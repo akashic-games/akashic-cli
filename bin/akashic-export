@@ -1,0 +1,10 @@
+#!/usr/bin/env node
+var argv = process.argv.slice(0);
+var type = argv.splice(2, 1)[0];
+if (type === "html") {
+	require("@akashic/akashic-cli-export-html").run(argv);
+} else if (type === "zip") {
+	require("@akashic/akashic-cli-export-zip").run(argv);
+} else {
+	console.log("Unknown option : " + type);
+}

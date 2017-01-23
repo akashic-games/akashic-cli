@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ES5",
+    "noLib": true,
+    "noImplicitAny": true,
+    "module": "commonjs",
+    "outDir": "./lib"
+  },
+  "files": [
+    "./node_modules/typescript/lib/lib.es6.d.ts",
+    "./typings/extend.commander.d.ts",
+    "./typings/index.d.ts",
+    "./src/ui.ts"
+  ]
+}

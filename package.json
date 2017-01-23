@@ -1,0 +1,63 @@
+{
+  "name": "@akashic/akashic-cli",
+  "version": "1.0.8",
+  "description": "Command-line utility for akashic game development",
+  "bin": {
+    "akashic": "./bin/akashic"
+  },
+  "scripts": {
+    "prepublish": "gulp clean && npm run install:typings && gulp compile",
+    "install:typings": "gulp install:typings",
+    "clean:typings": "gulp clean:typings",
+    "clean": "gulp clean",
+    "start": "npm run build && node bin/run",
+    "build": "gulp compile",
+    "lint": "gulp lint lint-md",
+    "test": "gulp test lint lint-md"
+  },
+  "author": "DWANGO Co., Ltd.",
+  "license": "MIT",
+  "files": [
+    "README.md",
+    "package.json",
+    "bin",
+    "lib"
+  ],
+  "dependencies": {
+    "@akashic/akashic-cli-commons": "~0.1.3",
+    "@akashic/akashic-cli-init": "~0.1.4",
+    "@akashic/akashic-cli-scan": "~0.0.3",
+    "@akashic/akashic-cli-modify": "~0.0.2",
+    "@akashic/akashic-cli-update": "~0.1.1",
+    "@akashic/akashic-cli-install": "~0.1.2",
+    "@akashic/akashic-cli-uninstall": "~0.1.1",
+    "@akashic/akashic-cli-config": "~0.0.4",
+    "@akashic/akashic-cli-export-html": "~0.0.5",
+    "@akashic/akashic-cli-export-zip": "~0.0.3",
+    "@akashic/akashic-cli-stat": "~0.0.3",
+    "commander": "2.8.1"
+  },
+  "devDependencies": {
+    "del": "1.1.1",
+    "gulp": "3.8.11",
+    "gulp-istanbul": "0.6.0",
+    "gulp-jasmine": "2.0.0",
+    "gulp-tslint": "4.3.2",
+    "gulp-shell": "^0.5.2",
+    "jasmine": "2.1.1",
+    "jasmine-reporters": "2.0.4",
+    "jasmine-terminal-reporter": "0.9.1",
+    "mdast": "~2.0.0",
+    "mdast-lint": "~1.1.1",
+    "tslint": "^3.10.2",
+    "typescript": "^1.7.5",
+    "typings": "^1.0.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/akashic-games/akashic-cli.git"
+  },
+  "publishConfig": {
+  "@akashic:registry": "http://registry.npmjs.org/"
+  }
+}
