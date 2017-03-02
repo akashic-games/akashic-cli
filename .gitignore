@@ -8,3 +8,4 @@ typings/globals
 typings/index.d.ts
 spec/typings/globals
 spec/typings/index.d.ts
+.vscode
