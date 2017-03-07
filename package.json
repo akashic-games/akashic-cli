@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Command-line utility for akashic game development",
   "bin": {
     "akashic": "./bin/akashic"

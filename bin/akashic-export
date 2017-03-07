@@ -5,6 +5,16 @@ if (type === "html") {
 	require("@akashic/akashic-cli-export-html").run(argv);
 } else if (type === "zip") {
 	require("@akashic/akashic-cli-export-zip").run(argv);
+} else if (type === "help" || type === "--help" || type === "-h") {
+	console.log([
+		"  ",
+		"  Usage: akashic export [format] [options]",
+		"  ",
+		"  Format:",
+		"    html",
+		"    zip",
+		"  "
+	].join("\n"));
 } else {
 	console.log("Unknown option : " + type);
 }
