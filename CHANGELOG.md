@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 1.1.4
+* 依存モジュール更新: akashic-cli-scan@0.1.2
+
 ## 1.1.3
 * publish失敗の修正
   * 機能変更はありません
