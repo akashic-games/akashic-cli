@@ -1,7 +1,11 @@
 # CHANGELOG
 
- ## 1.2.0
- * 依存モジュール更新: akashic-cli-init@0.3.0
+## 1.2.1
+* publish失敗の修正
+  * 機能変更はありません
+
+## 1.2.0
+* 依存モジュール更新: akashic-cli-init@0.3.0
 
 ## 1.1.4
 * 依存モジュール更新: akashic-cli-scan@0.1.2
