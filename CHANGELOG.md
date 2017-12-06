@@ -1,5 +1,20 @@
 # CHANGELOG
 
+## 1.3.0
+
+* 依存モジュール更新
+  * @akashic/akashic-cli-commons@0.2.5
+  * @akashic/akashic-cli-scan@0.2.1
+  * @akashic/akashic-cli-install@0.3.1
+  * @akashic/akashic-cli-uninstall@0.3.0
+  * @akashic/akashic-cli-export-zip@0.1.11
+  * @akashic/akashic-cli-export-zip@0.2.0
+* これにより、以下の変更が行われます。
+  * akashic scan, install, uninstall が game.json の moduleMainScripts フィールドを作成・更新・削除するように
+  * akashic export zip に --minify オプション追加
+  * akashic export html に --bundle, --minify, --strip オプション追加
+* moduleMainScripts を含む game.json を扱うために、 akashic-engine@1.12.7 以降または akashic-engine@2.0.2 以降が必要になります。
+
 ## 1.2.1
 * publish失敗の修正
   * 機能変更はありません
