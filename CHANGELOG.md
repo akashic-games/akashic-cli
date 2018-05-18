@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 1.3.1
+* 依存モジュール更新: @akashic/akashic-cli-export-html@0.1.22
+
 ## 1.3.0
 
 * 依存モジュール更新
