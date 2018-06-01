@@ -58,6 +58,6 @@
     "url": "https://github.com/akashic-games/akashic-cli.git"
   },
   "publishConfig": {
-    "@akashic:registry": "http://registry.npmjs.org/"
+    "@akashic:registry": "https://registry.npmjs.org/"
   }
 }

@@ -4,7 +4,7 @@
 
 # akashic-cli
 
-Akashic Engine を使ったゲーム作成を補助するコマンドラインユーティリティです。
+[Akashic Engine](https://akashic-games.github.io/) を使ったゲーム作成を補助するコマンドラインユーティリティです。
 
 ## インストール
 
@@ -15,7 +15,7 @@ akashic-cli は Node.js v4.2 以降で動作します。
 npm install -g @akashic/akashic-cli
 ```
 
-## 使用法
+## 利用方法
 
 インストール後、 `akashic` コマンドが利用できるようになります。
 
@@ -37,7 +37,9 @@ akashic scan asset
 akashic export html -o ../exported-my-game
 ```
 
-詳細は [利用ガイド](http://akashic-games.github.io/guide/akashic-cli.html) を参照してください。
+各コマンドの詳細については、 [利用ガイド](http://akashic-games.github.io/guide/akashic-cli.html) を参照してください。
+Akashic Engineの詳細な利用方法については、 [公式ページ](https://akashic-games.github.io/) を参照してください。
+
 
 ## ライセンス
 本リポジトリは MIT License の元で公開されています。
