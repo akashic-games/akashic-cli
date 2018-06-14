@@ -40,7 +40,6 @@ akashic export html -o ../exported-my-game
 各コマンドの詳細については、 [利用ガイド](http://akashic-games.github.io/guide/akashic-cli.html) を参照してください。
 Akashic Engineの詳細な利用方法については、 [公式ページ](https://akashic-games.github.io/) を参照してください。
 
-
 ## ライセンス
 本リポジトリは MIT License の元で公開されています。
 詳しくは [LICENSE](./LICENSE) をご覧ください。
