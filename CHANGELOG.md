@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 1.5.0
+* 依存モジュール更新: @akashic/akashic-cli-export-html@0.2.0
+
 ## 1.4.0
 * 依存モジュール更新: @akashic/akashic-cli-export-zip@0.3.0
   * これにより、以下の変更が行われます。
