@@ -16,6 +16,7 @@ commander
 	.command("unlink", "Unlink a node module and update globalScripts")
 	.command("export", "Export a directory as a specified format")
 	.command("stat", "Show statistics information")
+	.command("serve", "Start a server that hosts a game to test multiplaying")
 	.parse(process.argv);
 
 if (!commander.runningCommand) {
