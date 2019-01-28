@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.5.1
+* `serve` コマンドを追加
+* 依存モジュール追加: @akashic/akashic-cli-serve@0.0.6
+
 ## 1.5.0
 * 依存モジュール更新: @akashic/akashic-cli-export-html@0.2.0
 

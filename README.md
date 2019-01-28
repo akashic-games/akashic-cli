@@ -31,6 +31,12 @@ akashic init
 akashic scan asset
 ```
 
+例: カレントディレクトリのAkashicゲームをホストするマルチプレイ動作確認用サーバを起動
+
+```
+akashic serve
+```
+
 例: カレントディレクトリのAkashicゲームを、HTMLファイル(と画像・音声をまとめたディレクトリ)に変換し、 `../exported-my-game/` に出力する
 
 ```

@@ -1,0 +1,2 @@
+#!/usr/bin/env node
+require("@akashic/akashic-cli-serve/lib/server/").run(process.argv);
