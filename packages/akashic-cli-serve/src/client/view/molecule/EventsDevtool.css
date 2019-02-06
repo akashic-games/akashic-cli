@@ -1,0 +1,126 @@
+.events-devtool {
+	box-sizing: border-box;
+	flex: 1 1 auto;
+	display: flex;
+	flex-flow: row nowrap;
+	background: var(--color-tool-bg);
+}
+
+ul.event-list {
+	box-sizing: border-box;
+	flex: 1 1 auto;
+
+	display: flex;
+	flex-flow: column nowrap;
+	border-right: 1px solid #bbb;
+	background: var(--color-base-bg);
+	user-select: none;
+	-moz-user-select: none;
+	font-size: 12px;
+
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+
+.event-list > li {
+	box-sizing: border-box;
+	display: block;
+	flex: 0 0 auto;
+	padding: 3px 3px 3px 8px;
+	font-size: 12px;
+
+	position: relative;
+
+	overflow: hidden;
+	text-overflow: ellipsis;
+	text-wrap: nowrap;
+	white-space: nowrap;
+}
+
+.event-list > li:nth-child(odd) {
+	background: var(--color-base-bg-alt);
+}
+
+.event-list > li > .event-buttons {
+	visibility: hidden;
+}
+
+.event-list > li:hover > .event-buttons {
+	background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.8));
+	visibility: visible;
+}
+
+.event-buttons {
+	display: block;
+	position: absolute;
+	right: 0;
+	top: 0;
+	padding-left: 30px;
+}
+
+.sep {
+	align-self: center;
+
+	display: block;
+	width: 1px;
+	height: 20px;
+	margin: 0 3px;
+	border-left:1px solid silver;
+}
+
+
+/* TODO instance-toolbar と共有？ */
+
+.events-toolbar {
+	flex: 0 0 auto;
+	display: flex;
+	flex-flow: row wrap;
+	padding: 1px 3px;
+	align-items: center;
+
+	border-bottom: 1px solid #bbb;
+}
+
+.events-toolbar button {
+	color: var(--color-tool-text);
+	box-sizing: border-box;
+	border: 1px solid transparent;
+	background: transparent;
+	border-radius: 3px;
+	padding: 1px 3px;
+	margin: 0 3px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: space-around;
+	vertical-align: center;
+	outline: none;
+}
+
+.events-toolbar button > .material-icons {
+	font-size: 22px;
+}
+.events-toolbar button:hover {
+	border-color: var(--color-tool-border);
+}
+.events-toolbar button:active {
+	background: var(--color-tool-border);
+}
+
+.editor-container {
+	flex: 1 1 auto;
+	overflow-y: auto;
+	display: flex;
+	flex-flow: column nowrap;
+}
+
+.editor {
+	flex: 1 1 auto;
+	font-family: monospace;
+	font-size: 12px;
+	outline: none;
+	padding: 5px;
+	border-width: 0;
+	resize: none;
+	color: #555;
+}
+

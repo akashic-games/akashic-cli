@@ -1,0 +1,6 @@
+{
+  "@akashic/akashic-engine": "2.4.11",
+  "@akashic/game-driver": "1.4.11",
+  "@akashic/game-storage": "0.0.6",
+  "@akashic/pdi-browser": "1.5.6"
+}

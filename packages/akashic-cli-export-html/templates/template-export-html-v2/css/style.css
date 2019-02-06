@@ -1,0 +1,32 @@
+* {
+	margin: 0;
+	border: 0;
+	padding: 0;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+}
+
+body {
+	overflow: hidden;
+	width: 100%;
+	height: 100%;
+}
+
+#container {
+	margin: 0px;
+	padding: 0px;
+	overflow: hidden;
+	touch-action: none;
+	width: 100%;
+	height: 100%;
+
+	/* iOS表示崩れ対策: bodyのサイズ計算からこの要素を除外 */
+	position: absolute;
+}
+
+#container canvas {
+	background-size: contain;
+}

@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "ES5",
+    "noLib": true,
+    "noImplicitAny": true,
+    "module": "commonjs",
+    "outDir": "./lib",
+    "declaration": true
+  },
+  "files": [
+    "./node_modules/typescript/lib/lib.es6.d.ts",
+    "./typings/fs-readdir-recursive.d.ts",
+    "./typings/aac-duration.d.ts",
+    "./typings/thumbcoil.d.ts",
+    "./src/index.ts"
+  ]
+}

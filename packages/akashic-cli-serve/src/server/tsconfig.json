@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "commonjs",
+    "declaration": false,
+    "types": [
+      "express",
+      "express-serve-static-core",
+      "node",
+      "react"
+    ],
+    "sourceMap": true,
+    "outDir": "../../lib",
+    "removeComments": true,
+    "downlevelIteration": true,
+    "noImplicitAny": true,
+    "alwaysStrict": true
+  },
+  "include": [
+    "./**/*.ts"
+  ]
+}

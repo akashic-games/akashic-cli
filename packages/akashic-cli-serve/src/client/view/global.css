@@ -1,0 +1,46 @@
+/* TODO @import する箇所の限定 */
+
+:root {
+	--color-tool-text: #686868;
+	--color-tool-text-disabled: silver;
+	--color-tool-text-active: #222;
+	--color-tool-text-pushed: var(--color-tool-text);
+	--color-tool-border: #c0c0c0;
+	--color-tool-border-active: #bbb;
+	--color-tool-border-pushed: gray;
+	--color-tool-bg: #f0f0f0;
+	--color-tool-bg-active: #bbb;
+	--color-tool-bg-pushed: #ccc;
+
+	--color-base-text: #555;
+	--color-base-border: #bbb;
+	--color-base-grid: #ccc;
+	--color-base-bg: #fdfdfd;
+	--color-base-bg-alt: #f6f6f6;
+	--color-base-bg-active: #e8f0f8;
+
+	--color-pane-bg: white;
+	--color-pane-button-bg: white;
+	--color-pane-button-bg-selected: #ccd;
+	--color-pane-button-text-selected: white;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+html, body {
+	width: 100%;
+	height: 100%;
+
+	/* TODO フォント決めてWeb Fontで組み込む */
+	font-family: sans-serif;
+	font-size: 12px;
+	color: var(--color-tool-text);
+}
+
+:global(#container) {
+	width: 100%;
+	height: 100%;
+}

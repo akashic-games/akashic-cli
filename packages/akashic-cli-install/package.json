@@ -1,0 +1,52 @@
+{
+  "name": "@akashic/akashic-cli-install",
+  "version": "0.3.3",
+  "description": "npm install wrapper module for Akashic games",
+  "main": "lib/index.js",
+  "scripts": {
+    "prepublish": "npm run clean && npm run build",
+    "clean": "rimraf ./lib && rimraf ./spec/build",
+    "start": "npm run build && node bin/run",
+    "build": "tsc -p ./",
+    "lint": "npm run lint:ts && npm run lint:md",
+    "lint:ts": "tslint -c tslint.json --project ./tsconfig.json",
+    "lint:md": "remark ./*.md --frail --no-stdout --quiet --rc-path ./.remarkrc",
+    "test": "npm run test:jasmine && npm run lint",
+    "test:jasmine": "istanbul cover --report text --report html --colors -i ./lib/index.js ./node_modules/jasmine/bin/jasmine.js"
+  },
+  "author": "DWANGO Co., Ltd.",
+  "license": "MIT",
+  "bin": {
+    "akashic-cli-install": "./bin/run"
+  },
+  "files": [
+    "bin",
+    "lib",
+    "README.md",
+    "package.json"
+  ],
+  "devDependencies": {
+    "@types/commander": "~2.12.2",
+    "@types/jasmine": "~2.8.11",
+    "@types/node": "~10.12.5",
+    "istanbul": "^0.4.5",
+    "jasmine": "~3.3.0",
+    "jasmine-reporters": "~2.0.4",
+    "jasmine-terminal-reporter": "~0.9.1",
+    "mock-fs": "~4.8.0",
+    "remark-cli": "5.0.0",
+    "remark-lint": "~6.0.4",
+    "rimraf": "^2.6.2",
+    "tslint": "~5.11.0",
+    "typescript": "~2.8.0"
+  },
+  "dependencies": {
+    "@akashic/akashic-cli-commons": "^0.2.12",
+    "commander": "2.19.0"
+  },
+  "typings": "lib/index.d.ts",
+  "publishConfig": {
+    "access": "public",
+    "@akashic:registry": "https://registry.npmjs.org/"
+  }
+}

@@ -1,0 +1,27 @@
+
+.whole {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-flow: column nowrap;
+	align-items: stretch;
+}
+
+
+.main {
+	flex: 1 1 auto;
+}
+
+.centering {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.main > * {
+	border: 1px solid silver;
+}
+
+.devtools {
+	flex: 0 0 auto;
+}

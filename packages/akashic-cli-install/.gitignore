@@ -1,0 +1,14 @@
+node_modules
+typings/globals
+typings/index.d.ts
+spec/typings/globals
+spec/typings/index.d.ts
+.DS_Store*
+npm-debug.log
+*.iml
+coverage
+junitresults.xml
+lib
+tmp
+.idea
+spec/build

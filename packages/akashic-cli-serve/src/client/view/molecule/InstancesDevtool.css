@@ -1,0 +1,83 @@
+.instances-devtool {
+	flex: 1 1 auto;
+	display: flex;
+	flex-flow: column nowrap;
+	background: var(--color-tool-bg);
+}
+
+.instances-devtool a {
+	color: blue;
+}
+
+.instance-toolbar {
+	flex: 0 0 auto;
+	display: flex;
+	flex-flow: row wrap;
+	padding: 1px 3px;
+	align-items: center;
+	border-bottom: 1px solid var(--color-base-grid);
+}
+
+.instance-toolbar button {
+	color: var(--color-tool-text);
+	box-sizing: border-box;
+	border: 1px solid transparent;
+	background: transparent;
+	border-radius: 3px;
+	padding: 1px 3px;
+	margin: 0 3px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: space-around;
+	vertical-align: center;
+	outline: none;
+}
+
+.instance-toolbar button > .material-icons {
+	font-size: 22px;
+}
+
+.instance-toolbar button:hover {
+	border-color: var(--color-tool-border);
+}
+
+.instance-toolbar button:active {
+	background: var(--color-tool-border);
+}
+
+
+.instance-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 12px;
+	text-align: left;
+	color: var(--color-base-text);
+	background: var(--color-base-bg);
+	cursor: default;
+	user-select: none;
+}
+
+.instance-table th:not(:last-child),
+.instance-table td:not(:last-child) {
+	border-right: 1px solid var(--color-base-grid);
+}
+
+.instance-table th {
+	padding: 4px 8px;
+	font-weight: normal;
+	background: var(--color-tool-bg);
+	border-bottom: 1px solid var(--color-base-grid);
+}
+
+.instance-table td {
+	padding: 2px 8px;
+}
+
+.instance-table tr:nth-child(odd) {
+	background: var(--color-base-bg-alt);
+}
+
+.instance-table tr:hover {
+	background: var(--color-base-bg-active);
+}
+

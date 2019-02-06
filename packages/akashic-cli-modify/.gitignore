@@ -1,0 +1,11 @@
+node_modules
+typings
+spec/typings
+.DS_Store*
+npm-debug.log
+*.iml
+coverage
+junitresults.xml
+lib
+.idea
+spec/build
