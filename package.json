@@ -1,15 +1,17 @@
 {
   "private": true,
   "name": "@akashic/akashic-cli",
-  "version": "1.5.2",
+  "version": "0.0.1",
   "description": "Command-line utility for akashic game development",
   "scripts": {
-    "prepublish": "npm run clean && npm run build",
-    "postinstall": "lerna bootstrap --no-ci",
+    "prepublish": "npm run build",
+    "postinstall": "lerna bootstrap",
     "build": "lerna run build",
     "test": "npm run lint:md && lerna run test",
     "lint:md": "remark ./*.md --frail --no-stdout --quiet --rc-path ./.remarkrc",
-    "publish": "lerna publish from-package --yes"
+    "publish:patch": "lerna publish --conventional-commits patch --yes",
+    "publish:minor": "lerna publish --conventional-commits minor --yes",
+    "publish:major": "lerna publish --conventional-commits major --yes"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
@@ -21,8 +23,8 @@
   ],
   "devDependencies": {
     "lerna": "~3.10.7",
-    "remark-cli": "5.0.0",
-    "remark-lint": "~6.0.4"
+    "remark-cli": "~2.0.0",
+    "remark-lint": "~5.0.1"
   },
   "repository": {
     "type": "git",

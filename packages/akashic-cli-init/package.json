@@ -15,7 +15,7 @@
     "zip:js": "cd ./templates-src && bestzip ../templates/javascript.zip javascript",
     "zip:ts": "cd ./templates-src && bestzip ../templates/typescript.zip typescript",
     "http": "http-server -p 18080 &",
-    "test": "npm run test:jasmine ",
+    "test": "npm run test:jasmine",
     "test:jasmine": "istanbul cover --report text --report html --colors -i ./lib/index.js ./node_modules/jasmine/bin/jasmine.js",
     "pretest": "npm run http",
     "posttest": "kill $(lsof -t -i:18080)"
