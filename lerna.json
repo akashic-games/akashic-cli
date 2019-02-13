@@ -12,11 +12,6 @@
     },
     "version": {
       "exact": true
-    },
-    "bootstrap": {
-      "npmClientArgs": [
-        "--no-package-lock"
-      ]
     }
   },
   "packages": [
