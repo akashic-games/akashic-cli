@@ -1,0 +1,53 @@
+@import "../global.css";
+
+.tool-icon-button {
+	border: 1px solid transparent;
+	border-radius: 3px;
+	padding: 1px 2px;
+	margin: 2px 1px;
+
+	background: var(--color-tool-bg);
+	color: var(--color-tool-text);
+
+	box-sizing: border-box;
+	display: inline-flex;
+	align-items: center;
+	justify-content: space-around;
+	vertical-align: center;
+	outline: none;
+
+	cursor: default;
+	user-select: none;
+	moz-user-select: none;
+}
+
+.tool-icon-button:disabled {
+	color: var(--color-tool-text-disabled);
+}
+
+.tool-icon-button > p {
+	margin: 0 6px 0 3px;
+}
+
+.tool-icon-button > .material-icons {
+	font-size: 22px;
+}
+
+.tool-icon-button:not(:disabled):hover {
+	border-color: var(--color-tool-border-active);
+}
+
+.tool-icon-button.pushed:not(:disabled):active,
+.tool-icon-button:not(:disabled):active {
+	background: var(--color-tool-bg-active);
+}
+
+.pushed {
+	/* css-loader にクラスを認識させるための空定義 */
+}
+
+.tool-icon-button.pushed:not(:disabled) {
+	background: var(--color-tool-bg-pushed);
+	color: var(--color-tool-text-pushed);
+	border-color: var(--color-tool-border-pushed);
+}

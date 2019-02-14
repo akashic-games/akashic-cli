@@ -1,0 +1,16 @@
+node_modules
+.DS_Store*
+npm-debug.log
+*.iml
+coverage
+junitresults.xml
+lib
+tmp
+.idea
+spec/build
+templates-build/
+templates/template-export-html-v1/js/akashic-engine.strip.js
+templates/template-export-html-v2/js/akashic-engine.strip.js
+templates/template-export-html-v1/js/node_modules
+templates/template-export-html-v2/js/node_modules
+.vscode

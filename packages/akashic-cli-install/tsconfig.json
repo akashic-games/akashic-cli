@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "ES5",
+    "lib": ["es5"],
+    "noImplicitAny": true,
+    "module": "commonjs",
+    "outDir": "./lib",
+    "declaration": true
+  },
+  "filesGlob": [
+    "./node_modules/typescript/lib/lib.core.es6.d.ts",
+    "./src/**/*.ts"
+  ],
+  "files": [
+    "./node_modules/typescript/lib/lib.es6.d.ts",
+    "./src/cli.ts",
+    "./src/index.ts"
+  ]
+}

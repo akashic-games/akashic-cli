@@ -1,0 +1,54 @@
+{
+  "name": "@akashic/akashic-cli-commons",
+  "version": "0.2.12",
+  "description": "The shared definitions and routines for akashic-cli-xxx",
+  "main": "lib/index.js",
+  "scripts": {
+    "prepublish": "npm run clean && npm run build",
+    "clean": "shx rm -rf lib && shx rm -rf spec/build",
+    "build": "tsc -p ./",
+    "lint": "npm run lint:ts && npm run lint:md",
+    "lint:ts": "tslint --type-check -c tslint.json --project ./tsconfig.json",
+    "lint:md": "remark ./*.md --frail --no-stdout --quiet --rc-path ./.remarkrc",
+    "test": "npm run test:jasmine && npm run lint",
+    "test:jasmine": "istanbul cover --report text --report html --colors -i ./lib/main.node.js ./node_modules/jasmine/bin/jasmine.js"
+  },
+  "author": "DWANGO Co., Ltd.",
+  "license": "MIT",
+  "files": [
+    "lib",
+    "README.md",
+    "package.json"
+  ],
+  "devDependencies": {
+    "@types/eslint": "4.16.3",
+    "@types/browserify": "^12.0.33",
+    "@types/fs-extra": "5.0.2",
+    "shx": "~0.2.2",
+    "jasmine": "~3.3.0",
+    "jasmine-reporters": "~2.0.4",
+    "jasmine-terminal-reporter": "~0.9.1",
+    "istanbul": "^0.4.5",
+    "remark-cli": "~2.0.0",
+    "remark-lint": "~5.0.1",
+    "mdast-lint": "~1.1.1",
+    "mock-fs": "~4.5.0",
+    "tslint": "~5.4.3",
+    "typescript": "~2.6.1"
+  },
+  "typings": "lib/index.d.ts",
+  "dependencies": {
+    "browserify": "16.2.3",
+    "eslint": "~5.4.0",
+    "fs-extra": "3.0.1",
+    "fs-readdir-recursive": "0.1.2",
+    "js-sha256": "^0.8.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/akashic-games/akashic-cli-commons.git"
+  },
+  "publishConfig": {
+    "@akashic:registry": "https://registry.npmjs.org/"
+  }
+}

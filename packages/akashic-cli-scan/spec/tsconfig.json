@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "ES5",
+    "noLib": true,
+    "declaration": true,
+    "noImplicitAny": true,
+    "module": "commonjs",
+    "outDir": "./build"
+  },
+  "filesGlob": [
+    "../node_modules/typescript/lib/lib.es6.d.ts",
+    "../typings/*.d.ts",
+    "./typings/*.d.ts",
+    "./src/**/*.ts"
+  ],
+  "files": [
+    "../node_modules/typescript/lib/lib.es6.d.ts",
+    "./src/helpers/MockPromisedNpm.ts",
+    "./src/getAudioDurationSpec.ts",
+    "./src/ConfigurationSpec.ts",
+    "./src/scanSpec.ts"
+  ]
+}

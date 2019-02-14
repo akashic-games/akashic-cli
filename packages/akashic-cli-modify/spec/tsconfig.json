@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ES5",
+    "noLib": true,
+    "declaration": true,
+    "noImplicitAny": true,
+    "module": "commonjs",
+    "outDir": "./build"
+  },
+  "files": [
+    "../node_modules/typescript/lib/lib.es6.d.ts",
+    "./src/modifySpec.ts"
+  ]
+}

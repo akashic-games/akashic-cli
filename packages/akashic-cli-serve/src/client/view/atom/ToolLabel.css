@@ -1,0 +1,17 @@
+.tool-label {
+	margin: 1px 6px;
+	border: 1px solid var(--color-tool-border);
+	border-radius: 3px;
+	padding: 1px 6px;
+
+	background: var(--color-tool-bg);
+	color: var(--color-tool-text);
+
+	box-sizing: border-box;
+	display: inline-block;
+
+	/*
+	user-select: none;
+	-moz-user-select: none;
+	*/
+}

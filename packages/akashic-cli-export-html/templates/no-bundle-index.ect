@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>game</title>
+<script src="./js/option.js"></script>
+<script src="./js/akashic-engine.strip.js"></script>
+<script src="./js/game-driver.strip.js"></script>
+<script src="./js/pdi-browser.strip.js"></script>
+<script src="./js/initGlobals.js"></script>
+<script src="./js/build/LocalScriptAsset.js"></script>
+<script src="./js/build/LocalTextAsset.js"></script>
+<script src="./js/game-storage.strip.js"></script>
+<% if @version == "1" : %>
+<script src="./js/logger.js"></script>
+<% end %>
+<link rel="stylesheet" type="text/css" href="css/style.css">
+
+<% for asset in @assets : %>
+<script src="<%- asset %>"></script>
+<% end %>
+<script src="./js/sandbox.js"></script>
+
+<% for injectedContent in @injectedContents : %>
+<%- injectedContent %>
+<% end %>
+
+</head>
+<body>
+<div id="container">
+</div>
+</body>
+</html>
