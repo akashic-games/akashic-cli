@@ -54,7 +54,7 @@
   },
   "typings": "lib/index.d.ts",
   "dependencies": {
-    "@akashic/akashic-cli-commons": "^0.2.12",
+    "@akashic/akashic-cli-commons": "0.2.12",
     "archiver": "3.0.0",
     "browserify": "~16.2.3",
     "commander": "2.8.1",
