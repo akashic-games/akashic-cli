@@ -41,7 +41,7 @@
     "typescript": "~2.8.0"
   },
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.2.12",
+    "@akashic/akashic-cli-commons": "~0.2.9",
     "commander": "2.19.0"
   },
   "typings": "lib/index.d.ts",
