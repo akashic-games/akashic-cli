@@ -3,6 +3,7 @@ export interface EngineConfig {
 	engine_urls: string[];
 	content_url: string;
 	asset_base_url?: string;
+	external?: string[];
 }
 
 export const getEngineConfig = (baseUrl: string, isRaw: boolean): EngineConfig => {
@@ -13,6 +14,7 @@ export const getEngineConfig = (baseUrl: string, isRaw: boolean): EngineConfig =
 			`${baseUrl}/public/external/engineFilesV1_0_8_Canvas.js`,
 			`${baseUrl}/public/external/playlogClientV3_2_1.js`
 		],
+		external: ["coe"], // TODO: game.json から取得するように
 		content_url: `${baseUrl}/${gameContentDir}/game.json`,
 		asset_base_url: `${baseUrl}/${gameContentDir}`
 	};
