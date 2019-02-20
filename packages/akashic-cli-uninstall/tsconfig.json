@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ES5",
+    "lib": ["es5"],
+    "noImplicitAny": true,
+    "module": "commonjs",
+    "outDir": "./lib",
+    "declaration": true
+  },
+  "files": [
+    "./node_modules/typescript/lib/lib.es6.d.ts",
+    "./src/index.ts"
+  ]
+}

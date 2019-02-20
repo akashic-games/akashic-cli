@@ -1,0 +1,26 @@
+.top-resizable {
+	position: relative;
+	display: flex;
+	align-items: stretch;
+}
+
+.h-resizer {
+	position: absolute;
+	top: -3px;
+	width: 100%;
+	height: 6px;
+	border-radius: 2px;
+
+	background: rgba(255, 255, 255, 0.01);
+	cursor: ns-resize;
+}
+
+.h-resizer:active {
+	background: rgba(255, 0, 0, 0.3);
+}
+
+.content {
+	flex: 1 1 auto;
+	box-sizing: border-box;
+	display: flex;
+}

@@ -1,0 +1,12 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 5
+  },
+  "rules": {
+    "no-dupe-args": 2,
+    "no-dupe-keys": 2,
+    "no-duplicate-case": 2,
+    "no-inner-declarations": [2, "functions"],
+    "no-irregular-whitespace": 2
+  }
+}

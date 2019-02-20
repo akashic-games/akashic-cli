@@ -1,0 +1,28 @@
+.tool-label-button {
+	margin: 1px 6px;
+	border: 1px solid var(--color-tool-border);
+	border-radius: 3px;
+	padding: 0 5px;
+
+	background: var(--color-tool-bg);
+	color: var(--color-tool-text);
+
+	box-sizing: border-box;
+	display: inline-block;
+
+	cursor: pointer;
+	user-select: none;
+	moz-user-select: none;
+}
+
+.tool-label-button + .tool-label-button {
+	margin-left: 0;
+}
+
+.tool-label-button:hover {
+	border-color: var(--color-tool-border-active);
+}
+
+.tool-label-button:active {
+	background: var(--color-tool-bg-active);
+}

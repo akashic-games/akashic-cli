@@ -1,0 +1,31 @@
+{
+	"width": 320,
+	"height": 320,
+	"fps": 30,
+	"main": "./script/aez_bundle_main.js",
+	"assets": {
+		"aez_bundle_main": {
+			"type": "script",
+			"path": "script/aez_bundle_main.js",
+			"global": true
+		},
+		"bar": {
+			"type": "script",
+			"path": "script/bar.js",
+			"global": true
+		},
+		"foo": {
+			"type": "script",
+			"path": "script/foo.js",
+			"global": true
+		},
+		"test": {
+			"type": "text",
+			"path": "text/test.json",
+			"global": true
+		}
+	},
+	"environment": {
+		"sandbox-runtime": "2"
+	}
+}

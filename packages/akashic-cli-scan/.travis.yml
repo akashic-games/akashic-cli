@@ -1,0 +1,9 @@
+script:
+- npm install
+- npm test
+language: node_js
+node_js:
+- 6.10
+- 8.11
+- 10.4
+# mock-fsが node v10.5以上で、fs.promiseのcallbackが動作しないため、暫定として10.4を指定

@@ -1,0 +1,4 @@
+#!/usr/bin/env node
+var argv = process.argv.slice(0);
+argv.push("-l");
+require("@akashic/akashic-cli-install").run(argv);

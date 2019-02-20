@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "declaration": false,
+    "downlevelIteration": true,
+    "lib": ["es5", "dom", "es2015"],
+    "noImplicitAny": true,
+    "module": "commonjs" ,
+    "jsx": "react",
+    "sourceMap": true,
+    "outDir": "../../build-client-never-used",
+    "noUnusedParameters": true,
+    "experimentalDecorators": true
+  },
+  "include": [
+    "./view/stories/**/*.tsx",
+    "./css.d.ts",
+    "./akashic/AkashicGameViewWeb.d.ts",
+    "./bootstrap.tsx"
+  ]
+}

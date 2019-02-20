@@ -1,0 +1,17 @@
+@import "../global.css";
+
+.tool-control-group {
+	box-sizing: border-box;
+	flex: 0 0 auto;
+	display: inline-flex;
+	flex-flow: row wrap;
+	align-items: center;
+	background: var(--color-tool-bg);
+	font-size: 12px;
+}
+
+.label {
+	padding: 0 10px;
+	user-select: none;
+	-moz-user-select: none;
+}

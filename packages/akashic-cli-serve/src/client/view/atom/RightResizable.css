@@ -1,0 +1,26 @@
+.right-resizable {
+	position: relative;
+	display: flex;
+	align-items: stretch;
+}
+
+.v-resizer {
+	position: absolute;
+	right: -2px;
+	width: 6px;
+	height: 100%;
+	border-radius: 2px;
+
+	background: rgba(255, 255, 255, 0.01);
+	cursor: ew-resize;
+}
+
+.v-resizer:active {
+	background: rgba(255, 0, 0, 0.3);
+}
+
+.content {
+	flex: 1 1 auto;
+	box-sizing: border-box;
+	display: flex;
+}

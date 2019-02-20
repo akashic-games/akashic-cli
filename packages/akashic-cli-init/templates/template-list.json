@@ -1,0 +1,6 @@
+{
+	"templates": {
+		"javascript": "javascript.zip",
+		"typescript": "typescript.zip"
+	}
+}

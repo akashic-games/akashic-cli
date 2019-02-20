@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ES5",
+    "lib": ["es5"],
+    "declaration": true,
+    "noImplicitAny": true,
+    "module": "commonjs",
+    "outDir": "./build"
+  },
+  "files": [
+    "../node_modules/typescript/lib/lib.es6.d.ts",
+    "./src/ConfigurationSpec.ts",
+    "./src/uninstallSpec.ts"
+  ]
+}
