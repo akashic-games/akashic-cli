@@ -33,7 +33,7 @@
     "jasmine": "3.3.0",
     "jasmine-reporters": "2.0.4",
     "jasmine-terminal-reporter": "0.9.1",
-    "mock-fs": "4.5.0",
+    "mock-fs": "~4.8.0",
     "remark-cli": "5.0.0",
     "remark-lint": "~6.0.4",
     "remark-preset-lint-recommended": "~1.0.0",
