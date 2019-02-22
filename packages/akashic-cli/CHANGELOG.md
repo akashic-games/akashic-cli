@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.5.2 (2019-02-22)
+
+
+### Features
+
+* Make akashic-cli mono-repo ([#30](https://github-com-akashic-cli/akashic-games/akashic-cli/issues/30)) ([fd5aa71](https://github-com-akashic-cli/akashic-games/akashic-cli/commit/fd5aa71))
+
+
+
+
+
 ## 1.5.1
 * `serve` コマンドを追加
 * 依存モジュール追加: @akashic/akashic-cli-serve@0.0.6
