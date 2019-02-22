@@ -12,7 +12,7 @@
     "publish:patch": "lerna publish --conventional-commits patch --yes",
     "publish:minor": "lerna publish --conventional-commits minor --yes",
     "publish:major": "lerna publish --conventional-commits major --yes",
-    "publish:prerelease": "lerna publish --canary --dist-tag next --yes"
+    "publish:prerelease": "lerna publish prerelease --dist-tag next --yes"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
