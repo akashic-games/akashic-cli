@@ -7,7 +7,8 @@
         "*.json"
       ],
       "allowBranch": [
-        "master"
+        "master",
+        "copied-akashic-cli-xxx"
       ]
     },
     "version": {
