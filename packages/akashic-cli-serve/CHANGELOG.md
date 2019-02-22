@@ -1,4 +1,7 @@
-# CHANGELOG
+# Change Log
+
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
 ## 0.0.8
 * サーバー起動時にホスト名を指定しないとホストPC以外でアクセスできなくなる問題の修正

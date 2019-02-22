@@ -25,17 +25,17 @@
     "package.json"
   ],
   "devDependencies": {
-    "@types/node": "10.12.5",
     "@types/jasmine": "~2.8.2",
     "@types/mock-fs": "~3.6.30",
-    "shx": "~0.2.2",
+    "@types/node": "10.12.5",
+    "istanbul": "^0.4.5",
     "jasmine": "~3.3.0",
     "jasmine-reporters": "~2.0.4",
     "jasmine-terminal-reporter": "~0.9.1",
-    "istanbul": "^0.4.5",
+    "mock-fs": "~4.8.0",
     "remark-cli": "~2.0.0",
     "remark-lint": "~5.0.1",
-    "mock-fs": "~4.5.0",
+    "shx": "~0.2.2",
     "tslint": "~5.11.0",
     "typescript": "~2.8.0"
   },
@@ -44,11 +44,8 @@
     "@akashic/akashic-cli-commons": "~0.2.0",
     "commander": "^2.16.0"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/akashic-games/akashic-cli-modify.git"
-  },
   "publishConfig": {
+    "access": "public",
     "@akashic:registry": "https://registry.npmjs.org/"
   }
 }

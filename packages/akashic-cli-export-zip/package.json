@@ -40,15 +40,15 @@
     "@types/mock-fs": "~3.6.30",
     "@types/node": "~8.0.53",
     "@types/uglify-js": "2.6.30",
-    "rimraf": "^2.6.1",
-    "remark-cli": "~2.0.0",
-    "remark-lint": "~5.0.1",
-    "jasmine": "^2.1.1",
     "istanbul": "^0.4.5",
+    "jasmine": "^2.1.1",
     "jasmine-reporters": "~2.0.4",
     "mdast": "~2.3.2",
     "mdast-lint": "~1.1.1",
-    "mock-fs": "~4.5.0",
+    "mock-fs": "~4.8.0",
+    "remark-cli": "~2.0.0",
+    "remark-lint": "~5.0.1",
+    "rimraf": "^2.6.1",
     "tslint": "~5.4.3",
     "typescript": "~2.8.0"
   },
@@ -62,11 +62,8 @@
     "fs-readdir-recursive": "~0.1.2",
     "uglify-js": "2.6.1"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/akashic-games/akashic-cli-export-zip.git"
-  },
   "publishConfig": {
+    "access": "public",
     "@akashic:registry": "https://registry.npmjs.org/"
   }
 }

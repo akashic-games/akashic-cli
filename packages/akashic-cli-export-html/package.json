@@ -52,7 +52,7 @@
     "jasmine": "^3.3.0",
     "jasmine-reporters": "~2.0.4",
     "jasmine-terminal-reporter": "~0.9.1",
-    "mock-fs": "4.5.0",
+    "mock-fs": "~4.8.0",
     "remark-cli": "~2.0.0",
     "remark-lint": "~5.0.1",
     "shx": "~0.2.2",
@@ -74,11 +74,8 @@
     "https": "~1.0.0",
     "uglify-js": "2.6.1"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/akashic-games/akashic-cli-export-html.git"
-  },
   "publishConfig": {
+    "access": "public",
     "@akashic:registry": "https://registry.npmjs.org/"
   }
 }
