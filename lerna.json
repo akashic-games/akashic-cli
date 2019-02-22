@@ -2,10 +2,6 @@
   "version": "independent",
   "command": {
     "publish": {
-      "ignoreChanges": [
-        "*.md",
-        "*.json"
-      ],
       "allowBranch": [
         "master",
         "copied-akashic-cli-xxx"
