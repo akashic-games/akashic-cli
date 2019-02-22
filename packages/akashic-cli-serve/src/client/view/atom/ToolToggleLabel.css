@@ -1,0 +1,20 @@
+.tool-toggle-label {
+	padding: 1px;
+	box-sizing: border-box;
+	display: inline-flex;
+	align-items: center;
+
+	user-select: none;
+	-moz-user-select: none;
+}
+
+.pushed,
+.tool-toggle-label:hover {
+	/* TODO global.css の CSS Variables に移すか、カラーテーマを実装する */
+	background: silver;
+}
+
+.tool-toggle-label:active {
+	background: gray;
+	color: #eee;
+}

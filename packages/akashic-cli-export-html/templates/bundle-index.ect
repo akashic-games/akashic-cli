@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>game</title>
+<script>
+<% for preloadScript in @preloadScripts : %>
+	<%- preloadScript %>
+<% end %>
+</script>
+
+<script>
+if (! ("optionProps" in window)) {
+	window.optionProps = {};
+}
+window.optionProps.magnify = <%- @magnify %>
+
+window.g = require("@akashic/akashic-engine");
+</script>
+<script>
+if (! ("gLocalAssetContainer" in window)) {
+	window.gLocalAssetContainer = {};
+}
+
+<% for asset in @assets : %>
+	<% if asset.type is "script" : %>
+		window.gLocalAssetContainer["<%- asset.name %>"] = function(g) {
+			<%- asset.code %>
+		};
+	<% else if asset.type is "text" : %>
+		window.gLocalAssetContainer["<%- asset.name %>"] = "<%- asset.code %>";
+	<% end %>
+<% end %>
+</script>
+
+<script>
+<% for postloadScript in @postloadScripts : %>
+	<%- postloadScript %>
+<% end %>
+</script>
+
+<style type="text/css">
+<%- @css %>
+</style>
+
+<% for injectedContent in @injectedContents : %>
+<%- injectedContent %>
+<% end %>
+
+</head>
+<body>
+<div id="container">
+</div>
+</body>
+</html>

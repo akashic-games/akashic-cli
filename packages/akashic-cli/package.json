@@ -1,0 +1,58 @@
+{
+  "name": "@akashic/akashic-cli",
+  "version": "1.5.2-alpha.2",
+  "description": "Command-line utility for akashic game development",
+  "bin": {
+    "akashic": "./bin/akashic"
+  },
+  "scripts": {
+    "prepublish": "npm run clean && npm run build",
+    "clean": "rimraf ./lib && rimraf ./spec/build",
+    "start": "npm run build && node bin/run",
+    "build": "tsc -p ./",
+    "lint": "npm run lint:ts && npm run lint:md",
+    "lint:ts": "tslint -c tslint.json --project ./tsconfig.json",
+    "lint:md": "remark ./*.md --frail --no-stdout --quiet --rc-path ./.remarkrc",
+    "test": "npm run lint",
+    "test:jasmine": "jasmine ./spec/**/*[sS]pec.js"
+  },
+  "author": "DWANGO Co., Ltd.",
+  "license": "MIT",
+  "files": [
+    "README.md",
+    "package.json",
+    "bin",
+    "lib"
+  ],
+  "dependencies": {
+    "@akashic/akashic-cli-commons": "0.2.13-alpha.1",
+    "@akashic/akashic-cli-config": "0.1.2-alpha.2",
+    "@akashic/akashic-cli-export-html": "0.2.7-alpha.2",
+    "@akashic/akashic-cli-export-zip": "0.3.3-alpha.2",
+    "@akashic/akashic-cli-init": "0.3.6-alpha.2",
+    "@akashic/akashic-cli-install": "0.3.4-alpha.1",
+    "@akashic/akashic-cli-modify": "0.1.2-alpha.1",
+    "@akashic/akashic-cli-scan": "0.2.4-alpha.1",
+    "@akashic/akashic-cli-serve": "0.0.9-alpha.1",
+    "@akashic/akashic-cli-stat": "0.1.2-alpha.1",
+    "@akashic/akashic-cli-uninstall": "0.3.1-alpha.1",
+    "@akashic/akashic-cli-update": "0.2.1-alpha.1",
+    "commander": "2.8.1"
+  },
+  "devDependencies": {
+    "@types/commander": "~2.3.0",
+    "@types/node": "~10.12.7",
+    "jasmine": "3.3.0",
+    "jasmine-reporters": "2.0.4",
+    "jasmine-terminal-reporter": "0.9.1",
+    "remark-cli": "~2.0.0",
+    "remark-lint": "~5.0.1",
+    "rimraf": "^2.6.2",
+    "tslint": "^3.10.2",
+    "typescript": "~2.8.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "@akashic:registry": "https://registry.npmjs.org/"
+  }
+}

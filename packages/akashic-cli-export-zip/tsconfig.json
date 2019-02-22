@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ES5",
+    "lib": ["ES6"],
+    "noImplicitAny": true,
+    "module": "commonjs",
+    "outDir": "./lib",
+    "declaration": true
+  },
+  "files": [
+    "./src/cli.ts",
+    "./src/index.ts"
+  ]  
+}

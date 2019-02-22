@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "ES5",
+    "lib": ["es5"],
+    "noImplicitAny": true,
+    "module": "commonjs",
+    "outDir": "./lib",
+    "declaration": true,
+    "sourceMap": true
+  },
+  "files": [
+    "./node_modules/typescript/lib/lib.es6.d.ts",
+    "./typings/unzip.d.ts",
+    "./typings/prompt.d.ts",
+    "./src/index.ts"
+  ]
+}

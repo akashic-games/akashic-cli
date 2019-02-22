@@ -1,0 +1,30 @@
+{
+  "name": "typescript-game-sample",
+  "private": true,
+  "version": "0.1.0",
+  "description": "",
+  "main": "./script/main.js",
+  "scripts": {
+    "build": "rimraf ./script && tsc && akashic-cli-scan asset script",
+    "update": "akashic-cli-scan asset && akashic-cli-scan globalScripts",
+    "lint": "tslint -c tslint.json -p tsconfig.json",
+    "start": "akashic-sandbox .",
+    "export-zip": "rimraf game.zip && akashic-cli-export-zip -o game.zip -s",
+    "export-html": "rimraf game && akashic-cli-export-html -o game",
+    "test": "istanbul cover --report text --report html --colors ./node_modules/jasmine/bin/jasmine.js"
+  },
+  "author": "",
+  "license": "",
+  "devDependencies": {
+    "@akashic/akashic-cli-export-html": "~0.1.12",
+    "@akashic/akashic-cli-export-zip": "~0.2.0",
+    "@akashic/akashic-cli-scan": "~0.2.1",
+    "@akashic/akashic-engine": "~2.0.3",
+    "@akashic/akashic-sandbox": "~0.13.11",
+    "istanbul": "~0.4.5",
+    "jasmine": "~2.8.0",
+    "rimraf": "~2.6.2",
+    "tslint": "~5.8.0",
+    "typescript": "~2.6.2"
+  }
+}

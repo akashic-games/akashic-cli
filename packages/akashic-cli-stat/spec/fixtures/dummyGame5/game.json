@@ -1,0 +1,24 @@
+{
+	"width": 320,
+	"height": 320,
+	"fps": 30,
+	"assets": {
+		"mainScene": {
+			"type": "script",
+			"path": "script/mainScene.js",
+			"global": true
+		},
+		"dummy1x1": {
+			"type": "image",
+			"width": 1,
+			"height": 1,
+			"path": "image/dummy1x1.png"
+		},
+		"dummy": {
+			"type": "audio",
+			"path": "audio/dummy",
+			"systemId": "sound",
+			"duration": 941
+		}
+	}
+}

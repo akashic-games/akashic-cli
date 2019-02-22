@@ -1,0 +1,15 @@
+node_modules
+typings/globals
+typings/index.d.ts
+spec/typings/globals
+spec/typings/index.d.ts
+spec/build
+.DS_Store*
+npm-debug.log
+*.iml
+coverage
+junitresults.xml
+lib
+tmp
+.idea
+!spec/fixtures/simple_game_using_external/node_modules

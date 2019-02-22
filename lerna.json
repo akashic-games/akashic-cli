@@ -1,0 +1,22 @@
+{
+  "version": "independent",
+  "command": {
+    "publish": {
+      "allowBranch": [
+        "master",
+        "copied-akashic-cli-xxx"
+      ]
+    },
+    "version": {
+      "exact": true
+    },
+    "bootstrap": {
+      "npmClientArgs": [
+        "--no-package-lock"
+      ]
+    }
+  },
+  "packages": [
+    "packages/*"
+  ]
+}
