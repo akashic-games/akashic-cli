@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://github.com/akashic-games/akashic-cli/blob/master/img/akashic-cli.png"/>
+  <img src="https://github.com/akashic-games/akashic-cli/blob/master/img/akashic-cli.png"/>
 </p>
 
 # akashic-cli-commons
