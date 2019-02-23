@@ -11,8 +11,8 @@
     "start": "npm run build && node bin/run",
     "build": "tsc -p ./",
     "lint": "npm run lint:ts && npm run lint:md",
-    "lint:ts": "tslint -c tslint.json --project ./tsconfig.json",
-    "lint:md": "remark ./*.md --frail --no-stdout --quiet --rc-path ./.remarkrc",
+    "lint:ts": "tslint -c ../tslint.json --project ./tsconfig.json",
+    "lint:md": "remark ./*.md --frail --no-stdout --quiet --rc-path ../.remarkrc",
     "test": "npm run lint",
     "test:jasmine": "jasmine ./spec/**/*[sS]pec.js"
   },
@@ -48,7 +48,7 @@
     "remark-cli": "~2.0.0",
     "remark-lint": "~5.0.1",
     "rimraf": "^2.6.2",
-    "tslint": "^3.10.2",
+    "tslint": "~5.12.1",
     "typescript": "~2.8.0"
   },
   "publishConfig": {
