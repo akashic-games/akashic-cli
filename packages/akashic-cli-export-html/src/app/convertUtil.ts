@@ -94,8 +94,24 @@ export function wrap(code: string, minify?: boolean): string {
 }
 
 export function getDefaultBundleScripts(templatePath: string, version: string, minify?: boolean, bundleText: boolean = true): any {
-	var preloadScriptNames =
-		["akashic-engine.strip.js", "game-driver.strip.js", "pdi-browser.strip.js"];
+	var versionsJson = require("./engineFilesVersion.json");
+	var engineFilesVariable = `engineFilesV${versionsJson[`v${version}`].replace(/\./g, "_")}`;
+	var preloadScriptNames = [`${engineFilesVariable}.js`];
+	var preloadScript = `
+		window.engineFiles = ${engineFilesVariable};
+		window.g = engineFiles.akashicEngine;
+		(function() {
+			var originalRequire = window.require;
+			window.require = function(moduleName) {
+				switch(moduleName) {
+					case "@akashic/akashic-engine":
+						return engineFiles.akashicEngine;
+					default:
+						return this.call(this, moduleName);
+				}
+			};
+		})();
+	`;
 	var postloadScriptNames =
 		["build/LocalScriptAsset.js", "game-storage.strip.js", "sandbox.js", "initGlobals.js"];
 	if (version === "1") postloadScriptNames.push("logger.js");
@@ -104,6 +120,7 @@ export function getDefaultBundleScripts(templatePath: string, version: string, m
 	}
 
 	var preloadScripts = preloadScriptNames.map((fileName) => loadScriptFile(fileName, templatePath));
+	preloadScripts.push(preloadScript);
 	var postloadScripts = postloadScriptNames.map((fileName) => loadScriptFile(fileName, templatePath));
 	if (minify) {
 		preloadScripts = preloadScripts.map(script => UglifyJS.minify(script, { fromString: true }).code);
