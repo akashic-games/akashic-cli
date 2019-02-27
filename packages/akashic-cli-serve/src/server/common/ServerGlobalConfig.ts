@@ -3,6 +3,8 @@ export interface ServerGlobalConfig {
 	port: number;
 	useGivenHostname: boolean; // サーバー起動時にhostnameオプションが指定されたかどうか
 	useGivenPort: boolean; // サーバー起動時にportオプションが指定されたかどうか
+	waitStarting: boolean;
+	verbose: boolean;
 }
 
 export const DEFAULT_HOSTNAME = "localhost";
@@ -12,5 +14,7 @@ export const serverGlobalConfig: ServerGlobalConfig = {
 	hostname: DEFAULT_HOSTNAME,
 	port: DEFAULT_PORT,
 	useGivenHostname: false,
-	useGivenPort: false
+	useGivenPort: false,
+	waitStarting: false,
+	verbose: false
 };

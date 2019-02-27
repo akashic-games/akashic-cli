@@ -19,6 +19,7 @@ export interface CreateLocalInstanceParameterObject {
 	executionMode: ExecutionMode;
 	player: Player;
 	contentUrl?: string;
+	startupArgument?: any;
 }
 
 export interface CreateServerInstanceParameterObject {

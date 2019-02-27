@@ -35,6 +35,7 @@ declare module agv {
 			createCustomAmflowClient?: () => any;
 			overwriteEngineConfig?: string;
 		};
+		argument?: any;
 	}
 	interface ErrorListener {
 		onError: (e: Error) => void;

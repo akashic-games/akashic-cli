@@ -1,7 +1,8 @@
 import * as express from "express";
 import * as EngineConfig from "../domain/EngineConfig";
-import { InternalServerError } from "../common/ApiError";
 import {serverGlobalConfig} from "../common/ServerGlobalConfig";
+import {responseSuccess} from "../common/ApiResponse";
+import {OptionsApiResponseData} from "../../common/types/ApiResponse";
 
 export const createHandlerToGetEngineConfig = (isRaw: boolean): express.RequestHandler => {
 	return (req, res, next) => {
@@ -21,4 +22,15 @@ export const createHandlerToGetEngineConfig = (isRaw: boolean): express.RequestH
 			next(e);
 		}
 	};
+};
+
+export const handleToGetStartupOptions = (req: express.Request, res: express.Response, next: Function): void => {
+	try {
+		responseSuccess<OptionsApiResponseData>(res, 200, {
+			waitStarting: serverGlobalConfig.waitStarting,
+			verbose: serverGlobalConfig.verbose
+		});
+	} catch (e) {
+		next(e);
+	}
 };

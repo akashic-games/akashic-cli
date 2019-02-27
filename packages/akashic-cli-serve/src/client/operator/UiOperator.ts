@@ -44,4 +44,25 @@ export class UiOperator {
 	setEventEditContent = (content: string): void => {
 		this.store.devtoolUiStore.setEventEditContent(content);
 	}
+
+	toggleShowStartupArgumentList = (show: boolean): void => {
+		this.store.startupScreenUiStore.toggleShowStartupArgumentList(show);
+	}
+
+	setStartupArgumentListWidth = (w: number): void => {
+		this.store.startupScreenUiStore.setStartupArgumentListWidth(w);
+	}
+
+	copyRegisteredStartupArgumentToEditor = (label: string): void => {
+		const content = JSON.stringify(this.store.startupArguments[label], null, 2);
+		this.store.startupScreenUiStore.setStartupArgumentEditContent(content);
+	}
+
+	setStartupArgumentEditContent = (content: string): void => {
+		this.store.startupScreenUiStore.setStartupArgumentEditContent(content);
+	}
+
+	setJoinFlag = (joinFlag: boolean): void => {
+		this.store.startupScreenUiStore.setJoinFlag(joinFlag);
+	}
 }

@@ -7,24 +7,29 @@ import {LocalInstanceEntity} from "./LocalInstanceEntity";
 import {DevtoolUiStore} from "./DevtoolUiStore";
 import {ToolBarUiStore} from "./ToolBarUiStore";
 import {storage} from "./storage";
+import {StartupScreenUiStore} from "./StartupScreenUiStore";
 
 export class Store {
 	@observable playStore: PlayStore;
 	@observable toolBarUiStore: ToolBarUiStore;
 	@observable devtoolUiStore: DevtoolUiStore;
+	@observable startupScreenUiStore: StartupScreenUiStore;
 	@observable player: Player | null;
 
 	@observable currentPlay: PlayEntity | null;
 	@observable currentLocalInstance: LocalInstanceEntity | null;
 	@observable sandboxConfig: SandboxConfig;
+	@observable startupArguments: {[name: string]: any};
 
 	constructor() {
 		this.playStore = new PlayStore();
 		this.toolBarUiStore = new ToolBarUiStore();
 		this.devtoolUiStore = new DevtoolUiStore();
+		this.startupScreenUiStore = new StartupScreenUiStore();
 		this.player = { id: storage.data.playerId, name: storage.data.playerName };
 		this.currentPlay = null;
 		this.currentLocalInstance = null;
+		this.startupArguments = {};
 	}
 
 	@action
@@ -40,5 +45,10 @@ export class Store {
 	@action
 	setSandboxConfig(cfg: SandboxConfig): void {
 		this.sandboxConfig = cfg;
+	}
+
+	@action
+	setStartupArguments(args:  {[name: string]: any}): void {
+		this.startupArguments = args;
 	}
 }
