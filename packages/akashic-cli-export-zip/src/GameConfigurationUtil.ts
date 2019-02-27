@@ -56,7 +56,7 @@ export function makeUniqueAssetPath(gamejson: cmn.GameConfiguration, assetPath: 
 	const targetFileNamePrefix = path.basename(assetPath, targetExtName);
 	const assetIds = Object.keys(gamejson.assets);
 	for (let index = 0; assetIds.some(aid => gamejson.assets[aid].path === targetAssetPath); index++) {
-		targetAssetPath = path.join(targetDirName, targetFileNamePrefix + index + targetExtName);
+		targetAssetPath = path.posix.join(targetDirName, targetFileNamePrefix + index + targetExtName);
 	}
 	return targetAssetPath;
 }

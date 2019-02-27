@@ -12,6 +12,7 @@ export interface CommandParameterObject {
 	strip?: boolean;
 	minify?: boolean;
 	bundle?: boolean;
+	babel?: boolean;
 	hashFilename?: number | boolean;
 	omitEmptyJs?: boolean;
 }
@@ -21,6 +22,7 @@ export function cli(param: CommandParameterObject): void {
 	Promise.resolve()
 		.then(() => promiseExportZip({
 			bundle: param.bundle,
+			babel: (param.babel != null) ? param.babel : true,
 			minify: param.minify,
 			strip: (param.strip != null) ? param.strip : true,
 			source: param.cwd,
@@ -52,6 +54,7 @@ commander
 	.option("-M, --minify", "Minify JavaScript files")
 	.option("-H, --hash-filename [length]", "Rename asset files with their hash values")
 	.option("-b, --bundle", "Bundle script assets into a single file")
+	.option("--no-es5-downpile", "No convert JavaScript into es5")
 	.option("--no-omit-empty-js", "Disable omitting empty js from global assets");
 
 export function run(argv: string[]): void {
@@ -67,6 +70,7 @@ export function run(argv: string[]): void {
 		minify: commander["minify"],
 		hashFilename: commander["hashFilename"],
 		bundle: commander["bundle"],
+		babel: commander["babel"],
 		omitEmptyJs: commander["omitEmptyJs"]
 	});
 }

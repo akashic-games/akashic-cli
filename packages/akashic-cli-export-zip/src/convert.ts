@@ -6,9 +6,12 @@ import * as browserify from "browserify";
 import readdir = require("fs-readdir-recursive");
 import * as gcu from "./GameConfigurationUtil";
 import * as UglifyJS from "uglify-js";
+import * as babel from "@babel/core";
+import * as presetEnv from "@babel/preset-env";
 
 export interface ConvertGameParameterObject {
 	bundle?: boolean;
+	babel?: boolean;
 	minify?: boolean;
 	strip?: boolean;
 	source?: string;
@@ -24,6 +27,7 @@ export interface ConvertGameParameterObject {
 
 export function _completeConvertGameParameterObject(param: ConvertGameParameterObject): void {
 	param.bundle = !!param.bundle;
+	param.babel = !!param.babel;
 	param.minify = !!param.minify;
 	param.strip = !!param.strip;
 	param.source = param.source || process.cwd();
@@ -71,14 +75,15 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			let errorMessages: string[] = [];
 			gcu.extractScriptAssetFilePaths(gamejson).forEach(filePath => {
 				const code = fs.readFileSync(path.resolve(param.source, filePath)).toString();
-				errorMessages = errorMessages.concat(
-					cmn.LintUtil.validateEs5Code(code).map(info => `${filePath}(${info.line}:${info.column}): ${info.message}`)
-				);
+				if (!param.babel) {
+					errorMessages = errorMessages.concat(
+						cmn.LintUtil.validateEs5Code(code).map(info => `${filePath}(${info.line}:${info.column}): ${info.message}`)
+					);
+				}
 			});
 			if (errorMessages.length > 0) {
 				param.logger.warn("Non-ES5 syntax found.\n" + errorMessages.join("\n"));
 			}
-
 			if (!param.bundle)
 				return null;
 			return bundleScripts(gamejson.main || gamejson.assets.mainScene.path, param.source);
@@ -89,11 +94,24 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 				gcu.removeScriptFromFilePaths(gamejson, bundleResult.filePaths);
 				noCopyingFilePaths = new Set<string>(bundleResult.filePaths);
 			}
-			const files = param.strip ? gcu.extractFilePaths(gamejson, param.source) : readdir(param.source);
+
+			const babelOption = {
+				presets: [
+					babel.createConfigItem([presetEnv, {
+						modules: false,
+						targets: {
+							"ie": 10
+						}
+					}],
+					{ type: "preset" })
+				]
+			};
+
+			const files = param.strip ? gcu.extractFilePaths(gamejson, param.source) : readdir(param.source).map((p) => p.replace(/\\/g, "/"));
 			files.forEach(p => {
 				if (!noCopyingFilePaths.has(p)) {
 					cmn.Util.mkdirpSync(path.dirname(path.resolve(param.dest, p)));
-					const buff = fs.readFileSync(path.resolve(param.source, p));
+					let buff = fs.readFileSync(path.resolve(param.source, p));
 
 					if (param.omitEmptyJs && gcu.isScriptJsFile(p) && gcu.isEmptyScriptJs(buff.toString().trim())) {
 						Object.keys(gamejson.assets).some((key) => {
@@ -104,7 +122,9 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 							return false;
 						});
 					}
-					fs.writeFileSync(path.resolve(param.dest, p), buff);
+					const value: string | Buffer =
+						(param.babel && gcu.isScriptJsFile(p)) ? babel.transform(buff.toString().trim(), babelOption).code : buff;
+					fs.writeFileSync(path.resolve(param.dest, p), value);
 				}
 			});
 			if (bundleResult === null) {
@@ -124,7 +144,8 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			}
 			const entryPointAbsPath = path.resolve(param.dest, entryPointPath);
 			cmn.Util.mkdirpSync(path.dirname(entryPointAbsPath));
-			fs.writeFileSync(entryPointAbsPath, bundleResult.bundle);
+			const code = param.babel ? babel.transform(bundleResult.bundle, babelOption).code : bundleResult.bundle;
+			fs.writeFileSync(entryPointAbsPath, code);
 		})
 		.then(() => {
 			if (param.hashLength > 0) {
