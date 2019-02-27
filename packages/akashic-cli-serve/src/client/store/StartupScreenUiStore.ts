@@ -4,13 +4,13 @@ export class StartupScreenUiStore {
 	@observable showsStartupArgumentList: boolean;
 	@observable startupArgumentListWidth: number;
 	@observable startupArgumentEditContent: string;
-	@observable joinFlag: boolean;
+	@observable joinsToPlay: boolean;
 
 	constructor() {
 		this.showsStartupArgumentList = true;
 		this.startupArgumentListWidth = 150;
-		this.startupArgumentEditContent = "{}";
-		this.joinFlag = false;
+		this.startupArgumentEditContent = "";
+		this.joinsToPlay = false;
 	}
 
 	@action
@@ -29,7 +29,7 @@ export class StartupScreenUiStore {
 	}
 
 	@action
-	setJoinFlag(joinFlag: boolean): void {
-		this.joinFlag = joinFlag;
+	setJoinsToPlay(join: boolean): void {
+		this.joinsToPlay = join;
 	}
 }

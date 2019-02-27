@@ -19,7 +19,6 @@ export class Store {
 	@observable currentPlay: PlayEntity | null;
 	@observable currentLocalInstance: LocalInstanceEntity | null;
 	@observable sandboxConfig: SandboxConfig;
-	@observable startupArguments: {[name: string]: any};
 
 	constructor() {
 		this.playStore = new PlayStore();
@@ -29,7 +28,6 @@ export class Store {
 		this.player = { id: storage.data.playerId, name: storage.data.playerName };
 		this.currentPlay = null;
 		this.currentLocalInstance = null;
-		this.startupArguments = {};
 	}
 
 	@action
@@ -45,10 +43,5 @@ export class Store {
 	@action
 	setSandboxConfig(cfg: SandboxConfig): void {
 		this.sandboxConfig = cfg;
-	}
-
-	@action
-	setStartupArguments(args:  {[name: string]: any}): void {
-		this.startupArguments = args;
 	}
 }

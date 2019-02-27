@@ -15,11 +15,11 @@ export interface StartupScreenProps {
 	onToggleList: (nextVal: boolean) => void;
 	eventNames: string[];
 	eventEditContent: string;
-	joinFlag: boolean;
+	joinsToPlay: boolean;
 	onClickCopyEvent: (eventName: string) => void;
 	onEventEditContentChanged: (content: string) => void;
-	onChangeJoinFlag: (joinFlag: boolean) => void;
-	startContent: (params?: StartContentParameterObject) => Promise<void>;
+	onChangeJoinsToPlay: (join: boolean) => void;
+	onClickStartContent: (params?: StartContentParameterObject) => Promise<void>;
 }
 
 @observer
@@ -28,8 +28,8 @@ export class StartupScreen extends React.Component<StartupScreenProps, {}> {
 		return <div className={styles["devtool"]}>
 			<div className="checkbox">
 				<label className="join">
-					<input type="checkbox" id="join" checked={this.props.joinFlag}
-						   onChange={() => this.props.onChangeJoinFlag(!this.props.joinFlag)}/>
+					<input type="checkbox" id="join" checked={this.props.joinsToPlay}
+						   onChange={() => this.props.onChangeJoinsToPlay(!this.props.joinsToPlay)}/>
 					このコンテンツに join する
 				</label>
 			</div>
@@ -75,21 +75,22 @@ export class StartupScreen extends React.Component<StartupScreenProps, {}> {
 				<div className={styles["events-toolbar"]}>
 					<ToolIconButton
 						icon="list"
-						title={"イベントリストの表示・非表示を切り替え"}
+						title={"起動引数リストの表示・非表示を切り替え"}
 						pushed={props.showsEventList}
 						onClick={props.onToggleList} />
 				</div>
 				<textarea
 					className={styles["editor"]}
 					value={props.eventEditContent}
-					placeholder={"an array of playlog events (JSON) to send"}
+					placeholder={"startup argument (JSON) to send to content"}
 					onChange={this._handleTextAreaChange} />
 			</div>
 		</div>;
 	}
 
 	private _handleClickSendButton = (): void => {
-		this.props.startContent({joinFlag: this.props.joinFlag, startupArgument: JSON.parse(this.props.eventEditContent)})
+		const argsContent = this.props.eventEditContent === "" ? "{}" : this.props.eventEditContent; // textareaに何も書かれていなければ空オブジェクト扱いとする
+		this.props.onClickStartContent({joinsToPlay: this.props.joinsToPlay, startupArgument: JSON.parse(argsContent)})
 			.catch(e => { console.error(e); });
 	}
 

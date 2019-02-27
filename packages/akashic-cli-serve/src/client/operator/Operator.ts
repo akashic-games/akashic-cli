@@ -17,7 +17,7 @@ export interface OperatorParameterObject {
 }
 
 export interface StartContentParameterObject {
-	joinFlag: boolean;
+	joinsToPlay: boolean;
 	startupArgument: any;
 }
 
@@ -73,9 +73,6 @@ export class Operator {
 		const optionsResult = await ApiClient.getOptions();
 		if (!optionsResult.data.waitStarting) {
 			await this.startContent();
-		} else {
-			const argumentResult = await ApiClient.getStartupArgument();
-			store.setStartupArguments(argumentResult.data.args);
 		}
 	}
 
@@ -91,7 +88,7 @@ export class Operator {
 			startupArgument: params != null ? params.startupArgument : undefined
 		});
 		store.setCurrentLocalInstance(instance);
-		if (params != null && params.joinFlag) {
+		if (params != null && params.joinsToPlay) {
 			store.currentPlay.join(store.player.id, store.player.name);
 		}
 	}

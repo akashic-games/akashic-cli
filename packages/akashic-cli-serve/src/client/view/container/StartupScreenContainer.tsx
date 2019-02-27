@@ -3,30 +3,31 @@ import { observer } from "mobx-react";
 import { Operator } from "../../operator/Operator";
 import { StartupScreen } from "../organism/StartupScreen";
 import { StartupScreenUiStore } from "../../store/StartupScreenUiStore";
+import { SandboxConfig } from "../../../common/types/SandboxConfig";
 
 export interface StartupScreenContainerProps {
 	operator: Operator;
 	startupScreenUiStore: StartupScreenUiStore;
-	startupArguments: {[name: string]: any};
+	sandboxConfig: SandboxConfig;
 }
 
 @observer
 export class StartupScreenContainer extends React.Component<StartupScreenContainerProps, {}> {
 	render(): React.ReactNode {
-		const { operator, startupScreenUiStore, startupArguments } = this.props;
+		const { operator, startupScreenUiStore, sandboxConfig } = this.props;
 		return <StartupScreen
 			showsEventList={startupScreenUiStore.showsStartupArgumentList}
 			eventListWidth={startupScreenUiStore.startupArgumentListWidth}
 			eventListMinWidth={150}
 			onEventListResize={operator.ui.setStartupArgumentListWidth}
 			onToggleList={operator.ui.toggleShowStartupArgumentList}
-			eventNames={startupArguments ? Object.keys(startupArguments) : []}
+			eventNames={sandboxConfig.arguments ? Object.keys(sandboxConfig.arguments) : []}
 			eventEditContent={startupScreenUiStore.startupArgumentEditContent}
-			joinFlag={startupScreenUiStore.joinFlag}
+			joinsToPlay={startupScreenUiStore.joinsToPlay}
 			onClickCopyEvent={operator.ui.copyRegisteredStartupArgumentToEditor}
 			onEventEditContentChanged={operator.ui.setStartupArgumentEditContent}
-			onChangeJoinFlag={operator.ui.setJoinFlag}
-			startContent={operator.startContent}
+			onChangeJoinsToPlay={operator.ui.setJoinsToPlay}
+			onClickStartContent={operator.startContent}
 		/>;
 	}
 }

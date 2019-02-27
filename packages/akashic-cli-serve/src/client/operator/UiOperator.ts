@@ -54,7 +54,7 @@ export class UiOperator {
 	}
 
 	copyRegisteredStartupArgumentToEditor = (label: string): void => {
-		const content = JSON.stringify(this.store.startupArguments[label], null, 2);
+		const content = JSON.stringify(this.store.sandboxConfig.arguments[label], null, 2);
 		this.store.startupScreenUiStore.setStartupArgumentEditContent(content);
 	}
 
@@ -62,7 +62,7 @@ export class UiOperator {
 		this.store.startupScreenUiStore.setStartupArgumentEditContent(content);
 	}
 
-	setJoinFlag = (joinFlag: boolean): void => {
-		this.store.startupScreenUiStore.setJoinFlag(joinFlag);
+	setJoinsToPlay = (join: boolean): void => {
+		this.store.startupScreenUiStore.setJoinsToPlay(join);
 	}
 }

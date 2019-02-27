@@ -18,7 +18,6 @@ import { PlayStore } from "../domain/PlayStore";
 import { RunnerStore } from "../domain/RunnerStore";
 import { SocketIOAMFlowManager } from "../domain/SocketIOAMFlowManager";
 import { createHandlerToGetSandboxConfig } from "../controller/SandboxConfigController";
-import { createHandlerToGetStartupArgument } from "../controller/StartupArgumentController";
 
 export interface ApiRouterParameterObjct {
 	targetDir: string;
@@ -46,7 +45,6 @@ export const createApiRouter = (params: ApiRouterParameterObjct): express.Router
 	apiRouter.patch("/runner/:runnerId", createHandlerToPatchRunner(params.runnerStore));
 
 	apiRouter.get("/sandbox-config", createHandlerToGetSandboxConfig(params.targetDir));
-	apiRouter.get("/startup-argument", createHandlerToGetStartupArgument(params.targetDir));
 
 	return apiRouter;
 };
