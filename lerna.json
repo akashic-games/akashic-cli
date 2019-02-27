@@ -4,7 +4,7 @@
     "publish": {
       "allowBranch": [
         "master",
-        "copied-akashic-cli-xxx"
+        "serve-start-arguments"
       ]
     },
     "version": {
