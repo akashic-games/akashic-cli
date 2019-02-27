@@ -7,6 +7,7 @@ declare module agv {
 		registerExternalPlugin(plugin: ExternalPlugin): void;
 	}
 	class GameContent {
+		onExternalPluginRegister: TriggerLike; // NOTE: 拡張
 		constructor(...args: any[]);
 		pause(): void;
 		resume(): void;
@@ -16,7 +17,6 @@ declare module agv {
 		removeErrorListener(errorListener: ErrorListener): void;
 		getGameVars(propertyName: string, listener: (vars: any) => void): void;
 		getGame(): GameLike;
-		onExternalPluginRegister: TriggerLike; // NOTE: 拡張
 	}
 	interface PlaylogConfig {
 		playId: string;
