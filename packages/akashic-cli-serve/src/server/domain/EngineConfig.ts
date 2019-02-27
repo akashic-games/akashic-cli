@@ -10,7 +10,7 @@ export const getEngineConfig = (baseUrl: string, isRaw: boolean): EngineConfig =
 	return {
 		engine_configuration_version: "2.3.5",
 		engine_urls: [
-			`${baseUrl}/public/external/engineFilesV1_0_8_Canvas.js`,
+			`${baseUrl}/public/external/engineFilesV2_1_10_Canvas.js`,
 			`${baseUrl}/public/external/playlogClientV3_2_1.js`
 		],
 		content_url: `${baseUrl}/${gameContentDir}/game.json`,
