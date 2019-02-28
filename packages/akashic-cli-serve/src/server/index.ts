@@ -38,7 +38,7 @@ export function run(argv: any): void {
 		.option("-p, --port <port>", `The port number to listen. default: ${serverGlobalConfig.port}`, (x => parseInt(x, 10)))
 		.option("-H, --hostname <hostname>", `The host name of the server. default: ${serverGlobalConfig.hostname}`)
 		.option("-v, --verbose", `Display detailed information on console. default: false`)
-		.option("-w, --wait", `Stop automatic startup of contents. default: false`)
+		.option("--wait", `Wait automatic startup of contents. default: false`)
 		.parse(argv);
 
 	if (commander.port && isNaN(commander.port)) {

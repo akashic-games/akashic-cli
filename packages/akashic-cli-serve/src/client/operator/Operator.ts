@@ -85,7 +85,7 @@ export class Operator {
 			playToken: tokenResult.data.playToken,
 			executionMode: "passive",
 			player: store.player,
-			startupArgument: params != null ? params.startupArgument : undefined
+			argument: params != null ? params.startupArgument : undefined
 		});
 		store.setCurrentLocalInstance(instance);
 		if (params != null && params.joinsToPlay) {

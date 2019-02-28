@@ -26,7 +26,7 @@ export interface LocalInstanceEntityParameterObject {
 	executionMode: ExecutionMode;
 	play: PlayEntity;
 	player: Player;
-	startupArgument?: any;
+	argument?: any;
 }
 
 export class LocalInstanceEntity implements GameInstanceEntity {
@@ -69,7 +69,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 			gameLoaderCustomizer: {
 				createCustomAmflowClient: () => this.play.amflow
 			},
-			argument: params.startupArgument
+			argument: params.argument
 		});
 	}
 
