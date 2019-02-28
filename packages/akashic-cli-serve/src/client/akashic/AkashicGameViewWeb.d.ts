@@ -4,6 +4,7 @@ declare module agv {
 		addContent(content: any): void;
 		removeContent(content: any): void;
 		setViewSize(width: number, height: number): void;
+		registerExternalPlugin(plugin: ExternalPlugin): void;
 	}
 	class GameContent {
 		constructor(...args: any[]);
@@ -13,15 +14,24 @@ declare module agv {
 		addContentLoadListener(contentLoadListener: any): void;
 		addErrorListener(errorListener: ErrorListener): void;
 		removeErrorListener(errorListener: ErrorListener): void;
+		getGameVars(propertyName: string, listener: (vars: any) => void): void;
+		getGame(): GameLike;
+		onExternalPluginRegister: TriggerLike; // NOTE: 拡張
 	}
 	interface PlaylogConfig {
 		playId: string;
 		executionMode: ExecutionMode;
 		replayTargetTimeFunc: () => number;
-		playlogServerUrl: string;
-		playToken: string;
+		playlogServerUrl?: string;
+		playToken?: string;
 	}
 	interface GameViewSharedObject {}
+	interface GameLoaderCustomizer {
+		platformCustomizer?: (platform: any, opts?: any) => void;
+		createCustomAudioPlugins?: () => any[];
+		createCustomAmflowClient?: () => any;
+		overwriteEngineConfig?: string;
+	}
 	interface GameConfig {
 		contentUrl: string;
 		player: {
@@ -29,15 +39,26 @@ declare module agv {
 			name?: string;
 		};
 		playConfig: PlaylogConfig;
-		gameLoaderCustomizer: {
-			platformCustomizer?: (platform: any, opts?: any) => void;
-			createCustomAudioPlugins?: () => any[];
-			createCustomAmflowClient?: () => any;
-			overwriteEngineConfig?: string;
-		};
+		gameLoaderCustomizer: GameLoaderCustomizer;
 	}
 	interface ErrorListener {
 		onError: (e: Error) => void;
+	}
+	interface ExternalPlugin {
+		name: string;
+		onload: (game: GameLike, dataBus: any, gameContent: GameContent) => void;
+	}
+	interface TriggerLike {
+		add: (...args: any[]) => void;
+		addOnce: (...args: any[]) => void;
+		remove: (...args: any[]) => void;
+		fire: (arg: any) => void;
+	}
+	interface GameExternalPluginsLike {
+		coe?: any;
+	}
+	interface GameLike {
+		external: GameExternalPluginsLike;
 	}
 	enum ExecutionMode {
 		Active, Passive, Replay
