@@ -1,4 +1,5 @@
 import {generateTestbedScriptAsset} from "./TestbedScriptAsset";
+import {Trigger} from "@akashic/trigger";
 
 export interface Platform {
 	_resourceFactory: {
@@ -32,13 +33,15 @@ export class GameViewManager {
 
 	createGameContent(gameConfig: agv.GameConfig): agv.GameContent {
 		const customGameConfig = {
-			...gameConfig,
-			gameLoaderCustomizer: {
-				...gameConfig.gameLoaderCustomizer,
-				platformCustomizer: this.customizePlatform
-			}
+			...gameConfig
 		};
-		return new agv.GameContent(customGameConfig);
+		// TODO: 複数コンテンツのホスティングに対応されれば削除
+		if (gameConfig.gameLoaderCustomizer.createCustomAmflowClient) {
+			customGameConfig.gameLoaderCustomizer.platformCustomizer = this.customizePlatform;
+		}
+		const gameContent = new agv.GameContent(customGameConfig);
+		gameContent.onExternalPluginRegister = new Trigger();
+		return gameContent;
 	}
 
 	startGameContent(content: agv.GameContent): Promise<void> {
@@ -72,6 +75,18 @@ export class GameViewManager {
 
 	setViewSize(width: number, height: number): void {
 		this.gameView.setViewSize(width, height);
+	}
+
+	registerExternalPlugin(plugin: agv.ExternalPlugin): void {
+		this.gameView.registerExternalPlugin(plugin);
+	}
+
+	getGameVars<T>(content: agv.GameContent, propertyName: string): Promise<T> {
+		return new Promise(resolve => {
+			content.getGameVars(propertyName, value => {
+				resolve(value);
+			});
+		});
 	}
 
 	private customizePlatform(platform: Platform, options: any): void {

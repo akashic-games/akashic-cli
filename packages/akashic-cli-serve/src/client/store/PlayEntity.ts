@@ -1,5 +1,6 @@
 import { observable, action, ObservableMap } from "mobx";
 import * as playlog from "@akashic/playlog";
+import { Trigger } from "@akashic/trigger";
 import { TimeKeeper } from "../../common/TimeKeeper";
 import { PlayStatus } from "../../common/types/PlayStatus";
 import { PlayDurationState } from "../../common/types/PlayDurationState";
@@ -12,13 +13,22 @@ import { Player } from "../../common/types/Player";
 import { ExecutionMode } from "./ExecutionMode";
 import { LocalInstanceEntity } from "./LocalInstanceEntity";
 import { ServerInstanceEntity } from "./ServerInstanceEntity";
+import { CreateCoeLocalInstanceParameterObject } from "./CoePluginEntity";
 
 export interface CreateLocalInstanceParameterObject {
 	gameViewManager: GameViewManager;
-	playToken: string;
 	executionMode: ExecutionMode;
 	player: Player;
+	playId: string;
+	playToken?: string;
+	playlogServerUrl?: string;
 	contentUrl?: string;
+	argument?: any;
+	initialEvents?: playlog.Event[];
+	coeHandler?: {
+		onLocalInstanceCreate: (params: CreateCoeLocalInstanceParameterObject) => Promise<LocalInstanceEntity>;
+		onLocalInstanceDelete: (playId: string) => Promise<void>;
+	};
 }
 
 export interface CreateServerInstanceParameterObject {
@@ -33,9 +43,12 @@ export interface PlayEntityParameterObject {
 	runners?: RunnerDescription[];
 	clientInstances?: ClientInstanceDescription[];
 	durationState?: PlayDurationState;
+	parent?: PlayEntity;
 }
 
 export class PlayEntity {
+	onTeardown: Trigger<PlayEntity>;
+
 	readonly playId: string;
 	readonly amflow: SocketIOAMFlowClient;
 
@@ -54,6 +67,7 @@ export class PlayEntity {
 	private readonly _clientContentUrl: string;
 	private _serverInstanceWaiters: {[key: string]: (p: ServerInstanceEntity) => void };
 	private _timerId: any;
+	private _parent?: PlayEntity;
 
 	constructor(param: PlayEntityParameterObject) {
 		this.playId = param.playId;
@@ -66,10 +80,16 @@ export class PlayEntity {
 		this.status = "preparing";
 		this.localInstances = [];
 		this.serverInstances = !param.runners ? [] : param.runners.map(desc => new ServerInstanceEntity({ runnerId: desc.runnerId, play: this }));
+		this.onTeardown = new Trigger();
 		this._timeKeeper = new TimeKeeper();
 		this._clientContentUrl = param.clientContentUrl!;
 		this._serverInstanceWaiters = {};
 		this._timerId = null;
+
+		if (param.parent) {
+			this._parent = param.parent;
+			this._parent.onTeardown.addOnce(this._handleParentTeardown);
+		}
 
 		if (param.durationState) {
 			this._timeKeeper.setTime(param.durationState.duration);
@@ -89,7 +109,12 @@ export class PlayEntity {
 	}
 
 	async createLocalInstance(param: CreateLocalInstanceParameterObject): Promise<LocalInstanceEntity> {
-		const i = new LocalInstanceEntity({ play: this, contentUrl: this._clientContentUrl, ...param });
+		const i = new LocalInstanceEntity({
+			play: this,
+			contentUrl: this._clientContentUrl,
+			coeHandler: param.coeHandler,
+			...param
+		});
 		i.onStop.add(this._handleLocalInstanceStopped);
 		this.localInstances.push(i);
 		await i.start();
@@ -204,8 +229,11 @@ export class PlayEntity {
 		this.isActivePausing = false;
 	}
 
-	teardown(): void {
+	async teardown(): Promise<void> {
 		this._pauseTimeKeeper();
+		await this.deleteAllLocalInstances();
+		await this.deleteAllServerInstances();
+		this.onTeardown.fire(this);
 	}
 
 	private _handleLocalInstanceStopped = (instance: LocalInstanceEntity): void => {
@@ -224,6 +252,10 @@ export class PlayEntity {
 			clearInterval(this._timerId);
 			this._timerId = null;
 		}
+	}
+
+	private _handleParentTeardown = () => {
+		this.teardown();
 	}
 
 	@action
