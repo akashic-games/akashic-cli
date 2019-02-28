@@ -7,6 +7,7 @@ import { Store } from "../store/Store";
 import { PlayOperator } from "./PlayOperator";
 import { LocalInstanceOperator } from "./LocalInstanceOperator";
 import { UiOperator } from "./UiOperator";
+import { ExternalPluginOperator } from "./ExternalPluginOperator";
 
 export interface OperatorParameterObject {
 	store: Store;
@@ -25,6 +26,7 @@ export class Operator {
 	play: PlayOperator;
 	localInstance: LocalInstanceOperator;
 	ui: UiOperator;
+	externalPlugin: ExternalPluginOperator;
 	private store: Store;
 	private gameViewManager: GameViewManager;
 	private contentUrl: string;
@@ -35,6 +37,7 @@ export class Operator {
 		this.play = new PlayOperator(store);
 		this.localInstance = new LocalInstanceOperator(store);
 		this.ui = new UiOperator(store);
+		this.externalPlugin = new ExternalPluginOperator(param.gameViewManager);
 		this.store = param.store;
 		this.gameViewManager = param.gameViewManager;
 		this.contentUrl = param.contentUrl;
@@ -48,7 +51,7 @@ export class Operator {
 		await store.playStore.assertInitialized();
 		const playIds = Object.keys(store.playStore.plays);
 		const play = (playIds.length === 0) ? await this._createServerLoop() : store.playStore.plays[playIds[playIds.length - 1]];
-		return await this.setCurrentPlay(play);
+		await this.setCurrentPlay(play);
 	}
 
 	setCurrentPlay = async (play: PlayEntity): Promise<void> => {
@@ -82,10 +85,48 @@ export class Operator {
 		const tokenResult = await ApiClient.createPlayToken(play.playId, store.player.id, false, store.player.name);
 		const instance = await play.createLocalInstance({
 			gameViewManager: this.gameViewManager,
+			playId: play.playId,
 			playToken: tokenResult.data.playToken,
+			playlogServerUrl: "dummy-playlog-server-url",
 			executionMode: "passive",
 			player: store.player,
-			argument: params != null ? params.startupArgument : undefined
+			argument: params != null ? params.startupArgument : undefined,
+			coeHandler: {
+				onLocalInstanceCreate: async params => {
+					// TODO: local === true のみ対応
+					if (!params.local) {
+						// TODO: エラーハンドリング
+						throw new Error("Not supported");
+					}
+					const childPlay = await this._createClientLoop(params.contentUrl, params.playId);
+					return await childPlay.createLocalInstance({
+						gameViewManager: this.gameViewManager,
+						contentUrl: params.contentUrl,
+						player: this.store.player,
+						playId: params.playId,
+						executionMode: "active",
+						argument: {
+							coe: {
+								permission: {
+									advance: true,
+									advanceRequest: true,
+									aggregation: true
+								},
+								roles: ["broadcaster"],
+								debugMode: false
+							}
+						},
+						initialEvents: params.initialEvents
+					});
+				},
+				onLocalInstanceDelete: async playId => {
+					const play = this.store.playStore.plays[playId];
+					if (play == null) {
+						throw new Error("Play not found" + playId);
+					}
+					await play.teardown();
+				}
+			}
 		});
 		store.setCurrentLocalInstance(instance);
 		if (params != null && params.joinsToPlay) {
@@ -107,6 +148,14 @@ export class Operator {
 		const tokenResult = await ApiClient.createPlayToken(play.playId, "", true);  // TODO 空文字列でなくnullを使う
 		play.createServerInstance({ playToken: tokenResult.data.playToken });
 		ApiClient.resumePlayDuration(play.playId);
+		return play;
+	}
+
+	private async _createClientLoop(contentUrl: string, playId: string): Promise<PlayEntity> {
+		const play = await this.store.playStore.createStandalonePlay({
+			contentUrl,
+			playId
+		});
 		return play;
 	}
 

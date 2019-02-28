@@ -4,6 +4,7 @@ import {TimeKeeper} from "../../common/TimeKeeper";
 import {Player} from "../../common/types/Player";
 import {GameViewManager} from "../akashic/GameViewManager";
 import {PlayEntity} from "./PlayEntity";
+import {CoePluginEntity, CreateCoeLocalInstanceParameterObject} from "./CoePluginEntity";
 import {GameInstanceEntity} from "./GameInstanceEntity";
 import {ExecutionMode} from "./ExecutionMode";
 
@@ -22,11 +23,16 @@ const toAgvExecutionMode = (() => {
 export interface LocalInstanceEntityParameterObject {
 	gameViewManager: GameViewManager;
 	contentUrl: string;
-	playToken: string;
 	executionMode: ExecutionMode;
 	play: PlayEntity;
 	player: Player;
 	argument?: any;
+	playToken?: string;
+	playlogServerUrl?: string;
+	coeHandler?: {
+		onLocalInstanceCreate: (params: CreateCoeLocalInstanceParameterObject) => Promise<LocalInstanceEntity>;
+		onLocalInstanceDelete: (playId: string) => Promise<void>;
+	};
 }
 
 export class LocalInstanceEntity implements GameInstanceEntity {
@@ -38,6 +44,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 	@observable isPaused: boolean;
 
 	readonly play: PlayEntity;
+	readonly coePlugin: CoePluginEntity;
 	readonly contentUrl: string;
 
 	private _timeKeeper: TimeKeeper;
@@ -53,29 +60,50 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 		this.contentUrl = params.contentUrl;
 		this._timeKeeper = new TimeKeeper();
 		this._gameViewManager = params.gameViewManager;
+		const playConfig: agv.PlaylogConfig = {
+			playId: this.play.playId,
+			executionMode: toAgvExecutionMode(this.executionMode),
+			replayTargetTimeFunc: this._getReplayTargetTime
+		};
+		let gameLoaderCustomizer: agv.GameLoaderCustomizer = {};
+		if (params.playlogServerUrl != null) {
+			playConfig.playlogServerUrl = params.playlogServerUrl;
+			gameLoaderCustomizer.createCustomAmflowClient = () => this.play.amflow;
+		}
+		if (params.playToken != null) {
+			playConfig.playToken = params.playToken;
+		}
 		this._agvGameContent = this._gameViewManager.createGameContent({
 			contentUrl: this.contentUrl,
 			player: {
 				id: this.player.id,
 				name: this.player.name
 			},
-			playConfig: {
-				playId: this.play.playId,
-				executionMode: toAgvExecutionMode(this.executionMode),
-				replayTargetTimeFunc: this._getReplayTargetTime,
-				playlogServerUrl: "dummy-playlog-server-url",
-				playToken: params.playToken
-			} as agv.PlaylogConfig,
-			gameLoaderCustomizer: {
-				createCustomAmflowClient: () => this.play.amflow
-			},
+			playConfig,
+			gameLoaderCustomizer,
 			argument: params.argument
 		});
+		if (params.coeHandler != null) {
+			this.coePlugin = new CoePluginEntity({
+				gameViewManager: this._gameViewManager,
+				onLocalInstanceCreate: params.coeHandler.onLocalInstanceCreate,
+				onLocalInstanceDelete: params.coeHandler.onLocalInstanceDelete
+			});
+			this._agvGameContent.onExternalPluginRegister.addOnce((name: string) => {
+				if (name !== "coe") return;
+				const game = this._agvGameContent.getGame();
+				this.coePlugin.bootstrap(game, this._agvGameContent);
+			});
+		}
 	}
 
 	@computed
 	get isJoined(): boolean {
 		return this.play.joinedPlayerTable.has(this.player.id);
+	}
+
+	get gameContent(): agv.GameContent {
+		return this._agvGameContent;
 	}
 
 	async start(): Promise<void> {

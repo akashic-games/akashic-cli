@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli",
-  "version": "1.5.4-alpha.0",
+  "version": "1.5.4",
   "description": "Command-line utility for akashic game development",
   "bin": {
     "akashic": "./bin/akashic"
@@ -33,7 +33,7 @@
     "@akashic/akashic-cli-install": "0.3.4",
     "@akashic/akashic-cli-modify": "0.1.2",
     "@akashic/akashic-cli-scan": "0.2.4",
-    "@akashic/akashic-cli-serve": "0.0.11-alpha.0",
+    "@akashic/akashic-cli-serve": "0.0.11",
     "@akashic/akashic-cli-stat": "0.1.2",
     "@akashic/akashic-cli-uninstall": "0.3.1",
     "@akashic/akashic-cli-update": "0.2.1",
