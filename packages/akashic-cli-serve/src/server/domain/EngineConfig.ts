@@ -1,21 +1,29 @@
+import fetch from "node-fetch";
+
 export interface EngineConfig {
-	engine_configuration_version: string;
 	engine_urls: string[];
 	content_url: string;
 	asset_base_url?: string;
 	external?: string[];
 }
 
-export const getEngineConfig = (baseUrl: string, isRaw: boolean): EngineConfig => {
+export const getEngineConfig = (baseUrl: string, isRaw: boolean): Promise<EngineConfig> => {
 	const gameContentDir = isRaw ? "raw" : "content";
-	return {
-		engine_configuration_version: "2.3.5",
-		engine_urls: [
-			`${baseUrl}/public/external/engineFilesV2_1_10_Canvas.js`,
-			`${baseUrl}/public/external/playlogClientV3_2_1.js`
-		],
-		external: ["coe"], // TODO: game.json から取得するように
-		content_url: `${baseUrl}/${gameContentDir}/game.json`,
-		asset_base_url: `${baseUrl}/${gameContentDir}`
-	};
+	const versionsJson = require("../engineFilesVersion.json");
+	const gameJsonUrl = `${baseUrl}/${gameContentDir}/game.json`;
+	return fetch(gameJsonUrl, { method: "GET" })
+		.then(res => res.json())
+		.then(json => {
+			const version = json["environment"]["sandbox-runtime"] || "1";
+			const engineFilesName = `engineFilesV${versionsJson[`v${version}`].replace(/\./g, "_")}.js`
+			return {
+				engine_urls: [
+					`${baseUrl}/public/external/${engineFilesName}`,
+					`${baseUrl}/public/external/playlogClientV3_2_1.js`
+				],
+				external: ["coe"], // TODO: game.json から取得するように
+				content_url: gameJsonUrl,
+				asset_base_url: `${baseUrl}/${gameContentDir}`
+			};
+		});
 };
