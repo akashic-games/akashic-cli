@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-export-html",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "A module to convert your Akashic game to a runnable standalone.",
   "main": "lib/index.js",
   "scripts": {
@@ -19,8 +19,8 @@
     "build:template:v2": "cd templates/template-export-html-v2 && npm install && npm run build && cd ../../",
     "build:template:ect": "shx cp templates/bundle-index.ect templates-build/ && shx cp templates/no-bundle-index.ect templates-build/",
     "lint": "npm run lint:ts && npm run lint:md",
-    "lint:ts": "tslint -c tslint.json --project ./tsconfig.json",
-    "lint:md": "remark ./*.md --frail --no-stdout --quiet --rc-path ./.remarkrc",
+    "lint:ts": "tslint -c ../tslint.json --project ./tsconfig.json",
+    "lint:md": "remark ./*.md --frail --no-stdout --quiet --rc-path ../.remarkrc",
     "test": "npm run test:jasmine && npm run lint",
     "test:jasmine": "istanbul cover --report text --report html --colors -i ./lib/main.node.js ./node_modules/jasmine/bin/jasmine.js",
     "update-template": "npm run update-template:v1 && npm run update-template:v2 && node ./build-template-support/generateFilesAboutEngineFiles.js",
@@ -65,8 +65,8 @@
   },
   "typings": "lib/index.d.ts",
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.2.13",
-    "@akashic/akashic-cli-export-zip": "0.3.3",
+    "@akashic/akashic-cli-commons": "0.2.14",
+    "@akashic/akashic-cli-export-zip": "0.3.4",
     "archiver": "~3.0.0",
     "commander": "2.8.1",
     "ect": "^0.5.9",
