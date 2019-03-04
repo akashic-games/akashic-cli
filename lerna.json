@@ -3,8 +3,7 @@
   "command": {
     "publish": {
       "allowBranch": [
-        "master",
-        "copied-akashic-cli-xxx"
+        "master"
       ]
     },
     "version": {
