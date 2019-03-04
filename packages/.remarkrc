@@ -26,7 +26,7 @@
       "maximum-line-length": 140,
       "no-auto-link-without-protocol": true,
       "no-blockquote-without-caret": true,
-      "no-consecutive-blank-lines": true,
+      "no-consecutive-blank-lines": false,
       "no-duplicate-definitions": true,
       "no-duplicate-headings": false,
       "no-emphasis-as-heading": true,
@@ -52,7 +52,7 @@
       "ordered-list-marker-value": "ordered",
       "strong-marker": "*",
       "table-cell-padding": "consistent",
-      "table-pipe-alignment": true,
+      "table-pipe-alignment": false,
       "table-pipes": true,
       "unordered-list-marker-style": "*"
     }

@@ -3,8 +3,7 @@
   "command": {
     "publish": {
       "allowBranch": [
-        "master",
-        "serve-start-arguments"
+        "master"
       ]
     },
     "version": {
