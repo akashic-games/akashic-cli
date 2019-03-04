@@ -19,6 +19,13 @@ import { PlayEntity } from "./PlayEntity";
 export interface CreatePlayParameterObject {
 	contentUrl: string;
 	clientContentUrl?: string;
+	parent?: PlayEntity;
+}
+
+export interface CreateStandalonePlayParameterObject {
+	contentUrl: string;
+	playId: string;
+	parent?: PlayEntity;
 }
 
 export class PlayStore {
@@ -63,6 +70,26 @@ export class PlayStore {
 		// でなければ onPlayCreate 通知(が来て PlayEntity が生成される)を待つ
 		const play = await (new Promise<PlayEntity>(resolve => (this._creationWaiters[playId] = resolve)));
 		delete this._creationWaiters[playId];
+		return play;
+	}
+
+	/**
+	 * スタンドアロンのプレーを作成する。
+	 */
+	async createStandalonePlay(param: CreateStandalonePlayParameterObject): Promise<PlayEntity> {
+		const playId = param.playId;
+
+		if (this.plays[playId])
+			return this.plays[playId];
+
+		const play = new PlayEntity({
+			playId,
+			contentUrl: param.contentUrl,
+			clientContentUrl: "dummy",
+			parent: param.parent
+		});
+		this.plays[playId] = play;
+
 		return play;
 	}
 
