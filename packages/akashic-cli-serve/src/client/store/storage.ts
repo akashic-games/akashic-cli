@@ -12,7 +12,7 @@ export interface StorageData {
 	showsStartupArgumentList: boolean;
 	startupArgumentListWidth: number;
 	startupArgumentEditContent: string;
-	joinsToPlay: boolean;
+	joinsAutomatically: boolean;
 }
 
 function asBool(s: string | null): boolean | null {
@@ -72,7 +72,7 @@ export class Storage {
 			showsStartupArgumentList: choose(asBool(qp.showsStartupArgumentList), s.showsStartupArgumentList, true),
 			startupArgumentListWidth: choose(asNumber(qp.startupArgumentListWidth), s.startupArgumentListWidth, 150),
 			startupArgumentEditContent: choose(qp.startupArgumentEditContent, s.startupArgumentEditContent, ""),
-			joinsToPlay: choose(asBool(qp.joinsToPlay), s.joinsToPlay, false)
+			joinsAutomatically: choose(asBool(qp.joinsAutomatically), s.joinsAutomatically, false)
 		});
 	}
 

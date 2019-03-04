@@ -18,7 +18,7 @@ export interface OperatorParameterObject {
 }
 
 export interface StartContentParameterObject {
-	joinsToPlay: boolean;
+	joinsAutomatically: boolean;
 	startupArgument: any;
 }
 
@@ -129,7 +129,7 @@ export class Operator {
 			}
 		});
 		store.setCurrentLocalInstance(instance);
-		if (params != null && params.joinsToPlay) {
+		if (params != null && params.joinsAutomatically) {
 			store.currentPlay.join(store.player.id, store.player.name);
 		}
 	}

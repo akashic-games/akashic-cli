@@ -62,7 +62,7 @@ export class UiOperator {
 		this.store.startupScreenUiStore.setStartupArgumentEditContent(content);
 	}
 
-	setJoinsToPlay = (join: boolean): void => {
-		this.store.startupScreenUiStore.setJoinsToPlay(join);
+	setJoinsAutomatically = (join: boolean): void => {
+		this.store.startupScreenUiStore.setJoinsAutomatically(join);
 	}
 }

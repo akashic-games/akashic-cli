@@ -15,10 +15,10 @@ export interface StartupScreenProps {
 	onToggleList: (nextVal: boolean) => void;
 	eventNames: string[];
 	eventEditContent: string;
-	joinsToPlay: boolean;
+	joinsAutomatically: boolean;
 	onClickCopyEvent: (eventName: string) => void;
 	onEventEditContentChanged: (content: string) => void;
-	onChangeJoinsToPlay: (join: boolean) => void;
+	onChangeJoinsAutomatically: (join: boolean) => void;
 	onClickStartContent: (params?: StartContentParameterObject) => Promise<void>;
 }
 
@@ -28,12 +28,12 @@ export class StartupScreen extends React.Component<StartupScreenProps, {}> {
 		return <div className={styles["devtool"]}>
 			<div className="checkbox">
 				<label className="join">
-					<input type="checkbox" id="join" checked={this.props.joinsToPlay}
-						   onChange={() => this.props.onChangeJoinsToPlay(!this.props.joinsToPlay)}/>
+					<input type="checkbox" id="join" checked={this.props.joinsAutomatically}
+						   onChange={() => this.props.onChangeJoinsAutomatically(!this.props.joinsAutomatically)}/>
 					このコンテンツに join する
 				</label>
 			</div>
-			{this._generateStartArgumentDom()}
+			{this._generateStartupArgumentDom()}
 			<div className="send-button">
 				<button type="button" onClick={this._handleClickSendButton}>
 					コンテンツの開始
@@ -42,7 +42,7 @@ export class StartupScreen extends React.Component<StartupScreenProps, {}> {
 		</div>;
 	}
 
-	private _generateStartArgumentDom = (): React.ReactNode => {
+	private _generateStartupArgumentDom = (): React.ReactNode => {
 		const props = this.props;
 		return <div className={styles["events-devtool"]}>
 			{
@@ -90,7 +90,7 @@ export class StartupScreen extends React.Component<StartupScreenProps, {}> {
 
 	private _handleClickSendButton = (): void => {
 		const argsContent = this.props.eventEditContent === "" ? "{}" : this.props.eventEditContent; // textareaに何も書かれていなければ空オブジェクト扱いとする
-		this.props.onClickStartContent({joinsToPlay: this.props.joinsToPlay, startupArgument: JSON.parse(argsContent)})
+		this.props.onClickStartContent({joinsAutomatically: this.props.joinsAutomatically, startupArgument: JSON.parse(argsContent)})
 			.catch(e => { console.error(e); });
 	}
 

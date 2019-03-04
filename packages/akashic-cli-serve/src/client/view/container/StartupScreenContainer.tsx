@@ -23,10 +23,10 @@ export class StartupScreenContainer extends React.Component<StartupScreenContain
 			onToggleList={operator.ui.toggleShowStartupArgumentList}
 			eventNames={sandboxConfig.arguments ? Object.keys(sandboxConfig.arguments) : []}
 			eventEditContent={startupScreenUiStore.startupArgumentEditContent}
-			joinsToPlay={startupScreenUiStore.joinsToPlay}
+			joinsAutomatically={startupScreenUiStore.joinsAutomatically}
 			onClickCopyEvent={operator.ui.copyRegisteredStartupArgumentToEditor}
 			onEventEditContentChanged={operator.ui.setStartupArgumentEditContent}
-			onChangeJoinsToPlay={operator.ui.setJoinsToPlay}
+			onChangeJoinsAutomatically={operator.ui.setJoinsAutomatically}
 			onClickStartContent={operator.startContent}
 		/>;
 	}

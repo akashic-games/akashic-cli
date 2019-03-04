@@ -5,13 +5,13 @@ export class StartupScreenUiStore {
 	@observable showsStartupArgumentList: boolean;
 	@observable startupArgumentListWidth: number;
 	@observable startupArgumentEditContent: string;
-	@observable joinsToPlay: boolean;
+	@observable joinsAutomatically: boolean;
 
 	constructor() {
 		this.showsStartupArgumentList = storage.data.showsStartupArgumentList;
 		this.startupArgumentListWidth = storage.data.startupArgumentListWidth;
 		this.startupArgumentEditContent = storage.data.startupArgumentEditContent;
-		this.joinsToPlay = storage.data.joinsToPlay;
+		this.joinsAutomatically = storage.data.joinsAutomatically;
 	}
 
 	@action
@@ -33,8 +33,8 @@ export class StartupScreenUiStore {
 	}
 
 	@action
-	setJoinsToPlay(join: boolean): void {
-		this.joinsToPlay = join;
-		storage.put({ joinsToPlay: join });
+	setJoinsAutomatically(join: boolean): void {
+		this.joinsAutomatically = join;
+		storage.put({ joinsAutomatically: join });
 	}
 }
