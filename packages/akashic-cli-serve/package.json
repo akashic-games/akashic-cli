@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-serve",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "A development server for Akashic Engine",
   "scripts": {
     "prepublish": "npm run setup && npm run build",
@@ -16,7 +16,7 @@
     "lint": "npm run lint:client && npm run lint:server && npm run lint:md",
     "lint:client": "tslint -p ./src/client -c tslint.json 'src/client/**/*.ts*' 'src/common/**/*.ts'",
     "lint:server": "tslint -p ./src/server -c tslint.json 'src/server/**/*.ts'",
-    "lint:md": "remark ./*.md --frail --no-stdout --quiet --rc-path ./.remarkrc",
+    "lint:md": "remark ./*.md --frail --no-stdout --quiet --rc-path ../.remarkrc",
     "storybook": "start-storybook -p 9001 -c .storybook -s ./www"
   },
   "author": "DWANGO Co., Ltd.",
