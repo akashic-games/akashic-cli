@@ -53,10 +53,6 @@ export interface RunnerPatchApiResponseData {
 export interface SandboxConfigApiResponseData extends SandboxConfig {
 }
 
-export interface StartupArgumentApiResponseData {
-	args: {[name: string]: any};
-}
-
 export interface OptionsApiResponseData {
 	waitStarting: boolean;
 	verbose: boolean;
@@ -71,5 +67,4 @@ export type RunnerPostApiResponse = ApiResponse<RunnerPostApiResponseData>;
 export type RunnerDeleteApiResponse = ApiResponse<RunnerDeleteApiResponseData>;
 export type RunnerPatchApiResponse = ApiResponse<RunnerPatchApiResponseData>;
 export type SandboxConfigApiResponse = ApiResponse<SandboxConfigApiResponseData>;
-export type StartupArgumentApiResponse = ApiResponse<StartupArgumentApiResponseData>;
 export type OptionsApiResponse = ApiResponse<OptionsApiResponseData>;

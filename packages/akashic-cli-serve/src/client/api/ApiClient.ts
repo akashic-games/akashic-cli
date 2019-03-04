@@ -8,8 +8,7 @@ import {
 	RunnerPostApiResponse,
 	RunnerPatchApiResponse,
 	SandboxConfigApiResponse,
-	OptionsApiResponse,
-	StartupArgumentApiResponse
+	OptionsApiResponse
 } from "../../common/types/ApiResponse";
 import {GameConfiguration} from "../../common/types/GameConfiguration";
 import * as ApiRequest from "./ApiRequest";
