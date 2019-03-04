@@ -3,12 +3,10 @@
   "version": "0.0.1",
   "description": "Modules for export html template.",
   "scripts": {
-    "build": "npm run build:mkdir && npm run update:modules && npm run build:delete && npm run copy",
+    "build": "npm run build:mkdir && npm run update && npm run copy",
     "build:mkdir": "shx mkdir -p ../../templates-build/v2/js",
-    "build:delete": "shx rm -rf ./js/akashic-engine.js",
     "copy": "shx cp -r js ../../templates-build/v2 && shx cp -r css ../../templates-build/v2",
-    "update": "npm run update:modules && npm run build:delete",
-    "update:modules": "node ../../build-template-support/updatefiles.js template-export-html-v2"
+    "update": "node ../../build-template-support/updatefiles.js template-export-html-v2"
   },
   "devDependencies": {
     "shx": "~0.2.2"
