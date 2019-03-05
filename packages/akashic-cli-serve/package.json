@@ -9,7 +9,7 @@
     "copy:agv": "node build/AkashicGameViewWebBuilder.js",
     "copy:engine-files": "node build/FilesAboutEngineFilesGenerator.js",
     "watch:client": "webpack --mode development --config ./src/client/webpack.config.js --watch",
-    "build": "npm run build:client && npm run build:server && shx cp ./src/server/engineFilesVersion.json ./lib/server",
+    "build": "npm run build:client && npm run build:server && shx cp ./config/engineFilesVersion.json ./lib/server",
     "build:client": "webpack --config ./src/client/webpack.config.js",
     "build:server": "tsc -p ./src/server",
     "test": "jasmine ./spec/**/*[sS]pec.js && npm run lint",

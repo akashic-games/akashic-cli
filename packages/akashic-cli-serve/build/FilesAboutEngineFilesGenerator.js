@@ -12,14 +12,14 @@ var versions = {
 	v1: v1Version,
 	v2: v2Version
 };
-fs.writeFileSync(path.join(__dirname, "..", "src", "server", "engineFilesVersion.json"), JSON.stringify(versions, null, 2));
+fs.writeFileSync(path.join(__dirname, "..", "config", "engineFilesVersion.json"), JSON.stringify(versions, null, 2));
 console.log("end to generate engineFilesVersion.json");
 
 var promises = Object.keys(versions).map(majorVersion => {
 	var fileName = `engineFilesV${versions[majorVersion].replace(/\./g, "_")}.js`;
-return Promise.resolve().then(() => {
-	console.log(`start to download engineFiles (v${versions[majorVersion]})`);
-	return fetch(`https://github.com/akashic-games/engine-files/releases/download/v${versions[majorVersion]}/${fileName}`);
+	return Promise.resolve().then(() => {
+		console.log(`start to download engineFiles (v${versions[majorVersion]})`);
+		return fetch(`https://github.com/akashic-games/engine-files/releases/download/v${versions[majorVersion]}/${fileName}`);
 	}).then(res => {
 		return new Promise((resolve, reject) => {
 			var fileName = `engineFilesV${versions[majorVersion].replace(/\./g, "_")}.js`;
@@ -36,7 +36,7 @@ return Promise.resolve().then(() => {
 });
 Promise.all(promises)
 	.then(() => {console.log("end to generate files");})
-.catch(err => {
-	console.error(err);
-	process.exit(1);
-});
+	.catch(err => {
+		console.error(err);
+		process.exit(1);
+	});

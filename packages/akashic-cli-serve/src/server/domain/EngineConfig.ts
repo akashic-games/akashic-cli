@@ -7,16 +7,24 @@ export interface EngineConfig {
 	external?: string[];
 }
 
+let cachedEngineConfig: EngineConfig;
+
 export const getEngineConfig = (baseUrl: string, isRaw: boolean): Promise<EngineConfig> => {
+	if (cachedEngineConfig) {
+		return Promise.resolve().then(() => cachedEngineConfig);
+	}
 	const gameContentDir = isRaw ? "raw" : "content";
 	const versionsJson = require("../engineFilesVersion.json");
 	const gameJsonUrl = `${baseUrl}/${gameContentDir}/game.json`;
 	return fetch(gameJsonUrl, { method: "GET" })
 		.then(res => res.json())
 		.then(json => {
-			const version = json["environment"]["sandbox-runtime"] || "1";
-			const engineFilesName = `engineFilesV${versionsJson[`v${version}`].replace(/\./g, "_")}.js`
-			return {
+			let version = "1";
+			if (json["environment"] != null && json["environment"]["sandbox-runtime"] != null) {
+				version = json["environment"]["sandbox-runtime"];
+			}
+			const engineFilesName = `engineFilesV${versionsJson[`v${version}`].replace(/\./g, "_")}.js`;
+			cachedEngineConfig = {
 				engine_urls: [
 					`${baseUrl}/public/external/${engineFilesName}`,
 					`${baseUrl}/public/external/playlogClientV3_2_1.js`
@@ -25,5 +33,6 @@ export const getEngineConfig = (baseUrl: string, isRaw: boolean): Promise<Engine
 				content_url: gameJsonUrl,
 				asset_base_url: `${baseUrl}/${gameContentDir}`
 			};
+			return cachedEngineConfig;
 		});
 };
