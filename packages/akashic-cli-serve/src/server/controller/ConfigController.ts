@@ -27,7 +27,7 @@ export const createHandlerToGetEngineConfig = (isRaw: boolean): express.RequestH
 export const handleToGetStartupOptions = (req: express.Request, res: express.Response, next: Function): void => {
 	try {
 		responseSuccess<OptionsApiResponseData>(res, 200, {
-			waitStarting: serverGlobalConfig.waitStarting,
+			autoStart: serverGlobalConfig.autoStart,
 			verbose: serverGlobalConfig.verbose
 		});
 	} catch (e) {

@@ -54,7 +54,7 @@ export interface SandboxConfigApiResponseData extends SandboxConfig {
 }
 
 export interface OptionsApiResponseData {
-	waitStarting: boolean;
+	autoStart: boolean;
 	verbose: boolean;
 }
 

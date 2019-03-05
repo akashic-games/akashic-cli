@@ -74,7 +74,7 @@ export class Operator {
 		store.setCurrentPlay(play);
 
 		const optionsResult = await ApiClient.getOptions();
-		if (!optionsResult.data.waitStarting) {
+		if (optionsResult.data.autoStart) {
 			await this.startContent();
 		}
 	}
