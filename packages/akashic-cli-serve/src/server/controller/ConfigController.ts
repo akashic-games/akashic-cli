@@ -1,7 +1,6 @@
 import * as express from "express";
 import * as EngineConfig from "../domain/EngineConfig";
-import { InternalServerError } from "../common/ApiError";
-import {serverGlobalConfig} from "../common/ServerGlobalConfig";
+import { serverGlobalConfig } from "../common/ServerGlobalConfig";
 
 export const createHandlerToGetEngineConfig = (isRaw: boolean): express.RequestHandler => {
 	return (req, res, next) => {
