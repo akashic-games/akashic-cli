@@ -7,13 +7,25 @@ export interface EngineConfig {
 	external?: string[];
 }
 
-let cachedEngineConfig: EngineConfig;
+let cachedEngineFilesName: string;
+
+const convertEngineConfig = (baseUrl: string, gameContentDir: string): EngineConfig => {
+	return {
+		engine_urls: [
+			`${baseUrl}/public/external/${cachedEngineFilesName}`,
+			`${baseUrl}/public/external/playlogClientV3_2_1.js`
+		],
+		external: ["coe"], // TODO: game.json から取得するように
+		content_url: `${baseUrl}/${gameContentDir}/game.json`,
+		asset_base_url: `${baseUrl}/${gameContentDir}`
+	};
+};
 
 export const getEngineConfig = (baseUrl: string, isRaw: boolean): Promise<EngineConfig> => {
-	if (cachedEngineConfig) {
-		return Promise.resolve().then(() => cachedEngineConfig);
-	}
 	const gameContentDir = isRaw ? "raw" : "content";
+	if (cachedEngineFilesName) {
+		return Promise.resolve().then(() => convertEngineConfig(baseUrl, gameContentDir));
+	}
 	const versionsJson = require("../engineFilesVersion.json");
 	const gameJsonUrl = `${baseUrl}/${gameContentDir}/game.json`;
 	return fetch(gameJsonUrl, { method: "GET" })
@@ -23,16 +35,7 @@ export const getEngineConfig = (baseUrl: string, isRaw: boolean): Promise<Engine
 			if (json["environment"] != null && json["environment"]["sandbox-runtime"] != null) {
 				version = json["environment"]["sandbox-runtime"];
 			}
-			const engineFilesName = `engineFilesV${versionsJson[`v${version}`].replace(/\./g, "_")}.js`;
-			cachedEngineConfig = {
-				engine_urls: [
-					`${baseUrl}/public/external/${engineFilesName}`,
-					`${baseUrl}/public/external/playlogClientV3_2_1.js`
-				],
-				external: ["coe"], // TODO: game.json から取得するように
-				content_url: gameJsonUrl,
-				asset_base_url: `${baseUrl}/${gameContentDir}`
-			};
-			return cachedEngineConfig;
+			cachedEngineFilesName = `engineFilesV${versionsJson[`v${version}`].replace(/\./g, "_")}.js`;
+			return convertEngineConfig(baseUrl, gameContentDir);
 		});
 };
