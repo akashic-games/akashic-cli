@@ -82,7 +82,7 @@ describe("downloadTemplate.ts", () => {
 					.then(() => {
 						expect(fs.statSync(path.join(
 							param._realTemplateDirectory,
-							"javascript/javascript",
+							"javascript",
 							"game.json"
 						)).isFile()).toBe(true);
 					})
