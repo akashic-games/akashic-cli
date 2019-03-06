@@ -19,7 +19,7 @@ export interface OperatorParameterObject {
 
 export interface StartContentParameterObject {
 	joinsAutomatically: boolean;
-	startupArgument: any;
+	gameArgument: any;
 }
 
 export class Operator {
@@ -90,7 +90,7 @@ export class Operator {
 			playlogServerUrl: "dummy-playlog-server-url",
 			executionMode: "passive",
 			player: store.player,
-			argument: params != null ? params.startupArgument : undefined,
+			argument: params != null ? params.gameArgument : undefined,
 			coeHandler: {
 				onLocalInstanceCreate: async params => {
 					// TODO: local === true のみ対応

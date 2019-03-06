@@ -2,34 +2,34 @@ import {action, observable} from "mobx";
 import {storage} from "./storage";
 
 export class StartupScreenUiStore {
-	@observable showsStartupArgumentList: boolean;
-	@observable startupArgumentListWidth: number;
-	@observable startupArgumentEditContent: string;
+	@observable showsGameArgumentList: boolean;
+	@observable gameArgumentListWidth: number;
+	@observable gameArgumentEditContent: string;
 	@observable joinsAutomatically: boolean;
 
 	constructor() {
-		this.showsStartupArgumentList = storage.data.showsStartupArgumentList;
-		this.startupArgumentListWidth = storage.data.startupArgumentListWidth;
-		this.startupArgumentEditContent = storage.data.startupArgumentEditContent;
+		this.showsGameArgumentList = storage.data.showsGameArgumentList;
+		this.gameArgumentListWidth = storage.data.gameArgumentListWidth;
+		this.gameArgumentEditContent = storage.data.gameArgumentEditContent;
 		this.joinsAutomatically = storage.data.joinsAutomatically;
 	}
 
 	@action
-	toggleShowStartupArgumentList(show: boolean): void {
-		this.showsStartupArgumentList = show;
-		storage.put({ showsStartupArgumentList: show });
+	toggleShowGameArgumentList(show: boolean): void {
+		this.showsGameArgumentList = show;
+		storage.put({ showsGameArgumentList: show });
 	}
 
 	@action
-	setStartupArgumentListWidth(w: number): void {
-		this.startupArgumentListWidth = w;
-		storage.put({ startupArgumentListWidth: w });
+	setGameArgumentListWidth(w: number): void {
+		this.gameArgumentListWidth = w;
+		storage.put({ gameArgumentListWidth: w });
 	}
 
 	@action
-	setStartupArgumentEditContent(content: string): void {
-		this.startupArgumentEditContent = content;
-		storage.put({ startupArgumentEditContent: content });
+	setGameArgumentEditContent(content: string): void {
+		this.gameArgumentEditContent = content;
+		storage.put({ gameArgumentEditContent: content });
 	}
 
 	@action

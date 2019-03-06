@@ -33,7 +33,7 @@ export class StartupScreen extends React.Component<StartupScreenProps, {}> {
 					このコンテンツに join する
 				</label>
 			</div>
-			{this._generateStartupArgumentDom()}
+			{this._generateGameArgumentDom()}
 			<div className="send-button">
 				<button type="button" onClick={this._handleClickSendButton}>
 					コンテンツの開始
@@ -42,7 +42,7 @@ export class StartupScreen extends React.Component<StartupScreenProps, {}> {
 		</div>;
 	}
 
-	private _generateStartupArgumentDom = (): React.ReactNode => {
+	private _generateGameArgumentDom = (): React.ReactNode => {
 		const props = this.props;
 		return <div className={styles["events-devtool"]}>
 			{
@@ -90,7 +90,7 @@ export class StartupScreen extends React.Component<StartupScreenProps, {}> {
 
 	private _handleClickSendButton = (): void => {
 		const argsContent = this.props.eventEditContent === "" ? "{}" : this.props.eventEditContent; // textareaに何も書かれていなければ空オブジェクト扱いとする
-		this.props.onClickStartContent({joinsAutomatically: this.props.joinsAutomatically, startupArgument: JSON.parse(argsContent)})
+		this.props.onClickStartContent({joinsAutomatically: this.props.joinsAutomatically, gameArgument: JSON.parse(argsContent)})
 			.catch(e => { console.error(e); });
 	}
 
