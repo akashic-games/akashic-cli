@@ -25,8 +25,9 @@ export function hashFilepath(filepath: string, nameLength: number): string {
  * @param maxHashLength ハッシュ化後のファイル名の文字数の最大値。省略された場合、20文字
  */
 export function renameAssetFilenames(content: GameConfiguration, basedir: string, maxHashLength: number = 20): void {
-	_renameAssets(content, basedir, maxHashLength);
-	_renameGlobalScripts(content, basedir, maxHashLength);
+	const processedAssetPaths: Set<string> = new Set();
+	_renameAssets(content, basedir, maxHashLength, processedAssetPaths);
+	_renameGlobalScripts(content, processedAssetPaths, basedir, maxHashLength);
 }
 
 /**
@@ -35,7 +36,7 @@ export function renameAssetFilenames(content: GameConfiguration, basedir: string
  * @param filePath リネームするファイルのパス
  * @param newFilePath リネームされたファイルのパス
  */
-function _renameFilename(basedir: string, filePath: string, newFilePath: string): void {
+function _renameFilename(basedir: string, filePath: string, newFilePath: string, processedAssetPaths: Set<string>): void {
 	try {
 		fs.accessSync(path.resolve(basedir, newFilePath));
 	} catch (error) {
@@ -49,12 +50,12 @@ function _renameFilename(basedir: string, filePath: string, newFilePath: string)
 	throw new Error(ERROR_FILENAME_CONFLICT);
 }
 
-function _renameAudioFilename(basedir: string, filePath: string, newFilePath: string): void {
+function _renameAudioFilename(basedir: string, filePath: string, newFilePath: string, processedAssetPaths: Set<string>): void {
 	const extTypes = [".ogg", ".aac", ".mp4"];
 	extTypes.forEach((ext) => {
 		try {
 			fs.accessSync(path.resolve(basedir, filePath + ext));
-			_renameFilename(basedir, filePath + ext, newFilePath + ext);
+			_renameFilename(basedir, filePath + ext, newFilePath + ext, processedAssetPaths);
 		} catch (error) {
 			if (error.code === "ENOENT") return; // 全てのオーディオ拡張子が揃っているとは限らない
 			throw error;
@@ -62,37 +63,45 @@ function _renameAudioFilename(basedir: string, filePath: string, newFilePath: st
 	});
 }
 
-function _renameAssets(content: GameConfiguration, basedir: string, maxHashLength: number): void {
+function _renameAssets(content: GameConfiguration, basedir: string, maxHashLength: number, processedAssetPaths: Set<string>): void {
 	const assetNames = Object.keys(content.assets);
 	const dirpaths: string[] = [];
 	assetNames.forEach((name) => {
 		const filePath = content.assets[name].path;
 		dirpaths.push(path.dirname(filePath));
 		const hashedFilePath = hashFilepath(filePath, maxHashLength);
+		const isRenamedAsset = processedAssetPaths.has(hashedFilePath);
+
 		content.assets[name].path = hashedFilePath;
 		content.assets[name].virtualPath = filePath;
+		processedAssetPaths.add(hashedFilePath);
+		if (isRenamedAsset) return; // 同じパスのアセットを既にハッシュ化済みの場合、ファイルはリネーム済み
 		if (content.assets[name].type !== "audio") {
-			_renameFilename(basedir, filePath, hashedFilePath);
+			_renameFilename(basedir, filePath, hashedFilePath, processedAssetPaths);
 		} else {
-			_renameAudioFilename(basedir, filePath, hashedFilePath);
+			_renameAudioFilename(basedir, filePath, hashedFilePath, processedAssetPaths);
 		}
 	});
 	const assetAncestorDirs = _listAncestorDirNames(dirpaths);
 	_removeDirectoryIfEmpty(assetAncestorDirs, basedir);
 }
 
-function _renameGlobalScripts(content: GameConfiguration, basedir: string, maxHashLength: number): void {
+function _renameGlobalScripts(content: GameConfiguration, processedAssetPaths: Set<string>, basedir: string, maxHashLength: number): void {
 	if (content.globalScripts) {
 		content.globalScripts.forEach((name: string, idx: number) => {
 			const assetname = "a_e_z_" + idx;
 			const hashedFilePath = hashFilepath(name, maxHashLength);
+			const isRenamedAsset = processedAssetPaths.has(hashedFilePath);
+
 			content.assets[assetname] = {
 				type: /\.json$/i.test(name) ? "text" : "script",
 				virtualPath: name,
 				path: hashedFilePath,
 				global: true
 			};
-			_renameFilename(basedir, name, hashedFilePath);
+			processedAssetPaths.add(hashedFilePath);
+			if (isRenamedAsset) return; // 同じパスのアセットを既にハッシュ化済みの場合、ファイルはリネーム済み
+			_renameFilename(basedir, name, hashedFilePath, processedAssetPaths);
 		});
 
 		const assetDirs = _listAncestorDirNames(content.globalScripts.map((filepath) => path.dirname(filepath)));
