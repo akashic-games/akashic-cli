@@ -76,6 +76,7 @@ export class SocketIOAMFlowManager {
 					callback(err, null);
 					return;
 				}
+				this.playStore.registerClientInstance(conn.playId, this.descMap[token]);
 				conn.lastToken = token;
 				callback(null, permission);
 			});
