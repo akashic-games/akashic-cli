@@ -120,7 +120,7 @@ describe("Renamer", function () {
 			.catch(done.fail)
 		});
 
-		// アセットの path が重複している場合、ファイル名の衝突が発生しエラーになる
+		// アセットの path が重複している場合、重複するアセットでハッシュ化後のファイルを共有する
 		it("hash game.json - throw error", function (done) {
 			Promise.resolve()
 			.then(() => ConfigurationFile.ConfigurationFile.read(path.join("./srcDir", "game.json"), undefined))
@@ -138,7 +138,23 @@ describe("Renamer", function () {
 					}
 				};
 				gamejson.globalScripts = [];
-				expect(() => {Renamer.renameAssetFilenames(gamejson, "./srcDir")}).toThrow(new Error(Renamer.ERROR_FILENAME_CONFLICT));
+				expect(() => {
+					Renamer.renameAssetFilenames(gamejson, "./srcDir");
+					expect(fs.statSync(path.join("srcDir", "files/04ef22b752657e08b66f.js")).isFile()).toBe(true);
+					expect(gamejson.assets["hoge"]).toEqual({
+						type: "image",
+						path: "files/a70844aefe0a5ceb64eb.png",
+						virtualPath: "image/hoge.png",
+						global: true
+					});
+					expect(gamejson.assets["hoge2"]).toEqual({
+						type: "image",
+						path: "files/a70844aefe0a5ceb64eb.png",
+						virtualPath: "image/hoge.png",
+						global: true
+					});
+
+				});
 				done();
 			})
 			.catch(done.fail);
