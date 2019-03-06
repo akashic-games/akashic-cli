@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.15](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli-commons@0.2.14...@akashic/akashic-cli-commons@0.2.15) (2019-03-06)
+
+
+### Bug Fixes
+
+* allow same asset filepath when export zip  ([#40](https://github-com-akashic-cli/akashic-games/akashic-cli/issues/40)) ([8a26c0b](https://github-com-akashic-cli/akashic-games/akashic-cli/commit/8a26c0b))
+
+
+
+
+
 ## [0.2.14](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli-commons@0.2.13...@akashic/akashic-cli-commons@0.2.14) (2019-03-04)
 
 
