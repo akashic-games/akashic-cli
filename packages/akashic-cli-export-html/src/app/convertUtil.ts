@@ -95,7 +95,7 @@ export function wrap(code: string, minify?: boolean): string {
 
 export function getDefaultBundleScripts(templatePath: string, version: string, minify?: boolean, bundleText: boolean = true): any {
 	var versionsJson = require("./engineFilesVersion.json");
-	var engineFilesVariable = `engineFilesV${versionsJson[`v${version}`].replace(/\./g, "_")}`;
+	var engineFilesVariable = versionsJson[`v${version}`].variable;
 	var preloadScriptNames = [`${engineFilesVariable}.js`];
 	var preloadScript = `
 		window.engineFiles = ${engineFilesVariable};

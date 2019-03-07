@@ -96,7 +96,7 @@ function writeEct(assetPaths: string[], outputPath: string, conf: cmn.Configurat
 		magnify: !!options.magnify,
 		injectedContents: getInjectedContents(options.cwd, injects),
 		version: version,
-		engineFilesVariable: `engineFilesV${versionsJson[`v${version}`].replace(/\./g, "_")}`
+		engineFilesVariable: versionsJson[`v${version}`].variable
 	});
 	fs.writeFileSync(path.resolve(outputPath, "./index.html"), html);
 }
