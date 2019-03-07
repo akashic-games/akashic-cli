@@ -2,7 +2,6 @@ import * as amflow from "@akashic/amflow";
 import * as playlog from "@akashic/playlog";
 import { Trigger } from "@akashic/trigger";
 
-// TODO 複数インスタンスを作れるようにする(現状イベント名がかぶるのでSocketごとに一インスタンスしか作れない)
 export class SocketIOAMFlowClient implements amflow.AMFlow {
 	onGotStartedAt: Trigger<number>;
 
@@ -11,6 +10,9 @@ export class SocketIOAMFlowClient implements amflow.AMFlow {
 	private _tickHandlers: ((tick: playlog.Tick) => void)[];
 	private _eventHandlers: ((ev: playlog.Event) => void)[];
 	private _startedAt: number | null;
+	private _connectionId: string | null;
+	private _isSubscribingTick: boolean;
+	private _isSubscribingEvent: boolean;
 
 	constructor(socket: SocketIOClient.Socket) {
 		this.onGotStartedAt = new Trigger<number>();
@@ -19,6 +21,7 @@ export class SocketIOAMFlowClient implements amflow.AMFlow {
 		this._eventHandlers = [];
 		this._permission = null;
 		this._startedAt = null;
+		this._connectionId = null;
 	}
 
 	/**
@@ -36,63 +39,78 @@ export class SocketIOAMFlowClient implements amflow.AMFlow {
 	}
 
 	open(playId: string, callback?: (error?: Error) => void): void {
-		// TODO callback may not be able to be passed Error.
-		this._socket.emit("amflow:open", playId, callback);
 		this._socket.on("amflow:[tick]", this._onTick);
 		this._socket.on("amflow:[event]", this._onEvent);
+		this._socket.emit("amflow:open", playId, (err: Error, connectionId?: string) => {
+			if (err) {
+				callback(err);
+				return;
+			}
+			this._connectionId = connectionId;
+			callback();
+		});
 	}
 
 	close(callback?: (error?: Error) => void): void {
 		this._socket.off("amflow:[tick]", this._onTick);
 		this._socket.off("amflow:[event]", this._onEvent);
-		this._socket.emit("amflow:close", callback);
+		this._socket.emit("amflow:close", this._connectionId, callback);
+		this._connectionId = null;
 	}
 
 	authenticate(token: string, callback: (error: Error, permission: amflow.Permission) => void): void {
-		this._socket.emit("amflow:authenticate", token, (error: Error, permission: amflow.Permission) => {
+		this._socket.emit("amflow:authenticate", this._connectionId, token, (error: Error, permission: amflow.Permission) => {
 			this._permission = permission;
 			callback(error, permission);
 		});
 	}
 
 	sendTick(tick: playlog.Tick): void {
-		this._socket.emit("amflow:sendTick", tick);
+		this._socket.emit("amflow:sendTick", this._connectionId, tick);
 	}
 
 	onTick(handler: (tick: playlog.Tick) => void): void {
 		this._tickHandlers.push(handler);
-		this._socket.emit("amflow:onTick");
+		if (this._tickHandlers.length === 1) {
+			this._socket.emit("amflow:onTick", this._connectionId);
+		}
 	}
 
 	offTick(handler: (tick: playlog.Tick) => void): void {
 		this._tickHandlers = this._tickHandlers.filter(h => h !== handler);
-		this._socket.emit("amflow:offTick");
+		if (this._tickHandlers.length === 0) {
+			this._socket.emit("amflow:offTick", this._connectionId);
+		}
 	}
 
 	sendEvent(event: playlog.Event): void {
-		this._socket.emit("amflow:sendEvent", event);
+		this._socket.emit("amflow:sendEvent", this._connectionId, event);
 	}
 
 	onEvent(handler: (event: playlog.Event) => void): void {
 		this._eventHandlers.push(handler);
-		this._socket.emit("amflow:onEvent");
+		if (this._eventHandlers.length === 1) {
+			this._socket.emit("amflow:onEvent", this._connectionId);
+		}
 	}
 
 	offEvent(handler: (event: playlog.Event) => void): void {
 		this._eventHandlers = this._eventHandlers.filter(h => h !== handler);
-		this._socket.emit("amflow:offEvent");
+		if (this._eventHandlers.length === 0) {
+			this._socket.emit("amflow:offEvent", this._connectionId);
+		}
 	}
 
 	getTickList(begin: number, end: number, callback: (error: Error, tickList: playlog.TickList) => void): void {
-		this._socket.emit("amflow:getTickList", begin, end, callback);
+		this._socket.emit("amflow:getTickList", this._connectionId, begin, end, callback);
 	}
 
 	putStartPoint(startPoint: amflow.StartPoint, callback: (error: Error) => void): void {
-		this._socket.emit("amflow:putStartPoint", startPoint, callback);
+		this._socket.emit("amflow:putStartPoint", this._connectionId, startPoint, callback);
 	}
 
 	getStartPoint(opts: amflow.GetStartPointOptions, callback: (error: Error, startPoint: amflow.StartPoint) => void): void {
-		this._socket.emit("amflow:getStartPoint", opts, (err: Error, startPoint: amflow.StartPoint) => {
+		this._socket.emit("amflow:getStartPoint", this._connectionId, opts, (err: Error, startPoint: amflow.StartPoint) => {
 			if ((this._startedAt === null) && !err && opts.frame === 0) {
 				this._startedAt = startPoint.data.startedAt;
 				this.onGotStartedAt.fire(this._startedAt);
@@ -111,11 +129,15 @@ export class SocketIOAMFlowClient implements amflow.AMFlow {
 		callback(new Error("not supported"), null);
 	}
 
-	private _onTick = (tick: playlog.Tick): void => {
+	private _onTick = (connectionId: string, tick: playlog.Tick): void => {
+		if (connectionId !== this._connectionId)
+			return;
 		this._tickHandlers.forEach(h => h(tick));
 	}
 
-	private _onEvent = (pev: playlog.Event): void => {
+	private _onEvent = (connectionId: string, pev: playlog.Event): void => {
+		if (connectionId !== this._connectionId)
+			return;
 		this._eventHandlers.forEach(h => h(pev));
 	}
 }
