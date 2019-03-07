@@ -1,4 +1,5 @@
-import fetch from "node-fetch";
+import * as fs from "fs";
+import * as path from "path";
 
 export interface EngineConfig {
 	engine_urls: string[];
@@ -7,35 +8,29 @@ export interface EngineConfig {
 	external?: string[];
 }
 
-let cachedEngineFilesName: string;
-
-const convertEngineConfig = (baseUrl: string, gameContentDir: string): EngineConfig => {
+export const getEngineConfig = (baseUrl: string, baseDir: string, isRaw: boolean): EngineConfig => {
+	const gameContentDir = isRaw ? "raw" : "content";
+	const gameJsonPath = path.join(baseDir, "game.json");
+	// TODO: chokidar等でgame.jsonの変更時だけ読み込みを行うようにする
+	const gameJson: any = JSON.parse(fs.readFileSync(gameJsonPath).toString());
+	let version = "1";
+	let external: string[] = [];
+	if (gameJson["environment"] != null) {
+		if (gameJson["environment"]["sandbox-runtime"] != null) {
+			version = gameJson["environment"]["sandbox-runtime"];
+		}
+		if (gameJson["environment"]["external"] != null) {
+			external = Object.keys(gameJson["environment"]["external"]);
+		}
+	}
+	const versionsJson = require("../engineFilesVersion.json");
 	return {
 		engine_urls: [
-			`${baseUrl}/public/external/${cachedEngineFilesName}`,
+			`${baseUrl}/public/external/${versionsJson[`v${version}`].fileName}`,
 			`${baseUrl}/public/external/playlogClientV3_2_1.js`
 		],
-		external: ["coe"], // TODO: game.json から取得するように
+		external,
 		content_url: `${baseUrl}/${gameContentDir}/game.json`,
 		asset_base_url: `${baseUrl}/${gameContentDir}`
 	};
-};
-
-export const getEngineConfig = (baseUrl: string, isRaw: boolean): Promise<EngineConfig> => {
-	const gameContentDir = isRaw ? "raw" : "content";
-	if (cachedEngineFilesName) {
-		return Promise.resolve().then(() => convertEngineConfig(baseUrl, gameContentDir));
-	}
-	const versionsJson = require("../engineFilesVersion.json");
-	const gameJsonUrl = `${baseUrl}/${gameContentDir}/game.json`;
-	return fetch(gameJsonUrl, { method: "GET" })
-		.then(res => res.json())
-		.then(json => {
-			let version = "1";
-			if (json["environment"] != null && json["environment"]["sandbox-runtime"] != null) {
-				version = json["environment"]["sandbox-runtime"];
-			}
-			cachedEngineFilesName = `engineFilesV${versionsJson[`v${version}`].replace(/\./g, "_")}.js`;
-			return convertEngineConfig(baseUrl, gameContentDir);
-		});
 };
