@@ -40,7 +40,7 @@ describe("SocketIOAMFlowManager", () => {
 	});
 
 	it("provides AMFlow functions with connectionId", (done) => {
-		(async function() {
+		(async () => {
 			try {
 				const playStore = new PlayStore({ playManager: new hld.PlayManager() });
 				const amflowManager = new SocketIOAMFlowManager({ playStore });
@@ -115,7 +115,7 @@ describe("SocketIOAMFlowManager", () => {
 	});
 
 	it("multiplexes a socket with connectionId", (done) => {
-		(async function() {
+		(async () => {
 			try {
 				const playStore = new PlayStore({ playManager: new hld.PlayManager() });
 				const amflowManager = new SocketIOAMFlowManager({ playStore });
