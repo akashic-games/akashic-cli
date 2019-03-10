@@ -56,12 +56,10 @@ var promises = Object.keys(versions).filter(v => versions[v].version !== current
 				resolve();
 			});
 		});
-	}).then(() => {
-		console.log(`end to download engineFiles (v${version})`);
-	});
+	}).then(() => console.log(`end to download engineFiles (v${version})`));
 });
 Promise.all(promises)
-	.then(() => {console.log("end to generate files");})
+	.then(() => console.log("end to generate files"))
 	.catch(err => {
 		console.error(err);
 		process.exit(1);
