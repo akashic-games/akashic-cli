@@ -17,6 +17,11 @@ export interface OperatorParameterObject {
 	clientContentUrl?: string;
 }
 
+export interface StartContentParameterObject {
+	joinsAutomatically: boolean;
+	gameArgument: any;
+}
+
 export class Operator {
 	play: PlayOperator;
 	localInstance: LocalInstanceOperator;
@@ -56,6 +61,7 @@ export class Operator {
 
 		if (store.currentPlay) {
 			store.currentPlay.deleteAllLocalInstances();
+			store.setCurrentLocalInstance(null);
 		}
 
 		// TODO play からコンテンツを引くべき？
@@ -65,6 +71,17 @@ export class Operator {
 		const sandboxConfigResult = await ApiClient.getSandboxConfig();
 		store.setSandboxConfig(sandboxConfigResult.data || {});
 
+		store.setCurrentPlay(play);
+
+		const optionsResult = await ApiClient.getOptions();
+		if (optionsResult.data.autoStart) {
+			await this.startContent();
+		}
+	}
+
+	startContent = async (params?: StartContentParameterObject): Promise<void> => {
+		const store = this.store;
+		const play = store.currentPlay;
 		const tokenResult = await ApiClient.createPlayToken(play.playId, store.player.id, false, store.player.name);
 		const instance = await play.createLocalInstance({
 			gameViewManager: this.gameViewManager,
@@ -73,6 +90,7 @@ export class Operator {
 			playlogServerUrl: "dummy-playlog-server-url",
 			executionMode: "passive",
 			player: store.player,
+			argument: params != null ? params.gameArgument : undefined,
 			coeHandler: {
 				onLocalInstanceCreate: async params => {
 					// TODO: local === true のみ対応
@@ -110,9 +128,10 @@ export class Operator {
 				}
 			}
 		});
-
-		store.setCurrentPlay(play);
 		store.setCurrentLocalInstance(instance);
+		if (params != null && params.joinsAutomatically) {
+			store.currentPlay.join(store.player.id, store.player.name);
+		}
 	}
 
 	restartWithNewPlay = async (): Promise<void> => {

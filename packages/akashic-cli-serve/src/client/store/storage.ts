@@ -9,6 +9,10 @@ export interface StorageData {
 	showsEventList: boolean;
 	eventListWidth: number;
 	eventEditContent: string;
+	showsGameArgumentList: boolean;
+	gameArgumentListWidth: number;
+	gameArgumentEditContent: string;
+	joinsAutomatically: boolean;
 }
 
 function asBool(s: string | null): boolean | null {
@@ -64,7 +68,11 @@ export class Storage {
 			activeDevtool: choose(qp.activeDevtool, s.activeDevtool, "Instances"),
 			showsEventList: choose(asBool(qp.showsEventList), s.showsEventList, true),
 			eventListWidth: choose(asNumber(qp.eventListWidth), s.eventListWidth, 150),
-			eventEditContent: choose(qp.eventEditContent, s.eventEditContent, "")
+			eventEditContent: choose(qp.eventEditContent, s.eventEditContent, ""),
+			showsGameArgumentList: choose(asBool(qp.showsGameArgumentList), s.showsGameArgumentList, true),
+			gameArgumentListWidth: choose(asNumber(qp.gameArgumentListWidth), s.gameArgumentListWidth, 150),
+			gameArgumentEditContent: choose(qp.gameArgumentEditContent, s.gameArgumentEditContent, ""),
+			joinsAutomatically: choose(asBool(qp.joinsAutomatically), s.joinsAutomatically, false)
 		});
 	}
 

@@ -44,4 +44,25 @@ export class UiOperator {
 	setEventEditContent = (content: string): void => {
 		this.store.devtoolUiStore.setEventEditContent(content);
 	}
+
+	toggleShowGameArgumentList = (show: boolean): void => {
+		this.store.startupScreenUiStore.toggleShowGameArgumentList(show);
+	}
+
+	setGameArgumentListWidth = (w: number): void => {
+		this.store.startupScreenUiStore.setGameArgumentListWidth(w);
+	}
+
+	copyRegisteredGameArgumentToEditor = (label: string): void => {
+		const content = JSON.stringify(this.store.sandboxConfig.arguments[label], null, 2);
+		this.store.startupScreenUiStore.setGameArgumentEditContent(content);
+	}
+
+	setGameArgumentEditContent = (content: string): void => {
+		this.store.startupScreenUiStore.setGameArgumentEditContent(content);
+	}
+
+	setJoinsAutomatically = (join: boolean): void => {
+		this.store.startupScreenUiStore.setJoinsAutomatically(join);
+	}
 }

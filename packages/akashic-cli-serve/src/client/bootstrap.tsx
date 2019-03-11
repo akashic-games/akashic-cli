@@ -16,11 +16,13 @@ const operator = new Operator({
 	contentUrl: window.location.origin + "/config/content.raw.json",
 	clientContentUrl: "/config/content.json"  // ここで渡したパスはPlayのclientContentUrlとしてサーバーに記録され全クライアントでそのパスが使われるので、絶対パスではなくルートパスを渡す。
 });
-var p = operator.bootstrap()
-	.catch(e => console.error(e));
 
 window.addEventListener("load", async () => {
-	await p;
+	try {
+		await operator.bootstrap();
+	} catch (e) {
+		console.error(e);
+	}
 	ReactDOM.render(
 		<App store={store} operator={operator} gameViewManager={gameViewManager} />,
 		document.getElementById("container")
