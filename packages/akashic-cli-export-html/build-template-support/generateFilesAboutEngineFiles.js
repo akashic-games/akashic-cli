@@ -39,10 +39,8 @@ console.log("end to generate engineFilesVersion.json");
 var promises = Object.keys(versions).filter(v => versions[v].version !== currentVersions[v].version).map(v  => {
 	var version = versions[v].version;
 	var fileName = `${versions[v].variable}.js`;
-	return Promise.resolve().then(() => {
-		console.log(`start to download engineFiles (v${version})`);
-		return fetch(`https://github.com/akashic-games/engine-files/releases/download/v${version}/${fileName}`);
-	}).then(res => {
+	console.log(`start to download engineFiles (v${version})`);
+	return fetch(`https://github.com/akashic-games/engine-files/releases/download/v${version}/${fileName}`).then(res => {
 		return new Promise((resolve, reject) => {
 			var majorVersion = `v${version.substring(0, 1)}`;
 			var fileStream = fs.createWriteStream(
