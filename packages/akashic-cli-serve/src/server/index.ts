@@ -38,6 +38,7 @@ export function run(argv: any): void {
 		.option("-p, --port <port>", `The port number to listen. default: ${serverGlobalConfig.port}`, (x => parseInt(x, 10)))
 		.option("-H, --hostname <hostname>", `The host name of the server. default: ${serverGlobalConfig.hostname}`)
 		.option("-v, --verbose", `Display detailed information on console.`)
+		.option("-A, --no-auto-start", `Wait automatic startup of contents.`)
 		.parse(argv);
 
 	if (commander.port && isNaN(commander.port)) {
@@ -56,6 +57,7 @@ export function run(argv: any): void {
 	}
 
 	if (commander.verbose) {
+		serverGlobalConfig.verbose = true;
 		setSystemLogger({
 			info: (...messages: any[]) => {
 				console.log(chalk.gray(...convertToStrings(messages)));
@@ -71,6 +73,7 @@ export function run(argv: any): void {
 			}
 		});
 	} else {
+		serverGlobalConfig.verbose = false;
 		setSystemLogger({
 			info: (...messages: any[]) => {},
 			debug: (...messages: any[]) => {},
@@ -81,6 +84,10 @@ export function run(argv: any): void {
 				console.error(chalk.red(...convertToStrings(messages)));
 			}
 		});
+	}
+
+	if (commander.autoStart != null) {
+		serverGlobalConfig.autoStart = commander.autoStart;
 	}
 
 	const targetDir = commander.args.length > 0 ? commander.args[0] : process.cwd();

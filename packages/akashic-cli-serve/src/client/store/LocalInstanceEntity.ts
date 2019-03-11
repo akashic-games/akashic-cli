@@ -26,6 +26,7 @@ export interface LocalInstanceEntityParameterObject {
 	executionMode: ExecutionMode;
 	play: PlayEntity;
 	player: Player;
+	argument?: any;
 	playToken?: string;
 	playlogServerUrl?: string;
 	coeHandler?: {
@@ -79,7 +80,8 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 				name: this.player.name
 			},
 			playConfig,
-			gameLoaderCustomizer
+			gameLoaderCustomizer,
+			argument: params.argument
 		});
 		if (params.coeHandler != null) {
 			this.coePlugin = new CoePluginEntity({

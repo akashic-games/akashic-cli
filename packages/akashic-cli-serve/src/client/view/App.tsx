@@ -7,6 +7,7 @@ import {ToolBarContainer} from "./container/ToolbarContainer";
 import {DevtoolContainer} from "./container/DevtoolContainer";
 import "./global.css";
 import * as styles from "./App.css";
+import {StartupScreenContainer} from "./container/StartupScreenContainer";
 
 export interface AppProps {
 	store: Store;
@@ -18,8 +19,17 @@ export interface AppProps {
 export class App extends React.Component<AppProps, {}> {
 	render() {
 		const { store, operator } = this.props;
-		if (!store.currentPlay)
-			return null;
+		if (!store.currentLocalInstance) {
+			return <div id="whole" className={styles["whole"]}>
+				<div className={styles["main"] + " " + styles["centering"]}>
+					<StartupScreenContainer
+						operator={operator}
+						startupScreenUiStore={store.startupScreenUiStore}
+						sandboxConfig={store.sandboxConfig}
+					/>
+				</div>
+			</div>;
+		}
 		return <div id="whole" className={styles["whole"]}>
 			<ToolBarContainer
 				play={store.currentPlay}

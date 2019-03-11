@@ -53,6 +53,11 @@ export interface RunnerPatchApiResponseData {
 export interface SandboxConfigApiResponseData extends SandboxConfig {
 }
 
+export interface OptionsApiResponseData {
+	autoStart: boolean;
+	verbose: boolean;
+}
+
 export type PlayGetAllApiResponse = ApiResponse<PlayApiResponseData[]>;
 export type PlayPostApiResponse = ApiResponse<PlayApiResponseData>;
 export type PlayDeleteApiResponse = ApiResponse<PlayDeleteApiResponseData>;
@@ -62,3 +67,4 @@ export type RunnerPostApiResponse = ApiResponse<RunnerPostApiResponseData>;
 export type RunnerDeleteApiResponse = ApiResponse<RunnerDeleteApiResponseData>;
 export type RunnerPatchApiResponse = ApiResponse<RunnerPatchApiResponseData>;
 export type SandboxConfigApiResponse = ApiResponse<SandboxConfigApiResponseData>;
+export type OptionsApiResponse = ApiResponse<OptionsApiResponseData>;
