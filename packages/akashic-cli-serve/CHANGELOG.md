@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.14](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli-serve@0.0.13...@akashic/akashic-cli-serve@0.0.14) (2019-03-11)
+
+
+### Features
+
+* add startup-screen and --no-auto-start option in akashic-cli-serve ([#33](https://github-com-akashic-cli/akashic-games/akashic-cli/issues/33)) ([6c993de](https://github-com-akashic-cli/akashic-games/akashic-cli/commit/6c993de))
+
+
+
+
+
 ## [0.0.13](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli-serve@0.0.12...@akashic/akashic-cli-serve@0.0.13) (2019-03-07)
 
 **Note:** Version bump only for package @akashic/akashic-cli-serve
