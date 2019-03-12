@@ -18,7 +18,9 @@ export class Store {
 
 	@observable currentPlay: PlayEntity | null;
 	@observable currentLocalInstance: LocalInstanceEntity | null;
+
 	@observable sandboxConfig: SandboxConfig;
+	@observable argumentsTable: { [name: string]: string };
 
 	constructor() {
 		this.playStore = new PlayStore();
@@ -28,6 +30,8 @@ export class Store {
 		this.player = { id: storage.data.playerId, name: storage.data.playerName };
 		this.currentPlay = null;
 		this.currentLocalInstance = null;
+		this.sandboxConfig = null;
+		this.argumentsTable = null;
 	}
 
 	@action
@@ -43,5 +47,14 @@ export class Store {
 	@action
 	setSandboxConfig(cfg: SandboxConfig): void {
 		this.sandboxConfig = cfg;
+
+		// mobx の reaction として書くべき？
+		if (cfg.arguments) {
+			const args = cfg.arguments;
+			this.argumentsTable = Object.keys(args).reduce((acc, key) => {
+				acc[key] = JSON.stringify(args[key], null, 2);
+				return acc;
+			}, {} as { [name: string]: string });
+		}
 	}
 }
