@@ -11,8 +11,6 @@ export class SocketIOAMFlowClient implements amflow.AMFlow {
 	private _eventHandlers: ((ev: playlog.Event) => void)[];
 	private _startedAt: number | null;
 	private _connectionId: string | null;
-	private _isSubscribingTick: boolean;
-	private _isSubscribingEvent: boolean;
 
 	constructor(socket: SocketIOClient.Socket) {
 		this.onGotStartedAt = new Trigger<number>();

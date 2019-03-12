@@ -32,7 +32,7 @@ describe("SubscriberSpec", function() {
 		}
 	});
 	describe("playCreate-event", function() {
-		it("is sent from server, when access to create-play api", function(done) {
+		xit("is sent from server, when access to create-play api", function(done) {
 			var apiResponse;
 			var pushedData;
 			var assertOnPlayCreateEvent = function() {
@@ -54,7 +54,7 @@ describe("SubscriberSpec", function() {
 		});
 	});
 	describe("playStatusChange-event", function () {
-		it("is sent from server, when access to create-play api", function(done) {
+		xit("is sent from server, when access to create-play api", function(done) {
 			var apiResponse;
 			var pushedData;
 			var assertOnPlayStatusChangeEvent = function() {
@@ -75,7 +75,7 @@ describe("SubscriberSpec", function() {
 				}
 			});
 		});
-		it("is sent from server, when access to suspend-play api", function(done) {
+		xit("is sent from server, when access to suspend-play api", function(done) {
 			var apiResponse;
 			var pushedData;
 			var pushedCount = 0;
@@ -105,7 +105,7 @@ describe("SubscriberSpec", function() {
 		});
 	});
 	describe("runnerCreate-event", function () {
-		it("is sent from server, when access to create-runner api", function(done) {
+		xit("is sent from server, when access to create-runner api", function(done) {
 			var currentPlayId;
 			var apiResponse;
 			var pushedData;
@@ -134,7 +134,7 @@ describe("SubscriberSpec", function() {
 		});
 	});
 	describe("removeRunner-event", function () {
-		it("is sent from server, when access to delete-runner api", function(done) {
+		xit("is sent from server, when access to delete-runner api", function(done) {
 			var currentPlayId;
 			var apiResponse;
 			var pushedData;
@@ -164,7 +164,7 @@ describe("SubscriberSpec", function() {
 		});
 	});
 	describe("clientInstanceAppear-event", function () {
-		it("is sent from server, when send amflow:open-event and amflow:authenticate-event", function(done) {
+		xit("is sent from server, when send amflow:open-event and amflow:authenticate-event", function(done) {
 			var player = {id: 0, name: "test"};
 			var currentPlayId;
 			var socket = io(`ws://${host}:${port}`);
@@ -209,7 +209,7 @@ describe("SubscriberSpec", function() {
 		});
 	});
 	describe("clientInstanceDisappear-event", function () {
-		it("is sent from server, when send amflow:open-event and disconnect-evnet", function(done) {
+		xit("is sent from server, when send amflow:open-event and disconnect-evnet", function(done) {
 			var player = {id: 0, name: "test"};
 			var currentPlayId;
 			var socket = io(`ws://${host}:${port}`);
@@ -255,7 +255,7 @@ describe("SubscriberSpec", function() {
 		});
 	});
 	describe("playerJoin-event", function () {
-		it("is sent from server, when send amflow:sendEvent as join-event", function(done) {
+		xit("is sent from server, when send amflow:sendEvent as join-event", function(done) {
 			var player = {id: 0, name: "test"};
 			var currentPlayId;
 			var socket = io(`ws://${host}:${port}`);
@@ -315,7 +315,7 @@ describe("SubscriberSpec", function() {
 		afterAll(function() {
 			SubscreiberMock.onPlayerLeave.remove(onPlayerLeaveEvent);
 		});
-		it("is sent from server, when send amflow:sendEvent as leave-event", function(done) {
+		xit("is sent from server, when send amflow:sendEvent as leave-event", function(done) {
 			var player = {id: 0, name: "test"};
 			var currentPlayId;
 			var socket = io(`ws://${host}:${port}`);
