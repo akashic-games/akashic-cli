@@ -9,8 +9,7 @@ export const createScriptAssetController = (baseDir: string): express.RequestHan
 
 	const watcher = chokidar.watch(gameJsonPath, { persistent: true });
 	watcher.on("change", () => {
-		console.log("onchanged");
-	    gameJson = JSON.parse(fs.readFileSync(gameJsonPath).toString());
+		gameJson = JSON.parse(fs.readFileSync(gameJsonPath).toString());
 	});
 	return (req: express.Request, res: express.Response, next: Function): void => {
 		const scriptPath = path.join(baseDir, req.params.scriptName);
