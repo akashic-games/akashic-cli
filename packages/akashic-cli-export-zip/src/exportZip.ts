@@ -8,6 +8,7 @@ import { convertGame } from "./convert";
 
 export interface ExportZipParameterObject {
 	bundle?: boolean;
+	babel?: boolean;
 	minify?: boolean;
 	strip?: boolean;
 	source?: string;
@@ -21,6 +22,7 @@ export interface ExportZipParameterObject {
 export function _completeExportZipParameterObject(param: ExportZipParameterObject): ExportZipParameterObject {
 	return {
 		bundle: !!param.bundle,
+		babel: !!param.babel,
 		minify: !!param.minify,
 		strip: !!param.strip,
 		source: param.source || process.cwd(),
@@ -61,6 +63,7 @@ export function promiseExportZip(param: ExportZipParameterObject): Promise<void>
 		.then(() => {
 			return convertGame({
 				bundle: param.bundle,
+				babel: param.babel,
 				minify: param.minify,
 				strip: param.strip,
 				source: param.source,

@@ -7,7 +7,7 @@ const ServerConfigMock = require("../helper/SeverConfigMock");
 const SubscreiberMock = require("../helper/SubscriberMock");
 const ApiRequestMock = require("../helper/ApiRequestMock");
 
-describe("SubscriberSpec", function() {
+xdescribe("SubscriberSpec", function() {
 	const host = ServerConfigMock.hostname;
 	const port = ServerConfigMock.port;
 	const contentUrl = `http://${host}:${port}/config/content.raw.json`;

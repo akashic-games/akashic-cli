@@ -37,31 +37,17 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @akashic/akashic-cli-serve
 
-
-
-
-
 ## [0.0.10](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli-serve@0.0.9...@akashic/akashic-cli-serve@0.0.10) (2019-02-27)
-
 
 ### Features
 
 * Update engineFiles@2.1.10 ([#32](https://github-com-akashic-cli/akashic-games/akashic-cli/issues/32)) ([0e8dc06](https://github-com-akashic-cli/akashic-games/akashic-cli/commit/0e8dc06))
 
-
-
-
-
 ## 0.0.9 (2019-02-22)
-
 
 ### Features
 
 * Make akashic-cli mono-repo ([#30](https://github-com-akashic-cli/akashic-games/akashic-cli/issues/30)) ([fd5aa71](https://github-com-akashic-cli/akashic-games/akashic-cli/commit/fd5aa71))
-
-
-
-
 
 ## 0.0.8
 * サーバー起動時にホスト名を指定しないとホストPC以外でアクセスできなくなる問題の修正

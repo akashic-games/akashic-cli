@@ -27,14 +27,9 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## 0.2.13 (2019-02-22)
 
-
 ### Features
 
 * Make akashic-cli mono-repo ([#30](https://github-com-akashic-cli/akashic-games/akashic-cli/issues/30)) ([fd5aa71](https://github-com-akashic-cli/akashic-games/akashic-cli/commit/fd5aa71))
-
-
-
-
 
 ## 0.2.12
 * ビルドツールの変更
