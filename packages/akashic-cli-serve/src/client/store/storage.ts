@@ -9,7 +9,7 @@ export interface StorageData {
 	showsEventList: boolean;
 	eventListWidth: number;
 	eventEditContent: string;
-	showsGameArgumentList: boolean;
+	selectedArgumentsName: string | null;
 	gameArgumentListWidth: number;
 	gameArgumentEditContent: string;
 	joinsAutomatically: boolean;
@@ -69,7 +69,7 @@ export class Storage {
 			showsEventList: choose(asBool(qp.showsEventList), s.showsEventList, true),
 			eventListWidth: choose(asNumber(qp.eventListWidth), s.eventListWidth, 150),
 			eventEditContent: choose(qp.eventEditContent, s.eventEditContent, ""),
-			showsGameArgumentList: choose(asBool(qp.showsGameArgumentList), s.showsGameArgumentList, true),
+			selectedArgumentsName: choose(qp.selectedArgumentsName, s.selectedArgumentsName, null),
 			gameArgumentListWidth: choose(asNumber(qp.gameArgumentListWidth), s.gameArgumentListWidth, 150),
 			gameArgumentEditContent: choose(qp.gameArgumentEditContent, s.gameArgumentEditContent, ""),
 			joinsAutomatically: choose(asBool(qp.joinsAutomatically), s.joinsAutomatically, false)

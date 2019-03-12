@@ -7,16 +7,15 @@ import * as styles from "./StartupScreen.css";
 import { StartContentParameterObject } from "../../operator/Operator";
 
 export interface StartupScreenProps {
-	showsEventList: boolean;
-	eventListWidth: number;
-	eventListMinWidth: number;
-	onEventListResize: (width: number) => void;
-	onToggleList: (nextVal: boolean) => void;
-	argumentsTable?: { [name: string]: string };
-	eventEditContent: string;
+	argsListWidth: number;
+	argsListMinWidth: number;
+	onArgsListResize: (width: number) => void;
+	argumentsTable: { [name: string]: string };
+	argumentsEditContent: string;
+	selectedArgumentsName: string | null;
 	joinsAutomatically: boolean;
-	onClickCopyEvent: (eventName: string) => void;
-	onEventEditContentChanged: (content: string) => void;
+	onSelectArguments: (argName: string | null) => void;
+	onArgumentsEditContentChanged: (content: string) => void;
 	onChangeJoinsAutomatically: (join: boolean) => void;
 	onClickStartContent: (params?: StartContentParameterObject) => Promise<void>;
 }
@@ -25,55 +24,75 @@ export interface StartupScreenProps {
 export class StartupScreen extends React.Component<StartupScreenProps, {}> {
 	render(): React.ReactNode {
 		const props = this.props;
-		const isValidArg = this._isValidArgument(this.props.eventEditContent);
+		const {
+			selectedArgumentsName,
+			argumentsEditContent,
+			argumentsTable
+		} = props;
+		const isValidArg = this._isValidArgument(argumentsEditContent);
+		const selectedArguments = ((selectedArgumentsName == null) ? "" : argumentsTable[selectedArgumentsName]);
+		const isShowingSelected = (selectedArguments === argumentsEditContent)
+		const showsEditor = selectedArgumentsName || !isShowingSelected;
+
+		const argumentsList =
+			<FlexScrollY>
+				<ul className={styles["args-list"] + (showsEditor ? (" " + styles["resizable"]) : "")}>
+					<li
+						key={"sys:noarg"}
+						className={((selectedArgumentsName == null) && isShowingSelected) ? styles["selected"] : ""}
+						onClick={this._handleClickNoArguments}
+					>
+						&lt;No Argument&gt;
+					</li>
+					{
+						Object.keys(argumentsTable).map(name => (
+							<li
+								key={"template:" + name}
+								className={(name === selectedArgumentsName && isShowingSelected) ? styles["selected"] : ""}
+								onClick={() => props.onSelectArguments(name)}
+							>
+								{name}
+							</li>
+						))
+					}
+				</ul>
+			</FlexScrollY>;
+
 		return <div className={styles["startup-screen"]}>
 			<h2 className={styles["caption"]}>
-				Select Instance Arguments
+				New Instance
 			</h2>
-
-			<div className={styles["events-devtool"]}>
+			<div className={styles["args-tool"]}>
 				{
-					props.showsEventList &&
-						<RightResizable
-							width={props.eventListWidth}
-							minWidth={props.eventListMinWidth}
-							onResize={props.onEventListResize}
-						>
-							<FlexScrollY>
-								<ul className={styles["event-list"]}>
-									<li key="sys:empty" className={"foo"} onClick={this._handleClickEmptyArguments}>
-										(empty)
-									</li>
-									{
-										props.argumentsTable &&
-											Object.keys(props.argumentsTable).map(name => (
-												<li
-													key={"arg:" + name}
-													className={"foo"}
-													onClick={() => props.onClickCopyEvent(name)}
-												>
-													{name}
-												</li>
-											))
-									}
-								</ul>
-							</FlexScrollY>
-						</RightResizable>
+					!showsEditor ? argumentsList : (
+						<>
+							<RightResizable
+								width={props.argsListWidth}
+								minWidth={props.argsListMinWidth}
+								onResize={props.onArgsListResize}
+							>
+								{ argumentsList }
+							</RightResizable>
+							<div className={styles["editor-container"]}>
+								<div className={styles["editor-toolbar"]}>
+									<div className={styles["arguments-name"]}>
+										{
+											(!isValidArg) ? "(Invalid JSON)" :
+											(argumentsEditContent === "") ? "(no arguments)" :
+											(isShowingSelected) ? `Template "${selectedArgumentsName}"` :
+											"(Custom)"
+										}
+									</div>
+								</div>
+								<textarea
+									className={styles["editor"]}
+									value={props.argumentsEditContent}
+									placeholder={"Instance Arguments (JSON)"}
+									onChange={this._handleTextAreaChange} />
+							</div>
+						</>
+					)
 				}
-				<div className={styles["editor-container"]}>
-					<div className={styles["events-toolbar"]}>
-						<ToolIconButton
-							icon="list"
-							title={"起動引数リストの表示・非表示を切り替え"}
-							pushed={props.showsEventList}
-							onClick={props.onToggleList} />
-					</div>
-					<textarea
-						className={styles["editor"] + (isValidArg ? "" : " " + styles["editor-invalid"])}
-						value={props.eventEditContent}
-						placeholder={"startup argument (JSON) to send to content"}
-						onChange={this._handleTextAreaChange} />
-				</div>
 			</div>
 
 			<div className={styles["button-bar"]}>
@@ -84,8 +103,12 @@ export class StartupScreen extends React.Component<StartupScreenProps, {}> {
 						Send JoinEvent for the player
 					</label>
 				</div>
-				<button className={styles["start-button"]} disabled={!isValidArg} type="button" onClick={this._handleClickStartButton}>
-					Start instance
+				<button
+					className={styles["start-button"]}
+					disabled={!isValidArg}
+					onClick={this._handleClickStartButton}
+				>
+					Start
 				</button>
 			</div>
 		</div>;
@@ -102,21 +125,17 @@ export class StartupScreen extends React.Component<StartupScreenProps, {}> {
 		}
 	}
 
-	private _generateGameArgumentDom = (): React.ReactNode => {
-		const props = this.props;
-		return ;
-	}
-
-	private _handleClickEmptyArguments = (): void => {
+	private _handleClickNoArguments = (): void => {
+		this.props.onSelectArguments(null);
 	}
 
 	private _handleClickStartButton = (): void => {
-		const argsContent = this.props.eventEditContent === "" ? "{}" : this.props.eventEditContent; // textareaに何も書かれていなければ空オブジェクト扱いとする
-		this.props.onClickStartContent({joinsAutomatically: this.props.joinsAutomatically, gameArgument: JSON.parse(argsContent)});
-			// .catch(e => { console.error(e); });
+		const { joinsAutomatically, argumentsEditContent }= this.props;
+		const gameArgument = argumentsEditContent === "" ? undefined : JSON.parse(argumentsEditContent);
+		this.props.onClickStartContent({joinsAutomatically, gameArgument });
 	}
 
 	private _handleTextAreaChange = (ev: React.ChangeEvent<HTMLTextAreaElement>): void => {
-		this.props.onEventEditContentChanged(ev.target.value);
+		this.props.onArgumentsEditContentChanged(ev.target.value);
 	}
 }

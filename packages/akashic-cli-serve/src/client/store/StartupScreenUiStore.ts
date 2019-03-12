@@ -2,22 +2,22 @@ import {action, observable} from "mobx";
 import {storage} from "./storage";
 
 export class StartupScreenUiStore {
-	@observable showsGameArgumentList: boolean;
+	@observable selectedArgumentsName: string | null;
 	@observable gameArgumentListWidth: number;
 	@observable gameArgumentEditContent: string;
 	@observable joinsAutomatically: boolean;
 
 	constructor() {
-		this.showsGameArgumentList = storage.data.showsGameArgumentList;
+		this.selectedArgumentsName = null;
 		this.gameArgumentListWidth = storage.data.gameArgumentListWidth;
 		this.gameArgumentEditContent = storage.data.gameArgumentEditContent;
 		this.joinsAutomatically = storage.data.joinsAutomatically;
 	}
 
 	@action
-	toggleShowGameArgumentList(show: boolean): void {
-		this.showsGameArgumentList = show;
-		storage.put({ showsGameArgumentList: show });
+	setSelectedArgumentsName(name: string | null): void {
+		this.selectedArgumentsName = name;
+		storage.put({ selectedArgumentsName: name });
 	}
 
 	@action

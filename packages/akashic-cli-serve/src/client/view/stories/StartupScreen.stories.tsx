@@ -7,7 +7,6 @@ import { StartupScreen } from "../organism/StartupScreen";
 
 const store = observable({
 	joinsAutomatically: false,
-	shows: true,
 	width: 280,
 	editContent: `{ "foo": 100 }`,
 	argumentsTable: {
@@ -15,7 +14,8 @@ const store = observable({
 		"Start (difficulty: 10)": JSON.stringify([[32, 0, "test2"]], null, 2),
 		"Stop": JSON.stringify([[32, 0, "stop"]], null, 2),
 		"foo (a very long long event name example to test, woo hoo!)": JSON.stringify([[32, 0, "Long"]], null, 2)
-	} as ({ [name: string]: string })
+	} as ({ [name: string]: string }),
+	selectedArgumentsName: null
 });
 
 const Box = (props: any) => {
@@ -24,10 +24,7 @@ const Box = (props: any) => {
 		flexFlow: "column nowrap",
 		justifyContent: "stretch",
 		margin: 10,
-		// border: "1px dotted red",
-		minWidth: 500,
-		width: "80%",
-		minHeight: 500 
+		width: "80%"
 	};
 	return <div style={style}>{props.children}</div>;
 };
@@ -35,16 +32,15 @@ const Box = (props: any) => {
 const TestWithBehaviour = observer(() => (
 	<Box>
 		<StartupScreen
-			showsEventList={store.shows}
-			eventListWidth={store.width}
-			eventListMinWidth={200}
-			onEventListResize={w => (store.width = w)}
+			argsListWidth={store.width}
+			argsListMinWidth={200}
+			onArgsListResize={w => (store.width = w)}
 			argumentsTable={store.argumentsTable}
-			eventEditContent={store.editContent}
+			selectedArgumentsName={store.selectedArgumentsName}
+			argumentsEditContent={store.editContent}
 			joinsAutomatically={store.joinsAutomatically}
-			onToggleList={v => (store.shows = v)}
-			onClickCopyEvent={name => (store.editContent = store.argumentsTable[name])}
-			onEventEditContentChanged={v => (store.editContent = v)}
+			onSelectArguments={name => ((store.selectedArgumentsName = name), (store.editContent = (store.argumentsTable[name] || "")))}
+			onArgumentsEditContentChanged={v => (store.editContent = v)}
 			onChangeJoinsAutomatically={v => (store.joinsAutomatically = v)} 
 			onClickStartContent={action("start-content")} />
 	</Box>
@@ -54,21 +50,20 @@ storiesOf("m-StartupScreen", module)
 	.add("basic", () => (
 		<Box>
 			<StartupScreen
-				showsEventList={true}
-				eventListWidth={250}
-				eventListMinWidth={100}
+				argsListWidth={250}
+				argsListMinWidth={100}
 				argumentsTable={{
 					"Start (difficulty: 3)": "1",
 					"Start (difficulty: 10)": "1",
 					"Stop": "1",
 					"foo (a very long long event name example to test, woo hoo!)": "1"
 				}}
-				eventEditContent={`["test"]`}
+				selectedArgumentsName={"Stop"}
+				argumentsEditContent={`["test"]`}
 				joinsAutomatically={false}
-				onToggleList={action("toggle-list")}
-				onEventListResize={action("event-list-resize")}
-				onClickCopyEvent={action("copy")}
-				onEventEditContentChanged={action("edit-content")}
+				onArgsListResize={action("event-list-resize")}
+				onSelectArguments={action("copy")}
+				onArgumentsEditContentChanged={action("edit-content")}
 				onChangeJoinsAutomatically={action("change-joins-auto")} 
 				onClickStartContent={action("start-content")} />
 		</Box>
@@ -76,9 +71,8 @@ storiesOf("m-StartupScreen", module)
 	.add("many argumentsTable", () => (
 		<Box>
 			<StartupScreen
-				showsEventList={true}
-				eventListWidth={250}
-				eventListMinWidth={100}
+				argsListWidth={250}
+				argsListMinWidth={100}
 				argumentsTable={{
 					"Start (difficulty: 3)": "1",
 					"Start (difficulty: 10)": "1",
@@ -117,12 +111,12 @@ storiesOf("m-StartupScreen", module)
 					"Test 31": "1",
 					"Test 32": "1"
 				}}
-				eventEditContent={`["test"]`}
+				selectedArgumentsName={"Test 9"}
+				argumentsEditContent={`["test"]`}
 				joinsAutomatically={false}
-				onToggleList={action("toggle-list")}
-				onEventListResize={action("event-list-resize")}
-				onClickCopyEvent={action("copy")}
-				onEventEditContentChanged={action("edit-content")}
+				onArgsListResize={action("event-list-resize")}
+				onSelectArguments={action("copy")}
+				onArgumentsEditContentChanged={action("edit-content")}
 				onChangeJoinsAutomatically={action("change-joins-auto")} 
 				onClickStartContent={action("start-content")} />
 		</Box>

@@ -15,16 +15,15 @@ export class StartupScreenContainer extends React.Component<StartupScreenContain
 	render(): React.ReactNode {
 		const { operator, startupScreenUiStore, argumentsTable } = this.props;
 		return <StartupScreen
-			showsEventList={startupScreenUiStore.showsGameArgumentList}
-			eventListWidth={startupScreenUiStore.gameArgumentListWidth}
-			eventListMinWidth={150}
-			onEventListResize={operator.ui.setGameArgumentListWidth}
-			onToggleList={operator.ui.toggleShowGameArgumentList}
+			argsListWidth={startupScreenUiStore.gameArgumentListWidth}
+			argsListMinWidth={150}
+			onArgsListResize={operator.ui.setGameArgumentListWidth}
 			argumentsTable={argumentsTable}
-			eventEditContent={startupScreenUiStore.gameArgumentEditContent}
+			selectedArgumentsName={startupScreenUiStore.selectedArgumentsName}
+			argumentsEditContent={startupScreenUiStore.gameArgumentEditContent}
 			joinsAutomatically={startupScreenUiStore.joinsAutomatically}
-			onClickCopyEvent={operator.ui.copyRegisteredGameArgumentToEditor}
-			onEventEditContentChanged={operator.ui.setGameArgumentEditContent}
+			onSelectArguments={operator.ui.selectGameArguments}
+			onArgumentsEditContentChanged={operator.ui.setGameArgumentEditContent}
 			onChangeJoinsAutomatically={operator.ui.setJoinsAutomatically}
 			onClickStartContent={operator.startContent}
 		/>;

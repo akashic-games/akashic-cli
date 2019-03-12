@@ -52,7 +52,7 @@ export class Store {
 		if (cfg.arguments) {
 			const args = cfg.arguments;
 			this.argumentsTable = Object.keys(args).reduce((acc, key) => {
-				acc[key] = JSON.stringify(args[key], null, 2);
+				acc[key.replace(/^\</, "\\<")] = JSON.stringify(args[key], null, 2);
 				return acc;
 			}, {} as { [name: string]: string });
 		}
