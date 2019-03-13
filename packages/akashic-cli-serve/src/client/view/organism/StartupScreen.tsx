@@ -1,6 +1,5 @@
 import * as React from "react";
 import { observer } from "mobx-react";
-import { ToolIconButton } from "../atom/ToolIconButton";
 import { RightResizable } from "../atom/RightResizable";
 import { FlexScrollY } from "../atom/FlexScrollY";
 import * as styles from "./StartupScreen.css";

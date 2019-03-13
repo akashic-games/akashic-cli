@@ -36,5 +36,5 @@ export class StartupScreenContainer extends React.Component<StartupScreenContain
 			joinsSelf: startupScreenUiStore.joinsAutomatically,
 			instanceArgument: (argText !== "") ? JSON.parse(argText) : undefined
 		});
-	};
+	}
 }

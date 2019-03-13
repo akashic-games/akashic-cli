@@ -41,7 +41,7 @@ const TestWithBehaviour = observer(() => (
 			joinsAutomatically={store.joinsAutomatically}
 			onSelectArgument={name => ((store.selectedArgumentName = name), (store.editContent = (store.argumentsTable[name] || "")))}
 			onArgumentsEditContentChanged={v => (store.editContent = v)}
-			onChangeJoinsAutomatically={v => (store.joinsAutomatically = v)} 
+			onChangeJoinsAutomatically={v => (store.joinsAutomatically = v)}
 			onClickStart={action("start-content")} />
 	</Box>
 ));
@@ -64,7 +64,7 @@ storiesOf("m-StartupScreen", module)
 				onListResize={action("argument-list-resize")}
 				onSelectArgument={action("select")}
 				onArgumentsEditContentChanged={action("edit-content")}
-				onChangeJoinsAutomatically={action("change-joins-auto")} 
+				onChangeJoinsAutomatically={action("change-joins-auto")}
 				onClickStart={action("start-content")} />
 		</Box>
 	))
@@ -117,7 +117,7 @@ storiesOf("m-StartupScreen", module)
 				onListResize={action("argument-list-resize")}
 				onSelectArgument={action("select")}
 				onArgumentsEditContentChanged={action("edit-content")}
-				onChangeJoinsAutomatically={action("change-joins-auto")} 
+				onChangeJoinsAutomatically={action("change-joins-auto")}
 				onClickStart={action("start-content")} />
 		</Box>
 	))
