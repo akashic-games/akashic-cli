@@ -13,18 +13,18 @@ const store = observable({
 		"Start (difficulty: 3)": JSON.stringify([[32, 0, "test1"]], null, 2),
 		"Start (difficulty: 10)": JSON.stringify([[32, 0, "test2"]], null, 2),
 		"Stop": JSON.stringify([[32, 0, "stop"]], null, 2),
-		"foo (a very long long event name example to test, woo hoo!)": JSON.stringify([[32, 0, "Long"]], null, 2)
+		"foo (a very long long argument name example to test, woo hoo!)": JSON.stringify([[32, 0, "Long"]], null, 2)
 	} as ({ [name: string]: string }),
-	selectedArgumentsName: null
+	selectedArgumentName: null
 });
 
 const Box = (props: any) => {
 	const style = {
 		display: "flex",
-		flexFlow: "column nowrap",
-		justifyContent: "stretch",
-		margin: 10,
-		width: "80%"
+		flexFlow: "row nowrap",
+		justifyContent: "center",
+		padding: 10,
+		border: "1px dotted red"
 	};
 	return <div style={style}>{props.children}</div>;
 };
@@ -32,17 +32,17 @@ const Box = (props: any) => {
 const TestWithBehaviour = observer(() => (
 	<Box>
 		<StartupScreen
-			argsListWidth={store.width}
-			argsListMinWidth={200}
-			onArgsListResize={w => (store.width = w)}
+			listWidth={store.width}
+			listMinWidth={200}
+			onListResize={w => (store.width = w)}
 			argumentsTable={store.argumentsTable}
-			selectedArgumentsName={store.selectedArgumentsName}
-			argumentsEditContent={store.editContent}
+			selectedArgumentName={store.selectedArgumentName}
+			argumentEditContent={store.editContent}
 			joinsAutomatically={store.joinsAutomatically}
-			onSelectArguments={name => ((store.selectedArgumentsName = name), (store.editContent = (store.argumentsTable[name] || "")))}
+			onSelectArgument={name => ((store.selectedArgumentName = name), (store.editContent = (store.argumentsTable[name] || "")))}
 			onArgumentsEditContentChanged={v => (store.editContent = v)}
 			onChangeJoinsAutomatically={v => (store.joinsAutomatically = v)} 
-			onClickStartContent={action("start-content")} />
+			onClickStart={action("start-content")} />
 	</Box>
 ));
 
@@ -50,34 +50,34 @@ storiesOf("m-StartupScreen", module)
 	.add("basic", () => (
 		<Box>
 			<StartupScreen
-				argsListWidth={250}
-				argsListMinWidth={100}
+				listWidth={250}
+				listMinWidth={100}
 				argumentsTable={{
 					"Start (difficulty: 3)": "1",
 					"Start (difficulty: 10)": "1",
 					"Stop": "1",
-					"foo (a very long long event name example to test, woo hoo!)": "1"
+					"foo (a very long long argument name example to test, woo hoo!)": "1"
 				}}
-				selectedArgumentsName={"Stop"}
-				argumentsEditContent={`["test"]`}
+				selectedArgumentName={"Stop"}
+				argumentEditContent={`["test"]`}
 				joinsAutomatically={false}
-				onArgsListResize={action("event-list-resize")}
-				onSelectArguments={action("copy")}
+				onListResize={action("argument-list-resize")}
+				onSelectArgument={action("select")}
 				onArgumentsEditContentChanged={action("edit-content")}
 				onChangeJoinsAutomatically={action("change-joins-auto")} 
-				onClickStartContent={action("start-content")} />
+				onClickStart={action("start-content")} />
 		</Box>
 	))
 	.add("many argumentsTable", () => (
 		<Box>
 			<StartupScreen
-				argsListWidth={250}
-				argsListMinWidth={100}
+				listWidth={250}
+				listMinWidth={100}
 				argumentsTable={{
 					"Start (difficulty: 3)": "1",
 					"Start (difficulty: 10)": "1",
 					"Stop": "1",
-					"foo (a very long long event name example to test, woo hoo!)": "1",
+					"foo (a very long long argument name example to test, woo hoo!)": "1",
 					"Test 1": "1",
 					"Test 2": "1",
 					"Test 3": "1",
@@ -111,14 +111,14 @@ storiesOf("m-StartupScreen", module)
 					"Test 31": "1",
 					"Test 32": "1"
 				}}
-				selectedArgumentsName={"Test 9"}
-				argumentsEditContent={`["test"]`}
+				selectedArgumentName={"Test 9"}
+				argumentEditContent={`["test"]`}
 				joinsAutomatically={false}
-				onArgsListResize={action("event-list-resize")}
-				onSelectArguments={action("copy")}
+				onListResize={action("argument-list-resize")}
+				onSelectArgument={action("select")}
 				onArgumentsEditContentChanged={action("edit-content")}
 				onChangeJoinsAutomatically={action("change-joins-auto")} 
-				onClickStartContent={action("start-content")} />
+				onClickStart={action("start-content")} />
 		</Box>
 	))
 	.add("with-behavior", () => <TestWithBehaviour />);

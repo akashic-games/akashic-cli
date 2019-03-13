@@ -15,17 +15,26 @@ export class StartupScreenContainer extends React.Component<StartupScreenContain
 	render(): React.ReactNode {
 		const { operator, startupScreenUiStore, argumentsTable } = this.props;
 		return <StartupScreen
-			argsListWidth={startupScreenUiStore.gameArgumentListWidth}
-			argsListMinWidth={150}
-			onArgsListResize={operator.ui.setGameArgumentListWidth}
+			listWidth={startupScreenUiStore.instanceArgumentListWidth}
+			listMinWidth={150}
+			onListResize={operator.ui.setInstanceArgumentListWidth}
 			argumentsTable={argumentsTable}
-			selectedArgumentsName={startupScreenUiStore.selectedArgumentsName}
-			argumentsEditContent={startupScreenUiStore.gameArgumentEditContent}
+			selectedArgumentName={startupScreenUiStore.selectedArgumentName}
+			argumentEditContent={startupScreenUiStore.instanceArgumentEditContent}
 			joinsAutomatically={startupScreenUiStore.joinsAutomatically}
-			onSelectArguments={operator.ui.selectGameArguments}
-			onArgumentsEditContentChanged={operator.ui.setGameArgumentEditContent}
+			onSelectArgument={operator.ui.selectInstanceArguments}
+			onArgumentsEditContentChanged={operator.ui.setInstanceArgumentEditContent}
 			onChangeJoinsAutomatically={operator.ui.setJoinsAutomatically}
-			onClickStartContent={operator.startContent}
+			onClickStart={this._handleClickStart}
 		/>;
 	}
+
+	private _handleClickStart = (): void => {
+		const { operator, startupScreenUiStore } = this.props;
+		const argText = startupScreenUiStore.instanceArgumentEditContent;
+		operator.startContent({
+			joinsSelf: startupScreenUiStore.joinsAutomatically,
+			instanceArgument: (argText !== "") ? JSON.parse(argText) : undefined
+		});
+	};
 }

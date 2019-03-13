@@ -75,7 +75,6 @@ ul.args-list.resizable {
 	background: var(--color-base-bg-alt);
 }
 .args-list > li:hover {
-	color: white;
 	background: #6080c040;
 }
 .args-list > li:active {
@@ -129,7 +128,7 @@ ul.args-list.resizable {
 	padding: 5px;
 	border-width: 0;
 	resize: none;
-	color: #555;
+	color: var(--color-base-text);
 }
 
 .button-bar {
@@ -156,17 +155,17 @@ ul.args-list.resizable {
 	padding: 8px 20px;
 	border-radius: 3px;
 	font-size: 1.08rem;
-	background: #68c;
+	background: var(--color-base-button-bg);
 	color: white;
 }
 
 .start-button:hover {
 	cursor: pointer;
-	background: #6080c0;
+	background: var(--color-base-button-bg-hover);
 }
 .start-button:active {
 	cursor: pointer;
-	background: #5070b0;
+	background: var(--color-base-button-bg-active);
 }
 
 .start-button:disabled {

@@ -2,34 +2,34 @@ import {action, observable} from "mobx";
 import {storage} from "./storage";
 
 export class StartupScreenUiStore {
-	@observable selectedArgumentsName: string | null;
-	@observable gameArgumentListWidth: number;
-	@observable gameArgumentEditContent: string;
+	@observable selectedArgumentName: string | null;
+	@observable instanceArgumentListWidth: number;
+	@observable instanceArgumentEditContent: string;
 	@observable joinsAutomatically: boolean;
 
 	constructor() {
-		this.selectedArgumentsName = null;
-		this.gameArgumentListWidth = storage.data.gameArgumentListWidth;
-		this.gameArgumentEditContent = storage.data.gameArgumentEditContent;
+		this.selectedArgumentName = null;
+		this.instanceArgumentListWidth = storage.data.instanceArgumentListWidth;
+		this.instanceArgumentEditContent = storage.data.instanceArgumentEditContent;
 		this.joinsAutomatically = storage.data.joinsAutomatically;
 	}
 
 	@action
-	setSelectedArgumentsName(name: string | null): void {
-		this.selectedArgumentsName = name;
-		storage.put({ selectedArgumentsName: name });
+	setSelectedArgumentName(name: string | null): void {
+		this.selectedArgumentName = name;
+		storage.put({ selectedArgumentName: name });
 	}
 
 	@action
-	setGameArgumentListWidth(w: number): void {
-		this.gameArgumentListWidth = w;
-		storage.put({ gameArgumentListWidth: w });
+	setInstanceArgumentListWidth(w: number): void {
+		this.instanceArgumentListWidth = w;
+		storage.put({ instanceArgumentListWidth: w });
 	}
 
 	@action
-	setGameArgumentEditContent(content: string): void {
-		this.gameArgumentEditContent = content;
-		storage.put({ gameArgumentEditContent: content });
+	setInstanceArgumentEditContent(content: string): void {
+		this.instanceArgumentEditContent = content;
+		storage.put({ instanceArgumentEditContent: content });
 	}
 
 	@action

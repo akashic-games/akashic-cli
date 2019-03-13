@@ -18,6 +18,9 @@
 	--color-base-bg: #fdfdfd;
 	--color-base-bg-alt: #f6f6f6;
 	--color-base-bg-active: #e8f0f8;
+	--color-base-button-bg: #68c;
+	--color-base-button-bg-hover: #6080c0;
+	--color-base-button-bg-active: #5070b0;
 
 	--color-pane-bg: white;
 	--color-pane-button-bg: white;

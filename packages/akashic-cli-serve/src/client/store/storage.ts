@@ -9,9 +9,9 @@ export interface StorageData {
 	showsEventList: boolean;
 	eventListWidth: number;
 	eventEditContent: string;
-	selectedArgumentsName: string | null;
-	gameArgumentListWidth: number;
-	gameArgumentEditContent: string;
+	selectedArgumentName: string | null;
+	instanceArgumentListWidth: number;
+	instanceArgumentEditContent: string;
 	joinsAutomatically: boolean;
 }
 
@@ -69,9 +69,9 @@ export class Storage {
 			showsEventList: choose(asBool(qp.showsEventList), s.showsEventList, true),
 			eventListWidth: choose(asNumber(qp.eventListWidth), s.eventListWidth, 150),
 			eventEditContent: choose(qp.eventEditContent, s.eventEditContent, ""),
-			selectedArgumentsName: choose(qp.selectedArgumentsName, s.selectedArgumentsName, null),
-			gameArgumentListWidth: choose(asNumber(qp.gameArgumentListWidth), s.gameArgumentListWidth, 150),
-			gameArgumentEditContent: choose(qp.gameArgumentEditContent, s.gameArgumentEditContent, ""),
+			selectedArgumentName: choose(qp.selectedArgumentName, s.selectedArgumentName, null),
+			instanceArgumentListWidth: choose(asNumber(qp.instanceArgumentListWidth), s.instanceArgumentListWidth, 150),
+			instanceArgumentEditContent: choose(qp.instanceArgumentEditContent, s.instanceArgumentEditContent, ""),
 			joinsAutomatically: choose(asBool(qp.joinsAutomatically), s.joinsAutomatically, false)
 		});
 	}

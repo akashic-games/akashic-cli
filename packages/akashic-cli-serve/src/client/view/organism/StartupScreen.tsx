@@ -4,52 +4,57 @@ import { ToolIconButton } from "../atom/ToolIconButton";
 import { RightResizable } from "../atom/RightResizable";
 import { FlexScrollY } from "../atom/FlexScrollY";
 import * as styles from "./StartupScreen.css";
-import { StartContentParameterObject } from "../../operator/Operator";
 
 export interface StartupScreenProps {
-	argsListWidth: number;
-	argsListMinWidth: number;
-	onArgsListResize: (width: number) => void;
+	listWidth: number;
+	listMinWidth: number;
+	onListResize: (width: number) => void;
 	argumentsTable: { [name: string]: string };
-	argumentsEditContent: string;
-	selectedArgumentsName: string | null;
+	argumentEditContent: string;
+	selectedArgumentName: string | null;
 	joinsAutomatically: boolean;
-	onSelectArguments: (argName: string | null) => void;
+	onSelectArgument: (argName: string | null) => void;
 	onArgumentsEditContentChanged: (content: string) => void;
 	onChangeJoinsAutomatically: (join: boolean) => void;
-	onClickStartContent: (params?: StartContentParameterObject) => Promise<void>;
+	onClickStart: () => void;
 }
 
 @observer
 export class StartupScreen extends React.Component<StartupScreenProps, {}> {
 	render(): React.ReactNode {
-		const props = this.props;
 		const {
-			selectedArgumentsName,
-			argumentsEditContent,
-			argumentsTable
-		} = props;
-		const isValidArg = this._isValidArgument(argumentsEditContent);
-		const selectedArguments = ((selectedArgumentsName == null) ? "" : argumentsTable[selectedArgumentsName]);
-		const isShowingSelected = (selectedArguments === argumentsEditContent)
-		const showsEditor = selectedArgumentsName || !isShowingSelected;
+			listWidth,
+			listMinWidth,
+			onListResize,
+			selectedArgumentName,
+			argumentEditContent,
+			argumentsTable,
+			joinsAutomatically,
+			onSelectArgument,
+			onChangeJoinsAutomatically,
+			onClickStart
+		} = this.props;
+		const isValidArg = this._isValidArgument(argumentEditContent);
+		const selectedArg = ((selectedArgumentName == null) ? "" : argumentsTable[selectedArgumentName]);
+		const isShowingSelected = (selectedArg === argumentEditContent);
+		const showsEditor = selectedArgumentName || !isShowingSelected;
 
 		const argumentsList =
 			<FlexScrollY>
 				<ul className={styles["args-list"] + (showsEditor ? (" " + styles["resizable"]) : "")}>
 					<li
 						key={"sys:noarg"}
-						className={((selectedArgumentsName == null) && isShowingSelected) ? styles["selected"] : ""}
+						className={((selectedArgumentName == null) && isShowingSelected) ? styles["selected"] : ""}
 						onClick={this._handleClickNoArguments}
 					>
-						&lt;No Argument&gt;
+						(No Arguments)
 					</li>
 					{
 						Object.keys(argumentsTable).map(name => (
 							<li
 								key={"template:" + name}
-								className={(name === selectedArgumentsName && isShowingSelected) ? styles["selected"] : ""}
-								onClick={() => props.onSelectArguments(name)}
+								className={(name === selectedArgumentName && isShowingSelected) ? styles["selected"] : ""}
+								onClick={() => onSelectArgument(name)}
 							>
 								{name}
 							</li>
@@ -66,11 +71,7 @@ export class StartupScreen extends React.Component<StartupScreenProps, {}> {
 				{
 					!showsEditor ? argumentsList : (
 						<>
-							<RightResizable
-								width={props.argsListWidth}
-								minWidth={props.argsListMinWidth}
-								onResize={props.onArgsListResize}
-							>
+							<RightResizable width={listWidth} minWidth={listMinWidth} onResize={onListResize}>
 								{ argumentsList }
 							</RightResizable>
 							<div className={styles["editor-container"]}>
@@ -78,15 +79,15 @@ export class StartupScreen extends React.Component<StartupScreenProps, {}> {
 									<div className={styles["arguments-name"]}>
 										{
 											(!isValidArg) ? "(Invalid JSON)" :
-											(argumentsEditContent === "") ? "(no arguments)" :
-											(isShowingSelected) ? `Template "${selectedArgumentsName}"` :
+											(argumentEditContent === "") ? "(No Arguments)" :
+											(isShowingSelected) ? `Template "${selectedArgumentName}"` :
 											"(Custom)"
 										}
 									</div>
 								</div>
 								<textarea
 									className={styles["editor"]}
-									value={props.argumentsEditContent}
+									value={argumentEditContent}
 									placeholder={"Instance Arguments (JSON)"}
 									onChange={this._handleTextAreaChange} />
 							</div>
@@ -94,20 +95,18 @@ export class StartupScreen extends React.Component<StartupScreenProps, {}> {
 					)
 				}
 			</div>
-
 			<div className={styles["button-bar"]}>
 				<div className={styles["start-options"]}>
 					<label className="join">
-						<input type="checkbox" id="join" checked={props.joinsAutomatically}
-								 onChange={() => props.onChangeJoinsAutomatically(!props.joinsAutomatically)}/>
+						<input
+							type="checkbox"
+							id="join"
+							checked={joinsAutomatically}
+							onChange={() => onChangeJoinsAutomatically(!joinsAutomatically)}/>
 						Send JoinEvent for the player
 					</label>
 				</div>
-				<button
-					className={styles["start-button"]}
-					disabled={!isValidArg}
-					onClick={this._handleClickStartButton}
-				>
+				<button className={styles["start-button"]} disabled={!isValidArg} onClick={onClickStart}>
 					Start
 				</button>
 			</div>
@@ -126,13 +125,7 @@ export class StartupScreen extends React.Component<StartupScreenProps, {}> {
 	}
 
 	private _handleClickNoArguments = (): void => {
-		this.props.onSelectArguments(null);
-	}
-
-	private _handleClickStartButton = (): void => {
-		const { joinsAutomatically, argumentsEditContent }= this.props;
-		const gameArgument = argumentsEditContent === "" ? undefined : JSON.parse(argumentsEditContent);
-		this.props.onClickStartContent({joinsAutomatically, gameArgument });
+		this.props.onSelectArgument(null);
 	}
 
 	private _handleTextAreaChange = (ev: React.ChangeEvent<HTMLTextAreaElement>): void => {
