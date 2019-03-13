@@ -19,10 +19,10 @@ export class TopResizable extends React.Component<TopResizableProps, {}> {
 
 	render(): React.ReactNode {
 		return <div className={styles["top-resizable"]} style={{ height: this.props.height }} >
-			<div className={styles["h-resizer"]} onMouseDown={this._onMouseDownResizer} />
 			<div className={styles["content"]}>
 				{ this.props.children }
 			</div>
+			<div className={styles["h-resizer"]} onMouseDown={this._onMouseDownResizer} />
 		</div>;
 	}
 
