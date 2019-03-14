@@ -9,7 +9,13 @@ export const createScriptAssetController = (baseDir: string): express.RequestHan
 
 	const watcher = chokidar.watch(gameJsonPath, { persistent: true });
 	watcher.on("change", () => {
-		gameJson = JSON.parse(fs.readFileSync(gameJsonPath).toString());
+        try {
+            const gameJsonFileValue = JSON.parse(fs.readFileSync(gameJsonPath).toString());
+            gameJson = gameJsonFileValue;
+        }
+        catch (e) {
+            console.warn("detected game.json updated but dit not reflect because parsing failed.");
+        }
 	});
 	return (req: express.Request, res: express.Response, next: Function): void => {
 		const scriptPath = path.join(baseDir, req.params.scriptName);
