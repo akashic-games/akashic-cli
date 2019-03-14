@@ -21,7 +21,7 @@
     ["lint-maximum-line-length", 140],
     ["lint-no-auto-link-without-protocol", true],
     ["lint-no-blockquote-without-marker", true],
-    ["lint-no-consecutive-blank-lines", true],
+    ["lint-no-consecutive-blank-lines", false],
     ["lint-no-duplicate-headings", false],
     ["lint-no-emphasis-as-heading", true],
     ["lint-no-file-name-articles", false],
@@ -41,8 +41,17 @@
     ["lint-ordered-list-marker-value", "ordered"],
     ["lint-strong-marker", "*"],
     ["lint-table-cell-padding", "consistent"],
-    ["lint-table-pipe-alignment", true],
+    ["lint-table-pipe-alignment", false],
     ["lint-table-pipes", true],
-    ["lint-unordered-list-marker-style", "*"]
+    ["lint-unordered-list-marker-style", "*"],
+    ["lint-checkbox-character-style", {"checked": "x"}],
+    ["lint-checkbox-content-indent", true],
+    ["lint-final-newline", true],
+    ["lint-first-heading-level", true],
+    ["lint-list-item-bullet-indent", true],
+    ["lint-no-duplicate-definitions", true],
+    ["lint-no-heading-content-indent", true],
+    ["lint-no-heading-indent", true],
+    ["lint-no-tabs", true]
   ]
 }

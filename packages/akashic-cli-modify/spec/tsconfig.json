@@ -5,7 +5,8 @@
     "declaration": true,
     "noImplicitAny": true,
     "module": "commonjs",
-    "outDir": "./build"
+    "outDir": "./build",
+    "skipLibCheck": true
   },
   "files": [
     "../node_modules/typescript/lib/lib.es6.d.ts",

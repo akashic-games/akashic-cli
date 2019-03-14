@@ -6,7 +6,8 @@
     "module": "commonjs",
     "outDir": "./lib",
     "declaration": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "skipLibCheck": true
   },
   "files": [
     "./node_modules/typescript/lib/lib.es6.d.ts",
