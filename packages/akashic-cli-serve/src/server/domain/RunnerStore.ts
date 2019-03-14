@@ -45,6 +45,10 @@ export class RunnerStore {
 		this.onRunnerRemove.fire({ playId, runnerId });
 	}
 
+	getRunners() {
+		return this.runnerManager.getRunners();
+	}
+
 	pauseRunner(runnerId: string): void {
 		const runner = this.runnerManager.getRunner(runnerId);
 		const playId = runner.playId;

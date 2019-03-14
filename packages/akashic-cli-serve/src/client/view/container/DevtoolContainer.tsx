@@ -52,6 +52,11 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 				}))),
 				onClickAddInstance: operator.play.openNewClientInstance
 			}}
+			externalPluginsDevtoolProps={{
+				onClickCreateChildPlay: operator.createChildPlayAndSendEvents,
+				onClickSuspendChildPlay: operator.suspendPlayAndSendEvents,
+				playTree: devtoolUiStore.playTree
+			}}
 		/>;
 	}
 }

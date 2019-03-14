@@ -1,5 +1,5 @@
-import {generateTestbedScriptAsset} from "./TestbedScriptAsset";
 import {Trigger} from "@akashic/trigger";
+import {generateTestbedScriptAsset} from "./TestbedScriptAsset";
 
 export interface Platform {
 	_resourceFactory: {
@@ -37,7 +37,7 @@ export class GameViewManager {
 		};
 		// TODO: 複数コンテンツのホスティングに対応されれば削除
 		if (gameConfig.gameLoaderCustomizer.createCustomAmflowClient) {
-			customGameConfig.gameLoaderCustomizer.platformCustomizer = this.customizePlatform;
+			// customGameConfig.gameLoaderCustomizer.platformCustomizer = this.customizePlatform;
 		}
 		const gameContent = new agv.GameContent(customGameConfig);
 		gameContent.onExternalPluginRegister = new Trigger();

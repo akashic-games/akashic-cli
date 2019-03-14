@@ -13,6 +13,7 @@ import { createApiRouter } from "./route/ApiRoute";
 import { createConfigRouter } from "./route/ConfigRoute";
 import { RunnerStore } from "./domain/RunnerStore";
 import { PlayStore } from "./domain/PlayStore";
+import { PlayTreeStore } from "./domain/PlayTreeStore";
 import { SocketIOAMFlowManager } from "./domain/SocketIOAMFlowManager";
 import { serverGlobalConfig } from "./common/ServerGlobalConfig";
 
@@ -94,6 +95,7 @@ export function run(argv: any): void {
 	const playManager = new PlayManager();
 	const runnerManager = new RunnerManager(playManager);
 	const playStore = new PlayStore({playManager});
+	const playTreeStore = new PlayTreeStore();
 	const runnerStore = new RunnerStore({runnerManager});
 	const amflowManager = new SocketIOAMFlowManager({playStore});
 
@@ -121,7 +123,7 @@ export function run(argv: any): void {
 	app.use("/content/", express.static(targetDir)); // コンテンツのスクリプトアセット加工後のパス。クライアント側でゲームを動かすために必要。
 	app.use("/raw/", express.static(targetDir)); // コンテンツのスクリプトアセット加工前のパス。サーバー側でゲームを動かすために必要。
 	app.use("/public/", express.static(path.join(__dirname, "..", "..", "www")));
-	app.use("/api/", createApiRouter({ targetDir, playStore, runnerStore, amflowManager, io }));
+	app.use("/api/", createApiRouter({ targetDir, playStore, playTreeStore, runnerStore, amflowManager, io }));
 	app.use("/config/", createConfigRouter());
 
 	io.on("connection", (socket: socketio.Socket) => { amflowManager.setupSocketIOAMFlow(socket); });
@@ -137,6 +139,7 @@ export function run(argv: any): void {
 	runnerStore.onRunnerRemove.add(arg => { io.emit("runnerRemove", arg); });
 	runnerStore.onRunnerPause.add(arg => { io.emit("runnerPause", arg); });
 	runnerStore.onRunnerResume.add(arg => { io.emit("runnerResume", arg); });
+	playTreeStore.onPlayTreeChange.add(arg => { io.emit("playTreeChange", arg); });
 
 	httpServer.listen(serverGlobalConfig.port, () => {
 		if (serverGlobalConfig.port < 1024) {

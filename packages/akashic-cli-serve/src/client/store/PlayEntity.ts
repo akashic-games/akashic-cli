@@ -22,6 +22,7 @@ export interface CreateLocalInstanceParameterObject {
 	playId: string;
 	playToken?: string;
 	playlogServerUrl?: string;
+	parent?: LocalInstanceEntity;
 	contentUrl?: string;
 	argument?: any;
 	initialEvents?: playlog.Event[];
@@ -43,7 +44,6 @@ export interface PlayEntityParameterObject {
 	runners?: RunnerDescription[];
 	clientInstances?: ClientInstanceDescription[];
 	durationState?: PlayDurationState;
-	parent?: PlayEntity;
 }
 
 export class PlayEntity {
@@ -65,9 +65,9 @@ export class PlayEntity {
 
 	private readonly _timeKeeper: TimeKeeper;
 	private readonly _clientContentUrl: string;
+	private readonly _contentUrl: string;
 	private _serverInstanceWaiters: {[key: string]: (p: ServerInstanceEntity) => void };
 	private _timerId: any;
-	private _parent?: PlayEntity;
 
 	constructor(param: PlayEntityParameterObject) {
 		this.playId = param.playId;
@@ -83,13 +83,9 @@ export class PlayEntity {
 		this.onTeardown = new Trigger();
 		this._timeKeeper = new TimeKeeper();
 		this._clientContentUrl = param.clientContentUrl!;
+		this._contentUrl = param.contentUrl;
 		this._serverInstanceWaiters = {};
 		this._timerId = null;
-
-		if (param.parent) {
-			this._parent = param.parent;
-			this._parent.onTeardown.addOnce(this._handleParentTeardown);
-		}
 
 		if (param.durationState) {
 			this._timeKeeper.setTime(param.durationState.duration);
@@ -111,8 +107,9 @@ export class PlayEntity {
 	async createLocalInstance(param: CreateLocalInstanceParameterObject): Promise<LocalInstanceEntity> {
 		const i = new LocalInstanceEntity({
 			play: this,
-			contentUrl: this._clientContentUrl,
+			contentUrl: param.contentUrl != null ? param.contentUrl : this._contentUrl, // TODO: 本来は this._clientContentUrl をみるべき
 			coeHandler: param.coeHandler,
+			parent: param.parent,
 			...param
 		});
 		i.onStop.add(this._handleLocalInstanceStopped);
@@ -252,10 +249,6 @@ export class PlayEntity {
 			clearInterval(this._timerId);
 			this._timerId = null;
 		}
-	}
-
-	private _handleParentTeardown = () => {
-		this.teardown();
 	}
 
 	@action

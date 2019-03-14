@@ -1,3 +1,4 @@
+import { PlayTree } from "../../common/types/PlayTree";
 import { Store } from "../store/Store";
 
 export class UiOperator {
@@ -64,5 +65,9 @@ export class UiOperator {
 
 	setJoinsAutomatically = (join: boolean): void => {
 		this.store.startupScreenUiStore.setJoinsAutomatically(join);
+	}
+
+	setPlayTree = (playTree: PlayTree[]): void => {
+		this.store.devtoolUiStore.setPlayTree(playTree);
 	}
 }

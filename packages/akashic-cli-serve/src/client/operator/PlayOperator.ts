@@ -33,6 +33,11 @@ export class PlayOperator {
 		);
 	}
 
+	sendEvent = (pev: any): void => {
+		const amflow = this.store.currentPlay.amflow;
+		amflow.sendEvent(pev);
+	}
+
 	sendRegisteredEvent = (eventName: string): void => {
 		const pevs = this.store.sandboxConfig.events[eventName];
 		const amflow = this.store.currentPlay.amflow;

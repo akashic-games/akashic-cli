@@ -1,5 +1,6 @@
 import {Player} from "./Player";
 import {PlayStatus} from "./PlayStatus";
+import {PlayTree} from "./PlayTree";
 
 export interface PlayCreateTestbedEvent {
 	playId: string;
@@ -71,3 +72,5 @@ export interface PlayBroadcastTestbedEvent {
 	playId: string;
 	message: any;
 }
+
+export type PlayTreeTestbedEvent = PlayTree[];

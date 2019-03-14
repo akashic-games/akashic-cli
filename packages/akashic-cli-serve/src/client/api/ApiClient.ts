@@ -8,7 +8,10 @@ import {
 	RunnerPostApiResponse,
 	RunnerPatchApiResponse,
 	SandboxConfigApiResponse,
-	OptionsApiResponse
+	PlayTreeApiResponse,
+	OptionsApiResponse,
+	ChildPlayAddApiResponse,
+	ChildPlayRemoveApiResponse
 } from "../../common/types/ApiResponse";
 import {GameConfiguration} from "../../common/types/GameConfiguration";
 import * as ApiRequest from "./ApiRequest";
@@ -79,4 +82,16 @@ export const getSandboxConfig = async(): Promise<SandboxConfigApiResponse> => {
 
 export const getOptions = async(): Promise<OptionsApiResponse> => {
 	return await ApiRequest.get<OptionsApiResponse>("/config/options");
+};
+
+export const addChildPlay = async(playId: string, childId: string): Promise<ChildPlayAddApiResponse> => {
+	return await ApiRequest.post<ChildPlayAddApiResponse>(`/api/play/${playId}/child`, {childId: childId});
+};
+
+export const removeChildPlay = async(playId: string, childId: string): Promise<ChildPlayRemoveApiResponse> => {
+	return await ApiRequest.del<ChildPlayRemoveApiResponse>(`/api/play/${playId}/child/${childId}`);
+};
+
+export const getPlayTree = async(): Promise<PlayTreeApiResponse> => {
+	return await ApiRequest.get<PlayTreeApiResponse>("/api/play/child");
 };

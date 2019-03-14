@@ -7,8 +7,9 @@ import {
 	PlayPatchApiResponseData
 } from "../../common/types/ApiResponse";
 import { PlayStore } from "../domain/PlayStore";
+import { PlayTreeStore, PlayTree } from "../domain/PlayTreeStore";
 
-export const createHandlerToCreatePlay = (playStore: PlayStore): express.RequestHandler => {
+export const createHandlerToCreatePlay = (playStore: PlayStore, playTreeStore: PlayTreeStore): express.RequestHandler => {
 	return async (req, res, next) => {
 		try {
 			if (!req.body.contentUrl) {
@@ -17,6 +18,7 @@ export const createHandlerToCreatePlay = (playStore: PlayStore): express.Request
 			const contentUrl = req.body.contentUrl;
 			const clientContentUrl = req.body.clientContentUrl;
 			const playId = await playStore.createPlay(contentUrl, clientContentUrl);
+			playTreeStore.addPlay(playId);
 			responseSuccess<PlayApiResponseData>(res, 200, {
 				playId,
 				contentUrl,
@@ -83,7 +85,7 @@ export const createHandlerToGetPlays = (playStore: PlayStore): express.RequestHa
 	};
 };
 
-export const createHandlerToDeletePlay = (playStore: PlayStore): express.RequestHandler => {
+export const createHandlerToDeletePlay = (playStore: PlayStore, playTreeStore: PlayTreeStore): express.RequestHandler => {
 	return async (req: express.Request, res: express.Response, next: Function) => {
 		try {
 			if (!req.params.playId) {
@@ -91,6 +93,7 @@ export const createHandlerToDeletePlay = (playStore: PlayStore): express.Request
 			}
 			const playId = req.params.playId;
 			await playStore.stopPlay(playId);
+			playTreeStore.removePlay(playId);
 			responseSuccess<PlayDeleteApiResponseData>(res, 200, { playId });
 		} catch (e) {
 			next(e);
@@ -147,6 +150,64 @@ export const createHandlerToPatchPlay = (playStore: PlayStore): express.RequestH
 				}
 			}
 			responseSuccess<PlayPatchApiResponseData>(res, 200, { playId, status });
+		} catch (e) {
+			next(e);
+		}
+	};
+};
+
+export const createHandlerToAddChildPlay = (playStore: PlayStore, playTreeStore: PlayTreeStore): express.RequestHandler => {
+	return (req, res, next) => {
+		try {
+			const playId = req.params.playId;
+			const play = playStore.getPlay(playId);
+			if (!play) {
+				throw new NotFoundError({
+					errorMessage: "Play is not found"
+				});
+			}
+			const childId = req.body.childId;
+			if (!childId) {
+				throw new BadRequestError({
+					errorMessage: "childId is not given"
+				});
+			}
+			playTreeStore.addChildToPlay(playId, childId);
+			responseSuccess<PlayApiResponseData>(res, 200, undefined);
+		} catch (e) {
+			next(e);
+		}
+	};
+};
+
+export const createHandlerToRemoveChildPlay = (playStore: PlayStore, playTreeStore: PlayTreeStore): express.RequestHandler => {
+	return (req, res, next) => {
+		try {
+			const playId = req.params.playId;
+			const play = playStore.getPlay(playId);
+			if (!play) {
+				throw new NotFoundError({
+					errorMessage: "Play is not found"
+				});
+			}
+			const childId = req.params.childId;
+			if (!childId) {
+				throw new BadRequestError({
+					errorMessage: "childId is not given"
+				});
+			}
+			playTreeStore.removeChild(playId, childId);
+			responseSuccess<PlayApiResponseData>(res, 200, undefined);
+		} catch (e) {
+			next(e);
+		}
+	};
+};
+
+export const createHandlerToGetPlayTree = (playTreeStore: PlayTreeStore): express.RequestHandler => {
+	return (req, res, next) => {
+		try {
+			responseSuccess<PlayTree[]>(res, 200, playTreeStore.getPlayTree());
 		} catch (e) {
 			next(e);
 		}

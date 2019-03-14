@@ -2,6 +2,7 @@ import {PlayDurationState} from "./PlayDurationState";
 import {SandboxConfig} from "./SandboxConfig";
 import {ClientInstanceDescription, RunnerDescription} from "./TestbedEvent";
 import {Player} from "./Player";
+import {PlayTree} from "./PlayTree";
 
 export interface ApiResponse<T> {
 	meta: {
@@ -68,3 +69,6 @@ export type RunnerDeleteApiResponse = ApiResponse<RunnerDeleteApiResponseData>;
 export type RunnerPatchApiResponse = ApiResponse<RunnerPatchApiResponseData>;
 export type SandboxConfigApiResponse = ApiResponse<SandboxConfigApiResponseData>;
 export type OptionsApiResponse = ApiResponse<OptionsApiResponseData>;
+export type PlayTreeApiResponse = ApiResponse<PlayTree[]>;
+export type ChildPlayAddApiResponse = ApiResponse<void>;
+export type ChildPlayRemoveApiResponse = ApiResponse<void>;
