@@ -10,6 +10,8 @@
 	box-sizing: border-box;
 	display: inline-block;
 
+	/*
+	user-select: none;
 	-moz-user-select: none;
-	-ms-user-select: none;
+	*/
 }
