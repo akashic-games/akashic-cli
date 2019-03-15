@@ -3,18 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [0.0.12](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli-serve@0.0.11...@akashic/akashic-cli-serve@0.0.12) (2019-03-04)
+## [0.0.16](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli-serve@0.0.15...@akashic/akashic-cli-serve@0.0.16) (2019-03-15)
 
 
 ### Bug Fixes
 
-* delete unnecessary files and make test work ([#31](https://github-com-akashic-cli/akashic-games/akashic-cli/issues/31)) ([4517689](https://github-com-akashic-cli/akashic-games/akashic-cli/commit/4517689))
+* resolve problem that can not resize devtool of akashic-serve at IE ([#44](https://github-com-akashic-cli/akashic-games/akashic-cli/issues/44)) ([20faf39](https://github-com-akashic-cli/akashic-games/akashic-cli/commit/20faf39))
 
 
 
 
 
-## [0.0.11](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli-serve@0.0.10...@akashic/akashic-cli-serve@0.0.11) (2019-02-28)
+## [0.0.15](https://github.com/akashic-games/akashic-cli/compare/@akashic/akashic-cli-serve@0.0.14...@akashic/akashic-cli-serve@0.0.15) (2019-03-12)
 
 **Note:** Version bump only for package @akashic/akashic-cli-serve
 
@@ -22,27 +22,51 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-## [0.0.10](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli-serve@0.0.9...@akashic/akashic-cli-serve@0.0.10) (2019-02-27)
+## [0.0.14](https://github.com/akashic-games/akashic-cli/compare/@akashic/akashic-cli-serve@0.0.13...@akashic/akashic-cli-serve@0.0.14) (2019-03-11)
 
 
 ### Features
 
-* Update engineFiles@2.1.10 ([#32](https://github-com-akashic-cli/akashic-games/akashic-cli/issues/32)) ([0e8dc06](https://github-com-akashic-cli/akashic-games/akashic-cli/commit/0e8dc06))
+* add startup-screen and --no-auto-start option in akashic-cli-serve ([#33](https://github.com/akashic-games/akashic-cli/issues/33)) ([6c993de](https://github.com/akashic-games/akashic-cli/commit/6c993de))
 
 
 
 
+
+## [0.0.13](https://github.com/akashic-games/akashic-cli/compare/@akashic/akashic-cli-serve@0.0.12...@akashic/akashic-cli-serve@0.0.13) (2019-03-07)
+
+**Note:** Version bump only for package @akashic/akashic-cli-serve
+
+
+
+
+
+## [0.0.12](https://github.com/akashic-games/akashic-cli/compare/@akashic/akashic-cli-serve@0.0.11...@akashic/akashic-cli-serve@0.0.12) (2019-03-04)
+
+
+### Bug Fixes
+
+* delete unnecessary files and make test work ([#31](https://github.com/akashic-games/akashic-cli/issues/31)) ([4517689](https://github.com/akashic-games/akashic-cli/commit/4517689))
+
+
+
+
+
+## [0.0.11](https://github.com/akashic-games/akashic-cli/compare/@akashic/akashic-cli-serve@0.0.10...@akashic/akashic-cli-serve@0.0.11) (2019-02-28)
+
+**Note:** Version bump only for package @akashic/akashic-cli-serve
+
+## [0.0.10](https://github.com/akashic-games/akashic-cli/compare/@akashic/akashic-cli-serve@0.0.9...@akashic/akashic-cli-serve@0.0.10) (2019-02-27)
+
+### Features
+
+* Update engineFiles@2.1.10 ([#32](https://github.com/akashic-games/akashic-cli/issues/32)) ([0e8dc06](https://github.com/akashic-games/akashic-cli/commit/0e8dc06))
 
 ## 0.0.9 (2019-02-22)
 
-
 ### Features
 
-* Make akashic-cli mono-repo ([#30](https://github-com-akashic-cli/akashic-games/akashic-cli/issues/30)) ([fd5aa71](https://github-com-akashic-cli/akashic-games/akashic-cli/commit/fd5aa71))
-
-
-
-
+* Make akashic-cli mono-repo ([#30](https://github.com/akashic-games/akashic-cli/issues/30)) ([fd5aa71](https://github.com/akashic-games/akashic-cli/commit/fd5aa71))
 
 ## 0.0.8
 * サーバー起動時にホスト名を指定しないとホストPC以外でアクセスできなくなる問題の修正

@@ -1,3 +1,4 @@
+// TODO globalに依存しないようにする
 global.io = require("socket.io-client");
 
 const { spawn } = require("child_process");
@@ -6,7 +7,7 @@ const ServerConfigMock = require("../helper/SeverConfigMock");
 const SubscreiberMock = require("../helper/SubscriberMock");
 const ApiRequestMock = require("../helper/ApiRequestMock");
 
-describe("SubscriberSpec", function() {
+xdescribe("SubscriberSpec", function() {
 	const host = ServerConfigMock.hostname;
 	const port = ServerConfigMock.port;
 	const contentUrl = `http://${host}:${port}/config/content.raw.json`;
@@ -15,16 +16,14 @@ describe("SubscriberSpec", function() {
 	beforeAll(function(done) {
 		originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
 		jasmine.DEFAULT_TIMEOUT_INTERVAL = 8000; // 一番最初のテストはタイムアウトまで残り2秒の状態で始まるのでタイムアウト時間を3秒延長した
-		return new Promise((resolve) => {
-			childProcess = spawn(
-				"node",
-				[path.resolve(__dirname, "../../bin/run"), "-H", host, "-p", port],
-				{cwd: path.resolve(__dirname, "../fixture/sample_content")}
-			);
-			setTimeout(function() {
-				resolve();
-			}, 3000); // サーバーの起動に時間がかかるため何秒か待つようにした
-		}).then(done);
+		childProcess = spawn(
+			"node",
+			[path.resolve(__dirname, "../../bin/run"), "-H", host, "-p", port],
+			{cwd: path.resolve(__dirname, "../fixture/sample_content")}
+		);
+		setTimeout(function() {
+			done();
+		}, 3000); // サーバーの起動に時間がかかるため何秒か待つようにした
 	});
 	afterAll(function() {
 		jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;

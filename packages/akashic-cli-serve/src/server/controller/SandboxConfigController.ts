@@ -15,7 +15,7 @@ export const createHandlerToGetSandboxConfig = (dirpath: string): express.Reques
 				config = require(configPath);
 			} catch (e) {
 				if (e.code !== "MODULE_NOT_FOUND") {
-					getSystemLogger().error("Failure to load sandbox.config.json.", e.code);
+					getSystemLogger().error("Failure to load sandbox.config.js.", e.code);
 				}
 				config = null;
 			}

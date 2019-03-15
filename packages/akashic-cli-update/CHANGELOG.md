@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.4](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli-update@0.2.3...@akashic/akashic-cli-update@0.2.4) (2019-03-12)
+
+**Note:** Version bump only for package @akashic/akashic-cli-update
+
+
+
+
+
+## [0.2.3](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli-update@0.2.2...@akashic/akashic-cli-update@0.2.3) (2019-03-06)
+
+**Note:** Version bump only for package @akashic/akashic-cli-update
+
+
+
+
+
 ## [0.2.2](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli-update@0.2.1...@akashic/akashic-cli-update@0.2.2) (2019-03-04)
 
 

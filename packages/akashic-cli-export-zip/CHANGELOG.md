@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.6](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli-export-zip@0.3.5...@akashic/akashic-cli-export-zip@0.3.6) (2019-03-12)
+
+**Note:** Version bump only for package @akashic/akashic-cli-export-zip
+
+
+
+
+
+## [0.3.5](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli-export-zip@0.3.4...@akashic/akashic-cli-export-zip@0.3.5) (2019-03-06)
+
+**Note:** Version bump only for package @akashic/akashic-cli-export-zip
+
+
+
+
+
 ## [0.3.4](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli-export-zip@0.3.3...@akashic/akashic-cli-export-zip@0.3.4) (2019-03-04)
 
 
