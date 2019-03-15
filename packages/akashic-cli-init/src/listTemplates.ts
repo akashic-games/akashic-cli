@@ -7,7 +7,6 @@ import { InitParameterObject, completeInitParameterObject } from "./InitParamete
  * サーバに存在するテンプレート一覧を表示
  */
 export function listTemplates(param: InitParameterObject): Promise<void> {
-	console.log("list", param)
 	var templates: string[] = [];
 
 	return completeInitParameterObject(param)
