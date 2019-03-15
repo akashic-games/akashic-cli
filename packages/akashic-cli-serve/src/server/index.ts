@@ -122,7 +122,7 @@ export function run(argv: any): void {
 	app.use("/raw/", express.static(targetDir)); // コンテンツのスクリプトアセット加工前のパス。サーバー側でゲームを動かすために必要。
 	app.use("/public/", express.static(path.join(__dirname, "..", "..", "www")));
 	app.use("/api/", createApiRouter({ targetDir, playStore, runnerStore, amflowManager, io }));
-	app.use("/config/", createConfigRouter());
+	app.use("/config/", createConfigRouter({ targetDir }));
 
 	io.on("connection", (socket: socketio.Socket) => { amflowManager.setupSocketIOAMFlow(socket); });
 	// TODO 全体ブロードキャストせず該当するプレイにだけ通知するべき？

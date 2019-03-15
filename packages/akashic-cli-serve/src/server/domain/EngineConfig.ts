@@ -1,20 +1,35 @@
+import * as fs from "fs";
+import * as path from "path";
+
 export interface EngineConfig {
-	engine_configuration_version: string;
 	engine_urls: string[];
 	content_url: string;
 	asset_base_url?: string;
 	external?: string[];
 }
 
-export const getEngineConfig = (baseUrl: string, isRaw: boolean): EngineConfig => {
+export const getEngineConfig = (baseUrl: string, baseDir: string, isRaw: boolean): EngineConfig => {
 	const gameContentDir = isRaw ? "raw" : "content";
+	const gameJsonPath = path.join(baseDir, "game.json");
+	// TODO: chokidar等でgame.jsonの変更時だけ読み込みを行うようにする
+	const gameJson: any = JSON.parse(fs.readFileSync(gameJsonPath).toString());
+	let version = "1";
+	let external: string[] = [];
+	if (gameJson["environment"] != null) {
+		if (gameJson["environment"]["sandbox-runtime"] != null) {
+			version = gameJson["environment"]["sandbox-runtime"];
+		}
+		if (gameJson["environment"]["external"] != null) {
+			external = Object.keys(gameJson["environment"]["external"]);
+		}
+	}
+	const versionsJson = require("../engineFilesVersion.json");
 	return {
-		engine_configuration_version: "2.3.5",
 		engine_urls: [
-			`${baseUrl}/public/external/engineFilesV2_1_10_Canvas.js`,
+			`${baseUrl}/public/external/${versionsJson[`v${version}`].fileName}`,
 			`${baseUrl}/public/external/playlogClientV3_2_1.js`
 		],
-		external: ["coe"], // TODO: game.json から取得するように
+		external,
 		content_url: `${baseUrl}/${gameContentDir}/game.json`,
 		asset_base_url: `${baseUrl}/${gameContentDir}`
 	};

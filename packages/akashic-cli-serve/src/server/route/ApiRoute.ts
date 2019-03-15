@@ -19,7 +19,7 @@ import { RunnerStore } from "../domain/RunnerStore";
 import { SocketIOAMFlowManager } from "../domain/SocketIOAMFlowManager";
 import { createHandlerToGetSandboxConfig } from "../controller/SandboxConfigController";
 
-export interface ApiRouterParameterObjct {
+export interface ApiRouterParameterObject {
 	targetDir: string;
 	playStore: PlayStore;
 	runnerStore: RunnerStore;
@@ -27,7 +27,7 @@ export interface ApiRouterParameterObjct {
 	io: socketio.Server;
 }
 
-export const createApiRouter = (params: ApiRouterParameterObjct): express.Router => {
+export const createApiRouter = (params: ApiRouterParameterObject): express.Router => {
 	const apiRouter = express.Router();
 
 	// TODO 全体的に複数形にして普通のREST APIっぽくする
