@@ -2,4 +2,5 @@
 	margin-right: 7px;
 	user-select: none;
 	-moz-user-select: none;
+	-ms-user-select: none;
 }
