@@ -3,7 +3,6 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-
 ## [0.3.10](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli-init@0.3.9...@akashic/akashic-cli-init@0.3.10) (2019-03-13)
 
 
