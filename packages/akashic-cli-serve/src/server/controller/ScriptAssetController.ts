@@ -2,6 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import * as express from "express";
 import * as chokidar from "chokidar";
+import { getSystemLogger } from "@akashic/headless-driver";
 
 export const createScriptAssetController = (baseDir: string): express.RequestHandler => {
 	const gameJsonPath = path.join(baseDir, "game.json");
@@ -9,13 +10,13 @@ export const createScriptAssetController = (baseDir: string): express.RequestHan
 
 	const watcher = chokidar.watch(gameJsonPath, { persistent: true });
 	watcher.on("change", () => {
-        try {
-            const gameJsonFileValue = JSON.parse(fs.readFileSync(gameJsonPath).toString());
-            gameJson = gameJsonFileValue;
-        }
-        catch (e) {
-            console.warn("detected game.json updated but dit not reflect because parsing failed.");
-        }
+		try {
+			const gameJsonFileValue = JSON.parse(fs.readFileSync(gameJsonPath).toString());
+			gameJson = gameJsonFileValue;
+		}
+		catch (e) {
+			getSystemLogger().warn("detected game.json updated but dit not reflect because parsing failed.");
+		}
 	});
 	return (req: express.Request, res: express.Response, next: Function): void => {
 		const scriptPath = path.join(baseDir, req.params.scriptName);
