@@ -13,8 +13,7 @@ export const createScriptAssetController = (baseDir: string): express.RequestHan
 		try {
 			const gameJsonFileValue = JSON.parse(fs.readFileSync(gameJsonPath).toString());
 			gameJson = gameJsonFileValue;
-		}
-		catch (e) {
+		} catch (e) {
 			getSystemLogger().warn("detected game.json updated but dit not reflect because parsing failed.");
 		}
 	});
