@@ -58,6 +58,7 @@ describe("PlayTree", () => {
 		expect(playTreeStore.getPlayTree()[0].children[0].playId).toBe("1");
 		expect(playTreeStore.getPlayTree()[0].children[1].playId).toBe("4");
 
-		expect(playTreeStore.getPlayTree()[0].children).toEqual([]);
+		playTreeStore.removeAllChildren("0");
+		expect(playTreeStore.getPlayTree()[0].children.length).toBe(0);
 	});
 });
