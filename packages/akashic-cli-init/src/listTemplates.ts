@@ -7,6 +7,7 @@ import { InitParameterObject, completeInitParameterObject } from "./InitParamete
  * サーバに存在するテンプレート一覧を表示
  */
 export function listTemplates(param: InitParameterObject): Promise<void> {
+	console.log("list", param)
 	var templates: string[] = [];
 
 	return completeInitParameterObject(param)
@@ -14,6 +15,7 @@ export function listTemplates(param: InitParameterObject): Promise<void> {
 		.then((result) => {
 			templates = result.filter((filename) => (path.extname(filename) === ".zip"))
 				.map((filename) => path.basename(filename, path.extname(filename)));
+			param._realTemplateDirectory = param.localTemplateDirectory;
 		})
 		.then(() => promisedReaddir(param._realTemplateDirectory))
 		.then((localTemplates) => {
