@@ -1,8 +1,8 @@
 import * as React from "react";
 import { observer } from "mobx-react";
+import { PlayTree } from "../../../common/types/PlayTree";
 import { CreateNewPlayAndSendEventsParameterObject } from "../../operator/Operator";
 import * as styles from "./ExternalPluginsDevtool.css";
-import { PlayTree } from "../../../common/types/PlayTree";
 
 export interface ExternalPluginsDevtoolProps {
 	childSessionContentUrl: string;
