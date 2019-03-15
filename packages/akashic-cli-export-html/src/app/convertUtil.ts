@@ -100,6 +100,7 @@ export function getDefaultBundleScripts(templatePath: string, version: string, m
 	var preloadScript = `
 		window.engineFiles = ${engineFilesVariable};
 		window.g = engineFiles.akashicEngine;
+		// game-storageでrequireが使用されているので、requireの内容をgame-storage用のものに書き換える
 		(function() {
 			var originalRequire = window.require;
 			window.require = function(moduleName) {
