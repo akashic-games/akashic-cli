@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.18](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli-serve@0.0.17...@akashic/akashic-cli-serve@0.0.18) (2019-03-15)
+
+
+### Features
+
+* can download latest engineFiles in akashic-cli-serve ([#38](https://github-com-akashic-cli/akashic-games/akashic-cli/issues/38)) ([0067ad2](https://github-com-akashic-cli/akashic-games/akashic-cli/commit/0067ad2))
+
+
+
+
+
 ## [0.0.17](https://github.com/akashic-games/akashic-cli/compare/@akashic/akashic-cli-serve@0.0.16...@akashic/akashic-cli-serve@0.0.17) (2019-03-15)
 
 **Note:** Version bump only for package @akashic/akashic-cli-serve
