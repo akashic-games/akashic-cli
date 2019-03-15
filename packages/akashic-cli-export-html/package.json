@@ -23,7 +23,7 @@
     "lint:md": "remark ./*.md --frail --no-stdout --quiet --rc-path ../.remarkrc",
     "test": "npm run test:jasmine && npm run lint",
     "test:jasmine": "istanbul cover --report text --report html --colors -i ./lib/main.node.js ./node_modules/jasmine/bin/jasmine.js",
-    "update-template": "npm run update-template:v1 && npm run update-template:v2 && node ./build-template-support/generateFilesAboutEngineFiles.js",
+    "update-template": "npm run update-template:v1 && npm run update-template:v2 && node ./build-template-support/updateEngineFiles.js",
     "update-template:v1": "node ./build-template-support/generateAkashicVersionsFile v1 && cd templates/template-export-html-v1 && npm run update && npm run build && cd ../../",
     "update-template:v2": "node ./build-template-support/generateAkashicVersionsFile v2 && cd templates/template-export-html-v2 && npm run update && npm run build && cd ../../"
   },

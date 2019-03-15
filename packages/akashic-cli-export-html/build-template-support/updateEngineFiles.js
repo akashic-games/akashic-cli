@@ -59,7 +59,8 @@ Promise.all(promises)
 	.then(() => {
 		console.log("start to generate engineFilesVersion.json");
 		fs.writeFileSync(jsonPath, JSON.stringify(versions, null, 2));
-		console.log("end to generate engineFilesVersion.json");})
+		console.log("end to generate engineFilesVersion.json");
+	})
 	.then(() => console.log("end to generate files"))
 	.catch(err => {
 		console.error(err);
