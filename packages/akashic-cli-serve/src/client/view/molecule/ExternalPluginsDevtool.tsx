@@ -6,27 +6,18 @@ import * as styles from "./ExternalPluginsDevtool.css";
 
 export interface ExternalPluginsDevtoolProps {
 	childSessionContentUrl: string;
-	childSessionParameters: any;
+	childSessionParameters: string;
+	currentPlayId: string | null;
 	onChangeChildSessionContentUrl: (url: string) => void;
 	onChangeChildSessionParameters: (params: any) => void;
+	onChangeCurrentPlayId: (playId: string | null) => void;
 	onClickCreateChildPlay: (param: CreateNewPlayAndSendEventsParameterObject) => void;
 	onClickSuspendChildPlay: (playId: string) => void;
 	playTree: PlayTree[];
 }
 
-export interface ExternalPluginDevtoolStore {
-	currentPlayId: string;
-}
-
 @observer
-export class ExternalPluginsDevtool extends React.Component<ExternalPluginsDevtoolProps, ExternalPluginDevtoolStore> {
-	constructor(props: Readonly<ExternalPluginsDevtoolProps>) {
-		super(props);
-		this.state = {
-			currentPlayId: null
-		};
-	}
-
+export class ExternalPluginsDevtool extends React.Component<ExternalPluginsDevtoolProps, {}> {
 	render(): React.ReactNode {
 		return <div className={styles["external-plugin-devtool"]}>
 			<div className={styles["editor-container"]}>
@@ -54,7 +45,7 @@ export class ExternalPluginsDevtool extends React.Component<ExternalPluginsDevto
 	}
 
 	private renderPlayTree(playTree: PlayTree): React.ReactNode {
-		let className = this.state.currentPlayId === playTree.playId ? styles["playtree-list-active"] : styles["playtree-list"];
+		let className = this.props.currentPlayId === playTree.playId ? styles["playtree-list-active"] : styles["playtree-list"];
 		return <ul style={{marginLeft: 20, boxSizing: "content-box"}} key={playTree.playId}>
 			<li className={className} key={playTree.playId} onClick={() => this._onClickPlayTree(playTree.playId)}>playId: {playTree.playId}</li>
 			{
@@ -66,11 +57,21 @@ export class ExternalPluginsDevtool extends React.Component<ExternalPluginsDevto
 	}
 
 	private _onClickCreateNewPlay = (): void => {
-		if (this.props.childSessionContentUrl == null || this.props.childSessionParameters == null)
+		if (this.props.childSessionContentUrl == null)
+			return;
+
+		let sessionParameters: any;
+		try {
+			sessionParameters = JSON.parse(this.props.childSessionParameters);
+		} catch (e) {
+			console.error(e);
+		}
+
+		if (sessionParameters == null)
 			return;
 
 		this.props.onClickCreateChildPlay({
-			parentPlayId: this.state.currentPlayId,
+			parentPlayId: this.props.currentPlayId,
 			contentUrl: this.props.childSessionContentUrl,
 			clientContentUrl: this.props.childSessionContentUrl,
 			application: {
@@ -78,21 +79,19 @@ export class ExternalPluginsDevtool extends React.Component<ExternalPluginsDevto
 				version: "dummy",
 				url: this.props.childSessionContentUrl
 			},
-			sessionParameter: this.props.childSessionParameters
+			sessionParameters
 		});
 	}
 
 	private _onClickSuspendPlay = (): void => {
-		if (this.state.currentPlayId == null)
+		if (this.props.currentPlayId == null)
 			return;
 
-		this.props.onClickSuspendChildPlay(this.state.currentPlayId);
+		this.props.onClickSuspendChildPlay(this.props.currentPlayId);
 	}
 
 	private _onClickPlayTree = (playId: string): void => {
-		this.setState({
-			currentPlayId: playId
-		});
+		this.props.onChangeCurrentPlayId(playId);
 	}
 
 	private _handleContentUrlChange = (ev: React.ChangeEvent<HTMLInputElement>): void => {
@@ -100,11 +99,6 @@ export class ExternalPluginsDevtool extends React.Component<ExternalPluginsDevto
 	}
 
 	private _handleSessionParameterChange = (ev: React.ChangeEvent<HTMLTextAreaElement>): void => {
-		try {
-			const sessionParameters = JSON.parse(ev.target.value);
-			this.props.onChangeChildSessionParameters(sessionParameters);
-		} catch (e) {
-			//
-		}
+		this.props.onChangeChildSessionParameters(ev.target.value);
 	}
 }

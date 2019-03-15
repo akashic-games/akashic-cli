@@ -31,7 +31,7 @@ export interface CreateNewPlayAndSendEventsParameterObject {
 	contentUrl: string;
 	clientContentUrl: string;
 	application: CoeApplicationIdentifier;
-	sessionParameter?: any;
+	sessionParameters?: any;
 }
 
 export class Operator {
@@ -135,7 +135,7 @@ export class Operator {
 	}
 
 	createChildPlayAndSendEvents = async (param: CreateNewPlayAndSendEventsParameterObject): Promise<void> => {
-		const {parentPlayId, contentUrl, clientContentUrl, sessionParameter} = param;
+		const {parentPlayId, contentUrl, clientContentUrl, sessionParameters} = param;
 		const {type, version, url} = param.application;
 		let parentPlay: PlayEntity;
 		if (parentPlayId != null) {
@@ -169,6 +169,7 @@ export class Operator {
 		]);
 		await ApiClient.addChildPlay(parentPlay.playId, childPlay.playId);
 		await ApiClient.getPlayTree();
+		this.store.externalPluginUiStore.setCurrentPlay(childPlay.playId);
 		// TODO: headless-driver 側で AMFLowClient#authenticate() が完了する前に sendEvent() を呼んでも問題ないようにする
 		const pooling = () => {
 			if (childPlay.amflow._permission != null) {
@@ -180,7 +181,7 @@ export class Operator {
 						type: "start",
 						sessionId: childPlay.playId,
 						userId: ":akashic",
-						parameters: sessionParameter
+						parameters: sessionParameters
 					}
 				]);
 			} else {

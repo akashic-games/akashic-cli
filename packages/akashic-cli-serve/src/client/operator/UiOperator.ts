@@ -78,4 +78,8 @@ export class UiOperator {
 	setSessionParameters = (params: any): void => {
 		this.store.externalPluginUiStore.setSessionParameters(params);
 	}
+
+	setCurrentPlayId = (playId: string | null): void => {
+		this.store.externalPluginUiStore.setCurrentPlay(playId);
+	}
 }

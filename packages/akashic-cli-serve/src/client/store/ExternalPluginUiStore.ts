@@ -3,7 +3,8 @@ import {storage} from "./storage";
 
 export class ExternalPluginUiStore {
 	@observable contentUrl: string;
-	@observable sessionParameters: any;
+	@observable sessionParameters: string;
+	@observable currentPlayId: string | null;
 
 	constructor() {
 		this.contentUrl = storage.data.childSessionContentUrl;
@@ -17,13 +18,13 @@ export class ExternalPluginUiStore {
 	}
 
 	@action
-	setSessionParameters(params: any): void {
-		try {
-			const str = JSON.stringify(params, null, 4);
-			this.sessionParameters = params;
-			storage.put({ childSessionParameters: str });
-		} catch (e) {
-			//
-		}
+	setSessionParameters(params: string): void {
+		this.sessionParameters = params;
+		storage.put({ childSessionParameters: params });
+	}
+
+	@action
+	setCurrentPlay(playId: string | null): void {
+		this.currentPlayId = playId;
 	}
 }

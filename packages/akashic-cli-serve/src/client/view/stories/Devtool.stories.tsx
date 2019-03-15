@@ -49,9 +49,11 @@ const TestWithBehaviour = observer(() => (
 		}}
 		externalPluginsDevtoolProps={{
 			childSessionContentUrl: "https://localhost/1234",
-			childSessionParameters: { hoge: "fuga" },
+			childSessionParameters: "{}",
+			currentPlayId: "0",
 			onChangeChildSessionContentUrl: action("external-plugin:change-content-url"),
 			onChangeChildSessionParameters: action("external-plugin:change-session-parameters"),
+			onChangeCurrentPlayId: action("external-plugin:change-current-play"),
 			onClickCreateChildPlay: action("external-plugin:create-child"),
 			onClickSuspendChildPlay: action("external-plugin:suspend-child"),
 			playTree: [ { playId: "0", children: [] } ]
@@ -120,9 +122,11 @@ storiesOf("o-Devtool", module)
 			}}
 			externalPluginsDevtoolProps={{
 				childSessionContentUrl: "https://localhost/1234",
-				childSessionParameters: { hoge: "fuga" },
+				childSessionParameters: "{}",
+				currentPlayId: "0",
 				onChangeChildSessionContentUrl: action("external-plugin:change-content-url"),
 				onChangeChildSessionParameters: action("external-plugin:change-session-parameters"),
+				onChangeCurrentPlayId: action("external-plugin:change-current-play"),
 				onClickCreateChildPlay: action("external-plugin:create-child"),
 				onClickSuspendChildPlay: action("external-plugin:suspend-child"),
 				playTree: [ { playId: "0", children: [] } ]
@@ -197,9 +201,11 @@ storiesOf("o-Devtool", module)
 			}}
 			externalPluginsDevtoolProps={{
 				childSessionContentUrl: "https://localhost/1234",
-				childSessionParameters: { hoge: "fuga" },
+				childSessionParameters: "{}",
+				currentPlayId: "0",
 				onChangeChildSessionContentUrl: action("external-plugin:change-content-url"),
 				onChangeChildSessionParameters: action("external-plugin:change-session-parameters"),
+				onChangeCurrentPlayId: action("external-plugin:change-current-play"),
 				onClickCreateChildPlay: action("external-plugin:create-child"),
 				onClickSuspendChildPlay: action("external-plugin:suspend-child"),
 				playTree: [ { playId: "0", children: [] } ]
@@ -242,9 +248,11 @@ storiesOf("o-Devtool", module)
 			}}
 			externalPluginsDevtoolProps={{
 				childSessionContentUrl: "https://localhost/1234",
-				childSessionParameters: { hoge: "fuga" },
+				childSessionParameters: "{}",
+				currentPlayId: "0",
 				onChangeChildSessionContentUrl: action("external-plugin:change-content-url"),
 				onChangeChildSessionParameters: action("external-plugin:change-session-parameters"),
+				onChangeCurrentPlayId: action("external-plugin:change-current-play"),
 				onClickCreateChildPlay: action("external-plugin:create-child"),
 				onClickSuspendChildPlay: action("external-plugin:suspend-child"),
 				playTree: [

@@ -57,8 +57,10 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 			externalPluginsDevtoolProps={{
 				childSessionContentUrl: externalPluginUiStore.contentUrl,
 				childSessionParameters: externalPluginUiStore.sessionParameters,
+				currentPlayId: externalPluginUiStore.currentPlayId,
 				onChangeChildSessionContentUrl: operator.ui.setContentUrl,
 				onChangeChildSessionParameters: operator.ui.setSessionParameters,
+				onChangeCurrentPlayId: operator.ui.setCurrentPlayId,
 				onClickCreateChildPlay: operator.createChildPlayAndSendEvents,
 				onClickSuspendChildPlay: operator.suspendPlayAndSendEvents,
 				playTree: devtoolUiStore.playTree
