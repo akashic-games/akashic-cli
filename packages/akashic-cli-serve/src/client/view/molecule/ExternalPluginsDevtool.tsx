@@ -28,7 +28,7 @@ export class ExternalPluginsDevtool extends React.Component<ExternalPluginsDevto
 	}
 
 	render(): React.ReactNode {
-		return <div className={styles["events-devtool"]}>
+		return <div className={styles["external-plugin-devtool"]}>
 			<div className={styles["editor-container"]}>
 				<input
 					className={styles["editor-content-url"]}
