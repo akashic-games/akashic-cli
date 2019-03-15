@@ -55,6 +55,8 @@
 	background: var(--color-base-bg);
 	cursor: default;
 	user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
 }
 
 .instance-table th:not(:last-child),

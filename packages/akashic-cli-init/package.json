@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-init",
-  "version": "0.3.8",
+  "version": "0.3.10",
   "description": "A module to get your Akashic game started.",
   "main": "lib/index.js",
   "scripts": {
@@ -12,8 +12,8 @@
     "lint:ts": "tslint -c ../tslint.json --project ./tsconfig.json",
     "lint:md": "remark ./*.md --frail --no-stdout --quiet --rc-path ../.remarkrc",
     "zip": "cd ./templates-src && npm run zip:js && npm run zip:ts",
-    "zip:js": "cd ./templates-src && bestzip ../templates/javascript.zip javascript",
-    "zip:ts": "cd ./templates-src && bestzip ../templates/typescript.zip typescript",
+    "zip:js": "cd ./templates-src/javascript/ && bestzip ../../templates/javascript.zip *",
+    "zip:ts": "cd ./templates-src/typescript/ && bestzip ../../templates/typescript.zip *",
     "http": "http-server -p 18080 &",
     "test": "npm run test:jasmine",
     "test:jasmine": "istanbul cover --report text --report html --colors -i ./lib/index.js ./node_modules/jasmine/bin/jasmine.js",
@@ -53,8 +53,8 @@
   },
   "typings": "lib/index.d.ts",
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.2.15",
-    "@akashic/akashic-cli-config": "0.1.4",
+    "@akashic/akashic-cli-commons": "0.2.16",
+    "@akashic/akashic-cli-config": "0.1.5",
     "commander": "2.8.1",
     "fs-extra": "0.30.0",
     "prompt": "1.0.0",

@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.16](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli-commons@0.2.15...@akashic/akashic-cli-commons@0.2.16) (2019-03-12)
+
+**Note:** Version bump only for package @akashic/akashic-cli-commons
+
+
+
+
+
 ## [0.2.15](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli-commons@0.2.14...@akashic/akashic-cli-commons@0.2.15) (2019-03-06)
 
 
@@ -27,14 +35,9 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## 0.2.13 (2019-02-22)
 
-
 ### Features
 
 * Make akashic-cli mono-repo ([#30](https://github-com-akashic-cli/akashic-games/akashic-cli/issues/30)) ([fd5aa71](https://github-com-akashic-cli/akashic-games/akashic-cli/commit/fd5aa71))
-
-
-
-
 
 ## 0.2.12
 * ビルドツールの変更
