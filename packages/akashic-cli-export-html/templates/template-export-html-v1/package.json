@@ -3,24 +3,16 @@
   "version": "0.0.1",
   "description": "Modules for export html template.",
   "scripts": {
-    "build": "npm run build:mkdir && npm run build:browserify && npm run update:engine && npm run build:delete && npm run copy",
+    "build": "npm run build:mkdir && npm run copy",
     "build:mkdir": "shx mkdir -p ../../templates-build/v1/js",
-    "build:browserify": "browserify --require ./node_modules/@akashic/akashic-engine/lib/main.node.js:@akashic/akashic-engine --outfile ./js/akashic-engine.js",
-    "build:delete": "shx rm -rf ./js/akashic-engine.js",
     "copy": "shx cp -r js ../../templates-build/v1 && shx cp -r css ../../templates-build/v1",
-    "update": "npm run build:browserify && npm run update:all && npm run build:delete",
-    "update:all": "node ../../build-template-support/updatefiles.js template-export-html-v1 all",
-    "update:engine": "node ../../build-template-support/updatefiles.js template-export-html-v1 engine"
+    "update": "node ../../build-template-support/updatefiles.js template-export-html-v1"
   },
   "devDependencies": {
-    "@akashic/akashic-engine": "1.13.0",
-    "browserify": "^13.0.0",
     "shx": "~0.2.2"
   },
   "optionalDependencies": {
-    "@akashic/game-driver": "0.11.20",
-    "@akashic/game-storage": "0.0.6",
-    "@akashic/pdi-browser": "0.10.15"
+    "@akashic/game-storage": "0.0.6"
   },
   "private": true
 }

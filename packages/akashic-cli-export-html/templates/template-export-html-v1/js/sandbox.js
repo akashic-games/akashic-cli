@@ -15,8 +15,8 @@ window.addEventListener("load", function() {
 		var sandboxPlayId = "sandboxDummyPlayId";
 		var storage = new gameStorage.GameStorage(window.localStorage, { gameId: sandboxGameId });
 
-		var pdiBrowser = require("@akashic/pdi-browser");
-		var gdr = require("@akashic/game-driver");
+		var pdiBrowser = engineFiles.pdiBrowser;
+		var gdr = engineFiles.gameDriver;
 
 		var amflowClient = new gdr.MemoryAmflowClient({
 			playId: sandboxPlayId,

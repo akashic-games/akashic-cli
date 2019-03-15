@@ -7,7 +7,8 @@ import {
 	RunnerDeleteApiResponse,
 	RunnerPostApiResponse,
 	RunnerPatchApiResponse,
-	SandboxConfigApiResponse
+	SandboxConfigApiResponse,
+	OptionsApiResponse
 } from "../../common/types/ApiResponse";
 import {GameConfiguration} from "../../common/types/GameConfiguration";
 import * as ApiRequest from "./ApiRequest";
@@ -74,4 +75,8 @@ export const getGameConfiguration = async(): Promise<GameConfiguration> => {
 
 export const getSandboxConfig = async(): Promise<SandboxConfigApiResponse> => {
 	return await ApiRequest.get<SandboxConfigApiResponse>("/api/sandbox-config");
+};
+
+export const getOptions = async(): Promise<OptionsApiResponse> => {
+	return await ApiRequest.get<OptionsApiResponse>("/config/options");
 };

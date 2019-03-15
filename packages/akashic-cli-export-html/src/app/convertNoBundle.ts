@@ -89,11 +89,14 @@ function convertGlobalScriptAndOutput(
 function writeEct(assetPaths: string[], outputPath: string, conf: cmn.Configuration, options: ConvertTemplateParameterObject): void {
 	const injects = options.injects ? options.injects : [];
 	var ectRender = ect({root: __dirname + "/../templates-build", ext: ".ect"});
+	var version = conf._content.environment["sandbox-runtime"];
+	var versionsJson = require("./engineFilesVersion.json");
 	var html = ectRender.render("no-bundle-index", {
 		assets: assetPaths,
 		magnify: !!options.magnify,
 		injectedContents: getInjectedContents(options.cwd, injects),
-		version: conf._content.environment["sandbox-runtime"]
+		version: version,
+		engineFilesVariable: versionsJson[`v${version}`].variable
 	});
 	fs.writeFileSync(path.resolve(outputPath, "./index.html"), html);
 }

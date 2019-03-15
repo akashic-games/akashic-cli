@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.11](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli-export-html@0.2.10...@akashic/akashic-cli-export-html@0.2.11) (2019-03-15)
+
+
+### Bug Fixes
+
+* fix no-bundle-index.ect ([#48](https://github-com-akashic-cli/akashic-games/akashic-cli/issues/48)) ([30eb5a6](https://github-com-akashic-cli/akashic-games/akashic-cli/commit/30eb5a6))
+
+
+### Features
+
+* Use engineFiles in akashic-cli-export-html ([#37](https://github-com-akashic-cli/akashic-games/akashic-cli/issues/37)) ([3ede699](https://github-com-akashic-cli/akashic-games/akashic-cli/commit/3ede699))
+
+
+
+
+
+## [0.2.10](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli-export-html@0.2.9...@akashic/akashic-cli-export-html@0.2.10) (2019-03-12)
+
+**Note:** Version bump only for package @akashic/akashic-cli-export-html
+
+
+
+
+
+## [0.2.9](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli-export-html@0.2.8...@akashic/akashic-cli-export-html@0.2.9) (2019-03-06)
+
+**Note:** Version bump only for package @akashic/akashic-cli-export-html
+
+
+
+
+
 ## [0.2.8](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli-export-html@0.2.7...@akashic/akashic-cli-export-html@0.2.8) (2019-03-04)
 
 

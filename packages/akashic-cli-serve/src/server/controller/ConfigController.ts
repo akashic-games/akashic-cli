@@ -1,8 +1,10 @@
 import * as express from "express";
 import * as EngineConfig from "../domain/EngineConfig";
-import { serverGlobalConfig } from "../common/ServerGlobalConfig";
+import {serverGlobalConfig} from "../common/ServerGlobalConfig";
+import {responseSuccess} from "../common/ApiResponse";
+import {OptionsApiResponseData} from "../../common/types/ApiResponse";
 
-export const createHandlerToGetEngineConfig = (isRaw: boolean): express.RequestHandler => {
+export const createHandlerToGetEngineConfig = (baseDir: string, isRaw: boolean): express.RequestHandler => {
 	return (req, res, next) => {
 		try {
 			const urlInfo = req.header("host").split(":");
@@ -13,11 +15,22 @@ export const createHandlerToGetEngineConfig = (isRaw: boolean): express.RequestH
 			const hostname = serverGlobalConfig.useGivenHostname ? serverGlobalConfig.hostname : urlInfo[0];
 			const port = serverGlobalConfig.useGivenPort ? serverGlobalConfig.port : parseInt(urlInfo[1], 10);
 			const baseUrl = `http://${hostname}:${port}`;
-			const engineConfigJson = EngineConfig.getEngineConfig(baseUrl, isRaw);
+			const engineConfigJson = EngineConfig.getEngineConfig(baseUrl, baseDir, isRaw);
 			// akashic-gameview側でレスポンスがengineConfigJsonの形式なっていることを前提にしているので、resoponseSuccessは使わない
 			res.status(200).json(engineConfigJson);
 		} catch (e) {
 			next(e);
 		}
 	};
+};
+
+export const handleToGetStartupOptions = (req: express.Request, res: express.Response, next: Function): void => {
+	try {
+		responseSuccess<OptionsApiResponseData>(res, 200, {
+			autoStart: serverGlobalConfig.autoStart,
+			verbose: serverGlobalConfig.verbose
+		});
+	} catch (e) {
+		next(e);
+	}
 };

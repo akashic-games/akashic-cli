@@ -40,6 +40,7 @@ declare module agv {
 		};
 		playConfig: PlaylogConfig;
 		gameLoaderCustomizer: GameLoaderCustomizer;
+		argument?: any;
 	}
 	interface ErrorListener {
 		onError: (e: Error) => void;
