@@ -5,18 +5,20 @@ import { PlayEntity } from "../../store/PlayEntity";
 import { DevtoolUiStore } from "../../store/DevtoolUiStore";
 import { Operator } from "../../operator/Operator";
 import { Devtool } from "../organism/Devtool";
+import { ExternalPluginUiStore } from "../../store/ExternalPluginUiStore";
 
 export interface DevtoolContainerProps {
 	play: PlayEntity;
 	operator: Operator;
 	devtoolUiStore: DevtoolUiStore;
+	externalPluginUiStore: ExternalPluginUiStore;
 	sandboxConfig: SandboxConfig;
 }
 
 @observer
 export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}> {
 	render(): React.ReactNode {
-		const { play, operator, devtoolUiStore, sandboxConfig } = this.props;
+		const { play, operator, devtoolUiStore, externalPluginUiStore, sandboxConfig } = this.props;
 		return <Devtool
 			height={devtoolUiStore.height}
 			minHeight={200}
@@ -53,6 +55,10 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 				onClickAddInstance: operator.play.openNewClientInstance
 			}}
 			externalPluginsDevtoolProps={{
+				childSessionContentUrl: externalPluginUiStore.contentUrl,
+				childSessionParameters: externalPluginUiStore.sessionParameters,
+				onChangeChildSessionContentUrl: operator.ui.setContentUrl,
+				onChangeChildSessionParameters: operator.ui.setSessionParameters,
 				onClickCreateChildPlay: operator.createChildPlayAndSendEvents,
 				onClickSuspendChildPlay: operator.suspendPlayAndSendEvents,
 				playTree: devtoolUiStore.playTree

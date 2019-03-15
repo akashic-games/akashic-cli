@@ -8,12 +8,14 @@ import {DevtoolUiStore} from "./DevtoolUiStore";
 import {ToolBarUiStore} from "./ToolBarUiStore";
 import {storage} from "./storage";
 import {StartupScreenUiStore} from "./StartupScreenUiStore";
+import {ExternalPluginUiStore} from "./ExternalPluginUiStore";
 
 export class Store {
 	@observable playStore: PlayStore;
 	@observable toolBarUiStore: ToolBarUiStore;
 	@observable devtoolUiStore: DevtoolUiStore;
 	@observable startupScreenUiStore: StartupScreenUiStore;
+	@observable externalPluginUiStore: ExternalPluginUiStore;
 	@observable player: Player | null;
 
 	@observable currentPlay: PlayEntity | null;
@@ -25,6 +27,7 @@ export class Store {
 		this.toolBarUiStore = new ToolBarUiStore();
 		this.devtoolUiStore = new DevtoolUiStore();
 		this.startupScreenUiStore = new StartupScreenUiStore();
+		this.externalPluginUiStore = new ExternalPluginUiStore();
 		this.player = { id: storage.data.playerId, name: storage.data.playerName };
 		this.currentPlay = null;
 		this.currentLocalInstance = null;

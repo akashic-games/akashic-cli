@@ -45,6 +45,7 @@ export class App extends React.Component<AppProps, {}> {
 							play={store.currentPlay}
 							operator={operator}
 							devtoolUiStore={store.devtoolUiStore}
+							externalPluginUiStore={store.externalPluginUiStore}
 							sandboxConfig={store.sandboxConfig}
 						/>
 					</div> :

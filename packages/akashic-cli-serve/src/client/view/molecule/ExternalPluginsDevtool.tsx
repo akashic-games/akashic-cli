@@ -5,14 +5,16 @@ import * as styles from "./ExternalPluginsDevtool.css";
 import { PlayTree } from "../../../common/types/PlayTree";
 
 export interface ExternalPluginsDevtoolProps {
+	childSessionContentUrl: string;
+	childSessionParameters: any;
+	onChangeChildSessionContentUrl: (url: string) => void;
+	onChangeChildSessionParameters: (params: any) => void;
 	onClickCreateChildPlay: (param: CreateNewPlayAndSendEventsParameterObject) => void;
 	onClickSuspendChildPlay: (playId: string) => void;
 	playTree: PlayTree[];
 }
 
 export interface ExternalPluginDevtoolStore {
-	contentUrl: string;
-	sessionParameters: any;
 	currentPlayId: string;
 }
 
@@ -21,8 +23,6 @@ export class ExternalPluginsDevtool extends React.Component<ExternalPluginsDevto
 	constructor(props: Readonly<ExternalPluginsDevtoolProps>) {
 		super(props);
 		this.state = {
-			contentUrl: "",
-			sessionParameters: null,
 			currentPlayId: null
 		};
 	}
@@ -32,13 +32,13 @@ export class ExternalPluginsDevtool extends React.Component<ExternalPluginsDevto
 			<div className={styles["editor-container"]}>
 				<input
 					className={styles["editor-content-url"]}
-					defaultValue={this.state.contentUrl}
+					defaultValue={this.props.childSessionContentUrl}
 					onChange={this._handleContentUrlChange}
 					placeholder="content url"
 				/>
 				<textarea
 					className={styles["editor-session-parameters"]}
-					defaultValue={this.state.sessionParameters}
+					defaultValue={this.props.childSessionParameters}
 					onChange={this._handleSessionParameterChange}
 					placeholder="session parameters"
 				/>
@@ -66,19 +66,19 @@ export class ExternalPluginsDevtool extends React.Component<ExternalPluginsDevto
 	}
 
 	private _onClickCreateNewPlay = (): void => {
-		if (this.state.contentUrl == null || this.state.sessionParameters == null)
+		if (this.props.childSessionContentUrl == null || this.props.childSessionParameters == null)
 			return;
 
 		this.props.onClickCreateChildPlay({
 			parentPlayId: this.state.currentPlayId,
-			contentUrl: this.state.contentUrl,
-			clientContentUrl: this.state.contentUrl,
+			contentUrl: this.props.childSessionContentUrl,
+			clientContentUrl: this.props.childSessionContentUrl,
 			application: {
 				type: "dummy",
 				version: "dummy",
-				url: this.state.contentUrl
+				url: this.props.childSessionContentUrl
 			},
-			sessionParameter: this.state.sessionParameters
+			sessionParameter: this.props.childSessionParameters
 		});
 	}
 
@@ -96,21 +96,15 @@ export class ExternalPluginsDevtool extends React.Component<ExternalPluginsDevto
 	}
 
 	private _handleContentUrlChange = (ev: React.ChangeEvent<HTMLInputElement>): void => {
-		this.setState({
-			contentUrl: ev.target.value
-		});
+		this.props.onChangeChildSessionContentUrl(ev.target.value);
 	}
 
 	private _handleSessionParameterChange = (ev: React.ChangeEvent<HTMLTextAreaElement>): void => {
 		try {
 			const sessionParameters = JSON.parse(ev.target.value);
-			this.setState({
-				sessionParameters
-			});
+			this.props.onChangeChildSessionParameters(sessionParameters);
 		} catch (e) {
-			this.setState({
-				sessionParameters: null
-			});
+			//
 		}
 	}
 }

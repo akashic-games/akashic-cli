@@ -70,4 +70,12 @@ export class UiOperator {
 	setPlayTree = (playTree: PlayTree[]): void => {
 		this.store.devtoolUiStore.setPlayTree(playTree);
 	}
+
+	setContentUrl = (url: string): void => {
+		this.store.externalPluginUiStore.setContentUrl(url);
+	}
+
+	setSessionParameters = (params: any): void => {
+		this.store.externalPluginUiStore.setSessionParameters(params);
+	}
 }

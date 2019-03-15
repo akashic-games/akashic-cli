@@ -13,6 +13,8 @@ export interface StorageData {
 	gameArgumentListWidth: number;
 	gameArgumentEditContent: string;
 	joinsAutomatically: boolean;
+	childSessionContentUrl: string;
+	childSessionParameters: string;
 }
 
 function asBool(s: string | null): boolean | null {
@@ -72,7 +74,9 @@ export class Storage {
 			showsGameArgumentList: choose(asBool(qp.showsGameArgumentList), s.showsGameArgumentList, true),
 			gameArgumentListWidth: choose(asNumber(qp.gameArgumentListWidth), s.gameArgumentListWidth, 150),
 			gameArgumentEditContent: choose(qp.gameArgumentEditContent, s.gameArgumentEditContent, ""),
-			joinsAutomatically: choose(asBool(qp.joinsAutomatically), s.joinsAutomatically, false)
+			joinsAutomatically: choose(asBool(qp.joinsAutomatically), s.joinsAutomatically, false),
+			childSessionContentUrl: choose(qp.childSessionContentUrl, s.childSessionContentUrl, ""),
+			childSessionParameters: choose(qp.childSessionParameters, s.childSessionParameters, "")
 		});
 	}
 
