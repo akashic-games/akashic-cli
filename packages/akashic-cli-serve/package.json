@@ -27,6 +27,7 @@
     "@akashic/headless-driver": "0.2.1",
     "@akashic/trigger": "0.1.5",
     "chalk": "~2.4.2",
+    "chokidar": "^2.1.2",
     "commander": "2.19.0",
     "express": "4.16.3",
     "lodash": "~4.17.11",
