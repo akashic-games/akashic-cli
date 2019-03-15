@@ -9,7 +9,7 @@
 <script>
 window.engineFiles = <%= @engineFilesVariable %>;
 window.g = engineFiles.akashicEngine;
-// game-storage?require???????????require????game-storage??????????
+// game-storageでrequireが使用されているので、requireの内容をgame-storage用のものに書き換える
 (function() {
     var originalRequire = window.require;
     window.require = function(moduleName) {
