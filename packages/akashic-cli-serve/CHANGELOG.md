@@ -3,6 +3,47 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.19](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli-serve@0.0.18...@akashic/akashic-cli-serve@0.0.19) (2019-03-18)
+
+
+### Bug Fixes
+
+* fix warning section at npm audit ([#41](https://github-com-akashic-cli/akashic-games/akashic-cli/issues/41)) ([f476fd8](https://github-com-akashic-cli/akashic-games/akashic-cli/commit/f476fd8))
+
+
+
+
+
+## [0.0.18](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli-serve@0.0.17...@akashic/akashic-cli-serve@0.0.18) (2019-03-15)
+
+
+### Features
+
+* can download latest engineFiles in akashic-cli-serve ([#38](https://github-com-akashic-cli/akashic-games/akashic-cli/issues/38)) ([0067ad2](https://github-com-akashic-cli/akashic-games/akashic-cli/commit/0067ad2))
+
+
+
+
+
+## [0.0.17](https://github.com/akashic-games/akashic-cli/compare/@akashic/akashic-cli-serve@0.0.16...@akashic/akashic-cli-serve@0.0.17) (2019-03-15)
+
+**Note:** Version bump only for package @akashic/akashic-cli-serve
+
+
+
+
+
+## [0.0.16](https://github.com/akashic-games/akashic-cli/compare/@akashic/akashic-cli-serve@0.0.15...@akashic/akashic-cli-serve@0.0.16) (2019-03-15)
+
+
+### Bug Fixes
+
+* resolve problem that can not resize devtool of akashic-serve at IE ([#44](https://github.com/akashic-games/akashic-cli/issues/44)) ([20faf39](https://github.com/akashic-games/akashic-cli/commit/20faf39))
+
+
+
+
+
 ## [0.0.15](https://github.com/akashic-games/akashic-cli/compare/@akashic/akashic-cli-serve@0.0.14...@akashic/akashic-cli-serve@0.0.15) (2019-03-12)
 
 **Note:** Version bump only for package @akashic/akashic-cli-serve
