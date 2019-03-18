@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-commons",
-  "version": "0.2.16",
+  "version": "0.2.17",
   "description": "The shared definitions and routines for akashic-cli-xxx",
   "main": "lib/index.js",
   "scripts": {

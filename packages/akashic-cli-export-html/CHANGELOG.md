@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.12](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli-export-html@0.2.11...@akashic/akashic-cli-export-html@0.2.12) (2019-03-18)
+
+
+### Bug Fixes
+
+* fix warning section at npm audit ([#41](https://github-com-akashic-cli/akashic-games/akashic-cli/issues/41)) ([f476fd8](https://github-com-akashic-cli/akashic-games/akashic-cli/commit/f476fd8))
+
+
+
+
+
 ## [0.2.11](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli-export-html@0.2.10...@akashic/akashic-cli-export-html@0.2.11) (2019-03-15)
 
 
