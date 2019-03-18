@@ -85,13 +85,13 @@ export const getOptions = async(): Promise<OptionsApiResponse> => {
 };
 
 export const addChildPlay = async(playId: string, childId: string): Promise<ChildPlayAddApiResponse> => {
-	return await ApiRequest.post<ChildPlayAddApiResponse>(`/api/play/${playId}/child`, {childId: childId});
+	return await ApiRequest.post<ChildPlayAddApiResponse>(`/api/plays/${playId}/children`, {childId: childId});
 };
 
 export const removeChildPlay = async(playId: string, childId: string): Promise<ChildPlayRemoveApiResponse> => {
-	return await ApiRequest.del<ChildPlayRemoveApiResponse>(`/api/play/${playId}/child/${childId}`);
+	return await ApiRequest.del<ChildPlayRemoveApiResponse>(`/api/plays/${playId}/children/${childId}`);
 };
 
 export const getPlayTree = async(): Promise<PlayTreeApiResponse> => {
-	return await ApiRequest.get<PlayTreeApiResponse>("/api/play/child");
+	return await ApiRequest.get<PlayTreeApiResponse>("/api/plays/children");
 };

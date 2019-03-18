@@ -42,14 +42,14 @@ export const createApiRouter = (params: ApiRouterParameterObjct): express.Router
 	apiRouter.get("/play/:playId(\\d+)", createHandlerToGetPlay(params.playStore));
 	apiRouter.delete("/play/:playId(\\d+)", createHandlerToDeletePlay(params.playStore, params.playTreeStore));
 	apiRouter.patch("/play/:playId(\\d+)", createHandlerToPatchPlay(params.playStore));
-	apiRouter.post("/play/:playId(\\d+)/child", createHandlerToAddChildPlay(params.playStore, params.playTreeStore));
-	apiRouter.get("/play/child", createHandlerToGetPlayTree(params.playTreeStore));
-	apiRouter.delete("/play/:playId(\\d+)/child/:childId(\\d+)", createHandlerToRemoveChildPlay(params.playStore, params.playTreeStore));
+	apiRouter.post("/plays/:playId(\\d+)/children", createHandlerToAddChildPlay(params.playStore, params.playTreeStore));
+	apiRouter.get("/plays/children", createHandlerToGetPlayTree(params.playTreeStore));
+	apiRouter.delete("/plays/:playId(\\d+)/children/:childId(\\d+)", createHandlerToRemoveChildPlay(params.playStore, params.playTreeStore));
 
 	apiRouter.post("/play/:playId(\\d+)/token", createHandlerToCreatePlayToken(params.amflowManager));
 	apiRouter.post("/play/:playId(\\d+)/broadcast", createHandlerToBroadcast(params.io));
 
-	apiRouter.get("/runner", createHandlerToGetRunners(params.runnerStore));
+	apiRouter.get("/runners", createHandlerToGetRunners(params.runnerStore));
 	apiRouter.post("/runner", createHandlerToCreateRunner(params.playStore, params.runnerStore));
 	apiRouter.delete("/runner/:runnerId", createHandlerToDeleteRunner(params.runnerStore));
 	apiRouter.patch("/runner/:runnerId", createHandlerToPatchRunner(params.runnerStore));
