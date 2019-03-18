@@ -43,8 +43,6 @@
     "istanbul": "^0.4.5",
     "jasmine": "^2.1.1",
     "jasmine-reporters": "~2.0.4",
-    "mdast": "~2.3.2",
-    "mdast-lint": "~1.1.1",
     "mock-fs": "~4.8.0",
     "remark-cli": "~2.0.0",
     "remark-lint": "~5.0.1",
