@@ -194,6 +194,7 @@ export class SocketIOAMFlowManager {
 				const conn = this.connectionMap[connId];
 				if (conn.socket === socket) {
 					this.deletePlayToken(conn.lastToken);
+					// TODO: headless-driver 側で終了済みのプレーの AMFlowClient#close() 呼び出し時にエラーが発生しないように修正
 					if (this.playStore.getPlay(conn.playId) != null) {
 						conn.amflow.close(doNothing);
 					}

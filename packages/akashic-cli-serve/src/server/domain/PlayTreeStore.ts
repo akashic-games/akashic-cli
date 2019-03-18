@@ -34,6 +34,9 @@ export class PlayTree {
 	}
 }
 
+/**
+ * プレーの親子関係を管理するストアの簡易実装。
+ */
 export class PlayTreeStore {
 	onPlayTreeChange: Trigger<PlayTree[]> = new Trigger();
 
@@ -61,6 +64,7 @@ export class PlayTreeStore {
 	}
 
 	removePlay(playId: string): void {
+		// NOTE: ルートに位置するプレーのみ削除
 		this._removePlay(playId);
 		this.onPlayTreeChange.fire(this.playTree);
 	}
