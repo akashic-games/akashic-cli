@@ -6,7 +6,7 @@
     "noImplicitAny": true,
     "module": "commonjs",
     "outDir": "./build",
-    "skipLibCheck": true
+    "types" : ["commander", "jasmine", "node"]
   },
   "files": [
     "../node_modules/typescript/lib/lib.es6.d.ts",

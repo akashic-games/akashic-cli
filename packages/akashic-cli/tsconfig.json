@@ -5,7 +5,7 @@
     "noImplicitAny": true,
     "module": "commonjs",
     "outDir": "./lib",
-    "skipLibCheck": true
+    "types" : ["node", "commander"]
   },
   "files": [
     "./node_modules/typescript/lib/lib.es6.d.ts",

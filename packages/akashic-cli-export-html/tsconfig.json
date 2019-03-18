@@ -6,7 +6,7 @@
     "module": "commonjs",
     "outDir": "./lib",
     "declaration": true,
-    "skipLibCheck": true
+    "types" : ["archiver", "commander", "fs-extra", "fs-readdir-recursive", "node", "uglify-js"]
   },
   "files": [
     "./typings/ect.d.ts",

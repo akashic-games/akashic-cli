@@ -6,7 +6,7 @@
     "module": "commonjs",
     "outDir": "./lib",
     "declaration": true,
-    "skipLibCheck": true
+    "types" : ["browserify", "eslint", "fs-extra"]
   },
   "files": [
     "./typings/fs-readdir-recursive.d.ts",

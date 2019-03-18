@@ -6,7 +6,7 @@
     "module": "commonjs",
     "outDir": "./lib",
     "declaration": true,
-    "skipLibCheck": true
+    "types" : ["commander", "jasmine", "node"]
   },
   "filesGlob": [
     "./node_modules/typescript/lib/lib.core.es6.d.ts",

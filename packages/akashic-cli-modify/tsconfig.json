@@ -6,7 +6,7 @@
     "module": "commonjs",
     "outDir": "./lib",
     "declaration": true,
-    "skipLibCheck": true
+    "types" : ["jasmine", "mock-fs", "node"]
   },
   "files": [
     "./node_modules/typescript/lib/lib.es6.d.ts",
