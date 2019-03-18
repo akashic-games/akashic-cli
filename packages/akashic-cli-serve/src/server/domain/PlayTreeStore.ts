@@ -26,27 +26,11 @@ export class PlayTree {
 		this.children = [];
 	}
 
-	getChildren(): PlayTree[] {
-		return this.children;
-	}
-
-	searchChild(childId: string): PlayTree | null {
+	hasDescendant(childId: string): PlayTree | null {
 		if (this.playId === childId) {
 			return this;
 		}
-		return this.children.find(child => child.searchChild(childId) != null) || null;
-	}
-
-	hasChild(childId: string): boolean {
-		return this.children.some(child => child.playId === childId);
-	}
-
-	hasChildren(childId: string): boolean {
-		return this.children.some(child => child.hasChild(childId));
-	}
-
-	toString(): string {
-		return this.children.toString();
+		return this.children.find(child => child.hasDescendant(childId) != null) || null;
 	}
 }
 
@@ -91,7 +75,7 @@ export class PlayTreeStore {
 		}
 		let parent: PlayTree;
 		for (let i = 0; i < this.playTree.length; i++) {
-			parent = this.playTree[i].searchChild(playId);
+			parent = this.playTree[i].hasDescendant(playId);
 			if (parent) {
 				break;
 			}
@@ -116,7 +100,7 @@ export class PlayTreeStore {
 	private _removeAllChildren(playId: string): void {
 		let parent: PlayTree;
 		for (let i = 0; i < this.playTree.length; i++) {
-			parent = this.playTree[i].searchChild(playId);
+			parent = this.playTree[i].hasDescendant(playId);
 			if (parent) {
 				break;
 			}
@@ -139,7 +123,7 @@ export class PlayTreeStore {
 		}
 		let parent: PlayTree;
 		for (let i = 0; i < this.playTree.length; i++) {
-			parent = this.playTree[i].searchChild(playId);
+			parent = this.playTree[i].hasDescendant(playId);
 			if (parent) {
 				break;
 			}
