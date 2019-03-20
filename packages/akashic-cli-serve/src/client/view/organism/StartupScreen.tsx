@@ -96,10 +96,9 @@ export class StartupScreen extends React.Component<StartupScreenProps, {}> {
 			</div>
 			<div className={styles["button-bar"]}>
 				<div className={styles["start-options"]}>
-					<label className="join">
+					<label>
 						<input
 							type="checkbox"
-							id="join"
 							checked={joinsAutomatically}
 							onChange={() => onChangeJoinsAutomatically(!joinsAutomatically)}/>
 						Send JoinEvent for the player
