@@ -20,14 +20,12 @@ export class App extends React.Component<AppProps, {}> {
 	render() {
 		const { store, operator } = this.props;
 		if (!store.currentLocalInstance) {
-			return <div id="whole" className={styles["whole"]}>
-				<div className={styles["main"] + " " + styles["centering"]}>
-					<StartupScreenContainer
-						operator={operator}
-						startupScreenUiStore={store.startupScreenUiStore}
-						sandboxConfig={store.sandboxConfig}
-					/>
-				</div>
+			return <div id="whole" className={styles["whole-dialog"]}>
+				<StartupScreenContainer
+					operator={operator}
+					startupScreenUiStore={store.startupScreenUiStore}
+					argumentsTable={store.argumentsTable}
+				/>
 			</div>;
 		}
 		return <div id="whole" className={styles["whole"]}>

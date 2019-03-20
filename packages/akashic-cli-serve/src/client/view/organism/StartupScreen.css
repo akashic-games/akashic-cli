@@ -1,137 +1,174 @@
-.devtool {
-    flex: 0 0 auto;
-    box-sizing: border-box;
-    border-top: 1px solid var(--color-tool-border);
-    display: flex;
-    flex-flow: column nowrap;
-    align-items: stretch;
-    width: 50%;
-    height: 50%;
+.startup-screen {
+	flex: 1 1 auto;
+	box-sizing: border-box;
+	border: 1px solid var(--color-tool-border);
+	border-radius: 4px;
+	padding: 0 8px;
+	display: flex;
+	flex-flow: column nowrap;
+	align-items: stretch;
+	box-shadow: 0 1px 11px silver;
+	width: 50%;
+	height: 70%;
+	min-width: 400px;
+	max-width: 800px;
+	min-height: 400px;
+	max-height: 600px;
 }
 
-.events-devtool {
-    box-sizing: border-box;
-    flex: 1 1 auto;
-    display: flex;
-    flex-flow: row nowrap;
-    background: var(--color-tool-bg);
+.caption {
+	font-size: 1.3rem;
+	margin: 10px 0 10px 6px;
+	user-select: none;
+	-moz-user-select: none;
 }
 
-ul.event-list {
-    box-sizing: border-box;
-    flex: 1 1 auto;
-
-    display: flex;
-    flex-flow: column nowrap;
-    border-right: 1px solid #bbb;
-    background: var(--color-base-bg);
-    user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    font-size: 12px;
-
-    overflow-x: hidden;
-    overflow-y: scroll;
+.args-tool {
+	box-sizing: border-box;
+	flex: 1 1 auto;
+	display: flex;
+	flex-flow: row nowrap;
+	background: var(--color-tool-bg);
+	border: 1px solid silver;
+	border-radius: 3px;
 }
 
-.event-list > li {
-    box-sizing: border-box;
-    display: block;
-    flex: 0 0 auto;
-    padding: 3px 3px 3px 8px;
-    font-size: 12px;
+ul.args-list {
+	box-sizing: border-box;
+	flex: 1 1 auto;
 
-    position: relative;
+	display: flex;
+	flex-flow: column nowrap;
+	background: var(--color-base-bg);
+	user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	font-size: 12px;
 
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-wrap: nowrap;
-    white-space: nowrap;
+	overflow-x: hidden;
+	overflow-y: scroll;
 }
 
-.event-list > li:nth-child(odd) {
-    background: var(--color-base-bg-alt);
+ul.args-list.resizable {
+	border-right: 1px solid #bbb;
 }
 
-.event-list > li > .event-buttons {
-    visibility: hidden;
+.args-list > li {
+	box-sizing: border-box;
+	display: block;
+	flex: 0 0 auto;
+	padding: 3px 6px 6px 8px;
+	font-size: 12px;
+
+	overflow: hidden;
+	text-overflow: ellipsis;
+	text-wrap: nowrap;
+	white-space: nowrap;
+
+	cursor: pointer;
 }
 
-.event-list > li:hover > .event-buttons {
-    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.8));
-    visibility: visible;
+.selected {
+	/* empty but for css-loader */
 }
 
-.event-buttons {
-    display: block;
-    position: absolute;
-    right: 0;
-    top: 0;
-    padding-left: 30px;
+.args-list > li:nth-child(odd) {
+	background: var(--color-base-bg-alt);
 }
+.args-list > li:hover {
+	background: #6080c040;
+}
+.args-list > li:active {
+	background: #6080c0a0;
+}
+.args-list > li.selected {
+	color: white;
+	background: #5070b080;
+}
+
 
 .sep {
-    align-self: center;
+	align-self: center;
 
-    display: block;
-    width: 1px;
-    height: 20px;
-    margin: 0 3px;
-    border-left:1px solid silver;
+	display: block;
+	width: 1px;
+	height: 20px;
+	margin: 0 3px;
+	border-left:1px solid silver;
 }
 
 
-/* TODO instance-toolbar と共有？ */
-
-.events-toolbar {
-    flex: 0 0 auto;
-    display: flex;
-    flex-flow: row wrap;
-    padding: 1px 3px;
-    align-items: center;
-
-    border-bottom: 1px solid #bbb;
-}
-
-.events-toolbar button {
-    color: var(--color-tool-text);
-    box-sizing: border-box;
-    border: 1px solid transparent;
-    background: transparent;
-    border-radius: 3px;
-    padding: 1px 3px;
-    margin: 0 3px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: space-around;
-    vertical-align: center;
-    outline: none;
-}
-
-.events-toolbar button > .material-icons {
-    font-size: 22px;
-}
-.events-toolbar button:hover {
-    border-color: var(--color-tool-border);
-}
-.events-toolbar button:active {
-    background: var(--color-tool-border);
+.editor-toolbar {
+	flex: 0 0 auto;
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: space-between;
+	padding: 1px 3px;
+	align-items: center;
+	border-bottom: 1px solid #bbb;
 }
 
 .editor-container {
-    flex: 1 1 auto;
-    overflow-y: auto;
-    display: flex;
-    flex-flow: column nowrap;
+	flex: 1 1 auto;
+	overflow-y: auto;
+	display: flex;
+	flex-flow: column nowrap;
+}
+
+.arguments-name {
+	margin: 6px 8px;
+	user-select: none;
+	-moz-user-select: none;
 }
 
 .editor {
-    flex: 1 1 auto;
-    font-family: monospace;
-    font-size: 12px;
-    outline: none;
-    padding: 5px;
-    border-width: 0;
-    resize: none;
-    color: #555;
+	flex: 1 1 auto;
+	font-family: monospace;
+	font-size: 12px;
+	outline: none;
+	padding: 5px;
+	border-width: 0;
+	resize: none;
+	color: var(--color-base-text);
+}
+
+.button-bar {
+	margin: 10px 0;
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: space-between;
+	align-items: center;
+	user-select: none;
+	-moz-user-select: none;
+}
+
+.start-options {
+}
+
+.start-options input[type="checkbox"] {
+	margin: 5px;
+}
+
+.start-button {
+	box-sizing: border-box;
+	border: 0;
+	min-width: 100px;
+	padding: 8px 20px;
+	border-radius: 3px;
+	font-size: 1.08rem;
+	background: var(--color-base-button-bg);
+	color: white;
+}
+
+.start-button:hover {
+	cursor: pointer;
+	background: var(--color-base-button-bg-hover);
+}
+.start-button:active {
+	cursor: pointer;
+	background: var(--color-base-button-bg-active);
+}
+
+.start-button:disabled {
+	background: silver;
 }

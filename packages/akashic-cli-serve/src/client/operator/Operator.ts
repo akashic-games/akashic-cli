@@ -18,8 +18,8 @@ export interface OperatorParameterObject {
 }
 
 export interface StartContentParameterObject {
-	joinsAutomatically: boolean;
-	gameArgument: any;
+	joinsSelf: boolean;
+	instanceArgument: any;
 }
 
 export class Operator {
@@ -90,7 +90,7 @@ export class Operator {
 			playlogServerUrl: "dummy-playlog-server-url",
 			executionMode: "passive",
 			player: store.player,
-			argument: params != null ? params.gameArgument : undefined,
+			argument: params != null ? params.instanceArgument : undefined,
 			coeHandler: {
 				onLocalInstanceCreate: async params => {
 					// TODO: local === true のみ対応
@@ -129,7 +129,7 @@ export class Operator {
 			}
 		});
 		store.setCurrentLocalInstance(instance);
-		if (params != null && params.joinsAutomatically) {
+		if (params != null && params.joinsSelf) {
 			store.currentPlay.join(store.player.id, store.player.name);
 		}
 	}
