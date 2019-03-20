@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.20](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli-serve@0.0.19...@akashic/akashic-cli-serve@0.0.20) (2019-03-20)
+
+
+### Features
+
+* Update UI for --no-auto-start ([4dbc651](https://github-com-akashic-cli/akashic-games/akashic-cli/commit/4dbc651))
+
+
+
+
+
 ## [0.0.19](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli-serve@0.0.18...@akashic/akashic-cli-serve@0.0.19) (2019-03-18)
 
 
