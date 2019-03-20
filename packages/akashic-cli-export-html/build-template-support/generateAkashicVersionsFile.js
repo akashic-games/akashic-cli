@@ -24,7 +24,7 @@ var libVersions = {};
 	}
 });
 var akashicLibDir = path.join(__dirname, "..", "templates", "template-export-html-" + version, "node_modules", "@akashic");
-var akashicLibs = ["akashic-engine", "game-driver", "game-storage", "pdi-browser"];
+var akashicLibs = ["game-storage"];
 var versions = {};
 akashicLibs.forEach(function(libName) {
 	var packageJson = require(path.join(akashicLibDir, libName, "package.json"));

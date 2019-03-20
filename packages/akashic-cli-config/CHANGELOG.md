@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.6](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli-config@0.1.5...@akashic/akashic-cli-config@0.1.6) (2019-03-18)
+
+
+### Bug Fixes
+
+* fix warning section at npm audit ([#41](https://github-com-akashic-cli/akashic-games/akashic-cli/issues/41)) ([f476fd8](https://github-com-akashic-cli/akashic-games/akashic-cli/commit/f476fd8))
+
+
+
+
+
 ## [0.1.5](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli-config@0.1.4...@akashic/akashic-cli-config@0.1.5) (2019-03-12)
 
 **Note:** Version bump only for package @akashic/akashic-cli-config

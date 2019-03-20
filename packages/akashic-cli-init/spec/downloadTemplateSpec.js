@@ -33,29 +33,35 @@ describe("downloadTemplate.ts", () => {
 
 	describe("downloadTemplate()", () => {
 		it("download javascript templates", done => {
-			var tmpDir = os.tmpdir();
-			var param = {
-				logger: new commons.ConsoleLogger({quiet: true}),
-				_realTemplateDirectory: tmpDir,
-				repository: "http://127.0.0.1:18080/templates/",
-				templateListJsonPath: "template-list.json",
-				type: "javascript",
-			};
-			dt.downloadTemplateIfNeeded(param)
-				.then(() => {
-					expect(fs.statSync(path.join(
-						tmpDir,
-						"javascript/javascript",
-						"game.json"
-					)).isFile()).toBe(true);
-					expect(fs.statSync(path.join(
-						tmpDir,
-						"javascript/javascript",
-						"script",
-						"main.js"
-					)).isFile()).toBe(true);
+			new Promise((resolve, reject) => {
+				fs.mkdtemp(path.join(os.tmpdir(), "init-test"), (err, dir) => {
+					if (err) done.fail();
+					return resolve(dir);
 				})
-				.then(done, done.fail);
+			}).then((dir) => {
+				var param = {
+					logger: new commons.ConsoleLogger({quiet: true}),
+					_realTemplateDirectory: dir,
+					repository: "http://127.0.0.1:18080/templates/",
+					templateListJsonPath: "template-list.json",
+					type: "javascript",
+				};
+				dt.downloadTemplateIfNeeded(param)
+					.then(() => {
+						expect(fs.statSync(path.join(
+							dir,
+							"javascript",
+							"game.json"
+						)).isFile()).toBe(true);
+						expect(fs.statSync(path.join(
+							dir,
+							"javascript",
+							"script",
+							"main.js"
+						)).isFile()).toBe(true);
+					})
+					.then(done, done.fail);
+				});
 		});
 
 		it("It works even if params.repository is empty", done => {
@@ -82,7 +88,7 @@ describe("downloadTemplate.ts", () => {
 					.then(() => {
 						expect(fs.statSync(path.join(
 							param._realTemplateDirectory,
-							"javascript/javascript",
+							"javascript",
 							"game.json"
 						)).isFile()).toBe(true);
 					})

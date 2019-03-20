@@ -42,6 +42,7 @@ ul.args-list {
 	background: var(--color-base-bg);
 	user-select: none;
 	-moz-user-select: none;
+	-ms-user-select: none;
 	font-size: 12px;
 
 	overflow-x: hidden;

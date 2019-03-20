@@ -3,6 +3,49 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.5.14](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli@1.5.13...@akashic/akashic-cli@1.5.14) (2019-03-18)
+
+
+### Bug Fixes
+
+* fix warning section at npm audit ([#41](https://github-com-akashic-cli/akashic-games/akashic-cli/issues/41)) ([f476fd8](https://github-com-akashic-cli/akashic-games/akashic-cli/commit/f476fd8))
+
+
+
+
+
+## [1.5.13](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli@1.5.12...@akashic/akashic-cli@1.5.13) (2019-03-15)
+
+**Note:** Version bump only for package @akashic/akashic-cli
+
+
+
+
+
+## [1.5.12](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli@1.5.11...@akashic/akashic-cli@1.5.12) (2019-03-15)
+
+**Note:** Version bump only for package @akashic/akashic-cli
+
+
+
+
+
+## [1.5.11](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli@1.5.10...@akashic/akashic-cli@1.5.11) (2019-03-15)
+
+**Note:** Version bump only for package @akashic/akashic-cli
+
+
+
+
+
+## [1.5.10](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli@1.5.9...@akashic/akashic-cli@1.5.10) (2019-03-13)
+
+**Note:** Version bump only for package @akashic/akashic-cli
+
+
+
+
+
 ## [1.5.9](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli@1.5.8...@akashic/akashic-cli@1.5.9) (2019-03-12)
 
 **Note:** Version bump only for package @akashic/akashic-cli
