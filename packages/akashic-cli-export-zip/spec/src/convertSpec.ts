@@ -38,9 +38,10 @@ describe("convert", () => {
 		afterEach(() => {
 			fsx.removeSync(destDir);
 		});
+
 		it("can not convert game if script that is not written with ES5 syntax", (done) => {
 			var warningMessage = "";
-			const es6GameParameter = {
+			const param = {
 				source: path.resolve(__dirname, "..", "fixtures", "simple_game_es6"),
 				dest: destDir,
 				logger: {
@@ -58,7 +59,7 @@ describe("convert", () => {
 					}
 				}
 			};
-			convertGame(es6GameParameter)
+			convertGame(param)
 				.then(() => {
 					expect(fs.existsSync(destDir)).toBe(true);
 					const expected = "Non-ES5 syntax found.\n"
@@ -68,12 +69,46 @@ describe("convert", () => {
 					done();
 				}, done.fail);
 		});
+
+		it("can downpile script to ES5", (done) => {
+			var warningMessage = "";
+			const param = {
+				source: path.resolve(__dirname, "..", "fixtures", "simple_game_es6"),
+				dest: destDir,
+				babel: true,
+				logger: {
+					warn: (message: string) => {
+						warningMessage = message;
+					},
+					print: (message: string) => {
+						console.log(message);
+					},
+					error: (message: string) => {
+						console.error(message);
+					},
+					info: (message: string) => {
+						console.log(message);
+					}
+				}
+			};
+			convertGame(param)
+				.then(() => {
+					expect(fs.existsSync(destDir)).toBe(true);
+					expect(warningMessage).toBe("");
+					expect(fs.existsSync(path.join(destDir, "script/main.js"))).toBe(true);
+					expect(fs.existsSync(path.join(destDir, "script/bar.js"))).toBe(true);
+					expect(fs.existsSync(path.join(destDir, "script/foo.js"))).toBe(true);
+					expect(fs.existsSync(path.join(destDir, "game.json"))).toBe(true);
+					done();
+				}, done.fail);
+		});
+
 		it("copy all files in target directory", (done) => {
-			const es6GameParameter = {
+			const param = {
 				source: path.resolve(__dirname, "..", "fixtures", "simple_game_using_external"),
 				dest: destDir
 			};
-			convertGame(es6GameParameter)
+			convertGame(param)
 				.then(() => {
 					expect(fs.existsSync(path.join(destDir, "node_modules/external/index.js"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "node_modules/external/package.json"))).toBe(true);
@@ -86,13 +121,14 @@ describe("convert", () => {
 					done();
 				}, done.fail);
 		});
+
 		it("copy only necessary files in target directory when strip mode", (done) => {
-			const es6GameParameter = {
+			const param = {
 				source: path.resolve(__dirname, "..", "fixtures", "simple_game_using_external"),
 				dest: destDir,
 				strip: true
 			};
-			convertGame(es6GameParameter)
+			convertGame(param)
 				.then(() => {
 					expect(fs.existsSync(path.join(destDir, "node_modules/external/index.js"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "node_modules/external/package.json"))).toBe(false);
@@ -105,14 +141,15 @@ describe("convert", () => {
 					done();
 				}, done.fail);
 		});
+
 		it("copy bundled-script in target directory when bandle mode", (done) => {
-			const es6GameParameter = {
+			const param = {
 				source: path.resolve(__dirname, "..", "fixtures", "simple_game_using_external"),
 				dest: destDir,
 				bundle: true,
 				omitEmptyJs: true
 			};
-			convertGame(es6GameParameter)
+			convertGame(param)
 				.then(() => {
 					expect(fs.existsSync(path.join(destDir, "node_modules/external/index.js"))).toBe(false);
 					expect(fs.existsSync(path.join(destDir, "node_modules/external/package.json"))).toBe(true);
@@ -132,15 +169,16 @@ describe("convert", () => {
 					done();
 				}, done.fail);
 		});
+
 		it("does not copy output directory, even if it exists in source directory", (done) => {
 			const souceDirectory = path.resolve(__dirname, "..", "fixtures", "simple_game_using_external");
 			const outputDirectory = path.join(souceDirectory, "output");
-			const es6GameParameter = {
+			const param = {
 				source: souceDirectory,
 				dest: outputDirectory,
 				bundle: true
 			};
-			convertGame(es6GameParameter)
+			convertGame(param)
 				.then(() => {
 					expect(fs.existsSync(path.join(outputDirectory, "script/unrefered.js"))).toBe(true);
 					expect(fs.existsSync(path.join(outputDirectory, "script/aez_bundle_main.js"))).toBe(true);
@@ -149,19 +187,20 @@ describe("convert", () => {
 					expect(fs.existsSync(path.join(outputDirectory, "package.json"))).toBe(true);
 					expect(fs.existsSync(path.join(outputDirectory, "output"))).toBe(false);
 					expect(fs.readFileSync(path.join(outputDirectory, "game.json")).toString())
-						.not.toBe(fs.readFileSync(path.join(es6GameParameter.source, "game.json")).toString());
+						.not.toBe(fs.readFileSync(path.join(param.source, "game.json")).toString());
 					fsx.removeSync(outputDirectory);
 					done();
 				}, done.fail);
 		});
+
 		it("copy only necessary files and bundled-script in target directory when strip and bundle mode", (done) => {
-			const es6GameParameter = {
+			const param = {
 				source: path.resolve(__dirname, "..", "fixtures", "simple_game_using_external"),
 				dest: destDir,
 				strip: true,
 				bundle: true
 			};
-			convertGame(es6GameParameter)
+			convertGame(param)
 				.then(() => {
 					expect(fs.existsSync(path.join(destDir, "node_modules/external/index.js"))).toBe(false);
 					expect(fs.existsSync(path.join(destDir, "node_modules/external/package.json"))).toBe(false);
@@ -173,17 +212,18 @@ describe("convert", () => {
 					expect(fs.existsSync(path.join(destDir, "game.json"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "package.json"))).toBe(false);
 					expect(fs.readFileSync(path.join(destDir, "game.json")).toString())
-						.not.toBe(fs.readFileSync(path.join(es6GameParameter.source, "game.json")).toString());
+						.not.toBe(fs.readFileSync(path.join(param.source, "game.json")).toString());
 					done();
 				}, done.fail);
 		});
+
 		it("Include empty files when in no-omit-empty-js mode", (done) => {
-			const es6GameParameter = {
+			const param = {
 				source: path.resolve(__dirname, "..", "fixtures", "simple_game_using_external"),
 				dest: destDir,
 				omitEmptyJs: false
 			};
-			convertGame(es6GameParameter)
+			convertGame(param)
 				.then(() => {
 					expect(fs.existsSync(path.join(destDir, "node_modules/external/index.js"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "node_modules/external/package.json"))).toBe(true);
@@ -199,13 +239,14 @@ describe("convert", () => {
 					done();
 				}, done.fail);
 		});
+
 		it("rewrite aez_bundle_main.js, even if aez_bundle_main script-asset already exists as entry-point", (done) => {
-			const es6GameParameter = {
+			const param = {
 				source: path.resolve(__dirname, "..", "fixtures", "simple_game_with_aez_bundle_main"),
 				dest: destDir,
 				bundle: true
 			};
-			convertGame(es6GameParameter)
+			convertGame(param)
 				.then(() => {
 					expect(fs.existsSync(path.join(destDir, "script/aez_bundle_main.js"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "script/bar.js"))).toBe(false);
@@ -214,19 +255,20 @@ describe("convert", () => {
 					expect(fs.existsSync(path.join(destDir, "game.json"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "package.json"))).toBe(true);
 					expect(fs.readFileSync(path.join(destDir, "game.json")).toString())
-						.not.toBe(fs.readFileSync(path.join(es6GameParameter.source, "game.json")).toString());
+						.not.toBe(fs.readFileSync(path.join(param.source, "game.json")).toString());
 					expect(fs.readFileSync(path.join(destDir, "script/aez_bundle_main.js")).toString())
-						.not.toBe(fs.readFileSync(path.join(es6GameParameter.source, "script/aez_bundle_main.js")).toString());
+						.not.toBe(fs.readFileSync(path.join(param.source, "script/aez_bundle_main.js")).toString());
 					done();
 				}, done.fail);
 		});
+
 		it("does not rewrite aez_bundle_main.js, even if aez_bundle_main script-asset already exists as not entry-point", (done) => {
-			const es6GameParameter = {
+			const param = {
 				source: path.resolve(__dirname, "..", "fixtures", "simple_game_with_aez_bundle_main2"),
 				dest: destDir,
 				bundle: true
 			};
-			convertGame(es6GameParameter)
+			convertGame(param)
 				.then(() => {
 					expect(fs.existsSync(path.join(destDir, "script/aez_bundle_main.js"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "script/bar.js"))).toBe(false);
@@ -238,17 +280,18 @@ describe("convert", () => {
 					expect(fs.existsSync(path.join(destDir, "game.json"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "package.json"))).toBe(true);
 					expect(fs.readFileSync(path.join(destDir, "game.json")).toString())
-						.not.toBe(fs.readFileSync(path.join(es6GameParameter.source, "game.json")).toString());
+						.not.toBe(fs.readFileSync(path.join(param.source, "game.json")).toString());
 					done();
 				}, done.fail);
 		});
+
 		it("does not rewrite aez_bundle_main-asset, even if same name asset already exists as not script-asset", (done) => {
-			const es6GameParameter = {
+			const param = {
 				source: path.resolve(__dirname, "..", "fixtures", "simple_game_with_aez_bundle_main3"),
 				dest: destDir,
 				bundle: true
 			};
-			convertGame(es6GameParameter)
+			convertGame(param)
 				.then(() => {
 					expect(fs.existsSync(path.join(destDir, "script/bar.js"))).toBe(false);
 					expect(fs.existsSync(path.join(destDir, "script/foo.js"))).toBe(false);
@@ -266,13 +309,14 @@ describe("convert", () => {
 					done();
 				}, done.fail);
 		});
+
 		it("rewrite mainScene-asset, even if main is not included in game.json", (done) => {
-			const es6GameParameter = {
+			const param = {
 				source: path.resolve(__dirname, "..", "fixtures", "simple_game_with_main_scene"),
 				dest: destDir,
 				bundle: true
 			};
-			convertGame(es6GameParameter)
+			convertGame(param)
 				.then(() => {
 					expect(fs.existsSync(path.join(destDir, "script/bar.js"))).toBe(false);
 					expect(fs.existsSync(path.join(destDir, "script/foo.js"))).toBe(false);
@@ -282,7 +326,7 @@ describe("convert", () => {
 					expect(fs.existsSync(path.join(destDir, "game.json"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "package.json"))).toBe(true);
 					expect(fs.readFileSync(path.join(destDir, "script/mainScene.js")).toString())
-						.toBe(fs.readFileSync(path.join(es6GameParameter.source, "script/mainScene.js")).toString());
+						.toBe(fs.readFileSync(path.join(param.source, "script/mainScene.js")).toString());
 					const gameJson = JSON.parse(fs.readFileSync(path.join(destDir, "game.json")).toString());
 					expect(gameJson.assets["mainScene"].path).toBe("script/mainScene0.js");
 					expect(gameJson.assets["mainScene"].type).toBe("script");
