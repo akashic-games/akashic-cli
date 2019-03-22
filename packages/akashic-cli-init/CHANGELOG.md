@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.12](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli-init@0.3.11...@akashic/akashic-cli-init@0.3.12) (2019-03-22)
+
+
+### Features
+
+* use jest in akashic-cli-init template ([#50](https://github-com-akashic-cli/akashic-games/akashic-cli/issues/50)) ([4b3f90e](https://github-com-akashic-cli/akashic-games/akashic-cli/commit/4b3f90e))
+
+
+
+
+
 ## [0.3.11](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli-init@0.3.10...@akashic/akashic-cli-init@0.3.11) (2019-03-18)
 
 
