@@ -21,6 +21,8 @@ npm install
 
 * `npm install -g @akashic/akashic-sandbox` 後、 `akashic-sandbox .`
 
+ゲームを実行するとキャラクターが表示され、タッチ操作で効果音とともに弾を発射します。
+
 ### アセットの更新方法
 
 各種アセットを追加したい場合は、それぞれのアセットファイルを以下のディレクトリに格納します。
