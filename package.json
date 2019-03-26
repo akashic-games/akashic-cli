@@ -9,23 +9,29 @@
     "build": "lerna run build",
     "test": "npm run lint:md && lerna run test",
     "lint:md": "remark ./*.md --frail --no-stdout --quiet --rc-path ./.remarkrc",
-    "publish:patch": "lerna publish --conventional-commits patch --yes",
-    "publish:minor": "lerna publish --conventional-commits minor --yes",
-    "publish:major": "lerna publish --conventional-commits major --yes",
+    "publish:patch": "lerna publish patch --yes",
+    "publish:minor": "lerna publish minor --yes",
+    "publish:major": "lerna publish major --yes",
     "publish:prerelease": "lerna publish prerelease --dist-tag next --yes"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
-  "files": [
-    "README.md",
-    "package.json",
-    "bin",
-    "lib"
-  ],
+  "changelog": {
+    "repo": "akashic-games/akashic-cli",
+    "labels": {
+      "breaking": "Breaking Change",
+      "enhancement": "Enhancement",
+      "bug": "Bug Fix",
+      "documentation": "Documentation",
+      "internal": "Internal"
+    }
+  },
   "devDependencies": {
-    "lerna": "~3.10.7",
+    "lerna": "~3.13.1",
+    "lerna-changelog": "~0.8.2",
     "remark-cli": "~2.0.0",
-    "remark-lint": "~5.0.1"
+    "remark-lint": "~5.0.1",
+    "semver": "~5.6.0"
   },
   "repository": {
     "type": "git",
