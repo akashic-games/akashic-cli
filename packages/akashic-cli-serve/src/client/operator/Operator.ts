@@ -65,10 +65,10 @@ export class Operator {
 		}
 
 		// TODO play からコンテンツを引くべき？
-		const gameJson = await ApiClient.getGameConfiguration();
+		const gameJson = await ApiClient.getGameConfiguration(this.store.contentId);
 		this.gameViewManager.setViewSize(gameJson.width, gameJson.height);
 
-		const sandboxConfigResult = await ApiClient.getSandboxConfig();
+		const sandboxConfigResult = await ApiClient.getSandboxConfig(this.store.contentId);
 		store.setSandboxConfig(sandboxConfigResult.data || {});
 
 		store.setCurrentPlay(play);

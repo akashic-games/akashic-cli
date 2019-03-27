@@ -15,6 +15,7 @@ export class Store {
 	@observable devtoolUiStore: DevtoolUiStore;
 	@observable startupScreenUiStore: StartupScreenUiStore;
 	@observable player: Player | null;
+	@observable contentId: number; // 多分storage辺りに置く方がよさそうだが一旦動かすこと優先でここに置いておく
 
 	@observable currentPlay: PlayEntity | null;
 	@observable currentLocalInstance: LocalInstanceEntity | null;
@@ -23,7 +24,14 @@ export class Store {
 	@observable argumentsTable: { [name: string]: string };
 
 	constructor() {
-		this.playStore = new PlayStore();
+		this.contentId = 0;
+		window.location.search.slice(1).split("&").forEach((param: string) => {
+			const data = param.split("=");
+			if (data[0] === "id") {
+				this.contentId = parseInt(data[1], 10);
+			}
+		});
+		this.playStore = new PlayStore(this.contentId);
 		this.toolBarUiStore = new ToolBarUiStore();
 		this.devtoolUiStore = new DevtoolUiStore();
 		this.startupScreenUiStore = new StartupScreenUiStore();

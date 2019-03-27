@@ -8,7 +8,7 @@ export interface EngineConfig {
 	external?: string[];
 }
 
-export const getEngineConfig = (baseUrl: string, baseDir: string, isRaw: boolean): EngineConfig => {
+export const getEngineConfig = (baseUrl: string, contentId: number, baseDir: string, isRaw: boolean): EngineConfig => {
 	const gameContentDir = isRaw ? "raw" : "content";
 	const gameJsonPath = path.join(baseDir, "game.json");
 	// TODO: chokidar等でgame.jsonの変更時だけ読み込みを行うようにする
@@ -30,7 +30,7 @@ export const getEngineConfig = (baseUrl: string, baseDir: string, isRaw: boolean
 			`${baseUrl}/public/external/playlogClientV3_2_1.js`
 		],
 		external,
-		content_url: `${baseUrl}/${gameContentDir}/game.json`,
-		asset_base_url: `${baseUrl}/${gameContentDir}`
+		content_url: `${baseUrl}/${gameContentDir}/${contentId}/game.json`,
+		asset_base_url: `${baseUrl}/${gameContentDir}/${contentId}`
 	};
 };

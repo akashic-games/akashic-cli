@@ -35,6 +35,7 @@ export function run(argv: any): void {
 		.version(ver)
 		.description("Development server for Akashic Engine to debug multiple-player games")
 		.usage("[options] <gamepath>")
+		.option("-c, --content [path]", `game.json's paths to startup`, collectGameJsonPath, [])
 		.option("-p, --port <port>", `The port number to listen. default: ${serverGlobalConfig.port}`, (x => parseInt(x, 10)))
 		.option("-H, --hostname <hostname>", `The host name of the server. default: ${serverGlobalConfig.hostname}`)
 		.option("-v, --verbose", `Display detailed information on console.`)
@@ -90,7 +91,7 @@ export function run(argv: any): void {
 		serverGlobalConfig.autoStart = commander.autoStart;
 	}
 
-	const targetDir = commander.args.length > 0 ? commander.args[0] : process.cwd();
+	const targetDirs: string[] = commander.content.length === 0 ? [process.cwd()] : commander.content;
 	const playManager = new PlayManager();
 	const runnerManager = new RunnerManager(playManager);
 	const playStore = new PlayStore({playManager});
@@ -113,16 +114,18 @@ export function run(argv: any): void {
 		next();
 	});
 	app.use(bodyParser.json());
-	const scriptAssetRouter = express.Router();
-	scriptAssetRouter.get("/:scriptName(*.js$)", createScriptAssetController(targetDir));
 
 	app.use("^\/$", (req, res, next) => res.redirect("/public/"));
-	app.use("/content", scriptAssetRouter);
-	app.use("/content/", express.static(targetDir)); // コンテンツのスクリプトアセット加工後のパス。クライアント側でゲームを動かすために必要。
-	app.use("/raw/", express.static(targetDir)); // コンテンツのスクリプトアセット加工前のパス。サーバー側でゲームを動かすために必要。
+	for (let i = 0; i < targetDirs.length; i++) {
+		const scriptAssetRouter = express.Router();
+		scriptAssetRouter.get("/:scriptName(*.js$)", createScriptAssetController(targetDirs[i]));
+		app.use(`/content/${i}`, scriptAssetRouter);
+		app.use(`/content/${i}`, express.static(targetDirs[i])); // コンテンツのスクリプトアセット加工後のパス。クライアント側でゲームを動かすために必要。
+		app.use(`/raw/${i}`, express.static(targetDirs[i])); // コンテンツのスクリプトアセット加工前のパス。サーバー側でゲームを動かすために必要。
+	}
 	app.use("/public/", express.static(path.join(__dirname, "..", "..", "www")));
-	app.use("/api/", createApiRouter({ targetDir, playStore, runnerStore, amflowManager, io }));
-	app.use("/config/", createConfigRouter({ targetDir }));
+	app.use("/api/", createApiRouter({ targetDirs, playStore, runnerStore, amflowManager, io }));
+	app.use("/config/", createConfigRouter({ targetDirs }));
 
 	io.on("connection", (socket: socketio.Socket) => { amflowManager.setupSocketIOAMFlow(socket); });
 	// TODO 全体ブロードキャストせず該当するプレイにだけ通知するべき？
@@ -144,6 +147,11 @@ export function run(argv: any): void {
 				`We do not recommend to listen on a well-known port ${serverGlobalConfig.port}.`);
 		}
 		// サーバー起動のログに関してはSystemLoggerで使用していない色を使いたいので緑を選択
-		console.log(chalk.green(`Hosting ${targetDir} on http://${serverGlobalConfig.hostname}:${serverGlobalConfig.port}`));
+		targetDirs.forEach(dir => console.log(chalk.green(`Hosting ${dir} on http://${serverGlobalConfig.hostname}:${serverGlobalConfig.port}`)));
 	});
+}
+
+function collectGameJsonPath(path: string, paths: string[]): string[] {
+	paths.push(path);
+	return paths;
 }

@@ -4,7 +4,7 @@ import {serverGlobalConfig} from "../common/ServerGlobalConfig";
 import {responseSuccess} from "../common/ApiResponse";
 import {OptionsApiResponseData} from "../../common/types/ApiResponse";
 
-export const createHandlerToGetEngineConfig = (baseDir: string, isRaw: boolean): express.RequestHandler => {
+export const createHandlerToGetEngineConfig = (contentId: number, baseDir: string, isRaw: boolean): express.RequestHandler => {
 	return (req, res, next) => {
 		try {
 			const urlInfo = req.header("host").split(":");
@@ -15,7 +15,7 @@ export const createHandlerToGetEngineConfig = (baseDir: string, isRaw: boolean):
 			const hostname = serverGlobalConfig.useGivenHostname ? serverGlobalConfig.hostname : urlInfo[0];
 			const port = serverGlobalConfig.useGivenPort ? serverGlobalConfig.port : parseInt(urlInfo[1], 10);
 			const baseUrl = `http://${hostname}:${port}`;
-			const engineConfigJson = EngineConfig.getEngineConfig(baseUrl, baseDir, isRaw);
+			const engineConfigJson = EngineConfig.getEngineConfig(baseUrl, contentId, baseDir, isRaw);
 			// akashic-gameview側でレスポンスがengineConfigJsonの形式なっていることを前提にしているので、resoponseSuccessは使わない
 			res.status(200).json(engineConfigJson);
 		} catch (e) {
