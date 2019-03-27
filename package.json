@@ -13,7 +13,7 @@
     "publish:minor": "lerna publish minor --yes",
     "publish:major": "lerna publish major --yes",
     "publish:prerelease": "lerna publish prerelease --dist-tag next --yes",
-    "update:chagelog": "node build/updateChangelog"
+    "update:changelog": "node build/updateChangelog"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
