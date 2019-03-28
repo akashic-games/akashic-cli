@@ -12,7 +12,7 @@ if (process.argv.length < 3) {
 // どのバージョンを上げるのかを取得
 var target = process.argv[2];
 if (! /^patch|minor|major$/.test(target)) {
-	console.error("please specify patch or minor or major");
+	console.error("Please specify patch, minor or major.");
 	process.exit(1);
 }
 

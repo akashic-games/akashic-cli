@@ -13,7 +13,9 @@
     "publish:minor": "lerna publish minor --yes",
     "publish:major": "lerna publish major --yes",
     "publish:prerelease": "lerna publish prerelease --dist-tag next --yes",
-    "update:changelog": "node build/updateChangelog"
+    "changelog:patch": "node build/updateChangelog patch",
+    "changelog:minor": "node build/updateChangelog minor",
+    "changelog:major": "node build/updateChangelog major"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
@@ -24,15 +26,15 @@
       "enhancement": "Enhancement",
       "bug": "Bug Fix",
       "documentation": "Documentation",
-      "internal": "Internal"
+      "internal": "No impact on product"
     }
   },
   "devDependencies": {
-    "lerna": "~3.13.1",
-    "lerna-changelog": "~0.8.2",
+    "lerna": "^3.13.1",
+    "lerna-changelog": "^0.8.2",
     "remark-cli": "~2.0.0",
     "remark-lint": "~5.0.1",
-    "semver": "~5.6.0"
+    "semver": "^5.6.0"
   },
   "repository": {
     "type": "git",
