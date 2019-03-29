@@ -40,7 +40,7 @@ export class PlayStore {
 			const playsInfo = res.data;
 			playsInfo.forEach(playInfo => {
 				// 同じコンテンツかどうかの判定。非常に雑な判定方法なのであとで正式な方法を考える。
-				if (playInfo.clientContentUrl === `/config/${contentId}/content.json`) {
+				if (playInfo.clientContentUrl === `/contents/${contentId}/content.json`) {
 					this.plays[playInfo.playId] = new PlayEntity(playInfo);
 				}
 			});

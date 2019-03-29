@@ -8,13 +8,12 @@ import * as socketio from "socket.io";
 import * as commander from "commander";
 import chalk from "chalk";
 import { PlayManager, RunnerManager, setSystemLogger, getSystemLogger } from "@akashic/headless-driver";
-import { createScriptAssetController } from "./controller/ScriptAssetController";
 import { createApiRouter } from "./route/ApiRoute";
-import { createConfigRouter } from "./route/ConfigRoute";
 import { RunnerStore } from "./domain/RunnerStore";
 import { PlayStore } from "./domain/PlayStore";
 import { SocketIOAMFlowManager } from "./domain/SocketIOAMFlowManager";
 import { serverGlobalConfig } from "./common/ServerGlobalConfig";
+import {createContentsRouter} from "./route/ContentsRoute";
 
 // 渡されたパラメータを全てstringに変換する
 // chalkを使用する場合、ログ出力時objectの中身を展開してくれないためstringに変換する必要がある
@@ -116,16 +115,9 @@ export function run(argv: any): void {
 	app.use(bodyParser.json());
 
 	app.use("^\/$", (req, res, next) => res.redirect("/public/"));
-	for (let i = 0; i < targetDirs.length; i++) {
-		const scriptAssetRouter = express.Router();
-		scriptAssetRouter.get("/:scriptName(*.js$)", createScriptAssetController(targetDirs[i]));
-		app.use(`/content/${i}`, scriptAssetRouter);
-		app.use(`/content/${i}`, express.static(targetDirs[i])); // コンテンツのスクリプトアセット加工後のパス。クライアント側でゲームを動かすために必要。
-		app.use(`/raw/${i}`, express.static(targetDirs[i])); // コンテンツのスクリプトアセット加工前のパス。サーバー側でゲームを動かすために必要。
-	}
 	app.use("/public/", express.static(path.join(__dirname, "..", "..", "www")));
-	app.use("/api/", createApiRouter({ targetDirs, playStore, runnerStore, amflowManager, io }));
-	app.use("/config/", createConfigRouter({ targetDirs }));
+	app.use("/api/", createApiRouter({ playStore, runnerStore, amflowManager, io }));
+	app.use("/contents/", createContentsRouter({ targetDirs }));
 
 	io.on("connection", (socket: socketio.Socket) => { amflowManager.setupSocketIOAMFlow(socket); });
 	// TODO 全体ブロードキャストせず該当するプレイにだけ通知するべき？

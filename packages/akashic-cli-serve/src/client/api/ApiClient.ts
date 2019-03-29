@@ -70,13 +70,13 @@ export const resumeRunner = async(runnerId: string): Promise<RunnerPatchApiRespo
 };
 
 export const getGameConfiguration = async(contentId: number): Promise<GameConfiguration> => {
-	return await ApiRequest.get<GameConfiguration>(`/content/${contentId}/game.json`);
+	return await ApiRequest.get<GameConfiguration>(`/contents/${contentId}/content/game.json`);
 };
 
 export const getSandboxConfig = async(contentId: number): Promise<SandboxConfigApiResponse> => {
-	return await ApiRequest.get<SandboxConfigApiResponse>(`/api/${contentId}/sandbox-config`);
+	return await ApiRequest.get<SandboxConfigApiResponse>(`/contents/${contentId}/sandbox-config`);
 };
 
 export const getOptions = async(): Promise<OptionsApiResponse> => {
-	return await ApiRequest.get<OptionsApiResponse>("/config/options");
+	return await ApiRequest.get<OptionsApiResponse>("/api/options");
 };

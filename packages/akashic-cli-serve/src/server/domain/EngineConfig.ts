@@ -30,7 +30,7 @@ export const getEngineConfig = (baseUrl: string, contentId: number, baseDir: str
 			`${baseUrl}/public/external/playlogClientV3_2_1.js`
 		],
 		external,
-		content_url: `${baseUrl}/${gameContentDir}/${contentId}/game.json`,
-		asset_base_url: `${baseUrl}/${gameContentDir}/${contentId}`
+		content_url: `${baseUrl}/contents/${contentId}/${gameContentDir}/game.json`,
+		asset_base_url: `${baseUrl}/contents/${contentId}/${gameContentDir}`
 	};
 };
