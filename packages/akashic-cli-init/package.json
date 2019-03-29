@@ -10,7 +10,7 @@
     "build": "tsc -p ./ && npm run zip",
     "lint": "npm run lint:ts && npm run lint:md",
     "lint:ts": "tslint -c ../tslint.json --project ./tsconfig.json",
-    "lint:md": "../../node_modules/.bin/remark ./*.md --frail --no-stdout --quiet --rc-path ../../.remarkrc",
+    "lint:md": "remark ./*.md --frail --no-stdout --quiet --rc-path ../../.remarkrc",
     "zip": "cd ./templates-src && npm run zip:js && npm run zip:ts",
     "zip:js": "cd ./templates-src/javascript/ && bestzip ../../templates/javascript.zip *",
     "zip:ts": "cd ./templates-src/typescript/ && bestzip ../../templates/typescript.zip *",
@@ -45,6 +45,7 @@
     "jasmine-reporters": "~2.0.4",
     "jasmine-terminal-reporter": "~0.9.1",
     "mock-fs": "~4.8.0",
+    "remark-cli": "~6.0.1",
     "rimraf": "^2.6.2",
     "tslint": "^5.4.3",
     "typescript": "~2.1.6"

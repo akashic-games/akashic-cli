@@ -30,7 +30,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Bug Fixes
 
-*  npm script of zip in Akashic-cli-init ([#39](https://github-com-akashic-cli/akashic-games/akashic-cli/issues/39)) ([60f7013](https://github-com-akashic-cli/akashic-games/akashic-cli/commit/60f7013))
+* npm script of zip in Akashic-cli-init ([#39](https://github-com-akashic-cli/akashic-games/akashic-cli/issues/39)) ([60f7013](https://github-com-akashic-cli/akashic-games/akashic-cli/commit/60f7013))
 
 
 
