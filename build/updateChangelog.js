@@ -16,6 +16,12 @@ if (! /^patch|minor|major$/.test(target)) {
 	process.exit(1);
 }
 
+// 更新するモジュールが無ければChangelog更新処理を行わず終了する
+if (parseInt(execSync(`${path.join(__dirname, "..", "node_modules", ".bin", "lerna")} changed | wc -l`).toString(), 10) === 0) {
+	console.error("No modules to update version.");
+	process.exit(1);
+}
+
 // 全akashic-cli-xxxに依存するakashic-cliモジュールの次のバージョン番号を取得
 const packageJson = require(path.join(__dirname, "..", "packages", "akashic-cli", "package.json"));
 const currentVersion = packageJson["version"];

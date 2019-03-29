@@ -9,13 +9,11 @@
     "build": "lerna run build",
     "test": "npm run lint:md && lerna run test",
     "lint:md": "remark ./*.md --frail --no-stdout --quiet --rc-path ./.remarkrc",
-    "publish:patch": "lerna publish patch --yes",
-    "publish:minor": "lerna publish minor --yes",
-    "publish:major": "lerna publish major --yes",
+    "publish:patch": "node build/updateChangelog.js patch && npm run commit-changelog && lerna publish patch --yes",
+    "publish:minor": "node build/updateChangelog.js minor && npm run commit-changelog && lerna publish minor --yes",
+    "publish:major": "node build/updateChangelog.js major && npm run commit-changelog && lerna publish major --yes",
     "publish:prerelease": "lerna publish prerelease --dist-tag next --yes",
-    "changelog:patch": "node build/updateChangelog patch",
-    "changelog:minor": "node build/updateChangelog minor",
-    "changelog:major": "node build/updateChangelog major"
+    "commit-changelog": "git add ./CHANGELOG.md && git commit -m 'Update Changelog'"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
@@ -26,7 +24,7 @@
       "enhancement": "Enhancement",
       "bug": "Bug Fix",
       "documentation": "Documentation",
-      "internal": "No impact on product"
+      "other": "Other Change"
     }
   },
   "devDependencies": {
