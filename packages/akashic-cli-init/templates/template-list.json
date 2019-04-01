@@ -2,6 +2,6 @@
 	"templates": {
 		"javascript": "javascript.zip",
 		"typescript": "typescript.zip",
-		"javascript-minimum": "javascript-minimum.zip"
+		"javascript-minimal": "javascript-minimal.zip"
 	}
 }
