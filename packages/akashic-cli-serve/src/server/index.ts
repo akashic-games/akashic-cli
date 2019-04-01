@@ -34,7 +34,6 @@ export function run(argv: any): void {
 		.version(ver)
 		.description("Development server for Akashic Engine to debug multiple-player games")
 		.usage("[options] <gamepath>")
-		.option("-c, --content [path]", `game.json's paths to startup`, collectGameJsonPath, [])
 		.option("-p, --port <port>", `The port number to listen. default: ${serverGlobalConfig.port}`, (x => parseInt(x, 10)))
 		.option("-H, --hostname <hostname>", `The host name of the server. default: ${serverGlobalConfig.hostname}`)
 		.option("-v, --verbose", `Display detailed information on console.`)
@@ -90,7 +89,7 @@ export function run(argv: any): void {
 		serverGlobalConfig.autoStart = commander.autoStart;
 	}
 
-	const targetDirs: string[] = commander.content.length === 0 ? [process.cwd()] : commander.content;
+	const targetDirs: string[] = commander.args.length > 0 ? commander.args : [process.cwd()];
 	const playManager = new PlayManager();
 	const runnerManager = new RunnerManager(playManager);
 	const playStore = new PlayStore({playManager});
@@ -141,9 +140,4 @@ export function run(argv: any): void {
 		// サーバー起動のログに関してはSystemLoggerで使用していない色を使いたいので緑を選択
 		targetDirs.forEach(dir => console.log(chalk.green(`Hosting ${dir} on http://${serverGlobalConfig.hostname}:${serverGlobalConfig.port}`)));
 	});
-}
-
-function collectGameJsonPath(path: string, paths: string[]): string[] {
-	paths.push(path);
-	return paths;
 }

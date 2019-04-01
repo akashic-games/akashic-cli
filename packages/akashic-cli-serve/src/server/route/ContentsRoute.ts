@@ -14,12 +14,13 @@ export const createContentsRouter = (params: ContentsRouterParameterObject): exp
 		contentsRouter.get(`/${i}/content/:scriptName(*.js$)`, createScriptAssetController(params.targetDirs[i]));
 		contentsRouter.use(`/${i}/content`, express.static(params.targetDirs[i])); // コンテンツのスクリプトアセット加工後のパス。クライアント側でゲームを動かすために必要。
 		contentsRouter.use(`/${i}/raw`, express.static(params.targetDirs[i])); // コンテンツのスクリプトアセット加工前のパス。サーバー側でゲームを動かすために必要。
-		contentsRouter.get(`/${i}/sandbox-config`, createHandlerToGetSandboxConfig(params.targetDirs[i]));
-		contentsRouter.get(`/${i}/content.json`, createHandlerToGetEngineConfig(i, params.targetDirs[i], false));
-		// /engineとの相違点はスクリプトアセット加工前のコンテンツを含む情報を投げること
-		// サーバー側でインスタンスを立ち上げる時は加工前のスクリプトアセットを参照する必要がある
-		contentsRouter.get(`/${i}/content.raw.json`, createHandlerToGetEngineConfig(i, params.targetDirs[i], true));
 	}
+
+	contentsRouter.get(`/:contentId/sandbox-config`, createHandlerToGetSandboxConfig(params.targetDirs));
+	contentsRouter.get(`/:contentId/content.json`, createHandlerToGetEngineConfig(params.targetDirs, false));
+	// /engineとの相違点はスクリプトアセット加工前のコンテンツを含む情報を投げること
+	// サーバー側でインスタンスを立ち上げる時は加工前のスクリプトアセットを参照する必要がある
+	contentsRouter.get(`/:contentId/content.raw.json`, createHandlerToGetEngineConfig(params.targetDirs, true));
 
 	return contentsRouter;
 };

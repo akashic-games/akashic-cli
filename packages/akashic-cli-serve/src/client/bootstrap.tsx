@@ -14,7 +14,7 @@ const operator = new Operator({
 	store,
 	gameViewManager,
 	contentUrl: `${window.location.origin}/contents/${store.contentId}/content.raw.json`,
-	clientContentUrl: `/contents/${store.contentId}/content.json`  // ここで渡したパスはPlayのclientContentUrlとしてサーバーに記録され全クライアントでそのパスが使われるので、絶対パスではなくルートパスを渡す。
+	clientContentUrl: `/contents/${store.contentId}/content.json` // このパスはサーバーに記録され全クライアントで使われるので、絶対パスではなくルートパスを渡す。
 });
 
 window.addEventListener("load", async () => {
