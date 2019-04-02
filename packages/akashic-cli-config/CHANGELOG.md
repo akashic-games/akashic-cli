@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.8](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli-config@0.1.7...@akashic/akashic-cli-config@0.1.8) (2019-04-02)
+
+
+### Bug Fixes
+
+* fix where os.tmpdir() is used ([#55](https://github-com-akashic-cli/akashic-games/akashic-cli/issues/55)) ([8701ec7](https://github-com-akashic-cli/akashic-games/akashic-cli/commit/8701ec7))
+
+
+
+
+
 ## [0.1.7](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli-config@0.1.6...@akashic/akashic-cli-config@0.1.7) (2019-03-28)
 
 **Note:** Version bump only for package @akashic/akashic-cli-config
