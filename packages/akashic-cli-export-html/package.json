@@ -40,7 +40,7 @@
     "package.json"
   ],
   "devDependencies": {
-    "@akashic/akashic-engine": "~2.4.11",
+    "@akashic/akashic-engine": "~2.4.13",
     "@types/archiver": "~2.1.2",
     "@types/commander": "~2.3.31",
     "@types/fs-extra": "5.0.2",
