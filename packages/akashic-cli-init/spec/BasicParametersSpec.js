@@ -8,7 +8,7 @@ var commons = require("@akashic/akashic-cli-commons");
 
 describe("BasicParameters", function () {
 	describe("updateConfigurationFile()", function () {
-		var confPath = path.join(os.tmpdir(), ".akashicrc");
+		var confPath = fs.mkdtempSync(path.join(os.tmpdir(), ".akashicrc"));
 		var quietLogger = new commons.ConsoleLogger({quiet: true});
 
 		beforeEach(() => {
