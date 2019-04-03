@@ -4,7 +4,8 @@
     "lib": ["es5"],
     "noImplicitAny": true,
     "module": "commonjs",
-    "outDir": "./lib"
+    "outDir": "./lib",
+    "types" : ["node", "commander"]
   },
   "files": [
     "./node_modules/typescript/lib/lib.es6.d.ts",

@@ -10,7 +10,7 @@
     "build": "tsc -p ./",
     "lint": "npm run lint:ts && npm run lint:md",
     "lint:ts": "tslint -c ../tslint.json src/**/*.ts spec/*.ts --project ./tsconfig.json",
-    "lint:md": "remark ./*.md --frail --no-stdout --quiet --rc-path ../.remarkrc",
+    "lint:md": "remark ./*.md --frail --no-stdout --quiet --rc-path ../../.remarkrc",
     "test": "npm run test:jasmine && npm run lint",
     "test:jasmine": "istanbul cover --report text --report html --colors -i ./lib/main.node.js ./node_modules/jasmine/bin/jasmine.js"
   },
@@ -34,8 +34,7 @@
     "jasmine-reporters": "~2.0.4",
     "jasmine-terminal-reporter": "~0.9.1",
     "mock-fs": "~4.8.0",
-    "remark-cli": "~2.0.0",
-    "remark-lint": "~5.0.1",
+    "remark-cli": "~6.0.1",
     "rimraf": "^2.6.2",
     "tslint": "~5.12.1",
     "typescript": "~2.6.1"

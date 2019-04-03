@@ -5,7 +5,8 @@
     "noImplicitAny": true,
     "module": "commonjs",
     "outDir": "./lib",
-    "declaration": true
+    "declaration": true,
+    "types" : ["archiver", "browserify", "commander", "fs-extra", "fs-readdir-recursive", "jasmine", "mock-fs", "node", "uglify-js"]
   },
   "files": [
     "./typings/babel.d.ts",
