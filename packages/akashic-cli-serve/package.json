@@ -25,7 +25,7 @@
     "akashic-cli-serve": "./bin/run"
   },
   "dependencies": {
-    "@akashic/headless-driver": "0.2.1",
+    "@akashic/headless-driver": "0.3.6",
     "@akashic/trigger": "0.1.5",
     "chalk": "~2.4.2",
     "chokidar": "^2.1.2",
