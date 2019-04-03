@@ -21,7 +21,8 @@ if (parseInt(execSync(`${path.join(__dirname, "..", "node_modules", ".bin", "ler
 	process.exit(1);
 }
 
-// lerna-changelogコマンドを実行するために環境変数GITHUB_AUTHにgithubへのアクセストークンを与える必要があるが、与えられていなくてもコマンド実行時にエラーは発生しないのでここで事前にチェックする
+// lerna-changelogコマンドを実行するために環境変数GITHUB_AUTHにgithubへのアクセストークンを与える必要がある。
+// しかし、与えられていなくてもコマンド実行時にエラーは発生しないのでここで事前にチェックする。
 if (process.env.GITHUB_AUTH == null) {
 	console.error("Must provide GITHUB_AUTH.");
 	process.exit(1);
