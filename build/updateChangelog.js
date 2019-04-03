@@ -1,4 +1,3 @@
-// ※このスクリプトを実行するためには環境変数GITHUB_AUTHにgithubへのアクセストークンを与える必要があります
 const path = require("path");
 const fs = require("fs");
 const semver = require("semver");
@@ -22,13 +21,19 @@ if (parseInt(execSync(`${path.join(__dirname, "..", "node_modules", ".bin", "ler
 	process.exit(1);
 }
 
+// lerna-changelogコマンドを実行するために環境変数GITHUB_AUTHにgithubへのアクセストークンを与える必要があるが、与えられていなくてもコマンド実行時にエラーは発生しないのでここで事前にチェックする
+if (process.env.GITHUB_AUTH == null) {
+	console.error("Must provide GITHUB_AUTH.");
+	process.exit(1);
+}
+
 // 全akashic-cli-xxxに依存するakashic-cliモジュールの次のバージョン番号を取得
 const packageJson = require(path.join(__dirname, "..", "packages", "akashic-cli", "package.json"));
-const currentVersion = packageJson["version"];
-const nextVersion = semver.inc(currentVersion, target);
+const nextVersion = semver.inc(packageJson["version"], target);
 
 // 現在のCHANGELOGに次バージョンのログを追加
 const currentChangeLog = fs.readFileSync(path.join(__dirname, "..", "CHANGELOG.md")).toString();
-const addedLog = execSync(`${path.join(__dirname, "..", "node_modules", ".bin", "lerna-changelog")}`).toString().replace("Unreleased", nextVersion);
+const addedLog =
+	execSync(`${path.join(__dirname, "..", "node_modules", ".bin", "lerna-changelog")} --next-version ${nextVersion}`).toString();
 const nextChangeLog = currentChangeLog.replace("# CHANGELOG\n\n", "# CHANGELOG\n" + addedLog + "\n");
 fs.writeFileSync(path.join(__dirname, "..", "CHANGELOG.md"), nextChangeLog);

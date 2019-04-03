@@ -46,6 +46,16 @@ akashic export html -o ../exported-my-game
 各コマンドの詳細については、 [利用ガイド](http://akashic-games.github.io/guide/akashic-cli.html) を参照してください。
 Akashic Engineの詳細な利用方法については、 [公式ページ](https://akashic-games.github.io/) を参照してください。
 
+## 開発者向け
+* akashic-cli への PullReuest 作成時には、PullRequest の内容にあったラベルを Labels で設定してください。
+  * CHANGELOGに変更内容を記録するために必要な作業となります。
+  * 利用できるラベルの種類は以下の通りです。
+    * breaking: 互換性の破壊
+    * enhancement: 機能追加
+    * bug: バグ修正
+    * documentation: ドキュメントの追加・修正
+    * other: 上記4つに当てはまらない変更
+
 ## ライセンス
 本リポジトリは MIT License の元で公開されています。
 詳しくは [LICENSE](https://github.com/akashic-games/akashic-cli/blob/master/LICENSE) をご覧ください。
