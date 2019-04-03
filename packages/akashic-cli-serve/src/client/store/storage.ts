@@ -44,7 +44,7 @@ export class Storage {
 		const ignoreSession = (qp.ignoreSession === "1");
 		if (ignoreSession) {
 			delete qp.ignoreSession;
-			history.replaceState(null, null, location.pathname + queryString.stringify(qp));
+			history.replaceState(null, null, location.pathname + "?" + queryString.stringify(qp));
 		}
 
 		let s: any;

@@ -8,9 +8,16 @@ export interface EngineConfig {
 	external?: string[];
 }
 
-export const getEngineConfig = (baseUrl: string, contentId: number, baseDir: string, isRaw: boolean): EngineConfig => {
-	const gameContentDir = isRaw ? "raw" : "content";
-	const gameJsonPath = path.join(baseDir, "game.json");
+export interface GetEngineConfigParameterObject {
+	baseUrl: string;
+	contentId: number;
+	baseDir: string;
+	isRaw: boolean;
+}
+
+export const getEngineConfig = (param: GetEngineConfigParameterObject): EngineConfig => {
+	const gameContentDir = param.isRaw ? "raw" : "content";
+	const gameJsonPath = path.join(param.baseDir, "game.json");
 	// TODO: chokidar等でgame.jsonの変更時だけ読み込みを行うようにする
 	const gameJson: any = JSON.parse(fs.readFileSync(gameJsonPath).toString());
 	let version = "1";
@@ -26,11 +33,11 @@ export const getEngineConfig = (baseUrl: string, contentId: number, baseDir: str
 	const versionsJson = require("../engineFilesVersion.json");
 	return {
 		engine_urls: [
-			`${baseUrl}/public/external/${versionsJson[`v${version}`].fileName}`,
-			`${baseUrl}/public/external/playlogClientV3_2_1.js`
+			`${param.baseUrl}/public/external/${versionsJson[`v${version}`].fileName}`,
+			`${param.baseUrl}/public/external/playlogClientV3_2_1.js`
 		],
 		external,
-		content_url: `${baseUrl}/contents/${contentId}/${gameContentDir}/game.json`,
-		asset_base_url: `${baseUrl}/contents/${contentId}/${gameContentDir}`
+		content_url: `${param.baseUrl}/contents/${param.contentId}/${gameContentDir}/game.json`,
+		asset_base_url: `${param.baseUrl}/contents/${param.contentId}/${gameContentDir}`
 	};
 };

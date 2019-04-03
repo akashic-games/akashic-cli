@@ -33,17 +33,12 @@ export class PlayStore {
 	private _creationWaiters: {[key: string]: (p: PlayEntity) => void };
 	private _initializationWaiter: Promise<void>;
 
-	constructor(contentId: number) {
+	constructor() {
 		this.plays = Object.create(null);
 		this._creationWaiters = Object.create(null);
 		this._initializationWaiter = ApiClient.getPlays().then(res => {
 			const playsInfo = res.data;
-			playsInfo.forEach(playInfo => {
-				// 同じコンテンツかどうかの判定。非常に雑な判定方法なのであとで正式な方法を考える。
-				if (playInfo.clientContentUrl === `/contents/${contentId}/content.json`) {
-					this.plays[playInfo.playId] = new PlayEntity(playInfo);
-				}
-			});
+			playsInfo.forEach(playInfo => this.plays[playInfo.playId] = new PlayEntity(playInfo));
 			Subscriber.onPlayCreate.add(this.handlePlayCreate);
 			Subscriber.onPlayStatusChange.add(this.handlePlayStatusChange);
 			Subscriber.onPlayDurationStateChange.add(this.handlePlayDurationStateChange);

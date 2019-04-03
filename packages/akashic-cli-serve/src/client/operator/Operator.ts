@@ -49,7 +49,11 @@ export class Operator {
 	async bootstrap(): Promise<void> {
 		const store = this.store;
 		await store.playStore.assertInitialized();
-		const playIds = Object.keys(store.playStore.plays);
+		const playIds = Object.keys(store.playStore.plays).filter(id => {
+			// 同じコンテンツかどうかの判定。
+			// 本当はcontentIdで比較を行いたいが、playAPIがcontentIdを返さないので代わりにclientContentUrlを使っている。
+			return store.playStore.plays[id].clientContentUrl === `/contents/${store.contentId}/content.json`;
+		});
 		const play = (playIds.length === 0) ? await this._createServerLoop() : store.playStore.plays[playIds[playIds.length - 1]];
 		await this.setCurrentPlay(play);
 	}

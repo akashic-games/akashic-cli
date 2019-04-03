@@ -1,4 +1,5 @@
 import {observable, action} from "mobx";
+import * as queryString from "query-string";
 import {Player} from "../../common/types/Player";
 import {SandboxConfig} from "../../common/types/SandboxConfig";
 import {PlayEntity} from "./PlayEntity";
@@ -25,13 +26,11 @@ export class Store {
 
 	constructor() {
 		this.contentId = 0;
-		window.location.search.slice(1).split("&").forEach((param: string) => {
-			const data = param.split("=");
-			if (data[0] === "id") {
-				this.contentId = parseInt(data[1], 10);
-			}
-		});
-		this.playStore = new PlayStore(this.contentId);
+		const query = queryString.parse(window.location.search);
+		if (query.id) {
+			this.contentId = parseInt(query.id, 10);
+		}
+		this.playStore = new PlayStore();
 		this.toolBarUiStore = new ToolBarUiStore();
 		this.devtoolUiStore = new DevtoolUiStore();
 		this.startupScreenUiStore = new StartupScreenUiStore();
