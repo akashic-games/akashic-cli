@@ -4,9 +4,10 @@ const os = require("os");
 const path = require("path");
 const mockfs = require("mock-fs");
 const akashicConfig = require("../lib/config");
+const fs = require("fs");
 
 describe("config module", () => {
-	const confPath = path.join(os.tmpdir(), ".akashicrc");
+	const confPath = fs.mkdtempSync(path.join(os.tmpdir(), ".akashicrc"));
 
 	const testValidator = {
 		"apple.item1": "^\\w+$",

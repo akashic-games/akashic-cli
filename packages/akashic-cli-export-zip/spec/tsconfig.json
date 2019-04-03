@@ -5,7 +5,8 @@
     "declaration": true,
     "noImplicitAny": true,
     "module": "commonjs",
-    "outDir": "./build"
+    "outDir": "./build",
+    "types" : ["archiver", "browserify", "commander", "fs-extra", "fs-readdir-recursive", "jasmine", "mock-fs", "node", "uglify-js"]
   },
   "include": [
     "./src/**/*.ts"

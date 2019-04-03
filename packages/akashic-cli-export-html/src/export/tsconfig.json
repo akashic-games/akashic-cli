@@ -5,7 +5,8 @@
     "noImplicitAny": true,
     "module": "commonjs",
     "outDir": "../../tmp/export/build",
-    "newLine": "LF"
+    "newLine": "LF",
+    "types" : ["archiver", "commander", "fs-extra", "fs-readdir-recursive", "node", "uglify-js"]
   },
   "files": [
     "./../../node_modules/@akashic/akashic-engine/lib/main.d.ts",

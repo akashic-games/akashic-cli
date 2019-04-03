@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.15](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli-init@0.3.14...@akashic/akashic-cli-init@0.3.15) (2019-04-03)
+
+**Note:** Version bump only for package @akashic/akashic-cli-init
+
+
+
+
+
+## [0.3.14](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli-init@0.3.13...@akashic/akashic-cli-init@0.3.14) (2019-04-02)
+
+
+### Bug Fixes
+
+* fix where os.tmpdir() is used ([#55](https://github-com-akashic-cli/akashic-games/akashic-cli/issues/55)) ([8701ec7](https://github-com-akashic-cli/akashic-games/akashic-cli/commit/8701ec7))
+
+
+
+
+
+## [0.3.13](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli-init@0.3.12...@akashic/akashic-cli-init@0.3.13) (2019-03-28)
+
+**Note:** Version bump only for package @akashic/akashic-cli-init
+
+
+
+
+
 ## [0.3.12](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli-init@0.3.11...@akashic/akashic-cli-init@0.3.12) (2019-03-22)
 
 
@@ -30,7 +57,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Bug Fixes
 
-*  npm script of zip in Akashic-cli-init ([#39](https://github-com-akashic-cli/akashic-games/akashic-cli/issues/39)) ([60f7013](https://github-com-akashic-cli/akashic-games/akashic-cli/commit/60f7013))
+* npm script of zip in Akashic-cli-init ([#39](https://github-com-akashic-cli/akashic-games/akashic-cli/issues/39)) ([60f7013](https://github-com-akashic-cli/akashic-games/akashic-cli/commit/60f7013))
 
 
 
