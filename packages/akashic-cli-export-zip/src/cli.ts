@@ -70,7 +70,7 @@ export function run(argv: string[]): void {
 		minify: commander["minify"],
 		hashFilename: commander["hashFilename"],
 		bundle: commander["bundle"],
-		babel: commander["babel"],
+		babel: commander["es5Downpile"],
 		omitEmptyJs: commander["omitEmptyJs"]
 	});
 }

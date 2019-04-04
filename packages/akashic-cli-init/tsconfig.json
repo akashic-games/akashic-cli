@@ -6,7 +6,8 @@
     "module": "commonjs",
     "outDir": "./lib",
     "declaration": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "types" : ["commander", "form-data", "fs-extra", "node", "request"]
   },
   "files": [
     "./node_modules/typescript/lib/lib.es6.d.ts",

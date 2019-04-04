@@ -13,7 +13,7 @@ export async function extractZipIfNeeded(param: InitParameterObject): Promise<vo
 		return;
 	}
 
-	const temporaryPath = path.join(os.tmpdir(), param.type);
+	const temporaryPath = fs.mkdtempSync(path.join(os.tmpdir(), param.type));
 	param._realTemplateDirectory = temporaryPath;
 
 	const buffer = await getFactoryTemplate(param);

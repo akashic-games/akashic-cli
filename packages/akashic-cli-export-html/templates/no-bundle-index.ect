@@ -5,9 +5,23 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>game</title>
 <script src="./js/option.js"></script>
-<script src="./js/akashic-engine.strip.js"></script>
-<script src="./js/game-driver.strip.js"></script>
-<script src="./js/pdi-browser.strip.js"></script>
+<script src="./js/<%= @engineFilesVariable %>.js"></script>
+<script>
+window.engineFiles = <%= @engineFilesVariable %>;
+window.g = engineFiles.akashicEngine;
+// game-storageでrequireが使用されているので、requireの内容をgame-storage用のものに書き換える
+(function() {
+    var originalRequire = window.require;
+    window.require = function(moduleName) {
+        switch(moduleName) {
+            case "@akashic/akashic-engine":
+                return engineFiles.akashicEngine;
+            default:
+                return this.call(this, moduleName);
+        }
+    };
+})();
+</script>
 <script src="./js/initGlobals.js"></script>
 <script src="./js/build/LocalScriptAsset.js"></script>
 <script src="./js/build/LocalTextAsset.js"></script>

@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli",
-  "version": "1.5.12",
+  "version": "1.5.20",
   "description": "Command-line utility for akashic game development",
   "bin": {
     "akashic": "./bin/akashic"
@@ -12,7 +12,7 @@
     "build": "tsc -p ./",
     "lint": "npm run lint:ts && npm run lint:md",
     "lint:ts": "tslint -c ../tslint.json --project ./tsconfig.json",
-    "lint:md": "remark ./*.md --frail --no-stdout --quiet --rc-path ../.remarkrc",
+    "lint:md": "remark ./*.md --frail --no-stdout --quiet --rc-path ../../.remarkrc",
     "test": "npm run lint",
     "test:jasmine": "jasmine ./spec/**/*[sS]pec.js"
   },
@@ -25,18 +25,18 @@
     "lib"
   ],
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.2.16",
-    "@akashic/akashic-cli-config": "0.1.5",
-    "@akashic/akashic-cli-export-html": "0.2.10",
-    "@akashic/akashic-cli-export-zip": "0.3.6",
-    "@akashic/akashic-cli-init": "0.3.10",
-    "@akashic/akashic-cli-install": "0.3.7",
-    "@akashic/akashic-cli-modify": "0.1.5",
-    "@akashic/akashic-cli-scan": "0.2.7",
-    "@akashic/akashic-cli-serve": "0.0.17",
-    "@akashic/akashic-cli-stat": "0.1.5",
-    "@akashic/akashic-cli-uninstall": "0.3.4",
-    "@akashic/akashic-cli-update": "0.2.4",
+    "@akashic/akashic-cli-commons": "0.2.19",
+    "@akashic/akashic-cli-config": "0.1.9",
+    "@akashic/akashic-cli-export-html": "0.2.15",
+    "@akashic/akashic-cli-export-zip": "0.3.9",
+    "@akashic/akashic-cli-init": "0.3.15",
+    "@akashic/akashic-cli-install": "0.3.10",
+    "@akashic/akashic-cli-modify": "0.1.8",
+    "@akashic/akashic-cli-scan": "0.2.10",
+    "@akashic/akashic-cli-serve": "0.0.23",
+    "@akashic/akashic-cli-stat": "0.1.8",
+    "@akashic/akashic-cli-uninstall": "0.3.7",
+    "@akashic/akashic-cli-update": "0.2.7",
     "commander": "2.8.1"
   },
   "devDependencies": {
@@ -45,8 +45,7 @@
     "jasmine": "3.3.0",
     "jasmine-reporters": "2.0.4",
     "jasmine-terminal-reporter": "0.9.1",
-    "remark-cli": "~2.0.0",
-    "remark-lint": "~5.0.1",
+    "remark-cli": "~6.0.1",
     "rimraf": "^2.6.2",
     "tslint": "~5.12.1",
     "typescript": "~2.8.0"
