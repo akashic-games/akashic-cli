@@ -47,9 +47,9 @@ akashic export html -o ../exported-my-game
 Akashic Engineの詳細な利用方法については、 [公式ページ](https://akashic-games.github.io/) を参照してください。
 
 ## 開発者向け
-* akashic-cli への PullReuest 作成時には、PullRequest の内容にあったラベルを Labels で設定してください。
-  * CHANGELOGに変更内容を記録するために必要な作業となります。
-  * 利用できるラベルの種類は以下の通りです。
+* akashic-cli への PullReuest 作成時には、CHANGELOGに変更内容を記録するために以下の作業が必要になります。
+  * CHANGELOGにPullRequestのタイトルが記載されるため、PullRequestのタイトルには変更内容が分かるように記載してください。
+  * PullRequest の内容にあったラベルを Labels で設定してください。利用できるラベルの種類は以下の通りです。
     * breaking: 互換性の破壊
     * enhancement: 機能追加
     * bug: バグ修正
