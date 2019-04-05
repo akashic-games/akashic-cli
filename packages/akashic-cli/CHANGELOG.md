@@ -77,7 +77,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-
 ## [1.5.11](https://github-com-akashic-cli/akashic-games/akashic-cli/compare/@akashic/akashic-cli@1.5.10...@akashic/akashic-cli@1.5.11) (2019-03-15)
 
 **Note:** Version bump only for package @akashic/akashic-cli

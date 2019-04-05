@@ -1,13 +1,13 @@
-# javascript-game-sample-minimal
+# javascript-game-sample
 
-**javascript-game-sample-minimal**はJavascriptでAkashicのゲームを作る際のサンプルプロジェクトです。
+**javascript-game-sample**はJavascriptでAkashicのゲームを作る際のサンプルプロジェクトです。
 
 ## 利用方法
 
- `javascript-game-sample-minimal` を利用するにはNode.jsが必要です。
+ `javascript-game-sample` を利用するにはNode.jsが必要です。
 
 初回のみ、以下のコマンドを実行して、ビルドに必要なパッケージをインストールしてください。
-この作業は `javascript-game-sample-minimal` を新しく生成するごとに必要です。
+この作業は `javascript-game-sample` を新しく生成するごとに必要です。
 
 ```sh
 npm install
@@ -20,6 +20,8 @@ npm install
 * `npm start`
 
 * `npm install -g @akashic/akashic-sandbox` 後、 `akashic-sandbox .`
+
+ゲームを実行するとキャラクターが表示され、タッチ操作で効果音とともに弾を発射します。
 
 ### アセットの更新方法
 
@@ -34,13 +36,13 @@ npm install
 
 ### npm モジュールの追加・削除
 
-`javascript-game-sample-minimal` でnpmモジュールを利用する場合、このディレクトリで `akashic install <package_name>` することで npm モジュールを追加することができます。
+`javascript-game-sample` でnpmモジュールを利用する場合、このディレクトリで `akashic install <package_name>` することで npm モジュールを追加することができます。
 
 また `akashic uninstall <package_name>` すると npm モジュールを削除することができます。
 
 ## エクスポート方法
 
-`javascript-game-sample-minimal` をエクスポートするときは以下のコマンドを利用します。
+`javascript-game-sample` をエクスポートするときは以下のコマンドを利用します。
 
 ### htmlファイルのエクスポート
 
