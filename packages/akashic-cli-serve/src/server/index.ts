@@ -138,6 +138,6 @@ export function run(argv: any): void {
 				`We do not recommend to listen on a well-known port ${serverGlobalConfig.port}.`);
 		}
 		// サーバー起動のログに関してはSystemLoggerで使用していない色を使いたいので緑を選択
-		targetDirs.forEach(dir => console.log(chalk.green(`Hosting ${dir} on http://${serverGlobalConfig.hostname}:${serverGlobalConfig.port}`)));
+		console.log(chalk.green(`Hosting ${targetDirs.join(", ")} on http://${serverGlobalConfig.hostname}:${serverGlobalConfig.port}`));
 	});
 }
