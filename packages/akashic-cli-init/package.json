@@ -11,7 +11,7 @@
     "lint": "npm run lint:ts && npm run lint:md",
     "lint:ts": "tslint -c ../tslint.json --project ./tsconfig.json",
     "lint:md": "remark ./*.md --frail --no-stdout --quiet --rc-path ../../.remarkrc",
-    "zip": "cd ./templates-src && npm run zip:js && npm run zip:ts",
+    "zip": "cd ./templates-src && npm run zip:js && npm run zip:ts && zip:js-min",
     "zip:js": "cd ./templates-src/javascript/ && bestzip ../../templates/javascript.zip *",
     "zip:js-min": "cd ./templates-src/javascript-minimal/ && bestzip ../../templates/javascript-minimal.zip *",
     "zip:ts": "cd ./templates-src/typescript/ && bestzip ../../templates/typescript.zip *",
