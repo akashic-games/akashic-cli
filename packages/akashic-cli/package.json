@@ -12,7 +12,7 @@
     "build": "tsc -p ./",
     "lint": "npm run lint:ts && npm run lint:md",
     "lint:ts": "tslint -c ../tslint.json --project ./tsconfig.json",
-    "lint:md": "remark ./*.md --frail --no-stdout --quiet --rc-path ../../.remarkrc",
+    "lint:md": "remark . --frail --no-stdout --quiet --rc-path ../../.remarkrc",
     "test": "npm run lint",
     "test:jasmine": "jasmine ./spec/**/*[sS]pec.js"
   },
