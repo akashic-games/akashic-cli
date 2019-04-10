@@ -20,7 +20,7 @@ export const createHandlerToGetEngineConfig = (dirPaths: string[], isRaw: boolea
 			const hostname = serverGlobalConfig.useGivenHostname ? serverGlobalConfig.hostname : urlInfo[0];
 			const port = serverGlobalConfig.useGivenPort ? serverGlobalConfig.port : parseInt(urlInfo[1], 10);
 			const baseUrl = `http://${hostname}:${port}`;
-			const engineConfigJson = EngineConfig.getEngineConfig(baseUrl, contentId, dirPaths[contentId], isRaw);
+			const engineConfigJson = EngineConfig.getEngineConfig({ baseUrl, contentId, baseDir: dirPaths[contentId], isRaw });
 			// akashic-gameview側でレスポンスがengineConfigJsonの形式なっていることを前提にしているので、resoponseSuccessは使わない
 			res.status(200).json(engineConfigJson);
 		} catch (e) {

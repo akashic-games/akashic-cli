@@ -108,6 +108,7 @@ export class PlayEntity {
 		const i = new LocalInstanceEntity({
 			play: this,
 			contentUrl: param.contentUrl != null ? param.contentUrl : this._contentUrl, // TODO: 本来は this._clientContentUrl をみるべき
+			// contentUrl: this._clientContentUrl,  // クライアントスクリプトデバッグのためにはこちらに戻す必要あり
 			coeHandler: param.coeHandler,
 			parent: param.parent,
 			...param
