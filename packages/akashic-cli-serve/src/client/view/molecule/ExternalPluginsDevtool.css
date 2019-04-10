@@ -1,0 +1,54 @@
+.external-plugin-devtool {
+	box-sizing: border-box;
+	flex: 1 1 auto;
+	display: flex;
+	flex-flow: row nowrap;
+	background: var(--color-tool-bg);
+}
+
+.editor-container {
+	flex: 1 1 auto;
+	overflow-y: auto;
+	display: flex;
+	flex-flow: column nowrap;
+}
+
+.editor-container > .editor-content-url {
+	font-family: monospace;
+	font-size: 12px;
+	outline: none;
+	padding: 5px;
+	border-width: 0;
+	border-bottom: 1px var(--color-tool-border) solid;
+	resize: none;
+	color: #555;
+}
+
+.editor-container > .editor-session-parameters {
+	flex: 1 1 auto;
+	font-family: monospace;
+	font-size: 12px;
+	outline: none;
+	padding: 5px;
+	border-width: 0;
+	resize: none;
+	color: #555;
+}
+
+.playtree-list-container {
+	flex: 1 1 auto;
+	display: flex;
+	flex-flow: column nowrap;
+}
+
+.playtree-list {
+	color: inherit;
+	cursor: pointer;
+}
+
+.playtree-list-active {
+	color: red;
+	cursor: pointer;
+}
+
+

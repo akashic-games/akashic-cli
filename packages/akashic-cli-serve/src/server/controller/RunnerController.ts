@@ -9,6 +9,17 @@ import {
 import { PlayStore } from "../domain/PlayStore";
 import { RunnerStore } from "../domain/RunnerStore";
 
+export const createHandlerToGetRunners = (runnerStore: RunnerStore): express.RequestHandler => {
+	return async (req, res, next) => {
+		try {
+			const runners = await runnerStore.getRunners();
+			responseSuccess<any>(res, 200, runners.map(runner => ({ runnerId: runner.runnerId, playId: runner.playId })));
+		} catch (e) {
+			next(e);
+		}
+	};
+};
+
 export const createHandlerToCreateRunner = (playStore: PlayStore, runnerStore: RunnerStore): express.RequestHandler => {
 	return async (req, res, next) => {
 		try {

@@ -1,3 +1,4 @@
+import { PlayTree } from "../../common/types/PlayTree";
 import { Store } from "../store/Store";
 
 export class UiOperator {
@@ -62,5 +63,21 @@ export class UiOperator {
 
 	setJoinsAutomatically = (join: boolean): void => {
 		this.store.startupScreenUiStore.setJoinsAutomatically(join);
+	}
+
+	setPlayTree = (playTree: PlayTree[]): void => {
+		this.store.devtoolUiStore.setPlayTree(playTree);
+	}
+
+	setContentUrl = (url: string): void => {
+		this.store.externalPluginUiStore.setContentUrl(url);
+	}
+
+	setSessionParameters = (params: any): void => {
+		this.store.externalPluginUiStore.setSessionParameters(params);
+	}
+
+	setCurrentPlayId = (playId: string | null): void => {
+		this.store.externalPluginUiStore.setCurrentPlay(playId);
 	}
 }

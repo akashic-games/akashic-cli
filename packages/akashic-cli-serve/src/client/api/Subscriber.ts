@@ -11,7 +11,8 @@ import {
 	RunnerResumeTestbedEvent,
 	ClientInstanceAppearTestbedEvent,
 	ClientInstanceDisappearTestbedEvent,
-	PlayBroadcastTestbedEvent
+	PlayBroadcastTestbedEvent,
+	PlayTreeTestbedEvent
 } from "../../common/types/TestbedEvent";
 import { socketInstance } from "./socketInstance";
 
@@ -26,6 +27,7 @@ export const onRunnerPause = new Trigger<RunnerPauseTestbedEvent>();
 export const onRunnerResume = new Trigger<RunnerResumeTestbedEvent>();
 export const onClientInstanceAppear = new Trigger<ClientInstanceAppearTestbedEvent>();
 export const onClientInstanceDisappear = new Trigger<ClientInstanceDisappearTestbedEvent>();
+export const onPlayTreeChange = new Trigger<PlayTreeTestbedEvent>();
 export const onBroadcast = new Trigger<any>();
 
 const socket = socketInstance();
@@ -40,4 +42,5 @@ socket.on("runnerPause", (arg: RunnerPauseTestbedEvent) => onRunnerPause.fire(ar
 socket.on("runnerResume", (arg: RunnerResumeTestbedEvent) => onRunnerResume.fire(arg));
 socket.on("clientInstanceAppear", (arg: ClientInstanceAppearTestbedEvent) => onClientInstanceAppear.fire(arg));
 socket.on("clientInstanceDisappear", (arg: ClientInstanceDisappearTestbedEvent) => onClientInstanceDisappear.fire(arg));
+socket.on("playTreeChange", (arg: PlayTreeTestbedEvent) => onPlayTreeChange.fire(arg));
 socket.on("playBroadcast", (arg: PlayBroadcastTestbedEvent) => onBroadcast.fire(arg));

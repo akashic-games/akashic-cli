@@ -179,8 +179,9 @@ export class SocketIOAMFlowManager {
 
 		socket.on("amflow:close", (connectionId: string, callback: () => void) => {
 			const conn = this.getConncetion(connectionId);
-			if (!conn)
+			if (!conn || this.playStore.getPlay(conn.playId) == null) {
 				return callback();
+			}
 			conn.amflow.close(callback);
 
 			delete this.connectionMap[connectionId];
@@ -193,7 +194,10 @@ export class SocketIOAMFlowManager {
 				const conn = this.connectionMap[connId];
 				if (conn.socket === socket) {
 					this.deletePlayToken(conn.lastToken);
-					conn.amflow.close(doNothing);
+					// TODO: headless-driver 側で終了済みのプレーの AMFlowClient#close() 呼び出し時にエラーが発生しないように修正
+					if (this.playStore.getPlay(conn.playId) != null) {
+						conn.amflow.close(doNothing);
+					}
 					delete this.connectionMap[connId];
 				}
 			});

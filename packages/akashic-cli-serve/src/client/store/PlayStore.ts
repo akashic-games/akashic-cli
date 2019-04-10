@@ -19,13 +19,11 @@ import { PlayEntity } from "./PlayEntity";
 export interface CreatePlayParameterObject {
 	contentUrl: string;
 	clientContentUrl?: string;
-	parent?: PlayEntity;
 }
 
 export interface CreateStandalonePlayParameterObject {
 	contentUrl: string;
 	playId: string;
-	parent?: PlayEntity;
 }
 
 export class PlayStore {
@@ -88,8 +86,7 @@ export class PlayStore {
 		const play = new PlayEntity({
 			playId,
 			contentUrl: param.contentUrl,
-			clientContentUrl: "dummy",
-			parent: param.parent
+			clientContentUrl: "dummy"
 		});
 		this.plays[playId] = play;
 
@@ -140,6 +137,8 @@ export class PlayStore {
 	}
 
 	private handleRunnerRemove = (e: RunnerRemoveTestbedEvent): void => {
+		if (this.plays[e.playId] == null)
+			return;
 		this.plays[e.playId].handleRunnerRemove(e.runnerId);
 	}
 

@@ -11,6 +11,7 @@ import { PlayManager, RunnerManager, setSystemLogger, getSystemLogger } from "@a
 import { createApiRouter } from "./route/ApiRoute";
 import { RunnerStore } from "./domain/RunnerStore";
 import { PlayStore } from "./domain/PlayStore";
+import { PlayTreeStore } from "./domain/PlayTreeStore";
 import { SocketIOAMFlowManager } from "./domain/SocketIOAMFlowManager";
 import { serverGlobalConfig } from "./common/ServerGlobalConfig";
 import {createContentsRouter} from "./route/ContentsRoute";
@@ -93,6 +94,7 @@ export function run(argv: any): void {
 	const playManager = new PlayManager();
 	const runnerManager = new RunnerManager(playManager);
 	const playStore = new PlayStore({playManager});
+	const playTreeStore = new PlayTreeStore();
 	const runnerStore = new RunnerStore({runnerManager});
 	const amflowManager = new SocketIOAMFlowManager({playStore});
 
@@ -115,7 +117,7 @@ export function run(argv: any): void {
 
 	app.use("^\/$", (req, res, next) => res.redirect("/public/"));
 	app.use("/public/", express.static(path.join(__dirname, "..", "..", "www")));
-	app.use("/api/", createApiRouter({ playStore, runnerStore, amflowManager, io }));
+	app.use("/api/", createApiRouter({ playStore, playTreeStore, runnerStore, amflowManager, io }));
 	app.use("/contents/", createContentsRouter({ targetDirs }));
 
 	io.on("connection", (socket: socketio.Socket) => { amflowManager.setupSocketIOAMFlow(socket); });
@@ -131,6 +133,7 @@ export function run(argv: any): void {
 	runnerStore.onRunnerRemove.add(arg => { io.emit("runnerRemove", arg); });
 	runnerStore.onRunnerPause.add(arg => { io.emit("runnerPause", arg); });
 	runnerStore.onRunnerResume.add(arg => { io.emit("runnerResume", arg); });
+	playTreeStore.onPlayTreeChange.add(arg => { io.emit("playTreeChange", arg); });
 
 	httpServer.listen(serverGlobalConfig.port, () => {
 		if (serverGlobalConfig.port < 1024) {

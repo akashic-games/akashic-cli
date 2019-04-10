@@ -14,6 +14,7 @@ export interface GameState {
 export interface CreateCoeLocalInstanceParameterObject {
 	local: boolean;
 	playId: string;
+	parent?: LocalInstanceEntity;
 	contentUrl?: string;
 	argument?: any;
 	initialEvents?: Event[];
@@ -26,6 +27,7 @@ export interface CreateCoeLocalInstanceParameterObject {
 
 export interface CoePluginEntityParameterObject {
 	gameViewManager: GameViewManager;
+	localInstance: LocalInstanceEntity;
 	onLocalInstanceCreate: (params: CreateCoeLocalInstanceParameterObject) => Promise<LocalInstanceEntity>;
 	onLocalInstanceDelete: (playId: string) => Promise<void>;
 }
@@ -33,11 +35,13 @@ export interface CoePluginEntityParameterObject {
 export class CoePluginEntity {
 	private _gameViewManager: GameViewManager;
 	private _localInstance: LocalInstanceEntity;
+	private _childLocalInstance: LocalInstanceEntity;
 	private _coePluginMessageHandler: (parameters: CoeExternalMessage) => void;
 	private _createLocalInstance: (params: CreateCoeLocalInstanceParameterObject) => Promise<LocalInstanceEntity>;
 	private _deleteLocalInstance: (playId: string) => Promise<void>;
 
 	constructor(param: CoePluginEntityParameterObject) {
+		this._localInstance = param.localInstance;
 		this._gameViewManager = param.gameViewManager;
 		this._createLocalInstance = param.onLocalInstanceCreate;
 		this._deleteLocalInstance = param.onLocalInstanceDelete;
@@ -89,11 +93,11 @@ export class CoePluginEntity {
 				return;
 			}
 			if (parameters.needsResult) {
-				const instance = this._localInstance;
-				if (instance == null) {
+				const childInstance = this._childLocalInstance;
+				if (childInstance == null) {
 					throw new Error("Invalid operation");
 				}
-				const gameState = await this._gameViewManager.getGameVars<GameState>(instance.gameContent, "gameState");
+				const gameState = await this._gameViewManager.getGameVars<GameState>(childInstance.gameContent, "gameState");
 				this._coePluginMessageHandler({
 					type: "end",
 					result: gameState ? gameState.score : null,
@@ -111,16 +115,39 @@ export class CoePluginEntity {
 		// TODO
 	}
 
-	private async _startSession(_contentUrl: string, _parameters: any): Promise<void> {
-		// TODO
+	private async _startSession(contentUrl: string, parameters: any): Promise<void> {
+		try {
+			this._childLocalInstance = await this._createLocalInstance({
+				contentUrl,
+				playId: parameters.sessionId,
+				local: false,
+				parent: this._localInstance,
+				argument: {
+					coe: {
+						permission: {
+							advance: true,
+							advanceRequest: true,
+							aggregation: true
+						},
+						roles: ["broadcaster"],
+						debugMode: false
+					}
+				},
+				initialEvents: parameters.localEvents
+			});
+		} catch (e) {
+			// TODO: エラーハンドリング
+			console.error(e);
+		}
 	}
 
 	private async _startLocalSession(contentUrl: string, parameters: CoeStartSessionParameterObject): Promise<void> {
 		try {
-			this._localInstance = await this._createLocalInstance({
+			this._childLocalInstance = await this._createLocalInstance({
 				contentUrl,
 				playId: parameters.sessionId,
 				local: true,
+				parent: this._localInstance,
 				argument: {
 					coe: {
 						permission: {

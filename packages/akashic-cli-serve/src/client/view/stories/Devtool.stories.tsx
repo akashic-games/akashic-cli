@@ -47,6 +47,17 @@ const TestWithBehaviour = observer(() => (
 			],
 			onClickAddInstance: action("add-instance")
 		}}
+		externalPluginsDevtoolProps={{
+			childSessionContentUrl: "https://localhost/1234",
+			childSessionParameters: "{}",
+			currentPlayId: "0",
+			onChangeChildSessionContentUrl: action("external-plugin:change-content-url"),
+			onChangeChildSessionParameters: action("external-plugin:change-session-parameters"),
+			onChangeCurrentPlayId: action("external-plugin:change-current-play"),
+			onClickCreateChildPlay: action("external-plugin:create-child"),
+			onClickSuspendChildPlay: action("external-plugin:suspend-child"),
+			playTree: [ { playId: "0", children: [] } ]
+		}}
 	/>
 ));
 
@@ -108,6 +119,17 @@ storiesOf("o-Devtool", module)
 					{ type: "passive", env: "Firefox", playerId: "asfaiout24", name: "player-27", isJoined: false }
 				],
 				onClickAddInstance: action("add-instance")
+			}}
+			externalPluginsDevtoolProps={{
+				childSessionContentUrl: "https://localhost/1234",
+				childSessionParameters: "{}",
+				currentPlayId: "0",
+				onChangeChildSessionContentUrl: action("external-plugin:change-content-url"),
+				onChangeChildSessionParameters: action("external-plugin:change-session-parameters"),
+				onChangeCurrentPlayId: action("external-plugin:change-current-play"),
+				onClickCreateChildPlay: action("external-plugin:create-child"),
+				onClickSuspendChildPlay: action("external-plugin:suspend-child"),
+				playTree: [ { playId: "0", children: [] } ]
 			}}
 		/>
 	))
@@ -176,6 +198,76 @@ storiesOf("o-Devtool", module)
 					{ type: "passive", env: "Firefox", playerId: "asfaiout", name: "player-3", isJoined: false }
 				],
 				onClickAddInstance: action("add-instance")
+			}}
+			externalPluginsDevtoolProps={{
+				childSessionContentUrl: "https://localhost/1234",
+				childSessionParameters: "{}",
+				currentPlayId: "0",
+				onChangeChildSessionContentUrl: action("external-plugin:change-content-url"),
+				onChangeChildSessionParameters: action("external-plugin:change-session-parameters"),
+				onChangeCurrentPlayId: action("external-plugin:change-current-play"),
+				onClickCreateChildPlay: action("external-plugin:create-child"),
+				onClickSuspendChildPlay: action("external-plugin:suspend-child"),
+				playTree: [ { playId: "0", children: [] } ]
+			}}
+		/>
+	))
+	.add("external-plugins", () => (
+		<Devtool
+			height={300}
+			minHeight={200}
+			onResizeHeight={action("resize-height")}
+			activeDevtool={"ExternalPlugins"}
+			onSelectDevtool={action("select-tool")}
+			eventsDevtoolProps={{
+				showsEventList: true,
+				eventListWidth: 250,
+				eventListMinWidth: 200,
+				onEventListResize: action("events:list-resize"),
+				onToggleList: action("events:toggle-list"),
+				eventNames: [
+					"Foo",
+					"Start",
+					"Stop",
+					"A very long event name to see how it will be shown on your display ya?"
+				],
+				eventEditContent: `["test", 1]`,
+				onClickSendEvent: action("events:send"),
+				onClickCopyEvent: action("events:copy"),
+				onClickSendEditingEvent: action("events:send-edit"),
+				onEventEditContentChanged: action("events:edit")
+			}}
+			instancesDevtoolProps={{
+				instances: [
+					{ type: "active", env: "(server)", playerId: null, name: null, isJoined: false },
+					{ type: "passive", env: "Chrome", playerId: "1234567890", name: "player-1", isJoined: true },
+					{ type: "passive", env: "Chrome", playerId: "aa0941jlta", name: "player-2", isJoined: false },
+					{ type: "passive", env: "Firefox", playerId: "asfaiout", name: "player-3", isJoined: true }
+				],
+				onClickAddInstance: action("add-instance")
+			}}
+			externalPluginsDevtoolProps={{
+				childSessionContentUrl: "https://localhost/1234",
+				childSessionParameters: "{}",
+				currentPlayId: "0",
+				onChangeChildSessionContentUrl: action("external-plugin:change-content-url"),
+				onChangeChildSessionParameters: action("external-plugin:change-session-parameters"),
+				onChangeCurrentPlayId: action("external-plugin:change-current-play"),
+				onClickCreateChildPlay: action("external-plugin:create-child"),
+				onClickSuspendChildPlay: action("external-plugin:suspend-child"),
+				playTree: [
+					{ playId: "0", children: [
+						{ playId: "0-1", children: [] },
+						{ playId: "0-2", children: [
+							{ playId: "0-2-1", children: [] },
+							{ playId: "0-2-2", children: [] },
+							{ playId: "0-2-3", children: [] }
+						] },
+						{ playId: "0-3", children: [] }
+					] },
+					{ playId: "1", children: [] },
+					{ playId: "2", children: [] }
+				]
 			}}
 		/>
 	))

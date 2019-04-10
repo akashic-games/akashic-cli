@@ -29,6 +29,7 @@ export interface LocalInstanceEntityParameterObject {
 	argument?: any;
 	playToken?: string;
 	playlogServerUrl?: string;
+	parent?: LocalInstanceEntity;
 	coeHandler?: {
 		onLocalInstanceCreate: (params: CreateCoeLocalInstanceParameterObject) => Promise<LocalInstanceEntity>;
 		onLocalInstanceDelete: (playId: string) => Promise<void>;
@@ -86,6 +87,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 		if (params.coeHandler != null) {
 			this.coePlugin = new CoePluginEntity({
 				gameViewManager: this._gameViewManager,
+				localInstance: this,
 				onLocalInstanceCreate: params.coeHandler.onLocalInstanceCreate,
 				onLocalInstanceDelete: params.coeHandler.onLocalInstanceDelete
 			});
@@ -93,6 +95,11 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 				if (name !== "coe") return;
 				const game = this._agvGameContent.getGame();
 				this.coePlugin.bootstrap(game, this._agvGameContent);
+			});
+		}
+		if (params.parent != null) {
+			params.parent.onStop.addOnce(() => {
+				this.stop();
 			});
 		}
 	}
