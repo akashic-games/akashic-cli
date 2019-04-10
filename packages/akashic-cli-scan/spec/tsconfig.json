@@ -5,7 +5,8 @@
     "declaration": true,
     "noImplicitAny": true,
     "module": "commonjs",
-    "outDir": "./build"
+    "outDir": "./build",
+    "types" : ["image-size", "jasmine", "mock-fs", "musicmetadata", "node"]
   },
   "filesGlob": [
     "../node_modules/typescript/lib/lib.es6.d.ts",

@@ -5,7 +5,8 @@
     "noImplicitAny": true,
     "module": "commonjs",
     "outDir": "./lib",
-    "declaration": true
+    "declaration": true,
+    "types" : ["commander", "jasmine", "node"]
   },
   "filesGlob": [
     "./node_modules/typescript/lib/lib.core.es6.d.ts",

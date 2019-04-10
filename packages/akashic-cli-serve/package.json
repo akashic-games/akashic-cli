@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-serve",
-  "version": "0.0.20",
+  "version": "0.0.25",
   "description": "A development server for Akashic Engine",
   "scripts": {
     "prepublish": "npm run setup && npm run build",
@@ -16,7 +16,7 @@
     "lint": "npm run lint:client && npm run lint:server && npm run lint:md",
     "lint:client": "tslint -p ./src/client -c tslint.json 'src/client/**/*.ts*' 'src/common/**/*.ts'",
     "lint:server": "tslint -p ./src/server -c tslint.json 'src/server/**/*.ts'",
-    "lint:md": "remark ./*.md --frail --no-stdout --quiet --rc-path ../.remarkrc",
+    "lint:md": "remark . --frail --no-stdout --quiet --rc-path ../../.remarkrc",
     "storybook": "start-storybook -p 9001 -c .storybook -s ./www"
   },
   "author": "DWANGO Co., Ltd.",
@@ -25,7 +25,7 @@
     "akashic-cli-serve": "./bin/run"
   },
   "dependencies": {
-    "@akashic/headless-driver": "0.2.1",
+    "@akashic/headless-driver": "0.3.7",
     "@akashic/trigger": "0.1.5",
     "chalk": "~2.4.2",
     "chokidar": "^2.1.2",
@@ -62,8 +62,7 @@
     "query-string": "~5.1.1",
     "react": "~16.4.2",
     "react-dom": "~16.4.2",
-    "remark-cli": "~2.0.0",
-    "remark-lint": "~5.0.1",
+    "remark-cli": "~6.0.1",
     "shx": "^0.3.2",
     "socket.io-client": "~2.2.0",
     "storybook-addon-jsx": "~6.0.0",
@@ -78,7 +77,7 @@
     "whatwg-fetch": "~3.0.0"
   },
   "optionalDependencies": {
-    "@akashic/akashic-gameview-web": "~0.10.21"
+    "@akashic/akashic-gameview-web": "0.10.22"
   },
   "files": [
     "package.json",
