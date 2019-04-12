@@ -32,8 +32,7 @@ export interface LocalInstanceEntityParameterObject {
 	playlogServerUrl?: string;
 	parent?: LocalInstanceEntity;
 	coeHandler?: {
-		onLocalInstanceCreate: (params: CreateCoeLocalInstanceParameterObject) => Promise<LocalInstanceEntity>;
-		onLocalInstanceDelete: (playId: string) => Promise<void>;
+		createLocalInstance: (params: CreateCoeLocalInstanceParameterObject) => Promise<LocalInstanceEntity>;
 	};
 }
 
@@ -91,8 +90,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 			this.coePlugin = new CoePluginEntity({
 				gameViewManager: this._gameViewManager,
 				targetInstance: this,
-				onLocalInstanceCreate: params.coeHandler.onLocalInstanceCreate,
-				onLocalInstanceDelete: params.coeHandler.onLocalInstanceDelete
+				createLocalInstance: params.coeHandler.createLocalInstance
 			});
 			this._agvGameContent.onExternalPluginRegister.addOnce((name: string) => {
 				if (name !== "coe") return;

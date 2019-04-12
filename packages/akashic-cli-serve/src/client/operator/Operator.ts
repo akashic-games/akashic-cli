@@ -1,3 +1,4 @@
+import { EventCode } from "@akashic/playlog";
 import { PlayBroadcastTestbedEvent, PlayTreeTestbedEvent } from "../../common/types/TestbedEvent";
 import * as ApiClient from "../api/ApiClient";
 import * as Subscriber from "../api/Subscriber";
@@ -106,8 +107,7 @@ export class Operator {
 			player: store.player,
 			argument: params != null ? params.instanceArgument : undefined,
 			coeHandler: {
-				onLocalInstanceCreate: this._createLocalInstance,
-				onLocalInstanceDelete: this._deleteLocalInstance
+				createLocalInstance: this._createLocalInstance
 			}
 		});
 		store.setCurrentLocalInstance(instance);
@@ -143,8 +143,8 @@ export class Operator {
 		}
 		const childPlay = await this.createNewPlay({ contentUrl, clientContentUrl });
 		parentPlay.amflow.sendEvent([
-			32,
-			null,
+			EventCode.Message,
+			2,
 			":akashic",
 			{
 				type: "child_start",
@@ -165,9 +165,14 @@ export class Operator {
 		// TODO: headless-driver 側で AMFLowClient#authenticate() が完了する前に sendEvent() を呼んでも問題ないようにする
 		const polling = () => {
 			if (childPlay.amflow._permission != null) {
+				// 子セッションの制御プレイヤーをjoinさせる必要があるが、それが誰かはサービスが決める。
+				// serveはひとまず単に親セッションと同じプレイヤーをjoinさせることにする。
+				parentPlay.joinedPlayerTable.forEach(p => {
+					childPlay.amflow.sendEvent([EventCode.Join, 3, p.id, p.name]);
+				});
 				childPlay.amflow.sendEvent([
-					32,
-					null,
+					EventCode.Message,
+					2,
 					":akashic",
 					{
 						type: "start",
@@ -205,8 +210,7 @@ export class Operator {
 				argument: params.argument,
 				initialEvents: params.initialEvents,
 				coeHandler: {
-					onLocalInstanceCreate: this._createLocalInstance,
-					onLocalInstanceDelete: this._deleteLocalInstance
+					createLocalInstance: this._createLocalInstance
 				},
 				parent: params.parent
 			};
@@ -224,14 +228,6 @@ export class Operator {
 			};
 		}
 		return await play.createLocalInstance(createInstanceParam);
-	}
-
-	private _deleteLocalInstance = async (playId: string) => {
-		const play = this.store.playStore.plays[playId];
-		if (play == null) {
-			throw new Error("Play not found" + playId);
-		}
-		await play.teardown();
 	}
 
 	private async _createServerLoop(): Promise<PlayEntity> {

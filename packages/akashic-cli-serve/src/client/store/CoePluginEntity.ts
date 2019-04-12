@@ -25,8 +25,7 @@ export interface CreateCoeLocalInstanceParameterObject {
 	argument?: any;
 	initialEvents?: Event[];
 	coeHandler?: {
-		onLocalInstanceCreate: (params: CreateCoeLocalInstanceParameterObject) => Promise<LocalInstanceEntity>;
-		onLocalInstanceDelete: (playId: string) => Promise<void>;
+		createLocalInstance: (params: CreateCoeLocalInstanceParameterObject) => Promise<LocalInstanceEntity>;
 	};
 }
 
@@ -34,8 +33,7 @@ export interface CreateCoeLocalInstanceParameterObject {
 export interface CoePluginEntityParameterObject {
 	gameViewManager: GameViewManager;
 	targetInstance: LocalInstanceEntity;
-	onLocalInstanceCreate: (params: CreateCoeLocalInstanceParameterObject) => Promise<LocalInstanceEntity>;
-	onLocalInstanceDelete: (playId: string) => Promise<void>;
+	createLocalInstance: (params: CreateCoeLocalInstanceParameterObject) => Promise<LocalInstanceEntity>;
 }
 
 
@@ -44,14 +42,12 @@ export class CoePluginEntity {
 	private _targetInstance: LocalInstanceEntity;
 	private _childrenTable: { [sessionId: string]: CoeSessionData };
 	private _createLocalInstance: (params: CreateCoeLocalInstanceParameterObject) => Promise<LocalInstanceEntity>;
-	private _deleteLocalInstance: (playId: string) => Promise<void>;
 
 	constructor(param: CoePluginEntityParameterObject) {
 		this._gameViewManager = param.gameViewManager;
 		this._targetInstance = param.targetInstance;
 		this._childrenTable = {};
-		this._createLocalInstance = param.onLocalInstanceCreate;
-		this._deleteLocalInstance = param.onLocalInstanceDelete;
+		this._createLocalInstance = param.createLocalInstance;
 	}
 
 	async bootstrap(game: agv.GameLike, _gameContent: agv.GameContent): Promise<void> {
@@ -101,8 +97,9 @@ export class CoePluginEntity {
 				throw new Error("Invalid operation");
 			}
 
+			const child = this._childrenTable[sessionId];
+
 			if (parameters.needsResult) {
-				const child = this._childrenTable[sessionId];
 				const gameState = await this._gameViewManager.getGameVars<GameState>(child.instance.gameContent, "gameState");
 				child.messageHandler({
 					type: "end",
@@ -110,7 +107,8 @@ export class CoePluginEntity {
 					sessionId
 				});
 			}
-			await this._deleteLocalInstance(sessionId);
+
+			child.instance.stop();
 		} catch (e) {
 			// TODO: エラーハンドリング
 			console.error(e);

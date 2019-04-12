@@ -27,8 +27,7 @@ export interface CreateLocalInstanceParameterObject {
 	argument?: any;
 	initialEvents?: playlog.Event[];
 	coeHandler?: {
-		onLocalInstanceCreate: (params: CreateCoeLocalInstanceParameterObject) => Promise<LocalInstanceEntity>;
-		onLocalInstanceDelete: (playId: string) => Promise<void>;
+		createLocalInstance: (params: CreateCoeLocalInstanceParameterObject) => Promise<LocalInstanceEntity>;
 	};
 }
 
@@ -47,8 +46,6 @@ export interface PlayEntityParameterObject {
 }
 
 export class PlayEntity {
-	onTeardown: Trigger<PlayEntity>;
-
 	readonly playId: string;
 	readonly amflow: SocketIOAMFlowClient;
 
@@ -80,7 +77,6 @@ export class PlayEntity {
 		this.status = "preparing";
 		this.localInstances = [];
 		this.serverInstances = !param.runners ? [] : param.runners.map(desc => new ServerInstanceEntity({ runnerId: desc.runnerId, play: this }));
-		this.onTeardown = new Trigger();
 		this._timeKeeper = new TimeKeeper();
 		this._clientContentUrl = param.clientContentUrl!;
 		this._contentUrl = param.contentUrl;
@@ -227,11 +223,9 @@ export class PlayEntity {
 		this.isActivePausing = false;
 	}
 
-	async teardown(): Promise<void> {
+	async handleSuspend(): Promise<void> {
 		this._pauseTimeKeeper();
 		await this.deleteAllLocalInstances();
-		await this.deleteAllServerInstances();
-		this.onTeardown.fire(this);
 	}
 
 	private _handleLocalInstanceStopped = (instance: LocalInstanceEntity): void => {

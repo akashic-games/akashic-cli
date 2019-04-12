@@ -102,7 +102,7 @@ export class PlayStore {
 
 		// TODO LocalInstance はここで解放すべき？
 		if (e.playStatus === "suspending") {
-			play.teardown();
+			play.handleSuspend();
 			delete this.plays[e.playId];
 		}
 	}
