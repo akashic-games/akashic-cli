@@ -137,20 +137,11 @@ export class Operator {
 	createChildPlayAndSendEvents = async (param: CreateNewPlayAndSendEventsParameterObject): Promise<void> => {
 		const {parentPlayId, contentUrl, clientContentUrl, sessionParameters} = param;
 		const {type, version, url} = param.application;
-		let parentPlay: PlayEntity;
-		if (parentPlayId != null) {
-			parentPlay = this.store.playStore.plays[parentPlayId];
-		}
-		if (parentPlay == null) {
-			parentPlay = this.getCurrentPlay();
-		}
+		const parentPlay = ((parentPlayId != null) && this.store.playStore.plays[parentPlayId]) || this.getCurrentPlay();
 		if (parentPlay == null) {
 			throw new Error("play not found");
 		}
-		const childPlay = await this.createNewPlay({
-			contentUrl,
-			clientContentUrl
-		});
+		const childPlay = await this.createNewPlay({ contentUrl, clientContentUrl });
 		parentPlay.amflow.sendEvent([
 			32,
 			null,
@@ -170,8 +161,9 @@ export class Operator {
 		await ApiClient.addChildPlay(parentPlay.playId, childPlay.playId);
 		await ApiClient.getPlayTree();
 		this.store.externalPluginUiStore.setCurrentPlay(childPlay.playId);
+
 		// TODO: headless-driver 側で AMFLowClient#authenticate() が完了する前に sendEvent() を呼んでも問題ないようにする
-		const pooling = () => {
+		const polling = () => {
 			if (childPlay.amflow._permission != null) {
 				childPlay.amflow.sendEvent([
 					32,
@@ -185,10 +177,10 @@ export class Operator {
 					}
 				]);
 			} else {
-				setTimeout(pooling, 500);
+				setTimeout(polling, 500);
 			}
 		};
-		pooling();
+		polling();
 	}
 
 	suspendPlayAndSendEvents = async (playId: string): Promise<void> => {

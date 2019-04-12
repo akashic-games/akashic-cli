@@ -1,3 +1,4 @@
+import cloneDeep = require("lodash.clonedeep");
 import {action, observable, computed} from "mobx";
 import {Trigger} from "@akashic/trigger";
 import {TimeKeeper} from "../../common/TimeKeeper";
@@ -47,6 +48,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 	readonly play: PlayEntity;
 	readonly coePlugin: CoePluginEntity;
 	readonly contentUrl: string;
+	readonly argument: any;
 
 	private _timeKeeper: TimeKeeper;
 	private _gameViewManager: GameViewManager;
@@ -59,6 +61,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 		this.play = params.play;
 		this.isPaused = false;
 		this.contentUrl = params.contentUrl;
+		this.argument = params.argument;
 		this._timeKeeper = new TimeKeeper();
 		this._gameViewManager = params.gameViewManager;
 		const playConfig: agv.PlaylogConfig = {
@@ -82,12 +85,12 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 			},
 			playConfig,
 			gameLoaderCustomizer,
-			argument: params.argument
+			argument: cloneDeep(params.argument)
 		});
 		if (params.coeHandler != null) {
 			this.coePlugin = new CoePluginEntity({
 				gameViewManager: this._gameViewManager,
-				localInstance: this,
+				targetInstance: this,
 				onLocalInstanceCreate: params.coeHandler.onLocalInstanceCreate,
 				onLocalInstanceDelete: params.coeHandler.onLocalInstanceDelete
 			});
