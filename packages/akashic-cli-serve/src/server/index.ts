@@ -22,8 +22,10 @@ function convertToStrings(params: any[]): string[] {
 	return params.map(param => {
 		if (typeof param === "object") {
 			return util.inspect(param, {depth: null});
-		} else {
+		} else if (param != null) {
 			return param.toString();
+		} else {
+			return JSON.stringify(param);
 		}
 	});
 }
