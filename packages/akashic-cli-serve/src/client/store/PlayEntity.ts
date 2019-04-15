@@ -11,9 +11,8 @@ import { GameViewManager } from "../akashic/GameViewManager";
 import { SocketIOAMFlowClient } from "../akashic/SocketIOAMFlowClient";
 import { Player } from "../../common/types/Player";
 import { ExecutionMode } from "./ExecutionMode";
-import { LocalInstanceEntity } from "./LocalInstanceEntity";
+import { LocalInstanceEntity, HandleRegisterPluginParameterObject } from "./LocalInstanceEntity";
 import { ServerInstanceEntity } from "./ServerInstanceEntity";
-import { CreateCoeLocalInstanceParameterObject } from "./CoePluginEntity";
 
 export interface CreateLocalInstanceParameterObject {
 	gameViewManager: GameViewManager;
@@ -26,9 +25,7 @@ export interface CreateLocalInstanceParameterObject {
 	contentUrl?: string;
 	argument?: any;
 	initialEvents?: playlog.Event[];
-	coeHandler?: {
-		createLocalInstance: (params: CreateCoeLocalInstanceParameterObject) => Promise<LocalInstanceEntity>;
-	};
+	handleRegisterPlugin?: (params: HandleRegisterPluginParameterObject) => void;
 }
 
 export interface CreateServerInstanceParameterObject {
@@ -105,8 +102,6 @@ export class PlayEntity {
 			play: this,
 			contentUrl: param.contentUrl != null ? param.contentUrl : this._contentUrl, // TODO: 本来は this._clientContentUrl をみるべき
 			// contentUrl: this._clientContentUrl,  // クライアントスクリプトデバッグのためにはこちらに戻す必要あり
-			coeHandler: param.coeHandler,
-			parent: param.parent,
 			...param
 		});
 		i.onStop.add(this._handleLocalInstanceStopped);

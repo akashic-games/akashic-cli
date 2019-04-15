@@ -17,40 +17,35 @@ export interface CoeSessionData {
 	messageHandler: (parameters: CoeExternalMessage) => void;
 }
 
-export interface CreateCoeLocalInstanceParameterObject {
+export interface CreateSessionInstanceParameterObject {
 	local: boolean;
 	playId: string;
 	parent?: LocalInstanceEntity;
 	contentUrl?: string;
 	argument?: any;
 	initialEvents?: Event[];
-	coeHandler?: {
-		createLocalInstance: (params: CreateCoeLocalInstanceParameterObject) => Promise<LocalInstanceEntity>;
-	};
 }
-
 
 export interface CoePluginEntityParameterObject {
 	gameViewManager: GameViewManager;
 	targetInstance: LocalInstanceEntity;
-	createLocalInstance: (params: CreateCoeLocalInstanceParameterObject) => Promise<LocalInstanceEntity>;
+	createSessionInstance: (params: CreateSessionInstanceParameterObject) => Promise<LocalInstanceEntity>;
 }
-
 
 export class CoePluginEntity {
 	private _gameViewManager: GameViewManager;
 	private _targetInstance: LocalInstanceEntity;
 	private _childrenTable: { [sessionId: string]: CoeSessionData };
-	private _createLocalInstance: (params: CreateCoeLocalInstanceParameterObject) => Promise<LocalInstanceEntity>;
+	private _createSessionInstacne: (params: CreateSessionInstanceParameterObject) => Promise<LocalInstanceEntity>;
 
 	constructor(param: CoePluginEntityParameterObject) {
 		this._gameViewManager = param.gameViewManager;
 		this._targetInstance = param.targetInstance;
 		this._childrenTable = {};
-		this._createLocalInstance = param.createLocalInstance;
+		this._createSessionInstacne = param.createSessionInstance;
 	}
 
-	async bootstrap(game: agv.GameLike, _gameContent: agv.GameContent): Promise<void> {
+	async setup(game: agv.GameLike, _gameContent: agv.GameContent): Promise<void> {
 		game.external.coe = {
 			startSession: this.startSession,
 			exitSession: this.exitSession,
@@ -122,7 +117,7 @@ export class CoePluginEntity {
 	private async _startSession(contentUrl: string, parameters: any, argument: any): Promise<void> {
 		try {
 			const sessionId = parameters.sessionId;
-			const instance = await this._createLocalInstance({
+			const instance = await this._createSessionInstacne({
 				contentUrl,
 				playId: sessionId,
 				local: false,
@@ -140,7 +135,7 @@ export class CoePluginEntity {
 	private async _startLocalSession(contentUrl: string, parameters: CoeStartSessionParameterObject, argument: any): Promise<void> {
 		try {
 			const sessionId = parameters.sessionId;
-			const instance = await this._createLocalInstance({
+			const instance = await this._createSessionInstacne({
 				contentUrl,
 				playId: sessionId,
 				local: true,

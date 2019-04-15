@@ -3,7 +3,7 @@ import { PlayBroadcastTestbedEvent, PlayTreeTestbedEvent } from "../../common/ty
 import * as ApiClient from "../api/ApiClient";
 import * as Subscriber from "../api/Subscriber";
 import { GameViewManager } from "../akashic/GameViewManager";
-import { PlayEntity, CreateLocalInstanceParameterObject } from "../store/PlayEntity";
+import { PlayEntity } from "../store/PlayEntity";
 import { Store } from "../store/Store";
 import { PlayOperator } from "./PlayOperator";
 import { LocalInstanceOperator } from "./LocalInstanceOperator";
@@ -11,8 +11,8 @@ import { UiOperator } from "./UiOperator";
 import { ExternalPluginOperator } from "./ExternalPluginOperator";
 import { CreatePlayParameterObject } from "../store/PlayStore";
 import { CoeApplicationIdentifier } from "../common/interface/plugin";
-import { CreateCoeLocalInstanceParameterObject } from "../store/CoePluginEntity";
-import { LocalInstanceEntity } from "../store/LocalInstanceEntity";
+import { LocalInstanceEntity, HandleRegisterPluginParameterObject } from "../store/LocalInstanceEntity";
+import { CoePluginEntity, CreateSessionInstanceParameterObject } from "../store/CoePluginEntity";
 
 export interface OperatorParameterObject {
 	store: Store;
@@ -106,9 +106,7 @@ export class Operator {
 			executionMode: "passive",
 			player: store.player,
 			argument: params != null ? params.instanceArgument : undefined,
-			coeHandler: {
-				createLocalInstance: this._createLocalInstance
-			}
+			handleRegisterPlugin: this._handleRegisterPlugin
 		});
 		store.setCurrentLocalInstance(instance);
 		if (params != null && params.joinsSelf) {
@@ -192,14 +190,24 @@ export class Operator {
 		await ApiClient.suspendPlay(playId);
 	}
 
-	private _createLocalInstance = async (params: CreateCoeLocalInstanceParameterObject): Promise<LocalInstanceEntity> => {
+	private _handleRegisterPlugin = (params: HandleRegisterPluginParameterObject): void => {
+		if (params.name === "coe") {
+			const coePlugin = new CoePluginEntity({
+				gameViewManager: this.gameViewManager,
+				targetInstance: params.instance,
+				createSessionInstance: this._createSessionInstance
+			});
+			// TODO このインスタンスを保持しておくべき？
+			coePlugin.setup(params.game, params.agvGameContent);
+		}
+	}
+
+	private _createSessionInstance = async (params: CreateSessionInstanceParameterObject): Promise<LocalInstanceEntity> => {
 		const store = this.store;
-		let createInstanceParam: CreateLocalInstanceParameterObject;
-		let play: PlayEntity;
 		if (!params.local) {
-			play = this.store.playStore.plays[params.playId];
+			const play = this.store.playStore.plays[params.playId];
 			const childPlayToken = await ApiClient.createPlayToken(play.playId, store.player.id, false, store.player.name);
-			createInstanceParam = {
+			return await play.createLocalInstance({
 				gameViewManager: this.gameViewManager,
 				contentUrl: params.contentUrl,
 				player: this.store.player,
@@ -209,14 +217,12 @@ export class Operator {
 				executionMode: "passive",
 				argument: params.argument,
 				initialEvents: params.initialEvents,
-				coeHandler: {
-					createLocalInstance: this._createLocalInstance
-				},
+				handleRegisterPlugin: this._handleRegisterPlugin,
 				parent: params.parent
-			};
+			});
 		} else {
-			play = await this._createClientLoop(params.contentUrl, params.playId);
-			createInstanceParam = {
+			const play = await this._createClientLoop(params.contentUrl, params.playId);
+			return await play.createLocalInstance({
 				gameViewManager: this.gameViewManager,
 				contentUrl: params.contentUrl,
 				player: this.store.player,
@@ -225,9 +231,8 @@ export class Operator {
 				argument: params.argument,
 				initialEvents: params.initialEvents,
 				parent: params.parent
-			};
+			});
 		}
-		return await play.createLocalInstance(createInstanceParam);
 	}
 
 	private async _createServerLoop(): Promise<PlayEntity> {
