@@ -36,7 +36,7 @@ export class RunnerStore {
 		});
 		const runner = this.runnerManager.getRunner(runnerId);
 		await this.runnerManager.startRunner(runner.runnerId);
-		this.onRunnerCreate.fire({ playId, runnerId, isActive });
+		this.onRunnerCreate.fire({ playId, runnerId, isActive, passedArgument: JSON.stringify(args) });
 		return runner;
 	}
 

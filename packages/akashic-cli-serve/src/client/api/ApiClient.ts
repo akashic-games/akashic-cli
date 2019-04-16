@@ -41,11 +41,12 @@ export const createPlayToken = async(
 	playerId: string,
 	isActive: boolean,
 	name?: string,
-	envInfo?: any
+	envInfo?: any,
+	passedArgument?: string
 ): Promise<PlayTokenPostApiResponse> => {
 	return await ApiRequest.post<PlayTokenPostApiResponse>(
 		`/api/plays/${playId}/token`,
-		{playerId, isActive: isActive.toString(), name, envInfo}
+		{playerId, isActive: isActive.toString(), name, envInfo, passedArgument}
 	);
 };
 

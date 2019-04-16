@@ -99,7 +99,8 @@ export class Operator {
 	startContent = async (params?: StartContentParameterObject): Promise<void> => {
 		const store = this.store;
 		const play = store.currentPlay;
-		const tokenResult = await ApiClient.createPlayToken(play.playId, store.player.id, false, store.player.name);
+		const argument = params != null ? params.instanceArgument : undefined;
+		const tokenResult = await ApiClient.createPlayToken(play.playId, store.player.id, false, store.player.name, null, JSON.stringify(argument));
 		const instance = await play.createLocalInstance({
 			gameViewManager: this.gameViewManager,
 			playId: play.playId,
@@ -107,7 +108,7 @@ export class Operator {
 			playlogServerUrl: "dummy-playlog-server-url",
 			executionMode: "passive",
 			player: store.player,
-			argument: params != null ? params.instanceArgument : undefined,
+			argument,
 			handleRegisterPlugin: this._handleRegisterPlugin
 		});
 		store.setCurrentLocalInstance(instance);
@@ -128,11 +129,9 @@ export class Operator {
 
 	createNewPlay = async (param: CreatePlayParameterObject): Promise<PlayEntity> => {
 		const play = await this.store.playStore.createPlay(param);
-		const tokenResult = await ApiClient.createPlayToken(play.playId, "", true);  // TODO 空文字列でなくnullを使う
-		play.createServerInstance({
-			playToken: tokenResult.data.playToken,
-			argument: this.store.argumentsTable[Operator.ACTIVE_SERVER_INSTANCE_ARGUMENT_NAME]
-		});
+		const argument = JSON.parse(this.store.argumentsTable[Operator.ACTIVE_SERVER_INSTANCE_ARGUMENT_NAME]);
+		const tokenResult = await ApiClient.createPlayToken(play.playId, "", true, null, JSON.stringify(argument));  // TODO 空文字列でなくnullを使う
+		play.createServerInstance({ playToken: tokenResult.data.playToken, argument });
 		await ApiClient.broadcast(this.store.currentPlay.playId, { type: "newPlay", newPlayId: play.playId });
 		return play;
 	}
@@ -211,7 +210,14 @@ export class Operator {
 		const store = this.store;
 		if (!params.local) {
 			const play = this.store.playStore.plays[params.playId];
-			const childPlayToken = await ApiClient.createPlayToken(play.playId, store.player.id, false, store.player.name);
+			const childPlayToken = await ApiClient.createPlayToken(
+				play.playId,
+				store.player.id,
+				false,
+				store.player.name,
+				null,
+				JSON.stringify(params.argument)
+			);
 			return await play.createLocalInstance({
 				gameViewManager: this.gameViewManager,
 				contentUrl: params.contentUrl,
@@ -249,11 +255,9 @@ export class Operator {
 			contentUrl: this.contentUrl,
 			clientContentUrl: this.clientContentUrl
 		});
-		const tokenResult = await ApiClient.createPlayToken(play.playId, "", true);  // TODO 空文字列でなくnullを使う
-		play.createServerInstance({
-			playToken: tokenResult.data.playToken,
-			argument: this.store.argumentsTable[Operator.ACTIVE_SERVER_INSTANCE_ARGUMENT_NAME]
-		});
+		const argument = JSON.parse(this.store.argumentsTable[Operator.ACTIVE_SERVER_INSTANCE_ARGUMENT_NAME]);
+		const tokenResult = await ApiClient.createPlayToken(play.playId, "", true, null, JSON.stringify(argument));  // TODO 空文字列でなくnullを使う
+		play.createServerInstance({ playToken: tokenResult.data.playToken, argument });
 		ApiClient.resumePlayDuration(play.playId);
 		return play;
 	}

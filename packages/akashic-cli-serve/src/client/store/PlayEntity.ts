@@ -74,7 +74,9 @@ export class PlayEntity {
 		this.joinedPlayerTable = observable.map((param.joinedPlayers || []).map(p => [p.id, p]));
 		this.status = "preparing";
 		this.localInstances = [];
-		this.serverInstances = !param.runners ? [] : param.runners.map(desc => new ServerInstanceEntity({ runnerId: desc.runnerId, play: this }));
+		this.serverInstances = !param.runners ? [] : param.runners.map(desc => {
+			return new ServerInstanceEntity({ runnerId: desc.runnerId, play: this, passedArgument: desc.passedArgument });
+		});
 		this._timeKeeper = new TimeKeeper();
 		this._clientContentUrl = param.clientContentUrl!;
 		this._contentUrl = param.contentUrl;
@@ -194,11 +196,11 @@ export class PlayEntity {
 	}
 
 	@action
-	handleRunnerCreate(runnerId: string): void {
-		const instance = new ServerInstanceEntity({ runnerId, play: this });
+	handleRunnerCreate(e: RunnerDescription): void {
+		const instance = new ServerInstanceEntity({ runnerId: e.runnerId, play: this, passedArgument: e.passedArgument });
 		this.serverInstances.push(instance);
-		if (this._serverInstanceWaiters[runnerId]) {
-			this._serverInstanceWaiters[runnerId](instance);
+		if (this._serverInstanceWaiters[e.runnerId]) {
+			this._serverInstanceWaiters[e.runnerId](instance);
 		}
 	}
 

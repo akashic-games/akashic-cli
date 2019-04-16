@@ -39,18 +39,20 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 				onEventEditContentChanged: operator.ui.setEventEditContent
 			}}
 			instancesDevtoolProps={{
-				instances: play.serverInstances.map(desc => ({
+				instances: play.serverInstances.map(si => ({
 					type: "active" as ("active" | "passive"),
-					env: `server (runnerId: ${desc.runnerId})`,
+					env: `server (runnerId: ${si.runnerId})`,
 					playerId: null,
 					name: null,
-					isJoined: false
-				})).concat(play.clientInstances.map(desc => ({
-					type: (desc.isActive ? "active" : "passive") as ("active" | "passive"),
-					env: desc.envInfo ? JSON.stringify(desc.envInfo) : null,
-					playerId: desc.playerId,
-					name: desc.name,
-					isJoined: play.joinedPlayerTable.has(desc.playerId)
+					isJoined: false,
+					passedArgument: si.passedArgument
+				})).concat(play.clientInstances.map(ci => ({
+					type: (ci.isActive ? "active" : "passive") as ("active" | "passive"),
+					env: ci.envInfo ? JSON.stringify(ci.envInfo) : null,
+					playerId: ci.playerId,
+					name: ci.name,
+					isJoined: play.joinedPlayerTable.has(ci.playerId),
+					passedArgument: ci.passedArgument
 				}))),
 				onClickAddInstance: operator.play.openNewClientInstance
 			}}
