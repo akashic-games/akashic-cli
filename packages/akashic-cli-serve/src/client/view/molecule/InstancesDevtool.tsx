@@ -18,14 +18,6 @@ export interface InstancesDevtoolProps {
 	onClickAddInstance: () => void;
 }
 
-function prettify(val: any) {
-	try {
-		return JSON.stringify(JSON.parse(val), null, 2)
-	} catch (_e) {
-		return "";
-	}
-}
-
 @observer
 export class InstancesDevtool extends React.Component<InstancesDevtoolProps, {}> {
 	render(): React.ReactNode {
@@ -59,7 +51,7 @@ export class InstancesDevtool extends React.Component<InstancesDevtoolProps, {}>
 									<td>{ (i.name != null) ? i.name : "(null)" }</td>
 									<td>{ i.isJoined ? "true" : "false" }</td>
 									<td>{ i.env || "(N/A)" }</td>
-									<td title={prettify(i.passedArgument)}>{ i.passedArgument || "(N/A)" }</td>
+									<td title={i.passedArgument}>{ i.passedArgument || "(N/A)" }</td>
 								</tr>
 							))
 						}

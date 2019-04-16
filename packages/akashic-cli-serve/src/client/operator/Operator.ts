@@ -100,7 +100,14 @@ export class Operator {
 		const store = this.store;
 		const play = store.currentPlay;
 		const argument = params != null ? params.instanceArgument : undefined;
-		const tokenResult = await ApiClient.createPlayToken(play.playId, store.player.id, false, store.player.name, null, JSON.stringify(argument));
+		const tokenResult = await ApiClient.createPlayToken(
+			play.playId,
+			store.player.id,
+			false,
+			store.player.name,
+			null,
+			JSON.stringify(argument)
+		);
 		const instance = await play.createLocalInstance({
 			gameViewManager: this.gameViewManager,
 			playId: play.playId,

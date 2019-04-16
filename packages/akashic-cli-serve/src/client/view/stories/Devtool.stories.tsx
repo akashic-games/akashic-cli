@@ -40,7 +40,7 @@ const TestWithBehaviour = observer(() => (
 		}}
 		instancesDevtoolProps={{
 			instances: [
-				{ type: "active", env: "(server)", playerId: null, name: null, isJoined: false, passedArgument: '{ "foo": "dummy" }' },
+				{ type: "active", env: "(server)", playerId: null, name: null, isJoined: false, passedArgument: "{ \"foo\": \"dummy\" }" },
 				{ type: "passive", env: "Chrome", playerId: "1234567890", name: "player-1", isJoined: true, passedArgument: "argdummy2" },
 				{ type: "passive", env: "Chrome", playerId: "aa0941jlta", name: "player-2", isJoined: false, passedArgument: "argdummy3" },
 				{ type: "passive", env: "Firefox", playerId: "asfaiout", name: "player-3", isJoined: true }

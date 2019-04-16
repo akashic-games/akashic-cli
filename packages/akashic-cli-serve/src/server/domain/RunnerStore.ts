@@ -26,7 +26,13 @@ export class RunnerStore {
 		this.runnerManager = params.runnerManager;
 	}
 
-	async createAndStartRunner(playId: string, isActive: boolean, token: string, args: any, amflow: AMFlowClient): Promise<RunnerV1 | RunnerV2> {
+	async createAndStartRunner(
+		playId: string,
+		isActive: boolean,
+		token: string,
+		args: any,
+		amflow: AMFlowClient
+	): Promise<RunnerV1 | RunnerV2> {
 		const runnerId = await this.runnerManager.createRunner({
 			playId,
 			amflow,
