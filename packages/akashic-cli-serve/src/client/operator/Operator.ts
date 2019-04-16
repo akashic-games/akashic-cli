@@ -168,7 +168,6 @@ export class Operator {
 			}
 		]);
 		await ApiClient.addChildPlay(parentPlay.playId, childPlay.playId);
-		await ApiClient.getPlayTree();
 		this.store.externalPluginUiStore.setCurrentPlay(childPlay.playId);
 		// TODO: SocketIOAMFlowManager で connection が確立するまで `amfloe#sendEvent()` の呼び出しが握りつぶされるため pooling で待機
 		const pooling = () => {
