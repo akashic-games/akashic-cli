@@ -170,7 +170,7 @@ export class Operator {
 		await ApiClient.addChildPlay(parentPlay.playId, childPlay.playId);
 		await ApiClient.getPlayTree();
 		this.store.externalPluginUiStore.setCurrentPlay(childPlay.playId);
-		// TODO: headless-driver 側で AMFLowClient#authenticate() が完了する前に sendEvent() を呼んでも問題ないようにする
+		// TODO: SocketIOAMFlowManager で connection が確立するまで `amfloe#sendEvent()` の呼び出しが握りつぶされるため pooling で待機
 		const pooling = () => {
 			if (childPlay.amflow._permission != null) {
 				childPlay.amflow.sendEvent([
