@@ -30,8 +30,9 @@ export const createHandlerToCreateRunner = (playStore: PlayStore, runnerStore: R
 			const playId = req.body.playId;
 			const isActive = Boolean(req.body.isActive);
 			const token = req.body.token;
+			const args = req.body.args;
 			const amflow = playStore.createAMFlow(playId);
-			const runner = await runnerStore.createAndStartRunner(playId, isActive, token, amflow);
+			const runner = await runnerStore.createAndStartRunner(playId, isActive, token, args, amflow);
 			responseSuccess<RunnerPostApiResponseData>(res, 200, { playId: runner.playId, runnerId: runner.runnerId });
 		} catch (e) {
 			next(e);

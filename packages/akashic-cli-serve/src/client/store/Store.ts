@@ -56,13 +56,16 @@ export class Store {
 
 	@action
 	setSandboxConfig(cfg: SandboxConfig): void {
-		this.sandboxConfig = cfg;
+		this.sandboxConfig = {
+			events: {},
+			...cfg
+		};
 
 		// mobx の reaction として書くべき？
 		if (cfg.arguments) {
 			const args = cfg.arguments;
 			this.argumentsTable = Object.keys(args).reduce((acc, key) => {
-				acc[key.replace(/^\</, "\\<")] = JSON.stringify(args[key], null, 2);
+				acc[key] = JSON.stringify(args[key], null, 2);
 				return acc;
 			}, {} as { [name: string]: string });
 		}

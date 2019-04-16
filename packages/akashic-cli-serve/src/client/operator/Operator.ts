@@ -36,6 +36,8 @@ export interface CreateNewPlayAndSendEventsParameterObject {
 }
 
 export class Operator {
+	static ACTIVE_SERVER_INSTANCE_ARGUMENT_NAME = "<activeServerInstanceArgument>";
+
 	play: PlayOperator;
 	localInstance: LocalInstanceOperator;
 	ui: UiOperator;
@@ -127,7 +129,10 @@ export class Operator {
 	createNewPlay = async (param: CreatePlayParameterObject): Promise<PlayEntity> => {
 		const play = await this.store.playStore.createPlay(param);
 		const tokenResult = await ApiClient.createPlayToken(play.playId, "", true);  // TODO 空文字列でなくnullを使う
-		play.createServerInstance({ playToken: tokenResult.data.playToken });
+		play.createServerInstance({
+			playToken: tokenResult.data.playToken,
+			argument: this.store.argumentsTable[Operator.ACTIVE_SERVER_INSTANCE_ARGUMENT_NAME]
+		});
 		await ApiClient.broadcast(this.store.currentPlay.playId, { type: "newPlay", newPlayId: play.playId });
 		return play;
 	}
@@ -236,12 +241,19 @@ export class Operator {
 	}
 
 	private async _createServerLoop(): Promise<PlayEntity> {
+		// 一部フローで二度手間になるが、createServerInstance() 時に参照するのでこの箇所で更新しておく
+		const sandboxConfigResult = await ApiClient.getSandboxConfig(this.store.contentId);
+		this.store.setSandboxConfig(sandboxConfigResult.data || {});
+
 		const play = await this.store.playStore.createPlay({
 			contentUrl: this.contentUrl,
 			clientContentUrl: this.clientContentUrl
 		});
 		const tokenResult = await ApiClient.createPlayToken(play.playId, "", true);  // TODO 空文字列でなくnullを使う
-		play.createServerInstance({ playToken: tokenResult.data.playToken });
+		play.createServerInstance({
+			playToken: tokenResult.data.playToken,
+			argument: this.store.argumentsTable[Operator.ACTIVE_SERVER_INSTANCE_ARGUMENT_NAME]
+		});
 		ApiClient.resumePlayDuration(play.playId);
 		return play;
 	}

@@ -31,7 +31,7 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 				eventListMinWidth: 150,
 				onEventListResize: operator.ui.setEventListWidth,
 				onToggleList: operator.ui.toggleShowEventList,
-				eventNames: sandboxConfig.events ? Object.keys(sandboxConfig.events) : [],
+				eventNames: Object.keys(sandboxConfig.events),
 				eventEditContent: devtoolUiStore.eventEditContent,
 				onClickSendEvent: operator.play.sendRegisteredEvent,
 				onClickCopyEvent: operator.ui.copyRegisteredEventToEditor,
