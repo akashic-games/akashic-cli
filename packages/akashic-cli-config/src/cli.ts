@@ -6,7 +6,7 @@ import * as config from "./config";
 
 /**
  * akashic cli configを実行する
- * 
+ *
  * この関数は複数回呼ばれるべきではない
  */
 export function run(argv: string[]): void {
