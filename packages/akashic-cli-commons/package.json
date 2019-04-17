@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-commons",
-  "version": "0.2.19",
+  "version": "0.2.20",
   "description": "The shared definitions and routines for akashic-cli-xxx",
   "main": "lib/index.js",
   "scripts": {
@@ -9,7 +9,7 @@
     "build": "tsc -p ./",
     "lint": "npm run lint:ts && npm run lint:md",
     "lint:ts": "tslint --type-check -c ../tslint.json --project ./tsconfig.json",
-    "lint:md": "remark ./*.md --frail --no-stdout --quiet --rc-path ../../.remarkrc",
+    "lint:md": "remark . --frail --no-stdout --quiet --rc-path ../../.remarkrc",
     "test": "npm run test:jasmine && npm run lint",
     "test:jasmine": "istanbul cover --report text --report html --colors -i ./lib/main.node.js ./node_modules/jasmine/bin/jasmine.js"
   },

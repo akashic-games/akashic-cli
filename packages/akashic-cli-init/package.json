@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-init",
-  "version": "0.3.16",
+  "version": "0.3.17",
   "description": "A module to get your Akashic game started.",
   "main": "lib/index.js",
   "scripts": {
@@ -10,7 +10,7 @@
     "build": "tsc -p ./ && npm run zip",
     "lint": "npm run lint:ts && npm run lint:md",
     "lint:ts": "tslint -c ../tslint.json --project ./tsconfig.json",
-    "lint:md": "remark ./*.md --frail --no-stdout --quiet --rc-path ../../.remarkrc",
+    "lint:md": "remark . --frail --no-stdout --quiet --rc-path ../../.remarkrc",
     "zip": "cd ./templates-src && npm run zip:js && npm run zip:ts && npm run zip:js-min",
     "zip:js": "cd ./templates-src/javascript/ && bestzip ../../templates/javascript.zip *",
     "zip:js-min": "cd ./templates-src/javascript-minimal/ && bestzip ../../templates/javascript-minimal.zip *",
@@ -53,8 +53,8 @@
   },
   "typings": "lib/index.d.ts",
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.2.19",
-    "@akashic/akashic-cli-config": "0.1.9",
+    "@akashic/akashic-cli-commons": "0.2.20",
+    "@akashic/akashic-cli-config": "0.1.10",
     "commander": "2.8.1",
     "fs-extra": "0.30.0",
     "prompt": "1.0.0",

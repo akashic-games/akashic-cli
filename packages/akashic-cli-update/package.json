@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-update",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "Semi-automatic asset declarations maintenance tool for Akashic games.",
   "main": "lib/index.js",
   "scripts": {
@@ -10,7 +10,7 @@
     "build": "tsc -p ./",
     "lint": "npm run lint:ts && npm run lint:md",
     "lint:ts": "tslint -c ../tslint.json --project ./tsconfig.json",
-    "lint:md": "remark ./*.md --frail --no-stdout --quiet --rc-path ../../.remarkrc",
+    "lint:md": "remark . --frail --no-stdout --quiet --rc-path ../../.remarkrc",
     "test": "npm run build && npm run test:compile  && npm run test:jasmine",
     "test:compile": "tsc -p ./spec",
     "test:jasmine": "istanbul cover --report text --report html --colors -i ./lib/index.js ./node_modules/jasmine/bin/jasmine.js"
@@ -42,7 +42,7 @@
   },
   "typings": "lib/index.d.ts",
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.2.19",
+    "@akashic/akashic-cli-commons": "0.2.20",
     "commander": "2.19.0"
   },
   "publishConfig": {

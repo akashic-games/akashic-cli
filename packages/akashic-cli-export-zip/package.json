@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-export-zip",
-  "version": "0.3.9",
+  "version": "0.3.10",
   "description": "A module to export akashic game as a zip",
   "main": "lib/index.js",
   "scripts": {
@@ -12,7 +12,7 @@
     "lint:ts": "npm run lint:ts:src && npm run lint:ts:spec",
     "lint:ts:src": "tslint --project tsconfig.json -c ../tslint.json",
     "lint:ts:spec": "tslint --project ./spec/tsconfig.json -c ../tslint.json",
-    "lint:md": "remark ./*.md --frail --no-stdout --quiet --rc-path ../../.remarkrc",
+    "lint:md": "remark . --frail --no-stdout --quiet --rc-path ../../.remarkrc",
     "test": "npm run test:ts && npm run lint",
     "test:ts": "npm run test:ts:compile && npm run test:ts:jasmine",
     "test:ts:compile": "npm run build && tsc -p ./spec",
@@ -51,7 +51,7 @@
   },
   "typings": "lib/index.d.ts",
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.2.19",
+    "@akashic/akashic-cli-commons": "0.2.20",
     "@babel/core": "^7.2.2",
     "@babel/preset-env": "^7.3.1",
     "archiver": "3.0.0",

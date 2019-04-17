@@ -31,7 +31,7 @@ export class Store {
 		this.currentPlay = null;
 		this.currentLocalInstance = null;
 		this.sandboxConfig = null;
-		this.argumentsTable = null;
+		this.argumentsTable = {};
 	}
 
 	@action

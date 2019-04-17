@@ -90,8 +90,8 @@ export class Configuration extends cmn.Configuration {
 					_assertAssetFilenameValid(aid);
 					_assertAssetTypeNoConflict(aid, f, "image", decl.type);
 					if (decl.width !== size.width || decl.height !== size.height) {
-						this._logger.info("Detected change of the image size for " + aid + " " + unixPath +
-							" from " + decl.width + "x" + decl.height + " to " + size.width + "x" + size.height);
+						this._logger.info("Detected change of the image size for " + aid + " (" + unixPath +
+							") from " + decl.width + "x" + decl.height + " to " + size.width + "x" + size.height);
 						decl.width = size.width;
 						decl.height = size.height;
 					}
@@ -135,8 +135,8 @@ export class Configuration extends cmn.Configuration {
 					if (aidSet && aidSet.length > 0) {
 						aidSet.forEach((aid: string) => {
 							if (assets[aid].duration !== durationMap[current].duration) {
-								this._logger.info("Detected change of the audio duration for " + current + ": "
-									+ assets[aid].path + " from " + assets[aid].duration + " to " + durationMap[current]);
+								this._logger.info("Detected change of the audio duration for " + current + " ("
+									+ assets[aid].path + ") from " + assets[aid].duration + " to " + durationMap[current].duration);
 								assets[aid].duration = durationMap[current].duration;
 							}
 						});
