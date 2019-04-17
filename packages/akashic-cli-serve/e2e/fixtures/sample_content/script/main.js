@@ -68,6 +68,9 @@ function main(param) {
 		});
 		// ここまでゲーム内容を記述します
 	});
+	if (typeof window !== "undefined" && window.hasOwnProperty("completeToStartup")) {
+		window.completeToStartup();
+	}
 	g.game.pushScene(scene);
 }
 
