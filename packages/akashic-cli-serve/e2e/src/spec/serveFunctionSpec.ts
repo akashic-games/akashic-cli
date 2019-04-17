@@ -37,7 +37,7 @@ describe("cli-serve", () => {
 	});
 
 	it("create new play", async () => {
-		await page.goto("http://localhost:3300/public/index.html?playerId=test");
+		await page.goto("http://localhost:5010/public/index.html?playerId=test");
 		await awaiting;
 		awaiting = new Promise((resolve) => { allow = resolve; });
 		let icons: any[] = await page.$$(".material-icons");
@@ -52,12 +52,12 @@ describe("cli-serve", () => {
 				fs.writeFileSync(path.join(__dirname, "..", "..", "result", "create_new_play.png"), data.getBuffer());
 			});
 		expect(misMatchPercentage).toBeLessThan(screenshotDiffThreshold);
-		icons = await page.$$(".material-icons");
-		await icons[0].click(); // Play新規作成ボタンでリセット
+		//icons = await page.$$(".material-icons");
+		//await icons[0].click(); // Play新規作成ボタンでリセット
 	});
 
 	xit("pause active instance", async () => {
-		await page.goto("http://localhost:3300/public/index.html?playerId=test");
+		await page.goto("http://localhost:5011/public/index.html?playerId=test");
 		await awaiting;
 		let icons: any[] = await page.$$(".material-icons");
 		await icons[1].click(); // アクティブインスタンス停止ボタンをクリック
@@ -74,11 +74,11 @@ describe("cli-serve", () => {
 	});
 
 	it("join to content", async () => {
-		await page.goto("http://localhost:3300/public/index.html?playerId=test");
+		await page.goto("http://localhost:5012/public/index.html?playerId=test");
 		await awaiting;
 		let icons: any[] = await page.$$(".material-icons");
 		await icons[3].click(); // joinボタンをクリック
-		await page.waitFor(50);
+		await page.waitFor(100);
 		let current = await page.screenshot({fullPage: true});
 		let expected: any = fs.readFileSync(path.join(screenshotDir, "join.png"));
 		let misMatchPercentage = 0;
@@ -95,12 +95,12 @@ describe("cli-serve", () => {
 	});
 
 	xit("leave from content", async () => {
-		await page.goto("http://localhost:3300/public/index.html?playerId=test");
+		await page.goto("http://localhost:5013/public/index.html?playerId=test");
 		await awaiting;
 		let icons: any[] = await page.$$(".material-icons");
 		await icons[3].click(); // joinボタンをクリック
 		await icons[3].click(); // joinボタンクリック後leaveボタンをクリック
-		await page.waitFor(50);
+		await page.waitFor(100);
 		let current = await page.screenshot({fullPage: true});
 		let expected: any = fs.readFileSync(path.join(screenshotDir, "game_start.png"));
 		let misMatchPercentage = 0;

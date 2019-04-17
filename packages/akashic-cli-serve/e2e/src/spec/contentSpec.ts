@@ -37,7 +37,7 @@ describe("sample_content", () => {
 	});
 
 	it("start content", async () => {
-		await page.goto("http://localhost:3300/public/index.html?playerId=test");
+		await page.goto("http://localhost:5000/public/index.html?playerId=test");
 		await awaiting;
 		const current = await page.screenshot({fullPage: true});
 		const expected: any = fs.readFileSync(path.join(screenshotDir, "game_start.png"));
@@ -51,10 +51,10 @@ describe("sample_content", () => {
 	});
 
 	it("click in content", async () => {
-		await page.goto("http://localhost:3300/public/index.html?playerId=test");
+		await page.goto("http://localhost:5001/public/index.html?playerId=test");
 		await awaiting;
 		await page.click("canvas");
-		await page.waitFor(50);
+		await page.waitFor(100);
 		const current = await page.screenshot({fullPage: true});
 		const expected: any = fs.readFileSync(path.join(screenshotDir, "one_click.png"));
 		let misMatchPercentage = 0;
