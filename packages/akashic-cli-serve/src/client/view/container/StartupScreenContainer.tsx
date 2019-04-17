@@ -7,18 +7,18 @@ import { StartupScreenUiStore } from "../../store/StartupScreenUiStore";
 export interface StartupScreenContainerProps {
 	operator: Operator;
 	startupScreenUiStore: StartupScreenUiStore;
-	argumentsTable: { [name: string]: string };
+	argumentsStringTable: { [name: string]: string };
 }
 
 @observer
 export class StartupScreenContainer extends React.Component<StartupScreenContainerProps, {}> {
 	render(): React.ReactNode {
-		const { operator, startupScreenUiStore, argumentsTable } = this.props;
+		const { operator, startupScreenUiStore, argumentsStringTable } = this.props;
 		return <StartupScreen
 			listWidth={startupScreenUiStore.instanceArgumentListWidth}
 			listMinWidth={150}
 			onListResize={operator.ui.setInstanceArgumentListWidth}
-			argumentsTable={argumentsTable}
+			argumentsStringTable={argumentsStringTable}
 			selectedArgumentName={startupScreenUiStore.selectedArgumentName}
 			argumentEditContent={startupScreenUiStore.instanceArgumentEditContent}
 			joinsAutomatically={startupScreenUiStore.joinsAutomatically}

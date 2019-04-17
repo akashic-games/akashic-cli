@@ -51,7 +51,7 @@ export class UiOperator {
 	}
 
 	selectInstanceArguments = (name: string | null): void => {
-		const content = (name != null) ? this.store.argumentsTable[name] : "";
+		const content = (name != null) ? this.store.argumentsStringTable[name] : "";
 		const { startupScreenUiStore } = this.store;
 		startupScreenUiStore.setSelectedArgumentName(name);
 		startupScreenUiStore.setInstanceArgumentEditContent(content);

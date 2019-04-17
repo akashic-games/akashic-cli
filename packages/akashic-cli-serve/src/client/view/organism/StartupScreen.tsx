@@ -8,7 +8,7 @@ export interface StartupScreenProps {
 	listWidth: number;
 	listMinWidth: number;
 	onListResize: (width: number) => void;
-	argumentsTable: { [name: string]: string };
+	argumentsStringTable: { [name: string]: string };
 	argumentEditContent: string;
 	selectedArgumentName: string | null;
 	joinsAutomatically: boolean;
@@ -27,14 +27,14 @@ export class StartupScreen extends React.Component<StartupScreenProps, {}> {
 			onListResize,
 			selectedArgumentName,
 			argumentEditContent,
-			argumentsTable,
+			argumentsStringTable,
 			joinsAutomatically,
 			onSelectArgument,
 			onChangeJoinsAutomatically,
 			onClickStart
 		} = this.props;
 		const isValidArg = this._isValidArgument(argumentEditContent);
-		const selectedArg = ((selectedArgumentName == null) ? "" : argumentsTable[selectedArgumentName]);
+		const selectedArg = ((selectedArgumentName == null) ? "" : argumentsStringTable[selectedArgumentName]);
 		const isShowingSelected = (selectedArg === argumentEditContent);
 		const showsEditor = selectedArgumentName || !isShowingSelected;
 
@@ -49,7 +49,7 @@ export class StartupScreen extends React.Component<StartupScreenProps, {}> {
 						(No Arguments)
 					</li>
 					{
-						Object.keys(argumentsTable).map(name => (
+						Object.keys(argumentsStringTable).map(name => (
 							<li
 								key={"template:" + name}
 								className={(name === selectedArgumentName && isShowingSelected) ? styles["selected"] : ""}

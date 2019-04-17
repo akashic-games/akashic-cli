@@ -9,7 +9,7 @@ const store = observable({
 	joinsAutomatically: false,
 	width: 280,
 	editContent: `{ "foo": 100 }`,
-	argumentsTable: {
+	argumentsStringTable: {
 		"Start (difficulty: 3)": JSON.stringify([[32, 0, "test1"]], null, 2),
 		"Start (difficulty: 10)": JSON.stringify([[32, 0, "test2"]], null, 2),
 		"Stop": JSON.stringify([[32, 0, "stop"]], null, 2),
@@ -35,11 +35,11 @@ const TestWithBehaviour = observer(() => (
 			listWidth={store.width}
 			listMinWidth={200}
 			onListResize={w => (store.width = w)}
-			argumentsTable={store.argumentsTable}
+			argumentsStringTable={store.argumentsStringTable}
 			selectedArgumentName={store.selectedArgumentName}
 			argumentEditContent={store.editContent}
 			joinsAutomatically={store.joinsAutomatically}
-			onSelectArgument={name => ((store.selectedArgumentName = name), (store.editContent = (store.argumentsTable[name] || "")))}
+			onSelectArgument={name => ((store.selectedArgumentName = name), (store.editContent = (store.argumentsStringTable[name] || "")))}
 			onArgumentsEditContentChanged={v => (store.editContent = v)}
 			onChangeJoinsAutomatically={v => (store.joinsAutomatically = v)}
 			onClickStart={action("start-content")} />
@@ -52,7 +52,7 @@ storiesOf("m-StartupScreen", module)
 			<StartupScreen
 				listWidth={250}
 				listMinWidth={100}
-				argumentsTable={{
+				argumentsStringTable={{
 					"Start (difficulty: 3)": "1",
 					"Start (difficulty: 10)": "1",
 					"Stop": "1",
@@ -68,12 +68,12 @@ storiesOf("m-StartupScreen", module)
 				onClickStart={action("start-content")} />
 		</Box>
 	))
-	.add("many argumentsTable", () => (
+	.add("many argumentsStringTable", () => (
 		<Box>
 			<StartupScreen
 				listWidth={250}
 				listMinWidth={100}
-				argumentsTable={{
+				argumentsStringTable={{
 					"Start (difficulty: 3)": "1",
 					"Start (difficulty: 10)": "1",
 					"Stop": "1",

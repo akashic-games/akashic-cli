@@ -136,7 +136,7 @@ export class Operator {
 
 	createNewPlay = async (param: CreatePlayParameterObject): Promise<PlayEntity> => {
 		const play = await this.store.playStore.createPlay(param);
-		const argument = JSON.parse(this.store.argumentsTable[Operator.ACTIVE_SERVER_INSTANCE_ARGUMENT_NAME]);
+		const argument = this.store.sandboxConfig.arguments[Operator.ACTIVE_SERVER_INSTANCE_ARGUMENT_NAME];
 		const tokenResult = await ApiClient.createPlayToken(play.playId, "", true, null, JSON.stringify(argument));  // TODO 空文字列でなくnullを使う
 		play.createServerInstance({ playToken: tokenResult.data.playToken, argument });
 		await ApiClient.broadcast(this.store.currentPlay.playId, { type: "newPlay", newPlayId: play.playId });
@@ -144,8 +144,7 @@ export class Operator {
 	}
 
 	createChildPlayAndSendEvents = async (param: CreateNewPlayAndSendEventsParameterObject): Promise<void> => {
-		const {parentPlayId, contentUrl, clientContentUrl, sessionParameters} = param;
-		const {type, version, url} = param.application;
+		const {parentPlayId, contentUrl, clientContentUrl, sessionParameters, application} = param;
 		const parentPlay = ((parentPlayId != null) && this.store.playStore.plays[parentPlayId]) || this.getCurrentPlay();
 		if (parentPlay == null) {
 			throw new Error("play not found");
@@ -159,11 +158,7 @@ export class Operator {
 				type: "child_start",
 				sessionId: childPlay.playId,
 				userId: ":akashic",
-				application: {
-					type,
-					version,
-					url
-				},
+				application,
 				cascadeApplications: []
 			}
 		]);
@@ -262,7 +257,7 @@ export class Operator {
 			contentUrl: this.contentUrl,
 			clientContentUrl: this.clientContentUrl
 		});
-		const argument = JSON.parse(this.store.argumentsTable[Operator.ACTIVE_SERVER_INSTANCE_ARGUMENT_NAME]);
+		const argument = this.store.sandboxConfig.arguments[Operator.ACTIVE_SERVER_INSTANCE_ARGUMENT_NAME];
 		const tokenResult = await ApiClient.createPlayToken(play.playId, "", true, null, JSON.stringify(argument));  // TODO 空文字列でなくnullを使う
 		play.createServerInstance({ playToken: tokenResult.data.playToken, argument });
 		ApiClient.resumePlayDuration(play.playId);
