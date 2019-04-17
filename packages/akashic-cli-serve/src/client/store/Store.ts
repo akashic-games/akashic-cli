@@ -63,7 +63,7 @@ export class Store {
 		};
 
 		// mobx の reaction として書くべき？
-		const args = cfg.arguments;
+		const args = this.sandboxConfig.arguments;
 		this.argumentsStringTable = Object.keys(args).reduce((acc, key) => {
 			acc[key] = JSON.stringify(args[key], null, 2);
 			return acc;
