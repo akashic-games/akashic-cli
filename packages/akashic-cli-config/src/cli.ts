@@ -4,6 +4,11 @@ import * as commander from "commander";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons";
 import * as config from "./config";
 
+/**
+ * akashic cli configを実行する
+ * 
+ * この関数は複数回呼ばれるべきではない
+ */
 export function run(argv: string[]): void {
 
 	const packageJson = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "package.json"), "utf8"));
