@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 1.5.25 (2019-04-17)
+
+#### Bug Fix
+* `akashic-cli-config`
+  * [#68](https://github.com/akashic-games/akashic-cli/pull/68) fix cli init help message show config help ([@kamakiri01](https://github.com/kamakiri01))
+* `akashic-cli-scan`
+  * [#67](https://github.com/akashic-games/akashic-cli/pull/67) scanで一部のメッセージがおかしい問題を修正 ([@xnv](https://github.com/xnv))
+
+#### Committers: 2
+- kamakiri_ys ([@kamakiri01](https://github.com/kamakiri01))
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.5.24 (2019-04-09)
 
 #### Enhancement
