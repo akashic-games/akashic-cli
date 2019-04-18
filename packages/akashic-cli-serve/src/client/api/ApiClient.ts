@@ -36,6 +36,7 @@ export const resumePlayDuration = async(playId: string): Promise<PlayPatchApiRes
 	return await ApiRequest.patch<PlayPatchApiResponse>(`/api/plays/${playId}`, {status: "running"});
 };
 
+// TODO リファクタリング: 直接tokenに必要ないものをdebug用情報としてまとめる
 export const createPlayToken = async(
 	playId: string,
 	playerId: string,

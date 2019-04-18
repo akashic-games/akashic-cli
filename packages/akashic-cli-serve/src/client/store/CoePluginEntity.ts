@@ -45,7 +45,7 @@ export class CoePluginEntity {
 		this._createSessionInstacne = param.createSessionInstance;
 	}
 
-	async setup(game: agv.GameLike, _gameContent: agv.GameContent): Promise<void> {
+	setup(game: agv.GameLike, _gameContent: agv.GameContent): void {
 		game.external.coe = {
 			startSession: this.startSession,
 			exitSession: this.exitSession,
@@ -103,7 +103,7 @@ export class CoePluginEntity {
 				});
 			}
 
-			child.instance.stop();
+			await child.instance.stop();
 		} catch (e) {
 			// TODO: エラーハンドリング
 			console.error(e);
