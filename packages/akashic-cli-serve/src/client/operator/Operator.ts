@@ -71,7 +71,7 @@ export class Operator {
 		await this.setCurrentPlay(play);
 	}
 
-	setCurrentPlay = async (play: PlayEntity): Promise<void> => {
+	setCurrentPlay = async (play: PlayEntity, reuseStartupOption: boolean = false): Promise<void> => {
 		const store = this.store;
 		if (store.currentPlay === play)
 			return;
@@ -93,6 +93,12 @@ export class Operator {
 		const optionsResult = await ApiClient.getOptions();
 		if (optionsResult.data.autoStart) {
 			await this.startContent();
+		} else if (reuseStartupOption) {
+			const argText = this.store.startupScreenUiStore.instanceArgumentEditContent;
+			await this.startContent({
+				joinsSelf: this.store.startupScreenUiStore.joinsAutomatically, // joinについては起動画面での選択と直近の状態どちらを優先すべきか
+				instanceArgument: (argText !== "") ? JSON.parse(argText) : undefined
+			});
 		}
 	}
 
@@ -128,10 +134,12 @@ export class Operator {
 		return this.store.currentPlay;
 	}
 
-	restartWithNewPlay = async (): Promise<void> => {
-		const play = await this._createServerLoop();
-		await ApiClient.broadcast(this.store.currentPlay.playId, { type: "switchPlay", nextPlayId: play.playId });
-		await this.store.currentPlay.deleteAllServerInstances();
+	restart = async (): Promise<void> => {
+		await this._restartWithNewPlay(false);
+	}
+
+	restartWithStartupOption = async (): Promise<void> => {
+		await this._restartWithNewPlay(true);
 	}
 
 	createNewPlay = async (param: CreatePlayParameterObject): Promise<PlayEntity> => {
@@ -194,6 +202,16 @@ export class Operator {
 
 	suspendPlayAndSendEvents = async (playId: string): Promise<void> => {
 		await ApiClient.suspendPlay(playId);
+	}
+
+	private _restartWithNewPlay = async (reuseStartupOption: boolean): Promise<void> => {
+		const play = await this._createServerLoop();
+		await ApiClient.broadcast(this.store.currentPlay.playId, {
+			type: "switchPlay",
+			nextPlayId: play.playId,
+			reuseStartupOption
+		});
+		await this.store.currentPlay.deleteAllServerInstances();
 	}
 
 	private _handleRegisterPlugin = (params: HandleRegisterPluginParameterObject): void => {
@@ -276,7 +294,7 @@ export class Operator {
 		try {
 			switch (arg.message.type) {
 			case "switchPlay":  // TODO typeを型づける
-				this.setCurrentPlay(this.store.playStore.plays[arg.message.nextPlayId]);
+				this.setCurrentPlay(this.store.playStore.plays[arg.message.nextPlayId], arg.message.reuseStartupOption);
 				break;
 			case "newPlay":  // TODO typeを型づける
 				// do nothing
