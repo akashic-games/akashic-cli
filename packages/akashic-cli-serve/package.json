@@ -25,7 +25,7 @@
     "akashic-cli-serve": "./bin/run"
   },
   "dependencies": {
-    "@akashic/headless-driver": "0.3.7",
+    "@akashic/headless-driver": "0.3.8",
     "@akashic/trigger": "0.1.5",
     "chalk": "~2.4.2",
     "chokidar": "^2.1.2",
@@ -77,7 +77,7 @@
     "whatwg-fetch": "~3.0.0"
   },
   "optionalDependencies": {
-    "@akashic/akashic-gameview-web": "0.10.22"
+    "@akashic/akashic-gameview-web": "0.10.23"
   },
   "files": [
     "package.json",
