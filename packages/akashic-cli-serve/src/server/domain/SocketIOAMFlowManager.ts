@@ -34,9 +34,9 @@ export class SocketIOAMFlowManager {
 		this.connectionIdCounter = 0;
 	}
 
-	createPlayToken(playId: string, playerId: string, name: string, isActive: boolean, envInfo: any): string {
+	createPlayToken(playId: string, playerId: string, name: string, isActive: boolean, envInfo: any, passedArgument: string): string {
 		const token = this.playStore.createPlayToken(playId, isActive);
-		const desc = { id: ++this.idCounter, playId, playerId, name, isActive, envInfo };
+		const desc = { id: ++this.idCounter, playId, playerId, name, isActive, envInfo, passedArgument };
 		this.descMap[token] = desc;
 		return token;
 	}

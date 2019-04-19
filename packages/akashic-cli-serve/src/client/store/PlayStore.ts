@@ -102,7 +102,7 @@ export class PlayStore {
 
 		// TODO LocalInstance はここで解放すべき？
 		if (e.playStatus === "suspending") {
-			play.teardown();
+			play.handleSuspend();
 			delete this.plays[e.playId];
 		}
 	}
@@ -128,7 +128,7 @@ export class PlayStore {
 	}
 
 	private handleRunnerCreate = (e: RunnerCreateTestbedEvent): void => {
-		this.plays[e.playId].handleRunnerCreate(e.runnerId);
+		this.plays[e.playId].handleRunnerCreate(e);
 	}
 
 	private handleRunnerRemove = (e: RunnerRemoveTestbedEvent): void => {

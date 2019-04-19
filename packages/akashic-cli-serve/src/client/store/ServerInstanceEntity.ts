@@ -6,15 +6,18 @@ import {GameInstanceEntity} from "./GameInstanceEntity";
 export interface ServerInstanceEntityParameterObject {
 	runnerId: string;
 	play: PlayEntity;
+	passedArgument: string;
 }
 
 export class ServerInstanceEntity implements GameInstanceEntity {
-	@observable runnerId: string;
-	@observable play: PlayEntity;
+	@observable readonly runnerId: string;
+	@observable readonly play: PlayEntity;
+	@observable readonly passedArgument: string;
 
 	constructor(param: ServerInstanceEntityParameterObject) {
 		this.runnerId = param.runnerId;
 		this.play = param.play;
+		this.passedArgument = param.passedArgument;
 	}
 
 	async stop(): Promise<void> {

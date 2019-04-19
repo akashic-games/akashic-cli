@@ -24,7 +24,7 @@ export class App extends React.Component<AppProps, {}> {
 				<StartupScreenContainer
 					operator={operator}
 					startupScreenUiStore={store.startupScreenUiStore}
-					argumentsTable={store.argumentsTable}
+					argumentsStringTable={store.argumentsStringTable}
 				/>
 			</div>;
 		}

@@ -33,6 +33,7 @@ export interface RunnerDescription {
 	playId: string;
 	runnerId: string;
 	isActive: boolean;
+	passedArgument: string;
 }
 
 export interface RunnerCreateTestbedEvent extends RunnerDescription {
@@ -60,6 +61,7 @@ export interface ClientInstanceDescription {
 	name: string;
 	isActive: boolean;
 	envInfo: any;  // TODO 中身を固めてanyをやめる
+	passedArgument: string;
 }
 
 export interface ClientInstanceAppearTestbedEvent extends ClientInstanceDescription {

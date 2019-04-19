@@ -11,43 +11,41 @@ export interface GameState {
 	clearThrethold?: number;
 }
 
-export interface CreateCoeLocalInstanceParameterObject {
+export interface CoeSessionData {
+	sessionId: string;
+	instance: LocalInstanceEntity;
+	messageHandler: (parameters: CoeExternalMessage) => void;
+}
+
+export interface CreateSessionInstanceParameterObject {
 	local: boolean;
 	playId: string;
 	parent?: LocalInstanceEntity;
 	contentUrl?: string;
 	argument?: any;
 	initialEvents?: Event[];
-	coeHandler?: {
-		onLocalInstanceCreate: (params: CreateCoeLocalInstanceParameterObject) => Promise<LocalInstanceEntity>;
-		onLocalInstanceDelete: (playId: string) => Promise<void>;
-	};
 }
-
 
 export interface CoePluginEntityParameterObject {
 	gameViewManager: GameViewManager;
-	localInstance: LocalInstanceEntity;
-	onLocalInstanceCreate: (params: CreateCoeLocalInstanceParameterObject) => Promise<LocalInstanceEntity>;
-	onLocalInstanceDelete: (playId: string) => Promise<void>;
+	targetInstance: LocalInstanceEntity;
+	createSessionInstance: (params: CreateSessionInstanceParameterObject) => Promise<LocalInstanceEntity>;
 }
 
 export class CoePluginEntity {
 	private _gameViewManager: GameViewManager;
-	private _localInstance: LocalInstanceEntity;
-	private _childLocalInstance: LocalInstanceEntity;
-	private _coePluginMessageHandler: (parameters: CoeExternalMessage) => void;
-	private _createLocalInstance: (params: CreateCoeLocalInstanceParameterObject) => Promise<LocalInstanceEntity>;
-	private _deleteLocalInstance: (playId: string) => Promise<void>;
+	private _targetInstance: LocalInstanceEntity;
+	private _childrenTable: { [sessionId: string]: CoeSessionData };
+	private _createSessionInstacne: (params: CreateSessionInstanceParameterObject) => Promise<LocalInstanceEntity>;
 
 	constructor(param: CoePluginEntityParameterObject) {
-		this._localInstance = param.localInstance;
 		this._gameViewManager = param.gameViewManager;
-		this._createLocalInstance = param.onLocalInstanceCreate;
-		this._deleteLocalInstance = param.onLocalInstanceDelete;
+		this._targetInstance = param.targetInstance;
+		this._childrenTable = {};
+		this._createSessionInstacne = param.createSessionInstance;
 	}
 
-	async bootstrap(game: agv.GameLike, _gameContent: agv.GameContent): Promise<void> {
+	setup(game: agv.GameLike, _gameContent: agv.GameContent): void {
 		game.external.coe = {
 			startSession: this.startSession,
 			exitSession: this.exitSession,
@@ -57,29 +55,27 @@ export class CoePluginEntity {
 
 	startSession = async (parameters: CoeStartSessionParameterObject): Promise<void> => {
 		try {
-			if (parameters && parameters.messageHandler) {
-				this._coePluginMessageHandler = parameters.messageHandler;
-			}
-
 			if (parameters.application == null) {
 				throw new Error("Cannot start session");
 			}
 
+			// NOTE: 引数の決め方に仕様はない。組み込みサービスが決める。ここでは親セッションの値を引き継いでおく
+			const argument = this._targetInstance.argument;
 			const contentUrl = this._resolveContentUrl(parameters.application, parameters.cascadeApplications);
 
 			if (parameters.local) {
-				this._startLocalSession(contentUrl, parameters);
+				this._startLocalSession(contentUrl, parameters, argument);
 				return;
 			}
 
 			if (typeof parameters.delayRange === "number") {
 				window.setTimeout(() => {
-					this._startSession(contentUrl, parameters);
+					this._startSession(contentUrl, parameters, argument);
 				}, Math.floor(Math.random() * parameters.delayRange));
 				return;
 			}
 
-			await this._startSession(contentUrl, parameters);
+			await this._startSession(contentUrl, parameters, argument);
 		} catch (e) {
 			// TODO: エラーハンドリング
 			console.error(e);
@@ -92,19 +88,22 @@ export class CoePluginEntity {
 			if (parameters == null) {
 				return;
 			}
+			if (!this._childrenTable.hasOwnProperty(sessionId)) {
+				throw new Error("Invalid operation");
+			}
+
+			const child = this._childrenTable[sessionId];
+
 			if (parameters.needsResult) {
-				const childInstance = this._childLocalInstance;
-				if (childInstance == null) {
-					throw new Error("Invalid operation");
-				}
-				const gameState = await this._gameViewManager.getGameVars<GameState>(childInstance.gameContent, "gameState");
-				this._coePluginMessageHandler({
+				const gameState = await this._gameViewManager.getGameVars<GameState>(child.instance.gameContent, "gameState");
+				child.messageHandler({
 					type: "end",
 					result: gameState ? gameState.score : null,
 					sessionId
 				});
 			}
-			await this._deleteLocalInstance(sessionId);
+
+			await child.instance.stop();
 		} catch (e) {
 			// TODO: エラーハンドリング
 			console.error(e);
@@ -115,52 +114,36 @@ export class CoePluginEntity {
 		// TODO
 	}
 
-	private async _startSession(contentUrl: string, parameters: any): Promise<void> {
+	private async _startSession(contentUrl: string, parameters: any, argument: any): Promise<void> {
 		try {
-			this._childLocalInstance = await this._createLocalInstance({
+			const sessionId = parameters.sessionId;
+			const instance = await this._createSessionInstacne({
 				contentUrl,
-				playId: parameters.sessionId,
+				playId: sessionId,
 				local: false,
-				parent: this._localInstance,
-				argument: {
-					coe: {
-						permission: {
-							advance: true,
-							advanceRequest: true,
-							aggregation: true
-						},
-						roles: ["broadcaster"],
-						debugMode: false
-					}
-				},
+				parent: this._targetInstance,
+				argument,
 				initialEvents: parameters.localEvents
 			});
+			this._childrenTable[sessionId] = { sessionId, instance, messageHandler: parameters.messageHandler };
 		} catch (e) {
 			// TODO: エラーハンドリング
 			console.error(e);
 		}
 	}
 
-	private async _startLocalSession(contentUrl: string, parameters: CoeStartSessionParameterObject): Promise<void> {
+	private async _startLocalSession(contentUrl: string, parameters: CoeStartSessionParameterObject, argument: any): Promise<void> {
 		try {
-			this._childLocalInstance = await this._createLocalInstance({
+			const sessionId = parameters.sessionId;
+			const instance = await this._createSessionInstacne({
 				contentUrl,
-				playId: parameters.sessionId,
+				playId: sessionId,
 				local: true,
-				parent: this._localInstance,
-				argument: {
-					coe: {
-						permission: {
-							advance: true,
-							advanceRequest: true,
-							aggregation: true
-						},
-						roles: ["broadcaster"],
-						debugMode: false
-					}
-				},
+				parent: this._targetInstance,
+				argument,
 				initialEvents: parameters.localEvents
 			});
+			this._childrenTable[sessionId] = { sessionId, instance, messageHandler: parameters.messageHandler };
 		} catch (e) {
 			// TODO: エラーハンドリング
 			console.error(e);

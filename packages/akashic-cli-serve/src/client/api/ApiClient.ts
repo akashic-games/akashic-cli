@@ -36,16 +36,18 @@ export const resumePlayDuration = async(playId: string): Promise<PlayPatchApiRes
 	return await ApiRequest.patch<PlayPatchApiResponse>(`/api/plays/${playId}`, {status: "running"});
 };
 
+// TODO リファクタリング: 直接tokenに必要ないものをdebug用情報としてまとめる
 export const createPlayToken = async(
 	playId: string,
 	playerId: string,
 	isActive: boolean,
 	name?: string,
-	envInfo?: any
+	envInfo?: any,
+	passedArgument?: string
 ): Promise<PlayTokenPostApiResponse> => {
 	return await ApiRequest.post<PlayTokenPostApiResponse>(
 		`/api/plays/${playId}/token`,
-		{playerId, isActive: isActive.toString(), name, envInfo}
+		{playerId, isActive: isActive.toString(), name, envInfo, passedArgument}
 	);
 };
 
@@ -53,10 +55,10 @@ export const broadcast = async(playId: string, message: any): Promise<void> => {
 	return await ApiRequest.post<void>(`/api/plays/${playId}/broadcast`, message);
 };
 
-export const createRunner = async(playId: string, isActive: boolean, token: string): Promise<RunnerPostApiResponse> => {
+export const createRunner = async(playId: string, isActive: boolean, token: string, args?: any): Promise<RunnerPostApiResponse> => {
 	return await ApiRequest.post<RunnerPostApiResponse>(
 		"/api/runners",
-		{playId, isActive: isActive.toString(), token}
+		{playId, isActive: isActive.toString(), token, args}
 	);
 };
 

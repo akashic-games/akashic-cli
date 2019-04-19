@@ -79,7 +79,9 @@ export class PlayStore {
 	}
 
 	async stopPlay(playId: string): Promise<void> {
-		await this.playManager.stopPlay(playId);
+		// TODO headless-driver は stopPlay() すると全記録消えてしまうのをなんとかする
+		// TODO headless-driver に反映しないなら、 playStatus を自前で管理しておかないと、playStatus取得APIを作った時におかしくなる
+		// await this.playManager.stopPlay(playId);
 		this.onPlayStatusChange.fire({playId, playStatus: "suspending"});
 	}
 

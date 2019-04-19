@@ -1,10 +1,10 @@
+import cloneDeep = require("lodash.clonedeep");
 import {action, observable, computed} from "mobx";
 import {Trigger} from "@akashic/trigger";
 import {TimeKeeper} from "../../common/TimeKeeper";
 import {Player} from "../../common/types/Player";
 import {GameViewManager} from "../akashic/GameViewManager";
 import {PlayEntity} from "./PlayEntity";
-import {CoePluginEntity, CreateCoeLocalInstanceParameterObject} from "./CoePluginEntity";
 import {GameInstanceEntity} from "./GameInstanceEntity";
 import {ExecutionMode} from "./ExecutionMode";
 
@@ -20,6 +20,13 @@ const toAgvExecutionMode = (() => {
 	return toAgvExecutionMode;
 })();
 
+export interface HandleRegisterPluginParameterObject {
+	instance: LocalInstanceEntity;
+	name: string;
+	game: any;
+	agvGameContent: agv.GameContent;
+}
+
 export interface LocalInstanceEntityParameterObject {
 	gameViewManager: GameViewManager;
 	contentUrl: string;
@@ -30,10 +37,7 @@ export interface LocalInstanceEntityParameterObject {
 	playToken?: string;
 	playlogServerUrl?: string;
 	parent?: LocalInstanceEntity;
-	coeHandler?: {
-		onLocalInstanceCreate: (params: CreateCoeLocalInstanceParameterObject) => Promise<LocalInstanceEntity>;
-		onLocalInstanceDelete: (playId: string) => Promise<void>;
-	};
+	handleRegisterPlugin?: (params: HandleRegisterPluginParameterObject) => void;
 }
 
 export class LocalInstanceEntity implements GameInstanceEntity {
@@ -45,8 +49,8 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 	@observable isPaused: boolean;
 
 	readonly play: PlayEntity;
-	readonly coePlugin: CoePluginEntity;
 	readonly contentUrl: string;
+	readonly argument: any;
 
 	private _timeKeeper: TimeKeeper;
 	private _gameViewManager: GameViewManager;
@@ -59,8 +63,10 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 		this.play = params.play;
 		this.isPaused = false;
 		this.contentUrl = params.contentUrl;
+		this.argument = params.argument;
 		this._timeKeeper = new TimeKeeper();
 		this._gameViewManager = params.gameViewManager;
+
 		const playConfig: agv.PlaylogConfig = {
 			playId: this.play.playId,
 			executionMode: toAgvExecutionMode(this.executionMode),
@@ -74,6 +80,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 		if (params.playToken != null) {
 			playConfig.playToken = params.playToken;
 		}
+
 		this._agvGameContent = this._gameViewManager.createGameContent({
 			contentUrl: this.contentUrl,
 			player: {
@@ -82,21 +89,16 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 			},
 			playConfig,
 			gameLoaderCustomizer,
-			argument: params.argument
+			argument: cloneDeep(params.argument)
 		});
-		if (params.coeHandler != null) {
-			this.coePlugin = new CoePluginEntity({
-				gameViewManager: this._gameViewManager,
-				localInstance: this,
-				onLocalInstanceCreate: params.coeHandler.onLocalInstanceCreate,
-				onLocalInstanceDelete: params.coeHandler.onLocalInstanceDelete
-			});
-			this._agvGameContent.onExternalPluginRegister.addOnce((name: string) => {
-				if (name !== "coe") return;
+
+		if (params.handleRegisterPlugin) {
+			this._agvGameContent.onExternalPluginRegister.add((name: string) => {
 				const game = this._agvGameContent.getGame();
-				this.coePlugin.bootstrap(game, this._agvGameContent);
+				params.handleRegisterPlugin({ instance: this, name, game, agvGameContent: this._agvGameContent });
 			});
 		}
+
 		if (params.parent != null) {
 			params.parent.onStop.addOnce(() => {
 				this.stop();

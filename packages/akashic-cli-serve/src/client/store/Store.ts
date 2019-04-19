@@ -24,7 +24,7 @@ export class Store {
 	@observable currentLocalInstance: LocalInstanceEntity | null;
 
 	@observable sandboxConfig: SandboxConfig;
-	@observable argumentsTable: { [name: string]: string };
+	@observable argumentsStringTable: { [name: string]: string };
 
 	constructor() {
 		this.contentId = 0;
@@ -41,7 +41,7 @@ export class Store {
 		this.currentPlay = null;
 		this.currentLocalInstance = null;
 		this.sandboxConfig = null;
-		this.argumentsTable = {};
+		this.argumentsStringTable = {};
 	}
 
 	@action
@@ -56,15 +56,17 @@ export class Store {
 
 	@action
 	setSandboxConfig(cfg: SandboxConfig): void {
-		this.sandboxConfig = cfg;
+		this.sandboxConfig = {
+			events: {},
+			arguments: {},
+			...cfg
+		};
 
 		// mobx の reaction として書くべき？
-		if (cfg.arguments) {
-			const args = cfg.arguments;
-			this.argumentsTable = Object.keys(args).reduce((acc, key) => {
-				acc[key.replace(/^\</, "\\<")] = JSON.stringify(args[key], null, 2);
-				return acc;
-			}, {} as { [name: string]: string });
-		}
+		const args = this.sandboxConfig.arguments;
+		this.argumentsStringTable = Object.keys(args).reduce((acc, key) => {
+			acc[key] = JSON.stringify(args[key], null, 2);
+			return acc;
+		}, {} as { [name: string]: string });
 	}
 }

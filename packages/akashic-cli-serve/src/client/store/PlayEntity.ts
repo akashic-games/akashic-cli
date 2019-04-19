@@ -11,9 +11,8 @@ import { GameViewManager } from "../akashic/GameViewManager";
 import { SocketIOAMFlowClient } from "../akashic/SocketIOAMFlowClient";
 import { Player } from "../../common/types/Player";
 import { ExecutionMode } from "./ExecutionMode";
-import { LocalInstanceEntity } from "./LocalInstanceEntity";
+import { LocalInstanceEntity, HandleRegisterPluginParameterObject } from "./LocalInstanceEntity";
 import { ServerInstanceEntity } from "./ServerInstanceEntity";
-import { CreateCoeLocalInstanceParameterObject } from "./CoePluginEntity";
 
 export interface CreateLocalInstanceParameterObject {
 	gameViewManager: GameViewManager;
@@ -26,14 +25,12 @@ export interface CreateLocalInstanceParameterObject {
 	contentUrl?: string;
 	argument?: any;
 	initialEvents?: playlog.Event[];
-	coeHandler?: {
-		onLocalInstanceCreate: (params: CreateCoeLocalInstanceParameterObject) => Promise<LocalInstanceEntity>;
-		onLocalInstanceDelete: (playId: string) => Promise<void>;
-	};
+	handleRegisterPlugin?: (params: HandleRegisterPluginParameterObject) => void;
 }
 
 export interface CreateServerInstanceParameterObject {
 	playToken: string;
+	argument?: any;
 }
 
 export interface PlayEntityParameterObject {
@@ -47,8 +44,6 @@ export interface PlayEntityParameterObject {
 }
 
 export class PlayEntity {
-	onTeardown: Trigger<PlayEntity>;
-
 	readonly playId: string;
 	readonly amflow: SocketIOAMFlowClient;
 
@@ -79,8 +74,9 @@ export class PlayEntity {
 		this.joinedPlayerTable = observable.map((param.joinedPlayers || []).map(p => [p.id, p]));
 		this.status = "preparing";
 		this.localInstances = [];
-		this.serverInstances = !param.runners ? [] : param.runners.map(desc => new ServerInstanceEntity({ runnerId: desc.runnerId, play: this }));
-		this.onTeardown = new Trigger();
+		this.serverInstances = !param.runners ? [] : param.runners.map(desc => {
+			return new ServerInstanceEntity({ runnerId: desc.runnerId, play: this, passedArgument: desc.passedArgument });
+		});
 		this._timeKeeper = new TimeKeeper();
 		this._clientContentUrl = param.clientContentUrl!;
 		this._contentUrl = param.contentUrl;
@@ -109,8 +105,6 @@ export class PlayEntity {
 			play: this,
 			contentUrl: param.contentUrl != null ? param.contentUrl : this._contentUrl, // TODO: 本来は this._clientContentUrl をみるべき
 			// contentUrl: this._clientContentUrl,  // クライアントスクリプトデバッグのためにはこちらに戻す必要あり
-			coeHandler: param.coeHandler,
-			parent: param.parent,
 			...param
 		});
 		i.onStop.add(this._handleLocalInstanceStopped);
@@ -128,7 +122,7 @@ export class PlayEntity {
 	}
 
 	async createServerInstance(param: CreateServerInstanceParameterObject): Promise<ServerInstanceEntity> {
-		const runnerResult = await ApiClient.createRunner(this.playId, true, param.playToken);
+		const runnerResult = await ApiClient.createRunner(this.playId, true, param.playToken, param.argument);
 		const runnerId = runnerResult.data.runnerId;
 
 		// ApiClient.createRunner() に対する onRunnerCreate 通知が先行していれば、この時点で ServerInstanceEntity が生成済みになっている
@@ -202,11 +196,11 @@ export class PlayEntity {
 	}
 
 	@action
-	handleRunnerCreate(runnerId: string): void {
-		const instance = new ServerInstanceEntity({ runnerId, play: this });
+	handleRunnerCreate(e: RunnerDescription): void {
+		const instance = new ServerInstanceEntity({ runnerId: e.runnerId, play: this, passedArgument: e.passedArgument });
 		this.serverInstances.push(instance);
-		if (this._serverInstanceWaiters[runnerId]) {
-			this._serverInstanceWaiters[runnerId](instance);
+		if (this._serverInstanceWaiters[e.runnerId]) {
+			this._serverInstanceWaiters[e.runnerId](instance);
 		}
 	}
 
@@ -227,11 +221,9 @@ export class PlayEntity {
 		this.isActivePausing = false;
 	}
 
-	async teardown(): Promise<void> {
+	async handleSuspend(): Promise<void> {
 		this._pauseTimeKeeper();
 		await this.deleteAllLocalInstances();
-		await this.deleteAllServerInstances();
-		this.onTeardown.fire(this);
 	}
 
 	private _handleLocalInstanceStopped = (instance: LocalInstanceEntity): void => {

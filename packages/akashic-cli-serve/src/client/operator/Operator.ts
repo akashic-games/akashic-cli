@@ -1,8 +1,9 @@
+import { EventCode } from "@akashic/playlog";
 import { PlayBroadcastTestbedEvent, PlayTreeTestbedEvent } from "../../common/types/TestbedEvent";
 import * as ApiClient from "../api/ApiClient";
 import * as Subscriber from "../api/Subscriber";
 import { GameViewManager } from "../akashic/GameViewManager";
-import { PlayEntity, CreateLocalInstanceParameterObject } from "../store/PlayEntity";
+import { PlayEntity } from "../store/PlayEntity";
 import { Store } from "../store/Store";
 import { PlayOperator } from "./PlayOperator";
 import { LocalInstanceOperator } from "./LocalInstanceOperator";
@@ -10,8 +11,8 @@ import { UiOperator } from "./UiOperator";
 import { ExternalPluginOperator } from "./ExternalPluginOperator";
 import { CreatePlayParameterObject } from "../store/PlayStore";
 import { CoeApplicationIdentifier } from "../common/interface/plugin";
-import { CreateCoeLocalInstanceParameterObject } from "../store/CoePluginEntity";
-import { LocalInstanceEntity } from "../store/LocalInstanceEntity";
+import { LocalInstanceEntity, HandleRegisterPluginParameterObject } from "../store/LocalInstanceEntity";
+import { CoePluginEntity, CreateSessionInstanceParameterObject } from "../store/CoePluginEntity";
 
 export interface OperatorParameterObject {
 	store: Store;
@@ -35,6 +36,8 @@ export interface CreateNewPlayAndSendEventsParameterObject {
 }
 
 export class Operator {
+	static ACTIVE_SERVER_INSTANCE_ARGUMENT_NAME = "<activeServerInstanceArgument>";
+
 	play: PlayOperator;
 	localInstance: LocalInstanceOperator;
 	ui: UiOperator;
@@ -96,7 +99,15 @@ export class Operator {
 	startContent = async (params?: StartContentParameterObject): Promise<void> => {
 		const store = this.store;
 		const play = store.currentPlay;
-		const tokenResult = await ApiClient.createPlayToken(play.playId, store.player.id, false, store.player.name);
+		const argument = params != null ? params.instanceArgument : undefined;
+		const tokenResult = await ApiClient.createPlayToken(
+			play.playId,
+			store.player.id,
+			false,
+			store.player.name,
+			null,
+			JSON.stringify(argument)
+		);
 		const instance = await play.createLocalInstance({
 			gameViewManager: this.gameViewManager,
 			playId: play.playId,
@@ -104,11 +115,8 @@ export class Operator {
 			playlogServerUrl: "dummy-playlog-server-url",
 			executionMode: "passive",
 			player: store.player,
-			argument: params != null ? params.instanceArgument : undefined,
-			coeHandler: {
-				onLocalInstanceCreate: this._createLocalInstance,
-				onLocalInstanceDelete: this._deleteLocalInstance
-			}
+			argument,
+			handleRegisterPlugin: this._handleRegisterPlugin
 		});
 		store.setCurrentLocalInstance(instance);
 		if (params != null && params.joinsSelf) {
@@ -128,54 +136,47 @@ export class Operator {
 
 	createNewPlay = async (param: CreatePlayParameterObject): Promise<PlayEntity> => {
 		const play = await this.store.playStore.createPlay(param);
-		const tokenResult = await ApiClient.createPlayToken(play.playId, "", true);  // TODO 空文字列でなくnullを使う
-		play.createServerInstance({ playToken: tokenResult.data.playToken });
+		const argument = this.store.sandboxConfig.arguments[Operator.ACTIVE_SERVER_INSTANCE_ARGUMENT_NAME];
+		const tokenResult = await ApiClient.createPlayToken(play.playId, "", true, null, JSON.stringify(argument));  // TODO 空文字列でなくnullを使う
+		play.createServerInstance({ playToken: tokenResult.data.playToken, argument });
 		await ApiClient.broadcast(this.store.currentPlay.playId, { type: "newPlay", newPlayId: play.playId });
 		return play;
 	}
 
 	createChildPlayAndSendEvents = async (param: CreateNewPlayAndSendEventsParameterObject): Promise<void> => {
-		const {parentPlayId, contentUrl, clientContentUrl, sessionParameters} = param;
-		const {type, version, url} = param.application;
-		let parentPlay: PlayEntity;
-		if (parentPlayId != null) {
-			parentPlay = this.store.playStore.plays[parentPlayId];
-		}
-		if (parentPlay == null) {
-			parentPlay = this.getCurrentPlay();
-		}
+		const {parentPlayId, contentUrl, clientContentUrl, sessionParameters, application} = param;
+		const parentPlay = ((parentPlayId != null) && this.store.playStore.plays[parentPlayId]) || this.getCurrentPlay();
 		if (parentPlay == null) {
 			throw new Error("play not found");
 		}
-		const childPlay = await this.createNewPlay({
-			contentUrl,
-			clientContentUrl
-		});
+		const childPlay = await this.createNewPlay({ contentUrl, clientContentUrl });
 		parentPlay.amflow.sendEvent([
-			32,
-			null,
+			EventCode.Message,
+			2,
 			":akashic",
 			{
 				type: "child_start",
 				sessionId: childPlay.playId,
 				userId: ":akashic",
-				application: {
-					type,
-					version,
-					url
-				},
+				application,
 				cascadeApplications: []
 			}
 		]);
 		await ApiClient.addChildPlay(parentPlay.playId, childPlay.playId);
 		await ApiClient.getPlayTree();
 		this.store.externalPluginUiStore.setCurrentPlay(childPlay.playId);
+
 		// TODO: headless-driver 側で AMFLowClient#authenticate() が完了する前に sendEvent() を呼んでも問題ないようにする
-		const pooling = () => {
+		const polling = () => {
 			if (childPlay.amflow._permission != null) {
+				// 子セッションの制御プレイヤーをjoinさせる必要があるが、それが誰かはサービスが決める。
+				// serveはひとまず単に親セッションと同じプレイヤーをjoinさせることにする。
+				parentPlay.joinedPlayerTable.forEach(p => {
+					childPlay.amflow.sendEvent([EventCode.Join, 3, p.id, p.name]);
+				});
 				childPlay.amflow.sendEvent([
-					32,
-					null,
+					EventCode.Message,
+					2,
 					":akashic",
 					{
 						type: "start",
@@ -185,24 +186,41 @@ export class Operator {
 					}
 				]);
 			} else {
-				setTimeout(pooling, 500);
+				setTimeout(polling, 500);
 			}
 		};
-		pooling();
+		polling();
 	}
 
 	suspendPlayAndSendEvents = async (playId: string): Promise<void> => {
 		await ApiClient.suspendPlay(playId);
 	}
 
-	private _createLocalInstance = async (params: CreateCoeLocalInstanceParameterObject): Promise<LocalInstanceEntity> => {
+	private _handleRegisterPlugin = (params: HandleRegisterPluginParameterObject): void => {
+		if (params.name === "coe") {
+			const coePlugin = new CoePluginEntity({
+				gameViewManager: this.gameViewManager,
+				targetInstance: params.instance,
+				createSessionInstance: this._createSessionInstance
+			});
+			// TODO このインスタンスを保持しておくべき？
+			coePlugin.setup(params.game, params.agvGameContent);
+		}
+	}
+
+	private _createSessionInstance = async (params: CreateSessionInstanceParameterObject): Promise<LocalInstanceEntity> => {
 		const store = this.store;
-		let createInstanceParam: CreateLocalInstanceParameterObject;
-		let play: PlayEntity;
 		if (!params.local) {
-			play = this.store.playStore.plays[params.playId];
-			const childPlayToken = await ApiClient.createPlayToken(play.playId, store.player.id, false, store.player.name);
-			createInstanceParam = {
+			const play = this.store.playStore.plays[params.playId];
+			const childPlayToken = await ApiClient.createPlayToken(
+				play.playId,
+				store.player.id,
+				false,
+				store.player.name,
+				null,
+				JSON.stringify(params.argument)
+			);
+			return await play.createLocalInstance({
 				gameViewManager: this.gameViewManager,
 				contentUrl: params.contentUrl,
 				player: this.store.player,
@@ -212,15 +230,12 @@ export class Operator {
 				executionMode: "passive",
 				argument: params.argument,
 				initialEvents: params.initialEvents,
-				coeHandler: {
-					onLocalInstanceCreate: this._createLocalInstance,
-					onLocalInstanceDelete: this._deleteLocalInstance
-				},
+				handleRegisterPlugin: this._handleRegisterPlugin,
 				parent: params.parent
-			};
+			});
 		} else {
-			play = await this._createClientLoop(params.contentUrl, params.playId);
-			createInstanceParam = {
+			const play = await this._createClientLoop(params.contentUrl, params.playId);
+			return await play.createLocalInstance({
 				gameViewManager: this.gameViewManager,
 				contentUrl: params.contentUrl,
 				player: this.store.player,
@@ -229,26 +244,22 @@ export class Operator {
 				argument: params.argument,
 				initialEvents: params.initialEvents,
 				parent: params.parent
-			};
+			});
 		}
-		return await play.createLocalInstance(createInstanceParam);
-	}
-
-	private _deleteLocalInstance = async (playId: string) => {
-		const play = this.store.playStore.plays[playId];
-		if (play == null) {
-			throw new Error("Play not found" + playId);
-		}
-		await play.teardown();
 	}
 
 	private async _createServerLoop(): Promise<PlayEntity> {
+		// 一部フローで二度手間になるが、createServerInstance() 時に参照するのでこの箇所で更新しておく
+		const sandboxConfigResult = await ApiClient.getSandboxConfig(this.store.contentId);
+		this.store.setSandboxConfig(sandboxConfigResult.data || {});
+
 		const play = await this.store.playStore.createPlay({
 			contentUrl: this.contentUrl,
 			clientContentUrl: this.clientContentUrl
 		});
-		const tokenResult = await ApiClient.createPlayToken(play.playId, "", true);  // TODO 空文字列でなくnullを使う
-		play.createServerInstance({ playToken: tokenResult.data.playToken });
+		const argument = this.store.sandboxConfig.arguments[Operator.ACTIVE_SERVER_INSTANCE_ARGUMENT_NAME];
+		const tokenResult = await ApiClient.createPlayToken(play.playId, "", true, null, JSON.stringify(argument));  // TODO 空文字列でなくnullを使う
+		play.createServerInstance({ playToken: tokenResult.data.playToken, argument });
 		ApiClient.resumePlayDuration(play.playId);
 		return play;
 	}

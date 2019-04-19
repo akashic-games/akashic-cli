@@ -16,7 +16,8 @@ export const createHandlerToCreatePlayToken = (amflowManager: SocketIOAMFlowMana
 			const name = req.body.name;
 			const isActive = (req.body.isActive === "true");
 			const envInfo = req.body.envInfo;
-			const playToken = amflowManager.createPlayToken(playId, playerId, name, isActive, envInfo);
+			const passedArgument = req.body.passedArgument;
+			const playToken = amflowManager.createPlayToken(playId, playerId, name, isActive, envInfo, passedArgument);
 			if (!playToken) {
 				throw new InternalServerError({ errorMessage: "Cannot generate playToken" });
 			}

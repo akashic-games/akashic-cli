@@ -7,6 +7,7 @@ import * as styles from "./InstancesDevtool.css";
 export interface InstanceViewData {
 	type: "active" | "passive";  // TODO isActive: boolean にする
 	env?: string;
+	passedArgument?: string;
 	playerId: string | null;
 	name: string | null;
 	isJoined: boolean;
@@ -37,6 +38,7 @@ export class InstancesDevtool extends React.Component<InstancesDevtoolProps, {}>
 							<th>Name</th>
 							<th>Joined</th>
 							<th>Env</th>
+							<th>Passed Argument</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -49,6 +51,7 @@ export class InstancesDevtool extends React.Component<InstancesDevtoolProps, {}>
 									<td>{ (i.name != null) ? i.name : "(null)" }</td>
 									<td>{ i.isJoined ? "true" : "false" }</td>
 									<td>{ i.env || "(N/A)" }</td>
+									<td title={i.passedArgument}>{ i.passedArgument || "(N/A)" }</td>
 								</tr>
 							))
 						}
@@ -57,6 +60,7 @@ export class InstancesDevtool extends React.Component<InstancesDevtoolProps, {}>
 						<tr>
 							<td></td>
 							<td><a href="#" onClick={this._onClickAddInstanceLink}>Add an instance</a></td>
+							<td></td>
 							<td></td>
 							<td></td>
 							<td></td>

@@ -40,9 +40,9 @@ const TestWithBehaviour = observer(() => (
 		}}
 		instancesDevtoolProps={{
 			instances: [
-				{ type: "active", env: "(server)", playerId: null, name: null, isJoined: false },
-				{ type: "passive", env: "Chrome", playerId: "1234567890", name: "player-1", isJoined: true },
-				{ type: "passive", env: "Chrome", playerId: "aa0941jlta", name: "player-2", isJoined: false },
+				{ type: "active", env: "(server)", playerId: null, name: null, isJoined: false, passedArgument: "{ \"foo\": \"dummy\" }" },
+				{ type: "passive", env: "Chrome", playerId: "1234567890", name: "player-1", isJoined: true, passedArgument: "argdummy2" },
+				{ type: "passive", env: "Chrome", playerId: "aa0941jlta", name: "player-2", isJoined: false, passedArgument: "argdummy3" },
 				{ type: "passive", env: "Firefox", playerId: "asfaiout", name: "player-3", isJoined: true }
 			],
 			onClickAddInstance: action("add-instance")
@@ -239,10 +239,10 @@ storiesOf("o-Devtool", module)
 			}}
 			instancesDevtoolProps={{
 				instances: [
-					{ type: "active", env: "(server)", playerId: null, name: null, isJoined: false },
-					{ type: "passive", env: "Chrome", playerId: "1234567890", name: "player-1", isJoined: true },
+					{ type: "active", env: "(server)", playerId: null, name: null, isJoined: false, passedArgument: "dummy1" },
+					{ type: "passive", env: "Chrome", playerId: "1234567890", name: "player-1", isJoined: true, passedArgument: "dummy2" },
 					{ type: "passive", env: "Chrome", playerId: "aa0941jlta", name: "player-2", isJoined: false },
-					{ type: "passive", env: "Firefox", playerId: "asfaiout", name: "player-3", isJoined: true }
+					{ type: "passive", env: "Firefox", playerId: "asfaiout", name: "player-3", isJoined: true, passedArgument: "dummy3" }
 				],
 				onClickAddInstance: action("add-instance")
 			}}
