@@ -28,6 +28,7 @@ export class App extends React.Component<AppProps, {}> {
 				/>
 			</div>;
 		}
+		console.log("this.props.store.sandboxConfig.backGroundImage", this.props.store.sandboxConfig.backGroundImage);
 		return <div id="whole" className={styles["whole"]}>
 			<ToolBarContainer
 				play={store.currentPlay}
@@ -35,7 +36,9 @@ export class App extends React.Component<AppProps, {}> {
 				operator={operator}
 				toolBarUiStore={store.toolBarUiStore}
 			/>
-			<div className={styles["main"] + " " + styles["centering"]} ref={this._onRef} />
+			<div className={styles["main"] + " " + styles["centering"] } ref={this._onRef}>
+				<img src={this.props.store.sandboxConfig.backGroundImage} className={styles["bgImage"]}/>
+			</div>
 			{
 				store.toolBarUiStore.showsDevtools ?
 					<div className={styles["devtools"]}>
@@ -54,6 +57,7 @@ export class App extends React.Component<AppProps, {}> {
 	private _onRef = (elem: HTMLDivElement): void => {
 		if (elem) {
 			elem.appendChild(this.props.gameViewManager.getRootElement());
+
 		}
 	}
 }

@@ -33,3 +33,8 @@
 .devtools {
 	flex: 0 0 auto;
 }
+
+.bgImage {
+	position: absolute;
+	z-index: -1;
+}
