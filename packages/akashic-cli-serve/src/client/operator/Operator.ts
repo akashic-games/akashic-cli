@@ -96,7 +96,7 @@ export class Operator {
 		} else if (reuseStartupOption) {
 			const argText = this.store.startupScreenUiStore.instanceArgumentEditContent;
 			await this.startContent({
-				joinsSelf: this.store.startupScreenUiStore.joinsAutomatically, // joinについては起動画面での選択と直近の状態どちらを優先すべきか
+				joinsSelf: this.store.startupScreenUiStore.joinsAutomatically, // joinについても起動時の設定を引き継ぐ
 				instanceArgument: (argText !== "") ? JSON.parse(argText) : undefined
 			});
 		}
@@ -138,7 +138,7 @@ export class Operator {
 		await this._restartWithNewPlay(false);
 	}
 
-	restartWithStartupOption = async (): Promise<void> => {
+	restartWithCurrentArgument = async (): Promise<void> => {
 		await this._restartWithNewPlay(true);
 	}
 
