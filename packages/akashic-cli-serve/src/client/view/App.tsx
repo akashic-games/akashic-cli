@@ -28,7 +28,7 @@ export class App extends React.Component<AppProps, {}> {
 				/>
 			</div>;
 		}
-		console.log("this.props.store.sandboxConfig.backGroundImage", this.props.store.sandboxConfig.backGroundImage);
+		console.log("this.props.store.sandboxConfig.backgroundImage", this.props.store.sandboxConfig.backgroundImage);
 		return <div id="whole" className={styles["whole"]}>
 			<ToolBarContainer
 				play={store.currentPlay}
@@ -39,7 +39,7 @@ export class App extends React.Component<AppProps, {}> {
 			<div className={styles["main"] + " " + styles["centering"] } ref={this._onRef}>
 			{
 				store.toolBarUiStore.showsBgImage ?
-					<img src={this.props.store.sandboxConfig.backGroundImage} className={styles["bgImage"]}/> :
+					<img src={this.props.store.sandboxConfig.backgroundImage} className={styles["bgImage"]}/> :
 					null
 			}
 			</div>
