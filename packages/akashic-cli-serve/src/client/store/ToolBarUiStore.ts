@@ -6,6 +6,7 @@ export class ToolBarUiStore {
 	@observable isSeeking: boolean;
 	@observable showsAppearanceMenu: boolean;
 	@observable showsDevtools: boolean;
+	@observable showsBgImage: boolean;
 
 	constructor() {
 		this.currentTimePreview = 0;
@@ -34,5 +35,11 @@ export class ToolBarUiStore {
 	toggleShowDevtools(show: boolean): void {
 		this.showsDevtools = show;
 		storage.put({ showsDevtools: show });
+	}
+
+	@action
+	toggleShowBgImage(show: boolean): void {
+		this.showsBgImage = show;
+		storage.put({ showBgImage: show });
 	}
 }

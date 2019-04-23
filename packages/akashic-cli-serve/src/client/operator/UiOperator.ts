@@ -20,6 +20,10 @@ export class UiOperator {
 		this.store.toolBarUiStore.toggleShowDevtools(show);
 	}
 
+	toggleBgImage = (show: boolean): void => {
+		this.store.toolBarUiStore.toggleShowBgImage(show);
+	}
+
 	setDevtoolHeight = (height: number) => {
 		this.store.devtoolUiStore.setHeight(height);
 	}

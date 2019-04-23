@@ -4,6 +4,7 @@ export interface StorageData {
 	playerId: string;
 	playerName: string;
 	showsDevtools: boolean;
+	showBgImage: boolean;
 	devtoolsHeight: number;
 	activeDevtool: string;
 	showsEventList: boolean;

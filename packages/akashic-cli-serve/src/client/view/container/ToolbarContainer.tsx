@@ -26,9 +26,11 @@ export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}>
 			makePlayerControlProps={this._makePlayerControlProps}
 			showsAppearance={toolBarUiStore.showsAppearanceMenu}
 			showsDevtools={toolBarUiStore.showsDevtools}
+			showsBgImage={toolBarUiStore.showsBgImage}
 			showsInstanceControl={(localInstance.executionMode === "replay") || toolBarUiStore.showsDevtools}
 			onToggleAppearance={operator.ui.toggleShowAppearance}
 			onToggleDevTools={operator.ui.toggleShowDevtools}
+			onToggleBgImage={operator.ui.toggleBgImage}
 		/>;
 	}
 
