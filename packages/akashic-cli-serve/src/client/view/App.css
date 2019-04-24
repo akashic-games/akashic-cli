@@ -38,3 +38,13 @@
 	position: absolute;
 	z-index: -1;
 }
+
+/* IE11のみ */
+@media all and (-ms-high-contrast: none){
+	.bg-image {
+		margin: auto;
+		left: 0px;
+		right: 0px;
+		transform: translateY(-50%);
+	}
+}
