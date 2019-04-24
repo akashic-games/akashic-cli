@@ -40,6 +40,6 @@ export class ToolBarUiStore {
 	@action
 	toggleShowBgImage(show: boolean): void {
 		this.showsBgImage = show;
-		storage.put({ showBgImage: show });
+		storage.put({ showsBgImage: show });
 	}
 }

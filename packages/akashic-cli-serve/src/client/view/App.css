@@ -34,7 +34,7 @@
 	flex: 0 0 auto;
 }
 
-.bgImage {
+.bg-image {
 	position: absolute;
 	z-index: -1;
 }

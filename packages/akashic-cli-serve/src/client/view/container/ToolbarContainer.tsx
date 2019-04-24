@@ -30,7 +30,7 @@ export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}>
 			showsInstanceControl={(localInstance.executionMode === "replay") || toolBarUiStore.showsDevtools}
 			onToggleAppearance={operator.ui.toggleShowAppearance}
 			onToggleDevTools={operator.ui.toggleShowDevtools}
-			onToggleBgImage={operator.ui.toggleBgImage}
+			onToggleBgImage={operator.ui.toggleShowBgImage}
 		/>;
 	}
 

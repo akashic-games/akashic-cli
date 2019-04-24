@@ -20,7 +20,7 @@ export class UiOperator {
 		this.store.toolBarUiStore.toggleShowDevtools(show);
 	}
 
-	toggleBgImage = (show: boolean): void => {
+	toggleShowBgImage = (show: boolean): void => {
 		this.store.toolBarUiStore.toggleShowBgImage(show);
 	}
 
