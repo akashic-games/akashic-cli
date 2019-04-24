@@ -7,6 +7,7 @@ export interface PlayControlPropsData {
 	playbackRate: number;
 	isActivePausing: boolean;
 	onClickReset?: () => void;
+	onClickResetWithCurrentArgument?: () => void;
 	onClickActivePause?: (toPause: boolean) => void;
 	onClickAddInstance?: () => void;
 }
@@ -24,6 +25,10 @@ export class PlayControl extends React.Component<PlayControlProps, {}> {
 				icon="power_settings_new"
 				title={"新規プレイ\r\r新しいプレイを作成し、現在の全インスタンスから接続します。"}
 				onClick={props.onClickReset} />
+			<ToolIconButton
+				icon="power_settings_new"
+				title={"新規プレイ(起動引数引継ぎ)\r\r新しいプレイを作成し、現在の全インスタンスから接続します。その際、各インスタンスは前回使用していた起動引数を引き回します"}
+				onClick={props.onClickResetWithCurrentArgument} />
 			<ToolIconButton
 				icon="pause_circle_filled"
 				title={`アクティブインスタンスをポーズ${props.isActivePausing ? "解除" : ""}\r\r`
