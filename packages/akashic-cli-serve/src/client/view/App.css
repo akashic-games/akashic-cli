@@ -40,11 +40,9 @@
 }
 
 /* IE11のみ */
-@media all and (-ms-high-contrast: none){
-	.bg-image {
+_:-ms-lang(x)::-ms-backdrop, .bg-image {
 		margin: auto;
-		left: 0px;
-		right: 0px;
+		left: 0;
+		right: 0;
 		transform: translateY(-50%);
-	}
 }
