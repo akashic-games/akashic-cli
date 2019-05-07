@@ -14,6 +14,7 @@ const store = observable({
 	duration: 380 * 1000,
 	showsAppearance: false,
 	showsDevtools: false,
+	showsBgImage: false,
 	isActivePausing: false
 });
 
@@ -52,9 +53,11 @@ const TestWithBehaviour = observer(() => (
 			})}
 			showsAppearance={store.showsAppearance}
 			showsDevtools={store.showsDevtools}
+			showsBgImage={store.showsBgImage}
 			showsInstanceControl={store.showsDevtools}
 			onToggleAppearance={v => (store.showsAppearance = v)}
 			onToggleDevTools={v => (store.showsDevtools = v)}
+			onToggleBgImage={v => (store.showsBgImage = v)}
 		/>
 ));
 
@@ -86,8 +89,10 @@ storiesOf("o-ToolBar", module)
 			})}
 			showsAppearance={false}
 			showsDevtools={true}
+			showsBgImage={true}
 			showsInstanceControl={true}
 			onToggleAppearance={action("toggle-appearance")}
-			onToggleDevTools={action("toggle-dev-tools")} />
+			onToggleDevTools={action("toggle-dev-tools")}
+			onToggleBgImage={action("toggle-bg-image")} />
 	))
 	.add("with-behavior", () => <TestWithBehaviour />);

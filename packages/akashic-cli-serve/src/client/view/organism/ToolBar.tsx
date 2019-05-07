@@ -12,9 +12,11 @@ export interface ToolBarProps {
 	makePlayerControlProps: () => PlayerControlPropsData;
 	showsAppearance: boolean;
 	showsDevtools: boolean;
+	showsBgImage: boolean;
 	showsInstanceControl: boolean;
 	onToggleAppearance: (show: boolean) => void;
 	onToggleDevTools: (show: boolean) => void;
+	onToggleBgImage: (show: boolean) => void;
 }
 
 @observer
@@ -41,6 +43,11 @@ export class ToolBar extends React.Component<ToolBarProps, {}> {
 					<i className="material-icons">zoom_in</i>
 				</ToolToggleLabel>
 				*/}
+				<ToolIconButton
+					icon="image"
+					title={"背景画像の表示切り替え"}
+					pushed={props.showsBgImage}
+					onClick={props.onToggleBgImage} />
 				<ToolIconButton
 					icon="menu"
 					title={"Devtoolsの表示切り替え"}
