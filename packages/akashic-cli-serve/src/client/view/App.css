@@ -39,10 +39,13 @@
 	z-index: -1;
 }
 
-/* IE11のみ */
+/* 
+	IE11のみ
+	参考： https://qiita.com/feo52/items/932f57f9760d2b743d39
+*/
 _:-ms-lang(x)::-ms-backdrop, .bg-image {
-		margin: auto;
-		left: 0;
-		right: 0;
-		transform: translateY(-50%);
+	margin: auto;
+	left: 0;
+	right: 0;
+	transform: translateY(-50%);
 }
