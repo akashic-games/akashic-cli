@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.5.28 (2019-05-07)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#76](https://github.com/akashic-games/akashic-cli/pull/76) akashic-cli-serveで背景画像を表示する機能を追加 ([@kamakiri01](https://github.com/kamakiri01))
+
+#### Committers: 1
+- kamakiri_ys ([@kamakiri01](https://github.com/kamakiri01))
+
 
 
 
