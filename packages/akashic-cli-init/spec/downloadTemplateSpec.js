@@ -25,7 +25,7 @@ describe("downloadTemplate.ts", () => {
 
 			lt.listTemplates(param)
 				.then(() => {
-					expect(str).toBe("javascript-minimal\njavascript\ntypescript\n");
+					expect(str).toBe("javascript-ichiba\njavascript-minimal\njavascript\ntypescript\n");
 				})
 				.then(done, done.fail);
 		});
