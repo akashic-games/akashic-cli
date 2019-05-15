@@ -7,6 +7,7 @@ export class DevtoolUiStore {
 	@observable showsEventList: boolean;
 	@observable eventListWidth: number;
 	@observable eventEditContent: string;
+	@observable entityList: string;
 
 	constructor() {
 		this.height = storage.data.devtoolsHeight;
@@ -14,6 +15,7 @@ export class DevtoolUiStore {
 		this.showsEventList = storage.data.showsEventList;
 		this.eventListWidth = storage.data.eventListWidth;
 		this.eventEditContent = storage.data.eventEditContent;
+		this.entityList = storage.data.entityList;
 	}
 
 	@action
@@ -45,4 +47,12 @@ export class DevtoolUiStore {
 		this.eventEditContent = content;
 		storage.put({ eventEditContent: content });
 	}
+
+	@action
+	updateEntityList(entityList: string): void {
+		console.log("updateEntityList", entityList);
+		this.entityList = entityList;
+		// storageは上流で参照してないので更新しない（保存してもコンテンツ状態は一致しないので使い物にならない）
+	}
+
 }
