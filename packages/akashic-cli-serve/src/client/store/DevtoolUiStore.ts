@@ -54,5 +54,4 @@ export class DevtoolUiStore {
 		this.entityList = entityList;
 		// storageは上流で参照してないので更新しない（保存してもコンテンツ状態は一致しないので使い物にならない）
 	}
-
 }
