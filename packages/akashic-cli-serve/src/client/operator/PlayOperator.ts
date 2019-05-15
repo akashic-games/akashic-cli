@@ -46,7 +46,6 @@ export class PlayOperator {
 	}
 
 	updateEntityList = (): void => {
-		console.log("localInstances", this.store.currentPlay.localInstances);
 		const game: any = this.store.currentPlay.localInstances[0].gameContent.getGame();
 		const children = game.scene().children;
 		const entities: any[] = [];
