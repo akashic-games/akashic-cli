@@ -3,6 +3,8 @@
 		"javascript": "javascript.zip",
 		"typescript": "typescript.zip",
 		"javascript-minimal": "javascript-minimal.zip",
-		"javascript-ichiba": "javascript-ichiba.zip"
+		"typescript-minimal": "typescript-minimal.zip",
+		"javascript-ichiba": "javascript-ichiba.zip",
+		"typescript-ichiba": "typescript-ichiba.zip"
 	}
 }

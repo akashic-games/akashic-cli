@@ -1,9 +1,8 @@
 {
-  "name": "javascript-game-sample-ichiba",
+  "name": "javascript-game-sample",
   "private": true,
   "version": "0.1.0",
   "description": "",
-  "main": "./script/main.js",
   "scripts": {
     "start": "akashic-sandbox .",
     "lint": "eslint script",
