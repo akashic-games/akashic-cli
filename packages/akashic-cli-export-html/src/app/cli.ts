@@ -21,6 +21,8 @@ interface CommandParameterObject {
 	atsumaru?: boolean;
 }
 
+const ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "package.json"), "utf8")).version;
+
 function cli(param: CommandParameterObject): void {
 	const logger = new ConsoleLogger({ quiet: param.quiet });
 	const exportParam = {
@@ -62,8 +64,6 @@ function cli(param: CommandParameterObject): void {
 			process.exit(1);
 		});
 }
-
-const ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "package.json"), "utf8")).version;
 
 commander
 	.version(ver);

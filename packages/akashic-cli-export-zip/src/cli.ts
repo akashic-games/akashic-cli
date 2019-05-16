@@ -17,6 +17,8 @@ export interface CommandParameterObject {
 	omitEmptyJs?: boolean;
 }
 
+var ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "package.json"), "utf8")).version;
+
 export function cli(param: CommandParameterObject): void {
 	var logger = new ConsoleLogger({ quiet: param.quiet });
 	Promise.resolve()
@@ -30,7 +32,11 @@ export function cli(param: CommandParameterObject): void {
 			force: param.force,
 			hashLength: !param.hashFilename ? 0 : (param.hashFilename === true) ? 20 : Number(param.hashFilename),
 			omitEmptyJs: param.omitEmptyJs,
-			logger
+			logger,
+			exportInfo: {
+				version: ver,
+				option: param
+			}
 		}))
 		.then(() => logger.info("Done!"))
 		.catch((err: any) => {
@@ -38,8 +44,6 @@ export function cli(param: CommandParameterObject): void {
 			process.exit(1);
 		});
 }
-
-var ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "package.json"), "utf8")).version;
 
 commander
 	.version(ver);

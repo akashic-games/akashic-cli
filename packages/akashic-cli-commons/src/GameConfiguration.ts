@@ -55,9 +55,14 @@ export interface GameConfiguration {
 	operationPlugins?: OperationPluginDeclaration[];
 	environment?: ModuleEnvironment;
 	moduleMainScripts?: ModuleMainScripts;
+	exportZipInfo?: ExportZipInfo
 }
-
 
 export interface ModuleEnvironment {
 	"sandbox-runtime"?: string;
+}
+
+export interface ExportZipInfo {
+	version: string;
+	option: any;
 }

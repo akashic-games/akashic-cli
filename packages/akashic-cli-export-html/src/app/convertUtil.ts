@@ -16,11 +16,11 @@ export interface ConvertTemplateParameterObject {
 	cwd: string;
 	unbundleText: boolean;
 	lint: boolean;
-	exportInfo: {
+	injects?: string[];
+	exportInfo?: {
 		version: string;
 		option: string;
 	};
-	injects?: string[];
 }
 
 export function extractAssetDefinitions (conf: cmn.Configuration, type: string): string[] {
