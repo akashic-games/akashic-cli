@@ -119,7 +119,9 @@ function writeEct(
 		postloadScripts: scripts.postloadScripts,
 		css: getDefaultBundleStyle(templatePath),
 		magnify: !!options.magnify,
-		injectedContents: getInjectedContents(options.cwd, injects)
+		injectedContents: getInjectedContents(options.cwd, injects),
+		exportVersion: options.exportInfo.version,
+		exportOption: options.exportInfo.option
 	});
 	fs.writeFileSync(path.resolve(outputPath, "./index.html"), html);
 }

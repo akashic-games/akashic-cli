@@ -39,7 +39,11 @@ function cli(param: CommandParameterObject): void {
 		magnify: param.magnify || param.atsumaru,
 		injects: param.injects,
 		unbundleText: !param.bundle || param.atsumaru,
-		lint: !param.atsumaru
+		lint: !param.atsumaru,
+		exportInfo: {
+			version: ver,
+			option: JSON.stringify(param)
+		}
 	};
 	Promise.resolve()
 		.then(() => {
