@@ -55,7 +55,7 @@ export interface GameConfiguration {
 	operationPlugins?: OperationPluginDeclaration[];
 	environment?: ModuleEnvironment;
 	moduleMainScripts?: ModuleMainScripts;
-	exportZipInfo?: ExportZipInfo
+	exportZipInfo?: ExportZipInfo;
 }
 
 export interface ModuleEnvironment {
