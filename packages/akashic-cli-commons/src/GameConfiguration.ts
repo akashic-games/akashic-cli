@@ -64,5 +64,14 @@ export interface ModuleEnvironment {
 
 export interface ExportZipInfo {
 	version: string;
-	option: any;
+	option: {
+		quiet?: boolean;
+		force?: boolean;
+		strip?: boolean;
+		minify?: boolean;
+		bundle?: boolean;
+		babel?: boolean;
+		hashFilename?: number | boolean;
+		omitEmptyJs?: boolean;
+	};
 }

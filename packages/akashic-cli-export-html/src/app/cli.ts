@@ -25,6 +25,17 @@ const ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "package.js
 
 function cli(param: CommandParameterObject): void {
 	const logger = new ConsoleLogger({ quiet: param.quiet });
+	// index.htmlに書き込むためのexport実行時の情報を作成する。また、開発環境の情報の削除も行う。
+	const exportOption = {
+		force: param.force,
+		quiet: param.quiet,
+		strip: param.strip,
+		hashFilename: param.hashFilename,
+		minify: param.minify,
+		bundle: param.bundle,
+		magnify: param.magnify,
+		atsumaru: param.atsumaru
+	};
 	const exportParam = {
 		cwd: !param.cwd ? process.cwd() : path.resolve(param.cwd),
 		source: param.source,
@@ -44,7 +55,7 @@ function cli(param: CommandParameterObject): void {
 		lint: !param.atsumaru,
 		exportInfo: {
 			version: ver,
-			option: JSON.stringify(param)
+			option: JSON.stringify(exportOption)
 		}
 	};
 	Promise.resolve()
