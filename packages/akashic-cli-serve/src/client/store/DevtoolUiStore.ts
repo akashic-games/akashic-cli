@@ -1,13 +1,19 @@
 import {action, observable} from "mobx";
 import {storage} from "./storage";
 
+export interface Entity {
+	id: number;
+	className: string;
+	children: Entity[];
+}
+
 export class DevtoolUiStore {
 	@observable height: number;
 	@observable activeDevtool: string;
 	@observable showsEventList: boolean;
 	@observable eventListWidth: number;
 	@observable eventEditContent: string;
-	@observable entityList: string;
+	@observable entityList: Entity[];
 
 	constructor() {
 		this.height = storage.data.devtoolsHeight;
@@ -49,7 +55,7 @@ export class DevtoolUiStore {
 	}
 
 	@action
-	updateEntityList(entityList: string): void {
+	updateEntityList(entityList: Entity[]): void {
 		this.entityList = entityList;
 	}
 }

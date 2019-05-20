@@ -1,4 +1,5 @@
 import * as queryString from "query-string";
+import { Entity } from "./DevtoolUiStore";
 
 export interface StorageData {
 	playerId: string;
@@ -10,7 +11,7 @@ export interface StorageData {
 	showsEventList: boolean;
 	eventListWidth: number;
 	eventEditContent: string;
-	entityList: string;
+	entityList: Entity[];
 	selectedArgumentName: string | null;
 	instanceArgumentListWidth: number;
 	instanceArgumentEditContent: string;
@@ -71,7 +72,7 @@ export class Storage {
 			showsEventList: choose(asBool(qp.showsEventList), s.showsEventList, true),
 			eventListWidth: choose(asNumber(qp.eventListWidth), s.eventListWidth, 150),
 			eventEditContent: choose(qp.eventEditContent, s.eventEditContent, ""),
-			entityList: "",
+			entityList: [],
 			selectedArgumentName: choose(qp.selectedArgumentName, s.selectedArgumentName, null),
 			instanceArgumentListWidth: choose(asNumber(qp.instanceArgumentListWidth), s.instanceArgumentListWidth, 150),
 			instanceArgumentEditContent: choose(qp.instanceArgumentEditContent, s.instanceArgumentEditContent, ""),

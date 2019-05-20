@@ -49,7 +49,7 @@ const TestWithBehaviour = observer(() => (
 		}}
 		entityListDevtoolProps={{
 			onClickUpdateEntityList: action("update-entity-list"),
-			entityList: ""
+			entityList: []
 		}}
 	/>
 ));
@@ -115,7 +115,7 @@ storiesOf("o-Devtool", module)
 			}}
 			entityListDevtoolProps={{
 				onClickUpdateEntityList: action("update-entity-list"),
-				entityList: ""
+				entityList: []
 			}}
 		/>
 	))
@@ -187,7 +187,7 @@ storiesOf("o-Devtool", module)
 			}}
 			entityListDevtoolProps={{
 				onClickUpdateEntityList: action("update-entity-list"),
-				entityList: ""
+				entityList: []
 			}}
 		/>
 	))

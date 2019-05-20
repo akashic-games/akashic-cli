@@ -2,11 +2,11 @@ import * as React from "react";
 import { observer } from "mobx-react";
 import * as styles from "./InstancesDevtool.css";
 import { ToolIconButton } from "../atom/ToolIconButton";
-import { FlexScrollY } from "../atom/FlexScrollY";
+import { Entity } from "../../store/DevtoolUiStore";
 
 export interface EntityListDevtoolProps {
 	onClickUpdateEntityList: () => void;
-	entityList: string;
+	entityList: Entity[];
 }
 
 @observer
@@ -21,7 +21,7 @@ export class EntityListDevtool extends React.Component<EntityListDevtoolProps, {
 					更新
 				</ToolIconButton>
 			</div>
-			{this.props.entityList}
+			{JSON.stringify(this.props.entityList)}
 		</div>;
 	}
 }
