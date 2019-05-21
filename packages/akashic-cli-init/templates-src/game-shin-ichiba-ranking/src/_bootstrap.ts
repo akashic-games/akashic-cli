@@ -1,11 +1,11 @@
 // 通常このファイルを編集する必要はありません。ゲームの処理は main.js に記述してください
-import { GameMainParameterObject } from "./parameterObject";
+import { GameMainParameterObject, WindowWithRPGAtsumaru } from "./parameterObject";
 import { main } from "./main";
 
-declare const window: any;
+declare const window: WindowWithRPGAtsumaru;
 
 export = (originalParam: g.GameMainParameterObject) => {
-	const param: any = {};
+	const param: any = {} as GameMainParameterObject;
 	Object.keys(originalParam).forEach((key) => {
 		param[key] = (originalParam as any)[key];
 	});
@@ -24,7 +24,7 @@ export = (originalParam: g.GameMainParameterObject) => {
 		if (msg.data && msg.data.type === "start" && msg.data.parameters) {
 			param.sessionParameter = msg.data.parameters; // sessionParameterフィールドを追加
 			g.game.popScene();
-			main(param as GameMainParameterObject);
+			main(param);
 		}
 	});
 	scene.loaded.add(() => {
@@ -34,7 +34,7 @@ export = (originalParam: g.GameMainParameterObject) => {
 			// 待ち時間を超えた場合はゲームを開始します
 			if (currentTickCount > limitTickToWait) {
 				g.game.popScene();
-				main(param as GameMainParameterObject);
+				main(param);
 			}
 		});
 	});

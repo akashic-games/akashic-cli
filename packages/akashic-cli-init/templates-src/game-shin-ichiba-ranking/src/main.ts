@@ -1,6 +1,6 @@
-import { GameMainParameterObject } from "./parameterObject";
+import { GameMainParameterObject, WindowWithRPGAtsumaru } from "./parameterObject";
 
-declare const window: any;
+declare const window: WindowWithRPGAtsumaru;
 
 export function main(param: GameMainParameterObject): void {
 	const scene = new g.Scene({
