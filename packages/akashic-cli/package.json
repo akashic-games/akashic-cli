@@ -10,9 +10,7 @@
     "clean": "rimraf ./lib && rimraf ./spec/build",
     "start": "npm run build && node bin/run",
     "build": "tsc -p ./",
-    "lint": "npm run lint:ts && npm run lint:md",
-    "lint:ts": "tslint -c ../tslint.json --project ./tsconfig.json",
-    "lint:md": "remark . --frail --no-stdout --quiet --rc-path ../../.remarkrc",
+    "lint": "tslint -c ../tslint.json --project ./tsconfig.json",
     "test": "npm run lint",
     "test:jasmine": "jasmine ./spec/**/*[sS]pec.js"
   },
@@ -45,7 +43,6 @@
     "jasmine": "3.3.0",
     "jasmine-reporters": "2.0.4",
     "jasmine-terminal-reporter": "0.9.1",
-    "remark-cli": "~6.0.1",
     "rimraf": "^2.6.2",
     "tslint": "~5.12.1",
     "typescript": "~2.8.0"
