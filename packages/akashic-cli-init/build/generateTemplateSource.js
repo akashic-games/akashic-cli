@@ -15,10 +15,10 @@ const templateData = {
 		"js-dist": "javascript-minimal",
 		"ts-dist": "typescript-minimal"
 	},
-	"ichiba": {
-		"src": "game-ichiba",
-		"js-dist": "javascript-ichiba",
-		"ts-dist": "typescript-ichiba"
+	"shin-ichiba-ranking": {
+		"src": "game-shin-ichiba-ranking",
+		"js-dist": "javascript-shin-ichiba-ranking",
+		"ts-dist": "typescript-shin-ichiba-ranking"
 	}
 };
 
