@@ -21,17 +21,6 @@ var ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "package.json
 
 export function cli(param: CommandParameterObject): void {
 	var logger = new ConsoleLogger({ quiet: param.quiet });
-	// game.jsonに書き込むためのexport実行時の情報を作成する。また、開発環境の情報の削除も行う。
-	const exportOption = {
-		quiet: param.quiet,
-		force: param.force,
-		strip: param.strip,
-		minify: param.minify,
-		bundle: param.bundle,
-		babel: param.babel,
-		hashFilename: param.hashFilename,
-		omitEmptyJs: param.omitEmptyJs
-	};
 	Promise.resolve()
 		.then(() => promiseExportZip({
 			bundle: param.bundle,
@@ -46,7 +35,16 @@ export function cli(param: CommandParameterObject): void {
 			logger,
 			exportInfo: {
 				version: ver,
-				option: exportOption
+				option: {
+					quiet: param.quiet,
+					force: param.force,
+					strip: param.strip,
+					minify: param.minify,
+					bundle: param.bundle,
+					babel: param.babel,
+					hashFilename: param.hashFilename,
+					omitEmptyJs: param.omitEmptyJs
+				}
 			}
 		}))
 		.then(() => logger.info("Done!"))

@@ -62,6 +62,10 @@ export interface ModuleEnvironment {
 	"sandbox-runtime"?: string;
 }
 
+/**
+ * akashic export zip 実行時のオプション情報。
+ * エクスポート結果に埋め込む値であるため、実行環境のディレクトリの情報は持たせていないことに注意。
+ */
 export interface ExportZipInfo {
 	version: string;
 	option: {
