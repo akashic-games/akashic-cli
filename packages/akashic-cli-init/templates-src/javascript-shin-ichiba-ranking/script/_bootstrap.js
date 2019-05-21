@@ -1,3 +1,4 @@
+// 通常このファイルを編集する必要はありません。ゲームの処理は main.js に記述してください
 var main = require("./main.js");
 
 module.exports = function (originalParam) {

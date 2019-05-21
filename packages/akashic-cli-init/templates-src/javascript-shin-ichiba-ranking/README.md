@@ -1,13 +1,13 @@
-# javascript-game-sample-ichiba
+# javascript-game-sample-shin-ichiba-ranking
 
-**javascript-game-sample-ichiba**はJavascriptで市場コンテンツを作る際のサンプルプロジェクトです。
+**javascript-game-sample-shin-ichiba-ranking**はJavascriptでニコニコ新市場対応コンテンツを作る際のサンプルプロジェクトです。
 
 ## 利用方法
 
- `javascript-game-sample-ichiba` を利用するにはNode.jsが必要です。
+ `javascript-game-sample-shin-ichiba-ranking` を利用するにはNode.jsが必要です。
 
 初回のみ、以下のコマンドを実行して、ビルドに必要なパッケージをインストールしてください。
-この作業は `javascript-game-sample-ichiba` を新しく生成するごとに必要です。
+この作業は `javascript-game-sample-shin-ichiba-ranking` を新しく生成するごとに必要です。
 
 ```sh
 npm install
@@ -34,13 +34,13 @@ npm install
 
 ### npm モジュールの追加・削除
 
-`javascript-game-sample-ichiba` でnpmモジュールを利用する場合、このディレクトリで `akashic install <package_name>` することで npm モジュールを追加することができます。
+`javascript-game-sample-shin-ichiba-ranking` でnpmモジュールを利用する場合、このディレクトリで `akashic install <package_name>` することで npm モジュールを追加することができます。
 
 また `akashic uninstall <package_name>` すると npm モジュールを削除することができます。
 
 ## エクスポート方法
 
-`javascript-game-sample-ichiba` をエクスポートするときは以下のコマンドを利用します。
+`javascript-game-sample-shin-ichiba-ranking` をエクスポートするときは以下のコマンドを利用します。
 
 ### htmlファイルのエクスポート
 

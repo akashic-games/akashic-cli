@@ -2,11 +2,11 @@
 	"width": 320,
 	"height": 320,
 	"fps": 30,
-	"main": "./script/bootstrap.js",
+	"main": "./script/_bootstrap.js",
 	"assets": {
-		"bootstrap": {
+		"_bootstrap": {
 			"type": "script",
-			"path": "script/bootstrap.js",
+			"path": "script/_bootstrap.js",
 			"global": true
 		},
 		"main": {
