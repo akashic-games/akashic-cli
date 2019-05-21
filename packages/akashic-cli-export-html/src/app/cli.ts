@@ -42,8 +42,10 @@ function cli(param: CommandParameterObject): void {
 		injects: param.injects,
 		unbundleText: !param.bundle || param.atsumaru,
 		lint: !param.atsumaru,
+		// index.htmlに書き込むためのexport実行時の情報
 		exportInfo: {
-			version: ver,
+			version: ver, // export実行時のバージョン
+			// export実行時のオプション情報。index.htmlに表示される値であるため、実行環境のディレクトリの情報は持たせていないことに注意。
 			option: JSON.stringify({
 				force: param.force,
 				quiet: param.quiet,
