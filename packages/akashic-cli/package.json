@@ -13,8 +13,7 @@
     "lint": "npm run lint:ts && npm run lint:md",
     "lint:ts": "tslint -c ../tslint.json --project ./tsconfig.json",
     "lint:md": "remark . --frail --no-stdout --quiet --rc-path ../../.remarkrc",
-    "test": "npm run lint",
-    "test:jasmine": "jasmine ./spec/**/*[sS]pec.js"
+    "test": "npm run lint"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
@@ -42,9 +41,6 @@
   "devDependencies": {
     "@types/commander": "~2.3.0",
     "@types/node": "~10.12.7",
-    "jasmine": "3.3.0",
-    "jasmine-reporters": "2.0.4",
-    "jasmine-terminal-reporter": "0.9.1",
     "remark-cli": "~6.0.1",
     "rimraf": "^2.6.2",
     "tslint": "~5.12.1",
