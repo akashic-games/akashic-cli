@@ -21,6 +21,8 @@ interface CommandParameterObject {
 	atsumaru?: boolean;
 }
 
+const ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "package.json"), "utf8")).version;
+
 function cli(param: CommandParameterObject): void {
 	const logger = new ConsoleLogger({ quiet: param.quiet });
 	const exportParam = {
@@ -39,7 +41,22 @@ function cli(param: CommandParameterObject): void {
 		magnify: param.magnify || param.atsumaru,
 		injects: param.injects,
 		unbundleText: !param.bundle || param.atsumaru,
-		lint: !param.atsumaru
+		lint: !param.atsumaru,
+		// index.htmlに書き込むためのexport実行時の情報
+		exportInfo: {
+			version: ver, // export実行時のバージョン
+			// export実行時のオプション情報。index.htmlに表示される値であるため、実行環境のディレクトリの情報は持たせていないことに注意。
+			option: JSON.stringify({
+				force: param.force,
+				quiet: param.quiet,
+				strip: param.strip,
+				hashFilename: param.hashFilename,
+				minify: param.minify,
+				bundle: param.bundle,
+				magnify: param.magnify,
+				atsumaru: param.atsumaru
+			})
+		}
 	};
 	Promise.resolve()
 		.then(() => {
@@ -58,8 +75,6 @@ function cli(param: CommandParameterObject): void {
 			process.exit(1);
 		});
 }
-
-const ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "package.json"), "utf8")).version;
 
 commander
 	.version(ver);
