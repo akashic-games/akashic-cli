@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.5.29 (2019-05-22)
+
+#### Enhancement
+* `akashic-cli-commons`, `akashic-cli-export-html`, `akashic-cli-export-zip`
+  * [#80](https://github.com/akashic-games/akashic-cli/pull/80) exportを行ったツールのexport実行時のバージョンとオプションが表示されるようにする対応 ([@dera-](https://github.com/dera-))
+
+#### Committers: 1
+- [@dera-](https://github.com/dera-)
+
 ## 1.5.28 (2019-05-07)
 
 #### Enhancement
