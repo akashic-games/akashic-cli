@@ -11,5 +11,5 @@ export interface GameMainParameterObject extends g.GameMainParameterObject {
 }
 
 export interface RPGAtsumaruWindow {
-	RPGAtsumaru: any;
+	RPGAtsumaru?: any;
 }
