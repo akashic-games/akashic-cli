@@ -9,7 +9,6 @@ function main(param) {
 		time = param.sessionParameter.totalTimeLimit; // セッションパラメータで制限時間が指定されたらその値を使用する
 	}
 	// 市場コンテンツのランキングモードでは、g.game.vars.gameState.score の値をスコアとして扱います
-	// ランキングモードに対応しない場合、この定義は不要です。g.game.vars.gameState.scoreの代わりに任意の変数をスコアとして利用できます
 	g.game.vars.gameState = { score: 0 };
 	scene.loaded.add(function() {
 		// ここからゲーム内容を記述します
@@ -99,7 +98,6 @@ function main(param) {
 		var updateHandler = function() {
 			if (time <= 0) {
 				// RPGアツマール環境であればランキングを表示します
-				// ランキングモードに対応しない場合、この処理は不要です
 				if (param.isAtsumaru) {
 					var boardId = 1;
 					window.RPGAtsumaru.experimental.scoreboards.setRecord(boardId, g.game.vars.gameState.score).then(function() {
