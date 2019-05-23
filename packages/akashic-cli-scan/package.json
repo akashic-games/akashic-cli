@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-scan",
-  "version": "0.2.13",
+  "version": "0.2.14",
   "description": "Command line tool for updating assets and globalScripts.",
   "main": "lib/index.js",
   "scripts": {
@@ -39,7 +39,7 @@
   },
   "typings": "lib/index.d.ts",
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.2.21",
+    "@akashic/akashic-cli-commons": "0.2.22",
     "aac-duration": "0.0.1",
     "commander": "^2.16.0",
     "fs-readdir-recursive": "1.0.0",

@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-stat",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "description": "Project statistics tool for akashic.",
   "main": "lib/index.js",
   "scripts": {
@@ -37,7 +37,7 @@
   },
   "typings": "lib/index.d.ts",
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.2.21",
+    "@akashic/akashic-cli-commons": "0.2.22",
     "commander": "^2.16.0"
   },
   "publishConfig": {
