@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli",
-  "version": "1.5.28",
+  "version": "1.5.30",
   "description": "Command-line utility for akashic game development",
   "bin": {
     "akashic": "./bin/akashic"
@@ -10,9 +10,7 @@
     "clean": "rimraf ./lib && rimraf ./spec/build",
     "start": "npm run build && node bin/run",
     "build": "tsc -p ./",
-    "lint": "npm run lint:ts && npm run lint:md",
-    "lint:ts": "tslint -c ../tslint.json --project ./tsconfig.json",
-    "lint:md": "remark . --frail --no-stdout --quiet --rc-path ../../.remarkrc",
+    "lint": "tslint -c ../tslint.json --project ./tsconfig.json",
     "test": "npm run lint"
   },
   "author": "DWANGO Co., Ltd.",
@@ -24,24 +22,23 @@
     "lib"
   ],
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.2.20",
-    "@akashic/akashic-cli-config": "0.1.11",
-    "@akashic/akashic-cli-export-html": "0.2.19",
-    "@akashic/akashic-cli-export-zip": "0.3.10",
-    "@akashic/akashic-cli-init": "0.3.18",
-    "@akashic/akashic-cli-install": "0.3.11",
-    "@akashic/akashic-cli-modify": "0.1.9",
-    "@akashic/akashic-cli-scan": "0.2.12",
-    "@akashic/akashic-cli-serve": "0.0.28",
-    "@akashic/akashic-cli-stat": "0.1.9",
-    "@akashic/akashic-cli-uninstall": "0.3.8",
-    "@akashic/akashic-cli-update": "0.2.8",
+    "@akashic/akashic-cli-commons": "0.2.22",
+    "@akashic/akashic-cli-config": "0.1.13",
+    "@akashic/akashic-cli-export-html": "0.2.21",
+    "@akashic/akashic-cli-export-zip": "0.3.12",
+    "@akashic/akashic-cli-init": "0.3.20",
+    "@akashic/akashic-cli-install": "0.3.13",
+    "@akashic/akashic-cli-modify": "0.1.11",
+    "@akashic/akashic-cli-scan": "0.2.14",
+    "@akashic/akashic-cli-serve": "0.0.29",
+    "@akashic/akashic-cli-stat": "0.1.11",
+    "@akashic/akashic-cli-uninstall": "0.3.10",
+    "@akashic/akashic-cli-update": "0.2.10",
     "commander": "2.8.1"
   },
   "devDependencies": {
     "@types/commander": "~2.3.0",
     "@types/node": "~10.12.7",
-    "remark-cli": "~6.0.1",
     "rimraf": "^2.6.2",
     "tslint": "~5.12.1",
     "typescript": "~2.8.0"
