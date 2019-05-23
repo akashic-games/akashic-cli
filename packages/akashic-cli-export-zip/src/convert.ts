@@ -23,6 +23,7 @@ export interface ConvertGameParameterObject {
 	 * 省略された場合、akashic-cli-commons の `new ConsoleLogger()` 。
 	 */
 	logger?: cmn.Logger;
+	exportInfo?: cmn.ExportZipInfo;
 }
 
 export function _completeConvertGameParameterObject(param: ConvertGameParameterObject): void {
@@ -34,6 +35,7 @@ export function _completeConvertGameParameterObject(param: ConvertGameParameterO
 	param.hashLength = param.hashLength || 0;
 	param.logger = param.logger || new cmn.ConsoleLogger();
 	param.omitEmptyJs = !!param.omitEmptyJs;
+	param.exportInfo = param.exportInfo;
 }
 
 export interface BundleResult {
@@ -71,6 +73,13 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 		.then(() => cmn.ConfigurationFile.read(path.join(param.source, "game.json"), param.logger))
 		.then((result: cmn.GameConfiguration) => {
 			gamejson = result;
+			// export-zip実行時のバージョンとオプションを追記
+			if (param.exportInfo) {
+				gamejson.exportZipInfo = {
+					version: param.exportInfo.version,
+					option: param.exportInfo.option
+				};
+			}
 			// 全スクリプトがES5構文になっていることを確認する
 			let errorMessages: string[] = [];
 			gcu.extractScriptAssetFilePaths(gamejson).forEach(filePath => {

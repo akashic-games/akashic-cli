@@ -96,7 +96,9 @@ function writeEct(assetPaths: string[], outputPath: string, conf: cmn.Configurat
 		magnify: !!options.magnify,
 		injectedContents: getInjectedContents(options.cwd, injects),
 		version: version,
-		engineFilesVariable: versionsJson[`v${version}`].variable
+		engineFilesVariable: versionsJson[`v${version}`].variable,
+		exportVersion: options.exportInfo !== undefined ? options.exportInfo.version : "",
+		exportOption: options.exportInfo !== undefined ? options.exportInfo.option : ""
 	});
 	fs.writeFileSync(path.resolve(outputPath, "./index.html"), html);
 }

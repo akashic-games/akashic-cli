@@ -1,15 +1,13 @@
 {
   "name": "@akashic/akashic-cli-scan",
-  "version": "0.2.12",
+  "version": "0.2.13",
   "description": "Command line tool for updating assets and globalScripts.",
   "main": "lib/index.js",
   "scripts": {
     "prepublish": "npm run clean && npm run build",
     "clean": "shx rm -rf lib && shx rm -rf spec/build",
     "build": "tsc -p ./",
-    "lint": "npm run lint:ts && npm run lint:md",
-    "lint:ts": "tslint --type-check -c ../tslint.json --project ./tsconfig.json",
-    "lint:md": "remark . --frail --no-stdout --quiet --rc-path ../../.remarkrc",
+    "lint": "tslint --type-check -c ../tslint.json --project ./tsconfig.json",
     "test": "npm run test:build && npm run test:jasmine && npm run lint",
     "test:build": "tsc -p spec/",
     "test:jasmine": "istanbul cover --report text --report html --colors -i ./lib/main.node.js ./node_modules/jasmine/bin/jasmine.js"
@@ -35,15 +33,13 @@
     "jasmine-reporters": "~2.0.4",
     "jasmine-terminal-reporter": "~0.9.1",
     "mock-fs": "~4.8.0",
-    "remark-cli": "~6.0.1",
-    "remark-preset-lint-recommended": "~1.0.0",
     "shx": "~0.2.2",
     "tslint": "~5.4.3",
     "typescript": "~2.8.1"
   },
   "typings": "lib/index.d.ts",
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.2.20",
+    "@akashic/akashic-cli-commons": "0.2.21",
     "aac-duration": "0.0.1",
     "commander": "^2.16.0",
     "fs-readdir-recursive": "1.0.0",

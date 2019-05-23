@@ -48,7 +48,7 @@ akashic-cli-init のテンプレートはローカルテンプレートディレ
 ローカルテンプレートディレクトリにテンプレートが存在しない場合、
 テンプレートを以下の順番で探し、最初に見つかったものを利用します。
 1. テンプレート配信サーバ (ただしURLが空文字列の場合このステップは省略)
-2. コマンドに付属するファクトリテンプレート (javascript, javascript-minimal, javascript-ichiba, typescript のみ)
+2. コマンドに付属するファクトリテンプレート (javascript, javascript-minimal, javascript-shin-ichiba-ranking, typescript のみ)
 
 テンプレートを再ダウンロードする場合、一度ローカルテンプレートのディレクトリを手動で削除する必要があります。
 ローカルテンプレートのディレクトリは akashic-config で未設定の場合、
