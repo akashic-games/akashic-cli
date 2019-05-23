@@ -1,8 +1,8 @@
 // 通常このファイルを編集する必要はありません。ゲームの処理は main.js に記述してください
-import { GameMainParameterObject, WindowWithRPGAtsumaru } from "./parameterObject";
+import { GameMainParameterObject, RPGAtsumaruWindow } from "./parameterObject";
 import { main } from "./main";
 
-declare const window: WindowWithRPGAtsumaru;
+declare const window: RPGAtsumaruWindow;
 
 export = (originalParam: g.GameMainParameterObject) => {
 	const param: any = {} as GameMainParameterObject;

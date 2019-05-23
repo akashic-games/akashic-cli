@@ -10,6 +10,6 @@ export interface GameMainParameterObject extends g.GameMainParameterObject {
 	isAtsumaru: boolean;
 }
 
-export interface WindowWithRPGAtsumaru extends Window {
+export interface RPGAtsumaruWindow {
 	RPGAtsumaru: any;
 }
