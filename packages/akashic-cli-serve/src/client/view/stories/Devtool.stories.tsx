@@ -115,7 +115,7 @@ storiesOf("o-Devtool", module)
 			}}
 			entityListDevtoolProps={{
 				onClickUpdateEntityList: action("update-entity-list"),
-				entityList: [{"id": 1,"className": "FilledRect","children": []}]
+				entityList: [{"id" : 1, "className": "FilledRect", "children": []}]
 			}}
 		/>
 	))
