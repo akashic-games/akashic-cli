@@ -2,11 +2,11 @@ import * as React from "react";
 import { observer } from "mobx-react";
 import * as styles from "./InstancesDevtool.css";
 import { ToolIconButton } from "../atom/ToolIconButton";
-import { Entity } from "../../store/DevtoolUiStore";
+import { ELikeListItem } from "../../store/DevtoolUiStore";
 
 export interface EntityListDevtoolProps {
 	onClickUpdateEntityList: () => void;
-	entityList: Entity[];
+	entityList: ELikeListItem[];
 }
 
 @observer

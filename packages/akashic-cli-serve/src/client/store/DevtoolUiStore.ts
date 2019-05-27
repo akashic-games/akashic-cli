@@ -1,10 +1,10 @@
 import {action, observable} from "mobx";
 import {storage} from "./storage";
 
-export interface Entity {
+export interface ELikeListItem {
 	id: number;
 	className: string;
-	children: Entity[];
+	children: ELikeListItem[];
 }
 
 export class DevtoolUiStore {
@@ -13,7 +13,7 @@ export class DevtoolUiStore {
 	@observable showsEventList: boolean;
 	@observable eventListWidth: number;
 	@observable eventEditContent: string;
-	@observable entityList: Entity[];
+	@observable entityList: ELikeListItem[];
 
 	constructor() {
 		this.height = storage.data.devtoolsHeight;
@@ -55,7 +55,7 @@ export class DevtoolUiStore {
 	}
 
 	@action
-	updateEntityList(entityList: Entity[]): void {
+	updateEntityList(entityList: ELikeListItem[]): void {
 		this.entityList = entityList;
 	}
 }

@@ -1,5 +1,4 @@
 import { Store } from "../store/Store";
-import { Entity } from "../store/DevtoolUiStore";
 
 export class PlayOperator {
 	private store: Store;
@@ -45,27 +44,4 @@ export class PlayOperator {
 		const amflow = this.store.currentPlay.amflow;
 		pevs.forEach((pev: any) => amflow.sendEvent(pev));
 	}
-
-	updateEntityList = (): void => {
-		const game: any = this.store.currentPlay.localInstances[0].gameContent.getGame();
-		const children = game.scene().children;
-		const entities: Entity[] = [];
-		children.forEach((element: any) => {
-			entities.push(createEntityObject(element));
-		});
-		this.store.devtoolUiStore.updateEntityList(entities);
-	}
-}
-
-/**
- * 引数の e にはAkashic Engineのg.Eが渡る
- */
-function createEntityObject(e: any) {
-	var obj = {id: e.id, className: e.constructor.name, children: [] as any[]};
-	if (e.children && e.children.length > 0) {
-		e.children.forEach(function(c: any) {
-			obj.children.push(createEntityObject(c));
-		});
-	}
-	return obj;
 }

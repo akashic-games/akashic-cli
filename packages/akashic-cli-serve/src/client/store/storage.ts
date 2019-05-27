@@ -1,5 +1,5 @@
 import * as queryString from "query-string";
-import { Entity } from "./DevtoolUiStore";
+import { ELikeListItem } from "./DevtoolUiStore";
 
 export interface StorageData {
 	playerId: string;
@@ -11,7 +11,7 @@ export interface StorageData {
 	showsEventList: boolean;
 	eventListWidth: number;
 	eventEditContent: string;
-	entityList: Entity[];
+	entityList: ELikeListItem[];
 	selectedArgumentName: string | null;
 	instanceArgumentListWidth: number;
 	instanceArgumentEditContent: string;
