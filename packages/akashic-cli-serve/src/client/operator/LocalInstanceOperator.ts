@@ -31,7 +31,7 @@ export class LocalInstanceOperator {
 		const game: any = this.store.currentPlay.localInstances[0].gameContent.getGame();
 		const children = game.scene().children;
 		const entities: ELikeListItem[] = (children || []).map(createEntityObject);
-		this.store.devtoolUiStore.updateEntityList(entities);
+		this.store.devtoolUiStore.setEntityList(entities);
 	}
 }
 
@@ -39,12 +39,8 @@ export class LocalInstanceOperator {
  * 引数の e にはAkashic Engineのg.Eが渡る
  */
 function createEntityObject(e: ELike) {
-	var obj = {id: e.id, className: e.constructor.name, children: [] as any[]};
-	if (e.children && e.children.length > 0) {
-		e.children.forEach(function(c: any) {
-			obj.children.push(createEntityObject(c));
-		});
-	}
+	const obj = {id: e.id, className: e.constructor.name, children: [] as ELike[]};
+	obj.children = (e.children || []).map((c) => createEntityObject(c));
 	return obj;
 }
 

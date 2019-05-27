@@ -21,7 +21,7 @@ export class DevtoolUiStore {
 		this.showsEventList = storage.data.showsEventList;
 		this.eventListWidth = storage.data.eventListWidth;
 		this.eventEditContent = storage.data.eventEditContent;
-		this.entityList = storage.data.entityList;
+		this.entityList = [];
 	}
 
 	@action
@@ -55,7 +55,7 @@ export class DevtoolUiStore {
 	}
 
 	@action
-	updateEntityList(entityList: ELikeListItem[]): void {
+	setEntityList(entityList: ELikeListItem[]): void {
 		this.entityList = entityList;
 	}
 }
