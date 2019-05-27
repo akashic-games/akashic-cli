@@ -58,7 +58,7 @@ describe("exportHTML", function () {
 			return exp.promiseExportHTML(param);
 		})
 		.then((dest) => {
-			expect(dest).toMatch(/^.*\/akashic-export-html-tmp-.+$/);
+			expect(dest).toMatch(/^.*akashic-export-html-tmp-.+$/);
 			fsx.removeSync(dest);
 		})
 		.then(done, done.fail);
