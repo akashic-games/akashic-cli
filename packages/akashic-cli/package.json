@@ -11,8 +11,7 @@
     "start": "npm run build && node bin/run",
     "build": "tsc -p ./",
     "lint": "tslint -c ../tslint.json --project ./tsconfig.json",
-    "test": "npm run lint",
-    "test:jasmine": "jasmine ./spec/**/*[sS]pec.js"
+    "test": "npm run lint"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
@@ -40,9 +39,6 @@
   "devDependencies": {
     "@types/commander": "~2.3.0",
     "@types/node": "~10.12.7",
-    "jasmine": "3.3.0",
-    "jasmine-reporters": "2.0.4",
-    "jasmine-terminal-reporter": "0.9.1",
     "rimraf": "^2.6.2",
     "tslint": "~5.12.1",
     "typescript": "~2.8.0"
