@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.5.31 (2019-05-29)
+
+#### Other Change
+* `akashic-cli-export-html`, `akashic-cli-init`, `akashic-cli-stat`, `akashic-cli-update`, `akashic-cli`
+  * [#82](https://github.com/akashic-games/akashic-cli/pull/82) akashic-cli-xxxモジュールのテストフレームワークをjestに変更 ([@dera-](https://github.com/dera-))
+
+#### Committers: 1
+- [@dera-](https://github.com/dera-)
+
 ## 1.5.30 (2019-05-23)
 
 #### Enhancement
