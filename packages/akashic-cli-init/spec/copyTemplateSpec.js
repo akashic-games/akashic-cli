@@ -103,7 +103,7 @@ describe("copyTemplate.ts", () => {
 			ct.copyTemplate({files:[{src: "a"}, {src: "a", dst: "c"}]}, param)
 				.then(() => {done.fail();})
 				.catch((err) => {
-					expect(err.message).toBe("aborted to copy files, because followings already exist. [a, c/a]");
+					expect(err.message).toBe(`aborted to copy files, because followings already exist. [a, c${path.sep}a]`);
 					done();
 				});
 		});

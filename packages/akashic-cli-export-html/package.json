@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-export-html",
-  "version": "0.2.20",
+  "version": "0.2.22",
   "description": "A module to convert your Akashic game to a runnable standalone.",
   "main": "lib/index.js",
   "scripts": {
@@ -19,8 +19,8 @@
     "build:template:v2": "cd templates/template-export-html-v2 && npm install && npm run build && cd ../../",
     "build:template:ect": "shx cp templates/bundle-index.ect templates-build/ && shx cp templates/no-bundle-index.ect templates-build/",
     "lint": "tslint -c ../tslint.json --project ./tsconfig.json",
-    "test": "npm run test:jasmine && npm run lint",
-    "test:jasmine": "istanbul cover --report text --report html --colors -i ./lib/main.node.js ./node_modules/jasmine/bin/jasmine.js",
+    "test": "npm run test:jest && npm run lint",
+    "test:jest": "jest",
     "update-template": "npm run update-template:v1 && npm run update-template:v2 && node ./build-template-support/updateEngineFiles.js",
     "update-template:v1": "node ./build-template-support/generateAkashicVersionsFile v1 && cd templates/template-export-html-v1 && npm run update && npm run build && cd ../../",
     "update-template:v2": "node ./build-template-support/generateAkashicVersionsFile v2 && cd templates/template-export-html-v2 && npm run update && npm run build && cd ../../"
@@ -46,10 +46,7 @@
     "@types/node": "~8.0.53",
     "@types/uglify-js": "~2.6.29",
     "browserify": "^13.0.0",
-    "istanbul": "^0.4.5",
-    "jasmine": "^3.3.0",
-    "jasmine-reporters": "~2.0.4",
-    "jasmine-terminal-reporter": "~0.9.1",
+    "jest": "~24.8.0",
     "mock-fs": "~4.8.0",
     "node-fetch": "~2.3.0",
     "shx": "~0.2.2",
@@ -61,8 +58,8 @@
   },
   "typings": "lib/index.d.ts",
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.2.21",
-    "@akashic/akashic-cli-export-zip": "0.3.11",
+    "@akashic/akashic-cli-commons": "0.2.22",
+    "@akashic/akashic-cli-export-zip": "0.3.12",
     "archiver": "~3.0.0",
     "commander": "2.8.1",
     "ect": "^0.5.9",

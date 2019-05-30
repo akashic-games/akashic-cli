@@ -1,5 +1,35 @@
 # CHANGELOG
 
+## 1.5.31 (2019-05-29)
+
+#### Other Change
+* `akashic-cli-export-html`, `akashic-cli-init`, `akashic-cli-stat`, `akashic-cli-update`, `akashic-cli`
+  * [#82](https://github.com/akashic-games/akashic-cli/pull/82) akashic-cli-xxxモジュールのテストフレームワークをjestに変更 ([@dera-](https://github.com/dera-))
+
+#### Committers: 1
+- [@dera-](https://github.com/dera-)
+
+## 1.5.30 (2019-05-23)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#77](https://github.com/akashic-games/akashic-cli/pull/77) 新市場コンテンツ用のテンプレートを新規作成+akashic init実行時に一部ファイルを取得できない不具合の修正 ([@dera-](https://github.com/dera-))
+
+#### Bug Fix
+* `akashic-cli-init`
+  * [#77](https://github.com/akashic-games/akashic-cli/pull/77) 新市場コンテンツ用のテンプレートを新規作成+akashic init実行時に一部ファイルを取得できない不具合の修正 ([@dera-](https://github.com/dera-))
+
+#### Documentation
+* `akashic-cli-init`
+  * [#77](https://github.com/akashic-games/akashic-cli/pull/77) 新市場コンテンツ用のテンプレートを新規作成+akashic init実行時に一部ファイルを取得できない不具合の修正 ([@dera-](https://github.com/dera-))
+
+#### Other Change
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#81](https://github.com/akashic-games/akashic-cli/pull/81) remarkのプリセットとして@akashic/remark-preset-lintを使うよう変更 ([@dera-](https://github.com/dera-))
+
+#### Committers: 1
+- [@dera-](https://github.com/dera-)
+
 ## 1.5.29 (2019-05-22)
 
 #### Enhancement

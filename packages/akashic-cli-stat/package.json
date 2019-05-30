@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-stat",
-  "version": "0.1.10",
+  "version": "0.1.12",
   "description": "Project statistics tool for akashic.",
   "main": "lib/index.js",
   "scripts": {
@@ -8,8 +8,8 @@
     "clean": "shx rm -rf lib && shx rm -rf spec/build",
     "build": "tsc -p ./",
     "lint": "tslint --type-check -c ../tslint.json --project ./tsconfig.json",
-    "test": "npm run test:jasmine && npm run lint",
-    "test:jasmine": "istanbul cover --report text --report html --colors -i ./lib/main.node.js ./node_modules/jasmine/bin/jasmine.js"
+    "test": "npm run test:jest && npm run lint",
+    "test:jest": "jest"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
@@ -26,10 +26,7 @@
     "@types/jasmine": "~2.8.2",
     "@types/mock-fs": "~3.6.30",
     "@types/node": "10.12.7",
-    "istanbul": "^0.4.5",
-    "jasmine": "~3.3.0",
-    "jasmine-reporters": "~2.0.4",
-    "jasmine-terminal-reporter": "~0.9.1",
+    "jest": "~24.8.0",
     "mock-fs": "~4.8.0",
     "shx": "~0.2.2",
     "tslint": "~5.4.3",
@@ -37,7 +34,7 @@
   },
   "typings": "lib/index.d.ts",
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.2.21",
+    "@akashic/akashic-cli-commons": "0.2.22",
     "commander": "^2.16.0"
   },
   "publishConfig": {
