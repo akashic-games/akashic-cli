@@ -1,4 +1,5 @@
 import { Store } from "../store/Store";
+import { ELikeListItem } from "../store/DevtoolUiStore";
 
 export class LocalInstanceOperator {
 	private store: Store;
@@ -25,4 +26,25 @@ export class LocalInstanceOperator {
 		this.store.currentLocalInstance.setExecutionMode("passive");
 		this.store.currentLocalInstance.resume();
 	}
+
+	updateEntityList = (): void => {
+		const game: any = this.store.currentPlay.localInstances[0].gameContent.getGame();
+		const children = game.scene().children;
+		const entities: ELikeListItem[] = (children || []).map(createEntityObject);
+		this.store.devtoolUiStore.setEntityList(entities);
+	}
+}
+
+/**
+ * 引数の e にはAkashic Engineのg.Eが渡る
+ */
+function createEntityObject(e: ELike) {
+	const obj = {id: e.id, className: e.constructor.name, children: [] as ELike[]};
+	obj.children = (e.children || []).map((c) => createEntityObject(c));
+	return obj;
+}
+
+interface ELike {
+	id: number;
+	children: ELike[];
 }

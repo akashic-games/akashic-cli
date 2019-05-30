@@ -47,6 +47,10 @@ const TestWithBehaviour = observer(() => (
 			],
 			onClickAddInstance: action("add-instance")
 		}}
+		entityListDevtoolProps={{
+			onClickUpdateEntityList: action("update-entity-list"),
+			entityList: []
+		}}
 	/>
 ));
 
@@ -108,6 +112,10 @@ storiesOf("o-Devtool", module)
 					{ type: "passive", env: "Firefox", playerId: "asfaiout24", name: "player-27", isJoined: false }
 				],
 				onClickAddInstance: action("add-instance")
+			}}
+			entityListDevtoolProps={{
+				onClickUpdateEntityList: action("update-entity-list"),
+				entityList: [{"id" : 1, "className": "FilledRect", "children": []}]
 			}}
 		/>
 	))
@@ -176,6 +184,10 @@ storiesOf("o-Devtool", module)
 					{ type: "passive", env: "Firefox", playerId: "asfaiout", name: "player-3", isJoined: false }
 				],
 				onClickAddInstance: action("add-instance")
+			}}
+			entityListDevtoolProps={{
+				onClickUpdateEntityList: action("update-entity-list"),
+				entityList: []
 			}}
 		/>
 	))

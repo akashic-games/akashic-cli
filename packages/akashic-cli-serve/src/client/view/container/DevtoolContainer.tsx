@@ -52,6 +52,10 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 				}))),
 				onClickAddInstance: operator.play.openNewClientInstance
 			}}
+			entityListDevtoolProps={{
+				onClickUpdateEntityList: operator.localInstance.updateEntityList,
+				entityList: devtoolUiStore.entityList
+			}}
 		/>;
 	}
 }
