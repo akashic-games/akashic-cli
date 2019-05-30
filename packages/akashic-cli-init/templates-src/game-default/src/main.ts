@@ -1,18 +1,18 @@
-function main(param) {
-	var scene = new g.Scene({
+function main(param: g.GameMainParameterObject): void {
+	const scene = new g.Scene({
 		game: g.game,
 		// このシーンで利用するアセットのIDを列挙し、シーンに通知します
 		assetIds: ["player", "shot", "se"]
 	});
-	scene.loaded.add(function() {
+	scene.loaded.add(() => {
 		// ここからゲーム内容を記述します
 
 		// プレイヤーを生成します
-		var player = new g.Sprite({
+		const player = new g.Sprite({
 			scene: scene,
 			src: scene.assets["player"],
-			width: scene.assets["player"].width,
-			height: scene.assets["player"].height
+			width: (scene.assets["player"] as g.ImageAsset).width,
+			height: (scene.assets["player"] as g.ImageAsset).height
 		});
 
 		// プレイヤーの初期座標を、画面の中心に設定します
@@ -29,14 +29,14 @@ function main(param) {
 
 		// 画面をタッチしたとき、SEを鳴らします
 		scene.pointDownCapture.add(() => {
-			scene.assets["se"].play();
+			(scene.assets["se"] as g.AudioAsset).play();
 
 			// プレイヤーが発射する弾を生成します
-			var shot = new g.Sprite({
+			const shot = new g.Sprite({
 				scene: scene,
 				src: scene.assets["shot"],
-				width: scene.assets["shot"].width,
-				height: scene.assets["shot"].height
+				width: (scene.assets["shot"] as g.ImageAsset).width,
+				height: (scene.assets["shot"] as g.ImageAsset).height
 			});
 
 			// 弾の初期座標を、プレイヤーの少し右に設定します
@@ -60,4 +60,4 @@ function main(param) {
 	g.game.pushScene(scene);
 }
 
-module.exports = main;
+export = main;

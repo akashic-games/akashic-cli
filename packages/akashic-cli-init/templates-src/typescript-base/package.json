@@ -3,7 +3,6 @@
   "private": true,
   "version": "0.1.0",
   "description": "",
-  "main": "./script/main.js",
   "scripts": {
     "build": "rimraf ./script && tsc && akashic-cli-scan asset script",
     "update": "akashic-cli-scan asset && akashic-cli-scan globalScripts",
