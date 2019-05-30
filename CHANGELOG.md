@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.5.32 (2019-05-30)
+
+#### Other Change
+* `akashic-cli-export-html`, `akashic-cli-init`, `akashic-cli-stat`, `akashic-cli-update`, `akashic-cli`
+  * [#85](https://github.com/akashic-games/akashic-cli/pull/85) Fix broken publish v1.5.31 (with ignorable changes) ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.5.31 (2019-05-29)
 
 #### Other Change
