@@ -45,3 +45,4 @@ akashic-cli-update
 
 ただし、画像ファイルおよび音声ファイルは
 [CC BY 2.1 JP](https://creativecommons.org/licenses/by/2.1/jp/) の元で公開されています。
+
