@@ -1,13 +1,13 @@
-# javascript-game-sample-shin-ichiba-ranking
+# javascript-game-sample
 
-**javascript-game-sample-shin-ichiba-ranking**はJavascriptでニコニコ新市場対応コンテンツを作る際のサンプルプロジェクトです。
+**javascript-game-sample**はJavaScriptでAkashicのゲームを作る際のサンプルプロジェクトです。
 
 ## 利用方法
 
- `javascript-game-sample-shin-ichiba-ranking` を利用するにはNode.jsが必要です。
+ `javascript-game-sample` を利用するにはNode.jsが必要です。
 
 初回のみ、以下のコマンドを実行して、ビルドに必要なパッケージをインストールしてください。
-この作業は `javascript-game-sample-shin-ichiba-ranking` を新しく生成するごとに必要です。
+この作業は `javascript-game-sample` を新しく生成するごとに必要です。
 
 ```sh
 npm install
@@ -22,6 +22,18 @@ npm install
 * `npm install -g @akashic/akashic-sandbox` 後、 `akashic-sandbox .`
 
 ### テンプレートの使い方
+#### javascript
+* `script/main.js` を編集することでゲームの作成が可能です。
+  * スプライトの表示、音を鳴らす、タッチイベント定義等が、最初からこのテンプレートで行われています。
+
+#### javascript-minimal
+* `script/main.js` を編集することでゲームの作成が可能です。
+* 基本的な使い方は javascript テンプレートと同じですが、このテンプレートでは最低限のものしか記述されていないため以下のことは行われていません。
+  * スプライトの表示
+  * 音を鳴らす
+  * タッチイベント定義
+
+#### javascript-shin-ichiba-ranking
 * ゲーム部分を作成する場合は、 `script/main.js` を編集してください。
   * 基本的に`script/_bootstrap.js`を編集する必要はありません。
 * 基本的な使い方は javascript テンプレートと同じですが、このテンプレートでは `script/main.js` の `main` 関数の引数`param`に以下の値が新たに付与されています。
@@ -42,13 +54,13 @@ npm install
 
 ### npm モジュールの追加・削除
 
-`javascript-game-sample-shin-ichiba-ranking` でnpmモジュールを利用する場合、このディレクトリで `akashic install <package_name>` することで npm モジュールを追加することができます。
+`javascript-game-sample` でnpmモジュールを利用する場合、このディレクトリで `akashic install <package_name>` することで npm モジュールを追加することができます。
 
 また `akashic uninstall <package_name>` すると npm モジュールを削除することができます。
 
 ## エクスポート方法
 
-`javascript-game-sample-shin-ichiba-ranking` をエクスポートするときは以下のコマンドを利用します。
+`javascript-game-sample` をエクスポートするときは以下のコマンドを利用します。
 
 ### htmlファイルのエクスポート
 
