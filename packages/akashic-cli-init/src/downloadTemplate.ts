@@ -1,5 +1,5 @@
 import * as request from "request";
-import * as unzip from "unzip";
+import * as unzipper from "unzipper";
 import * as fs from "fs";
 import * as path from "path";
 import { InitParameterObject } from "./InitParameterObject";
@@ -114,7 +114,7 @@ function promisedRequest(param: RequestParameterObject): Promise<any> {
 
 export function promisedExtract(buf: Buffer, extractPath: string): Promise<void> {
 	return new Promise<void>((resolve, reject) => {
-		const stream = unzip.Extract({path: extractPath});
+		const stream = unzipper.Extract({path: extractPath});
 		stream.on("error", () => {
 			reject(new Error("failed to extract zip file"));
 		});
