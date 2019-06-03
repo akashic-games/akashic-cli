@@ -1,5 +1,25 @@
 # CHANGELOG
 
+## 1.6.0 (2019-06-03)
+
+#### Breaking Change
+* `akashic-cli-init`
+  * [#84](https://github.com/akashic-games/akashic-cli/pull/84) akashic-cli-initのテンプレートディレクトリを生成できるようにした ([@dera-](https://github.com/dera-))
+  * [#79](https://github.com/akashic-games/akashic-cli/pull/79) akashic-cli-initのテンプレートディレクトリを生成できるようにした ([@dera-](https://github.com/dera-))
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#84](https://github.com/akashic-games/akashic-cli/pull/84) akashic-cli-initのテンプレートディレクトリを生成できるようにした ([@dera-](https://github.com/dera-))
+  * [#79](https://github.com/akashic-games/akashic-cli/pull/79) akashic-cli-initのテンプレートディレクトリを生成できるようにした ([@dera-](https://github.com/dera-))
+
+#### Documentation
+* `akashic-cli-init`
+  * [#84](https://github.com/akashic-games/akashic-cli/pull/84) akashic-cli-initのテンプレートディレクトリを生成できるようにした ([@dera-](https://github.com/dera-))
+  * [#79](https://github.com/akashic-games/akashic-cli/pull/79) akashic-cli-initのテンプレートディレクトリを生成できるようにした ([@dera-](https://github.com/dera-))
+
+#### Committers: 1
+- [@dera-](https://github.com/dera-)
+
 
 
 ## 1.5.32 (2019-05-30)
