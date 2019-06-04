@@ -35,16 +35,22 @@ console.log("End to generate typescript-templates");
 
 // javascriptテンプレートを作成
 console.log("Start to generate javascript-templates");
+shell.mkdir("-p", path.join(templatesDirPath, "common"));
+console.log("Install packages");
+shell.cp(path.join(templatesSrcDirPath, "typescript-base", "package.json"), path.join(templatesDirPath, "common"));
+execSync(`cd ${path.join(templatesDirPath, "common")} && npm install`);
 Object.keys(templateData).forEach(key => {
 	console.log(`"${key}" template`);
 	shell.rm("-rf", path.join(templatesDirPath, templateData[key]["js-dist"]));
 	shell.cp("-R", path.join(templatesSrcDirPath, templateData[key]["src"]), path.join(templatesDirPath, templateData[key]["js-dist"]));
+	console.log("  - copy node_modules");
+	shell.cp("-R", path.join(templatesDirPath, "common", "node_modules"), path.join(templatesDirPath, templateData[key]["js-dist"], "node_modules"));
 	shell.cp(path.join(templatesSrcDirPath, "typescript-base", "package.json"), path.join(templatesDirPath, templateData[key]["js-dist"]));
 	shell.cp(path.join(templatesSrcDirPath, "typescript-base", "tsconfig.json"), path.join(templatesDirPath, templateData[key]["js-dist"]));
-	console.log("  - start to install packages and build");
+	console.log("  - start to build");
 	// インストールとビルドが完了するのを待ちたいので、ここだけ execSync を使用する
-	execSync(`cd ${path.join(templatesDirPath, templateData[key]["js-dist"])} && npm install && npm run build`);
-	console.log("  - end to install packages and build");
+	execSync(`cd ${path.join(templatesDirPath, templateData[key]["js-dist"])} && npm run build`);
+	console.log("  - end to build");
 	shell.rm(
 		"-rf",
 		path.join(templatesDirPath, templateData[key]["js-dist"], "src"),
@@ -52,10 +58,10 @@ Object.keys(templateData).forEach(key => {
 	);
 	shell.rm(
 		path.join(templatesDirPath, templateData[key]["js-dist"], "package.json"),
-		path.join(templatesDirPath, templateData[key]["js-dist"], "package-lock.json"),
 		path.join(templatesDirPath, templateData[key]["js-dist"], "tsconfig.json")
 	);
 	shell.cp("-R", path.join(templatesSrcDirPath, "javascript-base", "*"), path.join(templatesDirPath, templateData[key]["js-dist"]));
 	shell.cp(path.join(templatesSrcDirPath, "javascript-base", ".eslintrc.json"), path.join(templatesDirPath, templateData[key]["js-dist"]));
 });
+shell.rm("-rf", path.join(templatesDirPath, "common"));
 console.log("End to generate javascript-templates");

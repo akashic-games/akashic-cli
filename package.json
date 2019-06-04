@@ -4,7 +4,6 @@
   "version": "0.0.1",
   "description": "Command-line utility for akashic game development",
   "scripts": {
-    "prepublish": "npm run build",
     "postinstall": "lerna bootstrap --no-ci",
     "build": "lerna run build",
     "test": "npm run lint:md && lerna run test",
