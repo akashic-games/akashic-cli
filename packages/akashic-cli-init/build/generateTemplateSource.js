@@ -37,12 +37,12 @@ console.log("End to generate typescript-templates");
 console.log("Start to generate javascript-templates");
 shell.cp("-R", path.join(templatesSrcDirPath, "typescript-base"), path.join(templatesDirPath, "common"));
 console.log("Install packages");
+// テンプレート生成処理時間の短縮のため、各jsテンプレートビルド時に共通的に使用するパッケージを先にインストールしておく
 execSync(`cd ${path.join(templatesDirPath, "common")} && npm install`);
 Object.keys(templateData).forEach(key => {
 	console.log(`"${key}" template`);
 	shell.cp("-R", path.join(templatesSrcDirPath, templateData[key]["src"], "src"), path.join(templatesDirPath, "common", "src"));
 	console.log("  - start to build");
-	// インストールとビルドが完了するのを待ちたいので、ここだけ execSync を使用する
 	execSync(`cd ${path.join(templatesDirPath, "common")} && npm run build`);
 	console.log("  - end to build");
 	shell.rm("-rf", path.join(templatesDirPath, "common", "src"));
@@ -52,6 +52,7 @@ Object.keys(templateData).forEach(key => {
 	shell.mv(path.join(templatesDirPath, "common", "script"), path.join(templatesDirPath, templateData[key]["js-dist"], "script"));
 	shell.cp("-R", path.join(templatesSrcDirPath, "javascript-base", "*"), path.join(templatesDirPath, templateData[key]["js-dist"]));
 	shell.cp(path.join(templatesSrcDirPath, "javascript-base", ".eslintrc.json"), path.join(templatesDirPath, templateData[key]["js-dist"]));
+	// game.jsonにscriptアセットが登録されていない状態なので、ここで登録する
 	execSync(`cd ${path.join(templatesDirPath, templateData[key]["js-dist"])} && ../common/node_modules/.bin/akashic-cli-scan asset script`);
 });
 shell.rm("-rf", path.join(templatesDirPath, "common"));
