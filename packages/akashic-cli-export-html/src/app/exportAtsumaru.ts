@@ -27,7 +27,9 @@ export function promiseExportAtsumaru(param: ExportHTMLParameterObject): Promise
 				dest: completedParam.output,
 				hashLength: completedParam.hashLength,
 				strip: true,
-				force: true
+				force: true,
+				babel: true,
+				omitEmptyJs: true
 			});
 		}).then(() => {
 			// game.jsonへの追記
