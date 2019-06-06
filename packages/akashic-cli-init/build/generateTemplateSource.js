@@ -43,13 +43,20 @@ Object.keys(templateData).forEach(key => {
 	console.log(`"${key}" template`);
 	shell.cp("-R", path.join(templatesSrcDirPath, templateData[key]["src"], "src"), path.join(templatesDirPath, "common", "src"));
 	console.log("  - start to build");
+	// node_modulesがcommon下にあるので、そこでそのままビルドする
 	execSync(`cd ${path.join(templatesDirPath, "common")} && npm run build`);
 	console.log("  - end to build");
+	// 他のテンプレートもcommon下でビルドするため、ソースファイルディレクトリは削除しておく
 	shell.rm("-rf", path.join(templatesDirPath, "common", "src"));
+	// このスクリプト実行前にテンプレートが既に作られているならば、それを削除する
 	shell.rm("-rf", path.join(templatesDirPath, templateData[key]["js-dist"]));
+	// テンプレートを新たに生成
 	shell.cp("-R", path.join(templatesSrcDirPath, templateData[key]["src"]), path.join(templatesDirPath, templateData[key]["js-dist"]));
+	// common下でビルド済みのためソースファイルディレクトリは不要なので削除
 	shell.rm("-rf", path.join(templatesDirPath, templateData[key]["js-dist"], "src"));
+	// common下でビルドしたものをテンプレートに移す
 	shell.mv(path.join(templatesDirPath, "common", "script"), path.join(templatesDirPath, templateData[key]["js-dist"], "script"));
+	// javascriptテンプレートに共通で必要なものもテンプレートに置く
 	shell.cp("-R", path.join(templatesSrcDirPath, "javascript-base", "*"), path.join(templatesDirPath, templateData[key]["js-dist"]));
 	shell.cp(path.join(templatesSrcDirPath, "javascript-base", ".eslintrc.json"), path.join(templatesDirPath, templateData[key]["js-dist"]));
 	// game.jsonにscriptアセットが登録されていない状態なので、ここで登録する
