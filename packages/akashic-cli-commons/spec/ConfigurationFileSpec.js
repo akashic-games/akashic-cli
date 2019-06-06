@@ -1,4 +1,4 @@
-var mockfs = new require("mock-fs");
+var mockfs = require("mock-fs");
 var ConfigurationFile = require("../lib/ConfigurationFile").ConfigurationFile;
 var ConsoleLogger = require("../lib/ConsoleLogger").ConsoleLogger;
 

@@ -4,7 +4,7 @@ describe("ConsoleLogger", function () {
 	it("can be instantiated", function () {
 		var self = new ConsoleLogger();
 		expect(self.quiet).toBe(false);
-		expect(self._log instanceof Function).toBe(true);
+		expect(typeof self._log).toBe("function");
 	});
 
 	it("logs error, warn and info", function () {

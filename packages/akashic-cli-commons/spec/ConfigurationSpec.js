@@ -3,6 +3,9 @@ var Configuration = require("../lib/Configuration").Configuration;
 var ConsoleLogger = require("../lib/ConsoleLogger").ConsoleLogger;
 
 describe("Configuration", function () {
+	afterEach(function () {
+		mockfs.restore();
+	});
 	it("can be instantiated", function () {
 		var loggedResult = [];
 		var logger = new ConsoleLogger({ debugLogMethod: loggedResult.push.bind(loggedResult) });
