@@ -75,11 +75,11 @@ export class PlayStore {
 	}
 
 	getPlays(): Play[] {
-		return this.playManager.getPlays();
+		return this.playManager.getAllPlays();
 	}
 
 	async stopPlay(playId: string): Promise<void> {
-		await this.playManager.stopPlay(playId);
+		await this.playManager.deletePlay(playId);
 		this.onPlayStatusChange.fire({playId, playStatus: "suspending"});
 	}
 
