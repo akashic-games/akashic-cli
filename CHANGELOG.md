@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.6.3 (2019-06-06)
+
+#### Bug Fix
+* `akashic-cli-init`
+  * [#86](https://github.com/akashic-games/akashic-cli/pull/86) initのnode12対応 ([@kamakiri01](https://github.com/kamakiri01))
+
+#### Committers: 1
+- kamakiri_ys ([@kamakiri01](https://github.com/kamakiri01))
+
 ## 1.6.2 (2019-06-05)
 
 #### Enhancement
