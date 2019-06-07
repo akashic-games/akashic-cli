@@ -4,14 +4,14 @@ const semver = require("semver");
 const execSync = require("child_process").execSync;
 
 if (process.argv.length < 3) {
-	console.error("Please enter command as follows: node updateChangelog.js [patch|minor|major]");
+	console.error("Please enter command as follows: node updateChangelog.js [patch|minor|major|empty]");
 	process.exit(1);
 }
 
 // どのバージョンを上げるのかを取得
-var target = process.argv[2];
-if (! /^patch|minor|major$/.test(target)) {
-	console.error("Please specify patch, minor or major.");
+const arg = process.argv[2];
+if (! /^patch|minor|major|empty$/.test(arg)) {
+	console.error("Please specify patch, minor, major or empty.");
 	process.exit(1);
 }
 
@@ -30,6 +30,7 @@ if (process.env.GITHUB_AUTH == null) {
 
 // 全akashic-cli-xxxに依存するakashic-cliモジュールの次のバージョン番号を取得
 const packageJson = require(path.join(__dirname, "..", "packages", "akashic-cli", "package.json"));
+const target = arg === "empty" ? "patch" : arg;
 const nextVersion = semver.inc(packageJson["version"], target);
 
 // 現在のCHANGELOGに次バージョンのログを追加
