@@ -1,4 +1,5 @@
 import * as express from "express";
+import { ContentParameters } from "@akashic/headless-driver";
 import { BadRequestError, NotFoundError } from "../common/ApiError";
 import { responseSuccess } from "../common/ApiResponse";
 import {
@@ -47,7 +48,7 @@ export const createHandlerToGetPlay = (playStore: PlayStore): express.RequestHan
 			}
 			responseSuccess<PlayApiResponseData>(res, 200, {
 				playId: play.playId,
-				contentUrl: play.contentUrl,
+				contentUrl: (play as ContentParameters).contentUrl, // Play 生成時に contentUrl を渡しているため、ここでも contentUrl は必ず存在しているとみなす
 				joinedPlayers: playStore.getJoinedPlayers(playId),
 				clientContentUrl: playStore.getClientContentUrl(playId),
 				runners: playStore.getRunners(playId),
@@ -69,7 +70,7 @@ export const createHandlerToGetPlays = (playStore: PlayStore): express.RequestHa
 				200,
 				plays.map(play => ({
 					playId: play.playId,
-					contentUrl: play.contentUrl,
+					contentUrl: (play as ContentParameters).contentUrl, // Play 生成時に contentUrl を渡しているため、ここでも contentUrl は必ず存在しているとみなす
 					joinedPlayers: playStore.getJoinedPlayers(play.playId),
 					clientContentUrl: playStore.getClientContentUrl(play.playId),
 					runners: playStore.getRunners(play.playId),
