@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 1.6.5 (2019-06-11)
+
+#### Enhancement
+* `akashic-cli-export-html`
+  * [#93](https://github.com/akashic-games/akashic-cli/pull/93) 【akashic-cli-export-html】内部コンポーネントの更新(engineFiles@2.1.19、engineFiles@1.1.9) ([@xnv](https://github.com/xnv))
+* `akashic-cli-serve`
+  * [#92](https://github.com/akashic-games/akashic-cli/pull/92) Follow headless-driver@0.4.3 ([@yu-ogi](https://github.com/yu-ogi))
+
+#### Committers: 2
+- [@yu-ogi](https://github.com/yu-ogi)
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.6.4 (2019-06-11)
 
 #### Bug Fix
