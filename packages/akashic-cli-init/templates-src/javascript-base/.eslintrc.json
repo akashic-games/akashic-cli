@@ -1,12 +1,29 @@
 {
+  "env": {
+    "commonjs": true,
+    "amd": true
+  },
   "parserOptions": {
     "ecmaVersion": 5
   },
+  "globals": {
+    "window": false,
+    "global": false,
+    "self": false,
+    "RPGAtsumaru": false,
+    "g": false
+  },
   "rules": {
-    "no-dupe-args": 2,
-    "no-dupe-keys": 2,
-    "no-duplicate-case": 2,
-    "no-inner-declarations": [2, "functions"],
-    "no-irregular-whitespace": 2
+    "no-dupe-args": "error",
+    "no-dupe-keys": "error",
+    "no-duplicate-case": "error",
+    "no-inner-declarations": "error",
+    "no-irregular-whitespace": ["error", {
+      "skipStrings": true,
+      "skipComments": true,
+      "skipRegExps": true,
+      "skipTemplates": true
+    }],
+    "no-undef": "error"
   }
 }
