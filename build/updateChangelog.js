@@ -16,7 +16,7 @@ if (! /^patch|minor|major|empty$/.test(arg)) {
 }
 
 // 更新するモジュールが無ければChangelog更新処理を行わず終了する
-if (parseInt(execSync(`${path.join(__dirname, "..", "node_modules", ".bin", "lerna")} changed | wc -l`).toString(), 10) === 0) {
+if (arg !== "empty" && parseInt(execSync(`${path.join(__dirname, "..", "node_modules", ".bin", "lerna")} changed | wc -l`).toString(), 10) === 0) {
 	console.error("No modules to update version.");
 	process.exit(1);
 }
@@ -35,7 +35,11 @@ const nextVersion = semver.inc(packageJson["version"], target);
 
 // 現在のCHANGELOGに次バージョンのログを追加
 const currentChangeLog = fs.readFileSync(path.join(__dirname, "..", "CHANGELOG.md")).toString();
-const addedLog =
-	execSync(`${path.join(__dirname, "..", "node_modules", ".bin", "lerna-changelog")} --next-version ${nextVersion}`).toString();
+let addedLog;
+if (arg === "empty") {
+	addedLog = `\n## ${nextVersion}\n* Ignorable change to fix broken publish ${packageJson["version"]}\n`;
+} else {
+	addedLog = execSync(`${path.join(__dirname, "..", "node_modules", ".bin", "lerna-changelog")} --next-version ${nextVersion}`).toString();
+}
 const nextChangeLog = currentChangeLog.replace("# CHANGELOG\n\n", "# CHANGELOG\n" + addedLog + "\n");
 fs.writeFileSync(path.join(__dirname, "..", "CHANGELOG.md"), nextChangeLog);
