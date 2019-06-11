@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.6.4 (2019-06-11)
+
+#### Bug Fix
+* `akashic-cli-export-zip`, `akashic-cli-init`
+  * [#87](https://github.com/akashic-games/akashic-cli/pull/87) akashic-cliのpublish処理が遅い問題への対応 ([@dera-](https://github.com/dera-))
+
+#### Committers: 1
+- [@dera-](https://github.com/dera-)
+
 ## 1.6.3 (2019-06-06)
 
 #### Bug Fix
