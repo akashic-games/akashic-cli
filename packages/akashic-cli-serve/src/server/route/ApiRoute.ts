@@ -18,9 +18,9 @@ import { PlayStore } from "../domain/PlayStore";
 import { RunnerStore } from "../domain/RunnerStore";
 import { SocketIOAMFlowManager } from "../domain/SocketIOAMFlowManager";
 import { createHandlerToGetSandboxConfig } from "../controller/SandboxConfigController";
+import {handleToGetStartupOptions} from "../controller/ConfigController";
 
 export interface ApiRouterParameterObject {
-	targetDir: string;
 	playStore: PlayStore;
 	runnerStore: RunnerStore;
 	amflowManager: SocketIOAMFlowManager;
@@ -31,20 +31,20 @@ export const createApiRouter = (params: ApiRouterParameterObject): express.Route
 	const apiRouter = express.Router();
 
 	// TODO 全体的に複数形にして普通のREST APIっぽくする
-	apiRouter.post("/play", createHandlerToCreatePlay(params.playStore));
+	apiRouter.post("/plays", createHandlerToCreatePlay(params.playStore));
+	apiRouter.get("/plays/:playId(\\d+)", createHandlerToGetPlay(params.playStore));
 	apiRouter.get("/plays", createHandlerToGetPlays(params.playStore));
-	apiRouter.get("/play/:playId(\\d+)", createHandlerToGetPlay(params.playStore));
-	apiRouter.delete("/play/:playId(\\d+)", createHandlerToDeletePlay(params.playStore));
-	apiRouter.patch("/play/:playId(\\d+)", createHandlerToPatchPlay(params.playStore));
+	apiRouter.delete("/plays/:playId(\\d+)", createHandlerToDeletePlay(params.playStore));
+	apiRouter.patch("/plays/:playId(\\d+)", createHandlerToPatchPlay(params.playStore));
 
-	apiRouter.post("/play/:playId(\\d+)/token", createHandlerToCreatePlayToken(params.amflowManager));
-	apiRouter.post("/play/:playId(\\d+)/broadcast", createHandlerToBroadcast(params.io));
+	apiRouter.post("/plays/:playId(\\d+)/token", createHandlerToCreatePlayToken(params.amflowManager));
+	apiRouter.post("/plays/:playId(\\d+)/broadcast", createHandlerToBroadcast(params.io));
 
-	apiRouter.post("/runner", createHandlerToCreateRunner(params.playStore, params.runnerStore));
-	apiRouter.delete("/runner/:runnerId", createHandlerToDeleteRunner(params.runnerStore));
-	apiRouter.patch("/runner/:runnerId", createHandlerToPatchRunner(params.runnerStore));
+	apiRouter.post("/runners", createHandlerToCreateRunner(params.playStore, params.runnerStore));
+	apiRouter.delete("/runners/:runnerId", createHandlerToDeleteRunner(params.runnerStore));
+	apiRouter.patch("/runners/:runnerId", createHandlerToPatchRunner(params.runnerStore));
 
-	apiRouter.get("/sandbox-config", createHandlerToGetSandboxConfig(params.targetDir));
+	apiRouter.get("/options", handleToGetStartupOptions);
 
 	return apiRouter;
 };

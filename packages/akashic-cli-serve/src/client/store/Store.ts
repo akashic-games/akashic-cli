@@ -1,4 +1,5 @@
 import {observable, action} from "mobx";
+import * as queryString from "query-string";
 import {Player} from "../../common/types/Player";
 import {SandboxConfig} from "../../common/types/SandboxConfig";
 import {PlayEntity} from "./PlayEntity";
@@ -15,6 +16,7 @@ export class Store {
 	@observable devtoolUiStore: DevtoolUiStore;
 	@observable startupScreenUiStore: StartupScreenUiStore;
 	@observable player: Player | null;
+	@observable contentId: number; // 多分storage辺りに置く方がよさそうだが一旦動かすこと優先でここに置いておく
 
 	@observable currentPlay: PlayEntity | null;
 	@observable currentLocalInstance: LocalInstanceEntity | null;
@@ -23,6 +25,11 @@ export class Store {
 	@observable argumentsTable: { [name: string]: string };
 
 	constructor() {
+		this.contentId = 0;
+		const query = queryString.parse(window.location.search);
+		if (query.id) {
+			this.contentId = parseInt(query.id, 10);
+		}
 		this.playStore = new PlayStore();
 		this.toolBarUiStore = new ToolBarUiStore();
 		this.devtoolUiStore = new DevtoolUiStore();

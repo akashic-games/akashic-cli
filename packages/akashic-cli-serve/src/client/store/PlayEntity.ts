@@ -51,6 +51,7 @@ export class PlayEntity {
 
 	readonly playId: string;
 	readonly amflow: SocketIOAMFlowClient;
+	readonly clientContentUrl: string;
 
 	@observable activePlaybackRate: number;
 	@observable isActivePausing: boolean;
@@ -64,7 +65,6 @@ export class PlayEntity {
 	@observable serverInstances: ServerInstanceEntity[];
 
 	private readonly _timeKeeper: TimeKeeper;
-	private readonly _clientContentUrl: string;
 	private _serverInstanceWaiters: {[key: string]: (p: ServerInstanceEntity) => void };
 	private _timerId: any;
 	private _parent?: PlayEntity;
@@ -81,8 +81,8 @@ export class PlayEntity {
 		this.localInstances = [];
 		this.serverInstances = !param.runners ? [] : param.runners.map(desc => new ServerInstanceEntity({ runnerId: desc.runnerId, play: this }));
 		this.onTeardown = new Trigger();
+		this.clientContentUrl = param.clientContentUrl;
 		this._timeKeeper = new TimeKeeper();
-		this._clientContentUrl = param.clientContentUrl!;
 		this._serverInstanceWaiters = {};
 		this._timerId = null;
 
@@ -111,7 +111,7 @@ export class PlayEntity {
 	async createLocalInstance(param: CreateLocalInstanceParameterObject): Promise<LocalInstanceEntity> {
 		const i = new LocalInstanceEntity({
 			play: this,
-			contentUrl: this._clientContentUrl,
+			contentUrl: this.clientContentUrl,
 			coeHandler: param.coeHandler,
 			...param
 		});
