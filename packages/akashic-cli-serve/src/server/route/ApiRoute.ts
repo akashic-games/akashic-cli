@@ -30,7 +30,6 @@ export interface ApiRouterParameterObject {
 export const createApiRouter = (params: ApiRouterParameterObject): express.Router => {
 	const apiRouter = express.Router();
 
-	// TODO 全体的に複数形にして普通のREST APIっぽくする
 	apiRouter.post("/plays", createHandlerToCreatePlay(params.playStore));
 	apiRouter.get("/plays/:playId(\\d+)", createHandlerToGetPlay(params.playStore));
 	apiRouter.get("/plays", createHandlerToGetPlays(params.playStore));

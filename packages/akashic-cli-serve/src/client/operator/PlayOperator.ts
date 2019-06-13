@@ -26,7 +26,6 @@ export class PlayOperator {
 
 	openNewClientInstance = (): void => {
 		// ignoreSession は Mac Chrome の不具合(？)対策でやむなくつけているフラグ。 (ref. ../store/storage.ts)
-		// TODO: ignoreSessionつけるとURLの?が消えてしまうので、消えないように修正する
 		window.open(
 			`${window.location.pathname}?id=${this.store.contentId}&ignoreSession=1`,
 			"_blank",
