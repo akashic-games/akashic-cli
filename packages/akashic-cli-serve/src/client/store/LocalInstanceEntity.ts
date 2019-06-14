@@ -2,6 +2,7 @@ import {action, observable, computed} from "mobx";
 import {Trigger} from "@akashic/trigger";
 import {TimeKeeper} from "../../common/TimeKeeper";
 import {Player} from "../../common/types/Player";
+import {ClientContentLocator} from "../common/ClientContentLocator";
 import {GameViewManager} from "../akashic/GameViewManager";
 import {PlayEntity} from "./PlayEntity";
 import {CoePluginEntity, CreateCoeLocalInstanceParameterObject} from "./CoePluginEntity";
@@ -22,7 +23,7 @@ const toAgvExecutionMode = (() => {
 
 export interface LocalInstanceEntityParameterObject {
 	gameViewManager: GameViewManager;
-	contentUrl: string;
+	contentLocator: ClientContentLocator;
 	executionMode: ExecutionMode;
 	play: PlayEntity;
 	player: Player;
@@ -45,7 +46,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 
 	readonly play: PlayEntity;
 	readonly coePlugin: CoePluginEntity;
-	readonly contentUrl: string;
+	readonly contentLocator: ClientContentLocator;
 
 	private _timeKeeper: TimeKeeper;
 	private _gameViewManager: GameViewManager;
@@ -57,7 +58,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 		this.executionMode = params.executionMode;
 		this.play = params.play;
 		this.isPaused = false;
-		this.contentUrl = params.contentUrl;
+		this.contentLocator = params.contentLocator;
 		this._timeKeeper = new TimeKeeper();
 		this._gameViewManager = params.gameViewManager;
 		const playConfig: agv.PlaylogConfig = {
@@ -74,7 +75,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 			playConfig.playToken = params.playToken;
 		}
 		this._agvGameContent = this._gameViewManager.createGameContent({
-			contentUrl: this.contentUrl,
+			contentLocator: this.contentLocator,
 			player: {
 				id: this.player.id,
 				name: this.player.name

@@ -1,6 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { configure as mobxConfigure } from "mobx";
+import { ClientContentLocator } from "./common/ClientContentLocator";
 import { Store } from "./store/Store";
 import { Operator } from "./operator/Operator";
 import { GameViewManager } from "./akashic/GameViewManager";
@@ -13,8 +14,7 @@ const store = new Store();
 const operator = new Operator({
 	store,
 	gameViewManager,
-	contentUrl: `${window.location.origin}/contents/${store.contentId}/content.raw.json`,
-	clientContentUrl: `/contents/${store.contentId}/content.json` // このパスはサーバーに記録され全クライアントで使われるので、絶対パスではなくルートパスを渡す。
+	contentLocator: store.contentLocator
 });
 
 window.addEventListener("load", async () => {

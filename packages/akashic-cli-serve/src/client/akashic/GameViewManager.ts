@@ -1,5 +1,6 @@
-import {generateTestbedScriptAsset} from "./TestbedScriptAsset";
 import {Trigger} from "@akashic/trigger";
+import {ClientContentLocator} from "../common/ClientContentLocator";
+import {generateTestbedScriptAsset} from "./TestbedScriptAsset";
 
 export interface Platform {
 	_resourceFactory: {
@@ -11,6 +12,17 @@ export interface GameViewManagerParameterObject {
 	width?: number;
 	height?: number;
 	sharedObject?: agv.GameViewSharedObject;
+}
+
+export interface CreateGameContentParameterObject {
+	contentLocator: ClientContentLocator;
+	player: {
+		id: string;
+		name?: string;
+	};
+	playConfig: agv.PlaylogConfig;
+	gameLoaderCustomizer: agv.GameLoaderCustomizer;
+	argument?: any;
 }
 
 export class GameViewManager {
@@ -31,15 +43,19 @@ export class GameViewManager {
 		return this.rootElement;
 	}
 
-	createGameContent(gameConfig: agv.GameConfig): agv.GameContent {
-		const customGameConfig = {
-			...gameConfig
+	createGameContent(param: CreateGameContentParameterObject): agv.GameContent {
+		const gameConfig = {
+			contentUrl: param.contentLocator.asDebuggableRootRelativeUrl(),
+			player: param.player,
+			playConfig: param.playConfig,
+			gameLoaderCustomizer: param.gameLoaderCustomizer,
+			argument: param.argument
 		};
 		// TODO: 複数コンテンツのホスティングに対応されれば削除
-		if (gameConfig.gameLoaderCustomizer.createCustomAmflowClient) {
-			customGameConfig.gameLoaderCustomizer.platformCustomizer = this.customizePlatform;
+		if (param.gameLoaderCustomizer.createCustomAmflowClient) {
+			gameConfig.gameLoaderCustomizer.platformCustomizer = this.customizePlatform;
 		}
-		const gameContent = new agv.GameContent(customGameConfig);
+		const gameContent = new agv.GameContent(gameConfig);
 		gameContent.onExternalPluginRegister = new Trigger();
 		return gameContent;
 	}
