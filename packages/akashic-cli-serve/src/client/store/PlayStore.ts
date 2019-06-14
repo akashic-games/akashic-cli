@@ -38,9 +38,7 @@ export class PlayStore {
 		this._creationWaiters = Object.create(null);
 		this._initializationWaiter = ApiClient.getPlays().then(res => {
 			const playsInfo = res.data;
-			playsInfo.forEach(playInfo => {
-				this.plays[playInfo.playId] = new PlayEntity(playInfo);
-			});
+			playsInfo.forEach(playInfo => this.plays[playInfo.playId] = new PlayEntity(playInfo));
 			Subscriber.onPlayCreate.add(this.handlePlayCreate);
 			Subscriber.onPlayStatusChange.add(this.handlePlayStatusChange);
 			Subscriber.onPlayDurationStateChange.add(this.handlePlayDurationStateChange);
