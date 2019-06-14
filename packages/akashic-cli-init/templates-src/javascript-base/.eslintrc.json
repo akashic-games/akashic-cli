@@ -1,15 +1,12 @@
 {
   "env": {
-    "commonjs": true,
-    "amd": true
+    "commonjs": true
   },
   "parserOptions": {
     "ecmaVersion": 5
   },
   "globals": {
     "window": false,
-    "global": false,
-    "self": false,
     "RPGAtsumaru": false,
     "g": false
   },
