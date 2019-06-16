@@ -26,6 +26,7 @@
       "bug": "Bug Fix",
       "documentation": "Documentation",
       "other": "Other Change",
+      "dependencies": "Update Dependencies",
       "republish": "Only Publish"
     }
   },
