@@ -25,7 +25,8 @@
       "enhancement": "Enhancement",
       "bug": "Bug Fix",
       "documentation": "Documentation",
-      "other": "Other Change"
+      "other": "Other Change",
+      "republish": "Only Publish"
     }
   },
   "devDependencies": {
