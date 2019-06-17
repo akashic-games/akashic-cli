@@ -111,6 +111,7 @@ export class PlayEntity {
 	async createLocalInstance(param: CreateLocalInstanceParameterObject): Promise<LocalInstanceEntity> {
 		const i = new LocalInstanceEntity({
 			play: this,
+			resizeGameView: !this._parent,
 			contentLocator: this.contentLocator,
 			coeHandler: param.coeHandler,
 			...param

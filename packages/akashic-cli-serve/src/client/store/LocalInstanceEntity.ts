@@ -3,6 +3,7 @@ import {Trigger} from "@akashic/trigger";
 import {TimeKeeper} from "../../common/TimeKeeper";
 import {Player} from "../../common/types/Player";
 import {ClientContentLocator} from "../common/ClientContentLocator";
+import * as ApiRequest from "../api/ApiRequest";
 import {GameViewManager} from "../akashic/GameViewManager";
 import {PlayEntity} from "./PlayEntity";
 import {CoePluginEntity, CreateCoeLocalInstanceParameterObject} from "./CoePluginEntity";
@@ -27,6 +28,7 @@ export interface LocalInstanceEntityParameterObject {
 	executionMode: ExecutionMode;
 	play: PlayEntity;
 	player: Player;
+	resizeGameView?: boolean;
 	argument?: any;
 	playToken?: string;
 	playlogServerUrl?: string;
@@ -51,6 +53,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 	private _timeKeeper: TimeKeeper;
 	private _gameViewManager: GameViewManager;
 	private _agvGameContent: agv.GameContent;
+	private _resizeGameView: boolean;
 
 	constructor(params: LocalInstanceEntityParameterObject) {
 		this.onStop = new Trigger<LocalInstanceEntity>();
@@ -61,6 +64,8 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 		this.contentLocator = params.contentLocator;
 		this._timeKeeper = new TimeKeeper();
 		this._gameViewManager = params.gameViewManager;
+		this._resizeGameView = !!params.resizeGameView;
+
 		const playConfig: agv.PlaylogConfig = {
 			playId: this.play.playId,
 			executionMode: toAgvExecutionMode(this.executionMode),
@@ -108,6 +113,13 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 	}
 
 	async start(): Promise<void> {
+		if (this._resizeGameView) {
+			const url = this.contentLocator.asAbsoluteUrl();
+			const contentJson = await ApiRequest.get<{ content_url: string }>(url);
+			const gameJson = await ApiRequest.get<{ width: number, height: number }>(contentJson.content_url);
+			this._gameViewManager.setViewSize(gameJson.width, gameJson.height);
+		}
+
 		await this._gameViewManager.startGameContent(this._agvGameContent);
 		this._timeKeeper.start();
 	}

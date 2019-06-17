@@ -14,7 +14,6 @@ export interface OperatorParameterObject {
 	store: Store;
 	gameViewManager: GameViewManager;
 
-	// TODO xnv そもそもこれを受けるところから考え直す
 	contentLocator: ClientContentLocator;
 }
 
@@ -67,14 +66,8 @@ export class Operator {
 		}
 
 		// TODO play からコンテンツを引くべき？
-		// TODO xnv contentId 指定がある前提になっている。contentLocator を直接使うか、またはそもそもこの制御を LocalInstance 側に委ねる
 		// contentId でない場合は sandboxConfig はそもそも取れないとして扱うべき (サーバサイドのサポートがないと取れないので、単にGETリクエストするわけにもいかない)
-		// TODO xnv ContentLocator とか回りくどいことせずに、content.json から __akashicServe__.debbugableUrl を取れるようにすべき？
 		const contentId = parseInt(this.store.contentLocator.contentId, 10);
-
-		const gameJson = await ApiClient.getGameConfiguration(contentId);
-		this.gameViewManager.setViewSize(gameJson.width, gameJson.height);
-
 		const sandboxConfigResult = await ApiClient.getSandboxConfig(contentId);
 		store.setSandboxConfig(sandboxConfigResult.data || {});
 

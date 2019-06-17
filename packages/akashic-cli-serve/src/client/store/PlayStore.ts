@@ -26,9 +26,8 @@ export interface CreatePlayParameterObject {
 export interface CreateStandalonePlayParameterObject {
 	contentLocator: ClientContentLocator;
 
-	// TODO xnv なぜ create が playId をとっている？
+	// TODO xnv create が playId を引数にとるのはおかしい。sessionId の管理は Play から切り離す。
 	playId: string;
-	// TODO xnv 使われていない
 	parent?: PlayEntity;
 }
 
