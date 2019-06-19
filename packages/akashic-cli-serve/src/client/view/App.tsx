@@ -8,6 +8,7 @@ import {DevtoolContainer} from "./container/DevtoolContainer";
 import "./global.css";
 import * as styles from "./App.css";
 import {StartupScreenContainer} from "./container/StartupScreenContainer";
+import {NotificationContainer} from "./container/NotificationContainer";
 
 export interface AppProps {
 	store: Store;
@@ -54,6 +55,9 @@ export class App extends React.Component<AppProps, {}> {
 					</div> :
 					null
 			}
+			<NotificationContainer
+				notificationStore={store.notificationStore}
+			/>
 		</div>;
 	}
 
