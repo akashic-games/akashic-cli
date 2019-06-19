@@ -44,16 +44,6 @@ function assertNotContains(actuals, expected) {
 	}
 }
 
-// 引数で与えられたシェルコマンドを実行。実行時にエラーが発生した場合即テストをエラーにして終了する。
-function commandTest(command) {
-	const result = execSync(command).toString();
-	if (execSync("echo $?").toString().replace("\n", "") !== "0") {
-		console.error(`Failed: ${command}.`);
-		exit(false);
-	}
-	return result;
-}
-
 try{
 	console.log("Start test");
 
@@ -73,13 +63,13 @@ try{
 	// akashic -v で取得したバージョンがnpmにpublishされた最新バージョンと同じであることを確認
 	console.log("check version of @akashic/akashic-cli");
 	const expectedVersion = execSync("npm info @akashic/akashic-cli version").toString();
-	const versionResult = commandTest(`${akashicCliPath} -V`).toString();
+	const versionResult = execSync(`${akashicCliPath} -V`).toString();
 	assert(versionResult, expectedVersion);
 
 	// ゲームディレクトリを作成しつつakashic-cli-initのテスト
 	console.log("test @akashic/akashic-cli-init");
 	shell.cd(`/tmp/${dirName}/game`);
-	commandTest(`${akashicCliPath} init -y`);
+	execSync(`${akashicCliPath} init -y`);
 	// 出力されるファイルの検証
 	const files = fs.readdirSync(`/tmp/${dirName}/game`);
 	assertContains(files, "audio");
@@ -93,31 +83,31 @@ try{
 
 	// 各akashic-cli-xxxモジュールのテスト
 	console.log("test @akashic/akashic-cli-stat");
-	commandTest(`${akashicCliPath} stat size`);
+	execSync(`${akashicCliPath} stat size`);
 
 	console.log("test @akashic/akashic-cli-scan");
-	commandTest(`${akashicCliPath} scan asset`);
+	execSync(`${akashicCliPath} scan asset`);
 
 	console.log("test @akashic/akashic-cli-update");
-	commandTest(`${akashicCliPath} update`);
+	execSync(`${akashicCliPath} update`);
 
 	console.log("test @akashic/akashic-cli-export-html");
-	commandTest(`${akashicCliPath} export html --output output --bundle`);
+	execSync(`${akashicCliPath} export html --output output --bundle`);
 
 	console.log("test @akashic/akashic-cli-export-zip");
-	commandTest(`${akashicCliPath} zip --strip --bundle`);
+	execSync(`${akashicCliPath} zip --strip --bundle`);
 
 	console.log("test @akashic/akashic-cli-modify");
-	commandTest(`${akashicCliPath} modify width 816`);
-	commandTest(`${akashicCliPath} modify height 624`);
-	commandTest(`${akashicCliPath} modify fps 60`);
+	execSync(`${akashicCliPath} modify width 816`);
+	execSync(`${akashicCliPath} modify height 624`);
+	execSync(`${akashicCliPath} modify fps 60`);
 	let gameJson = JSON.parse(fs.readFileSync(`/tmp/${dirName}/game/game.json`).toString());
 	assert(gameJson.width, 816);
 	assert(gameJson.height, 624);
 	assert(gameJson.fps, 60);
 
 	console.log("test @akashic/akashic-cli-install");
-	commandTest(`${akashicCliPath} install @akashic-extension/akashic-label`);
+	execSync(`${akashicCliPath} install @akashic-extension/akashic-label`);
 	let packageJson = JSON.parse(fs.readFileSync(`/tmp/${dirName}/game/package.json`).toString());
 	gameJson = JSON.parse(fs.readFileSync(`/tmp/${dirName}/game/game.json`).toString());
 	assertContains(Object.keys(packageJson["dependencies"]), "@akashic-extension/akashic-label");
@@ -125,7 +115,7 @@ try{
 	assertContains(gameJson["globalScripts"], "node_modules/@akashic-extension/akashic-label/lib/index.js");
 
 	console.log("test @akashic/akashic-cli-uninstall");
-	commandTest(`${akashicCliPath} uninstall @akashic-extension/akashic-label`);
+	execSync(`${akashicCliPath} uninstall @akashic-extension/akashic-label`);
 	packageJson = JSON.parse(fs.readFileSync(`/tmp/${dirName}/game/package.json`).toString());
 	gameJson = JSON.parse(fs.readFileSync(`/tmp/${dirName}/game/game.json`).toString());
 	assertNotContains(Object.keys(packageJson["dependencies"]), "@akashic-extension/akashic-label");
