@@ -2,19 +2,19 @@ import {action, observable} from "mobx";
 import {NotificationType} from "./NotificationType";
 
 export class NotificationUiStore {
-	@observable isShown: boolean;
+	@observable isActive: boolean;
 	@observable type: NotificationType;
 	@observable title: string;
 	@observable name: string;
 	@observable message: string;
 
 	constructor() {
-		this.isShown = false;
+		this.isActive = false;
 	}
 
 	@action
-	show(type: NotificationType, title: string, name: string, message: string): void {
-		this.isShown = true;
+	setActive(type: NotificationType, title: string, name: string, message: string): void {
+		this.isActive = true;
 		this.type = type;
 		this.title = title;
 		this.name = name;
@@ -22,7 +22,7 @@ export class NotificationUiStore {
 	}
 
 	@action
-	hide(): void {
-		this.isShown = false;
+	setInactive(): void {
+		this.isActive = false;
 	}
 }

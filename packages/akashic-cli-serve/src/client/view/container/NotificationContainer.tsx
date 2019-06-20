@@ -24,6 +24,7 @@ export class NotificationContainer extends React.Component<NotificationContainer
 	render(): React.ReactNode {
 		return <Notification
 			onClickClose={this.handleClickNotificationClose}
+			isShown={this.props.notificationUiStore.isActive}
 			{...this.props.notificationUiStore}
 		/>;
 	}
