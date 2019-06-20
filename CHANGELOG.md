@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## 1.6.9 (2019-06-20)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#96](https://github.com/akashic-games/akashic-cli/pull/96) akashic-cli-initのjavascriptテンプレートの.eslintrc.jsonの修正 ([@dera-](https://github.com/dera-))
+
+#### Other Change
+* `akashic-cli-commons`, `akashic-cli-config`
+  * [#91](https://github.com/akashic-games/akashic-cli/pull/91) akashic-cli-commonsとakashic-cli-configのテストフレームワークをjestに変更 ([@dera-](https://github.com/dera-))
+
+#### Committers: 2
+- [@dera-](https://github.com/dera-)
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.6.8 (2019-06-11)
 
 #### Enhancement
