@@ -1,1 +1,1 @@
-export type NotificationType = "warn";
+export type NotificationType = "error";

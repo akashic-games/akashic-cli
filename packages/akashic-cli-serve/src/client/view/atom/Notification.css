@@ -16,7 +16,7 @@
   opacity: 1;
 }
 
-.notification-body-warn {
+.notification-body-error {
   background-color: #fee;
   color: #666;
 }
@@ -33,7 +33,7 @@
   margin: 3px 0;
 }
 
-.notification-title-warn {
+.notification-title-error {
   color: #222;
 }
 
@@ -42,7 +42,7 @@
   font-size: 19px;
 }
 
-.notification-name-warn {
+.notification-name-error {
   color: #f33;
   font-weight: bold;
 }
@@ -51,7 +51,7 @@
   margin: 4px 10px;
 }
 
-.notification-message-warn {
+.notification-message-error {
   color: #333;
 }
 
@@ -67,6 +67,6 @@
   padding: 0 10px;
 }
 
-.notification-icon-warn {
+.notification-icon-error {
   color: #ffcc00;
 }

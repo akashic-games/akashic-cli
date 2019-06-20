@@ -31,7 +31,7 @@ export class NotificationContainer extends React.Component<NotificationContainer
 
 	private handleError = (ev: ErrorEvent) => {
 		this.props.operator.ui.showNotification(
-			"warn",
+			"error",
 			"エラーが発生しました",
 			ev.error.message,
 			"Developer Tool などでエラー内容を確認の上修正してください。"

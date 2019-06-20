@@ -48,7 +48,7 @@ export class Notification extends React.Component<NotificationProps, {}> {
 	}
 
 	private resolveMaterialIcon(): string | null {
-		if (this.props.type === "warn") {
+		if (this.props.type === "error") {
 			return "warning";
 		}
 		return null;
