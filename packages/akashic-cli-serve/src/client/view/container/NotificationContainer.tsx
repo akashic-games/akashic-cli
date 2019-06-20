@@ -9,9 +9,13 @@ export interface NotificationContainerProps {
 	notificationUiStore: NotificationUiStore;
 }
 
+/**
+ * NotificatonUiStore の表示・操作をするためのコンポーネント
+ */
 @observer
 export class NotificationContainer extends React.Component<NotificationContainerProps, {}> {
 	componentDidMount() {
+		// このコンポーネントの責務とは少し違うが、適当な場所が無いのでここでエラーをハンドルする
 		window.addEventListener("error", this.handleError);
 		window.addEventListener("rejectionhandled", this.handleError);
 	}
