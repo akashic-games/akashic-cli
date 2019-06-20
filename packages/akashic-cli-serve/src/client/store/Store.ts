@@ -7,7 +7,7 @@ import {PlayStore} from "./PlayStore";
 import {LocalInstanceEntity} from "./LocalInstanceEntity";
 import {DevtoolUiStore} from "./DevtoolUiStore";
 import {ToolBarUiStore} from "./ToolBarUiStore";
-import {NotificationStore} from "./NotificationStore";
+import {NotificationUiStore} from "./NotificationUiStore";
 import {storage} from "./storage";
 import {StartupScreenUiStore} from "./StartupScreenUiStore";
 
@@ -15,7 +15,7 @@ export class Store {
 	@observable playStore: PlayStore;
 	@observable toolBarUiStore: ToolBarUiStore;
 	@observable devtoolUiStore: DevtoolUiStore;
-	@observable notificationStore: NotificationStore;
+	@observable notificationUiStore: NotificationUiStore;
 	@observable startupScreenUiStore: StartupScreenUiStore;
 	@observable player: Player | null;
 	@observable contentId: number; // 多分storage辺りに置く方がよさそうだが一旦動かすこと優先でここに置いておく
@@ -35,7 +35,7 @@ export class Store {
 		this.playStore = new PlayStore();
 		this.toolBarUiStore = new ToolBarUiStore();
 		this.devtoolUiStore = new DevtoolUiStore();
-		this.notificationStore = new NotificationStore();
+		this.notificationUiStore = new NotificationUiStore();
 		this.startupScreenUiStore = new StartupScreenUiStore();
 		this.player = { id: storage.data.playerId, name: storage.data.playerName };
 		this.currentPlay = null;

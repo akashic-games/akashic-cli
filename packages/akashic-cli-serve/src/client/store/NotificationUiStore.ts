@@ -1,7 +1,7 @@
 import {action, observable} from "mobx";
 import {NotificationType} from "./NotificationType";
 
-export class NotificationStore {
+export class NotificationUiStore {
 	@observable isShown: boolean;
 	@observable type: NotificationType;
 	@observable title: string;

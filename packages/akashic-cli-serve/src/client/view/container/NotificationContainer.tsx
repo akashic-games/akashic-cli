@@ -1,10 +1,12 @@
 import * as React from "react";
 import { observer } from "mobx-react";
 import { Notification } from "../atom/Notification";
-import { NotificationStore } from "../../store/NotificationStore";
+import { Operator } from "../../operator/Operator";
+import { NotificationUiStore } from "../../store/NotificationUiStore";
 
 export interface NotificationContainerProps {
-	notificationStore: NotificationStore;
+	operator: Operator;
+	notificationUiStore: NotificationUiStore;
 }
 
 @observer
@@ -22,12 +24,12 @@ export class NotificationContainer extends React.Component<NotificationContainer
 	render(): React.ReactNode {
 		return <Notification
 			onClickClose={this.handleClickNotificationClose}
-			{...this.props.notificationStore}
+			{...this.props.notificationUiStore}
 		/>;
 	}
 
 	private handleError = (ev: ErrorEvent) => {
-		this.props.notificationStore.show(
+		this.props.operator.ui.showNotification(
 			"warn",
 			"エラーが発生しました",
 			ev.error.message,
@@ -36,6 +38,6 @@ export class NotificationContainer extends React.Component<NotificationContainer
 	}
 
 	private handleClickNotificationClose = () => {
-		this.props.notificationStore.hide();
+		this.props.operator.ui.hideNotification();
 	}
 }

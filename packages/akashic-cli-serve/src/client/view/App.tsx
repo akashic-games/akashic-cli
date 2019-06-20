@@ -56,7 +56,8 @@ export class App extends React.Component<AppProps, {}> {
 					null
 			}
 			<NotificationContainer
-				notificationStore={store.notificationStore}
+				operator={operator}
+				notificationUiStore={store.notificationUiStore}
 			/>
 		</div>;
 	}
