@@ -2,6 +2,7 @@ import {observable, action} from "mobx";
 import * as queryString from "query-string";
 import {Player} from "../../common/types/Player";
 import {SandboxConfig} from "../../common/types/SandboxConfig";
+import {ClientContentLocator} from "../common/ClientContentLocator";
 import {PlayEntity} from "./PlayEntity";
 import {PlayStore} from "./PlayStore";
 import {LocalInstanceEntity} from "./LocalInstanceEntity";
@@ -16,7 +17,7 @@ export class Store {
 	@observable devtoolUiStore: DevtoolUiStore;
 	@observable startupScreenUiStore: StartupScreenUiStore;
 	@observable player: Player | null;
-	@observable contentId: number; // 多分storage辺りに置く方がよさそうだが一旦動かすこと優先でここに置いておく
+	@observable contentLocator: ClientContentLocator; // 多分storage辺りに置く方がよさそうだが一旦動かすこと優先でここに置いておく
 
 	@observable currentPlay: PlayEntity | null;
 	@observable currentLocalInstance: LocalInstanceEntity | null;
@@ -25,11 +26,8 @@ export class Store {
 	@observable argumentsTable: { [name: string]: string };
 
 	constructor() {
-		this.contentId = 0;
 		const query = queryString.parse(window.location.search);
-		if (query.id) {
-			this.contentId = parseInt(query.id, 10);
-		}
+		this.contentLocator = new ClientContentLocator({ contentId: (query.id != null) ? query.id : "0" }); // TODO xnv bootstrapから渡す方が自然では？
 		this.playStore = new PlayStore();
 		this.toolBarUiStore = new ToolBarUiStore();
 		this.devtoolUiStore = new DevtoolUiStore();

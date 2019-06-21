@@ -7,22 +7,21 @@ import {
 	PlayDeleteApiResponseData,
 	PlayPatchApiResponseData
 } from "../../common/types/ApiResponse";
+import { ServerContentLocator } from "../common/ServerContentLocator";
 import { PlayStore } from "../domain/PlayStore";
 
 export const createHandlerToCreatePlay = (playStore: PlayStore): express.RequestHandler => {
 	return async (req, res, next) => {
 		try {
-			if (!req.body.contentUrl) {
-				throw new BadRequestError({ errorMessage: "handleCreatePlay(): contentUrl is not given" });
+			if (!req.body.contentLocator || (!req.body.contentLocator.contentId && !req.body.contentLocator.path)) {
+				throw new BadRequestError({ errorMessage: "handleCreatePlay(): contentLocator is not given or invalid" });
 			}
-			const contentUrl = req.body.contentUrl;
-			const clientContentUrl = req.body.clientContentUrl;
-			const playId = await playStore.createPlay(contentUrl, clientContentUrl);
+			const contentLocator = new ServerContentLocator(req.body.contentLocator);
+			const playId = await playStore.createPlay(contentLocator);
 			responseSuccess<PlayApiResponseData>(res, 200, {
 				playId,
-				contentUrl,
+				contentLocatorData: contentLocator,
 				joinedPlayers: [],
-				clientContentUrl,
 				runners: [],
 				clientInstances: [],
 				durationState: {
@@ -48,9 +47,8 @@ export const createHandlerToGetPlay = (playStore: PlayStore): express.RequestHan
 			}
 			responseSuccess<PlayApiResponseData>(res, 200, {
 				playId: play.playId,
-				contentUrl: (play as ContentParameters).contentUrl, // Play 生成時に contentUrl を渡しているため、ここでも contentUrl は必ず存在しているとみなす
+				contentLocatorData: playStore.getContentLocator(playId),
 				joinedPlayers: playStore.getJoinedPlayers(playId),
-				clientContentUrl: playStore.getClientContentUrl(playId),
 				runners: playStore.getRunners(playId),
 				clientInstances: playStore.getClientInstances(playId),
 				durationState: playStore.getPlayDurationState(playId)
@@ -70,9 +68,8 @@ export const createHandlerToGetPlays = (playStore: PlayStore): express.RequestHa
 				200,
 				plays.map(play => ({
 					playId: play.playId,
-					contentUrl: (play as ContentParameters).contentUrl, // Play 生成時に contentUrl を渡しているため、ここでも contentUrl は必ず存在しているとみなす
+					contentLocatorData: playStore.getContentLocator(play.playId),
 					joinedPlayers: playStore.getJoinedPlayers(play.playId),
-					clientContentUrl: playStore.getClientContentUrl(play.playId),
 					runners: playStore.getRunners(play.playId),
 					clientInstances: playStore.getClientInstances(play.playId),
 					durationState: playStore.getPlayDurationState(play.playId)
