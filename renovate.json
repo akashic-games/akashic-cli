@@ -22,6 +22,10 @@
     {
       "updateTypes": ["patch"],
       "groupName": "all dependencies"
+    },
+    {
+      "updateTypes": ["major"],
+      "enabled": false
     }
   ],
   "ignorePaths": [
