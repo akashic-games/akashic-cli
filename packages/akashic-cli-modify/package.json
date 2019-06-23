@@ -25,7 +25,7 @@
   "devDependencies": {
     "@types/jasmine": "~2.8.2",
     "@types/mock-fs": "~3.6.30",
-    "@types/node": "10.12.5",
+    "@types/node": "10.12.30",
     "istanbul": "^0.4.5",
     "jasmine": "~3.3.0",
     "jasmine-reporters": "~2.0.4",
