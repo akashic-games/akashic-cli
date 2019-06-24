@@ -9,7 +9,7 @@
     "update": "node ../../build-template-support/updatefiles.js template-export-html-v2"
   },
   "devDependencies": {
-    "shx": "~0.2.2"
+    "shx": "0.2.2"
   },
   "optionalDependencies": {
     "@akashic/game-storage": "0.0.6"

@@ -37,11 +37,11 @@
     "commander": "2.8.1"
   },
   "devDependencies": {
-    "@types/commander": "~2.3.0",
-    "@types/node": "~10.12.7",
-    "rimraf": "^2.6.2",
-    "tslint": "~5.12.1",
-    "typescript": "~2.8.0"
+    "@types/commander": "2.3.31",
+    "@types/node": "10.12.30",
+    "rimraf": "2.6.3",
+    "tslint": "5.12.1",
+    "typescript": "2.8.4"
   },
   "publishConfig": {
     "access": "public",
