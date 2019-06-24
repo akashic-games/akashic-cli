@@ -1,10 +1,11 @@
 const path = require("path");
 const semver = require("semver");
 const execSync = require("child_process").execSync;
-const updateChangelog = require("./parts/updateChangelog").updateChangelog;
+const updateChangelog = require("./parts/updateChangelog");
 
 const apiBaseUrl = "https://api.github.com/repos/akashic-games/akashic-cli";
-const pullRequestBody = "※自動作成されたPRです";
+const pullRequestTitle = "Republish";
+const pullRequestBody = "再publishを行うためにラベルのみ付与したPullRequestです。何も変更はありません。";
 const pullRequestLabel = "republish";
 
 if (process.argv.length < 3) {
@@ -42,7 +43,7 @@ try {
 	// PRの作成とマージ処理
 	console.log("start to create PR");
 	// PRを作成する
-	const pullReqDataString = execSync(`curl --fail -H "Authorization: token ${process.env.GITHUB_AUTH}" -X POST -d '{"title":"PR To Republish", "body":"${pullRequestBody}", "head":"akashic-games:${branchName}", "base":"master"}' ${apiBaseUrl}/pulls`).toString();
+	const pullReqDataString = execSync(`curl --fail -H "Authorization: token ${process.env.GITHUB_AUTH}" -X POST -d '{"title":"${pullRequestTitle}", "body":"${pullRequestBody}", "head":"akashic-games:${branchName}", "base":"master"}' ${apiBaseUrl}/pulls`).toString();
 	const pullReqData = JSON.parse(pullReqDataString);
 	// issue(PR)にラベル付ける
 	execSync(`curl --fail -H "Authorization: token ${process.env.GITHUB_AUTH}" -X POST -d '{"labels": ["${pullRequestLabel}"]}' ${apiBaseUrl}/issues/${pullReqData["number"]}/labels`);

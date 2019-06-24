@@ -1,7 +1,7 @@
 const path = require("path");
 const semver = require("semver");
 const execSync = require("child_process").execSync;
-const updateChangelog = require("./parts/updateChangelog").updateChangelog;
+const updateChangelog = require("./parts/updateChangelog");
 
 if (process.argv.length < 3) {
 	console.error("Please enter command as follows: node updateChangelog.js [patch|minor|major]");
