@@ -19,14 +19,14 @@
     "package.json"
   ],
   "devDependencies": {
-    "@types/browserify": "^12.0.33",
+    "@types/browserify": "12.0.36",
     "@types/eslint": "4.16.6",
     "@types/fs-extra": "5.0.5",
-    "jest": "~24.8.0",
-    "mock-fs": "~4.10.1",
-    "shx": "~0.2.2",
-    "tslint": "~5.4.3",
-    "typescript": "~2.6.1"
+    "jest": "24.8.0",
+    "mock-fs": "4.10.1",
+    "shx": "0.2.2",
+    "tslint": "5.4.3",
+    "typescript": "2.6.2"
   },
   "typings": "lib/index.d.ts",
   "dependencies": {

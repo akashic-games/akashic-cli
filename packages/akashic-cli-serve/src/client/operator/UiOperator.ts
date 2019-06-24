@@ -1,4 +1,5 @@
 import { Store } from "../store/Store";
+import { NotificationType } from "../store/NotificationType";
 
 export class UiOperator {
 	private store: Store;
@@ -66,5 +67,13 @@ export class UiOperator {
 
 	setJoinsAutomatically = (join: boolean): void => {
 		this.store.startupScreenUiStore.setJoinsAutomatically(join);
+	}
+
+	showNotification = (type: NotificationType, title: string, name: string, message: string): void => {
+		this.store.notificationUiStore.setActive(type, title, name, message);
+	}
+
+	hideNotification = (): void => {
+		this.store.notificationUiStore.setInactive();
 	}
 }

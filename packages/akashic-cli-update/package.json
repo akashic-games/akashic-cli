@@ -24,14 +24,14 @@
     "index.js"
   ],
   "devDependencies": {
-    "@types/commander": "~2.12.2",
-    "@types/jasmine": "~2.8.11",
+    "@types/commander": "2.12.2",
+    "@types/jasmine": "2.8.16",
     "@types/node": "10.12.30",
-    "jest": "~24.8.0",
-    "mock-fs": "~4.8.0",
-    "rimraf": "^2.6.2",
-    "tslint": "~5.12.1",
-    "typescript": "~2.8.0"
+    "jest": "24.8.0",
+    "mock-fs": "4.8.0",
+    "rimraf": "2.6.3",
+    "tslint": "5.12.1",
+    "typescript": "2.8.4"
   },
   "typings": "lib/index.d.ts",
   "dependencies": {
