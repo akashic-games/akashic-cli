@@ -8,6 +8,7 @@ import {LocalInstanceEntity} from "./LocalInstanceEntity";
 import {DevtoolUiStore} from "./DevtoolUiStore";
 import {ToolBarUiStore} from "./ToolBarUiStore";
 import {ContentStore} from "./ContentStore";
+import {NotificationUiStore} from "./NotificationUiStore";
 import {storage} from "./storage";
 import {StartupScreenUiStore} from "./StartupScreenUiStore";
 
@@ -16,6 +17,7 @@ export class Store {
 	@observable playStore: PlayStore;
 	@observable toolBarUiStore: ToolBarUiStore;
 	@observable devtoolUiStore: DevtoolUiStore;
+	@observable notificationUiStore: NotificationUiStore;
 	@observable startupScreenUiStore: StartupScreenUiStore;
 	@observable player: Player | null;
 	@observable contentLocator: ClientContentLocator;
@@ -30,6 +32,7 @@ export class Store {
 		this.playStore = new PlayStore({ contentStore: this.contentStore });
 		this.toolBarUiStore = new ToolBarUiStore();
 		this.devtoolUiStore = new DevtoolUiStore();
+		this.notificationUiStore = new NotificationUiStore();
 		this.startupScreenUiStore = new StartupScreenUiStore();
 		this.player = { id: storage.data.playerId, name: storage.data.playerName };
 		this.currentPlay = null;

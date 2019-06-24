@@ -16,6 +16,7 @@ export const createScriptAssetController = (baseDir: string): express.RequestHan
 			// do nothing
 		}
 	});
+
 	return (req: express.Request, res: express.Response, next: Function): void => {
 		const scriptPath = path.join(baseDir, req.params.scriptName);
 		if (!fs.existsSync(scriptPath) || !fs.existsSync(scriptPath)) {
@@ -27,7 +28,7 @@ export const createScriptAssetController = (baseDir: string): express.RequestHan
 		let id = Object.keys(gameJson.assets).find((id) => gameJson.assets[id].path === req.params.scriptName);
 
 		const content = fs.readFileSync(scriptPath);
-		const responseBody = `
+		const responseBody = `"use strict";
 			if (! ("gScriptContainer" in window)) {
 				window.gScriptContainer = {};
 			}
