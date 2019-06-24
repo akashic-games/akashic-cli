@@ -9,10 +9,10 @@ export class ContentEntity {
 	@observable argumentsTable: { [name: string]: string };
 
 	constructor(desc: ContentDesc) {
-		const args = desc.sandboxConfig.arguments;
-		this.locator = new ClientContentLocator(desc.contentLocatorData);
-		this.sandboxConfig = desc.sandboxConfig;
+		this.locator = ClientContentLocator.instantiate(desc.contentLocatorData);
+		this.sandboxConfig = desc.sandboxConfig || {};
 		this.argumentsTable = {};
+		const args = this.sandboxConfig.arguments || {};
 		Object.keys(args).forEach(key => {
 			this.argumentsTable[key] = JSON.stringify(args[key], null, 2);
 		});

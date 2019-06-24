@@ -2,13 +2,13 @@ import {action, observable, computed} from "mobx";
 import {Trigger} from "@akashic/trigger";
 import {TimeKeeper} from "../../common/TimeKeeper";
 import {Player} from "../../common/types/Player";
-import {ClientContentLocator} from "../common/ClientContentLocator";
 import * as ApiRequest from "../api/ApiRequest";
 import {GameViewManager} from "../akashic/GameViewManager";
 import {PlayEntity} from "./PlayEntity";
 import {CoePluginEntity, CreateCoeLocalInstanceParameterObject} from "./CoePluginEntity";
 import {GameInstanceEntity} from "./GameInstanceEntity";
 import {ExecutionMode} from "./ExecutionMode";
+import {ContentEntity} from "./ContentEntity";
 
 const toAgvExecutionMode = (() => {
 	const executionModeTable = {
@@ -24,7 +24,7 @@ const toAgvExecutionMode = (() => {
 
 export interface LocalInstanceEntityParameterObject {
 	gameViewManager: GameViewManager;
-	contentLocator: ClientContentLocator;
+	content: ContentEntity;
 	executionMode: ExecutionMode;
 	play: PlayEntity;
 	player: Player;
@@ -48,7 +48,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 
 	readonly play: PlayEntity;
 	readonly coePlugin: CoePluginEntity;
-	readonly contentLocator: ClientContentLocator;
+	readonly content: ContentEntity;
 
 	private _timeKeeper: TimeKeeper;
 	private _gameViewManager: GameViewManager;
@@ -61,7 +61,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 		this.executionMode = params.executionMode;
 		this.play = params.play;
 		this.isPaused = false;
-		this.contentLocator = params.contentLocator;
+		this.content = params.content;
 		this._timeKeeper = new TimeKeeper();
 		this._gameViewManager = params.gameViewManager;
 		this._resizeGameView = !!params.resizeGameView;
@@ -80,7 +80,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 			playConfig.playToken = params.playToken;
 		}
 		this._agvGameContent = this._gameViewManager.createGameContent({
-			contentLocator: this.contentLocator,
+			contentLocator: this.content.locator,
 			player: {
 				id: this.player.id,
 				name: this.player.name
@@ -114,7 +114,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 
 	async start(): Promise<void> {
 		if (this._resizeGameView) {
-			const url = this.contentLocator.asAbsoluteUrl();
+			const url = this.content.locator.asAbsoluteUrl();
 			const contentJson = await ApiRequest.get<{ content_url: string }>(url);
 			const gameJson = await ApiRequest.get<{ width: number, height: number }>(contentJson.content_url);
 			this._gameViewManager.setViewSize(gameJson.width, gameJson.height);

@@ -3,5 +3,5 @@ import { SandboxConfig } from "./SandboxConfig";
 
 export interface ContentDesc {
 	contentLocatorData: ContentLocatorData;
-	sandboxConfig: SandboxConfig;
+	sandboxConfig?: SandboxConfig;
 }

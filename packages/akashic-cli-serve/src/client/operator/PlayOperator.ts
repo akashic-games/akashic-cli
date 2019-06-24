@@ -26,6 +26,7 @@ export class PlayOperator {
 
 	openNewClientInstance = (): void => {
 		// ignoreSession は Mac Chrome の不具合(？)対策でやむなくつけているフラグ。 (ref. ../store/storage.ts)
+		console.log(`OPENWINDOW: width=${window.innerWidth},height=${window.innerHeight},noopener`);
 		window.open(
 			`${window.location.pathname}?ignoreSession=1`,
 			"_blank",
@@ -34,7 +35,8 @@ export class PlayOperator {
 	}
 
 	sendRegisteredEvent = (eventName: string): void => {
-		const pevs = this.store.sandboxConfig.events[eventName];
+		const sandboxConfig = this.store.currentLocalInstance.content.sandboxConfig || {};
+		const pevs = sandboxConfig.events[eventName];
 		const amflow = this.store.currentPlay.amflow;
 		pevs.forEach((pev: any) => amflow.sendEvent(pev));
 	}

@@ -24,10 +24,11 @@ export class App extends React.Component<AppProps, {}> {
 				<StartupScreenContainer
 					operator={operator}
 					startupScreenUiStore={store.startupScreenUiStore}
-					argumentsTable={store.argumentsTable}
+					argumentsTable={store.currentPlay.content.argumentsTable}
 				/>
 			</div>;
 		}
+		const sandboxConfig = store.currentLocalInstance.content.sandboxConfig || {};
 		return <div id="whole" className={styles["whole"]}>
 			<ToolBarContainer
 				play={store.currentPlay}
@@ -38,7 +39,7 @@ export class App extends React.Component<AppProps, {}> {
 			<div className={styles["main"] + " " + styles["centering"] } ref={this._onRef}>
 			{
 				store.toolBarUiStore.showsBgImage ?
-					<img src={store.sandboxConfig.backgroundImage} className={styles["bg-image"]}/> :
+					<img src={sandboxConfig.backgroundImage} className={styles["bg-image"]}/> :
 					null
 			}
 			</div>
@@ -49,7 +50,7 @@ export class App extends React.Component<AppProps, {}> {
 							play={store.currentPlay}
 							operator={operator}
 							devtoolUiStore={store.devtoolUiStore}
-							sandboxConfig={store.sandboxConfig}
+							sandboxConfig={sandboxConfig}
 						/>
 					</div> :
 					null

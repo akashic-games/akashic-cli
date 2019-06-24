@@ -1,4 +1,5 @@
 import { observable } from "mobx";
+import { PlayApiResponseData } from "../../common/types/ApiResponse";
 import {
 	PlayCreateTestbedEvent,
 	PlayStatusChangedTestbedEvent,
@@ -16,7 +17,12 @@ import { ContentLocatorData } from "../../common/types/ContentLocatorData";
 import { ClientContentLocator } from "../common/ClientContentLocator";
 import * as Subscriber from "../api/Subscriber";
 import * as ApiClient from "../api/ApiClient";
-import { PlayEntity } from "./PlayEntity";
+import { ContentStore } from "./ContentStore";
+import { PlayEntity, PlayEntityParameterObject } from "./PlayEntity";
+
+export interface PlayStoreParameterObject {
+	contentStore: ContentStore;
+}
 
 export interface CreatePlayParameterObject {
 	contentLocator: ContentLocatorData;
@@ -33,23 +39,29 @@ export interface CreateStandalonePlayParameterObject {
 
 export class PlayStore {
 	@observable plays: {[key: string]: PlayEntity};
+	private _contentStore: ContentStore;
 	private _creationWaiters: {[key: string]: (p: PlayEntity) => void };
 	private _initializationWaiter: Promise<void>;
 
-	constructor() {
+	constructor(param: PlayStoreParameterObject) {
 		this.plays = Object.create(null);
+		this._contentStore = param.contentStore;
 		this._creationWaiters = Object.create(null);
 		this._initializationWaiter = ApiClient.getPlays().then(res => {
 			const playsInfo = res.data;
-			playsInfo.forEach(playInfo => this.plays[playInfo.playId] = new PlayEntity(playInfo));
+			playsInfo.forEach(playInfo => {
+				this.plays[playInfo.playId] = new PlayEntity({
+					...playInfo,
+					content: this._contentStore.findOrRegister(playInfo.contentLocatorData)
+				});
+			});
 			Subscriber.onPlayCreate.add(this.handlePlayCreate);
 			Subscriber.onPlayStatusChange.add(this.handlePlayStatusChange);
 			Subscriber.onPlayDurationStateChange.add(this.handlePlayDurationStateChange);
 			Subscriber.onPlayerJoin.add(this.handlePlayerJoin);
 			Subscriber.onPlayerLeave.add(this.handlePlayerLeave);
 			Subscriber.onClientInstanceAppear.add(this.handleClientInstanceAppear);
-			Subscriber.onClientInstanceDisappear.add(this.handleClientInstanceDisappear);
-			Subscriber.onRunnerCreate.add(this.handleRunnerCreate);
+			Subscriber.onClientInstanceDisappear.add(this.handleClientInstanceDisappear); Subscriber.onRunnerCreate.add(this.handleRunnerCreate);
 			Subscriber.onRunnerRemove.add(this.handleRunnerRemove);
 			Subscriber.onRunnerPause.add(this.handleRunnerPause);
 			Subscriber.onRunnerResume.add(this.handleRunnerResume);
@@ -89,7 +101,7 @@ export class PlayStore {
 
 		const play = new PlayEntity({
 			playId,
-			contentLocatorData: param.contentLocator,
+			content: this._contentStore.findOrRegister(param.contentLocator),
 			parent: param.parent
 		});
 		this.plays[playId] = play;
@@ -98,7 +110,10 @@ export class PlayStore {
 	}
 
 	private handlePlayCreate = (e: PlayCreateTestbedEvent): void => {
-		const play = new PlayEntity(e);
+		const play = new PlayEntity({
+			...e,
+			content: this._contentStore.findOrRegister(e.contentLocatorData)
+		});
 		this.plays[e.playId] = play;
 		if (this._creationWaiters[e.playId]) {
 			this._creationWaiters[e.playId](play);

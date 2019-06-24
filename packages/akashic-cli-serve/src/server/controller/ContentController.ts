@@ -19,7 +19,7 @@ export const createHandlerToGetContents = (targetDirs: string[]): express.Reques
 			next(e);
 		}
 	};
-}
+};
 
 export const createHandlerToGetEngineConfig = (dirPaths: string[], isRaw: boolean): express.RequestHandler => {
 	return (req, res, next) => {

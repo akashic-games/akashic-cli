@@ -6,13 +6,12 @@ import { TimeKeeper } from "../../common/TimeKeeper";
 import { PlayStatus } from "../../common/types/PlayStatus";
 import { PlayDurationState } from "../../common/types/PlayDurationState";
 import { RunnerDescription, ClientInstanceDescription } from "../../common/types/TestbedEvent";
-import { ContentLocatorData } from "../../common/types/ContentLocatorData";
-import { ClientContentLocator } from "../common/ClientContentLocator";
 import * as ApiClient from "../api/ApiClient";
 import { socketInstance } from "../api/socketInstance";
 import { GameViewManager } from "../akashic/GameViewManager";
 import { SocketIOAMFlowClient } from "../akashic/SocketIOAMFlowClient";
 import { ExecutionMode } from "./ExecutionMode";
+import { ContentEntity } from "./ContentEntity";
 import { LocalInstanceEntity } from "./LocalInstanceEntity";
 import { ServerInstanceEntity } from "./ServerInstanceEntity";
 import { CreateCoeLocalInstanceParameterObject } from "./CoePluginEntity";
@@ -39,7 +38,7 @@ export interface CreateServerInstanceParameterObject {
 export interface PlayEntityParameterObject {
 	playId: string;
 	joinedPlayers?: Player[];
-	contentLocatorData: ContentLocatorData;
+	content: ContentEntity;
 	runners?: RunnerDescription[];
 	clientInstances?: ClientInstanceDescription[];
 	durationState?: PlayDurationState;
@@ -51,7 +50,7 @@ export class PlayEntity {
 
 	readonly playId: string;
 	readonly amflow: SocketIOAMFlowClient;
-	readonly contentLocator: ClientContentLocator;
+	readonly content: ContentEntity;
 
 	@observable activePlaybackRate: number;
 	@observable isActivePausing: boolean;
@@ -81,7 +80,7 @@ export class PlayEntity {
 		this.localInstances = [];
 		this.serverInstances = !param.runners ? [] : param.runners.map(desc => new ServerInstanceEntity({ runnerId: desc.runnerId, play: this }));
 		this.onTeardown = new Trigger();
-		this.contentLocator = new ClientContentLocator(param.contentLocatorData);
+		this.content = param.content;
 		this._timeKeeper = new TimeKeeper();
 		this._serverInstanceWaiters = {};
 		this._timerId = null;
@@ -112,7 +111,7 @@ export class PlayEntity {
 		const i = new LocalInstanceEntity({
 			play: this,
 			resizeGameView: !this._parent,
-			contentLocator: this.contentLocator,
+			content: this.content,
 			coeHandler: param.coeHandler,
 			...param
 		});

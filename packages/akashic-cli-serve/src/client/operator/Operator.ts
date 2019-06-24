@@ -13,8 +13,6 @@ import { ExternalPluginOperator } from "./ExternalPluginOperator";
 export interface OperatorParameterObject {
 	store: Store;
 	gameViewManager: GameViewManager;
-
-	contentLocator: ClientContentLocator;
 }
 
 export interface StartContentParameterObject {
@@ -29,7 +27,6 @@ export class Operator {
 	externalPlugin: ExternalPluginOperator;
 	private store: Store;
 	private gameViewManager: GameViewManager;
-	private contentLocator: ClientContentLocator;
 
 	constructor(param: OperatorParameterObject) {
 		const store = param.store;
@@ -39,19 +36,25 @@ export class Operator {
 		this.externalPlugin = new ExternalPluginOperator(param.gameViewManager);
 		this.store = param.store;
 		this.gameViewManager = param.gameViewManager;
-		this.contentLocator = param.contentLocator;
 
 		Subscriber.onBroadcast.add(this._handleBroadcast);
 	}
 
-	async bootstrap(): Promise<void> {
+	async bootstrap(contentLocator?: ClientContentLocator): Promise<void> {
 		const store = this.store;
-		await store.playStore.assertInitialized();
-		// TODO xnv そもそもコンテンツを指定して立ち上げる時は、既存プレイを探さず直接新規プレイでいいのでは？
-		const plays = store.playStore.playsList().filter(play => {
-			return play.contentLocator.asAbsoluteUrl() === store.contentLocator.asAbsoluteUrl();
-		});
-		const play = (plays.length === 0) ? await this._createServerLoop() : plays[plays.length - 1];
+		await store.assertInitialized();
+		let play: PlayEntity = null;
+		if (contentLocator) {
+			play = await this._createServerLoop(contentLocator);
+		} else {
+			const plays = store.playStore.playsList();
+			if (plays.length > 0) {
+				play = plays[plays.length - 1];
+			} else {
+				const loc = store.contentStore.defaultContent().locator;
+				play = await this._createServerLoop(loc);
+			}
+		}
 		await this.setCurrentPlay(play);
 	}
 
@@ -130,13 +133,13 @@ export class Operator {
 	}
 
 	restartWithNewPlay = async (): Promise<void> => {
-		const play = await this._createServerLoop();
+		const play = await this._createServerLoop(this.store.currentPlay.content.locator);
 		await ApiClient.broadcast(this.store.currentPlay.playId, { type: "switchPlay", nextPlayId: play.playId });
 		await this.store.currentPlay.deleteAllServerInstances();
 	}
 
-	private async _createServerLoop(): Promise<PlayEntity> {
-		const play = await this.store.playStore.createPlay({ contentLocator: this.contentLocator });
+	private async _createServerLoop(contentLocator: ClientContentLocator): Promise<PlayEntity> {
+		const play = await this.store.playStore.createPlay({ contentLocator });
 		const tokenResult = await ApiClient.createPlayToken(play.playId, "", true);  // TODO 空文字列でなくnullを使う
 		play.createServerInstance({ playToken: tokenResult.data.playToken });
 		ApiClient.resumePlayDuration(play.playId);

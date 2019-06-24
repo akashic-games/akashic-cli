@@ -1,13 +1,17 @@
-import { observable } from "mobx";
+import { observable, ObservableMap } from "mobx";
+import { ContentLocatorData } from "../../common/types/ContentLocatorData";
+import { ClientContentLocator } from "../common/ClientContentLocator";
 import * as ApiClient from "../api/ApiClient";
 import { ContentEntity } from "./ContentEntity";
 
 export class ContentStore {
-	@observable contents: ContentEntity[];
+	@observable contents: ObservableMap<string, ContentEntity>;
+	private _defaultContent: ContentEntity;
 	private _initializationWaiter: Promise<void>;
 
 	constructor() {
-		this.contents = [];
+		this.contents = new ObservableMap<string, ContentEntity>();
+		this._defaultContent = null!;
 		this._initializationWaiter = this._initialize();
 	}
 
@@ -15,8 +19,27 @@ export class ContentStore {
 		return this._initializationWaiter;
 	}
 
+	defaultContent(): ContentEntity {
+		return this._defaultContent;
+	}
+
+	findOrRegister(locData: ContentLocatorData): ContentEntity {
+		const loc = ClientContentLocator.instantiate(locData);
+		const url = loc.asAbsoluteUrl();
+		if (this.contents.get(url))
+			this.contents.get(url);
+		const content = new ContentEntity({ contentLocatorData: loc });
+		this.contents.set(url, content);
+		return content;
+	}
+
 	private async _initialize(): Promise<void> {
 		const res = await ApiClient.getContents();
-		this.contents = res.data.map(desc => new ContentEntity(desc));
+		res.data.forEach(desc => {
+			const content = new ContentEntity(desc);
+			this.contents.set(content.locator.asAbsoluteUrl(), content);
+			if (!this._defaultContent)
+				this._defaultContent = content;
+		});
 	}
 }
