@@ -45,7 +45,7 @@ commander
 	.option("-t, --type <type>", "Type of template")
 	.option("-l, --list", "Display available template list")
 	.option("-f, --force", "If files to be copied already exist, overwrite them")
-	.option("-y, --yes", "Generate project without user input");
+	.option("-y, --yes", "Initialize without user input");
 
 export function run(argv: string[]): void {
 	commander.parse(argv);

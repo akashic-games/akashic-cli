@@ -1,16 +1,24 @@
 // publish後にakashic-cliが一通り動作することを確認するためのスクリプト
-
+// 本スクリプトは、このリポジトリのコードをテストするのではなく、publish された akashic-cli の動作確認を行います
+const os = require("os");
+const path = require("path");
 const fs = require("fs");
 const shell = require("shelljs");
+const assert = require("assert");
 const execSync = require("child_process").execSync;
 
+const tmpDir = os.tmpdir();
 const dirName = "test-akashic-cli_" + Date.now();
+const targetDir = path.join(tmpDir, dirName);
 
 // テスト用に作成されたディレクトリを消してからテストを終了する。
-function exit(isSuccess) {
+process.on("exit", function() {
 	console.log("delete test-directory");
-	shell.cd(`/tmp`);
-	shell.rm("-rf", `/tmp/${dirName}`);
+	shell.cd(`${tmpDir}`);
+	shell.rm("-rf", `${targetDir}`);
+});
+
+function quit(isSuccess) {
 	if (isSuccess) {
 		console.log("Completed!");
 		process.exit(0);
@@ -20,28 +28,14 @@ function exit(isSuccess) {
 	}
 }
 
-// assertメソッド。期待通りの値でなければ即テストをエラーにして終了する。
-function assert(actual, expected) {
-	if (actual !== expected) {
-		console.error(`${actual} is not ${expected}.`);
-		exit(false);
-	}
-}
-
-// 期待した値がactualsに含まれていることを確認。含まれていなければ即テストをエラーにして終了する。
+// 期待した値がactualsに含まれていることを確認。
 function assertContains(actuals, expected) {
-	if (actuals.indexOf(expected) === -1) {
-		console.error(`${expected} is not contained in ${actuals}.`);
-		exit(false);
-	}
+	assert.notStrictEqual(actuals.indexOf(expected), -1);
 }
 
-// 期待した値がactualsに含まれていないことを確認。含まれていれば即テストをエラーにして終了する。
+// 期待した値がactualsに含まれていないことを確認。
 function assertNotContains(actuals, expected) {
-	if (actuals.indexOf(expected) >= 0) {
-		console.error(`${expected} is contained in ${actuals}.`);
-		exit(false);
-	}
+	assert.strictEqual(actuals.indexOf(expected), -1);
 }
 
 try{
@@ -49,16 +43,16 @@ try{
 
 	// テストに使用するtmpディレクトリの作成
 	console.log("create test-directory");
-	shell.mkdir("-p", [`/tmp/${dirName}`, `/tmp/${dirName}/game`]);
+	shell.mkdir("-p", [`${targetDir}`, `${targetDir}/game`]);
 
 	// akashic-cliのインストール
 	console.log("npm install @akashic/akashic-cli");
-	shell.cd(`/tmp/${dirName}`);
+	shell.cd(`${targetDir}`);
 	execSync("npm init -y");
 	execSync("npm install @akashic/akashic-cli@latest");
 
 	// 以下、akashic-cliの動作検証
-	const akashicCliPath = `/tmp/${dirName}/node_modules/.bin/akashic`;
+	const akashicCliPath = `${targetDir}/node_modules/.bin/akashic`;
 
 	// akashic -v で取得したバージョンがnpmにpublishされた最新バージョンと同じであることを確認
 	console.log("check version of @akashic/akashic-cli");
@@ -68,10 +62,10 @@ try{
 
 	// ゲームディレクトリを作成しつつakashic-cli-initのテスト
 	console.log("test @akashic/akashic-cli-init");
-	shell.cd(`/tmp/${dirName}/game`);
+	shell.cd(`${targetDir}/game`);
 	execSync(`${akashicCliPath} init -y`);
 	// 出力されるファイルの検証
-	const files = fs.readdirSync(`/tmp/${dirName}/game`);
+	const files = fs.readdirSync(`${targetDir}/game`);
 	assertContains(files, "audio");
 	assertContains(files, "image");
 	assertContains(files, "script");
@@ -101,29 +95,29 @@ try{
 	execSync(`${akashicCliPath} modify width 816`);
 	execSync(`${akashicCliPath} modify height 624`);
 	execSync(`${akashicCliPath} modify fps 60`);
-	let gameJson = JSON.parse(fs.readFileSync(`/tmp/${dirName}/game/game.json`).toString());
+	let gameJson = JSON.parse(fs.readFileSync(`${targetDir}/game/game.json`).toString());
 	assert(gameJson.width, 816);
 	assert(gameJson.height, 624);
 	assert(gameJson.fps, 60);
 
 	console.log("test @akashic/akashic-cli-install");
 	execSync(`${akashicCliPath} install @akashic-extension/akashic-label`);
-	let packageJson = JSON.parse(fs.readFileSync(`/tmp/${dirName}/game/package.json`).toString());
-	gameJson = JSON.parse(fs.readFileSync(`/tmp/${dirName}/game/game.json`).toString());
+	let packageJson = JSON.parse(fs.readFileSync(`${targetDir}/game/package.json`).toString());
+	gameJson = JSON.parse(fs.readFileSync(`${targetDir}/game/game.json`).toString());
 	assertContains(Object.keys(packageJson["dependencies"]), "@akashic-extension/akashic-label");
 	assertContains(Object.keys(gameJson["moduleMainScripts"]), "@akashic-extension/akashic-label");
 	assertContains(gameJson["globalScripts"], "node_modules/@akashic-extension/akashic-label/lib/index.js");
 
 	console.log("test @akashic/akashic-cli-uninstall");
 	execSync(`${akashicCliPath} uninstall @akashic-extension/akashic-label`);
-	packageJson = JSON.parse(fs.readFileSync(`/tmp/${dirName}/game/package.json`).toString());
-	gameJson = JSON.parse(fs.readFileSync(`/tmp/${dirName}/game/game.json`).toString());
+	packageJson = JSON.parse(fs.readFileSync(`${targetDir}/game/package.json`).toString());
+	gameJson = JSON.parse(fs.readFileSync(`${targetDir}/game/game.json`).toString());
 	assertNotContains(Object.keys(packageJson["dependencies"]), "@akashic-extension/akashic-label");
 	assertNotContains(Object.keys(gameJson), "moduleMainScripts");
 	assertNotContains(gameJson["globalScripts"], "node_modules/@akashic-extension/akashic-label/lib/index.js");
 
-	exit(true);
+	quit(true);
 } catch (e) {
 	console.error(e);
-	exit(false);
+	quit(false);
 }
