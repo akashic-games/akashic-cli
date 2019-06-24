@@ -32,6 +32,10 @@ function choose<T>(a: T | null | undefined, b: T | null | undefined, c: T): T {
 	return (a != null) ? a : ((b != null) ? b : c);
 }
 
+function getQueryValue(queryValue: string | string[]) {
+	return Array.isArray(queryValue) ? queryValue[queryValue.length - 1] : queryValue;
+}
+
 export class Storage {
 	static SESSION_STORAGE_KEY: string = "aktb:config";
 
@@ -65,16 +69,16 @@ export class Storage {
 		this.put({
 			playerId,
 			playerName: choose(qp.playerName, s.playerName, ("player" + playerId)),
-			showsDevtools: choose(asBool(qp.showsDevtools), s.showsDevtools, false),
-			devtoolsHeight: choose(asNumber(qp.devtoolsHeight), s.devtoolsHeight, 200),
+			showsDevtools: choose(asBool(getQueryValue(qp.showsDevtools)), s.showsDevtools, false),
+			devtoolsHeight: choose(asNumber(getQueryValue(qp.devtoolsHeight)), s.devtoolsHeight, 200),
 			activeDevtool: choose(qp.activeDevtool, s.activeDevtool, "Instances"),
-			showsEventList: choose(asBool(qp.showsEventList), s.showsEventList, true),
-			eventListWidth: choose(asNumber(qp.eventListWidth), s.eventListWidth, 150),
+			showsEventList: choose(asBool(getQueryValue(qp.showsEventList)), s.showsEventList, true),
+			eventListWidth: choose(asNumber(getQueryValue(qp.eventListWidth)), s.eventListWidth, 150),
 			eventEditContent: choose(qp.eventEditContent, s.eventEditContent, ""),
 			selectedArgumentName: choose(qp.selectedArgumentName, s.selectedArgumentName, null),
-			instanceArgumentListWidth: choose(asNumber(qp.instanceArgumentListWidth), s.instanceArgumentListWidth, 150),
+			instanceArgumentListWidth: choose(asNumber(getQueryValue(qp.instanceArgumentListWidth)), s.instanceArgumentListWidth, 150),
 			instanceArgumentEditContent: choose(qp.instanceArgumentEditContent, s.instanceArgumentEditContent, ""),
-			joinsAutomatically: choose(asBool(qp.joinsAutomatically), s.joinsAutomatically, false)
+			joinsAutomatically: choose(asBool(getQueryValue(qp.joinsAutomatically)), s.joinsAutomatically, false)
 		});
 	}
 
