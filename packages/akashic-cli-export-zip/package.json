@@ -37,7 +37,7 @@
     "@types/jasmine": "2.8.16",
     "@types/mock-fs": "3.6.30",
     "@types/node": "8.0.58",
-    "@types/uglify-js": "2.6.30",
+    "@types/uglify-js": "2.6.32",
     "istanbul": "0.4.5",
     "jasmine": "2.99.0",
     "jasmine-reporters": "2.0.8",
@@ -57,7 +57,7 @@
     "commander": "2.8.1",
     "fs-extra": "^3.0.1",
     "fs-readdir-recursive": "~0.1.2",
-    "uglify-js": "2.6.1"
+    "uglify-js": "2.6.4"
   },
   "publishConfig": {
     "access": "public",
