@@ -8,10 +8,12 @@ import {PlayStore} from "./PlayStore";
 import {LocalInstanceEntity} from "./LocalInstanceEntity";
 import {DevtoolUiStore} from "./DevtoolUiStore";
 import {ToolBarUiStore} from "./ToolBarUiStore";
+import {ContentStore} from "./ContentStore";
 import {storage} from "./storage";
 import {StartupScreenUiStore} from "./StartupScreenUiStore";
 
 export class Store {
+	@observable contentStore: ContentStore;
 	@observable playStore: PlayStore;
 	@observable toolBarUiStore: ToolBarUiStore;
 	@observable devtoolUiStore: DevtoolUiStore;
@@ -28,6 +30,7 @@ export class Store {
 	constructor() {
 		const query = queryString.parse(window.location.search);
 		this.contentLocator = new ClientContentLocator({ contentId: (query.id != null) ? query.id : "0" }); // TODO xnv bootstrapから渡す方が自然では？
+		this.contentStore = new ContentStore();
 		this.playStore = new PlayStore();
 		this.toolBarUiStore = new ToolBarUiStore();
 		this.devtoolUiStore = new DevtoolUiStore();

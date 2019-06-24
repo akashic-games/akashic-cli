@@ -38,7 +38,7 @@ export class App extends React.Component<AppProps, {}> {
 			<div className={styles["main"] + " " + styles["centering"] } ref={this._onRef}>
 			{
 				store.toolBarUiStore.showsBgImage ?
-					<img src={this.props.store.sandboxConfig.backgroundImage} className={styles["bg-image"]}/> :
+					<img src={store.sandboxConfig.backgroundImage} className={styles["bg-image"]}/> :
 					null
 			}
 			</div>

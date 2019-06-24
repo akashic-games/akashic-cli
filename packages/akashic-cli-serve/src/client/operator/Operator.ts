@@ -66,10 +66,6 @@ export class Operator {
 		}
 
 		// TODO play からコンテンツを引くべき？
-		// contentId でない場合は sandboxConfig はそもそも取れないとして扱うべき (サーバサイドのサポートがないと取れないので、単にGETリクエストするわけにもいかない)
-		const contentId = parseInt(this.store.contentLocator.contentId, 10);
-		const sandboxConfigResult = await ApiClient.getSandboxConfig(contentId);
-		store.setSandboxConfig(sandboxConfigResult.data || {});
 
 		store.setCurrentPlay(play);
 

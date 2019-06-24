@@ -1,26 +1,29 @@
 import * as express from "express";
-import { createHandlerToGetEngineConfig } from "../controller/ConfigController";
-import {createScriptAssetController} from "../controller/ScriptAssetController";
-import {createHandlerToGetSandboxConfig} from "../controller/SandboxConfigController";
+import { createHandlerToGetContents, createHandlerToGetEngineConfig } from "../controller/ContentController";
+import { createScriptAssetController } from "../controller/ScriptAssetController";
+import { createHandlerToGetSandboxConfig } from "../controller/SandboxConfigController";
 
 export interface ContentsRouterParameterObject {
 	targetDirs: string[];
 }
 
 export const createContentsRouter = (params: ContentsRouterParameterObject): express.Router => {
+	const targetDirs = params.targetDirs;
 	const contentsRouter = express.Router();
 
-	for (let i = 0; i < params.targetDirs.length; i++) {
-		contentsRouter.get(`/${i}/content/:scriptName(*.js$)`, createScriptAssetController(params.targetDirs[i]));
-		contentsRouter.use(`/${i}/content`, express.static(params.targetDirs[i])); // コンテンツのスクリプトアセット加工後のパス。クライアント側でゲームを動かすために必要。
-		contentsRouter.use(`/${i}/raw`, express.static(params.targetDirs[i])); // コンテンツのスクリプトアセット加工前のパス。サーバー側でゲームを動かすために必要。
+	for (let i = 0; i < targetDirs.length; i++) {
+		contentsRouter.get(`/${i}/content/:scriptName(*.js$)`, createScriptAssetController(targetDirs[i]));
+		contentsRouter.use(`/${i}/content`, express.static(targetDirs[i]));
+		contentsRouter.use(`/${i}/raw`, express.static(targetDirs[i]));
 	}
 
-	contentsRouter.get(`/:contentId/sandbox-config`, createHandlerToGetSandboxConfig(params.targetDirs));
-	contentsRouter.get(`/:contentId/content.json`, createHandlerToGetEngineConfig(params.targetDirs, false));
-	// /engineとの相違点はスクリプトアセット加工前のコンテンツを含む情報を投げること
-	// サーバー側でインスタンスを立ち上げる時は加工前のスクリプトアセットを参照する必要がある
-	contentsRouter.get(`/:contentId/content.raw.json`, createHandlerToGetEngineConfig(params.targetDirs, true));
+	contentsRouter.get(`/`, createHandlerToGetContents(targetDirs));
+	contentsRouter.get(`/:contentId/sandbox-config`, createHandlerToGetSandboxConfig(targetDirs));
+
+	// content.json, content.raw.json はそれぞれ /contents/:contentId:/content/ と /contents/:contendId/raw/ に対応する。
+	contentsRouter.get(`/:contentId/content.json`, createHandlerToGetEngineConfig(targetDirs, false));
+	contentsRouter.get(`/:contentId/content.raw.json`, createHandlerToGetEngineConfig(targetDirs, true));
 
 	return contentsRouter;
 };
+
