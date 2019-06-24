@@ -1,7 +1,7 @@
 const path = require("path");
-const fs = require("fs");
 const semver = require("semver");
 const execSync = require("child_process").execSync;
+const updateChangelog = require("./parts/updateChangelog").updateChangelog;
 
 if (process.argv.length < 3) {
 	console.error("Please enter command as follows: node updateChangelog.js [patch|minor|major]");
@@ -28,13 +28,23 @@ if (process.env.GITHUB_AUTH == null) {
 	process.exit(1);
 }
 
-// 全akashic-cli-xxxに依存するakashic-cliモジュールの次のバージョン番号を取得
-const packageJson = require(path.join(__dirname, "..", "packages", "akashic-cli", "package.json"));
-const nextVersion = semver.inc(packageJson["version"], target);
+try {
+	// 現在のCHANGELOGに次バージョンのログを追加
+	console.log("start to update changelog");
+	// 全akashic-cli-xxxに依存するakashic-cliモジュールの次のバージョン番号を取得
+	const packageJson = require(path.join(__dirname, "..", "packages", "akashic-cli", "package.json"));
+	const nextVersion = semver.inc(packageJson["version"], target);
+	updateChangelog(nextVersion);
+	execSync("git add ./CHANGELOG.md");
+	execSync("git commit -m 'Update Changelog'");
+	execSync("git push origin master");
+	console.log("end to publish");
 
-// 現在のCHANGELOGに次バージョンのログを追加
-const currentChangeLog = fs.readFileSync(path.join(__dirname, "..", "CHANGELOG.md")).toString();
-const addedLog =
-	execSync(`${path.join(__dirname, "..", "node_modules", ".bin", "lerna-changelog")} --next-version ${nextVersion}`).toString();
-const nextChangeLog = currentChangeLog.replace("# CHANGELOG\n\n", "# CHANGELOG\n" + addedLog + "\n");
-fs.writeFileSync(path.join(__dirname, "..", "CHANGELOG.md"), nextChangeLog);
+	// publish処理
+	console.log("start to publish");
+	execSync(`${path.join(__dirname, "..", "node_modules", ".bin", "lerna")} publish ${target} --yes`);
+	console.log("end to publish");
+} catch (e) {
+	console.error(e);
+	process.exit(1);
+}

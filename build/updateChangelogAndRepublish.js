@@ -1,6 +1,7 @@
 const path = require("path");
-const fs = require("fs");
+const semver = require("semver");
 const execSync = require("child_process").execSync;
+const updateChangelog = require("./parts/updateChangelog").updateChangelog;
 
 const apiBaseUrl = "https://api.github.com/repos/akashic-games/akashic-cli";
 const pullRequestBody = "※自動作成されたPRです";
@@ -26,28 +27,22 @@ if (process.env.GITHUB_AUTH == null) {
 }
 
 try {
-	// versionのbump処理
-	console.log("start to bump version");
+	// PRのマージ元ブランチを作成しておく
+	console.log("start to create branch");
 	const branchName = "tmp_" + Date.now();
-	const lernaPath = path.join(__dirname, "..", "node_modules", ".bin", "lerna");
 	// versionのbumpを行う前の準備作業
 	execSync("git fetch");
 	execSync("git checkout origin/master");
 	execSync(`git checkout -b ${branchName}`);
-	// 直前のcommitがlernaでversionをbumpしたcommitの場合、versionのbumpに失敗するので空コミットを一度挟んでおく
+	// PRを作るためだけに空コミットをしておく。PRはlerna-changelogでCHANGELOGを更新するために必要。
 	execSync("git commit --allow-empty -m 'empty'");
-	// versionをbumpするためにはリモート側にブランチを用意しておく必要がある
 	execSync(`git push origin ${branchName}`);
-	// versionのbumpしてcommit+push(ここでgithubリポジトリにタグとリリースノートが作成される)
-	execSync(`${lernaPath} version ${target} --allow-branch=${branchName} --force-publish=* --yes`);
-	console.log("end to bump version");
+	console.log("end to create branch");
 
 	// PRの作成とマージ処理
 	console.log("start to create PR");
-	// requireの場合bump前のバージョンを取得してしまうため、fs.readFileSyncを使用してbump後のバージョンを取得する
-	const currentVersion = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "packages", "akashic-cli", "package.json")).toString()).version;
 	// PRを作成する
-	const pullReqDataString = execSync(`curl --fail -H "Authorization: token ${process.env.GITHUB_AUTH}" -X POST -d '{"title":"v${currentVersion}", "body":"${pullRequestBody}", "head":"akashic-games:${branchName}", "base":"master"}' ${apiBaseUrl}/pulls`).toString();
+	const pullReqDataString = execSync(`curl --fail -H "Authorization: token ${process.env.GITHUB_AUTH}" -X POST -d '{"title":"PR To Republish", "body":"${pullRequestBody}", "head":"akashic-games:${branchName}", "base":"master"}' ${apiBaseUrl}/pulls`).toString();
 	const pullReqData = JSON.parse(pullReqDataString);
 	// issue(PR)にラベル付ける
 	execSync(`curl --fail -H "Authorization: token ${process.env.GITHUB_AUTH}" -X POST -d '{"labels": ["${pullRequestLabel}"]}' ${apiBaseUrl}/issues/${pullReqData["number"]}/labels`);
@@ -63,15 +58,19 @@ try {
 	console.log("start to update changelog");
 	execSync("git checkout master");
 	execSync("git pull origin master");
-	const lernaChangeLogPath = path.join(__dirname, "..", "node_modules", ".bin", "lerna-changelog");
-	const addedLog = execSync(`${lernaChangeLogPath} --next-version v${currentVersion}`).toString();
-	const currentChangeLog = fs.readFileSync(path.join(__dirname, "..", "CHANGELOG.md")).toString();
-	const nextChangeLog = currentChangeLog.replace("# CHANGELOG\n\n", "# CHANGELOG\n" + addedLog + "\n");
-	fs.writeFileSync(path.join(__dirname, "..", "CHANGELOG.md"), nextChangeLog);
+	// 全akashic-cli-xxxに依存するakashic-cliモジュールの次のバージョン番号を取得
+	const packageJson = require(path.join(__dirname, "..", "packages", "akashic-cli", "package.json"));
+	const nextVersion = semver.inc(packageJson["version"], target);
+	updateChangelog(nextVersion);
 	execSync("git add ./CHANGELOG.md");
 	execSync("git commit -m 'Update Changelog'");
 	execSync("git push origin master");
-	console.log("end to update changelog");
+	console.log("end to publish");
+
+	// publish処理
+	console.log("start to publish");
+	execSync(`${path.join(__dirname, "..", "node_modules", ".bin", "lerna")} publish ${target} --force-publish=* --yes`);
+	console.log("end to publish");
 } catch (e) {
 	console.error(e);
 	process.exit(1);
