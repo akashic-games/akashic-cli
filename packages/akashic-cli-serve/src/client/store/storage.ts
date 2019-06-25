@@ -33,7 +33,7 @@ function choose<T>(a: T | null | undefined, b: T | null | undefined, c: T): T {
 }
 
 function getQueryValue(queryValue: string | string[]) {
-	return Array.isArray(queryValue) ? queryValue[queryValue.length - 1] : queryValue;
+	return typeof queryValue === "string" ? queryValue : queryValue[queryValue.length - 1];
 }
 
 export class Storage {
