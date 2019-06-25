@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-scan",
-  "version": "0.2.14",
+  "version": "0.2.15",
   "description": "Command line tool for updating assets and globalScripts.",
   "main": "lib/index.js",
   "scripts": {
@@ -24,22 +24,22 @@
   ],
   "devDependencies": {
     "@types/image-size": "0.0.29",
-    "@types/jasmine": "~2.8.2",
-    "@types/mock-fs": "~3.6.30",
-    "@types/musicmetadata": "^2.0.4",
+    "@types/jasmine": "2.8.16",
+    "@types/mock-fs": "3.6.30",
+    "@types/musicmetadata": "2.0.4",
     "@types/node": "6.0.46",
-    "istanbul": "^0.4.5",
-    "jasmine": "~3.3.0",
-    "jasmine-reporters": "~2.0.4",
-    "jasmine-terminal-reporter": "~0.9.1",
-    "mock-fs": "~4.8.0",
-    "shx": "~0.2.2",
-    "tslint": "~5.4.3",
-    "typescript": "~2.8.1"
+    "istanbul": "0.4.5",
+    "jasmine": "3.3.1",
+    "jasmine-reporters": "2.0.8",
+    "jasmine-terminal-reporter": "0.9.1",
+    "mock-fs": "4.8.0",
+    "shx": "0.2.2",
+    "tslint": "5.4.3",
+    "typescript": "2.8.4"
   },
   "typings": "lib/index.d.ts",
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.2.22",
+    "@akashic/akashic-cli-commons": "0.2.23",
     "aac-duration": "0.0.1",
     "commander": "^2.16.0",
     "fs-readdir-recursive": "1.0.0",

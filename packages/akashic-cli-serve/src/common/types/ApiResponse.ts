@@ -2,6 +2,7 @@ import {PlayDurationState} from "./PlayDurationState";
 import {SandboxConfig} from "./SandboxConfig";
 import {ClientInstanceDescription, RunnerDescription} from "./TestbedEvent";
 import {Player} from "./Player";
+import {ContentLocatorData} from "./ContentLocatorData";
 
 export interface ApiResponse<T> {
 	meta: {
@@ -14,11 +15,10 @@ export interface ApiResponse<T> {
 
 export interface PlayApiResponseData {
 	playId: string;
-	contentUrl: string;
+	contentLocatorData: ContentLocatorData;
 	joinedPlayers: Player[];
 	runners: RunnerDescription[];
 	clientInstances: ClientInstanceDescription[];
-	clientContentUrl: string | null;
 	durationState: PlayDurationState;
 }
 

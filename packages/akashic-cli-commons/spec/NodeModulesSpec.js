@@ -1,4 +1,4 @@
-var mockfs = new require("mock-fs");
+var mockfs = require("mock-fs");
 var NodeModules = require("../lib/NodeModules").NodeModules;
 
 describe("NodeModules", function () {

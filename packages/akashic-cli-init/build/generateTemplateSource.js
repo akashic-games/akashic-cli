@@ -35,27 +35,32 @@ console.log("End to generate typescript-templates");
 
 // javascriptテンプレートを作成
 console.log("Start to generate javascript-templates");
+shell.cp("-R", path.join(templatesSrcDirPath, "typescript-base"), path.join(templatesDirPath, "common"));
+console.log("Install packages");
+// テンプレート生成処理時間の短縮のため、各jsテンプレートビルド時に共通的に使用するパッケージを先にインストールしておく
+execSync(`cd ${path.join(templatesDirPath, "common")} && npm install`);
 Object.keys(templateData).forEach(key => {
 	console.log(`"${key}" template`);
+	shell.cp("-R", path.join(templatesSrcDirPath, templateData[key]["src"], "src"), path.join(templatesDirPath, "common", "src"));
+	console.log("  - start to build");
+	// node_modulesがcommon下にあるので、そこでそのままビルドする
+	execSync(`cd ${path.join(templatesDirPath, "common")} && npm run build`);
+	console.log("  - end to build");
+	// 他のテンプレートもcommon下でビルドするため、ソースファイルディレクトリは削除しておく
+	shell.rm("-rf", path.join(templatesDirPath, "common", "src"));
+	// このスクリプト実行前にテンプレートが既に作られているならば、それを削除する
 	shell.rm("-rf", path.join(templatesDirPath, templateData[key]["js-dist"]));
+	// テンプレートを新たに生成
 	shell.cp("-R", path.join(templatesSrcDirPath, templateData[key]["src"]), path.join(templatesDirPath, templateData[key]["js-dist"]));
-	shell.cp(path.join(templatesSrcDirPath, "typescript-base", "package.json"), path.join(templatesDirPath, templateData[key]["js-dist"]));
-	shell.cp(path.join(templatesSrcDirPath, "typescript-base", "tsconfig.json"), path.join(templatesDirPath, templateData[key]["js-dist"]));
-	console.log("  - start to install packages and build");
-	// インストールとビルドが完了するのを待ちたいので、ここだけ execSync を使用する
-	execSync(`cd ${path.join(templatesDirPath, templateData[key]["js-dist"])} && npm install && npm run build`);
-	console.log("  - end to install packages and build");
-	shell.rm(
-		"-rf",
-		path.join(templatesDirPath, templateData[key]["js-dist"], "src"),
-		path.join(templatesDirPath, templateData[key]["js-dist"], "node_modules")
-	);
-	shell.rm(
-		path.join(templatesDirPath, templateData[key]["js-dist"], "package.json"),
-		path.join(templatesDirPath, templateData[key]["js-dist"], "package-lock.json"),
-		path.join(templatesDirPath, templateData[key]["js-dist"], "tsconfig.json")
-	);
+	// common下でビルド済みのためソースファイルディレクトリは不要なので削除
+	shell.rm("-rf", path.join(templatesDirPath, templateData[key]["js-dist"], "src"));
+	// common下でビルドしたものをテンプレートに移す
+	shell.mv(path.join(templatesDirPath, "common", "script"), path.join(templatesDirPath, templateData[key]["js-dist"], "script"));
+	// javascriptテンプレートに共通で必要なものもテンプレートに置く
 	shell.cp("-R", path.join(templatesSrcDirPath, "javascript-base", "*"), path.join(templatesDirPath, templateData[key]["js-dist"]));
 	shell.cp(path.join(templatesSrcDirPath, "javascript-base", ".eslintrc.json"), path.join(templatesDirPath, templateData[key]["js-dist"]));
+	// game.jsonにscriptアセットが登録されていない状態なので、ここで登録する
+	execSync(`cd ${path.join(templatesDirPath, templateData[key]["js-dist"])} && ../common/node_modules/.bin/akashic-cli-scan asset script`);
 });
+shell.rm("-rf", path.join(templatesDirPath, "common"));
 console.log("End to generate javascript-templates");

@@ -34,7 +34,7 @@ describe("config module", () => {
 			.then(() => config.getItem("apple.item2"))
 			.then(value => expect(value).toBe("42"))
 			.then(() => config.getItem("banana.item3"))
-			.then(value => expect(value).toBeNull)
+			.then(value => expect(value).toBeNull())
 			.then(done, done.fail);
 	});
 });

@@ -1,4 +1,5 @@
 import { PlayBroadcastTestbedEvent } from "../../common/types/TestbedEvent";
+import { ClientContentLocator } from "../common/ClientContentLocator";
 import * as ApiClient from "../api/ApiClient";
 import * as Subscriber from "../api/Subscriber";
 import { GameViewManager } from "../akashic/GameViewManager";
@@ -13,8 +14,7 @@ export interface OperatorParameterObject {
 	store: Store;
 	gameViewManager: GameViewManager;
 
-	contentUrl: string;
-	clientContentUrl?: string;
+	contentLocator: ClientContentLocator;
 }
 
 export interface StartContentParameterObject {
@@ -29,8 +29,7 @@ export class Operator {
 	externalPlugin: ExternalPluginOperator;
 	private store: Store;
 	private gameViewManager: GameViewManager;
-	private contentUrl: string;
-	private clientContentUrl: string | null;
+	private contentLocator: ClientContentLocator;
 
 	constructor(param: OperatorParameterObject) {
 		const store = param.store;
@@ -40,8 +39,7 @@ export class Operator {
 		this.externalPlugin = new ExternalPluginOperator(param.gameViewManager);
 		this.store = param.store;
 		this.gameViewManager = param.gameViewManager;
-		this.contentUrl = param.contentUrl;
-		this.clientContentUrl = param.clientContentUrl;
+		this.contentLocator = param.contentLocator;
 
 		Subscriber.onBroadcast.add(this._handleBroadcast);
 	}
@@ -49,8 +47,11 @@ export class Operator {
 	async bootstrap(): Promise<void> {
 		const store = this.store;
 		await store.playStore.assertInitialized();
-		const playIds = Object.keys(store.playStore.plays);
-		const play = (playIds.length === 0) ? await this._createServerLoop() : store.playStore.plays[playIds[playIds.length - 1]];
+		// TODO xnv そもそもコンテンツを指定して立ち上げる時は、既存プレイを探さず直接新規プレイでいいのでは？
+		const plays = store.playStore.playsList().filter(play => {
+			return play.contentLocator.asAbsoluteUrl() === store.contentLocator.asAbsoluteUrl();
+		});
+		const play = (plays.length === 0) ? await this._createServerLoop() : plays[plays.length - 1];
 		await this.setCurrentPlay(play);
 	}
 
@@ -65,10 +66,9 @@ export class Operator {
 		}
 
 		// TODO play からコンテンツを引くべき？
-		const gameJson = await ApiClient.getGameConfiguration();
-		this.gameViewManager.setViewSize(gameJson.width, gameJson.height);
-
-		const sandboxConfigResult = await ApiClient.getSandboxConfig();
+		// contentId でない場合は sandboxConfig はそもそも取れないとして扱うべき (サーバサイドのサポートがないと取れないので、単にGETリクエストするわけにもいかない)
+		const contentId = parseInt(this.store.contentLocator.contentId, 10);
+		const sandboxConfigResult = await ApiClient.getSandboxConfig(contentId);
 		store.setSandboxConfig(sandboxConfigResult.data || {});
 
 		store.setCurrentPlay(play);
@@ -101,7 +101,6 @@ export class Operator {
 					const childPlay = await this._createClientLoop(params.contentUrl, params.playId);
 					return await childPlay.createLocalInstance({
 						gameViewManager: this.gameViewManager,
-						contentUrl: params.contentUrl,
 						player: this.store.player,
 						playId: params.playId,
 						executionMode: "active",
@@ -141,10 +140,7 @@ export class Operator {
 	}
 
 	private async _createServerLoop(): Promise<PlayEntity> {
-		const play = await this.store.playStore.createPlay({
-			contentUrl: this.contentUrl,
-			clientContentUrl: this.clientContentUrl
-		});
+		const play = await this.store.playStore.createPlay({ contentLocator: this.contentLocator });
 		const tokenResult = await ApiClient.createPlayToken(play.playId, "", true);  // TODO 空文字列でなくnullを使う
 		play.createServerInstance({ playToken: tokenResult.data.playToken });
 		ApiClient.resumePlayDuration(play.playId);
@@ -153,7 +149,7 @@ export class Operator {
 
 	private async _createClientLoop(contentUrl: string, playId: string): Promise<PlayEntity> {
 		const play = await this.store.playStore.createStandalonePlay({
-			contentUrl,
+			contentLocator: new ClientContentLocator({ path: contentUrl }),  // TODO xnv 多分動かない。COEプラグインからまともに ContentLocator を組み立てる必要がある
 			playId
 		});
 		return play;

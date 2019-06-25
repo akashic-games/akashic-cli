@@ -4,7 +4,6 @@
   "version": "0.0.1",
   "description": "Command-line utility for akashic game development",
   "scripts": {
-    "prepublish": "npm run build",
     "postinstall": "lerna bootstrap --no-ci",
     "build": "lerna run build",
     "test": "npm run lint:md && lerna run test",
@@ -33,10 +32,10 @@
   "devDependencies": {
     "@akashic/remark-preset-lint": "~0.1.1",
     "cross-env": "~5.2.0",
-    "lerna": "^3.13.1",
-    "lerna-changelog": "^0.8.2",
-    "remark-cli": "~6.0.1",
-    "semver": "^5.6.0"
+    "lerna": "3.13.1",
+    "lerna-changelog": "0.8.2",
+    "remark-cli": "6.0.1",
+    "semver": "5.6.0"
   },
   "repository": {
     "type": "git",

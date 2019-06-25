@@ -10,6 +10,7 @@ import {
 	SandboxConfigApiResponse,
 	OptionsApiResponse
 } from "../../common/types/ApiResponse";
+import {ContentLocatorData} from "../../common/types/ContentLocatorData";
 import {GameConfiguration} from "../../common/types/GameConfiguration";
 import * as ApiRequest from "./ApiRequest";
 
@@ -17,20 +18,20 @@ export const getPlays = async(): Promise<PlayGetAllApiResponse> => {
 	return await ApiRequest.get<PlayGetAllApiResponse>("/api/plays");
 };
 
-export const createPlay = async(contentUrl: string, clientContentUrl?: string): Promise<PlayPostApiResponse> => {
-	return await ApiRequest.post<PlayPostApiResponse>("/api/play", {contentUrl, clientContentUrl});
+export const createPlay = async(contentLocator: ContentLocatorData): Promise<PlayPostApiResponse> => {
+	return await ApiRequest.post<PlayPostApiResponse>("/api/plays", { contentLocator });
 };
 
 export const suspendPlay = async(playId: string): Promise<PlayDeleteApiResponse> => {
-	return await ApiRequest.del<PlayDeleteApiResponse>(`/api/play/${playId}`);
+	return await ApiRequest.del<PlayDeleteApiResponse>(`/api/plays/${playId}`);
 };
 
 export const pausePlayDuration = async(playId: string): Promise<PlayPatchApiResponse> => {
-	return await ApiRequest.patch<PlayPatchApiResponse>(`/api/play/${playId}`, {status: "paused"});
+	return await ApiRequest.patch<PlayPatchApiResponse>(`/api/plays/${playId}`, {status: "paused"});
 };
 
 export const resumePlayDuration = async(playId: string): Promise<PlayPatchApiResponse> => {
-	return await ApiRequest.patch<PlayPatchApiResponse>(`/api/play/${playId}`, {status: "running"});
+	return await ApiRequest.patch<PlayPatchApiResponse>(`/api/plays/${playId}`, {status: "running"});
 };
 
 export const createPlayToken = async(
@@ -41,42 +42,42 @@ export const createPlayToken = async(
 	envInfo?: any
 ): Promise<PlayTokenPostApiResponse> => {
 	return await ApiRequest.post<PlayTokenPostApiResponse>(
-		`/api/play/${playId}/token`,
+		`/api/plays/${playId}/token`,
 		{playerId, isActive: isActive.toString(), name, envInfo}
 	);
 };
 
 export const broadcast = async(playId: string, message: any): Promise<void> => {
-	return await ApiRequest.post<void>(`/api/play/${playId}/broadcast`, message);
+	return await ApiRequest.post<void>(`/api/plays/${playId}/broadcast`, message);
 };
 
 export const createRunner = async(playId: string, isActive: boolean, token: string): Promise<RunnerPostApiResponse> => {
 	return await ApiRequest.post<RunnerPostApiResponse>(
-		"/api/runner",
+		"/api/runners",
 		{playId, isActive: isActive.toString(), token}
 	);
 };
 
 export const deleteRunner = async(runnerId: string): Promise<RunnerDeleteApiResponse> => {
-	return await ApiRequest.del<RunnerDeleteApiResponse>(`/api/runner/${runnerId}`);
+	return await ApiRequest.del<RunnerDeleteApiResponse>(`/api/runners/${runnerId}`);
 };
 
 export const pauseRunner = async(runnerId: string): Promise<RunnerPatchApiResponse> => {
-	return await ApiRequest.patch<RunnerPatchApiResponse>(`/api/runner/${runnerId}`, {status: "paused"});
+	return await ApiRequest.patch<RunnerPatchApiResponse>(`/api/runners/${runnerId}`, {status: "paused"});
 };
 
 export const resumeRunner = async(runnerId: string): Promise<RunnerPatchApiResponse> => {
-	return await ApiRequest.patch<RunnerPatchApiResponse>(`/api/runner/${runnerId}`, {status: "running"});
+	return await ApiRequest.patch<RunnerPatchApiResponse>(`/api/runners/${runnerId}`, {status: "running"});
 };
 
-export const getGameConfiguration = async(): Promise<GameConfiguration> => {
-	return await ApiRequest.get<GameConfiguration>("/content/game.json");
+export const getGameConfiguration = async(contentId: number): Promise<GameConfiguration> => {
+	return await ApiRequest.get<GameConfiguration>(`/contents/${contentId}/content/game.json`);
 };
 
-export const getSandboxConfig = async(): Promise<SandboxConfigApiResponse> => {
-	return await ApiRequest.get<SandboxConfigApiResponse>("/api/sandbox-config");
+export const getSandboxConfig = async(contentId: number): Promise<SandboxConfigApiResponse> => {
+	return await ApiRequest.get<SandboxConfigApiResponse>(`/contents/${contentId}/sandbox-config`);
 };
 
 export const getOptions = async(): Promise<OptionsApiResponse> => {
-	return await ApiRequest.get<OptionsApiResponse>("/config/options");
+	return await ApiRequest.get<OptionsApiResponse>("/api/options");
 };
