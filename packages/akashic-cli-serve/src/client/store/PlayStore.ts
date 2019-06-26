@@ -1,5 +1,4 @@
 import { observable } from "mobx";
-import { PlayApiResponseData } from "../../common/types/ApiResponse";
 import {
 	PlayCreateTestbedEvent,
 	PlayStatusChangedTestbedEvent,
@@ -61,7 +60,8 @@ export class PlayStore {
 			Subscriber.onPlayerJoin.add(this.handlePlayerJoin);
 			Subscriber.onPlayerLeave.add(this.handlePlayerLeave);
 			Subscriber.onClientInstanceAppear.add(this.handleClientInstanceAppear);
-			Subscriber.onClientInstanceDisappear.add(this.handleClientInstanceDisappear); Subscriber.onRunnerCreate.add(this.handleRunnerCreate);
+			Subscriber.onClientInstanceDisappear.add(this.handleClientInstanceDisappear);
+			Subscriber.onRunnerCreate.add(this.handleRunnerCreate);
 			Subscriber.onRunnerRemove.add(this.handleRunnerRemove);
 			Subscriber.onRunnerPause.add(this.handleRunnerPause);
 			Subscriber.onRunnerResume.add(this.handleRunnerResume);

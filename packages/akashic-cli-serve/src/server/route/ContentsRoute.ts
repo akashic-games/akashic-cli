@@ -26,4 +26,3 @@ export const createContentsRouter = (params: ContentsRouterParameterObject): exp
 
 	return contentsRouter;
 };
-
