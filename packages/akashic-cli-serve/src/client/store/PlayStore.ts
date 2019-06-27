@@ -12,18 +12,21 @@ import {
 	ClientInstanceAppearTestbedEvent,
 	ClientInstanceDisappearTestbedEvent
 } from "../../common/types/TestbedEvent";
+import { ContentLocatorData } from "../../common/types/ContentLocatorData";
+import { ClientContentLocator } from "../common/ClientContentLocator";
 import * as Subscriber from "../api/Subscriber";
 import * as ApiClient from "../api/ApiClient";
 import { PlayEntity } from "./PlayEntity";
 
 export interface CreatePlayParameterObject {
-	contentUrl: string;
-	clientContentUrl?: string;
+	contentLocator: ContentLocatorData;
 	parent?: PlayEntity;
 }
 
 export interface CreateStandalonePlayParameterObject {
-	contentUrl: string;
+	contentLocator: ClientContentLocator;
+
+	// TODO xnv create が playId を引数にとるのはおかしい。sessionId の管理は Play から切り離す。
 	playId: string;
 	parent?: PlayEntity;
 }
@@ -57,8 +60,12 @@ export class PlayStore {
 		return this._initializationWaiter;
 	}
 
+	playsList(): PlayEntity[] {
+		return Object.keys(this.plays).map(playId => this.plays[playId]);
+	}
+
 	async createPlay(param: CreatePlayParameterObject): Promise<PlayEntity> {
-		const playInfo = await ApiClient.createPlay(param.contentUrl, param.clientContentUrl);
+		const playInfo = await ApiClient.createPlay(param.contentLocator);
 		const playId = playInfo.data.playId;
 
 		// ApiClient.createPlay() に対する onPlayCreate 通知が先行していれば、この時点で PlayEntity が生成済みになっている
@@ -82,8 +89,7 @@ export class PlayStore {
 
 		const play = new PlayEntity({
 			playId,
-			contentUrl: param.contentUrl,
-			clientContentUrl: "dummy",
+			contentLocatorData: param.contentLocator,
 			parent: param.parent
 		});
 		this.plays[playId] = play;

@@ -10,6 +10,7 @@ import {
 	SandboxConfigApiResponse,
 	OptionsApiResponse
 } from "../../common/types/ApiResponse";
+import {ContentLocatorData} from "../../common/types/ContentLocatorData";
 import {GameConfiguration} from "../../common/types/GameConfiguration";
 import * as ApiRequest from "./ApiRequest";
 
@@ -17,8 +18,8 @@ export const getPlays = async(): Promise<PlayGetAllApiResponse> => {
 	return await ApiRequest.get<PlayGetAllApiResponse>("/api/plays");
 };
 
-export const createPlay = async(contentUrl: string, clientContentUrl?: string): Promise<PlayPostApiResponse> => {
-	return await ApiRequest.post<PlayPostApiResponse>("/api/plays", {contentUrl, clientContentUrl});
+export const createPlay = async(contentLocator: ContentLocatorData): Promise<PlayPostApiResponse> => {
+	return await ApiRequest.post<PlayPostApiResponse>("/api/plays", { contentLocator });
 };
 
 export const suspendPlay = async(playId: string): Promise<PlayDeleteApiResponse> => {

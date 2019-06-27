@@ -23,7 +23,7 @@ export const get = async<T>(url: string, params?: {[key: string]: string}): Prom
 	return await response.json();
 };
 
-export const post = async<T>(url: string, params?: {[key: string]: string}): Promise<T> => {
+export const post = async<T>(url: string, params?: {[key: string]: any}): Promise<T> => {
 	const method = "POST";
 	const body = JSON.stringify(params);
 	const headers = {

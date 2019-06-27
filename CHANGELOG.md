@@ -1,5 +1,41 @@
 # CHANGELOG
 
+## 1.7.0 (2019-06-24)
+
+#### Breaking Change
+* `akashic-cli-serve`
+  * [#102](https://github.com/akashic-games/akashic-cli/pull/102) Enable "use strict" and Add Notification component ([@yu-ogi](https://github.com/yu-ogi))
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#102](https://github.com/akashic-games/akashic-cli/pull/102) Enable "use strict" and Add Notification component ([@yu-ogi](https://github.com/yu-ogi))
+
+#### Other Change
+* Other
+  * [#104](https://github.com/akashic-games/akashic-cli/pull/104) majorバージョンアップをrenovateの対象外にする対応 ([@dera-](https://github.com/dera-))
+  * [#103](https://github.com/akashic-games/akashic-cli/pull/103) Configure Renovate ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-serve`
+  * [#100](https://github.com/akashic-games/akashic-cli/pull/100) refactor: introduce ContentLocator ([@xnv](https://github.com/xnv))
+
+#### Committers: 3
+- [@dera-](https://github.com/dera-)
+- [@yu-ogi](https://github.com/yu-ogi)
+- xnv ([@xnv](https://github.com/xnv))
+
+## 1.6.9 (2019-06-20)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#96](https://github.com/akashic-games/akashic-cli/pull/96) akashic-cli-initのjavascriptテンプレートの.eslintrc.jsonの修正 ([@dera-](https://github.com/dera-))
+
+#### Other Change
+* `akashic-cli-commons`, `akashic-cli-config`
+  * [#91](https://github.com/akashic-games/akashic-cli/pull/91) akashic-cli-commonsとakashic-cli-configのテストフレームワークをjestに変更 ([@dera-](https://github.com/dera-))
+
+#### Committers: 2
+- [@dera-](https://github.com/dera-)
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.6.8 (2019-06-11)
 
 #### Enhancement
