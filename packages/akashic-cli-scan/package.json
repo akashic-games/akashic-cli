@@ -44,7 +44,7 @@
     "commander": "^2.16.0",
     "fs-readdir-recursive": "1.1.0",
     "image-size": "~0.7.0",
-    "musicmetadata": "2.0.0",
+    "musicmetadata": "2.0.5",
     "thumbcoil": "~1.2.0"
   },
   "publishConfig": {
