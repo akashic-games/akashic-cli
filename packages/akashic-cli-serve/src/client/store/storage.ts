@@ -33,7 +33,7 @@ function choose<T>(a: T | null | undefined, b: T | null | undefined, c: T): T {
 }
 
 function getQueryValue(queryValue: string | string[]): string {
-	return queryValue as string;
+	return queryValue as string; // TODO クエリの値が配列の場合の対応を考える
 }
 
 export class Storage {
