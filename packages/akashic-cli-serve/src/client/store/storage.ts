@@ -65,19 +65,19 @@ export class Storage {
 			}
 		}
 
-		const playerId =  choose(qp.playerId, s.playerId, ("" + Date.now())); // TODO 名前も含めサーバに問い合わせる？
+		const playerId =  choose(getQueryValue(qp.playerId), s.playerId, ("" + Date.now())); // TODO 名前も含めサーバに問い合わせる？
 		this.put({
 			playerId,
-			playerName: choose(qp.playerName, s.playerName, ("player" + playerId)),
+			playerName: choose(getQueryValue(qp.playerName), s.playerName, ("player" + playerId)),
 			showsDevtools: choose(asBool(getQueryValue(qp.showsDevtools)), s.showsDevtools, false),
 			devtoolsHeight: choose(asNumber(getQueryValue(qp.devtoolsHeight)), s.devtoolsHeight, 200),
-			activeDevtool: choose(qp.activeDevtool, s.activeDevtool, "Instances"),
+			activeDevtool: choose(getQueryValue(qp.activeDevtool), s.activeDevtool, "Instances"),
 			showsEventList: choose(asBool(getQueryValue(qp.showsEventList)), s.showsEventList, true),
 			eventListWidth: choose(asNumber(getQueryValue(qp.eventListWidth)), s.eventListWidth, 150),
-			eventEditContent: choose(qp.eventEditContent, s.eventEditContent, ""),
-			selectedArgumentName: choose(qp.selectedArgumentName, s.selectedArgumentName, null),
+			eventEditContent: choose(getQueryValue(qp.eventEditContent), s.eventEditContent, ""),
+			selectedArgumentName: choose(getQueryValue(qp.selectedArgumentName), s.selectedArgumentName, null),
 			instanceArgumentListWidth: choose(asNumber(getQueryValue(qp.instanceArgumentListWidth)), s.instanceArgumentListWidth, 150),
-			instanceArgumentEditContent: choose(qp.instanceArgumentEditContent, s.instanceArgumentEditContent, ""),
+			instanceArgumentEditContent: choose(getQueryValue(qp.instanceArgumentEditContent), s.instanceArgumentEditContent, ""),
 			joinsAutomatically: choose(asBool(getQueryValue(qp.joinsAutomatically)), s.joinsAutomatically, false)
 		});
 	}
