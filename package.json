@@ -28,10 +28,10 @@
   },
   "devDependencies": {
     "@akashic/remark-preset-lint": "~0.1.1",
-    "lerna": "3.13.1",
+    "lerna": "3.15.0",
     "lerna-changelog": "0.8.2",
     "remark-cli": "6.0.1",
-    "semver": "5.6.0"
+    "semver": "5.7.0"
   },
   "repository": {
     "type": "git",
