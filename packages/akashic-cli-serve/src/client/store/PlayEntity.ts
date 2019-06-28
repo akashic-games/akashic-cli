@@ -76,7 +76,11 @@ export class PlayEntity {
 		this.isActivePausing = !!param.durationState && param.durationState.isPaused;
 		this.duration = param.durationState ? param.durationState.duration : 0;
 		this.clientInstances = param.clientInstances || [];
-		this.joinedPlayerTable = observable.map((param.joinedPlayers || []).map(p => [p.id, p]));
+		const joinedPlayerMap: {[id: string]: Player} = {};
+		param.joinedPlayers.forEach(p => {
+			joinedPlayerMap[p.id] = p;
+		});
+		this.joinedPlayerTable = observable.map(joinedPlayerMap);
 		this.status = "preparing";
 		this.localInstances = [];
 		this.serverInstances = !param.runners ? [] : param.runners.map(desc => new ServerInstanceEntity({ runnerId: desc.runnerId, play: this }));
