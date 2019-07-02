@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 1.7.1 (2019-06-28)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#110](https://github.com/akashic-games/akashic-cli/pull/110) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@2.1.19、engineFiles@1.1.9) ([@xnv](https://github.com/xnv))
+* `akashic-cli-export-zip`
+  * [#109](https://github.com/akashic-games/akashic-cli/pull/109) export-htmlでatsumaruオプション実行時もgame.jsonにexport-zip実行時の情報が出力されるようにする ([@dera-](https://github.com/dera-))
+
+#### Committers: 2
+- [@dera-](https://github.com/dera-)
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.7.0 (2019-06-24)
 
 #### Breaking Change

@@ -20,6 +20,20 @@ export interface ExportZipParameterObject {
 	exportInfo?: cmn.ExportZipInfo;
 }
 
+function _createExportInfo(param: ExportZipParameterObject): cmn.ExportZipInfo {
+	return {
+		version: JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "package.json"), "utf8")).version,
+		option: {
+			force: !!param.force,
+			strip: !!param.strip,
+			minify: !!param.minify,
+			bundle: !!param.bundle,
+			babel: !!param.babel,
+			omitEmptyJs: !!param.omitEmptyJs
+		}
+	};
+}
+
 export function _completeExportZipParameterObject(param: ExportZipParameterObject): ExportZipParameterObject {
 	return {
 		bundle: !!param.bundle,
@@ -32,7 +46,7 @@ export function _completeExportZipParameterObject(param: ExportZipParameterObjec
 		logger: param.logger || new cmn.ConsoleLogger(),
 		hashLength: param.hashLength,
 		omitEmptyJs: param.omitEmptyJs,
-		exportInfo: param.exportInfo
+		exportInfo: param.exportInfo || _createExportInfo(param)
 	};
 }
 

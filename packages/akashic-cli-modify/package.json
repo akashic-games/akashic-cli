@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-modify",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "description": "A module to update game.json parameters",
   "main": "lib/index.js",
   "scripts": {
@@ -25,7 +25,7 @@
   "devDependencies": {
     "@types/jasmine": "2.8.16",
     "@types/mock-fs": "3.6.30",
-    "@types/node": "10.12.5",
+    "@types/node": "10.12.30",
     "istanbul": "0.4.5",
     "jasmine": "3.3.1",
     "jasmine-reporters": "2.0.8",
@@ -37,7 +37,7 @@
   },
   "typings": "lib/index.d.ts",
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.2.23",
+    "@akashic/akashic-cli-commons": "0.2.24",
     "commander": "^2.16.0"
   },
   "publishConfig": {
