@@ -15,8 +15,9 @@ if (! /^patch|minor|major$/.test(target)) {
 	process.exit(1);
 }
 
-// 更新するモジュールが無ければChangelog更新処理を行わず終了する
-if (parseInt(execSync(`${path.join(__dirname, "..", "node_modules", ".bin", "lerna")} changed | wc -l`).toString(), 10) === 0) {
+const lernaPath = path.join(__dirname, "..", "node_modules", ".bin", "lerna");
+// 更新するモジュールが無ければChangelog更新処理を行わず終了する(ただし強制publishの場合は例外とする)
+if (process.env.PUBLISH_MODE !== "force" && parseInt(execSync(`${lernaPath} changed | wc -l`).toString(), 10) === 0) {
 	console.error("No modules to update version.");
 	process.exit(1);
 }
@@ -28,13 +29,19 @@ if (process.env.GITHUB_AUTH == null) {
 	process.exit(1);
 }
 
-// 全akashic-cli-xxxに依存するakashic-cliモジュールの次のバージョン番号を取得
-const packageJson = require(path.join(__dirname, "..", "packages", "akashic-cli", "package.json"));
-const nextVersion = semver.inc(packageJson["version"], target);
-
-// 現在のCHANGELOGに次バージョンのログを追加
-const currentChangeLog = fs.readFileSync(path.join(__dirname, "..", "CHANGELOG.md")).toString();
-const addedLog =
-	execSync(`${path.join(__dirname, "..", "node_modules", ".bin", "lerna-changelog")} --next-version ${nextVersion}`).toString();
-const nextChangeLog = currentChangeLog.replace("# CHANGELOG\n\n", "# CHANGELOG\n" + addedLog + "\n");
-fs.writeFileSync(path.join(__dirname, "..", "CHANGELOG.md"), nextChangeLog);
+try {
+	// 現在のCHANGELOGに次バージョンのログを追加
+	console.log("start to update changelog");
+	// 全akashic-cli-xxxに依存するakashic-cliモジュールの次のバージョン番号を取得
+	const packageJson = require(path.join(__dirname, "..", "packages", "akashic-cli", "package.json"));
+	const nextVersion = semver.inc(packageJson["version"], target);
+	// 現在のCHANGELOGに次バージョンのログを追加
+	const lernaChangeLogPath = path.join(__dirname, "..", "node_modules", ".bin", "lerna-changelog");
+	const addedLog = execSync(`${lernaChangeLogPath} --next-version ${nextVersion}`).toString();
+	const currentChangeLog = fs.readFileSync(path.join(__dirname, "..", "CHANGELOG.md")).toString();
+	const nextChangeLog = currentChangeLog.replace("# CHANGELOG\n\n", "# CHANGELOG\n" + addedLog + "\n");
+	fs.writeFileSync(path.join(__dirname, "..", "CHANGELOG.md"), nextChangeLog);
+} catch (e) {
+	console.error(e);
+	process.exit(1);
+}
