@@ -77,9 +77,11 @@ export class PlayEntity {
 		this.duration = param.durationState ? param.durationState.duration : 0;
 		this.clientInstances = param.clientInstances || [];
 		const joinedPlayerMap: {[id: string]: Player} = {};
-		param.joinedPlayers.forEach(p => {
-			joinedPlayerMap[p.id] = p;
-		});
+		if (param.joinedPlayers) {
+			param.joinedPlayers.forEach(p => {
+				joinedPlayerMap[p.id] = p;
+			});
+		}
 		this.joinedPlayerTable = observable.map(joinedPlayerMap);
 		this.status = "preparing";
 		this.localInstances = [];
