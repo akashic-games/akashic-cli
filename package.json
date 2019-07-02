@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "@akashic/remark-preset-lint": "~0.1.1",
-    "cross-env": "~5.2.0",
+    "cross-env": "5.2.0",
     "lerna": "3.15.0",
     "lerna-changelog": "0.8.2",
     "remark-cli": "6.0.1",
