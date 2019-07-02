@@ -27,7 +27,7 @@ export class ContentStore {
 		const loc = ClientContentLocator.instantiate(locData);
 		const url = loc.asAbsoluteUrl();
 		if (this.contents.get(url))
-			this.contents.get(url);
+			return this.contents.get(url);
 		const content = new ContentEntity({ contentLocatorData: loc });
 		this.contents.set(url, content);
 		return content;
