@@ -1,5 +1,21 @@
 # CHANGELOG
 
+## 1.7.2 (2019-07-02)
+
+#### Other Change
+* [#94](https://github.com/akashic-games/akashic-cli/pull/94) 何も変更を加えずにpublishするnpm-scriptを追加 ([@dera-](https://github.com/dera-))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#106](https://github.com/akashic-games/akashic-cli/pull/106) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Republish
+* [#111](https://github.com/akashic-games/akashic-cli/pull/111) Republish ([@xnv](https://github.com/xnv))
+
+#### Committers: 2
+- [@dera-](https://github.com/dera-)
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.7.1 (2019-06-28)
 
 #### Enhancement
