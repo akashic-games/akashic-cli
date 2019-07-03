@@ -8,8 +8,7 @@ const assert = require("assert");
 const execSync = require("child_process").execSync;
 
 const tmpDir = os.tmpdir();
-const dirName = "test-akashic-cli_" + Date.now();
-const targetDir = path.join(tmpDir, dirName);
+const targetDir = fs.mkdtempSync(`${path.join(tmpDir, "test-akashic-cli_")}`);
 
 // テスト用に作成されたディレクトリを消してからテストを終了する。
 process.on("exit", function() {
