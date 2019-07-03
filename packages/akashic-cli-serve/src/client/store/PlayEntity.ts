@@ -76,10 +76,12 @@ export class PlayEntity {
 		this.isActivePausing = !!param.durationState && param.durationState.isPaused;
 		this.duration = param.durationState ? param.durationState.duration : 0;
 		this.clientInstances = param.clientInstances || [];
-		this.joinedPlayerTable = observable.map((param.joinedPlayers || []).map(p => [p.id, p]));
+		this.joinedPlayerTable = observable.map((param.joinedPlayers || []).map(p => [p.id, p] as [string, Player]));
 		this.status = "preparing";
 		this.localInstances = [];
-		this.serverInstances = !param.runners ? [] : param.runners.map(desc => new ServerInstanceEntity({ runnerId: desc.runnerId, play: this }));
+		this.serverInstances = !param.runners ? [] : param.runners.map(desc => {
+			return new ServerInstanceEntity({ runnerId: desc.runnerId, play: this });
+		});
 		this.onTeardown = new Trigger();
 		this.contentLocator = new ClientContentLocator(param.contentLocatorData);
 		this._timeKeeper = new TimeKeeper();
