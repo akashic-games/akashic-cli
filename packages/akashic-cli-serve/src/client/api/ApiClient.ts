@@ -7,6 +7,7 @@ import {
 	RunnerDeleteApiResponse,
 	RunnerPostApiResponse,
 	RunnerPatchApiResponse,
+	ContentsGetApiResponse,
 	SandboxConfigApiResponse,
 	OptionsApiResponse
 } from "../../common/types/ApiResponse";
@@ -70,10 +71,15 @@ export const resumeRunner = async(runnerId: string): Promise<RunnerPatchApiRespo
 	return await ApiRequest.patch<RunnerPatchApiResponse>(`/api/runners/${runnerId}`, {status: "running"});
 };
 
+export const getContents = async(): Promise<ContentsGetApiResponse> => {
+	return await ApiRequest.get<ContentsGetApiResponse>(`/contents/`);
+};
+
 export const getGameConfiguration = async(contentId: number): Promise<GameConfiguration> => {
 	return await ApiRequest.get<GameConfiguration>(`/contents/${contentId}/content/game.json`);
 };
 
+// TODO 使わないなら削除。コンテンツ更新時の再取得に利用するなら残す
 export const getSandboxConfig = async(contentId: number): Promise<SandboxConfigApiResponse> => {
 	return await ApiRequest.get<SandboxConfigApiResponse>(`/contents/${contentId}/sandbox-config`);
 };

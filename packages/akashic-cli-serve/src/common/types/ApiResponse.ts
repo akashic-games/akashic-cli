@@ -3,6 +3,7 @@ import {SandboxConfig} from "./SandboxConfig";
 import {ClientInstanceDescription, RunnerDescription} from "./TestbedEvent";
 import {Player} from "./Player";
 import {ContentLocatorData} from "./ContentLocatorData";
+import {ContentDesc} from "./ContentDesc";
 
 export interface ApiResponse<T> {
 	meta: {
@@ -50,6 +51,8 @@ export interface RunnerPatchApiResponseData {
 	status: "running" | "paused";
 }
 
+export type ContentsGetApiResponseData = ContentDesc[];
+
 export interface SandboxConfigApiResponseData extends SandboxConfig {
 }
 
@@ -66,5 +69,6 @@ export type PlayTokenPostApiResponse = ApiResponse<PlayTokenPostApiResponseData>
 export type RunnerPostApiResponse = ApiResponse<RunnerPostApiResponseData>;
 export type RunnerDeleteApiResponse = ApiResponse<RunnerDeleteApiResponseData>;
 export type RunnerPatchApiResponse = ApiResponse<RunnerPatchApiResponseData>;
+export type ContentsGetApiResponse = ApiResponse<ContentsGetApiResponseData>;
 export type SandboxConfigApiResponse = ApiResponse<SandboxConfigApiResponseData>;
 export type OptionsApiResponse = ApiResponse<OptionsApiResponseData>;
