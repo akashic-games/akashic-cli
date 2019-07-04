@@ -11,6 +11,7 @@
     "publish:patch": "node build/updateChangelog.js patch && npm run commit-changelog && lerna publish patch --yes",
     "publish:minor": "node build/updateChangelog.js minor && npm run commit-changelog && lerna publish minor --yes",
     "publish:major": "node build/updateChangelog.js major && npm run commit-changelog && lerna publish major --yes",
+    "publish:force-patch-all": "node build/prepareRepublish.js && cross-env PUBLISH_MODE=force node build/updateChangelog.js patch && npm run commit-changelog && lerna publish patch --force-publish=* --yes",
     "publish:prerelease": "lerna publish prerelease --dist-tag next --yes",
     "commit-changelog": "git add ./CHANGELOG.md && git commit -m 'Update Changelog'"
   },
@@ -23,15 +24,18 @@
       "enhancement": "Enhancement",
       "bug": "Bug Fix",
       "documentation": "Documentation",
-      "other": "Other Change"
+      "other": "Other Change",
+      "dependencies": "Update Dependencies",
+      "republish": "Republish"
     }
   },
   "devDependencies": {
     "@akashic/remark-preset-lint": "~0.1.1",
-    "lerna": "^3.13.1",
-    "lerna-changelog": "^0.8.2",
-    "remark-cli": "~6.0.1",
-    "semver": "^5.6.0"
+    "cross-env": "5.2.0",
+    "lerna": "3.15.0",
+    "lerna-changelog": "0.8.2",
+    "remark-cli": "6.0.1",
+    "semver": "5.7.0"
   },
   "repository": {
     "type": "git",
