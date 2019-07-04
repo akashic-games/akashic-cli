@@ -11,7 +11,7 @@ export class ContentStore {
 
 	constructor() {
 		this.contents = new ObservableMap<string, ContentEntity>();
-		this._defaultContent = null!;
+		this._defaultContent = null;
 		this._initializationWaiter = this._initialize();
 	}
 
