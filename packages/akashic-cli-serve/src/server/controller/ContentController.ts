@@ -1,9 +1,25 @@
+import * as path from "path";
 import * as express from "express";
+import { ContentsGetApiResponseData } from "../../common/types/ApiResponse";
 import * as EngineConfig from "../domain/EngineConfig";
-import {serverGlobalConfig} from "../common/ServerGlobalConfig";
-import {responseSuccess} from "../common/ApiResponse";
-import {OptionsApiResponseData} from "../../common/types/ApiResponse";
-import {NotFoundError} from "../common/ApiError";
+import { serverGlobalConfig } from "../common/ServerGlobalConfig";
+import { responseSuccess } from "../common/ApiResponse";
+import { NotFoundError } from "../common/ApiError";
+import { dynamicRequire } from "../domain/dynamicRequire";
+
+export const createHandlerToGetContents = (targetDirs: string[]): express.RequestHandler => {
+	return (req, res, next) => {
+		try {
+			const contents = targetDirs.map((targetDir, i) => ({
+				contentLocatorData: { contentId: "" + i },
+				sandboxConfig: dynamicRequire(path.resolve(targetDir, "sandbox.config.js")) || {}
+			}));
+			responseSuccess<ContentsGetApiResponseData>(res, 200, contents);
+		} catch (e) {
+			next(e);
+		}
+	};
+};
 
 export const createHandlerToGetEngineConfig = (dirPaths: string[], isRaw: boolean): express.RequestHandler => {
 	return (req, res, next) => {
@@ -29,13 +45,3 @@ export const createHandlerToGetEngineConfig = (dirPaths: string[], isRaw: boolea
 	};
 };
 
-export const handleToGetStartupOptions = (req: express.Request, res: express.Response, next: Function): void => {
-	try {
-		responseSuccess<OptionsApiResponseData>(res, 200, {
-			autoStart: serverGlobalConfig.autoStart,
-			verbose: serverGlobalConfig.verbose
-		});
-	} catch (e) {
-		next(e);
-	}
-};

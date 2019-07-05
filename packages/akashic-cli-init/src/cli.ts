@@ -49,5 +49,11 @@ commander
 
 export function run(argv: string[]): void {
 	commander.parse(argv);
-	cli(commander);
+	cli({
+		cwd: commander.cwd,
+		quiet: commander.quiet,
+		type: commander.type,
+		list: commander.list,
+		force: commander.force
+	});
 }

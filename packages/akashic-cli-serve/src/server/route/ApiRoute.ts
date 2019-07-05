@@ -17,8 +17,7 @@ import {
 import { PlayStore } from "../domain/PlayStore";
 import { RunnerStore } from "../domain/RunnerStore";
 import { SocketIOAMFlowManager } from "../domain/SocketIOAMFlowManager";
-import { createHandlerToGetSandboxConfig } from "../controller/SandboxConfigController";
-import {handleToGetStartupOptions} from "../controller/ConfigController";
+import { handleToGetStartupOptions } from "../controller/StartupOptionsController";
 
 export interface ApiRouterParameterObject {
 	playStore: PlayStore;
