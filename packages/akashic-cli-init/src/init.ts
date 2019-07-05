@@ -17,7 +17,7 @@ export function promiseInit(param: InitParameterObject): Promise<void> {
 		.then(() => readTemplateFile(param))
 		.then((template) => { templateConfig = template; })
 		.then(() => copyTemplate.copyTemplate(templateConfig, param))
-		.then(confPath => updateConfigurationFile(confPath, param.logger))
+		.then(confPath => updateConfigurationFile(confPath, param.logger, param.skipAsk))
 		.then(() => showTemplateMessage(templateConfig, param))
 		.then(() => param.logger.info("Done!"));
 }

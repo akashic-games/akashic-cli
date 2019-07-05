@@ -11,11 +11,12 @@ interface CommandParameterObject {
 	type?: string;
 	list?: boolean;
 	force?: boolean;
+	yes?: boolean;
 }
 
 function cli(param: CommandParameterObject): void {
 	var logger = new ConsoleLogger({ quiet: param.quiet });
-	var initParam = { cwd: param.cwd, type: param.type, logger: logger, forceCopy: param.force };
+	var initParam = { cwd: param.cwd, type: param.type, logger: logger, forceCopy: param.force, skipAsk: param.yes };
 	{
 		Promise.resolve()
 			.then(() => {
@@ -43,7 +44,8 @@ commander
 	.option("-r, --registry <regname>", "Template registery to search template")
 	.option("-t, --type <type>", "Type of template")
 	.option("-l, --list", "Display available template list")
-	.option("-f, --force", "If files to be copied already exist, overwrite them");
+	.option("-f, --force", "If files to be copied already exist, overwrite them")
+	.option("-y, --yes", "Initialize without user input");
 
 export function run(argv: string[]): void {
 	commander.parse(argv);
