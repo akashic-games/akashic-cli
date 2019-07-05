@@ -27,7 +27,8 @@ export class Store {
 
 	constructor() {
 		const query = queryString.parse(window.location.search);
-		this.contentLocator = new ClientContentLocator({ contentId: (query.id != null) ? query.id : "0" }); // TODO xnv bootstrapから渡す方が自然では？
+		// TODO xnv bootstrapから渡す方が自然では？
+		this.contentLocator = new ClientContentLocator({ contentId: (query.id != null) ? query.id as string : "0" });
 		this.contentStore = new ContentStore();
 		this.playStore = new PlayStore({ contentStore: this.contentStore });
 		this.toolBarUiStore = new ToolBarUiStore();
