@@ -30,7 +30,7 @@
   },
   "typings": "lib/index.d.ts",
   "dependencies": {
-    "browserify": "16.2.3",
+    "browserify": "16.3.0",
     "eslint": "~5.16.0",
     "fs-extra": "3.0.1",
     "fs-readdir-recursive": "0.1.2",
