@@ -1,5 +1,25 @@
 # CHANGELOG
 
+## 1.7.3 (2019-07-08)
+
+#### Enhancement
+* `akashic-cli-init`, `akashic-cli-serve`
+  * [#101](https://github.com/akashic-games/akashic-cli/pull/101) akashic-cli-initにユーザー入力をスキップするオプションを追加+publish後に動作確認するためのスクリプトを作成 ([@dera-](https://github.com/dera-))
+* `akashic-cli-serve`
+  * [#108](https://github.com/akashic-games/akashic-cli/pull/108) Introduce ContentStore ([@xnv](https://github.com/xnv))
+
+#### Other Change
+* `akashic-cli-init`, `akashic-cli-serve`
+  * [#101](https://github.com/akashic-games/akashic-cli/pull/101) akashic-cli-initにユーザー入力をスキップするオプションを追加+publish後に動作確認するためのスクリプトを作成 ([@dera-](https://github.com/dera-))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#107](https://github.com/akashic-games/akashic-cli/pull/107) Update all dependencies (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- [@dera-](https://github.com/dera-)
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.7.2 (2019-07-02)
 
 #### Other Change
