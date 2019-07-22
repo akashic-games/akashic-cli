@@ -6,6 +6,8 @@ export class ExternalPluginOperator {
 			name: "coe",
 			onload: (_game: agv.GameLike, _dataBus: any, gameContent: agv.GameContent) => {
 				gameContent.onExternalPluginRegister.fire("coe");
+				gameContent.onExternalPluginRegister.fire("nico");
+				gameContent.onExternalPluginRegister.fire("send");
 			}
 		});
 	}

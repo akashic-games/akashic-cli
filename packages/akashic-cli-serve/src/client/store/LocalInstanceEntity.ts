@@ -9,6 +9,8 @@ import {CoePluginEntity, CreateCoeLocalInstanceParameterObject} from "./CoePlugi
 import {GameInstanceEntity} from "./GameInstanceEntity";
 import {ExecutionMode} from "./ExecutionMode";
 import {ContentEntity} from "./ContentEntity";
+import {SendPluginEntity} from "./SendPluginEntity";
+import {NicoPluginEntity} from "./NicoPluginEntity";
 
 const toAgvExecutionMode = (() => {
 	const executionModeTable = {
@@ -48,6 +50,8 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 
 	readonly play: PlayEntity;
 	readonly coePlugin: CoePluginEntity;
+	readonly sendPlugin: SendPluginEntity;
+	readonly nicoPlugin: NicoPluginEntity;
 	readonly content: ContentEntity;
 
 	private _timeKeeper: TimeKeeper;
@@ -95,10 +99,17 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 				onLocalInstanceCreate: params.coeHandler.onLocalInstanceCreate,
 				onLocalInstanceDelete: params.coeHandler.onLocalInstanceDelete
 			});
-			this._agvGameContent.onExternalPluginRegister.addOnce((name: string) => {
-				if (name !== "coe") return;
+			this._agvGameContent.onExternalPluginRegister.add((name: string) => {
 				const game = this._agvGameContent.getGame();
-				this.coePlugin.bootstrap(game, this._agvGameContent);
+				if (name === "coe") {
+					this.coePlugin.bootstrap(game, this._agvGameContent);
+				} else if (name === "nico") {
+					game.external.nico = new NicoPluginEntity();
+				} else if (name === "send") {
+					game.external.send = (message: any) => {
+						console.log("game.external.send: ", message);
+					}
+				}
 			});
 		}
 	}
