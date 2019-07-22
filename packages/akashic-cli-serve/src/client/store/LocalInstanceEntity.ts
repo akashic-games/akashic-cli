@@ -108,7 +108,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 				} else if (name === "send") {
 					game.external.send = (message: any) => {
 						console.log("game.external.send: ", message);
-					}
+					};
 				}
 			});
 		}

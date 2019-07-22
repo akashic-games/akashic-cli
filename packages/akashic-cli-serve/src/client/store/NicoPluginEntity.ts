@@ -39,7 +39,7 @@ export class NicoPluginEntity {
 		};
 		this.requestPremiumUpgrade = () => {};
 		this.requestGetApplicationStatus = (_application: any, callback: (err: any, data?: any) => void) => {
-			callback(null, {isAvailable: true})
+			callback(null, {isAvailable: true});
 		};
 		this.getFollowStatus = (callback: (err: any, data?: any) => void) => {
 			callback(null, {isFollowing: true});
