@@ -3,14 +3,11 @@ export interface SendMessageEventLike {
 }
 
 export class SendPluginEntity {
+	send: (message: SendMessageEventLike) => void;
 
-	async bootstrap(game: agv.GameLike, _gameContent: agv.GameContent): Promise<void> {
-		console.log("send bootstrap");
-		game.external.send = this.send;
+	constructor() {
+		this.send = (message: SendMessageEventLike) => {
+			console.log("game.external.send: ", message);
+		}
 	}
-
-	send = (message: SendMessageEventLike) => {
-		console.log("game.external.send: ", message);
-	}
-
 }

@@ -18,7 +18,7 @@ export class NicoPluginEntity {
 	constructor() {
 		this.camera = {
 			exists: (callback: (exists: boolean) => void) => {
-				callback(false);
+				window.setTimeout(() => {callback(false);}, 0);
 			}
 		};
 		this.share = {
