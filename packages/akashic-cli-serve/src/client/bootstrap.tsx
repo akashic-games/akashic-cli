@@ -15,14 +15,15 @@ const operator = new Operator({ store, gameViewManager });
 
 window.addEventListener("load", async () => {
 	try {
-		await operator.bootstrap();
+		await operator.assertInitialized();
+		ReactDOM.render(
+			<App store={store} operator={operator} gameViewManager={gameViewManager} />,
+			document.getElementById("container")
+		);
+		operator.bootstrap();
 	} catch (e) {
 		console.error(e);
 	}
-	ReactDOM.render(
-		<App store={store} operator={operator} gameViewManager={gameViewManager} />,
-		document.getElementById("container")
-	);
 });
 
 (window as any).__testbed = { gameViewManager, store, operator };

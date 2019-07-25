@@ -6,7 +6,7 @@ module.exports = {
 	target: "node",
 	entry: ["whatwg-fetch", "./src/client/bootstrap.tsx"],
 	output: {
-		path: path.resolve(__dirname, "../../www/js"),
+		path: path.resolve(__dirname, "../../www/public/js"),
 		filename: "index.js"
 	},
 	devtool: "source-map",

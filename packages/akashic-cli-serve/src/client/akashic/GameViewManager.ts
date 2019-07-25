@@ -35,7 +35,9 @@ export class GameViewManager {
 			container: this.rootElement,
 			width: params.width || 0,
 			height: params.height || 0,
-			sharedObject: params.sharedObject
+			sharedObject: params.sharedObject,
+			untrustedFrameUrl: "/internal/untrusted_loader/loader_local.html",
+			trustedChildOrigin: /.*/
 		});
 	}
 

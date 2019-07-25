@@ -4,6 +4,7 @@ import {ClientInstanceDescription, RunnerDescription} from "./TestbedEvent";
 import {Player} from "./Player";
 import {ContentLocatorData} from "./ContentLocatorData";
 import {ContentDesc} from "./ContentDesc";
+import {AppOptions} from "./AppOptions";
 
 export interface ApiResponse<T> {
 	meta: {
@@ -56,10 +57,7 @@ export type ContentsGetApiResponseData = ContentDesc[];
 export interface SandboxConfigApiResponseData extends SandboxConfig {
 }
 
-export interface OptionsApiResponseData {
-	autoStart: boolean;
-	verbose: boolean;
-}
+export type OptionsApiResponseData = AppOptions;
 
 export type PlayGetAllApiResponse = ApiResponse<PlayApiResponseData[]>;
 export type PlayPostApiResponse = ApiResponse<PlayApiResponseData>;

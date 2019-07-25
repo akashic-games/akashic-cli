@@ -40,9 +40,12 @@ export class Operator {
 		Subscriber.onBroadcast.add(this._handleBroadcast);
 	}
 
+	assertInitialized(): Promise<unknown> {
+		return this.store.assertInitialized();
+	}
+
 	async bootstrap(contentLocator?: ClientContentLocator): Promise<void> {
 		const store = this.store;
-		await store.assertInitialized();
 		let play: PlayEntity = null;
 		if (contentLocator) {
 			play = await this._createServerLoop(contentLocator);
@@ -72,8 +75,7 @@ export class Operator {
 
 		store.setCurrentPlay(play);
 
-		const optionsResult = await ApiClient.getOptions();
-		if (optionsResult.data.autoStart) {
+		if (store.appOptions.autoStart) {
 			await this.startContent();
 		}
 	}
