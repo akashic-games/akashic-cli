@@ -8,6 +8,6 @@ export class SendPluginEntity {
 	constructor() {
 		this.send = (message: SendMessageEventLike) => {
 			console.log("game.external.send: ", message);
-		}
+		};
 	}
 }
