@@ -20,7 +20,7 @@
                 };
                 t[o][0].call(l.exports, function(e) {
                     var n = t[o][1][e];
-                    return s(n ? n : e);
+                    return s(n || e);
                 }, l, l.exports, e, t, n, r);
             }
             return n[o].exports;
@@ -30,7 +30,7 @@
     }({
         1: [ function(require, module, exports) {
             "use strict";
-            var g = require("@akashic/akashic-engine"), validator = require("./validator"), KEY_PREFIX = "akst:", GameStorage = function() {
+            var g = require("@akashic/akashic-engine"), validator = require("./validator"), GameStorage = function() {
                 function GameStorage(localStorage, metaData) {
                     this._localStorage = localStorage, this._metaData = metaData;
                 }
@@ -73,8 +73,8 @@
                 }, GameStorage.prototype.load = function(readKeys) {
                     var _this = this, allValues = {};
                     Object.keys(this._localStorage).forEach(function(key) {
-                        if (0 === key.indexOf(KEY_PREFIX)) {
-                            var k = key.slice(KEY_PREFIX.length);
+                        if (0 === key.indexOf("akst:")) {
+                            var k = key.slice("akst:".length);
                             allValues[k] = _this.getValue(k);
                         }
                     });
@@ -114,7 +114,7 @@
                 }, GameStorage.prototype.clearAll = function() {
                     var _this = this;
                     Object.keys(this._localStorage).forEach(function(key) {
-                        0 === key.indexOf(KEY_PREFIX) && _this._localStorage.removeItem(key);
+                        0 === key.indexOf("akst:") && _this._localStorage.removeItem(key);
                     });
                 }, GameStorage.prototype.createValuesValue = function(current, value, option) {
                     if (!value) return null;
@@ -190,13 +190,11 @@
                     return value && null != value.tag ? result.tag = value.tag : current && null != current.tag && (result.tag = current.tag), 
                     result;
                 }, GameStorage.prototype.setValue = function(key, value) {
-                    this._localStorage.setItem("" + KEY_PREFIX + key, JSON.stringify(value));
+                    this._localStorage.setItem("akst:" + key, JSON.stringify(value));
                 }, GameStorage.prototype.getValue = function(key) {
-                    var v = JSON.parse(this._localStorage.getItem("" + KEY_PREFIX + key));
-                    return v;
+                    return JSON.parse(this._localStorage.getItem("akst:" + key));
                 }, GameStorage.prototype.storageKeyToStringKey = function(key) {
-                    var region = key.region || "", gameId = null != key.gameId ? String(key.gameId) : "", userId = null != key.userId ? String(key.userId) : "", regionKey = key.regionKey || "";
-                    return region + "/" + gameId + "/" + userId + "/" + regionKey;
+                    return (key.region || "") + "/" + (null != key.gameId ? String(key.gameId) : "") + "/" + (null != key.userId ? String(key.userId) : "") + "/" + (key.regionKey || "");
                 }, GameStorage.prototype.stringKeyToStorageKey = function(key) {
                     var s = key.split("/"), res = {
                         region: Number(s[0]),
@@ -208,7 +206,7 @@
                     if ("*" === userId && (userId = "[0-9]+"), -1 !== key.regionKey.indexOf("*")) {
                         var layerKeys = key.regionKey.split(".");
                         layerKeys.forEach(function(layerKey, index) {
-                            regionKey += "*" === layerKey ? "[.a-z0-9]*" : -1 !== layerKey.indexOf("*") ? layerKey.replace("*", "[a-z0-9]*") : layerKey, 
+                            "*" === layerKey ? regionKey += "[.a-z0-9]*" : -1 !== layerKey.indexOf("*") ? regionKey += layerKey.replace("*", "[a-z0-9]*") : regionKey += layerKey, 
                             index !== layerKeys.length - 1 && (regionKey += ".");
                         });
                     } else regionKey = key.regionKey.replace(".", ".");
@@ -217,10 +215,10 @@
                     values.sort(function(a, b) {
                         var va = a.data, vb = b.data;
                         if (order === g.StorageOrder.Asc) {
-                            if (vb > va) return -1;
+                            if (va < vb) return -1;
                             if (va > vb) return 1;
                         } else if (order === g.StorageOrder.Desc) {
-                            if (vb > va) return 1;
+                            if (va < vb) return 1;
                             if (va > vb) return -1;
                         }
                         return 0;
@@ -229,10 +227,10 @@
                     values.sort(function(a, b) {
                         var ka = a.storageKey.regionKey, kb = b.storageKey.regionKey;
                         if (order === g.StorageOrder.Asc) {
-                            if (kb > ka) return -1;
+                            if (ka < kb) return -1;
                             if (ka > kb) return 1;
                         } else if (order === g.StorageOrder.Desc) {
-                            if (kb > ka) return 1;
+                            if (ka < kb) return 1;
                             if (ka > kb) return -1;
                         }
                         return 0;
@@ -297,11 +295,11 @@
  */
                 function compare(a, b) {
                     if (a === b) return 0;
-                    for (var x = a.length, y = b.length, i = 0, len = Math.min(x, y); len > i; ++i) if (a[i] !== b[i]) {
+                    for (var x = a.length, y = b.length, i = 0, len = Math.min(x, y); i < len; ++i) if (a[i] !== b[i]) {
                         x = a[i], y = b[i];
                         break;
                     }
-                    return y > x ? -1 : x > y ? 1 : 0;
+                    return x < y ? -1 : y < x ? 1 : 0;
                 }
                 function isBuffer(b) {
                     return global.Buffer && "function" == typeof global.Buffer.isBuffer ? global.Buffer.isBuffer(b) : !(null == b || !b._isBuffer);
@@ -310,7 +308,7 @@
                     return Object.prototype.toString.call(obj);
                 }
                 function isView(arrbuf) {
-                    return isBuffer(arrbuf) ? !1 : "function" != typeof global.ArrayBuffer ? !1 : "function" == typeof ArrayBuffer.isView ? ArrayBuffer.isView(arrbuf) : arrbuf ? arrbuf instanceof DataView ? !0 : arrbuf.buffer && arrbuf.buffer instanceof ArrayBuffer ? !0 : !1 : !1;
+                    return !isBuffer(arrbuf) && ("function" == typeof global.ArrayBuffer && ("function" == typeof ArrayBuffer.isView ? ArrayBuffer.isView(arrbuf) : !!arrbuf && (arrbuf instanceof DataView || !!(arrbuf.buffer && arrbuf.buffer instanceof ArrayBuffer))));
                 }
                 function getName(func) {
                     if (util.isFunction(func)) {
@@ -324,8 +322,8 @@
                 }
                 function inspect(something) {
                     if (functionsHaveNames || !util.isFunction(something)) return util.inspect(something);
-                    var rawname = getName(something), name = rawname ? ": " + rawname : "";
-                    return "[Function" + name + "]";
+                    var rawname = getName(something);
+                    return "[Function" + (rawname ? ": " + rawname : "") + "]";
                 }
                 function getMessage(self) {
                     return truncate(inspect(self.actual), 128) + " " + self.operator + " " + truncate(inspect(self.expected), 128);
@@ -355,7 +353,7 @@
                             expected: []
                         };
                         var actualIndex = memos.actual.indexOf(actual);
-                        return -1 !== actualIndex && actualIndex === memos.expected.indexOf(expected) ? !0 : (memos.actual.push(actual), 
+                        return -1 !== actualIndex && actualIndex === memos.expected.indexOf(expected) || (memos.actual.push(actual), 
                         memos.expected.push(expected), objEquiv(actual, expected, strict, memos));
                     }
                     return strict ? actual === expected : actual == expected;
@@ -385,7 +383,7 @@
                     try {
                         if (actual instanceof expected) return !0;
                     } catch (e) {}
-                    return Error.isPrototypeOf(expected) ? !1 : expected.call({}, actual) === !0;
+                    return !Error.isPrototypeOf(expected) && !0 === expected.call({}, actual);
                 }
                 function _tryBlock(block) {
                     var error;
@@ -458,7 +456,7 @@
                     actual !== expected && fail(actual, expected, message, "===", assert.strictEqual);
                 }, assert.notStrictEqual = function(actual, expected, message) {
                     actual === expected && fail(actual, expected, message, "!==", assert.notStrictEqual);
-                }, assert["throws"] = function(block, error, message) {
+                }, assert.throws = function(block, error, message) {
                     _throws(!0, block, error, message);
                 }, assert.doesNotThrow = function(block, error, message) {
                     _throws(!1, block, error, message);
@@ -628,12 +626,11 @@
                     }
                     var base = "", array = !1, braces = [ "{", "}" ];
                     if (isArray(value) && (array = !0, braces = [ "[", "]" ]), isFunction(value)) {
-                        var n = value.name ? ": " + value.name : "";
-                        base = " [Function" + n + "]";
+                        base = " [Function" + (value.name ? ": " + value.name : "") + "]";
                     }
                     if (isRegExp(value) && (base = " " + RegExp.prototype.toString.call(value)), isDate(value) && (base = " " + Date.prototype.toUTCString.call(value)), 
                     isError(value) && (base = " " + formatError(value)), 0 === keys.length && (!array || 0 == value.length)) return braces[0] + base + braces[1];
-                    if (0 > recurseTimes) return isRegExp(value) ? ctx.stylize(RegExp.prototype.toString.call(value), "regexp") : ctx.stylize("[Object]", "special");
+                    if (recurseTimes < 0) return isRegExp(value) ? ctx.stylize(RegExp.prototype.toString.call(value), "regexp") : ctx.stylize("[Object]", "special");
                     ctx.seen.push(value);
                     var output;
                     return output = array ? formatArray(ctx, value, recurseTimes, visibleKeys, keys) : keys.map(function(key) {
@@ -652,7 +649,7 @@
                     return "[" + Error.prototype.toString.call(value) + "]";
                 }
                 function formatArray(ctx, value, recurseTimes, visibleKeys, keys) {
-                    for (var output = [], i = 0, l = value.length; l > i; ++i) hasOwnProperty(value, String(i)) ? output.push(formatProperty(ctx, value, recurseTimes, visibleKeys, String(i), !0)) : output.push("");
+                    for (var output = [], i = 0, l = value.length; i < l; ++i) hasOwnProperty(value, String(i)) ? output.push(formatProperty(ctx, value, recurseTimes, visibleKeys, String(i), !0)) : output.push("");
                     return keys.forEach(function(key) {
                         key.match(/^\d+$/) || output.push(formatProperty(ctx, value, recurseTimes, visibleKeys, key, !0));
                     }), output;
@@ -676,10 +673,10 @@
                     return name + ": " + str;
                 }
                 function reduceToSingleString(output, base, braces) {
-                    var numLinesEst = 0, length = output.reduce(function(prev, cur) {
+                    var numLinesEst = 0;
+                    return output.reduce(function(prev, cur) {
                         return numLinesEst++, cur.indexOf("\n") >= 0 && numLinesEst++, prev + cur.replace(/\u001b\[\d\d?m/g, "").length + 1;
-                    }, 0);
-                    return length > 60 ? braces[0] + ("" === base ? "" : base + "\n ") + " " + output.join(",\n  ") + " " + braces[1] : braces[0] + base + " " + output.join(", ") + " " + braces[1];
+                    }, 0) > 60 ? braces[0] + ("" === base ? "" : base + "\n ") + " " + output.join(",\n  ") + " " + braces[1] : braces[0] + base + " " + output.join(", ") + " " + braces[1];
                 }
                 function isArray(ar) {
                     return Array.isArray(ar);
@@ -721,13 +718,13 @@
                     return "function" == typeof arg;
                 }
                 function isPrimitive(arg) {
-                    return null === arg || "boolean" == typeof arg || "number" == typeof arg || "string" == typeof arg || "symbol" == typeof arg || "undefined" == typeof arg;
+                    return null === arg || "boolean" == typeof arg || "number" == typeof arg || "string" == typeof arg || "symbol" == typeof arg || void 0 === arg;
                 }
                 function objectToString(o) {
                     return Object.prototype.toString.call(o);
                 }
                 function pad(n) {
-                    return 10 > n ? "0" + n.toString(10) : n.toString(10);
+                    return n < 10 ? "0" + n.toString(10) : n.toString(10);
                 }
                 function timestamp() {
                     var d = new Date(), time = [ pad(d.getHours()), pad(d.getMinutes()), pad(d.getSeconds()) ].join(":");
@@ -782,7 +779,7 @@
                           default:
                             return x;
                         }
-                    }), x = args[i]; len > i; x = args[++i]) str += isNull(x) || !isObject(x) ? " " + x : " " + inspect(x);
+                    }), x = args[i]; i < len; x = args[++i]) isNull(x) || !isObject(x) ? str += " " + x : str += " " + inspect(x);
                     return str;
                 }, exports.deprecate = function(fn, msg) {
                     function deprecated() {
@@ -795,7 +792,7 @@
                     if (isUndefined(global.process)) return function() {
                         return exports.deprecate(fn, msg).apply(this, arguments);
                     };
-                    if (process.noDeprecation === !0) return fn;
+                    if (!0 === process.noDeprecation) return fn;
                     var warned = !1;
                     return deprecated;
                 };
@@ -827,9 +824,9 @@
                 }, inspect.styles = {
                     special: "cyan",
                     number: "yellow",
-                    "boolean": "yellow",
+                    boolean: "yellow",
                     undefined: "grey",
-                    "null": "bold",
+                    null: "bold",
                     string: "green",
                     date: "magenta",
                     regexp: "red"
