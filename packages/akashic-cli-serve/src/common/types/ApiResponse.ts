@@ -59,6 +59,7 @@ export interface SandboxConfigApiResponseData extends SandboxConfig {
 export interface OptionsApiResponseData {
 	autoStart: boolean;
 	verbose: boolean;
+	targetService: boolean;
 }
 
 export type PlayGetAllApiResponse = ApiResponse<PlayApiResponseData[]>;

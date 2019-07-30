@@ -74,7 +74,10 @@ export class Operator {
 
 		const optionsResult = await ApiClient.getOptions();
 		if (optionsResult.data.autoStart) {
-			await this.startContent();
+			await this.startContent({
+				joinsSelf: !!optionsResult.data.targetService,
+				instanceArgument: undefined
+			});
 		}
 	}
 

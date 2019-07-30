@@ -39,6 +39,7 @@ akashic-cli-serve [<options>] [<path>]
 |`--no-auto-start`|`-A`|ブラウザを開いた時、コンテンツを自動開始しないようにします。|N/A|
 |`--help`|`-h`|ヘルプを表示して終了します。|N/A|
 |`--version`|`-V`|バージョンを表示して終了します。|N/A|
+|`--target-service`|`-T`|ブラウザを開いた時、配信者として開始します。|N/A|
 
 [ae]: https://akashic-games.github.io/
 
@@ -65,7 +66,7 @@ npm run storybook
 内部モジュール更新: 実行には `optionalDependencies` が解決できる必要があります。
 
 ```
-node run copy:agv
+npm run copy:agv
 ```
 
 ## ライセンス

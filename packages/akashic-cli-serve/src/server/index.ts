@@ -38,6 +38,7 @@ export function run(argv: any): void {
 		.option("-H, --hostname <hostname>", `The host name of the server. default: ${serverGlobalConfig.hostname}`)
 		.option("-v, --verbose", `Display detailed information on console.`)
 		.option("-A, --no-auto-start", `Wait automatic startup of contents.`)
+		.option("-T, --target-service", `Start as a broadcaster.`)
 		.parse(argv);
 
 	if (commander.port && isNaN(commander.port)) {
@@ -87,6 +88,10 @@ export function run(argv: any): void {
 
 	if (commander.autoStart != null) {
 		serverGlobalConfig.autoStart = commander.autoStart;
+	}
+
+	if (commander.targetService) {
+		serverGlobalConfig.targetService = true;
 	}
 
 	const targetDirs: string[] = commander.args.length > 0 ? commander.args : [process.cwd()];
