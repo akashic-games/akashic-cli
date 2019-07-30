@@ -24,7 +24,7 @@
     "akashic-cli-serve": "./bin/run"
   },
   "dependencies": {
-    "@akashic/headless-driver": "0.4.10",
+    "@akashic/headless-driver": "0.4.11",
     "@akashic/trigger": "0.1.5",
     "chalk": "2.4.2",
     "chokidar": "2.1.6",
@@ -34,8 +34,8 @@
     "socket.io": "2.2.0"
   },
   "devDependencies": {
-    "@akashic/amflow": "0.2.2",
-    "@akashic/playlog": "1.3.1",
+    "@akashic/amflow": "0.3.1",
+    "@akashic/playlog": "1.3.2",
     "@storybook/addon-actions": "4.1.18",
     "@storybook/addon-knobs": "4.1.18",
     "@storybook/react": "4.1.18",
@@ -75,7 +75,7 @@
     "whatwg-fetch": "3.0.0"
   },
   "optionalDependencies": {
-    "@akashic/akashic-gameview-web": "0.10.23"
+    "@akashic/akashic-gameview-web": "0.10.24"
   },
   "files": [
     "package.json",
