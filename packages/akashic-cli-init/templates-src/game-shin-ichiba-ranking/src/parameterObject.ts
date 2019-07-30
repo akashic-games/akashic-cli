@@ -3,9 +3,7 @@ export interface GameMainParameterObject extends g.GameMainParameterObject {
 		mode?: string;
 		totalTimeLimit?: number;
 		difficulty?: number;
-		randomSeed?: number;
-		playThreshold?: number;
-		clearThreshold?: number;
+		random?: g.RandomGenerator;
 	};
 	isAtsumaru: boolean;
 }
