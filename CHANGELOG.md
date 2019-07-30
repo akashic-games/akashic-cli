@@ -1,5 +1,23 @@
 # CHANGELOG
 
+## 1.7.5 (2019-07-30)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#120](https://github.com/akashic-games/akashic-cli/pull/120) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@2.1.21、engineFiles@1.1.9) ([@xnv](https://github.com/xnv))
+
+#### Bug Fix
+* `akashic-cli-serve`
+  * [#121](https://github.com/akashic-games/akashic-cli/pull/121) akashic-cli-serveに依存しているamflowとplaylogのバージョンを前のものに戻す対応 ([@dera-](https://github.com/dera-))
+
+#### Update Dependencies
+* `akashic-cli-serve`
+  * [#121](https://github.com/akashic-games/akashic-cli/pull/121) akashic-cli-serveに依存しているamflowとplaylogのバージョンを前のものに戻す対応 ([@dera-](https://github.com/dera-))
+
+#### Committers: 2
+- [@dera-](https://github.com/dera-)
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.7.4 (2019-07-30)
 
 #### Enhancement
