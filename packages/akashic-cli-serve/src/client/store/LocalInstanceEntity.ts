@@ -9,7 +9,6 @@ import {CoePluginEntity, CreateCoeLocalInstanceParameterObject} from "./CoePlugi
 import {GameInstanceEntity} from "./GameInstanceEntity";
 import {ExecutionMode} from "./ExecutionMode";
 import {ContentEntity} from "./ContentEntity";
-import {SendPluginEntity} from "./SendPluginEntity";
 import {NicoPluginEntity} from "./NicoPluginEntity";
 
 const toAgvExecutionMode = (() => {
@@ -50,7 +49,6 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 
 	readonly play: PlayEntity;
 	readonly coePlugin: CoePluginEntity;
-	readonly sendPlugin: SendPluginEntity;
 	readonly nicoPlugin: NicoPluginEntity;
 	readonly content: ContentEntity;
 
