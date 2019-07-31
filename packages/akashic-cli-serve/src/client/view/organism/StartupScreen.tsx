@@ -12,6 +12,7 @@ export interface StartupScreenProps {
 	argumentEditContent: string;
 	selectedArgumentName: string | null;
 	joinsAutomatically: boolean;
+	isJoinDisabled: boolean;
 	onSelectArgument: (argName: string | null) => void;
 	onArgumentsEditContentChanged: (content: string) => void;
 	onChangeJoinsAutomatically: (join: boolean) => void;
@@ -29,6 +30,7 @@ export class StartupScreen extends React.Component<StartupScreenProps, {}> {
 			argumentEditContent,
 			argumentsTable,
 			joinsAutomatically,
+			isJoinDisabled,
 			onSelectArgument,
 			onChangeJoinsAutomatically,
 			onClickStart
@@ -100,6 +102,7 @@ export class StartupScreen extends React.Component<StartupScreenProps, {}> {
 						<input
 							type="checkbox"
 							checked={joinsAutomatically}
+							disabled={isJoinDisabled}
 							onChange={() => onChangeJoinsAutomatically(!joinsAutomatically)}/>
 						Send JoinEvent for the player
 					</label>

@@ -73,12 +73,17 @@ export class Operator {
 		store.setCurrentPlay(play);
 
 		const optionsResult = await ApiClient.getOptions();
+		let isJoin = play.joinedPlayerTable.size === 0 && !!optionsResult.data.targetService;
 		if (optionsResult.data.autoStart) {
 			await this.startContent({
-				joinsSelf: !!optionsResult.data.targetService,
+				joinsSelf: isJoin,
 				instanceArgument: undefined
 			});
+		} else {
+			isJoin = isJoin || play.joinedPlayerTable.has(this.store.player.id);
+			this.ui.setJoinsAutomatically(isJoin);
 		}
+		this.ui.setJoinDisabled(!!optionsResult.data.targetService);
 	}
 
 	startContent = async (params?: StartContentParameterObject): Promise<void> => {

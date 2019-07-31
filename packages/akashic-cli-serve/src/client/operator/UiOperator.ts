@@ -72,6 +72,14 @@ export class UiOperator {
 		this.store.startupScreenUiStore.setJoinsAutomatically(join);
 	}
 
+	setJoinDisabled = (disabled: boolean): void => {
+		this.store.startupScreenUiStore.setJoinDisabled(disabled);
+	}
+
+	getJoinDisabled = (): boolean => {
+		return this.store.startupScreenUiStore.isJoinDisabled;
+	}
+
 	showNotification = (type: NotificationType, title: string, name: string, message: string): void => {
 		this.store.notificationUiStore.setActive(type, title, name, message);
 	}

@@ -65,10 +65,11 @@ export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}>
 
 	private _makePlayerControlProps = (): PlayerControlPropsData => {
 		const { localInstance, operator } = this.props;
+		const joinDisabled = operator.ui.getJoinDisabled();
 		return {
 			selfId: localInstance.player.id,
 			isJoined: localInstance.isJoined,
-			isJoinEnabled: (localInstance.executionMode === "passive"),
+			isJoinEnabled: (localInstance.executionMode === "passive" && !joinDisabled),
 			onClickJoinLeave: operator.play.toggleJoinLeaveSelf
 		};
 	}

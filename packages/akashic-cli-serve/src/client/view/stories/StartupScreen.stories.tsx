@@ -7,6 +7,7 @@ import { StartupScreen } from "../organism/StartupScreen";
 
 const store = observable({
 	joinsAutomatically: false,
+	isJoinDisabled: false,
 	width: 280,
 	editContent: `{ "foo": 100 }`,
 	argumentsTable: {
@@ -39,6 +40,7 @@ const TestWithBehaviour = observer(() => (
 			selectedArgumentName={store.selectedArgumentName}
 			argumentEditContent={store.editContent}
 			joinsAutomatically={store.joinsAutomatically}
+			isJoinDisabled={store.isJoinDisabled}
 			onSelectArgument={name => ((store.selectedArgumentName = name), (store.editContent = (store.argumentsTable[name] || "")))}
 			onArgumentsEditContentChanged={v => (store.editContent = v)}
 			onChangeJoinsAutomatically={v => (store.joinsAutomatically = v)}
@@ -61,6 +63,7 @@ storiesOf("m-StartupScreen", module)
 				selectedArgumentName={"Stop"}
 				argumentEditContent={`["test"]`}
 				joinsAutomatically={false}
+				isJoinDisabled={false}
 				onListResize={action("argument-list-resize")}
 				onSelectArgument={action("select")}
 				onArgumentsEditContentChanged={action("edit-content")}
@@ -114,6 +117,7 @@ storiesOf("m-StartupScreen", module)
 				selectedArgumentName={"Test 9"}
 				argumentEditContent={`["test"]`}
 				joinsAutomatically={false}
+				isJoinDisabled={false}
 				onListResize={action("argument-list-resize")}
 				onSelectArgument={action("select")}
 				onArgumentsEditContentChanged={action("edit-content")}
