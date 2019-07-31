@@ -25,6 +25,7 @@ export interface CreateLocalInstanceParameterObject {
 	playlogServerUrl?: string;
 	argument?: any;
 	initialEvents?: playlog.Event[];
+	proxyAudio?: boolean;
 	coeHandler?: {
 		onLocalInstanceCreate: (params: CreateCoeLocalInstanceParameterObject) => Promise<LocalInstanceEntity>;
 		onLocalInstanceDelete: (playId: string) => Promise<void>;
