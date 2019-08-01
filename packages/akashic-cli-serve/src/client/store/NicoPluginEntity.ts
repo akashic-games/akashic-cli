@@ -23,7 +23,7 @@ export class NicoPluginEntity {
 		};
 		this.share = {
 			isSupported: (callback: (supported: boolean) => void) => {
-				callback(false);
+				window.setTimeout(() => { callback(false); }, 0);
 			},
 			requestShare: (message: string) => {
 				console.log("game.external.nico.share.requestShare: ", message);
@@ -31,11 +31,13 @@ export class NicoPluginEntity {
 		};
 
 		this.getAccount = (callback: (err: any, data?: any) => void) => {
-			callback(null, {
-				id: "252525",
-				name: "nicouser",
-				premium: null
-			});
+			window.setTimeout(() => {
+				callback(null, {
+					id: "252525",
+					name: "nicouser",
+					premium: null
+				});
+			}, 0);
 		};
 		this.requestPremiumUpgrade = () => {};
 		this.requestGetApplicationStatus = (_application: any, callback: (err: any, data?: any) => void) => {
