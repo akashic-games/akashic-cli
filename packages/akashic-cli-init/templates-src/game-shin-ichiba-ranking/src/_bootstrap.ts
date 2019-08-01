@@ -13,6 +13,8 @@ export = (originalParam: g.GameMainParameterObject) => {
 	param.sessionParameter = {};
 	// コンテンツが動作している環境がRPGアツマール上かどうか
 	param.isAtsumaru = typeof window !== "undefined" && typeof window.RPGAtsumaru !== "undefined";
+	// 乱数生成器
+	param.random = g.game.random;
 
 	const limitTickToWait = 3; // セッションパラメーターが来るまでに待つtick数
 
@@ -24,9 +26,7 @@ export = (originalParam: g.GameMainParameterObject) => {
 		if (msg.data && msg.data.type === "start" && msg.data.parameters) {
 			param.sessionParameter = msg.data.parameters; // sessionParameterフィールドを追加
 			if (msg.data.parameters.randomSeed) {
-				param.sessionParameter.random = new g.XorshiftRandomGenerator(msg.data.parameters.randomSeed);
-			} else {
-				param.sessionParameter.random = g.game.random;
+				param.random = new g.XorshiftRandomGenerator(msg.data.parameters.randomSeed);
 			}
 			g.game.popScene();
 			main(param);

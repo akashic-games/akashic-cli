@@ -3,9 +3,9 @@ export interface GameMainParameterObject extends g.GameMainParameterObject {
 		mode?: string;
 		totalTimeLimit?: number;
 		difficulty?: number;
-		random?: g.RandomGenerator;
 	};
 	isAtsumaru: boolean;
+	random: g.RandomGenerator;
 }
 
 export interface RPGAtsumaruWindow {
