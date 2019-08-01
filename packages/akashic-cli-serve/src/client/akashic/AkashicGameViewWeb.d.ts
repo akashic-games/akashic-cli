@@ -57,6 +57,8 @@ declare module agv {
 	}
 	interface GameExternalPluginsLike {
 		coe?: any;
+		send?: any;
+		nico?: any;
 	}
 	interface GameLike {
 		external: GameExternalPluginsLike;
