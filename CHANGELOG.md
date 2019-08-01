@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.7.7 (2019-08-01)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#118](https://github.com/akashic-games/akashic-cli/pull/118) add game.external.send nico to serve ([@kamakiri01](https://github.com/kamakiri01))
+
+#### Committers: 1
+- kamakiri_ys ([@kamakiri01](https://github.com/kamakiri01))
+
 ## 1.7.6 (2019-07-31)
 
 #### Enhancement
