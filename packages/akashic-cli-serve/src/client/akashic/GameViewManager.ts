@@ -12,8 +12,9 @@ export interface GameViewManagerParameterObject {
 	width?: number;
 	height?: number;
 	sharedObject?: agv.GameViewSharedObject;
+	untrustedFrameUrl?: string;
+	trustedChildOrigin?: RegExp;
 }
-
 export interface CreateGameContentParameterObject {
 	contentLocator: ClientContentLocator;
 	player: {
@@ -36,8 +37,8 @@ export class GameViewManager {
 			width: params.width || 0,
 			height: params.height || 0,
 			sharedObject: params.sharedObject,
-			untrustedFrameUrl: "/internal/untrusted_loader/loader_local.html",
-			trustedChildOrigin: /.*/
+			untrustedFrameUrl: params.untrustedFrameUrl || "/internal/untrusted_loader/loader_local.html",
+			trustedChildOrigin: params.trustedChildOrigin || /.*/
 		});
 	}
 
