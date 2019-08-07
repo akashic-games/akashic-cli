@@ -5,6 +5,8 @@ export interface ServerGlobalConfig {
 	useGivenPort: boolean; // サーバー起動時にportオプションが指定されたかどうか
 	autoStart: boolean;
 	verbose: boolean;
+	untrusted: boolean; // 簡易対応。究極的にはコンテンツごとに指定されるべき値
+	proxyAudio: boolean;
 }
 
 export const DEFAULT_HOSTNAME = "localhost";
@@ -16,5 +18,7 @@ export const serverGlobalConfig: ServerGlobalConfig = {
 	useGivenHostname: false,
 	useGivenPort: false,
 	autoStart: true,
-	verbose: false
+	verbose: false,
+	untrusted: false,
+	proxyAudio: false
 };

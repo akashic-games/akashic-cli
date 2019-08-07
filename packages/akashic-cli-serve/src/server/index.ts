@@ -13,7 +13,7 @@ import { RunnerStore } from "./domain/RunnerStore";
 import { PlayStore } from "./domain/PlayStore";
 import { SocketIOAMFlowManager } from "./domain/SocketIOAMFlowManager";
 import { serverGlobalConfig } from "./common/ServerGlobalConfig";
-import {createContentsRouter} from "./route/ContentsRoute";
+import { createContentsRouter } from "./route/ContentsRoute";
 
 // 渡されたパラメータを全てstringに変換する
 // chalkを使用する場合、ログ出力時objectの中身を展開してくれないためstringに変換する必要がある
@@ -38,12 +38,17 @@ export function run(argv: any): void {
 		.option("-H, --hostname <hostname>", `The host name of the server. default: ${serverGlobalConfig.hostname}`)
 		.option("-v, --verbose", `Display detailed information on console.`)
 		.option("-A, --no-auto-start", `Wait automatic startup of contents.`)
+		.option("--debug-untrusted", `An internal debug option`)
+		.option("--debug-proxy-audio", `An internal debug option`)
 		.parse(argv);
 
 	if (commander.port && isNaN(commander.port)) {
 		console.error("Invalid --port option: " + commander.port);
 		process.exit(1);
 	}
+
+	serverGlobalConfig.untrusted = !!commander.debugUntrusted;
+	serverGlobalConfig.proxyAudio = !!commander.debugProxyAudio;
 
 	if (commander.hostname) {
 		serverGlobalConfig.hostname = commander.hostname;
@@ -114,7 +119,8 @@ export function run(argv: any): void {
 	app.use(bodyParser.json());
 
 	app.use("^\/$", (req, res, next) => res.redirect("/public/"));
-	app.use("/public/", express.static(path.join(__dirname, "..", "..", "www")));
+	app.use("/public/", express.static(path.join(__dirname, "..", "..", "www", "public")));
+	app.use("/internal/", express.static(path.join(__dirname, "..", "..", "www", "internal")));
 	app.use("/api/", createApiRouter({ playStore, runnerStore, amflowManager, io }));
 	app.use("/contents/", createContentsRouter({ targetDirs }));
 

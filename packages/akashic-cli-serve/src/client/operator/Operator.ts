@@ -40,9 +40,12 @@ export class Operator {
 		Subscriber.onBroadcast.add(this._handleBroadcast);
 	}
 
+	assertInitialized(): Promise<unknown> {
+		return this.store.assertInitialized();
+	}
+
 	async bootstrap(contentLocator?: ClientContentLocator): Promise<void> {
 		const store = this.store;
-		await store.assertInitialized();
 		let play: PlayEntity = null;
 		if (contentLocator) {
 			play = await this._createServerLoop(contentLocator);
@@ -72,8 +75,7 @@ export class Operator {
 
 		store.setCurrentPlay(play);
 
-		const optionsResult = await ApiClient.getOptions();
-		if (optionsResult.data.autoStart) {
+		if (store.appOptions.autoStart) {
 			await this.startContent();
 		}
 	}
@@ -90,6 +92,7 @@ export class Operator {
 			executionMode: "passive",
 			player: store.player,
 			argument: params != null ? params.instanceArgument : undefined,
+			proxyAudio: store.appOptions.proxyAudio,
 			coeHandler: {
 				onLocalInstanceCreate: async params => {
 					// TODO: local === true のみ対応
@@ -114,7 +117,8 @@ export class Operator {
 								debugMode: false
 							}
 						},
-						initialEvents: params.initialEvents
+						initialEvents: params.initialEvents,
+						proxyAudio: store.appOptions.proxyAudio
 					});
 				},
 				onLocalInstanceDelete: async playId => {
