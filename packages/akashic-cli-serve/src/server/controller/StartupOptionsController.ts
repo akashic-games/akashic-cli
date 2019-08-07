@@ -8,7 +8,7 @@ export const handleToGetStartupOptions = (req: express.Request, res: express.Res
 		responseSuccess<OptionsApiResponseData>(res, 200, {
 			autoStart: serverGlobalConfig.autoStart,
 			verbose: serverGlobalConfig.verbose,
-			proxyAudio: serverGlobalConfig.proxyAudio,
+			proxyAudio: serverGlobalConfig.proxyAudio
 		});
 	} catch (e) {
 		next(e);

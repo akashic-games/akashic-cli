@@ -31,29 +31,29 @@ export interface CreateGameContentParameterObject {
 // 将来的にはこれを使って、音を鳴らしつつ再生状況を devtools に表示するようにもしてもいいかもしれない。
 export class LogAudioPdiHandler {
 	loadAudioAsset(param: { id: string, assetPath: string }, handler: (err?: any) => void): void {
-		console.info("AUDIOLOG: loadAudioAsset", param);
+		console.log("AUDIOLOG: loadAudioAsset", param);
 		setTimeout(() => handler(), 0);
 	}
 	unloadAudioAsset(assetId: string): void {
-		console.info("AUDIOLOG: unloadAudioAsset", assetId);
+		console.log("AUDIOLOG: unloadAudioAsset", assetId);
 	}
 	createAudioPlayer(param: unknown): void {
-		console.info("AUDIOLOG: createAudioPlayer", param);
+		console.log("AUDIOLOG: createAudioPlayer", param);
 	}
 	destroyAudioPlayer(audioPlayerId: string): void {
-		console.info("AUDIOLOG: destroyAudioPlayer", audioPlayerId);
+		console.log("AUDIOLOG: destroyAudioPlayer", audioPlayerId);
 	}
 	playAudioPlayer(audioPlayerId: string): void {
-		console.info("AUDIOLOG: playAudioPlayer", audioPlayerId);
+		console.log("AUDIOLOG: playAudioPlayer", audioPlayerId);
 	}
 	stopAudioPlayer(audioPlayerId: string): void {
-		console.info("AUDIOLOG: stopAudioPlayer", audioPlayerId);
+		console.log("AUDIOLOG: stopAudioPlayer", audioPlayerId);
 	}
 	changeAudioVolume(audioPlayerId: string, volume: number): void {
-		console.info("AUDIOLOG: changeAudioVolume", audioPlayerId, volume);
+		console.log("AUDIOLOG: changeAudioVolume", audioPlayerId, volume);
 	}
 	changeAudioPlaybackRate(audioPlayerId: string, rate: number): void {
-		console.info("AUDIOLOG: changeAudioPlaybackRate", audioPlayerId, rate);
+		console.log("AUDIOLOG: changeAudioPlaybackRate", audioPlayerId, rate);
 	}
 }
 
