@@ -29,8 +29,6 @@ export interface CreateGameContentParameterObject {
 // --debug-proxy-audio用の暫定実装。デバッグ用なのでログに出すのみ。
 // 将来的にはこれを使って、音を鳴らしつつ再生状況を devtools に表示するようにもしてもいいかもしれない。
 export class LogAudioPdiHandler {
-	audioPlayerIdCounter: number = 0;
-
 	loadAudioAsset(param: { id: string, assetPath: string }, handler: (err?: any) => void): void {
 		console.info("AUDIOLOG: loadAudioAsset", param);
 		setTimeout(() => handler(), 0);
@@ -38,10 +36,8 @@ export class LogAudioPdiHandler {
 	unloadAudioAsset(assetId: string): void {
 		console.info("AUDIOLOG: unloadAudioAsset", assetId);
 	}
-	createAudioPlayer(assetId: string): string {
-		const ret = "lap" + this.audioPlayerIdCounter++;
-		console.info("AUDIOLOG: createAudioPlayer", assetId, ret);
-		return ret;
+	createAudioPlayer(param: unknown): void {
+		console.info("AUDIOLOG: createAudioPlayer", param);
 	}
 	destroyAudioPlayer(audioPlayerId: string): void {
 		console.info("AUDIOLOG: destroyAudioPlayer", audioPlayerId);
