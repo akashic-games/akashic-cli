@@ -33,6 +33,7 @@ export interface LocalInstanceEntityParameterObject {
 	argument?: any;
 	playToken?: string;
 	playlogServerUrl?: string;
+	proxyAudio?: boolean;
 	coeHandler?: {
 		onLocalInstanceCreate: (params: CreateCoeLocalInstanceParameterObject) => Promise<LocalInstanceEntity>;
 		onLocalInstanceDelete: (playId: string) => Promise<void>;
@@ -89,7 +90,8 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 			},
 			playConfig,
 			gameLoaderCustomizer,
-			argument: params.argument
+			argument: params.argument,
+			proxyAudio: params.proxyAudio
 		});
 		if (params.coeHandler != null) {
 			this.coePlugin = new CoePluginEntity({

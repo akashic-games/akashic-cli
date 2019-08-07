@@ -24,6 +24,37 @@ export interface CreateGameContentParameterObject {
 	playConfig: agv.PlaylogConfig;
 	gameLoaderCustomizer: agv.GameLoaderCustomizer;
 	argument?: any;
+	proxyAudio?: boolean;
+}
+
+// --debug-proxy-audio用の暫定実装。デバッグ用なのでログに出すのみ。
+// 将来的にはこれを使って、音を鳴らしつつ再生状況を devtools に表示するようにもしてもいいかもしれない。
+export class LogAudioPdiHandler {
+	loadAudioAsset(param: { id: string, assetPath: string }, handler: (err?: any) => void): void {
+		console.info("AUDIOLOG: loadAudioAsset", param);
+		setTimeout(() => handler(), 0);
+	}
+	unloadAudioAsset(assetId: string): void {
+		console.info("AUDIOLOG: unloadAudioAsset", assetId);
+	}
+	createAudioPlayer(param: unknown): void {
+		console.info("AUDIOLOG: createAudioPlayer", param);
+	}
+	destroyAudioPlayer(audioPlayerId: string): void {
+		console.info("AUDIOLOG: destroyAudioPlayer", audioPlayerId);
+	}
+	playAudioPlayer(audioPlayerId: string): void {
+		console.info("AUDIOLOG: playAudioPlayer", audioPlayerId);
+	}
+	stopAudioPlayer(audioPlayerId: string): void {
+		console.info("AUDIOLOG: stopAudioPlayer", audioPlayerId);
+	}
+	changeAudioVolume(audioPlayerId: string, volume: number): void {
+		console.info("AUDIOLOG: changeAudioVolume", audioPlayerId, volume);
+	}
+	changeAudioPlaybackRate(audioPlayerId: string, rate: number): void {
+		console.info("AUDIOLOG: changeAudioPlaybackRate", audioPlayerId, rate);
+	}
 }
 
 export class GameViewManager {
@@ -52,7 +83,8 @@ export class GameViewManager {
 			player: param.player,
 			playConfig: param.playConfig,
 			gameLoaderCustomizer: param.gameLoaderCustomizer,
-			argument: param.argument
+			argument: param.argument,
+			audioPdiHandlers: param.proxyAudio ? new LogAudioPdiHandler() : null
 		};
 		// TODO: 複数コンテンツのホスティングに対応されれば削除
 		if (param.gameLoaderCustomizer.createCustomAmflowClient) {
