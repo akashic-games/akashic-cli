@@ -25,7 +25,7 @@ export = (originalParam: g.GameMainParameterObject) => {
 	scene.message.add((msg) => {
 		if (msg.data && msg.data.type === "start" && msg.data.parameters) {
 			param.sessionParameter = msg.data.parameters; // sessionParameterフィールドを追加
-			if (msg.data.parameters.randomSeed) {
+			if (msg.data.parameters.randomSeed != null) {
 				param.random = new g.XorshiftRandomGenerator(msg.data.parameters.randomSeed);
 			}
 			g.game.popScene();
