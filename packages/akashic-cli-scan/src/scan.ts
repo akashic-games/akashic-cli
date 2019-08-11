@@ -1,3 +1,4 @@
+import * as path from "path";
 import * as cmn from "@akashic/akashic-cli-commons";
 import { Configuration } from "./Configuration";
 
@@ -36,11 +37,17 @@ export function _completeScanAssetParameterObject(param: ScanAssetParameterObjec
 
 export function promiseScanAsset(param: ScanAssetParameterObject): Promise<void> {
 	_completeScanAssetParameterObject(param);
-	var restoreDirectory = cmn.Util.chdir(param.cwd);
+	const restoreDirectory = cmn.Util.chdir(param.cwd);
+	const gameJsonPath = path.join(param.cwd, "game.json");
 	return Promise.resolve()
-		.then(() => cmn.ConfigurationFile.read("./game.json", param.logger))
+		.then(() => cmn.ConfigurationFile.read(gameJsonPath, param.logger))
 		.then((content: cmn.GameConfiguration) => {
-			var conf = new Configuration({ content: content, logger: param.logger, basepath: ".", noOmitPackagejson: param.noOmitPackagejson });
+			const conf = new Configuration({
+				content: content,
+				logger: param.logger,
+				basepath: param.cwd,
+				noOmitPackagejson: param.noOmitPackagejson
+			});
 			conf.vacuum();
 			return new Promise<void>((resolve, reject) => {
 				switch (param.target) {
@@ -62,7 +69,7 @@ export function promiseScanAsset(param: ScanAssetParameterObject): Promise<void>
 				}
 				resolve();
 			})
-			.then(() => cmn.ConfigurationFile.write(conf.getContent(), "./game.json", param.logger))
+			.then(() => cmn.ConfigurationFile.write(conf.getContent(), gameJsonPath, param.logger))
 			.then(() => param.logger.info("Done!"));
 		})
 		.then(restoreDirectory)
@@ -117,20 +124,21 @@ export function _completeScanNodeModulesParameterObject(param: ScanNodeModulesPa
 
 export function promiseScanNodeModules(param: ScanNodeModulesParameterObject): Promise<void> {
 	_completeScanNodeModulesParameterObject(param);
-	var restoreDirectory = cmn.Util.chdir(param.cwd);
+	const restoreDirectory = cmn.Util.chdir(param.cwd);
+	const gameJsonPath = path.join(param.cwd, "game.json");
 	return Promise.resolve()
-		.then(() => cmn.ConfigurationFile.read("./game.json", param.logger))
+		.then(() => cmn.ConfigurationFile.read(gameJsonPath, param.logger))
 		.then((content: cmn.GameConfiguration) => {
-			var conf = new Configuration({
+			const conf = new Configuration({
 				content: content,
 				logger: param.logger,
-				basepath: "." ,
+				basepath: param.cwd,
 				debugNpm: param.debugNpm,
 				noOmitPackagejson: !!param.noOmitPackagejson
 			});
 			return Promise.resolve()
 				.then(() => (param.fromEntryPoint ? conf.scanGlobalScriptsFromEntryPoint() : conf.scanGlobalScripts()))
-				.then(() => cmn.ConfigurationFile.write(conf.getContent(), "./game.json", param.logger))
+				.then(() => cmn.ConfigurationFile.write(conf.getContent(), gameJsonPath, param.logger))
 				.then(() => param.logger.info("Done!"));
 		})
 		.then(restoreDirectory, restoreDirectory);

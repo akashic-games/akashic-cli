@@ -8,9 +8,9 @@
     "clean": "shx rm -rf lib && shx rm -rf spec/build",
     "build": "tsc -p ./",
     "lint": "tslint --type-check -c ../tslint.json --project ./tsconfig.json",
-    "test": "npm run test:build && npm run test:jasmine && npm run lint",
+    "test": "npm run test:build && npm run test:jest && npm run lint",
     "test:build": "tsc -p spec/",
-    "test:jasmine": "istanbul cover --report text --report html --colors -i ./lib/main.node.js ./node_modules/jasmine/bin/jasmine.js"
+    "test:jest": "jest"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
@@ -28,10 +28,7 @@
     "@types/mock-fs": "3.6.30",
     "@types/musicmetadata": "2.0.4",
     "@types/node": "6.14.6",
-    "istanbul": "0.4.5",
-    "jasmine": "3.4.0",
-    "jasmine-reporters": "2.3.2",
-    "jasmine-terminal-reporter": "0.9.1",
+    "jest": "~24.8.0",
     "mock-fs": "4.10.1",
     "shx": "0.3.2",
     "tslint": "5.18.0",
