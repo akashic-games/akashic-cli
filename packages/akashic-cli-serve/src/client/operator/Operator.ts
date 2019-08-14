@@ -56,6 +56,14 @@ export class Operator {
 			}
 		}
 		await this.setCurrentPlay(play);
+
+		const plays = store.playStore.playsList();
+		if (contentLocator || plays.length !== 0) {
+			if (play.content.sandboxConfig.autoSendEvents) {
+				this.ui.setEventEditContent(JSON.stringify(play.content.sandboxConfig.events[play.content.sandboxConfig.autoSendEvents]));
+				this.play.sendEditorEvent();
+			}
+		}
 	}
 
 	setCurrentPlay = async (play: PlayEntity): Promise<void> => {
@@ -141,8 +149,8 @@ export class Operator {
 	private async _createServerLoop(contentLocator: ClientContentLocator): Promise<PlayEntity> {
 		const play = await this.store.playStore.createPlay({ contentLocator });
 		const tokenResult = await ApiClient.createPlayToken(play.playId, "", true);  // TODO 空文字列でなくnullを使う
-		play.createServerInstance({ playToken: tokenResult.data.playToken });
-		ApiClient.resumePlayDuration(play.playId);
+		await play.createServerInstance({ playToken: tokenResult.data.playToken });
+		await ApiClient.resumePlayDuration(play.playId);
 		return play;
 	}
 
