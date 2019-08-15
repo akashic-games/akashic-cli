@@ -44,8 +44,10 @@ export class Operator {
 		const store = this.store;
 		await store.assertInitialized();
 		let play: PlayEntity = null;
+		let isCreatedServerLoop = false;
 		if (contentLocator) {
 			play = await this._createServerLoop(contentLocator);
+			isCreatedServerLoop = true;
 		} else {
 			const plays = store.playStore.playsList();
 			if (plays.length > 0) {
@@ -53,17 +55,11 @@ export class Operator {
 			} else {
 				const loc = store.contentStore.defaultContent().locator;
 				play = await this._createServerLoop(loc);
+				isCreatedServerLoop = true;
 			}
 		}
 		await this.setCurrentPlay(play);
-
-		const plays = store.playStore.playsList();
-		if (contentLocator || plays.length !== 0) {
-			if (play.content.sandboxConfig.autoSendEvents) {
-				this.ui.setEventEditContent(JSON.stringify(play.content.sandboxConfig.events[play.content.sandboxConfig.autoSendEvents]));
-				this.play.sendEditorEvent();
-			}
-		}
+		if (isCreatedServerLoop) this.play.sendRegisteredEvent(play.content.sandboxConfig.autoSendEvents);
 	}
 
 	setCurrentPlay = async (play: PlayEntity): Promise<void> => {
