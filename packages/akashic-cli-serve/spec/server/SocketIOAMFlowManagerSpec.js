@@ -109,6 +109,8 @@ describe("SocketIOAMFlowManager", () => {
 					socket.emit("amflow:sendEvent", connId, [0x20, 1, "dummy-player", { data: "foo" }]);
 				});
 
+				await socket.close();
+
 				done();
 			} catch (e) {
 				done.fail(e);
@@ -273,6 +275,9 @@ describe("SocketIOAMFlowManager", () => {
 				await close(amflow1p3);
 				await close(amflow2a);
 				await close(amflow2p);
+
+				await socketA.close();
+				await socketB.close();
 
 				done();
 			} catch (e) {

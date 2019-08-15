@@ -12,7 +12,7 @@
     "build": "npm run build:client && npm run build:server && shx cp ./config/engineFilesVersion.json ./lib/server",
     "build:client": "webpack --config ./src/client/webpack.config.js",
     "build:server": "tsc -p ./src/server",
-    "test": "jest --forceExit && npm run lint",
+    "test": "jest && npm run lint",
     "lint": "npm run lint:client && npm run lint:server",
     "lint:client": "tslint -p ./src/client -c tslint.json 'src/client/**/*.ts*' 'src/common/**/*.ts'",
     "lint:server": "tslint -p ./src/server -c tslint.json 'src/server/**/*.ts'",
