@@ -7,13 +7,15 @@ const ServerConfigMock = require("../helper/SeverConfigMock");
 const SubscreiberMock = require("../helper/SubscriberMock");
 const ApiRequestMock = require("../helper/ApiRequestMock");
 
-describe("SubscriberSpec", function() {
+xdescribe("SubscriberSpec", function() {
 	const host = ServerConfigMock.hostname;
 	const port = ServerConfigMock.port;
 	const contentUrl = `http://${host}:${port}/config/content.raw.json`;
 	var childProcess;
 	var originalTimeout;
+	var subscreiberMock;
 	beforeAll(function(done) {
+		subscreiberMock = new SubscreiberMock.SubscreiberMock();
 		originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
 		jasmine.DEFAULT_TIMEOUT_INTERVAL = 8000; // 一番最初のテストはタイムアウトまで残り2秒の状態で始まるのでタイムアウト時間を3秒延長した
 		childProcess = spawn(
@@ -30,9 +32,11 @@ describe("SubscriberSpec", function() {
 		if (childProcess) {
 			childProcess.kill("SIGKILL");
 		}
-		ServerConfigMock.socket.close();
+		if (subscreiberMock.socket) {
+			subscreiberMock.socket.close();
+		}
 	});
-	xdescribe("playCreate-event", function() {
+	describe("playCreate-event", function() {
 		it("is sent from server, when access to create-play api", function(done) {
 			var apiResponse;
 			var pushedData;
@@ -40,13 +44,13 @@ describe("SubscriberSpec", function() {
 				expect(pushedData.playId).toBe(apiResponse.data.playId);
 				done();
 			};
-			SubscreiberMock.onPlayCreate.addOnce(function(arg) {
+			subscreiberMock.onPlayCreate.addOnce(function(arg) {
 				pushedData = arg;
 				if (apiResponse) {
 					assertOnPlayCreateEvent();
 				}
 			});
-			ApiRequestMock.post(`http://${host}:${port}/api/play`, {contentUrl: contentUrl}).then(function(response) {
+			ApiRequestMock.post(`http://${host}:${port}/api/plays`, {contentUrl: contentUrl}).then(function(response) {
 				apiResponse = response;
 				if (pushedData) {
 					assertOnPlayCreateEvent();
@@ -54,7 +58,7 @@ describe("SubscriberSpec", function() {
 			});
 		});
 	});
-	xdescribe("playStatusChange-event", function () {
+	describe("playStatusChange-event", function () {
 		it("is sent from server, when access to create-play api", function(done) {
 			var apiResponse;
 			var pushedData;
@@ -63,13 +67,13 @@ describe("SubscriberSpec", function() {
 				expect(pushedData.playStatus).toBe("running");
 				done();
 			};
-			SubscreiberMock.onPlayStatusChange.addOnce(function(arg) {
+			subscreiberMock.onPlayStatusChange.addOnce(function(arg) {
 				pushedData = arg;
 				if (apiResponse) {
 					assertOnPlayStatusChangeEvent();
 				}
 			});
-			ApiRequestMock.post(`http://${host}:${port}/api/play`, {contentUrl: contentUrl}).then(function(response) {
+			ApiRequestMock.post(`http://${host}:${port}/api/plays`, {contentUrl: contentUrl}).then(function(response) {
 				apiResponse = response;
 				if (pushedData) {
 					assertOnPlayStatusChangeEvent();
@@ -84,7 +88,7 @@ describe("SubscriberSpec", function() {
 			var assertOnPlayStatusChangeEvent = function() {
 				expect(pushedData.playId).toBe(apiResponse.data.playId);
 				expect(pushedData.playStatus).toBe("suspending");
-				SubscreiberMock.onPlayStatusChange.remove(playStatusChangeHandler);
+				subscreiberMock.onPlayStatusChange.remove(playStatusChangeHandler);
 				done();
 			};
 			playStatusChangeHandler = function(arg) {
@@ -94,9 +98,9 @@ describe("SubscriberSpec", function() {
 					assertOnPlayStatusChangeEvent();
 				}
 			};
-			SubscreiberMock.onPlayStatusChange.add(playStatusChangeHandler);
-			ApiRequestMock.post(`http://${host}:${port}/api/play`, {contentUrl: contentUrl}).then(function(response) {
-				return ApiRequestMock.del(`http://${host}:${port}/api/play/${response.data.playId}`);
+			subscreiberMock.onPlayStatusChange.add(playStatusChangeHandler);
+			ApiRequestMock.post(`http://${host}:${port}/api/plays`, {contentUrl: contentUrl}).then(function(response) {
+				return ApiRequestMock.del(`http://${host}:${port}/api/plays/${response.data.playId}`);
 			}).then(function(response) {
 				apiResponse = response;
 				if (pushedData && pushedCount === 2) { // create-play実行時にもEVENTが実行されてしまうので、呼び出し回数も見るようにした
@@ -105,7 +109,7 @@ describe("SubscriberSpec", function() {
 			});
 		});
 	});
-	xdescribe("runnerCreate-event", function () {
+	describe("runnerCreate-event", function () {
 		it("is sent from server, when access to create-runner api", function(done) {
 			var currentPlayId;
 			var apiResponse;
@@ -115,17 +119,17 @@ describe("SubscriberSpec", function() {
 				expect(pushedData.runnerId).toBe(apiResponse.data.runnerId);
 				done();
 			};
-			SubscreiberMock.onRunnerCreate.addOnce(function(arg) {
+			subscreiberMock.onRunnerCreate.addOnce(function(arg) {
 				pushedData = arg;
 				if (apiResponse) {
 					assertOnRunnerCreateEvent();
 				}
 			});
-			ApiRequestMock.post(`http://${host}:${port}/api/play`, {contentUrl: contentUrl}).then(function(response) {
+			ApiRequestMock.post(`http://${host}:${port}/api/plays`, {contentUrl: contentUrl}).then(function(response) {
 				currentPlayId = response.data.playId;
-				return ApiRequestMock.post(`http://${host}:${port}/api/play/${currentPlayId}/token`, {playerId: "", isActive: "true"});
+				return ApiRequestMock.post(`http://${host}:${port}/api/plays/${currentPlayId}/token`, {playerId: "", isActive: "true"});
 			}).then(function(response) {
-				return ApiRequestMock.post(`http://${host}:${port}/api/runner`, {playId: currentPlayId, isActive: "true", token: response.data.playToken});
+				return ApiRequestMock.post(`http://${host}:${port}/api/runners`, {playId: currentPlayId, isActive: "true", token: response.data.playToken});
 			}).then(function(response) {
 				apiResponse = response;
 				if (pushedData) {
@@ -134,7 +138,7 @@ describe("SubscriberSpec", function() {
 			});
 		});
 	});
-	xdescribe("removeRunner-event", function () {
+	describe("removeRunner-event", function () {
 		it("is sent from server, when access to delete-runner api", function(done) {
 			var currentPlayId;
 			var apiResponse;
@@ -143,7 +147,7 @@ describe("SubscriberSpec", function() {
 				expect(pushedData.runnerId).toBe(apiResponse.data.runnerId);
 				done();
 			};
-			SubscreiberMock.onRunnerRemove.addOnce(function(arg) {
+			subscreiberMock.onRunnerRemove.addOnce(function(arg) {
 				pushedData = arg;
 				if (apiResponse) {
 					assertOnRunnerRemoveEvent();
@@ -151,11 +155,11 @@ describe("SubscriberSpec", function() {
 			});
 			ApiRequestMock.post(`http://${host}:${port}/api/play`, {contentUrl: contentUrl}).then(function(response) {
 				currentPlayId = response.data.playId;
-				return ApiRequestMock.post(`http://${host}:${port}/api/play/${currentPlayId}/token`, {playerId: "", isActive: "true"});
+				return ApiRequestMock.post(`http://${host}:${port}/api/plays/${currentPlayId}/token`, {playerId: "", isActive: "true"});
 			}).then(function(response) {
-				return ApiRequestMock.post(`http://${host}:${port}/api/runner`, {playId: currentPlayId, isActive: "true", token: response.data.playToken});
+				return ApiRequestMock.post(`http://${host}:${port}/api/runners`, {playId: currentPlayId, isActive: "true", token: response.data.playToken});
 			}).then(function(response) {
-				return ApiRequestMock.del(`http://${host}:${port}/api/runner/${response.data.runnerId}`);
+				return ApiRequestMock.del(`http://${host}:${port}/api/runners/${response.data.runnerId}`);
 			}).then(function(response) {
 				apiResponse = response;
 				if (pushedData) {
@@ -164,7 +168,7 @@ describe("SubscriberSpec", function() {
 			});
 		});
 	});
-	xdescribe("clientInstanceAppear-event", function () {
+	describe("clientInstanceAppear-event", function () {
 		it("is sent from server, when send amflow:open-event and amflow:authenticate-event", function(done) {
 			var player = {id: 0, name: "test"};
 			var currentPlayId;
@@ -179,19 +183,19 @@ describe("SubscriberSpec", function() {
 				expect(pushedData.isActive).toBe(false);
 				done();
 			};
-			SubscreiberMock.onClientInstanceAppear.addOnce(function(arg) {
+			subscreiberMock.onClientInstanceAppear.addOnce(function(arg) {
 				pushedData = arg;
 				if (isAppeared) {
 					assertOnClientInstanceAppearEvent();
 				}
 			});
-			ApiRequestMock.post(`http://${host}:${port}/api/play`, {contentUrl: contentUrl}).then(function(response) {
+			ApiRequestMock.post(`http://${host}:${port}/api/plays`, {contentUrl: contentUrl}).then(function(response) {
 				currentPlayId = response.data.playId;
-				return ApiRequestMock.post(`http://${host}:${port}/api/play/${currentPlayId}/token`, {playerId: "", isActive: "true"});
+				return ApiRequestMock.post(`http://${host}:${port}/api/plays/${currentPlayId}/token`, {playerId: "", isActive: "true"});
 			}).then(function(response) {
-				return ApiRequestMock.post(`http://${host}:${port}/api/runner`, {playId: currentPlayId, isActive: "true", token: response.data.playToken});
+				return ApiRequestMock.post(`http://${host}:${port}/api/runners`, {playId: currentPlayId, isActive: "true", token: response.data.playToken});
 			}).then(function() {
-				return ApiRequestMock.post(`http://${host}:${port}/api/play/${currentPlayId}/token`, {playerId: player.id, name: player.name, isActive: "false"});
+				return ApiRequestMock.post(`http://${host}:${port}/api/plays/${currentPlayId}/token`, {playerId: player.id, name: player.name, isActive: "false"});
 			}).then(function(response) {
 				token = response.data.playToken;
 				return new Promise(function(resolve) {
@@ -209,7 +213,7 @@ describe("SubscriberSpec", function() {
 			});
 		});
 	});
-	xdescribe("clientInstanceDisappear-event", function () {
+	describe("clientInstanceDisappear-event", function () {
 		it("is sent from server, when send amflow:open-event and disconnect-evnet", function(done) {
 			var player = {id: 0, name: "test"};
 			var currentPlayId;
@@ -224,19 +228,19 @@ describe("SubscriberSpec", function() {
 				expect(pushedData.isActive).toBe(false);
 				done();
 			};
-			ApiRequestMock.post(`http://${host}:${port}/api/play`, {contentUrl: contentUrl}).then(function(response) {
+			ApiRequestMock.post(`http://${host}:${port}/api/plays`, {contentUrl: contentUrl}).then(function(response) {
 				currentPlayId = response.data.playId;
-				return ApiRequestMock.post(`http://${host}:${port}/api/play/${currentPlayId}/token`, {playerId: "", isActive: "true"});
+				return ApiRequestMock.post(`http://${host}:${port}/api/plays/${currentPlayId}/token`, {playerId: "", isActive: "true"});
 			}).then(function(response) {
-				return ApiRequestMock.post(`http://${host}:${port}/api/runner`, {playId: currentPlayId, isActive: "true", token: response.data.playToken});
+				return ApiRequestMock.post(`http://${host}:${port}/api/runners`, {playId: currentPlayId, isActive: "true", token: response.data.playToken});
 			}).then(function() {
-				return ApiRequestMock.post(`http://${host}:${port}/api/play/${currentPlayId}/token`, {playerId: player.id, name: player.name, isActive: "false"});
+				return ApiRequestMock.post(`http://${host}:${port}/api/plays/${currentPlayId}/token`, {playerId: player.id, name: player.name, isActive: "false"});
 			}).then(function(response) {
 				token = response.data.playToken;
 				return new Promise(function(resolve) {
 					socket.emit("amflow:open", currentPlayId, function() {
 						socket.emit("amflow:authenticate", token, function () {
-							SubscreiberMock.onClientInstanceDisappear.addOnce(function(arg) {
+							subscreiberMock.onClientInstanceDisappear.addOnce(function(arg) {
 								pushedData = arg;
 								if (isDisAppeared) {
 									assertOnClientInstanceDisAppearEvent();
@@ -255,7 +259,7 @@ describe("SubscriberSpec", function() {
 			});
 		});
 	});
-	xdescribe("playerJoin-event", function () {
+	describe("playerJoin-event", function () {
 		it("is sent from server, when send amflow:sendEvent as join-event", function(done) {
 			var player = {id: 0, name: "test"};
 			var currentPlayId;
@@ -268,19 +272,19 @@ describe("SubscriberSpec", function() {
 				expect(pushedData.player).toEqual(player);
 				done();
 			};
-			SubscreiberMock.onPlayerJoin.addOnce(function(arg) {
+			subscreiberMock.onPlayerJoin.addOnce(function(arg) {
 				pushedData = arg;
 				if (isJoined) {
 					assertOnPlayerJoinEvent();
 				}
 			});
-			ApiRequestMock.post(`http://${host}:${port}/api/play`, {contentUrl: contentUrl}).then(function(response) {
+			ApiRequestMock.post(`http://${host}:${port}/api/plays`, {contentUrl: contentUrl}).then(function(response) {
 				currentPlayId = response.data.playId;
-				return ApiRequestMock.post(`http://${host}:${port}/api/play/${currentPlayId}/token`, {playerId: "", isActive: "true"});
+				return ApiRequestMock.post(`http://${host}:${port}/api/plays/${currentPlayId}/token`, {playerId: "", isActive: "true"});
 			}).then(function(response) {
-				return ApiRequestMock.post(`http://${host}:${port}/api/runner`, {playId: currentPlayId, isActive: "true", token: response.data.playToken});
+				return ApiRequestMock.post(`http://${host}:${port}/api/runners`, {playId: currentPlayId, isActive: "true", token: response.data.playToken});
 			}).then(function() {
-				return ApiRequestMock.post(`http://${host}:${port}/api/play/${currentPlayId}/token`, {playerId: player.id, name: player.name, isActive: "false"});
+				return ApiRequestMock.post(`http://${host}:${port}/api/plays/${currentPlayId}/token`, {playerId: player.id, name: player.name, isActive: "false"});
 			}).then(function(response) {
 				token = response.data.playToken;
 				return new Promise(function(resolve) {
@@ -299,7 +303,7 @@ describe("SubscriberSpec", function() {
 			});
 		});
 	});
-	xdescribe("playerLeave-event", function () {
+	describe("playerLeave-event", function () {
 		var firedCount = 0;
 		var playerLeaveParams;
 		var onPlayerLeaveEvent = function(arg) {
@@ -307,14 +311,14 @@ describe("SubscriberSpec", function() {
 			firedCount++;
 		};
 		beforeAll(function() {
-			SubscreiberMock.onPlayerLeave.add(onPlayerLeaveEvent);
+			subscreiberMock.onPlayerLeave.add(onPlayerLeaveEvent);
 		});
 		beforeEach(function() {
 			firedCount = 0;
 			playerLeaveParams = undefined;
 		});
 		afterAll(function() {
-			SubscreiberMock.onPlayerLeave.remove(onPlayerLeaveEvent);
+			subscreiberMock.onPlayerLeave.remove(onPlayerLeaveEvent);
 		});
 		it("is sent from server, when send amflow:sendEvent as leave-event", function(done) {
 			var player = {id: 0, name: "test"};
@@ -328,19 +332,19 @@ describe("SubscriberSpec", function() {
 				expect(pushedData.playerId).toBe(player.id);
 				done();
 			};
-			SubscreiberMock.onPlayerLeave.addOnce(function(arg) {
+			subscreiberMock.onPlayerLeave.addOnce(function(arg) {
 				pushedData = arg;
 				if (isLeaved) {
 					assertOnPlayerLeaveEvent();
 				}
 			});
-			ApiRequestMock.post(`http://${host}:${port}/api/play`, {contentUrl: contentUrl}).then(function(response) {
+			ApiRequestMock.post(`http://${host}:${port}/api/plays`, {contentUrl: contentUrl}).then(function(response) {
 				currentPlayId = response.data.playId;
-				return ApiRequestMock.post(`http://${host}:${port}/api/play/${currentPlayId}/token`, {playerId: "", isActive: "true"});
+				return ApiRequestMock.post(`http://${host}:${port}/api/plays/${currentPlayId}/token`, {playerId: "", isActive: "true"});
 			}).then(function(response) {
-				return ApiRequestMock.post(`http://${host}:${port}/api/runner`, {playId: currentPlayId, isActive: "true", token: response.data.playToken});
+				return ApiRequestMock.post(`http://${host}:${port}/api/runners`, {playId: currentPlayId, isActive: "true", token: response.data.playToken});
 			}).then(function() {
-				return ApiRequestMock.post(`http://${host}:${port}/api/play/${currentPlayId}/token`, {playerId: player.id, name: player.name, isActive: "false"});
+				return ApiRequestMock.post(`http://${host}:${port}/api/plays/${currentPlayId}/token`, {playerId: player.id, name: player.name, isActive: "false"});
 			}).then(function(response) {
 				token = response.data.playToken;
 				return new Promise(function(resolve) {

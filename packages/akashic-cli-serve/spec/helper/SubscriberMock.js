@@ -1,19 +1,26 @@
 const Trigger = require("@akashic/trigger").Trigger;
 const ServerConfigMock = require("./SeverConfigMock");
-exports.onPlayCreate = new Trigger();
-exports.onPlayStatusChange = new Trigger();
-exports.onPlayerJoin = new Trigger();
-exports.onPlayerLeave = new Trigger();
-exports.onRunnerCreate = new Trigger();
-exports.onRunnerRemove = new Trigger();
-exports.onClientInstanceAppear = new Trigger();
-exports.onClientInstanceDisappear = new Trigger();
-const socket = ServerConfigMock.socket;
-socket.on("playCreate", function (arg) { exports.onPlayCreate.fire(arg); });
-socket.on("playStatusChange", function (arg) { exports.onPlayStatusChange.fire(arg); });
-socket.on("playerJoin", function (arg) { exports.onPlayerJoin.fire(arg); });
-socket.on("playerLeave", function (arg) { exports.onPlayerLeave.fire(arg); });
-socket.on("runnerCreate", function (arg) { exports.onRunnerCreate.fire(arg); });
-socket.on("runnerRemove", function (arg) { exports.onRunnerRemove.fire(arg); });
-socket.on("clientInstanceAppear", function (arg) { exports.onClientInstanceAppear.fire(arg); });
-socket.on("clientInstanceDisappear", function (arg) { exports.onClientInstanceDisappear.fire(arg); });
+
+class SubscriberMock {
+	constructor() {
+		this.onPlayCreate = new Trigger();
+		this.onPlayStatusChange = new Trigger();
+		this.onPlayerJoin = new Trigger();
+		this.onPlayerLeave = new Trigger();
+		this.onRunnerCreate = new Trigger();
+		this.onRunnerRemove = new Trigger();
+		this.onClientInstanceAppear = new Trigger();
+		this.onClientInstanceDisappear = new Trigger();
+		this.socket = io(`ws://${ServerConfigMock.hostname}:${ServerConfigMock.port}`);
+		this.socket.on("playCreate", function (arg) { this.onPlayCreate.fire(arg); });
+		this.socket.on("playStatusChange", function (arg) { this.onPlayStatusChange.fire(arg); });
+		this.socket.on("playerJoin", function (arg) { this.onPlayerJoin.fire(arg); });
+		this.socket.on("playerLeave", function (arg) { this.onPlayerLeave.fire(arg); });
+		this.socket.on("runnerCreate", function (arg) { this.onRunnerCreate.fire(arg); });
+		this.socket.on("runnerRemove", function (arg) { this.onRunnerRemove.fire(arg); });
+		this.socket.on("clientInstanceAppear", function (arg) { this.onClientInstanceAppear.fire(arg); });
+		this.socket.on("clientInstanceDisappear", function (arg) { this.onClientInstanceDisappear.fire(arg); });
+	}
+}
+
+exports.SubscreiberMock = SubscriberMock;
