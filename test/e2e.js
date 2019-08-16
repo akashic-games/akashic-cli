@@ -1,5 +1,9 @@
-// publish後にakashic-cliが一通り動作することを確認するためのスクリプト
-// 本スクリプトは、このリポジトリのコードをテストするのではなく、publish された akashic-cli の動作確認を行います
+// akashic-cli 全体の動作確認スクリプト
+//
+// Usage:
+//  node test/e2e.js          (latestタグでpublishされたものをインストールしてテスト)
+//  node test/e2e.js --local  (このリポジトリの packages/akashic-cli/bin/akashic をテスト)
+
 const os = require("os");
 const path = require("path");
 const fs = require("fs");
@@ -10,29 +14,18 @@ const execSync = require("child_process").execSync;
 const tmpDir = os.tmpdir();
 const targetDir = fs.mkdtempSync(`${path.join(tmpDir, "test-akashic-cli_")}`);
 
-// テスト用に作成されたディレクトリを消してからテストを終了する。
+const testsPublished = (process.argv.slice(2)[0] !== "--local");
+
 process.on("exit", function() {
 	console.log("delete test-directory");
 	shell.cd(`${tmpDir}`);
 	shell.rm("-rf", `${targetDir}`);
 });
 
-function quit(isSuccess) {
-	if (isSuccess) {
-		console.log("Completed!");
-		process.exit(0);
-	} else {
-		console.log("Failed!");
-		process.exit(1);
-	}
-}
-
-// 期待した値がactualsに含まれていることを確認。
 function assertContains(actuals, expected) {
 	assert.notStrictEqual(actuals.indexOf(expected), -1);
 }
 
-// 期待した値がactualsに含まれていないことを確認。
 function assertNotContains(actuals, expected) {
 	assert.strictEqual(actuals.indexOf(expected), -1);
 }
@@ -44,26 +37,36 @@ try{
 	console.log("create test-directory");
 	shell.mkdir("-p", [`${targetDir}`, `${targetDir}/game`]);
 
-	// akashic-cliのインストール
-	console.log("npm install @akashic/akashic-cli");
 	shell.cd(`${targetDir}`);
-	execSync("npm init -y");
-	execSync("npm install @akashic/akashic-cli@latest");
+
+	// akashic-cliのインストール
+	let akashicCliPath;
+	if (testsPublished) {
+		console.log("install @akashic/akashic-cli@latest");
+		execSync("npm init -y");
+		execSync("npm install @akashic/akashic-cli@latest");
+		akashicCliPath = `${targetDir}/node_modules/.bin/akashic`;
+	} else {
+		akashicCliPath = path.resolve(__dirname, "..", "packages", "akashic-cli", "bin", "akashic");
+		console.log(`use ${akashicCliPath}`);
+	}
 
 	// 以下、akashic-cliの動作検証
-	const akashicCliPath = `${targetDir}/node_modules/.bin/akashic`;
-
-	// akashic -v で取得したバージョンがnpmにpublishされた最新バージョンと同じであることを確認
-	console.log("check version of @akashic/akashic-cli");
-	const expectedVersion = execSync("npm info @akashic/akashic-cli version").toString();
-	const versionResult = execSync(`${akashicCliPath} -V`).toString();
-	assert(versionResult, expectedVersion);
+	if (testsPublished) {
+		// akashic -v で取得したバージョンがnpmにpublishされた最新バージョンと同じであることを確認
+		console.log("check version of @akashic/akashic-cli");
+		const expectedVersion = execSync("npm info @akashic/akashic-cli version").toString();
+		const versionResult = execSync(`${akashicCliPath} -V`).toString();
+		assert(versionResult, expectedVersion);
+	} else {
+		console.log("skip to check version");
+	}
 
 	// ゲームディレクトリを作成しつつakashic-cli-initのテスト
 	console.log("test @akashic/akashic-cli-init");
 	shell.cd(`${targetDir}/game`);
 	execSync(`${akashicCliPath} init -y`);
-	// 出力されるファイルの検証
+
 	const files = fs.readdirSync(`${targetDir}/game`);
 	assertContains(files, "audio");
 	assertContains(files, "image");
@@ -75,18 +78,22 @@ try{
 	assertContains(files, "README.md");
 
 	// 各akashic-cli-xxxモジュールのテスト
+	// TODO 出力確認
 	console.log("test @akashic/akashic-cli-stat");
 	execSync(`${akashicCliPath} stat size`);
 
+	// TODO game.json の編集結果確認
 	console.log("test @akashic/akashic-cli-scan");
 	execSync(`${akashicCliPath} scan asset`);
 
 	console.log("test @akashic/akashic-cli-update");
 	execSync(`${akashicCliPath} update`);
 
+	// TODO 出力結果検証
 	console.log("test @akashic/akashic-cli-export-html");
 	execSync(`${akashicCliPath} export html --output output --bundle`);
 
+	// TODO 出力結果検証
 	console.log("test @akashic/akashic-cli-export-zip");
 	execSync(`${akashicCliPath} zip --strip --bundle`);
 
@@ -115,8 +122,10 @@ try{
 	assertNotContains(Object.keys(gameJson), "moduleMainScripts");
 	assertNotContains(gameJson["globalScripts"], "node_modules/@akashic-extension/akashic-label/lib/index.js");
 
-	quit(true);
+	console.log("Completed!");
+	process.exit(0);
 } catch (e) {
 	console.error(e);
-	quit(false);
+	console.log("Failed!");
+	process.exit(1);
 }
