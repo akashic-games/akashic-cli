@@ -1,5 +1,20 @@
 # CHANGELOG
 
+## 1.7.10 (2019-08-16)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#130](https://github.com/akashic-games/akashic-cli/pull/130) add autoSendEvent for serve ([@kamakiri01](https://github.com/kamakiri01))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#117](https://github.com/akashic-games/akashic-cli/pull/117) Update all dependencies (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#116](https://github.com/akashic-games/akashic-cli/pull/116) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- kamakiri_ys ([@kamakiri01](https://github.com/kamakiri01))
+
 ## 1.7.9 (2019-08-09)
 
 #### Enhancement

@@ -47,8 +47,10 @@ export class Operator {
 	async bootstrap(contentLocator?: ClientContentLocator): Promise<void> {
 		const store = this.store;
 		let play: PlayEntity = null;
+		let isPlayCreated = false;
 		if (contentLocator) {
 			play = await this._createServerLoop(contentLocator);
+			isPlayCreated = true;
 		} else {
 			const plays = store.playStore.playsList();
 			if (plays.length > 0) {
@@ -56,9 +58,11 @@ export class Operator {
 			} else {
 				const loc = store.contentStore.defaultContent().locator;
 				play = await this._createServerLoop(loc);
+				isPlayCreated = true;
 			}
 		}
 		await this.setCurrentPlay(play);
+		if (isPlayCreated) this.play.sendRegisteredEvent(play.content.sandboxConfig.autoSendEvents);
 	}
 
 	setCurrentPlay = async (play: PlayEntity): Promise<void> => {
@@ -145,8 +149,8 @@ export class Operator {
 	private async _createServerLoop(contentLocator: ClientContentLocator): Promise<PlayEntity> {
 		const play = await this.store.playStore.createPlay({ contentLocator });
 		const tokenResult = await ApiClient.createPlayToken(play.playId, "", true);  // TODO 空文字列でなくnullを使う
-		play.createServerInstance({ playToken: tokenResult.data.playToken });
-		ApiClient.resumePlayDuration(play.playId);
+		await play.createServerInstance({ playToken: tokenResult.data.playToken });
+		await ApiClient.resumePlayDuration(play.playId);
 		return play;
 	}
 
