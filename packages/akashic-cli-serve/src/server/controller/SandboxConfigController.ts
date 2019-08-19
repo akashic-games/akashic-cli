@@ -9,7 +9,7 @@ import { dynamicRequire } from "../domain/dynamicRequire";
 export const createHandlerToGetSandboxConfig = (dirPaths: string[]): express.RequestHandler => {
 	return async (req, res, next) => {
 		try {
-			const contentId = req.params.contentId;
+			const contentId = Number(req.params.contentId);
 			if (!dirPaths[contentId]) {
 				throw new NotFoundError({ errorMessage: `contentId:${contentId} is not found.` });
 			}

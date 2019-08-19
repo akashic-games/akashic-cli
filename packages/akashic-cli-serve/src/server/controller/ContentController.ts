@@ -24,7 +24,7 @@ export const createHandlerToGetContents = (targetDirs: string[]): express.Reques
 export const createHandlerToGetEngineConfig = (dirPaths: string[], isRaw: boolean): express.RequestHandler => {
 	return (req, res, next) => {
 		try {
-			const contentId = req.params.contentId;
+			const contentId = Number(req.params.contentId);
 			if (!dirPaths[contentId]) {
 				throw new NotFoundError({ errorMessage: `contentId:${contentId} is not found.` });
 			}
