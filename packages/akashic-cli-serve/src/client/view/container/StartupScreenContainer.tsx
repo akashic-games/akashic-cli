@@ -22,7 +22,6 @@ export class StartupScreenContainer extends React.Component<StartupScreenContain
 			selectedArgumentName={startupScreenUiStore.selectedArgumentName}
 			argumentEditContent={startupScreenUiStore.instanceArgumentEditContent}
 			joinsAutomatically={startupScreenUiStore.joinsAutomatically}
-			isJoinDisabled={startupScreenUiStore.isJoinDisabled}
 			onSelectArgument={operator.ui.selectInstanceArguments}
 			onArgumentsEditContentChanged={operator.ui.setInstanceArgumentEditContent}
 			onChangeJoinsAutomatically={operator.ui.setJoinsAutomatically}

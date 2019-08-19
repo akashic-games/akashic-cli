@@ -9,6 +9,7 @@ import { PlayOperator } from "./PlayOperator";
 import { LocalInstanceOperator } from "./LocalInstanceOperator";
 import { UiOperator } from "./UiOperator";
 import { ExternalPluginOperator } from "./ExternalPluginOperator";
+import { ServiceName } from "../../common/types/ServiceType";
 
 export interface OperatorParameterObject {
 	store: Store;
@@ -79,23 +80,16 @@ export class Operator {
 
 		store.setCurrentPlay(play);
 
-// <<<<<<< add_target_service_option
-// 		const optionsResult = await ApiClient.getOptions();
-// 		let isJoin = play.joinedPlayerTable.size === 0 && !!optionsResult.data.targetService;
-// 		if (optionsResult.data.autoStart) {
-// 			await this.startContent({
-// 				joinsSelf: isJoin,
-// 				instanceArgument: undefined
-// 			});
-// 		} else {
-// 			isJoin = isJoin || play.joinedPlayerTable.has(this.store.player.id);
-// 			this.ui.setJoinsAutomatically(isJoin);
-// =======
+		console.log("joinTbl:", this.store.player.id, play.joinedPlayerTable);
+		let isJoin = play.joinedPlayerTable.size === 0
+					&& store.appOptions.targetService === ServiceName.NicoLive;
+
 		if (store.appOptions.autoStart) {
-			await this.startContent();
-// >>>>>>> master
+			await this.startContent({
+				joinsSelf: isJoin,
+				instanceArgument: undefined
+			});
 		}
-		this.ui.setJoinDisabled(!!optionsResult.data.targetService);
 	}
 
 	startContent = async (params?: StartContentParameterObject): Promise<void> => {

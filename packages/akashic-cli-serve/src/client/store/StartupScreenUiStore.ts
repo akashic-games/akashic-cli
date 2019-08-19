@@ -6,14 +6,12 @@ export class StartupScreenUiStore {
 	@observable instanceArgumentListWidth: number;
 	@observable instanceArgumentEditContent: string;
 	@observable joinsAutomatically: boolean;
-	@observable isJoinDisabled: boolean;
 
 	constructor() {
 		this.selectedArgumentName = null;
 		this.instanceArgumentListWidth = storage.data.instanceArgumentListWidth;
 		this.instanceArgumentEditContent = storage.data.instanceArgumentEditContent;
 		this.joinsAutomatically = storage.data.joinsAutomatically;
-		this.isJoinDisabled = false;
 	}
 
 	@action
@@ -40,8 +38,4 @@ export class StartupScreenUiStore {
 		storage.put({ joinsAutomatically: join });
 	}
 
-	@action
-	setJoinDisabled(disabled: boolean): void {
-		this.isJoinDisabled = disabled;
-	}
 }

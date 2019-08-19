@@ -8,12 +8,15 @@ import { PlayControlPropsData } from "../molecule/PlayControl";
 import { InstanceControlPropsData } from "../molecule/InstanceControl";
 import { PlayerControlPropsData } from "../molecule/PlayerControl";
 import { ToolBar } from "../organism/ToolBar";
+import { AppOptions } from "../../../common/types/AppOptions";
+import { ServiceName } from "../../../common/types/ServiceType";
 
 export interface ToolBarContainerProps {
 	play: PlayEntity;
 	localInstance: LocalInstanceEntity;
 	operator: Operator;
 	toolBarUiStore: ToolBarUiStore;
+	appOptions: AppOptions;
 }
 
 @observer
@@ -64,12 +67,12 @@ export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}>
 	}
 
 	private _makePlayerControlProps = (): PlayerControlPropsData => {
-		const { localInstance, operator } = this.props;
-		const joinDisabled = operator.ui.getJoinDisabled();
+		const { localInstance, operator, appOptions } = this.props;
+		const joinEnabled = appOptions.targetService !== ServiceName.NicoLive;
 		return {
 			selfId: localInstance.player.id,
 			isJoined: localInstance.isJoined,
-			isJoinEnabled: (localInstance.executionMode === "passive" && !joinDisabled),
+			isJoinEnabled: (localInstance.executionMode === "passive" && joinEnabled),
 			onClickJoinLeave: operator.play.toggleJoinLeaveSelf
 		};
 	}

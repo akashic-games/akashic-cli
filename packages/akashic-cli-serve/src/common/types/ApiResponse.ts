@@ -57,15 +57,7 @@ export type ContentsGetApiResponseData = ContentDesc[];
 export interface SandboxConfigApiResponseData extends SandboxConfig {
 }
 
-// <<<<<<< add_target_service_option
-// export interface OptionsApiResponseData {
-// 	autoStart: boolean;
-// 	verbose: boolean;
-// 	targetService: boolean;
-// }
-// =======
 export type OptionsApiResponseData = AppOptions;
-// >>>>>>> master
 
 export type PlayGetAllApiResponse = ApiResponse<PlayApiResponseData[]>;
 export type PlayPostApiResponse = ApiResponse<PlayApiResponseData>;
