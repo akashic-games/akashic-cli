@@ -1,3 +1,3 @@
 node_modules/
-packages/akashic-cli-serve/www/thirdparty/
+packages/akashic-cli-serve/www/public/thirdparty/
 CHANGELOG.md

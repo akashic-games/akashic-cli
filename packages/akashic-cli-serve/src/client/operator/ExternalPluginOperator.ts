@@ -8,5 +8,17 @@ export class ExternalPluginOperator {
 				gameContent.onExternalPluginRegister.fire("coe");
 			}
 		});
+		gameViewManager.registerExternalPlugin({
+			name: "nico",
+			onload: (_game: agv.GameLike, _dataBus: any, gameContent: agv.GameContent) => {
+				gameContent.onExternalPluginRegister.fire("nico");
+			}
+		});
+		gameViewManager.registerExternalPlugin({
+			name: "send",
+			onload: (_game: agv.GameLike, _dataBus: any, gameContent: agv.GameContent) => {
+				gameContent.onExternalPluginRegister.fire("send");
+			}
+		});
 	}
 }

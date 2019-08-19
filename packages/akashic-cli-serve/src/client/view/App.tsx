@@ -22,13 +22,19 @@ export class App extends React.Component<AppProps, {}> {
 		const { store, operator } = this.props;
 		if (!store.currentLocalInstance) {
 			return <div id="whole" className={styles["whole-dialog"]}>
-				<StartupScreenContainer
-					operator={operator}
-					startupScreenUiStore={store.startupScreenUiStore}
-					argumentsTable={store.currentPlay.content.argumentsTable}
-				/>
+				{
+					(store.currentPlay && !store.appOptions.autoStart) ?
+						<StartupScreenContainer
+							operator={operator}
+							startupScreenUiStore={store.startupScreenUiStore}
+							argumentsTable={store.currentPlay.content.argumentsTable}
+						/> :
+						null
+				}
+				<div id="agvcontainer" style={{ visibility: "visible" }} ref={this._onRef} />
 			</div>;
 		}
+
 		const sandboxConfig = store.currentLocalInstance.content.sandboxConfig || {};
 		return <div id="whole" className={styles["whole"]}>
 			<ToolBarContainer
@@ -37,7 +43,7 @@ export class App extends React.Component<AppProps, {}> {
 				operator={operator}
 				toolBarUiStore={store.toolBarUiStore}
 			/>
-			<div className={styles["main"] + " " + styles["centering"] } ref={this._onRef}>
+			<div id="agvcontainer" className={styles["main"] + " " + styles["centering"] } ref={this._onRef}>
 			{
 				store.toolBarUiStore.showsBgImage ?
 					<img src={sandboxConfig.backgroundImage} className={styles["bg-image"]}/> :

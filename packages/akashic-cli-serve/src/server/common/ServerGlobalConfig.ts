@@ -6,6 +6,8 @@ export interface ServerGlobalConfig {
 	autoStart: boolean;
 	verbose: boolean;
 	targetService: boolean;
+	untrusted: boolean; // 簡易対応。究極的にはコンテンツごとに指定されるべき値
+	proxyAudio: boolean;
 }
 
 export const DEFAULT_HOSTNAME = "localhost";
@@ -18,5 +20,7 @@ export const serverGlobalConfig: ServerGlobalConfig = {
 	useGivenPort: false,
 	autoStart: true,
 	verbose: false,
-	targetService: false
+	targetService: false,
+	untrusted: false,
+	proxyAudio: false
 };

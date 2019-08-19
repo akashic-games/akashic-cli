@@ -1,7 +1,9 @@
 import {observable, action} from "mobx";
 import * as queryString from "query-string";
 import {Player} from "../../common/types/Player";
+import {AppOptions} from "../../common/types/AppOptions";
 import {ClientContentLocator} from "../common/ClientContentLocator";
+import * as ApiClient from "../api/ApiClient";
 import {PlayEntity} from "./PlayEntity";
 import {PlayStore} from "./PlayStore";
 import {LocalInstanceEntity} from "./LocalInstanceEntity";
@@ -19,11 +21,14 @@ export class Store {
 	@observable devtoolUiStore: DevtoolUiStore;
 	@observable notificationUiStore: NotificationUiStore;
 	@observable startupScreenUiStore: StartupScreenUiStore;
+	@observable appOptions: AppOptions;
 	@observable player: Player | null;
 	@observable contentLocator: ClientContentLocator;
 
 	@observable currentPlay: PlayEntity | null;
 	@observable currentLocalInstance: LocalInstanceEntity | null;
+
+	private _initializationWaiter: Promise<void>;
 
 	constructor() {
 		const query = queryString.parse(window.location.search);
@@ -35,15 +40,21 @@ export class Store {
 		this.devtoolUiStore = new DevtoolUiStore();
 		this.notificationUiStore = new NotificationUiStore();
 		this.startupScreenUiStore = new StartupScreenUiStore();
+		this.appOptions = null!;
 		this.player = { id: storage.data.playerId, name: storage.data.playerName };
 		this.currentPlay = null;
 		this.currentLocalInstance = null;
+
+		this._initializationWaiter = ApiClient.getOptions().then(result => {
+			this.appOptions = result.data;
+		});
 	}
 
 	assertInitialized(): Promise<unknown> {
 		return Promise.all([
 			this.playStore.assertInitialized(),
-			this.contentStore.assertInitialized()
+			this.contentStore.assertInitialized(),
+			this._initializationWaiter
 		]);
 	}
 

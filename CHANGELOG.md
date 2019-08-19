@@ -1,5 +1,92 @@
 # CHANGELOG
 
+## 1.7.10 (2019-08-16)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#130](https://github.com/akashic-games/akashic-cli/pull/130) add autoSendEvent for serve ([@kamakiri01](https://github.com/kamakiri01))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#117](https://github.com/akashic-games/akashic-cli/pull/117) Update all dependencies (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#116](https://github.com/akashic-games/akashic-cli/pull/116) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- kamakiri_ys ([@kamakiri01](https://github.com/kamakiri01))
+
+## 1.7.9 (2019-08-09)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#128](https://github.com/akashic-games/akashic-cli/pull/128) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@2.1.22、engineFiles@1.1.10)  ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
+## 1.7.8 (2019-08-09)
+
+#### Enhancement
+* `akashic-cli-export-html`
+  * [#127](https://github.com/akashic-games/akashic-cli/pull/127) 【akashic-cli-export-html】内部コンポーネントの更新(engineFiles@2.1.22、engineFiles@1.1.10) ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
+## 1.7.7 (2019-08-01)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#118](https://github.com/akashic-games/akashic-cli/pull/118) add game.external.send nico to serve ([@kamakiri01](https://github.com/kamakiri01))
+
+#### Committers: 1
+- kamakiri_ys ([@kamakiri01](https://github.com/kamakiri01))
+
+## 1.7.6 (2019-07-31)
+
+#### Enhancement
+* `akashic-cli-export-html`
+  * [#123](https://github.com/akashic-games/akashic-cli/pull/123) 【akashic-cli-export-html】内部コンポーネントの更新(engineFiles@2.1.21、engineFiles@1.1.10) ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
+## 1.7.5 (2019-07-30)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#120](https://github.com/akashic-games/akashic-cli/pull/120) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@2.1.21、engineFiles@1.1.9) ([@xnv](https://github.com/xnv))
+
+#### Bug Fix
+* `akashic-cli-serve`
+  * [#121](https://github.com/akashic-games/akashic-cli/pull/121) akashic-cli-serveに依存しているamflowとplaylogのバージョンを前のものに戻す対応 ([@dera-](https://github.com/dera-))
+
+#### Update Dependencies
+* `akashic-cli-serve`
+  * [#121](https://github.com/akashic-games/akashic-cli/pull/121) akashic-cli-serveに依存しているamflowとplaylogのバージョンを前のものに戻す対応 ([@dera-](https://github.com/dera-))
+
+#### Committers: 2
+- [@dera-](https://github.com/dera-)
+- xnv ([@xnv](https://github.com/xnv))
+
+## 1.7.4 (2019-07-30)
+
+#### Enhancement
+* `akashic-cli-export-html`
+  * [#119](https://github.com/akashic-games/akashic-cli/pull/119) 【akashic-cli-export-html】内部コンポーネントの更新(engineFiles@2.1.21、engineFiles@1.1.9) ([@xnv](https://github.com/xnv))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-update`
+  * [#115](https://github.com/akashic-games/akashic-cli/pull/115) Update dependency lodash to v4.17.13 [SECURITY] ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-update`
+  * [#114](https://github.com/akashic-games/akashic-cli/pull/114) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#113](https://github.com/akashic-games/akashic-cli/pull/113) Update all dependencies (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#112](https://github.com/akashic-games/akashic-cli/pull/112) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.7.3 (2019-07-08)
 
 #### Enhancement

@@ -40,12 +40,17 @@ export class Operator {
 		Subscriber.onBroadcast.add(this._handleBroadcast);
 	}
 
+	assertInitialized(): Promise<unknown> {
+		return this.store.assertInitialized();
+	}
+
 	async bootstrap(contentLocator?: ClientContentLocator): Promise<void> {
 		const store = this.store;
-		await store.assertInitialized();
 		let play: PlayEntity = null;
+		let isPlayCreated = false;
 		if (contentLocator) {
 			play = await this._createServerLoop(contentLocator);
+			isPlayCreated = true;
 		} else {
 			const plays = store.playStore.playsList();
 			if (plays.length > 0) {
@@ -53,9 +58,11 @@ export class Operator {
 			} else {
 				const loc = store.contentStore.defaultContent().locator;
 				play = await this._createServerLoop(loc);
+				isPlayCreated = true;
 			}
 		}
 		await this.setCurrentPlay(play);
+		if (isPlayCreated) this.play.sendRegisteredEvent(play.content.sandboxConfig.autoSendEvents);
 	}
 
 	setCurrentPlay = async (play: PlayEntity): Promise<void> => {
@@ -72,16 +79,21 @@ export class Operator {
 
 		store.setCurrentPlay(play);
 
-		const optionsResult = await ApiClient.getOptions();
-		let isJoin = play.joinedPlayerTable.size === 0 && !!optionsResult.data.targetService;
-		if (optionsResult.data.autoStart) {
-			await this.startContent({
-				joinsSelf: isJoin,
-				instanceArgument: undefined
-			});
-		} else {
-			isJoin = isJoin || play.joinedPlayerTable.has(this.store.player.id);
-			this.ui.setJoinsAutomatically(isJoin);
+// <<<<<<< add_target_service_option
+// 		const optionsResult = await ApiClient.getOptions();
+// 		let isJoin = play.joinedPlayerTable.size === 0 && !!optionsResult.data.targetService;
+// 		if (optionsResult.data.autoStart) {
+// 			await this.startContent({
+// 				joinsSelf: isJoin,
+// 				instanceArgument: undefined
+// 			});
+// 		} else {
+// 			isJoin = isJoin || play.joinedPlayerTable.has(this.store.player.id);
+// 			this.ui.setJoinsAutomatically(isJoin);
+// =======
+		if (store.appOptions.autoStart) {
+			await this.startContent();
+// >>>>>>> master
 		}
 		this.ui.setJoinDisabled(!!optionsResult.data.targetService);
 	}
@@ -98,6 +110,7 @@ export class Operator {
 			executionMode: "passive",
 			player: store.player,
 			argument: params != null ? params.instanceArgument : undefined,
+			proxyAudio: store.appOptions.proxyAudio,
 			coeHandler: {
 				onLocalInstanceCreate: async params => {
 					// TODO: local === true のみ対応
@@ -122,7 +135,8 @@ export class Operator {
 								debugMode: false
 							}
 						},
-						initialEvents: params.initialEvents
+						initialEvents: params.initialEvents,
+						proxyAudio: store.appOptions.proxyAudio
 					});
 				},
 				onLocalInstanceDelete: async playId => {
@@ -149,8 +163,8 @@ export class Operator {
 	private async _createServerLoop(contentLocator: ClientContentLocator): Promise<PlayEntity> {
 		const play = await this.store.playStore.createPlay({ contentLocator });
 		const tokenResult = await ApiClient.createPlayToken(play.playId, "", true);  // TODO 空文字列でなくnullを使う
-		play.createServerInstance({ playToken: tokenResult.data.playToken });
-		ApiClient.resumePlayDuration(play.playId);
+		await play.createServerInstance({ playToken: tokenResult.data.playToken });
+		await ApiClient.resumePlayDuration(play.playId);
 		return play;
 	}
 
