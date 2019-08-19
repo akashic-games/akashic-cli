@@ -20,7 +20,7 @@
     "@akashic/akashic-cli-scan": "~0.2.6",
     "@akashic/akashic-engine": "~2.4.11",
     "@akashic/akashic-sandbox": "~0.13.55",
-    "jest": "24.8.0",
+    "jest": "24.9.0",
     "rimraf": "2.7.1",
     "tslint": "5.18.0",
     "typescript": "2.9.2"

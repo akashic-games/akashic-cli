@@ -46,7 +46,7 @@
     "@types/node": "8.10.51",
     "@types/uglify-js": "2.6.32",
     "browserify": "13.3.0",
-    "jest": "24.8.0",
+    "jest": "24.9.0",
     "mock-fs": "4.10.1",
     "node-fetch": "2.6.0",
     "shx": "0.3.2",

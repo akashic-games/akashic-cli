@@ -44,7 +44,7 @@
     "@types/unzipper": "0.10.0",
     "bestzip": "2.1.4",
     "http-server": "0.11.1",
-    "jest": "24.8.0",
+    "jest": "24.9.0",
     "mock-fs": "4.10.1",
     "rimraf": "2.7.1",
     "shelljs": "0.8.3",
