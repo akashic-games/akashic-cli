@@ -42,7 +42,6 @@ export class App extends React.Component<AppProps, {}> {
 				localInstance={store.currentLocalInstance}
 				operator={operator}
 				toolBarUiStore={store.toolBarUiStore}
-				appOptions={store.appOptions}
 				targetServiceStore={store.targetServiceStore}
 			/>
 			<div id="agvcontainer" className={styles["main"] + " " + styles["centering"] } ref={this._onRef}>

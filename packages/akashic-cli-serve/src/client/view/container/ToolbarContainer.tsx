@@ -8,8 +8,6 @@ import { PlayControlPropsData } from "../molecule/PlayControl";
 import { InstanceControlPropsData } from "../molecule/InstanceControl";
 import { PlayerControlPropsData } from "../molecule/PlayerControl";
 import { ToolBar } from "../organism/ToolBar";
-import { AppOptions } from "../../../common/types/AppOptions";
-import { ServiceName } from "../../../common/types/ServiceType";
 import { TargetServiceStore } from "../../store/TargetServiceStore";
 
 export interface ToolBarContainerProps {
@@ -17,7 +15,6 @@ export interface ToolBarContainerProps {
 	localInstance: LocalInstanceEntity;
 	operator: Operator;
 	toolBarUiStore: ToolBarUiStore;
-	appOptions: AppOptions;
 	targetServiceStore: TargetServiceStore;
 }
 
@@ -70,8 +67,8 @@ export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}>
 	}
 
 	private _makePlayerControlProps = (): PlayerControlPropsData => {
-		const { localInstance, operator, appOptions } = this.props;
-		const joinEnabled = appOptions.targetService !== ServiceName.NicoLive;
+		const { localInstance, operator, targetServiceStore } = this.props;
+		const joinEnabled = !targetServiceStore.isNicoLiveService();
 		return {
 			selfId: localInstance.player.id,
 			isJoined: localInstance.isJoined,
