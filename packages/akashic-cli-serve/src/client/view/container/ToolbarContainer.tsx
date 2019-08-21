@@ -10,6 +10,7 @@ import { PlayerControlPropsData } from "../molecule/PlayerControl";
 import { ToolBar } from "../organism/ToolBar";
 import { AppOptions } from "../../../common/types/AppOptions";
 import { ServiceName } from "../../../common/types/ServiceType";
+import { TargetServiceStore } from "../../store/TargetServiceStore";
 
 export interface ToolBarContainerProps {
 	play: PlayEntity;
@@ -17,12 +18,13 @@ export interface ToolBarContainerProps {
 	operator: Operator;
 	toolBarUiStore: ToolBarUiStore;
 	appOptions: AppOptions;
+	targetServiceStore: TargetServiceStore;
 }
 
 @observer
 export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}> {
 	render(): React.ReactNode {
-		const { operator, localInstance, toolBarUiStore } = this.props;
+		const { operator, localInstance, toolBarUiStore, targetServiceStore } = this.props;
 		return <ToolBar
 			makePlayControlProps={this._makePlayControlProps}
 			makeInstanceControlProps={this._makeInstanceControlProps}
@@ -31,6 +33,7 @@ export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}>
 			showsDevtools={toolBarUiStore.showsDevtools}
 			showsBgImage={toolBarUiStore.showsBgImage}
 			showsInstanceControl={(localInstance.executionMode === "replay") || toolBarUiStore.showsDevtools}
+			targetService={targetServiceStore.service}
 			onToggleAppearance={operator.ui.toggleShowAppearance}
 			onToggleDevTools={operator.ui.toggleShowDevtools}
 			onToggleBgImage={operator.ui.toggleShowBgImage}

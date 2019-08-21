@@ -4,13 +4,15 @@ import * as styles from "./ToolLabel.css";
 
 export interface ToolLabelProps {
 	title?: string;
+	hidden?: string;
+	optionClass?: string;
 }
 
 @observer
 export class ToolLabel extends React.Component<ToolLabelProps, {}> {
 	render() {
-		const { title, children } = this.props;
-		return <p className={styles["tool-label"]} title={title}>
+		const { title, children, hidden, optionClass} = this.props;
+		return <p className={[styles["tool-label"], hidden, optionClass].join(" ")} title={title}>
 			{ children }
 		</p>;
 	}

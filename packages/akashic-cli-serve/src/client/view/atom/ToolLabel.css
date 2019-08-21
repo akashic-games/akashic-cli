@@ -15,3 +15,14 @@
 	-moz-user-select: none;
 	*/
 }
+
+.tool-label-tareget-service {
+	margin: 3px 6px;
+	border-width: 2px;
+	border-color: #c1c1c1;
+	height: min-content;
+}
+
+.tool-label-tareget-value {
+	font-weight: bold;
+}

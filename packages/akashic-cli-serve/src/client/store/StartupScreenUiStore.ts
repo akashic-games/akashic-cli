@@ -37,5 +37,4 @@ export class StartupScreenUiStore {
 		this.joinsAutomatically = join;
 		storage.put({ joinsAutomatically: join });
 	}
-
 }

@@ -97,7 +97,8 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 			this.coePlugin = new CoePluginEntity({
 				gameViewManager: this._gameViewManager,
 				onLocalInstanceCreate: params.coeHandler.onLocalInstanceCreate,
-				onLocalInstanceDelete: params.coeHandler.onLocalInstanceDelete
+				onLocalInstanceDelete: params.coeHandler.onLocalInstanceDelete,
+				argument: params.argument
 			});
 			this._agvGameContent.onExternalPluginRegister.add((name: string) => {
 				const game = this._agvGameContent.getGame();

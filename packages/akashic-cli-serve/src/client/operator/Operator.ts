@@ -9,7 +9,6 @@ import { PlayOperator } from "./PlayOperator";
 import { LocalInstanceOperator } from "./LocalInstanceOperator";
 import { UiOperator } from "./UiOperator";
 import { ExternalPluginOperator } from "./ExternalPluginOperator";
-import { ServiceName } from "../../common/types/ServiceType";
 
 export interface OperatorParameterObject {
 	store: Store;
@@ -28,6 +27,7 @@ export class Operator {
 	externalPlugin: ExternalPluginOperator;
 	private store: Store;
 	private gameViewManager: GameViewManager;
+	private previousPlay: PlayEntity;
 
 	constructor(param: OperatorParameterObject) {
 		const store = param.store;
@@ -72,6 +72,7 @@ export class Operator {
 			return;
 
 		if (store.currentPlay) {
+			this.previousPlay = store.currentPlay;
 			store.currentPlay.deleteAllLocalInstances();
 			store.setCurrentLocalInstance(null);
 		}
@@ -80,14 +81,19 @@ export class Operator {
 
 		store.setCurrentPlay(play);
 
-		console.log("joinTbl:", this.store.player.id, play.joinedPlayerTable);
-		let isJoin = play.joinedPlayerTable.size === 0
-					&& store.appOptions.targetService === ServiceName.NicoLive;
-
+		let isJoin = false;
+		let argument = undefined;
+		if (store.targetServiceStore.isNicoLiveService()) {
+			isJoin = play.joinedPlayerTable.size === 0;
+			if (this.previousPlay) {
+				isJoin = this.previousPlay.joinedPlayerTable.has(store.player.id);
+			}
+			argument = store.targetServiceStore.createNicoLiveArgs(isJoin);
+		}
 		if (store.appOptions.autoStart) {
 			await this.startContent({
 				joinsSelf: isJoin,
-				instanceArgument: undefined
+				instanceArgument: argument
 			});
 		}
 	}
@@ -118,17 +124,7 @@ export class Operator {
 						player: this.store.player,
 						playId: params.playId,
 						executionMode: "active",
-						argument: {
-							coe: {
-								permission: {
-									advance: true,
-									advanceRequest: true,
-									aggregation: true
-								},
-								roles: ["broadcaster"],
-								debugMode: false
-							}
-						},
+						argument: params.argument,
 						initialEvents: params.initialEvents,
 						proxyAudio: store.appOptions.proxyAudio
 					});

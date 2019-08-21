@@ -13,6 +13,7 @@ import {ContentStore} from "./ContentStore";
 import {NotificationUiStore} from "./NotificationUiStore";
 import {storage} from "./storage";
 import {StartupScreenUiStore} from "./StartupScreenUiStore";
+import {TargetServiceStore} from "./TargetServiceStore";
 
 export class Store {
 	@observable contentStore: ContentStore;
@@ -27,6 +28,7 @@ export class Store {
 
 	@observable currentPlay: PlayEntity | null;
 	@observable currentLocalInstance: LocalInstanceEntity | null;
+	@observable targetServiceStore: TargetServiceStore;
 
 	private _initializationWaiter: Promise<void>;
 
@@ -44,9 +46,13 @@ export class Store {
 		this.player = { id: storage.data.playerId, name: storage.data.playerName };
 		this.currentPlay = null;
 		this.currentLocalInstance = null;
+		this.targetServiceStore = new TargetServiceStore();
 
 		this._initializationWaiter = ApiClient.getOptions().then(result => {
 			this.appOptions = result.data;
+			if (this.appOptions.targetService) {
+				this.targetServiceStore.setService(this.appOptions.targetService);
+			}
 		});
 	}
 
