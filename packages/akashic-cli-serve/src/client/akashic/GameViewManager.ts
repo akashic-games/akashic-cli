@@ -78,8 +78,9 @@ export class GameViewManager {
 	}
 
 	createGameContent(param: CreateGameContentParameterObject): agv.GameContent {
+		const loc = param.contentLocator;
 		const gameConfig = {
-			contentUrl: param.contentLocator.asDebuggableRootRelativeUrl(),
+			contentUrl: loc.asDebuggableRootRelativeUrl() || loc.asAbsoluteUrl(),
 			player: param.player,
 			playConfig: param.playConfig,
 			gameLoaderCustomizer: param.gameLoaderCustomizer,

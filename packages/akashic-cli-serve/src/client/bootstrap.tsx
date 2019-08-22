@@ -9,7 +9,10 @@ import { App } from "./view/App";
 
 mobxConfigure({ enforceActions: "observed" });
 
-const gameViewManager = new GameViewManager({ width: 0, height: 0 });
+const gameViewManager = new GameViewManager({
+	width: 0,
+	height: 0
+});
 const store = new Store();
 const operator = new Operator({ store, gameViewManager });
 
