@@ -40,7 +40,7 @@ export function run(argv: any): void {
 		.option("-v, --verbose", `Display detailed information on console.`)
 		.option("-A, --no-auto-start", `Wait automatic startup of contents.`)
 		.option("-s, --target-service <service>",
-			`Simulate the specified service. arguments: ${Object.values(ServiceType).filter((v) => v !== ServiceType.None)}`)
+			`Simulate the specified service. arguments: ${Object.values(ServiceType)}`)
 		.option("--debug-untrusted", `An internal debug option`)
 		.option("--debug-proxy-audio", `An internal debug option`)
 		.parse(argv);

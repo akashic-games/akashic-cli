@@ -89,7 +89,7 @@ export class Operator {
 			if (previousPlay) {
 				isJoin = previousPlay.joinedPlayerTable.has(store.player.id);
 			}
-			argument = this._createNicoLiveArgs(isJoin);
+			argument = this._createInstanceArgumentForNicolive(isJoin);
 		}
 		if (store.appOptions.autoStart) {
 			await this.startContent({
@@ -181,7 +181,7 @@ export class Operator {
 		}
 	}
 
-	private _createNicoLiveArgs(isBroadcaster: boolean) {
+	private _createInstanceArgumentForNicolive(isBroadcaster: boolean) {
 		return {
 			coe: {
 				permission: {

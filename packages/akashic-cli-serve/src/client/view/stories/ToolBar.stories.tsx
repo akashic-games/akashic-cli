@@ -4,6 +4,7 @@ import { observer } from "mobx-react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
 import { ToolBar } from "../organism/ToolBar";
+import { ServiceType } from "../../../common/types/ServiceType";
 
 const store = observable({
 	realtime: true,
@@ -55,7 +56,7 @@ const TestWithBehaviour = observer(() => (
 			showsDevtools={store.showsDevtools}
 			showsBgImage={store.showsBgImage}
 			showsInstanceControl={store.showsDevtools}
-			targetService={"none"}
+			targetService={ServiceType.None}
 			onToggleAppearance={v => (store.showsAppearance = v)}
 			onToggleDevTools={v => (store.showsDevtools = v)}
 			onToggleBgImage={v => (store.showsBgImage = v)}
@@ -92,7 +93,7 @@ storiesOf("o-ToolBar", module)
 			showsDevtools={true}
 			showsBgImage={true}
 			showsInstanceControl={true}
-			targetService={"none"}
+			targetService={ServiceType.None}
 			onToggleAppearance={action("toggle-appearance")}
 			onToggleDevTools={action("toggle-dev-tools")}
 			onToggleBgImage={action("toggle-bg-image")} />

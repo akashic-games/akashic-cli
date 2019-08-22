@@ -6,6 +6,7 @@ import { PlayControl, PlayControlPropsData } from "../molecule/PlayControl";
 import { InstanceControl, InstanceControlPropsData } from "../molecule/InstanceControl";
 import { PlayerControl, PlayerControlPropsData } from "../molecule/PlayerControl";
 import * as styles from "./ToolBar.css";
+import { ServiceType } from "../../../common/types/ServiceType";
 
 export interface ToolBarProps {
 	makePlayControlProps: () => PlayControlPropsData;
@@ -15,7 +16,7 @@ export interface ToolBarProps {
 	showsDevtools: boolean;
 	showsBgImage: boolean;
 	showsInstanceControl: boolean;
-	targetService: string;
+	targetService: ServiceType;
 	onToggleAppearance: (show: boolean) => void;
 	onToggleDevTools: (show: boolean) => void;
 	onToggleBgImage: (show: boolean) => void;
