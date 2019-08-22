@@ -39,7 +39,7 @@ akashic-cli-serve [<options>] [<path>]
 |`--no-auto-start`|`-A`|ブラウザを開いた時、コンテンツを自動開始しないようにします。|N/A|
 |`--help`|`-h`|ヘルプを表示して終了します。|N/A|
 |`--version`|`-V`|バージョンを表示して終了します。|N/A|
-|`--target-service`|`-T`|ブラウザを開いた時、引数で指定したサービスのモードで開始します。|N/A|
+|`--target-service`|`-s`|ブラウザを開いた時、引数で指定したサービスのモードで開始します。|`none`|
 
 [ae]: https://akashic-games.github.io/
 

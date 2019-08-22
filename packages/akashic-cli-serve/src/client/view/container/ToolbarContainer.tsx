@@ -8,20 +8,20 @@ import { PlayControlPropsData } from "../molecule/PlayControl";
 import { InstanceControlPropsData } from "../molecule/InstanceControl";
 import { PlayerControlPropsData } from "../molecule/PlayerControl";
 import { ToolBar } from "../organism/ToolBar";
-import { TargetServiceStore } from "../../store/TargetServiceStore";
+import { ServiceType } from "../../../common/types/ServiceType";
 
 export interface ToolBarContainerProps {
 	play: PlayEntity;
 	localInstance: LocalInstanceEntity;
 	operator: Operator;
 	toolBarUiStore: ToolBarUiStore;
-	targetServiceStore: TargetServiceStore;
+	targetService: ServiceType;
 }
 
 @observer
 export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}> {
 	render(): React.ReactNode {
-		const { operator, localInstance, toolBarUiStore, targetServiceStore } = this.props;
+		const { operator, localInstance, toolBarUiStore, targetService } = this.props;
 		return <ToolBar
 			makePlayControlProps={this._makePlayControlProps}
 			makeInstanceControlProps={this._makeInstanceControlProps}
@@ -30,7 +30,7 @@ export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}>
 			showsDevtools={toolBarUiStore.showsDevtools}
 			showsBgImage={toolBarUiStore.showsBgImage}
 			showsInstanceControl={(localInstance.executionMode === "replay") || toolBarUiStore.showsDevtools}
-			targetService={targetServiceStore.service}
+			targetService={targetService}
 			onToggleAppearance={operator.ui.toggleShowAppearance}
 			onToggleDevTools={operator.ui.toggleShowDevtools}
 			onToggleBgImage={operator.ui.toggleShowBgImage}
@@ -67,8 +67,8 @@ export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}>
 	}
 
 	private _makePlayerControlProps = (): PlayerControlPropsData => {
-		const { localInstance, operator, targetServiceStore } = this.props;
-		const joinEnabled = !targetServiceStore.isNicoLiveService();
+		const { localInstance, operator, targetService } = this.props;
+		const joinEnabled = targetService !== ServiceType.NicoLive;
 		return {
 			selfId: localInstance.player.id,
 			isJoined: localInstance.isJoined,

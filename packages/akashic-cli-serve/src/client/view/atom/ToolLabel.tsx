@@ -11,7 +11,7 @@ export interface ToolLabelProps {
 export class ToolLabel extends React.Component<ToolLabelProps, {}> {
 	render() {
 		const { title, children, optionClass} = this.props;
-		return <p className={[styles["tool-label"], optionClass].join(" ")} title={title}>
+		return <p className={[styles["tool-label"], styles[optionClass]].join(" ")} title={title}>
 			{ children }
 		</p>;
 	}

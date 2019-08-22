@@ -14,7 +14,7 @@ import { PlayStore } from "./domain/PlayStore";
 import { SocketIOAMFlowManager } from "./domain/SocketIOAMFlowManager";
 import { serverGlobalConfig } from "./common/ServerGlobalConfig";
 import { createContentsRouter } from "./route/ContentsRoute";
-import { ServiceName } from "../common/types/ServiceType";
+import { ServiceType } from "../common/types/ServiceType";
 
 // 渡されたパラメータを全てstringに変換する
 // chalkを使用する場合、ログ出力時objectの中身を展開してくれないためstringに変換する必要がある
@@ -39,8 +39,8 @@ export function run(argv: any): void {
 		.option("-H, --hostname <hostname>", `The host name of the server. default: ${serverGlobalConfig.hostname}`)
 		.option("-v, --verbose", `Display detailed information on console.`)
 		.option("-A, --no-auto-start", `Wait automatic startup of contents.`)
-		.option("-T, --target-service <service>",
-			`Starts in the specified service mode. arguments: ${Object.values(ServiceName).filter((v) => v !== "none")}`)
+		.option("-s, --target-service <service>",
+			`Simulate the specified service. arguments: ${Object.values(ServiceType).filter((v) => v !== ServiceType.None)}`)
 		.option("--debug-untrusted", `An internal debug option`)
 		.option("--debug-proxy-audio", `An internal debug option`)
 		.parse(argv);
@@ -98,12 +98,12 @@ export function run(argv: any): void {
 	}
 
 	if (commander.targetService) {
-		if (!commander.autoStart) {
+		if (!commander.autoStart && commander.targetService === ServiceType.NicoLive) {
 			getSystemLogger().error("--no-auto-start and --target-service options can not be set at the same time.");
 			process.exit(1);
 		}
 
-		if (!Object.values(ServiceName).includes(commander.targetService)) {
+		if (!Object.values(ServiceType).includes(commander.targetService)) {
 			getSystemLogger().error("Invalid --target-service option argument: " + commander.targetService);
 			process.exit(1);
 		}

@@ -1,4 +1,4 @@
-import { ServiceType, ServiceName } from "../../common/types/ServiceType";
+import { ServiceType } from "../../common/types/ServiceType";
 
 export interface ServerGlobalConfig {
 	hostname: string;
@@ -24,5 +24,5 @@ export const serverGlobalConfig: ServerGlobalConfig = {
 	verbose: false,
 	untrusted: false,
 	proxyAudio: false,
-	targetService: ServiceName.None
+	targetService: ServiceType.None
 };

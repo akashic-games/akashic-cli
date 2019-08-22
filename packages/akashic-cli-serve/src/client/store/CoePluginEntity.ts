@@ -26,7 +26,7 @@ export interface CreateCoeLocalInstanceParameterObject {
 
 export interface CoePluginEntityParameterObject {
 	gameViewManager: GameViewManager;
-	argument?: any;
+	instanceArgument?: any;
 	onLocalInstanceCreate: (params: CreateCoeLocalInstanceParameterObject) => Promise<LocalInstanceEntity>;
 	onLocalInstanceDelete: (playId: string) => Promise<void>;
 }
@@ -43,7 +43,7 @@ export class CoePluginEntity {
 		this._gameViewManager = param.gameViewManager;
 		this._createLocalInstance = param.onLocalInstanceCreate;
 		this._deleteLocalInstance = param.onLocalInstanceDelete;
-		this._argument = param.argument;
+		this._argument = param.instanceArgument;
 	}
 
 	async bootstrap(game: agv.GameLike, _gameContent: agv.GameContent): Promise<void> {

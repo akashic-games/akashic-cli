@@ -9,6 +9,7 @@ import { PlayOperator } from "./PlayOperator";
 import { LocalInstanceOperator } from "./LocalInstanceOperator";
 import { UiOperator } from "./UiOperator";
 import { ExternalPluginOperator } from "./ExternalPluginOperator";
+import { ServiceType } from "../../common/types/ServiceType";
 
 export interface OperatorParameterObject {
 	store: Store;
@@ -27,7 +28,6 @@ export class Operator {
 	externalPlugin: ExternalPluginOperator;
 	private store: Store;
 	private gameViewManager: GameViewManager;
-	private previousPlay: PlayEntity;
 
 	constructor(param: OperatorParameterObject) {
 		const store = param.store;
@@ -71,8 +71,9 @@ export class Operator {
 		if (store.currentPlay === play)
 			return;
 
+		let previousPlay;
 		if (store.currentPlay) {
-			this.previousPlay = store.currentPlay;
+			previousPlay = store.currentPlay;
 			store.currentPlay.deleteAllLocalInstances();
 			store.setCurrentLocalInstance(null);
 		}
@@ -83,12 +84,12 @@ export class Operator {
 
 		let isJoin = false;
 		let argument = undefined;
-		if (store.targetServiceStore.isNicoLiveService()) {
+		if (store.targetService === ServiceType.NicoLive) {
 			isJoin = play.joinedPlayerTable.size === 0;
-			if (this.previousPlay) {
-				isJoin = this.previousPlay.joinedPlayerTable.has(store.player.id);
+			if (previousPlay) {
+				isJoin = previousPlay.joinedPlayerTable.has(store.player.id);
 			}
-			argument = store.targetServiceStore.createNicoLiveArgs(isJoin);
+			argument = this._createNicoLiveArgs(isJoin);
 		}
 		if (store.appOptions.autoStart) {
 			await this.startContent({
@@ -178,5 +179,19 @@ export class Operator {
 		} catch (e) {
 			console.error("_handleBroadcast()", e);
 		}
+	}
+
+	private _createNicoLiveArgs(isBroadcaster: boolean) {
+		return {
+			coe: {
+				permission: {
+					advance: false,
+					advanceRequest: isBroadcaster,
+					aggregation: false
+				},
+				roles: isBroadcaster ? ["broadcaster"] : [],
+				debugMode: true
+			}
+		};
 	}
 }
