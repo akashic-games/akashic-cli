@@ -57,7 +57,7 @@ export function promiseUninstall(param: UninstallParameterObject): Promise<void>
 	}
 
 	const restoreDirectory = cmn.Util.chdir(param.cwd);
-	const gameJsonPath = path.join(param.cwd, "game.json");
+	const gameJsonPath = path.join(process.cwd(), "game.json");
 	return Promise.resolve()
 		.then(() => cmn.ConfigurationFile.read(gameJsonPath, param.logger))
 		.then((content: cmn.GameConfiguration) => {
