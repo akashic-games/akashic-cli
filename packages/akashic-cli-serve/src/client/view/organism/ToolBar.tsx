@@ -46,8 +46,8 @@ export class ToolBar extends React.Component<ToolBarProps, {}> {
 					<i className="material-icons">zoom_in</i>
 				</ToolToggleLabel>
 				*/}
-				<ToolLabel title="起動サービスモード" optionClass={"tool-label-target-service"}>
-					TargetService: <span>{props.targetService}</span>
+				<ToolLabel title="起動サービスモード" emphasizeBorder={true}>
+					TargetService: <b>{props.targetService}</b>
 				</ToolLabel>
 				<ToolIconButton
 					icon="image"

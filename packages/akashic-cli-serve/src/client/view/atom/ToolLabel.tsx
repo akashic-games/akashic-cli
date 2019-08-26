@@ -4,14 +4,15 @@ import * as styles from "./ToolLabel.css";
 
 export interface ToolLabelProps {
 	title?: string;
-	optionClass?: string;
+	emphasizeBorder?: boolean;
 }
 
 @observer
 export class ToolLabel extends React.Component<ToolLabelProps, {}> {
 	render() {
-		const { title, children, optionClass} = this.props;
-		return <p className={[styles["tool-label"], styles[optionClass]].join(" ")} title={title}>
+		const { title, children, emphasizeBorder} = this.props;
+		const borderStyle = emphasizeBorder ? "border-emphasize" : "";
+		return <p className={[styles["tool-label"], styles[borderStyle]].join(" ")} title={title}>
 			{ children }
 		</p>;
 	}

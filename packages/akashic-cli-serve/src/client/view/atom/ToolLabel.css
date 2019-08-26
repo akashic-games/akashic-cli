@@ -16,13 +16,9 @@
 	*/
 }
 
-.tool-label-target-service {
+.border-emphasize {
 	margin: 4px 6px;
 	border-width: 2px;
 	border-color: #c1c1c1;
 	height: min-content;
-}
-
-.tool-label-target-service span {
-	font-weight: bold;
 }
