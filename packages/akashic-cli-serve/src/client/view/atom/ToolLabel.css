@@ -19,6 +19,6 @@
 .border-emphasize {
 	margin: 4px 6px;
 	border-width: 2px;
-	border-color: #c1c1c1;
+	border-color: var(--color-tool-border-emphasize);
 	height: min-content;
 }
