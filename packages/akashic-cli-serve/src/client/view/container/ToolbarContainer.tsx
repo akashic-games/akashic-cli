@@ -1,5 +1,6 @@
 import * as React from "react";
 import { observer } from "mobx-react";
+import { ServiceType } from "../../../common/types/ServiceType";
 import { PlayEntity } from "../../store/PlayEntity";
 import { LocalInstanceEntity } from "../../store/LocalInstanceEntity";
 import { ToolBarUiStore } from "../../store/ToolBarUiStore";
@@ -8,7 +9,6 @@ import { PlayControlPropsData } from "../molecule/PlayControl";
 import { InstanceControlPropsData } from "../molecule/InstanceControl";
 import { PlayerControlPropsData } from "../molecule/PlayerControl";
 import { ToolBar } from "../organism/ToolBar";
-import { ServiceType } from "../../../common/types/ServiceType";
 
 export interface ToolBarContainerProps {
 	play: PlayEntity;

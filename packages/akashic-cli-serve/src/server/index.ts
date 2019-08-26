@@ -99,7 +99,7 @@ export function run(argv: any): void {
 
 	if (commander.targetService) {
 		if (!commander.autoStart && commander.targetService === ServiceType.NicoLive) {
-			getSystemLogger().error("--no-auto-start and --target-service options can not be set at the same time.");
+			getSystemLogger().error("--no-auto-start and --target-service nicolive can not be set at the same time.");
 			process.exit(1);
 		}
 

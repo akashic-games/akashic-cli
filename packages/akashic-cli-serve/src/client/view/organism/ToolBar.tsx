@@ -1,12 +1,12 @@
 import * as React from "react";
 import { observer } from "mobx-react";
+import { ServiceType } from "../../../common/types/ServiceType";
 import { ToolIconButton } from "../atom/ToolIconButton";
 import { ToolLabel } from "../atom/ToolLabel";
 import { PlayControl, PlayControlPropsData } from "../molecule/PlayControl";
 import { InstanceControl, InstanceControlPropsData } from "../molecule/InstanceControl";
 import { PlayerControl, PlayerControlPropsData } from "../molecule/PlayerControl";
 import * as styles from "./ToolBar.css";
-import { ServiceType } from "../../../common/types/ServiceType";
 
 export interface ToolBarProps {
 	makePlayControlProps: () => PlayControlPropsData;
