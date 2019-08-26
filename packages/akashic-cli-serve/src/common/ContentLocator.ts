@@ -9,6 +9,7 @@ export class ContentLocator {
 
 	constructor(locData: ContentLocatorData) {
 		this.contentId = locData.contentId || null;
+		this.host = locData.host || null;
 		this.path = locData.path || null;
 		this.debuggablePath = locData.debuggablePath || null;
 	}
@@ -25,6 +26,6 @@ export class ContentLocator {
 			return `/contents/${this.contentId}/content.json`;
 		if (this.debuggablePath)
 			return this.debuggablePath;
-		throw new Error("ContentLocator: no debuggable path");
+		return null;
 	}
 }

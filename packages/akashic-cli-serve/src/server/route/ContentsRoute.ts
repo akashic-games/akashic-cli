@@ -11,6 +11,16 @@ export const createContentsRouter = (params: ContentsRouterParameterObject): exp
 	const targetDirs = params.targetDirs;
 	const contentsRouter = express.Router();
 
+	// --debug-untrusted の動作用に、localhost と 127.0.0.1 のリクエストはクロスドメインでも許す
+	// (ref. GameViewManger#getDefaultUntrustedFrameUrl())
+	contentsRouter.use((req, res, next) => {
+		if (req.hostname === "localhost" || req.hostname === "127.0.0.1") {
+			res.header("Access-Control-Allow-Origin", req.get("origin"));
+			res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+		}
+		next();
+	});
+
 	for (let i = 0; i < targetDirs.length; i++) {
 		contentsRouter.get(`/${i}/content/:scriptName(*.js$)`, createScriptAssetController(targetDirs[i]));
 		contentsRouter.use(`/${i}/content`, express.static(targetDirs[i]));

@@ -68,7 +68,7 @@ export class GameViewManager {
 			width: params.width || 0,
 			height: params.height || 0,
 			sharedObject: params.sharedObject,
-			untrustedFrameUrl: params.untrustedFrameUrl || "/internal/untrusted_loader/loader_local.html",
+			untrustedFrameUrl: params.untrustedFrameUrl || this.getDefaultUntrustedFrameUrl(),
 			trustedChildOrigin: params.trustedChildOrigin || /.*/
 		});
 	}
@@ -78,8 +78,9 @@ export class GameViewManager {
 	}
 
 	createGameContent(param: CreateGameContentParameterObject): agv.GameContent {
+		const loc = param.contentLocator;
 		const gameConfig = {
-			contentUrl: param.contentLocator.asDebuggableRootRelativeUrl(),
+			contentUrl: loc.asDebuggableRootRelativeUrl() || loc.asAbsoluteUrl(),
 			player: param.player,
 			playConfig: param.playConfig,
 			gameLoaderCustomizer: param.gameLoaderCustomizer,
@@ -149,5 +150,19 @@ export class GameViewManager {
 				() => options.g.ExceptionFactory.createAssetLoadError("can not load script: " + assetPath)
 			);
 		};
+	}
+
+	private getDefaultUntrustedFrameUrl(): string {
+		// untrustedFrameUrl の制約上、別ホストでアクセスさせる必要があるのでそれを求める
+		const { hostname, protocol, port } = window.location;
+		const altHost = (hostname === "localhost") ? "127.0.0.1" : "localhost";
+		const altOrigin = `${protocol}//${altHost}:${port}`;
+
+		if (hostname !== "localhost" && hostname !== "127.0.0.1") {
+			// 上述の制約上、今の --debug-untrusted はローカルマシンでしか動作しないのてその旨警告しておく
+			console.warn("Hosted on neither localhost nor 127.0.0.1. --debug-untrusted will not work.");
+		}
+
+		return `${altOrigin}/internal/untrusted_loader/loader_local.html`;
 	}
 }
