@@ -12,9 +12,9 @@
     "lint:src": "tslint --project tsconfig.json -c ../tslint.json",
     "lint:spec": "tslint --project ./spec/tsconfig.json -c ../tslint.json",
     "test": "npm run test:ts && npm run lint",
-    "test:ts": "npm run test:ts:compile && npm run test:ts:jasmine",
+    "test:ts": "npm run test:ts:compile && npm run test:ts:jest",
     "test:ts:compile": "npm run build && tsc -p ./spec",
-    "test:ts:jasmine": "istanbul cover --report text --report html --colors -i ./lib/main.node.js ./node_modules/jasmine/bin/jasmine.js"
+    "test:ts:jest": "jest"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
@@ -38,9 +38,7 @@
     "@types/mock-fs": "3.6.30",
     "@types/node": "8.10.51",
     "@types/uglify-js": "2.6.32",
-    "istanbul": "0.4.5",
-    "jasmine": "2.99.0",
-    "jasmine-reporters": "2.3.2",
+    "jest": "~24.8.0",
     "mock-fs": "4.10.1",
     "rimraf": "2.7.1",
     "tslint": "5.18.0",

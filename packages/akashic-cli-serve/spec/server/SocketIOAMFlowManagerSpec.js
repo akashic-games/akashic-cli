@@ -42,11 +42,12 @@ describe("SocketIOAMFlowManager", () => {
 
 	it("provides AMFlow functions with connectionId", (done) => {
 		(async () => {
+			let socket;
 			try {
 				const playStore = new PlayStore({ playManager: new hld.PlayManager() });
 				const amflowManager = new SocketIOAMFlowManager({ playStore });
 				socketIOServer.on("connection", (socket) => amflowManager.setupSocketIOAMFlow(socket));
-				const socket = io("http://localhost:" + TEST_SERVER_PORT);
+				socket = io("http://localhost:" + TEST_SERVER_PORT);
 				const contentLocator = new ServerContentLocator({ path: "dummycontenturl" });
 
 				const playId1 = await playStore.createPlay(contentLocator);
@@ -112,18 +113,23 @@ describe("SocketIOAMFlowManager", () => {
 				done();
 			} catch (e) {
 				done.fail(e);
+			} finally {
+				if (socket) {
+					await socket.close();
+				}
 			}
 		})();
 	});
 
 	it("multiplexes a socket with connectionId", (done) => {
 		(async () => {
+			let socketA, socketB;
 			try {
 				const playStore = new PlayStore({ playManager: new hld.PlayManager() });
 				const amflowManager = new SocketIOAMFlowManager({ playStore });
 				socketIOServer.on("connection", (socket) => amflowManager.setupSocketIOAMFlow(socket));
-				const socketA = io("http://localhost:" + TEST_SERVER_PORT);
-				const socketB = io("http://localhost:" + TEST_SERVER_PORT);
+				socketA = io("http://localhost:" + TEST_SERVER_PORT);
+				socketB = io("http://localhost:" + TEST_SERVER_PORT);
 				const contentLocator = new ServerContentLocator({ path: "dummycontenturl" });
 
 				const playId1 = await playStore.createPlay(contentLocator);
@@ -277,6 +283,13 @@ describe("SocketIOAMFlowManager", () => {
 				done();
 			} catch (e) {
 				done.fail(e);
+			} finally {
+				if (socketA) {
+					await socketA.close();
+				}
+				if (socketB) {
+					await socketB.close();
+				}
 			}
 		})();
 	});
