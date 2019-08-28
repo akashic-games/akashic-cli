@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.7.13 (2019-08-28)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#125](https://github.com/akashic-games/akashic-cli/pull/125) --target-serviceオプション機能の追加 ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 1.7.12 (2019-08-22)
 
 #### Enhancement
