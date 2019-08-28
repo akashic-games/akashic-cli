@@ -1,5 +1,6 @@
 import * as React from "react";
 import { observer } from "mobx-react";
+import { ServiceType } from "../../../common/types/ServiceType";
 import { PlayEntity } from "../../store/PlayEntity";
 import { LocalInstanceEntity } from "../../store/LocalInstanceEntity";
 import { ToolBarUiStore } from "../../store/ToolBarUiStore";
@@ -14,12 +15,13 @@ export interface ToolBarContainerProps {
 	localInstance: LocalInstanceEntity;
 	operator: Operator;
 	toolBarUiStore: ToolBarUiStore;
+	targetService: ServiceType;
 }
 
 @observer
 export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}> {
 	render(): React.ReactNode {
-		const { operator, localInstance, toolBarUiStore } = this.props;
+		const { operator, localInstance, toolBarUiStore, targetService } = this.props;
 		return <ToolBar
 			makePlayControlProps={this._makePlayControlProps}
 			makeInstanceControlProps={this._makeInstanceControlProps}
@@ -28,6 +30,7 @@ export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}>
 			showsDevtools={toolBarUiStore.showsDevtools}
 			showsBgImage={toolBarUiStore.showsBgImage}
 			showsInstanceControl={(localInstance.executionMode === "replay") || toolBarUiStore.showsDevtools}
+			targetService={targetService}
 			onToggleAppearance={operator.ui.toggleShowAppearance}
 			onToggleDevTools={operator.ui.toggleShowDevtools}
 			onToggleBgImage={operator.ui.toggleShowBgImage}
@@ -64,11 +67,12 @@ export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}>
 	}
 
 	private _makePlayerControlProps = (): PlayerControlPropsData => {
-		const { localInstance, operator } = this.props;
+		const { localInstance, operator, targetService } = this.props;
+		const joinEnabled = targetService !== ServiceType.NicoLive;
 		return {
 			selfId: localInstance.player.id,
 			isJoined: localInstance.isJoined,
-			isJoinEnabled: (localInstance.executionMode === "passive"),
+			isJoinEnabled: (localInstance.executionMode === "passive" && joinEnabled),
 			onClickJoinLeave: operator.play.toggleJoinLeaveSelf
 		};
 	}

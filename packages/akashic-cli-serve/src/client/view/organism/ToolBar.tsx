@@ -1,6 +1,8 @@
 import * as React from "react";
 import { observer } from "mobx-react";
+import { ServiceType } from "../../../common/types/ServiceType";
 import { ToolIconButton } from "../atom/ToolIconButton";
+import { ToolLabel } from "../atom/ToolLabel";
 import { PlayControl, PlayControlPropsData } from "../molecule/PlayControl";
 import { InstanceControl, InstanceControlPropsData } from "../molecule/InstanceControl";
 import { PlayerControl, PlayerControlPropsData } from "../molecule/PlayerControl";
@@ -14,6 +16,7 @@ export interface ToolBarProps {
 	showsDevtools: boolean;
 	showsBgImage: boolean;
 	showsInstanceControl: boolean;
+	targetService: ServiceType;
 	onToggleAppearance: (show: boolean) => void;
 	onToggleDevTools: (show: boolean) => void;
 	onToggleBgImage: (show: boolean) => void;
@@ -43,6 +46,9 @@ export class ToolBar extends React.Component<ToolBarProps, {}> {
 					<i className="material-icons">zoom_in</i>
 				</ToolToggleLabel>
 				*/}
+				<ToolLabel title="起動サービスモード" emphasizeBorder={true}>
+					TargetService: <b>{props.targetService}</b>
+				</ToolLabel>
 				<ToolIconButton
 					icon="image"
 					title={"背景画像の表示切り替え"}

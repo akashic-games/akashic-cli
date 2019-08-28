@@ -1,3 +1,5 @@
+import { ServiceType } from "../../common/types/ServiceType";
+
 export interface ServerGlobalConfig {
 	hostname: string;
 	port: number;
@@ -7,6 +9,7 @@ export interface ServerGlobalConfig {
 	verbose: boolean;
 	untrusted: boolean; // 簡易対応。究極的にはコンテンツごとに指定されるべき値
 	proxyAudio: boolean;
+	targetService: ServiceType;
 }
 
 export const DEFAULT_HOSTNAME = "localhost";
@@ -20,5 +23,6 @@ export const serverGlobalConfig: ServerGlobalConfig = {
 	autoStart: true,
 	verbose: false,
 	untrusted: false,
-	proxyAudio: false
+	proxyAudio: false,
+	targetService: ServiceType.None
 };

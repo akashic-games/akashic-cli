@@ -26,6 +26,7 @@ export interface CreateCoeLocalInstanceParameterObject {
 
 export interface CoePluginEntityParameterObject {
 	gameViewManager: GameViewManager;
+	instanceArgument?: any;
 	onLocalInstanceCreate: (params: CreateCoeLocalInstanceParameterObject) => Promise<LocalInstanceEntity>;
 	onLocalInstanceDelete: (playId: string) => Promise<void>;
 }
@@ -33,6 +34,7 @@ export interface CoePluginEntityParameterObject {
 export class CoePluginEntity {
 	private _gameViewManager: GameViewManager;
 	private _localInstance: LocalInstanceEntity;
+	private _argument: any;
 	private _coePluginMessageHandler: (parameters: CoeExternalMessage) => void;
 	private _createLocalInstance: (params: CreateCoeLocalInstanceParameterObject) => Promise<LocalInstanceEntity>;
 	private _deleteLocalInstance: (playId: string) => Promise<void>;
@@ -41,6 +43,7 @@ export class CoePluginEntity {
 		this._gameViewManager = param.gameViewManager;
 		this._createLocalInstance = param.onLocalInstanceCreate;
 		this._deleteLocalInstance = param.onLocalInstanceDelete;
+		this._argument = param.instanceArgument;
 	}
 
 	async bootstrap(game: agv.GameLike, _gameContent: agv.GameContent): Promise<void> {
@@ -117,21 +120,22 @@ export class CoePluginEntity {
 
 	private async _startLocalSession(contentUrl: string, parameters: CoeStartSessionParameterObject): Promise<void> {
 		try {
+			const argument = this._argument || {
+				coe: {
+					permission: {
+						advance: true,
+						advanceRequest: true,
+						aggregation: true
+					},
+					roles: ["broadcaster"],
+					debugMode: false
+				}
+			};
 			this._localInstance = await this._createLocalInstance({
 				contentUrl,
 				playId: parameters.sessionId,
 				local: true,
-				argument: {
-					coe: {
-						permission: {
-							advance: true,
-							advanceRequest: true,
-							aggregation: true
-						},
-						roles: ["broadcaster"],
-						debugMode: false
-					}
-				},
+				argument: argument,
 				initialEvents: parameters.localEvents
 			});
 		} catch (e) {

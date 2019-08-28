@@ -13,6 +13,7 @@ import {ContentStore} from "./ContentStore";
 import {NotificationUiStore} from "./NotificationUiStore";
 import {storage} from "./storage";
 import {StartupScreenUiStore} from "./StartupScreenUiStore";
+import {ServiceType} from "../../common/types/ServiceType";
 
 export class Store {
 	@observable contentStore: ContentStore;
@@ -66,5 +67,9 @@ export class Store {
 	@action
 	setCurrentPlay(play: PlayEntity): void {
 		this.currentPlay = play;
+	}
+
+	get targetService(): ServiceType {
+		return this.appOptions.targetService;
 	}
 }

@@ -9,6 +9,7 @@ import { PlayOperator } from "./PlayOperator";
 import { LocalInstanceOperator } from "./LocalInstanceOperator";
 import { UiOperator } from "./UiOperator";
 import { ExternalPluginOperator } from "./ExternalPluginOperator";
+import { ServiceType } from "../../common/types/ServiceType";
 
 export interface OperatorParameterObject {
 	store: Store;
@@ -70,7 +71,9 @@ export class Operator {
 		if (store.currentPlay === play)
 			return;
 
+		let previousPlay;
 		if (store.currentPlay) {
+			previousPlay = store.currentPlay;
 			store.currentPlay.deleteAllLocalInstances();
 			store.setCurrentLocalInstance(null);
 		}
@@ -79,8 +82,21 @@ export class Operator {
 
 		store.setCurrentPlay(play);
 
+		let isJoin = false;
+		let argument = undefined;
+		if (store.targetService === ServiceType.NicoLive) {
+			if (previousPlay) {
+				isJoin = previousPlay.joinedPlayerTable.has(store.player.id);
+			} else {
+				isJoin = play.joinedPlayerTable.size === 0;
+			}
+			argument = this._createInstanceArgumentForNicolive(isJoin);
+		}
 		if (store.appOptions.autoStart) {
-			await this.startContent();
+			await this.startContent({
+				joinsSelf: isJoin,
+				instanceArgument: argument
+			});
 		}
 	}
 
@@ -110,17 +126,7 @@ export class Operator {
 						player: this.store.player,
 						playId: params.playId,
 						executionMode: "active",
-						argument: {
-							coe: {
-								permission: {
-									advance: true,
-									advanceRequest: true,
-									aggregation: true
-								},
-								roles: ["broadcaster"],
-								debugMode: false
-							}
-						},
+						argument: params.argument,
 						initialEvents: params.initialEvents,
 						proxyAudio: store.appOptions.proxyAudio
 					});
@@ -174,5 +180,19 @@ export class Operator {
 		} catch (e) {
 			console.error("_handleBroadcast()", e);
 		}
+	}
+
+	private _createInstanceArgumentForNicolive(isBroadcaster: boolean) {
+		return {
+			coe: {
+				permission: {
+					advance: false,
+					advanceRequest: isBroadcaster,
+					aggregation: false
+				},
+				roles: isBroadcaster ? ["broadcaster"] : [],
+				debugMode: true
+			}
+		};
 	}
 }
