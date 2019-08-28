@@ -85,9 +85,10 @@ export class Operator {
 		let isJoin = false;
 		let argument = undefined;
 		if (store.targetService === ServiceType.NicoLive) {
-			isJoin = play.joinedPlayerTable.size === 0;
 			if (previousPlay) {
 				isJoin = previousPlay.joinedPlayerTable.has(store.player.id);
+			} else {
+				isJoin = play.joinedPlayerTable.size === 0;
 			}
 			argument = this._createInstanceArgumentForNicolive(isJoin);
 		}
