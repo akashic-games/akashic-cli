@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.7.14 (2019-08-28)
+
+#### Other Change
+* `akashic-cli-export-zip`, `akashic-cli-modify`, `akashic-cli-serve`, `akashic-cli-uninstall`
+  * [#129](https://github.com/akashic-games/akashic-cli/pull/129) akashic-cli-xxxモジュールのテストフレームワークをjestに変更 その3 ([@dera-](https://github.com/dera-))
+
+#### Committers: 1
+- [@dera-](https://github.com/dera-)
+
 ## 1.7.13 (2019-08-28)
 
 #### Enhancement
