@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.7.17 (2019-08-30)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#140](https://github.com/akashic-games/akashic-cli/pull/140) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@2.1.23、engineFiles@1.1.11) ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.7.16 (2019-08-30)
 
 #### Enhancement
