@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.7.15 (2019-08-30)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#124](https://github.com/akashic-games/akashic-cli/pull/124) akashic-cli-initのランキング対応新市場コンテンツテンプレートの修正 ([@dera-](https://github.com/dera-))
+
+#### Committers: 1
+- [@dera-](https://github.com/dera-)
+
 ## 1.7.14 (2019-08-28)
 
 #### Other Change
