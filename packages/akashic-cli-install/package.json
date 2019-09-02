@@ -33,7 +33,7 @@
     "jasmine-terminal-reporter": "0.9.1",
     "mock-fs": "4.10.1",
     "rimraf": "2.7.1",
-    "tslint": "5.18.0",
+    "tslint": "5.19.0",
     "typescript": "2.9.2"
   },
   "dependencies": {
