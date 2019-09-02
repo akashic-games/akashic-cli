@@ -39,7 +39,7 @@
     "@types/commander": "2.12.0",
     "@types/form-data": "2.2.1",
     "@types/fs-extra": "2.1.0",
-    "@types/node": "10.14.15",
+    "@types/node": "10.14.17",
     "@types/request": "2.48.2",
     "@types/unzipper": "0.10.0",
     "bestzip": "2.1.4",
