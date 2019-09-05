@@ -38,12 +38,12 @@ export class PlayOperator {
 		const sandboxConfig = this.store.currentLocalInstance.content.sandboxConfig || {};
 		const pevs = sandboxConfig.events[eventName];
 		const amflow = this.store.currentPlay.amflow;
-		pevs.forEach((pev: any) => amflow.sendEvent(pev));
+		pevs.forEach((pev: any) => amflow.enqueueEvent(pev));
 	}
 
 	sendEditorEvent = (): void => {
 		const pevs = JSON.parse(this.store.devtoolUiStore.eventEditContent);
 		const amflow = this.store.currentPlay.amflow;
-		pevs.forEach((pev: any) => amflow.sendEvent(pev));
+		pevs.forEach((pev: any) => amflow.enqueueEvent(pev));
 	}
 }
