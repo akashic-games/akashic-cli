@@ -149,12 +149,12 @@ export class PlayEntity {
 
 	join(playerId: string, name?: string): void {
 		const highestPriority = 3;
-		this.amflow.sendEvent([playlog.EventCode.Join, highestPriority, playerId, name]);
+		this.amflow.enqueueEvent([playlog.EventCode.Join, highestPriority, playerId, name]);
 	}
 
 	leave(playerId: string): void {
 		const highestPriority = 3;
-		this.amflow.sendEvent([playlog.EventCode.Leave, highestPriority, playerId]);
+		this.amflow.enqueueEvent([playlog.EventCode.Leave, highestPriority, playerId]);
 	}
 
 	pauseActive(): void {

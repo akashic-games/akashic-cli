@@ -84,7 +84,11 @@ export class Storage {
 
 	put(data: Partial<StorageData>): void {
 		this.data = { ...this.data, ...data };
-		window.sessionStorage.setItem(Storage.SESSION_STORAGE_KEY, JSON.stringify(this.data));
+		try {
+			window.sessionStorage.setItem(Storage.SESSION_STORAGE_KEY, JSON.stringify(this.data));
+		} catch (e) {
+			console.error("Failed to sessionStorage.setItem()", e);
+		}
 	}
 }
 

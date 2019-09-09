@@ -48,10 +48,8 @@ export class Operator {
 	async bootstrap(contentLocator?: ClientContentLocator): Promise<void> {
 		const store = this.store;
 		let play: PlayEntity = null;
-		let isPlayCreated = false;
 		if (contentLocator) {
 			play = await this._createServerLoop(contentLocator);
-			isPlayCreated = true;
 		} else {
 			const plays = store.playStore.playsList();
 			if (plays.length > 0) {
@@ -59,11 +57,9 @@ export class Operator {
 			} else {
 				const loc = store.contentStore.defaultContent().locator;
 				play = await this._createServerLoop(loc);
-				isPlayCreated = true;
 			}
 		}
 		await this.setCurrentPlay(play);
-		if (isPlayCreated) this.play.sendRegisteredEvent(play.content.sandboxConfig.autoSendEvents);
 	}
 
 	setCurrentPlay = async (play: PlayEntity): Promise<void> => {
@@ -148,8 +144,8 @@ export class Operator {
 
 	restartWithNewPlay = async (): Promise<void> => {
 		const play = await this._createServerLoop(this.store.currentPlay.content.locator);
-		await ApiClient.broadcast(this.store.currentPlay.playId, { type: "switchPlay", nextPlayId: play.playId });
 		await this.store.currentPlay.deleteAllServerInstances();
+		await ApiClient.broadcast(this.store.currentPlay.playId, { type: "switchPlay", nextPlayId: play.playId });
 	}
 
 	private async _createServerLoop(contentLocator: ClientContentLocator): Promise<PlayEntity> {
@@ -157,6 +153,14 @@ export class Operator {
 		const tokenResult = await ApiClient.createPlayToken(play.playId, "", true);  // TODO 空文字列でなくnullを使う
 		await play.createServerInstance({ playToken: tokenResult.data.playToken });
 		await ApiClient.resumePlayDuration(play.playId);
+
+		// autoSendEvents
+		const sandboxConfig = this.store.contentStore.findOrRegister(contentLocator).sandboxConfig || {};
+		const { events, autoSendEvents } = sandboxConfig;
+		if (events && autoSendEvents && events[autoSendEvents] instanceof Array) {
+			events[autoSendEvents].forEach((pev: any) => play.amflow.enqueueEvent(pev));
+		}
+
 		return play;
 	}
 
