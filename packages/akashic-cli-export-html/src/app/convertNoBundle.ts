@@ -13,6 +13,7 @@ import {
 	getInjectedContents,
 	validateEs5Code
 } from "./convertUtil";
+import { minify } from "uglify-js";
 
 export async function promiseConvertNoBundle(options: ConvertTemplateParameterObject): Promise<void> {
 	var content = await cmn.ConfigurationFile.read(path.join(options.source, "game.json"), options.logger);
@@ -28,6 +29,18 @@ export async function promiseConvertNoBundle(options: ConvertTemplateParameterOb
 	var gamejsonPath = path.resolve(options.output, "./js/game.json.js");
 	fsx.outputFileSync(gamejsonPath, wrapText(JSON.stringify(conf._content, null, "\t"), "game.json"));
 	assetPaths.push("./js/game.json.js");
+
+	// assetsに無いので手動でsandbox.config.jsをコピーする
+	try {
+		var sandboxConfigJsPath = path.join(options.source, "sandbox.config.js");
+		fs.accessSync(sandboxConfigJsPath);
+		var sandboxConfigJsString = fs.readFileSync(sandboxConfigJsPath, "utf8").replace(/\r\n|\r/g, "\n");
+		sandboxConfigJsString = wrapScript(sandboxConfigJsString, "sandbox.config.js", options.minify)
+		fsx.outputFileSync(path.resolve(options.output, "sandbox.config.js"), sandboxConfigJsString);
+		assetPaths.push("sandbox.config.js");
+	} catch (error) {
+		// do nothing
+	}
 
 	var assetNames = extractAssetDefinitions(conf, "script").concat(extractAssetDefinitions(conf, "text"));
 	var errorMessages: string[] = [];
