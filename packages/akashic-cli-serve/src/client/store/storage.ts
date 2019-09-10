@@ -15,6 +15,7 @@ export interface StorageData {
 	instanceArgumentListWidth: number;
 	instanceArgumentEditContent: string;
 	joinsAutomatically: boolean;
+	showsGridCanvas: boolean;
 }
 
 function asBool(s: string | null): boolean | null {
@@ -78,7 +79,9 @@ export class Storage {
 			selectedArgumentName: choose(getQueryValue(qp.selectedArgumentName), s.selectedArgumentName, null),
 			instanceArgumentListWidth: choose(asNumber(getQueryValue(qp.instanceArgumentListWidth)), s.instanceArgumentListWidth, 150),
 			instanceArgumentEditContent: choose(getQueryValue(qp.instanceArgumentEditContent), s.instanceArgumentEditContent, ""),
-			joinsAutomatically: choose(asBool(getQueryValue(qp.joinsAutomatically)), s.joinsAutomatically, false)
+			joinsAutomatically: choose(asBool(getQueryValue(qp.joinsAutomatically)), s.joinsAutomatically, false),
+			showsBgImage: choose(asBool(getQueryValue(qp.showsBgImage)), s.showsBgImage, false),
+			showsGridCanvas: choose(asBool(getQueryValue(qp.showsGridCanvas)), s.showsGridCanvas, false)
 		});
 	}
 

@@ -9,6 +9,9 @@ import "./global.css";
 import * as styles from "./App.css";
 import {StartupScreenContainer} from "./container/StartupScreenContainer";
 import {NotificationContainer} from "./container/NotificationContainer";
+import {ContentDisplayOption} from "./organism/ContentDisplayOption";
+import {ContentDisplayOptionContainer} from "./container/ContentDisplayOptionContainer";
+import {ContentDisplayDialogContainer} from "./container/ContentDisplayDialogContainer";
 
 export interface AppProps {
 	store: Store;
@@ -44,12 +47,22 @@ export class App extends React.Component<AppProps, {}> {
 				toolBarUiStore={store.toolBarUiStore}
 				targetService={store.targetService}
 			/>
-			<div id="agvcontainer" className={styles["main"] + " " + styles["centering"] } ref={this._onRef}>
 			{
-				store.toolBarUiStore.showsBgImage ?
-					<img src={sandboxConfig.backgroundImage} className={styles["bg-image"]}/> :
+				store.toolBarUiStore.showsContentDisplayDialog ?
+					<div className={styles["display-dialog"]}>
+						<ContentDisplayDialogContainer
+							toolBarUiStore={store.toolBarUiStore}
+							operator={operator}
+						/>
+					</div> :
 					null
 			}
+			<div id="agvcontainer" className={styles["main"] + " " + styles["centering"] } ref={this._onRef}>
+				<ContentDisplayOptionContainer
+					sandboxConfig={sandboxConfig}
+					toolBarUiStore={store.toolBarUiStore}
+					localInstance={store.currentLocalInstance}
+				/>
 			</div>
 			{
 				store.toolBarUiStore.showsDevtools ?
@@ -71,7 +84,12 @@ export class App extends React.Component<AppProps, {}> {
 	}
 
 	private _onRef = (elem: HTMLDivElement): void => {
-		if (elem) {
+		if (!elem) {
+			return;
+		}
+		if (elem.firstChild) {
+			elem.firstChild.appendChild(this.props.gameViewManager.getRootElement());
+		} else {
 			elem.appendChild(this.props.gameViewManager.getRootElement());
 		}
 	}

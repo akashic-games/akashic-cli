@@ -120,6 +120,11 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 		return this.play.joinedPlayerTable.has(this.player.id);
 	}
 
+	@computed
+	get gameViewSize(): {width: number, height: number} {
+		return this._gameViewManager.getViewSize();
+	}
+
 	get gameContent(): agv.GameContent {
 		return this._agvGameContent;
 	}

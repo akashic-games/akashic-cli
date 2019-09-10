@@ -14,12 +14,12 @@ export interface ToolBarProps {
 	makePlayerControlProps: () => PlayerControlPropsData;
 	showsAppearance: boolean;
 	showsDevtools: boolean;
-	showsBgImage: boolean;
+	showsContentDisplayDialog: boolean;
 	showsInstanceControl: boolean;
 	targetService: ServiceType;
 	onToggleAppearance: (show: boolean) => void;
 	onToggleDevTools: (show: boolean) => void;
-	onToggleBgImage: (show: boolean) => void;
+	onToggleContentDisplayDialog: (show: boolean) => void;
 }
 
 @observer
@@ -51,9 +51,9 @@ export class ToolBar extends React.Component<ToolBarProps, {}> {
 				</ToolLabel>
 				<ToolIconButton
 					icon="image"
-					title={"背景画像の表示切り替え"}
-					pushed={props.showsBgImage}
-					onClick={props.onToggleBgImage} />
+					title={"コンテンツ表示オプションダイアログの表示切り替え"}
+					pushed={props.showsContentDisplayDialog}
+					onClick={props.onToggleContentDisplayDialog} />
 				<ToolIconButton
 					icon="menu"
 					title={"Devtoolsの表示切り替え"}

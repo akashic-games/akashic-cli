@@ -34,6 +34,10 @@
 	flex: 0 0 auto;
 }
 
+.display-dialog {
+	margin:0 0 0 auto;
+}
+
 .bg-image {
 	position: absolute;
 	z-index: -1;

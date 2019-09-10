@@ -15,7 +15,7 @@ const store = observable({
 	duration: 380 * 1000,
 	showsAppearance: false,
 	showsDevtools: false,
-	showsBgImage: false,
+	showsContentDisplayDialog: false,
 	isActivePausing: false
 });
 
@@ -54,12 +54,12 @@ const TestWithBehaviour = observer(() => (
 			})}
 			showsAppearance={store.showsAppearance}
 			showsDevtools={store.showsDevtools}
-			showsBgImage={store.showsBgImage}
+			showsContentDisplayDialog={store.showsContentDisplayDialog}
 			showsInstanceControl={store.showsDevtools}
 			targetService={ServiceType.None}
 			onToggleAppearance={v => (store.showsAppearance = v)}
 			onToggleDevTools={v => (store.showsDevtools = v)}
-			onToggleBgImage={v => (store.showsBgImage = v)}
+			onToggleContentDisplayDialog={v => (store.showsContentDisplayDialog = v)}
 		/>
 ));
 
@@ -91,11 +91,11 @@ storiesOf("o-ToolBar", module)
 			})}
 			showsAppearance={false}
 			showsDevtools={true}
-			showsBgImage={true}
+			showsContentDisplayDialog={true}
 			showsInstanceControl={true}
 			targetService={ServiceType.None}
 			onToggleAppearance={action("toggle-appearance")}
 			onToggleDevTools={action("toggle-dev-tools")}
-			onToggleBgImage={action("toggle-bg-image")} />
+			onToggleContentDisplayDialog={action("toggle-bg-image")} />
 	))
 	.add("with-behavior", () => <TestWithBehaviour />);

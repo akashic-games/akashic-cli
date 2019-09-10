@@ -1,0 +1,9 @@
+.bg-image {
+    position: absolute;
+    z-index: -1;
+}
+.grid-canvas {
+    position: absolute;
+    pointer-events: none;
+    z-index: 2;
+}
