@@ -30,7 +30,6 @@ export async function promiseConvertNoBundle(options: ConvertTemplateParameterOb
 	fsx.outputFileSync(gamejsonPath, wrapText(JSON.stringify(conf._content, null, "\t"), "game.json"));
 	assetPaths.push("./js/game.json.js");
 
-	// assetsに無いので手動でsandbox.config.jsをコピーする
 	try {
 		var sandboxConfigJsPath = path.join(options.source, "sandbox.config.js");
 		fs.accessSync(sandboxConfigJsPath);
