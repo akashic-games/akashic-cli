@@ -37,6 +37,17 @@ export async function promiseConvertBundle(options: ConvertTemplateParameterObje
 		code: encodeText(JSON.stringify(conf._content, null, "\t"))
 	});
 
+	try {
+		const sandboxConfig = fs.readFileSync(path.join(options.source, "sandbox.config.js"), { encoding: "utf8" });
+		innerHTMLAssetArray.push({
+			name: "sandbox.config.js",
+			type: "script",
+			code: wrap(sandboxConfig, false)
+		});
+	} catch (error) {
+		// do nothing
+	}
+
 	var errorMessages: string[] = [];
 	var innerHTMLAssetNames = extractAssetDefinitions(conf, "script");
 	if (!options.unbundleText) {

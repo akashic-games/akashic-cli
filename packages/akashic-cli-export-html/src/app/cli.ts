@@ -115,7 +115,7 @@ export function run(argv: string[]): void {
 }
 
 function dropDeprecatedArgs(argv: string[]): string[] {
-	const filteredArgv = argv.filter(v => !/^(-s|--strip)$/.test(v));
+	const filteredArgv = argv.filter(v => !/^(--strip)$/.test(v));
 	if (argv.length !== filteredArgv.length) {
 		console.log("WARN: --strip option is deprecated. strip is applied by default.");
 		console.log("WARN: If you do not need to apply it, use --no-strip option.");
