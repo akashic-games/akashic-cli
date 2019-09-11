@@ -4,8 +4,8 @@ import { observer } from "mobx-react";
 export interface ContentDisplayDialogProps {
 	showsBgImage: boolean;
 	showsGridCanvas: boolean;
-	setShowsBgImage: (show: boolean) => void
-	setShowsGridCanvas: (show: boolean) => void
+	setShowsBgImage: (show: boolean) => void;
+	setShowsGridCanvas: (show: boolean) => void;
 }
 
 @observer

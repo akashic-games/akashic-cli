@@ -88,6 +88,7 @@ export class App extends React.Component<AppProps, {}> {
 			return;
 		}
 		if (elem.firstChild) {
+			// elemの子要素が持つDOMと重なるようにコンテンツを表示させたいので、elemの子要素の1番下の子要素にする
 			elem.firstChild.appendChild(this.props.gameViewManager.getRootElement());
 		} else {
 			elem.appendChild(this.props.gameViewManager.getRootElement());

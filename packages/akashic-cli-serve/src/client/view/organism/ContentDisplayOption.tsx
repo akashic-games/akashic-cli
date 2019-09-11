@@ -20,6 +20,7 @@ export class ContentDisplayOption extends React.Component<ContentDisplayOptionPr
 					<img src={this.props.backgroundImage} className={styles["bg-image"]}/> :
 					null
 			}
+			{/* 重ねて表示するためにcanvasDOMを常にコンテンツDOMの前に置いておく必要があるので表示非表示切り替えはstyle属性で行う */}
 			<canvas
 				id="gridCanvas"
 				className={styles["grid-canvas"]}
@@ -42,7 +43,7 @@ export class ContentDisplayOption extends React.Component<ContentDisplayOptionPr
 			this._drawGridLine(context, 100, 100);
 			context.restore();
 		}
-	};
+	}
 
 	private _drawGridLine(context: CanvasRenderingContext2D, gridWidth: number, gridHeight: number) {
 		context.beginPath();
@@ -55,5 +56,5 @@ export class ContentDisplayOption extends React.Component<ContentDisplayOptionPr
 			context.lineTo(this.props.gameWidth, y);
 		}
 		context.stroke();
-	};
+	}
 }
