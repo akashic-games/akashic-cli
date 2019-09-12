@@ -43,18 +43,18 @@ export class ToolBarUiStore {
 	}
 
 	@action
-	toggleShowsContentDisplayDialog(show: boolean): void {
+	toggleShowContentDisplayDialog(show: boolean): void {
 		this.showsContentDisplayDialog = show;
 	}
 
 	@action
-	setShowsBgImage(show: boolean): void {
+	setShowBgImage(show: boolean): void {
 		this.showsBgImage = show;
 		storage.put({ showsBgImage: show });
 	}
 
 	@action
-	setShowsGridCanvas(show: boolean): void {
+	setShowGridCanvas(show: boolean): void {
 		this.showsGridCanvas = show;
 		storage.put({ showsGridCanvas: show });
 	}

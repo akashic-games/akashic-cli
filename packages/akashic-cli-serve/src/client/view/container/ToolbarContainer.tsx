@@ -33,7 +33,7 @@ export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}>
 			targetService={targetService}
 			onToggleAppearance={operator.ui.toggleShowAppearance}
 			onToggleDevTools={operator.ui.toggleShowDevtools}
-			onToggleContentDisplayDialog={operator.ui.toggleShowsContentDisplayDialog}
+			onToggleContentDisplayDialog={operator.ui.toggleShowContentDisplayDialog}
 		/>;
 	}
 

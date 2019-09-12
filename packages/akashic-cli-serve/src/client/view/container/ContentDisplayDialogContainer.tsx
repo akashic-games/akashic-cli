@@ -15,8 +15,8 @@ export class ContentDisplayDialogContainer extends React.Component<ContentDispla
 		return <ContentDisplayDialog
 			showsGridCanvas={this.props.toolBarUiStore.showsGridCanvas}
 			showsBgImage={this.props.toolBarUiStore.showsBgImage}
-			setShowsBgImage={this.props.operator.ui.setShowsBgImage}
-			setShowsGridCanvas={this.props.operator.ui.setShowsGridCanvas}
+			setShowBgImage={this.props.operator.ui.setShowBgImage}
+			setShowGridCanvas={this.props.operator.ui.setShowGridCanvas}
 		/>;
 	}
 }
