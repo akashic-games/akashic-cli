@@ -48,13 +48,13 @@ export class ToolBarUiStore {
 	}
 
 	@action
-	setShowBgImage(show: boolean): void {
+	toggleShowBgImage(show: boolean): void {
 		this.showsBgImage = show;
 		storage.put({ showsBgImage: show });
 	}
 
 	@action
-	setShowGridCanvas(show: boolean): void {
+	toggleShowGridCanvas(show: boolean): void {
 		this.showsGridCanvas = show;
 		storage.put({ showsGridCanvas: show });
 	}
