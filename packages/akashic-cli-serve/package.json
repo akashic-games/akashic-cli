@@ -65,11 +65,11 @@
     "storybook-addon-jsx": "6.0.1",
     "style-loader": "0.23.1",
     "ts-loader": "4.5.0",
-    "tslint": "5.19.0",
+    "tslint": "5.20.0",
     "typescript": "3.6.3",
     "uglify-js": "2.8.29",
     "uglify-save-license": "0.4.1",
-    "webpack": "4.39.3",
+    "webpack": "4.40.2",
     "webpack-cli": "3.3.8",
     "whatwg-fetch": "3.0.0"
   },
