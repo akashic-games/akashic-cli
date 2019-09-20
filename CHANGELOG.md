@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## 1.7.23 (2019-09-20)
+
+#### Enhancement
+* `akashic-cli-export-html`
+  * [#152](https://github.com/akashic-games/akashic-cli/pull/152) 【akashic-cli-export-html】内部コンポーネントの更新(engineFiles@2.1.25、engineFiles@1.1.12) ([@xnv](https://github.com/xnv))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#151](https://github.com/akashic-games/akashic-cli/pull/151) Update all dependencies (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#150](https://github.com/akashic-games/akashic-cli/pull/150) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.7.22 (2019-09-13)
 
 #### Enhancement
