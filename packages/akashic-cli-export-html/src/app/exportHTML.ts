@@ -22,6 +22,7 @@ export function _completeExportHTMLParameterObject(p: ExportHTMLParameterObject)
 	param.logger = param.logger || new cmn.ConsoleLogger();
 	return param;
 }
+
 export function promiseExportHTML(p: ExportHTMLParameterObject): Promise<string> {
 	const param = _completeExportHTMLParameterObject(p);
 	let gamepath: string;

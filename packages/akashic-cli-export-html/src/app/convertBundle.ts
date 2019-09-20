@@ -132,7 +132,9 @@ function writeEct(
 		magnify: !!options.magnify,
 		injectedContents: getInjectedContents(options.cwd, injects),
 		exportVersion: options.exportInfo !== undefined ? options.exportInfo.version : "",
-		exportOption: options.exportInfo !== undefined ? options.exportInfo.option : ""
+		exportOption: options.exportInfo !== undefined ? options.exportInfo.option : "",
+		autoSendEvents: "",
+		sandboxConfigJsCode: ""
 	});
 	fs.writeFileSync(path.resolve(outputPath, "./index.html"), html);
 }

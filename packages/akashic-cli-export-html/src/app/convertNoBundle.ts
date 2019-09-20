@@ -34,7 +34,7 @@ export async function promiseConvertNoBundle(options: ConvertTemplateParameterOb
 		var sandboxConfigJsPath = path.join(options.source, "sandbox.config.js");
 		fs.accessSync(sandboxConfigJsPath);
 		var sandboxConfigJsString = fs.readFileSync(sandboxConfigJsPath, "utf8").replace(/\r\n|\r/g, "\n");
-		sandboxConfigJsString = wrapScript(sandboxConfigJsString, "sandbox.config.js", options.minify)
+		sandboxConfigJsString = wrapScript(sandboxConfigJsString, "sandbox.config.js", options.minify);
 		fsx.outputFileSync(path.resolve(options.output, "sandbox.config.js"), sandboxConfigJsString);
 		assetPaths.push("sandbox.config.js");
 	} catch (error) {

@@ -36,6 +36,18 @@ if (! ("gLocalAssetContainer" in window)) {
 <% end %>
 </script>
 
+<% if @autoSendEvents : %>
+	window.__akashic__.autoSendEvents = <%- @autoSendEvents %>;
+	window.__akashic__.sandboxConfigFunc = function () {
+		var module = { exports: {} };
+		var exports = module.exports;
+		(function () {
+			<%- @sandboxConfigJsCode %>
+		})();
+		return module.exports;
+	}
+<% end %>
+
 <script>
 <% for postloadScript in @postloadScripts : %>
 	<%- postloadScript %>

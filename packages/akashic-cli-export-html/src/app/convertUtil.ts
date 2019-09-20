@@ -21,6 +21,7 @@ export interface ConvertTemplateParameterObject {
 		version: string;
 		option: string;
 	};
+	autoSendeEvents?: string;
 }
 
 export function extractAssetDefinitions (conf: cmn.Configuration, type: string): string[] {

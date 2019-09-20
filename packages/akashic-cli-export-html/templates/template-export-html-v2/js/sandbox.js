@@ -29,13 +29,11 @@ window.addEventListener("load", function() {
 			}
 		});
 
-		var sandboxConfigScript = window.gLocalAssetContainer["sandbox.config.js"];
-		if (sandboxConfigScript) {
-			var exporter = {module: {}, exports: {}};
-			sandboxConfigScript(exporter);
-			var sandboxConfig = exporter.module.exports;
-			if (!!sandboxConfig && sandboxConfig.autoSendEvents && sandboxConfig.events && sandboxConfig.events[sandboxConfig.autoSendEvents]) {
-				sandboxConfig.events[sandboxConfig.autoSendEvents].forEach((ev) => amflowClient.sendEvent(ev));
+		if (window.__akashic__.autoSendEvents) {
+			var autoSendEvents = window.__akashic__.autoSendEvents;
+			var sandboxConfig = window.__akashic__.sandboxConfigFunc();
+			if (!!sandboxConfig && autoSendEvents && sandboxConfig.events && sandboxConfig.events[autoSendEvents]) {
+				sandboxConfig.events[autoSendEvents].forEach((ev) => amflowClient.sendEvent(ev));
 			}
 		}
 
