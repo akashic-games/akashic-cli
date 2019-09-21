@@ -77,7 +77,8 @@ export function promiseExportHTML(p: ExportHTMLParameterObject): Promise<string>
 			injects: param.injects,
 			unbundleText: param.unbundleText,
 			lint: param.lint,
-			exportInfo: param.exportInfo
+			exportInfo: param.exportInfo,
+			autoSendEvents: param.autoSendEvents
 		};
 		if (param.bundle) {
 			return promiseConvertBundle(convertParam);

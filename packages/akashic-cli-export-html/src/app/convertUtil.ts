@@ -21,7 +21,8 @@ export interface ConvertTemplateParameterObject {
 		version: string;
 		option: string;
 	};
-	autoSendeEvents?: string;
+	autoSendEvents?: string | boolean;
+	sandboxConfigJsCode?: string;
 }
 
 export function extractAssetDefinitions (conf: cmn.Configuration, type: string): string[] {

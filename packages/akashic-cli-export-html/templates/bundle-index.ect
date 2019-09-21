@@ -25,6 +25,10 @@ if (! ("gLocalAssetContainer" in window)) {
 	window.gLocalAssetContainer = {};
 }
 
+if (! ("__akashic__" in window)) {
+	window.__akashic__ = {};
+}
+
 <% for asset in @assets : %>
 	<% if asset.type is "script" : %>
 		window.gLocalAssetContainer["<%- asset.name %>"] = function(g) {
@@ -34,10 +38,9 @@ if (! ("gLocalAssetContainer" in window)) {
 		window.gLocalAssetContainer["<%- asset.name %>"] = "<%- asset.code %>";
 	<% end %>
 <% end %>
-</script>
 
 <% if @autoSendEvents : %>
-	window.__akashic__.autoSendEvents = <%- @autoSendEvents %>;
+	window.__akashic__.autoSendEvents = "<%- @autoSendEvents %>";
 	window.__akashic__.sandboxConfigFunc = function () {
 		var module = { exports: {} };
 		var exports = module.exports;
@@ -47,6 +50,7 @@ if (! ("gLocalAssetContainer" in window)) {
 		return module.exports;
 	}
 <% end %>
+</script>
 
 <script>
 <% for postloadScript in @postloadScripts : %>

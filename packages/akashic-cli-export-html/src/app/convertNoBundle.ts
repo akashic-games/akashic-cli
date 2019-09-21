@@ -34,11 +34,14 @@ export async function promiseConvertNoBundle(options: ConvertTemplateParameterOb
 		var sandboxConfigJsPath = path.join(options.source, "sandbox.config.js");
 		fs.accessSync(sandboxConfigJsPath);
 		var sandboxConfigJsString = fs.readFileSync(sandboxConfigJsPath, "utf8").replace(/\r\n|\r/g, "\n");
-		sandboxConfigJsString = wrapScript(sandboxConfigJsString, "sandbox.config.js", options.minify);
-		fsx.outputFileSync(path.resolve(options.output, "sandbox.config.js"), sandboxConfigJsString);
-		assetPaths.push("sandbox.config.js");
+		options.sandboxConfigJsCode = sandboxConfigJsString;
+		// sandboxConfigJsString = wrapScript(sandboxConfigJsString, "sandbox.config.js", options.minify);
+		// fsx.outputFileSync(path.resolve(options.output, "sandbox.config.js"), sandboxConfigJsString);
+		// assetPaths.push("sandbox.config.js");
 	} catch (error) {
 		// do nothing
+		options.autoSendEvents = false;
+		console.log("failed write sandboxConfig");
 	}
 
 	var assetNames = extractAssetDefinitions(conf, "script").concat(extractAssetDefinitions(conf, "text"));
@@ -103,6 +106,8 @@ function writeEct(assetPaths: string[], outputPath: string, conf: cmn.Configurat
 	var ectRender = ect({root: __dirname + "/../templates-build", ext: ".ect"});
 	var version = conf._content.environment["sandbox-runtime"];
 	var versionsJson = require("./engineFilesVersion.json");
+	var sandboxConfig = fs.readFileSync(path.join(options.source, "sandbox.config.js"), { encoding: "utf8" });
+
 	var html = ectRender.render("no-bundle-index", {
 		assets: assetPaths,
 		magnify: !!options.magnify,
@@ -110,7 +115,10 @@ function writeEct(assetPaths: string[], outputPath: string, conf: cmn.Configurat
 		version: version,
 		engineFilesVariable: versionsJson[`v${version}`].variable,
 		exportVersion: options.exportInfo !== undefined ? options.exportInfo.version : "",
-		exportOption: options.exportInfo !== undefined ? options.exportInfo.option : ""
+		exportOption: options.exportInfo !== undefined ? options.exportInfo.option : "",
+		autoSendEvents: options.autoSendEvents,
+		sandboxConfigJsCode: sandboxConfig
+
 	});
 	fs.writeFileSync(path.resolve(outputPath, "./index.html"), html);
 }

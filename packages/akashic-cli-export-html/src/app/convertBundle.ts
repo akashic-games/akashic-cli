@@ -38,6 +38,20 @@ export async function promiseConvertBundle(options: ConvertTemplateParameterObje
 	});
 
 	try {
+		var sandboxConfigJsPath = path.join(options.source, "sandbox.config.js");
+		fs.accessSync(sandboxConfigJsPath);
+		var sandboxConfigJsString = fs.readFileSync(sandboxConfigJsPath, "utf8").replace(/\r\n|\r/g, "\n");
+		options.sandboxConfigJsCode = sandboxConfigJsString;
+		// sandboxConfigJsString = wrapScript(sandboxConfigJsString, "sandbox.config.js", options.minify);
+		// fsx.outputFileSync(path.resolve(options.output, "sandbox.config.js"), sandboxConfigJsString);
+		// assetPaths.push("sandbox.config.js");
+	} catch (error) {
+		// do nothing
+		options.autoSendEvents = false;
+		console.log("failed write sandboxConfig");
+	}
+	/*
+	try {
 		const sandboxConfig = fs.readFileSync(path.join(options.source, "sandbox.config.js"), { encoding: "utf8" });
 		innerHTMLAssetArray.push({
 			name: "sandbox.config.js",
@@ -47,6 +61,7 @@ export async function promiseConvertBundle(options: ConvertTemplateParameterObje
 	} catch (error) {
 		// do nothing
 	}
+	*/
 
 	var errorMessages: string[] = [];
 	var innerHTMLAssetNames = extractAssetDefinitions(conf, "script");
@@ -124,6 +139,7 @@ function writeEct(
 	const injects = options.injects ? options.injects : [];
 	var scripts = getDefaultBundleScripts(templatePath, conf._content.environment["sandbox-runtime"], options.minify, !options.unbundleText);
 	var ectRender = ect({root: __dirname + "/../templates-build", ext: ".ect"});
+
 	var html = ectRender.render("bundle-index", {
 		assets: innerHTMLAssetArray,
 		preloadScripts: scripts.preloadScripts,
@@ -133,8 +149,8 @@ function writeEct(
 		injectedContents: getInjectedContents(options.cwd, injects),
 		exportVersion: options.exportInfo !== undefined ? options.exportInfo.version : "",
 		exportOption: options.exportInfo !== undefined ? options.exportInfo.option : "",
-		autoSendEvents: "",
-		sandboxConfigJsCode: ""
+		autoSendEvents: options.autoSendEvents,
+		sandboxConfigJsCode: options.sandboxConfigJsCode
 	});
 	fs.writeFileSync(path.resolve(outputPath, "./index.html"), html);
 }
