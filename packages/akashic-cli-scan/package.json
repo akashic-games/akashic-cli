@@ -29,7 +29,7 @@
     "@types/musicmetadata": "2.0.4",
     "@types/node": "6.14.7",
     "istanbul": "0.4.5",
-    "jasmine": "3.4.0",
+    "jasmine": "3.5.0",
     "jasmine-reporters": "2.3.2",
     "jasmine-terminal-reporter": "0.9.1",
     "mock-fs": "4.10.1",
@@ -43,7 +43,7 @@
     "aac-duration": "0.0.1",
     "commander": "^2.16.0",
     "fs-readdir-recursive": "1.1.0",
-    "image-size": "~0.7.0",
+    "image-size": "~0.8.0",
     "musicmetadata": "2.0.5",
     "thumbcoil": "~1.2.0"
   },
