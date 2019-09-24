@@ -28,7 +28,7 @@
     "@types/jasmine": "2.8.16",
     "@types/node": "10.14.18",
     "istanbul": "0.4.5",
-    "jasmine": "3.4.0",
+    "jasmine": "3.5.0",
     "jasmine-reporters": "2.3.2",
     "jasmine-terminal-reporter": "0.9.1",
     "mock-fs": "4.10.1",
