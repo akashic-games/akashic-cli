@@ -13,7 +13,8 @@ import {
 	getDefaultBundleStyle,
 	extractAssetDefinitions,
 	getInjectedContents,
-	validateEs5Code
+	validateEs5Code,
+	readSandboxConfigJs
 } from "./convertUtil";
 
 interface InnerHTMLAssetData {
@@ -38,30 +39,12 @@ export async function promiseConvertBundle(options: ConvertTemplateParameterObje
 	});
 
 	try {
-		var sandboxConfigJsPath = path.join(options.source, "sandbox.config.js");
-		fs.accessSync(sandboxConfigJsPath);
-		var sandboxConfigJsString = fs.readFileSync(sandboxConfigJsPath, "utf8").replace(/\r\n|\r/g, "\n");
-		options.sandboxConfigJsCode = sandboxConfigJsString;
-		// sandboxConfigJsString = wrapScript(sandboxConfigJsString, "sandbox.config.js", options.minify);
-		// fsx.outputFileSync(path.resolve(options.output, "sandbox.config.js"), sandboxConfigJsString);
-		// assetPaths.push("sandbox.config.js");
+		options.sandboxConfigJsCode = readSandboxConfigJs(options.source);
 	} catch (error) {
-		// do nothing
+		// sandbox.config.jsを取得できなかった場合、autoSendEventsを無効化する
 		options.autoSendEvents = false;
-		console.log("failed write sandboxConfig");
+		console.log("failed read sandbox.config.js, disable autoSendEvents.");
 	}
-	/*
-	try {
-		const sandboxConfig = fs.readFileSync(path.join(options.source, "sandbox.config.js"), { encoding: "utf8" });
-		innerHTMLAssetArray.push({
-			name: "sandbox.config.js",
-			type: "script",
-			code: wrap(sandboxConfig, false)
-		});
-	} catch (error) {
-		// do nothing
-	}
-	*/
 
 	var errorMessages: string[] = [];
 	var innerHTMLAssetNames = extractAssetDefinitions(conf, "script");

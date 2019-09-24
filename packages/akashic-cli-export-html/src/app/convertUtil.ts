@@ -162,6 +162,12 @@ export function validateEs5Code(fileName: string, code: string): string[] {
 		.map(info => `${fileName}(${info.line}:${info.column}): ${info.message}`);
 }
 
+export function readSandboxConfigJs(sourceDir: string) {
+	const sandboxConfigJsPath = path.join(sourceDir, "sandbox.config.js");
+	fs.accessSync(sandboxConfigJsPath);
+	return fs.readFileSync(sandboxConfigJsPath, "utf8").replace(/\r\n|\r/g, "\n");
+}
+
 function getFileContentsFromDirectory(inputDirPath: string): string[] {
 	return fs.readdirSync(inputDirPath)
 		.map(fileName => fs.readFileSync(path.join(inputDirPath, fileName), "utf8").replace(/\r\n|\r/g, "\n"));

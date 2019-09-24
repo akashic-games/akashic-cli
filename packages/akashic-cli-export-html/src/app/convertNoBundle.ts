@@ -11,7 +11,8 @@ import {
 	wrap,
 	extractAssetDefinitions,
 	getInjectedContents,
-	validateEs5Code
+	validateEs5Code,
+	readSandboxConfigJs
 } from "./convertUtil";
 import { minify } from "uglify-js";
 
@@ -31,17 +32,11 @@ export async function promiseConvertNoBundle(options: ConvertTemplateParameterOb
 	assetPaths.push("./js/game.json.js");
 
 	try {
-		var sandboxConfigJsPath = path.join(options.source, "sandbox.config.js");
-		fs.accessSync(sandboxConfigJsPath);
-		var sandboxConfigJsString = fs.readFileSync(sandboxConfigJsPath, "utf8").replace(/\r\n|\r/g, "\n");
-		options.sandboxConfigJsCode = sandboxConfigJsString;
-		// sandboxConfigJsString = wrapScript(sandboxConfigJsString, "sandbox.config.js", options.minify);
-		// fsx.outputFileSync(path.resolve(options.output, "sandbox.config.js"), sandboxConfigJsString);
-		// assetPaths.push("sandbox.config.js");
+		options.sandboxConfigJsCode = readSandboxConfigJs(options.source);
 	} catch (error) {
-		// do nothing
+		// sandbox.config.jsを取得できなかった場合、autoSendEventsを無効化する
 		options.autoSendEvents = false;
-		console.log("failed write sandboxConfig");
+		console.log("failed read sandbox.config.js, disable autoSendEvents.");
 	}
 
 	var assetNames = extractAssetDefinitions(conf, "script").concat(extractAssetDefinitions(conf, "text"));
