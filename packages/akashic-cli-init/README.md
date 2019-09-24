@@ -65,6 +65,20 @@ akashic-cli-init は以下の設定を利用します。設定は `akashic confi
 * `init.defaultTemplateType`: テンプレートの種類が省略されたときに利用するテンプレート名。デフォルトは `javascript`。
 * `init.localTemplateDirectory`: ローカルファイルシステムでテンプレートを保存する場所。デフォルトは `$HOME/.akashic-templates`。
 
+## 開発者向け
+
+### ファクトリテンプレートの更新
+
+ファクトリテンプレートを更新する場合は、 templates-src/ 以下を編集してください。
+publish 時に、 templates/ 以下の zip に自動的に反映されます。
+
+### ファクトリテンプレートの追加
+
+ファクトリテンプレートを追加する場合は、 templates-src/ 以下に game-xxx/ デイレクトリを加えて、
+templates/template-list.json を編集してください。
+game-xxx/ ディレクトリは、 Akashic ゲームである必要があります。
+(実装上の制限から、現在は package.json を含むゲームを置くことはできないので注意してください。)
+
 ## ライセンス
 本リポジトリは MIT License の元で公開されています。
 詳しくは [LICENSE](https://github.com/akashic-games/akashic-cli/blob/master/LICENSE) をご覧ください。
