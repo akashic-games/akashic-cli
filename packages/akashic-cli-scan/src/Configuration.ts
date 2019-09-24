@@ -1,9 +1,10 @@
 import * as path from "path";
 import * as fs from "fs";
-import * as imageSize from "image-size";
 import * as readdirRecursive from "fs-readdir-recursive";
 import * as cmn from "@akashic/akashic-cli-commons";
 import { getAudioDuration } from "./getAudioDuration";
+import { imageSize } from "image-size";
+import { ISize } from "image-size/dist/types/interface";
 
 export function _isImageFilePath(p: string): boolean { return /.*\.(png|gif|jpg|jpeg)$/i.test(p); }
 export function _isAudioFilePath(p: string): boolean { return /.*\.(ogg|aac|mp4)$/i.test(p); }
@@ -80,7 +81,11 @@ export class Configuration extends cmn.Configuration {
 		var revmap = cmn.Util.invertMap(assets, "path");
 		files.filter(_isImageFilePath).forEach((f: string) => {
 			var unixPath = cmn.Util.makeUnixPath("image/" + f);
-			var size = imageSize(unixPath);
+			var size = imageSize(unixPath) as ISize;
+			if (!size) {
+				this._logger.warn(`Failed to get image size. Please check ${unixPath}`);
+				return;
+			}
 			var aidSet = revmap[unixPath];
 
 			// If a declaration already exists for the file then just update the image size.
