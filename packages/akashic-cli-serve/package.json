@@ -70,7 +70,7 @@
     "uglify-js": "2.8.29",
     "uglify-save-license": "0.4.1",
     "webpack": "4.40.2",
-    "webpack-cli": "3.3.8",
+    "webpack-cli": "3.3.9",
     "whatwg-fetch": "3.0.0"
   },
   "optionalDependencies": {
