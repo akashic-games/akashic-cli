@@ -14,7 +14,6 @@ import {
 	validateEs5Code,
 	readSandboxConfigJs
 } from "./convertUtil";
-import { minify } from "uglify-js";
 
 export async function promiseConvertNoBundle(options: ConvertTemplateParameterObject): Promise<void> {
 	var content = await cmn.ConfigurationFile.read(path.join(options.source, "game.json"), options.logger);
@@ -34,9 +33,8 @@ export async function promiseConvertNoBundle(options: ConvertTemplateParameterOb
 	try {
 		options.sandboxConfigJsCode = readSandboxConfigJs(options.source);
 	} catch (error) {
-		// sandbox.config.jsを取得できなかった場合、autoSendEventsを無効化する
 		options.autoSendEvents = false;
-		console.log("failed read sandbox.config.js, disable autoSendEvents.");
+		console.log("failed read sandbox.config.js, autoSendEvents disabled.");
 	}
 
 	var assetNames = extractAssetDefinitions(conf, "script").concat(extractAssetDefinitions(conf, "text"));
@@ -101,12 +99,7 @@ function writeEct(assetPaths: string[], outputPath: string, conf: cmn.Configurat
 	var ectRender = ect({root: __dirname + "/../templates-build", ext: ".ect"});
 	var version = conf._content.environment["sandbox-runtime"];
 	var versionsJson = require("./engineFilesVersion.json");
-	var sandboxConfig = "";
-	try {
-		sandboxConfig = fs.readFileSync(path.join(options.source, "sandbox.config.js"), { encoding: "utf8" });
-	} catch (error) {
-		// do nothing
-	}
+	var sandboxConfig = options.sandboxConfigJsCode;
 	var html = ectRender.render("no-bundle-index", {
 		assets: assetPaths,
 		magnify: !!options.magnify,
@@ -116,8 +109,7 @@ function writeEct(assetPaths: string[], outputPath: string, conf: cmn.Configurat
 		exportVersion: options.exportInfo !== undefined ? options.exportInfo.version : "",
 		exportOption: options.exportInfo !== undefined ? options.exportInfo.option : "",
 		autoSendEvents: options.autoSendEvents,
-		sandboxConfigJsCode: sandboxConfig
-
+		sandboxConfigJsCode: options.sandboxConfigJsCode !== undefined ? options.sandboxConfigJsCode : ""
 	});
 	fs.writeFileSync(path.resolve(outputPath, "./index.html"), html);
 }

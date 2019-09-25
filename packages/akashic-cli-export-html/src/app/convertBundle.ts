@@ -41,9 +41,8 @@ export async function promiseConvertBundle(options: ConvertTemplateParameterObje
 	try {
 		options.sandboxConfigJsCode = readSandboxConfigJs(options.source);
 	} catch (error) {
-		// sandbox.config.jsを取得できなかった場合、autoSendEventsを無効化する
 		options.autoSendEvents = false;
-		console.log("failed read sandbox.config.js, disable autoSendEvents.");
+		console.log("failed read sandbox.config.js, autoSendEvents disabled.");
 	}
 
 	var errorMessages: string[] = [];
