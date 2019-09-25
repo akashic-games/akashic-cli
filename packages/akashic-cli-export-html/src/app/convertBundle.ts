@@ -121,7 +121,6 @@ function writeEct(
 	const injects = options.injects ? options.injects : [];
 	var scripts = getDefaultBundleScripts(templatePath, conf._content.environment["sandbox-runtime"], options.minify, !options.unbundleText);
 	var ectRender = ect({root: __dirname + "/../templates-build", ext: ".ect"});
-
 	var html = ectRender.render("bundle-index", {
 		assets: innerHTMLAssetArray,
 		preloadScripts: scripts.preloadScripts,
@@ -132,7 +131,7 @@ function writeEct(
 		exportVersion: options.exportInfo !== undefined ? options.exportInfo.version : "",
 		exportOption: options.exportInfo !== undefined ? options.exportInfo.option : "",
 		autoSendEvents: options.autoSendEvents,
-		sandboxConfigJsCode: options.sandboxConfigJsCode
+		sandboxConfigJsCode: options.sandboxConfigJsCode !== undefined ? options.sandboxConfigJsCode : ""
 	});
 	fs.writeFileSync(path.resolve(outputPath, "./index.html"), html);
 }
