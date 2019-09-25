@@ -1,32 +1,46 @@
 import * as React from "react";
 import { observer } from "mobx-react";
-import * as styles from "./ContentDisplayOption.css";
+import { GameViewManager } from "../../akashic/GameViewManager";
+import * as styles from "./GameScreen.css";
 
-export interface ContentDisplayOptionProps {
+export interface GameScreenProps {
 	showsBgImage: boolean;
 	showsGridCanvas: boolean;
 	backgroundImage: string;
 	gameWidth: number;
 	gameHeight: number;
+	gameViewManager: GameViewManager;
 }
 
 @observer
-export class ContentDisplayOption extends React.Component<ContentDisplayOptionProps, {}> {
+export class GameScreen extends React.Component<GameScreenProps, {}> {
 	render(): React.ReactNode {
-		const gridDisplay = this.props.showsGridCanvas ? "block" : "none";
 		return <div>
 			{
 				this.props.showsBgImage ?
 					<img src={this.props.backgroundImage} className={styles["bg-image"]}/> :
 					null
 			}
-			{/* 重ねて表示するためにcanvasDOMを常にコンテンツDOMの前に置いておく必要があるので表示非表示切り替えはstyle属性で行う */}
-			<canvas
-				id="gridCanvas"
-				className={styles["grid-canvas"]}
-				style={{ width: this.props.gameWidth + "px", height: this.props.gameHeight + "px", display: gridDisplay}}
-				ref={this._createGridCanvas} />
+			{
+				this.props.showsGridCanvas ?
+					<canvas
+						id="gridCanvas"
+						className={styles["grid-canvas"]}
+						style={{
+							width: this.props.gameWidth + "px",
+							height: this.props.gameHeight + "px"
+						}}
+						ref={this._createGridCanvas}/> :
+					null
+			}
+			<div ref={this._onRef} />
 		</div>;
+	}
+
+	private _onRef = (elem: HTMLDivElement): void => {
+		if (elem) {
+			elem.appendChild(this.props.gameViewManager.getRootElement());
+		}
 	}
 
 	private _createGridCanvas = (gridCanvas: HTMLCanvasElement): void => {
@@ -45,7 +59,7 @@ export class ContentDisplayOption extends React.Component<ContentDisplayOptionPr
 		}
 	}
 
-	private _drawGridLine(context: CanvasRenderingContext2D, gridWidth: number, gridHeight: number) {
+	private _drawGridLine = (context: CanvasRenderingContext2D, gridWidth: number, gridHeight: number): void => {
 		context.beginPath();
 		for (let x = 0.5; x <= this.props.gameWidth; x += gridWidth) {
 			context.moveTo(x, 0);

@@ -21,8 +21,8 @@ export class UiOperator {
 		this.store.toolBarUiStore.toggleShowDevtools(show);
 	}
 
-	toggleShowContentDisplayDialog = (show: boolean): void => {
-		this.store.toolBarUiStore.toggleShowContentDisplayDialog(show);
+	toggleShowGameScreenPopover = (show: boolean): void => {
+		this.store.toolBarUiStore.toggleShowGameScreenPopover(show);
 	}
 
 	toggleShowBgImage = (show: boolean) => {

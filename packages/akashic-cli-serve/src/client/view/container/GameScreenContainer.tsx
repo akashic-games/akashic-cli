@@ -1,26 +1,29 @@
 import * as React from "react";
 import { observer } from "mobx-react";
-import { ContentDisplayOption } from "../organism/ContentDisplayOption";
-import { ToolBarUiStore } from "../../store/ToolBarUiStore";
 import { SandboxConfig } from "../../../common/types/SandboxConfig";
+import { GameViewManager } from "../../akashic/GameViewManager";
 import { LocalInstanceEntity } from "../../store/LocalInstanceEntity";
+import { ToolBarUiStore } from "../../store/ToolBarUiStore";
+import { GameScreen } from "../organism/GameScreen";
 
-export interface ContentDisplayOptionContainerProps {
+export interface GameScreenContainerProps {
 	sandboxConfig: SandboxConfig;
 	toolBarUiStore: ToolBarUiStore;
 	localInstance: LocalInstanceEntity;
+	gameViewManager: GameViewManager;
 }
 
 @observer
-export class ContentDisplayOptionContainer extends React.Component<ContentDisplayOptionContainerProps, {}> {
+export class GameScreenContainer extends React.Component<GameScreenContainerProps, {}> {
 	render(): React.ReactNode {
 		const gameViewSize = this.props.localInstance.gameViewSize;
-		return <ContentDisplayOption
+		return <GameScreen
 			backgroundImage={this.props.sandboxConfig.backgroundImage}
 			showsGridCanvas={this.props.toolBarUiStore.showsGridCanvas}
 			showsBgImage={this.props.toolBarUiStore.showsBgImage}
 			gameWidth={gameViewSize.width}
 			gameHeight={gameViewSize.height}
+			gameViewManager={this.props.gameViewManager}
 		/>;
 	}
 }

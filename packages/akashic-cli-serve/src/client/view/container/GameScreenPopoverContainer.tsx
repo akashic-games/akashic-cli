@@ -1,18 +1,18 @@
 import * as React from "react";
 import { observer } from "mobx-react";
-import { ContentDisplayDialog } from "../organism/ContentDisplayDialog";
-import { ToolBarUiStore } from "../../store/ToolBarUiStore";
 import { Operator } from "../../operator/Operator";
+import { GameScreenPopover } from "../organism/GameScreenPopover";
+import { ToolBarUiStore } from "../../store/ToolBarUiStore";
 
-export interface ContentDisplayDialogContainerProps {
+export interface GameScreenPopoverContainerProps {
 	toolBarUiStore: ToolBarUiStore;
 	operator: Operator;
 }
 
 @observer
-export class ContentDisplayDialogContainer extends React.Component<ContentDisplayDialogContainerProps, {}> {
+export class GameScreenPopoverContainer extends React.Component<GameScreenPopoverContainerProps, {}> {
 	render(): React.ReactNode {
-		return <ContentDisplayDialog
+		return <GameScreenPopover
 			showsGridCanvas={this.props.toolBarUiStore.showsGridCanvas}
 			showsBgImage={this.props.toolBarUiStore.showsBgImage}
 			toggleShowBgImage={this.props.operator.ui.toggleShowBgImage}

@@ -15,7 +15,7 @@ const store = observable({
 	duration: 380 * 1000,
 	showsAppearance: false,
 	showsDevtools: false,
-	showsContentDisplayDialog: false,
+	showsGameScreenPopover: false,
 	isActivePausing: false
 });
 
@@ -54,12 +54,12 @@ const TestWithBehaviour = observer(() => (
 			})}
 			showsAppearance={store.showsAppearance}
 			showsDevtools={store.showsDevtools}
-			showsContentDisplayDialog={store.showsContentDisplayDialog}
+			showsGameScreenPopover={store.showsGameScreenPopover}
 			showsInstanceControl={store.showsDevtools}
 			targetService={ServiceType.None}
 			onToggleAppearance={v => (store.showsAppearance = v)}
 			onToggleDevTools={v => (store.showsDevtools = v)}
-			onToggleContentDisplayDialog={v => (store.showsContentDisplayDialog = v)}
+			onToggleGameScreenPopover={v => (store.showsGameScreenPopover = v)}
 		/>
 ));
 
@@ -91,11 +91,11 @@ storiesOf("o-ToolBar", module)
 			})}
 			showsAppearance={false}
 			showsDevtools={true}
-			showsContentDisplayDialog={true}
+			showsGameScreenPopover={true}
 			showsInstanceControl={true}
 			targetService={ServiceType.None}
 			onToggleAppearance={action("toggle-appearance")}
 			onToggleDevTools={action("toggle-dev-tools")}
-			onToggleContentDisplayDialog={action("toggle-bg-image")} />
+			onToggleGameScreenPopover={action("toggle-bg-image")} />
 	))
 	.add("with-behavior", () => <TestWithBehaviour />);

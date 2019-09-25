@@ -6,7 +6,7 @@ export class ToolBarUiStore {
 	@observable isSeeking: boolean;
 	@observable showsAppearanceMenu: boolean;
 	@observable showsDevtools: boolean;
-	@observable showsContentDisplayDialog: boolean;
+	@observable showsGameScreenPopover: boolean;
 	@observable showsBgImage: boolean;
 	@observable showsGridCanvas: boolean;
 
@@ -15,7 +15,7 @@ export class ToolBarUiStore {
 		this.isSeeking = false;
 		this.showsAppearanceMenu = false;
 		this.showsDevtools = storage.data.showsDevtools;
-		this.showsContentDisplayDialog = false;
+		this.showsGameScreenPopover = false;
 		this.showsBgImage = storage.data.showsBgImage;
 		this.showsGridCanvas = storage.data.showsGridCanvas;
 	}
@@ -43,8 +43,8 @@ export class ToolBarUiStore {
 	}
 
 	@action
-	toggleShowContentDisplayDialog(show: boolean): void {
-		this.showsContentDisplayDialog = show;
+	toggleShowGameScreenPopover(show: boolean): void {
+		this.showsGameScreenPopover = show;
 	}
 
 	@action

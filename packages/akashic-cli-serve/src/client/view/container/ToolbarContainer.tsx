@@ -28,12 +28,12 @@ export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}>
 			makePlayerControlProps={this._makePlayerControlProps}
 			showsAppearance={toolBarUiStore.showsAppearanceMenu}
 			showsDevtools={toolBarUiStore.showsDevtools}
-			showsContentDisplayDialog={toolBarUiStore.showsContentDisplayDialog}
+			showsGameScreenPopover={toolBarUiStore.showsGameScreenPopover}
 			showsInstanceControl={(localInstance.executionMode === "replay") || toolBarUiStore.showsDevtools}
 			targetService={targetService}
 			onToggleAppearance={operator.ui.toggleShowAppearance}
 			onToggleDevTools={operator.ui.toggleShowDevtools}
-			onToggleContentDisplayDialog={operator.ui.toggleShowContentDisplayDialog}
+			onToggleGameScreenPopover={operator.ui.toggleShowGameScreenPopover}
 		/>;
 	}
 

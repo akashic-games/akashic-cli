@@ -9,9 +9,8 @@ import "./global.css";
 import * as styles from "./App.css";
 import {StartupScreenContainer} from "./container/StartupScreenContainer";
 import {NotificationContainer} from "./container/NotificationContainer";
-import {ContentDisplayOption} from "./organism/ContentDisplayOption";
-import {ContentDisplayOptionContainer} from "./container/ContentDisplayOptionContainer";
-import {ContentDisplayDialogContainer} from "./container/ContentDisplayDialogContainer";
+import {GameScreenContainer} from "./container/GameScreenContainer";
+import {GameScreenPopoverContainer} from "./container/GameScreenPopoverContainer";
 
 export interface AppProps {
 	store: Store;
@@ -34,7 +33,6 @@ export class App extends React.Component<AppProps, {}> {
 						/> :
 						null
 				}
-				<div id="agvcontainer" style={{ visibility: "visible" }} ref={this._onRef} />
 			</div>;
 		}
 
@@ -48,20 +46,21 @@ export class App extends React.Component<AppProps, {}> {
 				targetService={store.targetService}
 			/>
 			{
-				store.toolBarUiStore.showsContentDisplayDialog ?
+				store.toolBarUiStore.showsGameScreenPopover ?
 					<div className={styles["display-dialog"]}>
-						<ContentDisplayDialogContainer
+						<GameScreenPopoverContainer
 							toolBarUiStore={store.toolBarUiStore}
 							operator={operator}
 						/>
 					</div> :
 					null
 			}
-			<div id="agvcontainer" className={styles["main"] + " " + styles["centering"] } ref={this._onRef}>
-				<ContentDisplayOptionContainer
+			<div id="agvcontainer" className={styles["main"] + " " + styles["centering"] }>
+				<GameScreenContainer
 					sandboxConfig={sandboxConfig}
 					toolBarUiStore={store.toolBarUiStore}
 					localInstance={store.currentLocalInstance}
+					gameViewManager={this.props.gameViewManager}
 				/>
 			</div>
 			{
@@ -81,17 +80,5 @@ export class App extends React.Component<AppProps, {}> {
 				notificationUiStore={store.notificationUiStore}
 			/>
 		</div>;
-	}
-
-	private _onRef = (elem: HTMLDivElement): void => {
-		if (!elem) {
-			return;
-		}
-		if (elem.firstChild) {
-			// elemの子要素が持つDOMと重なるようにコンテンツを表示させたいので、elemの子要素の1番下の子要素にする
-			elem.firstChild.appendChild(this.props.gameViewManager.getRootElement());
-		} else {
-			elem.appendChild(this.props.gameViewManager.getRootElement());
-		}
 	}
 }

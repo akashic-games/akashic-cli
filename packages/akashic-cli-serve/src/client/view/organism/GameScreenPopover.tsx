@@ -1,7 +1,7 @@
 import * as React from "react";
 import { observer } from "mobx-react";
 
-export interface ContentDisplayDialogProps {
+export interface GameScreenPopoverProps {
 	showsBgImage: boolean;
 	showsGridCanvas: boolean;
 	toggleShowBgImage: (show: boolean) => void;
@@ -9,7 +9,7 @@ export interface ContentDisplayDialogProps {
 }
 
 @observer
-export class ContentDisplayDialog extends React.Component<ContentDisplayDialogProps, {}> {
+export class GameScreenPopover extends React.Component<GameScreenPopoverProps, {}> {
 	render(): React.ReactNode {
 		const {
 			showsBgImage,
