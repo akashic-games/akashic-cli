@@ -1,3 +1,4 @@
+/* AGVがコンテンツ生成の度にz-indexを加算する且つグリッドをコンテンツより手前に表示したいのでz-indexを指定する */
 /* TODO: z-indexは他コンポーネントにも影響を及ぼす要素なので本来はglobal.cssで定義すべき */
 /* 現状では、このコンポーネントでしかz-indexを使っていないのでここで定義している */
 .game-screen {
@@ -19,7 +20,8 @@
     z-index: 1;
 }
 .game-content {
-    position: absolute;
+    /* positionがstaticの場合、z-indexは適用されないのでrelativeにしておく */
+    position: relative;
     top: 0;
     left: 0;
     z-index: 0;
