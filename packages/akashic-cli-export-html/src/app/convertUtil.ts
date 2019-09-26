@@ -164,7 +164,6 @@ export function validateEs5Code(fileName: string, code: string): string[] {
 
 export function readSandboxConfigJs(sourceDir: string) {
 	const sandboxConfigJsPath = path.join(sourceDir, "sandbox.config.js");
-	fs.accessSync(sandboxConfigJsPath);
 	return fs.readFileSync(sandboxConfigJsPath, "utf8").replace(/\r\n|\r/g, "\n");
 }
 

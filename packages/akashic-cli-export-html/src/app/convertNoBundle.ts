@@ -30,11 +30,13 @@ export async function promiseConvertNoBundle(options: ConvertTemplateParameterOb
 	fsx.outputFileSync(gamejsonPath, wrapText(JSON.stringify(conf._content, null, "\t"), "game.json"));
 	assetPaths.push("./js/game.json.js");
 
-	try {
-		options.sandboxConfigJsCode = readSandboxConfigJs(options.source);
-	} catch (error) {
-		options.autoSendEvents = false;
-		console.log("failed read sandbox.config.js, autoSendEvents disabled.");
+	if (options.autoSendEvents) {
+		try {
+			options.sandboxConfigJsCode = readSandboxConfigJs(options.source);
+		} catch (error) {
+			options.autoSendEvents = false;
+			console.log("failed read sandbox.config.js, autoSendEvents disabled.");
+		}
 	}
 
 	var assetNames = extractAssetDefinitions(conf, "script").concat(extractAssetDefinitions(conf, "text"));
@@ -99,7 +101,6 @@ function writeEct(assetPaths: string[], outputPath: string, conf: cmn.Configurat
 	var ectRender = ect({root: __dirname + "/../templates-build", ext: ".ect"});
 	var version = conf._content.environment["sandbox-runtime"];
 	var versionsJson = require("./engineFilesVersion.json");
-	var sandboxConfig = options.sandboxConfigJsCode;
 	var html = ectRender.render("no-bundle-index", {
 		assets: assetPaths,
 		magnify: !!options.magnify,
