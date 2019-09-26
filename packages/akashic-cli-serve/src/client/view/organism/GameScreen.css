@@ -1,13 +1,26 @@
+/* TODO: z-indexは他コンポーネントにも影響を及ぼす要素なので本来はglobal.cssで定義すべき */
+/* 現状では、このコンポーネントでしかz-indexを使っていないのでここで定義している */
+.game-screen {
+    position: relative;
+}
 .bg-image {
+    display: block;
     position: absolute;
+    top: 0;
+    left: 0;
     z-index: -1;
 }
 .grid-canvas {
+    display: block;
     position: absolute;
+    top: 0;
+    left: 0;
     pointer-events: none;
-    z-index: 2;
-}
-.game-screen {
-    position: relative;
     z-index: 1;
+}
+.game-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
 }

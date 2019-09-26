@@ -15,12 +15,13 @@ export interface GameScreenProps {
 @observer
 export class GameScreen extends React.Component<GameScreenProps, {}> {
 	render(): React.ReactNode {
-		return <div>
+		return <div className={styles["game-screen"]}>
 			{
 				this.props.showsBgImage ?
 					<img src={this.props.backgroundImage} className={styles["bg-image"]}/> :
 					null
 			}
+			<div className={styles["game-content"]} ref={this._onRef} />
 			{
 				this.props.showsGridCanvas ?
 					<canvas
@@ -33,7 +34,6 @@ export class GameScreen extends React.Component<GameScreenProps, {}> {
 						ref={this._createGridCanvas}/> :
 					null
 			}
-			<div className={styles["game-screen"]} ref={this._onRef} />
 		</div>;
 	}
 
