@@ -33,7 +33,7 @@ export class GameScreen extends React.Component<GameScreenProps, {}> {
 						ref={this._createGridCanvas}/> :
 					null
 			}
-			<div ref={this._onRef} />
+			<div className={styles["game-screen"]} ref={this._onRef} />
 		</div>;
 	}
 
