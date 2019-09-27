@@ -70,7 +70,7 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 			.then(() => param.logger.info("Done!"))
 			.then(restoreDirectory, restoreDirectory);
 	}
-	(param as any).filePaths = [];
+
 	const gameJsonPath = path.join(process.cwd(), "game.json");
 	return Promise.resolve()
 		.then(() => cmn.ConfigurationFile.read(gameJsonPath, param.logger))

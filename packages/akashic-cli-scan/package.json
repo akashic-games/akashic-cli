@@ -28,7 +28,7 @@
     "@types/mock-fs": "3.6.30",
     "@types/musicmetadata": "2.0.4",
     "@types/node": "6.14.7",
-    "jest": "~24.9.0",
+    "jest": "24.9.0",
     "mock-fs": "4.10.1",
     "shx": "0.3.2",
     "tslint": "5.20.0",
