@@ -1,3 +1,4 @@
+import * as path from "path";
 import * as cmn from "@akashic/akashic-cli-commons";
 import { Configuration } from "./Configuration";
 
@@ -69,9 +70,10 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 			.then(() => param.logger.info("Done!"))
 			.then(restoreDirectory, restoreDirectory);
 	}
-
+	(param as any).filePaths = [];
+	const gameJsonPath = path.join(process.cwd(), "game.json");
 	return Promise.resolve()
-		.then(() => cmn.ConfigurationFile.read("./game.json", param.logger))
+		.then(() => cmn.ConfigurationFile.read(gameJsonPath, param.logger))
 		.then((content: cmn.GameConfiguration) => {
 			var conf = new Configuration({ content: content, logger: param.logger });
 			if ((param.plugin != null) && conf.findExistingOperationPluginIndex(param.plugin) !== -1)
@@ -103,7 +105,7 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 						conf.addOperationPlugin(param.plugin, param.moduleNames[0]);
 				})
 				.then(() => conf.vacuumGlobalScripts())
-				.then(() => cmn.ConfigurationFile.write(conf.getContent(), "./game.json", param.logger));
+				.then(() => cmn.ConfigurationFile.write(conf.getContent(), gameJsonPath, param.logger));
 		})
 		.then(restoreDirectory, restoreDirectory)
 		.then(() => param.logger.info("Done!"));
