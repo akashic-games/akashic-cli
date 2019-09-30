@@ -38,11 +38,13 @@ export async function promiseConvertBundle(options: ConvertTemplateParameterObje
 		code: encodeText(JSON.stringify(conf._content, null, "\t"))
 	});
 
-	try {
-		options.sandboxConfigJsCode = readSandboxConfigJs(options.source);
-	} catch (error) {
-		options.autoSendEvents = false;
-		console.log("failed read sandbox.config.js, autoSendEvents disabled.");
+	if (options.autoSendEvents) {
+		try {
+			options.sandboxConfigJsCode = readSandboxConfigJs(options.source);
+		} catch (error) {
+			options.autoSendEvents = "";
+			console.log("failed read sandbox.config.js, autoSendEvents disabled.");
+		}
 	}
 
 	var errorMessages: string[] = [];
