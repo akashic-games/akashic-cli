@@ -25,7 +25,7 @@
   "devDependencies": {
     "@types/jasmine": "2.8.16",
     "@types/mock-fs": "3.6.30",
-    "@types/node": "10.14.18",
+    "@types/node": "10.14.19",
     "jest": "24.9.0",
     "mock-fs": "4.10.1",
     "shx": "0.3.2",
