@@ -1,16 +1,15 @@
 import * as React from "react";
-import {observer} from "mobx-react";
-import {GameViewManager} from "../akashic/GameViewManager";
-import {Store} from "../store/Store";
-import {Operator} from "../operator/Operator";
-import {ToolBarContainer} from "./container/ToolbarContainer";
-import {DevtoolContainer} from "./container/DevtoolContainer";
+import { observer } from "mobx-react";
+import { GameViewManager } from "../akashic/GameViewManager";
+import { Store } from "../store/Store";
+import { Operator } from "../operator/Operator";
+import { ToolBarContainer } from "./container/ToolbarContainer";
+import { DevtoolContainer } from "./container/DevtoolContainer";
+import { StartupScreenContainer } from "./container/StartupScreenContainer";
+import { NotificationContainer } from "./container/NotificationContainer";
+import { GameScreenContainer } from "./container/GameScreenContainer";
 import "./global.css";
 import * as styles from "./App.css";
-import {StartupScreenContainer} from "./container/StartupScreenContainer";
-import {NotificationContainer} from "./container/NotificationContainer";
-import {GameScreenContainer} from "./container/GameScreenContainer";
-import {GameScreenPopoverContainer} from "./container/GameScreenPopoverContainer";
 
 export interface AppProps {
 	store: Store;
@@ -45,16 +44,6 @@ export class App extends React.Component<AppProps, {}> {
 				toolBarUiStore={store.toolBarUiStore}
 				targetService={store.targetService}
 			/>
-			{
-				store.toolBarUiStore.showsGameScreenPopover ?
-					<div className={styles["display-dialog"]}>
-						<GameScreenPopoverContainer
-							toolBarUiStore={store.toolBarUiStore}
-							operator={operator}
-						/>
-					</div> :
-					null
-			}
 			<div id="agvcontainer" className={styles["main"] + " " + styles["centering"] }>
 				<GameScreenContainer
 					sandboxConfig={sandboxConfig}

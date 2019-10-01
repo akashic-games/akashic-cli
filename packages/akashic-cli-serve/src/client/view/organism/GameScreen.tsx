@@ -4,8 +4,8 @@ import { GameViewManager } from "../../akashic/GameViewManager";
 import * as styles from "./GameScreen.css";
 
 export interface GameScreenProps {
-	showsBgImage: boolean;
-	showsGridCanvas: boolean;
+	showsBackgroundImage: boolean;
+	showsGrid: boolean;
 	backgroundImage: string;
 	gameWidth: number;
 	gameHeight: number;
@@ -17,13 +17,13 @@ export class GameScreen extends React.Component<GameScreenProps, {}> {
 	render(): React.ReactNode {
 		return <div className={styles["game-screen"]}>
 			{
-				this.props.showsBgImage ?
+				this.props.showsBackgroundImage ?
 					<img src={this.props.backgroundImage} className={styles["bg-image"]}/> :
 					null
 			}
 			<div className={styles["game-content"]} ref={this._onRef} />
 			{
-				this.props.showsGridCanvas ?
+				this.props.showsGrid ?
 					<canvas
 						id="gridCanvas"
 						className={styles["grid-canvas"]}

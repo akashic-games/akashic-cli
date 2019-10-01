@@ -5,7 +5,6 @@ export interface StorageData {
 	playerId: string;
 	playerName: string;
 	showsDevtools: boolean;
-	showsBgImage: boolean;
 	devtoolsHeight: number;
 	activeDevtool: string;
 	showsEventList: boolean;
@@ -15,7 +14,8 @@ export interface StorageData {
 	instanceArgumentListWidth: number;
 	instanceArgumentEditContent: string;
 	joinsAutomatically: boolean;
-	showsGridCanvas: boolean;
+	showsBackgroundImage: boolean;
+	showsGrid: boolean;
 }
 
 function asBool(s: string | null): boolean | null {
@@ -80,8 +80,8 @@ export class Storage {
 			instanceArgumentListWidth: choose(asNumber(getQueryValue(qp.instanceArgumentListWidth)), s.instanceArgumentListWidth, 150),
 			instanceArgumentEditContent: choose(getQueryValue(qp.instanceArgumentEditContent), s.instanceArgumentEditContent, ""),
 			joinsAutomatically: choose(asBool(getQueryValue(qp.joinsAutomatically)), s.joinsAutomatically, false),
-			showsBgImage: choose(asBool(getQueryValue(qp.showsBgImage)), s.showsBgImage, false),
-			showsGridCanvas: choose(asBool(getQueryValue(qp.showsGridCanvas)), s.showsGridCanvas, false)
+			showsBackgroundImage: choose(asBool(getQueryValue(qp.showsBackgroundImage)), s.showsBackgroundImage, false),
+			showsGrid: choose(asBool(getQueryValue(qp.showsGrid)), s.showsGrid, false)
 		});
 	}
 

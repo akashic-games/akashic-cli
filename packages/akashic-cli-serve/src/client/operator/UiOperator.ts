@@ -21,16 +21,16 @@ export class UiOperator {
 		this.store.toolBarUiStore.toggleShowDevtools(show);
 	}
 
-	toggleShowGameScreenPopover = (show: boolean): void => {
-		this.store.toolBarUiStore.toggleShowGameScreenPopover(show);
+	toggleShowDisplayOptionPopover = (show: boolean): void => {
+		this.store.toolBarUiStore.toggleShowDisplayOptionPopover(show);
 	}
 
-	toggleShowBgImage = (show: boolean) => {
-		this.store.toolBarUiStore.toggleShowBgImage(show);
+	toggleShowBackgroundImage = (show: boolean) => {
+		this.store.toolBarUiStore.toggleShowBackgroundImage(show);
 	}
 
-	toggleShowGridCanvas = (show: boolean) => {
-		this.store.toolBarUiStore.toggleShowGridCanvas(show);
+	toggleShowGrid = (show: boolean) => {
+		this.store.toolBarUiStore.toggleShowGrid(show);
 	}
 
 	setDevtoolHeight = (height: number) => {

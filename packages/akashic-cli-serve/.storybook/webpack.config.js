@@ -3,14 +3,20 @@ const path = require("path");
 module.exports = (config, env) => {
 	config.module.rules.push({
 		test: /\.(ts|tsx)$/,
-		include: path.resolve(__dirname, "../src/client"),
+		include: [
+			path.resolve(__dirname, "../src/client"),
+			path.resolve(__dirname, "../src/common")
+		],
 		use: [{
 			loader: require.resolve("ts-loader")
 		}]
 	});
 	config.module.rules.push({
 		test: /\.css$/,
-		include: path.resolve(__dirname, "../src/client"),
+		include: [
+			path.resolve(__dirname, "../src/client"),
+			path.resolve(__dirname, "../src/common")
+		],
 		use: [
 			{
 				loader: "style-loader"
