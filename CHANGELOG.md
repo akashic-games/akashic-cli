@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 1.7.33 (2019-10-02)
+
+#### Republish
+* [#169](https://github.com/akashic-games/akashic-cli/pull/169) Republish ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.7.32 (2019-10-02)
 
 #### Enhancement
