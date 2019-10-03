@@ -23,6 +23,14 @@ export interface PlayStoreParameterObject {
 	playManager: PlayManager;
 }
 
+export interface PlayEntity {
+	contentLocator: ServerContentLocator;
+	timeKeeper: TimeKeeper;
+	clientInstances: ClientInstanceDescription[];
+	runners: RunnerDescription[];
+	joinedPlayers: Player[];
+}
+
 export class PlayStore {
 	onPlayCreate: Trigger<PlayCreateTestbedEvent>;
 	onPlayStatusChange: Trigger<PlayStatusChangedTestbedEvent>;
@@ -35,11 +43,7 @@ export class PlayStore {
 	private playManager: PlayManager;
 
 	// TODO playId ごとの情報を集約して PlayEntity を作る
-	private contentLocators: { [playId: string]: ServerContentLocator };
-	private clientInstances: { [playId: string]: ClientInstanceDescription[] };
-	private runners: { [playId: string]: RunnerDescription[] };
-	private joinedPlayers: { [playId: string]: Player[] };
-	private timeKeepers: { [playId: string]: TimeKeeper };
+	private playEntities: { [playId: string]: PlayEntity };
 
 	constructor(params: PlayStoreParameterObject) {
 		this.onPlayCreate = new Trigger<PlayCreateTestbedEvent>();
@@ -50,11 +54,7 @@ export class PlayStore {
 		this.onClientInstanceAppear = new Trigger<ClientInstanceAppearTestbedEvent>();
 		this.onClientInstanceDisappear = new Trigger<ClientInstanceDisappearTestbedEvent>();
 		this.playManager = params.playManager;
-		this.contentLocators = {};
-		this.clientInstances = {};
-		this.runners = {};
-		this.joinedPlayers = {};
-		this.timeKeepers = {};
+		this.playEntities = {};
 	}
 
 	/**
@@ -64,8 +64,13 @@ export class PlayStore {
 		const playId = await this.playManager.createPlay({
 			contentUrl: loc.asAbsoluteUrl()
 		});
-		this.contentLocators[playId] = loc;
-		this.timeKeepers[playId] = new TimeKeeper();
+		this.playEntities[playId] = {
+			contentLocator: loc,
+			timeKeeper: new TimeKeeper(),
+			clientInstances: [],
+			runners: [],
+			joinedPlayers: []
+		};
 		this.onPlayCreate.fire({playId, contentLocatorData: loc});
 		this.onPlayStatusChange.fire({playId, playStatus: "running"});
 		return playId;
@@ -93,79 +98,64 @@ export class PlayStore {
 	}
 
 	registerClientInstance(playId: string, desc: ClientInstanceDescription): void {
-		if (this.clientInstances[playId] === undefined) {
-			this.clientInstances[playId] = [];
-		}
-		this.clientInstances[playId].push(desc);
+		this.playEntities[playId].clientInstances.push(desc);
 		this.onClientInstanceAppear.fire(desc);
 	}
 
 	unregisterClientInstance(playId: string, desc: ClientInstanceDescription): void {
-		if (this.clientInstances[playId]) {
-			this.clientInstances[playId] = this.clientInstances[playId].filter(i => i.id !== desc.id);
-			this.onClientInstanceDisappear.fire(desc);
-		}
+		this.playEntities[playId].clientInstances = this.playEntities[playId].clientInstances.filter(i => i.id !== desc.id);
+		this.onClientInstanceDisappear.fire(desc);
 	}
 
 	registerRunner(param: RunnerCreateTestbedEvent): void {
 		const playId = param.playId;
-		if (this.runners[playId] === undefined) {
-			this.runners[playId] = [];
-		}
-		this.runners[playId].push(param);
+		this.playEntities[playId].runners.push(param);
 	}
 
 	unregisterRunner(param: RunnerRemoveTestbedEvent): void {
 		const playId = param.playId;
-		if (this.runners[playId]) {
-			this.runners[playId] = this.runners[playId].filter(i => i.runnerId !== param.runnerId);
-		}
+		this.playEntities[playId].runners = this.playEntities[playId].runners.filter(i => i.runnerId !== param.runnerId);
 	}
 
 	join(playId: string, player: Player): void {
-		if (this.joinedPlayers[playId] === undefined) {
-			this.joinedPlayers[playId] = [];
-		}
-		this.joinedPlayers[playId].push(player);
+		this.playEntities[playId].joinedPlayers.push(player);
 		this.onPlayerJoin.fire({playId, player});
 	}
 
 	leave(playId: string, playerId: string): void {
-		if (this.joinedPlayers[playId]) {
-			this.joinedPlayers[playId] = this.joinedPlayers[playId].filter(player => player.id !== playerId);
-		}
+		this.playEntities[playId].joinedPlayers = this.playEntities[playId].joinedPlayers.filter(player => player.id !== playerId);
 		this.onPlayerLeave.fire({playId, playerId});
 	}
 
 	pausePlayDuration(playId: string): void {
-		this.timeKeepers[playId].pause();
+		this.playEntities[playId].timeKeeper.pause();
 		this.onPlayDurationStateChange.fire({playId, isPaused: true});
 	}
 
 	resumePlayDuration(playId: string): void {
-		const timeKeeper = this.timeKeepers[playId];
+		const timeKeeper = this.playEntities[playId].timeKeeper;
 		timeKeeper.start();
 		this.onPlayDurationStateChange.fire({playId, isPaused: false, duration: timeKeeper.now() });
 	}
 
 	getJoinedPlayers(playId: string): Player[] {
-		return this.joinedPlayers[playId] || [];
+		return this.playEntities[playId].joinedPlayers;
 	}
 
-	getContentLocator(playId: string): ServerContentLocator | null {
-		return this.contentLocators[playId] || null;
+	getContentLocator(playId: string): ServerContentLocator {
+		return this.playEntities[playId].contentLocator;
 	}
 
 	getRunners(playId: string): RunnerDescription[] {
-		return (this.runners[playId] != null) ? this.runners[playId] : [];
+		return this.playEntities[playId].runners;
 	}
 
 	getClientInstances(playId: string): ClientInstanceDescription[] {
-		return (this.clientInstances[playId] != null) ? this.clientInstances[playId] : [];
+		return this.playEntities[playId].clientInstances;
 	}
 
 	getPlayDurationState(playId: string): PlayDurationState {
-		const timeKeeper = this.timeKeepers[playId];
+		const timeKeeper = this.playEntities[playId].timeKeeper;
 		return { duration: timeKeeper.now(), isPaused: timeKeeper.isPausing() };
 	}
 }

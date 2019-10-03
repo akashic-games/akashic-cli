@@ -1,0 +1,43 @@
+<table border="1">
+    <caption>各Playの状態</caption>
+    <thead>
+        <tr>
+            <th>playId</th>
+            <th>status</th>
+            <th>createdAt</th>
+            <th>lastSuspendedAt</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% for info in @playsInfo : %>
+        <tr>
+            <td><%= info.playId %></td>
+            <td><%= info.status %></td>
+            <td><%= info.createdAt %></td>
+            <td><%= info.lastSuspendedAt %></td>
+        </tr>
+        <% end %>
+    </tbody>
+</table>
+
+<% for info in @playsInfo : %>
+<table border="1" style="border-collapse: collapse">
+    <caption>Play<%= info.playId %>に接続しているClientの状態</caption>
+    <thead>
+        <tr>
+            <th>playerId</th>
+            <th>playerName</th>
+            <th>isActive</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% for item in info.clientInstances : %>
+        <tr>
+            <td><%= item.playerId %></td>
+            <td><%= item.name %></td>
+            <td><%= item.isActive %></td>
+        </tr>
+        <% end %>
+    </tbody>
+</table>
+<% end %>

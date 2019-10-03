@@ -7,6 +7,7 @@ import * as bodyParser from "body-parser";
 import * as socketio from "socket.io";
 import * as commander from "commander";
 import chalk from "chalk";
+import ect = require("ect");
 import { PlayManager, RunnerManager, setSystemLogger, getSystemLogger } from "@akashic/headless-driver";
 import { createApiRouter } from "./route/ApiRoute";
 import { RunnerStore } from "./domain/RunnerStore";
@@ -15,6 +16,7 @@ import { SocketIOAMFlowManager } from "./domain/SocketIOAMFlowManager";
 import { serverGlobalConfig } from "./common/ServerGlobalConfig";
 import { createContentsRouter } from "./route/ContentsRoute";
 import { ServiceType } from "../common/types/ServiceType";
+import {createDebugRouter} from "./route/DebugRoute";
 
 // 渡されたパラメータを全てstringに変換する
 // chalkを使用する場合、ログ出力時objectの中身を展開してくれないためstringに変換する必要がある
@@ -125,6 +127,10 @@ export function run(argv: any): void {
 	const httpServer = http.createServer(app);
 	const io = socketio(httpServer);
 
+	app.set("views", path.join(__dirname, "..", "..", "views"));
+	app.engine("ect", ect({root: path.join(__dirname, "..", "..", "views"), ext: ".ect"}).render);
+	app.set("view engine", "ect");
+
 	app.use((req, res, next) => {
 		res.removeHeader("X-Powered-By");
 		res.removeHeader("ETag");
@@ -139,6 +145,7 @@ export function run(argv: any): void {
 	app.use("/internal/", express.static(path.join(__dirname, "..", "..", "www", "internal")));
 	app.use("/api/", createApiRouter({ playStore, runnerStore, amflowManager, io }));
 	app.use("/contents/", createContentsRouter({ targetDirs }));
+	app.use("/debug/", createDebugRouter({ playStore }));
 
 	io.on("connection", (socket: socketio.Socket) => { amflowManager.setupSocketIOAMFlow(socket); });
 	// TODO 全体ブロードキャストせず該当するプレイにだけ通知するべき？

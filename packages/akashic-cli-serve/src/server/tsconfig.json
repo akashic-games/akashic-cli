@@ -19,6 +19,7 @@
   },
   "include": [
     "./**/*.ts",
+    "./typings/ect.d.ts",
     "../client/akashic/SocketIOAMFlowClient.ts"
   ]
 }
