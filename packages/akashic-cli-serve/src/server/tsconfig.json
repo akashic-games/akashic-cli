@@ -14,12 +14,11 @@
     "outDir": "../../lib",
     "removeComments": true,
     "downlevelIteration": true,
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "alwaysStrict": true
   },
   "include": [
     "./**/*.ts",
-    "./typings/ect.d.ts",
     "../client/akashic/SocketIOAMFlowClient.ts"
   ]
 }
