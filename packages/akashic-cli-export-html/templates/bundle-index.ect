@@ -40,7 +40,7 @@ if (! ("__akashic__" in window)) {
 <% end %>
 
 <% if @autoSendEvents : %>
-	window.__akashic__.autoSendEvents = "<%- @autoSendEvents %>";
+	window.__akashic__.autoSendEvents = <%- JSON.stringify(@autoSendEvents) %>;
 	window.__akashic__.sandboxConfigFunc = function () {
 		var module = { exports: {} };
 		var exports = module.exports;

@@ -42,7 +42,7 @@ export async function promiseConvertBundle(options: ConvertTemplateParameterObje
 		try {
 			options.sandboxConfigJsCode = readSandboxConfigJs(options.source);
 		} catch (error) {
-			options.autoSendEvents = "";
+			options.autoSendEvents = false;
 			console.log("failed read sandbox.config.js, autoSendEvents disabled.");
 		}
 	}
