@@ -28,7 +28,7 @@
 	box-sizing: border-box;
 	display: flex;
 	flex-flow: row nowrap;
-	align-items: start;
+	align-items: center;
 	font-size: 12px;
 }
 

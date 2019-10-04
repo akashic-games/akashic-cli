@@ -15,7 +15,9 @@ const store = observable({
 	duration: 380 * 1000,
 	showsAppearance: false,
 	showsDevtools: false,
-	showsGameScreenPopover: false,
+	showsDisplayOptionPopover: false,
+	showsBackgroundImage: false,
+	showsGrid: false,
 	isActivePausing: false
 });
 
@@ -52,14 +54,20 @@ const TestWithBehaviour = observer(() => (
 				isJoinEnabled: store.realtime,
 				onClickJoinLeave: action("joinleave")
 			})}
+			makeDisplayOptionControlProps={() => ({
+				showsDisplayOptionPopover: store.showsDisplayOptionPopover,
+				showsBackgroundImage: store.showsBackgroundImage,
+				showsGrid: store.showsGrid,
+				onToggleDisplayOptionPopover: (show => store.showsDisplayOptionPopover = show),
+				onToggleShowBackgroundImage: (show => store.showsBackgroundImage = show),
+				onToggleShowGrid: (show => store.showsGrid = show)
+			})}
 			showsAppearance={store.showsAppearance}
 			showsDevtools={store.showsDevtools}
-			showsGameScreenPopover={store.showsGameScreenPopover}
 			showsInstanceControl={store.showsDevtools}
 			targetService={ServiceType.None}
 			onToggleAppearance={v => (store.showsAppearance = v)}
 			onToggleDevTools={v => (store.showsDevtools = v)}
-			onToggleGameScreenPopover={v => (store.showsGameScreenPopover = v)}
 		/>
 ));
 
@@ -89,13 +97,20 @@ storiesOf("o-ToolBar", module)
 				isJoinEnabled: false,
 				onClickJoinLeave: action("joinleave")
 			})}
+			makeDisplayOptionControlProps={() => ({
+				showsDisplayOptionPopover: true,
+				showsBackgroundImage: false,
+				showsGrid: true,
+				onToggleDisplayOptionPopover: action("toggle-display-option"),
+				onToggleShowBackgroundImage: action("toggle-bgimage"),
+				onToggleShowGrid: action("toggle-grid")
+			})}
 			showsAppearance={false}
 			showsDevtools={true}
-			showsGameScreenPopover={true}
 			showsInstanceControl={true}
 			targetService={ServiceType.None}
 			onToggleAppearance={action("toggle-appearance")}
 			onToggleDevTools={action("toggle-dev-tools")}
-			onToggleGameScreenPopover={action("toggle-bg-image")} />
+		/>
 	))
 	.add("with-behavior", () => <TestWithBehaviour />);

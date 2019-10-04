@@ -6,18 +6,18 @@ export class ToolBarUiStore {
 	@observable isSeeking: boolean;
 	@observable showsAppearanceMenu: boolean;
 	@observable showsDevtools: boolean;
-	@observable showsGameScreenPopover: boolean;
-	@observable showsBgImage: boolean;
-	@observable showsGridCanvas: boolean;
+	@observable showsDisplayOptionPopover: boolean;
+	@observable showsBackgroundImage: boolean;
+	@observable showsGrid: boolean;
 
 	constructor() {
 		this.currentTimePreview = 0;
 		this.isSeeking = false;
 		this.showsAppearanceMenu = false;
 		this.showsDevtools = storage.data.showsDevtools;
-		this.showsGameScreenPopover = false;
-		this.showsBgImage = storage.data.showsBgImage;
-		this.showsGridCanvas = storage.data.showsGridCanvas;
+		this.showsDisplayOptionPopover = false;
+		this.showsBackgroundImage = storage.data.showsBackgroundImage;
+		this.showsGrid = storage.data.showsGrid;
 	}
 
 	@action
@@ -43,19 +43,19 @@ export class ToolBarUiStore {
 	}
 
 	@action
-	toggleShowGameScreenPopover(show: boolean): void {
-		this.showsGameScreenPopover = show;
+	toggleShowDisplayOptionPopover(show: boolean): void {
+		this.showsDisplayOptionPopover = show;
 	}
 
 	@action
-	toggleShowBgImage(show: boolean): void {
-		this.showsBgImage = show;
-		storage.put({ showsBgImage: show });
+	toggleShowBackgroundImage(show: boolean): void {
+		this.showsBackgroundImage = show;
+		storage.put({ showsBackgroundImage: show });
 	}
 
 	@action
-	toggleShowGridCanvas(show: boolean): void {
-		this.showsGridCanvas = show;
-		storage.put({ showsGridCanvas: show });
+	toggleShowGrid(show: boolean): void {
+		this.showsGrid = show;
+		storage.put({ showsGrid: show });
 	}
 }
