@@ -1,14 +1,15 @@
 import * as React from "react";
-import {observer} from "mobx-react";
-import {GameViewManager} from "../akashic/GameViewManager";
-import {Store} from "../store/Store";
-import {Operator} from "../operator/Operator";
-import {ToolBarContainer} from "./container/ToolbarContainer";
-import {DevtoolContainer} from "./container/DevtoolContainer";
+import { observer } from "mobx-react";
+import { GameViewManager } from "../akashic/GameViewManager";
+import { Store } from "../store/Store";
+import { Operator } from "../operator/Operator";
+import { ToolBarContainer } from "./container/ToolbarContainer";
+import { DevtoolContainer } from "./container/DevtoolContainer";
+import { StartupScreenContainer } from "./container/StartupScreenContainer";
+import { NotificationContainer } from "./container/NotificationContainer";
+import { GameScreenContainer } from "./container/GameScreenContainer";
 import "./global.css";
 import * as styles from "./App.css";
-import {StartupScreenContainer} from "./container/StartupScreenContainer";
-import {NotificationContainer} from "./container/NotificationContainer";
 
 export interface AppProps {
 	store: Store;
@@ -31,7 +32,6 @@ export class App extends React.Component<AppProps, {}> {
 						/> :
 						null
 				}
-				<div id="agvcontainer" style={{ visibility: "visible" }} ref={this._onRef} />
 			</div>;
 		}
 
@@ -44,12 +44,13 @@ export class App extends React.Component<AppProps, {}> {
 				toolBarUiStore={store.toolBarUiStore}
 				targetService={store.targetService}
 			/>
-			<div id="agvcontainer" className={styles["main"] + " " + styles["centering"] } ref={this._onRef}>
-			{
-				store.toolBarUiStore.showsBgImage ?
-					<img src={sandboxConfig.backgroundImage} className={styles["bg-image"]}/> :
-					null
-			}
+			<div id="agvcontainer" className={styles["main"] + " " + styles["centering"] }>
+				<GameScreenContainer
+					sandboxConfig={sandboxConfig}
+					toolBarUiStore={store.toolBarUiStore}
+					localInstance={store.currentLocalInstance}
+					gameViewManager={this.props.gameViewManager}
+				/>
 			</div>
 			{
 				store.toolBarUiStore.showsDevtools ?
@@ -68,11 +69,5 @@ export class App extends React.Component<AppProps, {}> {
 				notificationUiStore={store.notificationUiStore}
 			/>
 		</div>;
-	}
-
-	private _onRef = (elem: HTMLDivElement): void => {
-		if (elem) {
-			elem.appendChild(this.props.gameViewManager.getRootElement());
-		}
 	}
 }

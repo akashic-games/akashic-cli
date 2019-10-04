@@ -13,6 +13,9 @@
 	--color-tool-bg-active: #bbb;
 	--color-tool-bg-pushed: #ccc;
 
+	--color-popover-bg: #fcfcfc;
+	--color-popover-text: #686868;
+
 	--color-base-text: #555;
 	--color-base-border: #bbb;
 	--color-base-grid: #ccc;
@@ -27,6 +30,12 @@
 	--color-pane-button-bg: white;
 	--color-pane-button-bg-selected: #ccd;
 	--color-pane-button-text-selected: white;
+
+	--zindex-game-screen-bg: -1;
+	--zindex-game-screen: calc(var(--zindex-game-screen-bg) + 1);
+	--zindex-game-screen-grid: calc(var(--zindex-game-screen-bg) + 1);
+	--zindex-popover: 10;
+	--zindex-notification: 20;
 }
 
 * {

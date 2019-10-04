@@ -6,13 +6,18 @@ export class ToolBarUiStore {
 	@observable isSeeking: boolean;
 	@observable showsAppearanceMenu: boolean;
 	@observable showsDevtools: boolean;
-	@observable showsBgImage: boolean;
+	@observable showsDisplayOptionPopover: boolean;
+	@observable showsBackgroundImage: boolean;
+	@observable showsGrid: boolean;
 
 	constructor() {
 		this.currentTimePreview = 0;
 		this.isSeeking = false;
 		this.showsAppearanceMenu = false;
 		this.showsDevtools = storage.data.showsDevtools;
+		this.showsDisplayOptionPopover = false;
+		this.showsBackgroundImage = storage.data.showsBackgroundImage;
+		this.showsGrid = storage.data.showsGrid;
 	}
 
 	@action
@@ -38,8 +43,19 @@ export class ToolBarUiStore {
 	}
 
 	@action
-	toggleShowBgImage(show: boolean): void {
-		this.showsBgImage = show;
-		storage.put({ showsBgImage: show });
+	toggleShowDisplayOptionPopover(show: boolean): void {
+		this.showsDisplayOptionPopover = show;
+	}
+
+	@action
+	toggleShowBackgroundImage(show: boolean): void {
+		this.showsBackgroundImage = show;
+		storage.put({ showsBackgroundImage: show });
+	}
+
+	@action
+	toggleShowGrid(show: boolean): void {
+		this.showsGrid = show;
+		storage.put({ showsGrid: show });
 	}
 }
