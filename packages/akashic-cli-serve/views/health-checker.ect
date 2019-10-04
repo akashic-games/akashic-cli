@@ -6,6 +6,8 @@
             <th>status</th>
             <th>createdAt</th>
             <th>lastSuspendedAt</th>
+            <th>clientInstanceCount</th>
+            <th>runnerCount</th>
         </tr>
     </thead>
     <tbody>
@@ -13,8 +15,10 @@
         <tr>
             <td><%= info.playId %></td>
             <td><%= info.status %></td>
-            <td><%= info.createdAt %></td>
-            <td><%= info.lastSuspendedAt %></td>
+            <td><%= new Date(info.createdAt).toString() %></td>
+            <td><%= if info.lastSuspendedAt then new Date(info.lastSuspendedAt).toString() else "" %></td>
+            <td><%= info.clientInstances.length %></td>
+            <td><%= info.runners.length %></td>
         </tr>
         <% end %>
     </tbody>
@@ -22,12 +26,12 @@
 
 <% for info in @playsInfo : %>
 <table border="1" style="border-collapse: collapse">
-    <caption>Play<%= info.playId %>に接続しているClientの状態</caption>
+    <caption>Play<%= info.playId %>に接続しているClientInstanceの状態</caption>
     <thead>
         <tr>
             <th>playerId</th>
             <th>playerName</th>
-            <th>isActive</th>
+            <th>isActiveInstance</th>
         </tr>
     </thead>
     <tbody>

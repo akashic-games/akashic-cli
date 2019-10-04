@@ -1,5 +1,4 @@
 import * as express from "express";
-import { Play } from "@akashic/headless-driver";
 import { PlayStore } from "../domain/PlayStore";
 
 export const createHandleToGetHealthChecker = (playStore: PlayStore): express.RequestHandler => {
@@ -12,7 +11,8 @@ export const createHandleToGetHealthChecker = (playStore: PlayStore): express.Re
 					status: play.status,
 					createdAt: play.createdAt,
 					lastSuspendedAt: play.lastSuspendedAt,
-					clientInstances: playStore.getClientInstances(play.playId)
+					clientInstances: playStore.getClientInstances(play.playId),
+					runners: playStore.getRunners(play.playId)
 				};
 			});
 			res.render("health-checker", {
