@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 1.7.34 (2019-10-04)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#147](https://github.com/akashic-games/akashic-cli/pull/147) akashic-cli-serveにグリッド描画機能の追加 ([@dera-](https://github.com/dera-))
+
+#### Committers: 2
+- [@dera-](https://github.com/dera-)
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.7.33 (2019-10-02)
 
 #### Republish
