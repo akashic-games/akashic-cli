@@ -2,6 +2,9 @@
 	"templates": {
 		"javascript": "javascript.zip",
 		"typescript": "typescript.zip",
-		"javascript-minimal": "javascript-minimal.zip"
+		"javascript-minimal": "javascript-minimal.zip",
+		"typescript-minimal": "typescript-minimal.zip",
+		"javascript-shin-ichiba-ranking": "javascript-shin-ichiba-ranking.zip",
+		"typescript-shin-ichiba-ranking": "typescript-shin-ichiba-ranking.zip"
 	}
 }

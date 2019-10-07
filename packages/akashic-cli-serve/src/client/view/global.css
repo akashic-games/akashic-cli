@@ -8,9 +8,13 @@
 	--color-tool-border: #c0c0c0;
 	--color-tool-border-active: #bbb;
 	--color-tool-border-pushed: gray;
+	--color-tool-border-emphasize: #c1c1c1;
 	--color-tool-bg: #f0f0f0;
 	--color-tool-bg-active: #bbb;
 	--color-tool-bg-pushed: #ccc;
+
+	--color-popover-bg: #fcfcfc;
+	--color-popover-text: #686868;
 
 	--color-base-text: #555;
 	--color-base-border: #bbb;
@@ -26,6 +30,12 @@
 	--color-pane-button-bg: white;
 	--color-pane-button-bg-selected: #ccd;
 	--color-pane-button-text-selected: white;
+
+	--zindex-game-screen-bg: -1;
+	--zindex-game-screen: calc(var(--zindex-game-screen-bg) + 1);
+	--zindex-game-screen-grid: calc(var(--zindex-game-screen-bg) + 1);
+	--zindex-popover: 10;
+	--zindex-notification: 20;
 }
 
 * {

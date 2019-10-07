@@ -1,6 +1,7 @@
 import { observable, action, ObservableMap } from "mobx";
 import * as playlog from "@akashic/playlog";
 import { Trigger } from "@akashic/trigger";
+import { Player } from "../../common/types/Player";
 import { TimeKeeper } from "../../common/TimeKeeper";
 import { PlayStatus } from "../../common/types/PlayStatus";
 import { PlayDurationState } from "../../common/types/PlayDurationState";
@@ -9,8 +10,8 @@ import * as ApiClient from "../api/ApiClient";
 import { socketInstance } from "../api/socketInstance";
 import { GameViewManager } from "../akashic/GameViewManager";
 import { SocketIOAMFlowClient } from "../akashic/SocketIOAMFlowClient";
-import { Player } from "../../common/types/Player";
 import { ExecutionMode } from "./ExecutionMode";
+import { ContentEntity } from "./ContentEntity";
 import { LocalInstanceEntity } from "./LocalInstanceEntity";
 import { ServerInstanceEntity } from "./ServerInstanceEntity";
 import { CreateCoeLocalInstanceParameterObject } from "./CoePluginEntity";
@@ -22,9 +23,9 @@ export interface CreateLocalInstanceParameterObject {
 	playId: string;
 	playToken?: string;
 	playlogServerUrl?: string;
-	contentUrl?: string;
 	argument?: any;
 	initialEvents?: playlog.Event[];
+	proxyAudio?: boolean;
 	coeHandler?: {
 		onLocalInstanceCreate: (params: CreateCoeLocalInstanceParameterObject) => Promise<LocalInstanceEntity>;
 		onLocalInstanceDelete: (playId: string) => Promise<void>;
@@ -38,8 +39,7 @@ export interface CreateServerInstanceParameterObject {
 export interface PlayEntityParameterObject {
 	playId: string;
 	joinedPlayers?: Player[];
-	contentUrl: string;  // 今のところ不使用だが渡しておく
-	clientContentUrl: string;
+	content: ContentEntity;
 	runners?: RunnerDescription[];
 	clientInstances?: ClientInstanceDescription[];
 	durationState?: PlayDurationState;
@@ -51,6 +51,7 @@ export class PlayEntity {
 
 	readonly playId: string;
 	readonly amflow: SocketIOAMFlowClient;
+	readonly content: ContentEntity;
 
 	@observable activePlaybackRate: number;
 	@observable isActivePausing: boolean;
@@ -64,7 +65,6 @@ export class PlayEntity {
 	@observable serverInstances: ServerInstanceEntity[];
 
 	private readonly _timeKeeper: TimeKeeper;
-	private readonly _clientContentUrl: string;
 	private _serverInstanceWaiters: {[key: string]: (p: ServerInstanceEntity) => void };
 	private _timerId: any;
 	private _parent?: PlayEntity;
@@ -76,13 +76,15 @@ export class PlayEntity {
 		this.isActivePausing = !!param.durationState && param.durationState.isPaused;
 		this.duration = param.durationState ? param.durationState.duration : 0;
 		this.clientInstances = param.clientInstances || [];
-		this.joinedPlayerTable = observable.map((param.joinedPlayers || []).map(p => [p.id, p]));
+		this.joinedPlayerTable = observable.map((param.joinedPlayers || []).map(p => [p.id, p] as [string, Player]));
 		this.status = "preparing";
 		this.localInstances = [];
-		this.serverInstances = !param.runners ? [] : param.runners.map(desc => new ServerInstanceEntity({ runnerId: desc.runnerId, play: this }));
+		this.serverInstances = !param.runners ? [] : param.runners.map(desc => {
+			return new ServerInstanceEntity({ runnerId: desc.runnerId, play: this });
+		});
 		this.onTeardown = new Trigger();
+		this.content = param.content;
 		this._timeKeeper = new TimeKeeper();
-		this._clientContentUrl = param.clientContentUrl!;
 		this._serverInstanceWaiters = {};
 		this._timerId = null;
 
@@ -111,7 +113,8 @@ export class PlayEntity {
 	async createLocalInstance(param: CreateLocalInstanceParameterObject): Promise<LocalInstanceEntity> {
 		const i = new LocalInstanceEntity({
 			play: this,
-			contentUrl: this._clientContentUrl,
+			resizeGameView: !this._parent,
+			content: this.content,
 			coeHandler: param.coeHandler,
 			...param
 		});
@@ -146,12 +149,12 @@ export class PlayEntity {
 
 	join(playerId: string, name?: string): void {
 		const highestPriority = 3;
-		this.amflow.sendEvent([playlog.EventCode.Join, highestPriority, playerId, name]);
+		this.amflow.enqueueEvent([playlog.EventCode.Join, highestPriority, playerId, name]);
 	}
 
 	leave(playerId: string): void {
 		const highestPriority = 3;
-		this.amflow.sendEvent([playlog.EventCode.Leave, highestPriority, playerId]);
+		this.amflow.enqueueEvent([playlog.EventCode.Leave, highestPriority, playerId]);
 	}
 
 	pauseActive(): void {

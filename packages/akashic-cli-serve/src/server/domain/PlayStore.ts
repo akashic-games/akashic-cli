@@ -16,6 +16,7 @@ import {
 } from "../../common/types/TestbedEvent";
 import { PlayDurationState } from "../../common/types/PlayDurationState";
 import { TimeKeeper } from "../../common/TimeKeeper";
+import { ServerContentLocator } from "../common/ServerContentLocator";
 import { activePermission, passivePermission } from "./AMFlowPermisson";
 
 export interface PlayStoreParameterObject {
@@ -34,10 +35,10 @@ export class PlayStore {
 	private playManager: PlayManager;
 
 	// TODO playId ごとの情報を集約して PlayEntity を作る
+	private contentLocators: { [playId: string]: ServerContentLocator };
 	private clientInstances: { [playId: string]: ClientInstanceDescription[] };
 	private runners: { [playId: string]: RunnerDescription[] };
 	private joinedPlayers: { [playId: string]: Player[] };
-	private clientContentUrls: { [playId: string]: string };
 	private timeKeepers: { [playId: string]: TimeKeeper };
 
 	constructor(params: PlayStoreParameterObject) {
@@ -49,23 +50,23 @@ export class PlayStore {
 		this.onClientInstanceAppear = new Trigger<ClientInstanceAppearTestbedEvent>();
 		this.onClientInstanceDisappear = new Trigger<ClientInstanceDisappearTestbedEvent>();
 		this.playManager = params.playManager;
+		this.contentLocators = {};
 		this.clientInstances = {};
 		this.runners = {};
 		this.joinedPlayers = {};
-		this.clientContentUrls = {};
 		this.timeKeepers = {};
 	}
 
 	/**
 	 * Playを生成するが、返すものはPlayId
 	 */
-	async createPlay(contentUrl: string, clientContentUrl?: string): Promise<string> {
+	async createPlay(loc: ServerContentLocator): Promise<string> {
 		const playId = await this.playManager.createPlay({
-			contentUrl
+			contentUrl: loc.asAbsoluteUrl()
 		});
-		this.clientContentUrls[playId] = clientContentUrl;
+		this.contentLocators[playId] = loc;
 		this.timeKeepers[playId] = new TimeKeeper();
-		this.onPlayCreate.fire({playId, contentUrl, clientContentUrl: clientContentUrl || null});
+		this.onPlayCreate.fire({playId, contentLocatorData: loc});
 		this.onPlayStatusChange.fire({playId, playStatus: "running"});
 		return playId;
 	}
@@ -75,11 +76,11 @@ export class PlayStore {
 	}
 
 	getPlays(): Play[] {
-		return this.playManager.getPlays();
+		return this.playManager.getAllPlays();
 	}
 
 	async stopPlay(playId: string): Promise<void> {
-		await this.playManager.stopPlay(playId);
+		await this.playManager.deletePlay(playId);
 		this.onPlayStatusChange.fire({playId, playStatus: "suspending"});
 	}
 
@@ -151,8 +152,8 @@ export class PlayStore {
 		return this.joinedPlayers[playId] || [];
 	}
 
-	getClientContentUrl(playId: string): string | null {
-		return (this.clientContentUrls[playId] != null) ? this.clientContentUrls[playId] : null;
+	getContentLocator(playId: string): ServerContentLocator | null {
+		return this.contentLocators[playId] || null;
 	}
 
 	getRunners(playId: string): RunnerDescription[] {

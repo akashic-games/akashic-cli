@@ -2,6 +2,7 @@ const http = require('http');
 const socketio = require("socket.io");
 const io = require("socket.io-client");
 const hld =  require("@akashic/headless-driver");
+const { ServerContentLocator } = require("../../lib/server/common/ServerContentLocator");
 const { PlayStore } = require("../../lib/server/domain/PlayStore");
 const { SocketIOAMFlowManager } = require("../../lib/server/domain/SocketIOAMFlowManager");
 const { SocketIOAMFlowClient } = require("../../lib/client/akashic/SocketIOAMFlowClient");
@@ -41,13 +42,15 @@ describe("SocketIOAMFlowManager", () => {
 
 	it("provides AMFlow functions with connectionId", (done) => {
 		(async () => {
+			let socket;
 			try {
 				const playStore = new PlayStore({ playManager: new hld.PlayManager() });
 				const amflowManager = new SocketIOAMFlowManager({ playStore });
 				socketIOServer.on("connection", (socket) => amflowManager.setupSocketIOAMFlow(socket));
-				const socket = io("http://localhost:" + TEST_SERVER_PORT);
+				socket = io("http://localhost:" + TEST_SERVER_PORT);
+				const contentLocator = new ServerContentLocator({ path: "dummycontenturl" });
 
-				const playId1 = await playStore.createPlay("dummycontenturl");
+				const playId1 = await playStore.createPlay(contentLocator);
 				const serverAMFlow = playStore.createAMFlow(playId1);
 				const serverToken = playStore.createPlayToken(playId1, true);
 				const token = amflowManager.createPlayToken(playId1, "playerId0", "john", false, null);
@@ -110,21 +113,27 @@ describe("SocketIOAMFlowManager", () => {
 				done();
 			} catch (e) {
 				done.fail(e);
+			} finally {
+				if (socket) {
+					await socket.close();
+				}
 			}
 		})();
 	});
 
 	it("multiplexes a socket with connectionId", (done) => {
 		(async () => {
+			let socketA, socketB;
 			try {
 				const playStore = new PlayStore({ playManager: new hld.PlayManager() });
 				const amflowManager = new SocketIOAMFlowManager({ playStore });
 				socketIOServer.on("connection", (socket) => amflowManager.setupSocketIOAMFlow(socket));
-				const socketA = io("http://localhost:" + TEST_SERVER_PORT);
-				const socketB = io("http://localhost:" + TEST_SERVER_PORT);
+				socketA = io("http://localhost:" + TEST_SERVER_PORT);
+				socketB = io("http://localhost:" + TEST_SERVER_PORT);
+				const contentLocator = new ServerContentLocator({ path: "dummycontenturl" });
 
-				const playId1 = await playStore.createPlay("dummycontenturl");
-				const playId2 = await playStore.createPlay("dummycontenturl");
+				const playId1 = await playStore.createPlay(contentLocator);
+				const playId2 = await playStore.createPlay(contentLocator);
 				const token1a = amflowManager.createPlayToken(playId1, "playerId0", "john", true, null);
 				const token1p1 = amflowManager.createPlayToken(playId1, "playerId1", "bob", false, null);
 				const token1p2 = amflowManager.createPlayToken(playId1, "playerId2", "jack", false, null);
@@ -274,6 +283,13 @@ describe("SocketIOAMFlowManager", () => {
 				done();
 			} catch (e) {
 				done.fail(e);
+			} finally {
+				if (socketA) {
+					await socketA.close();
+				}
+				if (socketB) {
+					await socketB.close();
+				}
 			}
 		})();
 	});

@@ -55,9 +55,27 @@ export interface GameConfiguration {
 	operationPlugins?: OperationPluginDeclaration[];
 	environment?: ModuleEnvironment;
 	moduleMainScripts?: ModuleMainScripts;
+	exportZipInfo?: ExportZipInfo;
 }
-
 
 export interface ModuleEnvironment {
 	"sandbox-runtime"?: string;
+}
+
+/**
+ * akashic export zip 実行時のオプション情報。
+ * エクスポート結果に埋め込む値であるため、実行環境のディレクトリの情報は持たせていないことに注意。
+ */
+export interface ExportZipInfo {
+	version: string;
+	option: {
+		quiet?: boolean;
+		force?: boolean;
+		strip?: boolean;
+		minify?: boolean;
+		bundle?: boolean;
+		babel?: boolean;
+		hashFilename?: number | boolean;
+		omitEmptyJs?: boolean;
+	};
 }

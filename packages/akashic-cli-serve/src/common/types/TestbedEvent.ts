@@ -1,10 +1,10 @@
 import {Player} from "./Player";
 import {PlayStatus} from "./PlayStatus";
+import {ContentLocatorData} from "./ContentLocatorData";
 
 export interface PlayCreateTestbedEvent {
 	playId: string;
-	contentUrl: string;
-	clientContentUrl: string | null;
+	contentLocatorData: ContentLocatorData;
 }
 
 export interface PlayStatusChangedTestbedEvent {

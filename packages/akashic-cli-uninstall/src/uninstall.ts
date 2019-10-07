@@ -1,3 +1,4 @@
+import * as path from "path";
 import * as cmn from "@akashic/akashic-cli-commons";
 import { Configuration } from "./Configuration";
 
@@ -49,15 +50,16 @@ export function _completeUninstallParameterObject(param: UninstallParameterObjec
 
 export function promiseUninstall(param: UninstallParameterObject): Promise<void> {
 	_completeUninstallParameterObject(param);
-	var npm = param.debugNpm || new cmn.PromisedNpm({ logger: param.logger });
+	const npm = param.debugNpm || new cmn.PromisedNpm({ logger: param.logger });
 
 	if (param.plugin && param.moduleNames.length > 1) {
 		return Promise.reject(new Error("'plugin' option cannot be used with multiple module uninstalling/unlinking."));
 	}
 
-	var restoreDirectory = cmn.Util.chdir(param.cwd);
+	const restoreDirectory = cmn.Util.chdir(param.cwd);
+	const gameJsonPath = path.join(process.cwd(), "game.json");
 	return Promise.resolve()
-		.then(() => cmn.ConfigurationFile.read("./game.json", param.logger))
+		.then(() => cmn.ConfigurationFile.read(gameJsonPath, param.logger))
 		.then((content: cmn.GameConfiguration) => {
 			return Promise.resolve()
 				.then(() => {
@@ -70,19 +72,19 @@ export function promiseUninstall(param: UninstallParameterObject): Promise<void>
 					}
 				})
 				.then(() => {
-					var conf = new Configuration({ content: content, logger: param.logger });
+					const conf = new Configuration({ content: content, logger: param.logger });
 					if (param.plugin)
 						conf.removeOperationPlugin(param.moduleNames[0]);
 					conf.vacuumGlobalScripts();
-					var globalScripts = conf._content.globalScripts;
-					var packageJsons = cmn.NodeModules.listPackageJsonsFromScriptsPath(".", globalScripts);
-					var moduleMainScripts = cmn.NodeModules.listModuleMainScripts(packageJsons);
+					const globalScripts = conf._content.globalScripts;
+					const packageJsons = cmn.NodeModules.listPackageJsonsFromScriptsPath(".", globalScripts);
+					const moduleMainScripts = cmn.NodeModules.listModuleMainScripts(packageJsons);
 					if (moduleMainScripts && Object.keys(moduleMainScripts).length > 0) {
 						conf._content.moduleMainScripts = moduleMainScripts;
 					} else {
 						delete conf._content.moduleMainScripts;
 					}
-					return cmn.ConfigurationFile.write(conf.getContent(), "./game.json", param.logger);
+					return cmn.ConfigurationFile.write(conf.getContent(), gameJsonPath, param.logger);
 				});
 		})
 		.then(restoreDirectory, restoreDirectory)

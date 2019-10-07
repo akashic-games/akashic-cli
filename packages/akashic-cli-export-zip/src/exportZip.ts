@@ -17,6 +17,21 @@ export interface ExportZipParameterObject {
 	logger?: cmn.Logger;
 	hashLength?: number;
 	omitEmptyJs?: boolean;
+	exportInfo?: cmn.ExportZipInfo;
+}
+
+function _createExportInfo(param: ExportZipParameterObject): cmn.ExportZipInfo {
+	return {
+		version: JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "package.json"), "utf8")).version,
+		option: {
+			force: !!param.force,
+			strip: !!param.strip,
+			minify: !!param.minify,
+			bundle: !!param.bundle,
+			babel: !!param.babel,
+			omitEmptyJs: !!param.omitEmptyJs
+		}
+	};
 }
 
 export function _completeExportZipParameterObject(param: ExportZipParameterObject): ExportZipParameterObject {
@@ -30,7 +45,8 @@ export function _completeExportZipParameterObject(param: ExportZipParameterObjec
 		force: !!param.force,
 		logger: param.logger || new cmn.ConsoleLogger(),
 		hashLength: param.hashLength,
-		omitEmptyJs: param.omitEmptyJs
+		omitEmptyJs: param.omitEmptyJs,
+		exportInfo: param.exportInfo || _createExportInfo(param)
 	};
 }
 
@@ -70,7 +86,8 @@ export function promiseExportZip(param: ExportZipParameterObject): Promise<void>
 				dest: destDir,
 				hashLength: param.hashLength,
 				omitEmptyJs: param.omitEmptyJs,
-				logger: param.logger
+				logger: param.logger,
+				exportInfo: param.exportInfo
 			});
 		})
 		.then(() => {

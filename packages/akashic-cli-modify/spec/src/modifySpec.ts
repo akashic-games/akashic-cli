@@ -6,11 +6,11 @@ import { modifyBasicParameter } from "../../lib/modify";
 describe("modify", function () {
 	var nullLogger = new cmn.ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
 
-	afterEach(() => {
-		mockfs.restore();
-	});
-
 	describe("modifyBasicParameter()", function () {
+		afterEach(() => {
+			mockfs.restore();
+		});
+
 		it("rejects for negative values", function (done: any) {
 			mockfs({
 				some: {

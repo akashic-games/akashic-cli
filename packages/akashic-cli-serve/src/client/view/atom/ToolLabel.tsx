@@ -4,6 +4,7 @@ import * as styles from "./ToolLabel.css";
 
 export interface ToolLabelProps {
 	title?: string;
+	emphasizeBorder?: boolean;
 }
 
 @observer

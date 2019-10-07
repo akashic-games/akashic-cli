@@ -1,4 +1,5 @@
 import { PlayBroadcastTestbedEvent } from "../../common/types/TestbedEvent";
+import { ClientContentLocator } from "../common/ClientContentLocator";
 import * as ApiClient from "../api/ApiClient";
 import * as Subscriber from "../api/Subscriber";
 import { GameViewManager } from "../akashic/GameViewManager";
@@ -8,13 +9,11 @@ import { PlayOperator } from "./PlayOperator";
 import { LocalInstanceOperator } from "./LocalInstanceOperator";
 import { UiOperator } from "./UiOperator";
 import { ExternalPluginOperator } from "./ExternalPluginOperator";
+import { ServiceType } from "../../common/types/ServiceType";
 
 export interface OperatorParameterObject {
 	store: Store;
 	gameViewManager: GameViewManager;
-
-	contentUrl: string;
-	clientContentUrl?: string;
 }
 
 export interface StartContentParameterObject {
@@ -29,8 +28,6 @@ export class Operator {
 	externalPlugin: ExternalPluginOperator;
 	private store: Store;
 	private gameViewManager: GameViewManager;
-	private contentUrl: string;
-	private clientContentUrl: string | null;
 
 	constructor(param: OperatorParameterObject) {
 		const store = param.store;
@@ -40,17 +37,28 @@ export class Operator {
 		this.externalPlugin = new ExternalPluginOperator(param.gameViewManager);
 		this.store = param.store;
 		this.gameViewManager = param.gameViewManager;
-		this.contentUrl = param.contentUrl;
-		this.clientContentUrl = param.clientContentUrl;
 
 		Subscriber.onBroadcast.add(this._handleBroadcast);
 	}
 
-	async bootstrap(): Promise<void> {
+	assertInitialized(): Promise<unknown> {
+		return this.store.assertInitialized();
+	}
+
+	async bootstrap(contentLocator?: ClientContentLocator): Promise<void> {
 		const store = this.store;
-		await store.playStore.assertInitialized();
-		const playIds = Object.keys(store.playStore.plays);
-		const play = (playIds.length === 0) ? await this._createServerLoop() : store.playStore.plays[playIds[playIds.length - 1]];
+		let play: PlayEntity = null;
+		if (contentLocator) {
+			play = await this._createServerLoop(contentLocator);
+		} else {
+			const plays = store.playStore.playsList();
+			if (plays.length > 0) {
+				play = plays[plays.length - 1];
+			} else {
+				const loc = store.contentStore.defaultContent().locator;
+				play = await this._createServerLoop(loc);
+			}
+		}
 		await this.setCurrentPlay(play);
 	}
 
@@ -59,23 +67,32 @@ export class Operator {
 		if (store.currentPlay === play)
 			return;
 
+		let previousPlay;
 		if (store.currentPlay) {
+			previousPlay = store.currentPlay;
 			store.currentPlay.deleteAllLocalInstances();
 			store.setCurrentLocalInstance(null);
 		}
 
 		// TODO play からコンテンツを引くべき？
-		const gameJson = await ApiClient.getGameConfiguration();
-		this.gameViewManager.setViewSize(gameJson.width, gameJson.height);
-
-		const sandboxConfigResult = await ApiClient.getSandboxConfig();
-		store.setSandboxConfig(sandboxConfigResult.data || {});
 
 		store.setCurrentPlay(play);
 
-		const optionsResult = await ApiClient.getOptions();
-		if (optionsResult.data.autoStart) {
-			await this.startContent();
+		let isJoin = false;
+		let argument = undefined;
+		if (store.targetService === ServiceType.NicoLive) {
+			if (previousPlay) {
+				isJoin = previousPlay.joinedPlayerTable.has(store.player.id);
+			} else {
+				isJoin = play.joinedPlayerTable.size === 0;
+			}
+			argument = this._createInstanceArgumentForNicolive(isJoin);
+		}
+		if (store.appOptions.autoStart) {
+			await this.startContent({
+				joinsSelf: isJoin,
+				instanceArgument: argument
+			});
 		}
 	}
 
@@ -91,6 +108,7 @@ export class Operator {
 			executionMode: "passive",
 			player: store.player,
 			argument: params != null ? params.instanceArgument : undefined,
+			proxyAudio: store.appOptions.proxyAudio,
 			coeHandler: {
 				onLocalInstanceCreate: async params => {
 					// TODO: local === true のみ対応
@@ -101,22 +119,12 @@ export class Operator {
 					const childPlay = await this._createClientLoop(params.contentUrl, params.playId);
 					return await childPlay.createLocalInstance({
 						gameViewManager: this.gameViewManager,
-						contentUrl: params.contentUrl,
 						player: this.store.player,
 						playId: params.playId,
 						executionMode: "active",
-						argument: {
-							coe: {
-								permission: {
-									advance: true,
-									advanceRequest: true,
-									aggregation: true
-								},
-								roles: ["broadcaster"],
-								debugMode: false
-							}
-						},
-						initialEvents: params.initialEvents
+						argument: params.argument,
+						initialEvents: params.initialEvents,
+						proxyAudio: store.appOptions.proxyAudio
 					});
 				},
 				onLocalInstanceDelete: async playId => {
@@ -135,25 +143,30 @@ export class Operator {
 	}
 
 	restartWithNewPlay = async (): Promise<void> => {
-		const play = await this._createServerLoop();
-		await ApiClient.broadcast(this.store.currentPlay.playId, { type: "switchPlay", nextPlayId: play.playId });
+		const play = await this._createServerLoop(this.store.currentPlay.content.locator);
 		await this.store.currentPlay.deleteAllServerInstances();
+		await ApiClient.broadcast(this.store.currentPlay.playId, { type: "switchPlay", nextPlayId: play.playId });
 	}
 
-	private async _createServerLoop(): Promise<PlayEntity> {
-		const play = await this.store.playStore.createPlay({
-			contentUrl: this.contentUrl,
-			clientContentUrl: this.clientContentUrl
-		});
+	private async _createServerLoop(contentLocator: ClientContentLocator): Promise<PlayEntity> {
+		const play = await this.store.playStore.createPlay({ contentLocator });
 		const tokenResult = await ApiClient.createPlayToken(play.playId, "", true);  // TODO 空文字列でなくnullを使う
-		play.createServerInstance({ playToken: tokenResult.data.playToken });
-		ApiClient.resumePlayDuration(play.playId);
+		await play.createServerInstance({ playToken: tokenResult.data.playToken });
+		await ApiClient.resumePlayDuration(play.playId);
+
+		// autoSendEvents
+		const sandboxConfig = this.store.contentStore.findOrRegister(contentLocator).sandboxConfig || {};
+		const { events, autoSendEvents } = sandboxConfig;
+		if (events && autoSendEvents && events[autoSendEvents] instanceof Array) {
+			events[autoSendEvents].forEach((pev: any) => play.amflow.enqueueEvent(pev));
+		}
+
 		return play;
 	}
 
 	private async _createClientLoop(contentUrl: string, playId: string): Promise<PlayEntity> {
 		const play = await this.store.playStore.createStandalonePlay({
-			contentUrl,
+			contentLocator: new ClientContentLocator({ path: contentUrl }),  // TODO xnv 多分動かない。COEプラグインからまともに ContentLocator を組み立てる必要がある
 			playId
 		});
 		return play;
@@ -171,5 +184,19 @@ export class Operator {
 		} catch (e) {
 			console.error("_handleBroadcast()", e);
 		}
+	}
+
+	private _createInstanceArgumentForNicolive(isBroadcaster: boolean) {
+		return {
+			coe: {
+				permission: {
+					advance: false,
+					advanceRequest: isBroadcaster,
+					aggregation: false
+				},
+				roles: isBroadcaster ? ["broadcaster"] : [],
+				debugMode: true
+			}
+		};
 	}
 }

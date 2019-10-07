@@ -24,5 +24,5 @@ function build(inputFilePath, outputFilePath, propertyName) {
 }
 
 const inputPath = path.resolve(__dirname + "/../node_modules/@akashic/akashic-gameview-web/lib/index.js");
-const outputPath = path.resolve(__dirname + "/../www/external/akashic-gameview-web.strip.js");
+const outputPath = path.resolve(__dirname + "/../www/public/external/akashic-gameview-web.strip.js");
 build(inputPath, outputPath, "agv");

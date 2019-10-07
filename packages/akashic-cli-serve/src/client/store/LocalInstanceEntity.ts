@@ -2,11 +2,14 @@ import {action, observable, computed} from "mobx";
 import {Trigger} from "@akashic/trigger";
 import {TimeKeeper} from "../../common/TimeKeeper";
 import {Player} from "../../common/types/Player";
+import * as ApiRequest from "../api/ApiRequest";
 import {GameViewManager} from "../akashic/GameViewManager";
 import {PlayEntity} from "./PlayEntity";
 import {CoePluginEntity, CreateCoeLocalInstanceParameterObject} from "./CoePluginEntity";
 import {GameInstanceEntity} from "./GameInstanceEntity";
 import {ExecutionMode} from "./ExecutionMode";
+import {ContentEntity} from "./ContentEntity";
+import {NicoPluginEntity} from "./NicoPluginEntity";
 
 const toAgvExecutionMode = (() => {
 	const executionModeTable = {
@@ -22,13 +25,15 @@ const toAgvExecutionMode = (() => {
 
 export interface LocalInstanceEntityParameterObject {
 	gameViewManager: GameViewManager;
-	contentUrl: string;
+	content: ContentEntity;
 	executionMode: ExecutionMode;
 	play: PlayEntity;
 	player: Player;
+	resizeGameView?: boolean;
 	argument?: any;
 	playToken?: string;
 	playlogServerUrl?: string;
+	proxyAudio?: boolean;
 	coeHandler?: {
 		onLocalInstanceCreate: (params: CreateCoeLocalInstanceParameterObject) => Promise<LocalInstanceEntity>;
 		onLocalInstanceDelete: (playId: string) => Promise<void>;
@@ -45,11 +50,13 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 
 	readonly play: PlayEntity;
 	readonly coePlugin: CoePluginEntity;
-	readonly contentUrl: string;
+	readonly nicoPlugin: NicoPluginEntity;
+	readonly content: ContentEntity;
 
 	private _timeKeeper: TimeKeeper;
 	private _gameViewManager: GameViewManager;
 	private _agvGameContent: agv.GameContent;
+	private _resizeGameView: boolean;
 
 	constructor(params: LocalInstanceEntityParameterObject) {
 		this.onStop = new Trigger<LocalInstanceEntity>();
@@ -57,9 +64,11 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 		this.executionMode = params.executionMode;
 		this.play = params.play;
 		this.isPaused = false;
-		this.contentUrl = params.contentUrl;
+		this.content = params.content;
 		this._timeKeeper = new TimeKeeper();
 		this._gameViewManager = params.gameViewManager;
+		this._resizeGameView = !!params.resizeGameView;
+
 		const playConfig: agv.PlaylogConfig = {
 			playId: this.play.playId,
 			executionMode: toAgvExecutionMode(this.executionMode),
@@ -74,25 +83,34 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 			playConfig.playToken = params.playToken;
 		}
 		this._agvGameContent = this._gameViewManager.createGameContent({
-			contentUrl: this.contentUrl,
+			contentLocator: this.content.locator,
 			player: {
 				id: this.player.id,
 				name: this.player.name
 			},
 			playConfig,
 			gameLoaderCustomizer,
-			argument: params.argument
+			argument: params.argument,
+			proxyAudio: params.proxyAudio
 		});
 		if (params.coeHandler != null) {
 			this.coePlugin = new CoePluginEntity({
 				gameViewManager: this._gameViewManager,
 				onLocalInstanceCreate: params.coeHandler.onLocalInstanceCreate,
-				onLocalInstanceDelete: params.coeHandler.onLocalInstanceDelete
+				onLocalInstanceDelete: params.coeHandler.onLocalInstanceDelete,
+				instanceArgument: params.argument
 			});
-			this._agvGameContent.onExternalPluginRegister.addOnce((name: string) => {
-				if (name !== "coe") return;
+			this._agvGameContent.onExternalPluginRegister.add((name: string) => {
 				const game = this._agvGameContent.getGame();
-				this.coePlugin.bootstrap(game, this._agvGameContent);
+				if (name === "coe") {
+					this.coePlugin.bootstrap(game, this._agvGameContent);
+				} else if (name === "nico") {
+					game.external.nico = new NicoPluginEntity();
+				} else if (name === "send") {
+					game.external.send = (message: any) => {
+						console.log("game.external.send: ", message);
+					};
+				}
 			});
 		}
 	}
@@ -102,11 +120,23 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 		return this.play.joinedPlayerTable.has(this.player.id);
 	}
 
+	@computed
+	get gameViewSize(): {width: number, height: number} {
+		return this._gameViewManager.getViewSize();
+	}
+
 	get gameContent(): agv.GameContent {
 		return this._agvGameContent;
 	}
 
 	async start(): Promise<void> {
+		if (this._resizeGameView) {
+			const url = this.content.locator.asAbsoluteUrl();
+			const contentJson = await ApiRequest.get<{ content_url: string }>(url);
+			const gameJson = await ApiRequest.get<{ width: number, height: number }>(contentJson.content_url);
+			this._gameViewManager.setViewSize(gameJson.width, gameJson.height);
+		}
+
 		await this._gameViewManager.startGameContent(this._agvGameContent);
 		this._timeKeeper.start();
 	}

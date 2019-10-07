@@ -2,6 +2,9 @@ import {PlayDurationState} from "./PlayDurationState";
 import {SandboxConfig} from "./SandboxConfig";
 import {ClientInstanceDescription, RunnerDescription} from "./TestbedEvent";
 import {Player} from "./Player";
+import {ContentLocatorData} from "./ContentLocatorData";
+import {ContentDesc} from "./ContentDesc";
+import {AppOptions} from "./AppOptions";
 
 export interface ApiResponse<T> {
 	meta: {
@@ -14,11 +17,10 @@ export interface ApiResponse<T> {
 
 export interface PlayApiResponseData {
 	playId: string;
-	contentUrl: string;
+	contentLocatorData: ContentLocatorData;
 	joinedPlayers: Player[];
 	runners: RunnerDescription[];
 	clientInstances: ClientInstanceDescription[];
-	clientContentUrl: string | null;
 	durationState: PlayDurationState;
 }
 
@@ -50,13 +52,12 @@ export interface RunnerPatchApiResponseData {
 	status: "running" | "paused";
 }
 
+export type ContentsGetApiResponseData = ContentDesc[];
+
 export interface SandboxConfigApiResponseData extends SandboxConfig {
 }
 
-export interface OptionsApiResponseData {
-	autoStart: boolean;
-	verbose: boolean;
-}
+export type OptionsApiResponseData = AppOptions;
 
 export type PlayGetAllApiResponse = ApiResponse<PlayApiResponseData[]>;
 export type PlayPostApiResponse = ApiResponse<PlayApiResponseData>;
@@ -66,5 +67,6 @@ export type PlayTokenPostApiResponse = ApiResponse<PlayTokenPostApiResponseData>
 export type RunnerPostApiResponse = ApiResponse<RunnerPostApiResponseData>;
 export type RunnerDeleteApiResponse = ApiResponse<RunnerDeleteApiResponseData>;
 export type RunnerPatchApiResponse = ApiResponse<RunnerPatchApiResponseData>;
+export type ContentsGetApiResponse = ApiResponse<ContentsGetApiResponseData>;
 export type SandboxConfigApiResponse = ApiResponse<SandboxConfigApiResponseData>;
 export type OptionsApiResponse = ApiResponse<OptionsApiResponseData>;

@@ -56,6 +56,11 @@ export interface InitParameterObject {
 	 * コピー先に既にファイルが存在していてもコピーするかどうか
 	 */
 	forceCopy?: boolean;
+
+	/**
+	 * ユーザー入力無しでプロジェクトの作成を行うかどうか
+	 */
+	skipAsk?: boolean;
 }
 
 const templateConfigValidator: config.StringMap = {

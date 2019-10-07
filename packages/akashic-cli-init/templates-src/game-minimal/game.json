@@ -1,0 +1,10 @@
+{
+	"width": 320,
+	"height": 320,
+	"fps": 30,
+	"main": "./script/main.js",
+	"assets": {},
+	"environment": {
+		"sandbox-runtime": "2"
+	}
+}

@@ -11,12 +11,12 @@ export const createScriptAssetController = (baseDir: string): express.RequestHan
 	const watcher = chokidar.watch(gameJsonPath, { persistent: true });
 	watcher.on("change", () => {
 		try {
-			const gameJsonFileValue = JSON.parse(fs.readFileSync(gameJsonPath).toString());
-			gameJson = gameJsonFileValue;
+			gameJson = JSON.parse(fs.readFileSync(gameJsonPath).toString());
 		} catch (e) {
-			getSystemLogger().warn("detected game.json updated but dit not reflect because parsing failed.");
+			// do nothing
 		}
 	});
+
 	return (req: express.Request, res: express.Response, next: Function): void => {
 		const scriptPath = path.join(baseDir, req.params.scriptName);
 		if (!fs.existsSync(scriptPath) || !fs.existsSync(scriptPath)) {
@@ -26,8 +26,9 @@ export const createScriptAssetController = (baseDir: string): express.RequestHan
 			return;
 		}
 		let id = Object.keys(gameJson.assets).find((id) => gameJson.assets[id].path === req.params.scriptName);
+
 		const content = fs.readFileSync(scriptPath);
-		const responseBody = `
+		const responseBody = `"use strict";
 			if (! ("gScriptContainer" in window)) {
 				window.gScriptContainer = {};
 			}

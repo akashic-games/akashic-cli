@@ -1,13 +1,15 @@
 import * as React from "react";
-import {observer} from "mobx-react";
-import {GameViewManager} from "../akashic/GameViewManager";
-import {Store} from "../store/Store";
-import {Operator} from "../operator/Operator";
-import {ToolBarContainer} from "./container/ToolbarContainer";
-import {DevtoolContainer} from "./container/DevtoolContainer";
+import { observer } from "mobx-react";
+import { GameViewManager } from "../akashic/GameViewManager";
+import { Store } from "../store/Store";
+import { Operator } from "../operator/Operator";
+import { ToolBarContainer } from "./container/ToolbarContainer";
+import { DevtoolContainer } from "./container/DevtoolContainer";
+import { StartupScreenContainer } from "./container/StartupScreenContainer";
+import { NotificationContainer } from "./container/NotificationContainer";
+import { GameScreenContainer } from "./container/GameScreenContainer";
 import "./global.css";
 import * as styles from "./App.css";
-import {StartupScreenContainer} from "./container/StartupScreenContainer";
 
 export interface AppProps {
 	store: Store;
@@ -21,21 +23,35 @@ export class App extends React.Component<AppProps, {}> {
 		const { store, operator } = this.props;
 		if (!store.currentLocalInstance) {
 			return <div id="whole" className={styles["whole-dialog"]}>
-				<StartupScreenContainer
-					operator={operator}
-					startupScreenUiStore={store.startupScreenUiStore}
-					argumentsTable={store.argumentsTable}
-				/>
+				{
+					(store.currentPlay && !store.appOptions.autoStart) ?
+						<StartupScreenContainer
+							operator={operator}
+							startupScreenUiStore={store.startupScreenUiStore}
+							argumentsTable={store.currentPlay.content.argumentsTable}
+						/> :
+						null
+				}
 			</div>;
 		}
+
+		const sandboxConfig = store.currentLocalInstance.content.sandboxConfig || {};
 		return <div id="whole" className={styles["whole"]}>
 			<ToolBarContainer
 				play={store.currentPlay}
 				localInstance={store.currentLocalInstance}
 				operator={operator}
 				toolBarUiStore={store.toolBarUiStore}
+				targetService={store.targetService}
 			/>
-			<div className={styles["main"] + " " + styles["centering"]} ref={this._onRef} />
+			<div id="agvcontainer" className={styles["main"] + " " + styles["centering"] }>
+				<GameScreenContainer
+					sandboxConfig={sandboxConfig}
+					toolBarUiStore={store.toolBarUiStore}
+					localInstance={store.currentLocalInstance}
+					gameViewManager={this.props.gameViewManager}
+				/>
+			</div>
 			{
 				store.toolBarUiStore.showsDevtools ?
 					<div className={styles["devtools"]}>
@@ -43,17 +59,15 @@ export class App extends React.Component<AppProps, {}> {
 							play={store.currentPlay}
 							operator={operator}
 							devtoolUiStore={store.devtoolUiStore}
-							sandboxConfig={store.sandboxConfig}
+							sandboxConfig={sandboxConfig}
 						/>
 					</div> :
 					null
 			}
+			<NotificationContainer
+				operator={operator}
+				notificationUiStore={store.notificationUiStore}
+			/>
 		</div>;
-	}
-
-	private _onRef = (elem: HTMLDivElement): void => {
-		if (elem) {
-			elem.appendChild(this.props.gameViewManager.getRootElement());
-		}
 	}
 }

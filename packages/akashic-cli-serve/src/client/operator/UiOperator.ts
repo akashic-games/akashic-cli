@@ -1,4 +1,5 @@
 import { Store } from "../store/Store";
+import { NotificationType } from "../store/NotificationType";
 
 export class UiOperator {
 	private store: Store;
@@ -20,6 +21,18 @@ export class UiOperator {
 		this.store.toolBarUiStore.toggleShowDevtools(show);
 	}
 
+	toggleShowDisplayOptionPopover = (show: boolean): void => {
+		this.store.toolBarUiStore.toggleShowDisplayOptionPopover(show);
+	}
+
+	toggleShowBackgroundImage = (show: boolean) => {
+		this.store.toolBarUiStore.toggleShowBackgroundImage(show);
+	}
+
+	toggleShowGrid = (show: boolean) => {
+		this.store.toolBarUiStore.toggleShowGrid(show);
+	}
+
 	setDevtoolHeight = (height: number) => {
 		this.store.devtoolUiStore.setHeight(height);
 	}
@@ -37,12 +50,14 @@ export class UiOperator {
 	}
 
 	copyRegisteredEventToEditor = (eventName: string): void => {
-		const content = JSON.stringify(this.store.sandboxConfig.events[eventName], null, 2);
-		this.store.devtoolUiStore.setEventEditContent(content);
+		// assert(this.store.currentLocalInstance.content.sandboxConfig.events);
+		const sandboxConfig = this.store.currentLocalInstance.content.sandboxConfig;
+		const eventsStr = JSON.stringify(sandboxConfig.events[eventName], null, 2);
+		this.store.devtoolUiStore.setEventEditContent(eventsStr);
 	}
 
-	setEventEditContent = (content: string): void => {
-		this.store.devtoolUiStore.setEventEditContent(content);
+	setEventEditContent = (eventsStr: string): void => {
+		this.store.devtoolUiStore.setEventEditContent(eventsStr);
 	}
 
 	setInstanceArgumentListWidth = (w: number): void => {
@@ -50,17 +65,26 @@ export class UiOperator {
 	}
 
 	selectInstanceArguments = (name: string | null): void => {
-		const content = (name != null) ? this.store.argumentsTable[name] : "";
+		const argumentsTable = this.store.currentPlay.content.argumentsTable;
+		const argStr = (name != null) ? argumentsTable[name] : "";
 		const { startupScreenUiStore } = this.store;
 		startupScreenUiStore.setSelectedArgumentName(name);
-		startupScreenUiStore.setInstanceArgumentEditContent(content);
+		startupScreenUiStore.setInstanceArgumentEditContent(argStr);
 	}
 
-	setInstanceArgumentEditContent = (content: string): void => {
-		this.store.startupScreenUiStore.setInstanceArgumentEditContent(content);
+	setInstanceArgumentEditContent = (argStr: string): void => {
+		this.store.startupScreenUiStore.setInstanceArgumentEditContent(argStr);
 	}
 
 	setJoinsAutomatically = (join: boolean): void => {
 		this.store.startupScreenUiStore.setJoinsAutomatically(join);
+	}
+
+	showNotification = (type: NotificationType, title: string, name: string, message: string): void => {
+		this.store.notificationUiStore.setActive(type, title, name, message);
+	}
+
+	hideNotification = (): void => {
+		this.store.notificationUiStore.setInactive();
 	}
 }

@@ -28,7 +28,8 @@ describe("uninstall()", function () {
 				logger: logger,
 				debugNpm: new DummyNpm({ logger })
 			}))
-			.then(done.fail, done);
+			.then(done.fail)
+			.catch(e => done());
 	});
 
 	it("removes declaration from globalScripts", function (done: any) {

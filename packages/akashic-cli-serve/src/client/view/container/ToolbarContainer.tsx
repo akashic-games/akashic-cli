@@ -1,5 +1,6 @@
 import * as React from "react";
 import { observer } from "mobx-react";
+import { ServiceType } from "../../../common/types/ServiceType";
 import { PlayEntity } from "../../store/PlayEntity";
 import { LocalInstanceEntity } from "../../store/LocalInstanceEntity";
 import { ToolBarUiStore } from "../../store/ToolBarUiStore";
@@ -7,6 +8,7 @@ import { Operator } from "../../operator/Operator";
 import { PlayControlPropsData } from "../molecule/PlayControl";
 import { InstanceControlPropsData } from "../molecule/InstanceControl";
 import { PlayerControlPropsData } from "../molecule/PlayerControl";
+import { DisplayOptionControlPropsData } from "../molecule/DisplayOptionControl";
 import { ToolBar } from "../organism/ToolBar";
 
 export interface ToolBarContainerProps {
@@ -14,19 +16,22 @@ export interface ToolBarContainerProps {
 	localInstance: LocalInstanceEntity;
 	operator: Operator;
 	toolBarUiStore: ToolBarUiStore;
+	targetService: ServiceType;
 }
 
 @observer
 export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}> {
 	render(): React.ReactNode {
-		const { operator, localInstance, toolBarUiStore } = this.props;
+		const { operator, localInstance, toolBarUiStore, targetService } = this.props;
 		return <ToolBar
 			makePlayControlProps={this._makePlayControlProps}
 			makeInstanceControlProps={this._makeInstanceControlProps}
 			makePlayerControlProps={this._makePlayerControlProps}
+			makeDisplayOptionControlProps={this._makeDisplayOptionControlProps}
 			showsAppearance={toolBarUiStore.showsAppearanceMenu}
 			showsDevtools={toolBarUiStore.showsDevtools}
 			showsInstanceControl={(localInstance.executionMode === "replay") || toolBarUiStore.showsDevtools}
+			targetService={targetService}
 			onToggleAppearance={operator.ui.toggleShowAppearance}
 			onToggleDevTools={operator.ui.toggleShowDevtools}
 		/>;
@@ -62,12 +67,25 @@ export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}>
 	}
 
 	private _makePlayerControlProps = (): PlayerControlPropsData => {
-		const { localInstance, operator } = this.props;
+		const { localInstance, operator, targetService } = this.props;
+		const joinEnabled = targetService !== ServiceType.NicoLive;
 		return {
 			selfId: localInstance.player.id,
 			isJoined: localInstance.isJoined,
-			isJoinEnabled: (localInstance.executionMode === "passive"),
+			isJoinEnabled: (localInstance.executionMode === "passive" && joinEnabled),
 			onClickJoinLeave: operator.play.toggleJoinLeaveSelf
+		};
+	}
+
+	private _makeDisplayOptionControlProps = (): DisplayOptionControlPropsData => {
+		const { operator, toolBarUiStore } = this.props;
+		return {
+			showsDisplayOptionPopover: toolBarUiStore.showsDisplayOptionPopover,
+			showsBackgroundImage: toolBarUiStore.showsBackgroundImage,
+			showsGrid: toolBarUiStore.showsGrid,
+			onToggleDisplayOptionPopover: operator.ui.toggleShowDisplayOptionPopover,
+			onToggleShowBackgroundImage: operator.ui.toggleShowBackgroundImage,
+			onToggleShowGrid: operator.ui.toggleShowGrid
 		};
 	}
 }

@@ -4,6 +4,7 @@ declare module agv {
 		addContent(content: any): void;
 		removeContent(content: any): void;
 		setViewSize(width: number, height: number): void;
+		getViewSize(): {width: number, height: number};
 		registerExternalPlugin(plugin: ExternalPlugin): void;
 	}
 	class GameContent {
@@ -57,6 +58,8 @@ declare module agv {
 	}
 	interface GameExternalPluginsLike {
 		coe?: any;
+		send?: any;
+		nico?: any;
 	}
 	interface GameLike {
 		external: GameExternalPluginsLike;

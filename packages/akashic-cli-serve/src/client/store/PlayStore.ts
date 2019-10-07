@@ -12,34 +12,47 @@ import {
 	ClientInstanceAppearTestbedEvent,
 	ClientInstanceDisappearTestbedEvent
 } from "../../common/types/TestbedEvent";
+import { ContentLocatorData } from "../../common/types/ContentLocatorData";
+import { ClientContentLocator } from "../common/ClientContentLocator";
 import * as Subscriber from "../api/Subscriber";
 import * as ApiClient from "../api/ApiClient";
-import { PlayEntity } from "./PlayEntity";
+import { ContentStore } from "./ContentStore";
+import { PlayEntity, PlayEntityParameterObject } from "./PlayEntity";
+
+export interface PlayStoreParameterObject {
+	contentStore: ContentStore;
+}
 
 export interface CreatePlayParameterObject {
-	contentUrl: string;
-	clientContentUrl?: string;
+	contentLocator: ContentLocatorData;
 	parent?: PlayEntity;
 }
 
 export interface CreateStandalonePlayParameterObject {
-	contentUrl: string;
+	contentLocator: ClientContentLocator;
+
+	// TODO xnv create が playId を引数にとるのはおかしい。sessionId の管理は Play から切り離す。
 	playId: string;
 	parent?: PlayEntity;
 }
 
 export class PlayStore {
 	@observable plays: {[key: string]: PlayEntity};
+	private _contentStore: ContentStore;
 	private _creationWaiters: {[key: string]: (p: PlayEntity) => void };
 	private _initializationWaiter: Promise<void>;
 
-	constructor() {
+	constructor(param: PlayStoreParameterObject) {
 		this.plays = Object.create(null);
+		this._contentStore = param.contentStore;
 		this._creationWaiters = Object.create(null);
 		this._initializationWaiter = ApiClient.getPlays().then(res => {
 			const playsInfo = res.data;
 			playsInfo.forEach(playInfo => {
-				this.plays[playInfo.playId] = new PlayEntity(playInfo);
+				this.plays[playInfo.playId] = new PlayEntity({
+					...playInfo,
+					content: this._contentStore.findOrRegister(playInfo.contentLocatorData)
+				});
 			});
 			Subscriber.onPlayCreate.add(this.handlePlayCreate);
 			Subscriber.onPlayStatusChange.add(this.handlePlayStatusChange);
@@ -59,8 +72,12 @@ export class PlayStore {
 		return this._initializationWaiter;
 	}
 
+	playsList(): PlayEntity[] {
+		return Object.keys(this.plays).map(playId => this.plays[playId]);
+	}
+
 	async createPlay(param: CreatePlayParameterObject): Promise<PlayEntity> {
-		const playInfo = await ApiClient.createPlay(param.contentUrl, param.clientContentUrl);
+		const playInfo = await ApiClient.createPlay(param.contentLocator);
 		const playId = playInfo.data.playId;
 
 		// ApiClient.createPlay() に対する onPlayCreate 通知が先行していれば、この時点で PlayEntity が生成済みになっている
@@ -84,8 +101,7 @@ export class PlayStore {
 
 		const play = new PlayEntity({
 			playId,
-			contentUrl: param.contentUrl,
-			clientContentUrl: "dummy",
+			content: this._contentStore.findOrRegister(param.contentLocator),
 			parent: param.parent
 		});
 		this.plays[playId] = play;
@@ -94,7 +110,10 @@ export class PlayStore {
 	}
 
 	private handlePlayCreate = (e: PlayCreateTestbedEvent): void => {
-		const play = new PlayEntity(e);
+		const play = new PlayEntity({
+			...e,
+			content: this._contentStore.findOrRegister(e.contentLocatorData)
+		});
 		this.plays[e.playId] = play;
 		if (this._creationWaiters[e.playId]) {
 			this._creationWaiters[e.playId](play);

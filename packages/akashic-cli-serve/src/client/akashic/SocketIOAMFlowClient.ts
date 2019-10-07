@@ -10,6 +10,7 @@ export class SocketIOAMFlowClient implements amflow.AMFlow {
 	private _tickHandlers: ((tick: playlog.Tick) => void)[];
 	private _eventHandlers: ((ev: playlog.Event) => void)[];
 	private _startedAt: number | null;
+	private _eventQueue: playlog.Event[];
 	private _connectionId: string | null;
 
 	constructor(socket: SocketIOClient.Socket) {
@@ -19,6 +20,7 @@ export class SocketIOAMFlowClient implements amflow.AMFlow {
 		this._eventHandlers = [];
 		this._permission = null;
 		this._startedAt = null;
+		this._eventQueue = [];
 		this._connectionId = null;
 	}
 
@@ -34,6 +36,20 @@ export class SocketIOAMFlowClient implements amflow.AMFlow {
 	 */
 	getStartedAt(): number | null {
 		return this._startedAt;
+	}
+
+	/**
+	 * 可能なタイミングでイベントを送る。
+	 * SocketIOAMFlowClient独自拡張。暫定。
+	 *
+	 * TODO playIdでイベントを投げるAPIを作り、そちらを利用する。
+	 */
+	enqueueEvent(event: playlog.Event): void {
+		if (this._permission != null) { // 暫定でなければpermissionの内容を踏まえるべき
+			this.sendEvent(event);
+		} else {
+			this._eventQueue.push(event);
+		}
 	}
 
 	open(playId: string, callback?: (error?: Error) => void): void {
@@ -59,6 +75,10 @@ export class SocketIOAMFlowClient implements amflow.AMFlow {
 	authenticate(token: string, callback: (error: Error, permission: amflow.Permission) => void): void {
 		this._socket.emit("amflow:authenticate", this._connectionId, token, (error: Error, permission: amflow.Permission) => {
 			this._permission = permission;
+
+			this._eventQueue.forEach(ev => this.sendEvent(ev));
+			this._eventQueue = [];
+
 			callback(error, permission);
 		});
 	}

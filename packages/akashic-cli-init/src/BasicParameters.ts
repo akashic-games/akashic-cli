@@ -22,24 +22,27 @@ export interface BasicParameters {
 /**
  * ユーザ入力で `BasicParameters` を取得する。
  */
-function promptGetBasicParameters(current: BasicParameters): Promise<BasicParameters> {
+function promptGetBasicParameters(current: BasicParameters, skipAsk: boolean): Promise<BasicParameters> {
 
 	var schema = {
 		properties: {
 			width: {
 				type: "number",
 				message: "width must be a number",
-				default: current.width || 320
+				default: current.width || 320,
+				ask: () => !skipAsk
 			},
 			height: {
 				type: "number",
 				message: "height must be a number",
-				default: current.height || 320
+				default: current.height || 320,
+				ask: () => !skipAsk
 			},
 			fps: {
 				type: "number",
 				message: "fps must be a number",
-				default: current.fps || 30
+				default: current.fps || 30,
+				ask: () => !skipAsk
 			}
 		}
 	};
@@ -93,14 +96,14 @@ function setBasicParameters(conf: commons.GameConfiguration, basicParams: BasicP
 /**
  * 指定した game.json の基本パラメータを更新する
  */
-export function updateConfigurationFile(confPath: string, logger: commons.Logger): Promise<void> {
+export function updateConfigurationFile(confPath: string, logger: commons.Logger, skipAsk: boolean): Promise<void> {
 	return commons.ConfigurationFile.read(confPath, logger)
 		.then(conf =>
 			promptGetBasicParameters({
 				width: conf.width,
 				height: conf.height,
 				fps: conf.fps
-			})
+			}, skipAsk)
 				.then(basicParams => {
 					setBasicParameters(conf, basicParams);
 					return commons.ConfigurationFile.write(conf, confPath, logger);

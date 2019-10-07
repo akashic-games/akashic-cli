@@ -1,5 +1,6 @@
 node_modules
 .idea
-www/thirdparty
-www/js
+www/public/thirdparty
+www/public/js
+www/internal
 lib

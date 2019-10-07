@@ -41,7 +41,7 @@ var promises = Object.keys(versions).filter(v => versions[v].version !== current
 			throw new Error(`failed to get engine-files. status:${res.status}.`);
 		}
 		return new Promise((resolve, reject) => {
-			var fileStream = fs.createWriteStream(path.join(__dirname, "..", "www", "external", fileName));
+			var fileStream = fs.createWriteStream(path.join(__dirname, "..", "www", "public", "external", fileName));
 			res.body.pipe(fileStream);
 			res.body.on("error", (err) => {
 				reject(err);

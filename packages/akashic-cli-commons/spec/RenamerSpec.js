@@ -7,6 +7,10 @@ var ConfigurationFile = require("../lib/ConfigurationFile");
 var GameConfiguration = require("../lib/GameConfiguration");
 
 describe("Renamer", function () {
+	afterEach(() => {
+		mockfs.restore();
+	});
+
 	it(".hashFilepath()", function () {
 		var arr = ["script/mainScene.js", "node_modules/foo/bar/index.js", "image/hoge.png"];
 		expect(arr.map((v) => Util.makeUnixPath(Renamer.hashFilepath(v)))).toEqual([

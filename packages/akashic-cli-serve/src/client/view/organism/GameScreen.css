@@ -1,0 +1,35 @@
+.game-screen {
+	position: relative;
+}
+
+.bg-image {
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: var(--zindex-game-screen-bg);
+}
+
+.game-content {
+	position: relative; /* z-index を効かせるため非static */
+
+	/* 内側の AGV が z-index を使うため、ここで z-index をつけて影響範囲を閉じる */
+	z-index: var(--zindex-game-screen);
+}
+
+.pseudo-transparent-bg {
+	/* 10x10 の灰色の矩形を斜めに並べた 20x20 の画像の Base64 エンコードデータ。
+	   本当は url-loader などを使う方がいいが、これはまず変化しない画像なのと、
+	   他に画像もないのでハードコーディングで済ませている。*/
+	background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAN1wAADdcBQiibeAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAA1SURBVDiNY/z//z8DMeDBgwdEKWQiyjQSwKiBowYOBgNZiM0BCgoKjMSoG/xeHjVw1EAyAABQXArGqEs08wAAAABJRU5ErkJggg==");
+	background-repeat: repeat-x repeat-y;
+}
+
+.grid-canvas {
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	pointer-events: none;
+	z-index: var(--zindex-game-screen-grid);
+}
