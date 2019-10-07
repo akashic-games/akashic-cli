@@ -26,12 +26,19 @@ export interface ScanAssetParameterObject {
 	 * 省略された場合、 `false` 。
 	 */
 	noOmitPackagejson?: boolean;
+
+	/**
+	 * アセットIDをアセットのパスから解決するかどうか。
+	 * 省略された場合、ファイル名から拡張子を除去した文字列がアセットIDとして利用される。
+	 */
+	resolveAssetIdsFromPath?: boolean;
 }
 
 export function _completeScanAssetParameterObject(param: ScanAssetParameterObject): void {
 	param.target = param.target || "all";
 	param.cwd = param.cwd || process.cwd();
 	param.logger = param.logger || new cmn.ConsoleLogger();
+	param.resolveAssetIdsFromPath = !!param.resolveAssetIdsFromPath;
 }
 
 export function promiseScanAsset(param: ScanAssetParameterObject): Promise<void> {
@@ -40,7 +47,13 @@ export function promiseScanAsset(param: ScanAssetParameterObject): Promise<void>
 	return Promise.resolve()
 		.then(() => cmn.ConfigurationFile.read("./game.json", param.logger))
 		.then((content: cmn.GameConfiguration) => {
-			var conf = new Configuration({ content: content, logger: param.logger, basepath: ".", noOmitPackagejson: param.noOmitPackagejson });
+			var conf = new Configuration({
+				content: content,
+				logger: param.logger,
+				basepath: ".",
+				noOmitPackagejson: param.noOmitPackagejson,
+				resolveAssetIdsFromPath: param.resolveAssetIdsFromPath
+			});
 			conf.vacuum();
 			return new Promise<void>((resolve, reject) => {
 				switch (param.target) {
@@ -107,12 +120,19 @@ export interface ScanNodeModulesParameterObject {
 	 * 省略された場合、 `false` 。
 	 */
 	noOmitPackagejson?: boolean;
+
+	/**
+	 * アセットIDをアセットのパスから解決するかどうか。
+	 * 省略された場合、ファイル名から拡張子を除去した文字列がアセットIDとして利用される。
+	 */
+	resolveAssetIdsFromPath?: boolean;
 }
 
 export function _completeScanNodeModulesParameterObject(param: ScanNodeModulesParameterObject): void {
 	param.cwd = param.cwd || process.cwd();
 	param.logger = param.logger || new cmn.ConsoleLogger();
 	param.fromEntryPoint = param.fromEntryPoint || false;
+	param.resolveAssetIdsFromPath = !!param.resolveAssetIdsFromPath;
 }
 
 export function promiseScanNodeModules(param: ScanNodeModulesParameterObject): Promise<void> {
@@ -126,7 +146,8 @@ export function promiseScanNodeModules(param: ScanNodeModulesParameterObject): P
 				logger: param.logger,
 				basepath: "." ,
 				debugNpm: param.debugNpm,
-				noOmitPackagejson: !!param.noOmitPackagejson
+				noOmitPackagejson: !!param.noOmitPackagejson,
+				resolveAssetIdsFromPath: !!param.resolveAssetIdsFromPath
 			});
 			return Promise.resolve()
 				.then(() => (param.fromEntryPoint ? conf.scanGlobalScriptsFromEntryPoint() : conf.scanGlobalScripts()))

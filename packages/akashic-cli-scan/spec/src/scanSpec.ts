@@ -68,6 +68,18 @@ describe("scan", function () {
 			});
 		});
 
+		it("scan assets conflict", function (done: any) {
+			mockfs(mockFsContent);
+			scanAsset({ cwd: "./game", logger: nullLogger, resolveAssetIdsFromPath: true }, (err: any) => {
+				expect(!!err).toBe(false);
+				var conf = JSON.parse(fs.readFileSync("./game/game.json").toString());
+				expect(conf.assets["text/foo/$"]).toEqual({ type: "text", path: "text/foo/$.txt" });
+				expect(conf.assets["audio/foo/_"]).toEqual({ type: "audio", path: "audio/foo/_", systemId: "sound", duration: 8000 });
+				expect(conf.assets["script/foo/_1"]).toEqual({ type: "script", path: "script/foo/_1.js", global: true });
+				done();
+			});
+		});
+
 		it("rejects unknown target", function (done: any) {
 			mockfs(mockFsContent);
 			Promise.resolve()

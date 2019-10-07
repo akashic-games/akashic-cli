@@ -49,17 +49,20 @@ export interface ConfigurationParameterObject extends cmn.ConfigurationParameter
 	basepath: string;
 	noOmitPackagejson?: boolean;
 	debugNpm?: cmn.PromisedNpm;
+	resolveAssetIdsFromPath?: boolean;
 }
 
 export class Configuration extends cmn.Configuration {
 	_basepath: string;
 	_noOmitPackagejson: boolean;
+	_resolveAssetIdsFromPath: boolean;
 	_npm: cmn.PromisedNpm;
 
 	constructor(param: ConfigurationParameterObject) {
 		super(param);
 		this._basepath = param.basepath;
 		this._noOmitPackagejson = param.noOmitPackagejson;
+		this._resolveAssetIdsFromPath = param.resolveAssetIdsFromPath;
 		this._npm = param.debugNpm ? param.debugNpm : new cmn.PromisedNpm({ logger: param.logger });
 	}
 
@@ -92,7 +95,8 @@ export class Configuration extends cmn.Configuration {
 			if (aidSet && aidSet.length > 0) {
 				aidSet.forEach((aid: string) => {
 					var decl = assets[aid];
-					_assertAssetFilenameValid(aid);
+					if (!this._resolveAssetIdsFromPath)
+						_assertAssetFilenameValid(aid);
 					_assertAssetTypeNoConflict(aid, f, "image", decl.type);
 					if (decl.width !== size.width || decl.height !== size.height) {
 						this._logger.info("Detected change of the image size for " + aid + " (" + unixPath +
@@ -105,8 +109,14 @@ export class Configuration extends cmn.Configuration {
 			}
 
 			// Otherwise add a new declaration.
-			var aid = path.basename(f, path.extname(f));
-			_assertAssetFilenameValid(aid);
+			const basename = path.basename(f, path.extname(f));
+			let aid: string;
+			if (this._resolveAssetIdsFromPath) {
+				aid = cmn.Util.makeUnixPath(path.join("image", path.dirname(f), basename));
+			} else {
+				aid = basename;
+				_assertAssetFilenameValid(aid);
+			}
 			_assertAssetNameNoConflict(assets, aid, f);
 
 			this._logger.info("Added/updated the declaration for " + aid + " (" + unixPath + ")");
@@ -150,12 +160,19 @@ export class Configuration extends cmn.Configuration {
 
 					// Otherwise add a new declaration.
 					var f = durationMap[current].path;
-					var aid = path.basename(f);
-					_assertAssetFilenameValid(aid);
+
+					const basename = path.basename(f);
+					let aid: string;
+					if (this._resolveAssetIdsFromPath) {
+						aid = cmn.Util.makeUnixPath(path.join(path.dirname(f), basename));
+					} else {
+						aid = path.basename(f);
+						_assertAssetFilenameValid(aid);
+					}
 					_assertAssetNameNoConflict(assets, aid, f);
 
 					this._logger.info("Added the declaration for '" + current + "' (" + durationMap[current].path + ")");
-					assets[current] = {
+					assets[aid] = {
 						type: "audio",
 						path: durationMap[current].path,  // Omit the extension for audio assets
 						systemId: "sound",
@@ -178,12 +195,19 @@ export class Configuration extends cmn.Configuration {
 			var aidSet = revmap[unixPath];
 			if (aidSet && aidSet.length > 0) {
 				aidSet.forEach((aid: string) => {
-					_assertAssetFilenameValid(aid);
+					if (!this._resolveAssetIdsFromPath)
+						_assertAssetFilenameValid(aid);
 					_assertAssetTypeNoConflict(aid, f, type, assets[aid].type);
 				});
 			} else {
-				var aid = path.basename(f, path.extname(f));
-				_assertAssetFilenameValid(aid);
+				const basename = path.basename(f, path.extname(f));
+				let aid: string;
+				if (this._resolveAssetIdsFromPath) {
+					aid = cmn.Util.makeUnixPath(path.join(dir, path.dirname(f), basename));
+				} else {
+					aid = basename;
+					_assertAssetFilenameValid(aid);
+				}
 				_assertAssetNameNoConflict(assets, aid, f);
 
 				this._logger.info("Added the declaration for '" + aid + "' (" + unixPath + ")");
@@ -318,7 +342,8 @@ export class Configuration extends cmn.Configuration {
 		return Promise.resolve()
 			.then(() => {
 				aidSet.forEach((aid: string) => {
-					_assertAssetFilenameValid(aid);
+					if (!this._resolveAssetIdsFromPath)
+						_assertAssetFilenameValid(aid);
 					_assertAssetTypeNoConflict(aid, filepath, "audio", assets[aid].type);
 				});
 			})
