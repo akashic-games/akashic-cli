@@ -30,7 +30,6 @@ window.addEventListener("load", function() {
 		});
 
 		if (window.__akashic__.autoSendEvents === true || typeof window.__akashic__.autoSendEvents === "string") {
-			if (window.__akashic__.autoSendEvents) {
 			var sandboxConfig = window.__akashic__.sandboxConfigFunc();
 			var autoSendEvents = (window.__akashic__.autoSendEvents === true) ? sandboxConfig.autoSendEvents : window.__akashic__.autoSendEvents;
 			if (!!sandboxConfig && autoSendEvents && sandboxConfig.events && sandboxConfig.events[autoSendEvents]) {
