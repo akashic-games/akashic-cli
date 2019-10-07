@@ -29,7 +29,7 @@ export interface ScanAssetParameterObject {
 
 	/**
 	 * アセットIDをアセットのパスから解決するかどうか。
-	 * 省略された場合、ファイル名から拡張子を除去した文字列がアセットIDとして利用される。
+	 * 省略された場合、 `false` 。
 	 */
 	resolveAssetIdsFromPath?: boolean;
 }
@@ -123,7 +123,8 @@ export interface ScanNodeModulesParameterObject {
 
 	/**
 	 * アセットIDをアセットのパスから解決するかどうか。
-	 * 省略された場合、ファイル名から拡張子を除去した文字列がアセットIDとして利用される。
+	 * 省略された場合、 `false` 。
+	 * 偽である場合、ファイル名から拡張子を除去した文字列がアセットIDとして利用される。
 	 */
 	resolveAssetIdsFromPath?: boolean;
 }
