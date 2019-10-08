@@ -25,6 +25,10 @@ if (! ("gLocalAssetContainer" in window)) {
 	window.gLocalAssetContainer = {};
 }
 
+if (! ("__akashic__" in window)) {
+	window.__akashic__ = {};
+}
+
 <% for asset in @assets : %>
 	<% if asset.type is "script" : %>
 		window.gLocalAssetContainer["<%- asset.name %>"] = function(g) {
@@ -33,6 +37,18 @@ if (! ("gLocalAssetContainer" in window)) {
 	<% else if asset.type is "text" : %>
 		window.gLocalAssetContainer["<%- asset.name %>"] = "<%- asset.code %>";
 	<% end %>
+<% end %>
+
+<% if @autoSendEvents : %>
+	window.__akashic__.autoSendEvents = <%- JSON.stringify(@autoSendEvents) %>;
+	window.__akashic__.sandboxConfigFunc = function () {
+		var module = { exports: {} };
+		var exports = module.exports;
+		(function () {
+			<%- @sandboxConfigJsCode %>
+		})();
+		return module.exports;
+	}
 <% end %>
 </script>
 
