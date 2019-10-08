@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.7.35 (2019-10-08)
+
+#### Enhancement
+* `akashic-cli-export-html`
+  * [#146](https://github.com/akashic-games/akashic-cli/pull/146) enable sandbox.config.js, send autoSendEvents for export-html ([@kamakiri01](https://github.com/kamakiri01))
+
+#### Committers: 1
+- kamakiri_ys ([@kamakiri01](https://github.com/kamakiri01))
+
 ## 1.7.34 (2019-10-04)
 
 #### Enhancement
