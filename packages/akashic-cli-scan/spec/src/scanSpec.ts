@@ -68,7 +68,7 @@ describe("scan", function () {
 			});
 		});
 
-		it("scan assets conflict", function (done: any) {
+		it("scan asset ids from these path", function (done: any) {
 			mockfs(mockFsContent);
 			scanAsset({ cwd: "./game", logger: nullLogger, resolveAssetIdsFromPath: true }, (err: any) => {
 				expect(!!err).toBe(false);
