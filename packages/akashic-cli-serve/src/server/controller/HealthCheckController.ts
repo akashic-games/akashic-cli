@@ -1,7 +1,7 @@
 import * as express from "express";
 import { PlayStore } from "../domain/PlayStore";
 
-export const createHandleToGetHealthChecker = (playStore: PlayStore): express.RequestHandler => {
+export const createHandleToGetStatus = (playStore: PlayStore): express.RequestHandler => {
 	return async (req, res, next) => {
 		try {
 			const plays = playStore.getPlays();
@@ -15,7 +15,7 @@ export const createHandleToGetHealthChecker = (playStore: PlayStore): express.Re
 					runners: playStore.getRunners(play.playId)
 				};
 			});
-			res.render("health-checker", {
+			res.render("health-check-status", {
 				playsInfo
 			});
 		} catch (e) {

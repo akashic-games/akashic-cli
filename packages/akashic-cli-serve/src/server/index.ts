@@ -16,7 +16,7 @@ import { SocketIOAMFlowManager } from "./domain/SocketIOAMFlowManager";
 import { serverGlobalConfig } from "./common/ServerGlobalConfig";
 import { createContentsRouter } from "./route/ContentsRoute";
 import { ServiceType } from "../common/types/ServiceType";
-import {createDebugRouter} from "./route/DebugRoute";
+import { createHealthCheckRouter } from "./route/HealthCheckRoute";
 
 // 渡されたパラメータを全てstringに変換する
 // chalkを使用する場合、ログ出力時objectの中身を展開してくれないためstringに変換する必要がある
@@ -128,7 +128,7 @@ export function run(argv: any): void {
 	const io = socketio(httpServer);
 
 	app.set("views", path.join(__dirname, "..", "..", "views"));
-	app.engine("ect", ect({root: path.join(__dirname, "..", "..", "views"), ext: ".ect"}).render);
+	app.engine("ect", ect({ext: ".ect"}).render);
 	app.set("view engine", "ect");
 
 	app.use((req, res, next) => {
@@ -145,7 +145,7 @@ export function run(argv: any): void {
 	app.use("/internal/", express.static(path.join(__dirname, "..", "..", "www", "internal")));
 	app.use("/api/", createApiRouter({ playStore, runnerStore, amflowManager, io }));
 	app.use("/contents/", createContentsRouter({ targetDirs }));
-	app.use("/debug/", createDebugRouter({ playStore }));
+	app.use("/health-check/", createHealthCheckRouter({ playStore }));
 
 	io.on("connection", (socket: socketio.Socket) => { amflowManager.setupSocketIOAMFlow(socket); });
 	// TODO 全体ブロードキャストせず該当するプレイにだけ通知するべき？
