@@ -166,7 +166,7 @@ export class Configuration extends cmn.Configuration {
 					if (this._resolveAssetIdsFromPath) {
 						aid = cmn.Util.makeUnixPath(path.join(path.dirname(f), basename));
 					} else {
-						aid = path.basename(f);
+						aid = basename;
 						_assertAssetFilenameValid(aid);
 					}
 					_assertAssetNameNoConflict(assets, aid, f);
