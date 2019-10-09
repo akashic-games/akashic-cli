@@ -1,35 +1,39 @@
 import * as puppeteer from "puppeteer";
-import * as commander from "commander";
+const setup = require("./setup");
+const teardown = require("./teardown");
 
 (async () => {
-	commander
-		.description("Script for taking screenshots for use in integration test.")
-		.option("-p, --port <port>", `The port number to listen. default: 3300`, (x => parseInt(x, 10)))
-		.option("-H, --hostname <hostname>", `The host name of the server. default: localhost`)
-		.parse(process.argv);
-	const hostname = commander.hostmane || "localhost";
-	const port = commander.port || 3300;
-	let allow: any;
-	let awaiting: Promise<void> = new Promise((resolve) => { allow = resolve; });
-	const browser = await puppeteer.launch();
-	const page = await browser.newPage();
-	await page.exposeFunction("completeToStartup", () => {
-		if (allow) {
-			allow();
-		}
-	});
-	await page.goto(`http://${hostname}:${port}/public/index.html?playerId=test`);
-	await awaiting;
-	awaiting = new Promise((resolve) => { allow = resolve; });
-	await page.screenshot({path: "e2e/fixtures/sample_content/screenshot/game_start.png", fullPage: true});
-	let icons: any[] = await page.$$(".material-icons");
-	await icons[0].click(); // Play新規作成ボタンでリセット
-	await awaiting;
-	icons = await page.$$(".material-icons");
-	await icons[3].click(); // joinボタンを押す
-	await page.screenshot({path: "e2e/fixtures/sample_content/screenshot/join.png", fullPage: true});
-	await icons[3].click(); // leaveボタンを押す
-	await page.click("canvas");
-	await page.screenshot({path: "e2e/fixtures/sample_content/screenshot/one_click.png", fullPage: true});
-	await browser.close();
+	try {
+		setup();
+		const hostname = "localhost";
+		const port = process.env.SERVE_PORT;
+		let allow: any;
+		let awaiting: Promise<void> = new Promise((resolve) => { allow = resolve; });
+		const browser = await puppeteer.launch();
+		const page = await browser.newPage();
+		await page.waitFor(5000); // serveが立つのを待つために待機時間を長めに設定
+		await page.exposeFunction("completeToStartup", () => {
+			if (allow) {
+				allow();
+			}
+		});
+		await page.goto(`http://${hostname}:${port}/public/index.html?playerId=test`);
+		await awaiting;
+		await page.screenshot({path: "e2e/result/base/game_start.png", fullPage: true});
+		let icons: any[] = await page.$$(".material-icons");
+		await icons[3].click(); // joinボタンを押す
+		await page.waitFor(500);
+		await page.screenshot({path: "e2e/result/base/join.png", fullPage: true});
+		await icons[3].click(); // leaveボタンを押す
+		await icons[1].click(); // pauseボタンを押す
+		await page.screenshot({path: "e2e/result/base/pause.png", fullPage: true});
+		await icons[1].click(); // resumeボタンを押す
+		await page.click("canvas");
+		await page.waitFor(500);
+		await page.screenshot({path: "e2e/result/base/one_click.png", fullPage: true});
+		await page.close();
+		await browser.close();
+	} finally {
+		teardown();
+	}
 })();

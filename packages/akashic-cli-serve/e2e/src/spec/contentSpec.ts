@@ -2,66 +2,74 @@ import * as fs from "fs";
 import * as path from "path";
 import * as puppeteer from "puppeteer";
 import * as resemble from "resemblejs";
-import {execSync} from "child_process";
 
 describe("sample_content", () => {
-	const screenshotDir = path.join(__dirname, "..",  "..", "fixtures", "sample_content", "screenshot");
+	const targetUrl = "http://localhost:" + process.env.SERVE_PORT + "/public/index.html?playerId=test";
+	const screenshotDir = path.join(__dirname, "..", "..", "result", "base");
 	const screenshotDiffThreshold = 0.1;
+	const waitingLoading = 2000;
+	const waitingRendering = 500;
 	let browser: any;
 	let page: any;
 	let allow: any;
 	let awaiting: Promise<void>;
+
 	beforeAll(async () => {
 		browser = await puppeteer.launch();
+	});
+
+	beforeEach(async () => {
 		page = await browser.newPage();
 		await page.exposeFunction("completeToStartup", () => {
 			if (allow) {
 				allow();
 			}
 		});
-	});
-
-	beforeEach(async () => {
 		awaiting = new Promise((resolve) => { allow = resolve; });
-		// execSync(`${path.join(__dirname, "..", "..", "..", "node_modules", ".bin", "forever")} restartall`);
-		// await execSync(`${path.join(__dirname, "..", "..", "..", "node_modules", ".bin", "forever")} start ${path.join(__dirname, "..", "helper", "runSampleContent.js")}`);
 	});
 
 	afterEach(async () => {
-		// await execSync(`${path.join(__dirname, "..", "..", "..", "node_modules", ".bin", "forever")} stop ${path.join(__dirname, "..", "helper", "runSampleContent.js")}`);
+		await page.close();
 	});
 
 	afterAll(async () => {
-		await page.close();
 		await browser.close();
 	});
 
 	it("start content", async () => {
-		await page.goto("http://localhost:5000/public/index.html?playerId=test");
+		await page.goto(targetUrl);
 		await awaiting;
+		let icons: any[] = await page.$$(".material-icons");
+		await icons[0].click(); // Play新規作成ボタンでリセット
+		await page.waitFor(waitingLoading); // ゲームの起動を待つ
+
 		const current = await page.screenshot({fullPage: true});
 		const expected: any = fs.readFileSync(path.join(screenshotDir, "game_start.png"));
 		let misMatchPercentage = 0;
 		await resemble(current).compareTo(expected)
 			.onComplete((data: any) => {
 				misMatchPercentage = parseFloat(data.misMatchPercentage);
-				fs.writeFileSync(path.join(__dirname, "..", "..", "result", "start_content.png"), data.getBuffer());
+				fs.writeFileSync(path.join(__dirname, "..", "..", "result", "diff", "start_content.png"), data.getBuffer());
 			});
 		expect(misMatchPercentage).toBeLessThan(screenshotDiffThreshold);
 	});
 
 	it("click in content", async () => {
-		await page.goto("http://localhost:5001/public/index.html?playerId=test");
+		await page.goto(targetUrl);
 		await awaiting;
+		let icons: any[] = await page.$$(".material-icons");
+		await icons[0].click(); // Play新規作成ボタンでリセット
+		await page.waitFor(waitingLoading); // ゲームの起動を待つ
+
 		await page.click("canvas");
-		await page.waitFor(100);
+		await page.waitFor(waitingRendering); // click動作がゲーム側に反映されるまで少し長めに待つ
 		const current = await page.screenshot({fullPage: true});
 		const expected: any = fs.readFileSync(path.join(screenshotDir, "one_click.png"));
 		let misMatchPercentage = 0;
 		await resemble(current).compareTo(expected)
 			.onComplete((data: any) => {
 				misMatchPercentage = parseFloat(data.misMatchPercentage);
-				fs.writeFileSync(path.join(__dirname, "..", "..", "result", "click_in_content.png"), data.getBuffer());
+				fs.writeFileSync(path.join(__dirname, "..", "..", "result", "diff", "click_in_content.png"), data.getBuffer());
 			});
 		expect(misMatchPercentage).toBeLessThan(screenshotDiffThreshold);
 	});
