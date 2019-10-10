@@ -6,7 +6,6 @@ import * as express from "express";
 import * as bodyParser from "body-parser";
 import * as socketio from "socket.io";
 import * as commander from "commander";
-import * as ect from "ect";
 import chalk from "chalk";
 import { PlayManager, RunnerManager, setSystemLogger, getSystemLogger } from "@akashic/headless-driver";
 import { createApiRouter } from "./route/ApiRoute";
@@ -128,8 +127,7 @@ export function run(argv: any): void {
 	const io = socketio(httpServer);
 
 	app.set("views", path.join(__dirname, "..", "..", "views"));
-	app.engine("ect", ect({ext: ".ect"}).render);
-	app.set("view engine", "ect");
+	app.set("view engine", "ejs");
 
 	app.use((req, res, next) => {
 		res.removeHeader("X-Powered-By");

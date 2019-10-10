@@ -18,20 +18,20 @@
         </tr>
     </thead>
     <tbody>
-        <% for info in @playsInfo : %>
+        <% for (var info of playsInfo) { %>
         <tr>
             <td><%= info.playId %></td>
             <td><%= info.status %></td>
             <td><%= new Date(info.createdAt).toString() %></td>
-            <td><%= if info.lastSuspendedAt then new Date(info.lastSuspendedAt).toString() else "" %></td>
+            <td><%= info.lastSuspendedAt ? new Date(info.lastSuspendedAt).toString() : "" %></td>
             <td><%= info.clientInstances.length %></td>
             <td><%= info.runners.length %></td>
         </tr>
-        <% end %>
+        <% } %>
     </tbody>
 </table>
 
-<% for info in @playsInfo : %>
+<% for (var info of playsInfo) { %>
 <table border="1" style="border-collapse: collapse">
     <caption>Play<%= info.playId %>に接続しているClientInstanceの状態</caption>
     <thead>
@@ -42,15 +42,15 @@
         </tr>
     </thead>
     <tbody>
-        <% for item in info.clientInstances : %>
+        <% for (var item of info.clientInstances) { %>
         <tr>
             <td><%= item.playerId %></td>
             <td><%= item.name %></td>
             <td><%= item.isActive %></td>
         </tr>
-        <% end %>
+        <% } %>
     </tbody>
 </table>
-<% end %>
+<% } %>
 </body>
 </html>

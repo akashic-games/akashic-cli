@@ -14,7 +14,7 @@
     "outDir": "../../lib",
     "removeComments": true,
     "downlevelIteration": true,
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "alwaysStrict": true
   },
   "include": [
