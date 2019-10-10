@@ -104,7 +104,6 @@ describe("install()", function () {
 		};
 
 		mockfs(mockFsContent);
-		var resolvedOriginalPath = path.resolve(process.cwd());
 		var shrinkwrapCalled = false;
 		var dummyNpm = {
 			install: function (names) {
@@ -114,12 +113,8 @@ describe("install()", function () {
 					mockFsContent.somedir.node_modules[nameNoVer] = mockModules[nameNoVer];
 				});
 
-				// 一時的にもともとのカレントディレクトリに戻してから、新しい内容でmockfs()することでnpm installを模擬する。
-				// このパスに来る段階、つまりこのテストでnpmが叩かれる時は、./somedir に移動してしまっている。
-				// 戻してからmockfs()しないと変なところをモックしてしまう。
-				var restoreDir = cmn.Util.chdir(resolvedOriginalPath);
-				mockfs(mockFsContent);
-				return restoreDir();
+				mockfs(mockFsContent.somedir);
+				return Promise.resolve();
 			},
 			shrinkwrap: function () {
 				shrinkwrapCalled = true;
