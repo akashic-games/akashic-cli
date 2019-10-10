@@ -21,6 +21,8 @@ export interface ConvertTemplateParameterObject {
 		version: string;
 		option: string;
 	};
+	autoSendEvents?: string | boolean;
+	sandboxConfigJsCode?: string;
 }
 
 export function extractAssetDefinitions (conf: cmn.Configuration, type: string): string[] {
@@ -158,6 +160,11 @@ export function getInjectedContents(baseDir: string, injects: string[]): string[
 export function validateEs5Code(fileName: string, code: string): string[] {
 	return cmn.LintUtil.validateEs5Code(code)
 		.map(info => `${fileName}(${info.line}:${info.column}): ${info.message}`);
+}
+
+export function readSandboxConfigJs(sourceDir: string) {
+	const sandboxConfigJsPath = path.join(sourceDir, "sandbox.config.js");
+	return fs.readFileSync(sandboxConfigJsPath, "utf8").replace(/\r\n|\r/g, "\n");
 }
 
 function getFileContentsFromDirectory(inputDirPath: string): string[] {

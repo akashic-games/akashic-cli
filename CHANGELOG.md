@@ -1,5 +1,41 @@
 # CHANGELOG
 
+## 1.8.0 (2019-10-10)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#171](https://github.com/akashic-games/akashic-cli/pull/171) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- [@yu-ogi](https://github.com/yu-ogi)
+
+## 1.7.35 (2019-10-08)
+
+#### Enhancement
+* `akashic-cli-export-html`
+  * [#146](https://github.com/akashic-games/akashic-cli/pull/146) enable sandbox.config.js, send autoSendEvents for export-html ([@kamakiri01](https://github.com/kamakiri01))
+
+#### Committers: 1
+- kamakiri_ys ([@kamakiri01](https://github.com/kamakiri01))
+
+## 1.7.34 (2019-10-04)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#147](https://github.com/akashic-games/akashic-cli/pull/147) akashic-cli-serveにグリッド描画機能の追加 ([@dera-](https://github.com/dera-))
+
+#### Committers: 2
+- [@dera-](https://github.com/dera-)
+- xnv ([@xnv](https://github.com/xnv))
+
+## 1.7.33 (2019-10-02)
+
+#### Republish
+* [#169](https://github.com/akashic-games/akashic-cli/pull/169) Republish ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.7.32 (2019-10-02)
 
 #### Enhancement

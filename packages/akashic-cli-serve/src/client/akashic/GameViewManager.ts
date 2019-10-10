@@ -129,6 +129,10 @@ export class GameViewManager {
 		this.gameView.setViewSize(width, height);
 	}
 
+	getViewSize(): {width: number, height: number} {
+		return this.gameView.getViewSize();
+	}
+
 	registerExternalPlugin(plugin: agv.ExternalPlugin): void {
 		this.gameView.registerExternalPlugin(plugin);
 	}

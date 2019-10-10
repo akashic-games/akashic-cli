@@ -21,8 +21,16 @@ export class UiOperator {
 		this.store.toolBarUiStore.toggleShowDevtools(show);
 	}
 
-	toggleShowBgImage = (show: boolean): void => {
-		this.store.toolBarUiStore.toggleShowBgImage(show);
+	toggleShowDisplayOptionPopover = (show: boolean): void => {
+		this.store.toolBarUiStore.toggleShowDisplayOptionPopover(show);
+	}
+
+	toggleShowBackgroundImage = (show: boolean) => {
+		this.store.toolBarUiStore.toggleShowBackgroundImage(show);
+	}
+
+	toggleShowGrid = (show: boolean) => {
+		this.store.toolBarUiStore.toggleShowGrid(show);
 	}
 
 	setDevtoolHeight = (height: number) => {

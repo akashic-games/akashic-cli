@@ -1,6 +1,6 @@
 .notification-body-main {
   position: fixed;
-  z-index: 10000;
+  z-index: var(--zindex-notification);
   width: 450px;
   padding: 12px;
   bottom: 0;

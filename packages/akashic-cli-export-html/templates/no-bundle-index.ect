@@ -36,6 +36,22 @@ window.g = engineFiles.akashicEngine;
 <% for asset in @assets : %>
 <script src="<%- asset %>"></script>
 <% end %>
+
+<% if @autoSendEvents : %>
+<script>
+	window.__akashic__.autoSendEvents = <%- JSON.stringify(@autoSendEvents) %>;
+	window.__akashic__.sandboxConfigFunc = function () {
+		var module = { exports: {} };
+		var exports = module.exports;
+		(function () {
+			<%- @sandboxConfigJsCode %>
+		})();
+		return module.exports;
+	}
+</script>
+<% end %>
+
+
 <script src="./js/sandbox.js"></script>
 
 <% for injectedContent in @injectedContents : %>

@@ -15,10 +15,3 @@
 	-moz-user-select: none;
 	*/
 }
-
-.border-emphasize {
-	margin: 4px 6px;
-	border-width: 2px;
-	border-color: var(--color-tool-border-emphasize);
-	height: min-content;
-}

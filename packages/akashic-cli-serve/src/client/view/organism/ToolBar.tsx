@@ -6,20 +6,20 @@ import { ToolLabel } from "../atom/ToolLabel";
 import { PlayControl, PlayControlPropsData } from "../molecule/PlayControl";
 import { InstanceControl, InstanceControlPropsData } from "../molecule/InstanceControl";
 import { PlayerControl, PlayerControlPropsData } from "../molecule/PlayerControl";
+import { DisplayOptionControl, DisplayOptionControlPropsData } from "../molecule/DisplayOptionControl";
 import * as styles from "./ToolBar.css";
 
 export interface ToolBarProps {
 	makePlayControlProps: () => PlayControlPropsData;
 	makeInstanceControlProps: () => InstanceControlPropsData;
 	makePlayerControlProps: () => PlayerControlPropsData;
+	makeDisplayOptionControlProps: () => DisplayOptionControlPropsData;
 	showsAppearance: boolean;
 	showsDevtools: boolean;
-	showsBgImage: boolean;
 	showsInstanceControl: boolean;
 	targetService: ServiceType;
 	onToggleAppearance: (show: boolean) => void;
 	onToggleDevTools: (show: boolean) => void;
-	onToggleBgImage: (show: boolean) => void;
 }
 
 @observer
@@ -46,17 +46,13 @@ export class ToolBar extends React.Component<ToolBarProps, {}> {
 					<i className="material-icons">zoom_in</i>
 				</ToolToggleLabel>
 				*/}
-				<ToolLabel title="起動サービスモード" emphasizeBorder={true}>
+				<ToolLabel>
 					TargetService: <b>{props.targetService}</b>
 				</ToolLabel>
-				<ToolIconButton
-					icon="image"
-					title={"背景画像の表示切り替え"}
-					pushed={props.showsBgImage}
-					onClick={props.onToggleBgImage} />
+				<DisplayOptionControl makeProps={props.makeDisplayOptionControlProps} />
 				<ToolIconButton
 					icon="menu"
-					title={"Devtoolsの表示切り替え"}
+					title={"Devtools"}
 					pushed={props.showsDevtools}
 					onClick={props.onToggleDevTools} />
 			</div>

@@ -22,6 +22,7 @@ export function _completeExportHTMLParameterObject(p: ExportHTMLParameterObject)
 	param.logger = param.logger || new cmn.ConsoleLogger();
 	return param;
 }
+
 export function promiseExportHTML(p: ExportHTMLParameterObject): Promise<string> {
 	const param = _completeExportHTMLParameterObject(p);
 	let gamepath: string;
@@ -76,7 +77,8 @@ export function promiseExportHTML(p: ExportHTMLParameterObject): Promise<string>
 			injects: param.injects,
 			unbundleText: param.unbundleText,
 			lint: param.lint,
-			exportInfo: param.exportInfo
+			exportInfo: param.exportInfo,
+			autoSendEvents: param.autoSendEvents
 		};
 		if (param.bundle) {
 			return promiseConvertBundle(convertParam);
