@@ -5,14 +5,27 @@ import * as resemble from "resemblejs";
 
 describe("cli-serve", () => {
 	const targetUrl = "http://localhost:" + process.env.SERVE_PORT + "/public/index.html?playerId=test";
-	const screenshotDir = path.join(__dirname, "..", "..", "result", "base");
-	const screenshotDiffThreshold = 0.1;
-	const waitingLoading = 2000;
-	const waitingRendering = 500;
+	const screenshotDir = path.join(__dirname, "..", "..", "screenshot");
+	const outputDir = path.join(__dirname, "..", "..", "result");
+	const screenshotDiffThreshold = 0.1; // 予め用意しているスクリーンショットと画像を比較する時diffをどこまで許容するかの値
+	const screenshotDiffThresholdForGameScene = 0.5; // 残り時間やスコアが多少異なることがあるのでゲームシーンでは許容するdiffを多めにする
+	const waitingRendering = 1000;
+	const waitingLoadingGame = 2000;
+	const waitingRuleScene = 5000;
+	const waitingGameScene = 10000;
+	const assertScreenshot = async (targetPath: string, outputPath: string, threshold: number = screenshotDiffThreshold) => {
+		const current = await page.screenshot({fullPage: true});
+		const expected: any = fs.readFileSync(targetPath);
+		let misMatchPercentage = 0;
+		await resemble(current).compareTo(expected)
+			.onComplete((data: any) => {
+				misMatchPercentage = parseFloat(data.misMatchPercentage);
+				fs.writeFileSync(outputPath, data.getBuffer());
+			});
+		expect(misMatchPercentage).toBeLessThan(threshold);
+	};
 	let browser: any;
 	let page: any;
-	let allow: any;
-	let awaiting: Promise<void>;
 
 	beforeAll(async () => {
 		browser = await puppeteer.launch();
@@ -20,12 +33,6 @@ describe("cli-serve", () => {
 
 	beforeEach(async () => {
 		page = await browser.newPage();
-		await page.exposeFunction("completeToStartup", () => {
-			if (allow) {
-				allow();
-			}
-		});
-		awaiting = new Promise((resolve) => { allow = resolve; });
 	});
 
 	afterEach(async () => {
@@ -38,86 +45,45 @@ describe("cli-serve", () => {
 
 	it("create new play", async () => {
 		await page.goto(targetUrl);
-		await awaiting;
+		await page.waitFor(".material-icons");
 		let icons: any[] = await page.$$(".material-icons");
 		await icons[0].click(); // Play新規作成ボタンでリセット
-		await page.waitFor(waitingLoading); // ゲームの起動を待つ
-		const current = await page.screenshot({fullPage: true});
-		const expected: any = fs.readFileSync(path.join(screenshotDir, "game_start.png"));
-		let misMatchPercentage = 0;
-		await resemble(current).compareTo(expected)
-			.onComplete((data: any) => {
-				misMatchPercentage = parseFloat(data.misMatchPercentage);
-				fs.writeFileSync(path.join(__dirname, "..", "..", "result", "diff", "create_new_play.png"), data.getBuffer());
-			});
-		expect(misMatchPercentage).toBeLessThan(screenshotDiffThreshold);
+		await page.waitFor("canvas");
+		await page.waitFor(waitingLoadingGame); // ゲームの起動を待つ
+		await assertScreenshot(
+			path.join(screenshotDir, "title_scene.png"),
+			path.join(outputDir, "create_new_play.png")
+		);
 	});
 
 	it("pause active instance", async () => {
 		await page.goto(targetUrl);
-		await awaiting;
+		await page.waitFor(".material-icons");
 		let icons: any[] = await page.$$(".material-icons");
 		await icons[0].click(); // Play新規作成ボタンでリセット
-		await page.waitFor(waitingLoading); // ゲームの起動を待つ
+		await page.waitFor("canvas");
+		await page.waitFor(waitingLoadingGame + waitingRuleScene + waitingGameScene); // ゲーム画面に遷移するまで待つ
 
 		icons = await page.$$(".material-icons");
 		await icons[1].click(); // アクティブインスタンス停止ボタンをクリック
-		await page.click("canvas");
+		const canvasElem = await page.$("canvas");
+		const canvasRect = await canvasElem.boundingBox();
+		page.mouse.click(canvasRect.x + 500, canvasRect.y + 200); // パネルを選択
+		page.mouse.click(canvasRect.x + 100, canvasRect.y + 100); // パネルを1つだけセット
 		await page.waitFor(waitingRendering); // click動作がゲーム側に反映されるまで少し長めに待つ
-		let current = await page.screenshot({fullPage: true});
-		let expected: any = fs.readFileSync(path.join(screenshotDir, "pause.png"));
-		let misMatchPercentage = 0;
-		await resemble(current).compareTo(expected)
-			.onComplete((data: any) => {
-				misMatchPercentage = parseFloat(data.misMatchPercentage);
-				fs.writeFileSync(path.join(__dirname, "..", "..", "result", "diff", "pause_active_instance.png"), data.getBuffer());
-			});
-		expect(misMatchPercentage).toBeLessThan(screenshotDiffThreshold);
+		await assertScreenshot(
+			path.join(screenshotDir, "game_scene.png"),
+			path.join(outputDir, "pause_active_instance.png"),
+			screenshotDiffThresholdForGameScene
+		);
 
 		icons = await page.$$(".material-icons");
 		await icons[1].click(); // アクティブインスタンス再開ボタンをクリック
-		current = await page.screenshot({fullPage: true});
-		expected = fs.readFileSync(path.join(screenshotDir, "one_click.png"));
-		misMatchPercentage = 0;
-		await resemble(current).compareTo(expected)
-			.onComplete((data: any) => {
-				misMatchPercentage = parseFloat(data.misMatchPercentage);
-				fs.writeFileSync(path.join(__dirname, "..", "..", "result", "diff", "resume_active_instance.png"), data.getBuffer());
-			});
-		expect(misMatchPercentage).toBeLessThan(screenshotDiffThreshold);
-	});
-
-	it("join to content and leave from content", async () => {
-		await page.goto(targetUrl);
-		await awaiting;
-		let icons: any[] = await page.$$(".material-icons");
-		await icons[0].click(); // Play新規作成ボタンでリセット
-		await page.waitFor(waitingLoading); // ゲームの起動を待つ
-
-		icons = await page.$$(".material-icons");
-		await icons[3].click(); // joinボタンをクリック
 		await page.waitFor(waitingRendering); // click動作がゲーム側に反映されるまで少し長めに待つ
-		let current = await page.screenshot({fullPage: true});
-		let expected: any = fs.readFileSync(path.join(screenshotDir, "join.png"));
-		let misMatchPercentage = 0;
-		await resemble(current).compareTo(expected)
-			.onComplete((data: any) => {
-				misMatchPercentage = parseFloat(data.misMatchPercentage);
-				fs.writeFileSync(path.join(__dirname, "..", "..", "result", "diff", "join_to_content.png"), data.getBuffer());
-			});
-		expect(misMatchPercentage).toBeLessThan(screenshotDiffThreshold);
-
-		icons = await page.$$(".material-icons");
-		await icons[3].click(); // joinボタンクリック後leaveボタンをクリック
-		await page.waitFor(waitingRendering); // click動作がゲーム側に反映されるまで少し長めに待つ
-		current = await page.screenshot({fullPage: true});
-		expected = fs.readFileSync(path.join(screenshotDir, "game_start.png"));
-		misMatchPercentage = 0;
-		await resemble(current).compareTo(expected)
-			.onComplete((data: any) => {
-				misMatchPercentage = parseFloat(data.misMatchPercentage);
-				fs.writeFileSync(path.join(__dirname, "..", "..", "result", "diff", "leave_from_content.png"), data.getBuffer());
-			});
-		expect(misMatchPercentage).toBeLessThan(screenshotDiffThreshold);
+		await assertScreenshot(
+			path.join(screenshotDir, "game_scene_one_click.png"),
+			path.join(outputDir, "resume_active_instance.png"),
+			screenshotDiffThresholdForGameScene
+		);
 	});
 });

@@ -1,0 +1,130 @@
+{
+	"width": 640,
+	"height": 360,
+	"fps": 30,
+	"main": "./script/aez_bundle_main.js",
+	"assets": {
+		"glyph28": {
+			"type": "text",
+			"path": "text/glyph28.json"
+		},
+		"glyph72": {
+			"type": "text",
+			"path": "text/glyph72.json"
+		},
+		"jin_000": {
+			"type": "audio",
+			"path": "audio/jin_000",
+			"systemId": "sound",
+			"duration": 2984
+		},
+		"jin_002": {
+			"type": "audio",
+			"path": "audio/jin_002",
+			"systemId": "sound",
+			"duration": 1998
+		},
+		"se_001a": {
+			"type": "audio",
+			"path": "audio/se_001a",
+			"systemId": "sound",
+			"duration": 1237
+		},
+		"se_001c": {
+			"type": "audio",
+			"path": "audio/se_001c",
+			"systemId": "sound",
+			"duration": 770
+		},
+		"se_002c": {
+			"type": "audio",
+			"path": "audio/se_002c",
+			"systemId": "sound",
+			"duration": 1005
+		},
+		"se_003": {
+			"type": "audio",
+			"path": "audio/se_003",
+			"systemId": "sound",
+			"duration": 2171
+		},
+		"se_004": {
+			"type": "audio",
+			"path": "audio/se_004",
+			"systemId": "sound",
+			"duration": 1104
+		},
+		"se_005A_mono": {
+			"type": "audio",
+			"path": "audio/se_005A_mono",
+			"systemId": "sound",
+			"duration": 2030
+		},
+		"se_006B_mono": {
+			"type": "audio",
+			"path": "audio/se_006B_mono",
+			"systemId": "sound",
+			"duration": 1029
+		},
+		"ui_common": {
+			"type": "image",
+			"width": 1024,
+			"height": 1024,
+			"path": "image/ui_common.png"
+		},
+		"ui": {
+			"type": "image",
+			"width": 1024,
+			"height": 1024,
+			"path": "image/ui.png"
+		},
+		"se_100c": {
+			"type": "audio",
+			"path": "audio/se_100c",
+			"systemId": "sound",
+			"duration": 924
+		},
+		"ui_2": {
+			"type": "image",
+			"width": 1024,
+			"height": 1024,
+			"path": "image/ui_2.png"
+		},
+		"glyph32_yellow": {
+			"type": "text",
+			"path": "text/glyph32_yellow.json"
+		},
+		"bgm_130": {
+			"type": "audio",
+			"path": "audio/bgm_130",
+			"systemId": "music",
+			"duration": 11498
+		},
+		"aez_bundle_main": {
+			"type": "script",
+			"global": true,
+			"path": "script/aez_bundle_main.js"
+		}
+	},
+	"environment": {
+		"niconico": {
+			"supportedModes": [
+				"ranking"
+			]
+		},
+		"sandbox-runtime": "2"
+	},
+	"globalScripts": [],
+	"moduleMainScripts": {
+		"@akashic-extension/akashic-timeline": "node_modules/@akashic-extension/akashic-timeline/lib/index.js"
+	},
+	"exportZipInfo": {
+		"version": "0.4.0",
+		"option": {
+			"strip": true,
+			"bundle": true,
+			"babel": true,
+			"omitEmptyJs": true
+		}
+	}
+}

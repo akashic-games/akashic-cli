@@ -1,7 +1,7 @@
 import { execSync, exec } from "child_process";
 
 module.exports = function () {
-	const result = execSync("ps -e -o cmd | grep -e bin/run -e 'akashic serve'").toString();
+	const result = execSync("ps -e -o args | grep -e bin/run -e 'akashic serve'").toString();
 	// serve起動に使われている全てのポート番号を取得
 	const usedPorts = result.split("\n").filter(str => str !== "" && !str.match(/grep/)).map(cmd => {
 		const matches = cmd.match(/(\-p|\-\-port)\s+(\d+)/);
