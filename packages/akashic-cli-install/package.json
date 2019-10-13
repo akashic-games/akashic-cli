@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-install",
-  "version": "0.3.26",
+  "version": "0.4.0",
   "description": "npm install wrapper module for Akashic games",
   "main": "lib/index.js",
   "scripts": {
@@ -9,8 +9,8 @@
     "start": "npm run build && node bin/run",
     "build": "tsc -p ./",
     "lint": "tslint -c ../tslint.json --project ./tsconfig.json",
-    "test": "npm run test:jasmine && npm run lint",
-    "test:jasmine": "istanbul cover --report text --report html --colors -i ./lib/index.js ./node_modules/jasmine/bin/jasmine.js"
+    "test": "npm run test:jest && npm run lint",
+    "test:jest": "jest"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
@@ -26,18 +26,15 @@
   "devDependencies": {
     "@types/commander": "2.12.2",
     "@types/jasmine": "2.8.16",
-    "@types/node": "10.14.19",
-    "istanbul": "0.4.5",
-    "jasmine": "3.5.0",
-    "jasmine-reporters": "2.3.2",
-    "jasmine-terminal-reporter": "0.9.1",
+    "@types/node": "10.14.21",
+    "jest": "24.9.0",
     "mock-fs": "4.10.1",
     "rimraf": "2.7.1",
     "tslint": "5.20.0",
     "typescript": "2.9.2"
   },
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.2.35",
+    "@akashic/akashic-cli-commons": "0.3.0",
     "commander": "2.20.1"
   },
   "typings": "lib/index.d.ts",

@@ -13,7 +13,8 @@ import {
 	getDefaultBundleStyle,
 	extractAssetDefinitions,
 	getInjectedContents,
-	validateEs5Code
+	validateEs5Code,
+	readSandboxConfigJs
 } from "./convertUtil";
 
 interface InnerHTMLAssetData {
@@ -36,6 +37,15 @@ export async function promiseConvertBundle(options: ConvertTemplateParameterObje
 		type: "text",
 		code: encodeText(JSON.stringify(conf._content, null, "\t"))
 	});
+
+	if (options.autoSendEvents) {
+		try {
+			options.sandboxConfigJsCode = readSandboxConfigJs(options.source);
+		} catch (error) {
+			options.autoSendEvents = false;
+			console.log("failed read sandbox.config.js, autoSendEvents disabled.");
+		}
+	}
 
 	var errorMessages: string[] = [];
 	var innerHTMLAssetNames = extractAssetDefinitions(conf, "script");
@@ -121,7 +131,9 @@ function writeEct(
 		magnify: !!options.magnify,
 		injectedContents: getInjectedContents(options.cwd, injects),
 		exportVersion: options.exportInfo !== undefined ? options.exportInfo.version : "",
-		exportOption: options.exportInfo !== undefined ? options.exportInfo.option : ""
+		exportOption: options.exportInfo !== undefined ? options.exportInfo.option : "",
+		autoSendEvents: options.autoSendEvents,
+		sandboxConfigJsCode: options.sandboxConfigJsCode !== undefined ? options.sandboxConfigJsCode : ""
 	});
 	fs.writeFileSync(path.resolve(outputPath, "./index.html"), html);
 }

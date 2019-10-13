@@ -29,6 +29,14 @@ window.addEventListener("load", function() {
 			}
 		});
 
+		if (window.__akashic__.autoSendEvents === true || typeof window.__akashic__.autoSendEvents === "string") {
+			var sandboxConfig = window.__akashic__.sandboxConfigFunc();
+			var autoSendEvents = (window.__akashic__.autoSendEvents === true) ? sandboxConfig.autoSendEvents : window.__akashic__.autoSendEvents;
+			if (!!sandboxConfig && autoSendEvents && sandboxConfig.events && sandboxConfig.events[autoSendEvents]) {
+				sandboxConfig.events[autoSendEvents].forEach((ev) => amflowClient.sendEvent(ev));
+			}
+		}
+
 		var audioPlugins;
 		if (location.protocol !== "file:") {
 			// 特にSafariの制約(user activationなしでは音が鳴らない)回避のため、可能ならWebAudioを使う

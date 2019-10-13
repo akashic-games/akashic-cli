@@ -19,6 +19,7 @@ interface CommandParameterObject {
 	magnify?: boolean;
 	injects?: string[];
 	atsumaru?: boolean;
+	autoSendEvents?: string | boolean;
 }
 
 const ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "package.json"), "utf8")).version;
@@ -42,6 +43,7 @@ function cli(param: CommandParameterObject): void {
 		injects: param.injects,
 		unbundleText: !param.bundle || param.atsumaru,
 		lint: !param.atsumaru,
+		autoSendEvents: param.autoSendEvents,
 		// index.htmlに書き込むためのexport実行時の情報
 		exportInfo: {
 			version: ver, // export実行時のバージョン
@@ -92,6 +94,7 @@ commander
 	.option("-b, --bundle", "bundle assets and scripts in index.html (to reduce the number of files)")
 	.option("-m, --magnify", "fit game area to outer element size")
 	.option("-i, --inject [fileName]", "specify injected file content into index.html", inject, [])
+	.option("-A, --autoSendEvents [eventName]", "event name that send automatically when game start")
 	.option("-a, --atsumaru", "generate files that can be posted to RPG-atsumaru");
 
 export function run(argv: string[]): void {
@@ -110,12 +113,13 @@ export function run(argv: string[]): void {
 		magnify: commander["magnify"],
 		hashFilename: commander["hashFilename"],
 		injects: commander["inject"],
-		atsumaru: commander["atsumaru"]
+		atsumaru: commander["atsumaru"],
+		autoSendEvents: commander["autoSendEvents"]
 	});
 }
 
 function dropDeprecatedArgs(argv: string[]): string[] {
-	const filteredArgv = argv.filter(v => !/^(-s|--strip)$/.test(v));
+	const filteredArgv = argv.filter(v => !/^(--strip)$/.test(v));
 	if (argv.length !== filteredArgv.length) {
 		console.log("WARN: --strip option is deprecated. strip is applied by default.");
 		console.log("WARN: If you do not need to apply it, use --no-strip option.");
