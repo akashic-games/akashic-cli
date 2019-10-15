@@ -1,5 +1,5 @@
 import * as React from "react";
-import { observable } from "mobx";
+import { observable, ObservableMap } from "mobx";
 import { observer } from "mobx-react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
@@ -7,10 +7,11 @@ import { Devtool } from "../organism/Devtool";
 
 const store = observable({
 	devtoolsHeight: 300,
-	activeDevtool: "Instances",
+	activeDevtool: "EntityTree",
 	showsEventList: true,
 	eventListWidth: 280,
-	eventEditContent: `["test": true]`
+	eventEditContent: `["test": true]`,
+	entityTreeStateTable: observable.map({})
 });
 
 const TestWithBehaviour = observer(() => (
@@ -47,9 +48,86 @@ const TestWithBehaviour = observer(() => (
 			],
 			onClickAddInstance: action("add-instance")
 		}}
-		entityListDevtoolProps={{
-			onClickUpdateEntityList: action("update-entity-list"),
-			entityList: []
+		entityTreeDevtoolProps={{
+			onClickUpdateEntityTrees: action("update-entity-tree"),
+			onClickToggleOpenEntityChildren: (e => {
+				console.log("TOGGLE", store.entityTreeStateTable.get(e.id));
+				store.entityTreeStateTable.set(e.id, !store.entityTreeStateTable.get(e.id));
+			}),
+			onClickEntityItem: action("click-entity"),
+			entityTrees: [
+				{
+					id: 0,
+					constructorName: "Sprite",
+					x: 0,
+					y: 0,
+					width: 10,
+					height: 10,
+					opacity: 1,
+					scaleX: 1,
+					scaleY: 1,
+					anchorX: 0,
+					anchorY: 0,
+					children: [
+						{
+							id: 1,
+							constructorName: "Sprite",
+							x: 0,
+							y: 0,
+							width: 32,
+							height: 64,
+							opacity: 1,
+							scaleX: 2,
+							scaleY: 2,
+							anchorX: 0,
+							anchorY: 0,
+							children: [
+								{
+									id: 3,
+									constructorName: "FilledRect",
+									x: 10,
+									y: 88,
+									width: 100,
+									height: 100,
+									opacity: 1,
+									scaleX: 1.4,
+									scaleY: 1.2,
+									anchorX: 0,
+									anchorY: 0,
+									children: null,
+									angle: 0,
+									touchable: true,
+									state: 0
+								},
+							],
+							angle: 45,
+							touchable: true,
+							state: 0
+						},
+						{
+							id: 2,
+							constructorName: "FilledRect",
+							x: 0,
+							y: 0,
+							width: 100,
+							height: 100,
+							opacity: 1,
+							scaleX: 1.4,
+							scaleY: 1.2,
+							anchorX: 0,
+							anchorY: 0,
+							children: null,
+							angle: 0,
+							touchable: true,
+							state: 0
+						},
+					],
+					angle: 0,
+					touchable: true,
+					state: 0
+				}
+			],
+			entityTreeStateTable: store.entityTreeStateTable
 		}}
 	/>
 ));
@@ -113,9 +191,28 @@ storiesOf("o-Devtool", module)
 				],
 				onClickAddInstance: action("add-instance")
 			}}
-			entityListDevtoolProps={{
-				onClickUpdateEntityList: action("update-entity-list"),
-				entityList: [{"id" : 1, "className": "FilledRect", "children": []}]
+			entityTreeDevtoolProps={{
+				onClickUpdateEntityTrees: action("update-entity-tree"),
+				onClickToggleOpenEntityChildren: action("toggle"),
+				onClickEntityItem: action("click-entity"),
+				entityTrees: [
+					{
+						id : 1,
+						constructorName: "FilledRect",
+						children: [],
+						x: 0,
+						y: 10,
+						width: 20,
+						height: 20,
+						opacity: 0,
+						angle: 0,
+						scaleX: 1,
+						scaleY: 1,
+						touchable: true,
+						state: 0
+					}
+				],
+				entityTreeStateTable: observable.map({ 1: false })
 			}}
 		/>
 	))
@@ -185,9 +282,12 @@ storiesOf("o-Devtool", module)
 				],
 				onClickAddInstance: action("add-instance")
 			}}
-			entityListDevtoolProps={{
-				onClickUpdateEntityList: action("update-entity-list"),
-				entityList: []
+			entityTreeDevtoolProps={{
+				onClickUpdateEntityTrees: action("update-entity-tree"),
+				onClickToggleOpenEntityChildren: action("toggle"),
+				onClickEntityItem: action("click-entity"),
+				entityTrees: [],
+				entityTreeStateTable: observable.map({})
 			}}
 		/>
 	))

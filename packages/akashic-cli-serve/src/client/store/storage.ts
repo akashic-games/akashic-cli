@@ -1,5 +1,4 @@
 import * as queryString from "query-string";
-import { ELikeListItem } from "./DevtoolUiStore";
 
 export interface StorageData {
 	playerId: string;

@@ -1,11 +1,6 @@
-import {action, observable} from "mobx";
-import {storage} from "./storage";
-
-export interface ELikeListItem {
-	id: number;
-	className: string;
-	children: ELikeListItem[];
-}
+import { action, observable, ObservableMap } from "mobx";
+import { EDumpItem } from "../common/EDumpItem";
+import { storage } from "./storage";
 
 export class DevtoolUiStore {
 	@observable height: number;
@@ -13,7 +8,8 @@ export class DevtoolUiStore {
 	@observable showsEventList: boolean;
 	@observable eventListWidth: number;
 	@observable eventEditContent: string;
-	@observable entityList: ELikeListItem[];
+	@observable entityTrees: EDumpItem[];
+	@observable entityTreeStateTable: ObservableMap<number, boolean>;
 
 	constructor() {
 		this.height = storage.data.devtoolsHeight;
@@ -21,7 +17,8 @@ export class DevtoolUiStore {
 		this.showsEventList = storage.data.showsEventList;
 		this.eventListWidth = storage.data.eventListWidth;
 		this.eventEditContent = storage.data.eventEditContent;
-		this.entityList = [];
+		this.entityTrees = [];
+		this.entityTreeStateTable = observable.map<number, boolean>();
 	}
 
 	@action
@@ -55,7 +52,12 @@ export class DevtoolUiStore {
 	}
 
 	@action
-	setEntityList(entityList: ELikeListItem[]): void {
-		this.entityList = entityList;
+	setEntityTrees(entityTrees: EDumpItem[]): void {
+		this.entityTrees = entityTrees;
+	}
+
+	@action
+	toggleOpenEntityTreeChildren(e: EDumpItem): void {
+		this.entityTreeStateTable.set(e.id, !this.entityTreeStateTable.get(e.id));
 	}
 }

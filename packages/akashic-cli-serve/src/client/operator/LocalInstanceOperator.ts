@@ -1,5 +1,5 @@
 import { Store } from "../store/Store";
-import { ELikeListItem } from "../store/DevtoolUiStore";
+import { EDumpItem, makeEDumpItem } from "../common/EDumpItem";
 
 export class LocalInstanceOperator {
 	private store: Store;
@@ -27,24 +27,13 @@ export class LocalInstanceOperator {
 		this.store.currentLocalInstance.resume();
 	}
 
-	updateEntityList = (): void => {
+	updateEntityTrees = (): void => {
 		const game: any = this.store.currentPlay.localInstances[0].gameContent.getGame();
 		const children = game.scene().children;
-		const entities: ELikeListItem[] = (children || []).map(createEntityObject);
-		this.store.devtoolUiStore.setEntityList(entities);
+		this.store.devtoolUiStore.setEntityTrees((children || []).map(makeEDumpItem));
 	}
-}
 
-/**
- * 引数の e にはAkashic Engineのg.Eが渡る
- */
-function createEntityObject(e: ELike) {
-	const obj = {id: e.id, className: e.constructor.name, children: [] as ELike[]};
-	obj.children = (e.children || []).map((c) => createEntityObject(c));
-	return obj;
-}
-
-interface ELike {
-	id: number;
-	children: ELike[];
+	toggleOpenEntityTreeChildren(e: EDumpItem): void {
+		this.store.devtoolUiStore.toggleOpenEntityTreeChildren(e);
+	}
 }

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { observer } from "mobx-react";
-import { SandboxConfig} from "../../../common/types/SandboxConfig";
+import { SandboxConfig } from "../../../common/types/SandboxConfig";
 import { PlayEntity } from "../../store/PlayEntity";
 import { DevtoolUiStore } from "../../store/DevtoolUiStore";
 import { Operator } from "../../operator/Operator";
@@ -52,9 +52,12 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 				}))),
 				onClickAddInstance: operator.play.openNewClientInstance
 			}}
-			entityListDevtoolProps={{
-				onClickUpdateEntityList: operator.localInstance.updateEntityList,
-				entityList: devtoolUiStore.entityList
+			entityTreeDevtoolProps={{
+				onClickUpdateEntityTrees: operator.localInstance.updateEntityTrees,
+				onClickToggleOpenEntityChildren: operator.localInstance.toggleOpenEntityTreeChildren,
+				// onClickEntityItem: operator.localInstance.
+				entityTrees: devtoolUiStore.entityTrees,
+				entityTreeStateTable: devtoolUiStore.entityTreeStateTable
 			}}
 		/>;
 	}
