@@ -14,7 +14,7 @@ export interface EntityTreeDevtoolProps {
 }
 
 function toFixed(x: number, d: number = 2): string {
-	return x.toFixed((Math.floor(x) === x) ? 0 : d)
+	return x.toFixed((Math.floor(x) === x) ? 0 : d);
 }
 
 function strigifyEDumpItemScale(e: EDumpItem): string {
@@ -43,7 +43,7 @@ function renderEDumpItem(e: EDumpItem, props?: EntityTreeDevtoolProps): React.Re
 		</div>
 		{
 			hasChildren && showsChildren
-				? <div style={{marginLeft:10}}>{ e.children.map(c => renderEDumpItem(c, props)) }</div>
+				? <div style={{ marginLeft: 10 }}>{ e.children.map(c => renderEDumpItem(c, props)) }</div>
 				: null
 		}
 	</div>;

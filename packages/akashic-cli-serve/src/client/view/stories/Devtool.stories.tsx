@@ -98,7 +98,7 @@ const TestWithBehaviour = observer(() => (
 									angle: 0,
 									touchable: true,
 									state: 0
-								},
+								}
 							],
 							angle: 45,
 							touchable: true,
@@ -120,7 +120,7 @@ const TestWithBehaviour = observer(() => (
 							angle: 0,
 							touchable: true,
 							state: 0
-						},
+						}
 					],
 					angle: 0,
 					touchable: true,
