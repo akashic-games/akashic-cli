@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.8.1 (2019-10-15)
+
+#### Other Change
+* `akashic-cli-install`
+  * [#174](https://github.com/akashic-games/akashic-cli/pull/174) akashic-cli-installのテストフレームワークをjestに変更 ([@dera-](https://github.com/dera-))
+
+#### Committers: 1
+- [@dera-](https://github.com/dera-)
+
 ## 1.8.0 (2019-10-10)
 
 #### Update Dependencies
