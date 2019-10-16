@@ -1,5 +1,5 @@
 import { Store } from "../store/Store";
-import { EDumpItem, makeEDumpItem } from "../common/EDumpItem";
+import { EDumpItem, makeEDumpItem } from "../akashic/EDumpItem";
 
 export class LocalInstanceOperator {
 	private store: Store;
@@ -28,12 +28,22 @@ export class LocalInstanceOperator {
 	}
 
 	updateEntityTrees = (): void => {
-		const game: any = this.store.currentPlay.localInstances[0].gameContent.getGame();
+		// TODO /akashic/ 以下に移す
+		// TODO any をなんとかする(現状で型をつけてもuntrustedの時整合しない)。デバッグ用機能がエンジンやAGVに必要？
+		const game: any = this.store.currentPlay.localInstances[0].gameContent.agvGameContent.getGame();
 		const children = game.scene().children;
 		this.store.devtoolUiStore.setEntityTrees((children || []).map(makeEDumpItem));
 	}
 
-	toggleOpenEntityTreeChildren(e: EDumpItem): void {
+	toggleOpenEntityTreeChildren = (e: EDumpItem): void => {
 		this.store.devtoolUiStore.toggleOpenEntityTreeChildren(e);
+	}
+
+	setHighlightedEntity = (e: EDumpItem): void => {
+		this.store.currentPlay.localInstances[0].gameContent.changeHighlightedEntity(e.id);
+	}
+
+	clearHighlightedEntity = (): void => {
+		this.store.currentPlay.localInstances[0].gameContent.changeHighlightedEntity(null);
 	}
 }

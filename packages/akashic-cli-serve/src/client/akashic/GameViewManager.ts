@@ -1,6 +1,7 @@
-import {Trigger} from "@akashic/trigger";
-import {ClientContentLocator} from "../common/ClientContentLocator";
-import {generateTestbedScriptAsset} from "./TestbedScriptAsset";
+import { Trigger } from "@akashic/trigger";
+import { ClientContentLocator } from "../common/ClientContentLocator";
+import { generateTestbedScriptAsset } from "./TestbedScriptAsset";
+import { ServeGameContent } from "./ServeGameContent";
 
 export interface Platform {
 	_resourceFactory: {
@@ -77,7 +78,7 @@ export class GameViewManager {
 		return this.rootElement;
 	}
 
-	createGameContent(param: CreateGameContentParameterObject): agv.GameContent {
+	createGameContent(param: CreateGameContentParameterObject): ServeGameContent {
 		const loc = param.contentLocator;
 		const gameConfig = {
 			contentUrl: loc.asDebuggableRootRelativeUrl() || loc.asAbsoluteUrl(),
@@ -91,12 +92,13 @@ export class GameViewManager {
 		if (param.gameLoaderCustomizer.createCustomAmflowClient) {
 			gameConfig.gameLoaderCustomizer.platformCustomizer = this.customizePlatform;
 		}
-		const gameContent = new agv.GameContent(gameConfig);
-		gameContent.onExternalPluginRegister = new Trigger();
-		return gameContent;
+		const agvGameContent = new agv.GameContent(gameConfig);
+		agvGameContent.onExternalPluginRegister = new Trigger(); // TODO 整理する: ServeGameContentが持つのが筋。
+		return new ServeGameContent(agvGameContent);
 	}
 
-	startGameContent(content: agv.GameContent): Promise<void> {
+	startGameContent(content: ServeGameContent): Promise<void> {
+		const agvGameContent = content.agvGameContent;
 		return new Promise<void>((resolve, reject) => {
 			// agvにGameContenをt読み込み時にのみ使用するエラーハンドリング
 			const initializeErrorListener: agv.ErrorListener = {
@@ -104,25 +106,26 @@ export class GameViewManager {
 					return reject(e);
 				}
 			};
-			content.addErrorListener(initializeErrorListener);
-			content.addContentLoadListener({
+			agvGameContent.addErrorListener(initializeErrorListener);
+			agvGameContent.addContentLoadListener({
 				onLoad: () => {
 					// 読み込みが完了したら、この処理用のエラーハンドリングは削除して代わりにゲーム動作中のエラーハンドリングを追加する
-					content.removeErrorListener(initializeErrorListener);
-					content.addErrorListener({
+					agvGameContent.removeErrorListener(initializeErrorListener);
+					agvGameContent.addErrorListener({
 						onError: (e) => {
 							console.error(e);
 						}
 					});
+					content.setup();
 					resolve();
 				}
 			});
-			this.gameView.addContent(content);
+			this.gameView.addContent(agvGameContent);
 		});
 	}
 
-	removeGameContent(content: agv.GameContent): void {
-		this.gameView.removeContent(content);
+	removeGameContent(content: ServeGameContent): void {
+		this.gameView.removeContent(content.agvGameContent);
 	}
 
 	setViewSize(width: number, height: number): void {
@@ -137,9 +140,9 @@ export class GameViewManager {
 		this.gameView.registerExternalPlugin(plugin);
 	}
 
-	getGameVars<T>(content: agv.GameContent, propertyName: string): Promise<T> {
+	getGameVars<T>(content: ServeGameContent, propertyName: string): Promise<T> {
 		return new Promise(resolve => {
-			content.getGameVars(propertyName, value => {
+			content.agvGameContent.getGameVars(propertyName, value => {
 				resolve(value);
 			});
 		});

@@ -14,4 +14,14 @@ export interface ELike {
 	local?: boolean;
 	touchable: boolean;
 	state: number;
+
+	// FilledRect
+	cssColor?: string;
+
+	// Sprite
+	surface?: any; // TODO SurfaceLike
+	srcWidth?: number;
+	srcHeight?: number;
+	srcX?: number;
+	srcY?: number;
 }

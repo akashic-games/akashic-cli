@@ -1,3 +1,11 @@
+.entity-tree-devtool {
+	box-sizing: border-box;
+	flex: 1 1 auto;
+	display: flex;
+	flex-flow: column nowrap;
+	background: var(--color-tool-bg);
+}
+
 /* TODO use altCSS to integrate this with .instance-toolbar */
 .entity-tree-toolbar {
 	flex: 0 0 auto;
@@ -36,9 +44,16 @@
 }
 
 .entity-tree-view {
+	flex: 1 1 auto;
+	display: flex;
+	flex-flow: row nowrap;
 	padding: 5px;
+	background: var(--color-base-bg);
 }
 
+.invisible-entity {
+	opacity: 0.5;
+}
 
 .entity-item {
 	display: flex;
@@ -48,9 +63,11 @@
 	user-select: none;
 	-webkit-user-select: none;
 }
+
 .entity-item:hover {
 	background-color: #f0f0ff;
 }
+
 
 .entity-expand-button {
 	vertical-align: center;
@@ -71,4 +88,14 @@
 .entity-mini-info {
 	color: #999;
 	font-size: 10px;
+}
+
+.color-box {
+	display: inline-block;
+	box-sizing: border-box;
+	border: 1px solid black;
+	border-radius: 2px;
+	width: 10px;
+	height: 10px;
+	margin: 0 5px;
 }

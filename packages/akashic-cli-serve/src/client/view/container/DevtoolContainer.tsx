@@ -55,7 +55,9 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 			entityTreeDevtoolProps={{
 				onClickUpdateEntityTrees: operator.localInstance.updateEntityTrees,
 				onClickToggleOpenEntityChildren: operator.localInstance.toggleOpenEntityTreeChildren,
-				// onClickEntityItem: operator.localInstance.
+				onClickEntityItem: () => {}, // TODO implement
+				onMouseOverEntityItem: operator.localInstance.setHighlightedEntity,
+				onMouseLeaveEntityItem: operator.localInstance.clearHighlightedEntity,
 				entityTrees: devtoolUiStore.entityTrees,
 				entityTreeStateTable: devtoolUiStore.entityTreeStateTable
 			}}

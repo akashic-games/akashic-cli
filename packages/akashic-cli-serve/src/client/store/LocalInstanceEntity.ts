@@ -4,6 +4,7 @@ import {TimeKeeper} from "../../common/TimeKeeper";
 import {Player} from "../../common/types/Player";
 import * as ApiRequest from "../api/ApiRequest";
 import {GameViewManager} from "../akashic/GameViewManager";
+import {ServeGameContent} from "../akashic/ServeGameContent";
 import {PlayEntity} from "./PlayEntity";
 import {CoePluginEntity, CreateCoeLocalInstanceParameterObject} from "./CoePluginEntity";
 import {GameInstanceEntity} from "./GameInstanceEntity";
@@ -55,7 +56,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 
 	private _timeKeeper: TimeKeeper;
 	private _gameViewManager: GameViewManager;
-	private _agvGameContent: agv.GameContent;
+	private _serveGameContent: ServeGameContent;
 	private _resizeGameView: boolean;
 
 	constructor(params: LocalInstanceEntityParameterObject) {
@@ -82,7 +83,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 		if (params.playToken != null) {
 			playConfig.playToken = params.playToken;
 		}
-		this._agvGameContent = this._gameViewManager.createGameContent({
+		this._serveGameContent = this._gameViewManager.createGameContent({
 			contentLocator: this.content.locator,
 			player: {
 				id: this.player.id,
@@ -100,10 +101,11 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 				onLocalInstanceDelete: params.coeHandler.onLocalInstanceDelete,
 				instanceArgument: params.argument
 			});
-			this._agvGameContent.onExternalPluginRegister.add((name: string) => {
-				const game = this._agvGameContent.getGame();
+			const agvGameContent = this._serveGameContent.agvGameContent;
+			agvGameContent.onExternalPluginRegister.add((name: string) => {
+				const game = agvGameContent.getGame();
 				if (name === "coe") {
-					this.coePlugin.bootstrap(game, this._agvGameContent);
+					this.coePlugin.bootstrap(game, agvGameContent);
 				} else if (name === "nico") {
 					game.external.nico = new NicoPluginEntity();
 				} else if (name === "send") {
@@ -125,8 +127,8 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 		return this._gameViewManager.getViewSize();
 	}
 
-	get gameContent(): agv.GameContent {
-		return this._agvGameContent;
+	get gameContent(): ServeGameContent {
+		return this._serveGameContent;
 	}
 
 	async start(): Promise<void> {
@@ -137,12 +139,12 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 			this._gameViewManager.setViewSize(gameJson.width, gameJson.height);
 		}
 
-		await this._gameViewManager.startGameContent(this._agvGameContent);
+		await this._gameViewManager.startGameContent(this._serveGameContent);
 		this._timeKeeper.start();
 	}
 
 	stop(): Promise<void> {
-		this._gameViewManager.removeGameContent(this._agvGameContent);
+		this._gameViewManager.removeGameContent(this._serveGameContent);
 		this.onStop.fire(this);
 		return Promise.resolve();
 	}
@@ -155,7 +157,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 	pause(): Promise<void> {
 		if (this.isPaused)
 			return;
-		this._agvGameContent.pause();
+		this._serveGameContent.agvGameContent.pause();
 		this._timeKeeper.pause();
 		this.isPaused = true;
 		return Promise.resolve();
@@ -165,7 +167,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 	resume(): Promise<void> {
 		if (!this.isPaused)
 			return;
-		this._agvGameContent.resume();
+		this._serveGameContent.agvGameContent.resume();
 		this._timeKeeper.start();
 		this.isPaused = false;
 		return Promise.resolve();
@@ -176,7 +178,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 		if (this.executionMode === mode)
 			return;
 		this.executionMode = mode;
-		this._agvGameContent.setExecutionMode(toAgvExecutionMode(mode));
+		this._serveGameContent.agvGameContent.setExecutionMode(toAgvExecutionMode(mode));
 	}
 
 	@action

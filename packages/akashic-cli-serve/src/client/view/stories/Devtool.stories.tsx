@@ -3,6 +3,7 @@ import { observable, ObservableMap } from "mobx";
 import { observer } from "mobx-react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
+import { EDumpItem } from "../../akashic/EDumpItem";
 import { Devtool } from "../organism/Devtool";
 
 const store = observable({
@@ -13,6 +14,27 @@ const store = observable({
 	eventEditContent: `["test": true]`,
 	entityTreeStateTable: observable.map({})
 });
+
+function createFilledRectDumpItem(id: number, cssColor: string = "black"): EDumpItem {
+	return {
+		id,
+		constructorName: "FilledRect",
+		x: 0,
+		y: 0,
+		width: 100,
+		height: 100,
+		opacity: 1,
+		scaleX: 1.4,
+		scaleY: 1.2,
+		anchorX: 0,
+		anchorY: 0,
+		children: null,
+		angle: 0,
+		touchable: true,
+		visible: true,
+		cssColor
+	};
+}
 
 const TestWithBehaviour = observer(() => (
 	<Devtool
@@ -51,10 +73,11 @@ const TestWithBehaviour = observer(() => (
 		entityTreeDevtoolProps={{
 			onClickUpdateEntityTrees: action("update-entity-tree"),
 			onClickToggleOpenEntityChildren: (e => {
-				console.log("TOGGLE", store.entityTreeStateTable.get(e.id));
 				store.entityTreeStateTable.set(e.id, !store.entityTreeStateTable.get(e.id));
 			}),
 			onClickEntityItem: action("click-entity"),
+			onMouseOverEntityItem: action("mouseover"),
+			onMouseLeaveEntityItem: action("mouseleave"),
 			entityTrees: [
 				{
 					id: 0,
@@ -89,7 +112,7 @@ const TestWithBehaviour = observer(() => (
 									y: 88,
 									width: 100,
 									height: 100,
-									opacity: 1,
+									opacity: 0.5,
 									scaleX: 1.4,
 									scaleY: 1.2,
 									anchorX: 0,
@@ -97,12 +120,13 @@ const TestWithBehaviour = observer(() => (
 									children: null,
 									angle: 0,
 									touchable: true,
-									state: 0
+									visible: true,
+									cssColor: "red"
 								}
 							],
 							angle: 45,
 							touchable: true,
-							state: 0
+							visible: true
 						},
 						{
 							id: 2,
@@ -119,13 +143,37 @@ const TestWithBehaviour = observer(() => (
 							children: null,
 							angle: 0,
 							touchable: true,
-							state: 0
+							visible: false,
+							cssColor: "#ccf"
 						}
 					],
 					angle: 0,
 					touchable: true,
-					state: 0
-				}
+					visible: true
+				},
+				createFilledRectDumpItem(100),
+				createFilledRectDumpItem(101),
+				createFilledRectDumpItem(102),
+				createFilledRectDumpItem(103),
+				createFilledRectDumpItem(104),
+				createFilledRectDumpItem(105),
+				createFilledRectDumpItem(106),
+				createFilledRectDumpItem(107),
+				createFilledRectDumpItem(108),
+				createFilledRectDumpItem(109),
+				createFilledRectDumpItem(110),
+				createFilledRectDumpItem(111),
+				createFilledRectDumpItem(112),
+				createFilledRectDumpItem(113),
+				createFilledRectDumpItem(114),
+				createFilledRectDumpItem(115),
+				createFilledRectDumpItem(116),
+				createFilledRectDumpItem(117),
+				createFilledRectDumpItem(118),
+				createFilledRectDumpItem(119),
+				createFilledRectDumpItem(120),
+				createFilledRectDumpItem(121),
+				createFilledRectDumpItem(122)
 			],
 			entityTreeStateTable: store.entityTreeStateTable
 		}}
@@ -195,6 +243,8 @@ storiesOf("o-Devtool", module)
 				onClickUpdateEntityTrees: action("update-entity-tree"),
 				onClickToggleOpenEntityChildren: action("toggle"),
 				onClickEntityItem: action("click-entity"),
+				onMouseOverEntityItem: action("mouseover"),
+				onMouseLeaveEntityItem: action("mouseleave"),
 				entityTrees: [
 					{
 						id : 1,
@@ -209,7 +259,7 @@ storiesOf("o-Devtool", module)
 						scaleX: 1,
 						scaleY: 1,
 						touchable: true,
-						state: 0
+						visible: true
 					}
 				],
 				entityTreeStateTable: observable.map({ 1: false })
@@ -286,6 +336,8 @@ storiesOf("o-Devtool", module)
 				onClickUpdateEntityTrees: action("update-entity-tree"),
 				onClickToggleOpenEntityChildren: action("toggle"),
 				onClickEntityItem: action("click-entity"),
+				onMouseOverEntityItem: action("mouseover"),
+				onMouseLeaveEntityItem: action("mouseleave"),
 				entityTrees: [],
 				entityTreeStateTable: observable.map({})
 			}}
