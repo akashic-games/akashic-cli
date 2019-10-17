@@ -7,9 +7,9 @@ export interface HealthCheckRouterParameterObject {
 }
 
 export const createHealthCheckRouter = (params: HealthCheckRouterParameterObject): express.Router => {
-	const contentsRouter = express.Router();
+	const healthCheckRouter = express.Router();
 
-	contentsRouter.get(`/status`, createHandleToGetStatus(params.playStore));
+	healthCheckRouter.get(`/status`, createHandleToGetStatus(params.playStore));
 
-	return contentsRouter;
+	return healthCheckRouter;
 };

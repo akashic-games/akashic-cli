@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>サーバー側のヘルスチェック</title>
+<title>サーバの状態</title>
 </head>
 <body>
 <table border="1">
@@ -23,6 +23,7 @@
             <td><%= info.playId %></td>
             <td><%= info.status %></td>
             <td><%= new Date(info.createdAt).toString() %></td>
+            <%# 本来はview側にロジックを入れるべきではないが、時刻表示のフォーマット整形はview側で行いたいので妥協してロジックを入れた %>
             <td><%= info.lastSuspendedAt ? new Date(info.lastSuspendedAt).toString() : "" %></td>
             <td><%= info.clientInstances.length %></td>
             <td><%= info.runners.length %></td>
