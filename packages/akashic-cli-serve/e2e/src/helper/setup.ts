@@ -17,7 +17,7 @@ module.exports = function () {
 	for (i = 0; i < limit; i++) {
 		const targetPort = firstPort + i;
 		if (!usedPorts.some(p => p === targetPort)) {
-			exec("cd e2e/fixtures/sample_content && ../../../bin/run -p " + targetPort);
+			exec("cd e2e/fixtures/speed-jigsaw && ../../../bin/run -p " + targetPort);
 			process.env.SERVE_PORT = "" + targetPort;
 			console.log("process.env.SERVE_PORT:" + process.env.SERVE_PORT);
 			break;

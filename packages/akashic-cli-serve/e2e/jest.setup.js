@@ -1,4 +1,4 @@
 // setTimeoutが動作するようにする
 jest.useRealTimers();
-// タイムアウト時間を20秒に増やしておく
-jest.setTimeout(20000);
+// タイムアウト時間を60秒に増やしておく
+jest.setTimeout(60000);
