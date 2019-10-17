@@ -4,16 +4,17 @@ import { observer } from "mobx-react";
 import { EDumpItem } from "../../akashic/EDumpItem";
 import { FlexScrollY } from "../atom/FlexScrollY";
 import { ToolIconButton } from "../atom/ToolIconButton";
+import { EntityTreeOptionBar, EntityTreeOptionBarProps } from "./EntityTreeOptionBar";
 import * as styles from "./EntityTreeDevtool.css";
 
-export interface EntityTreeDevtoolProps {
-	onClickUpdateEntityTrees: () => void;
-	onClickToggleOpenEntityChildren: (e: EDumpItem) => void;
-	onClickEntityItem?: (e: EDumpItem) => void;
-	onMouseOverEntityItem?: (e: EDumpItem) => void;
-	onMouseLeaveEntityItem?: (e: EDumpItem) => void;
+export interface EntityTreeDevtoolProps extends EntityTreeOptionBarProps {
 	entityTrees: EDumpItem[];
 	entityTreeStateTable: ObservableMap<number, boolean>;
+	selectedEntityId: number | null;
+	onClickToggleOpenEntityChildren: (e: EDumpItem) => void;
+	onClickEntityItem: (e: EDumpItem) => void;
+	onMouseOverEntityItem: (e: EDumpItem) => void;
+	onMouseLeaveEntityItem: (e: EDumpItem) => void;
 }
 
 function formatNum(x: number, d: number = 2): string {
@@ -29,8 +30,21 @@ function strigifyEDumpItemScale(e: EDumpItem): string {
 	return (sx === 1 && sy === 1) ? "" : (sx === sy) ? `x${formatNum(sx)}` : `(x${formatNum(sx)}, x${formatNum(sy)})`;
 }
 
+function scrollRefIntoView(e: HTMLElement | null): void {
+	if (e) {
+		if (typeof (e as any).scrollIntoViewIfNeeded === "function") {
+			// Webkit-specific だが便利なのである場合は使う
+			(e as any).scrollIntoViewIfNeeded(true);
+		} else {
+			e.scrollIntoView();
+		}
+	}
+}
 
 function renderEDumpItem(e: EDumpItem, props: EntityTreeDevtoolProps): React.ReactNode {
+	if (!props.showsHidden && !e.visible)
+		return null;
+
 	const toggle = (ev: React.MouseEvent<HTMLElement>) => {
 		ev.stopPropagation();
 		props.onClickToggleOpenEntityChildren(e);
@@ -43,12 +57,13 @@ function renderEDumpItem(e: EDumpItem, props: EntityTreeDevtoolProps): React.Rea
 		ev.stopPropagation();
 		props.onMouseLeaveEntityItem(e);
 	};
+	const isSelected = e.id === props.selectedEntityId;
 	const hasChildren = e.children && e.children.length > 0;
 	const showsChildren = !props.entityTreeStateTable.get(e.id);
 	const buttonStyle = styles["entity-expand-button"] + (hasChildren ? ""  : " " + styles["entity-expand-button-hidden"]);
-	return <div key={e.id} className={e.visible ? null : styles["invisible-entity"]}>
+	return <div key={e.id} className={e.visible ? null : styles["invisible-entity"]} ref={isSelected ? scrollRefIntoView : null}>
 		<div
-			className={styles["entity-item"]}
+			className={styles["entity-item"] + (isSelected ? " " + styles["selected"] : "")}
 			onMouseOver={onMouseOver}
 			onMouseLeave={onMouseLeave}
 			onClick={() => props.onClickEntityItem(e)}
@@ -60,7 +75,7 @@ function renderEDumpItem(e: EDumpItem, props: EntityTreeDevtoolProps): React.Rea
 			<span className={styles["entity-mini-info"]}>
 				{ `#${e.id} (${formatNum(e.x)}, ${formatNum(e.y)}) ${formatNum(e.width)}x${formatNum(e.height)}` }
 				{ `${e.angle !== 0 ? ` ${formatNum(e.angle)}°` : ""} ${strigifyEDumpItemScale(e)}` }
-				{ e.touchable ? <i className={"material-icons " + styles["entity-touch-icon"]} title={"touchable"}>touch_app</i> : null }
+				{ e.touchable ? <span className={styles["entity-touchable"]}>Touchable</span> : null }
 				{ (e.text != null) ? <span className={styles["entity-text"]}>{formatText(e.text)}</span> : null }
 			</span>
 			{
@@ -84,17 +99,18 @@ function renderEDumpItem(e: EDumpItem, props: EntityTreeDevtoolProps): React.Rea
 @observer
 export class EntityTreeDevtool extends React.Component<EntityTreeDevtoolProps, {}> {
 	render(): React.ReactNode {
+		const props = this.props;
 		return <div className={styles["entity-tree-devtool"]}>
-			<div className={styles["entity-tree-toolbar"]}>
-				<ToolIconButton icon="refresh"
-				                title="ツリー情報を更新"
-				                onClick={this.props.onClickUpdateEntityTrees}>
-					Update
-				</ToolIconButton>
-			</div>
+			<EntityTreeOptionBar
+				isSelectingEntity={props.isSelectingEntity}
+				showsHidden={props.showsHidden}
+				onChangeShowsHidden={props.onChangeShowsHidden}
+				onClickSelectEntity={props.onClickSelectEntity}
+				onClickUpdateEntityTrees={props.onClickUpdateEntityTrees}
+			/>
 			<div className={styles["entity-tree-view"]}>
 				<FlexScrollY>
-					{ (this.props.entityTrees || []).map(e => renderEDumpItem(e, this.props)) }
+					{ (props.entityTrees || []).map(e => renderEDumpItem(e, props)) }
 				</FlexScrollY>
 			</div>
 		</div>;

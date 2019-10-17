@@ -31,16 +31,22 @@ export interface ToolIconButtonProps {
 	 * 引数は `!pushed` の値。
 	 */
 	onClick?: (nextVal?: boolean) => void;
+	/**
+	 * ボタンのサイズ。
+	 */
+	size?: number;
 }
 
 @observer
 export class ToolIconButton extends React.Component<ToolIconButtonProps, {}> {
 	render() {
-		const { icon, title, pushed, pushedIcon, disabled, children } = this.props;
+		const { icon, title, pushed, pushedIcon, disabled, children, size } = this.props;
 		const pushedClass = (pushed && !pushedIcon) ? " " + styles["pushed"] : "";
 		return <button className={styles["tool-icon-button"] + pushedClass}
 		               disabled={disabled} title={title} onClick={this._onClick}>
-			<i className="material-icons">{(pushed && pushedIcon) ? pushedIcon : icon}</i>
+			<i className="material-icons" style={(size != null) ? { fontSize: size } : null}>
+				{(pushed && pushedIcon) ? pushedIcon : icon}
+			</i>
 			{ children ? <p>{children}</p> : null }
 		</button>;
 	}

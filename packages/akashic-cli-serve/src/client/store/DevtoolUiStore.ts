@@ -8,6 +8,11 @@ export class DevtoolUiStore {
 	@observable showsEventList: boolean;
 	@observable eventListWidth: number;
 	@observable eventEditContent: string;
+	@observable showsHiddenEntity: boolean;
+
+	// storage に保存しないもの
+	@observable isSelectingEntity: boolean;
+	@observable selectedEntityId: number | null;
 	@observable entityTrees: EDumpItem[];
 	@observable entityTreeStateTable: ObservableMap<number, boolean>;
 
@@ -17,6 +22,9 @@ export class DevtoolUiStore {
 		this.showsEventList = storage.data.showsEventList;
 		this.eventListWidth = storage.data.eventListWidth;
 		this.eventEditContent = storage.data.eventEditContent;
+		this.showsHiddenEntity = storage.data.showsHiddenEntity;
+		this.isSelectingEntity = false;
+		this.selectedEntityId = null;
 		this.entityTrees = [];
 		this.entityTreeStateTable = observable.map<number, boolean>();
 	}
@@ -59,5 +67,21 @@ export class DevtoolUiStore {
 	@action
 	toggleOpenEntityTreeChildren(e: EDumpItem): void {
 		this.entityTreeStateTable.set(e.id, !this.entityTreeStateTable.get(e.id));
+	}
+
+	@action
+	toggleShowHiddenEntity(show: boolean): void {
+		this.showsHiddenEntity = show;
+		storage.put({ showsHiddenEntity: show });
+	}
+
+	@action
+	toggleIsSelectingEntity = (select: boolean): void => {
+		this.isSelectingEntity = select;
+	}
+
+	@action
+	setSelectedEntityId = (eid: number | null): void => {
+		this.selectedEntityId = eid;
 	}
 }

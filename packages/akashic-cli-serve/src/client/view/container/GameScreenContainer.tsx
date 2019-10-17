@@ -4,13 +4,17 @@ import { SandboxConfig } from "../../../common/types/SandboxConfig";
 import { GameViewManager } from "../../akashic/GameViewManager";
 import { LocalInstanceEntity } from "../../store/LocalInstanceEntity";
 import { ToolBarUiStore } from "../../store/ToolBarUiStore";
+import { DevtoolUiStore } from "../../store/DevtoolUiStore";
+import { Operator } from "../../operator/Operator";
 import { GameScreen } from "../organism/GameScreen";
 
 export interface GameScreenContainerProps {
 	sandboxConfig: SandboxConfig;
 	toolBarUiStore: ToolBarUiStore;
+	devtoolUiStore: DevtoolUiStore;
 	localInstance: LocalInstanceEntity;
 	gameViewManager: GameViewManager;
+	operator: Operator;
 }
 
 @observer
@@ -23,7 +27,26 @@ export class GameScreenContainer extends React.Component<GameScreenContainerProp
 			showsBackgroundImage={this.props.toolBarUiStore.showsBackgroundImage}
 			gameWidth={gameViewSize.width}
 			gameHeight={gameViewSize.height}
-			gameViewManager={this.props.gameViewManager}
+			screenElement={this.props.gameViewManager.getRootElement()}
+			shouldStopPropagationFunc={this._handleShouldStopPropgation}
+			onMouseMoveCapture={this._handleMouseMoveCapture}
+			onClickCapture={this._handleClickCapture}
 		/>;
+	}
+
+	private _handleShouldStopPropgation = (): boolean => {
+		return this.props.devtoolUiStore.isSelectingEntity;
+	}
+
+	private _handleMouseMoveCapture = (p: { x: number, y: number}): void => {
+		if (!this.props.devtoolUiStore.isSelectingEntity)
+			return;
+		this.props.operator.localInstance.setHighlightedEntityByPoint(p.x, p.y);
+	}
+
+	private _handleClickCapture = (p: { x: number, y: number}): void => {
+		if (!this.props.devtoolUiStore.isSelectingEntity)
+			return;
+		this.props.operator.localInstance.finishEntitySelection(p.x, p.y);
 	}
 }

@@ -12,6 +12,7 @@ export interface StorageData {
 	selectedArgumentName: string | null;
 	instanceArgumentListWidth: number;
 	instanceArgumentEditContent: string;
+	showsHiddenEntity: boolean;
 	joinsAutomatically: boolean;
 	showsBackgroundImage: boolean;
 	showsGrid: boolean;
@@ -78,6 +79,7 @@ export class Storage {
 			selectedArgumentName: choose(getQueryValue(qp.selectedArgumentName), s.selectedArgumentName, null),
 			instanceArgumentListWidth: choose(asNumber(getQueryValue(qp.instanceArgumentListWidth)), s.instanceArgumentListWidth, 150),
 			instanceArgumentEditContent: choose(getQueryValue(qp.instanceArgumentEditContent), s.instanceArgumentEditContent, ""),
+			showsHiddenEntity: choose(asBool(getQueryValue(qp.showsHiddenEntity)), s.showsHiddenEntity, true),
 			joinsAutomatically: choose(asBool(getQueryValue(qp.joinsAutomatically)), s.joinsAutomatically, false),
 			showsBackgroundImage: choose(asBool(getQueryValue(qp.showsBackgroundImage)), s.showsBackgroundImage, false),
 			showsGrid: choose(asBool(getQueryValue(qp.showsGrid)), s.showsGrid, false)

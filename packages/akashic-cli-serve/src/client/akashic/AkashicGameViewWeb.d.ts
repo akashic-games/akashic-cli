@@ -1,4 +1,10 @@
+// Akashic Engine の使う部分に無理やり型をつける
+// TODO engineFiles 内の型をなんとかして使う？
 declare module ae {
+	const enum EntityStateFlags {
+		Hidden = 1
+	}
+
 	interface PointLike {
 		x: number;
 		y: number;
@@ -15,12 +21,24 @@ declare module ae {
 		getMatrix(): MatrixLike;
 	}
 
+	// TODO ELike 統合。ELikeを触るのは /akashic/ に限定する
 	interface ELike {
 		width: number;
 		height: number;
 		parent?: ELike;
 		_matrix?: MatrixLike;
+		_touchable: boolean;
+		_hasTouchableChildren: boolean;
+		_targetCameras?: CameraLike[];
 		getMatrix(): MatrixLike;
+	}
+
+	interface PointSourceLike {
+		target: ELike;
+	}
+
+	interface SceneLike {
+		findPointSourceByPoint(p: PointLike, force: boolean, camera: CameraLike): PointSourceLike;
 	}
 
 	interface RendererLike {
@@ -51,7 +69,7 @@ declare module agv {
 		addErrorListener(errorListener: ErrorListener): void;
 		removeErrorListener(errorListener: ErrorListener): void;
 		getGameVars(propertyName: string, listener: (vars: any) => void): void;
-		getGame(): ae.GameLike;
+		getGame(): agv.GameLike;
 	}
 
 	interface PlaylogConfig {
@@ -88,7 +106,7 @@ declare module agv {
 
 	interface ExternalPlugin {
 		name: string;
-		onload: (game: GameLike, dataBus: any, gameContent: GameContent) => void;
+		onload: (game: agv.GameLike, dataBus: any, gameContent: GameContent) => void;
 	}
 
 	interface TriggerLike {
@@ -96,9 +114,6 @@ declare module agv {
 		addOnce: (...args: any[]) => void;
 		remove: (...args: any[]) => void;
 		fire: (arg: any) => void;
-	}
-
-	interface SceneLike {
 	}
 
 	interface GameExternalPluginsLike {
@@ -111,7 +126,6 @@ declare module agv {
 		Active, Passive, Replay
 	}
 
-
 	interface GameLike {
 		external: GameExternalPluginsLike;
 
@@ -120,7 +134,7 @@ declare module agv {
 		renderers: ae.RendererLike[];
 		_localDb: { [id: number]: ae.ELike };
 		focusingCamera?: ae.CameraLike;
-		scene(): any;
+		scene(): ac.SceneLike;
 		render(camera?: ae.CameraLike): void;
 	}
 }

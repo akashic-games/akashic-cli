@@ -50,6 +50,8 @@ export class App extends React.Component<AppProps, {}> {
 					toolBarUiStore={store.toolBarUiStore}
 					localInstance={store.currentLocalInstance}
 					gameViewManager={this.props.gameViewManager}
+					devtoolUiStore={store.devtoolUiStore}
+					operator={this.props.operator}
 				/>
 			</div>
 			{

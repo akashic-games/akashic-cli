@@ -53,13 +53,18 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 				onClickAddInstance: operator.play.openNewClientInstance
 			}}
 			entityTreeDevtoolProps={{
+				entityTrees: devtoolUiStore.entityTrees,
+				entityTreeStateTable: devtoolUiStore.entityTreeStateTable,
+				selectedEntityId: devtoolUiStore.selectedEntityId,
+				isSelectingEntity: devtoolUiStore.isSelectingEntity,
+				showsHidden: devtoolUiStore.showsHiddenEntity,
+				onChangeShowsHidden: operator.localInstance.toggleShowHiddenEntity,
+				onClickSelectEntity: operator.localInstance.startEntitySelection,
 				onClickUpdateEntityTrees: operator.localInstance.updateEntityTrees,
 				onClickToggleOpenEntityChildren: operator.localInstance.toggleOpenEntityTreeChildren,
-				onClickEntityItem: () => {}, // TODO implement
+				onClickEntityItem: operator.localInstance.selectEntityByEDumpItem,
 				onMouseOverEntityItem: operator.localInstance.setHighlightedEntity,
-				onMouseLeaveEntityItem: operator.localInstance.clearHighlightedEntity,
-				entityTrees: devtoolUiStore.entityTrees,
-				entityTreeStateTable: devtoolUiStore.entityTreeStateTable
+				onMouseLeaveEntityItem: operator.localInstance.clearHighlightedEntity
 			}}
 		/>;
 	}

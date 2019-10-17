@@ -27,6 +27,8 @@ export class LocalInstanceOperator {
 		this.store.currentLocalInstance.resume();
 	}
 
+	// TODO DevtoolOperator を作って以下を移す
+
 	updateEntityTrees = (): void => {
 		// TODO /akashic/ 以下に移す
 		// TODO any をなんとかする(現状で型をつけてもuntrustedの時整合しない)。デバッグ用機能がエンジンやAGVに必要？
@@ -45,5 +47,29 @@ export class LocalInstanceOperator {
 
 	clearHighlightedEntity = (): void => {
 		this.store.currentPlay.localInstances[0].gameContent.changeHighlightedEntity(null);
+	}
+
+	setHighlightedEntityByPoint = (x: number, y: number): void => {
+		const gameContent = this.store.currentPlay.localInstances[0].gameContent;
+		gameContent.changeHighlightedEntity(gameContent.getEntityIdByPoint(x, y));
+	}
+
+	toggleShowHiddenEntity = (shows: boolean): void => {
+		this.store.devtoolUiStore.toggleShowHiddenEntity(shows);
+	}
+
+	startEntitySelection = (): void => {
+		this.store.devtoolUiStore.toggleIsSelectingEntity(true);
+	}
+
+	finishEntitySelection = (x: number, y: number): void => {
+		const gameContent = this.store.currentPlay.localInstances[0].gameContent;
+		this.store.devtoolUiStore.toggleIsSelectingEntity(false);
+		this.store.devtoolUiStore.setSelectedEntityId(gameContent.getEntityIdByPoint(x, y));
+		gameContent.changeHighlightedEntity(null);
+	}
+
+	selectEntityByEDumpItem = (e: EDumpItem): void => {
+		this.store.devtoolUiStore.setSelectedEntityId(e.id);
 	}
 }

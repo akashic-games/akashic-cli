@@ -82,6 +82,9 @@ ul.event-list {
 	border-bottom: 1px solid #bbb;
 }
 
+/*
+TODO 不要では？
+
 .events-toolbar button {
 	color: var(--color-tool-text);
 	box-sizing: border-box;
@@ -106,6 +109,7 @@ ul.event-list {
 .events-toolbar button:active {
 	background: var(--color-tool-border);
 }
+*/
 
 .editor-container {
 	flex: 1 1 auto;
