@@ -20,10 +20,15 @@ function formatNum(x: number, d: number = 2): string {
 	return x.toFixed((Math.floor(x) === x) ? 0 : d);
 }
 
+function formatText(s: string, maxLen: number = 20): string {
+	return JSON.stringify((s.length > maxLen) ? s.slice(0, maxLen) + "..." : s);
+}
+
 function strigifyEDumpItemScale(e: EDumpItem): string {
 	const sx = e.scaleX, sy = e.scaleY;
 	return (sx === 1 && sy === 1) ? "" : (sx === sy) ? `x${formatNum(sx)}` : `(x${formatNum(sx)}, x${formatNum(sy)})`;
 }
+
 
 function renderEDumpItem(e: EDumpItem, props: EntityTreeDevtoolProps): React.ReactNode {
 	const toggle = (ev: React.MouseEvent<HTMLElement>) => {
@@ -55,7 +60,8 @@ function renderEDumpItem(e: EDumpItem, props: EntityTreeDevtoolProps): React.Rea
 			<span className={styles["entity-mini-info"]}>
 				{ `#${e.id} (${formatNum(e.x)}, ${formatNum(e.y)}) ${formatNum(e.width)}x${formatNum(e.height)}` }
 				{ `${e.angle !== 0 ? ` ${formatNum(e.angle)}°` : ""} ${strigifyEDumpItemScale(e)}` }
-				{ e.visible ? null : " hidden" }
+				{ e.touchable ? <i className={"material-icons " + styles["entity-touch-icon"]} title={"touchable"}>touch_app</i> : null }
+				{ (e.text != null) ? <span className={styles["entity-text"]}>{formatText(e.text)}</span> : null }
 			</span>
 			{
 				e.cssColor ?

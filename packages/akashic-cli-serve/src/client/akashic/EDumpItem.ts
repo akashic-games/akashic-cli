@@ -22,6 +22,8 @@ export interface EDumpItem {
 
 	// FilledRect
 	cssColor?: string;
+	// Label
+	text?: string;
 	// Sprite
 	image?: HTMLImageElement; // especially for ImageAssetSurface
 	srcWidth?: number;
@@ -49,6 +51,7 @@ export function makeEDumpItem(e: ELike): EDumpItem {
 		touchable: e.touchable,
 		visible: !(e.state & 1),  // 1 === g.EntityStateFlags.Hidden
 		cssColor: (e.cssColor != null) ? e.cssColor : null,
+		text: (e.text != null) ? e.text : null,
 		image: (e.surface != null && e.surface._drawable instanceof HTMLImageElement) ? e.surface._drawable : null,
 		srcWidth: (e.srcWidth != null) ? e.srcWidth : null,
 		srcHeight: (e.srcHeight != null) ? e.srcHeight : null,

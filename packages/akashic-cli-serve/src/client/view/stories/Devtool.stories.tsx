@@ -30,7 +30,7 @@ function createFilledRectDumpItem(id: number, cssColor: string = "black"): EDump
 		anchorY: 0,
 		children: null,
 		angle: 0,
-		touchable: true,
+		touchable: false,
 		visible: true,
 		cssColor
 	};
@@ -81,7 +81,7 @@ const TestWithBehaviour = observer(() => (
 			entityTrees: [
 				{
 					id: 0,
-					constructorName: "Sprite",
+					constructorName: "Label",
 					x: 0,
 					y: 0,
 					width: 10,
@@ -126,11 +126,11 @@ const TestWithBehaviour = observer(() => (
 							],
 							angle: 45,
 							touchable: true,
-							visible: true
+							visible: false
 						},
 						{
 							id: 2,
-							constructorName: "FilledRect",
+							constructorName: "Label",
 							x: 0,
 							y: 0,
 							width: 100,
@@ -142,14 +142,15 @@ const TestWithBehaviour = observer(() => (
 							anchorY: 0,
 							children: null,
 							angle: 0,
-							touchable: true,
-							visible: false,
-							cssColor: "#ccf"
+							touchable: false,
+							visible: true,
+							text: "100 pt."
 						}
 					],
 					angle: 0,
 					touchable: true,
-					visible: true
+					visible: true,
+					text: "我輩は人である。名前はもうある。どこで生れたかはとんと見当がつかぬがまあ病院である。"
 				},
 				createFilledRectDumpItem(100),
 				createFilledRectDumpItem(101),

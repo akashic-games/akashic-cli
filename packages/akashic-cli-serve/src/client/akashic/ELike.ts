@@ -18,7 +18,10 @@ export interface ELike {
 	// FilledRect
 	cssColor?: string;
 
-	// Sprite
+	// Label
+	text?: string;
+
+	// Sprite (not used yet)
 	surface?: any; // TODO SurfaceLike
 	srcWidth?: number;
 	srcHeight?: number;
