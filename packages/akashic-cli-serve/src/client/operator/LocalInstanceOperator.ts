@@ -32,7 +32,7 @@ export class LocalInstanceOperator {
 	updateEntityTrees = (): void => {
 		// TODO /akashic/ 以下に移す
 		// TODO any をなんとかする(現状で型をつけてもuntrustedの時整合しない)。デバッグ用機能がエンジンやAGVに必要？
-		const game: any = this.store.currentPlay.localInstances[0].gameContent.agvGameContent.getGame();
+		const game: any = this.store.currentLocalInstance.gameContent.agvGameContent.getGame();
 		const children = game.scene().children;
 		this.store.devtoolUiStore.setEntityTrees((children || []).map(makeEDumpItem));
 	}
@@ -42,20 +42,26 @@ export class LocalInstanceOperator {
 	}
 
 	setHighlightedEntity = (e: EDumpItem): void => {
-		this.store.currentPlay.localInstances[0].gameContent.changeHighlightedEntity(e.id);
+		this.store.currentLocalInstance.gameContent.changeHighlightedEntity(e.id);
 	}
 
 	clearHighlightedEntity = (): void => {
-		this.store.currentPlay.localInstances[0].gameContent.changeHighlightedEntity(null);
-	}
-
-	setHighlightedEntityByPoint = (x: number, y: number): void => {
-		const gameContent = this.store.currentPlay.localInstances[0].gameContent;
-		gameContent.changeHighlightedEntity(gameContent.getEntityIdByPoint(x, y));
+		this.store.currentLocalInstance.gameContent.changeHighlightedEntity(null);
 	}
 
 	toggleShowHiddenEntity = (shows: boolean): void => {
 		this.store.devtoolUiStore.toggleShowHiddenEntity(shows);
+	}
+
+	selectEntityByEDumpItem = (e: EDumpItem): void => {
+		this.store.devtoolUiStore.setSelectedEntityId(e.id);
+	}
+
+	selectEntityByPoint = (x: number, y: number): void => {
+		const gameContent = this.store.currentLocalInstance.gameContent;
+		const eid = gameContent.getEntityIdByPoint(x, y);
+		this.store.devtoolUiStore.setSelectedEntityId(eid);
+		gameContent.changeHighlightedEntity(eid);
 	}
 
 	startEntitySelection = (): void => {
@@ -63,13 +69,10 @@ export class LocalInstanceOperator {
 	}
 
 	finishEntitySelection = (x: number, y: number): void => {
-		const gameContent = this.store.currentPlay.localInstances[0].gameContent;
+		const gameContent = this.store.currentLocalInstance.gameContent;
+		this.updateEntityTrees();
 		this.store.devtoolUiStore.toggleIsSelectingEntity(false);
 		this.store.devtoolUiStore.setSelectedEntityId(gameContent.getEntityIdByPoint(x, y));
 		gameContent.changeHighlightedEntity(null);
-	}
-
-	selectEntityByEDumpItem = (e: EDumpItem): void => {
-		this.store.devtoolUiStore.setSelectedEntityId(e.id);
 	}
 }

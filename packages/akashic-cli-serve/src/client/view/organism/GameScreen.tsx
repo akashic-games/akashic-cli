@@ -9,7 +9,7 @@ export interface GameScreenProps {
 	gameWidth: number;
 	gameHeight: number;
 	screenElement: HTMLElement;
-	shouldStopPropagationFunc?: () => boolean;
+	shouldStopPropagationFunc: () => boolean;
 	onMouseMoveCapture?: (p: { x: number, y: number }) => void;
 	onClickCapture?: (p: { x: number, y: number }) => void;
 }
@@ -19,63 +19,51 @@ export class GameScreen extends React.Component<GameScreenProps, {}> {
 	render(): React.ReactNode {
 		const { showsBackgroundImage: showsBgImage, backgroundImage: bgImage, showsGrid, gameWidth, gameHeight } = this.props;
 		const bgImageStyle = (showsBgImage && !bgImage) ?  (" " + styles["pseudo-transparent-bg"]) : "";
-		return (
-			<div
-				className={styles["game-screen"]}
-				style={{ width: gameWidth, height: gameHeight }}
-				onMouseMoveCapture={this._onMouseMoveCapture}
-				onMouseDownCapture={this._onMouseDownCapture}
-				onMouseUpCapture={this._onMouseUpCapture}
-				onClickCapture={this._onClickCapture}
-			>
-				{
-					(showsBgImage && bgImage) ?
-						<img src={bgImage} className={styles["bg-image"]}/> :
-						null
-				}
-				<div className={styles["game-content"] + bgImageStyle} ref={this._onRef} />
-				{
-					showsGrid ?
-						<canvas
-							id="gridCanvas"
-							className={styles["grid-canvas"]}
-							style={{ width: gameWidth, height: gameHeight }}
-							ref={this._createGridCanvas}/> :
-						null
-				}
-			</div>
-		);
+		return <div className={styles["game-screen"]} style={{ width: gameWidth, height: gameHeight }}>
+			{
+				(showsBgImage && bgImage) ?
+					<img src={bgImage} className={styles["bg-image"]}/> :
+					null
+			}
+			<div className={styles["game-content"] + bgImageStyle} ref={this._onRef} />
+			{
+				showsGrid ?
+					<canvas
+						id="gridCanvas"
+						className={styles["grid-canvas"]}
+						style={{ width: gameWidth, height: gameHeight }}
+						ref={this._createGridCanvas}/> :
+					null
+			}
+		</div>;
 	}
 
-	private _stopPropagationIfNeeded = (ev: React.MouseEvent<HTMLDivElement>): void => {
-		const shouldStopFunc = this.props.shouldStopPropagationFunc;
-		if (shouldStopFunc && shouldStopFunc()) {
+	private _stopPropagationIfNeeded = (ev: MouseEvent): void => {
+		if (this.props.shouldStopPropagationFunc())
 			ev.stopPropagation();
-		}
 	}
 
-	private _onMouseDownCapture = (ev: React.MouseEvent<HTMLDivElement>): void => {
-		// TODO なぜかここには到達しない＝エンティティ選択のクリックがコンテンツに通知されてしまっている……
+	private _onMouseMoveCapture = (ev: MouseEvent): void => {
 		this._stopPropagationIfNeeded(ev);
+		this.props.onMouseMoveCapture({ x: ev.offsetX, y: ev.offsetY });
 	}
 
-	private _onMouseUpCapture = (ev: React.MouseEvent<HTMLDivElement>): void => {
+	private _onClickCapture = (ev: MouseEvent): void => {
 		this._stopPropagationIfNeeded(ev);
-	}
-
-	private _onMouseMoveCapture = (ev: React.MouseEvent<HTMLDivElement>): void => {
-		this._stopPropagationIfNeeded(ev);
-		this.props.onMouseMoveCapture({ x: ev.nativeEvent.offsetX, y: ev.nativeEvent.offsetY });
-	}
-
-	private _onClickCapture = (ev: React.MouseEvent<HTMLDivElement>): void => {
-		this._stopPropagationIfNeeded(ev);
-		this.props.onClickCapture({ x: ev.nativeEvent.offsetX, y: ev.nativeEvent.offsetY });
+		this.props.onClickCapture({ x: ev.offsetX, y: ev.offsetY });
 	}
 
 	private _onRef = (elem: HTMLDivElement): void => {
 		if (elem) {
 			elem.appendChild(this.props.screenElement);
+
+			// NOTE: 意図して mousedown などを使い、React の onMouseDownCapture を使っていないことに注意。
+			// AGV 内の mousedown と相性が悪いらしく、祖先要素に onMouseDownCapture をつけても
+			// capture できないことへの暫定回避。
+			elem.addEventListener("mousedown", this._stopPropagationIfNeeded, true);
+			elem.addEventListener("mousemove", this._onMouseMoveCapture, true);
+			elem.addEventListener("mouseup", this._stopPropagationIfNeeded, true);
+			elem.addEventListener("click", this._onClickCapture, true);
 		}
 	}
 
