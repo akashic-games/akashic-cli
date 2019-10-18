@@ -21,7 +21,7 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 			height={devtoolUiStore.height}
 			minHeight={200}
 			onResizeHeight={operator.ui.setDevtoolHeight}
-			activeDevtool={devtoolUiStore.activeDevtool as any /* TODO any 排除？ */}
+			activeDevtool={devtoolUiStore.activeDevtool as any /* TODO any 排除 */}
 			onSelectDevtool={operator.ui.setActiveDevtool}
 			eventsDevtoolProps={{
 				showsEventList: devtoolUiStore.showsEventList,
@@ -58,13 +58,13 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 				selectedEntityId: devtoolUiStore.selectedEntityId,
 				isSelectingEntity: devtoolUiStore.isSelectingEntity,
 				showsHidden: devtoolUiStore.showsHiddenEntity,
-				onChangeShowsHidden: operator.localInstance.toggleShowHiddenEntity,
-				onClickSelectEntity: operator.localInstance.startEntitySelection,
-				onClickUpdateEntityTrees: operator.localInstance.updateEntityTrees,
-				onClickToggleOpenEntityChildren: operator.localInstance.toggleOpenEntityTreeChildren,
-				onClickEntityItem: operator.localInstance.selectEntityByEDumpItem,
-				onMouseOverEntityItem: operator.localInstance.setHighlightedEntity,
-				onMouseLeaveEntityItem: operator.localInstance.clearHighlightedEntity
+				onChangeShowsHidden: operator.devtool.toggleShowHiddenEntity,
+				onClickSelectEntity: operator.devtool.startEntitySelection,
+				onClickUpdateEntityTrees: operator.devtool.updateEntityTrees,
+				onClickToggleOpenEntityChildren: operator.devtool.toggleOpenEntityTreeChildren,
+				onClickEntityItem: operator.devtool.selectEntityByEDumpItem,
+				onMouseOverEntityItem: operator.devtool.setHighlightedEntity,
+				onMouseLeaveEntityItem: operator.devtool.clearHighlightedEntity
 			}}
 		/>;
 	}

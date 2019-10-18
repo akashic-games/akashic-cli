@@ -41,12 +41,12 @@ export class GameScreenContainer extends React.Component<GameScreenContainerProp
 	private _handleMouseMoveCapture = (p: { x: number, y: number}): void => {
 		if (!this.props.devtoolUiStore.isSelectingEntity)
 			return;
-		this.props.operator.localInstance.selectEntityByPoint(p.x, p.y);
+		this.props.operator.devtool.selectEntityByPoint(p.x, p.y);
 	}
 
 	private _handleClickCapture = (p: { x: number, y: number}): void => {
 		if (!this.props.devtoolUiStore.isSelectingEntity)
 			return;
-		this.props.operator.localInstance.finishEntitySelection(p.x, p.y);
+		this.props.operator.devtool.finishEntitySelection(p.x, p.y);
 	}
 }

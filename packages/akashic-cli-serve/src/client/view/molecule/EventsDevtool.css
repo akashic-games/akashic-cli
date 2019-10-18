@@ -82,35 +82,6 @@ ul.event-list {
 	border-bottom: 1px solid #bbb;
 }
 
-/*
-TODO 不要では？
-
-.events-toolbar button {
-	color: var(--color-tool-text);
-	box-sizing: border-box;
-	border: 1px solid transparent;
-	background: transparent;
-	border-radius: 3px;
-	padding: 1px 3px;
-	margin: 0 3px;
-	display: inline-flex;
-	align-items: center;
-	justify-content: space-around;
-	vertical-align: center;
-	outline: none;
-}
-
-.events-toolbar button > .material-icons {
-	font-size: 22px;
-}
-.events-toolbar button:hover {
-	border-color: var(--color-tool-border);
-}
-.events-toolbar button:active {
-	background: var(--color-tool-border);
-}
-*/
-
 .editor-container {
 	flex: 1 1 auto;
 	overflow-y: auto;
