@@ -1,5 +1,5 @@
 import { action, observable, ObservableMap } from "mobx";
-import { EDumpItem } from "../akashic/EDumpItem";
+import { EDumpItem } from "../common/types/EDumpItem";
 import { storage } from "./storage";
 
 export class DevtoolUiStore {

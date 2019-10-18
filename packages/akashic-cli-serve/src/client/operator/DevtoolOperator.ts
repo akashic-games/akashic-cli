@@ -1,5 +1,5 @@
+import { EDumpItem } from "../common/types/EDumpItem";
 import { Store } from "../store/Store";
-import { EDumpItem, makeEDumpItem } from "../akashic/EDumpItem";
 
 export class DevtoolOperator {
 	private store: Store;
@@ -9,11 +9,8 @@ export class DevtoolOperator {
 	}
 
 	updateEntityTrees = (): void => {
-		// TODO /akashic/ 以下に移す
-		// TODO any をなんとかする(現状で型をつけてもuntrustedの時整合しない)。デバッグ用機能がエンジンやAGVに必要？
-		const game: any = this.store.currentLocalInstance.gameContent.agvGameContent.getGame();
-		const children = game.scene().children;
-		this.store.devtoolUiStore.setEntityTrees((children || []).map(makeEDumpItem));
+		const dumpItems = this.store.currentLocalInstance.gameContent.dumpEntities();
+		this.store.devtoolUiStore.setEntityTrees(dumpItems);
 	}
 
 	toggleOpenEntityTreeChildren = (e: EDumpItem): void => {

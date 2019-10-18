@@ -2,7 +2,7 @@ import * as React from "react";
 import { ObservableMap } from "mobx";
 import { observer } from "mobx-react";
 import scrollIntoView from "scroll-into-view-if-needed";
-import { EDumpItem } from "../../akashic/EDumpItem";
+import { EDumpItem } from "../../common/types/EDumpItem";
 import { FlexScrollY } from "../atom/FlexScrollY";
 import { ToolIconButton } from "../atom/ToolIconButton";
 import { EntityTreeOptionBar, EntityTreeOptionBarProps } from "./EntityTreeOptionBar";

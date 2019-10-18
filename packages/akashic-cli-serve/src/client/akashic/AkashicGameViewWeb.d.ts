@@ -21,15 +21,39 @@ declare module ae {
 		getMatrix(): MatrixLike;
 	}
 
-	// TODO ELike 統合。ELikeを触るのは /akashic/ に限定する
 	interface ELike {
+		id: number;
+		children?: ELike[];
+		x: number;
+		y: number;
 		width: number;
 		height: number;
+		opacity: number;
+		angle: number;
+		scaleX: number;
+		scaleY: number;
+		anchorX?: number;
+		anchorY?: number;
+		local?: boolean;
+		touchable: boolean;
+		state: number;
 		parent?: ELike;
 		_matrix?: MatrixLike;
 		_touchable: boolean;
 		_hasTouchableChildren: boolean;
 		_targetCameras?: CameraLike[];
+
+		// FilledRect
+		cssColor?: string;
+		// Label
+		text?: string;
+		// Sprite (not used yet)
+		surface?: any;
+		srcWidth?: number;
+		srcHeight?: number;
+		srcX?: number;
+		srcY?: number;
+
 		getMatrix(): MatrixLike;
 	}
 

@@ -1,5 +1,4 @@
 import { Store } from "../store/Store";
-import { EDumpItem, makeEDumpItem } from "../akashic/EDumpItem";
 
 export class LocalInstanceOperator {
 	private store: Store;

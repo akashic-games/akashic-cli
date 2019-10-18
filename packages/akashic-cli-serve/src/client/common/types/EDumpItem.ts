@@ -1,6 +1,7 @@
-export interface ELike {
+export interface EDumpItem {
+	constructorName: string;
 	id: number;
-	children?: ELike[];
+	children?: EDumpItem[];
 	x: number;
 	y: number;
 	width: number;
@@ -13,18 +14,19 @@ export interface ELike {
 	anchorY?: number;
 	local?: boolean;
 	touchable: boolean;
-	state: number;
+	visible: boolean;
+
+	// TODO 内部実装への依存の扱い検討。エンジン側にデバッグ用インターフェースが必要？
 
 	// FilledRect
 	cssColor?: string;
-
 	// Label
 	text?: string;
-
-	// Sprite (not used yet)
-	surface?: any; // TODO SurfaceLike
+	// Sprite
+	image?: HTMLImageElement; // especially for ImageAssetSurface
 	srcWidth?: number;
 	srcHeight?: number;
 	srcX?: number;
 	srcY?: number;
 }
+

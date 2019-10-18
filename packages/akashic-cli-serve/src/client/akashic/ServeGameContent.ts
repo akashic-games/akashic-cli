@@ -1,3 +1,5 @@
+import { EDumpItem } from "../common/types/EDumpItem";
+
 function getMatrixFromRoot(e: ae.ELike | null, camera: ae.CameraLike | null): ae.MatrixLike | null {
 	if (!e || !e.getMatrix)
 		return camera ? camera.getMatrix() : null;
@@ -21,7 +23,7 @@ function findPointSourceByPoint(
 	findUntouchable: boolean,
 	findHidden: boolean,
 	camera?: CameraLike
-): ELike | null {
+): ae.ELike | null {
 	if (!findHidden && e.state & ae.EntityStateFlags.Hidden)
 		return null;
 	const cams = e._targetCameras;
@@ -44,6 +46,34 @@ function findPointSourceByPoint(
 	return ((findUntouchable || e._touchable) && (0 <= p.x && e.width > p.x && 0 <= p.y && e.height > p.y)) ? e : null;
 };
 */
+
+function makeEDumpItem(e: ae.ELike): EDumpItem {
+	return {
+		constructorName: e.constructor ? e.constructor.name : "",
+		id: e.id,
+		children: (e.children || []).map(makeEDumpItem),
+		x: e.x,
+		y: e.y,
+		width: e.width,
+		height: e.height,
+		opacity: e.opacity,
+		angle: e.angle,
+		scaleX: e.scaleX,
+		scaleY: e.scaleY,
+		anchorX: e.anchorX,
+		anchorY: e.anchorY,
+		local: e.local,
+		touchable: e.touchable,
+		visible: !(e.state & 1),  // 1 === g.EntityStateFlags.Hidden
+		cssColor: (e.cssColor != null) ? e.cssColor : null,
+		text: (e.text != null) ? e.text : null,
+		image: (e.surface != null && e.surface._drawable instanceof HTMLImageElement) ? e.surface._drawable : null,
+		srcWidth: (e.srcWidth != null) ? e.srcWidth : null,
+		srcHeight: (e.srcHeight != null) ? e.srcHeight : null,
+		srcX: (e.srcX != null) ? e.srcX : null,
+		srcY: (e.srcY != null) ? e.srcY : null
+	};
+}
 
 export class ServeGameContent {
 	readonly agvGameContent: agv.GameContent;
@@ -80,6 +110,12 @@ export class ServeGameContent {
 			renderer.end();
 			return ret;
 		};
+	}
+
+	dumpEntities(): EDumpItem[] {
+		if (!this._game || !this._game.scene())
+			return [];
+		return (this._game.scene().children || []).map(makeEDumpItem);
 	}
 
 	getRawEntity(eid: number): any {

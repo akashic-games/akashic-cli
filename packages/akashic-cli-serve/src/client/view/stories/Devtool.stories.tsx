@@ -3,7 +3,7 @@ import { observable, ObservableMap } from "mobx";
 import { observer } from "mobx-react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
-import { EDumpItem } from "../../akashic/EDumpItem";
+import { EDumpItem } from "../../common/types/EDumpItem";
 import { Devtool } from "../organism/Devtool";
 
 const store = observable({
