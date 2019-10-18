@@ -12,6 +12,8 @@
 .switch-option {
 	margin: 0 9px;
 	font-size: 0.8rem;
+	user-select: none;
+	-webkit-user-select: none;
 }
 
 .switch-option > input[type=checkbox] {

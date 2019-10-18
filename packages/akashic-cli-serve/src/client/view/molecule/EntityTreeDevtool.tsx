@@ -1,6 +1,7 @@
 import * as React from "react";
 import { ObservableMap } from "mobx";
 import { observer } from "mobx-react";
+import scrollIntoView from "scroll-into-view-if-needed";
 import { EDumpItem } from "../../akashic/EDumpItem";
 import { FlexScrollY } from "../atom/FlexScrollY";
 import { ToolIconButton } from "../atom/ToolIconButton";
@@ -32,12 +33,7 @@ function strigifyEDumpItemScale(e: EDumpItem): string {
 
 function scrollRefIntoView(e: HTMLElement | null): void {
 	if (e) {
-		if (typeof (e as any).scrollIntoViewIfNeeded === "function") {
-			// Webkit-specific だが便利なのである場合は使う
-			(e as any).scrollIntoViewIfNeeded(true);
-		} else {
-			e.scrollIntoView();
-		}
+		scrollIntoView(e, { scrollMode: "if-needed", block: "center", inline: "nearest" });
 	}
 }
 
