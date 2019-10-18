@@ -136,6 +136,7 @@ const TestWithBehaviour = observer(() => (
 							anchorY: 0,
 							children: null,
 							angle: 0,
+							local: true,
 							touchable: false,
 							visible: true,
 							text: "100 pt."

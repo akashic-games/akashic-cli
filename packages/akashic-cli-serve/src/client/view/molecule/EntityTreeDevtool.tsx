@@ -67,8 +67,11 @@ function renderEDumpItem(e: EDumpItem, props: EntityTreeDevtoolProps): React.Rea
 			<i className={"material-icons " + buttonStyle} onClick={toggle}>
 				{ showsChildren ? "expand_more" : "chevron_right" }
 			</i>
-			<span className={styles["entity-class-name"]}>{ e.constructorName }</span>
+			<span className={styles["entity-class-name"]}>
+				{ e.constructorName }
+			</span>
 			<span className={styles["entity-mini-info"]}>
+				{ e.local ? <span className={styles["entity-local"]}>Local</span> : null }
 				{ `#${e.id} (${formatNum(e.x)}, ${formatNum(e.y)}) ${formatNum(e.width)}x${formatNum(e.height)}` }
 				{ `${e.angle !== 0 ? ` ${formatNum(e.angle)}°` : ""} ${strigifyEDumpItemScale(e)}` }
 				{ e.touchable ? <span className={styles["entity-touchable"]}>Touchable</span> : null }
