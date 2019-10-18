@@ -93,7 +93,7 @@ export class GameViewManager {
 			gameConfig.gameLoaderCustomizer.platformCustomizer = this.customizePlatform;
 		}
 		const agvGameContent = new agv.GameContent(gameConfig);
-		agvGameContent.onExternalPluginRegister = new Trigger(); // TODO 整理する: ServeGameContentが持つのが筋。
+		agvGameContent.onExternalPluginRegister = new Trigger();
 		return new ServeGameContent(agvGameContent);
 	}
 

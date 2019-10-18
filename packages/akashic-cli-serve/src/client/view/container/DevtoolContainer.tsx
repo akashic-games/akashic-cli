@@ -58,6 +58,7 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 				selectedEntityId: devtoolUiStore.selectedEntityId,
 				isSelectingEntity: devtoolUiStore.isSelectingEntity,
 				showsHidden: devtoolUiStore.showsHiddenEntity,
+				onClickDump: operator.devtool.dumpSelectedEntity,
 				onChangeShowsHidden: operator.devtool.toggleShowHiddenEntity,
 				onClickSelectEntity: operator.devtool.startEntitySelection,
 				onClickUpdateEntityTrees: operator.devtool.updateEntityTrees,

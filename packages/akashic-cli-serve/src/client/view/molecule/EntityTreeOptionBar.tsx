@@ -5,7 +5,9 @@ import * as styles from "./EntityTreeOptionBar.css";
 
 export interface EntityTreeOptionBarProps {
 	isSelectingEntity: boolean;
+	selectedEntityId: number | null;
 	showsHidden: boolean;
+	onClickDump: () => void;
 	onChangeShowsHidden: (shows: boolean) => void;
 	onClickSelectEntity: () => void;
 	onClickUpdateEntityTrees: () => void;
@@ -17,7 +19,7 @@ export class EntityTreeOptionBar extends React.Component<EntityTreeOptionBarProp
 		const { isSelectingEntity, showsHidden, onClickSelectEntity, onClickUpdateEntityTrees } = this.props;
 		return <div className={styles["entity-tree-option-bar"]}>
 			<ToolIconButton
-				icon="location_searching"
+				icon="input"
 				title="ゲーム画面からエンティティを選択"
 				pushed={isSelectingEntity}
 				size={17}
@@ -36,6 +38,15 @@ export class EntityTreeOptionBar extends React.Component<EntityTreeOptionBarProp
 				<input type="checkbox" checked={this.props.showsHidden} onChange={this._onInputChange} />
 				Show hidden
 			</label>
+			<ToolIconButton
+				icon="web_asset"
+				title="選択エンティティをコンソールにダンプ"
+				size={20}
+				disabled={this.props.selectedEntityId == null}
+				onClick={this.props.onClickDump}
+			>
+				console.log()
+			</ToolIconButton>
 		</div>;
 	}
 

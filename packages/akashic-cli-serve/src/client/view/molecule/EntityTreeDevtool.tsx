@@ -99,7 +99,9 @@ export class EntityTreeDevtool extends React.Component<EntityTreeDevtoolProps, {
 		return <div className={styles["entity-tree-devtool"]}>
 			<EntityTreeOptionBar
 				isSelectingEntity={props.isSelectingEntity}
+				selectedEntityId={props.selectedEntityId}
 				showsHidden={props.showsHidden}
+				onClickDump={props.onClickDump}
 				onChangeShowsHidden={props.onChangeShowsHidden}
 				onClickSelectEntity={props.onClickSelectEntity}
 				onClickUpdateEntityTrees={props.onClickUpdateEntityTrees}

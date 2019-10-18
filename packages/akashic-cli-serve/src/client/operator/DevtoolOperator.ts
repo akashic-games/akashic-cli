@@ -51,4 +51,14 @@ export class DevtoolOperator {
 		this.store.devtoolUiStore.setSelectedEntityId(gameContent.getEntityIdByPoint(x, y));
 		gameContent.changeHighlightedEntity(null);
 	}
+
+	dumpSelectedEntity = (): void => {
+		const gameContent = this.store.currentLocalInstance.gameContent;
+		const e = gameContent.getRawEntity(this.store.devtoolUiStore.selectedEntityId);
+		console.log(e);
+
+		// 暫定便利機能: ダンプついでにしれっとグローバル変数に刺しておく (c.f. Chrome/Firefox の $0)
+		// (console からグローバルに格納できる Chrome などでは不要なので暫定)
+		(window as any).__testbed.$0 = e;
+	}
 }
