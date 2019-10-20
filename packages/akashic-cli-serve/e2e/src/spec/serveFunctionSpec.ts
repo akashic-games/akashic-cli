@@ -1,28 +1,30 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as puppeteer from "puppeteer";
-import * as resemble from "resemblejs";
+import * as pngjs from "pngjs";
 
+const pixelmatch = require("pixelmatch");
 describe("cli-serve", () => {
 	const targetUrl = "http://localhost:" + process.env.SERVE_PORT + "/public/index.html?playerId=test";
 	const screenshotDir = path.join(__dirname, "..", "..", "screenshot");
 	const outputDir = path.join(__dirname, "..", "..", "result");
-	const screenshotDiffThreshold = 0.1; // 予め用意しているスクリーンショットと画像を比較する時diffをどこまで許容するかの値
-	const screenshotDiffThresholdForGameScene = 0.5; // 残り時間やスコアが多少異なることがあるのでゲームシーンでは許容するdiffを多めにする
+	// 予め用意しているスクリーンショットと画像を比較する時diffをどこまで許容するかの値
+	const screenshotDiffThreshold = 0.001;
+	// 残り時間やスコアが多少異なることがあるのでゲームシーンでは許容するdiffを多めにする
+	const screenshotDiffThresholdForGameScene = 0.01;
 	const waitingRendering = 1000;
 	const waitingLoadingGame = 2000;
 	const waitingRuleScene = 5000;
 	const waitingGameScene = 10000;
-	const assertScreenshot = async (targetPath: string, outputPath: string, threshold: number = screenshotDiffThreshold) => {
-		const current = await page.screenshot({fullPage: true});
-		const expected: any = fs.readFileSync(targetPath);
-		let misMatchPercentage = 0;
-		await resemble(current).compareTo(expected)
-			.onComplete((data: any) => {
-				misMatchPercentage = parseFloat(data.misMatchPercentage);
-				fs.writeFileSync(outputPath, data.getBuffer());
-			});
-		expect(misMatchPercentage).toBeLessThan(threshold);
+
+	const assertScreenshot = async (expectedPath: string, outputPath: string, threshold: number = screenshotDiffThreshold) => {
+		const expected = pngjs.PNG.sync.read(fs.readFileSync(expectedPath));
+		await page.screenshot({path: outputPath, fullPage: true});
+		const actual = pngjs.PNG.sync.read(fs.readFileSync(outputPath));
+		const {width, height} = expected;
+		const diff = new pngjs.PNG({width, height});
+		const value = pixelmatch(expected.data, actual.data, diff.data, width, height,  {threshold: 0.1});
+		expect(value).toBeLessThan(threshold * width * height);
 	};
 	let browser: any;
 	let page: any;
