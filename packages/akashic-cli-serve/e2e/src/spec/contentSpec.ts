@@ -29,7 +29,11 @@ describe("speed-jigsaw", () => {
 	let page: any;
 
 	beforeAll(async () => {
-		browser = await puppeteer.launch();
+		browser = await puppeteer.launch({
+			headless: true,
+			executablePath: process.env.CHROME_BIN || null,
+			args: ['--no-sandbox', '--headless', '--disable-gpu', '--disable-dev-shm-usage']
+		});
 	});
 
 	beforeEach(async () => {
