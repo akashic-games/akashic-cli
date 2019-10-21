@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>サーバの状態</title>
+</head>
+<body>
+<table border="1">
+    <caption>各Playの状態</caption>
+    <thead>
+        <tr>
+            <th>playId</th>
+            <th>status</th>
+            <th>createdAt</th>
+            <th>lastSuspendedAt</th>
+            <th>clientInstanceCount</th>
+            <th>runnerCount</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% for (var info of playsInfo) { %>
+        <tr>
+            <td><%= info.playId %></td>
+            <td><%= info.status %></td>
+            <td><%= new Date(info.createdAt).toString() %></td>
+            <%# 本来はview側にロジックを入れるべきではないが、時刻表示のフォーマット整形はview側で行いたいので妥協してロジックを入れた %>
+            <td><%= info.lastSuspendedAt ? new Date(info.lastSuspendedAt).toString() : "" %></td>
+            <td><%= info.clientInstances.length %></td>
+            <td><%= info.runners.length %></td>
+        </tr>
+        <% } %>
+    </tbody>
+</table>
+
+<% for (var info of playsInfo) { %>
+<table border="1" style="border-collapse: collapse">
+    <caption>Play<%= info.playId %>に接続しているClientInstanceの状態</caption>
+    <thead>
+        <tr>
+            <th>playerId</th>
+            <th>playerName</th>
+            <th>isActiveInstance</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% for (var item of info.clientInstances) { %>
+        <tr>
+            <td><%= item.playerId %></td>
+            <td><%= item.name %></td>
+            <td><%= item.isActive %></td>
+        </tr>
+        <% } %>
+    </tbody>
+</table>
+<% } %>
+</body>
+</html>
