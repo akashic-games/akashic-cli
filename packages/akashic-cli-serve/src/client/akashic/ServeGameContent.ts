@@ -14,39 +14,7 @@ function getMatrixFromRoot(e: ae.ELike | null, camera: ae.CameraLike | null): ae
 	return m2 ? m2.multiplyNew(m1) : m1;
 }
 
-/*
-TODO use original implementation for exclude E option
-function findPointSourceByPoint(
-	e: ae.ELike,
-	point: ae.PointLike,
-	m: ae.MatrixLike,
-	findUntouchable: boolean,
-	findHidden: boolean,
-	camera?: CameraLike
-): ae.ELike | null {
-	if (!findHidden && e.state & ae.EntityStateFlags.Hidden)
-		return null;
-	const cams = e._targetCameras;
-	if (cams && cams.length > 0 && (!camera || cams.indexOf(camera) === -1))
-		return null;
-	m = m ? m.multiplyNew(e.getMatrix()) : e.getMatrix().clone();
-	const p = m.multiplyInverseForPoint(point);
-	if (e._hasTouchableChildren || (findUntouchable && e.children && e.children.length)) {
-		if (!e.shouldFindChildrenByPoint(p))
-			continue;
-		for (let i = e.children.length - 1; i >= 0; --i) {
-			const child = e.children[i];
-			if (!findUntouchable && !child._touchable && !child._hasTouchableChildren)
-				continue;
-			const result = findPointSourceByPoint(child, point, m, findUntouchable, findHidden, camera);
-			if (result)
-				return result;
-		}
-	}
-	return ((findUntouchable || e._touchable) && (0 <= p.x && e.width > p.x && 0 <= p.y && e.height > p.y)) ? e : null;
-};
-*/
-
+// Mobx にゲーム内の値を触らせないようコピーする (class なのでコピーしなくても大丈夫？　要検証)
 function makeEDumpItem(e: ae.ELike): EDumpItem {
 	return {
 		constructorName: e.constructor ? e.constructor.name : "",
@@ -64,14 +32,9 @@ function makeEDumpItem(e: ae.ELike): EDumpItem {
 		anchorY: e.anchorY,
 		local: e.local,
 		touchable: e.touchable,
-		visible: !(e.state & 1),  // 1 === g.EntityStateFlags.Hidden
+		visible: !(e.state & ae.EntityStateFlags.Hidden),
 		cssColor: (e.cssColor != null) ? e.cssColor : null,
-		text: (e.text != null) ? e.text : null,
-		image: (e.surface != null && e.surface._drawable instanceof HTMLImageElement) ? e.surface._drawable : null,
-		srcWidth: (e.srcWidth != null) ? e.srcWidth : null,
-		srcHeight: (e.srcHeight != null) ? e.srcHeight : null,
-		srcX: (e.srcX != null) ? e.srcX : null,
-		srcY: (e.srcY != null) ? e.srcY : null
+		text: (e.text != null) ? e.text : null
 	};
 }
 

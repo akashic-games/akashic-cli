@@ -22,11 +22,4 @@ export interface EDumpItem {
 	cssColor?: string;
 	// Label
 	text?: string;
-	// Sprite
-	image?: HTMLImageElement; // especially for ImageAssetSurface
-	srcWidth?: number;
-	srcHeight?: number;
-	srcX?: number;
-	srcY?: number;
 }
-

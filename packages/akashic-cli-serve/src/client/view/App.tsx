@@ -3,6 +3,7 @@ import { observer } from "mobx-react";
 import { GameViewManager } from "../akashic/GameViewManager";
 import { Store } from "../store/Store";
 import { Operator } from "../operator/Operator";
+import { FlexScrollY } from "./atom/FlexScrollY";
 import { ToolBarContainer } from "./container/ToolbarContainer";
 import { DevtoolContainer } from "./container/DevtoolContainer";
 import { StartupScreenContainer } from "./container/StartupScreenContainer";
@@ -44,16 +45,18 @@ export class App extends React.Component<AppProps, {}> {
 				toolBarUiStore={store.toolBarUiStore}
 				targetService={store.targetService}
 			/>
-			<div id="agvcontainer" className={styles["main"] + " " + styles["centering"] }>
-				<GameScreenContainer
-					sandboxConfig={sandboxConfig}
-					toolBarUiStore={store.toolBarUiStore}
-					localInstance={store.currentLocalInstance}
-					gameViewManager={this.props.gameViewManager}
-					devtoolUiStore={store.devtoolUiStore}
-					operator={this.props.operator}
-				/>
-			</div>
+			<FlexScrollY>
+				<div id="agvcontainer" className={styles["main"] + " " + styles["centering"] }>
+					<GameScreenContainer
+						sandboxConfig={sandboxConfig}
+						toolBarUiStore={store.toolBarUiStore}
+						localInstance={store.currentLocalInstance}
+						gameViewManager={this.props.gameViewManager}
+						devtoolUiStore={store.devtoolUiStore}
+						operator={this.props.operator}
+					/>
+				</div>
+			</FlexScrollY>
 			{
 				store.toolBarUiStore.showsDevtools ?
 					<div className={styles["devtools"]}>
