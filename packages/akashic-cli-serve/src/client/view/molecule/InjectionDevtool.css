@@ -1,0 +1,41 @@
+.injection-devtool {
+	box-sizing: border-box;
+	flex: 1 1 auto;
+	display: flex;
+	flex-flow: column nowrap;
+	/* background: var(--color-tool-bg); */
+}
+
+.injection-table {
+	max-width: 480px;
+	box-sizing: border-box;
+	text-align: center;
+	font-family: Menlo, "Courier New", Consolas, monospace;
+	border-spacing: 0;
+}
+
+.injection-table tr {
+	padding: 0;
+}
+
+.injection-table tr:not(:last-child) td {
+	x-border-bottom: 1px solid silver;
+}
+
+.injection-table tr:nth-child(odd) td {
+	background: #fdfdfd;
+}
+
+.injection-table td:not(:last-child) {
+	x-border-right: 1px solid silver;
+}
+
+.injection-table td {
+	border: 0 solid #ddd;
+	border-width: 0 1px 1px 0;
+
+	box-sizing: border-box;
+	padding: 4px 14px;
+	background: #f8f8f8;
+}
+

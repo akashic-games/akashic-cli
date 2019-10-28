@@ -67,6 +67,12 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 				onMouseOverEntityItem: operator.devtool.setHighlightedEntity,
 				onMouseLeaveEntityItem: operator.devtool.clearHighlightedEntity
 			}}
+			injectionDevtoolProps={{
+				valueTable: devtoolUiStore.injectionValueTable,
+				injectionConfig: sandboxConfig.injection,
+				onChange: operator.devtool.setInjectionValue,
+				onBlur: operator.devtool.setInjectionValue
+			}}
 		/>;
 	}
 }

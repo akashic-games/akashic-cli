@@ -16,6 +16,8 @@ export class DevtoolUiStore {
 	@observable entityTrees: EDumpItem[];
 	@observable entityTreeStateTable: ObservableMap<number, boolean>;
 
+	@observable injectionValueTable: ObservableMap<string, any>;
+
 	constructor() {
 		this.height = storage.data.devtoolsHeight;
 		this.activeDevtool = storage.data.activeDevtool;
@@ -27,6 +29,8 @@ export class DevtoolUiStore {
 		this.selectedEntityId = null;
 		this.entityTrees = [];
 		this.entityTreeStateTable = observable.map<number, boolean>();
+
+		this.injectionValueTable = observable.map<string, any>();
 	}
 
 	@action
@@ -83,5 +87,10 @@ export class DevtoolUiStore {
 	@action
 	setSelectedEntityId = (eid: number | null): void => {
 		this.selectedEntityId = eid;
+	}
+
+	@action
+	setInjectionValue = (key: string, val: any): void => {
+		this.injectionValueTable.set(key, val);
 	}
 }

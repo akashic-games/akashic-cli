@@ -5,13 +5,15 @@ import { DevtoolSelectorBar } from "../atom/DevtoolSelectorBar";
 import { EventsDevtool, EventsDevtoolProps } from "../molecule/EventsDevtool";
 import { InstancesDevtool, InstancesDevtoolProps } from "../molecule/InstancesDevtool";
 import { EntityTreeDevtool, EntityTreeDevtoolProps } from "../molecule/EntityTreeDevtool";
+import { InjectionDevtool, InjectionDevtoolProps } from "../molecule/InjectionDevtool";
 import * as styles from "./Devtool.css";
 
 // TODO 適切な箇所に定義を移す
 export type DevtoolType =
 	"Instances" |
 	"Events" |
-	"EntityTree";
+	"EntityTree" |
+	"Injection";
 
 export interface DevtoolProps {
 	height: number;
@@ -22,6 +24,7 @@ export interface DevtoolProps {
 	eventsDevtoolProps: EventsDevtoolProps;
 	instancesDevtoolProps: InstancesDevtoolProps;
 	entityTreeDevtoolProps: EntityTreeDevtoolProps;
+	injectionDevtoolProps?: InjectionDevtoolProps;
 }
 
 @observer
@@ -33,7 +36,8 @@ export class Devtool extends React.Component<DevtoolProps, {}> {
 		this._onSelectToolTable = {
 			"Instances": this._onSelectInstancesTool,
 			"Events": this._onSelectEventsTool,
-			"EntityTree": this._onSelectEntityListTool
+			"EntityTree": this._onSelectEntityListTool,
+			"Injection": this._onSelectInjectionTool
 		};
 	}
 
@@ -43,7 +47,7 @@ export class Devtool extends React.Component<DevtoolProps, {}> {
 		return <TopResizable height={props.height} minHeight={props.minHeight} onResize={props.onResizeHeight}>
 			<div className={styles["devtool"]}>
 				<DevtoolSelectorBar items={
-					["Instances", "Events", "EntityTree"].map(t => ({
+					["Instances", "Events", "EntityTree", "Injection"].map(t => ({
 						name: t,
 						active: (t === activeDevtool),
 						onClick: this._onSelectToolTable[t]
@@ -52,6 +56,7 @@ export class Devtool extends React.Component<DevtoolProps, {}> {
 				{ (activeDevtool === "Instances") && <InstancesDevtool {...props.instancesDevtoolProps} /> }
 				{ (activeDevtool === "Events") && <EventsDevtool {...props.eventsDevtoolProps} /> }
 				{ (activeDevtool === "EntityTree") && <EntityTreeDevtool {...props.entityTreeDevtoolProps} /> }
+				{ (activeDevtool === "Injection") && <InjectionDevtool {...props.injectionDevtoolProps} /> }
 			</div>
 		</TopResizable>;
 	}
@@ -66,5 +71,9 @@ export class Devtool extends React.Component<DevtoolProps, {}> {
 
 	private _onSelectEntityListTool = (): void => {
 		this.props.onSelectDevtool("EntityTree");
+	}
+
+	private _onSelectInjectionTool = (): void => {
+		this.props.onSelectDevtool("Injection");
 	}
 }

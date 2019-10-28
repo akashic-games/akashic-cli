@@ -61,4 +61,8 @@ export class DevtoolOperator {
 		// (console からグローバルに格納できる Chrome などでは不要なので暫定)
 		(window as any).__testbed.$0 = e;
 	}
+
+	setInjectionValue = (key: string, val: any): void => {
+		this.store.devtoolUiStore.setInjectionValue(key, val);
+	}
 }

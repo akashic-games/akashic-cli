@@ -8,7 +8,7 @@ import { Devtool } from "../organism/Devtool";
 
 const store = observable({
 	devtoolsHeight: 300,
-	activeDevtool: "EntityTree",
+	activeDevtool: "Injection",
 	showsEventList: true,
 	eventListWidth: 280,
 	eventEditContent: `["test": true]`,
@@ -162,6 +162,24 @@ const TestWithBehaviour = observer(() => (
 			onClickEntityItem: action("click-entity"),
 			onMouseOverEntityItem: action("mouseover"),
 			onMouseLeaveEntityItem: action("mouseleave")
+		}}
+		injectionDevtoolProps={{
+			valueTable: observable.map({
+				playerX: 100,
+				playerAngle: true
+			}),
+			injectionConfig: {
+				items: {
+					playerX: {
+						type: "range"
+					},
+					playerAngle: {
+						type: "checkbox"
+					}
+				}
+			},
+			onChange: action("change"),
+			onBlur: action("blur")
 		}}
 	/>
 ));
