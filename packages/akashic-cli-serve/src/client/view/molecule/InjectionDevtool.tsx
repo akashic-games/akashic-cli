@@ -30,8 +30,8 @@ function renderInjectionConfigItem(
 			min={item.min || 0}
 			max={(item.max != null) ? item.max : 100}
 			step={item.step || 1}
-			onChange={(ev: React.ChangeEvent<HTMLInputElement>) => onChange(key, ev.target.value)}
-			onBlur={() => onBlur(key, value)}
+			onChange={(ev: React.ChangeEvent<HTMLInputElement>) => onChange(key, Number(ev.target.value))}
+			onBlur={() => onBlur(key, Number(value))}
 		/>;
 		break;
 	case "checkbox":

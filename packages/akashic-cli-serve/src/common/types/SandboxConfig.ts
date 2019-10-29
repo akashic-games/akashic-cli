@@ -28,7 +28,7 @@ export type SandboxConfigInjectionItem =
 	SandboxConfigInjectionItemButton;
 
 export interface SandboxConfigInjectionConfig {
-	marker?: string;
+	markerPrefix?: string;
 	items: { [key: string]: SandboxConfigInjectionItem };
 }
 

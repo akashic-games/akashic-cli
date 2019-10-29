@@ -64,5 +64,13 @@ export class DevtoolOperator {
 
 	setInjectionValue = (key: string, val: any): void => {
 		this.store.devtoolUiStore.setInjectionValue(key, val);
+
+		if ((window as any).__testbedInject) {
+			const item = (window as any).__testbedInject[key];
+			if (item) {
+				item.set(val);
+				item.onchange();
+			}
+		}
 	}
 }
