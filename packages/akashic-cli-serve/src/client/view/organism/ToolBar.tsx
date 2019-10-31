@@ -19,7 +19,7 @@ export interface ToolBarProps {
 	showsInstanceControl: boolean;
 	targetService: ServiceType;
 	onToggleAppearance: (show: boolean) => void;
-	onToggleDevTools: (show: boolean) => void;
+	onClickDevTools: (show: boolean) => void;
 }
 
 @observer
@@ -54,7 +54,7 @@ export class ToolBar extends React.Component<ToolBarProps, {}> {
 					icon="menu"
 					title={"Devtools"}
 					pushed={props.showsDevtools}
-					onClick={props.onToggleDevTools} />
+					onClick={props.onClickDevTools} />
 			</div>
 		</div>;
 	}

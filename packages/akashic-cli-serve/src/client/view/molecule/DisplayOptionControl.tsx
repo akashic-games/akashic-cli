@@ -7,9 +7,9 @@ export interface DisplayOptionControlPropsData {
 	showsDisplayOptionPopover: boolean;
 	showsBackgroundImage: boolean;
 	showsGrid: boolean;
-	onToggleDisplayOptionPopover: (show: boolean) => void;
-	onToggleShowBackgroundImage: (show: boolean) => void;
-	onToggleShowGrid: (show: boolean) => void;
+	onClickDisplayOptionPopover: (show: boolean) => void;
+	onChangeShowBackgroundImage: (show: boolean) => void;
+	onChangeShowGrid: (show: boolean) => void;
 }
 
 export interface DisplayOptionControlProps {
@@ -28,9 +28,9 @@ export class DisplayOptionControl extends React.Component<DisplayOptionControlPr
 			showsDisplayOptionPopover,
 			showsBackgroundImage,
 			showsGrid,
-			onToggleDisplayOptionPopover,
-			onToggleShowBackgroundImage,
-			onToggleShowGrid
+			onClickDisplayOptionPopover,
+			onChangeShowBackgroundImage,
+			onChangeShowGrid
 		} = this._lastProps!;
 
 		return <div ref={this._onRef} style={{position: "relative"}}>
@@ -38,7 +38,7 @@ export class DisplayOptionControl extends React.Component<DisplayOptionControlPr
 				icon="image"
 				title={"表示オプション"}
 				pushed={showsDisplayOptionPopover}
-				onClick={onToggleDisplayOptionPopover} />
+				onClick={onClickDisplayOptionPopover} />
 			{
 				showsDisplayOptionPopover ?
 					<div className={styles["popover"]}>
@@ -50,7 +50,7 @@ export class DisplayOptionControl extends React.Component<DisplayOptionControlPr
 										className={styles["checkbox"]}
 										type="checkbox"
 										checked={showsBackgroundImage}
-										onChange={() => onToggleShowBackgroundImage(!showsBackgroundImage)}
+										onChange={() => onChangeShowBackgroundImage(!showsBackgroundImage)}
 									/>
 									Show backgorund image
 								</label>
@@ -61,7 +61,7 @@ export class DisplayOptionControl extends React.Component<DisplayOptionControlPr
 										className={styles["checkbox"]}
 										type="checkbox"
 										checked={showsGrid}
-										onChange={() => onToggleShowGrid(!showsGrid)}
+										onChange={() => onChangeShowGrid(!showsGrid)}
 									/>
 									Show grid
 								</label>
@@ -110,7 +110,7 @@ export class DisplayOptionControl extends React.Component<DisplayOptionControlPr
 		if (!ref || !lastProps || !(target instanceof Element))
 			return;
 		if (lastProps.showsDisplayOptionPopover && !ref.contains(target as Element)) {
-			lastProps.onToggleDisplayOptionPopover(false);
+			lastProps.onClickDisplayOptionPopover(false);
 		}
 	}
 }

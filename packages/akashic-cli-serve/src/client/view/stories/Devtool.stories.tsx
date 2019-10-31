@@ -25,7 +25,7 @@ const TestWithBehaviour = observer(() => (
 			eventListWidth: store.eventListWidth,
 			eventListMinWidth: 200,
 			onEventListResize: (w => (store.eventListWidth = w)),
-			onToggleList: (v => (store.showsEventList = v)),
+			onClickShowEventList: (v => (store.showsEventList = v)),
 			eventNames: [
 				"Foo",
 				"Start",
@@ -67,7 +67,7 @@ storiesOf("o-Devtool", module)
 				eventListWidth: 250,
 				eventListMinWidth: 200,
 				onEventListResize: action("events:list-resize"),
-				onToggleList: action("events:toggle-list"),
+				onClickShowEventList: action("events:list"),
 				eventNames: [
 					"Foo",
 					"Start",
@@ -131,7 +131,7 @@ storiesOf("o-Devtool", module)
 				eventListWidth: 250,
 				eventListMinWidth: 200,
 				onEventListResize: action("events:list-resize"),
-				onToggleList: action("events:toggle-list"),
+				onClickShowEventList: action("events:list"),
 				eventNames: [
 					"Foo",
 					"Start",

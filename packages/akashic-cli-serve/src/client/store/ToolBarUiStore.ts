@@ -32,29 +32,29 @@ export class ToolBarUiStore {
 	}
 
 	@action
-	toggleShowAppearance(show: boolean): void {
+	setShowAppearance(show: boolean): void {
 		this.showsAppearanceMenu = show;
 	}
 
 	@action
-	toggleShowDevtools(show: boolean): void {
+	setShowDevtools(show: boolean): void {
 		this.showsDevtools = show;
 		storage.put({ showsDevtools: show });
 	}
 
 	@action
-	toggleShowDisplayOptionPopover(show: boolean): void {
+	setShowDisplayOptionPopover(show: boolean): void {
 		this.showsDisplayOptionPopover = show;
 	}
 
 	@action
-	toggleShowBackgroundImage(show: boolean): void {
+	setShowBackgroundImage(show: boolean): void {
 		this.showsBackgroundImage = show;
 		storage.put({ showsBackgroundImage: show });
 	}
 
 	@action
-	toggleShowGrid(show: boolean): void {
+	setShowGrid(show: boolean): void {
 		this.showsGrid = show;
 		storage.put({ showsGrid: show });
 	}

@@ -25,7 +25,7 @@ const TestWithBehaviour = observer(() => (
 		onEventListResize={w => (store.width = w)}
 		eventNames={Object.keys(store.events)}
 		eventEditContent={store.editContent}
-		onToggleList={v => (store.shows = v)}
+		onClickShowEventList={v => (store.shows = v)}
 		onClickSendEvent={action("send")}
 		onClickCopyEvent={name => (store.editContent = JSON.stringify(store.events[name]))}
 		onClickSendEditingEvent={action("send-edit")}
@@ -45,7 +45,7 @@ storiesOf("m-EventsDevtool", module)
 				"foo (a very long long event name example to test, woo hoo!)"
 			]}
 			eventEditContent={`["test"]`}
-			onToggleList={action("toggle-list")}
+			onClickShowEventList={action("list")}
 			onEventListResize={action("event-list-resize")}
 			onClickSendEvent={action("send")}
 			onClickCopyEvent={action("copy")}
@@ -96,7 +96,7 @@ storiesOf("m-EventsDevtool", module)
 				"Test 32"
 			]}
 			eventEditContent={`["test"]`}
-			onToggleList={action("toggle-list")}
+			onClickShowEventList={action("list")}
 			onEventListResize={action("event-list-resize")}
 			onClickSendEvent={action("send")}
 			onClickCopyEvent={action("copy")}
