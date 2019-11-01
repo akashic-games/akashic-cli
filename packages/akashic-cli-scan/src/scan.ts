@@ -1,6 +1,40 @@
 import * as cmn from "@akashic/akashic-cli-commons";
 import { Configuration } from "./Configuration";
 
+export interface assetScanDir  {
+	/**
+	 * AudioAssetを取得するパス。
+	 * 省略された場合、 `["audio"]` 。
+	 */
+	audio?: string[],
+
+	/**
+	 * ImageAssetを取得するパス。
+	 * 省略された場合、 `["image"]` 。
+	 */
+	image?: string[],
+
+	/**
+	 * ScriptAssetを取得するパス。
+	 * 省略された場合、 `["script"]` 。
+	 */
+	script?: string[],
+
+	/**
+	 * TextAssetを取得するパス。
+	 * 省略された場合、 `["text"]` 。
+	 */
+	text?: string[]
+}
+
+export interface AssetExtension {
+	/**
+	 * TextAssetの拡張子。
+	 * 省略された場合、全て利用できることを表す `[]` 。
+	 */
+	text?: string[]
+}
+
 export interface ScanAssetParameterObject {
 	/**
 	 * 更新する対象。
@@ -32,17 +66,38 @@ export interface ScanAssetParameterObject {
 	 * 省略された場合、 `false` 。
 	 */
 	resolveAssetIdsFromPath?: boolean;
+
+	/**
+	 * 各アセットを取得するパス。
+	 */
+	assetScanDir?: assetScanDir;
+
+	/**
+	 * 各アセットとして扱う拡張子。
+	 */
+	assetExtension?: AssetExtension;
 }
 
 export function _completeScanAssetParameterObject(param: ScanAssetParameterObject): void {
 	param.target = param.target || "all";
 	param.cwd = param.cwd || process.cwd();
 	param.logger = param.logger || new cmn.ConsoleLogger();
+
 	param.resolveAssetIdsFromPath = !!param.resolveAssetIdsFromPath;
+	param.assetScanDir = param.assetScanDir || {};
+	param.assetScanDir.audio = param.assetScanDir.audio || ["audio"];
+	param.assetScanDir.image = param.assetScanDir.image || ["image"];
+	param.assetScanDir.script = param.assetScanDir.script || ["script"];
+	param.assetScanDir.text = param.assetScanDir.text || ["text"];
+
+	param.assetExtension = param.assetExtension || {};
+	param.assetExtension.text = param.assetExtension.text || [];
 }
 
 export function promiseScanAsset(param: ScanAssetParameterObject): Promise<void> {
 	_completeScanAssetParameterObject(param);
+
+	console.log("param", param.assetScanDir);
 	var restoreDirectory = cmn.Util.chdir(param.cwd);
 	return Promise.resolve()
 		.then(() => cmn.ConfigurationFile.read("./game.json", param.logger))
@@ -58,18 +113,18 @@ export function promiseScanAsset(param: ScanAssetParameterObject): Promise<void>
 			return new Promise<void>((resolve, reject) => {
 				switch (param.target) {
 				case "image":
-					conf.scanAssetsImage();
+					conf.scanAssetsImage(param.assetScanDir.image);
 					break;
 				case "audio":
-					return conf.scanAssetsAudio().then(resolve, reject);
+					return conf.scanAssetsAudio(param.assetScanDir.audio).then(resolve, reject);
 				case "script":
-					conf.scanAssetsScript();
+					conf.scanAssetsScript(param.assetScanDir.script);
 					break;
 				case "text":
-					conf.scanAssetsText();
+					conf.scanAssetsText(param.assetScanDir.text);
 					break;
 				case "all":
-					return conf.scanAssets().then(resolve, reject);
+					return conf.scanAssets(param.assetScanDir, param.assetExtension).then(resolve, reject);
 				default:
 					return reject("scan asset " + param.target + ": unknown target " + param.target);
 				}

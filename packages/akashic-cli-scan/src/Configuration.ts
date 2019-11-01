@@ -5,6 +5,7 @@ import * as cmn from "@akashic/akashic-cli-commons";
 import { getAudioDuration } from "./getAudioDuration";
 import { imageSize } from "image-size";
 import { ISize } from "image-size/dist/types/interface";
+import { ScanAssetParameterObject, assetScanDir, AssetExtension } from "./scan";
 
 export function _isImageFilePath(p: string): boolean { return /.*\.(png|gif|jpg|jpeg)$/i.test(p); }
 export function _isAudioFilePath(p: string): boolean { return /.*\.(ogg|aac|mp4)$/i.test(p); }
@@ -66,24 +67,49 @@ export class Configuration extends cmn.Configuration {
 		this._npm = param.debugNpm ? param.debugNpm : new cmn.PromisedNpm({ logger: param.logger });
 	}
 
-	scanAssets(): Promise<void> {
+	scanAssets(assetScanDir: assetScanDir, assetExtension: AssetExtension): Promise<void> {
 		return Promise.resolve()
 			.then(() => {
-				this.scanAssetsImage();
-				this.scanAssetsScript();
-				this.scanAssetsText();
+				this.scanAssetsImage(assetScanDir.image);
+				this.scanAssetsScript(assetScanDir.script);
+				this.scanAssetsText(assetScanDir.text);
 			})
-			.then(() => this.scanAssetsAudio());
+			.then(() => this.scanAssetsAudio(assetScanDir.audio));
 	}
 
-	scanAssetsImage(): void {
-		var files: string[] = readdirRecursive(path.join(this._basepath, "image/"));
+	scanAssetsImage(imageAssetScanDirs: string[]) {
+		imageAssetScanDirs.forEach((dirname) => {
+			this._scanAssetsImage(dirname);
+		});
+	}
+
+	scanAssetsAudio(audioAssetScanDirs: string[]): Promise<void> {
+		return new Promise((resolve) => {
+			Promise.all(audioAssetScanDirs.map((dirname) => this._scanAssetsAudio(dirname))).then(() => resolve());
+		});
+	}
+
+	scanAssetsScript(scriptAssetScanDirs: string[]) {
+		scriptAssetScanDirs.forEach((dirname) => {
+			this._scanAssetsScript(dirname);
+		});
+	}
+
+
+	scanAssetsText(textAssetScanDirs: string[]) {
+		textAssetScanDirs.forEach((dirname) => {
+			this._scanAssetsText(dirname);
+		});
+	}
+
+	_scanAssetsImage(imageAssetDir: string): void {
+		var files: string[] = readdirRecursive(path.join(this._basepath, imageAssetDir + "/"));
 		if (! this._content.assets)
 			this._content.assets = {};
 		var assets = this._content.assets;
 		var revmap = cmn.Util.invertMap(assets, "path");
 		files.filter(_isImageFilePath).forEach((f: string) => {
-			var unixPath = cmn.Util.makeUnixPath("image/" + f);
+			var unixPath = cmn.Util.makeUnixPath(imageAssetDir + "/" + f);
 			var size = imageSize(unixPath) as ISize;
 			if (!size) {
 				this._logger.warn(`Failed to get image size. Please check ${unixPath}`);
@@ -130,11 +156,11 @@ export class Configuration extends cmn.Configuration {
 		});
 	}
 
-	scanAssetsAudio(): Promise<void> {
-		var files: string[] = readdirRecursive(path.join(this._basepath, "audio/")).filter(_isAudioFilePath);
+	_scanAssetsAudio(audioAssetDir: string): Promise<void> {
+		var files: string[] = readdirRecursive(path.join(this._basepath, audioAssetDir + "/")).filter(_isAudioFilePath);
 		if (files.length === 0)
 			return Promise.resolve();
-		files = files.map((filepath: string) => path.join("audio", filepath));
+		files = files.map((filepath: string) => path.join(audioAssetDir, filepath));
 		var assets = this._content.assets || (this._content.assets = {});
 		var revmap = cmn.Util.invertMap(assets, "path");
 
@@ -223,12 +249,12 @@ export class Configuration extends cmn.Configuration {
 		});
 	}
 
-	scanAssetsScript(): void {
-		this.scanAssetsXXX(path.join(this._basepath, "script/"), _isScriptAssetPath, "script");
+	_scanAssetsScript(scriptAssetDir: string): void {
+		this.scanAssetsXXX(path.join(this._basepath, scriptAssetDir + "/"), _isScriptAssetPath, "script");
 	}
 
-	scanAssetsText(): void {
-		this.scanAssetsXXX(path.join(this._basepath, "text/"), _isTextAssetPath, "text");
+	_scanAssetsText(textAssetDir: string): void {
+		this.scanAssetsXXX(path.join(this._basepath, textAssetDir + "/"), _isTextAssetPath, "text");
 	}
 
 	scanGlobalScripts(): Promise<void> {
@@ -313,10 +339,11 @@ export class Configuration extends cmn.Configuration {
 		function audioPathMaker(f: string): string {
 			return path.join(path.dirname(f), path.basename(f, path.extname(f)));  // remove the extension
 		}
-		this.vacuumXXX("audio/", "audio", _isAudioFilePath, audioPathMaker);
-		this.vacuumXXX("image/", "image", _isImageFilePath);
-		this.vacuumXXX("script/", "script", _isScriptAssetPath);
-		this.vacuumXXX("text/", "text", _isTextAssetPath);
+		const assetDirList = this._pickDirListWithTypes();
+		assetDirList.audio.forEach((assetDir) => {this.vacuumXXX(assetDir + "/", "audio", _isAudioFilePath, audioPathMaker);});
+		assetDirList.image.forEach((assetDir) => {this.vacuumXXX(assetDir + "/", "image", _isImageFilePath);});
+		assetDirList.script.forEach((assetDir) => {this.vacuumXXX(assetDir + "/", "script", _isScriptAssetPath);});
+		assetDirList.text.forEach((assetDir) => {this.vacuumXXX(assetDir + "/", "text", _isTextAssetPath);});
 	}
 
 	/**
@@ -395,5 +422,35 @@ export class Configuration extends cmn.Configuration {
 				lsResult.dependencies = lsResult.dependencies || {};
 				return Object.keys(lsResult.dependencies);
 			});
+	}
+
+	private _pickDirListWithTypes() {
+		// do
+		const dirList = {
+			audio: <string[]>[],
+			image: <string[]>[],
+			script: <string[]>[],
+			text: <string[]>[]
+		};
+		Object.keys(this._content.assets).forEach((k: string) => {
+			const topDirname = this._content.assets[k].path.split(path.posix.sep)[0];
+			switch (this._content.assets[k].type) {
+				case "audio":
+					dirList.audio.push(topDirname);
+					break;
+				case "image":
+					dirList.image.push(topDirname);
+					break;
+				case "script":
+					dirList.script.push(topDirname);
+					break;
+				case "text":
+					dirList.text.push(topDirname);
+					break;
+				default:
+					// do nothing
+			}
+		});
+		return dirList;
 	}
 }
