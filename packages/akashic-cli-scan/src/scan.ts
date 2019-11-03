@@ -1,30 +1,30 @@
 import * as cmn from "@akashic/akashic-cli-commons";
 import { Configuration } from "./Configuration";
 
-export interface assetScanDir  {
+export interface AssetScanDir  {
 	/**
 	 * AudioAssetを取得するパス。
 	 * 省略された場合、 `["audio"]` 。
 	 */
-	audio?: string[],
+	audio?: string[];
 
 	/**
 	 * ImageAssetを取得するパス。
 	 * 省略された場合、 `["image"]` 。
 	 */
-	image?: string[],
+	image?: string[];
 
 	/**
 	 * ScriptAssetを取得するパス。
 	 * 省略された場合、 `["script"]` 。
 	 */
-	script?: string[],
+	script?: string[];
 
 	/**
 	 * TextAssetを取得するパス。
 	 * 省略された場合、 `["text"]` 。
 	 */
-	text?: string[]
+	text?: string[];
 }
 
 export interface AssetExtension {
@@ -32,7 +32,7 @@ export interface AssetExtension {
 	 * TextAssetの拡張子。
 	 * 省略された場合、全て利用できることを表す `[]` 。
 	 */
-	text?: string[]
+	text?: string[];
 }
 
 export interface ScanAssetParameterObject {
@@ -70,7 +70,7 @@ export interface ScanAssetParameterObject {
 	/**
 	 * 各アセットを取得するパス。
 	 */
-	assetScanDir?: assetScanDir;
+	assetScanDir?: AssetScanDir;
 
 	/**
 	 * 各アセットとして扱う拡張子。
@@ -97,7 +97,6 @@ export function _completeScanAssetParameterObject(param: ScanAssetParameterObjec
 export function promiseScanAsset(param: ScanAssetParameterObject): Promise<void> {
 	_completeScanAssetParameterObject(param);
 
-	console.log("param", param.assetScanDir);
 	var restoreDirectory = cmn.Util.chdir(param.cwd);
 	return Promise.resolve()
 		.then(() => cmn.ConfigurationFile.read("./game.json", param.logger))
@@ -109,7 +108,7 @@ export function promiseScanAsset(param: ScanAssetParameterObject): Promise<void>
 				noOmitPackagejson: param.noOmitPackagejson,
 				resolveAssetIdsFromPath: param.resolveAssetIdsFromPath
 			});
-			conf.vacuum();
+			conf.vacuum(param.assetScanDir);
 			return new Promise<void>((resolve, reject) => {
 				switch (param.target) {
 				case "image":

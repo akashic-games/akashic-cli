@@ -19,7 +19,7 @@ commander
 	.option("--imageAssetDir <dir>", "specify ImageAsset directory", (val: any, ret: any) => {
 		ret = ret || [];
 		ret.push(val);
-		return ret;})
+		return ret; })
 	.option("--audioAssetDir <dir>, specify AudioAsset directory")
 	.option("--scriptAssetDir <dir>, specify ScriptAsset directory")
 	.option("--textAssetDir <dir>, specify TextAsset directory")
@@ -29,9 +29,12 @@ commander
 			audio: opts.audioAssetDir,
 			image: opts.imageAssetDir,
 			script: opts.scriptAssetDir,
-			text: opts.textAssetDir,
-		}
-		promiseScanAsset({ target: target, cwd: opts.cwd, logger: logger, resolveAssetIdsFromPath: opts.usePathAssetId, assetScanDir: assetScanDir })
+			text: opts.textAssetDir
+		};
+		promiseScanAsset({
+			target: target, cwd: opts.cwd, logger: logger,
+			resolveAssetIdsFromPath: opts.usePathAssetId, assetScanDir: assetScanDir
+		})
 			.catch((err: any) => {
 				logger.error(err);
 				process.exit(1);
