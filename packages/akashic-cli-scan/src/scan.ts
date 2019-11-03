@@ -109,7 +109,7 @@ export function promiseScanAsset(param: ScanAssetParameterObject): Promise<void>
 				noOmitPackagejson: param.noOmitPackagejson,
 				resolveAssetIdsFromPath: param.resolveAssetIdsFromPath
 			});
-			conf.vacuum(param.assetScanDir);
+			conf.vacuum(param.assetScanDir, param.assetExtension);
 			return new Promise<void>((resolve, reject) => {
 				switch (param.target) {
 				case "image":

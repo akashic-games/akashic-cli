@@ -97,12 +97,7 @@ export class Configuration extends cmn.Configuration {
 
 
 	scanAssetsText(textAssetScanDirs: string[], textAssetExtension: string[]) {
-		const textAssetExtensionRegExp = new RegExp(textAssetExtension.join("|"), "i");
-		const textAssetExtensionFilter = textAssetExtension.length === 0 ?
-			(p: string) => { return true; } :
-			(p: string) => {
-				return textAssetExtensionRegExp.test(p);
-			};
+		const textAssetExtensionFilter = createTextAssetExtensionFilter(textAssetExtension);
 		textAssetScanDirs.forEach((dirname) => {
 			this._scanAssetsText(dirname, textAssetExtensionFilter);
 		});
@@ -341,14 +336,16 @@ export class Configuration extends cmn.Configuration {
 	}
 
 	// アセットのうちでファイルが消えていた物を処理するためのメソッド
-	vacuum(assetScanDir: AssetScanDir): void {
+	vacuum(assetScanDir: AssetScanDir, assetExtension: AssetExtension): void {
 		function audioPathMaker(f: string): string {
 			return path.join(path.dirname(f), path.basename(f, path.extname(f)));  // remove the extension
 		}
 		assetScanDir.audio.forEach((assetDir) => {this.vacuumXXX(assetDir + "/", "audio", _isAudioFilePath, audioPathMaker); });
 		assetScanDir.image.forEach((assetDir) => {this.vacuumXXX(assetDir + "/", "image", _isImageFilePath); });
 		assetScanDir.script.forEach((assetDir) => {this.vacuumXXX(assetDir + "/", "script", _isScriptAssetPath); });
-		assetScanDir.text.forEach((assetDir) => {this.vacuumXXX(assetDir + "/", "text", _isTextAssetPath); });
+
+		const textAssetExtensionFilter = createTextAssetExtensionFilter(assetExtension.text);
+		assetScanDir.text.forEach((assetDir) => {this.vacuumXXX(assetDir + "/", "text", textAssetExtensionFilter); });
 	}
 
 	/**
@@ -428,4 +425,14 @@ export class Configuration extends cmn.Configuration {
 				return Object.keys(lsResult.dependencies);
 			});
 	}
+}
+
+function createTextAssetExtensionFilter(assetExtension: string[]) {
+	const assetExtensionRegExp = new RegExp(assetExtension.join("|"), "i");
+	const assetExtensionFilter = assetExtension.length === 0 ?
+		(p: string) => { return true; } :
+		(p: string) => {
+			return assetExtensionRegExp.test(p);
+		};
+	return assetExtensionFilter;
 }

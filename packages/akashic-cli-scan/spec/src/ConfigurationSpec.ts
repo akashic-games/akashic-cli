@@ -734,12 +734,17 @@ describe("Configuration", function () {
 		expect(conf.getContent().assets["deletedSe"]).not.toBe(undefined);
 		expect(conf.getContent().assets["deletedTxt"]).not.toBe(undefined);
 		expect(conf.getContent().assets["deletedScript"]).not.toBe(undefined);
-		conf.vacuum({
+
+		var assetScanDir = {
 			audio: ["audio"],
 			image: ["image"],
 			script: ["script"],
 			text: ["text"]
-		});
+		};
+		var assretExtension = {
+			text: <string[]>[]
+		}
+		conf.vacuum(assetScanDir, assretExtension);
 		expect(conf.getContent().assets["chara"]).not.toBe(undefined);
 		expect(conf.getContent().assets["se"]).not.toBe(undefined);
 		expect(conf.getContent().assets["txt"]).not.toBe(undefined);
@@ -1693,9 +1698,12 @@ describe("Configuration", function () {
 			script: ["script"],
 			text: ["text"]
 		};
+		var assretExtension = {
+			text: <string[]>[]
+		}
 
 		conf.scanAssets(assetScanDir, {text: []}).then(() => {
-			conf.vacuum(assetScanDir);
+			conf.vacuum(assetScanDir, assretExtension);
 			expect(conf.getContent()).toEqual({
 				width: 320,
 				height: 320,
