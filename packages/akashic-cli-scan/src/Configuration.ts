@@ -72,7 +72,7 @@ export class Configuration extends cmn.Configuration {
 			.then(() => {
 				this.scanAssetsImage(assetScanDir.image);
 				this.scanAssetsScript(assetScanDir.script);
-				this.scanAssetsText(assetScanDir.text);
+				this.scanAssetsText(assetScanDir.text, assetExtension.text);
 			})
 			.then(() => this.scanAssetsAudio(assetScanDir.audio));
 	}
@@ -96,9 +96,15 @@ export class Configuration extends cmn.Configuration {
 	}
 
 
-	scanAssetsText(textAssetScanDirs: string[]) {
+	scanAssetsText(textAssetScanDirs: string[], textAssetExtension: string[]) {
+		const textAssetExtensionRegExp = new RegExp(textAssetExtension.join("|"), "i");
+		const textAssetExtensionFilter = textAssetExtension.length === 0 ?
+			(p: string) => { return true; } :
+			(p: string) => {
+				return textAssetExtensionRegExp.test(p);
+			};
 		textAssetScanDirs.forEach((dirname) => {
-			this._scanAssetsText(dirname);
+			this._scanAssetsText(dirname, textAssetExtensionFilter);
 		});
 	}
 
@@ -253,7 +259,7 @@ export class Configuration extends cmn.Configuration {
 		this.scanAssetsXXX(path.join(this._basepath, scriptAssetDir + "/"), _isScriptAssetPath, "script");
 	}
 
-	_scanAssetsText(textAssetDir: string): void {
+	_scanAssetsText(textAssetDir: string, _isTextAssetPath: (p: string) => boolean): void {
 		this.scanAssetsXXX(path.join(this._basepath, textAssetDir + "/"), _isTextAssetPath, "text");
 	}
 

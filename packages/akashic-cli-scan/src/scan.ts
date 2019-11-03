@@ -74,6 +74,7 @@ export interface ScanAssetParameterObject {
 
 	/**
 	 * 各アセットとして扱う拡張子。
+	 * 省略された場合、 `[]` 。
 	 */
 	assetExtension?: AssetExtension;
 }
@@ -120,7 +121,7 @@ export function promiseScanAsset(param: ScanAssetParameterObject): Promise<void>
 					conf.scanAssetsScript(param.assetScanDir.script);
 					break;
 				case "text":
-					conf.scanAssetsText(param.assetScanDir.text);
+					conf.scanAssetsText(param.assetScanDir.text, param.assetExtension.text);
 					break;
 				case "all":
 					return conf.scanAssets(param.assetScanDir, param.assetExtension).then(resolve, reject);
