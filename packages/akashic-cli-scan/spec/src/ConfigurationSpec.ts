@@ -755,22 +755,27 @@ describe("Configuration", function () {
 		expect(conf.getContent().assets["deletedScript"]).toBe(undefined);
 	});
 
-	it("scan target any asset dirs", function (done) {
+	it("specify scan target dir", function (done) {
 		var gamejson: any = {
 			assets: {
-				"": {
-					"type": "text",
-					"path": "text/foo/dummy.txt",
+				"dummyAudio": {
+					"type": "audio",
+					"path": "audio/foo/dummyAudio",
 					"global": true,
+					"duration": 100
 				},
-				"a2": {
-					"type": "txt",
-					"path": "text/foo/dummy.txt",
+				"dummyImage": {
+					"type": "image",
+					"path": "image/foo/dummyImage.png",
 				},
-				"a3": {
+				"dummyScript": {
+					"type": "script",
+					"path": "script/foo/dummyScript.js",
+				},
+				"dummyText": {
 					"type": "text",
-					"path": "text/foo/dummy.txt",
-				},
+					"path": "script/foo/dummyText.js",
+				}
 			}
 		};
 		mockfs({
@@ -791,12 +796,16 @@ describe("Configuration", function () {
 		var conf = new cnf.Configuration({ content: gamejson, logger: nullLogger, basepath: process.cwd() });
 		conf.scanAssetsImage(["img"]);
 		expect(conf.getContent().assets["dummyImg"].type).toBe("image");
+		expect(conf.getContent().assets["dummyImage"].type).toBe("image");
 		conf.scanAssetsScript(["code"]);
 		expect(conf.getContent().assets["dummyCode"].type).toBe("script");
+		expect(conf.getContent().assets["dummyScript"].type).toBe("script");
 		conf.scanAssetsText(["txt"], []);
 		expect(conf.getContent().assets["dummyTxt"].type).toBe("text");
+		expect(conf.getContent().assets["dummyText"].type).toBe("text");
 		conf.scanAssetsAudio(["sound"]).then(() => {
 			expect(conf.getContent().assets["dummySound"].type).toBe("audio");
+			expect(conf.getContent().assets["dummyAudio"].type).toBe("audio");
 			done();
 		}, done.fail);
 	});
