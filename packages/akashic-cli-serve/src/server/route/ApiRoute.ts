@@ -39,8 +39,8 @@ export const createApiRouter = (params: ApiRouterParameterObject): express.Route
 	apiRouter.post("/plays/:playId(\\d+)/broadcast", createHandlerToBroadcast(params.io));
 
 	apiRouter.post("/runners", createHandlerToCreateRunner(params.playStore, params.runnerStore));
-	apiRouter.delete("/runners/:runnerId", createHandlerToDeleteRunner(params.runnerStore));
-	apiRouter.patch("/runners/:runnerId", createHandlerToPatchRunner(params.runnerStore));
+	apiRouter.delete("/runners/:runnerId/:playId(\\d+)", createHandlerToDeleteRunner(params.runnerStore));
+	apiRouter.patch("/runners/:runnerId/:playId(\\d+)", createHandlerToPatchRunner(params.runnerStore));
 
 	apiRouter.get("/options", handleToGetStartupOptions);
 

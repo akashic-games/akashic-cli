@@ -18,14 +18,14 @@ export class ServerInstanceEntity implements GameInstanceEntity {
 	}
 
 	async stop(): Promise<void> {
-		await ApiClient.deleteRunner(this.runnerId);
+		await ApiClient.deleteRunner(this.runnerId, this.play.playId);
 	}
 
 	async pause(): Promise<void> {
-		await ApiClient.pauseRunner(this.runnerId);
+		await ApiClient.pauseRunner(this.runnerId, this.play.playId);
 	}
 
 	async resume(): Promise<void> {
-		await ApiClient.resumeRunner(this.runnerId);
+		await ApiClient.resumeRunner(this.runnerId, this.play.playId);
 	}
 }

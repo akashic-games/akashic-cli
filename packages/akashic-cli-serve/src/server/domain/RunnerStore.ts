@@ -39,24 +39,29 @@ export class RunnerStore {
 		return runner;
 	}
 
-	async stopRunner(runnerId: string): Promise<void> {
-		const playId = this.runnerManager.getRunner(runnerId).playId;
-		await this.runnerManager.stopRunner(runnerId);
+	async stopRunner(runnerId: string, playId: string): Promise<void> {
+		const runner = this.runnerManager.getRunner(runnerId);
+		if (runner) {
+			// コンテンツがエラーの場合、runnerを取得できないので取得できる場合のみ実行
+			await this.runnerManager.stopRunner(runnerId);
+		}
 		this.onRunnerRemove.fire({ playId, runnerId });
 	}
 
-	pauseRunner(runnerId: string): void {
+	pauseRunner(runnerId: string, playId: string): void {
 		const runner = this.runnerManager.getRunner(runnerId);
-		const playId = runner.playId;
-		// TODO headless-driver に pause()/resume() を作る
-		(runner as any).driver.stopGame();
+		if (runner) {
+			// TODO headless-driver に pause()/resume() を作る
+			(runner as any).driver.stopGame();
+		}
 		this.onRunnerPause.fire({ playId, runnerId });
 	}
 
-	resumeRunner(runnerId: string): void {
+	resumeRunner(runnerId: string, playId: string): void {
 		const runner = this.runnerManager.getRunner(runnerId);
-		const playId = runner.playId;
-		(runner as any).driver.startGame();
+		if (runner) {
+			(runner as any).driver.startGame();
+		}
 		this.onRunnerResume.fire({ playId, runnerId });
 	}
 }

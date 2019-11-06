@@ -35,7 +35,7 @@ export const createHandlerToDeleteRunner = (runnerStore: RunnerStore): express.R
 				throw new BadRequestError({ errorMessage: "Invalid runnerId" });
 			}
 			const runnerId = req.params.runnerId;
-			await runnerStore.stopRunner(runnerId);
+			await runnerStore.stopRunner(runnerId, req.params.playId);
 			responseSuccess<RunnerDeleteApiResponseData>(res, 200, { runnerId });
 		} catch (e) {
 			next(e);
@@ -47,6 +47,7 @@ export const createHandlerToPatchRunner = (runnerStore: RunnerStore): express.Re
 	return async (req, res, next) => {
 		try {
 			const runnerId = req.params.runnerId;
+			const playId = req.params.playId;
 			const status = req.body.status;
 			if (!runnerId) {
 				throw new BadRequestError({ errorMessage: "Invalid runnerId" });
@@ -56,9 +57,9 @@ export const createHandlerToPatchRunner = (runnerStore: RunnerStore): express.Re
 			}
 
 			if (status === "paused") {
-				runnerStore.pauseRunner(runnerId);
+				runnerStore.pauseRunner(runnerId, playId);
 			} else {
-				runnerStore.resumeRunner(runnerId);
+				runnerStore.resumeRunner(runnerId, playId);
 			}
 
 			responseSuccess<RunnerPatchApiResponseData>(res, 200, { runnerId, status });

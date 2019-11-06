@@ -146,6 +146,7 @@ export class Operator {
 		const play = await this._createServerLoop(this.store.currentPlay.content.locator);
 		await this.store.currentPlay.deleteAllServerInstances();
 		await ApiClient.broadcast(this.store.currentPlay.playId, { type: "switchPlay", nextPlayId: play.playId });
+		this.ui.hideNotification();
 	}
 
 	private async _createServerLoop(contentLocator: ClientContentLocator): Promise<PlayEntity> {
