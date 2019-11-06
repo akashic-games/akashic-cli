@@ -37,7 +37,7 @@ export class DevtoolUiStore {
 	}
 
 	@action
-	toggleShowEventList(show: boolean): void {
+	setShowEventList(show: boolean): void {
 		this.showsEventList = show;
 		storage.put({ showsEventList: show });
 	}

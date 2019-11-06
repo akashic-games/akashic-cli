@@ -32,8 +32,8 @@ export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}>
 			showsDevtools={toolBarUiStore.showsDevtools}
 			showsInstanceControl={(localInstance.executionMode === "replay") || toolBarUiStore.showsDevtools}
 			targetService={targetService}
-			onToggleAppearance={operator.ui.toggleShowAppearance}
-			onToggleDevTools={operator.ui.toggleShowDevtools}
+			onToggleAppearance={operator.ui.setShowAppearance}
+			onClickDevTools={operator.ui.setShowDevtools}
 		/>;
 	}
 
@@ -83,9 +83,9 @@ export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}>
 			showsDisplayOptionPopover: toolBarUiStore.showsDisplayOptionPopover,
 			showsBackgroundImage: toolBarUiStore.showsBackgroundImage,
 			showsGrid: toolBarUiStore.showsGrid,
-			onToggleDisplayOptionPopover: operator.ui.toggleShowDisplayOptionPopover,
-			onToggleShowBackgroundImage: operator.ui.toggleShowBackgroundImage,
-			onToggleShowGrid: operator.ui.toggleShowGrid
+			onClickDisplayOptionPopover: operator.ui.setShowDisplayOptionPopover,
+			onChangeShowBackgroundImage: operator.ui.setShowBackgroundImage,
+			onChangeShowGrid: operator.ui.setShowGrid
 		};
 	}
 }

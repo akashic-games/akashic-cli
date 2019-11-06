@@ -11,7 +11,7 @@ export interface EventsDevtoolProps {
 	eventListWidth: number;
 	eventListMinWidth: number;
 	onEventListResize: (width: number) => void;
-	onToggleList: (nextVal: boolean) => void;
+	onClickShowEventList: (nextVal: boolean) => void;
 	eventNames: string[];
 	eventEditContent: string;
 	onClickSendEvent: (eventName: string) => void;
@@ -61,7 +61,7 @@ export class EventsDevtool extends React.Component<EventsDevtoolProps, {}> {
 						icon="list"
 						title={"イベントリストの表示・非表示を切り替え"}
 						pushed={props.showsEventList}
-						onClick={props.onToggleList} />
+						onClick={props.onClickShowEventList} />
 					<div className={styles["sep"]} />
 					<ToolLabelButton
 						title="Send to the play"

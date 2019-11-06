@@ -58,16 +58,16 @@ const TestWithBehaviour = observer(() => (
 				showsDisplayOptionPopover: store.showsDisplayOptionPopover,
 				showsBackgroundImage: store.showsBackgroundImage,
 				showsGrid: store.showsGrid,
-				onToggleDisplayOptionPopover: (show => store.showsDisplayOptionPopover = show),
-				onToggleShowBackgroundImage: (show => store.showsBackgroundImage = show),
-				onToggleShowGrid: (show => store.showsGrid = show)
+				onClickDisplayOptionPopover: (show => store.showsDisplayOptionPopover = show),
+				onChangeShowBackgroundImage: (show => store.showsBackgroundImage = show),
+				onChangeShowGrid: (show => store.showsGrid = show)
 			})}
 			showsAppearance={store.showsAppearance}
 			showsDevtools={store.showsDevtools}
 			showsInstanceControl={store.showsDevtools}
 			targetService={ServiceType.None}
 			onToggleAppearance={v => (store.showsAppearance = v)}
-			onToggleDevTools={v => (store.showsDevtools = v)}
+			onClickDevTools={v => (store.showsDevtools = v)}
 		/>
 ));
 
@@ -101,16 +101,16 @@ storiesOf("o-ToolBar", module)
 				showsDisplayOptionPopover: true,
 				showsBackgroundImage: false,
 				showsGrid: true,
-				onToggleDisplayOptionPopover: action("toggle-display-option"),
-				onToggleShowBackgroundImage: action("toggle-bgimage"),
-				onToggleShowGrid: action("toggle-grid")
+				onClickDisplayOptionPopover: action("display-option"),
+				onChangeShowBackgroundImage: action("bgimage"),
+				onChangeShowGrid: action("grid")
 			})}
 			showsAppearance={false}
 			showsDevtools={true}
 			showsInstanceControl={true}
 			targetService={ServiceType.None}
 			onToggleAppearance={action("toggle-appearance")}
-			onToggleDevTools={action("toggle-dev-tools")}
+			onClickDevTools={action("dev-tools")}
 		/>
 	))
 	.add("with-behavior", () => <TestWithBehaviour />);

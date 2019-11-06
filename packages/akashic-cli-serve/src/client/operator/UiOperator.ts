@@ -13,24 +13,24 @@ export class UiOperator {
 		// this.store.ui.toolBar.showActivePlaybackRateDialog();
 	}
 
-	toggleShowAppearance = (show: boolean): void => {
-		this.store.toolBarUiStore.toggleShowAppearance(show);
+	setShowAppearance = (show: boolean): void => {
+		this.store.toolBarUiStore.setShowAppearance(show);
 	}
 
-	toggleShowDevtools = (show: boolean): void => {
-		this.store.toolBarUiStore.toggleShowDevtools(show);
+	setShowDevtools = (show: boolean): void => {
+		this.store.toolBarUiStore.setShowDevtools(show);
 	}
 
-	toggleShowDisplayOptionPopover = (show: boolean): void => {
-		this.store.toolBarUiStore.toggleShowDisplayOptionPopover(show);
+	setShowDisplayOptionPopover = (show: boolean): void => {
+		this.store.toolBarUiStore.setShowDisplayOptionPopover(show);
 	}
 
-	toggleShowBackgroundImage = (show: boolean) => {
-		this.store.toolBarUiStore.toggleShowBackgroundImage(show);
+	setShowBackgroundImage = (show: boolean) => {
+		this.store.toolBarUiStore.setShowBackgroundImage(show);
 	}
 
-	toggleShowGrid = (show: boolean) => {
-		this.store.toolBarUiStore.toggleShowGrid(show);
+	setShowGrid = (show: boolean) => {
+		this.store.toolBarUiStore.setShowGrid(show);
 	}
 
 	setDevtoolHeight = (height: number) => {
@@ -45,8 +45,8 @@ export class UiOperator {
 		this.store.devtoolUiStore.setEventListWidth(width);
 	}
 
-	toggleShowEventList = (show: boolean): void => {
-		this.store.devtoolUiStore.toggleShowEventList(show);
+	setShowEventList = (show: boolean): void => {
+		this.store.devtoolUiStore.setShowEventList(show);
 	}
 
 	copyRegisteredEventToEditor = (eventName: string): void => {
