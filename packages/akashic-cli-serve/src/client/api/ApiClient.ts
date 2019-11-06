@@ -59,16 +59,16 @@ export const createRunner = async(playId: string, isActive: boolean, token: stri
 	);
 };
 
-export const deleteRunner = async(runnerId: string, playId: string): Promise<RunnerDeleteApiResponse> => {
-	return await ApiRequest.del<RunnerDeleteApiResponse>(`/api/runners/${runnerId}/${playId}`);
+export const deleteRunner = async(runnerId: string): Promise<RunnerDeleteApiResponse> => {
+	return await ApiRequest.del<RunnerDeleteApiResponse>(`/api/runners/${runnerId}`);
 };
 
-export const pauseRunner = async(runnerId: string, playId: string): Promise<RunnerPatchApiResponse> => {
-	return await ApiRequest.patch<RunnerPatchApiResponse>(`/api/runners/${runnerId}/${playId}`, {status: "paused"});
+export const pauseRunner = async(runnerId: string): Promise<RunnerPatchApiResponse> => {
+	return await ApiRequest.patch<RunnerPatchApiResponse>(`/api/runners/${runnerId}`, {status: "paused"});
 };
 
-export const resumeRunner = async (runnerId: string, playId: string): Promise<RunnerPatchApiResponse> => {
-	return await ApiRequest.patch<RunnerPatchApiResponse>(`/api/runners/${runnerId}/${playId}`, {status: "running"});
+export const resumeRunner = async (runnerId: string): Promise<RunnerPatchApiResponse> => {
+	return await ApiRequest.patch<RunnerPatchApiResponse>(`/api/runners/${runnerId}`, {status: "running"});
 };
 
 export const getContents = async(): Promise<ContentsGetApiResponse> => {

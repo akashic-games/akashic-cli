@@ -17,6 +17,7 @@ export class RunnerStore {
 	onRunnerPause: Trigger<RunnerPauseTestbedEvent>;
 	onRunnerResume: Trigger<RunnerResumeTestbedEvent>;
 	private runnerManager: RunnerManager;
+	private currentPlayId: string;
 
 	constructor(params: RunnerStoreParameterObject) {
 		this.onRunnerCreate = new Trigger<RunnerCreateTestbedEvent>();
@@ -36,32 +37,33 @@ export class RunnerStore {
 		const runner = this.runnerManager.getRunner(runnerId);
 		await this.runnerManager.startRunner(runner.runnerId);
 		this.onRunnerCreate.fire({ playId, runnerId, isActive });
+		this.currentPlayId = playId;
 		return runner;
 	}
 
-	async stopRunner(runnerId: string, playId: string): Promise<void> {
+	async stopRunner(runnerId: string): Promise<void> {
 		const runner = this.runnerManager.getRunner(runnerId);
 		if (runner) {
 			// コンテンツがエラーの場合、runnerを取得できないので取得できる場合のみ実行
 			await this.runnerManager.stopRunner(runnerId);
 		}
-		this.onRunnerRemove.fire({ playId, runnerId });
+		this.onRunnerRemove.fire({ playId: `${parseInt(this.currentPlayId, 10) - 1}`, runnerId });
 	}
 
-	pauseRunner(runnerId: string, playId: string): void {
+	pauseRunner(runnerId: string): void {
 		const runner = this.runnerManager.getRunner(runnerId);
 		if (runner) {
 			// TODO headless-driver に pause()/resume() を作る
 			(runner as any).driver.stopGame();
 		}
-		this.onRunnerPause.fire({ playId, runnerId });
+		this.onRunnerPause.fire({ playId: this.currentPlayId, runnerId });
 	}
 
-	resumeRunner(runnerId: string, playId: string): void {
+	resumeRunner(runnerId: string): void {
 		const runner = this.runnerManager.getRunner(runnerId);
 		if (runner) {
 			(runner as any).driver.startGame();
 		}
-		this.onRunnerResume.fire({ playId, runnerId });
+		this.onRunnerResume.fire({ playId: this.currentPlayId, runnerId });
 	}
 }
