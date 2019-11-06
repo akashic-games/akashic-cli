@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.8.8 (2019-11-06)
+
+#### Other Change
+* `akashic-cli-serve`
+  * [#182](https://github.com/akashic-games/akashic-cli/pull/182) refactor: Refactor functions with names toggle ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 1.8.7 (2019-11-05)
 
 #### Enhancement
