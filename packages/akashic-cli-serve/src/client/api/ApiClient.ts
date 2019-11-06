@@ -67,7 +67,7 @@ export const pauseRunner = async(runnerId: string): Promise<RunnerPatchApiRespon
 	return await ApiRequest.patch<RunnerPatchApiResponse>(`/api/runners/${runnerId}`, {status: "paused"});
 };
 
-export const resumeRunner = async (runnerId: string): Promise<RunnerPatchApiResponse> => {
+export const resumeRunner = async(runnerId: string): Promise<RunnerPatchApiResponse> => {
 	return await ApiRequest.patch<RunnerPatchApiResponse>(`/api/runners/${runnerId}`, {status: "running"});
 };
 
