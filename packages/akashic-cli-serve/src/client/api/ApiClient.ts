@@ -63,7 +63,7 @@ export const deleteRunner = async(runnerId: string, playId: string): Promise<Run
 	return await ApiRequest.del<RunnerDeleteApiResponse>(`/api/runners/${runnerId}/${playId}`);
 };
 
-export const pauseRunner = async (runnerId: string, playId: string): Promise<RunnerPatchApiResponse> => {
+export const pauseRunner = async(runnerId: string, playId: string): Promise<RunnerPatchApiResponse> => {
 	return await ApiRequest.patch<RunnerPatchApiResponse>(`/api/runners/${runnerId}/${playId}`, {status: "paused"});
 };
 
