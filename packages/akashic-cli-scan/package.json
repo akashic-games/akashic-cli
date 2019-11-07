@@ -26,7 +26,6 @@
     "@types/image-size": "0.7.0",
     "@types/jasmine": "2.8.16",
     "@types/mock-fs": "3.6.30",
-    "@types/musicmetadata": "2.0.4",
     "@types/node": "6.14.7",
     "istanbul": "0.4.5",
     "jasmine": "3.5.0",
@@ -44,7 +43,7 @@
     "commander": "^2.16.0",
     "fs-readdir-recursive": "1.1.0",
     "image-size": "~0.8.0",
-    "musicmetadata": "2.0.5",
+    "music-metadata": "4.8.3",
     "thumbcoil": "~1.2.0"
   },
   "publishConfig": {
