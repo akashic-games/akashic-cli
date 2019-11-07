@@ -17,7 +17,7 @@ export class RunnerStore {
 	onRunnerPause: Trigger<RunnerPauseTestbedEvent>;
 	onRunnerResume: Trigger<RunnerResumeTestbedEvent>;
 	private runnerManager: RunnerManager;
-	private currentPlayId: string;
+	private playIdTable: { [runnerId: string]: string };
 
 	constructor(params: RunnerStoreParameterObject) {
 		this.onRunnerCreate = new Trigger<RunnerCreateTestbedEvent>();
@@ -25,6 +25,7 @@ export class RunnerStore {
 		this.onRunnerPause = new Trigger<RunnerPauseTestbedEvent>();
 		this.onRunnerResume = new Trigger<RunnerResumeTestbedEvent>();
 		this.runnerManager = params.runnerManager;
+		this.playIdTable = {};
 	}
 
 	async createAndStartRunner(playId: string, isActive: boolean, token: string, amflow: AMFlowClient): Promise<RunnerV1 | RunnerV2> {
@@ -37,7 +38,7 @@ export class RunnerStore {
 		const runner = this.runnerManager.getRunner(runnerId);
 		await this.runnerManager.startRunner(runner.runnerId);
 		this.onRunnerCreate.fire({ playId, runnerId, isActive });
-		this.currentPlayId = playId;
+		this.playIdTable[runnerId]  = playId;
 		return runner;
 	}
 
@@ -47,7 +48,9 @@ export class RunnerStore {
 			// コンテンツがエラーの場合、runnerを取得できないので取得できる場合のみ実行
 			await this.runnerManager.stopRunner(runnerId);
 		}
-		this.onRunnerRemove.fire({ playId: `${parseInt(this.currentPlayId, 10) - 1}`, runnerId });
+		const playId = this.playIdTable[runnerId];
+		this.onRunnerRemove.fire({ playId, runnerId });
+		delete this.playIdTable[runnerId];
 	}
 
 	pauseRunner(runnerId: string): void {
@@ -56,7 +59,8 @@ export class RunnerStore {
 			// TODO headless-driver に pause()/resume() を作る
 			(runner as any).driver.stopGame();
 		}
-		this.onRunnerPause.fire({ playId: this.currentPlayId, runnerId });
+		const playId = this.playIdTable[runnerId];
+		this.onRunnerPause.fire({ playId, runnerId });
 	}
 
 	resumeRunner(runnerId: string): void {
@@ -64,6 +68,7 @@ export class RunnerStore {
 		if (runner) {
 			(runner as any).driver.startGame();
 		}
-		this.onRunnerResume.fire({ playId: this.currentPlayId, runnerId });
+		const playId = this.playIdTable[runnerId];
+		this.onRunnerResume.fire({ playId, runnerId });
 	}
 }
