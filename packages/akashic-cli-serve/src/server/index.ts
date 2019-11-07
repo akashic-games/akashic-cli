@@ -29,6 +29,9 @@ function convertToStrings(params: any[]): string[] {
 	});
 }
 
+let httpServer: http.Server;
+let io: socketio.Server;
+
 // TODOこのファイルを改名してcli.tsにする
 export function run(argv: any): void {
 	const ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "..", "package.json"), "utf8")).version;
@@ -123,8 +126,8 @@ export function run(argv: any): void {
 	runnerStore.onRunnerRemove.add(arg => playStore.unregisterRunner(arg));
 
 	const app = express();
-	const httpServer = http.createServer(app);
-	const io = socketio(httpServer);
+	httpServer = http.createServer(app);
+	io = socketio(httpServer);
 
 	app.set("views", path.join(__dirname, "..", "..", "views"));
 	app.set("view engine", "ejs");
@@ -167,4 +170,13 @@ export function run(argv: any): void {
 		// サーバー起動のログに関してはSystemLoggerで使用していない色を使いたいので緑を選択
 		console.log(chalk.green(`Hosting ${targetDirs.join(", ")} on http://${serverGlobalConfig.hostname}:${serverGlobalConfig.port}`));
 	});
+}
+
+export function close(): void {
+	if (httpServer) {
+		httpServer.close();
+	}
+	if (io) {
+		io.close();
+	}
 }
