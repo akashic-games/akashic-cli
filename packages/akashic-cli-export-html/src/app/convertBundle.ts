@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import * as cmn from "@akashic/akashic-cli-commons";
 import * as fsx from "fs-extra";
-import * as ect from "ect";
+import * as ejs from "ejs";
 import {
 	ConvertTemplateParameterObject,
 	copyAssetFilesStrip,
@@ -122,8 +122,8 @@ function writeEct(
 	conf: cmn.Configuration, options: ConvertTemplateParameterObject, templatePath: string): void {
 	const injects = options.injects ? options.injects : [];
 	var scripts = getDefaultBundleScripts(templatePath, conf._content.environment["sandbox-runtime"], options.minify, !options.unbundleText);
-	var ectRender = ect({root: __dirname + "/../templates-build", ext: ".ect"});
-	var html = ectRender.render("bundle-index", {
+	const filePath = path.resolve(__dirname + "/../templates-build/bundle-index.ejs");
+	ejs.renderFile(filePath, {
 		assets: innerHTMLAssetArray,
 		preloadScripts: scripts.preloadScripts,
 		postloadScripts: scripts.postloadScripts,
@@ -134,8 +134,11 @@ function writeEct(
 		exportOption: options.exportInfo !== undefined ? options.exportInfo.option : "",
 		autoSendEvents: options.autoSendEvents,
 		sandboxConfigJsCode: options.sandboxConfigJsCode !== undefined ? options.sandboxConfigJsCode : ""
+	},
+	(err, html) => {
+		if (err) throw err;
+		fs.writeFileSync(path.resolve(outputPath, "./index.html"), html);
 	});
-	fs.writeFileSync(path.resolve(outputPath, "./index.html"), html);
 }
 
 function writeCommonFiles(

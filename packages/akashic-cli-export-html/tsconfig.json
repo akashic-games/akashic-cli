@@ -9,8 +9,7 @@
     "types" : ["archiver", "commander", "fs-extra", "fs-readdir-recursive", "node", "uglify-js"]
   },
   "files": [
-    "./typings/ect.d.ts",
     "./src/app/cli.ts",
     "./src/app/index.ts"
-  ]  
+  ]
 }
