@@ -1,5 +1,5 @@
 script:
-- npm install
+- travis_wait 30 npm install
 - npm test
 language: node_js
 node_js:
