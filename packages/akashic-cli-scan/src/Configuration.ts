@@ -69,13 +69,14 @@ export class Configuration extends cmn.Configuration {
 
 	scanAssets(assetScanDir: AssetScanDir, assetExtension: AssetExtension): Promise<void> {
 		return Promise.resolve()
+
+			.then(() => this.scanAssetsAudio(assetScanDir.audio))
 			.then(() => {
 				this.scanAssetsImage(assetScanDir.image);
 				this.scanAssetsScript(assetScanDir.script);
 				this.scanAssetsText(assetScanDir.text, assetExtension.text);
 			})
-			.then(() => this.scanAssetsAudio(assetScanDir.audio));
-	}
+		}
 
 	scanAssetsImage(imageAssetScanDirs: string[]) {
 		imageAssetScanDirs.forEach((dirname) => {
@@ -84,8 +85,8 @@ export class Configuration extends cmn.Configuration {
 	}
 
 	scanAssetsAudio(audioAssetScanDirs: string[]): Promise<void> {
-		return new Promise((resolve, reject) => {
-			Promise.all(audioAssetScanDirs.map((dirname) => this._scanAssetsAudio(dirname))).then(() => resolve()).catch(reject);
+		return new Promise<void>((resolve, reject) => {
+			Promise.all(audioAssetScanDirs.map((dirname) => this._scanAssetsAudio(dirname))).then(() => resolve(), reject);
 		});
 	}
 
