@@ -77,7 +77,7 @@ export async function promiseConvertBundle(options: ConvertTemplateParameterObje
 		default:
 			throw Error("Unknown engine version: `environment[\"sandbox-runtime\"]` field in game.json should be \"1\" or \"2\".");
 	}
-	writeEct(innerHTMLAssetArray, options.output, conf, options, templatePath);
+	await writeHtmlFile(innerHTMLAssetArray, options.output, conf, options, templatePath);
 	writeCommonFiles(options.source, options.output, conf, options, templatePath);
 }
 
@@ -117,13 +117,13 @@ function convertScriptNameToInnerHTMLObj(
 	};
 }
 
-function writeEct(
+async function writeHtmlFile(
 	innerHTMLAssetArray: InnerHTMLAssetData[], outputPath: string,
-	conf: cmn.Configuration, options: ConvertTemplateParameterObject, templatePath: string): void {
+	conf: cmn.Configuration, options: ConvertTemplateParameterObject, templatePath: string): Promise<void> {
 	const injects = options.injects ? options.injects : [];
 	var scripts = getDefaultBundleScripts(templatePath, conf._content.environment["sandbox-runtime"], options.minify, !options.unbundleText);
 	const filePath = path.resolve(__dirname + "/../templates-build/bundle-index.ejs");
-	ejs.renderFile(filePath, {
+	const html = await ejs.renderFile<string>(filePath, {
 		assets: innerHTMLAssetArray,
 		preloadScripts: scripts.preloadScripts,
 		postloadScripts: scripts.postloadScripts,
@@ -134,11 +134,8 @@ function writeEct(
 		exportOption: options.exportInfo !== undefined ? options.exportInfo.option : "",
 		autoSendEvents: options.autoSendEvents,
 		sandboxConfigJsCode: options.sandboxConfigJsCode !== undefined ? options.sandboxConfigJsCode : ""
-	},
-	(err, html) => {
-		if (err) throw err;
-		fs.writeFileSync(path.resolve(outputPath, "./index.html"), html);
 	});
+	fs.writeFileSync(path.resolve(outputPath, "./index.html"), html);
 }
 
 function writeCommonFiles(

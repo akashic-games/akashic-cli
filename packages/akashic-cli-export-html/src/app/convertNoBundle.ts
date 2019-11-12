@@ -53,8 +53,7 @@ export async function promiseConvertNoBundle(options: ConvertTemplateParameterOb
 	if (errorMessages.length > 0) {
 		options.logger.warn("The following ES5 syntax errors exist.\n" + errorMessages.join("\n"));
 	}
-
-	writeEct(assetPaths, options.output, conf, options);
+	await writeHtmlFile(assetPaths, options.output, conf, options);
 	writeOptionScript(options.output, options);
 }
 
@@ -96,12 +95,16 @@ function convertGlobalScriptAndOutput(
 	return relativePath;
 }
 
-function writeEct(assetPaths: string[], outputPath: string, conf: cmn.Configuration, options: ConvertTemplateParameterObject): void {
+async function writeHtmlFile(
+	assetPaths: string[],
+	outputPath: string,
+	conf: cmn.Configuration,
+	options: ConvertTemplateParameterObject): Promise<void> {
 	const injects = options.injects ? options.injects : [];
 	var version = conf._content.environment["sandbox-runtime"];
 	var versionsJson = require("./engineFilesVersion.json");
 	const filePath = path.resolve(__dirname + "/../templates-build/no-bundle-index.ejs");
-	ejs.renderFile(filePath, {
+	const html = await ejs.renderFile<string>(filePath, {
 		assets: assetPaths,
 		magnify: !!options.magnify,
 		injectedContents: getInjectedContents(options.cwd, injects),
@@ -111,11 +114,8 @@ function writeEct(assetPaths: string[], outputPath: string, conf: cmn.Configurat
 		exportOption: options.exportInfo !== undefined ? options.exportInfo.option : "",
 		autoSendEvents: options.autoSendEvents,
 		sandboxConfigJsCode: options.sandboxConfigJsCode !== undefined ? options.sandboxConfigJsCode : ""
-	},
-	(err, html) => {
-		if (err) throw err;
-		fs.writeFileSync(path.resolve(outputPath, "./index.html"), html);
 	});
+	fs.writeFileSync(path.resolve(outputPath, "./index.html"), html);
 }
 
 function writeCommonFiles(
