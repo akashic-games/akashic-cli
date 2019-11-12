@@ -23,7 +23,7 @@ commander
 	.option("--textAssetExtension <extension>", "specify TextAsset extension", commanderArgsCoordinater)
 	.action((target: string, opts: any = {}) => {
 		var logger = new ConsoleLogger({ quiet: opts.quiet });
-		var assetScanDir = {
+		var assetScanDirectoryTable = {
 			audio: opts.audioAssetDir,
 			image: opts.imageAssetDir,
 			script: opts.scriptAssetDir,
@@ -37,7 +37,7 @@ commander
 			cwd: opts.cwd,
 			logger: logger,
 			resolveAssetIdsFromPath: opts.usePathAssetId,
-			assetScanDir: assetScanDir,
+			assetScanDirectoryTable: assetScanDirectoryTable,
 			assetExtension: assetExtension
 		})
 			.catch((err: any) => {

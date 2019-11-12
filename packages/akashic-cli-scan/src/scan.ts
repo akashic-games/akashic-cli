@@ -1,7 +1,7 @@
 import * as cmn from "@akashic/akashic-cli-commons";
 import { Configuration } from "./Configuration";
 
-export interface AssetScanDir  {
+export interface AssetScanDirectoryTable  {
 	/**
 	 * AudioAssetを取得するパス。
 	 * 省略された場合、 `["audio"]` 。
@@ -70,7 +70,7 @@ export interface ScanAssetParameterObject {
 	/**
 	 * 各アセットを取得するパス。
 	 */
-	assetScanDir?: AssetScanDir;
+	assetScanDirectoryTable?: AssetScanDirectoryTable;
 
 	/**
 	 * 各アセットとして扱う拡張子。
@@ -85,11 +85,11 @@ export function _completeScanAssetParameterObject(param: ScanAssetParameterObjec
 	param.logger = param.logger || new cmn.ConsoleLogger();
 
 	param.resolveAssetIdsFromPath = !!param.resolveAssetIdsFromPath;
-	param.assetScanDir = param.assetScanDir || {};
-	param.assetScanDir.audio = param.assetScanDir.audio || ["audio"];
-	param.assetScanDir.image = param.assetScanDir.image || ["image"];
-	param.assetScanDir.script = param.assetScanDir.script || ["script"];
-	param.assetScanDir.text = param.assetScanDir.text || ["text"];
+	param.assetScanDirectoryTable = param.assetScanDirectoryTable || {};
+	param.assetScanDirectoryTable.audio = param.assetScanDirectoryTable.audio || ["audio"];
+	param.assetScanDirectoryTable.image = param.assetScanDirectoryTable.image || ["image"];
+	param.assetScanDirectoryTable.script = param.assetScanDirectoryTable.script || ["script"];
+	param.assetScanDirectoryTable.text = param.assetScanDirectoryTable.text || ["text"];
 
 	param.assetExtension = param.assetExtension || {};
 	param.assetExtension.text = param.assetExtension.text || [];
@@ -109,22 +109,25 @@ export function promiseScanAsset(param: ScanAssetParameterObject): Promise<void>
 				noOmitPackagejson: param.noOmitPackagejson,
 				resolveAssetIdsFromPath: param.resolveAssetIdsFromPath
 			});
-			conf.vacuum(param.assetScanDir, param.assetExtension);
+			conf.vacuum(param.assetScanDirectoryTable, param.assetExtension);
 			return new Promise<void>((resolve, reject) => {
 				switch (param.target) {
 				case "image":
-					conf.scanAssetsImage(param.assetScanDir.image);
+					conf.scanAssetsImage(param.assetScanDirectoryTable.image);
 					break;
 				case "audio":
-					return conf.scanAssetsAudio(param.assetScanDir.audio).then(resolve, reject);
+					return conf.scanAssetsAudio(param.assetScanDirectoryTable.audio).then(resolve, reject);
 				case "script":
-					conf.scanAssetsScript(param.assetScanDir.script);
+					conf.scanAssetsScript(param.assetScanDirectoryTable.script);
 					break;
 				case "text":
-					conf.scanAssetsText(param.assetScanDir.text, param.assetExtension.text);
+					conf.scanAssetsText(param.assetScanDirectoryTable.text, param.assetExtension.text);
 					break;
 				case "all":
-					return conf.scanAssets(param.assetScanDir, param.assetExtension).then(resolve, reject);
+					return conf.scanAssets({
+						scanDirectoryTable: param.assetScanDirectoryTable,
+						extension: param.assetExtension
+					}).then(resolve, reject);
 				default:
 					return reject("scan asset " + param.target + ": unknown target " + param.target);
 				}

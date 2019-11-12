@@ -5,7 +5,7 @@ import * as cmn from "@akashic/akashic-cli-commons";
 import { getAudioDuration } from "./getAudioDuration";
 import { imageSize } from "image-size";
 import { ISize } from "image-size/dist/types/interface";
-import { ScanAssetParameterObject, AssetScanDir, AssetExtension } from "./scan";
+import { ScanAssetParameterObject, AssetScanDirectoryTable, AssetExtension } from "./scan";
 
 export function _isImageFilePath(p: string): boolean { return /.*\.(png|gif|jpg|jpeg)$/i.test(p); }
 export function _isAudioFilePath(p: string): boolean { return /.*\.(ogg|aac|mp4)$/i.test(p); }
@@ -53,6 +53,11 @@ export interface ConfigurationParameterObject extends cmn.ConfigurationParameter
 	resolveAssetIdsFromPath?: boolean;
 }
 
+export interface ScanAssetsInformation {
+	scanDirectoryTable: AssetScanDirectoryTable;
+	extension: AssetExtension;
+}
+
 export class Configuration extends cmn.Configuration {
 	_basepath: string;
 	_noOmitPackagejson: boolean;
@@ -67,15 +72,15 @@ export class Configuration extends cmn.Configuration {
 		this._npm = param.debugNpm ? param.debugNpm : new cmn.PromisedNpm({ logger: param.logger });
 	}
 
-	scanAssets(assetScanDir: AssetScanDir, assetExtension: AssetExtension): Promise<void> {
+	scanAssets(info: ScanAssetsInformation): Promise<void> {
 		return Promise.resolve()
 
-			.then(() => this.scanAssetsAudio(assetScanDir.audio))
+			.then(() => this.scanAssetsAudio(info.scanDirectoryTable.audio))
 			.then(() => {
-				this.scanAssetsImage(assetScanDir.image);
-				this.scanAssetsScript(assetScanDir.script);
-				this.scanAssetsText(assetScanDir.text, assetExtension.text);
-			})
+				this.scanAssetsImage(info.scanDirectoryTable.image);
+				this.scanAssetsScript(info.scanDirectoryTable.script);
+				this.scanAssetsText(info.scanDirectoryTable.text, info.extension.text);
+			});
 		}
 
 	scanAssetsImage(imageAssetScanDirs: string[]) {
@@ -337,7 +342,7 @@ export class Configuration extends cmn.Configuration {
 	}
 
 	// アセットのうちでファイルが消えていた物を処理するためのメソッド
-	vacuum(assetScanDir: AssetScanDir, assetExtension: AssetExtension): void {
+	vacuum(assetScanDir: AssetScanDirectoryTable, assetExtension: AssetExtension): void {
 		function audioPathMaker(f: string): string {
 			return path.join(path.dirname(f), path.basename(f, path.extname(f)));  // remove the extension
 		}

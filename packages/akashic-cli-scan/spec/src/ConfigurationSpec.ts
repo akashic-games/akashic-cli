@@ -1711,7 +1711,7 @@ describe("Configuration", function () {
 			text: <string[]>[]
 		}
 
-		conf.scanAssets(assetScanDir, {text: []}).then(() => {
+		conf.scanAssets({ scanDirectoryTable: assetScanDir, extension: {text: []} }).then(() => {
 			conf.vacuum(assetScanDir, assretExtension);
 			expect(conf.getContent()).toEqual({
 				width: 320,
