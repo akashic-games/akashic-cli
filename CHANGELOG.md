@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.8.13 (2019-11-12)
+
+#### Bug Fix
+* `akashic-cli-serve`
+  * [#186](https://github.com/akashic-games/akashic-cli/pull/186) fix: server stopped to contents error ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 1.8.12 (2019-11-07)
 
 #### Enhancement
