@@ -17,6 +17,7 @@ export class RunnerStore {
 	onRunnerPause: Trigger<RunnerPauseTestbedEvent>;
 	onRunnerResume: Trigger<RunnerResumeTestbedEvent>;
 	private runnerManager: RunnerManager;
+	private playIdTable: { [runnerId: string]: string };
 
 	constructor(params: RunnerStoreParameterObject) {
 		this.onRunnerCreate = new Trigger<RunnerCreateTestbedEvent>();
@@ -24,6 +25,7 @@ export class RunnerStore {
 		this.onRunnerPause = new Trigger<RunnerPauseTestbedEvent>();
 		this.onRunnerResume = new Trigger<RunnerResumeTestbedEvent>();
 		this.runnerManager = params.runnerManager;
+		this.playIdTable = {};
 	}
 
 	async createAndStartRunner(playId: string, isActive: boolean, token: string, amflow: AMFlowClient): Promise<RunnerV1 | RunnerV2> {
@@ -36,27 +38,37 @@ export class RunnerStore {
 		const runner = this.runnerManager.getRunner(runnerId);
 		await this.runnerManager.startRunner(runner.runnerId);
 		this.onRunnerCreate.fire({ playId, runnerId, isActive });
+		this.playIdTable[runnerId]  = playId;
 		return runner;
 	}
 
 	async stopRunner(runnerId: string): Promise<void> {
-		const playId = this.runnerManager.getRunner(runnerId).playId;
-		await this.runnerManager.stopRunner(runnerId);
+		const runner = this.runnerManager.getRunner(runnerId);
+		if (runner) {
+			// コンテンツがエラーの場合、runnerを取得できないので取得できる場合のみ実行
+			await this.runnerManager.stopRunner(runnerId);
+		}
+		const playId = this.playIdTable[runnerId];
 		this.onRunnerRemove.fire({ playId, runnerId });
+		delete this.playIdTable[runnerId];
 	}
 
 	pauseRunner(runnerId: string): void {
 		const runner = this.runnerManager.getRunner(runnerId);
-		const playId = runner.playId;
-		// TODO headless-driver に pause()/resume() を作る
-		(runner as any).driver.stopGame();
+		if (runner) {
+			// TODO headless-driver に pause()/resume() を作る
+			(runner as any).driver.stopGame();
+		}
+		const playId = this.playIdTable[runnerId];
 		this.onRunnerPause.fire({ playId, runnerId });
 	}
 
 	resumeRunner(runnerId: string): void {
 		const runner = this.runnerManager.getRunner(runnerId);
-		const playId = runner.playId;
-		(runner as any).driver.startGame();
+		if (runner) {
+			(runner as any).driver.startGame();
+		}
+		const playId = this.playIdTable[runnerId];
 		this.onRunnerResume.fire({ playId, runnerId });
 	}
 }
