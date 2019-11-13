@@ -159,6 +159,16 @@ export function run(argv: any): void {
 	runnerStore.onRunnerPause.add(arg => { io.emit("runnerPause", arg); });
 	runnerStore.onRunnerResume.add(arg => { io.emit("runnerResume", arg); });
 
+	const close = () => {
+		httpServer.close();
+		io.close();
+		console.log(chalk.green(`Stop hosting ${targetDirs.join(", ")} on http://${serverGlobalConfig.hostname}:${serverGlobalConfig.port}`));
+		process.exit(0);
+	};
+
+	process.on("SIGINT", close);
+	process.on("SIGTERM", close);
+
 	httpServer.listen(serverGlobalConfig.port, () => {
 		if (serverGlobalConfig.port < 1024) {
 			getSystemLogger().warn("Akashic Serve is a development server which is not appropriate for public release. " +
