@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as aacDuration from "aac-duration";
-import * as musicMetaData from "musicmetadata";
+import * as musicMetaData from "music-metadata";
 import { mp4Inspector } from "thumbcoil";
 import * as cmn from "@akashic/akashic-cli-commons";
 
@@ -19,13 +19,14 @@ export function getAudioDuration(filepath: string, logger?: cmn.Logger): Promise
 		return Promise.resolve(d);
 	case ".ogg":
 		return new Promise((resolve, reject) => {
-			musicMetaData(fs.createReadStream(filepath), { duration: true }, (err: any, metadata: MM.Metadata) => {
-				if (err) {
+			musicMetaData.parseFile(filepath, {duration: true})
+				.then((metaData: musicMetaData.IAudioMetadata) => {
+					resolve(metaData.format.duration);
+				})
+				.catch( (err: any) => {
 					return reject(err);
-				}
-				resolve(metadata.duration);
+				});
 			});
-		});
 	case ".mp4":
 		if (logger) {
 			logger.warn("[deprecated] " + path.basename(filepath) + " uses deprecated format. Use AAC instead of MP4(AAC).");
