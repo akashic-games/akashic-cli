@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 1.8.14 (2019-11-14)
+
+#### Other Change
+* `akashic-cli-scan`
+  * [#189](https://github.com/akashic-games/akashic-cli/pull/189) other: replace musicmetadata to music-metadata ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+* `akashic-cli-export-html`
+  * [#190](https://github.com/akashic-games/akashic-cli/pull/190) other: replace deprecated module ect to ejs ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 1.8.13 (2019-11-12)
 
 #### Bug Fix
