@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import * as cmn from "@akashic/akashic-cli-commons";
 import * as fsx from "fs-extra";
-import * as ect from "ect";
+import * as ejs from "ejs";
 import {
 	ConvertTemplateParameterObject,
 	copyAssetFilesStrip,
@@ -53,8 +53,7 @@ export async function promiseConvertNoBundle(options: ConvertTemplateParameterOb
 	if (errorMessages.length > 0) {
 		options.logger.warn("The following ES5 syntax errors exist.\n" + errorMessages.join("\n"));
 	}
-
-	writeEct(assetPaths, options.output, conf, options);
+	await writeHtmlFile(assetPaths, options.output, conf, options);
 	writeOptionScript(options.output, options);
 }
 
@@ -96,12 +95,16 @@ function convertGlobalScriptAndOutput(
 	return relativePath;
 }
 
-function writeEct(assetPaths: string[], outputPath: string, conf: cmn.Configuration, options: ConvertTemplateParameterObject): void {
+async function writeHtmlFile(
+	assetPaths: string[],
+	outputPath: string,
+	conf: cmn.Configuration,
+	options: ConvertTemplateParameterObject): Promise<void> {
 	const injects = options.injects ? options.injects : [];
-	var ectRender = ect({root: __dirname + "/../templates-build", ext: ".ect"});
 	var version = conf._content.environment["sandbox-runtime"];
 	var versionsJson = require("./engineFilesVersion.json");
-	var html = ectRender.render("no-bundle-index", {
+	const filePath = path.resolve(__dirname + "/../templates-build/no-bundle-index.ejs");
+	const html = await ejs.renderFile<string>(filePath, {
 		assets: assetPaths,
 		magnify: !!options.magnify,
 		injectedContents: getInjectedContents(options.cwd, injects),
