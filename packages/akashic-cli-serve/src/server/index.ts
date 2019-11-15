@@ -162,7 +162,9 @@ export function run(argv: any): void {
 	const close = () => {
 		httpServer.close((err?: Error) => {
 			if (err) {
-				console.log(chalk.red(`Failed to stop server(host: ${serverGlobalConfig.hostname}, port:${serverGlobalConfig.port}).`));
+				console.error(
+					chalk.red(`Failed to stop server(host: ${serverGlobalConfig.hostname}, port: ${serverGlobalConfig.port}). ${err.message}`)
+				);
 				process.exit(1);
 			}
 			io.close(() => {
