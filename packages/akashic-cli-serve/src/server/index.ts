@@ -159,18 +159,34 @@ export function run(argv: any): void {
 	runnerStore.onRunnerPause.add(arg => { io.emit("runnerPause", arg); });
 	runnerStore.onRunnerResume.add(arg => { io.emit("runnerResume", arg); });
 
-	const close = () => {
-		httpServer.close((err?: Error) => {
-			if (err) {
-				console.error(
-					chalk.red(`Failed to stop server(host: ${serverGlobalConfig.hostname}, port: ${serverGlobalConfig.port}). ${err.message}`)
-				);
-				process.exit(1);
-			}
-			io.close(() => {
-				console.log(chalk.green(`Stop hosting ${targetDirs.join(", ")} on http://${serverGlobalConfig.hostname}:${serverGlobalConfig.port}`));
-				process.exit(0);
+	const closeSocket = () => {
+		return new Promise((resolve) => {
+			io.close(() => resolve());
+		});
+	};
+
+	const closeServer = () => {
+		return new Promise((resolve, reject) => {
+			httpServer.close((err?: Error) => {
+				if (err) {
+					return closeSocket().then(() => reject(err));
+				}
+				closeSocket().then(() => resolve());
 			});
+		});
+	};
+
+	const close = () => {
+		closeServer()
+		.then(() => {
+			console.log(chalk.green(`Stop hosting ${targetDirs.join(", ")} on http://${serverGlobalConfig.hostname}:${serverGlobalConfig.port}`));
+			process.exit(0);
+		})
+		.catch((err) => {
+			console.error(
+				chalk.red(`Failed to stop server(host: ${serverGlobalConfig.hostname}, port: ${serverGlobalConfig.port}). ${err.message}`)
+			);
+			process.exit(1);
 		});
 	};
 
