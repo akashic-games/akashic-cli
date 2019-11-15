@@ -160,10 +160,16 @@ export function run(argv: any): void {
 	runnerStore.onRunnerResume.add(arg => { io.emit("runnerResume", arg); });
 
 	const close = () => {
-		httpServer.close();
-		io.close();
-		console.log(chalk.green(`Stop hosting ${targetDirs.join(", ")} on http://${serverGlobalConfig.hostname}:${serverGlobalConfig.port}`));
-		process.exit(0);
+		httpServer.close((err?: Error) => {
+			if (err) {
+				console.log(chalk.red(`Failed to stop server(host: ${serverGlobalConfig.hostname}, port:${serverGlobalConfig.port}).`));
+				process.exit(1);
+			}
+			io.close(() => {
+				console.log(chalk.green(`Stop hosting ${targetDirs.join(", ")} on http://${serverGlobalConfig.hostname}:${serverGlobalConfig.port}`));
+				process.exit(0);
+			});
+		});
 	};
 
 	process.on("SIGINT", close);
