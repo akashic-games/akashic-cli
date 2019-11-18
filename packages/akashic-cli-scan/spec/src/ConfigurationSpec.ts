@@ -193,13 +193,13 @@ describe("Configuration", function () {
 			logger: nullLogger,
 			basepath: "./"
 		});
-		conf.scanAssetsImage();
+		conf.scanAssetsImage(["image"]);
 		expect(conf.getContent().assets["d"].type).toBe("image");
-		conf.scanAssetsScript();
+		conf.scanAssetsScript(["script"]);
 		expect(conf.getContent().assets["_1"].type).toBe("script");
-		conf.scanAssetsText();
+		conf.scanAssetsText(["text"], []);
 		expect(conf.getContent().assets["$"].type).toBe("text");
-		conf.scanAssetsAudio().then(() => {
+		conf.scanAssetsAudio(["audio"]).then(() => {
 			expect(conf.getContent().assets["_"].type).toBe("audio");
 			done();
 		}, done.fail);
@@ -237,7 +237,7 @@ describe("Configuration", function () {
 		expect(conf.getContent().assets["dummyImage"].height).toBe(90);
 		expect(conf.getContent().assets["dummyImage"].global).toBe(true);
 		expect(conf.getContent().assets["bar"]).toBeUndefined();
-		conf.scanAssetsImage();
+		conf.scanAssetsImage(["image"]);
 		expect(conf.getContent().assets["dummyImage"].type).toBe("image");
 		expect(conf.getContent().assets["dummyImage"].width).toBe(1);
 		expect(conf.getContent().assets["dummyImage"].height).toBe(1);
@@ -268,7 +268,7 @@ describe("Configuration", function () {
 			logger: nullLogger,
 			basepath: process.cwd()
 		});
-		expect(function(){conf.scanAssetsImage()}).toThrow();
+		expect(function(){conf.scanAssetsImage(["image"])}).toThrow();
 	});
 
 	it("scan image assets invalid file name", function() {
@@ -289,7 +289,7 @@ describe("Configuration", function () {
 				},
 			},
 		});
-		expect(function(){conf.scanAssetsImage()}).toThrow();
+		expect(function(){conf.scanAssetsImage(["image"])}).toThrow();
 
 		conf = new cnf.Configuration({ content: <any>{}, logger: nullLogger, basepath: process.cwd() });
 		gamejson = {
@@ -308,7 +308,7 @@ describe("Configuration", function () {
 				},
 			},
 		});
-		expect(function(){conf.scanAssetsImage()}).toThrow();
+		expect(function(){conf.scanAssetsImage(["image"])}).toThrow();
 	});
 
 	it("scan audio assets info - ogg", function (done) {
@@ -342,7 +342,7 @@ describe("Configuration", function () {
 
 		expect(conf.getContent().assets["dummyAudio"].type).toBe("audio");
 		expect(conf.getContent().assets["newDummy"]).toBe(undefined);
-		conf.scanAssetsAudio().then(() => {
+		conf.scanAssetsAudio(["audio"]).then(() => {
 			expect(conf.getContent().assets["dummyAudio"].type).toBe("audio");
 			expect(conf.getContent().assets["newDummy"].type).toBe("audio");
 			expect(conf.getContent().assets["newDummy"].systemId).toBe("sound");
@@ -382,7 +382,7 @@ describe("Configuration", function () {
 
 		expect(conf.getContent().assets["dummyAudio"].type).toBe("audio");
 		expect(conf.getContent().assets["newDummy"]).toBe(undefined);
-		conf.scanAssetsAudio().then(() => {
+		conf.scanAssetsAudio(["audio"]).then(() => {
 			expect(conf.getContent().assets["dummyAudio"].type).toBe("audio");
 			expect(conf.getContent().assets["newDummy"].type).toBe("audio");
 			expect(conf.getContent().assets["newDummy"].systemId).toBe("sound");
@@ -412,7 +412,7 @@ describe("Configuration", function () {
 			}
 		});
 		var conf = new cnf.Configuration({ content: gamejson, logger: nullLogger, basepath: "." });
-		conf.scanAssetsAudio().then((done.fail as () => void)).catch((err: any) => {
+		conf.scanAssetsAudio(["audio"]).then((done.fail as () => void)).catch((err: any) => {
 			expect(err.message.indexOf("Conflicted Asset Type") >= 0).toBe(true);
 			done();
 		});
@@ -429,7 +429,7 @@ describe("Configuration", function () {
 		var loggedCount = 0;
 		var logger = new cmn.ConsoleLogger({ quiet: false, debugLogMethod: () => ++loggedCount });
 		var conf = new cnf.Configuration({ content: <any>{}, logger: logger, basepath: process.cwd() });
-		conf.scanAssetsAudio().then(() => {
+		conf.scanAssetsAudio(["audio"]).then(() => {
 			// アセット追加のログが1つ + duration差のwarnが1つ + AAC利用のwarnが1つ
 			expect(loggedCount).toBe(3);
 			done();
@@ -455,7 +455,7 @@ describe("Configuration", function () {
 			},
 		});
 		var conf = new cnf.Configuration({ content: gamejson, logger: nullLogger, basepath: process.cwd() });
-		conf.scanAssetsAudio().then((done.fail as () => void), (err: any) => {
+		conf.scanAssetsAudio(["audio"]).then((done.fail as () => void), (err: any) => {
 			expect(err).toEqual(new Error("not aac"));
 			done();
 		});
@@ -480,10 +480,9 @@ describe("Configuration", function () {
 			},
 		});
 		var conf = new cnf.Configuration({ content: gamejson, logger: nullLogger, basepath: process.cwd() });
-
 		expect(conf.getContent().assets["dummyCode"].type).toBe("script");
 		expect(conf.getContent().assets["newDummy"]).toBe(undefined);
-		conf.scanAssetsScript();
+		conf.scanAssetsScript(["script"]);
 		expect(conf.getContent().assets["dummyCode"].type).toBe("script");
 		expect(conf.getContent().assets["newDummy"].type).toBe("script");
 
@@ -504,7 +503,7 @@ describe("Configuration", function () {
 			},
 		});
 		conf = new cnf.Configuration({ content: gamejson, logger: nullLogger, basepath: process.cwd() });
-		expect(function(){conf.scanAssetsScript()}).toThrow();
+		expect(function(){conf.scanAssetsScript(["script"])}).toThrow();
 	});
 
 	it("scan script assets invalid file name", function() {
@@ -525,7 +524,7 @@ describe("Configuration", function () {
 				},
 			},
 		});
-		expect(function(){conf.scanAssetsScript()}).toThrow();
+		expect(function(){conf.scanAssetsScript(["script"])}).toThrow();
 		var conf = new cnf.Configuration({ content: <any>{}, logger: nullLogger, basepath: process.cwd() });
 		gamejson = {
 			assets: {
@@ -543,7 +542,7 @@ describe("Configuration", function () {
 				},
 			},
 		});
-		expect(function(){conf.scanAssetsScript()}).toThrow();
+		expect(function(){conf.scanAssetsScript(["script"])}).toThrow();
 	});
 
 	it("scan text assets info", function () {
@@ -568,7 +567,7 @@ describe("Configuration", function () {
 
 		expect(conf.getContent().assets["dummyText"].type).toBe("text");
 		expect(conf.getContent().assets["newDummy"]).toBe(undefined);
-		conf.scanAssetsText();
+		conf.scanAssetsText(["text"], []);
 		expect(conf.getContent().assets["dummyText"].type).toBe("text");
 		expect(conf.getContent().assets["newDummy"].type).toBe("text");
 
@@ -589,7 +588,7 @@ describe("Configuration", function () {
 			},
 		});
 		conf = new cnf.Configuration({ content: gamejson, logger: nullLogger, basepath: process.cwd() });
-		expect(function(){conf.scanAssetsText()}).toThrow();
+		expect(function(){conf.scanAssetsText(["text"], [])}).toThrow();
 	});
 
 	it("scan text assets invalid file name", function() {
@@ -610,7 +609,7 @@ describe("Configuration", function () {
 				},
 			},
 		});
-		expect(function(){conf.scanAssetsText()}).toThrow();
+		expect(function(){conf.scanAssetsText(["text"], [])}).toThrow();
 		var conf = new cnf.Configuration({ content: <any>{}, logger: nullLogger, basepath: process.cwd() });
 		gamejson = {
 			assets: {
@@ -628,7 +627,7 @@ describe("Configuration", function () {
 				},
 			},
 		});
-		expect(function(){conf.scanAssetsText()}).toThrow();
+		expect(function(){conf.scanAssetsText(["text"], [])}).toThrow();
 	});
 
 	it("handles a path appeared multiple time", function () {
@@ -658,7 +657,7 @@ describe("Configuration", function () {
 			},
 		});
 		var conf = new cnf.Configuration({ content: gamejson, logger: nullLogger, basepath: process.cwd() });
-		expect(function(){conf.scanAssetsText()}).toThrow();
+		expect(function(){conf.scanAssetsText(["text"], [])}).toThrow();
 	});
 
 	it("vacuums obsolete declarations", function () {
@@ -735,7 +734,17 @@ describe("Configuration", function () {
 		expect(conf.getContent().assets["deletedSe"]).not.toBe(undefined);
 		expect(conf.getContent().assets["deletedTxt"]).not.toBe(undefined);
 		expect(conf.getContent().assets["deletedScript"]).not.toBe(undefined);
-		conf.vacuum();
+
+		var assetScanDir = {
+			audio: ["audio"],
+			image: ["image"],
+			script: ["script"],
+			text: ["text"]
+		};
+		var assretExtension = {
+			text: <string[]>[]
+		}
+		conf.vacuum(assetScanDir, assretExtension);
 		expect(conf.getContent().assets["chara"]).not.toBe(undefined);
 		expect(conf.getContent().assets["se"]).not.toBe(undefined);
 		expect(conf.getContent().assets["txt"]).not.toBe(undefined);
@@ -744,6 +753,107 @@ describe("Configuration", function () {
 		expect(conf.getContent().assets["deletedSe"]).toBe(undefined);
 		expect(conf.getContent().assets["deletedTxt"]).toBe(undefined);
 		expect(conf.getContent().assets["deletedScript"]).toBe(undefined);
+	});
+
+	it("specify scan target dir", function (done) {
+		var gamejson: any = {
+			assets: {
+				"dummyAudio": {
+					"type": "audio",
+					"path": "audio/foo/dummyAudio",
+					"global": true,
+					"duration": 100
+				},
+				"dummyImage": {
+					"type": "image",
+					"path": "image/foo/dummyImage.png",
+				},
+				"dummyScript": {
+					"type": "script",
+					"path": "script/foo/dummyScript.js",
+				},
+				"dummyText": {
+					"type": "text",
+					"path": "script/foo/dummyText.js",
+				}
+			}
+		};
+		mockfs({
+			"game.json": JSON.stringify(gamejson),
+			"sound": {
+				"dummySound.ogg": DUMMY_OGG_DATA
+			},
+			"img": {
+				"dummyImg.png": DUMMY_1x1_PNG_DATA
+			},
+			"txt": {
+				"dummyTxt.txt": "Lorem ipsum dolor sit amet, consectetur...",
+			},
+			"code": {
+				"dummyCode.js": "var x = 1;",
+			}
+		});
+		var conf = new cnf.Configuration({ content: gamejson, logger: nullLogger, basepath: process.cwd() });
+		conf.scanAssetsImage(["img"]);
+		expect(conf.getContent().assets["dummyImg"].type).toBe("image");
+		expect(conf.getContent().assets["dummyImage"].type).toBe("image");
+		conf.scanAssetsScript(["code"]);
+		expect(conf.getContent().assets["dummyCode"].type).toBe("script");
+		expect(conf.getContent().assets["dummyScript"].type).toBe("script");
+		conf.scanAssetsText(["txt"], []);
+		expect(conf.getContent().assets["dummyTxt"].type).toBe("text");
+		expect(conf.getContent().assets["dummyText"].type).toBe("text");
+		conf.scanAssetsAudio(["sound"]).then(() => {
+			expect(conf.getContent().assets["dummySound"].type).toBe("audio");
+			expect(conf.getContent().assets["dummyAudio"].type).toBe("audio");
+			done();
+		}, done.fail);
+	});
+
+	it("scan vacuum without no target dirs", function (done) {
+		var gamejson: any = {
+			assets: {
+				"": {
+					"type": "text",
+					"path": "text/foo/dummy.txt",
+					"global": true,
+				},
+				"a2": {
+					"type": "image",
+					"path": "text/foo/dummy.txt",
+				},
+				"a3": {
+					"type": "text",
+					"path": "text/foo/dummy.txt",
+				},
+			}
+		};
+		mockfs({
+			"game.json": JSON.stringify(gamejson),
+			"sound": {
+				"dummySound.ogg": DUMMY_OGG_DATA
+			},
+			"img": {
+				"dummyImg.png": DUMMY_1x1_PNG_DATA
+			},
+			"txt": {
+				"dummyTxt.txt": "Lorem ipsum dolor sit amet, consectetur...",
+			},
+			"code": {
+				"dummyCode.js": "var x = 1;",
+			}
+		});
+		var conf = new cnf.Configuration({ content: gamejson, logger: nullLogger, basepath: process.cwd() });
+		conf.scanAssetsImage(["img"]);
+		expect(conf.getContent().assets["dummyImg"].type).toBe("image");
+		conf.scanAssetsScript(["code"]);
+		expect(conf.getContent().assets["dummyCode"].type).toBe("script");
+		conf.scanAssetsText(["txt"], []);
+		expect(conf.getContent().assets["dummyTxt"].type).toBe("text");
+		conf.scanAssetsAudio(["sound"]).then(() => {
+			expect(conf.getContent().assets["dummySound"].type).toBe("audio");
+			done();
+		}, done.fail);
 	});
 
 	it("scan globalScripts field based on node_modules/", function (done) {
@@ -1591,8 +1701,18 @@ describe("Configuration", function () {
 		});
 		var conf = new cnf.Configuration({ content: gamejson, logger: nullLogger, basepath: process.cwd() });
 
-		conf.scanAssets().then(() => {
-			conf.vacuum();
+		var assetScanDir = {
+			audio: ["audio"],
+			image: ["image"],
+			script: ["script"],
+			text: ["text"]
+		};
+		var assretExtension = {
+			text: <string[]>[]
+		}
+
+		conf.scanAssets({ scanDirectoryTable: assetScanDir, extension: {text: []} }).then(() => {
+			conf.vacuum(assetScanDir, assretExtension);
 			expect(conf.getContent()).toEqual({
 				width: 320,
 				height: 320,
