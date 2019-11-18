@@ -32,6 +32,12 @@ export interface ScanAssetParameterObject {
 	 * 省略された場合、 `false` 。
 	 */
 	resolveAssetIdsFromPath?: boolean;
+
+	/**
+	 * アセットIDを再度スキャンし直すかどうか。
+	 * 省略された場合、 `false` 。
+	 */
+	rescanAssetIds?: boolean;
 }
 
 export function _completeScanAssetParameterObject(param: ScanAssetParameterObject): void {
@@ -39,6 +45,7 @@ export function _completeScanAssetParameterObject(param: ScanAssetParameterObjec
 	param.cwd = param.cwd || process.cwd();
 	param.logger = param.logger || new cmn.ConsoleLogger();
 	param.resolveAssetIdsFromPath = !!param.resolveAssetIdsFromPath;
+	param.rescanAssetIds = !!param.rescanAssetIds;
 }
 
 export function promiseScanAsset(param: ScanAssetParameterObject): Promise<void> {
@@ -52,7 +59,8 @@ export function promiseScanAsset(param: ScanAssetParameterObject): Promise<void>
 				logger: param.logger,
 				basepath: ".",
 				noOmitPackagejson: param.noOmitPackagejson,
-				resolveAssetIdsFromPath: param.resolveAssetIdsFromPath
+				resolveAssetIdsFromPath: param.resolveAssetIdsFromPath,
+				rescanAssetIds: param.rescanAssetIds
 			});
 			conf.vacuum();
 			return new Promise<void>((resolve, reject) => {
@@ -127,6 +135,12 @@ export interface ScanNodeModulesParameterObject {
 	 * 偽である場合、ファイル名から拡張子を除去した文字列がアセットIDとして利用される。
 	 */
 	resolveAssetIdsFromPath?: boolean;
+
+	/**
+	 * アセットIDを再度スキャンし直すかどうか。
+	 * 省略された場合、 `false` 。
+	 */
+	rescanAssetIds?: boolean;
 }
 
 export function _completeScanNodeModulesParameterObject(param: ScanNodeModulesParameterObject): void {
@@ -134,6 +148,7 @@ export function _completeScanNodeModulesParameterObject(param: ScanNodeModulesPa
 	param.logger = param.logger || new cmn.ConsoleLogger();
 	param.fromEntryPoint = param.fromEntryPoint || false;
 	param.resolveAssetIdsFromPath = !!param.resolveAssetIdsFromPath;
+	param.rescanAssetIds = !!param.rescanAssetIds;
 }
 
 export function promiseScanNodeModules(param: ScanNodeModulesParameterObject): Promise<void> {
@@ -148,7 +163,8 @@ export function promiseScanNodeModules(param: ScanNodeModulesParameterObject): P
 				basepath: "." ,
 				debugNpm: param.debugNpm,
 				noOmitPackagejson: !!param.noOmitPackagejson,
-				resolveAssetIdsFromPath: !!param.resolveAssetIdsFromPath
+				resolveAssetIdsFromPath: !!param.resolveAssetIdsFromPath,
+				rescanAssetIds: !!param.rescanAssetIds
 			});
 			return Promise.resolve()
 				.then(() => (param.fromEntryPoint ? conf.scanGlobalScriptsFromEntryPoint() : conf.scanGlobalScripts()))

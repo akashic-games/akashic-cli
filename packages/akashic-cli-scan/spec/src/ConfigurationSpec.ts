@@ -1608,5 +1608,82 @@ describe("Configuration", function () {
 			done();
 		}, done.fail);
 	});
+
+	it("can rescan Asset IDs", async () => {
+		const gamejson = {
+			width: 1,
+			height: 1,
+			assets: {
+				"chara": {
+					"type": "image",
+					"path": "image/foo/dummy.png",
+					"width": 1,
+					"height": 1
+				},
+				"se": {
+					"type": "audio",
+					"path": "audio/some/se"
+				},
+				"txt": {
+					"type": "text",
+					"path": "text/foo/textdata.txt"
+				},
+				"script": {
+					"type": "script",
+					"path": "script/foo/script.js"
+				}
+			}
+		};
+		mockfs({
+			"game.json": JSON.stringify(gamejson),
+			"image": {
+				"foo": {
+					"dummy.png": DUMMY_1x1_PNG_DATA
+				}
+			},
+			"audio": {
+				"some": {
+					"se.ogg": DUMMY_OGG_DATA
+				}
+			},
+			"text": {
+				"foo": {
+					"textdata.txt": "Lorem ipsum dolor sit amet, consectetur..."
+				}
+			},
+			"script": {
+				"foo": {
+					"script.js": "var x = 1;"
+				}
+			}
+		});
+		const conf = new cnf.Configuration({
+			content: gamejson,
+			logger: nullLogger,
+			basepath: process.cwd(),
+			rescanAssetIds: false,
+			resolveAssetIdsFromPath: true
+		});
+
+		await conf.scanAssets();
+		expect(conf.getContent().assets["chara"]).not.toBe(undefined);
+		expect(conf.getContent().assets["se"]).not.toBe(undefined);
+		expect(conf.getContent().assets["txt"]).not.toBe(undefined);
+		expect(conf.getContent().assets["script"]).not.toBe(undefined);
+
+		conf._rescanAssetIds = true;
+		await conf.scanAssets();
+		expect(conf.getContent().assets["image/foo/dummy"]).not.toBe(undefined);
+		expect(conf.getContent().assets["audio/some/se"]).not.toBe(undefined);
+		expect(conf.getContent().assets["text/foo/textdata"]).not.toBe(undefined);
+		expect(conf.getContent().assets["script/foo/script"]).not.toBe(undefined);
+
+		conf._resolveAssetIdsFromPath = false;
+		await conf.scanAssets();
+		expect(conf.getContent().assets["dummy"]).not.toBe(undefined);
+		expect(conf.getContent().assets["se"]).not.toBe(undefined);
+		expect(conf.getContent().assets["textdata"]).not.toBe(undefined);
+		expect(conf.getContent().assets["script"]).not.toBe(undefined);
+	});
 });
 
