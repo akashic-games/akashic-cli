@@ -16,7 +16,7 @@ commander
 	.option("-C, --cwd <dir>", "The directory incluedes game.json")
 	.option("-q, --quiet", "Suppress output")
 	.option("--use-path-asset-id", "Resolve Asset IDs from these path instead of name")
-	.option("--rescan-asset-id", "Rescan only Asset IDs")
+	.option("--rescan-asset-id", "Rescan Asset IDs")
 	.action((target: string, opts: any = {}) => {
 		var logger = new ConsoleLogger({ quiet: opts.quiet });
 		promiseScanAsset({
