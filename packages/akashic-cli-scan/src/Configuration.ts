@@ -432,7 +432,7 @@ export class Configuration extends cmn.Configuration {
 		if (from === to) {
 			return;
 		}
-		this._logger.info(`Detected change of the Aset ID from ${from} to ${to}`);
+		this._logger.info(`Detected change of the Asset ID from ${from} to ${to}`);
 		this._content.assets[to] = this._content.assets[from];
 		delete this._content.assets[from];
 	}
