@@ -1729,7 +1729,7 @@ describe("Configuration", function () {
 		}, done.fail);
 	});
 
-	it("can update already defined Asset IDs", async () => {
+	it("can update previously defined Asset IDs", async () => {
 		const gamejson = {
 			width: 1,
 			height: 1,
@@ -1785,21 +1785,34 @@ describe("Configuration", function () {
 			resolveAssetIdsFromPath: true
 		});
 
-		await conf.scanAssets();
+		const scanDirectoryTable = {
+			audio: ["audio"],
+			image: ["image"],
+			script: ["script"],
+			text: ["text"]
+		};
+		const extension = {
+			audio: ["ogg"],
+			image: ["png"],
+			script: ["js"],
+			text: ["txt"]
+		};
+
+		await conf.scanAssets({scanDirectoryTable, extension});
 		expect(conf.getContent().assets["chara"]).not.toBe(undefined);
 		expect(conf.getContent().assets["se"]).not.toBe(undefined);
 		expect(conf.getContent().assets["txt"]).not.toBe(undefined);
 		expect(conf.getContent().assets["script"]).not.toBe(undefined);
 
 		conf._forceUpdateAssetIds = true;
-		await conf.scanAssets();
+		await conf.scanAssets({scanDirectoryTable, extension});
 		expect(conf.getContent().assets["image/foo/dummy"]).not.toBe(undefined);
 		expect(conf.getContent().assets["audio/some/se"]).not.toBe(undefined);
 		expect(conf.getContent().assets["text/foo/textdata"]).not.toBe(undefined);
 		expect(conf.getContent().assets["script/foo/script"]).not.toBe(undefined);
 
 		conf._resolveAssetIdsFromPath = false;
-		await conf.scanAssets();
+		await conf.scanAssets({scanDirectoryTable, extension});
 		expect(conf.getContent().assets["dummy"]).not.toBe(undefined);
 		expect(conf.getContent().assets["se"]).not.toBe(undefined);
 		expect(conf.getContent().assets["textdata"]).not.toBe(undefined);
