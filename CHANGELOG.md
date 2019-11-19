@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.8.15 (2019-11-19)
+
+#### Enhancement
+* `akashic-cli-scan`
+  * [#183](https://github.com/akashic-games/akashic-cli/pull/183) specify scan dirs, asset extension ([@kamakiri01](https://github.com/kamakiri01))
+
+#### Committers: 1
+- kamakiri_ys ([@kamakiri01](https://github.com/kamakiri01))
+
 ## 1.8.14 (2019-11-14)
 
 #### Other Change
