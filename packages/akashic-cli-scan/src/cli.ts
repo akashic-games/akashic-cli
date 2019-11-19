@@ -17,14 +17,30 @@ commander
 	.option("-q, --quiet", "Suppress output")
 	.option("--use-path-asset-id", "Resolve Asset IDs from these path instead of name")
 	.option("--update-asset-id", "Update previously defined Asset IDs")
+	.option("--imageAssetDir <dir>", "specify ImageAsset directory", commanderArgsCoordinater)
+	.option("--audioAssetDir <dir>", "specify AudioAsset directory", commanderArgsCoordinater)
+	.option("--scriptAssetDir <dir>", "specify ScriptAsset directory", commanderArgsCoordinater)
+	.option("--textAssetDir <dir>", "specify TextAsset directory", commanderArgsCoordinater)
+	.option("--textAssetExtension <extension>", "specify TextAsset extension", commanderArgsCoordinater)
 	.action((target: string, opts: any = {}) => {
 		var logger = new ConsoleLogger({ quiet: opts.quiet });
+		var assetScanDirectoryTable = {
+			audio: opts.audioAssetDir,
+			image: opts.imageAssetDir,
+			script: opts.scriptAssetDir,
+			text: opts.textAssetDir
+		};
+		var assetExtension = {
+			text: opts.textAssetExtension
+		};
 		promiseScanAsset({
 			target: target,
 			cwd: opts.cwd,
 			logger: logger,
 			resolveAssetIdsFromPath: opts.usePathAssetId,
-			forceUpdateAssetIds: opts.updateAssetId
+			forceUpdateAssetIds: opts.updateAssetId,
+			assetScanDirectoryTable: assetScanDirectoryTable,
+			assetExtension: assetExtension
 		})
 			.catch((err: any) => {
 				logger.error(err);
@@ -60,10 +76,14 @@ commander
 
 export function run(argv: string[]): void {
 	commander.parse(argv);
-
 	if (argv.length < 3
 		|| !argv[2].match(/^(asset|globalScripts)$/)) {
 		commander.help();
 	}
+}
 
+function commanderArgsCoordinater (val: any, ret: any) {
+	ret = ret || [];
+	ret.push(val);
+	return ret;
 }

@@ -1,6 +1,40 @@
 import * as cmn from "@akashic/akashic-cli-commons";
 import { Configuration } from "./Configuration";
 
+export interface AssetScanDirectoryTable  {
+	/**
+	 * AudioAssetを取得するパス。
+	 * 省略された場合、 `["audio"]` 。
+	 */
+	audio?: string[];
+
+	/**
+	 * ImageAssetを取得するパス。
+	 * 省略された場合、 `["image"]` 。
+	 */
+	image?: string[];
+
+	/**
+	 * ScriptAssetを取得するパス。
+	 * 省略された場合、 `["script"]` 。
+	 */
+	script?: string[];
+
+	/**
+	 * TextAssetを取得するパス。
+	 * 省略された場合、 `["text"]` 。
+	 */
+	text?: string[];
+}
+
+export interface AssetExtension {
+	/**
+	 * TextAssetの拡張子。
+	 * 省略された場合、全て利用できることを表す `[]` 。
+	 */
+	text?: string[];
+}
+
 export interface ScanAssetParameterObject {
 	/**
 	 * 更新する対象。
@@ -38,18 +72,39 @@ export interface ScanAssetParameterObject {
 	 * 省略された場合、 `false` 。
 	 */
 	forceUpdateAssetIds?: boolean;
+
+	/*
+	 * 各アセットを取得するパス。
+	 */
+	assetScanDirectoryTable?: AssetScanDirectoryTable;
+
+	/**
+	 * 各アセットとして扱う拡張子。
+	 * 省略された場合、 `[]` 。
+	 */
+	assetExtension?: AssetExtension;
 }
 
 export function _completeScanAssetParameterObject(param: ScanAssetParameterObject): void {
 	param.target = param.target || "all";
 	param.cwd = param.cwd || process.cwd();
 	param.logger = param.logger || new cmn.ConsoleLogger();
+
 	param.resolveAssetIdsFromPath = !!param.resolveAssetIdsFromPath;
 	param.forceUpdateAssetIds = !!param.forceUpdateAssetIds;
+	param.assetScanDirectoryTable = param.assetScanDirectoryTable || {};
+	param.assetScanDirectoryTable.audio = param.assetScanDirectoryTable.audio || ["audio"];
+	param.assetScanDirectoryTable.image = param.assetScanDirectoryTable.image || ["image"];
+	param.assetScanDirectoryTable.script = param.assetScanDirectoryTable.script || ["script"];
+	param.assetScanDirectoryTable.text = param.assetScanDirectoryTable.text || ["text"];
+
+	param.assetExtension = param.assetExtension || {};
+	param.assetExtension.text = param.assetExtension.text || [];
 }
 
 export function promiseScanAsset(param: ScanAssetParameterObject): Promise<void> {
 	_completeScanAssetParameterObject(param);
+
 	var restoreDirectory = cmn.Util.chdir(param.cwd);
 	return Promise.resolve()
 		.then(() => cmn.ConfigurationFile.read("./game.json", param.logger))
@@ -62,22 +117,25 @@ export function promiseScanAsset(param: ScanAssetParameterObject): Promise<void>
 				resolveAssetIdsFromPath: param.resolveAssetIdsFromPath,
 				forceUpdateAssetIds: param.forceUpdateAssetIds
 			});
-			conf.vacuum();
+			conf.vacuum(param.assetScanDirectoryTable, param.assetExtension);
 			return new Promise<void>((resolve, reject) => {
 				switch (param.target) {
 				case "image":
-					conf.scanAssetsImage();
+					conf.scanAssetsImage(param.assetScanDirectoryTable.image);
 					break;
 				case "audio":
-					return conf.scanAssetsAudio().then(resolve, reject);
+					return conf.scanAssetsAudio(param.assetScanDirectoryTable.audio).then(resolve, reject);
 				case "script":
-					conf.scanAssetsScript();
+					conf.scanAssetsScript(param.assetScanDirectoryTable.script);
 					break;
 				case "text":
-					conf.scanAssetsText();
+					conf.scanAssetsText(param.assetScanDirectoryTable.text, param.assetExtension.text);
 					break;
 				case "all":
-					return conf.scanAssets().then(resolve, reject);
+					return conf.scanAssets({
+						scanDirectoryTable: param.assetScanDirectoryTable,
+						extension: param.assetExtension
+					}).then(resolve, reject);
 				default:
 					return reject("scan asset " + param.target + ": unknown target " + param.target);
 				}
