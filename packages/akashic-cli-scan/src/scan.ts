@@ -34,10 +34,10 @@ export interface ScanAssetParameterObject {
 	resolveAssetIdsFromPath?: boolean;
 
 	/**
-	 * アセットIDを再度スキャンし直すかどうか。
+	 * アセットIDを強制的にスキャンし直すかどうか。
 	 * 省略された場合、 `false` 。
 	 */
-	rescanAssetIds?: boolean;
+	forceUpdateAssetIds?: boolean;
 }
 
 export function _completeScanAssetParameterObject(param: ScanAssetParameterObject): void {
@@ -45,7 +45,7 @@ export function _completeScanAssetParameterObject(param: ScanAssetParameterObjec
 	param.cwd = param.cwd || process.cwd();
 	param.logger = param.logger || new cmn.ConsoleLogger();
 	param.resolveAssetIdsFromPath = !!param.resolveAssetIdsFromPath;
-	param.rescanAssetIds = !!param.rescanAssetIds;
+	param.forceUpdateAssetIds = !!param.forceUpdateAssetIds;
 }
 
 export function promiseScanAsset(param: ScanAssetParameterObject): Promise<void> {
@@ -60,7 +60,7 @@ export function promiseScanAsset(param: ScanAssetParameterObject): Promise<void>
 				basepath: ".",
 				noOmitPackagejson: param.noOmitPackagejson,
 				resolveAssetIdsFromPath: param.resolveAssetIdsFromPath,
-				rescanAssetIds: param.rescanAssetIds
+				forceUpdateAssetIds: param.forceUpdateAssetIds
 			});
 			conf.vacuum();
 			return new Promise<void>((resolve, reject) => {
@@ -140,7 +140,7 @@ export interface ScanNodeModulesParameterObject {
 	 * アセットIDを再度スキャンし直すかどうか。
 	 * 省略された場合、 `false` 。
 	 */
-	rescanAssetIds?: boolean;
+	forceUpdateAssetIds?: boolean;
 }
 
 export function _completeScanNodeModulesParameterObject(param: ScanNodeModulesParameterObject): void {
@@ -148,7 +148,7 @@ export function _completeScanNodeModulesParameterObject(param: ScanNodeModulesPa
 	param.logger = param.logger || new cmn.ConsoleLogger();
 	param.fromEntryPoint = param.fromEntryPoint || false;
 	param.resolveAssetIdsFromPath = !!param.resolveAssetIdsFromPath;
-	param.rescanAssetIds = !!param.rescanAssetIds;
+	param.forceUpdateAssetIds = !!param.forceUpdateAssetIds;
 }
 
 export function promiseScanNodeModules(param: ScanNodeModulesParameterObject): Promise<void> {
@@ -164,7 +164,7 @@ export function promiseScanNodeModules(param: ScanNodeModulesParameterObject): P
 				debugNpm: param.debugNpm,
 				noOmitPackagejson: !!param.noOmitPackagejson,
 				resolveAssetIdsFromPath: !!param.resolveAssetIdsFromPath,
-				rescanAssetIds: !!param.rescanAssetIds
+				forceUpdateAssetIds: !!param.forceUpdateAssetIds
 			});
 			return Promise.resolve()
 				.then(() => (param.fromEntryPoint ? conf.scanGlobalScriptsFromEntryPoint() : conf.scanGlobalScripts()))

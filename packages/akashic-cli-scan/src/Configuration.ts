@@ -50,14 +50,14 @@ export interface ConfigurationParameterObject extends cmn.ConfigurationParameter
 	noOmitPackagejson?: boolean;
 	debugNpm?: cmn.PromisedNpm;
 	resolveAssetIdsFromPath?: boolean;
-	rescanAssetIds?: boolean;
+	forceUpdateAssetIds?: boolean;
 }
 
 export class Configuration extends cmn.Configuration {
 	_basepath: string;
 	_noOmitPackagejson: boolean;
 	_resolveAssetIdsFromPath: boolean;
-	_rescanAssetIds: boolean;
+	_forceUpdateAssetIds: boolean;
 	_npm: cmn.PromisedNpm;
 
 	constructor(param: ConfigurationParameterObject) {
@@ -65,7 +65,7 @@ export class Configuration extends cmn.Configuration {
 		this._basepath = param.basepath;
 		this._noOmitPackagejson = param.noOmitPackagejson;
 		this._resolveAssetIdsFromPath = param.resolveAssetIdsFromPath;
-		this._rescanAssetIds = param.rescanAssetIds;
+		this._forceUpdateAssetIds = param.forceUpdateAssetIds;
 		this._npm = param.debugNpm ? param.debugNpm : new cmn.PromisedNpm({ logger: param.logger });
 	}
 
@@ -98,7 +98,7 @@ export class Configuration extends cmn.Configuration {
 			if (aidSet && aidSet.length > 0) {
 				aidSet.forEach((aid: string) => {
 					let newAssetId = aid;
-					if (this._rescanAssetIds) {
+					if (this._forceUpdateAssetIds) {
 						const basename = path.basename(f, path.extname(f));
 						if (this._resolveAssetIdsFromPath) {
 							newAssetId = cmn.Util.makeUnixPath(path.join("image", path.dirname(f), basename));
@@ -164,7 +164,7 @@ export class Configuration extends cmn.Configuration {
 						aidSet.forEach((aid: string) => {
 							const f = durationMap[current].path;
 							let newAssetId = aid;
-							if (this._rescanAssetIds) {
+							if (this._forceUpdateAssetIds) {
 								const basename = path.basename(f);
 								if (this._resolveAssetIdsFromPath) {
 									newAssetId = cmn.Util.makeUnixPath(path.join(path.dirname(f), basename));
@@ -225,7 +225,7 @@ export class Configuration extends cmn.Configuration {
 			if (aidSet && aidSet.length > 0) {
 				aidSet.forEach((aid: string) => {
 					let newAssetId = aid;
-					if (this._rescanAssetIds) {
+					if (this._forceUpdateAssetIds) {
 						const basename = path.basename(f, path.extname(f));
 						if (this._resolveAssetIdsFromPath) {
 							newAssetId = cmn.Util.makeUnixPath(path.join(path.dirname(unixPath), basename));

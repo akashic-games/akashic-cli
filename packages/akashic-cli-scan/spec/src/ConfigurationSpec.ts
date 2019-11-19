@@ -1609,7 +1609,7 @@ describe("Configuration", function () {
 		}, done.fail);
 	});
 
-	it("can rescan Asset IDs", async () => {
+	it("can update already defined Asset IDs", async () => {
 		const gamejson = {
 			width: 1,
 			height: 1,
@@ -1661,7 +1661,7 @@ describe("Configuration", function () {
 			content: gamejson,
 			logger: nullLogger,
 			basepath: process.cwd(),
-			rescanAssetIds: false,
+			forceUpdateAssetIds: false,
 			resolveAssetIdsFromPath: true
 		});
 
@@ -1671,7 +1671,7 @@ describe("Configuration", function () {
 		expect(conf.getContent().assets["txt"]).not.toBe(undefined);
 		expect(conf.getContent().assets["script"]).not.toBe(undefined);
 
-		conf._rescanAssetIds = true;
+		conf._forceUpdateAssetIds = true;
 		await conf.scanAssets();
 		expect(conf.getContent().assets["image/foo/dummy"]).not.toBe(undefined);
 		expect(conf.getContent().assets["audio/some/se"]).not.toBe(undefined);
