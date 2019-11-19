@@ -106,7 +106,7 @@ export class Configuration extends cmn.Configuration {
 							newAssetId = basename;
 							_assertAssetFilenameValid(newAssetId);
 						}
-						this._swapAssetId(aid, newAssetId);
+						this._moveAssetDeclaration(aid, newAssetId);
 					}
 
 					const decl = assets[newAssetId];
@@ -171,7 +171,7 @@ export class Configuration extends cmn.Configuration {
 								} else {
 									newAssetId = basename;
 								}
-								this._swapAssetId(aid, newAssetId);
+								this._moveAssetDeclaration(aid, newAssetId);
 							}
 							if (!this._resolveAssetIdsFromPath) {
 								_assertAssetFilenameValid(newAssetId);
@@ -232,7 +232,7 @@ export class Configuration extends cmn.Configuration {
 						} else {
 							newAssetId = basename;
 						}
-						this._swapAssetId(aid, newAssetId);
+						this._moveAssetDeclaration(aid, newAssetId);
 					}
 					if (!this._resolveAssetIdsFromPath)
 						_assertAssetFilenameValid(newAssetId);
@@ -428,7 +428,7 @@ export class Configuration extends cmn.Configuration {
 			});
 	}
 
-	private _swapAssetId(from: string, to: string): void {
+	private _moveAssetDeclaration(from: string, to: string): void {
 		if (from === to) {
 			return;
 		}
