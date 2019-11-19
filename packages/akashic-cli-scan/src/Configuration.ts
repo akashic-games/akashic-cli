@@ -106,7 +106,8 @@ export class Configuration extends cmn.Configuration {
 							newAssetId = basename;
 							_assertAssetFilenameValid(newAssetId);
 						}
-						this._moveAssetDeclaration(aid, newAssetId);
+						if (aid !== newAssetId)
+							this._moveAssetDeclaration(aid, newAssetId);
 					}
 
 					const decl = assets[newAssetId];
@@ -171,7 +172,8 @@ export class Configuration extends cmn.Configuration {
 								} else {
 									newAssetId = basename;
 								}
-								this._moveAssetDeclaration(aid, newAssetId);
+								if (aid !== newAssetId)
+									this._moveAssetDeclaration(aid, newAssetId);
 							}
 							if (!this._resolveAssetIdsFromPath) {
 								_assertAssetFilenameValid(newAssetId);
@@ -232,7 +234,8 @@ export class Configuration extends cmn.Configuration {
 						} else {
 							newAssetId = basename;
 						}
-						this._moveAssetDeclaration(aid, newAssetId);
+						if (aid !== newAssetId)
+							this._moveAssetDeclaration(aid, newAssetId);
 					}
 					if (!this._resolveAssetIdsFromPath)
 						_assertAssetFilenameValid(newAssetId);
@@ -430,6 +433,7 @@ export class Configuration extends cmn.Configuration {
 
 	private _moveAssetDeclaration(from: string, to: string): void {
 		if (from === to) {
+			this._logger.warn(`Cannot move declaration of the same Asset ID (${from})`);
 			return;
 		}
 		this._logger.info(`Detected change of the Asset ID from ${from} to ${to}`);
