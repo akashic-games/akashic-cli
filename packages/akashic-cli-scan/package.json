@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-scan",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Command line tool for updating assets and globalScripts.",
   "main": "lib/index.js",
   "scripts": {
