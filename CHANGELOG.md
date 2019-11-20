@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 1.8.16 (2019-11-20)
+
+#### Enhancement
+* `akashic-cli-scan`
+  * [#195](https://github.com/akashic-games/akashic-cli/pull/195) Add a command to rescan Asset IDs ([@yu-ogi](https://github.com/yu-ogi))
+
+#### Committers: 2
+- [@yu-ogi](https://github.com/yu-ogi)
+- kamakiri_ys ([@kamakiri01](https://github.com/kamakiri01))
+
 ## 1.8.15 (2019-11-19)
 
 #### Enhancement
