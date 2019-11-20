@@ -16,7 +16,7 @@ commander
 	.option("-C, --cwd <dir>", "The directory incluedes game.json")
 	.option("-q, --quiet", "Suppress output")
 	.option("--use-path-asset-id", "Resolve Asset IDs from these path instead of name")
-	.option("--update-asset-id", "Update previously defined Asset IDs")
+	.option("--update-asset-id", "Update previously registered Asset IDs")
 	.option("--imageAssetDir <dir>", "specify ImageAsset directory", commanderArgsCoordinater)
 	.option("--audioAssetDir <dir>", "specify AudioAsset directory", commanderArgsCoordinater)
 	.option("--scriptAssetDir <dir>", "specify ScriptAsset directory", commanderArgsCoordinater)
