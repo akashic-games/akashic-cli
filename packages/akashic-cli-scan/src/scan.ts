@@ -68,6 +68,12 @@ export interface ScanAssetParameterObject {
 	resolveAssetIdsFromPath?: boolean;
 
 	/**
+	 * アセットIDを強制的にスキャンし直すかどうか。
+	 * 省略された場合、 `false` 。
+	 */
+	forceUpdateAssetIds?: boolean;
+
+	/*
 	 * 各アセットを取得するパス。
 	 */
 	assetScanDirectoryTable?: AssetScanDirectoryTable;
@@ -85,6 +91,7 @@ export function _completeScanAssetParameterObject(param: ScanAssetParameterObjec
 	param.logger = param.logger || new cmn.ConsoleLogger();
 
 	param.resolveAssetIdsFromPath = !!param.resolveAssetIdsFromPath;
+	param.forceUpdateAssetIds = !!param.forceUpdateAssetIds;
 	param.assetScanDirectoryTable = param.assetScanDirectoryTable || {};
 	param.assetScanDirectoryTable.audio = param.assetScanDirectoryTable.audio || ["audio"];
 	param.assetScanDirectoryTable.image = param.assetScanDirectoryTable.image || ["image"];
@@ -107,7 +114,8 @@ export function promiseScanAsset(param: ScanAssetParameterObject): Promise<void>
 				logger: param.logger,
 				basepath: ".",
 				noOmitPackagejson: param.noOmitPackagejson,
-				resolveAssetIdsFromPath: param.resolveAssetIdsFromPath
+				resolveAssetIdsFromPath: param.resolveAssetIdsFromPath,
+				forceUpdateAssetIds: param.forceUpdateAssetIds
 			});
 			conf.vacuum(param.assetScanDirectoryTable, param.assetExtension);
 			return new Promise<void>((resolve, reject) => {
@@ -185,6 +193,12 @@ export interface ScanNodeModulesParameterObject {
 	 * 偽である場合、ファイル名から拡張子を除去した文字列がアセットIDとして利用される。
 	 */
 	resolveAssetIdsFromPath?: boolean;
+
+	/**
+	 * アセットIDを再度スキャンし直すかどうか。
+	 * 省略された場合、 `false` 。
+	 */
+	forceUpdateAssetIds?: boolean;
 }
 
 export function _completeScanNodeModulesParameterObject(param: ScanNodeModulesParameterObject): void {
@@ -192,6 +206,7 @@ export function _completeScanNodeModulesParameterObject(param: ScanNodeModulesPa
 	param.logger = param.logger || new cmn.ConsoleLogger();
 	param.fromEntryPoint = param.fromEntryPoint || false;
 	param.resolveAssetIdsFromPath = !!param.resolveAssetIdsFromPath;
+	param.forceUpdateAssetIds = !!param.forceUpdateAssetIds;
 }
 
 export function promiseScanNodeModules(param: ScanNodeModulesParameterObject): Promise<void> {
@@ -206,7 +221,8 @@ export function promiseScanNodeModules(param: ScanNodeModulesParameterObject): P
 				basepath: "." ,
 				debugNpm: param.debugNpm,
 				noOmitPackagejson: !!param.noOmitPackagejson,
-				resolveAssetIdsFromPath: !!param.resolveAssetIdsFromPath
+				resolveAssetIdsFromPath: !!param.resolveAssetIdsFromPath,
+				forceUpdateAssetIds: !!param.forceUpdateAssetIds
 			});
 			return Promise.resolve()
 				.then(() => (param.fromEntryPoint ? conf.scanGlobalScriptsFromEntryPoint() : conf.scanGlobalScripts()))

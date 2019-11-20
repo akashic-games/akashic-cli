@@ -51,6 +51,7 @@ export interface ConfigurationParameterObject extends cmn.ConfigurationParameter
 	noOmitPackagejson?: boolean;
 	debugNpm?: cmn.PromisedNpm;
 	resolveAssetIdsFromPath?: boolean;
+	forceUpdateAssetIds?: boolean;
 }
 
 export interface ScanAssetsInformation {
@@ -62,6 +63,7 @@ export class Configuration extends cmn.Configuration {
 	_basepath: string;
 	_noOmitPackagejson: boolean;
 	_resolveAssetIdsFromPath: boolean;
+	_forceUpdateAssetIds: boolean;
 	_npm: cmn.PromisedNpm;
 
 	constructor(param: ConfigurationParameterObject) {
@@ -69,6 +71,7 @@ export class Configuration extends cmn.Configuration {
 		this._basepath = param.basepath;
 		this._noOmitPackagejson = param.noOmitPackagejson;
 		this._resolveAssetIdsFromPath = param.resolveAssetIdsFromPath;
+		this._forceUpdateAssetIds = param.forceUpdateAssetIds;
 		this._npm = param.debugNpm ? param.debugNpm : new cmn.PromisedNpm({ logger: param.logger });
 	}
 
@@ -127,12 +130,23 @@ export class Configuration extends cmn.Configuration {
 			// If a declaration already exists for the file then just update the image size.
 			if (aidSet && aidSet.length > 0) {
 				aidSet.forEach((aid: string) => {
-					var decl = assets[aid];
-					if (!this._resolveAssetIdsFromPath)
-						_assertAssetFilenameValid(aid);
-					_assertAssetTypeNoConflict(aid, f, "image", decl.type);
+					let newAssetId = aid;
+					if (this._forceUpdateAssetIds) {
+						const basename = path.basename(f, path.extname(f));
+						if (this._resolveAssetIdsFromPath) {
+							newAssetId = cmn.Util.makeUnixPath(path.join("image", path.dirname(f), basename));
+						} else {
+							newAssetId = basename;
+							_assertAssetFilenameValid(newAssetId);
+						}
+						if (aid !== newAssetId)
+							this._moveAssetDeclaration(aid, newAssetId);
+					}
+
+					const decl = assets[newAssetId];
+					_assertAssetTypeNoConflict(newAssetId, f, "image", decl.type);
 					if (decl.width !== size.width || decl.height !== size.height) {
-						this._logger.info("Detected change of the image size for " + aid + " (" + unixPath +
+						this._logger.info("Detected change of the image size for " + newAssetId + " (" + unixPath +
 							") from " + decl.width + "x" + decl.height + " to " + size.width + "x" + size.height);
 						decl.width = size.width;
 						decl.height = size.height;
@@ -182,10 +196,27 @@ export class Configuration extends cmn.Configuration {
 					var aidSet = revmap[durationMap[current].path];
 					if (aidSet && aidSet.length > 0) {
 						aidSet.forEach((aid: string) => {
-							if (assets[aid].duration !== durationMap[current].duration) {
+							const f = durationMap[current].path;
+							let newAssetId = aid;
+							if (this._forceUpdateAssetIds) {
+								const basename = path.basename(f);
+								if (this._resolveAssetIdsFromPath) {
+									newAssetId = cmn.Util.makeUnixPath(path.join(path.dirname(f), basename));
+								} else {
+									newAssetId = basename;
+								}
+								if (aid !== newAssetId)
+									this._moveAssetDeclaration(aid, newAssetId);
+							}
+							if (!this._resolveAssetIdsFromPath) {
+								_assertAssetFilenameValid(newAssetId);
+							}
+							_assertAssetTypeNoConflict(newAssetId, f, "audio", assets[newAssetId].type);
+
+							if (assets[newAssetId].duration !== durationMap[current].duration) {
 								this._logger.info("Detected change of the audio duration for " + current + " ("
-									+ assets[aid].path + ") from " + assets[aid].duration + " to " + durationMap[current].duration);
-								assets[aid].duration = durationMap[current].duration;
+									+ assets[newAssetId].path + ") from " + assets[newAssetId].duration + " to " + durationMap[current].duration);
+								assets[newAssetId].duration = durationMap[current].duration;
 							}
 						});
 						continue;
@@ -228,15 +259,26 @@ export class Configuration extends cmn.Configuration {
 			var aidSet = revmap[unixPath];
 			if (aidSet && aidSet.length > 0) {
 				aidSet.forEach((aid: string) => {
+					let newAssetId = aid;
+					if (this._forceUpdateAssetIds) {
+						const basename = path.basename(f, path.extname(f));
+						if (this._resolveAssetIdsFromPath) {
+							newAssetId = cmn.Util.makeUnixPath(path.join(path.dirname(unixPath), basename));
+						} else {
+							newAssetId = basename;
+						}
+						if (aid !== newAssetId)
+							this._moveAssetDeclaration(aid, newAssetId);
+					}
 					if (!this._resolveAssetIdsFromPath)
-						_assertAssetFilenameValid(aid);
-					_assertAssetTypeNoConflict(aid, f, type, assets[aid].type);
+						_assertAssetFilenameValid(newAssetId);
+					_assertAssetTypeNoConflict(newAssetId, f, type, assets[newAssetId].type);
 				});
 			} else {
 				const basename = path.basename(f, path.extname(f));
 				let aid: string;
 				if (this._resolveAssetIdsFromPath) {
-					aid = cmn.Util.makeUnixPath(path.join(dir, path.dirname(f), basename));
+					aid = cmn.Util.makeUnixPath(path.join(path.dirname(unixPath), basename));
 				} else {
 					aid = basename;
 					_assertAssetFilenameValid(aid);
@@ -373,15 +415,7 @@ export class Configuration extends cmn.Configuration {
 		var basename = path.basename(filepath, ext);
 		var noextUnixPath = cmn.Util.makeUnixPath(path.join(path.dirname(filepath), basename));
 
-		var aidSet = assetsRevmap[noextUnixPath] || [];
 		return Promise.resolve()
-			.then(() => {
-				aidSet.forEach((aid: string) => {
-					if (!this._resolveAssetIdsFromPath)
-						_assertAssetFilenameValid(aid);
-					_assertAssetTypeNoConflict(aid, filepath, "audio", assets[aid].type);
-				});
-			})
 			.then(() => getAudioDuration(path.join(this._basepath, filepath), this._logger))
 			.then((duration: number) => {
 				return {
@@ -430,6 +464,16 @@ export class Configuration extends cmn.Configuration {
 				lsResult.dependencies = lsResult.dependencies || {};
 				return Object.keys(lsResult.dependencies);
 			});
+	}
+
+	private _moveAssetDeclaration(from: string, to: string): void {
+		if (from === to) {
+			this._logger.warn(`Cannot move declaration of the same Asset ID (${from})`);
+			return;
+		}
+		this._logger.info(`Detected change of the Asset ID from ${from} to ${to}`);
+		this._content.assets[to] = this._content.assets[from];
+		delete this._content.assets[from];
 	}
 }
 

@@ -16,6 +16,7 @@ commander
 	.option("-C, --cwd <dir>", "The directory incluedes game.json")
 	.option("-q, --quiet", "Suppress output")
 	.option("--use-path-asset-id", "Resolve Asset IDs from these path instead of name")
+	.option("--update-asset-id", "Update previously registered Asset IDs")
 	.option("--image-asset-dir <dir>", "specify ImageAsset directory", commanderArgsCoordinater)
 	.option("--audio-asset-dir <dir>", "specify AudioAsset directory", commanderArgsCoordinater)
 	.option("--script-asset-dir <dir>", "specify ScriptAsset directory", commanderArgsCoordinater)
@@ -37,6 +38,7 @@ commander
 			cwd: opts.cwd,
 			logger: logger,
 			resolveAssetIdsFromPath: opts.usePathAssetId,
+			forceUpdateAssetIds: opts.updateAssetId,
 			assetScanDirectoryTable: assetScanDirectoryTable,
 			assetExtension: assetExtension
 		})
