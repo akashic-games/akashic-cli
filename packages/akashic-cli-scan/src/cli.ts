@@ -17,6 +17,7 @@ commander
 	.option("-q, --quiet", "Suppress output")
 	.option("--use-path-asset-id", "Resolve Asset IDs from these path instead of name")
 	.option("--update-asset-id", "Update previously registered Asset IDs")
+	.option("--include-ext-to-asset-id", "Include file extensions to Asset IDs")
 	.option("--image-asset-dir <dir>", "specify ImageAsset directory", commanderArgsCoordinater)
 	.option("--audio-asset-dir <dir>", "specify AudioAsset directory", commanderArgsCoordinater)
 	.option("--script-asset-dir <dir>", "specify ScriptAsset directory", commanderArgsCoordinater)
@@ -39,6 +40,7 @@ commander
 			logger: logger,
 			resolveAssetIdsFromPath: opts.usePathAssetId,
 			forceUpdateAssetIds: opts.updateAssetId,
+			includeExtensionToAssetId: opts.includeExtToAssetId,
 			assetScanDirectoryTable: assetScanDirectoryTable,
 			assetExtension: assetExtension
 		})
