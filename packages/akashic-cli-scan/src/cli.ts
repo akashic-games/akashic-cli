@@ -16,11 +16,11 @@ commander
 	.option("-C, --cwd <dir>", "The directory incluedes game.json")
 	.option("-q, --quiet", "Suppress output")
 	.option("--use-path-asset-id", "Resolve Asset IDs from these path instead of name")
-	.option("--imageAssetDir <dir>", "specify ImageAsset directory", commanderArgsCoordinater)
-	.option("--audioAssetDir <dir>", "specify AudioAsset directory", commanderArgsCoordinater)
-	.option("--scriptAssetDir <dir>", "specify ScriptAsset directory", commanderArgsCoordinater)
-	.option("--textAssetDir <dir>", "specify TextAsset directory", commanderArgsCoordinater)
-	.option("--textAssetExtension <extension>", "specify TextAsset extension", commanderArgsCoordinater)
+	.option("--image-asset-dir <dir>", "specify ImageAsset directory", commanderArgsCoordinater)
+	.option("--audio-asset-dir <dir>", "specify AudioAsset directory", commanderArgsCoordinater)
+	.option("--script-asset-dir <dir>", "specify ScriptAsset directory", commanderArgsCoordinater)
+	.option("--text-asset-dir <dir>", "specify TextAsset directory", commanderArgsCoordinater)
+	.option("--text-asset-extension <extension>", "specify TextAsset extension", commanderArgsCoordinater)
 	.action((target: string, opts: any = {}) => {
 		var logger = new ConsoleLogger({ quiet: opts.quiet });
 		var assetScanDirectoryTable = {
