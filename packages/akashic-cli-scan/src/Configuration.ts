@@ -5,7 +5,7 @@ import * as cmn from "@akashic/akashic-cli-commons";
 import { getAudioDuration } from "./getAudioDuration";
 import { imageSize } from "image-size";
 import { ISize } from "image-size/dist/types/interface";
-import { ScanAssetParameterObject, AssetScanDirectoryTable, AssetExtension } from "./scan";
+import { AssetScanDirectoryTable, AssetExtension } from "./scan";
 
 export function _isImageFilePath(p: string): boolean { return /.*\.(png|gif|jpg|jpeg)$/i.test(p); }
 export function _isAudioFilePath(p: string): boolean { return /.*\.(ogg|aac|mp4)$/i.test(p); }
@@ -52,6 +52,7 @@ export interface ConfigurationParameterObject extends cmn.ConfigurationParameter
 	debugNpm?: cmn.PromisedNpm;
 	resolveAssetIdsFromPath?: boolean;
 	forceUpdateAssetIds?: boolean;
+	includeExtensionToAssetId?: boolean;
 }
 
 export interface ScanAssetsInformation {
@@ -64,6 +65,7 @@ export class Configuration extends cmn.Configuration {
 	_noOmitPackagejson: boolean;
 	_resolveAssetIdsFromPath: boolean;
 	_forceUpdateAssetIds: boolean;
+	_includeExtensionToAssetId: boolean;
 	_npm: cmn.PromisedNpm;
 
 	constructor(param: ConfigurationParameterObject) {
@@ -72,6 +74,7 @@ export class Configuration extends cmn.Configuration {
 		this._noOmitPackagejson = param.noOmitPackagejson;
 		this._resolveAssetIdsFromPath = param.resolveAssetIdsFromPath;
 		this._forceUpdateAssetIds = param.forceUpdateAssetIds;
+		this._includeExtensionToAssetId = param.includeExtensionToAssetId;
 		this._npm = param.debugNpm ? param.debugNpm : new cmn.PromisedNpm({ logger: param.logger });
 	}
 
@@ -103,7 +106,6 @@ export class Configuration extends cmn.Configuration {
 			this._scanAssetsScript(dirname);
 		});
 	}
-
 
 	scanAssetsText(textAssetScanDirs: string[], textAssetExtension: string[]) {
 		const textAssetExtensionFilter = createTextAssetExtensionFilter(textAssetExtension);
@@ -137,8 +139,11 @@ export class Configuration extends cmn.Configuration {
 							newAssetId = cmn.Util.makeUnixPath(path.join("image", path.dirname(f), basename));
 						} else {
 							newAssetId = basename;
-							_assertAssetFilenameValid(newAssetId);
+							if (!this._includeExtensionToAssetId)
+								_assertAssetFilenameValid(newAssetId);
 						}
+						if (this._includeExtensionToAssetId)
+							newAssetId += path.extname(f);
 						if (aid !== newAssetId)
 							this._moveAssetDeclaration(aid, newAssetId);
 					}
@@ -164,6 +169,8 @@ export class Configuration extends cmn.Configuration {
 				aid = basename;
 				_assertAssetFilenameValid(aid);
 			}
+			if (this._includeExtensionToAssetId)
+				aid += path.extname(f);
 			_assertAssetNameNoConflict(assets, aid, f);
 
 			this._logger.info("Added/updated the declaration for " + aid + " (" + unixPath + ")");
@@ -266,12 +273,14 @@ export class Configuration extends cmn.Configuration {
 							newAssetId = cmn.Util.makeUnixPath(path.join(path.dirname(unixPath), basename));
 						} else {
 							newAssetId = basename;
+							if (!this._includeExtensionToAssetId)
+								_assertAssetFilenameValid(newAssetId);
 						}
+						if (this._includeExtensionToAssetId)
+							newAssetId += path.extname(f);
 						if (aid !== newAssetId)
 							this._moveAssetDeclaration(aid, newAssetId);
 					}
-					if (!this._resolveAssetIdsFromPath)
-						_assertAssetFilenameValid(newAssetId);
 					_assertAssetTypeNoConflict(newAssetId, f, type, assets[newAssetId].type);
 				});
 			} else {
@@ -283,6 +292,8 @@ export class Configuration extends cmn.Configuration {
 					aid = basename;
 					_assertAssetFilenameValid(aid);
 				}
+				if (this._includeExtensionToAssetId)
+					aid += path.extname(f);
 				_assertAssetNameNoConflict(assets, aid, f);
 
 				this._logger.info("Added the declaration for '" + aid + "' (" + unixPath + ")");

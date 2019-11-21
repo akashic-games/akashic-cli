@@ -73,6 +73,13 @@ export interface ScanAssetParameterObject {
 	 */
 	forceUpdateAssetIds?: boolean;
 
+	/**
+	 * アセットIDに拡張子を含めるかどうか。
+	 * ただし音声アセットについては拡張子が含まれない点に注意。
+	 * 省略された場合、 `false` 。
+	 */
+	includeExtensionToAssetId?: boolean;
+
 	/*
 	 * 各アセットを取得するパス。
 	 */
@@ -92,6 +99,7 @@ export function _completeScanAssetParameterObject(param: ScanAssetParameterObjec
 
 	param.resolveAssetIdsFromPath = !!param.resolveAssetIdsFromPath;
 	param.forceUpdateAssetIds = !!param.forceUpdateAssetIds;
+	param.includeExtensionToAssetId = !!param.includeExtensionToAssetId;
 	param.assetScanDirectoryTable = param.assetScanDirectoryTable || {};
 	param.assetScanDirectoryTable.audio = param.assetScanDirectoryTable.audio || ["audio"];
 	param.assetScanDirectoryTable.image = param.assetScanDirectoryTable.image || ["image"];
@@ -115,7 +123,8 @@ export function promiseScanAsset(param: ScanAssetParameterObject): Promise<void>
 				basepath: ".",
 				noOmitPackagejson: param.noOmitPackagejson,
 				resolveAssetIdsFromPath: param.resolveAssetIdsFromPath,
-				forceUpdateAssetIds: param.forceUpdateAssetIds
+				forceUpdateAssetIds: param.forceUpdateAssetIds,
+				includeExtensionToAssetId: param.includeExtensionToAssetId
 			});
 			conf.vacuum(param.assetScanDirectoryTable, param.assetExtension);
 			return new Promise<void>((resolve, reject) => {
@@ -199,6 +208,13 @@ export interface ScanNodeModulesParameterObject {
 	 * 省略された場合、 `false` 。
 	 */
 	forceUpdateAssetIds?: boolean;
+
+	/**
+	 * アセットIDに拡張子を含めるかどうか。
+	 * ただし音声アセットについては拡張子が含まれない点に注意
+	 * 省略された場合、 `false` 。
+	 */
+	includeExtensionToAssetId?: boolean;
 }
 
 export function _completeScanNodeModulesParameterObject(param: ScanNodeModulesParameterObject): void {
@@ -207,6 +223,7 @@ export function _completeScanNodeModulesParameterObject(param: ScanNodeModulesPa
 	param.fromEntryPoint = param.fromEntryPoint || false;
 	param.resolveAssetIdsFromPath = !!param.resolveAssetIdsFromPath;
 	param.forceUpdateAssetIds = !!param.forceUpdateAssetIds;
+	param.includeExtensionToAssetId = !!param.includeExtensionToAssetId;
 }
 
 export function promiseScanNodeModules(param: ScanNodeModulesParameterObject): Promise<void> {

@@ -1818,5 +1818,118 @@ describe("Configuration", function () {
 		expect(conf.getContent().assets["textdata"]).not.toBe(undefined);
 		expect(conf.getContent().assets["script"]).not.toBe(undefined);
 	});
-});
 
+	it("can scan Asset IDs with file extensions", async () => {
+		const gamejson = {
+			width: 1,
+			height: 1,
+			assets: {
+				"chara": {
+					"type": "image",
+					"path": "image/foo/dummy.png",
+					"width": 1,
+					"height": 1
+				},
+				"se": {
+					"type": "audio",
+					"path": "audio/some/se"
+				},
+				"txt": {
+					"type": "text",
+					"path": "text/foo/textdata.txt"
+				},
+				"txt2": {
+					"type": "text",
+					"path": "text/bar/textdata2"
+				},
+				"script": {
+					"type": "script",
+					"path": "script/foo/script.js"
+				}
+			}
+		};
+		mockfs({
+			"game.json": JSON.stringify(gamejson),
+			"image": {
+				"foo": {
+					"dummy.png": DUMMY_1x1_PNG_DATA
+				}
+			},
+			"audio": {
+				"some": {
+					"se.ogg": DUMMY_OGG_DATA
+				}
+			},
+			"text": {
+				"foo": {
+					"textdata.txt": "Lorem ipsum dolor sit amet, consectetur..."
+				},
+				"bar": {
+					"textdata2": "no extension..."
+				}
+			},
+			"script": {
+				"foo": {
+					"script.js": "var x = 1;"
+				}
+			}
+		});
+		const conf = new cnf.Configuration({
+			content: gamejson,
+			logger: nullLogger,
+			basepath: process.cwd(),
+			forceUpdateAssetIds: false,
+			resolveAssetIdsFromPath: false
+		});
+
+		const scanDirectoryTable = {
+			audio: ["audio"],
+			image: ["image"],
+			script: ["script"],
+			text: ["text"]
+		};
+		const extension = {
+			audio: ["ogg"],
+			image: ["png"],
+			script: ["js"],
+			text: ["txt", ""]
+		};
+
+		await conf.scanAssets({scanDirectoryTable, extension});
+		expect(conf.getContent().assets["chara"]).not.toBe(undefined);
+		expect(conf.getContent().assets["se"]).not.toBe(undefined);
+		expect(conf.getContent().assets["txt"]).not.toBe(undefined);
+		expect(conf.getContent().assets["txt2"]).not.toBe(undefined);
+		expect(conf.getContent().assets["script"]).not.toBe(undefined);
+
+		conf._forceUpdateAssetIds = true;
+		conf._resolveAssetIdsFromPath = false;
+		conf._includeExtensionToAssetId = true;
+		await conf.scanAssets({scanDirectoryTable, extension});
+		expect(conf.getContent().assets["dummy.png"]).not.toBe(undefined);
+		expect(conf.getContent().assets["se"]).not.toBe(undefined);
+		expect(conf.getContent().assets["textdata.txt"]).not.toBe(undefined);
+		expect(conf.getContent().assets["textdata2"]).not.toBe(undefined);
+		expect(conf.getContent().assets["script.js"]).not.toBe(undefined);
+
+		conf._forceUpdateAssetIds = true;
+		conf._resolveAssetIdsFromPath = true;
+		conf._includeExtensionToAssetId = true;
+		await conf.scanAssets({scanDirectoryTable, extension});
+		expect(conf.getContent().assets["image/foo/dummy.png"]).not.toBe(undefined);
+		expect(conf.getContent().assets["audio/some/se"]).not.toBe(undefined);
+		expect(conf.getContent().assets["text/foo/textdata.txt"]).not.toBe(undefined);
+		expect(conf.getContent().assets["text/bar/textdata2"]).not.toBe(undefined);
+		expect(conf.getContent().assets["script/foo/script.js"]).not.toBe(undefined);
+
+		conf._forceUpdateAssetIds = true;
+		conf._resolveAssetIdsFromPath = false;
+		conf._includeExtensionToAssetId = false;
+		await conf.scanAssets({scanDirectoryTable, extension});
+		expect(conf.getContent().assets["dummy"]).not.toBe(undefined);
+		expect(conf.getContent().assets["se"]).not.toBe(undefined);
+		expect(conf.getContent().assets["textdata"]).not.toBe(undefined);
+		expect(conf.getContent().assets["textdata2"]).not.toBe(undefined);
+		expect(conf.getContent().assets["script"]).not.toBe(undefined);
+	});
+});
