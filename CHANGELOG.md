@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.8.17 (2019-11-21)
+
+#### Enhancement
+* `akashic-cli-scan`
+  * [#197](https://github.com/akashic-games/akashic-cli/pull/197) Add a command to scan assets with the file extensions ([@yu-ogi](https://github.com/yu-ogi))
+
+#### Committers: 1
+- [@yu-ogi](https://github.com/yu-ogi)
+
 ## 1.8.16 (2019-11-20)
 
 #### Enhancement
