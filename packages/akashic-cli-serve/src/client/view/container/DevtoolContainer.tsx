@@ -1,6 +1,6 @@
 import * as React from "react";
 import { observer } from "mobx-react";
-import { SandboxConfig} from "../../../common/types/SandboxConfig";
+import { SandboxConfig } from "../../../common/types/SandboxConfig";
 import { PlayEntity } from "../../store/PlayEntity";
 import { DevtoolUiStore } from "../../store/DevtoolUiStore";
 import { Operator } from "../../operator/Operator";
@@ -21,7 +21,7 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 			height={devtoolUiStore.height}
 			minHeight={200}
 			onResizeHeight={operator.ui.setDevtoolHeight}
-			activeDevtool={devtoolUiStore.activeDevtool as any /* TODO any 排除？ */}
+			activeDevtool={devtoolUiStore.activeDevtool as any /* TODO any 排除 */}
 			onSelectDevtool={operator.ui.setActiveDevtool}
 			eventsDevtoolProps={{
 				showsEventList: devtoolUiStore.showsEventList,
@@ -52,9 +52,20 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 				}))),
 				onClickAddInstance: operator.play.openNewClientInstance
 			}}
-			entityListDevtoolProps={{
-				onClickUpdateEntityList: operator.localInstance.updateEntityList,
-				entityList: devtoolUiStore.entityList
+			entityTreeDevtoolProps={{
+				entityTrees: devtoolUiStore.entityTrees,
+				entityTreeStateTable: devtoolUiStore.entityTreeStateTable,
+				selectedEntityId: devtoolUiStore.selectedEntityId,
+				isSelectingEntity: devtoolUiStore.isSelectingEntity,
+				showsHidden: devtoolUiStore.showsHiddenEntity,
+				onClickDump: operator.devtool.dumpSelectedEntity,
+				onChangeShowsHidden: operator.devtool.toggleShowHiddenEntity,
+				onClickSelectEntity: operator.devtool.startEntitySelection,
+				onClickUpdateEntityTrees: operator.devtool.updateEntityTrees,
+				onClickToggleOpenEntityChildren: operator.devtool.toggleOpenEntityTreeChildren,
+				onClickEntityItem: operator.devtool.selectEntityByEDumpItem,
+				onMouseOverEntityItem: operator.devtool.setHighlightedEntity,
+				onMouseLeaveEntityItem: operator.devtool.clearHighlightedEntity
 			}}
 		/>;
 	}

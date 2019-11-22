@@ -1,17 +1,41 @@
 import * as React from "react";
-import { observable } from "mobx";
+import { observable, ObservableMap } from "mobx";
 import { observer } from "mobx-react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
+import { EDumpItem } from "../../common/types/EDumpItem";
 import { Devtool } from "../organism/Devtool";
 
 const store = observable({
 	devtoolsHeight: 300,
-	activeDevtool: "Instances",
+	activeDevtool: "EntityTree",
 	showsEventList: true,
 	eventListWidth: 280,
-	eventEditContent: `["test": true]`
+	eventEditContent: `["test": true]`,
+	entityTreeStateTable: observable.map({}),
+	showsHidden: true
 });
+
+function createFilledRectDumpItem(id: number, cssColor: string = "black"): EDumpItem {
+	return {
+		id,
+		constructorName: "FilledRect",
+		x: 0,
+		y: 0,
+		width: 100,
+		height: 100,
+		opacity: 1,
+		scaleX: 1.4,
+		scaleY: 1.2,
+		anchorX: 0,
+		anchorY: 0,
+		children: null,
+		angle: 0,
+		touchable: false,
+		visible: true,
+		cssColor
+	};
+}
 
 const TestWithBehaviour = observer(() => (
 	<Devtool
@@ -47,9 +71,97 @@ const TestWithBehaviour = observer(() => (
 			],
 			onClickAddInstance: action("add-instance")
 		}}
-		entityListDevtoolProps={{
-			onClickUpdateEntityList: action("update-entity-list"),
-			entityList: []
+		entityTreeDevtoolProps={{
+			entityTrees: [
+				{
+					id: 0,
+					constructorName: "Label",
+					x: 0,
+					y: 0,
+					width: 10,
+					height: 10,
+					opacity: 1,
+					scaleX: 1,
+					scaleY: 1,
+					anchorX: 0,
+					anchorY: 0,
+					children: [
+						{
+							id: 1,
+							constructorName: "Sprite",
+							x: 0,
+							y: 0,
+							width: 32,
+							height: 64,
+							opacity: 1,
+							scaleX: 2,
+							scaleY: 2,
+							anchorX: 0,
+							anchorY: 0,
+							children: [
+								{
+									id: 3,
+									constructorName: "FilledRect",
+									x: 10,
+									y: 88,
+									width: 100,
+									height: 100,
+									opacity: 0.5,
+									scaleX: 1.4,
+									scaleY: 1.2,
+									anchorX: 0,
+									anchorY: 0,
+									children: null,
+									angle: 0,
+									touchable: true,
+									visible: true,
+									cssColor: "red"
+								}
+							],
+							angle: 45,
+							touchable: true,
+							visible: false
+						},
+						{
+							id: 2,
+							constructorName: "Label",
+							x: 0,
+							y: 0,
+							width: 100,
+							height: 100,
+							opacity: 1,
+							scaleX: 1.4,
+							scaleY: 1.2,
+							anchorX: 0,
+							anchorY: 0,
+							children: null,
+							angle: 0,
+							local: true,
+							touchable: false,
+							visible: true,
+							text: "100 pt."
+						}
+					],
+					angle: 0,
+					touchable: true,
+					visible: true,
+					text: "我輩は人である。名前はもうある。どこで生れたかはとんと見当がつかぬがまあ病院である。"
+				}
+			],
+			entityTreeStateTable: store.entityTreeStateTable,
+			selectedEntityId: 2,
+			isSelectingEntity: false,
+			showsHidden: store.showsHidden,
+			onClickDump: action("dump"),
+			onChangeShowsHidden: shows => store.showsHidden = shows,
+			onClickSelectEntity: () => {},
+			onClickUpdateEntityTrees: action("update-entity-tree"),
+			onClickToggleOpenEntityChildren: (e => {
+				store.entityTreeStateTable.set(e.id, !store.entityTreeStateTable.get(e.id));
+			}),
+			onClickEntityItem: action("click-entity"),
+			onMouseOverEntityItem: action("mouseover"),
+			onMouseLeaveEntityItem: action("mouseleave")
 		}}
 	/>
 ));
@@ -113,9 +225,36 @@ storiesOf("o-Devtool", module)
 				],
 				onClickAddInstance: action("add-instance")
 			}}
-			entityListDevtoolProps={{
-				onClickUpdateEntityList: action("update-entity-list"),
-				entityList: [{"id" : 1, "className": "FilledRect", "children": []}]
+			entityTreeDevtoolProps={{
+				entityTrees: [
+					{
+						id : 1,
+						constructorName: "FilledRect",
+						children: [],
+						x: 0,
+						y: 10,
+						width: 20,
+						height: 20,
+						opacity: 0,
+						angle: 0,
+						scaleX: 1,
+						scaleY: 1,
+						touchable: true,
+						visible: true
+					}
+				],
+				entityTreeStateTable: observable.map({ 1: false }),
+				selectedEntityId: null,
+				isSelectingEntity: false,
+				showsHidden: false,
+				onClickDump: action("dump"),
+				onChangeShowsHidden: action("change-shows-hidden"),
+				onClickSelectEntity: action("click-select-entity"),
+				onClickUpdateEntityTrees: action("update-entity-tree"),
+				onClickToggleOpenEntityChildren: action("toggle"),
+				onClickEntityItem: action("click-entity"),
+				onMouseOverEntityItem: action("mouseover"),
+				onMouseLeaveEntityItem: action("mouseleave")
 			}}
 		/>
 	))
@@ -185,9 +324,107 @@ storiesOf("o-Devtool", module)
 				],
 				onClickAddInstance: action("add-instance")
 			}}
-			entityListDevtoolProps={{
-				onClickUpdateEntityList: action("update-entity-list"),
-				entityList: []
+			entityTreeDevtoolProps={{
+				entityTrees: [],
+				entityTreeStateTable: observable.map({}),
+				selectedEntityId: null,
+				isSelectingEntity: false,
+				showsHidden: false,
+				onClickDump: action("dump"),
+				onChangeShowsHidden: action("change-shows-hidden"),
+				onClickSelectEntity: action("click-select-entity"),
+				onClickUpdateEntityTrees: action("update-entity-tree"),
+				onClickToggleOpenEntityChildren: action("toggle"),
+				onClickEntityItem: action("click-entity"),
+				onMouseOverEntityItem: action("mouseover"),
+				onMouseLeaveEntityItem: action("mouseleave")
+			}}
+		/>
+	))
+	.add("entity-tree", () => (
+		<Devtool
+			height={300}
+			minHeight={200}
+			onResizeHeight={action("resize-height")}
+			activeDevtool={"EntityTree"}
+			onSelectDevtool={action("select-tool")}
+			eventsDevtoolProps={{
+				showsEventList: true,
+				eventListWidth: 250,
+				eventListMinWidth: 200,
+				onEventListResize: action("events:list-resize"),
+				onToggleList: action("events:toggle-list"),
+				eventNames: [ "Foo", "Test 0" ],
+				eventEditContent: `["test", 1]`,
+				onClickSendEvent: action("events:send"),
+				onClickCopyEvent: action("events:copy"),
+				onClickSendEditingEvent: action("events:send-edit"),
+				onEventEditContentChanged: action("events:edit")
+			}}
+			instancesDevtoolProps={{
+				instances: [
+					{ type: "active", env: "(server)", playerId: null, name: null, isJoined: false },
+					{ type: "passive", env: "Chrome", playerId: "1234567890", name: "player-1", isJoined: false },
+					{ type: "passive", env: "Chrome", playerId: "aa0941jlta", name: "player-2", isJoined: false },
+					{ type: "passive", env: "Firefox", playerId: "asfaiout", name: "player-3", isJoined: false }
+				],
+				onClickAddInstance: action("add-instance")
+			}}
+			entityTreeDevtoolProps={{
+				entityTrees: [
+					createFilledRectDumpItem(100),
+					createFilledRectDumpItem(101),
+					createFilledRectDumpItem(102),
+					createFilledRectDumpItem(103),
+					createFilledRectDumpItem(104),
+					createFilledRectDumpItem(105),
+					createFilledRectDumpItem(106),
+					createFilledRectDumpItem(107),
+					createFilledRectDumpItem(108),
+					createFilledRectDumpItem(109),
+					createFilledRectDumpItem(110),
+					createFilledRectDumpItem(111),
+					createFilledRectDumpItem(112),
+					createFilledRectDumpItem(113),
+					createFilledRectDumpItem(114),
+					createFilledRectDumpItem(115),
+					createFilledRectDumpItem(116),
+					createFilledRectDumpItem(117),
+					createFilledRectDumpItem(118),
+					createFilledRectDumpItem(119),
+					createFilledRectDumpItem(120),
+					createFilledRectDumpItem(121),
+					createFilledRectDumpItem(122),
+					createFilledRectDumpItem(123),
+					createFilledRectDumpItem(124),
+					createFilledRectDumpItem(125),
+					createFilledRectDumpItem(126),
+					createFilledRectDumpItem(127),
+					createFilledRectDumpItem(128),
+					createFilledRectDumpItem(129),
+					createFilledRectDumpItem(130),
+					createFilledRectDumpItem(131),
+					createFilledRectDumpItem(132),
+					createFilledRectDumpItem(133),
+					createFilledRectDumpItem(134),
+					createFilledRectDumpItem(135),
+					createFilledRectDumpItem(136),
+					createFilledRectDumpItem(137),
+					createFilledRectDumpItem(138),
+					createFilledRectDumpItem(139)
+				],
+				entityTreeStateTable: observable.map({}),
+				selectedEntityId: null,
+				isSelectingEntity: false,
+				showsHidden: false,
+				onClickDump: action("dump"),
+				onChangeShowsHidden: action("change-shows-hidden"),
+				onClickSelectEntity: action("click-select-entity"),
+				onClickUpdateEntityTrees: action("update-entity-tree"),
+				onClickToggleOpenEntityChildren: action("toggle"),
+				onClickEntityItem: action("click-entity"),
+				onMouseOverEntityItem: action("mouseover"),
+				onMouseLeaveEntityItem: action("mouseleave")
 			}}
 		/>
 	))

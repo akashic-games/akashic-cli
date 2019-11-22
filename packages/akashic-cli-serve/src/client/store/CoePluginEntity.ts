@@ -1,7 +1,7 @@
 import { Event } from "@akashic/playlog";
 import {
 	CoeStartSessionParameterObject, CoeExitSessionParameterObject, CoeApplicationIdentifier, CoeExternalMessage
-} from "../common/interface/plugin";
+} from "../common/types/plugin";
 import { GameViewManager } from "../akashic/GameViewManager";
 import { LocalInstanceEntity } from "./LocalInstanceEntity";
 

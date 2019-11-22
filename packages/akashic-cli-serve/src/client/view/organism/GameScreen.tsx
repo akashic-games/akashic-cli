@@ -1,15 +1,17 @@
 import * as React from "react";
 import { observer } from "mobx-react";
-import { GameViewManager } from "../../akashic/GameViewManager";
 import * as styles from "./GameScreen.css";
 
 export interface GameScreenProps {
 	showsBackgroundImage: boolean;
 	showsGrid: boolean;
-	backgroundImage: string;
+	backgroundImage: string | null;
 	gameWidth: number;
 	gameHeight: number;
-	gameViewManager: GameViewManager;
+	screenElement: HTMLElement;
+	shouldStopPropagationFunc: () => boolean;
+	onMouseMoveCapture?: (p: { x: number, y: number }) => void;
+	onClickCapture?: (p: { x: number, y: number }) => void;
 }
 
 @observer
@@ -17,7 +19,7 @@ export class GameScreen extends React.Component<GameScreenProps, {}> {
 	render(): React.ReactNode {
 		const { showsBackgroundImage: showsBgImage, backgroundImage: bgImage, showsGrid, gameWidth, gameHeight } = this.props;
 		const bgImageStyle = (showsBgImage && !bgImage) ?  (" " + styles["pseudo-transparent-bg"]) : "";
-		return <div className={styles["game-screen"]}>
+		return <div className={styles["game-screen"]} style={{ width: gameWidth, height: gameHeight }}>
 			{
 				(showsBgImage && bgImage) ?
 					<img src={bgImage} className={styles["bg-image"]}/> :
@@ -36,9 +38,32 @@ export class GameScreen extends React.Component<GameScreenProps, {}> {
 		</div>;
 	}
 
+	private _stopPropagationIfNeeded = (ev: MouseEvent): void => {
+		if (this.props.shouldStopPropagationFunc())
+			ev.stopPropagation();
+	}
+
+	private _onMouseMoveCapture = (ev: MouseEvent): void => {
+		this._stopPropagationIfNeeded(ev);
+		this.props.onMouseMoveCapture({ x: ev.offsetX, y: ev.offsetY });
+	}
+
+	private _onClickCapture = (ev: MouseEvent): void => {
+		this._stopPropagationIfNeeded(ev);
+		this.props.onClickCapture({ x: ev.offsetX, y: ev.offsetY });
+	}
+
 	private _onRef = (elem: HTMLDivElement): void => {
 		if (elem) {
-			elem.appendChild(this.props.gameViewManager.getRootElement());
+			elem.appendChild(this.props.screenElement);
+
+			// NOTE: 意図して mousedown などを使い、React の onMouseDownCapture を使っていないことに注意。
+			// AGV 内の mousedown と相性が悪いらしく、祖先要素に onMouseDownCapture をつけても
+			// capture できないことへの暫定回避。
+			elem.addEventListener("mousedown", this._stopPropagationIfNeeded, true);
+			elem.addEventListener("mousemove", this._onMouseMoveCapture, true);
+			elem.addEventListener("mouseup", this._stopPropagationIfNeeded, true);
+			elem.addEventListener("click", this._onClickCapture, true);
 		}
 	}
 

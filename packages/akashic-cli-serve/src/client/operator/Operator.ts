@@ -8,6 +8,7 @@ import { Store } from "../store/Store";
 import { PlayOperator } from "./PlayOperator";
 import { LocalInstanceOperator } from "./LocalInstanceOperator";
 import { UiOperator } from "./UiOperator";
+import { DevtoolOperator } from "./DevtoolOperator";
 import { ExternalPluginOperator } from "./ExternalPluginOperator";
 import { ServiceType } from "../../common/types/ServiceType";
 
@@ -25,6 +26,7 @@ export class Operator {
 	play: PlayOperator;
 	localInstance: LocalInstanceOperator;
 	ui: UiOperator;
+	devtool: DevtoolOperator;
 	externalPlugin: ExternalPluginOperator;
 	private store: Store;
 	private gameViewManager: GameViewManager;
@@ -34,6 +36,7 @@ export class Operator {
 		this.play = new PlayOperator(store);
 		this.localInstance = new LocalInstanceOperator(store);
 		this.ui = new UiOperator(store);
+		this.devtool = new DevtoolOperator(store);
 		this.externalPlugin = new ExternalPluginOperator(param.gameViewManager);
 		this.store = param.store;
 		this.gameViewManager = param.gameViewManager;

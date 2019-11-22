@@ -4,14 +4,14 @@ import { TopResizable } from "../atom/TopResizable";
 import { DevtoolSelectorBar } from "../atom/DevtoolSelectorBar";
 import { EventsDevtool, EventsDevtoolProps } from "../molecule/EventsDevtool";
 import { InstancesDevtool, InstancesDevtoolProps } from "../molecule/InstancesDevtool";
-import { EntityListDevtool, EntityListDevtoolProps } from "../molecule/EntityListDevtool";
+import { EntityTreeDevtool, EntityTreeDevtoolProps } from "../molecule/EntityTreeDevtool";
 import * as styles from "./Devtool.css";
 
 // TODO 適切な箇所に定義を移す
 export type DevtoolType =
 	"Instances" |
 	"Events" |
-	"EntityList";
+	"EntityTree";
 
 export interface DevtoolProps {
 	height: number;
@@ -21,7 +21,7 @@ export interface DevtoolProps {
 	onSelectDevtool: (type: DevtoolType) => void;
 	eventsDevtoolProps: EventsDevtoolProps;
 	instancesDevtoolProps: InstancesDevtoolProps;
-	entityListDevtoolProps: EntityListDevtoolProps;
+	entityTreeDevtoolProps: EntityTreeDevtoolProps;
 }
 
 @observer
@@ -33,7 +33,7 @@ export class Devtool extends React.Component<DevtoolProps, {}> {
 		this._onSelectToolTable = {
 			"Instances": this._onSelectInstancesTool,
 			"Events": this._onSelectEventsTool,
-			"EntityList": this._onSelectEntityListTool
+			"EntityTree": this._onSelectEntityListTool
 		};
 	}
 
@@ -43,7 +43,7 @@ export class Devtool extends React.Component<DevtoolProps, {}> {
 		return <TopResizable height={props.height} minHeight={props.minHeight} onResize={props.onResizeHeight}>
 			<div className={styles["devtool"]}>
 				<DevtoolSelectorBar items={
-					["Instances", "Events", "EntityList"].map(t => ({
+					["Instances", "Events", "EntityTree"].map(t => ({
 						name: t,
 						active: (t === activeDevtool),
 						onClick: this._onSelectToolTable[t]
@@ -51,7 +51,7 @@ export class Devtool extends React.Component<DevtoolProps, {}> {
 				} />
 				{ (activeDevtool === "Instances") && <InstancesDevtool {...props.instancesDevtoolProps} /> }
 				{ (activeDevtool === "Events") && <EventsDevtool {...props.eventsDevtoolProps} /> }
-				{ (activeDevtool === "EntityList") && <EntityListDevtool {...props.entityListDevtoolProps} /> }
+				{ (activeDevtool === "EntityTree") && <EntityTreeDevtool {...props.entityTreeDevtoolProps} /> }
 			</div>
 		</TopResizable>;
 	}
@@ -65,6 +65,6 @@ export class Devtool extends React.Component<DevtoolProps, {}> {
 	}
 
 	private _onSelectEntityListTool = (): void => {
-		this.props.onSelectDevtool("EntityList");
+		this.props.onSelectDevtool("EntityTree");
 	}
 }

@@ -61,7 +61,10 @@ export class Store {
 
 	@action
 	setCurrentLocalInstance(instance: LocalInstanceEntity): void {
+		if (this.currentLocalInstance === instance)
+			return;
 		this.currentLocalInstance = instance;
+		this.devtoolUiStore.setEntityTrees([]);
 	}
 
 	@action
