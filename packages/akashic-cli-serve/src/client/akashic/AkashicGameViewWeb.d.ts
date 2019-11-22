@@ -68,6 +68,8 @@ declare module ae {
 	interface RendererLike {
 		begin(): void;
 		end(): void;
+		save(): void;
+		restore(): void;
 		transform(mat: number[]): void;
 		fillRect(x: number, y: number, width: number, height: number, cssColor: string): void;
 	}

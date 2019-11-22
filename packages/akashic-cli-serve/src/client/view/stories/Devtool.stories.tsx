@@ -353,7 +353,7 @@ storiesOf("o-Devtool", module)
 				eventListWidth: 250,
 				eventListMinWidth: 200,
 				onEventListResize: action("events:list-resize"),
-				onToggleList: action("events:toggle-list"),
+				onClickShowEventList: action("events:toggle-list"),
 				eventNames: [ "Foo", "Test 0" ],
 				eventEditContent: `["test", 1]`,
 				onClickSendEvent: action("events:send"),

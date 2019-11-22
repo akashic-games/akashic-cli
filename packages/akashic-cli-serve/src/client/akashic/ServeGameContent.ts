@@ -67,9 +67,11 @@ export class ServeGameContent {
 				return ret;
 			const renderer = game.renderers[0];  // TODO 0番だけで描画するのは暫定。現実的には0しかない。
 			renderer.begin();
+			renderer.save();
 			const mat = getMatrixFromRoot(e, camera || game.focusingCamera)._matrix;
 			renderer.transform(mat);
 			renderer.fillRect(0, 0, e.width, e.height, "rgba(255, 0, 0, 0.3)");
+			renderer.restore();
 			renderer.end();
 			return ret;
 		};
