@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 1.8.18 (2019-11-22)
+
+#### Bug Fix
+* `akashic-cli-export-html`
+  * [#198](https://github.com/akashic-games/akashic-cli/pull/198) eslint js files ([@kamakiri01](https://github.com/kamakiri01))
+
+#### Committers: 2
+- kamakiri_ys ([@kamakiri01](https://github.com/kamakiri01))
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.8.17 (2019-11-21)
 
 #### Enhancement
