@@ -33,7 +33,7 @@ window.addEventListener("load", function() {
 			var sandboxConfig = window.__akashic__.sandboxConfigFunc();
 			var autoSendEvents = (window.__akashic__.autoSendEvents === true) ? sandboxConfig.autoSendEvents : window.__akashic__.autoSendEvents;
 			if (!!sandboxConfig && autoSendEvents && sandboxConfig.events && sandboxConfig.events[autoSendEvents]) {
-				sandboxConfig.events[autoSendEvents].forEach((ev) => amflowClient.sendEvent(ev));
+				sandboxConfig.events[autoSendEvents].forEach(function (ev){amflowClient.sendEvent(ev)});
 			}
 		}
 
