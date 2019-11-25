@@ -22,7 +22,7 @@
     "@akashic/akashic-sandbox": "~0.13.55",
     "jest": "24.9.0",
     "rimraf": "2.7.1",
-    "tslint": "5.20.0",
+    "tslint": "5.20.1",
     "typescript": "2.9.2"
   }
 }

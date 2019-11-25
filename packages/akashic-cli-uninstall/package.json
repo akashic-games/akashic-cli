@@ -30,16 +30,16 @@
     "@types/fs-extra": "5.1.0",
     "@types/jasmine": "2.8.16",
     "@types/mock-fs": "3.6.30",
-    "@types/node": "10.14.21",
+    "@types/node": "10.14.22",
     "jest": "24.9.0",
-    "mock-fs": "4.10.1",
+    "mock-fs": "4.10.3",
     "rimraf": "2.7.1",
-    "tslint": "5.20.0",
+    "tslint": "5.20.1",
     "typescript": "2.9.2"
   },
   "dependencies": {
     "@akashic/akashic-cli-commons": "0.3.0",
-    "commander": "2.20.1"
+    "commander": "2.20.3"
   },
   "typings": "lib/index.d.ts",
   "publishConfig": {
