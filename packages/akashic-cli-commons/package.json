@@ -23,9 +23,9 @@
     "@types/eslint": "4.16.8",
     "@types/fs-extra": "5.1.0",
     "jest": "24.9.0",
-    "mock-fs": "4.10.1",
+    "mock-fs": "4.10.3",
     "shx": "0.3.2",
-    "tslint": "5.20.0",
+    "tslint": "5.20.1",
     "typescript": "2.9.2"
   },
   "typings": "lib/index.d.ts",

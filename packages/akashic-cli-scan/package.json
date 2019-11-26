@@ -26,14 +26,14 @@
     "@types/image-size": "0.7.0",
     "@types/jasmine": "2.8.16",
     "@types/mock-fs": "3.6.30",
-    "@types/node": "6.14.7",
+    "@types/node": "6.14.9",
     "istanbul": "0.4.5",
     "jasmine": "3.5.0",
     "jasmine-reporters": "2.3.2",
     "jasmine-terminal-reporter": "0.9.1",
-    "mock-fs": "4.10.1",
+    "mock-fs": "4.10.3",
     "shx": "0.3.2",
-    "tslint": "5.20.0",
+    "tslint": "5.20.1",
     "typescript": "2.9.2"
   },
   "typings": "lib/index.d.ts",
@@ -43,7 +43,7 @@
     "commander": "^2.16.0",
     "fs-readdir-recursive": "1.1.0",
     "image-size": "~0.8.0",
-    "music-metadata": "4.8.3",
+    "music-metadata": "4.8.4",
     "thumbcoil": "~1.2.0"
   },
   "publishConfig": {
