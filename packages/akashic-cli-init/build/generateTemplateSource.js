@@ -60,7 +60,7 @@ Object.keys(templateData).forEach(key => {
 	shell.cp("-R", path.join(templatesSrcDirPath, "javascript-base", "*"), path.join(templatesDirPath, templateData[key]["js-dist"]));
 	shell.cp(path.join(templatesSrcDirPath, "javascript-base", ".eslintrc.json"), path.join(templatesDirPath, templateData[key]["js-dist"]));
 	// game.jsonにscriptアセットが登録されていない状態なので、ここで登録する
-	execSync(`cd ${path.join(templatesDirPath, templateData[key]["js-dist"])} && ../common/node_modules/.bin/akashic-cli-scan asset script`);
+	execSync(`cd ${path.join(templatesDirPath, templateData[key]["js-dist"])} && ${path.join(templatesDirPath, templateData[key]["js-dist"], "..", "common", "node_modules", ".bin", "akashic-cli-scan")} asset script`);
 });
 shell.rm("-rf", path.join(templatesDirPath, "common"));
 console.log("End to generate javascript-templates");
