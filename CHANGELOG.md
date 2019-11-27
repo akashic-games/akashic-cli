@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.8.20 (2019-11-27)
+
+#### Bug Fix
+* `akashic-cli-init`
+  * [#199](https://github.com/akashic-games/akashic-cli/pull/199) fix init --yes option ([@kamakiri01](https://github.com/kamakiri01))
+
+#### Committers: 1
+- kamakiri_ys ([@kamakiri01](https://github.com/kamakiri01))
+
 ## 1.8.19 (2019-11-27)
 
 #### Update Dependencies
