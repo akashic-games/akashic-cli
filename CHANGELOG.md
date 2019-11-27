@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 1.8.19 (2019-11-27)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#172](https://github.com/akashic-games/akashic-cli/pull/172) Update all dependencies (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#175](https://github.com/akashic-games/akashic-cli/pull/175) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#180](https://github.com/akashic-games/akashic-cli/pull/180) Pin dependencies ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
 ## 1.8.18 (2019-11-22)
 
 #### Bug Fix
