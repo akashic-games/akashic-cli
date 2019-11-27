@@ -54,6 +54,7 @@ export function run(argv: string[]): void {
 		quiet: commander.quiet,
 		type: commander.type,
 		list: commander.list,
+		yes: commander.yes,
 		force: commander.force
 	});
 }
