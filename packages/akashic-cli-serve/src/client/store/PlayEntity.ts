@@ -34,6 +34,7 @@ export interface CreateLocalInstanceParameterObject {
 
 export interface CreateServerInstanceParameterObject {
 	playToken: string;
+	contentId: string;
 }
 
 export interface PlayEntityParameterObject {
@@ -133,7 +134,7 @@ export class PlayEntity {
 	}
 
 	async createServerInstance(param: CreateServerInstanceParameterObject): Promise<ServerInstanceEntity> {
-		const runnerResult = await ApiClient.createRunner(this.playId, true, param.playToken);
+		const runnerResult = await ApiClient.createRunner(this.playId, true, param.playToken, param.contentId);
 		const runnerId = runnerResult.data.runnerId;
 
 		// ApiClient.createRunner() に対する onRunnerCreate 通知が先行していれば、この時点で ServerInstanceEntity が生成済みになっている

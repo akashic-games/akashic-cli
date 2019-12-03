@@ -10,6 +10,7 @@ export interface ServerGlobalConfig {
 	untrusted: boolean; // 簡易対応。究極的にはコンテンツごとに指定されるべき値
 	proxyAudio: boolean;
 	targetService: ServiceType;
+	allowedExternal: boolean;
 }
 
 export const DEFAULT_HOSTNAME = "localhost";
@@ -24,5 +25,6 @@ export const serverGlobalConfig: ServerGlobalConfig = {
 	verbose: false,
 	untrusted: false,
 	proxyAudio: false,
-	targetService: ServiceType.None
+	targetService: ServiceType.None,
+	allowedExternal: false
 };
