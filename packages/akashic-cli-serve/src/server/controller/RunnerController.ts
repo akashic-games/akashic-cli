@@ -26,7 +26,7 @@ export const createHandlerToCreateRunner = (
 
 			const contentId = req.params.contentId;
 			const sandboxConfig = dynamicRequire<SandboxConfig>(path.resolve(targetDirs[parseInt(contentId, 10)], "sandbox.config.js"));
-			const externalAssets = sandboxConfig.externalAssets === undefined ? [] : sandboxConfig.externalAssets;
+			const externalAssets = sandboxConfig?.externalAssets === undefined ? [] : sandboxConfig.externalAssets;
 			if (externalAssets && externalAssets.length > 0) {
 				// sandbox.configに設定される値があり (string|regexp)[] でない場合エラーとする
 				if (!(externalAssets instanceof Array)) {
