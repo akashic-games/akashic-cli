@@ -104,7 +104,7 @@ async function writeHtmlFile(
 	var version = conf._content.environment["sandbox-runtime"];
 	var versionsJson = require("./engineFilesVersion.json");
 	const filePath = path.resolve(__dirname + "/../templates-build/no-bundle-index.ejs");
-	const html = await ejs.renderFile<string>(filePath, {
+	const html = await ejs.renderFile(filePath, {
 		assets: assetPaths,
 		magnify: !!options.magnify,
 		injectedContents: getInjectedContents(options.cwd, injects),
