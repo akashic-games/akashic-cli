@@ -40,7 +40,7 @@ akashic-cli-serve [<options>] [<path>]
 |`--help`|`-h`|ヘルプを表示して終了します。|N/A|
 |`--version`|`-V`|バージョンを表示して終了します。|N/A|
 |`--target-service`|`-s`|ブラウザを開いた時、引数で指定したサービスのモードで開始します。|`none`|
-|`--allowed-external`|`-a`|外部アセットを許可します。許可する値は sandbox.config.js から読み込みます。|N/A|
+|`--allow-external`|`-a`|外部アセットを許可します。許可する値は sandbox.config.js から読み込みます。|N/A|
 
 [ae]: https://akashic-games.github.io/
 

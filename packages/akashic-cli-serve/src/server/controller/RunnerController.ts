@@ -94,7 +94,7 @@ export const createHandlerToPatchRunner = (runnerStore: RunnerStore): express.Re
 
 function createAllowedUrls(contentId: string, externalAssets: (string | RegExp)[] | null) {
 	let allowedUrls: (string | RegExp)[] = [`http://${serverGlobalConfig.hostname}:${serverGlobalConfig.port}/contents/${contentId}/`];
-	if (serverGlobalConfig.allowedExternal) {
+	if (serverGlobalConfig.allowExternal) {
 		if (externalAssets === null) return null;
 
 		allowedUrls = allowedUrls.concat(externalAssets);

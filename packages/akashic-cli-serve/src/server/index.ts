@@ -44,7 +44,7 @@ export function run(argv: any): void {
 			`Simulate the specified service. arguments: ${Object.values(ServiceType)}`)
 		.option("--debug-untrusted", `An internal debug option`)
 		.option("--debug-proxy-audio", `An internal debug option`)
-		.option("-a, --allowed-external", `Read the URL allowing external access from sandbox.config.js`)
+		.option("-a, --allow-external", `Read the URL allowing external access from sandbox.config.js`)
 		.parse(argv);
 
 	if (commander.port && isNaN(commander.port)) {
@@ -112,8 +112,8 @@ export function run(argv: any): void {
 		serverGlobalConfig.targetService = commander.targetService;
 	}
 
-	if (commander.allowedExternal) {
-		serverGlobalConfig.allowedExternal = commander.allowedExternal;
+	if (commander.allowExternal) {
+		serverGlobalConfig.allowExternal = commander.allowExternal;
 	}
 
 	const targetDirs: string[] = commander.args.length > 0 ? commander.args : [process.cwd()];
