@@ -6,7 +6,6 @@ import {
 	RunnerPauseTestbedEvent,
 	RunnerResumeTestbedEvent
 } from "../../common/types/TestbedEvent";
-import { serverGlobalConfig } from "../common/ServerGlobalConfig";
 
 export interface RunnerStoreParameterObject {
 	runnerManager: RunnerManager;
@@ -17,8 +16,7 @@ export interface CreateAndStartRunnerParameterObject {
 	isActive: boolean;
 	token: string;
 	amflow: AMFlowClient;
-	externalAssets: (string | RegExp)[] | null;
-	contentId: string;
+	allowedUrls: (string | RegExp)[] | null;
 }
 
 export class RunnerStore {
@@ -39,13 +37,12 @@ export class RunnerStore {
 	}
 
 	async createAndStartRunner(params: CreateAndStartRunnerParameterObject): Promise<RunnerV1 | RunnerV2> {
-		const allowedUrls = this.createAllowedUrls(params.contentId, params.externalAssets);
 		const runnerId = await this.runnerManager.createRunner({
 			playId: params.playId,
 			amflow: params.amflow,
 			executionMode: params.isActive ? "active" : "passive",
 			playToken: params.token,
-			allowedUrls
+			allowedUrls: params.allowedUrls
 		});
 		const runner = this.runnerManager.getRunner(runnerId);
 		await this.runnerManager.startRunner(runner.runnerId);
@@ -82,18 +79,5 @@ export class RunnerStore {
 		}
 		const playId = this.playIdTable[runnerId];
 		this.onRunnerResume.fire({ playId, runnerId });
-	}
-
-	private createAllowedUrls(contentId: string, externalAssets: (string | RegExp)[] | null) {
-		let allowedUrls: (string | RegExp)[] = [ `http://${serverGlobalConfig.hostname}:${serverGlobalConfig.port}/contents/${contentId}/` ];
-		if (serverGlobalConfig.allowedExternal) {
-			if (externalAssets === null) return null;
-
-			allowedUrls = allowedUrls.concat(externalAssets);
-			if (process.env.AKASHIC_SERVE_ALLOW_ORIGIN) {
-				allowedUrls.push(process.env.AKASHIC_SERVE_ALLOW_ORIGIN);
-			}
-		}
-		return allowedUrls;
 	}
 }

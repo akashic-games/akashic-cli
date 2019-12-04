@@ -1,4 +1,5 @@
 import * as express from "express";
+import * as path from "path";
 import { BadRequestError } from "../common/ApiError";
 import { responseSuccess } from "../common/ApiResponse";
 import {
@@ -9,8 +10,8 @@ import {
 import { PlayStore } from "../domain/PlayStore";
 import { RunnerStore } from "../domain/RunnerStore";
 import { dynamicRequire } from "../domain/dynamicRequire";
-import * as path from "path";
 import { SandboxConfig } from "../../common/types/SandboxConfig";
+import { serverGlobalConfig } from "../common/ServerGlobalConfig";
 
 export const createHandlerToCreateRunner = (
 	playStore: PlayStore,
@@ -28,7 +29,7 @@ export const createHandlerToCreateRunner = (
 			const sandboxConfig = dynamicRequire<SandboxConfig>(path.resolve(targetDirs[parseInt(contentId, 10)], "sandbox.config.js"));
 			const externalAssets = sandboxConfig?.externalAssets === undefined ? [] : sandboxConfig.externalAssets;
 			if (externalAssets && externalAssets.length > 0) {
-				// sandbox.configに設定される値があり (string|regexp)[] でない場合エラーとする
+				// sandbox.config.js の externalAssets に値がある場合は (string|regexp)[] でなければエラーとする
 				if (!(externalAssets instanceof Array)) {
 					throw new BadRequestError({ errorMessage: "Invalid externalAssets, Not Array" });
 				}
@@ -42,7 +43,8 @@ export const createHandlerToCreateRunner = (
 			const isActive = Boolean(req.body.isActive);
 			const token = req.body.token;
 			const amflow = playStore.createAMFlow(playId);
-			const runner = await runnerStore.createAndStartRunner({ playId, isActive, token, amflow, externalAssets, contentId });
+			const allowedUrls = createAllowedUrls(contentId, externalAssets);
+			const runner = await runnerStore.createAndStartRunner({ playId, isActive, token, amflow, allowedUrls });
 			responseSuccess<RunnerPostApiResponseData>(res, 200, { playId: runner.playId, runnerId: runner.runnerId });
 		} catch (e) {
 			next(e);
@@ -90,3 +92,15 @@ export const createHandlerToPatchRunner = (runnerStore: RunnerStore): express.Re
 	};
 };
 
+function createAllowedUrls(contentId: string, externalAssets: (string | RegExp)[] | null) {
+	let allowedUrls: (string | RegExp)[] = [`http://${serverGlobalConfig.hostname}:${serverGlobalConfig.port}/contents/${contentId}/`];
+	if (serverGlobalConfig.allowedExternal) {
+		if (externalAssets === null) return null;
+
+		allowedUrls = allowedUrls.concat(externalAssets);
+		if (process.env.AKASHIC_SERVE_ALLOW_ORIGIN) {
+			allowedUrls.push(process.env.AKASHIC_SERVE_ALLOW_ORIGIN);
+		}
+	}
+	return allowedUrls;
+}
