@@ -16,6 +16,7 @@ import { serverGlobalConfig } from "./common/ServerGlobalConfig";
 import { createContentsRouter } from "./route/ContentsRoute";
 import { ServiceType } from "../common/types/ServiceType";
 import { createHealthCheckRouter } from "./route/HealthCheckRoute";
+import { ServerContentLocator } from "./common/ServerContentLocator";
 
 // 渡されたパラメータを全てstringに変換する
 // chalkを使用する場合、ログ出力時objectの中身を展開してくれないためstringに変換する必要がある
@@ -30,7 +31,7 @@ function convertToStrings(params: any[]): string[] {
 }
 
 // TODOこのファイルを改名してcli.tsにする
-export function run(argv: any): void {
+export async function run(argv: any): Promise<void> {
 	const ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "..", "package.json"), "utf8")).version;
 	commander
 		.version(ver)
@@ -42,6 +43,7 @@ export function run(argv: any): void {
 		.option("-A, --no-auto-start", `Wait automatic startup of contents.`)
 		.option("-s, --target-service <service>",
 			`Simulate the specified service. arguments: ${Object.values(ServiceType)}`)
+		.option("-P, --playlog-path <playlogPath>", `Specify path of playlog-json. arguments: .`)
 		.option("--debug-untrusted", `An internal debug option`)
 		.option("--debug-proxy-audio", `An internal debug option`)
 		.parse(argv);
@@ -159,6 +161,23 @@ export function run(argv: any): void {
 	runnerStore.onRunnerPause.add(arg => { io.emit("runnerPause", arg); });
 	runnerStore.onRunnerResume.add(arg => { io.emit("runnerResume", arg); });
 
+	let loadedPlaylogPlayId: string;
+	if (commander.playlogPath) {
+		const actualPath = path.join(process.cwd(), commander.playlogPath);
+		if (!fs.existsSync(actualPath)) {
+			getSystemLogger().error(`Can not find ${actualPath}`);
+			process.exit(1);
+		}
+		const playlog = require(actualPath);
+		// 現状指定されるplaylogは1つの想定なので、contentIdは必ず0になる
+		const contentLocator = new ServerContentLocator({contentId: "0"});
+		loadedPlaylogPlayId = await playStore.createPlay(contentLocator);
+		await playStore.loadPlaylog(loadedPlaylogPlayId, playlog).catch((e: Error) => {
+			getSystemLogger().error(e.message);
+			process.exit(1);
+		});
+	}
+
 	httpServer.listen(serverGlobalConfig.port, () => {
 		if (serverGlobalConfig.port < 1024) {
 			getSystemLogger().warn("Akashic Serve is a development server which is not appropriate for public release. " +
@@ -166,5 +185,10 @@ export function run(argv: any): void {
 		}
 		// サーバー起動のログに関してはSystemLoggerで使用していない色を使いたいので緑を選択
 		console.log(chalk.green(`Hosting ${targetDirs.join(", ")} on http://${serverGlobalConfig.hostname}:${serverGlobalConfig.port}`));
+		if (loadedPlaylogPlayId) {
+			console.log(`play(id: ${loadedPlaylogPlayId}) read playlog(path: ${path.join(process.cwd(), commander.playlogPath)}).`);
+			const url = `http://${serverGlobalConfig.hostname}:${serverGlobalConfig.port}/public?playId=${loadedPlaylogPlayId}&mode=replay`;
+			console.log(`if access ${url}, you can show this play.`);
+		}
 	});
 }

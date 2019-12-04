@@ -76,6 +76,36 @@ export class PlayStore {
 		return playId;
 	}
 
+	/**
+	 * 指定のplayIdのplayに指定したplaylogを読み込ませる
+	 */
+	async loadPlaylog(playId: string, playlog: any): Promise<void> {
+		const token = await this.createPlayToken(playId, true);
+		const amflow = await this.createAMFlow(playId);
+		amflow.open(playId, e => {
+			if (e) {
+				throw e;
+			}
+			amflow.authenticate(token, e => {
+				if (e) {
+					throw e;
+				}
+				if (playlog.startPoints && playlog.startPoints instanceof Array) {
+					amflow.putStartPoint(playlog.startPoints[0], e => {
+						if (e) {
+							throw e;
+						}
+						if (playlog.tickList && playlog.tickList instanceof Array) {
+							playlog.tickList[2].forEach((tick: any) => {
+								amflow.sendTick(tick);
+							});
+						}
+					});
+				}
+			});
+		});
+	}
+
 	getPlay(playId: string): Play {
 		return this.playManager.getPlay(playId);
 	}

@@ -1,3 +1,4 @@
+import * as queryString from "query-string";
 import { PlayBroadcastTestbedEvent } from "../../common/types/TestbedEvent";
 import { ClientContentLocator } from "../common/ClientContentLocator";
 import * as ApiClient from "../api/ApiClient";
@@ -20,6 +21,7 @@ export interface OperatorParameterObject {
 export interface StartContentParameterObject {
 	joinsSelf: boolean;
 	instanceArgument: any;
+	isReplay?: boolean;
 }
 
 export class Operator {
@@ -50,22 +52,29 @@ export class Operator {
 
 	async bootstrap(contentLocator?: ClientContentLocator): Promise<void> {
 		const store = this.store;
+		const query = queryString.parse(window.location.search);
 		let play: PlayEntity = null;
-		if (contentLocator) {
+		if (contentLocator && !query.playId) {
 			play = await this._createServerLoop(contentLocator);
 		} else {
 			const plays = store.playStore.playsList();
-			if (plays.length > 0) {
+			if (query.playId) {
+				const target = plays.filter(play => play.playId === query.playId);
+				if (target.length === 0) {
+					throw new Error(`play(id: ${query.playId}) is not found.`);
+				}
+				play = target[0];
+			} else if (plays.length > 0) {
 				play = plays[plays.length - 1];
 			} else {
 				const loc = store.contentStore.defaultContent().locator;
 				play = await this._createServerLoop(loc);
 			}
 		}
-		await this.setCurrentPlay(play);
+		await this.setCurrentPlay(play, query.mode === "replay");
 	}
 
-	setCurrentPlay = async (play: PlayEntity): Promise<void> => {
+	setCurrentPlay = async (play: PlayEntity, isReplay: boolean = false): Promise<void> => {
 		const store = this.store;
 		if (store.currentPlay === play)
 			return;
@@ -94,7 +103,8 @@ export class Operator {
 		if (store.appOptions.autoStart) {
 			await this.startContent({
 				joinsSelf: isJoin,
-				instanceArgument: argument
+				instanceArgument: argument,
+				isReplay
 			});
 		}
 	}
@@ -108,7 +118,7 @@ export class Operator {
 			playId: play.playId,
 			playToken: tokenResult.data.playToken,
 			playlogServerUrl: "dummy-playlog-server-url",
-			executionMode: "passive",
+			executionMode: params.isReplay ? "replay" : "passive",
 			player: store.player,
 			argument: params != null ? params.instanceArgument : undefined,
 			proxyAudio: store.appOptions.proxyAudio,
@@ -139,6 +149,9 @@ export class Operator {
 				}
 			}
 		});
+		if (params.isReplay) {
+			play.handlePlayDurationStateChange(false, 0);
+		}
 		store.setCurrentLocalInstance(instance);
 		if (params != null && params.joinsSelf) {
 			store.currentPlay.join(store.player.id, store.player.name);
