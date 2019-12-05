@@ -43,7 +43,7 @@ export async function run(argv: any): Promise<void> {
 		.option("-A, --no-auto-start", `Wait automatic startup of contents.`)
 		.option("-s, --target-service <service>",
 			`Simulate the specified service. arguments: ${Object.values(ServiceType)}`)
-		.option("-P, --playlog-path <playlogPath>", `Specify path of playlog-json. arguments: .`)
+		.option("--playlog <playlog>", `Specify path of playlog-json. arguments: .`)
 		.option("--debug-untrusted", `An internal debug option`)
 		.option("--debug-proxy-audio", `An internal debug option`)
 		.parse(argv);
@@ -162,13 +162,13 @@ export async function run(argv: any): Promise<void> {
 	runnerStore.onRunnerResume.add(arg => { io.emit("runnerResume", arg); });
 
 	let loadedPlaylogPlayId: string;
-	if (commander.playlogPath) {
-		const actualPath = path.join(process.cwd(), commander.playlogPath);
-		if (!fs.existsSync(actualPath)) {
-			getSystemLogger().error(`Can not find ${actualPath}`);
+	if (commander.playlog) {
+		const absolutePath = path.join(process.cwd(), commander.playlog);
+		if (!fs.existsSync(absolutePath)) {
+			getSystemLogger().error(`Can not find ${absolutePath}`);
 			process.exit(1);
 		}
-		const playlog = require(actualPath);
+		const playlog = require(absolutePath);
 		// 現状指定されるplaylogは1つの想定なので、contentIdは必ず0になる
 		const contentLocator = new ServerContentLocator({contentId: "0"});
 		loadedPlaylogPlayId = await playStore.createPlay(contentLocator);
@@ -186,7 +186,7 @@ export async function run(argv: any): Promise<void> {
 		// サーバー起動のログに関してはSystemLoggerで使用していない色を使いたいので緑を選択
 		console.log(chalk.green(`Hosting ${targetDirs.join(", ")} on http://${serverGlobalConfig.hostname}:${serverGlobalConfig.port}`));
 		if (loadedPlaylogPlayId) {
-			console.log(`play(id: ${loadedPlaylogPlayId}) read playlog(path: ${path.join(process.cwd(), commander.playlogPath)}).`);
+			console.log(`play(id: ${loadedPlaylogPlayId}) read playlog(path: ${path.join(process.cwd(), commander.playlog)}).`);
 			const url = `http://${serverGlobalConfig.hostname}:${serverGlobalConfig.port}/public?playId=${loadedPlaylogPlayId}&mode=replay`;
 			console.log(`if access ${url}, you can show this play.`);
 		}

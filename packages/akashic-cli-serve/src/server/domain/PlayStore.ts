@@ -18,6 +18,8 @@ import { PlayDurationState } from "../../common/types/PlayDurationState";
 import { TimeKeeper } from "../../common/TimeKeeper";
 import { ServerContentLocator } from "../common/ServerContentLocator";
 import { activePermission, passivePermission } from "./AMFlowPermisson";
+import { TickList } from "@akashic/playlog";
+import { StartPoint } from "@akashic/amflow";
 
 export interface PlayStoreParameterObject {
 	playManager: PlayManager;
@@ -29,6 +31,11 @@ export interface PlayEntity {
 	clientInstances: ClientInstanceDescription[];
 	runners: RunnerDescription[];
 	joinedPlayers: Player[];
+}
+
+export interface Playlog {
+	tickList: TickList;
+	startPoints: StartPoint[];
 }
 
 export class PlayStore {
@@ -79,31 +86,28 @@ export class PlayStore {
 	/**
 	 * 指定のplayIdのplayに指定したplaylogを読み込ませる
 	 */
-	async loadPlaylog(playId: string, playlog: any): Promise<void> {
+	async loadPlaylog(playId: string, playlog: Playlog): Promise<void> {
 		const token = await this.createPlayToken(playId, true);
 		const amflow = await this.createAMFlow(playId);
-		amflow.open(playId, e => {
-			if (e) {
-				throw e;
-			}
-			amflow.authenticate(token, e => {
-				if (e) {
-					throw e;
-				}
-				if (playlog.startPoints && playlog.startPoints instanceof Array) {
-					amflow.putStartPoint(playlog.startPoints[0], e => {
+		try {
+			await new Promise((resolve, reject) => amflow.open(playId, e => e ? reject(e) : resolve()))
+				.then(() => {
+					return new Promise((resolve, reject) => amflow.authenticate(token, e => e ? reject(e) : resolve()));
+				})
+				.then(() => {
+					return new Promise((resolve, reject) => amflow.putStartPoint(playlog.startPoints[0], (e: Error) => {
 						if (e) {
-							throw e;
+							return reject(e);
 						}
-						if (playlog.tickList && playlog.tickList instanceof Array) {
-							playlog.tickList[2].forEach((tick: any) => {
-								amflow.sendTick(tick);
-							});
-						}
-					});
-				}
-			});
-		});
+						playlog.tickList[2].forEach((tick: any) => {
+							amflow.sendTick(tick);
+						});
+						resolve();
+					}));
+				});
+		} catch (e) {
+			throw e;
+		}
 	}
 
 	getPlay(playId: string): Play {
