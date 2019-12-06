@@ -89,25 +89,12 @@ export class PlayStore {
 	async loadPlaylog(playId: string, playlog: Playlog): Promise<void> {
 		const token = await this.createPlayToken(playId, true);
 		const amflow = await this.createAMFlow(playId);
-		try {
-			await new Promise((resolve, reject) => amflow.open(playId, e => e ? reject(e) : resolve()))
-				.then(() => {
-					return new Promise((resolve, reject) => amflow.authenticate(token, e => e ? reject(e) : resolve()));
-				})
-				.then(() => {
-					return new Promise((resolve, reject) => amflow.putStartPoint(playlog.startPoints[0], (e: Error) => {
-						if (e) {
-							return reject(e);
-						}
-						playlog.tickList[2].forEach((tick: any) => {
-							amflow.sendTick(tick);
-						});
-						resolve();
-					}));
-				});
-		} catch (e) {
-			throw e;
-		}
+		await new Promise((resolve, reject) => amflow.open(playId, (e: Error) => e ? reject(e) : resolve()));
+		await new Promise((resolve, reject) => amflow.authenticate(token, (e: Error) => e ? reject(e) : resolve()));
+		await new Promise((resolve, reject) => amflow.putStartPoint(playlog.startPoints[0], (e: Error) => e ? reject(e) : resolve()));
+		playlog.tickList[2].forEach((tick: any) => {
+			amflow.sendTick(tick);
+		});
 	}
 
 	getPlay(playId: string): Play {

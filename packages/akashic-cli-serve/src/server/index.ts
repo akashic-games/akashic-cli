@@ -43,7 +43,7 @@ export async function run(argv: any): Promise<void> {
 		.option("-A, --no-auto-start", `Wait automatic startup of contents.`)
 		.option("-s, --target-service <service>",
 			`Simulate the specified service. arguments: ${Object.values(ServiceType)}`)
-		.option("--playlog <playlog>", `Specify path of playlog-json. arguments: .`)
+		.option("--playlog <playlog>", `Specify path of playlog-json. default: .`)
 		.option("--debug-untrusted", `An internal debug option`)
 		.option("--debug-proxy-audio", `An internal debug option`)
 		.parse(argv);
