@@ -9,11 +9,11 @@ const { SocketIOAMFlowManager } = require("../../lib/server/domain/SocketIOAMFlo
 const { SocketIOAMFlowClient } = require("../../lib/client/akashic/SocketIOAMFlowClient");
 
 describe("SocketIOAMFlowManager", () => {
-	let TEST_SERVER_PORT;
+	let testServerPort;
 
 	let logger = null;
 	beforeAll(async () => {
-		TEST_SERVER_PORT = await getPort();
+		testServerPort = await getPort();
 		// TODO setSystemLogger() 依存をやめる
 		logger = hld.getSystemLogger();
 		hld.setSystemLogger({ info: () => {}, debug: () => {}, warn: () => {}, error: () => {} });
@@ -26,7 +26,7 @@ describe("SocketIOAMFlowManager", () => {
 	beforeEach((done) => {
 		const server = http.Server();
 		socketIOServer = socketio(server);
-		server.listen(TEST_SERVER_PORT, () => done());
+		server.listen(testServerPort, () => done());
 	});
 	afterEach((done) => {
 		socketIOServer.close(() => {
@@ -48,7 +48,7 @@ describe("SocketIOAMFlowManager", () => {
 				const playStore = new PlayStore({ playManager: new hld.PlayManager() });
 				const amflowManager = new SocketIOAMFlowManager({ playStore });
 				socketIOServer.on("connection", (socket) => amflowManager.setupSocketIOAMFlow(socket));
-				socket = io("http://localhost:" + TEST_SERVER_PORT);
+				socket = io("http://localhost:" + testServerPort);
 				const contentLocator = new ServerContentLocator({ path: "dummycontenturl" });
 
 				const playId1 = await playStore.createPlay(contentLocator);
@@ -129,8 +129,8 @@ describe("SocketIOAMFlowManager", () => {
 				const playStore = new PlayStore({ playManager: new hld.PlayManager() });
 				const amflowManager = new SocketIOAMFlowManager({ playStore });
 				socketIOServer.on("connection", (socket) => amflowManager.setupSocketIOAMFlow(socket));
-				socketA = io("http://localhost:" + TEST_SERVER_PORT);
-				socketB = io("http://localhost:" + TEST_SERVER_PORT);
+				socketA = io("http://localhost:" + testServerPort);
+				socketB = io("http://localhost:" + testServerPort);
 				const contentLocator = new ServerContentLocator({ path: "dummycontenturl" });
 
 				const playId1 = await playStore.createPlay(contentLocator);

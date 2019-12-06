@@ -21,4 +21,4 @@ class SubscriberMock {
 	}
 }
 
-exports.SubscreiberMock = SubscriberMock;
+exports.SubscriberMock = SubscriberMock;
