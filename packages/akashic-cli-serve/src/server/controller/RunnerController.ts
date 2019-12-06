@@ -25,7 +25,8 @@ export const createHandlerToCreateRunner = (
 				throw new BadRequestError({ errorMessage: "Invalid playId, isActive or token" });
 			}
 
-			const contentId = req.params.contentId;
+			const playId = req.body.playId;
+			const contentId = playStore.getContentLocator(playId).contentId;
 			const sandboxConfig = dynamicRequire<SandboxConfig>(path.resolve(targetDirs[parseInt(contentId, 10)], "sandbox.config.js"));
 			const externalAssets = sandboxConfig?.externalAssets === undefined ? [] : sandboxConfig.externalAssets;
 			if (externalAssets && externalAssets.length > 0) {
@@ -39,7 +40,6 @@ export const createHandlerToCreateRunner = (
 				}
 			}
 
-			const playId = req.body.playId;
 			const isActive = Boolean(req.body.isActive);
 			const token = req.body.token;
 			const amflow = playStore.createAMFlow(playId);
@@ -92,7 +92,7 @@ export const createHandlerToPatchRunner = (runnerStore: RunnerStore): express.Re
 	};
 };
 
-function createAllowedUrls(contentId: string, externalAssets: (string | RegExp)[] | null) {
+function createAllowedUrls(contentId: string, externalAssets: (string | RegExp)[] | null): (string | RegExp)[] | null {
 	let allowedUrls: (string | RegExp)[] = [`http://${serverGlobalConfig.hostname}:${serverGlobalConfig.port}/contents/${contentId}/`];
 	if (serverGlobalConfig.allowExternal) {
 		if (externalAssets === null) return null;

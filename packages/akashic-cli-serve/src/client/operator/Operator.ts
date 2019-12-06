@@ -155,7 +155,7 @@ export class Operator {
 	private async _createServerLoop(contentLocator: ClientContentLocator): Promise<PlayEntity> {
 		const play = await this.store.playStore.createPlay({ contentLocator });
 		const tokenResult = await ApiClient.createPlayToken(play.playId, "", true);  // TODO 空文字列でなくnullを使う
-		await play.createServerInstance({ playToken: tokenResult.data.playToken, contentId: contentLocator.contentId });
+		await play.createServerInstance({ playToken: tokenResult.data.playToken });
 		await ApiClient.resumePlayDuration(play.playId);
 
 		// autoSendEvents

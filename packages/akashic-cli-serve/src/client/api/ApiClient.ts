@@ -52,9 +52,9 @@ export const broadcast = async(playId: string, message: any): Promise<void> => {
 	return await ApiRequest.post<void>(`/api/plays/${playId}/broadcast`, message);
 };
 
-export const createRunner = async(playId: string, isActive: boolean, token: string, contentId: string): Promise<RunnerPostApiResponse> => {
+export const createRunner = async(playId: string, isActive: boolean, token: string): Promise<RunnerPostApiResponse> => {
 	return await ApiRequest.post<RunnerPostApiResponse>(
-		`/api/runners/${contentId}`,
+		`/api/runners/`,
 		{playId, isActive: isActive.toString(), token}
 	);
 };
