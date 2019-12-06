@@ -7,6 +7,7 @@ const getPort = require('get-port');
 const SubscriberMock = require("../helper/SubscriberMock");
 const ApiRequestMock = require("../helper/ApiRequestMock");
 
+// TODO: このテストは安定化のため無効化し続けていたところ通らなくなってしまったので、有効化の際はテストを修正する必要がある
 xdescribe("SubscriberSpec", function() {
 	var host;
 	var port;
@@ -221,6 +222,7 @@ xdescribe("SubscriberSpec", function() {
 		it("is sent from server, when send amflow:open-event and disconnect-evnet", function(done) {
 			var player = {id: 0, name: "test"};
 			var currentPlayId;
+			var anotherSocket = io(`ws://${host}:${port}`); // disconnectする必要があるのでsocketとは別の変数を用意する
 			var token;
 			var isDisAppeared = false;
 			var pushedData;
@@ -241,15 +243,15 @@ xdescribe("SubscriberSpec", function() {
 			}).then(function(response) {
 				token = response.data.playToken;
 				return new Promise(function(resolve) {
-					socket.emit("amflow:open", currentPlayId, function() {
-						socket.emit("amflow:authenticate", token, function () {
+					anotherSocket.emit("amflow:open", currentPlayId, function() {
+						anotherSocket.emit("amflow:authenticate", token, function () {
 							subscriberMock.onClientInstanceDisappear.addOnce(function(arg) {
 								pushedData = arg;
 								if (isDisAppeared) {
 									assertOnClientInstanceDisAppearEvent();
 								}
 							});
-							socket.disconnect();
+							anotherSocket.disconnect();
 							resolve();
 						});
 					});
@@ -259,7 +261,6 @@ xdescribe("SubscriberSpec", function() {
 				if (pushedData) {
 					assertOnClientInstanceDisAppearEvent();
 				}
-				socket.reconnect();
 			});
 		});
 	});
