@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 1.8.22 (2019-12-06)
+
+#### Enhancement
+* `akashic-cli-export-html`
+  * [#206](https://github.com/akashic-games/akashic-cli/pull/206) 【akashic-cli-export-html】内部コンポーネントの更新(engineFiles@2.1.33, engineFiles@1.1.13) ([@xnv](https://github.com/xnv))
+
+#### Committers: 2
+- [@dera-](https://github.com/dera-)
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.8.21 (2019-12-05)
 
 #### Enhancement
