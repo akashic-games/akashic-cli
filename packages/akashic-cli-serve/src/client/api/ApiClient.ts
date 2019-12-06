@@ -54,7 +54,7 @@ export const broadcast = async(playId: string, message: any): Promise<void> => {
 
 export const createRunner = async(playId: string, isActive: boolean, token: string): Promise<RunnerPostApiResponse> => {
 	return await ApiRequest.post<RunnerPostApiResponse>(
-		`/api/runners/`,
+		"/api/runners/",
 		{playId, isActive: isActive.toString(), token}
 	);
 };
