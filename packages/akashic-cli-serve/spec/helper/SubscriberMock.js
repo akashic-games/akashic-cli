@@ -1,5 +1,4 @@
 const Trigger = require("@akashic/trigger").Trigger;
-const ServerConfigMock = require("./SeverConfigMock");
 
 class SubscriberMock {
 	constructor(socket) {

@@ -3,7 +3,7 @@ global.io = require("socket.io-client");
 
 const { spawn } = require("child_process");
 const path = require("path");
-const ServerConfigMock = require("../helper/SeverConfigMock");
+const getPort = require('get-port');
 const SubscreiberMock = require("../helper/SubscriberMock");
 const ApiRequestMock = require("../helper/ApiRequestMock");
 
@@ -16,8 +16,8 @@ xdescribe("SubscriberSpec", function() {
 	var subscreiberMock;
 	var currentScocket;
 	beforeAll(async function(done) {
-		host = ServerConfigMock.hostname;
-		port = await ServerConfigMock.getPort();
+		host = "localhost";
+		port = await getPort();
 		contentUrl = `http://${host}:${port}/config/content.raw.json`;
 		currentScocket = io(`ws://${host}:${port}`);
 		subscreiberMock = new SubscreiberMock.SubscreiberMock(currentScocket);
