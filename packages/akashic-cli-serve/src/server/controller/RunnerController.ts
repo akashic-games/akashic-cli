@@ -9,15 +9,10 @@ import {
 } from "../../common/types/ApiResponse";
 import { PlayStore } from "../domain/PlayStore";
 import { RunnerStore } from "../domain/RunnerStore";
-import { dynamicRequire } from "../domain/dynamicRequire";
-import { SandboxConfig } from "../../common/types/SandboxConfig";
 import { serverGlobalConfig } from "../common/ServerGlobalConfig";
+import { sandboxConfigs } from "../domain/SandboxConfigs";
 
-export const createHandlerToCreateRunner = (
-	playStore: PlayStore,
-	runnerStore: RunnerStore,
-	targetDirs: string[]
-): express.RequestHandler => {
+export const createHandlerToCreateRunner = (playStore: PlayStore, runnerStore: RunnerStore): express.RequestHandler => {
 	return async (req, res, next) => {
 		try {
 			// TODO: バリデーション用クラスを別で用意した方がよさそう
@@ -27,19 +22,8 @@ export const createHandlerToCreateRunner = (
 
 			const playId = req.body.playId;
 			const contentId = playStore.getContentLocator(playId).contentId;
-			const sandboxConfig = dynamicRequire<SandboxConfig>(path.resolve(targetDirs[parseInt(contentId, 10)], "sandbox.config.js"));
+			const sandboxConfig = sandboxConfigs[parseInt(contentId, 10)];
 			const externalAssets = sandboxConfig?.externalAssets === undefined ? [] : sandboxConfig.externalAssets;
-			if (externalAssets && externalAssets.length > 0) {
-				// sandbox.config.js の externalAssets に値がある場合は (string|regexp)[] でなければエラーとする
-				if (!(externalAssets instanceof Array)) {
-					throw new BadRequestError({ errorMessage: "Invalid externalAssets, Not Array" });
-				}
-				const found = externalAssets.find((url: any) => typeof url !== "string" && !(url instanceof RegExp));
-				if (found) {
-					throw new BadRequestError({ errorMessage: `Invalid externalAssets, The value is neither a string or regexp. value:${found}` });
-				}
-			}
-
 			const isActive = Boolean(req.body.isActive);
 			const token = req.body.token;
 			const amflow = playStore.createAMFlow(playId);
