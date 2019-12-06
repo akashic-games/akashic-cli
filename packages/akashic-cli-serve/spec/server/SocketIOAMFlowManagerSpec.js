@@ -1,6 +1,7 @@
 const http = require('http');
 const socketio = require("socket.io");
 const io = require("socket.io-client");
+const getPort = require('get-port');
 const hld =  require("@akashic/headless-driver");
 const { ServerContentLocator } = require("../../lib/server/common/ServerContentLocator");
 const { PlayStore } = require("../../lib/server/domain/PlayStore");
@@ -8,11 +9,11 @@ const { SocketIOAMFlowManager } = require("../../lib/server/domain/SocketIOAMFlo
 const { SocketIOAMFlowClient } = require("../../lib/client/akashic/SocketIOAMFlowClient");
 
 describe("SocketIOAMFlowManager", () => {
-	// TODO 動的に空いているポートを選ぶ
-	const TEST_SERVER_PORT = 12345;
+	let TEST_SERVER_PORT;
 
 	let logger = null;
-	beforeAll(() => {
+	beforeAll(async () => {
+		TEST_SERVER_PORT = await getPort();
 		// TODO setSystemLogger() 依存をやめる
 		logger = hld.getSystemLogger();
 		hld.setSystemLogger({ info: () => {}, debug: () => {}, warn: () => {}, error: () => {} });

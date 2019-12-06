@@ -1,5 +1,12 @@
+const getPort = require('get-port');
+
 const hostname = "localhost";
-const port = 12345;
+let currentPort;
 
 exports.hostname = hostname;
-exports.port = port;
+exports.getPort = async () => {
+	if (!currentPort) {
+		currentPort = await getPort();
+	}
+	return currentPort;
+}

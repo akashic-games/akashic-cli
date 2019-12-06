@@ -8,14 +8,19 @@ const SubscreiberMock = require("../helper/SubscriberMock");
 const ApiRequestMock = require("../helper/ApiRequestMock");
 
 xdescribe("SubscriberSpec", function() {
-	const host = ServerConfigMock.hostname;
-	const port = ServerConfigMock.port;
-	const contentUrl = `http://${host}:${port}/config/content.raw.json`;
+	var host;
+	var port;
+	var contentUrl;
 	var childProcess;
 	var originalTimeout;
 	var subscreiberMock;
-	beforeAll(function(done) {
-		subscreiberMock = new SubscreiberMock.SubscreiberMock();
+	var currentScocket;
+	beforeAll(async function(done) {
+		host = ServerConfigMock.hostname;
+		port = await ServerConfigMock.getPort();
+		contentUrl = `http://${host}:${port}/config/content.raw.json`;
+		currentScocket = io(`ws://${host}:${port}`);
+		subscreiberMock = new SubscreiberMock.SubscreiberMock(currentScocket);
 		originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
 		jasmine.DEFAULT_TIMEOUT_INTERVAL = 8000; // 一番最初のテストはタイムアウトまで残り2秒の状態で始まるのでタイムアウト時間を3秒延長した
 		childProcess = spawn(
@@ -32,8 +37,8 @@ xdescribe("SubscriberSpec", function() {
 		if (childProcess) {
 			childProcess.kill("SIGKILL");
 		}
-		if (subscreiberMock.socket) {
-			subscreiberMock.socket.close();
+		if (currentScocket) {
+			currentScocket.close();
 		}
 	});
 	describe("playCreate-event", function() {
