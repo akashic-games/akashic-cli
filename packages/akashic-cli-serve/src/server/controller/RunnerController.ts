@@ -95,10 +95,12 @@ export const createHandlerToPatchRunner = (runnerStore: RunnerStore): express.Re
 function createAllowedUrls(contentId: string, externalAssets: (string | RegExp)[] | null): (string | RegExp)[] | null {
 	let allowedUrls: (string | RegExp)[] = [`http://${serverGlobalConfig.hostname}:${serverGlobalConfig.port}/contents/${contentId}/`];
 	if (serverGlobalConfig.allowExternal) {
+		// null は全てのアクセスを許可するため、nullが指定された場合は他の値を参照せず null を返す
 		if (externalAssets === null) return null;
 
 		allowedUrls = allowedUrls.concat(externalAssets);
 		if (process.env.AKASHIC_SERVE_ALLOW_ORIGIN) {
+			if (process.env.AKASHIC_SERVE_ALLOW_ORIGIN === "null") return null;
 			allowedUrls.push(process.env.AKASHIC_SERVE_ALLOW_ORIGIN);
 		}
 	}
