@@ -9,12 +9,10 @@ import { loadSandboxConfigJs } from "../domain/SandboxConfigs";
 export const createHandlerToGetContents = (targetDirs: string[]): express.RequestHandler => {
 	return (req, res, next) => {
 		try {
-			const contents = targetDirs.map((targetDir, i) => {
-				return {
-					contentLocatorData: { contentId: "" + i },
-					sandboxConfig: loadSandboxConfigJs(targetDir)
-				};
-			});
+			const contents = targetDirs.map((targetDir, i) => ({
+				contentLocatorData: { contentId: "" + i },
+				sandboxConfig: loadSandboxConfigJs(targetDir)
+			}));
 			responseSuccess<ContentsGetApiResponseData>(res, 200, contents);
 		} catch (e) {
 			next(e);
