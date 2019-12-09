@@ -1,5 +1,7 @@
 import { AMFlowClient, Play, PlayManager } from "@akashic/headless-driver";
 import { Trigger } from "@akashic/trigger";
+import { TickList } from "@akashic/playlog";
+import { StartPoint } from "@akashic/amflow";
 import { Player } from "../../common/types/Player";
 import {
 	PlayCreateTestbedEvent,
@@ -18,8 +20,6 @@ import { PlayDurationState } from "../../common/types/PlayDurationState";
 import { TimeKeeper } from "../../common/TimeKeeper";
 import { ServerContentLocator } from "../common/ServerContentLocator";
 import { activePermission, passivePermission } from "./AMFlowPermisson";
-import { TickList } from "@akashic/playlog";
-import { StartPoint } from "@akashic/amflow";
 
 export interface PlayStoreParameterObject {
 	playManager: PlayManager;
@@ -67,10 +67,13 @@ export class PlayStore {
 	/**
 	 * Playを生成するが、返すものはPlayId
 	 */
-	async createPlay(loc: ServerContentLocator): Promise<string> {
+	async createPlay(loc: ServerContentLocator, playlog?: Playlog): Promise<string> {
 		const playId = await this.playManager.createPlay({
 			contentUrl: loc.asAbsoluteUrl()
 		});
+		if (playlog) {
+			await this.loadPlaylog(playId, playlog);
+		}
 		this.playEntities[playId] = {
 			contentLocator: loc,
 			timeKeeper: new TimeKeeper(),
@@ -81,20 +84,6 @@ export class PlayStore {
 		this.onPlayCreate.fire({playId, contentLocatorData: loc});
 		this.onPlayStatusChange.fire({playId, playStatus: "running"});
 		return playId;
-	}
-
-	/**
-	 * 指定のplayIdのplayに指定したplaylogを読み込ませる
-	 */
-	async loadPlaylog(playId: string, playlog: Playlog): Promise<void> {
-		const token = await this.createPlayToken(playId, true);
-		const amflow = await this.createAMFlow(playId);
-		await new Promise((resolve, reject) => amflow.open(playId, (e: Error) => e ? reject(e) : resolve()));
-		await new Promise((resolve, reject) => amflow.authenticate(token, (e: Error) => e ? reject(e) : resolve()));
-		await new Promise((resolve, reject) => amflow.putStartPoint(playlog.startPoints[0], (e: Error) => e ? reject(e) : resolve()));
-		playlog.tickList[2].forEach((tick: any) => {
-			amflow.sendTick(tick);
-		});
 	}
 
 	getPlay(playId: string): Play {
@@ -178,5 +167,17 @@ export class PlayStore {
 	getPlayDurationState(playId: string): PlayDurationState {
 		const timeKeeper = this.playEntities[playId].timeKeeper;
 		return { duration: timeKeeper.now(), isPaused: timeKeeper.isPausing() };
+	}
+
+	private async loadPlaylog(playId: string, playlog: Playlog): Promise<void> {
+		const token = this.createPlayToken(playId, true);
+		const amflow = this.createAMFlow(playId);
+		await new Promise((resolve, reject) => amflow.open(playId, (e: Error) => e ? reject(e) : resolve()));
+		await new Promise((resolve, reject) => amflow.authenticate(token, (e: Error) => e ? reject(e) : resolve()));
+		await new Promise((resolve, reject) => amflow.putStartPoint(playlog.startPoints[0], (e: Error) => e ? reject(e) : resolve()));
+		playlog.tickList[2].forEach((tick: any) => {
+			amflow.sendTick(tick);
+		});
+		amflow.destroy();
 	}
 }

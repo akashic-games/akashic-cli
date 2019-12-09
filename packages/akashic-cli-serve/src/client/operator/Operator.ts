@@ -54,17 +54,17 @@ export class Operator {
 		const store = this.store;
 		const query = queryString.parse(window.location.search);
 		let play: PlayEntity = null;
-		if (contentLocator && !query.playId) {
+		if (query.playId != null) {
+			const target = store.playStore.plays[query.playId as string];
+			if (!target) {
+				throw new Error(`play(id: ${query.playId}) is not found.`);
+			}
+			play = target;
+		} else if (contentLocator) {
 			play = await this._createServerLoop(contentLocator);
 		} else {
 			const plays = store.playStore.playsList();
-			if (query.playId) {
-				const target = plays.filter(play => play.playId === query.playId);
-				if (target.length === 0) {
-					throw new Error(`play(id: ${query.playId}) is not found.`);
-				}
-				play = target[0];
-			} else if (plays.length > 0) {
+			if (plays.length > 0) {
 				play = plays[plays.length - 1];
 			} else {
 				const loc = store.contentStore.defaultContent().locator;
@@ -118,7 +118,7 @@ export class Operator {
 			playId: play.playId,
 			playToken: tokenResult.data.playToken,
 			playlogServerUrl: "dummy-playlog-server-url",
-			executionMode: params.isReplay ? "replay" : "passive",
+			executionMode: params != null && params.isReplay ? "replay" : "passive",
 			player: store.player,
 			argument: params != null ? params.instanceArgument : undefined,
 			proxyAudio: store.appOptions.proxyAudio,
@@ -149,7 +149,7 @@ export class Operator {
 				}
 			}
 		});
-		if (params.isReplay) {
+		if (params != null && params.isReplay) {
 			play.handlePlayDurationStateChange(false, 0);
 		}
 		store.setCurrentLocalInstance(instance);
