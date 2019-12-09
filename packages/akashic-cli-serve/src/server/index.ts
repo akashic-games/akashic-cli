@@ -169,7 +169,7 @@ export async function run(argv: any): Promise<void> {
 			process.exit(1);
 		}
 		const playlog = require(absolutePath);
-		// 現状指定されるplaylogは1つの想定なので、contentIdは必ず0になる
+		// 現状 playlog は一つしか受け取らない。それは contentId: 0 のコンテンツの playlog として扱う。
 		const contentLocator = new ServerContentLocator({contentId: "0"});
 		try {
 			loadedPlaylogPlayId = await playStore.createPlay(contentLocator, playlog);
