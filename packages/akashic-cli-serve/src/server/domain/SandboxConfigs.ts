@@ -3,16 +3,7 @@ import { SandboxConfig } from "../../common/types/SandboxConfig";
 import { dynamicRequire } from "./dynamicRequire";
 import { BadRequestError } from "../common/ApiError";
 
-class SandboxConfigs extends Array<SandboxConfig> {
-	constructor() {
-		super();
-	}
-	init(): void {
-		this.length = 0;
-	}
-}
-export const sandboxConfigs = new SandboxConfigs();
-
+// TODO: 読み込み直さなかった時は validation を省略させる
 export function loadSandboxConfigJs(targetDir: string): SandboxConfig {
 	const config = dynamicRequire<SandboxConfig>(path.resolve(targetDir, "sandbox.config.js")) || {};
 	validateConfig(config);

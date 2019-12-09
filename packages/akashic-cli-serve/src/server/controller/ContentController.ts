@@ -4,18 +4,15 @@ import * as EngineConfig from "../domain/EngineConfig";
 import { serverGlobalConfig } from "../common/ServerGlobalConfig";
 import { responseSuccess } from "../common/ApiResponse";
 import { NotFoundError } from "../common/ApiError";
-import { sandboxConfigs, loadSandboxConfigJs } from "../domain/SandboxConfigs";
+import { loadSandboxConfigJs } from "../domain/SandboxConfigs";
 
 export const createHandlerToGetContents = (targetDirs: string[]): express.RequestHandler => {
 	return (req, res, next) => {
 		try {
-			sandboxConfigs.init();
 			const contents = targetDirs.map((targetDir, i) => {
-				const config = loadSandboxConfigJs(targetDir);
-				sandboxConfigs.push(config);
 				return {
 					contentLocatorData: { contentId: "" + i },
-					sandboxConfig: config
+					sandboxConfig: loadSandboxConfigJs(targetDir)
 				};
 			});
 			responseSuccess<ContentsGetApiResponseData>(res, 200, contents);

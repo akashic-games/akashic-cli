@@ -1,5 +1,4 @@
 import * as express from "express";
-import * as path from "path";
 import { BadRequestError } from "../common/ApiError";
 import { responseSuccess } from "../common/ApiResponse";
 import {
@@ -10,9 +9,12 @@ import {
 import { PlayStore } from "../domain/PlayStore";
 import { RunnerStore } from "../domain/RunnerStore";
 import { serverGlobalConfig } from "../common/ServerGlobalConfig";
-import { sandboxConfigs } from "../domain/SandboxConfigs";
 
-export const createHandlerToCreateRunner = (playStore: PlayStore, runnerStore: RunnerStore): express.RequestHandler => {
+export const createHandlerToCreateRunner = (
+	playStore: PlayStore,
+	runnerStore: RunnerStore,
+	targetDirs: string[]
+): express.RequestHandler => {
 	return async (req, res, next) => {
 		try {
 			// TODO: バリデーション用クラスを別で用意した方がよさそう
@@ -22,13 +24,10 @@ export const createHandlerToCreateRunner = (playStore: PlayStore, runnerStore: R
 
 			const playId = req.body.playId;
 			const contentId = playStore.getContentLocator(playId).contentId;
-			const sandboxConfig = sandboxConfigs[parseInt(contentId, 10)];
-			const externalAssets = sandboxConfig?.externalAssets === undefined ? [] : sandboxConfig.externalAssets;
 			const isActive = Boolean(req.body.isActive);
 			const token = req.body.token;
 			const amflow = playStore.createAMFlow(playId);
-			const allowedUrls = createAllowedUrls(contentId, externalAssets);
-			const runner = await runnerStore.createAndStartRunner({ playId, isActive, token, amflow, allowedUrls });
+			const runner = await runnerStore.createAndStartRunner({ playId, isActive, token, amflow, targetDirs, contentId });
 			responseSuccess<RunnerPostApiResponseData>(res, 200, { playId: runner.playId, runnerId: runner.runnerId });
 		} catch (e) {
 			next(e);
