@@ -55,11 +55,10 @@ export class Operator {
 		const query = queryString.parse(window.location.search);
 		let play: PlayEntity = null;
 		if (query.playId != null) {
-			const target = store.playStore.plays[query.playId as string];
-			if (!target) {
+			play = store.playStore.plays[query.playId as string];
+			if (!play) {
 				throw new Error(`play(id: ${query.playId}) is not found.`);
 			}
-			play = target;
 		} else if (contentLocator) {
 			play = await this._createServerLoop(contentLocator);
 		} else {
@@ -149,9 +148,6 @@ export class Operator {
 				}
 			}
 		});
-		if (params != null && params.isReplay) {
-			play.handlePlayDurationStateChange(false, 0);
-		}
 		store.setCurrentLocalInstance(instance);
 		if (params != null && params.joinsSelf) {
 			store.currentPlay.join(store.player.id, store.player.name);

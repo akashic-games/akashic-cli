@@ -168,10 +168,10 @@ export async function run(argv: any): Promise<void> {
 			getSystemLogger().error(`Can not find ${absolutePath}`);
 			process.exit(1);
 		}
-		const playlog = require(absolutePath);
 		// 現状 playlog は一つしか受け取らない。それは contentId: 0 のコンテンツの playlog として扱う。
 		const contentLocator = new ServerContentLocator({contentId: "0"});
 		try {
+			const playlog = require(absolutePath);
 			loadedPlaylogPlayId = await playStore.createPlay(contentLocator, playlog);
 		} catch (e) {
 			getSystemLogger().error(e.message);
