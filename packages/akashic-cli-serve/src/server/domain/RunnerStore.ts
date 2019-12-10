@@ -41,6 +41,7 @@ export class RunnerStore {
 
 	async createAndStartRunner(params: CreateAndStartRunnerParameterObject): Promise<RunnerV1 | RunnerV2> {
 		// TODO: allowedUrls を作成するための sandbox.config.js の load や引数の targetDirs 等は SandboxConfig の反映タイミング修正で不要となる可能性がある。
+		// TODO: targetDirsを渡さなくても、contentIdから解決できるようにする。
 		const sandboxConfigDir = params.targetDirs[parseInt(params.contentId, 10)];
 		const sandboxConfig = loadSandboxConfigJs(sandboxConfigDir);
 		const externalAssets = sandboxConfig?.externalAssets === undefined ? [] : sandboxConfig.externalAssets;
