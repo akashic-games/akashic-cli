@@ -183,6 +183,10 @@ export class SocketIOAMFlowManager {
 				return callback();
 			conn.amflow.close(callback);
 
+			delete this.connectionMap[connectionId].socket;
+			delete this.connectionMap[connectionId].lastToken;
+			delete this.connectionMap[connectionId].emitEvent;
+			delete this.connectionMap[connectionId].emitTick;
 			getSystemLogger().info("user disconnected. playId: " + conn.playId + " connectionId: " + connectionId);
 		});
 
@@ -204,8 +208,7 @@ export class SocketIOAMFlowManager {
 			const conn = this.connectionMap[k];
 			return conn.playId === playId;
 		});
-		const amflow = this.connectionMap[key]?.amflow;
-		return amflow;
+		return this.connectionMap[key]?.amflow;
 	}
 
 	private getConncetion(connectionId: string): Connection | null {

@@ -164,7 +164,7 @@ export const createHandlerToGetPlaylog = (amflowManager: SocketIOAMFlowManager):
 			}
 			const dumpData = amflow.dump();
 			const dumpJsonStr = JSON.stringify(dumpData);
-			const fileName = `playlog${playId}_${new Date().getTime()}.json`;
+			const fileName = `playlog_${playId}_${new Date().getTime()}.json`;
 
 			res.setHeader("Content-disposition", "attachment; filename=" + fileName);
 			res.setHeader("Content-type", "application/x-download");
