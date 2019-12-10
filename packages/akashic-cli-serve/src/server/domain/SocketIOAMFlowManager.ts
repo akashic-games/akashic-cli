@@ -1,7 +1,7 @@
 import { Socket } from "socket.io";
 import * as pl from "@akashic/playlog";
 import * as amf from "@akashic/amflow";
-import { getSystemLogger } from "@akashic/headless-driver";
+import { getSystemLogger, AMFlowClient } from "@akashic/headless-driver";
 import { ClientInstanceDescription } from "../../common/types/TestbedEvent";
 import { PlayStore } from "../domain/PlayStore";
 
@@ -11,7 +11,7 @@ export interface SocketIOAMFlowManagerParameterObject {
 
 export interface Connection {
 	playId: string;
-	amflow: amf.AMFlow;
+	amflow: AMFlowClient;
 	socket: Socket;
 	lastToken: string;
 	emitTick: (tick: pl.Tick) => void;
@@ -183,7 +183,6 @@ export class SocketIOAMFlowManager {
 				return callback();
 			conn.amflow.close(callback);
 
-			delete this.connectionMap[connectionId];
 			getSystemLogger().info("user disconnected. playId: " + conn.playId + " connectionId: " + connectionId);
 		});
 
@@ -198,6 +197,15 @@ export class SocketIOAMFlowManager {
 				}
 			});
 		});
+	}
+
+	getAMFlow(playId: string): AMFlowClient {
+		const key = Object.keys(this.connectionMap).find(k => {
+			const conn = this.connectionMap[k];
+			return conn.playId === playId;
+		});
+		const amflow = this.connectionMap[key]?.amflow;
+		return amflow;
 	}
 
 	private getConncetion(connectionId: string): Connection | null {

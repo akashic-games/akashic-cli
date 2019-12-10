@@ -42,8 +42,13 @@ export class PlayOperator {
 	}
 
 	sendEditorEvent = (): void => {
-		const pevs = JSON.parse(this.store.devtoolUiStore.eventEditContent);
-		const amflow = this.store.currentPlay.amflow;
-		pevs.forEach((pev: any) => amflow.enqueueEvent(pev));
+		if (this.store.devtoolUiStore.eventEditContent.trim() === "")  return;
+		try {
+			const pevs = JSON.parse(this.store.devtoolUiStore.eventEditContent);
+			const amflow = this.store.currentPlay.amflow;
+			pevs.forEach((pev: any) => amflow.enqueueEvent(pev));
+		} catch (e) {
+			throw new Error(e);
+		}
 	}
 }
