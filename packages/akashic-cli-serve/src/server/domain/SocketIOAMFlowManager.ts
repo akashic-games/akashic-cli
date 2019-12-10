@@ -183,10 +183,7 @@ export class SocketIOAMFlowManager {
 				return callback();
 			conn.amflow.close(callback);
 
-			delete this.connectionMap[connectionId].socket;
-			delete this.connectionMap[connectionId].lastToken;
-			delete this.connectionMap[connectionId].emitEvent;
-			delete this.connectionMap[connectionId].emitTick;
+			delete this.connectionMap[connectionId];
 			getSystemLogger().info("user disconnected. playId: " + conn.playId + " connectionId: " + connectionId);
 		});
 
@@ -201,14 +198,6 @@ export class SocketIOAMFlowManager {
 				}
 			});
 		});
-	}
-
-	getAMFlow(playId: string): AMFlowClient {
-		const key = Object.keys(this.connectionMap).find(k => {
-			const conn = this.connectionMap[k];
-			return conn.playId === playId;
-		});
-		return this.connectionMap[key]?.amflow;
 	}
 
 	private getConncetion(connectionId: string): Connection | null {

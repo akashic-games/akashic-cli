@@ -151,14 +151,14 @@ export const createHandlerToPatchPlay = (playStore: PlayStore): express.RequestH
 	};
 };
 
-export const createHandlerToGetPlaylog = (amflowManager: SocketIOAMFlowManager): express.RequestHandler => {
+export const createHandlerToGetPlaylog = (playStore: PlayStore): express.RequestHandler => {
 	return (req, res, next) => {
 		try {
 			if (!req.params.playId) {
 				throw new BadRequestError({ errorMessage: "PlayId is not given" });
 			}
 			const playId = req.params.playId;
-			const amflow = amflowManager.getAMFlow(playId);
+			const amflow = playStore.createAMFlow(playId);
 			if (!amflow) {
 				throw new NotFoundError({ errorMessage: `PlayLog is not found. playId:${playId}` });
 			}
