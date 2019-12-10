@@ -175,7 +175,7 @@ export class PlayStore {
 		await new Promise((resolve, reject) => amflow.open(playId, (e: Error) => e ? reject(e) : resolve()));
 		await new Promise((resolve, reject) => amflow.authenticate(token, (e: Error) => e ? reject(e) : resolve()));
 		await new Promise((resolve, reject) => amflow.putStartPoint(playlog.startPoints[0], (e: Error) => e ? reject(e) : resolve()));
-		playlog.tickList[2].forEach((tick: any) => {
+		playlog.tickList[2].forEach((tick) => {
 			amflow.sendTick(tick);
 		});
 		amflow.destroy();
