@@ -1,7 +1,7 @@
 import { Socket } from "socket.io";
 import * as pl from "@akashic/playlog";
 import * as amf from "@akashic/amflow";
-import { getSystemLogger, AMFlowClient } from "@akashic/headless-driver";
+import { getSystemLogger } from "@akashic/headless-driver";
 import { ClientInstanceDescription } from "../../common/types/TestbedEvent";
 import { PlayStore } from "../domain/PlayStore";
 
@@ -11,7 +11,7 @@ export interface SocketIOAMFlowManagerParameterObject {
 
 export interface Connection {
 	playId: string;
-	amflow: AMFlowClient;
+	amflow: amf.AMFlow;
 	socket: Socket;
 	lastToken: string;
 	emitTick: (tick: pl.Tick) => void;
