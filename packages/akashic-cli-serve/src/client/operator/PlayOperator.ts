@@ -42,13 +42,15 @@ export class PlayOperator {
 	}
 
 	sendEditorEvent = (): void => {
+		// TODO: 入力された JSON が不正な値の場合に Send ボタンを disabled にし、このパスでは正常な値が取れるようにする。
 		if (this.store.devtoolUiStore.eventEditContent.trim() === "")  return;
+		let pevs;
 		try {
-			const pevs = JSON.parse(this.store.devtoolUiStore.eventEditContent);
-			const amflow = this.store.currentPlay.amflow;
-			pevs.forEach((pev: any) => amflow.enqueueEvent(pev));
+			pevs = JSON.parse(this.store.devtoolUiStore.eventEditContent);
 		} catch (e) {
 			throw new Error(e);
 		}
+		const amflow = this.store.currentPlay.amflow;
+		pevs.forEach((pev: any) => amflow.enqueueEvent(pev));
 	}
 }
