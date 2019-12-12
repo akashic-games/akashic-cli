@@ -46,4 +46,9 @@ export class TimeKeeper {
 		}
 		this.pausedTime = this.now();
 	}
+
+	setFinishedTime(time: number): void {
+		this.origin = Date.now();
+		this.pausedTime = time;
+	}
 }

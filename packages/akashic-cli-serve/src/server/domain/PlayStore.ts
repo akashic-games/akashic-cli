@@ -176,7 +176,29 @@ export class PlayStore {
 
 		// クライアント側にdurationとしてplaylogに記録されている終了時間を渡す必要があるので、そのための設定を行う
 		const timeKeeper = this.playEntities[playId].timeKeeper;
-		timeKeeper.origin = Date.now();
-		timeKeeper.pausedTime = playlog.tickList[1] * 1000 / playlog.startPoints[0].data.fps;
+		const finishedTime = this.calculataFinishedTime(playlog);
+		timeKeeper.setFinishedTime(finishedTime);
+	}
+
+	// コンテンツの終了時間をplaylogから算出する
+	private calculataFinishedTime(playlog: DumpedPlaylog): number {
+		const fps = playlog.startPoints[0].data.fps;
+		const replayStartTime = playlog.startPoints[0].timestamp;
+		const replayLastAge = playlog.tickList[1];
+		const ticksWithEvents = playlog.tickList[2];
+		let replayLastTime = null;
+		for (let i = ticksWithEvents.length - 1; i >= 0; --i) {
+			const tick = ticksWithEvents[i];
+			const pevs = tick[1] || [];
+			for (let j = 0; j < pevs.length; ++j) {
+				if (pevs[j][0] === 2) { // TimestampEvent
+					const timestamp = pevs[j][3]; // Timestamp
+					// Timestamp の時刻がゲームの開始時刻より小さかった場合は相対時刻とみなす
+					replayLastTime = (timestamp < replayStartTime ? timestamp + replayStartTime : timestamp) + (replayLastAge - tick[0]) * 1000 / fps;
+					break;
+				}
+			}
+		}
+		return (replayLastTime == null) ? (replayLastAge * 1000 / fps) : (replayLastTime - replayStartTime);
 	}
 }
