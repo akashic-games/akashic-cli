@@ -44,6 +44,7 @@ export function run(argv: any): void {
 			`Simulate the specified service. arguments: ${Object.values(ServiceType)}`)
 		.option("--debug-untrusted", `An internal debug option`)
 		.option("--debug-proxy-audio", `An internal debug option`)
+		.option("--allow-external", `Read the URL allowing external access from sandbox.config.js`)
 		.parse(argv);
 
 	if (commander.port && isNaN(commander.port)) {
@@ -111,6 +112,10 @@ export function run(argv: any): void {
 		serverGlobalConfig.targetService = commander.targetService;
 	}
 
+	if (commander.allowExternal) {
+		serverGlobalConfig.allowExternal = commander.allowExternal;
+	}
+
 	const targetDirs: string[] = commander.args.length > 0 ? commander.args : [process.cwd()];
 	const playManager = new PlayManager();
 	const runnerManager = new RunnerManager(playManager);
@@ -141,7 +146,7 @@ export function run(argv: any): void {
 	app.use("^\/$", (req, res, next) => res.redirect("/public/"));
 	app.use("/public/", express.static(path.join(__dirname, "..", "..", "www", "public")));
 	app.use("/internal/", express.static(path.join(__dirname, "..", "..", "www", "internal")));
-	app.use("/api/", createApiRouter({ playStore, runnerStore, amflowManager, io }));
+	app.use("/api/", createApiRouter({ playStore, runnerStore, amflowManager, io, targetDirs}));
 	app.use("/contents/", createContentsRouter({ targetDirs }));
 	app.use("/health-check/", createHealthCheckRouter({ playStore }));
 

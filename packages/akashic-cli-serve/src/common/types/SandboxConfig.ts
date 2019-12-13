@@ -4,4 +4,5 @@ export interface SandboxConfig {
 	showMenu?: boolean;
 	events?: { [name: string]: any };
 	arguments?: { [name: string]: any };
+	externalAssets?: (string | RegExp)[] | null;
 }

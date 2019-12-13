@@ -1,18 +1,17 @@
-import * as path from "path";
 import * as express from "express";
 import { ContentsGetApiResponseData } from "../../common/types/ApiResponse";
 import * as EngineConfig from "../domain/EngineConfig";
 import { serverGlobalConfig } from "../common/ServerGlobalConfig";
 import { responseSuccess } from "../common/ApiResponse";
 import { NotFoundError } from "../common/ApiError";
-import { dynamicRequire } from "../domain/dynamicRequire";
+import { loadSandboxConfigJs } from "../domain/SandboxConfigs";
 
 export const createHandlerToGetContents = (targetDirs: string[]): express.RequestHandler => {
 	return (req, res, next) => {
 		try {
 			const contents = targetDirs.map((targetDir, i) => ({
 				contentLocatorData: { contentId: "" + i },
-				sandboxConfig: dynamicRequire(path.resolve(targetDir, "sandbox.config.js")) || {}
+				sandboxConfig: loadSandboxConfigJs(targetDir)
 			}));
 			responseSuccess<ContentsGetApiResponseData>(res, 200, contents);
 		} catch (e) {
