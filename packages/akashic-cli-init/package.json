@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-init",
-  "version": "0.5.2",
+  "version": "0.5.4",
   "description": "A module to get your Akashic game started.",
   "main": "lib/index.js",
   "scripts": {
@@ -43,9 +43,9 @@
     "@types/request": "2.48.3",
     "@types/unzipper": "0.10.1",
     "bestzip": "2.1.5",
-    "http-server": "0.11.1",
+    "http-server": "0.12.0",
     "jest": "24.9.0",
-    "mock-fs": "4.10.3",
+    "mock-fs": "4.10.4",
     "rimraf": "2.7.1",
     "shelljs": "0.8.3",
     "tslint": "5.20.1",
@@ -53,8 +53,8 @@
   },
   "typings": "lib/index.d.ts",
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.3.1",
-    "@akashic/akashic-cli-config": "0.2.1",
+    "@akashic/akashic-cli-commons": "0.3.3",
+    "@akashic/akashic-cli-config": "0.2.3",
     "commander": "2.20.3",
     "fs-extra": "0.30.0",
     "prompt": "1.0.0",

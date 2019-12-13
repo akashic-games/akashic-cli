@@ -123,7 +123,7 @@ async function writeHtmlFile(
 	const injects = options.injects ? options.injects : [];
 	var scripts = getDefaultBundleScripts(templatePath, conf._content.environment["sandbox-runtime"], options.minify, !options.unbundleText);
 	const filePath = path.resolve(__dirname + "/../templates-build/bundle-index.ejs");
-	const html = await ejs.renderFile<string>(filePath, {
+	const html = await ejs.renderFile(filePath, {
 		assets: innerHTMLAssetArray,
 		preloadScripts: scripts.preloadScripts,
 		postloadScripts: scripts.postloadScripts,

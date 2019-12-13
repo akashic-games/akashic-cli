@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-serve",
-  "version": "0.2.10",
+  "version": "0.2.15",
   "description": "A development server for Akashic Engine",
   "scripts": {
     "prepublish": "npm run setup && npm run build",
@@ -24,8 +24,8 @@
     "akashic-cli-serve": "./bin/run"
   },
   "dependencies": {
-    "@akashic/headless-driver": "0.5.15",
-    "@akashic/trigger": "0.1.5",
+    "@akashic/headless-driver": "0.5.18",
+    "@akashic/trigger": "0.1.6",
     "chalk": "2.4.2",
     "chokidar": "2.1.8",
     "commander": "2.20.3",
@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "@akashic/amflow": "~0.3.1",
-    "@akashic/playlog": "~1.3.2",
+    "@akashic/playlog": "~1.3.3",
     "@storybook/addon-actions": "4.1.18",
     "@storybook/addon-knobs": "4.1.18",
     "@storybook/react": "4.1.18",
@@ -44,7 +44,7 @@
     "@types/express-serve-static-core": "4.17.0",
     "@types/node": "10.17.6",
     "@types/query-string": "6.2.0",
-    "@types/react": "16.9.13",
+    "@types/react": "16.9.15",
     "@types/react-dom": "16.9.4",
     "@types/socket.io": "1.4.40",
     "@types/socket.io-client": "1.4.32",
@@ -53,6 +53,7 @@
     "browserify": "16.5.0",
     "css-loader": "2.1.1",
     "es6-promise": "4.2.8",
+    "get-port": "5.0.0",
     "jest": "24.9.0",
     "material-design-icons": "3.0.1",
     "mobx": "4.15.0",
@@ -68,7 +69,7 @@
     "style-loader": "0.23.1",
     "ts-loader": "4.5.0",
     "tslint": "5.20.1",
-    "typescript": "3.7.2",
+    "typescript": "3.7.3",
     "uglify-js": "2.8.29",
     "uglify-save-license": "0.4.1",
     "webpack": "4.41.2",

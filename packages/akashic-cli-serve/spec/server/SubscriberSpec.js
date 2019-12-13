@@ -3,19 +3,25 @@ global.io = require("socket.io-client");
 
 const { spawn } = require("child_process");
 const path = require("path");
-const ServerConfigMock = require("../helper/SeverConfigMock");
-const SubscreiberMock = require("../helper/SubscriberMock");
+const getPort = require('get-port');
+const SubscriberMock = require("../helper/SubscriberMock");
 const ApiRequestMock = require("../helper/ApiRequestMock");
 
+// TODO: このテストは安定化のため無効化し続けていたところ通らなくなってしまったので、有効化の際はテストを修正する必要がある
 xdescribe("SubscriberSpec", function() {
-	const host = ServerConfigMock.hostname;
-	const port = ServerConfigMock.port;
-	const contentUrl = `http://${host}:${port}/config/content.raw.json`;
+	var host;
+	var port;
+	var contentUrl;
 	var childProcess;
 	var originalTimeout;
-	var subscreiberMock;
-	beforeAll(function(done) {
-		subscreiberMock = new SubscreiberMock.SubscreiberMock();
+	var subscriberMock;
+	var socket;
+	beforeAll(async function(done) {
+		host = "localhost";
+		port = await getPort();
+		contentUrl = `http://${host}:${port}/config/content.raw.json`;
+		socket = io(`ws://${host}:${port}`);
+		subscriberMock = new SubscriberMock.SubscriberMock(socket);
 		originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
 		jasmine.DEFAULT_TIMEOUT_INTERVAL = 8000; // 一番最初のテストはタイムアウトまで残り2秒の状態で始まるのでタイムアウト時間を3秒延長した
 		childProcess = spawn(
@@ -32,8 +38,8 @@ xdescribe("SubscriberSpec", function() {
 		if (childProcess) {
 			childProcess.kill("SIGKILL");
 		}
-		if (subscreiberMock.socket) {
-			subscreiberMock.socket.close();
+		if (socket) {
+			socket.close();
 		}
 	});
 	describe("playCreate-event", function() {
@@ -44,7 +50,7 @@ xdescribe("SubscriberSpec", function() {
 				expect(pushedData.playId).toBe(apiResponse.data.playId);
 				done();
 			};
-			subscreiberMock.onPlayCreate.addOnce(function(arg) {
+			subscriberMock.onPlayCreate.addOnce(function(arg) {
 				pushedData = arg;
 				if (apiResponse) {
 					assertOnPlayCreateEvent();
@@ -67,7 +73,7 @@ xdescribe("SubscriberSpec", function() {
 				expect(pushedData.playStatus).toBe("running");
 				done();
 			};
-			subscreiberMock.onPlayStatusChange.addOnce(function(arg) {
+			subscriberMock.onPlayStatusChange.addOnce(function(arg) {
 				pushedData = arg;
 				if (apiResponse) {
 					assertOnPlayStatusChangeEvent();
@@ -88,7 +94,7 @@ xdescribe("SubscriberSpec", function() {
 			var assertOnPlayStatusChangeEvent = function() {
 				expect(pushedData.playId).toBe(apiResponse.data.playId);
 				expect(pushedData.playStatus).toBe("suspending");
-				subscreiberMock.onPlayStatusChange.remove(playStatusChangeHandler);
+				subscriberMock.onPlayStatusChange.remove(playStatusChangeHandler);
 				done();
 			};
 			playStatusChangeHandler = function(arg) {
@@ -98,7 +104,7 @@ xdescribe("SubscriberSpec", function() {
 					assertOnPlayStatusChangeEvent();
 				}
 			};
-			subscreiberMock.onPlayStatusChange.add(playStatusChangeHandler);
+			subscriberMock.onPlayStatusChange.add(playStatusChangeHandler);
 			ApiRequestMock.post(`http://${host}:${port}/api/plays`, {contentUrl: contentUrl}).then(function(response) {
 				return ApiRequestMock.del(`http://${host}:${port}/api/plays/${response.data.playId}`);
 			}).then(function(response) {
@@ -119,7 +125,7 @@ xdescribe("SubscriberSpec", function() {
 				expect(pushedData.runnerId).toBe(apiResponse.data.runnerId);
 				done();
 			};
-			subscreiberMock.onRunnerCreate.addOnce(function(arg) {
+			subscriberMock.onRunnerCreate.addOnce(function(arg) {
 				pushedData = arg;
 				if (apiResponse) {
 					assertOnRunnerCreateEvent();
@@ -147,7 +153,7 @@ xdescribe("SubscriberSpec", function() {
 				expect(pushedData.runnerId).toBe(apiResponse.data.runnerId);
 				done();
 			};
-			subscreiberMock.onRunnerRemove.addOnce(function(arg) {
+			subscriberMock.onRunnerRemove.addOnce(function(arg) {
 				pushedData = arg;
 				if (apiResponse) {
 					assertOnRunnerRemoveEvent();
@@ -172,7 +178,6 @@ xdescribe("SubscriberSpec", function() {
 		it("is sent from server, when send amflow:open-event and amflow:authenticate-event", function(done) {
 			var player = {id: 0, name: "test"};
 			var currentPlayId;
-			var socket = io(`ws://${host}:${port}`);
 			var token;
 			var isAppeared = false;
 			var pushedData;
@@ -183,7 +188,7 @@ xdescribe("SubscriberSpec", function() {
 				expect(pushedData.isActive).toBe(false);
 				done();
 			};
-			subscreiberMock.onClientInstanceAppear.addOnce(function(arg) {
+			subscriberMock.onClientInstanceAppear.addOnce(function(arg) {
 				pushedData = arg;
 				if (isAppeared) {
 					assertOnClientInstanceAppearEvent();
@@ -217,7 +222,7 @@ xdescribe("SubscriberSpec", function() {
 		it("is sent from server, when send amflow:open-event and disconnect-evnet", function(done) {
 			var player = {id: 0, name: "test"};
 			var currentPlayId;
-			var socket = io(`ws://${host}:${port}`);
+			var anotherSocket = io(`ws://${host}:${port}`); // disconnectする必要があるのでsocketとは別の変数を用意する
 			var token;
 			var isDisAppeared = false;
 			var pushedData;
@@ -238,15 +243,15 @@ xdescribe("SubscriberSpec", function() {
 			}).then(function(response) {
 				token = response.data.playToken;
 				return new Promise(function(resolve) {
-					socket.emit("amflow:open", currentPlayId, function() {
-						socket.emit("amflow:authenticate", token, function () {
-							subscreiberMock.onClientInstanceDisappear.addOnce(function(arg) {
+					anotherSocket.emit("amflow:open", currentPlayId, function() {
+						anotherSocket.emit("amflow:authenticate", token, function () {
+							subscriberMock.onClientInstanceDisappear.addOnce(function(arg) {
 								pushedData = arg;
 								if (isDisAppeared) {
 									assertOnClientInstanceDisAppearEvent();
 								}
 							});
-							socket.disconnect();
+							anotherSocket.disconnect();
 							resolve();
 						});
 					});
@@ -263,7 +268,6 @@ xdescribe("SubscriberSpec", function() {
 		it("is sent from server, when send amflow:sendEvent as join-event", function(done) {
 			var player = {id: 0, name: "test"};
 			var currentPlayId;
-			var socket = io(`ws://${host}:${port}`);
 			var token;
 			var isJoined = false;
 			var pushedData;
@@ -272,7 +276,7 @@ xdescribe("SubscriberSpec", function() {
 				expect(pushedData.player).toEqual(player);
 				done();
 			};
-			subscreiberMock.onPlayerJoin.addOnce(function(arg) {
+			subscriberMock.onPlayerJoin.addOnce(function(arg) {
 				pushedData = arg;
 				if (isJoined) {
 					assertOnPlayerJoinEvent();
@@ -311,19 +315,18 @@ xdescribe("SubscriberSpec", function() {
 			firedCount++;
 		};
 		beforeAll(function() {
-			subscreiberMock.onPlayerLeave.add(onPlayerLeaveEvent);
+			subscriberMock.onPlayerLeave.add(onPlayerLeaveEvent);
 		});
 		beforeEach(function() {
 			firedCount = 0;
 			playerLeaveParams = undefined;
 		});
 		afterAll(function() {
-			subscreiberMock.onPlayerLeave.remove(onPlayerLeaveEvent);
+			subscriberMock.onPlayerLeave.remove(onPlayerLeaveEvent);
 		});
 		it("is sent from server, when send amflow:sendEvent as leave-event", function(done) {
 			var player = {id: 0, name: "test"};
 			var currentPlayId;
-			var socket = io(`ws://${host}:${port}`);
 			var token;
 			var isLeaved = false;
 			var pushedData;
@@ -332,7 +335,7 @@ xdescribe("SubscriberSpec", function() {
 				expect(pushedData.playerId).toBe(player.id);
 				done();
 			};
-			subscreiberMock.onPlayerLeave.addOnce(function(arg) {
+			subscriberMock.onPlayerLeave.addOnce(function(arg) {
 				pushedData = arg;
 				if (isLeaved) {
 					assertOnPlayerLeaveEvent();

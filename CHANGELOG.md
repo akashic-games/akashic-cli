@@ -1,5 +1,61 @@
 # CHANGELOG
 
+## 1.8.25 (2019-12-13)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#211](https://github.com/akashic-games/akashic-cli/pull/211) 【akashic-cli-export-html】内部コンポーネントの更新(engineFiles@2.1.34, engineFiles@1.1.13) ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
+## 1.8.24 (2019-12-10)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#209](https://github.com/akashic-games/akashic-cli/pull/209) 【akashic-cli-export-html】内部コンポーネントの更新(engineFiles@2.1.34, engineFiles@1.1.13) ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
+## 1.8.23 (2019-12-10)
+
+#### Enhancement
+* `akashic-cli-export-html`
+  * [#208](https://github.com/akashic-games/akashic-cli/pull/208) 【akashic-cli-export-html】内部コンポーネントの更新(engineFiles@2.1.34, engineFiles@1.1.13) ([@xnv](https://github.com/xnv))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#207](https://github.com/akashic-games/akashic-cli/pull/207) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
+## 1.8.22 (2019-12-06)
+
+#### Enhancement
+* `akashic-cli-export-html`
+  * [#206](https://github.com/akashic-games/akashic-cli/pull/206) 【akashic-cli-export-html】内部コンポーネントの更新(engineFiles@2.1.33, engineFiles@1.1.13) ([@xnv](https://github.com/xnv))
+
+#### Committers: 2
+- [@dera-](https://github.com/dera-)
+- xnv ([@xnv](https://github.com/xnv))
+
+## 1.8.21 (2019-12-05)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#204](https://github.com/akashic-games/akashic-cli/pull/204) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@2.1.33、engineFiles@1.1.13) ([@xnv](https://github.com/xnv))
+
+#### Update Dependencies
+* `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#201](https://github.com/akashic-games/akashic-cli/pull/201) Update all dependencies (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#200](https://github.com/akashic-games/akashic-cli/pull/200) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.8.20 (2019-11-27)
 
 #### Bug Fix

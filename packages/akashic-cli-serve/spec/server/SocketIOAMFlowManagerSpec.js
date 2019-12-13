@@ -1,6 +1,7 @@
 const http = require('http');
 const socketio = require("socket.io");
 const io = require("socket.io-client");
+const getPort = require('get-port');
 const hld =  require("@akashic/headless-driver");
 const { ServerContentLocator } = require("../../lib/server/common/ServerContentLocator");
 const { PlayStore } = require("../../lib/server/domain/PlayStore");
@@ -8,11 +9,11 @@ const { SocketIOAMFlowManager } = require("../../lib/server/domain/SocketIOAMFlo
 const { SocketIOAMFlowClient } = require("../../lib/client/akashic/SocketIOAMFlowClient");
 
 describe("SocketIOAMFlowManager", () => {
-	// TODO 動的に空いているポートを選ぶ
-	const TEST_SERVER_PORT = 12345;
+	let testServerPort;
 
 	let logger = null;
-	beforeAll(() => {
+	beforeAll(async () => {
+		testServerPort = await getPort();
 		// TODO setSystemLogger() 依存をやめる
 		logger = hld.getSystemLogger();
 		hld.setSystemLogger({ info: () => {}, debug: () => {}, warn: () => {}, error: () => {} });
@@ -25,7 +26,7 @@ describe("SocketIOAMFlowManager", () => {
 	beforeEach((done) => {
 		const server = http.Server();
 		socketIOServer = socketio(server);
-		server.listen(TEST_SERVER_PORT, () => done());
+		server.listen(testServerPort, () => done());
 	});
 	afterEach((done) => {
 		socketIOServer.close(() => {
@@ -47,7 +48,7 @@ describe("SocketIOAMFlowManager", () => {
 				const playStore = new PlayStore({ playManager: new hld.PlayManager() });
 				const amflowManager = new SocketIOAMFlowManager({ playStore });
 				socketIOServer.on("connection", (socket) => amflowManager.setupSocketIOAMFlow(socket));
-				socket = io("http://localhost:" + TEST_SERVER_PORT);
+				socket = io("http://localhost:" + testServerPort);
 				const contentLocator = new ServerContentLocator({ path: "dummycontenturl" });
 
 				const playId1 = await playStore.createPlay(contentLocator);
@@ -128,8 +129,8 @@ describe("SocketIOAMFlowManager", () => {
 				const playStore = new PlayStore({ playManager: new hld.PlayManager() });
 				const amflowManager = new SocketIOAMFlowManager({ playStore });
 				socketIOServer.on("connection", (socket) => amflowManager.setupSocketIOAMFlow(socket));
-				socketA = io("http://localhost:" + TEST_SERVER_PORT);
-				socketB = io("http://localhost:" + TEST_SERVER_PORT);
+				socketA = io("http://localhost:" + testServerPort);
+				socketB = io("http://localhost:" + testServerPort);
 				const contentLocator = new ServerContentLocator({ path: "dummycontenturl" });
 
 				const playId1 = await playStore.createPlay(contentLocator);
