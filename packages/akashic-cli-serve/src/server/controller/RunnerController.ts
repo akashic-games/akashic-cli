@@ -8,19 +8,26 @@ import {
 } from "../../common/types/ApiResponse";
 import { PlayStore } from "../domain/PlayStore";
 import { RunnerStore } from "../domain/RunnerStore";
+import { serverGlobalConfig } from "../common/ServerGlobalConfig";
 
-export const createHandlerToCreateRunner = (playStore: PlayStore, runnerStore: RunnerStore): express.RequestHandler => {
+export const createHandlerToCreateRunner = (
+	playStore: PlayStore,
+	runnerStore: RunnerStore,
+	targetDirs: string[]
+): express.RequestHandler => {
 	return async (req, res, next) => {
 		try {
 			// TODO: バリデーション用クラスを別で用意した方がよさそう
 			if (!req.body.playId || req.body.isActive === undefined || !req.body.token) {
 				throw new BadRequestError({ errorMessage: "Invalid playId, isActive or token" });
 			}
+
 			const playId = req.body.playId;
+			const contentId = playStore.getContentLocator(playId).contentId;
 			const isActive = Boolean(req.body.isActive);
 			const token = req.body.token;
 			const amflow = playStore.createAMFlow(playId);
-			const runner = await runnerStore.createAndStartRunner(playId, isActive, token, amflow);
+			const runner = await runnerStore.createAndStartRunner({ playId, isActive, token, amflow, targetDirs, contentId });
 			responseSuccess<RunnerPostApiResponseData>(res, 200, { playId: runner.playId, runnerId: runner.runnerId });
 		} catch (e) {
 			next(e);
@@ -68,3 +75,17 @@ export const createHandlerToPatchRunner = (runnerStore: RunnerStore): express.Re
 	};
 };
 
+function createAllowedUrls(contentId: string, externalAssets: (string | RegExp)[] | null): (string | RegExp)[] | null {
+	let allowedUrls: (string | RegExp)[] = [`http://${serverGlobalConfig.hostname}:${serverGlobalConfig.port}/contents/${contentId}/`];
+	if (serverGlobalConfig.allowExternal) {
+		// null は全てのアクセスを許可するため、nullが指定された場合は他の値を参照せず null を返す
+		if (externalAssets === null) return null;
+
+		allowedUrls = allowedUrls.concat(externalAssets);
+		if (process.env.AKASHIC_SERVE_ALLOW_ORIGIN) {
+			if (process.env.AKASHIC_SERVE_ALLOW_ORIGIN === "null") return null;
+			allowedUrls.push(process.env.AKASHIC_SERVE_ALLOW_ORIGIN);
+		}
+	}
+	return allowedUrls;
+}
