@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.8.26 (2019-12-13)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#202](https://github.com/akashic-games/akashic-cli/pull/202) Add allow-external option ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 1.8.25 (2019-12-13)
 
 #### Enhancement
