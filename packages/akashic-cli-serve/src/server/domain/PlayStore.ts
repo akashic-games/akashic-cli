@@ -177,7 +177,7 @@ export class PlayStore {
 		// クライアント側にdurationとしてplaylogに記録されている終了時間を渡す必要があるので、そのための設定を行う
 		const timeKeeper = this.playEntities[playId].timeKeeper;
 		const finishedTime = this.calculataFinishedTime(playlog);
-		timeKeeper.setFinishedTime(finishedTime);
+		timeKeeper.setTime(finishedTime);
 	}
 
 	// コンテンツの終了時間をplaylogから算出する
