@@ -17,6 +17,7 @@ import {
 import { PlayDurationState } from "../../common/types/PlayDurationState";
 import { TimeKeeper } from "../../common/TimeKeeper";
 import { ServerContentLocator } from "../common/ServerContentLocator";
+import { DumpedPlaylog } from "../common/types/DumpedPlaylog";
 import { activePermission, passivePermission } from "./AMFlowPermisson";
 
 export interface PlayStoreParameterObject {
@@ -60,7 +61,7 @@ export class PlayStore {
 	/**
 	 * Playを生成するが、返すものはPlayId
 	 */
-	async createPlay(loc: ServerContentLocator): Promise<string> {
+	async createPlay(loc: ServerContentLocator, playlog?: DumpedPlaylog): Promise<string> {
 		const playId = await this.playManager.createPlay({
 			contentUrl: loc.asAbsoluteUrl()
 		});
@@ -71,6 +72,9 @@ export class PlayStore {
 			runners: [],
 			joinedPlayers: []
 		};
+		if (playlog) {
+			await this.loadPlaylog(playId, playlog);
+		}
 		this.onPlayCreate.fire({playId, contentLocatorData: loc});
 		this.onPlayStatusChange.fire({playId, playStatus: "running"});
 		return playId;
@@ -157,5 +161,44 @@ export class PlayStore {
 	getPlayDurationState(playId: string): PlayDurationState {
 		const timeKeeper = this.playEntities[playId].timeKeeper;
 		return { duration: timeKeeper.now(), isPaused: timeKeeper.isPausing() };
+	}
+
+	private async loadPlaylog(playId: string, playlog: DumpedPlaylog): Promise<void> {
+		const token = this.createPlayToken(playId, true);
+		const amflow = this.createAMFlow(playId);
+		await new Promise((resolve, reject) => amflow.open(playId, (e: Error) => e ? reject(e) : resolve()));
+		await new Promise((resolve, reject) => amflow.authenticate(token, (e: Error) => e ? reject(e) : resolve()));
+		await new Promise((resolve, reject) => amflow.putStartPoint(playlog.startPoints[0], (e: Error) => e ? reject(e) : resolve()));
+		playlog.tickList[2].forEach((tick) => {
+			amflow.sendTick(tick);
+		});
+		amflow.destroy();
+
+		// クライアント側にdurationとしてplaylogに記録されている終了時間を渡す必要があるので、そのための設定を行う
+		const timeKeeper = this.playEntities[playId].timeKeeper;
+		const finishedTime = this.calculataFinishedTime(playlog);
+		timeKeeper.setTime(finishedTime);
+	}
+
+	// コンテンツの終了時間をplaylogから算出する
+	private calculataFinishedTime(playlog: DumpedPlaylog): number {
+		const fps = playlog.startPoints[0].data.fps;
+		const replayStartTime = playlog.startPoints[0].timestamp;
+		const replayLastAge = playlog.tickList[1];
+		const ticksWithEvents = playlog.tickList[2];
+		let replayLastTime = null;
+		loop: for (let i = ticksWithEvents.length - 1; i >= 0; --i) {
+			const tick = ticksWithEvents[i];
+			const pevs = tick[1] || [];
+			for (let j = 0; j < pevs.length; ++j) {
+				if (pevs[j][0] === 2) { // TimestampEvent
+					const timestamp = pevs[j][3]; // Timestamp
+					// Timestamp の時刻がゲームの開始時刻より小さかった場合は相対時刻とみなす
+					replayLastTime = (timestamp < replayStartTime ? timestamp + replayStartTime : timestamp) + (replayLastAge - tick[0]) * 1000 / fps;
+					break loop;
+				}
+			}
+		}
+		return (replayLastTime == null) ? (replayLastAge * 1000 / fps) : (replayLastTime - replayStartTime);
 	}
 }

@@ -5,7 +5,7 @@ export class TimeKeeper {
 	offset: number;
 
 	constructor() {
-		this.origin = null;
+		this.origin = Date.now();
 		this.pausedTime = 0;
 		this.rate = 1;
 		this.offset = 0;
@@ -16,9 +16,6 @@ export class TimeKeeper {
 	}
 
 	now(): number {
-		if (this.origin === null) {
-			return 0;
-		}
 		return (this.isPausing()) ? this.pausedTime : ((Date.now() - this.origin) * this.rate + this.offset);
 	}
 

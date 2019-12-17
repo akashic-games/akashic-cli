@@ -1,3 +1,4 @@
+import * as queryString from "query-string";
 import { PlayBroadcastTestbedEvent } from "../../common/types/TestbedEvent";
 import { ClientContentLocator } from "../common/ClientContentLocator";
 import * as ApiClient from "../api/ApiClient";
@@ -20,6 +21,7 @@ export interface OperatorParameterObject {
 export interface StartContentParameterObject {
 	joinsSelf: boolean;
 	instanceArgument: any;
+	isReplay?: boolean;
 }
 
 export class Operator {
@@ -50,8 +52,14 @@ export class Operator {
 
 	async bootstrap(contentLocator?: ClientContentLocator): Promise<void> {
 		const store = this.store;
+		const query = queryString.parse(window.location.search);
 		let play: PlayEntity = null;
-		if (contentLocator) {
+		if (query.playId != null) {
+			play = store.playStore.plays[query.playId as string];
+			if (!play) {
+				throw new Error(`play(id: ${query.playId}) is not found.`);
+			}
+		} else if (contentLocator) {
 			play = await this._createServerLoop(contentLocator);
 		} else {
 			const plays = store.playStore.playsList();
@@ -62,10 +70,10 @@ export class Operator {
 				play = await this._createServerLoop(loc);
 			}
 		}
-		await this.setCurrentPlay(play);
+		await this.setCurrentPlay(play, query.mode === "replay");
 	}
 
-	setCurrentPlay = async (play: PlayEntity): Promise<void> => {
+	setCurrentPlay = async (play: PlayEntity, isReplay: boolean = false): Promise<void> => {
 		const store = this.store;
 		if (store.currentPlay === play)
 			return;
@@ -94,7 +102,8 @@ export class Operator {
 		if (store.appOptions.autoStart) {
 			await this.startContent({
 				joinsSelf: isJoin,
-				instanceArgument: argument
+				instanceArgument: argument,
+				isReplay
 			});
 		}
 	}
@@ -108,7 +117,7 @@ export class Operator {
 			playId: play.playId,
 			playToken: tokenResult.data.playToken,
 			playlogServerUrl: "dummy-playlog-server-url",
-			executionMode: "passive",
+			executionMode: params != null && params.isReplay ? "replay" : "passive",
 			player: store.player,
 			argument: params != null ? params.instanceArgument : undefined,
 			proxyAudio: store.appOptions.proxyAudio,
