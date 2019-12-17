@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 1.8.29 (2019-12-17)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#203](https://github.com/akashic-games/akashic-cli/pull/203) akashic-cli-serveでplaylogを予め読み込んだplayを作成できるようにした ([@dera-](https://github.com/dera-))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#212](https://github.com/akashic-games/akashic-cli/pull/212) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- [@dera-](https://github.com/dera-)
+
 ## 1.8.28 (2019-12-16)
 
 #### Enhancement
