@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.8.30 (2019-12-18)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#210](https://github.com/akashic-games/akashic-cli/pull/210) Add Playlog dump function ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 1.8.29 (2019-12-17)
 
 #### Enhancement
