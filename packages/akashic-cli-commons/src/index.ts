@@ -43,8 +43,15 @@ import { CliConfigInit } from "./CliConfig/cliConfigInit";
 export { CliConfigInit };
 import { CliConfigInstall } from "./CliConfig/CliConfigInstall";
 export { CliConfigInstall };
+import { CliConfigModify } from "./CliConfig/CliConfigModify";
+export {CliConfigModify };
+import { CliConfigScanAsset, CliConfigScanGlobalScripts } from "./CliConfig/CliConfigScan";
+export { CliConfigScanAsset, CliConfigScanGlobalScripts };
+import { CliConfigServe } from "./CliConfig/CliConfigServe";
+export { CliConfigServe };
 import { CliConfigStat } from "./CliConfig/CliConfigStat";
 export { CliConfigStat };
-import { CliConfigUnInstall } from "./CliConfig/CliConfigUnInstall";
-export { CliConfigUnInstall };
-
+import { CliConfigUninstall } from "./CliConfig/CliConfigUninstall";
+export { CliConfigUninstall };
+import { CliConfigUpdate } from "./CliConfig/CliConfigUpdate";
+export { CliConfigUpdate };

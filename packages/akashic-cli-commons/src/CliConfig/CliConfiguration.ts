@@ -8,6 +8,7 @@ import { CliConfigServe } from "./CliConfigServe";
 import { CliConfigStat } from "./CliConfigStat";
 import { CliConfigUninstall } from "./CliConfigUninstall";
 import { CliConfigUpdate } from "./CliConfigUpdate";
+
 /**
  * AkashicConfig.json の型。
  */
