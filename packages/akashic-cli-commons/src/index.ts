@@ -39,7 +39,7 @@ import { CliConfigExportHtml } from "./CliConfig/CliConfigExportHtml";
 export { CliConfigExportHtml };
 import { CliConfigExportZip } from "./CliConfig/CliconfigExportZip";
 export { CliConfigExportZip };
-import { CliConfigInit } from "./CliConfig/cliConfigInit";
+import { CliConfigInit } from "./CliConfig/CliConfigInit";
 export { CliConfigInit };
 import { CliConfigInstall } from "./CliConfig/CliConfigInstall";
 export { CliConfigInstall };

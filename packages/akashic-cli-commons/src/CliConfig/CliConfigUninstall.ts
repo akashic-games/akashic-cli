@@ -1,4 +1,4 @@
-export interface CliConfigUnInstall {
+export interface CliConfigUninstall {
 	args?: string[];
 	cwd?: string;
 	unlink?: boolean;
