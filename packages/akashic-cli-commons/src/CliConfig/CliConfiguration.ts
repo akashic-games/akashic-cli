@@ -13,19 +13,19 @@ import { CliConfigUpdate } from "./CliConfigUpdate";
  * AkashicConfig.json の型。
  */
 export interface CliConfiguration {
-    commandOptions: {
-        exportHtml?: CliConfigExportHtml;
-        exportZip?: CliConfigExportZip;
-        init?: CliConfigInit;
-        install?: CliConfigInstall;
-        modify?: CliConfigModify;
-        scan?: {
-            asset?: CliConfigScanAsset;
-            globalSCripts?: CliConfigScanGlobalScripts;
-        };
-        serve?: CliConfigServe;
-        stat?: CliConfigStat;
-        uninstall?: CliConfigUninstall;
-        update?: CliConfigUpdate;
-    }
+	commandOptions: {
+		exportHtml?: CliConfigExportHtml;
+		exportZip?: CliConfigExportZip;
+		init?: CliConfigInit;
+		install?: CliConfigInstall;
+		modify?: CliConfigModify;
+		scan?: {
+			asset?: CliConfigScanAsset;
+			globalSCripts?: CliConfigScanGlobalScripts;
+		};
+		serve?: CliConfigServe;
+		stat?: CliConfigStat;
+		uninstall?: CliConfigUninstall;
+		update?: CliConfigUpdate;
+	};
 }
