@@ -35,6 +35,7 @@ import * as Renamer from "./Renamer";
 export { Renamer };
 import * as LintUtil from "./LintUtil";
 export { LintUtil };
+
 import { CliConfigExportHtml } from "./CliConfig/CliConfigExportHtml";
 export { CliConfigExportHtml };
 import { CliConfigExportZip } from "./CliConfig/CliconfigExportZip";
@@ -55,3 +56,7 @@ import { CliConfigUninstall } from "./CliConfig/CliConfigUninstall";
 export { CliConfigUninstall };
 import { CliConfigUpdate } from "./CliConfig/CliConfigUpdate";
 export { CliConfigUpdate };
+import { CliConfigurationFile } from "./CliConfig/CliConfigurationFile";
+export { CliConfigurationFile };
+import { CliConfiguration } from "./CliConfig/CliConfiguration";
+export { CliConfiguration };

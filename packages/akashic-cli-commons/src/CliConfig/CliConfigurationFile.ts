@@ -5,28 +5,27 @@ import { CliConfiguration } from "./CliConfiguration";
 /**
  * game.json をファイルとして取り扱うモジュール。
  */
-export module ConfigurationFile {
+export module CliConfigurationFile {
 	/**
 	 * akashicConfig.json ファイルを読み込む。
 	 *
 	 * @param confPath akashicConfig.jsonがあるディレクトリ。絶対パスであることを期待する。
 	 * @param logger ログ出力に用いるロガー。
 	 */
-	export function read(confPath: string, logger: Logger): Promise<CliConfiguration> {
-		return new Promise<CliConfiguration>((resolve: (conf: CliConfiguration) => void, reject: (err: any) => void) => {
+	export function read(confPath: string, callback: (conf: CliConfiguration) => void): void {
 			fs.readFile(confPath, "utf8", (err: any, data: string) => {
 				if (err) {
-					if (err.code !== "ENOENT")
-						return void reject(err);
-					logger.info("No game.json found. Create a new one.");
-					data = "{}";
+					if (err.code === "ENOENT") {
+						return callback({commandOptions: {}});
+					} else {
+						throw err;
+					}
 				}
 				try {
-					resolve(JSON.parse(data));
+					callback(JSON.parse(data));
 				} catch (e) {
-					reject(e);
+					throw e;
 				}
 			});
-		});
 	}
 }
