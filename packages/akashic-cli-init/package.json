@@ -21,7 +21,8 @@
     "test": "npm run test:jest && npm run lint",
     "test:jest": "jest",
     "pretest": "npm run http",
-    "posttest": "kill $(lsof -t -i:18080)"
+    "posttest": "kill $(lsof -t -i:18080)",
+    "update:template-modules": "node ./buildupdateModulesOfTemplates.js"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
