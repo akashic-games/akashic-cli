@@ -22,7 +22,7 @@
     "test:jest": "jest",
     "pretest": "npm run http",
     "posttest": "kill $(lsof -t -i:18080)",
-    "update:template-modules": "node ./buildupdateModulesOfTemplates.js"
+    "update:template-modules": "node ./build/updateModulesOfTemplates.js"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",

@@ -1,8 +1,9 @@
+const fs = require("fs");
 const path = require("path");
 const shell = require('shelljs');
 
-const templates = ["javascript-base", "typescript-base"];
 const templateSrcPath = path.join(__dirname, "..", "templates-src");
+const templates = fs.readdirSync(templateSrcPath).filter(dir => fs.existsSync(path.join(templateSrcPath, dir, "package.json")));
 
 console.log("Start to update modules of templates");
 templates.forEach(name => {
