@@ -7,7 +7,8 @@ import {
 	RunnerDeleteApiResponse,
 	RunnerPostApiResponse,
 	RunnerPatchApiResponse,
-	ContentsGetApiResponse,
+	ContentGetAllApiResponse,
+	ContentGetApiResponse,
 	SandboxConfigApiResponse,
 	OptionsApiResponse
 } from "../../common/types/ApiResponse";
@@ -71,8 +72,12 @@ export const resumeRunner = async(runnerId: string): Promise<RunnerPatchApiRespo
 	return await ApiRequest.patch<RunnerPatchApiResponse>(`/api/runners/${runnerId}`, {status: "running"});
 };
 
-export const getContents = async(): Promise<ContentsGetApiResponse> => {
-	return await ApiRequest.get<ContentsGetApiResponse>(`/contents/`);
+export const getContents = async (): Promise<ContentGetAllApiResponse> => {
+	return await ApiRequest.get<ContentGetAllApiResponse>(`/contents/`);
+};
+
+export const getContent = async (contentId: string): Promise<ContentGetApiResponse> => {
+	return await ApiRequest.get<ContentGetApiResponse>(`/contents/${contentId}`);
 };
 
 export const getGameConfiguration = async(contentId: number): Promise<GameConfiguration> => {

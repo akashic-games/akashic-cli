@@ -12,8 +12,7 @@ import { serverGlobalConfig } from "../common/ServerGlobalConfig";
 
 export const createHandlerToCreateRunner = (
 	playStore: PlayStore,
-	runnerStore: RunnerStore,
-	targetDirs: string[]
+	runnerStore: RunnerStore
 ): express.RequestHandler => {
 	return async (req, res, next) => {
 		try {
@@ -27,7 +26,7 @@ export const createHandlerToCreateRunner = (
 			const isActive = Boolean(req.body.isActive);
 			const token = req.body.token;
 			const amflow = playStore.createAMFlow(playId);
-			const runner = await runnerStore.createAndStartRunner({ playId, isActive, token, amflow, targetDirs, contentId });
+			const runner = await runnerStore.createAndStartRunner({ playId, isActive, token, amflow, contentId });
 			responseSuccess<RunnerPostApiResponseData>(res, 200, { playId: runner.playId, runnerId: runner.runnerId });
 		} catch (e) {
 			next(e);

@@ -155,6 +155,7 @@ export class Operator {
 	}
 
 	restartWithNewPlay = async (): Promise<void> => {
+		await this.store.contentStore.updateSandboxConfig(this.store.currentPlay.content.locator);
 		const play = await this._createServerLoop(this.store.currentPlay.content.locator);
 		await this.store.currentPlay.deleteAllServerInstances();
 		await ApiClient.broadcast(this.store.currentPlay.playId, { type: "switchPlay", nextPlayId: play.playId });

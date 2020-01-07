@@ -52,7 +52,7 @@ export interface RunnerPatchApiResponseData {
 	status: "running" | "paused";
 }
 
-export type ContentsGetApiResponseData = ContentDesc[];
+export type ContentGetApiResponseData = ContentDesc;
 
 export interface SandboxConfigApiResponseData extends SandboxConfig {
 }
@@ -67,6 +67,7 @@ export type PlayTokenPostApiResponse = ApiResponse<PlayTokenPostApiResponseData>
 export type RunnerPostApiResponse = ApiResponse<RunnerPostApiResponseData>;
 export type RunnerDeleteApiResponse = ApiResponse<RunnerDeleteApiResponseData>;
 export type RunnerPatchApiResponse = ApiResponse<RunnerPatchApiResponseData>;
-export type ContentsGetApiResponse = ApiResponse<ContentsGetApiResponseData>;
+export type ContentGetAllApiResponse = ApiResponse<ContentGetApiResponseData[]>;
+export type ContentGetApiResponse = ApiResponse<ContentGetApiResponseData>;
 export type SandboxConfigApiResponse = ApiResponse<SandboxConfigApiResponseData>;
 export type OptionsApiResponse = ApiResponse<OptionsApiResponseData>;

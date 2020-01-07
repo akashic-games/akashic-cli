@@ -1,27 +1,60 @@
 import * as path from "path";
+import * as chokidar from "chokidar";
 import { SandboxConfig } from "../../common/types/SandboxConfig";
 import { dynamicRequire } from "./dynamicRequire";
 import { BadRequestError } from "../common/ApiError";
 
-// TODO: 読み込み直さなかった時は validation を省略させる
-export function loadSandboxConfigJs(targetDir: string): SandboxConfig {
-	const config = dynamicRequire<SandboxConfig>(path.resolve(targetDir, "sandbox.config.js")) || {};
-	validateConfig(config);
-	return config;
-}
+export class SandboxConfigs {
+	private static _instance: SandboxConfigs;
 
-function validateConfig(config: SandboxConfig): void {
-	const externalAssets = (config ? config.externalAssets : undefined) === undefined ? [] : config.externalAssets;
-	if (externalAssets) {
-		// sandbox.config.js の externalAssets に値がある場合は (string|regexp)[] でなければエラーとする
-		if (!(externalAssets instanceof Array)) {
-			throw new BadRequestError({ errorMessage: "Invalid externalAssets, Not Array" });
+	static getInstance(): SandboxConfigs {
+		if (!this._instance) {
+			this._instance = new SandboxConfigs();
 		}
+		return this._instance;
+	}
+	private _configs: { [key: string]: SandboxConfig } = {};
 
-		if ( externalAssets.length > 0) {
-			const found = externalAssets.find((url: any) => typeof url !== "string" && !(url instanceof RegExp));
-			if (found) {
-				throw new BadRequestError({errorMessage: `Invalid externalAssets, The value is neither a string or regexp. value:${ found }` });
+	/**
+	 * sandbox.config.jsを読み込み、ファイルの監視を行う。
+	 * 読み込んだ内容は、コンテンツIDで紐付け保持する。
+	 *
+	 * @param targetDir 対象ディレクトリ
+	 * @param contentId コンテンツID
+	 */
+	loadSandboxConfigJs(targetDir: string, contentId: string): void {
+		const configPath = path.resolve(targetDir, "sandbox.config.js");
+		this._configs[contentId] = dynamicRequire<SandboxConfig>(configPath, true) || {};
+		this.validateConfig(this._configs[contentId]);
+
+		const watcher = chokidar.watch(configPath, { persistent: true });
+		watcher.on("change", () => {
+			this._configs[contentId] = dynamicRequire<SandboxConfig>(configPath, true);
+			this.validateConfig(this._configs[contentId]);
+		});
+	}
+
+	/**
+	 * コンテンツIDに紐づく、sandboxConfigを返す。
+	 * @param contentId コンテンツID
+	 */
+	getConfig(contentId: string): SandboxConfig {
+		return this._configs[contentId];
+	}
+
+	private validateConfig(config: SandboxConfig): void {
+		const externalAssets = (config ? config.externalAssets : undefined) === undefined ? [] : config.externalAssets;
+		if (externalAssets) {
+			// sandbox.config.js の externalAssets に値がある場合は (string|regexp)[] でなければエラーとする
+			if (!(externalAssets instanceof Array)) {
+				throw new BadRequestError({ errorMessage: "Invalid externalAssets, Not Array" });
+			}
+
+			if (externalAssets.length > 0) {
+				const found = externalAssets.find((url: any) => typeof url !== "string" && !(url instanceof RegExp));
+				if (found) {
+					throw new BadRequestError({errorMessage: `Invalid externalAssets, The value is neither a string or regexp. value:${ found }` });
+				}
 			}
 		}
 	}

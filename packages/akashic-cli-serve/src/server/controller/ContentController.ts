@@ -1,19 +1,37 @@
 import * as express from "express";
-import { ContentsGetApiResponseData } from "../../common/types/ApiResponse";
+import { ContentGetApiResponseData } from "../../common/types/ApiResponse";
 import * as EngineConfig from "../domain/EngineConfig";
 import { serverGlobalConfig } from "../common/ServerGlobalConfig";
 import { responseSuccess } from "../common/ApiResponse";
-import { NotFoundError } from "../common/ApiError";
-import { loadSandboxConfigJs } from "../domain/SandboxConfigs";
+import { NotFoundError, BadRequestError } from "../common/ApiError";
+import { SandboxConfigs } from "../domain/SandboxConfigs";
 
 export const createHandlerToGetContents = (targetDirs: string[]): express.RequestHandler => {
 	return (req, res, next) => {
 		try {
 			const contents = targetDirs.map((targetDir, i) => ({
 				contentLocatorData: { contentId: "" + i },
-				sandboxConfig: loadSandboxConfigJs(targetDir)
+				sandboxConfig: SandboxConfigs.getInstance().getConfig(i.toString())
 			}));
-			responseSuccess<ContentsGetApiResponseData>(res, 200, contents);
+			responseSuccess<ContentGetApiResponseData[]>(res, 200, contents);
+		} catch (e) {
+			next(e);
+		}
+	};
+};
+
+export const createHandlerToGetContent = (): express.RequestHandler => {
+	return (req, res, next) => {
+		try {
+			if (!req.params.contentId) {
+				throw new BadRequestError({ errorMessage: "ContentId is not given" });
+			}
+			const contentId = req.params.contentId;
+			const content = {
+				contentLocatorData: { contentId: contentId },
+				sandboxConfig: SandboxConfigs.getInstance().getConfig(contentId)
+			};
+			responseSuccess<ContentGetApiResponseData>(res, 200, content);
 		} catch (e) {
 			next(e);
 		}
