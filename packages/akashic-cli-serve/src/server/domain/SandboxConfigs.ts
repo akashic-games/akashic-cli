@@ -24,13 +24,17 @@ export class SandboxConfigs {
 	 */
 	loadSandboxConfigJs(targetDir: string, contentId: string): void {
 		const configPath = path.resolve(targetDir, "sandbox.config.js");
-		this._configs[contentId] = dynamicRequire<SandboxConfig>(configPath, true) || {};
-		this.validateConfig(this._configs[contentId]);
-
 		const watcher = chokidar.watch(configPath, { persistent: true });
-		watcher.on("change", () => {
-			this._configs[contentId] = dynamicRequire<SandboxConfig>(configPath, true);
-			this.validateConfig(this._configs[contentId]);
+		watcher.on("all", (event, path) => {
+			// watch後、初回読み込みは add イベントで行われる。
+			if (event === "add" || event === "change") {
+				this._configs[contentId] = dynamicRequire<SandboxConfig>(configPath, true);
+				this.validateConfig(this._configs[contentId]);
+			} else if (event === "unlink") {
+				this._configs[contentId] = {};
+			} else {
+				// do nothing.
+			}
 		});
 	}
 
