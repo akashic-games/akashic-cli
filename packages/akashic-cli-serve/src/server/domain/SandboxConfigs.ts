@@ -32,8 +32,6 @@ export class SandboxConfigs {
 				this.validateConfig(this._configs[contentId]);
 			} else if (event === "unlink") {
 				this._configs[contentId] = {};
-			} else {
-				// do nothing.
 			}
 		});
 	}

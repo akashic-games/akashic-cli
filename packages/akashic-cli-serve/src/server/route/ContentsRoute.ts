@@ -2,7 +2,6 @@ import * as express from "express";
 import { createHandlerToGetContent, createHandlerToGetContents, createHandlerToGetEngineConfig } from "../controller/ContentController";
 import { createScriptAssetController } from "../controller/ScriptAssetController";
 import { createHandlerToGetSandboxConfig } from "../controller/SandboxConfigController";
-import { SandboxConfigs } from "../domain/SandboxConfigs";
 
 export interface ContentsRouterParameterObject {
 	targetDirs: string[];
@@ -11,7 +10,6 @@ export interface ContentsRouterParameterObject {
 export const createContentsRouter = (params: ContentsRouterParameterObject): express.Router => {
 	const targetDirs = params.targetDirs;
 	const contentsRouter = express.Router();
-	const sandboxConfigs = SandboxConfigs.getInstance();
 
 	// --debug-untrusted の動作用に、localhost と 127.0.0.1 のリクエストはクロスドメインでも許す
 	// (ref. GameViewManger#getDefaultUntrustedFrameUrl())
@@ -27,7 +25,6 @@ export const createContentsRouter = (params: ContentsRouterParameterObject): exp
 		contentsRouter.get(`/${i}/content/:scriptName(*.js$)`, createScriptAssetController(targetDirs[i]));
 		contentsRouter.use(`/${i}/content`, express.static(targetDirs[i]));
 		contentsRouter.use(`/${i}/raw`, express.static(targetDirs[i]));
-		sandboxConfigs.loadSandboxConfigJs(targetDirs[i], i.toString());
 	}
 
 	contentsRouter.get(`/`, createHandlerToGetContents(targetDirs));

@@ -7,12 +7,22 @@ import { NotFoundError, BadRequestError } from "../common/ApiError";
 import { SandboxConfigs } from "../domain/SandboxConfigs";
 
 export const createHandlerToGetContents = (targetDirs: string[]): express.RequestHandler => {
+	// サーバ開始後、SandboxConfig がここで初めて読み込まれる。この処理以前にSandboxConfigが必要な場合は、その部分で `loadSandboxConfigJs()` を行うこと。
+	const sandboxConfigs = SandboxConfigs.getInstance();
+	let contents = targetDirs.map((targetDir, i) => {
+		sandboxConfigs.loadSandboxConfigJs(targetDir, i.toString());
+		return {
+			contentLocatorData: { contentId: "" + i },
+			sandboxConfig: {}
+		};
+	});
+
 	return (req, res, next) => {
 		try {
-			const contents = targetDirs.map((targetDir, i) => ({
-				contentLocatorData: { contentId: "" + i },
-				sandboxConfig: SandboxConfigs.getInstance().getConfig(i.toString())
-			}));
+			contents = contents.map((content, i) => {
+				content.sandboxConfig = sandboxConfigs.getConfig(i.toString());
+				return content;
+			});
 			responseSuccess<ContentGetApiResponseData[]>(res, 200, contents);
 		} catch (e) {
 			next(e);
