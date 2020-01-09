@@ -12,6 +12,7 @@ import { UiOperator } from "./UiOperator";
 import { DevtoolOperator } from "./DevtoolOperator";
 import { ExternalPluginOperator } from "./ExternalPluginOperator";
 import { ServiceType } from "../../common/types/ServiceType";
+import { rpgAtsumaruApiMock } from "../atsumaru/RPGAtsumaruApi";
 
 export interface OperatorParameterObject {
 	store: Store;
@@ -98,6 +99,8 @@ export class Operator {
 				isJoin = play.joinedPlayerTable.size === 0;
 			}
 			argument = this._createInstanceArgumentForNicolive(isJoin);
+		} else if (store.targetService === ServiceType.Atsumaru) {
+			(window as any).RPGAtsumaru = rpgAtsumaruApiMock;
 		}
 		if (store.appOptions.autoStart) {
 			await this.startContent({
