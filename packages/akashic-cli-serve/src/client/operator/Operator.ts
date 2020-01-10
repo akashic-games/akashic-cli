@@ -169,9 +169,13 @@ export class Operator {
 
 		// autoSendEvents
 		const sandboxConfig = this.store.contentStore.findOrRegister(contentLocator).sandboxConfig || {};
-		const { events, autoSendEvents } = sandboxConfig;
+		const { events, autoSendEvents, autoSendEventName } = sandboxConfig;
 		if (events && autoSendEvents && events[autoSendEvents] instanceof Array) {
+			// TODO: `autoSendEvents` は deprecated となった。互換性のためこのパスを残しているが、`autoSendEvents` の削除時にこのパスも削除する。
+			console.warn("[deprecated] sandbox.config.js in `autoSendEvents` is deprecated. Use `autoSendEventName`");
 			events[autoSendEvents].forEach((pev: any) => play.amflow.enqueueEvent(pev));
+		} else if (events && autoSendEventName && events[autoSendEventName] instanceof Array) {
+			events[autoSendEventName].forEach((pev: any) => play.amflow.enqueueEvent(pev));
 		}
 
 		return play;
