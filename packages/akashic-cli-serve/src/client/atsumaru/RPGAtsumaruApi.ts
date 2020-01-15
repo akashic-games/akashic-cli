@@ -131,17 +131,17 @@ export const rpgAtsumaruApiMock: RPGAtsumaruApi = {
 				return Promise.resolve().then(() => dummySelfInfomation);
 			},
 			getUserInformation: (userId: number) => {
-				// コンパイルを通すためだけの処理
-				console.log("userId", userId);
-				return Promise.resolve().then(() => dummyUserInformation);
+				const info = {
+					...dummyUserInformation,
+					id: userId
+				};
+				return Promise.resolve().then(() => info);
 			},
 			getRecentUsers: () => {
 				return Promise.resolve().then(() => [dummyUserIdName]);
 			},
 			getActiveUserCount: (minutes: number) => {
-				// コンパイルを通すためだけの処理
-				console.log("minutes", minutes);
-				return Promise.resolve().then(() => 1); // ダミーの値として固定値を返す
+				return Promise.resolve().then(() => minutes); // ダミーの値として引数をそのまま返す
 			}
 		},
 		scoreboards: {
@@ -156,8 +156,6 @@ export const rpgAtsumaruApiMock: RPGAtsumaruApi = {
 				return Promise.resolve();
 			},
 			getRecords: (boardId: number) => {
-				// コンパイルを通すためだけの処理
-				console.log(boardId);
 				const dummyScoreboardData = {
 					"myRecord": {
 						"isNewRecord": false,
@@ -190,7 +188,7 @@ export const rpgAtsumaruApiMock: RPGAtsumaruApi = {
 						"userName": "atsumalion",
 						"userId": 123456
 					},
-					"boardId": 1,
+					"boardId": boardId,
 					"boardName": "スコアボードの名前"
 				};
 				return Promise.resolve().then(() => dummyScoreboardData);
