@@ -35,7 +35,7 @@ export function loadSandboxConfigJs(contentId: string, targetDir?: string): Sand
 
 function validateConfig(config: SandboxConfig): void {
 	const externalAssets = (config ? config.externalAssets : undefined) === undefined ? [] : config.externalAssets;
-	if ( externalAssets) {
+	if (externalAssets) {
 		// sandbox.config.js の externalAssets に値がある場合は (string|regexp)[] でなければエラーとする
 		if (!(externalAssets instanceof Array)) {
 			throw new BadRequestError({ errorMessage: "Invalid externalAssets, Not Array" });
@@ -44,7 +44,7 @@ function validateConfig(config: SandboxConfig): void {
 		if ( externalAssets.length > 0) {
 			const found = externalAssets.find((url: any) => typeof url !== "string" && !(url instanceof RegExp));
 			if (found) {
-				throw new BadRequestError({ errorMessage: `Invalid externalAssets, The value is neither a string or regexp. value:${ found }` });
+				throw new BadRequestError({errorMessage: `Invalid externalAssets, The value is neither a string or regexp. value:${ found }` });
 			}
 		}
 	}
