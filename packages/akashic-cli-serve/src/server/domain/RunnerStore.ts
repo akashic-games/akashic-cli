@@ -6,7 +6,7 @@ import {
 	RunnerPauseTestbedEvent,
 	RunnerResumeTestbedEvent
 } from "../../common/types/TestbedEvent";
-import { SandboxConfigs } from "./SandboxConfigs";
+import { loadSandboxConfigJs } from "./SandboxConfigs";
 import { serverGlobalConfig } from "../common/ServerGlobalConfig";
 
 export interface RunnerStoreParameterObject {
@@ -39,7 +39,7 @@ export class RunnerStore {
 	}
 
 	async createAndStartRunner(params: CreateAndStartRunnerParameterObject): Promise<RunnerV1 | RunnerV2> {
-		const sandboxConfig = SandboxConfigs.getInstance().getConfig(params.contentId);
+		const sandboxConfig = loadSandboxConfigJs(params.contentId);
 		const externalAssets = (sandboxConfig ? sandboxConfig.externalAssets : undefined) === undefined ? [] : sandboxConfig.externalAssets;
 		const allowedUrls = this.createAllowedUrls(params.contentId, externalAssets);
 

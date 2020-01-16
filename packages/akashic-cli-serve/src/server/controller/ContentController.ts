@@ -4,25 +4,16 @@ import * as EngineConfig from "../domain/EngineConfig";
 import { serverGlobalConfig } from "../common/ServerGlobalConfig";
 import { responseSuccess } from "../common/ApiResponse";
 import { NotFoundError, BadRequestError } from "../common/ApiError";
-import { SandboxConfigs } from "../domain/SandboxConfigs";
+import { loadSandboxConfigJs } from "../domain/SandboxConfigs";
 
 export const createHandlerToGetContents = (targetDirs: string[]): express.RequestHandler => {
-	// サーバ開始後、SandboxConfig がここで初めて読み込まれる。この処理以前にSandboxConfigが必要な場合は、その部分で `loadSandboxConfigJs()` を行うこと。
-	const sandboxConfigs = SandboxConfigs.getInstance();
-	let contents = targetDirs.map((targetDir, i) => {
-		sandboxConfigs.loadSandboxConfigJs(targetDir, i.toString());
-		return {
-			contentLocatorData: { contentId: "" + i },
-			sandboxConfig: {}
-		};
-	});
-
 	return (req, res, next) => {
 		try {
-			contents = contents.map((content, i) => {
-				content.sandboxConfig = sandboxConfigs.getConfig(i.toString());
-				return content;
-			});
+			// サーバ開始後、sandbox.config.js がここで初めて読み込まれる。この処理以前に sandbox.config.js が必要な場合は、その部分で `loadSandboxConfigJs()` を行うこと。
+			const contents = targetDirs.map((targetDir, i) => ({
+				contentLocatorData: { contentId: "" + i },
+				sandboxConfig: loadSandboxConfigJs(i.toString(), targetDir)
+			}));
 			responseSuccess<ContentGetApiResponseData[]>(res, 200, contents);
 		} catch (e) {
 			next(e);
@@ -39,7 +30,7 @@ export const createHandlerToGetContent = (): express.RequestHandler => {
 			const contentId = req.params.contentId;
 			const content = {
 				contentLocatorData: { contentId: contentId },
-				sandboxConfig: SandboxConfigs.getInstance().getConfig(contentId)
+				sandboxConfig: loadSandboxConfigJs(contentId)
 			};
 			responseSuccess<ContentGetApiResponseData>(res, 200, content);
 		} catch (e) {
