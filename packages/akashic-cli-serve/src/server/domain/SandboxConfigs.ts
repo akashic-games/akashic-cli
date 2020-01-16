@@ -41,10 +41,10 @@ function validateConfig(config: SandboxConfig): void {
 			throw new BadRequestError({ errorMessage: "Invalid externalAssets, Not Array" });
 		}
 
-		if (externalAssets.length > 0) {
+		if ( externalAssets.length > 0) {
 			const found = externalAssets.find((url: any) => typeof url !== "string" && !(url instanceof RegExp));
 			if (found) {
-				throw new BadRequestError({errorMessage: `Invalid externalAssets, The value is neither a string or regexp. value:${ found }`});
+				throw new BadRequestError({ errorMessage: `Invalid externalAssets, The value is neither a string or regexp. value:${ found }` });
 			}
 		}
 	}
