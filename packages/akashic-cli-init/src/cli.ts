@@ -1,20 +1,11 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as commander from "commander";
-import { ConsoleLogger } from "@akashic/akashic-cli-commons";
+import { ConsoleLogger, CliConfigurationFile, CliConfigInit } from "@akashic/akashic-cli-commons";
 import { promiseInit } from "./init";
 import { listTemplates } from "./listTemplates";
 
-interface CommandParameterObject {
-	cwd?: string;
-	quiet?: boolean;
-	type?: string;
-	list?: boolean;
-	force?: boolean;
-	yes?: boolean;
-}
-
-function cli(param: CommandParameterObject): void {
+function cli(param: CliConfigInit): void {
 	var logger = new ConsoleLogger({ quiet: param.quiet });
 	var initParam = { cwd: param.cwd, type: param.type, logger: logger, forceCopy: param.force, skipAsk: param.yes };
 	{
@@ -49,12 +40,16 @@ commander
 
 export function run(argv: string[]): void {
 	commander.parse(argv);
-	cli({
-		cwd: commander.cwd,
-		quiet: commander.quiet,
-		type: commander.type,
-		list: commander.list,
-		yes: commander.yes,
-		force: commander.force
+
+	CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashicConfig.json"), (configuration) => {
+		const conf = configuration.commandOptions.init || {};
+		cli({
+			cwd: commander.cwd,
+			quiet: commander.quiet,
+			type: commander.type,
+			list: commander.list,
+			yes: commander.yes,
+			force: commander.force
+		});
 	});
 }
