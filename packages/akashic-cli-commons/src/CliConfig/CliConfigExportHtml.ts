@@ -1,9 +1,9 @@
 export interface CliConfigExportHtml {
+	output: string;
 	cwd?: string;
 	source?: string;
 	force?: boolean;
 	quiet?: boolean;
-	output?: string;
 	exclude?: string[];
 	strip?: boolean;
 	hashFilename?: number | boolean;
