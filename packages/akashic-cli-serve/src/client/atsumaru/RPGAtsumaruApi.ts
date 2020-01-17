@@ -56,23 +56,11 @@ export interface RPGAtsumaruApi {
 export const rpgAtsumaruApiMock: RPGAtsumaruApi = {
 	comment: {
 		verbose: false,
-		changeScene: (sceneName: string) => {
-			// コンパイルを通すためだけの処理
-			console.log(sceneName);
-		},
-		resetAndChangeScene: (sceneName: string) => {
-			// コンパイルを通すためだけの処理
-			console.log(sceneName);
-		},
-		pushContextFactor: (factor: string) => {
-			// コンパイルを通すためだけの処理
-			console.log(factor);
-		},
+		changeScene: (_sceneName: string) => {},
+		resetAndChangeScene: (_sceneName: string) => {},
+		pushContextFactor: (_factor: string) => {},
 		pushMinorContext: () => {},
-		setContext: (context: string) => {
-			// コンパイルを通すためだけの処理
-			console.log(context);
-		}
+		setContext: (_context: string) => {}
 	},
 	storage: {
 		getItems: () => {
@@ -80,14 +68,12 @@ export const rpgAtsumaruApiMock: RPGAtsumaruApi = {
 			const items = [{key: "data1", value: "hoge"}, {key: "data2", value: "fuga"}];
 			return Promise.resolve().then(() => items);
 		},
-		setItems: (items: {key: string, value: string}[]) => {
-			// コンパイルを通すためだけの処理
-			console.log(items);
+		// TODO: API本実装時に引数に付与したアンダースコアを除去する
+		setItems: (_items: {key: string, value: string}[]) => {
 			return Promise.resolve();
 		},
-		removeItem: (key: string) => {
-			// コンパイルを通すためだけの処理
-			console.log(key);
+		// TODO: API本実装時に引数に付与したアンダースコアを除去する
+		removeItem: (_key: string) => {
 			return Promise.resolve();
 		}
 	},
@@ -97,18 +83,16 @@ export const rpgAtsumaruApiMock: RPGAtsumaruApi = {
 			return 0;
 		},
 		changed: {
-			subscribe: (observer: Observer<any> | ((volume: number) => void)): Subscription => {
-				// コンパイルを通すためだけの処理
-				console.log(observer);
+			// TODO: API本実装時に引数に付与したアンダースコアを除去する
+			subscribe: (_observer: Observer<any> | ((volume: number) => void)): Subscription => {
 				// コンパイルを通すためにダミーのSubscriptionを返す
 				return new Subscription();
 			}
 		}
 	},
 	popups: {
-		openLink: (url: string, comment?: string) => {
-			// コンパイルを通すためだけの処理
-			console.log(url, comment);
+		// TODO: API本実装時に引数に付与したアンダースコアを除去する
+		openLink: (_url: string, _comment?: string) => {
 			return Promise.resolve();
 		}
 	},
@@ -120,9 +104,8 @@ export const rpgAtsumaruApiMock: RPGAtsumaruApi = {
 			"param3": "hogehoge"
 		},
 		popups: {
-			displayCreatorInformationModal: (niconicoUserId?: number | null) => {
-				// コンパイルを通すためだけの処理
-				console.log(niconicoUserId);
+			// TODO: API本実装時に引数に付与したアンダースコアを除去する
+			displayCreatorInformationModal: (_niconicoUserId?: number | null) => {
 				return Promise.resolve();
 			}
 		},
@@ -140,19 +123,18 @@ export const rpgAtsumaruApiMock: RPGAtsumaruApi = {
 			getRecentUsers: () => {
 				return Promise.resolve().then(() => [dummyUserIdName]);
 			},
-			getActiveUserCount: (minutes: number) => {
-				return Promise.resolve().then(() => minutes); // ダミーの値として引数をそのまま返す
+			// ダミー情報を返すため引数の値は利用しないので、アンダースコアを付与する
+			getActiveUserCount: (_minutes: number) => {
+				return Promise.resolve().then(() => 1); // ダミーの値として固定値を返す
 			}
 		},
 		scoreboards: {
-			setRecord: (boardId: number, score: number) => {
-				// コンパイルを通すためだけの処理
-				console.log(boardId, score);
+			// TODO: API本実装時に引数に付与したアンダースコアを除去する
+			setRecord: (_boardId: number, _score: number) => {
 				return Promise.resolve();
 			},
-			display: (boardId: number) => {
-				// コンパイルを通すためだけの処理
-				console.log(boardId);
+			// TODO: API本実装時に引数に付与したアンダースコアを除去する
+			display: (_boardId: number) => {
 				return Promise.resolve();
 			},
 			getRecords: (boardId: number) => {
@@ -199,14 +181,10 @@ export const rpgAtsumaruApiMock: RPGAtsumaruApi = {
 				const dummyData = { tweeted: true };
 				return Promise.resolve().then(() => dummyData);
 			},
-			setScreenshotHandler: (handler: () => Promise<string>) => {
-				// コンパイルを通すためだけの処理
-				console.log(handler);
-			},
-			setTweetMessage: (tweetSettings: TweetSettings | null) => {
-				// コンパイルを通すためだけの処理
-				console.log(tweetSettings);
-			}
+			// TODO: API本実装時に引数に付与したアンダースコアを除去する
+			setScreenshotHandler: (_handler: () => Promise<string>) => {},
+			// TODO: API本実装時に引数に付与したアンダースコアを除去する
+			setTweetMessage: (_tweetSettings: TweetSettings | null) => {}
 		}
 	}
 };
