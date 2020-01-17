@@ -1,5 +1,23 @@
 # CHANGELOG
 
+## 1.8.33 (2020-01-17)
+
+#### Other Change
+* `akashic-cli-serve`
+  * [#225](https://github.com/akashic-games/akashic-cli/pull/225) fix: sandbox.config.js in autoSendEvents is deprecated ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+* `akashic-cli-init`
+  * [#220](https://github.com/akashic-games/akashic-cli/pull/220) akashic-cli-initのテンプレートディレクトリが依存するakashicモジュールを最新に更新するスクリプトの作成 ([@dera-](https://github.com/dera-))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`
+  * [#216](https://github.com/akashic-games/akashic-cli/pull/216) Update all dependencies (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#215](https://github.com/akashic-games/akashic-cli/pull/215) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- [@dera-](https://github.com/dera-)
+
 ## 1.8.32 (2020-01-07)
 
 #### Enhancement
