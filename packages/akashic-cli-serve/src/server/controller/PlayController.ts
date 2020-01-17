@@ -1,5 +1,4 @@
 import * as express from "express";
-import { ContentParameters } from "@akashic/headless-driver";
 import { BadRequestError, NotFoundError } from "../common/ApiError";
 import { responseSuccess } from "../common/ApiResponse";
 import {
@@ -145,6 +144,30 @@ export const createHandlerToPatchPlay = (playStore: PlayStore): express.RequestH
 				}
 			}
 			responseSuccess<PlayPatchApiResponseData>(res, 200, { playId, status });
+		} catch (e) {
+			next(e);
+		}
+	};
+};
+
+export const createHandlerToGetPlaylog = (playStore: PlayStore): express.RequestHandler => {
+	return (req, res, next) => {
+		try {
+			if (!req.params.playId) {
+				throw new BadRequestError({ errorMessage: "PlayId is not given" });
+			}
+			const playId = req.params.playId;
+			const amflow = playStore.createAMFlow(playId);
+			if (!amflow) {
+				throw new NotFoundError({ errorMessage: `PlayLog is not found. playId:${playId}` });
+			}
+			const dumpData = amflow.dump();
+			const dumpJsonStr = JSON.stringify(dumpData);
+			const fileName = `playlog_${playId}_${Date.now()}.json`;
+
+			res.setHeader("Content-disposition", "attachment; filename=" + fileName);
+			res.setHeader("Content-type", "application/x-download");
+			res.send(dumpJsonStr);
 		} catch (e) {
 			next(e);
 		}

@@ -11,7 +11,7 @@ export function loadSandboxConfigJs(targetDir: string): SandboxConfig {
 }
 
 function validateConfig(config: SandboxConfig): void {
-	const externalAssets = config?.externalAssets === undefined ? [] : config.externalAssets;
+	const externalAssets = (config ? config.externalAssets : undefined) === undefined ? [] : config.externalAssets;
 	if (externalAssets) {
 		// sandbox.config.js の externalAssets に値がある場合は (string|regexp)[] でなければエラーとする
 		if (!(externalAssets instanceof Array)) {

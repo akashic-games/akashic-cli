@@ -44,7 +44,7 @@ export class RunnerStore {
 		// TODO: targetDirsを渡さなくても、contentIdから解決できるようにする。
 		const sandboxConfigDir = params.targetDirs[parseInt(params.contentId, 10)];
 		const sandboxConfig = loadSandboxConfigJs(sandboxConfigDir);
-		const externalAssets = sandboxConfig?.externalAssets === undefined ? [] : sandboxConfig.externalAssets;
+		const externalAssets = (sandboxConfig ? sandboxConfig.externalAssets : undefined) === undefined ? [] : sandboxConfig.externalAssets;
 		const allowedUrls = this.createAllowedUrls(params.contentId, externalAssets);
 
 		const runnerId = await this.runnerManager.createRunner({

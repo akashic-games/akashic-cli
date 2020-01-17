@@ -6,7 +6,7 @@
     "module": "commonjs",
     "outDir": "./lib",
     "declaration": true,
-    "types" : ["commander", "fs-extra", "ini"]
+    "types" : ["node", "commander", "fs-extra", "ini"]
   },
   "files": [
     "./typings/selected_lodash.d.ts",
