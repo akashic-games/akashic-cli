@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-install",
-  "version": "0.4.5",
+  "version": "0.4.6",
   "description": "npm install wrapper module for Akashic games",
   "main": "lib/index.js",
   "scripts": {
@@ -34,7 +34,7 @@
     "typescript": "2.9.2"
   },
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.3.4",
+    "@akashic/akashic-cli-commons": "0.3.5",
     "commander": "2.20.3"
   },
   "typings": "lib/index.d.ts",
