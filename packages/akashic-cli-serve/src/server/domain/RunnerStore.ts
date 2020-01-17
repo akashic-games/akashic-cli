@@ -1,5 +1,5 @@
 import { Trigger } from "@akashic/trigger";
-import { AMFlowClient, RunnerManager, RunnerV1, RunnerV2 } from "@akashic/headless-driver";
+import { AMFlowClient, RunnerManager, RunnerV1, RunnerV2, RunnerV3 } from "@akashic/headless-driver";
 import {
 	RunnerCreateTestbedEvent,
 	RunnerRemoveTestbedEvent,
@@ -39,7 +39,7 @@ export class RunnerStore {
 		this.playIdTable = {};
 	}
 
-	async createAndStartRunner(params: CreateAndStartRunnerParameterObject): Promise<RunnerV1 | RunnerV2> {
+	async createAndStartRunner(params: CreateAndStartRunnerParameterObject): Promise<RunnerV1 | RunnerV2 | RunnerV3> {
 		// TODO: allowedUrls を作成するための sandbox.config.js の load や引数の targetDirs 等は SandboxConfig の反映タイミング修正で不要となる可能性がある。
 		// TODO: targetDirsを渡さなくても、contentIdから解決できるようにする。
 		const sandboxConfigDir = params.targetDirs[parseInt(params.contentId, 10)];

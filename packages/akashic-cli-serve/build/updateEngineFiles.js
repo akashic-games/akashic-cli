@@ -13,6 +13,10 @@ var currentVersions = {
 	v2: {
 		version: "",
 		fileName: ""
+	},
+	v3: {
+		version: "",
+		fileName: ""
 	}
 };
 if (fs.existsSync(jsonPath)) {
@@ -20,18 +24,23 @@ if (fs.existsSync(jsonPath)) {
 }
 var v1Version = execSync(`npm info @akashic/engine-files@for_ae1x version`).toString().replace("\n", "");
 var v2Version = execSync(`npm info @akashic/engine-files@latest version`).toString().replace("\n", "");
+var v3Version = execSync(`npm info @akashic/engine-files@next version`).toString().replace("\n", "");
 var versions = {
 	v1: {
 		version: v1Version,
-		fileName: `engineFilesV${v1Version.replace(/\./g, "_")}.js`
+		fileName: `engineFilesV${v1Version.replace(/[\.-]/g, "_")}.js`
 	},
 	v2: {
 		version: v2Version,
-		fileName: `engineFilesV${v2Version.replace(/\./g, "_")}.js`
+		fileName: `engineFilesV${v2Version.replace(/[\.-]/g, "_")}.js`
+	},
+	v3: {
+		version: v3Version,
+		fileName: `engineFilesV${v3Version.replace(/[\.-]/g, "_")}.js`
 	}
 };
 
-// v1,v2のうち、バージョンが更新されたもののjsファイルのみをダウンロード
+// v1,v2, v3のうち、バージョンが更新されたもののjsファイルのみをダウンロード
 var promises = Object.keys(versions).filter(v => versions[v].version !== currentVersions[v].version).map(v  => {
 	var version = versions[v].version;
 	var fileName = versions[v].fileName;
