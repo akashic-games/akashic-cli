@@ -1,11 +1,12 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as commander from "commander";
-import { ConsoleLogger } from "@akashic/akashic-cli-commons";
+import { ConsoleLogger, CliConfigurationFile, CliConfigModify } from "@akashic/akashic-cli-commons";
 import { promiseModifyBasicParameter } from "./modify";
 
-function cliBasicParameter(target: string, value: string, opts: any): void {
+function cliBasicParameter(target: string, value: string, opts: CliConfigModify): void {
 	var logger = new ConsoleLogger({ quiet: opts.quiet });
+
 	promiseModifyBasicParameter({ target: target, value: Number(value), cwd: opts.cwd, logger: logger })
 		.catch((err: any) => {
 			logger.error(err);
@@ -19,7 +20,15 @@ function defineCommand(commandName: string): void {
 		.description("Update '" + commandName + "' property of game.json")
 		.option("-C, --cwd <dir>", "The directory incluedes game.json")
 		.option("-q, --quiet", "Suppress output")
-		.action((value: string, opts: any = {}) => cliBasicParameter(commandName, value, opts));
+		.action((value: string, opts: CliConfigModify = {}) => {
+			CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashicConfig.json"), (configuration) => {
+				const conf = configuration.commandOptions.modify || {};
+				cliBasicParameter(commandName, value, {
+					cwd: opts.cwd || conf.cwd,
+					quiet: opts.quiet || conf.quiet
+				});
+			});
+		});
 }
 
 ["fps", "width", "height"].forEach((commandName) => {
