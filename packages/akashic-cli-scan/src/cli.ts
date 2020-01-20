@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as commander from "commander";
-import { ConsoleLogger } from "@akashic/akashic-cli-commons";
+import { ConsoleLogger, CliConfigurationFile, CliConfigScanAsset, CliConfigScanGlobalScripts } from "@akashic/akashic-cli-commons";
 import { promiseScanAsset, promiseScanNodeModules } from "./scan";
 
 var ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "package.json"), "utf8")).version;
@@ -26,31 +26,34 @@ commander
 	.option("--script-asset-dir <dir>", "specify ScriptAsset directory", commanderArgsCoordinater)
 	.option("--text-asset-dir <dir>", "specify TextAsset directory", commanderArgsCoordinater)
 	.option("--text-asset-extension <extension>", "specify TextAsset extension", commanderArgsCoordinater)
-	.action((target: string, opts: any = {}) => {
-		var logger = new ConsoleLogger({ quiet: opts.quiet });
-		var assetScanDirectoryTable = {
-			audio: opts.audioAssetDir,
-			image: opts.imageAssetDir,
-			script: opts.scriptAssetDir,
-			text: opts.textAssetDir
-		};
-		var assetExtension = {
-			text: opts.textAssetExtension
-		};
-		promiseScanAsset({
-			target: target,
-			cwd: opts.cwd,
-			logger: logger,
-			resolveAssetIdsFromPath: opts.usePathAssetId,
-			forceUpdateAssetIds: opts.updateAssetId,
-			includeExtensionToAssetId: opts.usePathAssetId || opts.includeExtensionToAssetId,
-			assetScanDirectoryTable: assetScanDirectoryTable,
-			assetExtension: assetExtension
-		})
-			.catch((err: any) => {
-				logger.error(err);
-				process.exit(1);
-			});
+	.action((target: string, opts: CliConfigScanAsset = {}) => {
+		CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashicConfig.json"), (configuration) => {
+			const conf = configuration.commandOptions.scan ? (configuration.commandOptions.scan.asset || {}) : {};
+			var logger = new ConsoleLogger({ quiet: opts.quiet || conf.quiet });
+			var assetScanDirectoryTable = {
+				audio: opts.audioAssetDir || conf.audioAssetDir,
+				image: opts.imageAssetDir || conf.imageAssetDir,
+				script: opts.scriptAssetDir || conf.scriptAssetDir,
+				text: opts.textAssetDir || conf.textAssetDir
+			};
+			var assetExtension = {
+				text: opts.textAssetExtension || conf.textAssetExtension
+			};
+			promiseScanAsset({
+				target: target,
+				cwd: opts.cwd || conf.cwd,
+				logger: logger,
+				resolveAssetIdsFromPath: opts.usePathAssetId || conf.usePathAssetId,
+				forceUpdateAssetIds: opts.updateAssetId || conf.updateAssetId,
+				includeExtensionToAssetId: opts.usePathAssetId || opts.includeExtensionToAssetId || conf.includeExtensionToAssetId,
+				assetScanDirectoryTable: assetScanDirectoryTable,
+				assetExtension: assetExtension
+			})
+				.catch((err: any) => {
+					logger.error(err);
+					process.exit(1);
+				});
+		});
 	})
 	.on("--help", () => {
 		console.log("  Target:");
@@ -70,7 +73,7 @@ commander
 	.option("-e, --from-entry-point", "Scan from the entrypoint instead of `npm ls`")
 	.option("-q, --quiet", "Suppress output")
 	.option("--no-omit-packagejson", "Add package.json of each module to the globalScripts property (to support older Akashic Engine)")
-	.action((opts: any = {}) => {
+	.action((opts: CliConfigScanGlobalScripts = {}) => {
 		var logger = new ConsoleLogger({ quiet: opts.quiet });
 		promiseScanNodeModules({ cwd: opts.cwd, logger: logger, fromEntryPoint: opts.fromEntryPoint, noOmitPackagejson: !opts.omitPackagejson })
 			.catch((err: any) => {
