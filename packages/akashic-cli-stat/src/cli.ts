@@ -1,18 +1,10 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as commander from "commander";
-import { Logger, ConsoleLogger, ConfigurationFile } from "@akashic/akashic-cli-commons";
+import { Logger, ConsoleLogger, ConfigurationFile, CliConfigurationFile, CliConfigStat } from "@akashic/akashic-cli-commons";
 import * as stat from "./stat";
 
-interface CommandParameterObject {
-	args?: string[];
-	cwd?: string;
-	quiet?: boolean;
-	limit?: string;
-	raw?: boolean;
-}
-
-function statSize(logger: Logger, param: CommandParameterObject): void {
+function statSize(logger: Logger, param: CliConfigStat): void {
 	const basepath = param.cwd || process.cwd();
 	ConfigurationFile.read(path.join(basepath, "game.json"), logger)
 		.then(game =>
@@ -43,7 +35,7 @@ commander
 	.option("-l, --limit <limit>", "Limit size")
 	.option("--raw", "Raw mode. Result will not contain logger prefix.");
 
-function cli(param: CommandParameterObject): void {
+function cli(param: CliConfigStat): void {
 	const logger = new ConsoleLogger({ quiet: param.quiet });
 	const target = param.args.length > 0 ? param.args[0] : "(empty)";
 	switch (target) {
@@ -58,5 +50,14 @@ function cli(param: CommandParameterObject): void {
 
 export function run(argv: string[]): void {
 	commander.parse(argv);
-	cli(commander);
+	CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashicConfig.json"), (configuration) => {
+		const conf = configuration.commandOptions.stat || {};
+		cli({
+			args: commander.args || conf.args,
+			cwd: commander.cwd || conf.cwd,
+			quiet: commander.quiet || conf.quiet,
+			limit: commander.limit || conf.limit,
+			raw: commander.raw || conf.raw
+		});
+	});
 }
