@@ -76,6 +76,29 @@ describe("exportAtsumaru", function () {
 				})
 				.then(done, done.fail);
 		});
+		// TODO: akashic-runtime-version-tableにv3系も登録されるようになったらこのテストを有効にする
+		xit("add information about environment to game.json (v3)", function (done) {
+			const targetDirPath = path.join(__dirname, "fixture", "sample_game_v3");
+			const outputDirPath = path.join(targetDirPath, "output");
+			Promise.resolve()
+				.then(function () {
+					cliParam.cwd = targetDirPath;
+					return atsumaru.promiseExportAtsumaru(cliParam);
+				})
+				.then(function (dest) {
+					expect(dest).toBe(outputDirPath);
+					const gameJson = require(path.join(outputDirPath, "game.json"));
+					expect(gameJson.environment.external.send).toBe("0");
+					expect(gameJson.environment["akashic-runtime"]["version"]).toMatch(/^~3\.\d+\.\d+.*$/);
+					expect(gameJson.environment["akashic-runtime"]["flavor"]).toBe("-canvas");
+					expect(gameJson.environment["niconico"]["supportedModes"].length).toBe(1);
+					expect(gameJson.environment["niconico"]["supportedModes"]).toContain("single");
+				})
+				.then(function() {
+					fsx.removeSync(outputDirPath);
+				})
+				.then(done, done.fail);
+		});
 		it("does not add akashic-runtime-information about environment to game.json, if it is already written", function (done) {
 			const targetDirPath = path.join(__dirname, "fixture", "sample_game_with_akashic_runtime");
 			const outputDirPath = path.join(targetDirPath, "output");

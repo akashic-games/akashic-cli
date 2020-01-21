@@ -1,5 +1,5 @@
 var path = require("path");
-["v1", "v2"].forEach(function(version) {
+["v1", "v2", "v3"].forEach(function(version) {
 	console.log(version + ": start to check akashic-library-version");
 	var originalPackageJson = require(path.join(__dirname, "..", "templates", "template-export-html-" + version, "package.json"));
 	var versions = {};
