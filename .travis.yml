@@ -1,8 +1,8 @@
 language: node_js
 
 node_js:
-  - 8
   - 10
+  - 12
 
 install: travis_wait 20 npm install # TODO: 一時的にタイムアウトを伸ばす
 
