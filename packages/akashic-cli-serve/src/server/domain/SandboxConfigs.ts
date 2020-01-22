@@ -7,30 +7,44 @@ import { BadRequestError } from "../common/ApiError";
 const configs: { [key: string]: SandboxConfig } = {};
 
 /**
- * sandbox.config.jsを読み込み内容を返す。
- * 読み込んだ内容はコンテンツIDで紐付け保持する。
- * 初回読み込み後はファイル監視を行い、監視イベントにて保持内容を更新する。
+ * コンテンツの sandbox.config.js  ファイルの読み込み/監視を登録。
  *
  * @param contentId コンテンツID
- * @param targetDir 対象ディレクトリ
+ * @param targetDir sandbox.config.jsが存在するディレクトリパス
  */
-export function loadSandboxConfigJs(contentId: string, targetDir?: string): SandboxConfig {
-	if (!configs[contentId] && targetDir) {
-		const configPath = path.resolve(targetDir, "sandbox.config.js");
-		configs[contentId] = dynamicRequire<SandboxConfig>(configPath, true) || {};
-		validateConfig(configs[contentId]);
+export function register(contentId: string, targetDir: string): Promise<void> {
+	const configPath = path.resolve(targetDir, "sandbox.config.js");
+	return watchRequire(configPath, config => configs[contentId] = config);
+}
+
+/**
+ * コンテンツIDに紐づく SandboxConfig の取得
+ *
+ * @param contentId コンテンツID
+ */
+export function get(contentId: string): SandboxConfig {
+	return configs[contentId];
+}
+
+function watchRequire(configPath: string, callback: (content: SandboxConfig) => void): Promise<void> {
+	return new Promise(() => {
+		let config = {};
+		const eventListener = async (event: string, path: string) => {
+			const c = await new Promise((resolve) => {
+				if (event === "add" || event === "change") {
+					config = dynamicRequire<SandboxConfig>(path, true);
+					validateConfig(config);
+				} else if (event === "unlink") {
+					config = {};
+				}
+				resolve(config);
+			});
+			callback(c);
+		};
 
 		const watcher = chokidar.watch(configPath, { persistent: true });
-		watcher.on("all", (event, path) => {
-			if ((event === "add" && !Object.keys(configs[contentId]).length) || event === "change") {
-				configs[contentId] = dynamicRequire<SandboxConfig>(path, true);
-				validateConfig(configs[contentId]);
-			} else if (event === "unlink") {
-				configs[contentId] = {};
-			}
-		});
-	}
-	return configs[contentId];
+		watcher.on("all", eventListener);
+	});
 }
 
 function validateConfig(config: SandboxConfig): void {
