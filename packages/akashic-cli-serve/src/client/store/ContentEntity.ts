@@ -2,6 +2,7 @@ import { action, observable } from "mobx";
 import { SandboxConfig } from "../../common/types/SandboxConfig";
 import { ContentDesc } from "../../common/types/ContentDesc";
 import { ClientContentLocator } from "../common/ClientContentLocator";
+import * as ApiClient from "../api/ApiClient";
 
 export class ContentEntity {
 	readonly locator: ClientContentLocator;
@@ -21,5 +22,10 @@ export class ContentEntity {
 	@action
 	setSandboxConfig(config: SandboxConfig): void {
 		this.sandboxConfig = config;
+	}
+
+	async updateSandboxConfig(): Promise<void> {
+		const res = await ApiClient.getContent(this.locator.contentId);
+		this.setSandboxConfig(res.data.sandboxConfig || {});
 	}
 }

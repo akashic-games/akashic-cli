@@ -33,13 +33,6 @@ export class ContentStore {
 		return content;
 	}
 
-	async updateSandboxConfig(locData: ContentLocatorData): Promise<void> {
-		const loc = ClientContentLocator.instantiate(locData);
-		const res = await ApiClient.getContent(loc.contentId);
-		const content = this.contents.get(loc.asAbsoluteUrl());
-		content.setSandboxConfig(res.data.sandboxConfig || {});
-	}
-
 	private async _initialize(): Promise<void> {
 		const res = await ApiClient.getContents();
 		res.data.forEach(desc => {
