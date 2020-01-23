@@ -14,8 +14,10 @@ import { CliConfigUpdate } from "./CliConfigUpdate";
  */
 export interface CliConfiguration {
 	commandOptions: {
-		exportHtml?: Partial<CliConfigExportHtml>;
-		exportZip?: Partial<CliConfigExportZip>;
+		export?: {
+			html?: Partial<CliConfigExportHtml>;
+			zip?: Partial<CliConfigExportZip>;
+		}
 		init?: Partial<CliConfigInit>;
 		install?: Partial<CliConfigInstall>;
 		modify?: Partial<CliConfigModify>;
