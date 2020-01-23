@@ -63,7 +63,8 @@ export function run(argv: string[]): void {
 	commander.parse(argvCopy);
 
 	CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashicConfig.json"), (configuration) => {
-		const conf = configuration.commandOptions.exportZip || {};
+		const conf = configuration.commandOptions.export ? (configuration.commandOptions.export.zip || {}) : {};
+
 		cli({
 			cwd: commander["cwd"] || conf.cwd,
 			quiet: commander["quiet"] || conf.quiet,
