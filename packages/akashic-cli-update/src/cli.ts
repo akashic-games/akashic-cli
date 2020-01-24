@@ -28,9 +28,9 @@ export function run(argv: string[]): void {
 	CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashicConfig.json"), (configuration) => {
 		const conf = configuration.commandOptions.update || {};
 		cli({
-			cwd: commander.cwd || conf.cwd,
-			quiet: commander.quiet || conf.quiet,
-			args: commander.args || conf.args
+			cwd: commander.cwd ?? conf.cwd,
+			quiet: commander.quiet ?? conf.quiet,
+			args: commander.args ?? conf.args
 		});
 	});
 }
