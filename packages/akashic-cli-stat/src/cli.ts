@@ -53,11 +53,11 @@ export function run(argv: string[]): void {
 	CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashicConfig.json"), (configuration) => {
 		const conf = configuration.commandOptions.stat || {};
 		cli({
-			args: commander.args || conf.args,
-			cwd: commander.cwd || conf.cwd,
-			quiet: commander.quiet || conf.quiet,
-			limit: commander.limit || conf.limit,
-			raw: commander.raw || conf.raw
+			args: commander.args ?? conf.args,
+			cwd: commander.cwd ?? conf.cwd,
+			quiet: commander.quiet ?? conf.quiet,
+			limit: commander.limit ?? conf.limit,
+			raw: commander.raw ?? conf.raw
 		});
 	});
 }

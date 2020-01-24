@@ -44,12 +44,12 @@ export function run(argv: string[]): void {
 	CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashicConfig.json"), (configuration) => {
 		const conf = configuration.commandOptions.init || {};
 		cli({
-			cwd: commander.cwd,
-			quiet: commander.quiet,
-			type: commander.type,
-			list: commander.list,
-			yes: commander.yes,
-			force: commander.force
+			cwd: commander.cwd ?? conf.cwd,
+			quiet: commander.quiet ?? conf.quiet,
+			type: commander.type ?? conf.type,
+			list: commander.list ?? conf.list,
+			yes: commander.yes ?? conf.yes,
+			force: commander.force ?? conf.force
 		});
 	});
 }

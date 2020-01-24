@@ -66,16 +66,16 @@ export function run(argv: string[]): void {
 		const conf = configuration.commandOptions.export ? (configuration.commandOptions.export.zip || {}) : {};
 
 		cli({
-			cwd: commander["cwd"] || conf.cwd,
-			quiet: commander["quiet"] || conf.quiet,
-			output: commander["output"] || conf.output,
-			force: commander["force"] || conf.force,
-			strip: commander["strip"] || conf.strip,
-			minify: commander["minify"] || conf.minify,
-			hashFilename: commander["hashFilename"] || conf.hashFilename,
-			bundle: commander["bundle"] || conf.bundle,
-			babel: commander["es5Downpile"] || conf.babel,
-			omitEmptyJs: commander["omitEmptyJs"] || conf.omitEmptyJs
+			cwd: commander["cwd"] ?? conf.cwd,
+			quiet: commander["quiet"] ?? conf.quiet,
+			output: commander["output"] ?? conf.output,
+			force: commander["force"] ?? conf.force,
+			strip: commander["strip"] ?? conf.strip,
+			minify: commander["minify"] ?? conf.minify,
+			hashFilename: commander["hashFilename"] ?? conf.hashFilename,
+			bundle: commander["bundle"] ?? conf.bundle,
+			babel: commander["es5Downpile"] ?? conf.babel,
+			omitEmptyJs: commander["omitEmptyJs"] ?? conf.omitEmptyJs
 		});
 	});
 }

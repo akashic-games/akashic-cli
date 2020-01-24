@@ -31,19 +31,6 @@ function convertToStrings(params: any[]): string[] {
 	});
 }
 
-export interface CliConfigServe {
-	hostname: string;
-	port: number;
-	autoStart: boolean;
-	verbose: boolean;
-	targetService: ServiceType;
-	debugPlaylog: string;
-	debugUntrusted: boolean;
-	debugProxyAudio: boolean;
-	allowExternal: boolean;
-	targetDirs: string[];
-}
-
 async function cli(cliConfigParam: CliConfigServe) {
 	if (cliConfigParam.port && isNaN(cliConfigParam.port)) {
 		console.error("Invalid --port option: " + cliConfigParam.port);
@@ -216,17 +203,17 @@ export async function run(argv: any): Promise<void> {
 	CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashicConfig.json"), async (configuration) => {
 		const conf = configuration.commandOptions.serve || {};
 		const cliConfigParam: CliConfigServe = {
-			port: commander.port || conf.port,
-			hostname: commander.hostname || conf.hostname,
-			verbose: commander.verbose || conf.verbose,
-			autoStart: commander.autoStart || conf.autoStart,
-			targetService: commander.targetService || conf.targetService,
-			debugPlaylog: commander.debugPlaylog || conf.debugPlaylog,
-			debugUntrusted: commander.debugUntrusted || conf.debugUntrusted,
-			debugProxyAudio: commander.proxyAudio || conf.debugProxyAudio,
-			allowExternal: commander.allowExternal || conf.allowExternal,
-			targetDirs: commander.args.length > 0 ? commander.args : (conf.targetDirs || [process.cwd()])
+			port: commander.port ?? conf.port,
+			hostname: commander.hostname ?? conf.hostname,
+			verbose: commander.verbose ?? conf.verbose,
+			autoStart: commander.autoStart ?? conf.autoStart,
+			targetService: commander.targetService ?? conf.targetService,
+			debugPlaylog: commander.debugPlaylog ?? conf.debugPlaylog,
+			debugUntrusted: commander.debugUntrusted ?? conf.debugUntrusted,
+			debugProxyAudio: commander.proxyAudio ?? conf.debugProxyAudio,
+			allowExternal: commander.allowExternal ?? conf.allowExternal,
+			targetDirs: commander.args.length > 0 ? commander.args : (conf.targetDirs ?? [process.cwd()])
 		};
-		await cli(cliConfigParam);		
+		await cli(cliConfigParam);
 	});
 }

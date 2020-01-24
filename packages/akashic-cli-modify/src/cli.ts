@@ -24,8 +24,8 @@ function defineCommand(commandName: string): void {
 			CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashicConfig.json"), (configuration) => {
 				const conf = configuration.commandOptions.modify || {};
 				cliBasicParameter(commandName, value, {
-					cwd: opts.cwd || conf.cwd,
-					quiet: opts.quiet || conf.quiet
+					cwd: opts.cwd ?? conf.cwd,
+					quiet: opts.quiet ?? conf.quiet
 				});
 			});
 		});

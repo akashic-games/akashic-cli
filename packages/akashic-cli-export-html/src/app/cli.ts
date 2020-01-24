@@ -88,19 +88,19 @@ export function run(argv: string[]): void {
 	CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashicConfig.json"), (configuration) => {
 		const conf = configuration.commandOptions.export ? (configuration.commandOptions.export.html || {}) : {};
 		cli({
-			cwd: commander["cwd"] || conf.cwd,
-			force: commander["force"] || conf.force,
-			quiet: commander["quiet"] || conf.quiet,
-			output: commander["output"] || conf.source,
-			source: commander["source"] || conf.source,
-			strip: commander["strip"] || conf.strip,
-			minify: commander["minify"] || conf.minify,
-			bundle: commander["bundle"] || conf.bundle,
-			magnify: commander["magnify"] || conf.magnify,
-			hashFilename: commander["hashFilename"] || conf.hashFilename,
-			injects: commander["inject"] || conf.injects,
-			atsumaru: commander["atsumaru"] || conf.atsumaru,
-			autoSendEvents: commander["autoSendEvents"] || conf.autoSendEvents
+			cwd: commander["cwd"] ?? conf.cwd,
+			force: commander["force"] ?? conf.force,
+			quiet: commander["quiet"] ?? conf.quiet,
+			output: commander["output"] ?? conf.source,
+			source: commander["source"] ?? conf.source,
+			strip: commander["strip"] ?? conf.strip,
+			minify: commander["minify"] ?? conf.minify,
+			bundle: commander["bundle"] ?? conf.bundle,
+			magnify: commander["magnify"] ?? conf.magnify,
+			hashFilename: commander["hashFilename"] ?? conf.hashFilename,
+			injects: commander["inject"] ?? conf.injects,
+			atsumaru: commander["atsumaru"] ?? conf.atsumaru,
+			autoSendEvents: commander["autoSendEvents"] ?? conf.autoSendEvents
 		});
 	});
 }

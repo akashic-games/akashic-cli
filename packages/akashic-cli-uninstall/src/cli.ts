@@ -33,11 +33,11 @@ export function run(argv: string[]): void {
 	CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashicConfig.json"), (configuration) => {
 		const conf = configuration.commandOptions.uninstall || {};
 		cli({
-			args: commander.args || conf.args,
-			cwd: commander.cwd || conf.cwd,
-			unlink: commander.unlink || conf.unlink,
-			quiet: commander.quiet || conf.quiet,
-			plugin: commander.plugin || conf.plugin
+			args: commander.args ?? conf.args,
+			cwd: commander.cwd ?? conf.cwd,
+			unlink: commander.unlink ?? conf.unlink,
+			quiet: commander.quiet ?? conf.quiet,
+			plugin: commander.plugin ?? conf.plugin
 		});
 	});
 }

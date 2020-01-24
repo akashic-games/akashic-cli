@@ -36,12 +36,12 @@ export function run(argv: string[]): void {
 	CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashicConfig.json"), (configuration) => {
 		const conf = configuration.commandOptions.install || {};
 		cli({
-			args: commander["args"] || conf.args,
-			cwd: commander["cwd"] || conf.cwd,
-			link: commander["link"] || conf.link,
-			quiet: commander["quiet"] || conf.quiet,
-			plugin: commander["plugin"] || conf.plugin,
-			omitPackagejson: commander["omitPackagejson"] || conf.omitPackagejson
+			args: commander["args"] ?? conf.args,
+			cwd: commander["cwd"] ?? conf.cwd,
+			link: commander["link"] ?? conf.link,
+			quiet: commander["quiet"] ?? conf.quiet,
+			plugin: commander["plugin"] ?? conf.plugin,
+			omitPackagejson: commander["omitPackagejson"] ?? conf.omitPackagejson
 		});
 	});
 }

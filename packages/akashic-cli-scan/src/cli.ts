@@ -41,11 +41,11 @@ commander
 			};
 			promiseScanAsset({
 				target: target,
-				cwd: opts.cwd || conf.cwd,
+				cwd: opts.cwd ?? conf.cwd,
 				logger: logger,
-				resolveAssetIdsFromPath: opts.usePathAssetId || conf.usePathAssetId,
-				forceUpdateAssetIds: opts.updateAssetId || conf.updateAssetId,
-				includeExtensionToAssetId: opts.usePathAssetId || opts.includeExtensionToAssetId || conf.includeExtensionToAssetId,
+				resolveAssetIdsFromPath: opts.usePathAssetId ?? conf.usePathAssetId,
+				forceUpdateAssetIds: opts.updateAssetId ?? conf.updateAssetId,
+				includeExtensionToAssetId: opts.usePathAssetId || (opts.includeExtensionToAssetId ?? conf.includeExtensionToAssetId),
 				assetScanDirectoryTable: assetScanDirectoryTable,
 				assetExtension: assetExtension
 			})
