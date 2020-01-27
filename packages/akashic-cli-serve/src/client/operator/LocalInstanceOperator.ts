@@ -25,4 +25,14 @@ export class LocalInstanceOperator {
 		this.store.currentLocalInstance.setExecutionMode("passive");
 		this.store.currentLocalInstance.resume();
 	}
+
+	volumeChangeTo = (vol: number): void => {
+		this.store.toolBarUiStore.volumeSeekTo(vol);
+		this.store.changeVolume(vol / 100);
+	}
+
+	volumeSeekTo = (vol: number): void => {
+		this.store.toolBarUiStore.endVolumeSeek(vol);
+		this.store.changeVolume(vol / 100);
+	}
 }

@@ -9,6 +9,7 @@ import { PlayControlPropsData } from "../molecule/PlayControl";
 import { InstanceControlPropsData } from "../molecule/InstanceControl";
 import { PlayerControlPropsData } from "../molecule/PlayerControl";
 import { DisplayOptionControlPropsData } from "../molecule/DisplayOptionControl";
+import { ContentVolumeControlPropsData } from "../molecule/ContentVolumeControl";
 import { ToolBar } from "../organism/ToolBar";
 
 export interface ToolBarContainerProps {
@@ -28,6 +29,7 @@ export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}>
 			makeInstanceControlProps={this._makeInstanceControlProps}
 			makePlayerControlProps={this._makePlayerControlProps}
 			makeDisplayOptionControlProps={this._makeDisplayOptionControlProps}
+			makeContentVolumeControlProps={this._makeContentVolumeControlProps}
 			showsAppearance={toolBarUiStore.showsAppearanceMenu}
 			showsDevtools={toolBarUiStore.showsDevtools}
 			showsInstanceControl={(localInstance.executionMode === "replay") || toolBarUiStore.showsDevtools}
@@ -86,6 +88,16 @@ export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}>
 			onClickDisplayOptionPopover: operator.ui.setShowDisplayOptionPopover,
 			onChangeShowBackgroundImage: operator.ui.setShowBackgroundImage,
 			onChangeShowGrid: operator.ui.setShowGrid
+		};
+	}
+
+	private _makeContentVolumeControlProps = (): ContentVolumeControlPropsData => {
+		const { toolBarUiStore, operator } = this.props;
+		return {
+			volume: toolBarUiStore.volume,
+			isSeeking: toolBarUiStore.isSeekingVolume,
+			changeVolume: operator.localInstance.volumeChangeTo,
+			dicideVolume: operator.localInstance.volumeSeekTo
 		};
 	}
 }

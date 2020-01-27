@@ -131,6 +131,11 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 		return this._serveGameContent;
 	}
 
+	@computed
+	get volume(): number {
+		return this.gameContent.getVolume();
+	}
+
 	async start(): Promise<void> {
 		if (this._resizeGameView) {
 			const url = this.content.locator.asAbsoluteUrl();

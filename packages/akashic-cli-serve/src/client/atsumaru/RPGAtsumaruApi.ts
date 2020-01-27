@@ -5,8 +5,10 @@ import { SelfInformation, dummySelfInfomation } from "./SelfInformation";
 import { TweetSettings } from "./TweetSettings";
 import { UserIdName, dummyUserIdName } from "./UserIdName";
 import { UserInformation, dummyUserInformation } from "./UserInformation";
+import { ServeGameContent } from "../akashic/ServeGameContent";
+import { Trigger } from "@akashic/trigger";
 
-export interface RPGAtsumaruApi {
+export interface RPGAtsumaruApiLike {
 	comment: {
 		verbose: boolean;
 		changeScene: (sceneName: string) => void;
@@ -23,7 +25,7 @@ export interface RPGAtsumaruApi {
 	volume: {
 		getCurrentValue: () => number;
 		changed: {
-			subscribe: (observer: Observer<any> | ((volume: number) => void)) => Subscription;
+			subscribe: (observer: Observer<number> | ((volume: number) => void)) => Subscription;
 		}
 	};
 	popups: {
@@ -53,16 +55,21 @@ export interface RPGAtsumaruApi {
 	};
 }
 
-export const rpgAtsumaruApiMock: RPGAtsumaruApi = {
-	comment: {
+export interface RPGAtsumaruApiParameter {
+	targetContent: ServeGameContent;
+}
+
+export class RPGAtsumaruApi implements RPGAtsumaruApiLike {
+	comment = {
 		verbose: false,
 		changeScene: (_sceneName: string) => {},
 		resetAndChangeScene: (_sceneName: string) => {},
 		pushContextFactor: (_factor: string) => {},
 		pushMinorContext: () => {},
 		setContext: (_context: string) => {}
-	},
-	storage: {
+	};
+
+	storage = {
 		getItems: () => {
 			// コンパイルを通すためにダミーのセーブデータを用意
 			const items = [{key: "data1", value: "hoge"}, {key: "data2", value: "fuga"}];
@@ -76,27 +83,34 @@ export const rpgAtsumaruApiMock: RPGAtsumaruApi = {
 		removeItem: (_key: string) => {
 			return Promise.resolve();
 		}
-	},
-	volume: {
+	};
+
+	volume = {
 		getCurrentValue: () => {
-			// コンパイルを通すためにダミーの音量を返す
-			return 0;
+			return this.targetContent.agvGameContent.getMasterVolume();
 		},
 		changed: {
-			// TODO: API本実装時に引数に付与したアンダースコアを除去する
-			subscribe: (_observer: Observer<any> | ((volume: number) => void)): Subscription => {
-				// コンパイルを通すためにダミーのSubscriptionを返す
+			subscribe: (observer: Observer<number> | ((volume: number) => void)) => {
+				this.volumeTrigger.add((vol: number) => {
+					if (observer.hasOwnProperty("next")) {
+						(observer as Observer<number>).next(vol);
+					} else {
+						(observer as Function)(vol);
+					}
+				});
 				return new Subscription();
 			}
 		}
-	},
-	popups: {
+	};
+
+	popups = {
 		// TODO: API本実装時に引数に付与したアンダースコアを除去する
 		openLink: (_url: string, _comment?: string) => {
 			return Promise.resolve();
 		}
-	},
-	experimental: {
+	};
+
+	experimental = {
 		// コンパイルを通すためにダミーのデータを返す
 		query: {
 			"param1": "hoge",
@@ -186,5 +200,13 @@ export const rpgAtsumaruApiMock: RPGAtsumaruApi = {
 			// TODO: API本実装時に引数に付与したアンダースコアを除去する
 			setTweetMessage: (_tweetSettings: TweetSettings | null) => {}
 		}
+	};
+
+	volumeTrigger: Trigger<number>;
+	private targetContent: ServeGameContent;
+
+	constructor(params: RPGAtsumaruApiParameter) {
+		this.targetContent = params.targetContent;
+		this.volumeTrigger = new Trigger<number>();
 	}
-};
+}
