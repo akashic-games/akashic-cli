@@ -12,9 +12,10 @@ const configs: { [key: string]: SandboxConfig } = {};
  * @param contentId コンテンツID
  * @param targetDir sandbox.config.jsが存在するディレクトリパス
  */
-export function register(contentId: string, targetDir: string): Promise<void> {
+export function register(contentId: string, targetDir: string): void {
 	const configPath = path.resolve(targetDir, "sandbox.config.js");
-	return watchRequire(configPath, config => configs[contentId] = config);
+	if (configs[contentId]) return;
+	configs[contentId] = watchRequire(configPath, config => configs[contentId] = config);
 }
 
 /**
@@ -26,25 +27,24 @@ export function get(contentId: string): SandboxConfig {
 	return configs[contentId];
 }
 
-function watchRequire(configPath: string, callback: (content: SandboxConfig) => void): Promise<void> {
-	return new Promise(() => {
-		let config = {};
-		const eventListener = async (event: string, path: string) => {
-			const c = await new Promise((resolve) => {
-				if (event === "add" || event === "change") {
-					config = dynamicRequire<SandboxConfig>(path, true);
-					validateConfig(config);
-				} else if (event === "unlink") {
-					config = {};
-				}
-				resolve(config);
-			});
-			callback(c);
-		};
+function watchRequire(configPath: string, callback: (content: SandboxConfig) => void): SandboxConfig {
+	let config = dynamicRequire<SandboxConfig>(configPath, true);
 
-		const watcher = chokidar.watch(configPath, { persistent: true });
-		watcher.on("all", eventListener);
-	});
+	const eventListener = (event: string, path: string) => {
+		if ((event === "add" && !Object.keys(config).length) || event === "change") {
+			config = dynamicRequire<SandboxConfig>(path, true);
+			validateConfig(config);
+		} else if (event === "unlink") {
+			config = {};
+		} else {
+			return;
+		}
+		callback(config);
+	};
+	const watcher = chokidar.watch(configPath, { persistent: true });
+	watcher.on("all", eventListener);
+
+	return config;
 }
 
 function validateConfig(config: SandboxConfig): void {
@@ -55,10 +55,10 @@ function validateConfig(config: SandboxConfig): void {
 			throw new BadRequestError({ errorMessage: "Invalid externalAssets, Not Array" });
 		}
 
-		if ( externalAssets.length > 0) {
+		if (externalAssets.length > 0) {
 			const found = externalAssets.find((url: any) => typeof url !== "string" && !(url instanceof RegExp));
 			if (found) {
-				throw new BadRequestError({errorMessage: `Invalid externalAssets, The value is neither a string or regexp. value:${ found }` });
+				throw new BadRequestError({ errorMessage: `Invalid externalAssets, The value is neither a string or regexp. value:${ found }` });
 			}
 		}
 	}
