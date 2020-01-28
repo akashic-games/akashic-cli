@@ -21,7 +21,7 @@ export class ToolBarUiStore {
 		this.showsBackgroundImage = storage.data.showsBackgroundImage;
 		this.showsGrid = storage.data.showsGrid;
 		this.isSeekingVolume = false;
-		this.volume = 100; // TODO: 音量の初期値をコンテンツから取得できるようにする
+		this.volume = 0;
 	}
 
 	@action

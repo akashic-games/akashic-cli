@@ -209,4 +209,8 @@ export class RPGAtsumaruApi implements RPGAtsumaruApiLike {
 		this.targetContent = params.targetContent;
 		this.volumeTrigger = new Trigger<number>();
 	}
+
+	close(): void {
+		this.volumeTrigger.destroy();
+	}
 }
