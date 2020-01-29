@@ -1,6 +1,7 @@
 import * as React from "react";
 import { observer } from "mobx-react";
 import { SandboxConfig } from "../../../common/types/SandboxConfig";
+import { ServiceType } from "../../../common/types/ServiceType";
 import { PlayEntity } from "../../store/PlayEntity";
 import { DevtoolUiStore } from "../../store/DevtoolUiStore";
 import { Operator } from "../../operator/Operator";
@@ -11,12 +12,13 @@ export interface DevtoolContainerProps {
 	operator: Operator;
 	devtoolUiStore: DevtoolUiStore;
 	sandboxConfig: SandboxConfig;
+	targetService: ServiceType;
 }
 
 @observer
 export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}> {
 	render(): React.ReactNode {
-		const { play, operator, devtoolUiStore, sandboxConfig } = this.props;
+		const { play, operator, devtoolUiStore, sandboxConfig, targetService } = this.props;
 		return <Devtool
 			height={devtoolUiStore.height}
 			minHeight={200}
@@ -66,6 +68,13 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 				onClickEntityItem: operator.devtool.selectEntityByEDumpItem,
 				onMouseOverEntityItem: operator.devtool.setHighlightedEntity,
 				onMouseLeaveEntityItem: operator.devtool.clearHighlightedEntity
+			}}
+			atsumaruDevtoolProps={{
+				disabled: targetService !== ServiceType.Atsumaru,
+				volume: devtoolUiStore.volume,
+				isSeekingVolume: devtoolUiStore.isSeekingVolume,
+				changeVolume: operator.devtool.volumeChangeTo,
+				dicideVolume: operator.devtool.volumeSeekTo
 			}}
 		/>;
 	}

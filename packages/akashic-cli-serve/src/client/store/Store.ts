@@ -75,7 +75,7 @@ export class Store {
 		this.devtoolUiStore.setEntityTrees([]);
 		if (this.currentLocalInstance) {
 			// 本来はここでやる処理べきではないが、このタイミングでないとコンテンツの実際の音量が取得できないためここで行う
-			this.toolBarUiStore.volume = Math.floor(100 * this.currentLocalInstance.volume);
+			this.devtoolUiStore.volume = Math.floor(100 * this.currentLocalInstance.volume);
 			if (this.targetService === ServiceType.Atsumaru) {
 				this._atsumaruApi = new RPGAtsumaruApi({
 					targetContent: this.currentLocalInstance.gameContent
@@ -92,7 +92,6 @@ export class Store {
 
 	@action
 	changeVolume(vol: number): void {
-		this.currentLocalInstance.gameContent.agvGameContent.setMasterVolume(vol);
 		if (this._atsumaruApi) {
 			this._atsumaruApi.volumeTrigger.fire(vol);
 		}

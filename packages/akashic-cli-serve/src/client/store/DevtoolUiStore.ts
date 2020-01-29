@@ -15,6 +15,8 @@ export class DevtoolUiStore {
 	@observable selectedEntityId: number | null;
 	@observable entityTrees: EDumpItem[];
 	@observable entityTreeStateTable: ObservableMap<number, boolean>;
+	@observable isSeekingVolume: boolean;
+	@observable volume: number;
 
 	constructor() {
 		this.height = storage.data.devtoolsHeight;
@@ -27,6 +29,8 @@ export class DevtoolUiStore {
 		this.selectedEntityId = null;
 		this.entityTrees = [];
 		this.entityTreeStateTable = observable.map<number, boolean>();
+		this.isSeekingVolume = false;
+		this.volume = 0;
 	}
 
 	@action
@@ -83,5 +87,17 @@ export class DevtoolUiStore {
 	@action
 	setSelectedEntityId = (eid: number | null): void => {
 		this.selectedEntityId = eid;
+	}
+
+	@action
+	volumeSeekTo(volume: number): void {
+		this.volume = volume;
+		this.isSeekingVolume = true;
+	}
+
+	@action
+	endVolumeSeek(volume: number): void {
+		this.volume = volume;
+		this.isSeekingVolume = false;
 	}
 }

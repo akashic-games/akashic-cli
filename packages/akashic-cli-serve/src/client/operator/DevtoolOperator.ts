@@ -61,4 +61,14 @@ export class DevtoolOperator {
 		// (console からグローバルに格納できる Chrome などでは不要なので暫定)
 		(window as any).__testbed.$0 = e;
 	}
+
+	volumeChangeTo = (vol: number): void => {
+		this.store.devtoolUiStore.volumeSeekTo(vol);
+		this.store.changeVolume(vol / 100);
+	}
+
+	volumeSeekTo = (vol: number): void => {
+		this.store.devtoolUiStore.endVolumeSeek(vol);
+		this.store.changeVolume(vol / 100);
+	}
 }

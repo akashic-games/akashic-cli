@@ -1,4 +1,4 @@
-import { Observer, Subscription } from "rxjs";
+import { Observer } from "rxjs";
 import { ScoreboardData } from "./ScoreboardData";
 import { ScreenshotModalResults } from "./ScreenshotModalResults";
 import { SelfInformation, dummySelfInfomation } from "./SelfInformation";
@@ -7,6 +7,12 @@ import { UserIdName, dummyUserIdName } from "./UserIdName";
 import { UserInformation, dummyUserInformation } from "./UserInformation";
 import { ServeGameContent } from "../akashic/ServeGameContent";
 import { Trigger } from "@akashic/trigger";
+
+interface SubscriptionMock {
+	unsubscribe(): void;
+    add(teardown: any): any;
+    remove(subscription: any): void;
+}
 
 export interface RPGAtsumaruApiLike {
 	comment: {
@@ -25,7 +31,8 @@ export interface RPGAtsumaruApiLike {
 	volume: {
 		getCurrentValue: () => number;
 		changed: {
-			subscribe: (observer: Observer<number> | ((volume: number) => void)) => Subscription;
+			// マスターボリュームの情報はserve側で持っていてコンテンツ側で監視すべきものでないので、Subscriptionのmockを返している
+			subscribe: (observer: Observer<number> | ((volume: number) => void)) => SubscriptionMock;
 		}
 	};
 	popups: {
@@ -98,7 +105,11 @@ export class RPGAtsumaruApi implements RPGAtsumaruApiLike {
 						(observer as Function)(vol);
 					}
 				});
-				return new Subscription();
+				return {
+					unsubscribe: () => {},
+					add: (_teardown: any) => {},
+					remove: (_subscription: any) => {}
+				};
 			}
 		}
 	};

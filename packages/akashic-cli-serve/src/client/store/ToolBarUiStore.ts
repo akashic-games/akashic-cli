@@ -9,8 +9,6 @@ export class ToolBarUiStore {
 	@observable showsDisplayOptionPopover: boolean;
 	@observable showsBackgroundImage: boolean;
 	@observable showsGrid: boolean;
-	@observable isSeekingVolume: boolean;
-	@observable volume: number;
 
 	constructor() {
 		this.currentTimePreview = 0;
@@ -20,8 +18,6 @@ export class ToolBarUiStore {
 		this.showsDisplayOptionPopover = false;
 		this.showsBackgroundImage = storage.data.showsBackgroundImage;
 		this.showsGrid = storage.data.showsGrid;
-		this.isSeekingVolume = false;
-		this.volume = 0;
 	}
 
 	@action
@@ -33,18 +29,6 @@ export class ToolBarUiStore {
 	@action
 	endPreviewSeek(): void {
 		this.isSeeking = false;
-	}
-
-	@action
-	volumeSeekTo(volume: number): void {
-		this.volume = volume;
-		this.isSeekingVolume = true;
-	}
-
-	@action
-	endVolumeSeek(volume: number): void {
-		this.volume = volume;
-		this.isSeekingVolume = false;
 	}
 
 	@action

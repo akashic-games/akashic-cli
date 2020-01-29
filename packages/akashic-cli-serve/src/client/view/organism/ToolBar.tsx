@@ -8,14 +8,12 @@ import { InstanceControl, InstanceControlPropsData } from "../molecule/InstanceC
 import { PlayerControl, PlayerControlPropsData } from "../molecule/PlayerControl";
 import { DisplayOptionControl, DisplayOptionControlPropsData } from "../molecule/DisplayOptionControl";
 import * as styles from "./ToolBar.css";
-import { ContentVolumeControl, ContentVolumeControlPropsData } from "../molecule/ContentVolumeControl";
 
 export interface ToolBarProps {
 	makePlayControlProps: () => PlayControlPropsData;
 	makeInstanceControlProps: () => InstanceControlPropsData;
 	makePlayerControlProps: () => PlayerControlPropsData;
 	makeDisplayOptionControlProps: () => DisplayOptionControlPropsData;
-	makeContentVolumeControlProps: () => ContentVolumeControlPropsData;
 	showsAppearance: boolean;
 	showsDevtools: boolean;
 	showsInstanceControl: boolean;
@@ -48,9 +46,6 @@ export class ToolBar extends React.Component<ToolBarProps, {}> {
 					<i className="material-icons">zoom_in</i>
 				</ToolToggleLabel>
 				*/}
-				<ContentVolumeControl
-					makeProps={props.makeContentVolumeControlProps}
-				/>
 				<ToolLabel>
 					TargetService: <b>{props.targetService}</b>
 				</ToolLabel>
