@@ -10,8 +10,8 @@ import { Trigger } from "@akashic/trigger";
 
 interface SubscriptionMock {
 	unsubscribe(): void;
-    add(teardown: any): any;
-    remove(subscription: any): void;
+	add(teardown: any): any;
+	remove(subscription: any): void;
 }
 
 export interface RPGAtsumaruApiLike {
