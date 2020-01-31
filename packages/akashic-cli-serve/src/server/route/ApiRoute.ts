@@ -5,7 +5,8 @@ import {
 	createHandlerToGetPlays,
 	createHandlerToGetPlay,
 	createHandlerToDeletePlay,
-	createHandlerToPatchPlay
+	createHandlerToPatchPlay,
+	createHandlerToGetPlaylog
 } from "../controller/PlayController";
 import { createHandlerToCreatePlayToken } from "../controller/PlayTokenController";
 import { createHandlerToBroadcast } from "../controller/BroadcastController";
@@ -24,7 +25,6 @@ export interface ApiRouterParameterObject {
 	runnerStore: RunnerStore;
 	amflowManager: SocketIOAMFlowManager;
 	io: socketio.Server;
-	targetDirs: string[];
 }
 
 export const createApiRouter = (params: ApiRouterParameterObject): express.Router => {
@@ -38,8 +38,9 @@ export const createApiRouter = (params: ApiRouterParameterObject): express.Route
 
 	apiRouter.post("/plays/:playId(\\d+)/token", createHandlerToCreatePlayToken(params.amflowManager));
 	apiRouter.post("/plays/:playId(\\d+)/broadcast", createHandlerToBroadcast(params.io));
+	apiRouter.get("/plays/:playId(\\d+)/playlog", createHandlerToGetPlaylog(params.playStore));
 
-	apiRouter.post("/runners", createHandlerToCreateRunner(params.playStore, params.runnerStore, params.targetDirs));
+	apiRouter.post("/runners", createHandlerToCreateRunner(params.playStore, params.runnerStore));
 	apiRouter.delete("/runners/:runnerId", createHandlerToDeleteRunner(params.runnerStore));
 	apiRouter.patch("/runners/:runnerId", createHandlerToPatchRunner(params.runnerStore));
 

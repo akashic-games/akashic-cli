@@ -1,5 +1,70 @@
 # CHANGELOG
 
+## 1.8.35 (2020-01-31)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#233](https://github.com/akashic-games/akashic-cli/pull/233) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- kamakiri_ys ([@kamakiri01](https://github.com/kamakiri01))
+
+## 1.8.34 (2020-01-30)
+
+#### Bug Fix
+* `akashic-cli-serve`
+  * [#223](https://github.com/akashic-games/akashic-cli/pull/223) fix: loading timing of sandboxConfig ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Other Change
+* [#231](https://github.com/akashic-games/akashic-cli/pull/231) Remove node-v8 from travis.yml and add node-v12 ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`
+  * [#230](https://github.com/akashic-games/akashic-cli/pull/230) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#229](https://github.com/akashic-games/akashic-cli/pull/229) Pin dependency npm-check-updates to 4.0.1 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+## 1.8.33 (2020-01-17)
+
+#### Other Change
+* `akashic-cli-serve`
+  * [#225](https://github.com/akashic-games/akashic-cli/pull/225) fix: sandbox.config.js in autoSendEvents is deprecated ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+* `akashic-cli-init`
+  * [#220](https://github.com/akashic-games/akashic-cli/pull/220) akashic-cli-initのテンプレートディレクトリが依存するakashicモジュールを最新に更新するスクリプトの作成 ([@dera-](https://github.com/dera-))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`
+  * [#216](https://github.com/akashic-games/akashic-cli/pull/216) Update all dependencies (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#215](https://github.com/akashic-games/akashic-cli/pull/215) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- [@dera-](https://github.com/dera-)
+
+## 1.8.32 (2020-01-07)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#222](https://github.com/akashic-games/akashic-cli/pull/222) 【akashic-cli-export-html】内部コンポーネントの更新(engineFiles@2.1.35, engineFiles@1.1.13) ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
+
+
+## 1.8.30 (2019-12-18)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#210](https://github.com/akashic-games/akashic-cli/pull/210) Add Playlog dump function ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 1.8.29 (2019-12-17)
 
 #### Enhancement

@@ -14,18 +14,20 @@ import { CliConfigUpdate } from "./CliConfigUpdate";
  */
 export interface CliConfiguration {
 	commandOptions: {
-		exportHtml?: CliConfigExportHtml;
-		exportZip?: CliConfigExportZip;
-		init?: CliConfigInit;
-		install?: CliConfigInstall;
-		modify?: CliConfigModify;
+		export?: {
+			html?: Partial<CliConfigExportHtml>;
+			zip?: Partial<CliConfigExportZip>;
+		}
+		init?: Partial<CliConfigInit>;
+		install?: Partial<CliConfigInstall>;
+		modify?: Partial<CliConfigModify>;
 		scan?: {
-			asset?: CliConfigScanAsset;
-			globalSCripts?: CliConfigScanGlobalScripts;
+			asset?: Partial<CliConfigScanAsset>;
+			globalSCripts?: Partial<CliConfigScanGlobalScripts>;
 		};
-		serve?: CliConfigServe;
-		stat?: CliConfigStat;
-		uninstall?: CliConfigUninstall;
-		update?: CliConfigUpdate;
+		serve?: Partial<CliConfigServe>;
+		stat?: Partial<CliConfigStat>;
+		uninstall?: Partial<CliConfigUninstall>;
+		update?: Partial<CliConfigUpdate>;
 	};
 }

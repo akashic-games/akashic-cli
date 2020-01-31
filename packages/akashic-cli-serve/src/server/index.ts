@@ -131,7 +131,7 @@ async function cli(cliConfigParam: CliConfigServe) {
 	app.use("^\/$", (req, res, next) => res.redirect("/public/"));
 	app.use("/public/", express.static(path.join(__dirname, "..", "..", "www", "public")));
 	app.use("/internal/", express.static(path.join(__dirname, "..", "..", "www", "internal")));
-	app.use("/api/", createApiRouter({ playStore, runnerStore, amflowManager, io, targetDirs}));
+	app.use("/api/", createApiRouter({ playStore, runnerStore, amflowManager, io}));
 	app.use("/contents/", createContentsRouter({ targetDirs }));
 	app.use("/health-check/", createHealthCheckRouter({ playStore }));
 
