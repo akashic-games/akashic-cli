@@ -1,5 +1,5 @@
 import { CliConfigExportHtml } from "./CliConfigExportHtml";
-import { CliConfigExportZip } from "./CliconfigExportZip";
+import { CliConfigExportZip } from "./CliConfigExportZip";
 import { CliConfigInit } from "./CliConfigInit";
 import { CliConfigInstall } from "./CliConfigInstall";
 import { CliConfigModify } from "./CliConfigModify";
