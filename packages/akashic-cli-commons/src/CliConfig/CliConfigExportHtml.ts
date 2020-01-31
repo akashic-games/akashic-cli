@@ -4,7 +4,6 @@ export interface CliConfigExportHtml {
 	source?: string;
 	force?: boolean;
 	quiet?: boolean;
-
 	exclude?: string[];
 	strip?: boolean;
 	hashFilename?: number | boolean;
