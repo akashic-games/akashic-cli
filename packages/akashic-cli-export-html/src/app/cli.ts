@@ -91,7 +91,7 @@ export function run(argv: string[]): void {
 			cwd: commander["cwd"] ?? conf.cwd,
 			force: commander["force"] ?? conf.force,
 			quiet: commander["quiet"] ?? conf.quiet,
-			output: commander["output"] ?? conf.source,
+			output: commander["output"] ?? conf.output,
 			source: commander["source"] ?? conf.source,
 			strip: commander["strip"] ?? conf.strip,
 			minify: commander["minify"] ?? conf.minify,
