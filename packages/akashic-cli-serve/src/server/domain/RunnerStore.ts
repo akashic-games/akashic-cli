@@ -6,8 +6,8 @@ import {
 	RunnerPauseTestbedEvent,
 	RunnerResumeTestbedEvent
 } from "../../common/types/TestbedEvent";
-import { loadSandboxConfigJs } from "./SandboxConfigs";
 import { serverGlobalConfig } from "../common/ServerGlobalConfig";
+import * as sandboxConfigs from "./SandboxConfigs";
 
 export interface RunnerStoreParameterObject {
 	runnerManager: RunnerManager;
@@ -18,7 +18,6 @@ export interface CreateAndStartRunnerParameterObject {
 	isActive: boolean;
 	token: string;
 	amflow: AMFlowClient;
-	targetDirs: string[];
 	contentId: string;
 }
 
@@ -40,10 +39,7 @@ export class RunnerStore {
 	}
 
 	async createAndStartRunner(params: CreateAndStartRunnerParameterObject): Promise<RunnerV1 | RunnerV2 | RunnerV3> {
-		// TODO: allowedUrls を作成するための sandbox.config.js の load や引数の targetDirs 等は SandboxConfig の反映タイミング修正で不要となる可能性がある。
-		// TODO: targetDirsを渡さなくても、contentIdから解決できるようにする。
-		const sandboxConfigDir = params.targetDirs[parseInt(params.contentId, 10)];
-		const sandboxConfig = loadSandboxConfigJs(sandboxConfigDir);
+		const sandboxConfig = sandboxConfigs.get(params.contentId);
 		const externalAssets = (sandboxConfig ? sandboxConfig.externalAssets : undefined) === undefined ? [] : sandboxConfig.externalAssets;
 		const allowedUrls = this.createAllowedUrls(params.contentId, externalAssets);
 

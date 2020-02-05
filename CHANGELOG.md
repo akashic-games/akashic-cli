@@ -1,5 +1,32 @@
 # CHANGELOG
 
+## 1.8.35 (2020-01-31)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#233](https://github.com/akashic-games/akashic-cli/pull/233) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- kamakiri_ys ([@kamakiri01](https://github.com/kamakiri01))
+
+## 1.8.34 (2020-01-30)
+
+#### Bug Fix
+* `akashic-cli-serve`
+  * [#223](https://github.com/akashic-games/akashic-cli/pull/223) fix: loading timing of sandboxConfig ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Other Change
+* [#231](https://github.com/akashic-games/akashic-cli/pull/231) Remove node-v8 from travis.yml and add node-v12 ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`
+  * [#230](https://github.com/akashic-games/akashic-cli/pull/230) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#229](https://github.com/akashic-games/akashic-cli/pull/229) Pin dependency npm-check-updates to 4.0.1 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 1.8.33 (2020-01-17)
 
 #### Other Change

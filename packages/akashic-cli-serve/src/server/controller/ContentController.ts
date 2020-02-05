@@ -1,19 +1,40 @@
 import * as express from "express";
-import { ContentsGetApiResponseData } from "../../common/types/ApiResponse";
+import { ContentGetApiResponseData } from "../../common/types/ApiResponse";
 import * as EngineConfig from "../domain/EngineConfig";
 import { serverGlobalConfig } from "../common/ServerGlobalConfig";
 import { responseSuccess } from "../common/ApiResponse";
-import { NotFoundError } from "../common/ApiError";
-import { loadSandboxConfigJs } from "../domain/SandboxConfigs";
+import { NotFoundError, BadRequestError } from "../common/ApiError";
+import * as sandboxConfigs from "../domain/SandboxConfigs";
 
 export const createHandlerToGetContents = (targetDirs: string[]): express.RequestHandler => {
+	// サーバ開始後、sandbox.config.js はここで初めて読み込まれる。この処理以前に sandbox.config.js が必要な場合は、その部分で `register()` を行うこと。
+	targetDirs.forEach((targetDir, idx) => sandboxConfigs.register(idx.toString(), targetDir));
+
 	return (req, res, next) => {
 		try {
 			const contents = targetDirs.map((targetDir, i) => ({
 				contentLocatorData: { contentId: "" + i },
-				sandboxConfig: loadSandboxConfigJs(targetDir)
+				sandboxConfig: sandboxConfigs.get(i.toString())
 			}));
-			responseSuccess<ContentsGetApiResponseData>(res, 200, contents);
+			responseSuccess<ContentGetApiResponseData[]>(res, 200, contents);
+		} catch (e) {
+			next(e);
+		}
+	};
+};
+
+export const createHandlerToGetContent = (): express.RequestHandler => {
+	return (req, res, next) => {
+		try {
+			if (!req.params.contentId) {
+				throw new BadRequestError({ errorMessage: "ContentId is not given" });
+			}
+			const contentId = req.params.contentId;
+			const content = {
+				contentLocatorData: { contentId: contentId },
+				sandboxConfig: sandboxConfigs.get(contentId)
+			};
+			responseSuccess<ContentGetApiResponseData>(res, 200, content);
 		} catch (e) {
 			next(e);
 		}

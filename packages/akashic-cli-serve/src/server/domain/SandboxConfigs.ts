@@ -1,12 +1,49 @@
 import * as path from "path";
+import * as chokidar from "chokidar";
 import { SandboxConfig } from "../../common/types/SandboxConfig";
 import { dynamicRequire } from "./dynamicRequire";
 import { BadRequestError } from "../common/ApiError";
 
-// TODO: 読み込み直さなかった時は validation を省略させる
-export function loadSandboxConfigJs(targetDir: string): SandboxConfig {
-	const config = dynamicRequire<SandboxConfig>(path.resolve(targetDir, "sandbox.config.js")) || {};
-	validateConfig(config);
+const configs: { [key: string]: SandboxConfig } = {};
+
+/**
+ * コンテンツの sandbox.config.js  ファイルの読み込み/監視を登録。
+ *
+ * @param contentId コンテンツID
+ * @param targetDir sandbox.config.jsが存在するディレクトリパス
+ */
+export function register(contentId: string, targetDir: string): void {
+	const configPath = path.resolve(targetDir, "sandbox.config.js");
+	if (configs[contentId]) return;
+	configs[contentId] = watchRequire(configPath, config => configs[contentId] = config);
+}
+
+/**
+ * コンテンツIDに紐づく SandboxConfig の取得
+ *
+ * @param contentId コンテンツID
+ */
+export function get(contentId: string): SandboxConfig {
+	return configs[contentId];
+}
+
+function watchRequire(configPath: string, callback: (content: SandboxConfig) => void): SandboxConfig {
+	let config = dynamicRequire<SandboxConfig>(configPath, true);
+
+	const eventListener = (event: string, path: string) => {
+		if ((event === "add" && !Object.keys(config).length) || event === "change") {
+			config = dynamicRequire<SandboxConfig>(path, true);
+			validateConfig(config);
+		} else if (event === "unlink") {
+			config = {};
+		} else {
+			return;
+		}
+		callback(config);
+	};
+	const watcher = chokidar.watch(configPath, { persistent: true });
+	watcher.on("all", eventListener);
+
 	return config;
 }
 
