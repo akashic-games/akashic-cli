@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 1.9.0 (2020-02-06)
+
+#### Enhancement
+* `akashic-cli-export-html`, `akashic-cli-serve`
+  * [#232](https://github.com/akashic-games/akashic-cli/pull/232) v3系のengineを利用しているコンテンツも動かせるよう対応(akashic-cli-serve, akashic-cli-export-html) ([@dera-](https://github.com/dera-))
+* `akashic-cli-init`
+  * [#240](https://github.com/akashic-games/akashic-cli/pull/240) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Committers: 2
+- [@dera-](https://github.com/dera-)
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.8.36 (2020-02-06)
 
 #### Enhancement
