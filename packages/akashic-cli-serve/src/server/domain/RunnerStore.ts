@@ -1,5 +1,5 @@
 import { Trigger } from "@akashic/trigger";
-import { AMFlowClient, RunnerManager, RunnerV1, RunnerV2 } from "@akashic/headless-driver";
+import { AMFlowClient, RunnerManager, RunnerV1, RunnerV2, RunnerV3 } from "@akashic/headless-driver";
 import {
 	RunnerCreateTestbedEvent,
 	RunnerRemoveTestbedEvent,
@@ -38,7 +38,7 @@ export class RunnerStore {
 		this.playIdTable = {};
 	}
 
-	async createAndStartRunner(params: CreateAndStartRunnerParameterObject): Promise<RunnerV1 | RunnerV2> {
+	async createAndStartRunner(params: CreateAndStartRunnerParameterObject): Promise<RunnerV1 | RunnerV2 | RunnerV3> {
 		const sandboxConfig = sandboxConfigs.get(params.contentId);
 		const externalAssets = (sandboxConfig ? sandboxConfig.externalAssets : undefined) === undefined ? [] : sandboxConfig.externalAssets;
 		const allowedUrls = this.createAllowedUrls(params.contentId, externalAssets);

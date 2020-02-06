@@ -74,8 +74,11 @@ export async function promiseConvertBundle(options: ConvertTemplateParameterObje
 		case "2":
 			templatePath = "templates-build/v2";
 			break;
+		case "3":
+			templatePath = "templates-build/v3";
+			break;
 		default:
-			throw Error("Unknown engine version: `environment[\"sandbox-runtime\"]` field in game.json should be \"1\" or \"2\".");
+			throw Error("Unknown engine version: `environment[\"sandbox-runtime\"]` field in game.json should be \"1\", \"2\", or \"3\".");
 	}
 	await writeHtmlFile(innerHTMLAssetArray, options.output, conf, options, templatePath);
 	writeCommonFiles(options.source, options.output, conf, options, templatePath);

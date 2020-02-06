@@ -9,8 +9,8 @@ if (process.argv.length < 3) {
 
 // バージョン取得
 var version = process.argv[2];
-if (! /^v[12]$/.test(version)) {
-	console.error("please specify version(v1 or v2)");
+if (! /^v[123]$/.test(version)) {
+	console.error("please specify version(v1, v2, or v3)");
 	process.exit(1);
 }
 
