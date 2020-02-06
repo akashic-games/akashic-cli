@@ -1,19 +1,10 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as commander from "commander";
-import { ConsoleLogger } from "@akashic/akashic-cli-commons";
+import { ConsoleLogger, CliConfigurationFile, CliConfigInstall } from "@akashic/akashic-cli-commons";
 import { promiseInstall } from "./install";
 
-export interface CommandParameterObject {
-	args?: string[];
-	cwd?: string;
-	link?: boolean;
-	quiet?: boolean;
-	plugin?: number;
-	omitPackagejson?: boolean;
-}
-
-function cli(param: CommandParameterObject): void {
+function cli(param: CliConfigInstall): void {
 	var logger = new ConsoleLogger({ quiet: param.quiet });
 	var installParam = {
 		moduleNames: param.args, cwd: param.cwd, plugin: param.plugin, logger: logger, link: param.link, noOmitPackagejson: !param.omitPackagejson
@@ -42,5 +33,15 @@ commander
 
 export function run(argv: string[]): void {
 	commander.parse(argv);
-	cli(commander);
+	CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashicConfig.json"), (configuration) => {
+		const conf = configuration.commandOptions.install || {};
+		cli({
+			args: commander["args"] ?? conf.args,
+			cwd: commander["cwd"] ?? conf.cwd,
+			link: commander["link"] ?? conf.link,
+			quiet: commander["quiet"] ?? conf.quiet,
+			plugin: commander["plugin"] ?? conf.plugin,
+			omitPackagejson: commander["omitPackagejson"] ?? conf.omitPackagejson
+		});
+	});
 }

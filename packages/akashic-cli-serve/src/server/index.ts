@@ -17,6 +17,7 @@ import { createContentsRouter } from "./route/ContentsRoute";
 import { ServiceType } from "../common/types/ServiceType";
 import { createHealthCheckRouter } from "./route/HealthCheckRoute";
 import { ServerContentLocator } from "./common/ServerContentLocator";
+import {  CliConfigurationFile, CliConfigServe } from "@akashic/akashic-cli-commons";
 
 // 渡されたパラメータを全てstringに変換する
 // chalkを使用する場合、ログ出力時objectの中身を展開してくれないためstringに変換する必要がある
@@ -30,44 +31,26 @@ function convertToStrings(params: any[]): string[] {
 	});
 }
 
-// TODOこのファイルを改名してcli.tsにする
-export async function run(argv: any): Promise<void> {
-	const ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "..", "package.json"), "utf8")).version;
-	commander
-		.version(ver)
-		.description("Development server for Akashic Engine to debug multiple-player games")
-		.usage("[options] <gamepath>")
-		.option("-p, --port <port>", `The port number to listen. default: ${serverGlobalConfig.port}`, (x => parseInt(x, 10)))
-		.option("-H, --hostname <hostname>", `The host name of the server. default: ${serverGlobalConfig.hostname}`)
-		.option("-v, --verbose", `Display detailed information on console.`)
-		.option("-A, --no-auto-start", `Wait automatic startup of contents.`)
-		.option("-s, --target-service <service>",
-			`Simulate the specified service. arguments: ${Object.values(ServiceType)}`)
-		.option("--debug-playlog <path>", `Specify path of playlog-json.`)
-		.option("--debug-untrusted", `An internal debug option`)
-		.option("--debug-proxy-audio", `An internal debug option`)
-		.option("--allow-external", `Read the URL allowing external access from sandbox.config.js`)
-		.parse(argv);
-
-	if (commander.port && isNaN(commander.port)) {
-		console.error("Invalid --port option: " + commander.port);
+async function cli(cliConfigParam: CliConfigServe) {
+	if (cliConfigParam.port && isNaN(cliConfigParam.port)) {
+		console.error("Invalid --port option: " + cliConfigParam.port);
 		process.exit(1);
 	}
 
-	serverGlobalConfig.untrusted = !!commander.debugUntrusted;
-	serverGlobalConfig.proxyAudio = !!commander.debugProxyAudio;
+	serverGlobalConfig.untrusted = !!cliConfigParam.debugUntrusted;
+	serverGlobalConfig.proxyAudio = !!cliConfigParam.debugProxyAudio;
 
-	if (commander.hostname) {
-		serverGlobalConfig.hostname = commander.hostname;
+	if (cliConfigParam.hostname) {
+		serverGlobalConfig.hostname = cliConfigParam.hostname;
 		serverGlobalConfig.useGivenHostname = true;
 	}
 
-	if (commander.port) {
-		serverGlobalConfig.port = commander.port;
+	if (cliConfigParam.port) {
+		serverGlobalConfig.port = cliConfigParam.port;
 		serverGlobalConfig.useGivenPort = true;
 	}
 
-	if (commander.verbose) {
+	if (cliConfigParam.verbose) {
 		serverGlobalConfig.verbose = true;
 		setSystemLogger({
 			info: (...messages: any[]) => {
@@ -97,28 +80,28 @@ export async function run(argv: any): Promise<void> {
 		});
 	}
 
-	if (commander.autoStart != null) {
-		serverGlobalConfig.autoStart = commander.autoStart;
+	if (cliConfigParam.autoStart != null) {
+		serverGlobalConfig.autoStart = cliConfigParam.autoStart;
 	}
 
-	if (commander.targetService) {
-		if (!commander.autoStart && commander.targetService === ServiceType.NicoLive) {
+	if (cliConfigParam.targetService) {
+		if (!cliConfigParam.autoStart && cliConfigParam.targetService === ServiceType.NicoLive) {
 			getSystemLogger().error("--no-auto-start and --target-service nicolive can not be set at the same time.");
 			process.exit(1);
 		}
 
-		if (!Object.values(ServiceType).includes(commander.targetService)) {
-			getSystemLogger().error("Invalid --target-service option argument: " + commander.targetService);
+		if (!Object.values(ServiceType).includes(cliConfigParam.targetService as ServiceType)) {
+			getSystemLogger().error("Invalid --target-service option argument: " + cliConfigParam.targetService);
 			process.exit(1);
 		}
-		serverGlobalConfig.targetService = commander.targetService;
+		serverGlobalConfig.targetService = cliConfigParam.targetService as ServiceType;
 	}
 
-	if (commander.allowExternal) {
-		serverGlobalConfig.allowExternal = commander.allowExternal;
+	if (cliConfigParam.allowExternal) {
+		serverGlobalConfig.allowExternal = cliConfigParam.allowExternal;
 	}
 
-	const targetDirs: string[] = commander.args.length > 0 ? commander.args : [process.cwd()];
+	const targetDirs: string[] = cliConfigParam.targetDirs;
 	const playManager = new PlayManager();
 	const runnerManager = new RunnerManager(playManager);
 	const playStore = new PlayStore({playManager});
@@ -167,8 +150,8 @@ export async function run(argv: any): Promise<void> {
 	runnerStore.onRunnerResume.add(arg => { io.emit("runnerResume", arg); });
 
 	let loadedPlaylogPlayId: string;
-	if (commander.debugPlaylog) {
-		const absolutePath = path.join(process.cwd(), commander.debugPlaylog);
+	if (cliConfigParam.debugPlaylog) {
+		const absolutePath = path.join(process.cwd(), cliConfigParam.debugPlaylog);
 		if (!fs.existsSync(absolutePath)) {
 			getSystemLogger().error(`Can not find ${absolutePath}`);
 			process.exit(1);
@@ -196,5 +179,42 @@ export async function run(argv: any): Promise<void> {
 			const url = `http://${serverGlobalConfig.hostname}:${serverGlobalConfig.port}/public?playId=${loadedPlaylogPlayId}&mode=replay`;
 			console.log(`if access ${url}, you can show this play.`);
 		}
+	});
+}
+
+// TODOこのファイルを改名してcli.tsにする
+export async function run(argv: any): Promise<void> {
+	const ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "..", "package.json"), "utf8")).version;
+	commander
+		.version(ver)
+		.description("Development server for Akashic Engine to debug multiple-player games")
+		.usage("[options] <gamepath>")
+		.option("-p, --port <port>", `The port number to listen. default: ${serverGlobalConfig.port}`, (x => parseInt(x, 10)))
+		.option("-H, --hostname <hostname>", `The host name of the server. default: ${serverGlobalConfig.hostname}`)
+		.option("-v, --verbose", `Display detailed information on console.`)
+		.option("-A, --no-auto-start", `Wait automatic startup of contents.`)
+		.option("-s, --target-service <service>",
+			`Simulate the specified service. arguments: ${Object.values(ServiceType)}`)
+		.option("--debug-playlog <path>", `Specify path of playlog-json.`)
+		.option("--debug-untrusted", `An internal debug option`)
+		.option("--debug-proxy-audio", `An internal debug option`)
+		.option("--allow-external", `Read the URL allowing external access from sandbox.config.js`)
+		.parse(argv);
+
+	CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashicConfig.json"), async (configuration) => {
+		const conf = configuration.commandOptions.serve || {};
+		const cliConfigParam: CliConfigServe = {
+			port: commander.port ?? conf.port,
+			hostname: commander.hostname ?? conf.hostname,
+			verbose: commander.verbose ?? conf.verbose,
+			autoStart: commander.autoStart ?? conf.autoStart,
+			targetService: commander.targetService ?? conf.targetService,
+			debugPlaylog: commander.debugPlaylog ?? conf.debugPlaylog,
+			debugUntrusted: commander.debugUntrusted ?? conf.debugUntrusted,
+			debugProxyAudio: commander.proxyAudio ?? conf.debugProxyAudio,
+			allowExternal: commander.allowExternal ?? conf.allowExternal,
+			targetDirs: commander.args.length > 0 ? commander.args : (conf.targetDirs ?? [process.cwd()])
+		};
+		await cli(cliConfigParam);
 	});
 }
