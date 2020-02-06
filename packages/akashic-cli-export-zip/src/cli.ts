@@ -1,25 +1,12 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as commander from "commander";
-import { ConsoleLogger } from "@akashic/akashic-cli-commons";
+import { ConsoleLogger, CliConfigurationFile, CliConfigExportZip  } from "@akashic/akashic-cli-commons";
 import { promiseExportZip } from "./exportZip";
-
-export interface CommandParameterObject {
-	cwd?: string;
-	quiet?: boolean;
-	output?: string;
-	force?: boolean;
-	strip?: boolean;
-	minify?: boolean;
-	bundle?: boolean;
-	babel?: boolean;
-	hashFilename?: number | boolean;
-	omitEmptyJs?: boolean;
-}
 
 var ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "package.json"), "utf8")).version;
 
-export function cli(param: CommandParameterObject): void {
+export function cli(param: CliConfigExportZip): void {
 	var logger = new ConsoleLogger({ quiet: param.quiet });
 	Promise.resolve()
 		.then(() => promiseExportZip({
@@ -74,17 +61,22 @@ export function run(argv: string[]): void {
 	// Commander の制約により --strip と --no-strip 引数を両立できないため、暫定対応として Commander 前に argv を処理する
 	const argvCopy = dropDeprecatedArgs(argv);
 	commander.parse(argvCopy);
-	cli({
-		cwd: commander["cwd"],
-		quiet: commander["quiet"],
-		output: commander["output"],
-		force: commander["force"],
-		strip: commander["strip"],
-		minify: commander["minify"],
-		hashFilename: commander["hashFilename"],
-		bundle: commander["bundle"],
-		babel: commander["es5Downpile"],
-		omitEmptyJs: commander["omitEmptyJs"]
+
+	CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashicConfig.json"), (configuration) => {
+		const conf = configuration.commandOptions.export ? (configuration.commandOptions.export.zip || {}) : {};
+
+		cli({
+			cwd: commander["cwd"] ?? conf.cwd,
+			quiet: commander["quiet"] ?? conf.quiet,
+			output: commander["output"] ?? conf.output,
+			force: commander["force"] ?? conf.force,
+			strip: commander["strip"] ?? conf.strip,
+			minify: commander["minify"] ?? conf.minify,
+			hashFilename: commander["hashFilename"] ?? conf.hashFilename,
+			bundle: commander["bundle"] ?? conf.bundle,
+			babel: commander["es5Downpile"] ?? conf.babel,
+			omitEmptyJs: commander["omitEmptyJs"] ?? conf.omitEmptyJs
+		});
 	});
 }
 

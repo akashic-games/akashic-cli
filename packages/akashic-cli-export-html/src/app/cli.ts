@@ -1,30 +1,13 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as commander from "commander";
-import { ConsoleLogger } from "@akashic/akashic-cli-commons";
+import { ConsoleLogger, CliConfigExportHtml, CliConfigurationFile } from "@akashic/akashic-cli-commons";
 import { promiseExportHTML } from "./exportHTML";
 import { promiseExportAtsumaru } from "./exportAtsumaru";
 
-interface CommandParameterObject {
-	cwd?: string;
-	source?: string;
-	force?: boolean;
-	quiet?: boolean;
-	output?: string;
-	exclude?: string[];
-	strip?: boolean;
-	hashFilename?: number | boolean;
-	minify?: boolean;
-	bundle?: boolean;
-	magnify?: boolean;
-	injects?: string[];
-	atsumaru?: boolean;
-	autoSendEvents?: string | boolean;
-}
-
 const ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "package.json"), "utf8")).version;
 
-function cli(param: CommandParameterObject): void {
+function cli(param: CliConfigExportHtml): void {
 	const logger = new ConsoleLogger({ quiet: param.quiet });
 	const exportParam = {
 		cwd: !param.cwd ? process.cwd() : path.resolve(param.cwd),
@@ -101,20 +84,24 @@ export function run(argv: string[]): void {
 	// Commander の制約により --strip と --no-strip 引数を両立できないため、暫定対応として Commander 前に argv を処理する
 	const argvCopy = dropDeprecatedArgs(argv);
 	commander.parse(argvCopy);
-	cli({
-		cwd: commander["cwd"],
-		force: commander["force"],
-		quiet: commander["quiet"],
-		output: commander["output"],
-		source: commander["source"],
-		strip: commander["strip"],
-		minify: commander["minify"],
-		bundle: commander["bundle"],
-		magnify: commander["magnify"],
-		hashFilename: commander["hashFilename"],
-		injects: commander["inject"],
-		atsumaru: commander["atsumaru"],
-		autoSendEvents: commander["autoSendEvents"]
+
+	CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashicConfig.json"), (configuration) => {
+		const conf = configuration.commandOptions.export ? (configuration.commandOptions.export.html || {}) : {};
+		cli({
+			cwd: commander["cwd"] ?? conf.cwd,
+			force: commander["force"] ?? conf.force,
+			quiet: commander["quiet"] ?? conf.quiet,
+			output: commander["output"] ?? conf.output,
+			source: commander["source"] ?? conf.source,
+			strip: commander["strip"] ?? conf.strip,
+			minify: commander["minify"] ?? conf.minify,
+			bundle: commander["bundle"] ?? conf.bundle,
+			magnify: commander["magnify"] ?? conf.magnify,
+			hashFilename: commander["hashFilename"] ?? conf.hashFilename,
+			injects: commander["inject"] ?? conf.injects,
+			atsumaru: commander["atsumaru"] ?? conf.atsumaru,
+			autoSendEvents: commander["autoSendEvents"] ?? conf.autoSendEvents
+		});
 	});
 }
 
