@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 1.8.36 (2020-02-06)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#237](https://github.com/akashic-games/akashic-cli/pull/237) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Committers: 2
+- kamakiri_ys ([@kamakiri01](https://github.com/kamakiri01))
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.8.35 (2020-01-31)
 
 #### Update Dependencies
