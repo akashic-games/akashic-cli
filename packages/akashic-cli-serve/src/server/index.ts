@@ -43,6 +43,8 @@ export async function run(argv: any): Promise<void> {
 		.option("-A, --no-auto-start", `Wait automatic startup of contents.`)
 		.option("-s, --target-service <service>",
 			`Simulate the specified service. arguments: ${Object.values(ServiceType)}`)
+		.option("--server-external-script <path>",
+			`Evaluate the given JS and assign it to Game#external of the server instances`)
 		.option("--debug-playlog <path>", `Specify path of playlog-json.`)
 		.option("--debug-untrusted", `An internal debug option`)
 		.option("--debug-proxy-audio", `An internal debug option`)
@@ -118,12 +120,26 @@ export async function run(argv: any): Promise<void> {
 		serverGlobalConfig.allowExternal = commander.allowExternal;
 	}
 
+	let gameExternalFactory: () => any = () => undefined;
+	if (commander.serverExternalScript) {
+		try {
+			gameExternalFactory = require(path.join(process.cwd(), commander.serverExternalScript));
+		} catch (e) {
+			getSystemLogger().error(`Failed to evaluating --server-external-script (${commander.serverExternalScript}): ${e}`);
+			process.exit(1);
+		}
+		if (typeof gameExternalFactory !== "function") {
+			getSystemLogger().error(`${commander.serverExternalScript}, given as --server-external-script, does not export a function`);
+			process.exit(1);
+		}
+	}
+
 	const targetDirs: string[] = commander.args.length > 0 ? commander.args : [process.cwd()];
 	const playManager = new PlayManager();
 	const runnerManager = new RunnerManager(playManager);
-	const playStore = new PlayStore({playManager});
-	const runnerStore = new RunnerStore({runnerManager});
-	const amflowManager = new SocketIOAMFlowManager({playStore});
+	const playStore = new PlayStore({ playManager });
+	const runnerStore = new RunnerStore({ runnerManager, gameExternalFactory });
+	const amflowManager = new SocketIOAMFlowManager({ playStore });
 
 	// TODO ここでRunner情報を外部からPlayStoreにねじ込むのではなく、PlayEntity や PlayEntity#createRunner() を作って管理する方が自然
 	runnerStore.onRunnerCreate.add(arg => playStore.registerRunner(arg));
@@ -148,7 +164,7 @@ export async function run(argv: any): Promise<void> {
 	app.use("^\/$", (req, res, next) => res.redirect("/public/"));
 	app.use("/public/", express.static(path.join(__dirname, "..", "..", "www", "public")));
 	app.use("/internal/", express.static(path.join(__dirname, "..", "..", "www", "internal")));
-	app.use("/api/", createApiRouter({ playStore, runnerStore, amflowManager, io}));
+	app.use("/api/", createApiRouter({ playStore, runnerStore, amflowManager, io }));
 	app.use("/contents/", createContentsRouter({ targetDirs }));
 	app.use("/health-check/", createHealthCheckRouter({ playStore }));
 
