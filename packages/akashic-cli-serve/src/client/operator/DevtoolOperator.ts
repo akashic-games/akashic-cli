@@ -64,11 +64,17 @@ export class DevtoolOperator {
 
 	volumeChangeTo = (vol: number): void => {
 		this.store.devtoolUiStore.volumeSeekTo(vol);
-		this.store.changeVolume(vol / 100);
+		const atsumaruApi = (window as any).RPGAtsumaru;
+		if (atsumaruApi) {
+			atsumaruApi.volumeTrigger.fire(vol / 100);
+		}
 	}
 
 	volumeSeekTo = (vol: number): void => {
 		this.store.devtoolUiStore.endVolumeSeek(vol);
-		this.store.changeVolume(vol / 100);
+		const atsumaruApi = (window as any).RPGAtsumaru;
+		if (atsumaruApi) {
+			atsumaruApi.volumeTrigger.fire(vol / 100);
+		}
 	}
 }

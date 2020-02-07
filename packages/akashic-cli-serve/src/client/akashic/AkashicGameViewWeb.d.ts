@@ -96,7 +96,6 @@ declare module agv {
 		removeErrorListener(errorListener: ErrorListener): void;
 		getGameVars(propertyName: string, listener: (vars: any) => void): void;
 		getGame(): agv.GameLike;
-		getMasterVolume(): number;
 	}
 
 	interface PlaylogConfig {

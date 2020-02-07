@@ -100,8 +100,4 @@ export class ServeGameContent {
 		const pointSource = game.scene().findPointSourceByPoint({ x, y }, true, game.focusingCamera);
 		return (pointSource && pointSource.target) ? pointSource.target.id : null;
 	}
-
-	getVolume(): number {
-		return this.agvGameContent ? this.agvGameContent.getMasterVolume() : 0;
-	}
 }

@@ -30,7 +30,7 @@ export class DevtoolUiStore {
 		this.entityTrees = [];
 		this.entityTreeStateTable = observable.map<number, boolean>();
 		this.isSeekingVolume = false;
-		this.volume = 0;
+		this.volume = 100;
 	}
 
 	@action

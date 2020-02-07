@@ -30,7 +30,6 @@ export class Store {
 	@observable currentPlay: PlayEntity | null;
 	@observable currentLocalInstance: LocalInstanceEntity | null;
 
-	private _atsumaruApi: RPGAtsumaruApi | null;
 	private _initializationWaiter: Promise<void>;
 
 	constructor() {
@@ -47,7 +46,6 @@ export class Store {
 		this.player = { id: storage.data.playerId, name: storage.data.playerName };
 		this.currentPlay = null;
 		this.currentLocalInstance = null;
-		this._atsumaruApi = null;
 
 		this._initializationWaiter = ApiClient.getOptions().then(result => {
 			this.appOptions = result.data;
@@ -66,35 +64,13 @@ export class Store {
 	setCurrentLocalInstance(instance: LocalInstanceEntity): void {
 		if (this.currentLocalInstance === instance)
 			return;
-		if (this._atsumaruApi) {
-			this._atsumaruApi.close();
-			this._atsumaruApi = undefined;
-			delete (window as any).RPGAtsumaru;
-		}
 		this.currentLocalInstance = instance;
 		this.devtoolUiStore.setEntityTrees([]);
-		if (this.currentLocalInstance) {
-			// 本来はここでやる処理べきではないが、このタイミングでないとコンテンツの実際の音量が取得できないためここで行う
-			this.devtoolUiStore.volume = Math.floor(100 * this.currentLocalInstance.volume);
-			if (this.targetService === ServiceType.Atsumaru) {
-				this._atsumaruApi = new RPGAtsumaruApi({
-					targetContent: this.currentLocalInstance.gameContent
-				});
-				(window as any).RPGAtsumaru = this._atsumaruApi;
-			}
-		}
 	}
 
 	@action
 	setCurrentPlay(play: PlayEntity): void {
 		this.currentPlay = play;
-	}
-
-	@action
-	changeVolume(vol: number): void {
-		if (this._atsumaruApi) {
-			this._atsumaruApi.volumeTrigger.fire(vol);
-		}
 	}
 
 	get targetService(): ServiceType {
