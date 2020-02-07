@@ -61,7 +61,8 @@ export function promiseExportAtsumaru(param: ExportHTMLParameterObject): Promise
 				if (!gameJson.environment["sandbox-runtime"] || gameJson.environment["sandbox-runtime"] === "1") {
 					gameJson.environment["akashic-runtime"]["version"] = "~" + versionInfo["latest"]["1"];
 				} else {
-					gameJson.environment["akashic-runtime"]["version"] = "~" + versionInfo["latest"]["2"];
+					gameJson.environment["akashic-runtime"]["version"] =
+						"~" + versionInfo["latest"][gameJson.environment["sandbox-runtime"]];
 					if (!gameJson.renderers || gameJson.renderers.indexOf("webgl") === -1) {
 						gameJson.environment["akashic-runtime"]["flavor"] = "-canvas";
 					}

@@ -38,7 +38,7 @@ export { LintUtil };
 
 import { CliConfigExportHtml } from "./CliConfig/CliConfigExportHtml";
 export { CliConfigExportHtml };
-import { CliConfigExportZip } from "./CliConfig/CliconfigExportZip";
+import { CliConfigExportZip } from "./CliConfig/CliConfigExportZip";
 export { CliConfigExportZip };
 import { CliConfigInit } from "./CliConfig/CliConfigInit";
 export { CliConfigInit };

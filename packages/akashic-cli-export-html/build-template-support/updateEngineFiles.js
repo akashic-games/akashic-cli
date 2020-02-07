@@ -13,6 +13,10 @@ var currentVersions = {
 	v2: {
 		version: "",
 		variable: ""
+	},
+	v3: {
+		version: "",
+		variable: ""
 	}
 };
 if (fs.existsSync(jsonPath)) {
@@ -20,14 +24,19 @@ if (fs.existsSync(jsonPath)) {
 }
 var v1Version = execSync(`npm info @akashic/engine-files@for_ae1x version`).toString().replace("\n", "");
 var v2Version = execSync(`npm info @akashic/engine-files@latest version`).toString().replace("\n", "");
+var v3Version = execSync(`npm info @akashic/engine-files@next version`).toString().replace("\n", "");
 var versions = {
 	v1: {
 		version: v1Version,
-		variable: `engineFilesV${v1Version.replace(/\./g, "_")}`
+		variable: `engineFilesV${v1Version.replace(/[\.-]/g, "_")}`
 	},
 	v2: {
 		version: v2Version,
-		variable: `engineFilesV${v2Version.replace(/\./g, "_")}`
+		variable: `engineFilesV${v2Version.replace(/[\.-]/g, "_")}`
+	},
+	v3: {
+		version: v3Version,
+		variable: `engineFilesV${v3Version.replace(/[\.-]/g, "_")}`
 	}
 };
 
