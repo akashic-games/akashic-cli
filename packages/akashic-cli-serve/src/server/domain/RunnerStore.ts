@@ -11,6 +11,7 @@ import * as sandboxConfigs from "./SandboxConfigs";
 
 export interface RunnerStoreParameterObject {
 	runnerManager: RunnerManager;
+	gameExternalFactory: () => any;
 }
 
 export interface CreateAndStartRunnerParameterObject {
@@ -27,6 +28,7 @@ export class RunnerStore {
 	onRunnerPause: Trigger<RunnerPauseTestbedEvent>;
 	onRunnerResume: Trigger<RunnerResumeTestbedEvent>;
 	private runnerManager: RunnerManager;
+	private gameExternalFactory: () => any;
 	private playIdTable: { [runnerId: string]: string };
 
 	constructor(params: RunnerStoreParameterObject) {
@@ -35,6 +37,7 @@ export class RunnerStore {
 		this.onRunnerPause = new Trigger<RunnerPauseTestbedEvent>();
 		this.onRunnerResume = new Trigger<RunnerResumeTestbedEvent>();
 		this.runnerManager = params.runnerManager;
+		this.gameExternalFactory = params.gameExternalFactory;
 		this.playIdTable = {};
 	}
 
@@ -51,7 +54,18 @@ export class RunnerStore {
 			allowedUrls
 		});
 		const runner = this.runnerManager.getRunner(runnerId);
-		await this.runnerManager.startRunner(runner.runnerId);
+		const startRunnerPromise = this.runnerManager.startRunner(runner.runnerId);
+
+		// TODO headless-driver に game.external を与える機能を加え、それを利用する。
+		//
+		// 以下は無理やり game.external を与える暫定実装。startRunner() を await すると
+		// 間に合わない (エントリポイントどころか最初のシーンの loaded すら終わってしまう) ので、
+		// ここ (runner.driver が生成されている唯一のタイミング) でハンドラをかけている。
+		(runner as any).driver.gameCreatedTrigger.addOnce((game: any) => {
+			game.external = { ...this.gameExternalFactory(), ...game.external };
+		});
+
+		const game = await startRunnerPromise;
 		this.onRunnerCreate.fire({ playId: params.playId, runnerId, isActive: params.isActive });
 		this.playIdTable[runnerId] = params.playId;
 		return runner;
