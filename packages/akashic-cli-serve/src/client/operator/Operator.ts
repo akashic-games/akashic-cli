@@ -12,6 +12,7 @@ import { UiOperator } from "./UiOperator";
 import { DevtoolOperator } from "./DevtoolOperator";
 import { ExternalPluginOperator } from "./ExternalPluginOperator";
 import { ServiceType } from "../../common/types/ServiceType";
+import { RPGAtsumaruApi } from "../atsumaru/RPGAtsumaruApi";
 
 export interface OperatorParameterObject {
 	store: Store;
@@ -69,6 +70,12 @@ export class Operator {
 				const loc = store.contentStore.defaultContent().locator;
 				play = await this._createServerLoop(loc);
 			}
+		}
+		if (store.targetService === ServiceType.Atsumaru) {
+			(window as any).RPGAtsumaru = new RPGAtsumaruApi({
+				// 元のAPIが0～1の実数を返す仕様になっているので、それに合わせた
+				getVolumeCallback: () => this.store.devtoolUiStore.volume / 100
+			});
 		}
 		await this.setCurrentPlay(play, query.mode === "replay");
 	}

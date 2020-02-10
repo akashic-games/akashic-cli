@@ -65,6 +65,7 @@ export class App extends React.Component<AppProps, {}> {
 							operator={operator}
 							devtoolUiStore={store.devtoolUiStore}
 							sandboxConfig={sandboxConfig}
+							targetService={store.targetService}
 						/>
 					</div> :
 					null
