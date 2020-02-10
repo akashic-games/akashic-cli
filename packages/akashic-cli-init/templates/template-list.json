@@ -5,6 +5,12 @@
 		"javascript-minimal": "javascript-minimal.zip",
 		"typescript-minimal": "typescript-minimal.zip",
 		"javascript-shin-ichiba-ranking": "javascript-shin-ichiba-ranking.zip",
-		"typescript-shin-ichiba-ranking": "typescript-shin-ichiba-ranking.zip"
+		"typescript-shin-ichiba-ranking": "typescript-shin-ichiba-ranking.zip",
+		"javascript-v3": "javascript-v3.zip",
+		"typescript-v3": "typescript-v3.zip",
+		"javascript-minimal-v3": "javascript-minimal-v3.zip",
+		"typescript-minimal-v3": "typescript-minimal-v3.zip",
+		"javascript-shin-ichiba-ranking-v3": "javascript-shin-ichiba-ranking-v3.zip",
+		"typescript-shin-ichiba-ranking-v3": "typescript-shin-ichiba-ranking-v3.zip"
 	}
 }
