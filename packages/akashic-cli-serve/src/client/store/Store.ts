@@ -29,7 +29,6 @@ export class Store {
 
 	@observable currentPlay: PlayEntity | null;
 	@observable currentLocalInstance: LocalInstanceEntity | null;
-	@observable atsumaruApi: RPGAtsumaruApi | null;
 
 	private _initializationWaiter: Promise<void>;
 
@@ -47,7 +46,6 @@ export class Store {
 		this.player = { id: storage.data.playerId, name: storage.data.playerName };
 		this.currentPlay = null;
 		this.currentLocalInstance = null;
-		this.atsumaruApi = null;
 
 		this._initializationWaiter = ApiClient.getOptions().then(result => {
 			this.appOptions = result.data;
@@ -68,25 +66,11 @@ export class Store {
 			return;
 		this.currentLocalInstance = instance;
 		this.devtoolUiStore.setEntityTrees([]);
-		if (this.targetService === ServiceType.Atsumaru) {
-			this.atsumaruApi = new RPGAtsumaruApi({
-				targetContent: this.currentLocalInstance.gameContent
-			});
-			(window as any).RPGAtsumaru = this.atsumaruApi;
-		}
 	}
 
 	@action
 	setCurrentPlay(play: PlayEntity): void {
 		this.currentPlay = play;
-	}
-
-	@action
-	changeVolume(vol: number): void {
-		this.currentLocalInstance.gameContent.agvGameContent.setMasterVolume(vol);
-		if (this.atsumaruApi) {
-			this.atsumaruApi.volumeTrigger.fire(vol);
-		}
 	}
 
 	get targetService(): ServiceType {

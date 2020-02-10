@@ -18,9 +18,7 @@ const store = observable({
 	showsDisplayOptionPopover: false,
 	showsBackgroundImage: false,
 	showsGrid: false,
-	isActivePausing: false,
-	volume: 0,
-	isSeekingVolume: false
+	isActivePausing: false
 });
 
 setInterval(() => {
@@ -64,12 +62,6 @@ const TestWithBehaviour = observer(() => (
 				onChangeShowBackgroundImage: (show => store.showsBackgroundImage = show),
 				onChangeShowGrid: (show => store.showsGrid = show)
 			})}
-			makeContentVolumeControlProps={() => ({
-				volume: store.volume,
-				isSeeking: store.isSeekingVolume,
-				changeVolume: (v => (store.isSeekingVolume = true, store.volume = v)),
-				dicideVolume: (v => (store.isSeekingVolume = false, store.volume = v))
-			})}
 			showsAppearance={store.showsAppearance}
 			showsDevtools={store.showsDevtools}
 			showsInstanceControl={store.showsDevtools}
@@ -112,12 +104,6 @@ storiesOf("o-ToolBar", module)
 				onClickDisplayOptionPopover: action("display-option"),
 				onChangeShowBackgroundImage: action("bgimage"),
 				onChangeShowGrid: action("grid")
-			})}
-			makeContentVolumeControlProps={() => ({
-				volume: store.volume,
-				isSeeking: store.isSeekingVolume,
-				changeVolume: (v => (store.isSeekingVolume = true, store.volume = v)),
-				dicideVolume: (v => (store.isSeekingVolume = false, store.volume = v))
 			})}
 			showsAppearance={false}
 			showsDevtools={true}

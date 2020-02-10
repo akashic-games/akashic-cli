@@ -1,4 +1,4 @@
-import { Observer, Subscription } from "rxjs";
+import { Observer } from "rxjs";
 import { ScoreboardData } from "./ScoreboardData";
 import { ScreenshotModalResults } from "./ScreenshotModalResults";
 import { SelfInformation, dummySelfInfomation } from "./SelfInformation";
@@ -7,6 +7,12 @@ import { UserIdName, dummyUserIdName } from "./UserIdName";
 import { UserInformation, dummyUserInformation } from "./UserInformation";
 import { ServeGameContent } from "../akashic/ServeGameContent";
 import { Trigger } from "@akashic/trigger";
+
+interface SubscriptionMock {
+	unsubscribe(): void;
+	add(teardown: any): any;
+	remove(subscription: any): void;
+}
 
 export interface RPGAtsumaruApiLike {
 	comment: {
@@ -25,7 +31,8 @@ export interface RPGAtsumaruApiLike {
 	volume: {
 		getCurrentValue: () => number;
 		changed: {
-			subscribe: (observer: Observer<number> | ((volume: number) => void)) => Subscription;
+			// マスターボリュームの情報はserve側で持っていてコンテンツ側で監視すべきものでないので、Subscriptionのmockを返している
+			subscribe: (observer: Observer<number> | ((volume: number) => void)) => SubscriptionMock;
 		}
 	};
 	popups: {
@@ -55,8 +62,8 @@ export interface RPGAtsumaruApiLike {
 	};
 }
 
-export interface RPGAtsumaruApiParameter {
-	targetContent: ServeGameContent;
+export interface RPGAtsumaruAPIParameterObject {
+	getVolumeCallback: () => number;
 }
 
 export class RPGAtsumaruApi implements RPGAtsumaruApiLike {
@@ -87,25 +94,32 @@ export class RPGAtsumaruApi implements RPGAtsumaruApiLike {
 
 	volume = {
 		getCurrentValue: () => {
-			return this.targetContent.agvGameContent.getMasterVolume();
+			return this._param.getVolumeCallback();
 		},
 		changed: {
 			subscribe: (observer: Observer<number> | ((volume: number) => void)) => {
-				this.volumeTrigger.add((vol: number) => {
+				const func = (vol: number) => {
 					if (observer.hasOwnProperty("next")) {
 						(observer as Observer<number>).next(vol);
 					} else {
 						(observer as Function)(vol);
 					}
-				});
-				return new Subscription();
+				};
+				this.volumeTrigger.add(func);
+				return {
+					unsubscribe: () => {
+						this.volumeTrigger.remove(func);
+					},
+					add: (_teardown: any) => {},
+					remove: (_subscription: any) => {}
+				};
 			}
 		}
 	};
 
 	popups = {
-		// TODO: API本実装時に引数に付与したアンダースコアを除去する
-		openLink: (_url: string, _comment?: string) => {
+		openLink: (url: string, comment?: string) => {
+			console.log(`called window.RPGAtsumaru.popups.openLink (url: ${url}, comment: ${comment})`);
 			return Promise.resolve();
 		}
 	};
@@ -203,10 +217,10 @@ export class RPGAtsumaruApi implements RPGAtsumaruApiLike {
 	};
 
 	volumeTrigger: Trigger<number>;
-	private targetContent: ServeGameContent;
+	private _param: RPGAtsumaruAPIParameterObject;
 
-	constructor(params: RPGAtsumaruApiParameter) {
-		this.targetContent = params.targetContent;
+	constructor(param: RPGAtsumaruAPIParameterObject) {
+		this._param = param;
 		this.volumeTrigger = new Trigger<number>();
 	}
 }
