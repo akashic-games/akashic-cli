@@ -14,7 +14,7 @@ export interface GameConfiguration {
 }
 
 export interface NiconicoConfig {
-	supportedModes?: ["single" | "ranking"];
+	supportedModes?: Array<"single" | "ranking">;
 	preferredSessionParameters?: {
 		totalTimeLimit?: number;
 	};

@@ -28,7 +28,7 @@ const nicoProps: NiconicoDevtoolProps = {
 		main: "",
 		environment: {
 			niconico: {
-				supportedModes: ["ranking"],
+				supportedModes: ["ranking", "single"],
 				preferredSessionParameters: {
 					totalTimeLimit: 55
 				}
@@ -404,7 +404,6 @@ storiesOf("o-Devtool", module)
 				dicideVolume: (v => (store.isSeekingVolume = false, store.volume = v))
 			}}
 			niconicoDevtoolProps={nicoProps}
-
 		/>
 	))
 	.add("entity-tree", () => (
