@@ -37,6 +37,7 @@ export class App extends React.Component<AppProps, {}> {
 		}
 
 		const sandboxConfig = store.currentLocalInstance.content.sandboxConfig || {};
+		const gameJson = store.currentLocalInstance.content.gameJson;
 		return <div id="whole" className={styles["whole"]}>
 			<ToolBarContainer
 				play={store.currentPlay}
@@ -66,6 +67,7 @@ export class App extends React.Component<AppProps, {}> {
 							devtoolUiStore={store.devtoolUiStore}
 							sandboxConfig={sandboxConfig}
 							targetService={store.targetService}
+							gameJson={gameJson}
 						/>
 					</div> :
 					null

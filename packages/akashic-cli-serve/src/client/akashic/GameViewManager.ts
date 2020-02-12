@@ -2,6 +2,7 @@ import { Trigger } from "@akashic/trigger";
 import { ClientContentLocator } from "../common/ClientContentLocator";
 import { generateTestbedScriptAsset } from "./TestbedScriptAsset";
 import { ServeGameContent } from "./ServeGameContent";
+import { Store } from "../store/Store";
 
 export interface Platform {
 	_resourceFactory: {
@@ -26,6 +27,7 @@ export interface CreateGameContentParameterObject {
 	gameLoaderCustomizer: agv.GameLoaderCustomizer;
 	argument?: any;
 	proxyAudio?: boolean;
+	store: Store;
 }
 
 // --debug-proxy-audio用の暫定実装。デバッグ用なのでログに出すのみ。
@@ -94,7 +96,7 @@ export class GameViewManager {
 		}
 		const agvGameContent = new agv.GameContent(gameConfig);
 		agvGameContent.onExternalPluginRegister = new Trigger();
-		return new ServeGameContent(agvGameContent);
+		return new ServeGameContent(agvGameContent, param.store);
 	}
 
 	startGameContent(content: ServeGameContent): Promise<void> {

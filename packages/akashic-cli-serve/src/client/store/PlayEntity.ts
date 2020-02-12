@@ -15,6 +15,7 @@ import { ContentEntity } from "./ContentEntity";
 import { LocalInstanceEntity } from "./LocalInstanceEntity";
 import { ServerInstanceEntity } from "./ServerInstanceEntity";
 import { CreateCoeLocalInstanceParameterObject } from "./CoePluginEntity";
+import { Store } from "./Store";
 
 export interface CreateLocalInstanceParameterObject {
 	gameViewManager: GameViewManager;
@@ -26,6 +27,7 @@ export interface CreateLocalInstanceParameterObject {
 	argument?: any;
 	initialEvents?: playlog.Event[];
 	proxyAudio?: boolean;
+	store: Store;
 	coeHandler?: {
 		onLocalInstanceCreate: (params: CreateCoeLocalInstanceParameterObject) => Promise<LocalInstanceEntity>;
 		onLocalInstanceDelete: (playId: string) => Promise<void>;

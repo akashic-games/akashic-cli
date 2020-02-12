@@ -1,4 +1,6 @@
 import { EDumpItem } from "../common/types/EDumpItem";
+import { Store } from "../store/Store";
+import { ServiceType } from "../../common/types/ServiceType";
 
 function getMatrixFromRoot(e: ae.ELike | null, camera: ae.CameraLike | null): ae.MatrixLike | null {
 	if (!e || !e.getMatrix)
@@ -42,11 +44,13 @@ export class ServeGameContent {
 	readonly agvGameContent: agv.GameContent;
 	private _game: agv.GameLike;
 	private _highlightedEntityId: number | null;
+	private _store: Store;
 
-	constructor(agvGameContent: agv.GameContent) {
+	constructor(agvGameContent: agv.GameContent, store: Store) {
 		this.agvGameContent = agvGameContent;
 		this._game = null!;
 		this._highlightedEntityId = null;
+		this._store = store;
 	}
 
 	setup(): void {
@@ -74,6 +78,16 @@ export class ServeGameContent {
 			renderer.restore();
 			renderer.end();
 			return ret;
+		};
+
+		const tickOriginal = game.tick;
+		game.tick = function (_advanceAge: boolean, _omittedTickCount ?: number) {
+			if (self._store.targetService !== ServiceType.Atsumaru && game.vars && game.vars.gameState) {
+				self._store.devtoolUiStore.setScore(game.vars.gameState.score);
+				self._store.devtoolUiStore.setPlayThreshold(game.vars.gameState.playThreshold);
+				self._store.devtoolUiStore.setClearThreshold(game.vars.gameState.clearThreshold);
+			}
+			return tickOriginal.apply(this, arguments);
 		};
 	}
 

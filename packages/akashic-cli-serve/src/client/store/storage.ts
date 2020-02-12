@@ -16,6 +16,11 @@ export interface StorageData {
 	joinsAutomatically: boolean;
 	showsBackgroundImage: boolean;
 	showsGrid: boolean;
+	showSessionParameterTable: boolean;
+	supportedMode: string;
+	usePreferredTotalTimeLimit: boolean;
+	useStopGame: boolean;
+	totalTimeLimit: string;
 }
 
 function asBool(s: string | null): boolean | null {
@@ -82,7 +87,12 @@ export class Storage {
 			showsHiddenEntity: choose(asBool(getQueryValue(qp.showsHiddenEntity)), s.showsHiddenEntity, true),
 			joinsAutomatically: choose(asBool(getQueryValue(qp.joinsAutomatically)), s.joinsAutomatically, false),
 			showsBackgroundImage: choose(asBool(getQueryValue(qp.showsBackgroundImage)), s.showsBackgroundImage, false),
-			showsGrid: choose(asBool(getQueryValue(qp.showsGrid)), s.showsGrid, false)
+			showsGrid: choose(asBool(getQueryValue(qp.showsGrid)), s.showsGrid, false),
+			showSessionParameterTable: choose(asBool(getQueryValue(qp.showSessionParameterTable)), s.showSessionParameterTable, false),
+			supportedMode: choose(getQueryValue(qp.supportedMode), s.supportedMode, "single"),
+			usePreferredTotalTimeLimit: choose(asBool(getQueryValue(qp.usePreferredTotalTimeLimit)), s.usePreferredTotalTimeLimit, false),
+			useStopGame: choose(asBool(getQueryValue(qp.useStopGame)), s.useStopGame, false),
+			totalTimeLimit: choose(getQueryValue(qp.totalTimeLimit), s.totalTimeLimit, "85")
 		});
 	}
 

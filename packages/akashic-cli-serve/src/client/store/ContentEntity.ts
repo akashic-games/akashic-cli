@@ -2,9 +2,11 @@ import { action, observable } from "mobx";
 import { SandboxConfig } from "../../common/types/SandboxConfig";
 import { ContentDesc } from "../../common/types/ContentDesc";
 import { ClientContentLocator } from "../common/ClientContentLocator";
+import { GameConfiguration } from "../../common/types/GameConfiguration";
 import * as ApiClient from "../api/ApiClient";
 
 export class ContentEntity {
+	gameJson: GameConfiguration;
 	readonly locator: ClientContentLocator;
 	@observable sandboxConfig: SandboxConfig;
 	@observable argumentsTable: { [name: string]: string };
@@ -22,6 +24,10 @@ export class ContentEntity {
 	@action
 	setSandboxConfig(config: SandboxConfig): void {
 		this.sandboxConfig = config;
+	}
+
+	setGameJson(config: GameConfiguration): void {
+		this.gameJson = config;
 	}
 
 	async updateSandboxConfig(): Promise<void> {

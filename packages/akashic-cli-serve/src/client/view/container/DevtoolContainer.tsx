@@ -2,6 +2,7 @@ import * as React from "react";
 import { observer } from "mobx-react";
 import { SandboxConfig } from "../../../common/types/SandboxConfig";
 import { ServiceType } from "../../../common/types/ServiceType";
+import { GameConfiguration } from "../../../common/types/GameConfiguration";
 import { PlayEntity } from "../../store/PlayEntity";
 import { DevtoolUiStore } from "../../store/DevtoolUiStore";
 import { Operator } from "../../operator/Operator";
@@ -13,12 +14,13 @@ export interface DevtoolContainerProps {
 	devtoolUiStore: DevtoolUiStore;
 	sandboxConfig: SandboxConfig;
 	targetService: ServiceType;
+	gameJson: GameConfiguration;
 }
 
 @observer
 export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}> {
 	render(): React.ReactNode {
-		const { play, operator, devtoolUiStore, sandboxConfig, targetService } = this.props;
+		const { play, operator, devtoolUiStore, sandboxConfig, targetService, gameJson } = this.props;
 		return <Devtool
 			height={devtoolUiStore.height}
 			minHeight={200}
@@ -75,6 +77,31 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 				isSeekingVolume: devtoolUiStore.isSeekingVolume,
 				changeVolume: operator.devtool.volumeChangeTo,
 				dicideVolume: operator.devtool.volumeSeekTo
+			}}
+
+			niconicoDevtoolProps={{
+				disabled: targetService === ServiceType.Atsumaru,
+				gameJson: gameJson,
+				isAutoSendEvents: devtoolUiStore.showSessionParameterTable,
+				mode: devtoolUiStore.supportMode,
+				totalTimeLimit: devtoolUiStore.totalTimeLimit,
+				remainingTime: devtoolUiStore.remainingTime,
+				usePreferredTimeLimit: devtoolUiStore.usePreferredTotalTimeLimit,
+				useStopGameOnTimeout: devtoolUiStore.useStopGame,
+				isStopGame: devtoolUiStore.stopGameOnTimeOut,
+				score: devtoolUiStore.score,
+				playThreshold: devtoolUiStore.playThreshold,
+				clearThreshold: devtoolUiStore.clearThreshold,
+				duration: play.duration,
+				onAutoSendEventsChanged: operator.devtool.toggleShowSessionParameterTable,
+				onModeSelectChanged: operator.devtool.setSupportedMode,
+				onUsePreferredTotalTimeLimitChanged: operator.devtool.toggleUsePreferredTotalTimeLimit,
+				onUseStopGameChanged: operator.devtool.toggleUseStopGame,
+				onTotalTimeLimitChanged: operator.devtool.setTotalTimeLimit,
+				setRemainingTime: operator.devtool.setRemainingTimeUntilGameStop,
+				setStopGame: operator.devtool.setStopGameOnTimeOut,
+				sendNicoEvent: operator.play.sendEvent,
+				stopGame: operator.play.pauseActive
 			}}
 		/>;
 	}

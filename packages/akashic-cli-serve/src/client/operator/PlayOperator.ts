@@ -1,4 +1,5 @@
 import { Store } from "../store/Store";
+import * as playlog from "@akashic/playlog";
 
 export class PlayOperator {
 	private store: Store;
@@ -52,5 +53,14 @@ export class PlayOperator {
 		}
 		const amflow = this.store.currentPlay.amflow;
 		pevs.forEach((pev: any) => amflow.enqueueEvent(pev));
+	}
+
+	sendEvent = (event: playlog.Event[]) => {
+		const amflow = this.store.currentPlay.amflow;
+		event.forEach((pev: playlog.Event) => amflow.enqueueEvent(pev));
+	}
+
+	pauseActive = (): void => {
+		this.store.currentPlay.pauseActive();
 	}
 }

@@ -7,7 +7,15 @@ export interface GameConfiguration {
 	assets?: any;
 	environment?: {
 		"sandbox-runtime"?: string;
+		niconico?: NiconicoConfig;
 	};
 	globalScripts?: string[];
 	moduleMainScripts?: {[key: string]: string};
+}
+
+export interface NiconicoConfig {
+	supportedModes?: ["single" | "ranking"];
+	preferredSessionParameters?: {
+		totalTimeLimit?: number;
+	};
 }

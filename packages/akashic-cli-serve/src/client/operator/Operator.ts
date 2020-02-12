@@ -128,6 +128,7 @@ export class Operator {
 			player: store.player,
 			argument: params != null ? params.instanceArgument : undefined,
 			proxyAudio: store.appOptions.proxyAudio,
+			store: store,
 			coeHandler: {
 				onLocalInstanceCreate: async params => {
 					// TODO: local === true のみ対応
@@ -143,7 +144,8 @@ export class Operator {
 						executionMode: "active",
 						argument: params.argument,
 						initialEvents: params.initialEvents,
-						proxyAudio: store.appOptions.proxyAudio
+						proxyAudio: store.appOptions.proxyAudio,
+						store: store
 					});
 				},
 				onLocalInstanceDelete: async playId => {

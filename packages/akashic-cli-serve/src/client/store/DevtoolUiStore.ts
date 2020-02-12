@@ -9,6 +9,11 @@ export class DevtoolUiStore {
 	@observable eventListWidth: number;
 	@observable eventEditContent: string;
 	@observable showsHiddenEntity: boolean;
+	@observable showSessionParameterTable: boolean;
+	@observable supportMode: string;
+	@observable usePreferredTotalTimeLimit: boolean;
+	@observable useStopGame: boolean;
+	@observable totalTimeLimit: string;
 
 	// storage に保存しないもの
 	@observable isSelectingEntity: boolean;
@@ -17,6 +22,11 @@ export class DevtoolUiStore {
 	@observable entityTreeStateTable: ObservableMap<number, boolean>;
 	@observable isSeekingVolume: boolean;
 	@observable volume: number;
+	@observable stopGameOnTimeOut: boolean;
+	@observable remainingTime: number;
+	@observable score: number;
+	@observable playThreshold: number;
+	@observable clearThreshold: number;
 
 	constructor() {
 		this.height = storage.data.devtoolsHeight;
@@ -31,6 +41,11 @@ export class DevtoolUiStore {
 		this.entityTreeStateTable = observable.map<number, boolean>();
 		this.isSeekingVolume = false;
 		this.volume = 100;
+		this.showSessionParameterTable = storage.data.showSessionParameterTable;
+		this.supportMode = storage.data.supportedMode;
+		this.usePreferredTotalTimeLimit = storage.data.usePreferredTotalTimeLimit;
+		this.useStopGame = storage.data.useStopGame;
+		this.totalTimeLimit = storage.data.totalTimeLimit;
 	}
 
 	@action
@@ -99,5 +114,56 @@ export class DevtoolUiStore {
 	endVolumeSeek(volume: number): void {
 		this.volume = volume;
 		this.isSeekingVolume = false;
+	}
+
+	@action
+	toggleShowSessionParameterTable(show: boolean): void {
+		this.showSessionParameterTable = show;
+		storage.put({ showSessionParameterTable: show });
+	}
+
+	@action
+	toggleUsePreferredTotalTimeLimit(v: boolean): void {
+		this.usePreferredTotalTimeLimit = v;
+		storage.put({ usePreferredTotalTimeLimit: v });
+	}
+
+	@action
+	toggleUseStopGame(v: boolean): void {
+		this.useStopGame = v;
+		storage.put({ useStopGame: v });
+	}
+	@action
+	setSupportedMode(mode: string): void {
+		this.supportMode = mode;
+		storage.put({ supportedMode: mode });
+	}
+	@action
+	setTotalTimeLimit(v: string): void {
+		this.totalTimeLimit = v;
+		storage.put({ totalTimeLimit: v });
+	}
+	@action
+	setRemainingTimeUntilGameStop(v: number): void {
+		this.remainingTime = v;
+	}
+	@action
+	setStopGameOnTimeOut(v: boolean): void {
+		this.stopGameOnTimeOut = v;
+	}
+
+	@action
+	setScore(v: number): void {
+		this.score = v;
+	}
+
+	@action
+	setPlayThreshold(v: number): void {
+		this.playThreshold = v;
+	}
+
+	@action
+	setClearThreshold(v: number): void {
+		this.clearThreshold = v;
 	}
 }

@@ -1,5 +1,6 @@
 import { EDumpItem } from "../common/types/EDumpItem";
 import { Store } from "../store/Store";
+import { GameState } from "../store/CoePluginEntity";
 
 export class DevtoolOperator {
 	private store: Store;
@@ -76,5 +77,37 @@ export class DevtoolOperator {
 		if (atsumaruApi) {
 			atsumaruApi.volumeTrigger.fire(vol / 100);
 		}
+	}
+
+	toggleShowSessionParameterTable = (shows: boolean): void => {
+		this.store.devtoolUiStore.toggleShowSessionParameterTable(shows);
+	}
+
+	toggleUsePreferredTotalTimeLimit = (use: boolean): void => {
+		this.store.devtoolUiStore.toggleUsePreferredTotalTimeLimit(use);
+	}
+
+	toggleUseStopGame = (use: boolean): void => {
+		this.store.devtoolUiStore.toggleUseStopGame(use);
+	}
+
+	setSupportedMode = (value: string): void => {
+		this.store.devtoolUiStore.setSupportedMode(value);
+	}
+
+	setTotalTimeLimit = (value: string): void => {
+		this.store.devtoolUiStore.setTotalTimeLimit(value);
+	}
+
+	setRemainingTimeUntilGameStop = (value: number): void => {
+		this.store.devtoolUiStore.setRemainingTimeUntilGameStop(value);
+	}
+
+	setStopGameOnTimeOut = (value: boolean): void => {
+		this.store.devtoolUiStore.setStopGameOnTimeOut(value);
+	}
+
+	stopGame = (): void => {
+		this.store.currentLocalInstance.stop();
 	}
 }

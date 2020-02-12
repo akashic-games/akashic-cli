@@ -11,6 +11,8 @@ import {GameInstanceEntity} from "./GameInstanceEntity";
 import {ExecutionMode} from "./ExecutionMode";
 import {ContentEntity} from "./ContentEntity";
 import {NicoPluginEntity} from "./NicoPluginEntity";
+import {Store} from "./Store";
+import { GameConfiguration } from "../../common/types/GameConfiguration";
 
 const toAgvExecutionMode = (() => {
 	const executionModeTable = {
@@ -35,6 +37,7 @@ export interface LocalInstanceEntityParameterObject {
 	playToken?: string;
 	playlogServerUrl?: string;
 	proxyAudio?: boolean;
+	store: Store;
 	coeHandler?: {
 		onLocalInstanceCreate: (params: CreateCoeLocalInstanceParameterObject) => Promise<LocalInstanceEntity>;
 		onLocalInstanceDelete: (playId: string) => Promise<void>;
@@ -92,7 +95,8 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 			playConfig,
 			gameLoaderCustomizer,
 			argument: params.argument,
-			proxyAudio: params.proxyAudio
+			proxyAudio: params.proxyAudio,
+			store: params.store
 		});
 		if (params.coeHandler != null) {
 			this.coePlugin = new CoePluginEntity({
@@ -135,7 +139,8 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 		if (this._resizeGameView) {
 			const url = this.content.locator.asAbsoluteUrl();
 			const contentJson = await ApiRequest.get<{ content_url: string }>(url);
-			const gameJson = await ApiRequest.get<{ width: number, height: number }>(contentJson.content_url);
+			const gameJson = await ApiRequest.get<GameConfiguration>(contentJson.content_url);
+			this.content.setGameJson(gameJson);
 			this._gameViewManager.setViewSize(gameJson.width, gameJson.height);
 		}
 
