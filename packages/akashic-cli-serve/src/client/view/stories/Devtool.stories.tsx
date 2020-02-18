@@ -13,7 +13,9 @@ const store = observable({
 	eventListWidth: 280,
 	eventEditContent: `["test": true]`,
 	entityTreeStateTable: observable.map({}),
-	showsHidden: true
+	showsHidden: true,
+	volume: 0,
+	isSeekingVolume: false
 });
 
 function createFilledRectDumpItem(id: number, cssColor: string = "black"): EDumpItem {
@@ -163,6 +165,13 @@ const TestWithBehaviour = observer(() => (
 			onMouseOverEntityItem: action("mouseover"),
 			onMouseLeaveEntityItem: action("mouseleave")
 		}}
+		atsumaruDevtoolProps={{
+			disabled: false,
+			volume: store.volume,
+			isSeekingVolume: store.isSeekingVolume,
+			changeVolume: (v => (store.isSeekingVolume = true, store.volume = v)),
+			dicideVolume: (v => (store.isSeekingVolume = false, store.volume = v))
+		}}
 	/>
 ));
 
@@ -256,6 +265,13 @@ storiesOf("o-Devtool", module)
 				onMouseOverEntityItem: action("mouseover"),
 				onMouseLeaveEntityItem: action("mouseleave")
 			}}
+			atsumaruDevtoolProps={{
+				disabled: false,
+				volume: store.volume,
+				isSeekingVolume: store.isSeekingVolume,
+				changeVolume: (v => (store.isSeekingVolume = true, store.volume = v)),
+				dicideVolume: (v => (store.isSeekingVolume = false, store.volume = v))
+			}}
 		/>
 	))
 	.add("events", () => (
@@ -338,6 +354,13 @@ storiesOf("o-Devtool", module)
 				onClickEntityItem: action("click-entity"),
 				onMouseOverEntityItem: action("mouseover"),
 				onMouseLeaveEntityItem: action("mouseleave")
+			}}
+			atsumaruDevtoolProps={{
+				disabled: false,
+				volume: store.volume,
+				isSeekingVolume: store.isSeekingVolume,
+				changeVolume: (v => (store.isSeekingVolume = true, store.volume = v)),
+				dicideVolume: (v => (store.isSeekingVolume = false, store.volume = v))
 			}}
 		/>
 	))
@@ -425,6 +448,13 @@ storiesOf("o-Devtool", module)
 				onClickEntityItem: action("click-entity"),
 				onMouseOverEntityItem: action("mouseover"),
 				onMouseLeaveEntityItem: action("mouseleave")
+			}}
+			atsumaruDevtoolProps={{
+				disabled: false,
+				volume: store.volume,
+				isSeekingVolume: store.isSeekingVolume,
+				changeVolume: (v => (store.isSeekingVolume = true, store.volume = v)),
+				dicideVolume: (v => (store.isSeekingVolume = false, store.volume = v))
 			}}
 		/>
 	))

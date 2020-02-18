@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 1.10.0 (2020-02-10)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#227](https://github.com/akashic-games/akashic-cli/pull/227) akashic-cli-serveの --target-service オプションに atsumaru を追加 ([@dera-](https://github.com/dera-))
+  * [#234](https://github.com/akashic-games/akashic-cli/pull/234) RPGアツマールのマスターボリュームAPIモック機能を作成 ([@dera-](https://github.com/dera-))
+* `akashic-cli-init`
+  * [#241](https://github.com/akashic-games/akashic-cli/pull/241) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Committers: 2
+- [@dera-](https://github.com/dera-)
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.9.0 (2020-02-06)
 
 #### Enhancement

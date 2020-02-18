@@ -14,6 +14,7 @@ import {NotificationUiStore} from "./NotificationUiStore";
 import {storage} from "./storage";
 import {StartupScreenUiStore} from "./StartupScreenUiStore";
 import {ServiceType} from "../../common/types/ServiceType";
+import { RPGAtsumaruApi } from "../atsumaru/RPGAtsumaruApi";
 
 export class Store {
 	@observable contentStore: ContentStore;
