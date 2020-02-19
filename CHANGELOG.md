@@ -1,5 +1,22 @@
 # CHANGELOG
 
+## 1.11.0 (2020-02-19)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#244](https://github.com/akashic-games/akashic-cli/pull/244) akashic-cli-initにv3用のテンプレートを追加 ([@dera-](https://github.com/dera-))
+  * [#243](https://github.com/akashic-games/akashic-cli/pull/243) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#246](https://github.com/akashic-games/akashic-cli/pull/246) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#242](https://github.com/akashic-games/akashic-cli/pull/242) Pin dependency typescript to 3.7.5 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- [@dera-](https://github.com/dera-)
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.10.0 (2020-02-10)
 
 #### Enhancement
