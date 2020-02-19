@@ -69,35 +69,48 @@ export interface RPGAtsumaruAPIParameterObject {
 export class RPGAtsumaruApi implements RPGAtsumaruApiLike {
 	comment = {
 		verbose: false,
-		changeScene: (_sceneName: string) => {},
-		resetAndChangeScene: (_sceneName: string) => {},
-		pushContextFactor: (_factor: string) => {},
-		pushMinorContext: () => {},
-		setContext: (_context: string) => {}
+		changeScene: (sceneName: string) => {
+			console.log(`called window.RPGAtsumaru.comment.changeScene (sceneName: ${sceneName})`);
+		},
+		resetAndChangeScene: (sceneName: string) => {
+			console.log(`called window.RPGAtsumaru.comment.resetAndChangeScene (sceneName: ${sceneName})`);
+		},
+		pushContextFactor: (factor: string) => {
+			console.log(`called window.RPGAtsumaru.comment.pushContextFactor (factor: ${factor})`);
+		},
+		pushMinorContext: () => {
+			console.log(`called window.RPGAtsumaru.comment.pushMinorContext`);
+		},
+		setContext: (context: string) => {
+			console.log(`called window.RPGAtsumaru.comment.setContext (context: ${context})`);
+		}
 	};
 
 	storage = {
 		getItems: () => {
 			// コンパイルを通すためにダミーのセーブデータを用意
 			const items = [{key: "data1", value: "hoge"}, {key: "data2", value: "fuga"}];
+			console.log(`called window.RPGAtsumaru.storage.getItems. it will return ${items}.`);
 			return Promise.resolve().then(() => items);
 		},
-		// TODO: API本実装時に引数に付与したアンダースコアを除去する
-		setItems: (_items: {key: string, value: string}[]) => {
+		setItems: (items: {key: string, value: string}[]) => {
+			console.log(`called window.RPGAtsumaru.storage.setItems (items: ${items})`);
 			return Promise.resolve();
 		},
-		// TODO: API本実装時に引数に付与したアンダースコアを除去する
-		removeItem: (_key: string) => {
+		removeItem: (key: string) => {
+			console.log(`called window.RPGAtsumaru.storage.removeItem (key: ${key})`);
 			return Promise.resolve();
 		}
 	};
 
 	volume = {
 		getCurrentValue: () => {
+			console.log(`called window.RPGAtsumaru.volume.getCurrentValue`);
 			return this._param.getVolumeCallback();
 		},
 		changed: {
 			subscribe: (observer: Observer<number> | ((volume: number) => void)) => {
+				console.log(`called window.RPGAtsumaru.volume.changed.subscribe`);
 				const func = (vol: number) => {
 					if (observer.hasOwnProperty("next")) {
 						(observer as Observer<number>).next(vol);
@@ -132,13 +145,14 @@ export class RPGAtsumaruApi implements RPGAtsumaruApiLike {
 			"param3": "hogehoge"
 		},
 		popups: {
-			// TODO: API本実装時に引数に付与したアンダースコアを除去する
-			displayCreatorInformationModal: (_niconicoUserId?: number | null) => {
+			displayCreatorInformationModal: (niconicoUserId?: number | null) => {
+				console.log(`called window.RPGAtsumaru.experimental.popups.displayCreatorInformationModal (niconicoUserId: ${niconicoUserId})`);
 				return Promise.resolve();
 			}
 		},
 		user: {
 			getSelfInformation: () => {
+				console.log(`called window.RPGAtsumaru.experimental.user.getSelfInformation. it will return ${dummySelfInfomation}.`);
 				return Promise.resolve().then(() => dummySelfInfomation);
 			},
 			getUserInformation: (userId: number) => {
@@ -146,23 +160,27 @@ export class RPGAtsumaruApi implements RPGAtsumaruApiLike {
 					...dummyUserInformation,
 					id: userId
 				};
+				console.log(`called window.RPGAtsumaru.experimental.user.getUserInformation (userId: ${userId}). it will return ${info}.`);
 				return Promise.resolve().then(() => info);
 			},
 			getRecentUsers: () => {
+				console.log(`called window.RPGAtsumaru.experimental.user.getRecentUsers. it will return ${[dummyUserIdName]}.`);
 				return Promise.resolve().then(() => [dummyUserIdName]);
 			},
 			// ダミー情報を返すため引数の値は利用しないので、アンダースコアを付与する
 			getActiveUserCount: (_minutes: number) => {
-				return Promise.resolve().then(() => 1); // ダミーの値として固定値を返す
+				const dummyCount = 1; // ダミーの値として固定値を返す
+				console.log(`called window.RPGAtsumaru.experimental.user.getActiveUserCount. it will return ${dummyCount}.`);
+				return Promise.resolve().then(() => dummyCount);
 			}
 		},
 		scoreboards: {
-			// TODO: API本実装時に引数に付与したアンダースコアを除去する
-			setRecord: (_boardId: number, _score: number) => {
+			setRecord: (boardId: number, score: number) => {
+				console.log(`called window.RPGAtsumaru.experimental.scoreboards.setRecord (boardId: ${boardId}, score: ${score})`);
 				return Promise.resolve();
 			},
-			// TODO: API本実装時に引数に付与したアンダースコアを除去する
-			display: (_boardId: number) => {
+			display: (boardId: number) => {
+				console.log(`called window.RPGAtsumaru.experimental.scoreboards.display (boardId: ${boardId})`);
 				return Promise.resolve();
 			},
 			getRecords: (boardId: number) => {
@@ -201,18 +219,23 @@ export class RPGAtsumaruApi implements RPGAtsumaruApiLike {
 					"boardId": boardId,
 					"boardName": "スコアボードの名前"
 				};
+				console.log(`called window.RPGAtsumaru.experimental.scoreboards.getRecords (boardId: ${boardId}). it will return ${dummyScoreboardData}.`);
 				return Promise.resolve().then(() => dummyScoreboardData);
 			}
 		},
 		screenshot: {
 			displayModal: () => {
 				const dummyData = { tweeted: true };
+				console.log(`called window.RPGAtsumaru.experimental.screenshot.displayModal. it will return ${dummyData}.`);
 				return Promise.resolve().then(() => dummyData);
 			},
 			// TODO: API本実装時に引数に付与したアンダースコアを除去する
-			setScreenshotHandler: (_handler: () => Promise<string>) => {},
-			// TODO: API本実装時に引数に付与したアンダースコアを除去する
-			setTweetMessage: (_tweetSettings: TweetSettings | null) => {}
+			setScreenshotHandler: (_handler: () => Promise<string>) => {
+				console.log(`called window.RPGAtsumaru.experimental.screenshot.setScreenshotHandler`);
+			},
+			setTweetMessage: (tweetSettings: TweetSettings | null) => {
+				console.log(`called window.RPGAtsumaru.experimental.screenshot.setTweetMessage (tweetSettings: ${tweetSettings})`);
+			}
 		}
 	};
 
