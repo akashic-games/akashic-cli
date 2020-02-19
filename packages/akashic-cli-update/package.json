@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-update",
-  "version": "0.3.8",
+  "version": "0.4.0",
   "description": "Semi-automatic asset declarations maintenance tool for Akashic games.",
   "main": "lib/index.js",
   "scripts": {
@@ -35,7 +35,7 @@
   },
   "typings": "lib/index.d.ts",
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.3.8",
+    "@akashic/akashic-cli-commons": "0.4.0",
     "commander": "2.20.3"
   },
   "publishConfig": {
