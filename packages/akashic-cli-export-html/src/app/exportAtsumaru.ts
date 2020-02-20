@@ -67,6 +67,11 @@ export function promiseExportAtsumaru(param: ExportHTMLParameterObject): Promise
 						gameJson.environment["akashic-runtime"]["flavor"] = "-canvas";
 					}
 				}
+				if (gameJson.environment["akashic-runtime"]["version"].match(/beta/)) {
+					completedParam.logger.warn(
+						"operation is not guaranteed because latest version of akashic-runtime is prerelease."
+					);
+				}
 				return gameJson;
 			});
 		}).then((gameJson) => {
