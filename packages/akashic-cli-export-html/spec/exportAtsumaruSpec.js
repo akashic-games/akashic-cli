@@ -76,8 +76,7 @@ describe("exportAtsumaru", function () {
 				})
 				.then(done, done.fail);
 		});
-		// TODO: akashic-runtime-version-tableにv3系も登録されるようになったらこのテストを有効にする
-		xit("add information about environment to game.json (v3)", function (done) {
+		it("add information about environment to game.json (v3)", function (done) {
 			const targetDirPath = path.join(__dirname, "fixture", "sample_game_v3");
 			const outputDirPath = path.join(targetDirPath, "output");
 			Promise.resolve()
