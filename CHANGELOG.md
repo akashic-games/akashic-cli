@@ -1,5 +1,21 @@
 # CHANGELOG
 
+## 1.11.2 (2020-02-26)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#256](https://github.com/akashic-games/akashic-cli/pull/256) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.0.0-beta.2, engineFiles@2.1.37, engineFiles@1.1.14) ([@xnv](https://github.com/xnv))
+* `akashic-cli-init`
+  * [#252](https://github.com/akashic-games/akashic-cli/pull/252) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Other Change
+* `akashic-cli-serve`
+  * [#248](https://github.com/akashic-games/akashic-cli/pull/248) display called atsumaru-api on console ([@dera-](https://github.com/dera-))
+
+#### Committers: 2
+- [@dera-](https://github.com/dera-)
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.11.1 (2020-02-21)
 
 #### Enhancement
