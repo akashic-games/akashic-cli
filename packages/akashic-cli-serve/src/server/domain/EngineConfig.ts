@@ -1,5 +1,4 @@
-import * as fs from "fs";
-import * as path from "path";
+import * as gameConfigs from "../domain/GameConfigs";
 import { serverGlobalConfig } from "../common/ServerGlobalConfig";
 
 export interface EngineConfig {
@@ -20,9 +19,7 @@ export interface GetEngineConfigParameterObject {
 export const getEngineConfig = (param: GetEngineConfigParameterObject): EngineConfig => {
 	const untrusted = serverGlobalConfig.untrusted;
 	const gameContentDir = (param.isRaw || untrusted) ? "raw" : "content";
-	const gameJsonPath = path.join(param.baseDir, "game.json");
-	// TODO: chokidar等でgame.jsonの変更時だけ読み込みを行うようにする
-	const gameJson: any = JSON.parse(fs.readFileSync(gameJsonPath).toString());
+	const gameJson = gameConfigs.get(param.contentId.toString());
 	let version = "1";
 	let external: string[] = [];
 	if (gameJson["environment"] != null) {

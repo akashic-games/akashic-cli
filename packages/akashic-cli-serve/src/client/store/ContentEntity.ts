@@ -2,10 +2,12 @@ import { action, observable } from "mobx";
 import { SandboxConfig } from "../../common/types/SandboxConfig";
 import { ContentDesc } from "../../common/types/ContentDesc";
 import { ClientContentLocator } from "../common/ClientContentLocator";
+import { GameConfiguration } from "../../common/types/GameConfiguration";
 import * as ApiClient from "../api/ApiClient";
 
 export class ContentEntity {
 	readonly locator: ClientContentLocator;
+	gameJson: GameConfiguration;
 	@observable sandboxConfig: SandboxConfig;
 	@observable argumentsTable: { [name: string]: string };
 
@@ -14,6 +16,7 @@ export class ContentEntity {
 		this.sandboxConfig = desc.sandboxConfig || {};
 		this.argumentsTable = {};
 		const args = this.sandboxConfig.arguments || {};
+		this.gameJson = desc.gameJson;
 		Object.keys(args).forEach(key => {
 			this.argumentsTable[key] = JSON.stringify(args[key], null, 2);
 		});

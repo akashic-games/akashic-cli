@@ -1,21 +1,10 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as express from "express";
-import * as chokidar from "chokidar";
-import { getSystemLogger } from "@akashic/headless-driver";
+import * as gameConfigs from "../domain/GameConfigs";
 
-export const createScriptAssetController = (baseDir: string): express.RequestHandler => {
-	const gameJsonPath = path.join(baseDir, "game.json");
-	let gameJson: any = JSON.parse(fs.readFileSync(gameJsonPath).toString());
-
-	const watcher = chokidar.watch(gameJsonPath, { persistent: true });
-	watcher.on("change", () => {
-		try {
-			gameJson = JSON.parse(fs.readFileSync(gameJsonPath).toString());
-		} catch (e) {
-			// do nothing
-		}
-	});
+export const createScriptAssetController = (baseDir: string, index: number): express.RequestHandler => {
+	gameConfigs.register(index.toString(), baseDir);
 
 	return (req: express.Request, res: express.Response, next: Function): void => {
 		const scriptPath = path.join(baseDir, req.params.scriptName);
@@ -25,6 +14,7 @@ export const createScriptAssetController = (baseDir: string): express.RequestHan
 			next(err);
 			return;
 		}
+		const gameJson = gameConfigs.get(index.toString());
 		let id = Object.keys(gameJson.assets).find((id) => gameJson.assets[id].path === req.params.scriptName);
 
 		const content = fs.readFileSync(scriptPath);
