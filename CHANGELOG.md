@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.11.3 (2020-02-28)
+
+#### Other Change
+* `akashic-cli-export-html`
+  * [#257](https://github.com/akashic-games/akashic-cli/pull/257) atsumaruオプションでexport html実行時に、対象のruntime-versionがpreleaseバージョンの時警告を出す対応 ([@dera-](https://github.com/dera-))
+
+#### Committers: 1
+- [@dera-](https://github.com/dera-)
+
 ## 1.11.2 (2020-02-26)
 
 #### Enhancement
