@@ -11,7 +11,7 @@ export interface GameConfiguration {
 		external: any;
 	};
 	globalScripts?: string[];
-	moduleMainScripts?: { [key: string]: string };
+	moduleMainScripts?: {[key: string]: string};
 }
 
 export interface NiconicoConfig {
