@@ -7,7 +7,7 @@ import * as ApiClient from "../api/ApiClient";
 
 export class ContentEntity {
 	readonly locator: ClientContentLocator;
-	gameJson: GameConfiguration;
+	gameJson: GameConfiguration; // 現状では view に反映しないので observable はつけない
 	@observable sandboxConfig: SandboxConfig;
 	@observable argumentsTable: { [name: string]: string };
 

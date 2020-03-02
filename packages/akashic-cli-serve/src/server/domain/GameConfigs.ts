@@ -26,12 +26,13 @@ export function get(contentId: string): GameConfiguration {
 	return configs[contentId];
 }
 
-function watchGameJson(gameJsonPath: string, callback: (content: GameConfiguration) => void): GameConfiguration {
+function watchGameJson(gameJsonPath: string, callback: (gameJson: GameConfiguration) => void): GameConfiguration {
 	let gameJson: any = JSON.parse(fs.readFileSync(gameJsonPath).toString());
 
 	const changeEventListener = (event: string, path: string) => {
 		if ( event === "change") {
 			gameJson = JSON.parse(fs.readFileSync(path).toString());
+			callback(gameJson);
 		}
 	};
 	const watcher = chokidar.watch(gameJsonPath, { persistent: true });

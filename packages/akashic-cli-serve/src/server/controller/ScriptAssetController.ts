@@ -4,6 +4,7 @@ import * as express from "express";
 import * as gameConfigs from "../domain/GameConfigs";
 
 export const createScriptAssetController = (baseDir: string, index: number): express.RequestHandler => {
+	// TODO: require() のキャッシュするモジュールのインターフェース (index でアクセスする点) と register() 箇所を見直す
 	gameConfigs.register(index.toString(), baseDir);
 
 	return (req: express.Request, res: express.Response, next: Function): void => {

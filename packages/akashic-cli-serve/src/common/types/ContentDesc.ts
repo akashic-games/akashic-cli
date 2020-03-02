@@ -5,5 +5,5 @@ import { GameConfiguration } from "./GameConfiguration";
 export interface ContentDesc {
 	contentLocatorData: ContentLocatorData;
 	sandboxConfig?: SandboxConfig;
-	gameJson: GameConfiguration;
+	gameJson?: GameConfiguration;
 }
