@@ -258,13 +258,13 @@ export class Operator {
 			this.store.devtoolUiStore.setRemainingTime(currentRemainingTime >= 0 ? Math.ceil(currentRemainingTime) : 0);
 			const dur = this.store.currentPlay.duration / 1000 - currentRemainingTime;
 			if (dur >= reamainTimeOrg) {
-				this.stopGameTimeout(intervalId);
+				this.stopGameOnTimeout(intervalId);
 			}
 		}, 1000 / fps);
 		this.gameStopIntervalId = intervalId;
 	}
 
-	private stopGameTimeout(intervalId: any): void {
+	private stopGameOnTimeout(intervalId: any): void {
 		if (this.gameStopIntervalId !== intervalId) return;
 
 		this.store.devtoolUiStore.setRemainingTime(0);
