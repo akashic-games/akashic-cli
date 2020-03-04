@@ -26,6 +26,7 @@ export interface CreateLocalInstanceParameterObject {
 	argument?: any;
 	initialEvents?: playlog.Event[];
 	proxyAudio?: boolean;
+	tickHandler: (game: agv.GameLike) => void;
 	coeHandler?: {
 		onLocalInstanceCreate: (params: CreateCoeLocalInstanceParameterObject) => Promise<LocalInstanceEntity>;
 		onLocalInstanceDelete: (playId: string) => Promise<void>;
@@ -120,7 +121,7 @@ export class PlayEntity {
 		});
 		i.onStop.add(this._handleLocalInstanceStopped);
 		this.localInstances.push(i);
-		await i.start();
+		await i.start(param.tickHandler);
 		return i;
 	}
 

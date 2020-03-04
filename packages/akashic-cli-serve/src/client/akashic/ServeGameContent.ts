@@ -49,7 +49,7 @@ export class ServeGameContent {
 		this._highlightedEntityId = null;
 	}
 
-	setup(): void {
+	setup(tickHandler: (game: agv.GameLike) => void): void {
 		this._game = this.agvGameContent.getGame();
 		const game = this._game;
 		const renderOriginal = game.render;
@@ -74,6 +74,12 @@ export class ServeGameContent {
 			renderer.restore();
 			renderer.end();
 			return ret;
+		};
+
+		const tickOriginal = game.tick;
+		game.tick = function (_advanceAge: boolean, _omittedTickCount?: number) {
+			tickHandler(game);
+			return tickOriginal.apply(this, arguments);
 		};
 	}
 

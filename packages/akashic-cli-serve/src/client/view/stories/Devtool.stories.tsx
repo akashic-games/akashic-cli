@@ -5,6 +5,7 @@ import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
 import { EDumpItem } from "../../common/types/EDumpItem";
 import { Devtool } from "../organism/Devtool";
+import { NiconicoDevtoolProps } from "../molecule/NiconicoDevtool";
 
 const store = observable({
 	devtoolsHeight: 300,
@@ -17,6 +18,25 @@ const store = observable({
 	volume: 0,
 	isSeekingVolume: false
 });
+
+const nicoProps: NiconicoDevtoolProps = {
+	disabled: false,
+	isAutoSendEvent: true,
+	usePreferredTimeLimit: true,
+	useStopGameOnTimeout: true,
+	totalTimeLimit: "65",
+	supportMode: "ranking",
+	remainingTime: 65,
+	preferredTotalTimeLimit: 55,
+	score: 700,
+	playThreshold: 100,
+	clearThreshold: 500,
+	onAutoSendEventsChanged: action("events:auto-send-events-changed"),
+	onModeSelectChanged: action("events:mode-select-changed"),
+	onTotalTimeLimitChanged: action("events:total-time-limit-changed"),
+	onUsePreferredTotalTimeLimitChanged: action("events:use-preferred-total-time-limit-changed"),
+	onUseStopGameChanged: action("events:use-stop-game-changed")
+};
 
 function createFilledRectDumpItem(id: number, cssColor: string = "black"): EDumpItem {
 	return {
@@ -172,6 +192,7 @@ const TestWithBehaviour = observer(() => (
 			changeVolume: (v => (store.isSeekingVolume = true, store.volume = v)),
 			dicideVolume: (v => (store.isSeekingVolume = false, store.volume = v))
 		}}
+		niconicoDevtoolProps={nicoProps}
 	/>
 ));
 
@@ -272,6 +293,7 @@ storiesOf("o-Devtool", module)
 				changeVolume: (v => (store.isSeekingVolume = true, store.volume = v)),
 				dicideVolume: (v => (store.isSeekingVolume = false, store.volume = v))
 			}}
+			niconicoDevtoolProps={nicoProps}
 		/>
 	))
 	.add("events", () => (
@@ -362,6 +384,7 @@ storiesOf("o-Devtool", module)
 				changeVolume: (v => (store.isSeekingVolume = true, store.volume = v)),
 				dicideVolume: (v => (store.isSeekingVolume = false, store.volume = v))
 			}}
+			niconicoDevtoolProps={nicoProps}
 		/>
 	))
 	.add("entity-tree", () => (
@@ -456,6 +479,56 @@ storiesOf("o-Devtool", module)
 				changeVolume: (v => (store.isSeekingVolume = true, store.volume = v)),
 				dicideVolume: (v => (store.isSeekingVolume = false, store.volume = v))
 			}}
+			niconicoDevtoolProps={nicoProps}
+		/>
+	))
+	.add("niconico", () => (
+		<Devtool
+			height={300}
+			minHeight={200}
+			onResizeHeight={action("resize-height")}
+			activeDevtool={"Niconico"}
+			onSelectDevtool={action("select-tool")}
+			eventsDevtoolProps={{
+				showsEventList: true,
+				eventListWidth: 250,
+				eventListMinWidth: 200,
+				onEventListResize: action("events:list-resize"),
+				onClickShowEventList: action("events:toggle-list"),
+				eventNames: ["Foo", "Test 0"],
+				eventEditContent: `["test", 1]`,
+				onClickSendEvent: action("events:send"),
+				onClickCopyEvent: action("events:copy"),
+				onClickSendEditingEvent: action("events:send-edit"),
+				onEventEditContentChanged: action("events:edit")
+			}}
+			instancesDevtoolProps={{
+				instances: [],
+				onClickAddInstance: action("add-instance")
+			}}
+			entityTreeDevtoolProps={{
+				entityTrees: [],
+				entityTreeStateTable: observable.map({}),
+				selectedEntityId: null,
+				isSelectingEntity: false,
+				showsHidden: false,
+				onClickDump: action("dump"),
+				onChangeShowsHidden: action("change-shows-hidden"),
+				onClickSelectEntity: action("click-select-entity"),
+				onClickUpdateEntityTrees: action("update-entity-tree"),
+				onClickToggleOpenEntityChildren: action("toggle"),
+				onClickEntityItem: action("click-entity"),
+				onMouseOverEntityItem: action("mouseover"),
+				onMouseLeaveEntityItem: action("mouseleave")
+			}}
+			atsumaruDevtoolProps={{
+				disabled: false,
+				volume: store.volume,
+				isSeekingVolume: store.isSeekingVolume,
+				changeVolume: (v => (store.isSeekingVolume = true, store.volume = v)),
+				dicideVolume: (v => (store.isSeekingVolume = false, store.volume = v))
+			}}
+			niconicoDevtoolProps={nicoProps}
 		/>
 	))
 	.add("with-behavior", () => <TestWithBehaviour />);

@@ -97,7 +97,7 @@ export class GameViewManager {
 		return new ServeGameContent(agvGameContent);
 	}
 
-	startGameContent(content: ServeGameContent): Promise<void> {
+	startGameContent(content: ServeGameContent, tickHandler: (game: agv.GameLike) => void): Promise<void> {
 		const agvGameContent = content.agvGameContent;
 		return new Promise<void>((resolve, reject) => {
 			// agvにGameContenをt読み込み時にのみ使用するエラーハンドリング
@@ -116,7 +116,7 @@ export class GameViewManager {
 							console.error(e);
 						}
 					});
-					content.setup();
+					content.setup(tickHandler);
 					resolve();
 				}
 			});

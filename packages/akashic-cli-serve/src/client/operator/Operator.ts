@@ -33,6 +33,7 @@ export class Operator {
 	externalPlugin: ExternalPluginOperator;
 	private store: Store;
 	private gameViewManager: GameViewManager;
+	private gameStopIntervalId: any;
 
 	constructor(param: OperatorParameterObject) {
 		const store = param.store;
@@ -119,6 +120,7 @@ export class Operator {
 		const store = this.store;
 		const play = store.currentPlay;
 		const tokenResult = await ApiClient.createPlayToken(play.playId, store.player.id, false, store.player.name);
+		const tickHandler = store.devtoolUiStore.createTickHandler(store.targetService);
 		const instance = await play.createLocalInstance({
 			gameViewManager: this.gameViewManager,
 			playId: play.playId,
@@ -128,6 +130,7 @@ export class Operator {
 			player: store.player,
 			argument: params != null ? params.instanceArgument : undefined,
 			proxyAudio: store.appOptions.proxyAudio,
+			tickHandler: tickHandler,
 			coeHandler: {
 				onLocalInstanceCreate: async params => {
 					// TODO: local === true のみ対応
@@ -143,7 +146,8 @@ export class Operator {
 						executionMode: "active",
 						argument: params.argument,
 						initialEvents: params.initialEvents,
-						proxyAudio: store.appOptions.proxyAudio
+						proxyAudio: store.appOptions.proxyAudio,
+						tickHandler: tickHandler
 					});
 				},
 				onLocalInstanceDelete: async playId => {
@@ -159,9 +163,11 @@ export class Operator {
 		if (params != null && params.joinsSelf) {
 			store.currentPlay.join(store.player.id, store.player.name);
 		}
+		this.startTimerToStopGame();
 	}
 
 	restartWithNewPlay = async (): Promise<void> => {
+		if (this.gameStopIntervalId) clearInterval(this.gameStopIntervalId);
 		await this.store.currentPlay.content.updateSandboxConfig();
 		const play = await this._createServerLoop(this.store.currentPlay.content.locator);
 		await this.store.currentPlay.deleteAllServerInstances();
@@ -176,7 +182,9 @@ export class Operator {
 		await ApiClient.resumePlayDuration(play.playId);
 
 		// autoSendEvents
-		const sandboxConfig = this.store.contentStore.findOrRegister(contentLocator).sandboxConfig || {};
+		const content = this.store.contentStore.findOrRegister(contentLocator);
+		const sandboxConfig = content.sandboxConfig || {};
+
 		const { events, autoSendEvents, autoSendEventName } = sandboxConfig;
 		if (events && autoSendEventName && events[autoSendEventName] instanceof Array) {
 			events[autoSendEventName].forEach((pev: any) => play.amflow.enqueueEvent(pev));
@@ -184,6 +192,12 @@ export class Operator {
 			// TODO: `autoSendEvents` は deprecated となった。互換性のためこのパスを残しているが、`autoSendEvents` の削除時にこのパスも削除する。
 			console.warn("[deprecated] `autoSendEvents` in sandbox.config.js is deprecated. Please use `autoSendEventName`.");
 			events[autoSendEvents].forEach((pev: any) => play.amflow.enqueueEvent(pev));
+		}
+
+		this.store.devtoolUiStore.initializePrefferdSessionParams(content.gameJson);
+		if (this.store.devtoolUiStore.isAutoSendEvent) {
+			const nicoEvent = this.createNicoEvent();
+			nicoEvent.forEach((pev: any) => play.amflow.enqueueEvent(pev));
 		}
 
 		return play;
@@ -223,5 +237,55 @@ export class Operator {
 				debugMode: true
 			}
 		};
+	}
+
+	private startTimerToStopGame = (): void => {
+		if (!this.store.devtoolUiStore.isAutoSendEvent
+			|| this.store.devtoolUiStore.supportMode !== "ranking"
+			|| !this.store.devtoolUiStore.useStopGameOnTimeout
+			|| this.store.currentLocalInstance.executionMode === "replay"
+		) return;
+
+		const gameStartTime = Date.now();
+		const fps = this.store.currentLocalInstance.content.gameJson.fps;
+		const dur = this.store.currentPlay.duration / 1000;
+		let remainingTime = this.store.devtoolUiStore.remainingTime;
+		const reamainTimeOrg = remainingTime;
+		remainingTime = dur > remainingTime ? 0 : remainingTime - dur;
+
+		const intervalId = setInterval(() => {
+			const currentRemainingTime = remainingTime - (Date.now() - gameStartTime) / 1000;
+			this.store.devtoolUiStore.setRemainingTime(currentRemainingTime >= 0 ? Math.ceil(currentRemainingTime) : 0);
+			const dur = this.store.currentPlay.duration / 1000 - currentRemainingTime;
+			if (dur >= reamainTimeOrg) {
+				this.stopGameTimeout(intervalId);
+			}
+		}, 1000 / fps);
+		this.gameStopIntervalId = intervalId;
+	}
+
+	private stopGameTimeout(intervalId: any): void {
+		if (this.gameStopIntervalId !== intervalId) return;
+
+		this.store.devtoolUiStore.setRemainingTime(0);
+		clearInterval(this.gameStopIntervalId);
+		if (this.store.devtoolUiStore.useStopGameOnTimeout) {
+			this.store.currentPlay.pauseActive();
+		}
+	}
+
+	private createNicoEvent(): any {
+		const supportMode = this.store.devtoolUiStore.supportMode;
+		const params: any = {
+			"mode": supportMode
+		};
+		if (supportMode === "ranking") {
+			params["totalTimeLimit"] = this.store.devtoolUiStore.remainingTime;
+		}
+		const event = [[32, 0, "dummy", {
+			"type": "start",
+			"parameters": params
+		}]];
+		return event;
 	}
 }

@@ -77,4 +77,24 @@ export class DevtoolOperator {
 			atsumaruApi.volumeTrigger.fire(vol / 100);
 		}
 	}
+
+	toggleAutoSendEvents = (isSend: boolean): void => {
+		this.store.devtoolUiStore.toggleAutoSendEvents(isSend);
+	}
+
+	toggleUsePreferredTotalTimeLimit = (use: boolean): void => {
+		this.store.devtoolUiStore.toggleUsePreferredTotalTimeLimit(use);
+	}
+
+	toggleUseStopGame = (use: boolean): void => {
+		this.store.devtoolUiStore.toggleUseStopGame(use);
+	}
+
+	setSupportedMode = (value: string): void => {
+		this.store.devtoolUiStore.setSupportedMode(value);
+	}
+
+	setTotalTimeLimit = (value: string): void => {
+		this.store.devtoolUiStore.setTotalTimeLimit(value);
+	}
 }
