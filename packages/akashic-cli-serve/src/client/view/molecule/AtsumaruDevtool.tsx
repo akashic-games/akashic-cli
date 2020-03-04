@@ -17,7 +17,7 @@ export class AtsumaruDevtool extends React.Component<AtsumaruDevtoolProps, {}> {
 		return <div>
 			{
 				// TODO: ここのデザイン部分をユーザーフレンドリーなものに修正する
-				props.disabled && <p><b>このタブは現在無効になっています。有効にするためにはTargetServiceにatsumaruを指定する必要があります。</b></p>
+				props.disabled && <p><b>このタブは現在無効になっています。有効にするためには起動オプションに --target-service atsumaru を指定する必要があります。</b></p>
 			}
 			volume:
 			<ToolProgressBar
