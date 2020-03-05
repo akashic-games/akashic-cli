@@ -53,12 +53,12 @@
     "bestzip": "2.1.5",
     "http-server": "0.12.1",
     "jest": "24.9.0",
-    "mock-fs": "4.10.4",
+    "mock-fs": "4.11.0",
     "npm-check-updates": "4.0.3",
     "rimraf": "2.7.1",
     "shelljs": "0.8.3",
     "tslint": "5.20.1",
-    "typescript": "3.7.5"
+    "typescript": "3.8.3"
   },
   "typings": "lib/index.d.ts",
   "dependencies": {
