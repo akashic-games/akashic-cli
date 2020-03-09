@@ -85,7 +85,7 @@ export function run(argv: string[]): void {
 	const argvCopy = dropDeprecatedArgs(argv);
 	commander.parse(argvCopy);
 
-	CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashicConfig.json"), (configuration) => {
+	CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashic.config.js"), (configuration) => {
 		const conf = configuration.commandOptions.export ? (configuration.commandOptions.export.html || {}) : {};
 		cli({
 			cwd: commander["cwd"] ?? conf.cwd,

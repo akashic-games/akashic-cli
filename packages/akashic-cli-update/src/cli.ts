@@ -25,7 +25,7 @@ commander
 
 export function run(argv: string[]): void {
 	commander.parse(argv);
-	CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashicConfig.json"), (configuration) => {
+	CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashic.config.js"), (configuration) => {
 		const conf = configuration.commandOptions.update || {};
 		cli({
 			cwd: commander.cwd ?? conf.cwd,

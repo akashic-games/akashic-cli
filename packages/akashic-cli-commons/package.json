@@ -30,6 +30,7 @@
   },
   "typings": "lib/index.d.ts",
   "dependencies": {
+    "@types/node": "^13.9.0",
     "browserify": "16.5.0",
     "eslint": "~5.16.0",
     "fs-extra": "3.0.1",
