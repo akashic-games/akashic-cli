@@ -54,7 +54,7 @@
     "http-server": "0.12.1",
     "jest": "24.9.0",
     "mock-fs": "4.11.0",
-    "npm-check-updates": "4.0.3",
+    "npm-check-updates": "4.0.4",
     "rimraf": "2.7.1",
     "shelljs": "0.8.3",
     "tslint": "5.20.1",
