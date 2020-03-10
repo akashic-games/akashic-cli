@@ -15,13 +15,12 @@ export module CliConfigurationFile {
 		try {
 			cliConfig = require(confPath);
 			delete require.cache[require.resolve(confPath)];
+			callback(cliConfig);
 		} catch (error) {
-			if (error) {
-				if (error.code === "ENOENT") {
-					callback(cliConfig);
-				} else {
-					throw error;
-				}
+			if (error.code === "ENOENT") {
+				callback(cliConfig);
+			} else {
+				throw error;
 			}
 		}
 	}
