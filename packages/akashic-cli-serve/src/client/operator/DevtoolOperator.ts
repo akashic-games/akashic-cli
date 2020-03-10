@@ -97,4 +97,49 @@ export class DevtoolOperator {
 	setTotalTimeLimit = (value: string): void => {
 		this.store.devtoolUiStore.setTotalTimeLimit(value);
 	}
+
+	createNicoEvent = (): any => {
+		const emulatingShinichibaMode = this.store.devtoolUiStore.emulatingShinichibaMode;
+		const params: any = {
+			"mode": emulatingShinichibaMode
+		};
+		if (emulatingShinichibaMode === "ranking") {
+			params["totalTimeLimit"] = this.store.devtoolUiStore.remainingTime;
+		}
+		const event = [[32, 0, "dummy", {
+			"type": "start",
+			"parameters": params
+		}]];
+		return event;
+	}
+
+	addTickHandler = (): void => {
+		const gameContent = this.store.currentLocalInstance.gameContent;
+		const remaingTimeOrg = this.store.devtoolUiStore.remainingTime;
+
+		gameContent.onTick.add((game: agv.GameLike) => {
+			if (this.store.devtoolUiStore.stopsGameOnTimeout)
+				this.stopGameOverTime(remaingTimeOrg);
+
+			if (game.vars && game.vars.gameState) {
+				this.store.devtoolUiStore.setScore(game.vars.gameState.score);
+				this.store.devtoolUiStore.setPlayThreshold(game.vars.gameState.playThreshold);
+				this.store.devtoolUiStore.setClearThreshold(game.vars.gameState.clearThreshold);
+			}
+		});
+	}
+
+	stopGameOverTime  = (remaingTime: number ): void => {
+		if (!this.store.devtoolUiStore.isAutoSendEvent
+			|| this.store.devtoolUiStore.emulatingShinichibaMode !== "ranking"
+			|| this.store.currentLocalInstance.executionMode === "replay"
+		) return;
+
+		const dur = this.store.currentPlay.duration / 1000;
+		const currentRemainingTime = remaingTime - dur ;
+		this.store.devtoolUiStore.setRemainingTime(currentRemainingTime >= 0 ? Math.ceil(currentRemainingTime) : 0);
+		if (dur >= remaingTime && !this.store.currentPlay.isActivePausing) {
+			this.store.currentPlay.pauseActive();
+		}
+	}
 }

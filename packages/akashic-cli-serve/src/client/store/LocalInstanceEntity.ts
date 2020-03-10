@@ -131,7 +131,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 		return this._serveGameContent;
 	}
 
-	async start(tickHandler: (game: agv.GameLike) => void): Promise<void> {
+	async start(): Promise<void> {
 		if (this._resizeGameView) {
 			const url = this.content.locator.asAbsoluteUrl();
 			const contentJson = await ApiRequest.get<{ content_url: string }>(url);
@@ -139,7 +139,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 			this._gameViewManager.setViewSize(gameJson.width, gameJson.height);
 		}
 
-		await this._gameViewManager.startGameContent(this._serveGameContent, tickHandler);
+		await this._gameViewManager.startGameContent(this._serveGameContent);
 		this._timeKeeper.start();
 	}
 

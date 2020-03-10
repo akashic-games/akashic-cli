@@ -7,9 +7,9 @@ export interface NiconicoDevtoolProps {
 	disabled: boolean;
 	isAutoSendEvent: boolean;
 	usePreferredTimeLimit: boolean;
-	useStopGameOnTimeout: boolean;
+	stopsGameOnTimeout: boolean;
 	totalTimeLimit: string;
-	supportMode: string;
+	emulatingShinichibaMode: string;
 	remainingTime: number;
 	preferredTotalTimeLimit: number;
 	score?: number;
@@ -59,32 +59,32 @@ export class NiconicoDevtool extends React.Component<NiconicoDevtoolProps, {}> {
 									<tr>
 										<td>mode</td>
 										<td>
-											<select name="mode-select" onChange={this._onModeSelectChanged} value={this.props.supportMode}>
+											<select name="mode-select" onChange={this._onModeSelectChanged} value={this.props.emulatingShinichibaMode}>
 												{selectOptions}
 											</select>
 										</td>
 									</tr>
-									<tr className={this.props.supportMode !== "ranking" ? styles["text-silver"] : ""}>
+									<tr className={this.props.emulatingShinichibaMode !== "ranking" ? styles["text-silver"] : ""}>
 										<td>totalTimeLimit</td>
 										<td>
 											<input type="text" value={this.props.totalTimeLimit}
-												className={this.props.supportMode !== "ranking" || this.props.usePreferredTimeLimit ? styles["text-silver"] : ""}
-												disabled={this.props.supportMode !== "ranking" || this.props.usePreferredTimeLimit}
+												className={this.props.emulatingShinichibaMode !== "ranking" || this.props.usePreferredTimeLimit ? styles["text-silver"] : ""}
+												disabled={this.props.emulatingShinichibaMode !== "ranking" || this.props.usePreferredTimeLimit}
 												onChange={this._onTotalTimeLimitChanged} />
 											<div>
 												<label>
 													<input type="checkbox"
 														checked={this.props.usePreferredTimeLimit}
-														disabled={this.props.supportMode !== "ranking"}
+														disabled={this.props.emulatingShinichibaMode !== "ranking"}
 														onChange={this._onUsePreferredTotalTimeLimitChanged} />
 													<span>game.jsonのpreferredSessionParametersの値を利用する({this.props.preferredTotalTimeLimit}秒)</span>
 												</label>
 											</div>
 											<label>
 												<input type="checkbox"
-													checked={this.props.useStopGameOnTimeout}
-													onChange={this._onUseStopGameChanged}
-													disabled={this.props.supportMode !== "ranking"}/>
+													checked={this.props.stopsGameOnTimeout}
+													onChange={this._onStopsGameChanged}
+													disabled={this.props.emulatingShinichibaMode !== "ranking"}/>
 												<span>時間経過後にゲームを停止</span> (残 {this.props.remainingTime} 秒)
 											</label>
 											<p className={`${styles["text-red-bold"]} ${this.props.remainingTime === 0 ? styles["text-visible"] : styles["text-hidden"]}`} >
@@ -138,8 +138,8 @@ export class NiconicoDevtool extends React.Component<NiconicoDevtoolProps, {}> {
 		this.props.onUsePreferredTotalTimeLimitChanged(!this.props.usePreferredTimeLimit);
 	}
 
-	private _onUseStopGameChanged = (): void => {
-		this.props.onUseStopGameChanged(!this.props.useStopGameOnTimeout);
+	private _onStopsGameChanged = (): void => {
+		this.props.onUseStopGameChanged(!this.props.stopsGameOnTimeout);
 	}
 
 	private _onTotalTimeLimitChanged = (e: React.ChangeEvent<HTMLInputElement> ): void => {

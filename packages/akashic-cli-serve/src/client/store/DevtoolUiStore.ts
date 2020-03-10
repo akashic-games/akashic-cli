@@ -1,11 +1,9 @@
 import { action, observable, ObservableMap } from "mobx";
 import { EDumpItem } from "../common/types/EDumpItem";
 import { storage } from "./storage";
-import { GameConfiguration } from "../../common/types/GameConfiguration";
-import { ServiceType } from "../../common/types/ServiceType";
 
 export class DevtoolUiStore {
-	readonly defaultTotalTimeLimit = 85;
+	static DEFAULT_TOTAL_TIME_LIMIT = 85;
 
 	@observable height: number;
 	@observable activeDevtool: string;
@@ -14,11 +12,10 @@ export class DevtoolUiStore {
 	@observable eventEditContent: string;
 	@observable showsHiddenEntity: boolean;
 	@observable isAutoSendEvent: boolean;
-	@observable supportMode: string;
+	@observable emulatingShinichibaMode: string;
 	@observable usePreferredTotalTimeLimit: boolean;
-	@observable useStopGameOnTimeout: boolean;
+	@observable stopsGameOnTimeout: boolean;
 	@observable totalTimeLimit: string;
-	@observable remainingTime: number;
 
 	// storage に保存しないもの
 	@observable isSelectingEntity: boolean;
@@ -30,7 +27,7 @@ export class DevtoolUiStore {
 	@observable score: number;
 	@observable playThreshold: number;
 	@observable clearThreshold: number;
-	@observable preferredTotalTimeLimit: number;
+	@observable remainingTime: number;
 
 	constructor() {
 		this.height = storage.data.devtoolsHeight;
@@ -46,11 +43,10 @@ export class DevtoolUiStore {
 		this.isSeekingVolume = false;
 		this.volume = 100;
 		this.isAutoSendEvent = storage.data.isAutoSendEvents;
-		this.supportMode = storage.data.supportedMode;
+		this.emulatingShinichibaMode = storage.data.emulatingShinichibaMode;
 		this.usePreferredTotalTimeLimit = storage.data.usePreferredTotalTimeLimit;
-		this.useStopGameOnTimeout = storage.data.useStopGame;
+		this.stopsGameOnTimeout = storage.data.stopsGameOnTimeout;
 		this.totalTimeLimit = storage.data.totalTimeLimit ;
-		this.remainingTime = storage.data.remainingTime || this.defaultTotalTimeLimit;
 	}
 
 	@action
@@ -135,13 +131,13 @@ export class DevtoolUiStore {
 
 	@action
 	toggleUseStopGame(v: boolean): void {
-		this.useStopGameOnTimeout = v;
-		storage.put({ useStopGame: v });
+		this.stopsGameOnTimeout = v;
+		storage.put({ stopsGameOnTimeout: v });
 	}
 	@action
 	setSupportedMode(mode: string): void {
-		this.supportMode = mode;
-		storage.put({ supportedMode: mode });
+		this.emulatingShinichibaMode = mode;
+		storage.put({ emulatingShinichibaMode: mode });
 	}
 	@action
 	setTotalTimeLimit(v: string): void {
@@ -169,33 +165,10 @@ export class DevtoolUiStore {
 	}
 
 	@action
-	initializePrefferdSessionParams(gameJson: GameConfiguration): void {
-		const niconicoConfig = gameJson && gameJson.environment && gameJson.environment.niconico;
-		this.preferredTotalTimeLimit =
-			!niconicoConfig || !niconicoConfig.preferredSessionParameters || !niconicoConfig.preferredSessionParameters.totalTimeLimit
-				? this.defaultTotalTimeLimit
-				: niconicoConfig.preferredSessionParameters.totalTimeLimit;
-
-		this.initializeReamingTime();
-	}
-
-
-	@action
-	initializeReamingTime(): void {
+	initRemainingTime(preferredTotalTimeLimit: number): void {
 		if (this.totalTimeLimit === "")
-			this.totalTimeLimit = this.defaultTotalTimeLimit.toString();
-		this.remainingTime = this.usePreferredTotalTimeLimit ? this.preferredTotalTimeLimit : parseInt(this.totalTimeLimit, 10);
+			this.totalTimeLimit = DevtoolUiStore.DEFAULT_TOTAL_TIME_LIMIT.toString();
+		this.remainingTime = this.usePreferredTotalTimeLimit ? preferredTotalTimeLimit : parseInt(this.totalTimeLimit, 10);
 		storage.put({ totalTimeLimit: this.totalTimeLimit });
-		storage.put({ remainingTime: this.remainingTime });
-	}
-
-	createTickHandler(targetService: ServiceType): (game: agv.GameLike) => void {
-		return (game: agv.GameLike) => {
-			if (targetService !== ServiceType.Atsumaru && game.vars && game.vars.gameState) {
-				this.setScore(game.vars.gameState.score);
-				this.setPlayThreshold(game.vars.gameState.playThreshold);
-				this.setClearThreshold(game.vars.gameState.clearThreshold);
-			}
-		};
 	}
 }

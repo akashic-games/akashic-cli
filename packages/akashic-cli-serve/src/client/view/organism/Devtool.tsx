@@ -57,11 +57,11 @@ export class Devtool extends React.Component<DevtoolProps, {}> {
 						onClick: this._onSelectToolTable[t]
 					}))
 				} />
-				{(activeDevtool === "Instances") && <InstancesDevtool {...props.instancesDevtoolProps} />}
-				{(activeDevtool === "Events") && <EventsDevtool {...props.eventsDevtoolProps} />}
-				{(activeDevtool === "EntityTree") && <EntityTreeDevtool {...props.entityTreeDevtoolProps} />}
-				{(activeDevtool === "Atsumaru") && <AtsumaruDevtool {...props.atsumaruDevtoolProps} />}
-				{(activeDevtool === "Niconico") && <NiconicoDevtool {...props.niconicoDevtoolProps} />}
+				{ (activeDevtool === "Instances") && <InstancesDevtool {...props.instancesDevtoolProps} /> }
+				{ (activeDevtool === "Events") && <EventsDevtool {...props.eventsDevtoolProps} /> }
+				{ (activeDevtool === "EntityTree") && <EntityTreeDevtool {...props.entityTreeDevtoolProps } />}
+				{ (activeDevtool === "Atsumaru") && <AtsumaruDevtool {...props.atsumaruDevtoolProps} /> }
+				{ (activeDevtool === "Niconico") && <NiconicoDevtool {...props.niconicoDevtoolProps} /> }
 			</div>
 		</TopResizable>;
 	}

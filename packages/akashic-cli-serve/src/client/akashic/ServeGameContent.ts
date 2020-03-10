@@ -1,3 +1,4 @@
+import { Trigger } from "@akashic/trigger";
 import { EDumpItem } from "../common/types/EDumpItem";
 
 function getMatrixFromRoot(e: ae.ELike | null, camera: ae.CameraLike | null): ae.MatrixLike | null {
@@ -40,6 +41,7 @@ function makeEDumpItem(e: ae.ELike): EDumpItem {
 
 export class ServeGameContent {
 	readonly agvGameContent: agv.GameContent;
+	onTick: Trigger<agv.GameLike>;
 	private _game: agv.GameLike;
 	private _highlightedEntityId: number | null;
 
@@ -47,9 +49,10 @@ export class ServeGameContent {
 		this.agvGameContent = agvGameContent;
 		this._game = null!;
 		this._highlightedEntityId = null;
+		this.onTick = new Trigger<agv.GameLike>();
 	}
 
-	setup(tickHandler: (game: agv.GameLike) => void): void {
+	setup(): void {
 		this._game = this.agvGameContent.getGame();
 		const game = this._game;
 		const renderOriginal = game.render;
@@ -78,7 +81,7 @@ export class ServeGameContent {
 
 		const tickOriginal = game.tick;
 		game.tick = function (_advanceAge: boolean, _omittedTickCount?: number) {
-			tickHandler(game);
+			self.onTick.fire(game);
 			return tickOriginal.apply(this, arguments);
 		};
 	}
