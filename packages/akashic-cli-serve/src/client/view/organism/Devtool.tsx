@@ -59,7 +59,7 @@ export class Devtool extends React.Component<DevtoolProps, {}> {
 				} />
 				{ (activeDevtool === "Instances") && <InstancesDevtool {...props.instancesDevtoolProps} /> }
 				{ (activeDevtool === "Events") && <EventsDevtool {...props.eventsDevtoolProps} /> }
-				{ (activeDevtool === "EntityTree") && <EntityTreeDevtool {...props.entityTreeDevtoolProps } />}
+				{ (activeDevtool === "EntityTree") && <EntityTreeDevtool {...props.entityTreeDevtoolProps} /> }
 				{ (activeDevtool === "Atsumaru") && <AtsumaruDevtool {...props.atsumaruDevtoolProps} /> }
 				{ (activeDevtool === "Niconico") && <NiconicoDevtool {...props.niconicoDevtoolProps} /> }
 			</div>
