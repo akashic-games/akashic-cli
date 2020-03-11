@@ -8,19 +8,19 @@ export module CliConfigurationFile {
 	 * akashic.config.js ファイルを読み込む。
 	 *
 	 * @param confPath akashic.config.js があるディレクトリ。絶対パスであることを期待する。
-	 * @param logger ログ出力に用いるロガー。
+	 * @param callback コールバック。
 	 */
-	export function read(confPath: string, callback: (conf: CliConfiguration) => void): void {
+	export function read(confPath: string, callback: (error: Error, conf: CliConfiguration) => void): void {
 		let cliConfig: CliConfiguration = { commandOptions: {} };
 		try {
 			cliConfig = require(confPath);
 			delete require.cache[require.resolve(confPath)];
-			callback(cliConfig);
+			setImmediate(() => callback(undefined, cliConfig));
 		} catch (error) {
 			if (error.code === "ENOENT") {
-				callback(cliConfig);
+				setImmediate(() => callback(undefined, cliConfig));
 			} else {
-				throw error;
+				callback(error, undefined);
 			}
 		}
 	}
