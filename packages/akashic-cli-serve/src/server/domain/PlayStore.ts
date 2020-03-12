@@ -74,7 +74,10 @@ export class PlayStore {
 		};
 
 		if (playlog) {
-			this.loadPlaylog(playId, playlog);
+			// クライアント側にdurationとしてplaylogに記録されている終了時間を渡す必要があるので、そのための設定を行う
+			const timeKeeper = this.playEntities[playId].timeKeeper;
+			const finishedTime = this.calculataFinishedTime(playlog);
+			timeKeeper.setTime(finishedTime);
 		}
 		this.onPlayCreate.fire({playId, contentLocatorData: loc});
 		this.onPlayStatusChange.fire({playId, playStatus: "running"});
@@ -162,13 +165,6 @@ export class PlayStore {
 	getPlayDurationState(playId: string): PlayDurationState {
 		const timeKeeper = this.playEntities[playId].timeKeeper;
 		return { duration: timeKeeper.now(), isPaused: timeKeeper.isPausing() };
-	}
-
-	private loadPlaylog(playId: string, playlog: DumpedPlaylog): void {
-		// クライアント側にdurationとしてplaylogに記録されている終了時間を渡す必要があるので、そのための設定を行う
-		const timeKeeper = this.playEntities[playId].timeKeeper;
-		const finishedTime = this.calculataFinishedTime(playlog);
-		timeKeeper.setTime(finishedTime);
 	}
 
 	// コンテンツの終了時間をplaylogから算出する
