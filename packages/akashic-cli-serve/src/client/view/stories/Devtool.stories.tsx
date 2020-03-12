@@ -26,7 +26,6 @@ const nicoProps: NiconicoDevtoolProps = {
 	stopsGameOnTimeout: true,
 	totalTimeLimitInputValue: 75,
 	emulatingShinichibaMode: "ranking",
-	// remainingTime: 65,
 	totalTimeLimit: 65,
 	playDuration: 0,
 	preferredTotalTimeLimit: 55,
