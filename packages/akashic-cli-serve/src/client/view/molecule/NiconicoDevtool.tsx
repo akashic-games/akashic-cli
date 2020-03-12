@@ -8,16 +8,17 @@ export interface NiconicoDevtoolProps {
 	isAutoSendEvent: boolean;
 	usePreferredTimeLimit: boolean;
 	stopsGameOnTimeout: boolean;
-	totalTimeLimit: string;
+	totalTimeLimitInputValue: number;
 	emulatingShinichibaMode: string;
-	remainingTime: number;
+	playDuration: number;
+	totalTimeLimit: number;
 	preferredTotalTimeLimit: number;
 	score?: number;
 	playThreshold?: number;
 	clearThreshold?: number;
 	onAutoSendEventsChanged: (isSend: boolean) => void;
 	onModeSelectChanged: (e: string) => void;
-	onTotalTimeLimitChanged: (v: string) => void;
+	onTotalTimeLimitInputValueChanged: (v: number) => void;
 	onUsePreferredTotalTimeLimitChanged: (value: boolean) => void;
 	onUseStopGameChanged: (value: boolean) => void;
 }
@@ -32,6 +33,9 @@ export class NiconicoDevtool extends React.Component<NiconicoDevtoolProps, {}> {
 		const selectOptions = this.modeList.map((mode) => {
 			return <option value={mode.value} key={mode.value}>{mode.text}</option>;
 		});
+
+		let remainingTime = this.props.totalTimeLimit - Math.floor(this.props.playDuration / 1000);
+		remainingTime = Math.max(remainingTime, 0);
 
 		return <div className={styles["niconico-devtool"]}>
 			<div className={this.props.disabled ? "" : styles["hidden"]}>
@@ -67,10 +71,10 @@ export class NiconicoDevtool extends React.Component<NiconicoDevtoolProps, {}> {
 									<tr className={this.props.emulatingShinichibaMode !== "ranking" ? styles["text-silver"] : ""}>
 										<td>totalTimeLimit</td>
 										<td>
-											<input type="text" value={this.props.totalTimeLimit}
+											<input type="text" value={isNaN(this.props.totalTimeLimitInputValue) ? "" : this.props.totalTimeLimitInputValue }
 												className={this.props.emulatingShinichibaMode !== "ranking" || this.props.usePreferredTimeLimit ? styles["text-silver"] : ""}
 												disabled={this.props.emulatingShinichibaMode !== "ranking" || this.props.usePreferredTimeLimit}
-												onChange={this._onTotalTimeLimitChanged} />
+												onChange={this._onTotalTimeLimitInputValueChanged} />
 											<div>
 												<label>
 													<input type="checkbox"
@@ -85,9 +89,9 @@ export class NiconicoDevtool extends React.Component<NiconicoDevtoolProps, {}> {
 													checked={this.props.stopsGameOnTimeout}
 													onChange={this._onStopsGameChanged}
 													disabled={this.props.emulatingShinichibaMode !== "ranking"}/>
-												<span>時間経過後にゲームを停止</span> (残 {this.props.remainingTime} 秒)
+												<span>時間経過後にゲームを停止</span> (残 {isNaN(this.props.totalTimeLimit) ?  "N/A" : remainingTime} 秒)
 											</label>
-											<p className={`${styles["text-red-bold"]} ${this.props.remainingTime === 0 ? styles["text-visible"] : styles["text-hidden"]}`} >
+											<p className={`${styles["text-red-bold"]} ${remainingTime === 0 ? styles["text-visible"] : styles["text-hidden"]}`} >
 												ゲームを停止しました。</p>
 										</td>
 									</tr>
@@ -142,9 +146,9 @@ export class NiconicoDevtool extends React.Component<NiconicoDevtoolProps, {}> {
 		this.props.onUseStopGameChanged(!this.props.stopsGameOnTimeout);
 	}
 
-	private _onTotalTimeLimitChanged = (e: React.ChangeEvent<HTMLInputElement> ): void => {
-		const value = parseInt(e.target.value, 10);
-		if (e.target.value !== "" && isNaN(parseInt(e.target.value, 10))) return; // TODOs
-		this.props.onTotalTimeLimitChanged(e.target.value);
+	private _onTotalTimeLimitInputValueChanged = (e: React.ChangeEvent<HTMLInputElement> ): void => {
+		let value = parseInt(e.target.value, 10);
+		// if (isNaN(value)) value = DevtoolUiStore.DEFAULT_TOTAL_TIME_LIMIT;
+		this.props.onTotalTimeLimitInputValueChanged(value);
 	}
 }

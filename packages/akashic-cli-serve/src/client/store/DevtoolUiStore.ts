@@ -15,7 +15,7 @@ export class DevtoolUiStore {
 	@observable emulatingShinichibaMode: string;
 	@observable usePreferredTotalTimeLimit: boolean;
 	@observable stopsGameOnTimeout: boolean;
-	@observable totalTimeLimit: string;
+	@observable totalTimeLimitInputValue: number;
 
 	// storage に保存しないもの
 	@observable isSelectingEntity: boolean;
@@ -27,7 +27,8 @@ export class DevtoolUiStore {
 	@observable score: number;
 	@observable playThreshold: number;
 	@observable clearThreshold: number;
-	@observable remainingTime: number;
+	@observable totalTimeLimit: number;
+	@observable preferredTotalTimeLimit: number;
 
 	constructor() {
 		this.height = storage.data.devtoolsHeight;
@@ -46,7 +47,7 @@ export class DevtoolUiStore {
 		this.emulatingShinichibaMode = storage.data.emulatingShinichibaMode;
 		this.usePreferredTotalTimeLimit = storage.data.usePreferredTotalTimeLimit;
 		this.stopsGameOnTimeout = storage.data.stopsGameOnTimeout;
-		this.totalTimeLimit = storage.data.totalTimeLimit ;
+		this.totalTimeLimitInputValue = storage.data.totalTimeLimitInputValue;
 	}
 
 	@action
@@ -140,13 +141,13 @@ export class DevtoolUiStore {
 		storage.put({ emulatingShinichibaMode: mode });
 	}
 	@action
-	setTotalTimeLimit(v: string): void {
-		this.totalTimeLimit = v;
-		storage.put({ totalTimeLimit: v });
+	setTotalTimeLimitInputValue(v: number): void {
+		this.totalTimeLimitInputValue = v;
+		storage.put({ totalTimeLimitInputValue: v });
 	}
 	@action
-	setRemainingTime(v: number): void {
-		this.remainingTime = v;
+	settotalTimeLimit(v: number): void {
+		this.totalTimeLimit = v;
 	}
 
 	@action
@@ -165,10 +166,8 @@ export class DevtoolUiStore {
 	}
 
 	@action
-	initRemainingTime(preferredTotalTimeLimit: number): void {
-		if (this.totalTimeLimit === "")
-			this.totalTimeLimit = DevtoolUiStore.DEFAULT_TOTAL_TIME_LIMIT.toString();
-		this.remainingTime = this.usePreferredTotalTimeLimit ? preferredTotalTimeLimit : parseInt(this.totalTimeLimit, 10);
-		storage.put({ totalTimeLimit: this.totalTimeLimit });
+	initTotalTimeLimit(_preferredTotalTimeLimit: number): void {
+		this.preferredTotalTimeLimit = _preferredTotalTimeLimit;
+		this.totalTimeLimit = this.usePreferredTotalTimeLimit ? _preferredTotalTimeLimit : this.totalTimeLimitInputValue;
 	}
 }

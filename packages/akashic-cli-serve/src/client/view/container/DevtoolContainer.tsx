@@ -80,19 +80,20 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 				disabled: targetService === ServiceType.Atsumaru,
 				isAutoSendEvent: devtoolUiStore.isAutoSendEvent,
 				emulatingShinichibaMode: devtoolUiStore.emulatingShinichibaMode,
+				totalTimeLimitInputValue: devtoolUiStore.totalTimeLimitInputValue,
 				totalTimeLimit: devtoolUiStore.totalTimeLimit,
-				remainingTime: devtoolUiStore.remainingTime,
+				playDuration: play.duration,
 				usePreferredTimeLimit: devtoolUiStore.usePreferredTotalTimeLimit,
 				stopsGameOnTimeout: devtoolUiStore.stopsGameOnTimeout,
 				score: devtoolUiStore.score,
 				playThreshold: devtoolUiStore.playThreshold,
 				clearThreshold: devtoolUiStore.clearThreshold,
-				preferredTotalTimeLimit: play.content.preferredTotalTimeLimit,
+				preferredTotalTimeLimit: devtoolUiStore.preferredTotalTimeLimit,
 				onAutoSendEventsChanged: operator.devtool.toggleAutoSendEvents,
 				onModeSelectChanged: operator.devtool.setSupportedMode,
 				onUsePreferredTotalTimeLimitChanged: operator.devtool.toggleUsePreferredTotalTimeLimit,
 				onUseStopGameChanged: operator.devtool.toggleUseStopGame,
-				onTotalTimeLimitChanged: operator.devtool.setTotalTimeLimit
+				onTotalTimeLimitInputValueChanged: operator.devtool.setTotalTimeLimitInputValue
 			}}
 		/>;
 	}

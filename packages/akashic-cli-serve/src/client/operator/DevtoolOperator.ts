@@ -94,8 +94,8 @@ export class DevtoolOperator {
 		this.store.devtoolUiStore.setSupportedMode(value);
 	}
 
-	setTotalTimeLimit = (value: string): void => {
-		this.store.devtoolUiStore.setTotalTimeLimit(value);
+	setTotalTimeLimitInputValue = (value: number): void => {
+		this.store.devtoolUiStore.setTotalTimeLimitInputValue(value);
 	}
 
 	createNicoEvent = (): any => {
@@ -104,7 +104,7 @@ export class DevtoolOperator {
 			"mode": emulatingShinichibaMode
 		};
 		if (emulatingShinichibaMode === "ranking") {
-			params["totalTimeLimit"] = this.store.devtoolUiStore.remainingTime;
+			params["totalTimeLimit"] = this.store.devtoolUiStore.totalTimeLimit;
 		}
 		const event = [[32, 0, "dummy", {
 			"type": "start",
@@ -113,32 +113,32 @@ export class DevtoolOperator {
 		return event;
 	}
 
-	addTickHandler = (): void => {
+	setupNiconicoDevtoolValueWatcher = (): void => {
 		const gameContent = this.store.currentLocalInstance.gameContent;
-		const remaingTimeOrg = this.store.devtoolUiStore.remainingTime;
-
-		gameContent.onTick.add((game: agv.GameLike) => {
-			if (this.store.devtoolUiStore.stopsGameOnTimeout)
-				this.stopGameOverTime(remaingTimeOrg);
-
-			if (game.vars && game.vars.gameState) {
-				this.store.devtoolUiStore.setScore(game.vars.gameState.score);
-				this.store.devtoolUiStore.setPlayThreshold(game.vars.gameState.playThreshold);
-				this.store.devtoolUiStore.setClearThreshold(game.vars.gameState.clearThreshold);
-			}
-		});
+		if (!gameContent.onTick.contains(this.tickHandler, this))
+			gameContent.onTick.add(this.tickHandler, this);
 	}
 
-	stopGameOverTime  = (remaingTime: number ): void => {
+	private tickHandler(game: agv.GameLike) {
+		if (this.store.devtoolUiStore.stopsGameOnTimeout)
+			this.updateRemainingTime();
+
+		if (game.vars && game.vars.gameState) {
+			this.store.devtoolUiStore.setScore(game.vars.gameState.score);
+			this.store.devtoolUiStore.setPlayThreshold(game.vars.gameState.playThreshold);
+			this.store.devtoolUiStore.setClearThreshold(game.vars.gameState.clearThreshold);
+		}
+	}
+
+	private updateRemainingTime(): void {
 		if (!this.store.devtoolUiStore.isAutoSendEvent
 			|| this.store.devtoolUiStore.emulatingShinichibaMode !== "ranking"
 			|| this.store.currentLocalInstance.executionMode === "replay"
 		) return;
 
 		const dur = this.store.currentPlay.duration / 1000;
-		const currentRemainingTime = remaingTime - dur ;
-		this.store.devtoolUiStore.setRemainingTime(currentRemainingTime >= 0 ? Math.ceil(currentRemainingTime) : 0);
-		if (dur >= remaingTime && !this.store.currentPlay.isActivePausing) {
+		const totalTimeLimit = this.store.devtoolUiStore.totalTimeLimit;
+		if (dur >= totalTimeLimit && !this.store.currentPlay.isActivePausing) {
 			this.store.currentPlay.pauseActive();
 		}
 	}

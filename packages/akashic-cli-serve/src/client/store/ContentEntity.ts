@@ -2,17 +2,16 @@ import { action, observable } from "mobx";
 import { SandboxConfig } from "../../common/types/SandboxConfig";
 import { ContentDesc } from "../../common/types/ContentDesc";
 import { ClientContentLocator } from "../common/ClientContentLocator";
-import { GameConfiguration } from "../../common/types/GameConfiguration";
+import { GameConfiguration, PreferredSessionParameters } from "../../common/types/GameConfiguration";
 import { DevtoolUiStore } from "./DevtoolUiStore";
 import * as ApiClient from "../api/ApiClient";
 
 export class ContentEntity {
 	readonly locator: ClientContentLocator;
-	readonly defaultTotalTimeLimit = 85;
 	gameJson: GameConfiguration; // 現状では view に反映しないので observable はつけない
+	preferredSessionParameters: PreferredSessionParameters; // 現状では view に反映しないので observable はつけない
 	@observable sandboxConfig: SandboxConfig;
 	@observable argumentsTable: { [name: string]: string };
-	@observable preferredTotalTimeLimit: number;
 
 	constructor(desc: ContentDesc) {
 		this.locator = ClientContentLocator.instantiate(desc.contentLocatorData);
@@ -20,7 +19,7 @@ export class ContentEntity {
 		this.argumentsTable = {};
 		const args = this.sandboxConfig.arguments || {};
 		this.gameJson = desc.gameJson;
-		this.setTotalTimeLimit();
+		this.calculatePreferredSessionParameters();
 		Object.keys(args).forEach(key => {
 			this.argumentsTable[key] = JSON.stringify(args[key], null, 2);
 		});
@@ -37,9 +36,11 @@ export class ContentEntity {
 	}
 
 	@action
-	setTotalTimeLimit(): void {
+	calculatePreferredSessionParameters(): void {
 		const niconicoConfig = this.gameJson && this.gameJson.environment && this.gameJson.environment.niconico;
-		this.preferredTotalTimeLimit =
+		this.preferredSessionParameters = niconicoConfig.preferredSessionParameters;
+
+		this.preferredSessionParameters.totalTimeLimit =
 			!niconicoConfig || !niconicoConfig.preferredSessionParameters || !niconicoConfig.preferredSessionParameters.totalTimeLimit
 				? DevtoolUiStore.DEFAULT_TOTAL_TIME_LIMIT
 				: niconicoConfig.preferredSessionParameters.totalTimeLimit;

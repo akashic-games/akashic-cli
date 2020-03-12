@@ -20,7 +20,7 @@ export interface StorageData {
 	emulatingShinichibaMode: string;
 	usePreferredTotalTimeLimit: boolean;
 	stopsGameOnTimeout: boolean;
-	totalTimeLimit: string;
+	totalTimeLimitInputValue: number;
 }
 
 function asBool(s: string | null): boolean | null {
@@ -92,7 +92,7 @@ export class Storage {
 			emulatingShinichibaMode: choose(getQueryValue(qp.emulatingShinichibaMode), s.emulatingShinichibaMode, "single"),
 			usePreferredTotalTimeLimit: choose(asBool(getQueryValue(qp.usePreferredTotalTimeLimit)), s.usePreferredTotalTimeLimit, false),
 			stopsGameOnTimeout: choose(asBool(getQueryValue(qp.stopsGameOnTimeout)), s.stopsGameOnTimeout, false),
-			totalTimeLimit: choose(getQueryValue(qp.totalTimeLimit), s.totalTimeLimit, "")
+			totalTimeLimitInputValue: choose(asNumber(getQueryValue(qp.totalTimeLimitInputValue)), s.totalTimeLimitInputValue, 85)
 		});
 	}
 

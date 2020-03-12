@@ -157,8 +157,8 @@ export class Operator {
 		});
 		store.setCurrentLocalInstance(instance);
 		if (store.targetService !== ServiceType.Atsumaru ) {
-			this.store.devtoolUiStore.initRemainingTime(play.content.preferredTotalTimeLimit);
-			this.devtool.addTickHandler();
+			this.store.devtoolUiStore.initTotalTimeLimit(play.content.preferredSessionParameters.totalTimeLimit);
+			this.devtool.setupNiconicoDevtoolValueWatcher();
 		}
 
 		if (params != null && params.joinsSelf) {
@@ -194,7 +194,7 @@ export class Operator {
 		}
 
 		if (this.store.devtoolUiStore.isAutoSendEvent) {
-			this.store.devtoolUiStore.initRemainingTime(content.preferredTotalTimeLimit);
+			this.store.devtoolUiStore.initTotalTimeLimit(play.content.preferredSessionParameters.totalTimeLimit);
 			const nicoEvent = this.devtool.createNicoEvent();
 			nicoEvent.forEach((pev: any) => play.amflow.enqueueEvent(pev));
 		}
