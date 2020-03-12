@@ -50,8 +50,8 @@ function cli(param: CliConfigStat): void {
 
 export function run(argv: string[]): void {
 	commander.parse(argv);
-	CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashic.config.js"), (configuration) => {
-		const conf = configuration.commandOptions.stat || {};
+	CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashic.config.js"), (error, configuration) => {
+		const conf = error ? {} : configuration.commandOptions.stat || {};
 		cli({
 			args: commander.args ?? conf.args,
 			cwd: commander.cwd ?? conf.cwd,
