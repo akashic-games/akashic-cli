@@ -218,7 +218,9 @@ export async function run(argv: any): Promise<void> {
 		.parse(argv);
 
 	CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashic.config.js"), async (error, configuration) => {
-		const conf = error ? {} : configuration.commandOptions.serve || {};
+		if (error) throw error;
+
+		const conf = configuration.commandOptions.serve || {};
 		const cliConfigParam: CliConfigServe = {
 			port: commander.port ?? conf.port,
 			hostname: commander.hostname ?? conf.hostname,

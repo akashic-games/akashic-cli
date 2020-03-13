@@ -63,8 +63,9 @@ export function run(argv: string[]): void {
 	commander.parse(argvCopy);
 
 	CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashic.config.js"), (error, configuration) => {
-		const conf = error ? {} : configuration.commandOptions.export ? (configuration.commandOptions.export.zip || {}) : {};
+		if (error) throw error;
 
+		const conf = configuration.commandOptions.export ? (configuration.commandOptions.export.zip || {}) : {};
 		cli({
 			cwd: commander["cwd"] ?? conf.cwd,
 			quiet: commander["quiet"] ?? conf.quiet,
