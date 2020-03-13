@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-export-html",
-  "version": "0.6.1",
+  "version": "0.6.3",
   "description": "A module to convert your Akashic game to a runnable standalone.",
   "main": "lib/index.js",
   "scripts": {
@@ -53,19 +53,19 @@
     "browserify": "13.3.0",
     "eslint": "6.8.0",
     "jest": "24.9.0",
-    "mock-fs": "4.10.4",
+    "mock-fs": "4.11.0",
     "node-fetch": "2.6.0",
     "shx": "0.3.2",
     "tslint": "5.20.1",
-    "typescript": "3.7.5",
+    "typescript": "3.8.3",
     "uglify-save-license": "0.4.1",
     "vinyl-source-stream": "1.1.2",
     "zip": "1.2.0"
   },
   "typings": "lib/index.d.ts",
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.4.0",
-    "@akashic/akashic-cli-export-zip": "0.5.0",
+    "@akashic/akashic-cli-commons": "0.4.1",
+    "@akashic/akashic-cli-export-zip": "0.5.1",
     "archiver": "~3.1.0",
     "commander": "2.20.3",
     "ejs": "~2.7.1",

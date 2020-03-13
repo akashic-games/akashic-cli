@@ -67,6 +67,13 @@ export function promiseExportAtsumaru(param: ExportHTMLParameterObject): Promise
 						gameJson.environment["akashic-runtime"]["flavor"] = "-canvas";
 					}
 				}
+				if (/\d+\.\d+\.\d+-\w+/.test(gameJson.environment["akashic-runtime"]["version"])) {
+					const runtimeVersion = gameJson.environment["akashic-runtime"]["version"].slice(1);
+					const engineVersion = gameJson.environment["sandbox-runtime"] || "1";
+					completedParam.logger.warn(
+						`UNSTABLE: Akashic Engine v${engineVersion} (akashic-runtime@${runtimeVersion}) is in beta. The game exported MAY NOT WORK PROPERLY.`
+					);
+				}
 				return gameJson;
 			});
 		}).then((gameJson) => {
