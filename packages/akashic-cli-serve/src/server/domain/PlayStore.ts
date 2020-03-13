@@ -63,7 +63,7 @@ export class PlayStore {
 	 */
 	async createPlay(loc: ServerContentLocator, playlog?: DumpedPlaylog): Promise<string> {
 		const playId = await this.playManager.createPlay({
-			contentUrl: loc.asAbsoluteUrl(),
+			contentUrl: loc.asAbsoluteUrl()
 		}, playlog);
 		this.playEntities[playId] = {
 			contentLocator: loc,
