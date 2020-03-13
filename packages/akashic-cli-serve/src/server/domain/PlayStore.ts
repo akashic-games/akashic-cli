@@ -64,7 +64,7 @@ export class PlayStore {
 	async createPlay(loc: ServerContentLocator, playlog?: DumpedPlaylog): Promise<string> {
 		const playId = await this.playManager.createPlay({
 			contentUrl: loc.asAbsoluteUrl()
-		});
+		}, playlog);
 		this.playEntities[playId] = {
 			contentLocator: loc,
 			timeKeeper: new TimeKeeper(),
@@ -72,8 +72,12 @@ export class PlayStore {
 			runners: [],
 			joinedPlayers: []
 		};
+
 		if (playlog) {
-			await this.loadPlaylog(playId, playlog);
+			// クライアント側にdurationとしてplaylogに記録されている終了時間を渡す必要があるので、そのための設定を行う
+			const timeKeeper = this.playEntities[playId].timeKeeper;
+			const finishedTime = this.calculataFinishedTime(playlog);
+			timeKeeper.setTime(finishedTime);
 		}
 		this.onPlayCreate.fire({playId, contentLocatorData: loc});
 		this.onPlayStatusChange.fire({playId, playStatus: "running"});
@@ -161,23 +165,6 @@ export class PlayStore {
 	getPlayDurationState(playId: string): PlayDurationState {
 		const timeKeeper = this.playEntities[playId].timeKeeper;
 		return { duration: timeKeeper.now(), isPaused: timeKeeper.isPausing() };
-	}
-
-	private async loadPlaylog(playId: string, playlog: DumpedPlaylog): Promise<void> {
-		const token = this.createPlayToken(playId, true);
-		const amflow = this.createAMFlow(playId);
-		await new Promise((resolve, reject) => amflow.open(playId, (e: Error) => e ? reject(e) : resolve()));
-		await new Promise((resolve, reject) => amflow.authenticate(token, (e: Error) => e ? reject(e) : resolve()));
-		await new Promise((resolve, reject) => amflow.putStartPoint(playlog.startPoints[0], (e: Error) => e ? reject(e) : resolve()));
-		playlog.tickList[2].forEach((tick) => {
-			amflow.sendTick(tick);
-		});
-		amflow.destroy();
-
-		// クライアント側にdurationとしてplaylogに記録されている終了時間を渡す必要があるので、そのための設定を行う
-		const timeKeeper = this.playEntities[playId].timeKeeper;
-		const finishedTime = this.calculataFinishedTime(playlog);
-		timeKeeper.setTime(finishedTime);
 	}
 
 	// コンテンツの終了時間をplaylogから算出する
