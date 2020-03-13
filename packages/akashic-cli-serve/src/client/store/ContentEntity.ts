@@ -38,11 +38,11 @@ export class ContentEntity {
 	@action
 	calculatePreferredSessionParameters(): void {
 		const niconicoConfig = this.gameJson && this.gameJson.environment && this.gameJson.environment.niconico;
-		this.preferredSessionParameters = niconicoConfig.preferredSessionParameters;
+		this.preferredSessionParameters = niconicoConfig && niconicoConfig.preferredSessionParameters || {};
 
 		this.preferredSessionParameters.totalTimeLimit =
-			!niconicoConfig || !niconicoConfig.preferredSessionParameters || !niconicoConfig.preferredSessionParameters.totalTimeLimit
+			!this.preferredSessionParameters || !this.preferredSessionParameters.totalTimeLimit
 				? DevtoolUiStore.DEFAULT_TOTAL_TIME_LIMIT
-				: niconicoConfig.preferredSessionParameters.totalTimeLimit;
+				: this.preferredSessionParameters.totalTimeLimit;
 	}
 }
