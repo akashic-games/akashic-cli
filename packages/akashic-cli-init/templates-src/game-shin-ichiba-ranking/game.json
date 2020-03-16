@@ -23,7 +23,7 @@
 			"duration": 250
 		}
 	},
-	"moduleMainScripts": [],
+	"moduleMainScripts": {},
 	"environment": {
 		"sandbox-runtime": "2",
 		"niconico": {
