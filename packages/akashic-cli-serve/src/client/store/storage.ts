@@ -16,6 +16,11 @@ export interface StorageData {
 	joinsAutomatically: boolean;
 	showsBackgroundImage: boolean;
 	showsGrid: boolean;
+	isAutoSendEvents: boolean;
+	emulatingShinichibaMode: string;
+	usePreferredTotalTimeLimit: boolean;
+	stopsGameOnTimeout: boolean;
+	totalTimeLimitInputValue: number;
 }
 
 function asBool(s: string | null): boolean | null {
@@ -82,7 +87,12 @@ export class Storage {
 			showsHiddenEntity: choose(asBool(getQueryValue(qp.showsHiddenEntity)), s.showsHiddenEntity, true),
 			joinsAutomatically: choose(asBool(getQueryValue(qp.joinsAutomatically)), s.joinsAutomatically, false),
 			showsBackgroundImage: choose(asBool(getQueryValue(qp.showsBackgroundImage)), s.showsBackgroundImage, false),
-			showsGrid: choose(asBool(getQueryValue(qp.showsGrid)), s.showsGrid, false)
+			showsGrid: choose(asBool(getQueryValue(qp.showsGrid)), s.showsGrid, false),
+			isAutoSendEvents: choose(asBool(getQueryValue(qp.isAutoSendEvents)), s.isAutoSendEvents, false),
+			emulatingShinichibaMode: choose(getQueryValue(qp.emulatingShinichibaMode), s.emulatingShinichibaMode, "single"),
+			usePreferredTotalTimeLimit: choose(asBool(getQueryValue(qp.usePreferredTotalTimeLimit)), s.usePreferredTotalTimeLimit, false),
+			stopsGameOnTimeout: choose(asBool(getQueryValue(qp.stopsGameOnTimeout)), s.stopsGameOnTimeout, false),
+			totalTimeLimitInputValue: choose(asNumber(getQueryValue(qp.totalTimeLimitInputValue)), s.totalTimeLimitInputValue, 85)
 		});
 	}
 
