@@ -5,6 +5,7 @@ import { serverGlobalConfig } from "../common/ServerGlobalConfig";
 import { responseSuccess } from "../common/ApiResponse";
 import { NotFoundError, BadRequestError } from "../common/ApiError";
 import * as sandboxConfigs from "../domain/SandboxConfigs";
+import * as gameConfigs from "../domain/GameConfigs";
 
 export const createHandlerToGetContents = (targetDirs: string[]): express.RequestHandler => {
 	// サーバ開始後、sandbox.config.js はここで初めて読み込まれる。この処理以前に sandbox.config.js が必要な場合は、その部分で `register()` を行うこと。
@@ -14,7 +15,8 @@ export const createHandlerToGetContents = (targetDirs: string[]): express.Reques
 		try {
 			const contents = targetDirs.map((targetDir, i) => ({
 				contentLocatorData: { contentId: "" + i },
-				sandboxConfig: sandboxConfigs.get(i.toString())
+				sandboxConfig: sandboxConfigs.get(i.toString()),
+				gameJson: gameConfigs.get(i.toString())
 			}));
 			responseSuccess<ContentGetApiResponseData[]>(res, 200, contents);
 		} catch (e) {
@@ -32,7 +34,8 @@ export const createHandlerToGetContent = (): express.RequestHandler => {
 			const contentId = req.params.contentId;
 			const content = {
 				contentLocatorData: { contentId: contentId },
-				sandboxConfig: sandboxConfigs.get(contentId)
+				sandboxConfig: sandboxConfigs.get(contentId),
+				gameJson: gameConfigs.get(contentId)
 			};
 			responseSuccess<ContentGetApiResponseData>(res, 200, content);
 		} catch (e) {

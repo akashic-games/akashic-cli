@@ -156,6 +156,11 @@ export class Operator {
 			}
 		});
 		store.setCurrentLocalInstance(instance);
+		if (store.targetService !== ServiceType.Atsumaru ) {
+			this.store.devtoolUiStore.initTotalTimeLimit(play.content.preferredSessionParameters.totalTimeLimit);
+			this.devtool.setupNiconicoDevtoolValueWatcher();
+		}
+
 		if (params != null && params.joinsSelf) {
 			store.currentPlay.join(store.player.id, store.player.name);
 		}
@@ -176,7 +181,9 @@ export class Operator {
 		await ApiClient.resumePlayDuration(play.playId);
 
 		// autoSendEvents
-		const sandboxConfig = this.store.contentStore.findOrRegister(contentLocator).sandboxConfig || {};
+		const content = this.store.contentStore.findOrRegister(contentLocator);
+		const sandboxConfig = content.sandboxConfig || {};
+
 		const { events, autoSendEvents, autoSendEventName } = sandboxConfig;
 		if (events && autoSendEventName && events[autoSendEventName] instanceof Array) {
 			events[autoSendEventName].forEach((pev: any) => play.amflow.enqueueEvent(pev));
@@ -184,6 +191,12 @@ export class Operator {
 			// TODO: `autoSendEvents` は deprecated となった。互換性のためこのパスを残しているが、`autoSendEvents` の削除時にこのパスも削除する。
 			console.warn("[deprecated] `autoSendEvents` in sandbox.config.js is deprecated. Please use `autoSendEventName`.");
 			events[autoSendEvents].forEach((pev: any) => play.amflow.enqueueEvent(pev));
+		}
+
+		if (this.store.devtoolUiStore.isAutoSendEvent) {
+			this.store.devtoolUiStore.initTotalTimeLimit(play.content.preferredSessionParameters.totalTimeLimit);
+			const nicoEvent = this.devtool.createNicoEvent();
+			nicoEvent.forEach((pev: any) => play.amflow.enqueueEvent(pev));
 		}
 
 		return play;

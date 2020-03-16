@@ -77,4 +77,69 @@ export class DevtoolOperator {
 			atsumaruApi.volumeTrigger.fire(vol / 100);
 		}
 	}
+
+	toggleAutoSendEvents = (isSend: boolean): void => {
+		this.store.devtoolUiStore.toggleAutoSendEvents(isSend);
+	}
+
+	toggleUsePreferredTotalTimeLimit = (use: boolean): void => {
+		this.store.devtoolUiStore.toggleUsePreferredTotalTimeLimit(use);
+	}
+
+	toggleUseStopGame = (use: boolean): void => {
+		this.store.devtoolUiStore.toggleUseStopGame(use);
+	}
+
+	setSupportedMode = (value: string): void => {
+		this.store.devtoolUiStore.setSupportedMode(value);
+	}
+
+	setTotalTimeLimitInputValue = (value: number): void => {
+		this.store.devtoolUiStore.setTotalTimeLimitInputValue(value);
+	}
+
+	createNicoEvent = (): any => {
+		const emulatingShinichibaMode = this.store.devtoolUiStore.emulatingShinichibaMode;
+		const params: any = {
+			"mode": emulatingShinichibaMode
+		};
+		if (emulatingShinichibaMode === "ranking") {
+			params["totalTimeLimit"] = this.store.devtoolUiStore.totalTimeLimit;
+		}
+		const event = [[32, 0, "dummy", {
+			"type": "start",
+			"parameters": params
+		}]];
+		return event;
+	}
+
+	setupNiconicoDevtoolValueWatcher = (): void => {
+		const gameContent = this.store.currentLocalInstance.gameContent;
+		if (!gameContent.onTick.contains(this.tickHandler, this))
+			gameContent.onTick.add(this.tickHandler, this);
+	}
+
+	private tickHandler(game: agv.GameLike) {
+		if (this.store.devtoolUiStore.stopsGameOnTimeout)
+			this.updateRemainingTime();
+
+		if (game.vars && game.vars.gameState) {
+			this.store.devtoolUiStore.setScore(game.vars.gameState.score);
+			this.store.devtoolUiStore.setPlayThreshold(game.vars.gameState.playThreshold);
+			this.store.devtoolUiStore.setClearThreshold(game.vars.gameState.clearThreshold);
+		}
+	}
+
+	private updateRemainingTime(): void {
+		if (!this.store.devtoolUiStore.isAutoSendEvent
+			|| this.store.devtoolUiStore.emulatingShinichibaMode !== "ranking"
+			|| this.store.currentLocalInstance.executionMode === "replay"
+		) return;
+
+		const dur = this.store.currentPlay.duration / 1000;
+		const totalTimeLimit = this.store.devtoolUiStore.totalTimeLimit;
+		if (dur >= totalTimeLimit && !this.store.currentPlay.isActivePausing) {
+			this.store.currentPlay.pauseActive();
+		}
+	}
 }

@@ -3,12 +3,19 @@ import { EDumpItem } from "../common/types/EDumpItem";
 import { storage } from "./storage";
 
 export class DevtoolUiStore {
+	static DEFAULT_TOTAL_TIME_LIMIT = 85;
+
 	@observable height: number;
 	@observable activeDevtool: string;
 	@observable showsEventList: boolean;
 	@observable eventListWidth: number;
 	@observable eventEditContent: string;
 	@observable showsHiddenEntity: boolean;
+	@observable isAutoSendEvent: boolean;
+	@observable emulatingShinichibaMode: string;
+	@observable usePreferredTotalTimeLimit: boolean;
+	@observable stopsGameOnTimeout: boolean;
+	@observable totalTimeLimitInputValue: number;
 
 	// storage に保存しないもの
 	@observable isSelectingEntity: boolean;
@@ -17,6 +24,11 @@ export class DevtoolUiStore {
 	@observable entityTreeStateTable: ObservableMap<number, boolean>;
 	@observable isSeekingVolume: boolean;
 	@observable volume: number;
+	@observable score: number;
+	@observable playThreshold: number;
+	@observable clearThreshold: number;
+	@observable totalTimeLimit: number;
+	@observable preferredTotalTimeLimit: number;
 
 	constructor() {
 		this.height = storage.data.devtoolsHeight;
@@ -31,6 +43,11 @@ export class DevtoolUiStore {
 		this.entityTreeStateTable = observable.map<number, boolean>();
 		this.isSeekingVolume = false;
 		this.volume = 100;
+		this.isAutoSendEvent = storage.data.isAutoSendEvents;
+		this.emulatingShinichibaMode = storage.data.emulatingShinichibaMode;
+		this.usePreferredTotalTimeLimit = storage.data.usePreferredTotalTimeLimit;
+		this.stopsGameOnTimeout = storage.data.stopsGameOnTimeout;
+		this.totalTimeLimitInputValue = storage.data.totalTimeLimitInputValue;
 	}
 
 	@action
@@ -99,5 +116,58 @@ export class DevtoolUiStore {
 	endVolumeSeek(volume: number): void {
 		this.volume = volume;
 		this.isSeekingVolume = false;
+	}
+
+	@action
+	toggleAutoSendEvents(isSend: boolean): void {
+		this.isAutoSendEvent = isSend;
+		storage.put({ isAutoSendEvents: isSend });
+	}
+
+	@action
+	toggleUsePreferredTotalTimeLimit(v: boolean): void {
+		this.usePreferredTotalTimeLimit = v;
+		storage.put({ usePreferredTotalTimeLimit: v });
+	}
+
+	@action
+	toggleUseStopGame(v: boolean): void {
+		this.stopsGameOnTimeout = v;
+		storage.put({ stopsGameOnTimeout: v });
+	}
+	@action
+	setSupportedMode(mode: string): void {
+		this.emulatingShinichibaMode = mode;
+		storage.put({ emulatingShinichibaMode: mode });
+	}
+	@action
+	setTotalTimeLimitInputValue(v: number): void {
+		this.totalTimeLimitInputValue = v;
+		storage.put({ totalTimeLimitInputValue: v });
+	}
+	@action
+	settotalTimeLimit(v: number): void {
+		this.totalTimeLimit = v;
+	}
+
+	@action
+	setScore(v: number): void {
+		this.score = v;
+	}
+
+	@action
+	setPlayThreshold(v: number): void {
+		this.playThreshold = v;
+	}
+
+	@action
+	setClearThreshold(v: number): void {
+		this.clearThreshold = v;
+	}
+
+	@action
+	initTotalTimeLimit(_preferredTotalTimeLimit: number): void {
+		this.preferredTotalTimeLimit = _preferredTotalTimeLimit;
+		this.totalTimeLimit = this.usePreferredTotalTimeLimit ? _preferredTotalTimeLimit : this.totalTimeLimitInputValue;
 	}
 }

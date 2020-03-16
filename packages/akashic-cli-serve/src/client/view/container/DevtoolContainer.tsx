@@ -76,6 +76,25 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 				changeVolume: operator.devtool.volumeChangeTo,
 				dicideVolume: operator.devtool.volumeSeekTo
 			}}
+			niconicoDevtoolProps={{
+				disabled: targetService === ServiceType.Atsumaru,
+				isAutoSendEvent: devtoolUiStore.isAutoSendEvent,
+				emulatingShinichibaMode: devtoolUiStore.emulatingShinichibaMode,
+				totalTimeLimitInputValue: devtoolUiStore.totalTimeLimitInputValue,
+				totalTimeLimit: devtoolUiStore.totalTimeLimit,
+				playDuration: play.duration,
+				usePreferredTimeLimit: devtoolUiStore.usePreferredTotalTimeLimit,
+				stopsGameOnTimeout: devtoolUiStore.stopsGameOnTimeout,
+				score: devtoolUiStore.score,
+				playThreshold: devtoolUiStore.playThreshold,
+				clearThreshold: devtoolUiStore.clearThreshold,
+				preferredTotalTimeLimit: devtoolUiStore.preferredTotalTimeLimit,
+				onAutoSendEventsChanged: operator.devtool.toggleAutoSendEvents,
+				onModeSelectChanged: operator.devtool.setSupportedMode,
+				onUsePreferredTotalTimeLimitChanged: operator.devtool.toggleUsePreferredTotalTimeLimit,
+				onUseStopGameChanged: operator.devtool.toggleUseStopGame,
+				onTotalTimeLimitInputValueChanged: operator.devtool.setTotalTimeLimitInputValue
+			}}
 		/>;
 	}
 }
