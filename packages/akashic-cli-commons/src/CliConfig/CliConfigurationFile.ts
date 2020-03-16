@@ -17,10 +17,10 @@ export module CliConfigurationFile {
 			delete require.cache[require.resolve(confPath)];
 			setImmediate(() => callback(undefined, cliConfig));
 		} catch (error) {
-			if (error.code === "ENOENT") {
+			if (error.code === "MODULE_NOT_FOUND") {
 				setImmediate(() => callback(undefined, cliConfig));
 			} else {
-				callback(error, undefined);
+				setImmediate(() => callback(error, undefined));
 			}
 		}
 	}
