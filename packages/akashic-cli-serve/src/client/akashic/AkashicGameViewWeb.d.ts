@@ -62,6 +62,7 @@ declare module ae {
 	}
 
 	interface SceneLike {
+		children: ELike[];
 		findPointSourceByPoint(p: PointLike, force: boolean, camera: CameraLike): PointSourceLike;
 	}
 
@@ -160,7 +161,9 @@ declare module agv {
 		renderers: ae.RendererLike[];
 		_localDb: { [id: number]: ae.ELike };
 		focusingCamera?: ae.CameraLike;
-		scene(): ac.SceneLike;
+		vars: any;
+		scene(): ae.SceneLike;
 		render(camera?: ae.CameraLike): void;
+		tick(advanceAge: boolean, omittedTickCount?: number): boolean;
 	}
 }
