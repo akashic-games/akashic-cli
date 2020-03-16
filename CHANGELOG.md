@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 1.12.1 (2020-03-16)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#258](https://github.com/akashic-games/akashic-cli/pull/258) Add devTool niconico ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+  * [#260](https://github.com/akashic-games/akashic-cli/pull/260) Add niconico to devTool ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 1.12.0 (2020-03-13)
 
 #### Enhancement
