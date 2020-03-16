@@ -4,6 +4,7 @@
 	"fps": 30,
 	"main": "./script/main.js",
 	"assets": {},
+	"moduleMainScripts": [],
 	"environment": {
 		"sandbox-runtime": "3"
 	}
