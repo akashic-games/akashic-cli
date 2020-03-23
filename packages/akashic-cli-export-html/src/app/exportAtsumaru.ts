@@ -34,6 +34,12 @@ export function promiseExportAtsumaru(param: ExportHTMLParameterObject): Promise
 		}).then(() => {
 			// game.jsonへの追記
 			const gameJson = require(path.join(completedParam.output, "game.json"));
+			// 全てのImageAssetに"untainted": trueのオプションを追加する
+			Object.keys(gameJson.assets).forEach(key => {
+				if (gameJson.assets[key].type === "image") {
+					gameJson.assets[key].untainted = true;
+				}
+			});
 			if (!gameJson.environment) {
 				gameJson.environment = {};
 			}

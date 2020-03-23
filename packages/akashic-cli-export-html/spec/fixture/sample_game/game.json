@@ -8,6 +8,12 @@
 			"type": "script",
 			"path": "script/main.js",
 			"global": true
+		},
+		"sample": {
+			"type": "image",
+			"width": 150,
+			"height": 149,
+			"path": "image/sample.png"
 		}
 	}
 }

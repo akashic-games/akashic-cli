@@ -38,6 +38,23 @@ describe("exportAtsumaru", function () {
 				})
 				.then(done, done.fail);
 		});
+		it("add untainted to image assets on game.json", function (done) {
+			Promise.resolve()
+				.then(function () {
+					return atsumaru.promiseExportAtsumaru(cliParam);
+				})
+				.then(function (dest) {
+					expect(dest).toBe(outputDirPath);
+					const gameJson = require(path.join(outputDirPath, "game.json"));
+					// ImageAssetならばuntaintedオプションが付与されることを確認
+					expect(gameJson.assets.sample.type).toBe("image");
+					expect(gameJson.assets.sample.untainted).toBeDefined();
+					// ImageAsset以外のアセットに対してはuntaintedオプションは付与されない
+					expect(gameJson.assets.aez_bundle_main.type).toBe("script");
+					expect(gameJson.assets.aez_bundle_main.untainted).toBeUndefined();
+				})
+				.then(done, done.fail);
+		});
 		it("add information about environment to game.json (v1)", function (done) {
 			Promise.resolve()
 				.then(function () {
