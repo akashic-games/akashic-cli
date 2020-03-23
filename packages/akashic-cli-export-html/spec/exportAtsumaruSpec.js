@@ -48,10 +48,10 @@ describe("exportAtsumaru", function () {
 					const gameJson = require(path.join(outputDirPath, "game.json"));
 					// ImageAssetならばuntaintedオプションが付与されることを確認
 					expect(gameJson.assets.sample.type).toBe("image");
-					expect(gameJson.assets.sample.untainted).toBeDefined();
+					expect(gameJson.assets.sample.hint.untainted).toBeTruthy();
 					// ImageAsset以外のアセットに対してはuntaintedオプションは付与されない
 					expect(gameJson.assets.aez_bundle_main.type).toBe("script");
-					expect(gameJson.assets.aez_bundle_main.untainted).toBeUndefined();
+					expect(gameJson.assets.aez_bundle_main.hint).toBeUndefined();
 				})
 				.then(done, done.fail);
 		});
