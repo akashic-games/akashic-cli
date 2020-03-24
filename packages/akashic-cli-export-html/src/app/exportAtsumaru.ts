@@ -5,6 +5,7 @@ import * as archiver from "archiver";
 import {promiseExportZip} from "@akashic/akashic-cli-export-zip/lib/exportZip";
 import {_completeExportHTMLParameterObject, ExportHTMLParameterObject, promiseExportHTML} from "./exportHTML";
 import {getFromHttps} from "./apiUtil";
+import { addUntaintedToImageAssets } from "./convertUtil";
 
 export function promiseExportAtsumaru(param: ExportHTMLParameterObject): Promise<string> {
 	if (param.output === undefined) {
@@ -34,15 +35,7 @@ export function promiseExportAtsumaru(param: ExportHTMLParameterObject): Promise
 		}).then(() => {
 			// game.jsonへの追記
 			const gameJson = require(path.join(completedParam.output, "game.json"));
-			// 全てのImageAssetに"untainted": trueのオプションを追加する
-			Object.keys(gameJson.assets).forEach(key => {
-				if (gameJson.assets[key].type === "image") {
-					if (!gameJson.assets[key].hint) {
-						gameJson.assets[key].hint = {};
-					}
-					gameJson.assets[key].hint.untainted = true;
-				}
-			});
+			addUntaintedToImageAssets(gameJson);
 			if (!gameJson.environment) {
 				gameJson.environment = {};
 			}

@@ -27,6 +27,7 @@ function cli(param: CliConfigExportHtml): void {
 		unbundleText: !param.bundle || param.atsumaru,
 		lint: !param.atsumaru,
 		autoSendEvents: param.autoSendEvents,
+		isUntaintedImageAsset: param.atsumaru,
 		// index.htmlに書き込むためのexport実行時の情報
 		exportInfo: {
 			version: ver, // export実行時のバージョン
