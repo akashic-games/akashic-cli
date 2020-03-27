@@ -79,7 +79,7 @@ export function promiseExportHTML(p: ExportHTMLParameterObject): Promise<string>
 			lint: param.lint,
 			exportInfo: param.exportInfo,
 			autoSendEvents: param.autoSendEvents,
-			isUntaintedImageAsset: param.isUntaintedImageAsset
+			needsUntaintedImageAsset: param.needsUntaintedImageAsset
 		};
 		if (param.bundle) {
 			return promiseConvertBundle(convertParam);

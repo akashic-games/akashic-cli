@@ -26,7 +26,7 @@ interface InnerHTMLAssetData {
 
 export async function promiseConvertBundle(options: ConvertTemplateParameterObject): Promise<void> {
 	var content = await cmn.ConfigurationFile.read(path.join(options.source, "game.json"), options.logger);
-	if (options.isUntaintedImageAsset) {
+	if (options.needsUntaintedImageAsset) {
 		addUntaintedToImageAssets(content);
 	}
 	if (!content.environment) content.environment = {};

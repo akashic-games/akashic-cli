@@ -18,7 +18,7 @@ describe("exportAtsumaru", function () {
 			bundle: true,
 			copyText: true,
 			force: true,
-			isUntaintedImageAsset: true
+			needsUntaintedImageAsset: true
 		};
 	});
 	afterEach(function() {
