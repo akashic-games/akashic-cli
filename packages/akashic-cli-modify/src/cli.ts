@@ -22,8 +22,11 @@ function defineCommand(commandName: string): void {
 		.option("-q, --quiet", "Suppress output")
 		.action((value: string, opts: CliConfigModify = {}) => {
 			CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashic.config.js"), (error, configuration) => {
-				if (error) throw error;
-
+				if (error) {
+					console.error(error);
+					process.exit(1);
+				}
+		
 				const conf = configuration.commandOptions.modify || {};
 				cliBasicParameter(commandName, value, {
 					cwd: opts.cwd ?? conf.cwd,

@@ -63,7 +63,10 @@ export function run(argv: string[]): void {
 	commander.parse(argvCopy);
 
 	CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashic.config.js"), (error, configuration) => {
-		if (error) throw error;
+		if (error) {
+			console.error(error);
+			process.exit(1);
+		}
 
 		const conf = configuration.commandOptions.export ? (configuration.commandOptions.export.zip || {}) : {};
 		cli({

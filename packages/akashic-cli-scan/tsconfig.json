@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES5",
+    "lib": ["es5", "node"],
     "noImplicitAny": true,
     "module": "commonjs",
     "outDir": "./lib",
