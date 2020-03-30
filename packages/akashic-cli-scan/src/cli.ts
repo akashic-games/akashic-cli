@@ -32,7 +32,7 @@ commander
 				console.error(error);
 				process.exit(1);
 			}
-	
+
 			const conf = configuration.commandOptions.scan ? (configuration.commandOptions.scan.asset || {}) : {};
 			var logger = new ConsoleLogger({ quiet: opts.quiet || conf.quiet });
 			var assetScanDirectoryTable = {
