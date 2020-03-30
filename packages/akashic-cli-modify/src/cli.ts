@@ -26,7 +26,7 @@ function defineCommand(commandName: string): void {
 					console.error(error);
 					process.exit(1);
 				}
-		
+
 				const conf = configuration.commandOptions.modify || {};
 				cliBasicParameter(commandName, value, {
 					cwd: opts.cwd ?? conf.cwd,
