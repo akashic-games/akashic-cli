@@ -11,6 +11,9 @@ export interface AssetConfiguration {
 	systemId?: string;
 	global?: boolean;
 	duration?: number;
+	hint?: {
+		untainted?: boolean;
+	};
 }
 
 /**

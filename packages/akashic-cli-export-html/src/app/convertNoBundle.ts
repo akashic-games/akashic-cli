@@ -12,11 +12,15 @@ import {
 	extractAssetDefinitions,
 	getInjectedContents,
 	validateEs5Code,
-	readSandboxConfigJs
+	readSandboxConfigJs,
+	addUntaintedToImageAssets
 } from "./convertUtil";
 
 export async function promiseConvertNoBundle(options: ConvertTemplateParameterObject): Promise<void> {
 	var content = await cmn.ConfigurationFile.read(path.join(options.source, "game.json"), options.logger);
+	if (options.needsUntaintedImageAsset) {
+		addUntaintedToImageAssets(content);
+	}
 	if (!content.environment) content.environment = {};
 	content.environment["sandbox-runtime"] = content.environment["sandbox-runtime"] ? content.environment["sandbox-runtime"] : "1";
 	var conf = new cmn.Configuration({

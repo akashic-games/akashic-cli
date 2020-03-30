@@ -17,7 +17,8 @@ describe("exportAtsumaru", function () {
 			hashLength: 20,
 			bundle: true,
 			copyText: true,
-			force: true
+			force: true,
+			needsUntaintedImageAsset: true
 		};
 	});
 	afterEach(function() {
@@ -35,6 +36,23 @@ describe("exportAtsumaru", function () {
 					const expectedFilePath = cmn.Renamer.hashFilepath("script/aez_bundle_main.js", 20);
 					expect(fs.existsSync(path.join(outputDirPath, expectedFilePath))).toBe(true);
 					expect(fs.existsSync(path.join(outputDirPath, "script", "main.js"))).toBe(false);
+				})
+				.then(done, done.fail);
+		});
+		it("add untainted to image assets on game.json", function (done) {
+			Promise.resolve()
+				.then(function () {
+					return atsumaru.promiseExportAtsumaru(cliParam);
+				})
+				.then(function (dest) {
+					expect(dest).toBe(outputDirPath);
+					const gameJson = require(path.join(outputDirPath, "game.json"));
+					// ImageAssetならばuntaintedオプションが付与されることを確認
+					expect(gameJson.assets.sample.type).toBe("image");
+					expect(gameJson.assets.sample.hint.untainted).toBeTruthy();
+					// ImageAsset以外のアセットに対してはuntaintedオプションは付与されない
+					expect(gameJson.assets.aez_bundle_main.type).toBe("script");
+					expect(gameJson.assets.aez_bundle_main.hint).toBeUndefined();
 				})
 				.then(done, done.fail);
 		});
