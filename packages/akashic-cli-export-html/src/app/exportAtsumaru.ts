@@ -5,6 +5,7 @@ import * as archiver from "archiver";
 import {promiseExportZip} from "@akashic/akashic-cli-export-zip/lib/exportZip";
 import {_completeExportHTMLParameterObject, ExportHTMLParameterObject, promiseExportHTML} from "./exportHTML";
 import {getFromHttps} from "./apiUtil";
+import { addUntaintedToImageAssets } from "./convertUtil";
 
 export function promiseExportAtsumaru(param: ExportHTMLParameterObject): Promise<string> {
 	if (param.output === undefined) {
@@ -34,6 +35,7 @@ export function promiseExportAtsumaru(param: ExportHTMLParameterObject): Promise
 		}).then(() => {
 			// game.jsonへの追記
 			const gameJson = require(path.join(completedParam.output, "game.json"));
+			addUntaintedToImageAssets(gameJson);
 			if (!gameJson.environment) {
 				gameJson.environment = {};
 			}

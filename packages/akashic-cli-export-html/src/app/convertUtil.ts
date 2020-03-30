@@ -23,6 +23,7 @@ export interface ConvertTemplateParameterObject {
 	};
 	autoSendEvents?: string | boolean;
 	sandboxConfigJsCode?: string;
+	needsUntaintedImageAsset?: boolean;
 }
 
 export function extractAssetDefinitions (conf: cmn.Configuration, type: string): string[] {
@@ -165,6 +166,20 @@ export function validateEs5Code(fileName: string, code: string): string[] {
 export function readSandboxConfigJs(sourceDir: string) {
 	const sandboxConfigJsPath = path.join(sourceDir, "sandbox.config.js");
 	return fs.readFileSync(sandboxConfigJsPath, "utf8").replace(/\r\n|\r/g, "\n");
+}
+
+/**
+ * 指定のgameJson中の全てのImageAssetに untainted:true を付与する
+ */
+export function addUntaintedToImageAssets(gameJson: cmn.GameConfiguration): void {
+	Object.keys(gameJson.assets).forEach(key => {
+		if (gameJson.assets[key].type === "image") {
+			if (!gameJson.assets[key].hint) {
+				gameJson.assets[key].hint = {};
+			}
+			gameJson.assets[key].hint.untainted = true;
+		}
+	});
 }
 
 function getFileContentsFromDirectory(inputDirPath: string): string[] {

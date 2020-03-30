@@ -1,5 +1,16 @@
 # CHANGELOG
 
+
+
+## 1.12.2 (2020-03-17)
+
+#### Other Change
+* `akashic-cli-init`
+  * [#269](https://github.com/akashic-games/akashic-cli/pull/269) Add moduleMainScripts to template game.json ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 1.12.1 (2020-03-16)
 
 #### Enhancement
