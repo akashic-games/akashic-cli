@@ -15,9 +15,9 @@
   "author": "",
   "license": "",
   "devDependencies": {
-    "@akashic/akashic-cli-export-html": "~0.7.0",
-    "@akashic/akashic-cli-export-zip": "~0.6.0",
-    "@akashic/akashic-cli-scan": "~0.5.0",
+    "@akashic/akashic-cli-export-html": "~0.7.1",
+    "@akashic/akashic-cli-export-zip": "~0.6.1",
+    "@akashic/akashic-cli-scan": "~0.5.1",
     "@akashic/akashic-engine": "~2.6.1",
     "@akashic/akashic-sandbox": "~0.16.3",
     "jest": "24.9.0",
