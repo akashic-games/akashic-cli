@@ -1,5 +1,22 @@
 # CHANGELOG
 
+## 1.13.1 (2020-03-31)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#275](https://github.com/akashic-games/akashic-cli/pull/275) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.0.0-beta.2, engineFiles@2.1.38, engineFiles@1.1.14) ([@xnv](https://github.com/xnv))
+* `akashic-cli-init`
+  * [#273](https://github.com/akashic-games/akashic-cli/pull/273) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Update Dependencies
+* `akashic-cli-init`
+  * [#272](https://github.com/akashic-games/akashic-cli/pull/272) Update dependency npm-check-updates to v4.1.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#270](https://github.com/akashic-games/akashic-cli/pull/270) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 
 
 ## 1.12.2 (2020-03-17)
