@@ -1,5 +1,6 @@
 const path = require("path");
 const shell = require('shelljs');
+const fs = require("fs");
 const { execSync } = require("child_process");
 
 const templatesSrcDirPath = path.join(__dirname, "..", "templates-src");
@@ -52,12 +53,18 @@ function generateTemplates(srcPath, outPath, data) {
 		shell.cp("-R", path.join(srcPath, data[key]["src"]), path.join(outPath, data[key]["ts-dist"]));
 		shell.cp("-R", path.join(srcPath, "typescript-base", "*"), path.join(outPath, data[key]["ts-dist"]));
 		shell.cp(path.join(srcPath, "typescript-base", ".gitignore"), path.join(outPath, data[key]["ts-dist"]));
+		if (fs.existsSync(path.join(outPath, data[key]["ts-dist"], "package-v3.json"))) {
+			shell.mv(path.join(outPath, data[key]["ts-dist"], "package-v3.json"), path.join(outPath, data[key]["ts-dist"], "package.json"));
+		}
 	});
 	console.log("End to generate typescript-templates");
 
 	// javascriptテンプレートを作成
 	console.log("Start to generate javascript-templates");
 	shell.cp("-R", path.join(srcPath, "typescript-base"), path.join(outPath, "common"));
+	if (fs.existsSync(path.join(outPath, "common", "package-v3.json"))) {
+		shell.mv(path.join(outPath, "common", "package-v3.json"), path.join(outPath, "common", "package.json"));
+	}
 	console.log("Install packages");
 	// テンプレート生成処理時間の短縮のため、各jsテンプレートビルド時に共通的に使用するパッケージを先にインストールしておく
 	execSync(`cd ${path.join(outPath, "common")} && npm install`);
@@ -81,6 +88,9 @@ function generateTemplates(srcPath, outPath, data) {
 		// javascriptテンプレートに共通で必要なものもテンプレートに置く
 		shell.cp("-R", path.join(srcPath, "javascript-base", "*"), path.join(outPath, data[key]["js-dist"]));
 		shell.cp(path.join(srcPath, "javascript-base", ".eslintrc.json"), path.join(outPath, data[key]["js-dist"]));
+		if (fs.existsSync(path.join(outPath, data[key]["js-dist"], "package-v3.json"))) {
+			shell.mv(path.join(outPath, data[key]["js-dist"], "package-v3.json"), path.join(outPath, data[key]["js-dist"], "package.json") );
+		}
 		// game.jsonにscriptアセットが登録されていない状態なので、ここで登録する
 		execSync(`cd ${path.join(outPath, data[key]["js-dist"])} && ${path.join(outPath, data[key]["js-dist"], "..", "common", "node_modules", ".bin", "akashic-cli-scan")} asset script`);
 	});
