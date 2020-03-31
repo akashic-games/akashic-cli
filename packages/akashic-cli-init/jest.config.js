@@ -78,7 +78,7 @@ module.exports = {
 	// moduleNameMapper: {},
 
 	// An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
-	// modulePathIgnorePatterns: [],
+	modulePathIgnorePatterns: ["templates-src/*", "templates-src-v3/*"],
 
 	// Activates notifications for test results
 	// notify: false,
