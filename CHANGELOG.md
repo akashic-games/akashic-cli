@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 1.13.2 (2020-03-31)
+
+#### Enhancement
+* `akashic-cli-commons`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`
+  * [#262](https://github.com/akashic-games/akashic-cli/pull/262) fix akashicConfig.json to akashic.config.js ([@kamakiri01](https://github.com/kamakiri01))
+* `akashic-cli-init`
+  * [#276](https://github.com/akashic-games/akashic-cli/pull/276) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Committers: 2
+- kamakiri_ys ([@kamakiri01](https://github.com/kamakiri01))
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.13.1 (2020-03-31)
 
 #### Enhancement
