@@ -61,9 +61,16 @@ export class RunnerStore {
 		// 以下は無理やり game.external を与える暫定実装。startRunner() を await すると
 		// 間に合わない (エントリポイントどころか最初のシーンの loaded すら終わってしまう) ので、
 		// ここ (runner.driver が生成されている唯一のタイミング) でハンドラをかけている。
-		(runner as any).driver.gameCreatedTrigger.addOnce((game: any) => {
-			game.external = { ...this.gameExternalFactory(), ...game.external };
-		});
+		if (runner.engineVersion === "1") {
+			(runner as any).driver.gameCreatedTrigger.handle((game: any) => {
+				game.external = { ...this.gameExternalFactory(), ...game.external };
+				return true;
+			});
+		} else {
+			(runner as any).driver.gameCreatedTrigger.addOnce((game: any) => {
+				game.external = { ...this.gameExternalFactory(), ...game.external };
+			});
+		}
 
 		const game = await startRunnerPromise;
 		this.onRunnerCreate.fire({ playId: params.playId, runnerId, isActive: params.isActive });
