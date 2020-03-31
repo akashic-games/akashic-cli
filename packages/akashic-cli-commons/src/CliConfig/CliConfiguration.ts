@@ -10,7 +10,7 @@ import { CliConfigUninstall } from "./CliConfigUninstall";
 import { CliConfigUpdate } from "./CliConfigUpdate";
 
 /**
- * AkashicConfig.json の型。
+ * akashic.config.js の型。
  */
 export interface CliConfiguration {
 	commandOptions: {

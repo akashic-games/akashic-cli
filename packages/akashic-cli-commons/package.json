@@ -9,7 +9,7 @@
     "build": "tsc -p ./",
     "lint": "tslint --type-check -c ../tslint.json --project ./tsconfig.json",
     "test": "npm run test:jest && npm run lint",
-    "test:jest": "jest"
+    "test:jest": "jest --runInBand"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
@@ -30,6 +30,7 @@
   },
   "typings": "lib/index.d.ts",
   "dependencies": {
+    "@types/node": "^13.9.0",
     "browserify": "16.5.0",
     "eslint": "~5.16.0",
     "fs-extra": "3.0.1",

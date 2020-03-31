@@ -217,7 +217,12 @@ export async function run(argv: any): Promise<void> {
 		.option("--allow-external", `Read the URL allowing external access from sandbox.config.js`)
 		.parse(argv);
 
-	CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashicConfig.json"), async (configuration) => {
+	CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashic.config.js"), async (error, configuration) => {
+		if (error) {
+			console.error(error);
+			process.exit(1);
+		}
+
 		const conf = configuration.commandOptions.serve || {};
 		const cliConfigParam: CliConfigServe = {
 			port: commander.port ?? conf.port,

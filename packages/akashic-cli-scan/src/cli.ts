@@ -27,7 +27,12 @@ commander
 	.option("--text-asset-dir <dir>", "specify TextAsset directory", commanderArgsCoordinater)
 	.option("--text-asset-extension <extension>", "specify TextAsset extension", commanderArgsCoordinater)
 	.action((target: string, opts: CliConfigScanAsset = {}) => {
-		CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashicConfig.json"), (configuration) => {
+		CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashic.config.js"), (error, configuration) => {
+			if (error) {
+				console.error(error);
+				process.exit(1);
+			}
+
 			const conf = configuration.commandOptions.scan ? (configuration.commandOptions.scan.asset || {}) : {};
 			var logger = new ConsoleLogger({ quiet: opts.quiet || conf.quiet });
 			var assetScanDirectoryTable = {

@@ -62,9 +62,13 @@ export function run(argv: string[]): void {
 	const argvCopy = dropDeprecatedArgs(argv);
 	commander.parse(argvCopy);
 
-	CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashicConfig.json"), (configuration) => {
-		const conf = configuration.commandOptions.export ? (configuration.commandOptions.export.zip || {}) : {};
+	CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashic.config.js"), (error, configuration) => {
+		if (error) {
+			console.error(error);
+			process.exit(1);
+		}
 
+		const conf = configuration.commandOptions.export ? (configuration.commandOptions.export.zip || {}) : {};
 		cli({
 			cwd: commander["cwd"] ?? conf.cwd,
 			quiet: commander["quiet"] ?? conf.quiet,
