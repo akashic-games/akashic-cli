@@ -1,5 +1,26 @@
 # CHANGELOG
 
+## 1.13.3 (2020-04-01)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#279](https://github.com/akashic-games/akashic-cli/pull/279) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.0.0-beta.2, engineFiles@2.1.38, engineFiles@1.1.14) ([@xnv](https://github.com/xnv))
+* `akashic-cli-init`
+  * [#277](https://github.com/akashic-games/akashic-cli/pull/277) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Bug Fix
+* `akashic-cli-serve`
+  * [#278](https://github.com/akashic-games/akashic-cli/pull/278) fix to work v1 content ([@dera-](https://github.com/dera-))
+
+#### Other Change
+* `akashic-cli-export-zip`, `akashic-cli-init`
+  * [#274](https://github.com/akashic-games/akashic-cli/pull/274) Set modulePathIgnorePatterns for jest.config.js ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 3
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- [@dera-](https://github.com/dera-)
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.13.2 (2020-03-31)
 
 #### Enhancement
