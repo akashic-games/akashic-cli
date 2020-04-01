@@ -117,7 +117,7 @@ describe("convert", () => {
 					expect(fs.existsSync(path.join(destDir, "script/ignore.js"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "text/test.json"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "game.json"))).toBe(true);
-					expect(fs.existsSync(path.join(destDir, "package-external.json"))).toBe(true);
+					expect(fs.existsSync(path.join(destDir, "package.json"))).toBe(true);
 					done();
 				}, done.fail);
 		});
@@ -137,7 +137,7 @@ describe("convert", () => {
 					expect(fs.existsSync(path.join(destDir, "script/unrefered.js"))).toBe(false);
 					expect(fs.existsSync(path.join(destDir, "text/test.json"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "game.json"))).toBe(true);
-					expect(fs.existsSync(path.join(destDir, "package-external.json"))).toBe(false);
+					expect(fs.existsSync(path.join(destDir, "package.json"))).toBe(false);
 					done();
 				}, done.fail);
 		});
@@ -159,7 +159,7 @@ describe("convert", () => {
 					expect(fs.existsSync(path.join(destDir, "script/aez_bundle_main.js"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "text/test.json"))).toBe(false);
 					expect(fs.existsSync(path.join(destDir, "game.json"))).toBe(true);
-					expect(fs.existsSync(path.join(destDir, "package-external.json"))).toBe(true);
+					expect(fs.existsSync(path.join(destDir, "package.json"))).toBe(true);
 					const gameJson = JSON.parse(fs.readFileSync(path.join(destDir, "game.json")).toString());
 					expect(gameJson.main).toBe("./script/aez_bundle_main.js");
 					expect(gameJson.assets["aez_bundle_main"].path).toBe("script/aez_bundle_main.js");
@@ -184,7 +184,7 @@ describe("convert", () => {
 					expect(fs.existsSync(path.join(outputDirectory, "script/aez_bundle_main.js"))).toBe(true);
 					expect(fs.existsSync(path.join(outputDirectory, "script/ignore.js"))).toBe(true);
 					expect(fs.existsSync(path.join(outputDirectory, "game.json"))).toBe(true);
-					expect(fs.existsSync(path.join(outputDirectory, "package-external.json"))).toBe(true);
+					expect(fs.existsSync(path.join(outputDirectory, "package.json"))).toBe(true);
 					expect(fs.existsSync(path.join(outputDirectory, "output"))).toBe(false);
 					expect(fs.readFileSync(path.join(outputDirectory, "game.json")).toString())
 						.not.toBe(fs.readFileSync(path.join(param.source, "game.json")).toString());
@@ -210,7 +210,7 @@ describe("convert", () => {
 					expect(fs.existsSync(path.join(destDir, "script/aez_bundle_main.js"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "text/test.json"))).toBe(false);
 					expect(fs.existsSync(path.join(destDir, "game.json"))).toBe(true);
-					expect(fs.existsSync(path.join(destDir, "package-external.json"))).toBe(false);
+					expect(fs.existsSync(path.join(destDir, "package.json"))).toBe(false);
 					expect(fs.readFileSync(path.join(destDir, "game.json")).toString())
 						.not.toBe(fs.readFileSync(path.join(param.source, "game.json")).toString());
 					done();
@@ -232,7 +232,7 @@ describe("convert", () => {
 					expect(fs.existsSync(path.join(destDir, "script/unrefered.js"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "text/test.json"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "game.json"))).toBe(true);
-					expect(fs.existsSync(path.join(destDir, "package-external.json"))).toBe(true);
+					expect(fs.existsSync(path.join(destDir, "package.json"))).toBe(true);
 					const gameJson = fs.readFileSync(path.join(destDir, "game.json")).toString();
 					const gameJsonObj = JSON.parse(gameJson);
 					expect(gameJsonObj.assets["ignore2"].global).toBeTruthy();
@@ -253,7 +253,7 @@ describe("convert", () => {
 					expect(fs.existsSync(path.join(destDir, "script/foo.js"))).toBe(false);
 					expect(fs.existsSync(path.join(destDir, "text/test.json"))).toBe(false);
 					expect(fs.existsSync(path.join(destDir, "game.json"))).toBe(true);
-					expect(fs.existsSync(path.join(destDir, "package-main1.json"))).toBe(true);
+					expect(fs.existsSync(path.join(destDir, "package.json"))).toBe(true);
 					expect(fs.readFileSync(path.join(destDir, "game.json")).toString())
 						.not.toBe(fs.readFileSync(path.join(param.source, "game.json")).toString());
 					expect(fs.readFileSync(path.join(destDir, "script/aez_bundle_main.js")).toString())
@@ -278,7 +278,7 @@ describe("convert", () => {
 					expect(fs.existsSync(path.join(destDir, "script/aez_bundle_main0.js"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "text/test.json"))).toBe(false);
 					expect(fs.existsSync(path.join(destDir, "game.json"))).toBe(true);
-					expect(fs.existsSync(path.join(destDir, "package-main2.json"))).toBe(true);
+					expect(fs.existsSync(path.join(destDir, "package.json"))).toBe(true);
 					expect(fs.readFileSync(path.join(destDir, "game.json")).toString())
 						.not.toBe(fs.readFileSync(path.join(param.source, "game.json")).toString());
 					done();
@@ -300,7 +300,7 @@ describe("convert", () => {
 					expect(fs.existsSync(path.join(destDir, "script/aez_bundle_main0.js"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "image/akashic-cli.png"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "game.json"))).toBe(true);
-					expect(fs.existsSync(path.join(destDir, "package-main3.json"))).toBe(true);
+					expect(fs.existsSync(path.join(destDir, "package.json"))).toBe(true);
 					const gameJson = JSON.parse(fs.readFileSync(path.join(destDir, "game.json")).toString());
 					expect(gameJson.assets["aez_bundle_main0"].path).toBe("script/aez_bundle_main0.js");
 					expect(gameJson.assets["aez_bundle_main0"].type).toBe("script");
@@ -324,7 +324,7 @@ describe("convert", () => {
 					expect(fs.existsSync(path.join(destDir, "script/mainScene.js"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "script/mainScene0.js"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "game.json"))).toBe(true);
-					expect(fs.existsSync(path.join(destDir, "package-main-scene.json"))).toBe(true);
+					expect(fs.existsSync(path.join(destDir, "package.json"))).toBe(true);
 					expect(fs.readFileSync(path.join(destDir, "script/mainScene.js")).toString())
 						.toBe(fs.readFileSync(path.join(param.source, "script/mainScene.js")).toString());
 					const gameJson = JSON.parse(fs.readFileSync(path.join(destDir, "game.json")).toString());
