@@ -1,3 +1,4 @@
+import * as fs from "fs";
 import * as path from "path";
 import * as cmn from "@akashic/akashic-cli-commons";
 import { Configuration } from "./Configuration";
@@ -70,7 +71,8 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 			.then(() => param.logger.info("Done!"))
 			.then(restoreDirectory, restoreDirectory);
 	}
-
+	const beforePackageJson = JSON.parse(fs.readFileSync(path.join(param.cwd, "package.json"), "utf-8"));
+	const beforeKeys = beforePackageJson.dependencies ? Object.keys(beforePackageJson.dependencies) : [];
 	const gameJsonPath = path.join(process.cwd(), "game.json");
 	return Promise.resolve()
 		.then(() => cmn.ConfigurationFile.read(gameJsonPath, param.logger))
@@ -88,6 +90,14 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 							.then(() => npm.install(param.moduleNames))
 							.then(() => npm.shrinkwrap());
 					}
+				})
+				.then(() => {
+					// モジュールにnpm pack された tgzファイルのパスが指定された場合、akashic-cli-ommons の NodeModules#listScriptFiles() に tgzのパスが browserify へ渡りエラーとなる。
+					// そのため、`npm i` 前後の package.json のモジュール名の差分を取得し、その差分のモジュール名を渡すようにする。
+					const afterPackageJson = JSON.parse(fs.readFileSync(path.join(param.cwd, "package.json"), "utf-8"));
+					const afterKeys = Object.keys(afterPackageJson.dependencies);
+					const diffKeys = afterKeys.filter((key: string) => beforeKeys.indexOf(key) === -1);
+					if (diffKeys.length > 0) param.moduleNames = diffKeys;
 				})
 				.then(() => {
 					const listFiles = param.noOmitPackagejson ? cmn.NodeModules.listModuleFiles : cmn.NodeModules.listScriptFiles;

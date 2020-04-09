@@ -1,15 +1,23 @@
 var path = require("path");
 var mockfs = require("mock-fs");
+var fs = require("fs");
 var cmn = require("@akashic/akashic-cli-commons");
 var promiseInstall = require("../lib/install").promiseInstall;
 
 describe("install()", function () {
+	const mockFsObject = {
+		"package.json": JSON.stringify({
+			name: "test",
+			dependencies: {}
+		})
+	};
+
 	afterEach(function () {
 		mockfs.restore();
 	});
 
 	it("handles npm install failure", function (done) {
-		mockfs({});
+		mockfs(mockFsObject);
 		var logger = new cmn.ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
 		var shrinkwrapCalled = false;
 		var dummyNpm = {
@@ -31,7 +39,7 @@ describe("install()", function () {
 	});
 
 	it("handles npm link failure", function (done) {
-		mockfs({});
+		mockfs(mockFsObject);
 		var logger = new cmn.ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
 		var dummyNpm = {
 			link: function (names) { return Promise.reject("LinkFail:" + names); },
@@ -66,7 +74,9 @@ describe("install()", function () {
 					name: "dummy",
 					version: "0.0.0",
 					main: "main.js",
-					dependencies: { "dummyChild": "*" }
+					dependencies: {
+						"dummy": "*",
+					}
 				}),
 				"main.js": [
 					"require('./foo');",
@@ -87,6 +97,7 @@ describe("install()", function () {
 			"dummy2": {
 				"index.js": "require('./sub')",
 				"sub.js": "",
+				"package.json": "{}"
 			},
 			"noOmitPackagejson": {
 				"package.json": JSON.stringify({
@@ -99,21 +110,42 @@ describe("install()", function () {
 		};
 		var mockFsContent = {
 			"somedir": {
-				"node_modules": {}
+				"node_modules": {},
+				"package.json": JSON.stringify({
+					name: "mock",
+					version: "0.0.0",
+					main: "main.js",
+					dependencies: {}
+				})
 			}
 		};
 
+		let gameJson;
 		mockfs(mockFsContent);
 		var shrinkwrapCalled = false;
 		var dummyNpm = {
 			install: function (names) {
+				if (fs.existsSync("./somedir/game.json")) {
+					gameJson = JSON.parse(fs.readFileSync("./somedir/game.json", "utf-8").toString());
+				}
+				mockfs.restore(); // 同keyを含むObjectをmockし直すためrestore()を実行
 				names = (names instanceof Array) ? names : [names];
 				names.forEach(function (name) {
 					var nameNoVer = cmn.Util.makeModuleNameNoVer(name);
-					mockFsContent.somedir.node_modules[nameNoVer] = mockModules[nameNoVer];
+					// restore()で前のデータが消えている。 promiseInstall() を継続的に行うテストのため前のpackage.jsonの中身を取り込む。
+					const dep = JSON.parse(mockModules[nameNoVer]["package.json"]).dependencies;
+					const pkgJson = JSON.parse(mockFsContent.somedir["package.json"])
+					for (key in dep) {
+						if (!pkgJson.dependencies.hasOwnProperty(key)) {
+							pkgJson.dependencies[key] = dep[key];
+						}
+					}
+					mockFsContent.somedir["package.json"] = JSON.stringify(pkgJson);
+					mockFsContent["node_modules"] = {};
+					mockFsContent.node_modules[nameNoVer] = mockModules[nameNoVer];
 				});
 
-				mockfs(mockFsContent.somedir);
+				mockfs(mockFsContent);
 				return Promise.resolve();
 			},
 			shrinkwrap: function () {
@@ -150,6 +182,7 @@ describe("install()", function () {
 			.then(() => promiseInstall({ moduleNames: ["dummy2@1.0.1"], cwd: "./somedir", plugin: 12, logger: logger, debugNpm: dummyNpm }))
 			.then(() => cmn.ConfigurationFile.read("./somedir/game.json", logger))
 			.then((content) => {
+				content.globalScripts = gameJson.globalScripts.concat(content.globalScripts);
 				expect(content.operationPlugins).toEqual([
 					{
 						code: 12,
@@ -174,6 +207,7 @@ describe("install()", function () {
 			.then(() => promiseInstall({ moduleNames: ["noOmitPackagejson@0.0.0"], cwd: "./somedir", logger: logger, debugNpm: dummyNpm, noOmitPackagejson: true }))
 			.then(() => cmn.ConfigurationFile.read("./somedir/game.json", logger))
 			.then((content) => {
+				content.globalScripts = gameJson.globalScripts.concat(content.globalScripts);
 				var globalScripts = content.globalScripts;
 
 				expect(warnLogs.length).toBe(0);
