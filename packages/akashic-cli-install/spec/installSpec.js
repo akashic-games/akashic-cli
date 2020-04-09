@@ -74,7 +74,7 @@ describe("install()", function () {
 					name: "dummy",
 					version: "0.0.0",
 					main: "main.js",
-					dependencies: { "dummyChild": "*" }
+					dependencies: { "dummy": "*" }
 				}),
 				"main.js": [
 					"require('./foo');",
