@@ -71,6 +71,7 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 			.then(() => param.logger.info("Done!"))
 			.then(restoreDirectory, restoreDirectory);
 	}
+
 	const beforePackageJson = JSON.parse(fs.readFileSync(path.join(param.cwd, "package.json"), "utf-8"));
 	const beforeKeys = beforePackageJson.dependencies ? Object.keys(beforePackageJson.dependencies) : [];
 	const gameJsonPath = path.join(process.cwd(), "game.json");

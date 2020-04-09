@@ -74,9 +74,7 @@ describe("install()", function () {
 					name: "dummy",
 					version: "0.0.0",
 					main: "main.js",
-					dependencies: {
-						"dummy": "*",
-					}
+					dependencies: { "dummyChild": "*" }
 				}),
 				"main.js": [
 					"require('./foo');",
@@ -126,6 +124,7 @@ describe("install()", function () {
 		var dummyNpm = {
 			install: function (names) {
 				if (fs.existsSync("./somedir/game.json")) {
+					// restore()で前のデータが消えるので保持し後でマージする。
 					gameJson = JSON.parse(fs.readFileSync("./somedir/game.json", "utf-8").toString());
 				}
 				mockfs.restore(); // 同keyを含むObjectをmockし直すためrestore()を実行
