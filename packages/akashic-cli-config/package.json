@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-config",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "Configuration manager for akashic.",
   "main": "lib/index.js",
   "scripts": {
@@ -36,7 +36,7 @@
   },
   "typings": "lib/index.d.ts",
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.5.2",
+    "@akashic/akashic-cli-commons": "0.5.3",
     "commander": "2.20.3",
     "fs-extra": "^5.0.0",
     "ini": "^1.3.4",
