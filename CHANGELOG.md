@@ -1,5 +1,47 @@
 # CHANGELOG
 
+## 1.13.8 (2020-04-13)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#291](https://github.com/akashic-games/akashic-cli/pull/291) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.0.0-beta.3, engineFiles@2.1.39, engineFiles@1.1.14) ([@xnv](https://github.com/xnv))
+* `akashic-cli-init`
+  * [#290](https://github.com/akashic-games/akashic-cli/pull/290) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
+## 1.13.7 (2020-04-13)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#281](https://github.com/akashic-games/akashic-cli/pull/281) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
+## 1.13.6 (2020-04-13)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#289](https://github.com/akashic-games/akashic-cli/pull/289) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.0.0-beta.3, engineFiles@2.1.39, engineFiles@1.1.14) ([@xnv](https://github.com/xnv))
+* `akashic-cli-init`
+  * [#288](https://github.com/akashic-games/akashic-cli/pull/288) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
+## 1.13.5 (2020-04-13)
+
+#### Enhancement
+* `akashic-cli-export-html`
+  * [#286](https://github.com/akashic-games/akashic-cli/pull/286) 【akashic-cli-export-html】内部コンポーネントの更新(engineFiles@3.0.0-beta.3, engineFiles@2.1.39, engineFiles@1.1.14) ([@xnv](https://github.com/xnv))
+* `akashic-cli-init`
+  * [#285](https://github.com/akashic-games/akashic-cli/pull/285) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.13.4 (2020-04-10)
 
 #### Enhancement

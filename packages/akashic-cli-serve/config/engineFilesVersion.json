@@ -4,11 +4,11 @@
     "fileName": "engineFilesV1_1_14.js"
   },
   "v2": {
-    "version": "2.1.38",
-    "fileName": "engineFilesV2_1_38.js"
+    "version": "2.1.39",
+    "fileName": "engineFilesV2_1_39.js"
   },
   "v3": {
-    "version": "3.0.0-beta.2",
-    "fileName": "engineFilesV3_0_0_beta_2.js"
+    "version": "3.0.0-beta.3",
+    "fileName": "engineFilesV3_0_0_beta_3.js"
   }
 }
