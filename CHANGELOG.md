@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.13.9 (2020-04-14)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#287](https://github.com/akashic-games/akashic-cli/pull/287) アツマールAPIの更新に追従する対応 ([@dera-](https://github.com/dera-))
+
+#### Committers: 1
+- [@dera-](https://github.com/dera-)
+
 ## 1.13.8 (2020-04-13)
 
 #### Enhancement
