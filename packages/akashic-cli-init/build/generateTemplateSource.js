@@ -81,11 +81,8 @@ function generateTemplates(srcPath, outPath, data) {
 		shell.mv(path.join(outPath, "common", "script"), path.join(outPath, data[key]["js-dist"], "script"));
 		// javascriptテンプレートに共通で必要なものもテンプレートに置く
 		shell.cp("-R", path.join(srcPath, "javascript-base", "*"), path.join(outPath, data[key]["js-dist"]));
-
-		if (key === "shin-ichiba-ranking") {
-			deleteUnnecessaryLinesFromJsFile(path.join(outPath, data[key]["js-dist"], "script"));
-		}
-
+		// jsファイルに不要な行があれば削除する
+		deleteUnnecessaryLinesFromJsFile(path.join(outPath, data[key]["js-dist"], "script"));
 		shell.cp(path.join(srcPath, "javascript-base", ".eslintrc.json"), path.join(outPath, data[key]["js-dist"]));
 		// game.jsonにscriptアセットが登録されていない状態なので、ここで登録する
 		execSync(`cd ${path.join(outPath, data[key]["js-dist"])} && ${path.join(outPath, data[key]["js-dist"], "..", "common", "node_modules", ".bin", "akashic-cli-scan")} asset script`);
@@ -101,7 +98,7 @@ function generateTemplates(srcPath, outPath, data) {
  * @param targetPath 対象ディレクトリのパス
  */
 function deleteUnnecessaryLinesFromJsFile(targetPath) {
-	const targetWord = "Object.defineProperty";
+	const excludeWord = `Object.defineProperty(exports, "__esModule", { value: true });`.replace(/\s+/g, "");
 	const files = fs.readdirSync(targetPath);
 
 	files.forEach((file) => {
@@ -110,8 +107,9 @@ function deleteUnnecessaryLinesFromJsFile(targetPath) {
 		const filePath = path.join(targetPath, file);
 		const data = fs.readFileSync(filePath, "utf-8").toString();
 		const lines = data.split("\n");
-		const ret = lines.filter((line) => line.indexOf(targetWord) == -1);
+		const ret = lines.filter((line) => line.replace(/\s+/g, "") !== excludeWord);
 		const writeData = ret.join("\n");
+		if (data === writeData) return;
 
 		if (writeData.length === 0) {
 			fs.unlinkSync(filePath);
