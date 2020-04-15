@@ -5,7 +5,8 @@
     "noImplicitAny": true,
     "module": "commonjs" ,
     "outDir": "./script",
-    "types" : []
+    "types" : [],
+    "noImplicitUseStrict": true
   },
   "files": [
     "node_modules/@akashic/akashic-engine/lib/main.d.ts"
