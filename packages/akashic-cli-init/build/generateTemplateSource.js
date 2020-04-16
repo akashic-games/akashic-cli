@@ -1,3 +1,4 @@
+const fs = require("fs");
 const path = require("path");
 const shell = require('shelljs');
 const { execSync } = require("child_process");
@@ -80,10 +81,38 @@ function generateTemplates(srcPath, outPath, data) {
 		shell.mv(path.join(outPath, "common", "script"), path.join(outPath, data[key]["js-dist"], "script"));
 		// javascriptテンプレートに共通で必要なものもテンプレートに置く
 		shell.cp("-R", path.join(srcPath, "javascript-base", "*"), path.join(outPath, data[key]["js-dist"]));
+		// jsファイルに不要な行があれば削除する
+		deleteUnnecessaryLinesFromJsFile(path.join(outPath, data[key]["js-dist"], "script"));
 		shell.cp(path.join(srcPath, "javascript-base", ".eslintrc.json"), path.join(outPath, data[key]["js-dist"]));
 		// game.jsonにscriptアセットが登録されていない状態なので、ここで登録する
 		execSync(`cd ${path.join(outPath, data[key]["js-dist"])} && ${path.join(outPath, data[key]["js-dist"], "..", "common", "node_modules", ".bin", "akashic-cli-scan")} asset script`);
 	});
 	shell.rm("-rf", path.join(outPath, "common"));
 	console.log(`End to generate javascript-templates from ${srcPath}`);
+}
+
+
+/**
+ * 対象ディレクトリ配下の js ファイルからテンプレートとして不要な箇所を削除する。(初心者にはわかりづらく不要な箇所)
+ * 削除後、中身がなければファイルを削除する。
+ * @param targetPath 対象ディレクトリのパス
+ */
+function deleteUnnecessaryLinesFromJsFile(targetPath) {
+	const excludeRe = /^Object.defineProperty\(exports,\s*"__esModule",\s*{\s*value:\s*true\s*}\);\s*$/m;
+	const files = fs.readdirSync(targetPath);
+
+	files.forEach((file) => {
+		if (path.extname(file) !== ".js") return
+
+		const filePath = path.join(targetPath, file);
+		const data = fs.readFileSync(filePath, "utf-8").toString();
+		const writeData = data.replace(excludeRe, "");
+		if (data === writeData) return;
+
+		if (writeData.length === 0) {
+			fs.unlinkSync(filePath);
+		} else {
+			fs.writeFileSync(filePath, writeData, "utf-8");
+		}
+	});
 }
