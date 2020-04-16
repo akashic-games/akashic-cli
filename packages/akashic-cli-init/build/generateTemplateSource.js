@@ -93,12 +93,12 @@ function generateTemplates(srcPath, outPath, data) {
 
 
 /**
- * 対象ディレクトリ配下の js ファイルからテンプレートとして不要な行を削除する。(初心者にはわかりづらく不要な箇所)
+ * 対象ディレクトリ配下の js ファイルからテンプレートとして不要な箇所を削除する。(初心者にはわかりづらく不要な箇所)
  * 削除後、中身がなければファイルを削除する。
  * @param targetPath 対象ディレクトリのパス
  */
 function deleteUnnecessaryLinesFromJsFile(targetPath) {
-	const excludeWord = `Object.defineProperty(exports, "__esModule", { value: true });`.replace(/\s+/g, "");
+	const excludeRe = /^Object.defineProperty\(exports,\s*"__esModule",\s*{\s*value:\s*true\s*}\);\s*$/m;
 	const files = fs.readdirSync(targetPath);
 
 	files.forEach((file) => {
@@ -106,9 +106,7 @@ function deleteUnnecessaryLinesFromJsFile(targetPath) {
 
 		const filePath = path.join(targetPath, file);
 		const data = fs.readFileSync(filePath, "utf-8").toString();
-		const lines = data.split("\n");
-		const ret = lines.filter((line) => line.replace(/\s+/g, "") !== excludeWord);
-		const writeData = ret.join("\n");
+		const writeData = data.replace(excludeRe, "");
 		if (data === writeData) return;
 
 		if (writeData.length === 0) {
