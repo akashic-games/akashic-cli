@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 1.13.10 (2020-04-16)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#292](https://github.com/akashic-games/akashic-cli/pull/292) Delete unnecessary lines from js template file ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+  * [#293](https://github.com/akashic-games/akashic-cli/pull/293) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Committers: 2
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.13.9 (2020-04-14)
 
 #### Enhancement
