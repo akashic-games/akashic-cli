@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.13.12 (2020-04-21)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#294](https://github.com/akashic-games/akashic-cli/pull/294) Add externalValue to the argument of RunnerManager#createRunner() ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 1.13.11 (2020-04-21)
 
 #### Enhancement
