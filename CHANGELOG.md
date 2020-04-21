@@ -1,5 +1,25 @@
 # CHANGELOG
 
+## 1.13.11 (2020-04-21)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#296](https://github.com/akashic-games/akashic-cli/pull/296) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.0.0-beta.3, engineFiles@2.1.39, engineFiles@1.1.14) ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
+## 1.13.10 (2020-04-16)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#292](https://github.com/akashic-games/akashic-cli/pull/292) Delete unnecessary lines from js template file ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+  * [#293](https://github.com/akashic-games/akashic-cli/pull/293) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Committers: 2
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.13.9 (2020-04-14)
 
 #### Enhancement
