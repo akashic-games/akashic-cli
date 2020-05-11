@@ -26,7 +26,7 @@
     "@types/image-size": "0.7.0",
     "@types/jasmine": "2.8.16",
     "@types/mock-fs": "3.6.30",
-    "@types/node": "6.14.9",
+    "@types/node": "6.14.10",
     "istanbul": "0.4.5",
     "jasmine": "3.5.0",
     "jasmine-reporters": "2.3.2",
