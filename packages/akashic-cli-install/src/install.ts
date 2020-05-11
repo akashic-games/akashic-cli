@@ -1,4 +1,5 @@
 import * as path from "path";
+import * as tar from "tar";
 import * as cmn from "@akashic/akashic-cli-commons";
 import { Configuration } from "./Configuration";
 
@@ -71,6 +72,7 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 			.then(restoreDirectory, restoreDirectory);
 	}
 
+	let installedModuleNames: string[] = [];
 	const gameJsonPath = path.join(process.cwd(), "game.json");
 	return Promise.resolve()
 		.then(() => cmn.ConfigurationFile.read(gameJsonPath, param.logger))
@@ -89,9 +91,20 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 							.then(() => npm.shrinkwrap());
 					}
 				})
+
+				.then(() => {
+					// param.moduleNames は npm pack された tgz ファイルのパスを含む場合がある。しかし NodeModules#listScriptFiles() はこれを扱えない。
+					// そのため tgz ファイルを解凍し package.json から name を取得する。
+					param.moduleNames.forEach((moduleName) => {
+						if (/\.tgz/.test(moduleName)) {
+							moduleName = _getPackageNameFromTgzFile(moduleName);
+						}
+						installedModuleNames.push(moduleName);
+					});
+				})
 				.then(() => {
 					const listFiles = param.noOmitPackagejson ? cmn.NodeModules.listModuleFiles : cmn.NodeModules.listScriptFiles;
-					return listFiles(".", param.moduleNames, param.logger);
+					return listFiles(".", installedModuleNames, param.logger);
 				})
 				.then((filePaths: string[]) => {
 					conf.addToGlobalScripts(filePaths);
@@ -102,7 +115,7 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 				})
 				.then(() => {
 					if (param.plugin != null)
-						conf.addOperationPlugin(param.plugin, param.moduleNames[0]);
+						conf.addOperationPlugin(param.plugin, installedModuleNames[0]);
 				})
 				.then(() => conf.vacuumGlobalScripts())
 				.then(() => cmn.ConfigurationFile.write(conf.getContent(), gameJsonPath, param.logger));
@@ -113,4 +126,21 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 
 export function install(param: InstallParameterObject, cb: (err: any) => void): void {
 	promiseInstall(param).then(cb, cb);
+}
+
+
+function _getPackageNameFromTgzFile(fileName: string): string {
+	const data: any = [];
+	const onentry = (entry: tar.FileStat) => {
+		if (entry.header.path.indexOf("package.json") !== -1) {
+			entry.on("data", c => data.push(c) );
+		}
+	};
+	tar.t({
+		onentry,
+		file: fileName,
+		sync: true
+	});
+	const json = JSON.parse(data);
+	return json.name;
 }
