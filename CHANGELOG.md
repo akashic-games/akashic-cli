@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 1.13.13 (2020-05-12)
+
+#### Bug Fix
+* `akashic-cli-install`
+  * [#298](https://github.com/akashic-games/akashic-cli/pull/298) fix tgz file installation ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#295](https://github.com/akashic-games/akashic-cli/pull/295) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 1.13.12 (2020-04-21)
 
 #### Enhancement
