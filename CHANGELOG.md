@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## 1.13.14 (2020-05-12)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#299](https://github.com/akashic-games/akashic-cli/pull/299) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Bug Fix
+* `akashic-cli-install`
+  * [#300](https://github.com/akashic-games/akashic-cli/pull/300) Add tar module to dependencies ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 2
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.13.13 (2020-05-12)
 
 #### Bug Fix
