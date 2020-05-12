@@ -91,15 +91,12 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 							.then(() => npm.shrinkwrap());
 					}
 				})
-
 				.then(() => {
 					// param.moduleNames は npm pack された tgz ファイルのパスを含む場合がある。しかし NodeModules#listScriptFiles() はこれを扱えない。
 					// そのため tgz ファイルを解凍し package.json からモジュール名を取得し後続処理に渡す。
 					param.moduleNames.forEach((moduleName) => {
-						if (/\.tgz/.test(moduleName)) {
-							moduleName = _getPackageNameFromTgzFile(moduleName);
-						}
-						installedModuleNames.push(moduleName);
+						const actualName = /\.t(ar\.)?gz$/.test(moduleName) ? _getPackageNameFromTgzFile(moduleName) : moduleName;
+						installedModuleNames.push(actualName);
 					});
 				})
 				.then(() => {
@@ -130,10 +127,12 @@ export function install(param: InstallParameterObject, cb: (err: any) => void): 
 
 
 function _getPackageNameFromTgzFile(fileName: string): string {
-	const data: any = [];
+	let data: string;
 	const onentry = (entry: tar.FileStat) => {
-		if (entry.header.path.indexOf("package.json") !== -1) {
-			entry.on("data", c => data.push(c) );
+		const splitPath = entry.header.path.split("/");
+		// splitPath[0] は解凍後のディレクトリ名が入る。そのディレクトリ直下のpackage.jsonのみを対象とする。
+		if (splitPath[1] === "package.json") {
+			entry.on("data", c => data = c.toString());
 		}
 	};
 	tar.t({
