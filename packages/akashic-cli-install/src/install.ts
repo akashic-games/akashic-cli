@@ -1,4 +1,5 @@
 import * as path from "path";
+import * as tar from "tar";
 import * as cmn from "@akashic/akashic-cli-commons";
 import { Configuration } from "./Configuration";
 
@@ -71,6 +72,7 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 			.then(restoreDirectory, restoreDirectory);
 	}
 
+	let installedModuleNames: string[] = [];
 	const gameJsonPath = path.join(process.cwd(), "game.json");
 	return Promise.resolve()
 		.then(() => cmn.ConfigurationFile.read(gameJsonPath, param.logger))
@@ -90,8 +92,15 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 					}
 				})
 				.then(() => {
+					// param.moduleNames は npm pack された tgz ファイルのパスを含む場合がある。しかし NodeModules#listScriptFiles() はこれを扱えない。
+					// そのため tgz ファイルを解凍し package.json からモジュール名を取得し後続処理に渡す。
+					installedModuleNames = param.moduleNames.map(name => {
+						return /\.t(ar\.)?gz$/.test(name) ? _getPackageNameFromTgzFile(name) : name;
+					});
+				})
+				.then(() => {
 					const listFiles = param.noOmitPackagejson ? cmn.NodeModules.listModuleFiles : cmn.NodeModules.listScriptFiles;
-					return listFiles(".", param.moduleNames, param.logger);
+					return listFiles(".", installedModuleNames, param.logger);
 				})
 				.then((filePaths: string[]) => {
 					conf.addToGlobalScripts(filePaths);
@@ -102,7 +111,7 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 				})
 				.then(() => {
 					if (param.plugin != null)
-						conf.addOperationPlugin(param.plugin, param.moduleNames[0]);
+						conf.addOperationPlugin(param.plugin, installedModuleNames[0]);
 				})
 				.then(() => conf.vacuumGlobalScripts())
 				.then(() => cmn.ConfigurationFile.write(conf.getContent(), gameJsonPath, param.logger));
@@ -113,4 +122,23 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 
 export function install(param: InstallParameterObject, cb: (err: any) => void): void {
 	promiseInstall(param).then(cb, cb);
+}
+
+
+function _getPackageNameFromTgzFile(fileName: string): string {
+	let data: string;
+	const onentry = (entry: tar.FileStat) => {
+		const splitPath = entry.header.path.split("/");
+		// splitPath[0] は解凍後のディレクトリ名が入る。そのディレクトリ直下のpackage.jsonのみを対象とする。
+		if (splitPath[1] === "package.json") {
+			entry.on("data", c => data = c.toString());
+		}
+	};
+	tar.t({
+		onentry,
+		file: fileName,
+		sync: true
+	});
+	const json = JSON.parse(data);
+	return json.name;
 }
