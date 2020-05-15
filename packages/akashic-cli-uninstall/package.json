@@ -32,10 +32,10 @@
     "@types/mock-fs": "3.6.30",
     "@types/node": "10.17.21",
     "jest": "24.9.0",
-    "mock-fs": "4.11.0",
+    "mock-fs": "4.12.0",
     "rimraf": "2.7.1",
     "tslint": "5.20.1",
-    "typescript": "3.8.3"
+    "typescript": "3.9.2"
   },
   "dependencies": {
     "@akashic/akashic-cli-commons": "0.5.4",
