@@ -48,7 +48,7 @@
     "@types/ejs": "2.7.0",
     "@types/fs-extra": "5.1.0",
     "@types/fs-readdir-recursive": "1.0.0",
-    "@types/node": "8.10.60",
+    "@types/node": "8.10.61",
     "@types/uglify-js": "2.6.32",
     "browserify": "13.3.0",
     "eslint": "6.8.0",
@@ -57,7 +57,7 @@
     "node-fetch": "2.6.0",
     "shx": "0.3.2",
     "tslint": "5.20.1",
-    "typescript": "3.9.2",
+    "typescript": "3.9.3",
     "uglify-save-license": "0.4.1",
     "vinyl-source-stream": "1.1.2",
     "zip": "1.2.0"
