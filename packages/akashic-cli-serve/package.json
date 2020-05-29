@@ -63,7 +63,7 @@
     "query-string": "5.1.1",
     "react": "16.13.1",
     "react-dom": "16.13.1",
-    "scroll-into-view-if-needed": "2.2.24",
+    "scroll-into-view-if-needed": "2.2.25",
     "shx": "0.3.2",
     "socket.io-client": "2.3.0",
     "storybook-addon-jsx": "6.0.1",
