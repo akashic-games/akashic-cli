@@ -11,6 +11,7 @@ import {GameInstanceEntity} from "./GameInstanceEntity";
 import {ExecutionMode} from "./ExecutionMode";
 import {ContentEntity} from "./ContentEntity";
 import {NicoPluginEntity} from "./NicoPluginEntity";
+import {CoeLimitedPluginEntity} from "./CoeLimitedPluginEntity";
 
 const toAgvExecutionMode = (() => {
 	const executionModeTable = {
@@ -53,6 +54,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 	readonly coePlugin: CoePluginEntity;
 	readonly nicoPlugin: NicoPluginEntity;
 	readonly content: ContentEntity;
+	readonly coeLimitdPlugin: CoeLimitedPluginEntity;
 
 	private _timeKeeper: TimeKeeper;
 	private _gameViewManager: GameViewManager;
@@ -101,6 +103,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 				onLocalInstanceDelete: params.coeHandler.onLocalInstanceDelete,
 				instanceArgument: params.argument
 			});
+			this.coeLimitdPlugin = new CoeLimitedPluginEntity();
 			const agvGameContent = this._serveGameContent.agvGameContent;
 			agvGameContent.onExternalPluginRegister.add((name: string) => {
 				const game = agvGameContent.getGame();
@@ -112,6 +115,8 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 					game.external.send = (message: any) => {
 						console.log("game.external.send: ", message);
 					};
+				} else if (name === "coeLimited") {
+					game.external.coeLimited = this.coeLimitdPlugin;
 				}
 			});
 		}

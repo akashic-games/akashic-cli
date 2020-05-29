@@ -1,6 +1,7 @@
 import * as React from "react";
 import { observer } from "mobx-react";
 import * as styles from "./GameScreen.css";
+import { ConfirmDialog } from "../molecule/ConfirmDialog";
 
 export interface GameScreenProps {
 	showsBackgroundImage: boolean;
@@ -9,15 +10,27 @@ export interface GameScreenProps {
 	gameWidth: number;
 	gameHeight: number;
 	screenElement: HTMLElement;
+	isDisplayingResolver: boolean;
+	remainingTimeForResolver: number;
 	shouldStopPropagationFunc: () => boolean;
 	onMouseMoveCapture?: (p: { x: number, y: number }) => void;
 	onClickCapture?: (p: { x: number, y: number }) => void;
+	onClickResolver?: (accepted: boolean) => void;
 }
 
 @observer
 export class GameScreen extends React.Component<GameScreenProps, {}> {
 	render(): React.ReactNode {
-		const { showsBackgroundImage: showsBgImage, backgroundImage: bgImage, showsGrid, gameWidth, gameHeight } = this.props;
+		const {
+			showsBackgroundImage: showsBgImage,
+			backgroundImage: bgImage,
+			showsGrid,
+			gameWidth,
+			gameHeight,
+			isDisplayingResolver,
+			remainingTimeForResolver,
+			onClickResolver
+		 } = this.props;
 		const bgImageStyle = (showsBgImage && !bgImage) ?  (" " + styles["pseudo-transparent-bg"]) : "";
 		return <div className={styles["game-screen"]} style={{ width: gameWidth, height: gameHeight }}>
 			{
@@ -33,6 +46,14 @@ export class GameScreen extends React.Component<GameScreenProps, {}> {
 						className={styles["grid-canvas"]}
 						style={{ width: gameWidth, height: gameHeight }}
 						ref={this._createGridCanvas}/> :
+					null
+			}
+			{
+				isDisplayingResolver ?
+					<ConfirmDialog
+						remainingSeconds={remainingTimeForResolver}
+						onClick={onClickResolver}
+					/> :
 					null
 			}
 		</div>;

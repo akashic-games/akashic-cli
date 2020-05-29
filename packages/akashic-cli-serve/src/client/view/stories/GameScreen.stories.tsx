@@ -20,6 +20,8 @@ storiesOf("o-GameScreen", module)
 			gameWidth={320}
 			gameHeight={240}
 			screenElement={createDummyDiv(320, 240)}
+			isDisplayingResolver={false}
+			remainingTimeForResolver={0}
 			shouldStopPropagationFunc={() => {
 				action("shouldStopPropagation");
 				return false;
@@ -36,6 +38,8 @@ storiesOf("o-GameScreen", module)
 			gameWidth={320}
 			gameHeight={240}
 			screenElement={createDummyDiv(320, 240)}
+			isDisplayingResolver={false}
+			remainingTimeForResolver={0}
 			shouldStopPropagationFunc={() => {
 				action("shouldStopPropagation");
 				return false;
@@ -52,6 +56,26 @@ storiesOf("o-GameScreen", module)
 			gameWidth={320}
 			gameHeight={240}
 			screenElement={createDummyDiv(320, 240)}
+			isDisplayingResolver={false}
+			remainingTimeForResolver={0}
+			shouldStopPropagationFunc={() => {
+				action("shouldStopPropagation");
+				return false;
+			}}
+			onMouseMoveCapture={action("onMouseMoveCapture")}
+			onClickCapture={action("onClickCapture")}
+		/>
+	))
+	.add("confirmDialog", () => (
+		<GameScreen
+			showsBackgroundImage={false}
+			showsGrid={false}
+			backgroundImage={null}
+			gameWidth={320}
+			gameHeight={240}
+			screenElement={createDummyDiv(320, 240)}
+			isDisplayingResolver={true}
+			remainingTimeForResolver={15}
 			shouldStopPropagationFunc={() => {
 				action("shouldStopPropagation");
 				return false;
@@ -60,4 +84,3 @@ storiesOf("o-GameScreen", module)
 			onClickCapture={action("onClickCapture")}
 		/>
 	));
-

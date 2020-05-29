@@ -28,9 +28,12 @@ export class GameScreenContainer extends React.Component<GameScreenContainerProp
 			gameWidth={gameViewSize.width}
 			gameHeight={gameViewSize.height}
 			screenElement={this.props.gameViewManager.getRootElement()}
+			isDisplayingResolver={this.props.localInstance.coeLimitdPlugin.isDisplayingResolver}
+			remainingTimeForResolver={this.props.localInstance.coeLimitdPlugin.remainingSeconds}
 			shouldStopPropagationFunc={this._handleShouldStopPropgation}
 			onMouseMoveCapture={this._handleMouseMoveCapture}
 			onClickCapture={this._handleClickCapture}
+			onClickResolver={this.props.localInstance.coeLimitdPlugin.sendName}
 		/>;
 	}
 
