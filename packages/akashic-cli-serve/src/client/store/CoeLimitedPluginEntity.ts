@@ -2,13 +2,7 @@ import { observable, action, computed } from "mobx";
 import * as pl from "@akashic/playlog";
 import { storage } from "./storage";
 
-export interface StartLocalSessionPameterObject {
-	sessionId: string;
-	localEvents: pl.Event[];
-	messageHandler: (message: any) => void;
-}
-
-export interface StartLocalSessionMessage {
+export interface UsernameDisplayAuthorizationMessage {
 	result: {
 		name: string;
 		userData: {
@@ -17,13 +11,19 @@ export interface StartLocalSessionMessage {
 	};
 }
 
+export interface StartLocalSessionPameterObject {
+	sessionId: string;
+	localEvents: pl.Event[];
+	messageHandler: (message: UsernameDisplayAuthorizationMessage) => void;
+}
+
 const DEFAULT_LIMIT_MILLISECONDS = 15 * 1000;
 const DEFAULT_PLAYER_NAME = "akashic-cli-serve-player";
 
 export class CoeLimitedPluginEntity {
 	@observable isDisplayingResolver: boolean;
 	@observable remainingMilliSeconds: number;
-	@observable messageHandler: (message: StartLocalSessionMessage) => void;
+	@observable messageHandler: (message: UsernameDisplayAuthorizationMessage) => void;
 	@action startLocalSession: (param: StartLocalSessionPameterObject) => void;
 	@action exitLocalSession: (sessionId: string) => void;
 	private sessionId: string;

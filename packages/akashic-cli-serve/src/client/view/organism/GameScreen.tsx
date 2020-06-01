@@ -1,7 +1,10 @@
 import * as React from "react";
 import { observer } from "mobx-react";
 import * as styles from "./GameScreen.css";
-import { ConfirmDialog } from "../molecule/ConfirmDialog";
+import {
+	UsernameDisplayAuthorizationDialog,
+	UsernameDisplayAuthorizationDialogProps
+} from "../molecule/UsernameDisplayAuthorizationDialog";
 
 export interface GameScreenProps {
 	showsBackgroundImage: boolean;
@@ -11,11 +14,10 @@ export interface GameScreenProps {
 	gameHeight: number;
 	screenElement: HTMLElement;
 	isDisplayingResolver: boolean;
-	remainingTimeForResolver: number;
+	usernameDisplayAuthorizationDialogProps: UsernameDisplayAuthorizationDialogProps;
 	shouldStopPropagationFunc: () => boolean;
 	onMouseMoveCapture?: (p: { x: number, y: number }) => void;
 	onClickCapture?: (p: { x: number, y: number }) => void;
-	onClickResolver?: (accepted: boolean) => void;
 }
 
 @observer
@@ -28,8 +30,7 @@ export class GameScreen extends React.Component<GameScreenProps, {}> {
 			gameWidth,
 			gameHeight,
 			isDisplayingResolver,
-			remainingTimeForResolver,
-			onClickResolver
+			usernameDisplayAuthorizationDialogProps
 		 } = this.props;
 		const bgImageStyle = (showsBgImage && !bgImage) ?  (" " + styles["pseudo-transparent-bg"]) : "";
 		return <div className={styles["game-screen"]} style={{ width: gameWidth, height: gameHeight }}>
@@ -50,10 +51,7 @@ export class GameScreen extends React.Component<GameScreenProps, {}> {
 			}
 			{
 				isDisplayingResolver ?
-					<ConfirmDialog
-						remainingSeconds={remainingTimeForResolver}
-						onClick={onClickResolver}
-					/> :
+					<UsernameDisplayAuthorizationDialog {...usernameDisplayAuthorizationDialogProps} /> :
 					null
 			}
 		</div>;

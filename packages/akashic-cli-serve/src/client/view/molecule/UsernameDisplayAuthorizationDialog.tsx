@@ -1,13 +1,13 @@
 import * as React from "react";
 import { observer } from "mobx-react";
 
-export interface ConfirmDialogProps {
+export interface UsernameDisplayAuthorizationDialogProps {
 	remainingSeconds: number;
-	onClick?: (accepted: boolean) => void;
+	onClick: (accepted: boolean) => void;
 }
 
 @observer
-export class ConfirmDialog extends React.Component<ConfirmDialogProps, {}> {
+export class UsernameDisplayAuthorizationDialog extends React.Component<UsernameDisplayAuthorizationDialogProps, {}> {
 	render(): React.ReactNode {
 		// TODO: cssを入れてダイアログっぽい見た目にする
 		return <div>

@@ -21,7 +21,10 @@ storiesOf("o-GameScreen", module)
 			gameHeight={240}
 			screenElement={createDummyDiv(320, 240)}
 			isDisplayingResolver={false}
-			remainingTimeForResolver={0}
+			usernameDisplayAuthorizationDialogProps={{
+				remainingSeconds: 0,
+				onClick: action("onClick")
+			}}
 			shouldStopPropagationFunc={() => {
 				action("shouldStopPropagation");
 				return false;
@@ -39,7 +42,10 @@ storiesOf("o-GameScreen", module)
 			gameHeight={240}
 			screenElement={createDummyDiv(320, 240)}
 			isDisplayingResolver={false}
-			remainingTimeForResolver={0}
+			usernameDisplayAuthorizationDialogProps={{
+				remainingSeconds: 0,
+				onClick: action("onClick")
+			}}
 			shouldStopPropagationFunc={() => {
 				action("shouldStopPropagation");
 				return false;
@@ -57,7 +63,10 @@ storiesOf("o-GameScreen", module)
 			gameHeight={240}
 			screenElement={createDummyDiv(320, 240)}
 			isDisplayingResolver={false}
-			remainingTimeForResolver={0}
+			usernameDisplayAuthorizationDialogProps={{
+				remainingSeconds: 0,
+				onClick: action("onClick")
+			}}
 			shouldStopPropagationFunc={() => {
 				action("shouldStopPropagation");
 				return false;
@@ -75,7 +84,10 @@ storiesOf("o-GameScreen", module)
 			gameHeight={240}
 			screenElement={createDummyDiv(320, 240)}
 			isDisplayingResolver={true}
-			remainingTimeForResolver={15}
+			usernameDisplayAuthorizationDialogProps={{
+				remainingSeconds: 15,
+				onClick: action("onClick")
+			}}
 			shouldStopPropagationFunc={() => {
 				action("shouldStopPropagation");
 				return false;
