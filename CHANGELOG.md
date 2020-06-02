@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.13.22 (2020-05-29)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#320](https://github.com/akashic-games/akashic-cli/pull/320) Update dependency lerna to v3.22.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
 ## 1.13.21 (2020-05-26)
 
 #### Enhancement
