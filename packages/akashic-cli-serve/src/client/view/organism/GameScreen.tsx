@@ -13,8 +13,7 @@ export interface GameScreenProps {
 	gameWidth: number;
 	gameHeight: number;
 	screenElement: HTMLElement;
-	isDisplayingResolver: boolean;
-	usernameDisplayAuthorizationDialogProps: UsernameDisplayAuthorizationDialogProps;
+	usernameDisplayAuthorizationDialogProps?: UsernameDisplayAuthorizationDialogProps;
 	shouldStopPropagationFunc: () => boolean;
 	onMouseMoveCapture?: (p: { x: number, y: number }) => void;
 	onClickCapture?: (p: { x: number, y: number }) => void;
@@ -29,7 +28,6 @@ export class GameScreen extends React.Component<GameScreenProps, {}> {
 			showsGrid,
 			gameWidth,
 			gameHeight,
-			isDisplayingResolver,
 			usernameDisplayAuthorizationDialogProps
 		 } = this.props;
 		const bgImageStyle = (showsBgImage && !bgImage) ?  (" " + styles["pseudo-transparent-bg"]) : "";
@@ -50,7 +48,7 @@ export class GameScreen extends React.Component<GameScreenProps, {}> {
 					null
 			}
 			{
-				isDisplayingResolver ?
+				usernameDisplayAuthorizationDialogProps ?
 					<UsernameDisplayAuthorizationDialog {...usernameDisplayAuthorizationDialogProps} /> :
 					null
 			}

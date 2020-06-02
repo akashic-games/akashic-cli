@@ -7,6 +7,7 @@ import { ToolBarUiStore } from "../../store/ToolBarUiStore";
 import { DevtoolUiStore } from "../../store/DevtoolUiStore";
 import { Operator } from "../../operator/Operator";
 import { GameScreen } from "../organism/GameScreen";
+import { UsernameDisplayAuthorizationDialogProps } from "../molecule/UsernameDisplayAuthorizationDialog";
 
 export interface GameScreenContainerProps {
 	sandboxConfig: SandboxConfig;
@@ -28,11 +29,7 @@ export class GameScreenContainer extends React.Component<GameScreenContainerProp
 			gameWidth={gameViewSize.width}
 			gameHeight={gameViewSize.height}
 			screenElement={this.props.gameViewManager.getRootElement()}
-			isDisplayingResolver={this.props.localInstance.coeLimitdPlugin.isDisplayingResolver}
-			usernameDisplayAuthorizationDialogProps={{
-				remainingSeconds: this.props.localInstance.coeLimitdPlugin.remainingSeconds,
-				onClick: this.props.localInstance.coeLimitdPlugin.sendName
-			}}
+			usernameDisplayAuthorizationDialogProps={this._makeUsernameDisplayAuthorizationDialogProps()}
 			shouldStopPropagationFunc={this._handleShouldStopPropgation}
 			onMouseMoveCapture={this._handleMouseMoveCapture}
 			onClickCapture={this._handleClickCapture}
@@ -53,5 +50,12 @@ export class GameScreenContainer extends React.Component<GameScreenContainerProp
 		if (!this.props.devtoolUiStore.isSelectingEntity)
 			return;
 		this.props.operator.devtool.finishEntitySelection(p.x, p.y);
+	}
+
+	private _makeUsernameDisplayAuthorizationDialogProps = (): UsernameDisplayAuthorizationDialogProps | undefined => {
+		return this.props.localInstance.coeLimitdPlugin.isDisplayingResolver ? {
+			remainingSeconds: this.props.localInstance.coeLimitdPlugin.remainingSeconds,
+			onClick: this.props.localInstance.coeLimitdPlugin.sendName
+		} : undefined;
 	}
 }

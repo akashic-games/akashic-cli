@@ -24,37 +24,39 @@ export class CoeLimitedPluginEntity {
 	@observable isDisplayingResolver: boolean;
 	@observable remainingMilliSeconds: number;
 	@observable messageHandler: (message: UsernameDisplayAuthorizationMessage) => void;
-	@action startLocalSession: (param: StartLocalSessionPameterObject) => void;
-	@action exitLocalSession: (sessionId: string) => void;
 	private sessionId: string;
 	private timerId: NodeJS.Timer | null;
 
 	constructor() {
 		this.isDisplayingResolver = false;
 		this.remainingMilliSeconds = DEFAULT_LIMIT_MILLISECONDS;
-		this.startLocalSession = (param: StartLocalSessionPameterObject) => {
-			this.messageHandler = param.messageHandler;
-			this.isDisplayingResolver = true;
-			this.sessionId = param.sessionId;
-			// NOTE: この場合、F5実行時に表示上だけ制限時間がリセットされてしまう(実際はリセットされない)ので、現在時刻ではなくゲームの起動時刻を取得した方が良さそう？
-			const startingDateTime = Date.now();
-			let limitMilliSeconds = DEFAULT_LIMIT_MILLISECONDS;
-			const localEventData = param.localEvents[0][pl.MessageEventIndex.Data];
-			if (localEventData && localEventData.parameters && localEventData.parameters.limitSeconds) {
-				limitMilliSeconds = localEventData.parameters.limitSeconds * 1000;
+	}
+
+	@action
+	startLocalSession = (param: StartLocalSessionPameterObject): void => {
+		this.messageHandler = param.messageHandler;
+		this.isDisplayingResolver = true;
+		this.sessionId = param.sessionId;
+		// NOTE: この場合、ページリロード時に表示上だけ制限時間がリセットされてしまう(実際はリセットされない)ので、現在時刻ではなくゲームの起動時刻を取得した方が良さそう？
+		const startingDateTime = Date.now();
+		let limitMilliSeconds = DEFAULT_LIMIT_MILLISECONDS;
+		const localEventData = param.localEvents[0][pl.MessageEventIndex.Data];
+		if (localEventData && localEventData.parameters && localEventData.parameters.limitSeconds) {
+			limitMilliSeconds = localEventData.parameters.limitSeconds * 1000;
+		}
+		this.timerId = setInterval(() => {
+			this.calculateRemainingMilliSeconds(limitMilliSeconds, startingDateTime);
+			if (this.remainingMilliSeconds === 0 && this.timerId != null) {
+				this.sendName(false);
 			}
-			this.timerId = setInterval(() => {
-				this.calculateRemainingMilliSeconds(limitMilliSeconds, startingDateTime);
-				if (this.remainingMilliSeconds === 0 && this.timerId != null) {
-					this.sendName(false);
-				}
-			}, 200); // 1s毎だと表示と実際の時間に若干のズレが生まれそうなので、やや間隔短めに残り時間の算出を行う
-		};
-		this.exitLocalSession = (_sessionId: string) => {
-			clearInterval(this.timerId);
-			this.isDisplayingResolver = false;
-			this.timerId = null;
-		};
+		}, 200); // 1s毎だと表示と実際の時間に若干のズレが生まれそうなので、やや間隔短めに残り時間の算出を行う
+	}
+
+	@action
+	exitLocalSession = (_sessionId: string): void => {
+		clearInterval(this.timerId);
+		this.isDisplayingResolver = false;
+		this.timerId = null;
 	}
 
 	@computed

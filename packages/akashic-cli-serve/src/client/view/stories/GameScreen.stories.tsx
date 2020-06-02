@@ -20,11 +20,7 @@ storiesOf("o-GameScreen", module)
 			gameWidth={320}
 			gameHeight={240}
 			screenElement={createDummyDiv(320, 240)}
-			isDisplayingResolver={false}
-			usernameDisplayAuthorizationDialogProps={{
-				remainingSeconds: 0,
-				onClick: action("onClick")
-			}}
+			usernameDisplayAuthorizationDialogProps={undefined}
 			shouldStopPropagationFunc={() => {
 				action("shouldStopPropagation");
 				return false;
@@ -41,11 +37,7 @@ storiesOf("o-GameScreen", module)
 			gameWidth={320}
 			gameHeight={240}
 			screenElement={createDummyDiv(320, 240)}
-			isDisplayingResolver={false}
-			usernameDisplayAuthorizationDialogProps={{
-				remainingSeconds: 0,
-				onClick: action("onClick")
-			}}
+			usernameDisplayAuthorizationDialogProps={undefined}
 			shouldStopPropagationFunc={() => {
 				action("shouldStopPropagation");
 				return false;
@@ -62,11 +54,7 @@ storiesOf("o-GameScreen", module)
 			gameWidth={320}
 			gameHeight={240}
 			screenElement={createDummyDiv(320, 240)}
-			isDisplayingResolver={false}
-			usernameDisplayAuthorizationDialogProps={{
-				remainingSeconds: 0,
-				onClick: action("onClick")
-			}}
+			usernameDisplayAuthorizationDialogProps={undefined}
 			shouldStopPropagationFunc={() => {
 				action("shouldStopPropagation");
 				return false;
@@ -83,7 +71,6 @@ storiesOf("o-GameScreen", module)
 			gameWidth={320}
 			gameHeight={240}
 			screenElement={createDummyDiv(320, 240)}
-			isDisplayingResolver={true}
 			usernameDisplayAuthorizationDialogProps={{
 				remainingSeconds: 15,
 				onClick: action("onClick")
