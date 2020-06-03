@@ -1,5 +1,24 @@
 # CHANGELOG
 
+## 1.13.23 (2020-06-03)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#324](https://github.com/akashic-games/akashic-cli/pull/324) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.0.0-beta.5, engineFiles@2.1.40, engineFiles@1.1.14) ([@xnv](https://github.com/xnv))
+* `akashic-cli-init`
+  * [#323](https://github.com/akashic-games/akashic-cli/pull/323) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Bug Fix
+* [#322](https://github.com/akashic-games/akashic-cli/pull/322) 直下の.npmrcの削除 ([@dera-](https://github.com/dera-))
+
+#### Update Dependencies
+* `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#319](https://github.com/akashic-games/akashic-cli/pull/319) Update dependency scroll-into-view-if-needed to v2.2.25 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- [@dera-](https://github.com/dera-)
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.13.22 (2020-05-29)
 
 #### Update Dependencies
