@@ -64,8 +64,8 @@ export class CoeLimitedPluginEntity {
 		return Math.ceil(this.remainingMilliSeconds / 1000);
 	}
 
-	@action.bound
-	sendName(accepted: boolean): void {
+	@action
+	sendName = (accepted: boolean): void => {
 		if (this.messageHandler) {
 			this.messageHandler({
 				result: {
@@ -79,8 +79,8 @@ export class CoeLimitedPluginEntity {
 		}
 	}
 
-	@action.bound
-	private calculateRemainingMilliSeconds(limitTime: number, startingDateTime: number): void {
+	@action
+	private calculateRemainingMilliSeconds = (limitTime: number, startingDateTime: number): void => {
 		this.remainingMilliSeconds = limitTime - (Date.now() - startingDateTime);
 		if (this.remainingMilliSeconds <= 0) {
 			this.remainingMilliSeconds = 0;
