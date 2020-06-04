@@ -13,12 +13,14 @@ export interface UsernameDisplayAuthorizationMessage {
 
 export interface StartLocalSessionPameterObject {
 	sessionId: string;
+	applicationName: string;
 	localEvents: pl.Event[];
 	messageHandler: (message: UsernameDisplayAuthorizationMessage) => void;
 }
 
 const DEFAULT_LIMIT_MILLISECONDS = 15 * 1000;
 const DEFAULT_PLAYER_NAME = "akashic-cli-serve-player";
+const ALLOWED_APPLICATION_NAME = "player-info-resolver";
 
 export class CoeLimitedPluginEntity {
 	@observable isDisplayingResolver: boolean;
@@ -34,6 +36,9 @@ export class CoeLimitedPluginEntity {
 
 	@action
 	startLocalSession = (param: StartLocalSessionPameterObject): void => {
+		if (param.applicationName !== ALLOWED_APPLICATION_NAME) {
+			return;
+		}
 		this.messageHandler = param.messageHandler;
 		this.isDisplayingResolver = true;
 		this.sessionId = param.sessionId;
