@@ -22,6 +22,7 @@ const DEFAULT_LIMIT_MILLISECONDS = 15 * 1000;
 const DEFAULT_PLAYER_NAME = "akashic-cli-serve-player";
 const ALLOWED_APPLICATION_NAME = "player-info-resolver";
 
+// TODO: 本来このEntityはakashicの文脈に依存するものなのでakashicディレクトリで定義して、コンポーネントで利用するプロパティはStoreに、関数はOperatorに定義すべき
 export class CoeLimitedPluginEntity {
 	@observable isDisplayingResolver: boolean;
 	@observable remainingMilliSeconds: number;
