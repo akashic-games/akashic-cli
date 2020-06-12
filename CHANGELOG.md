@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 1.13.26 (2020-06-12)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#330](https://github.com/akashic-games/akashic-cli/pull/330) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.0.0-beta.5, engineFiles@2.1.40, engineFiles@1.1.14) ([@xnv](https://github.com/xnv))
+
+#### Other Change
+* [#326](https://github.com/akashic-games/akashic-cli/pull/326) publishスクリプトにタグ指定オプションを追加 ([@dera-](https://github.com/dera-))
+
+#### Committers: 2
+- [@dera-](https://github.com/dera-)
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.13.25 (2020-06-11)
 
 #### Enhancement
