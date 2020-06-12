@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.13.28 (2020-06-12)
+
+#### Update Dependencies
+* `akashic-cli-config`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#331](https://github.com/akashic-games/akashic-cli/pull/331) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
 ## 1.13.27 (2020-06-12)
 
 #### Enhancement
