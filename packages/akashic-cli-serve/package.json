@@ -78,7 +78,7 @@
     "whatwg-fetch": "3.0.0"
   },
   "optionalDependencies": {
-    "@akashic/akashic-gameview-web": "2.0.0"
+    "@akashic/akashic-gameview-web": "2.1.0"
   },
   "files": [
     "package.json",
