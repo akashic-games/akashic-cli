@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.14.0 (2020-06-15)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#321](https://github.com/akashic-games/akashic-cli/pull/321) akashic-cli-serveでユーザー名表示許諾ダイアログを表示する対応 ([@dera-](https://github.com/dera-))
+
+#### Committers: 1
+- [@dera-](https://github.com/dera-)
+
 ## 1.13.29 (2020-06-12)
 
 #### Enhancement
