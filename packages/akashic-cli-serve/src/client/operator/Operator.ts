@@ -13,6 +13,7 @@ import { DevtoolOperator } from "./DevtoolOperator";
 import { ExternalPluginOperator } from "./ExternalPluginOperator";
 import { ServiceType } from "../../common/types/ServiceType";
 import { RPGAtsumaruApi } from "../atsumaru/RPGAtsumaruApi";
+import { DefaultSessionParameter } from "../../server/common/DefaultSessionParameter"
 
 export interface OperatorParameterObject {
 	store: Store;
@@ -185,12 +186,16 @@ export class Operator {
 		const sandboxConfig = content.sandboxConfig || {};
 
 		const { events, autoSendEvents, autoSendEventName } = sandboxConfig;
+		console.log("_createServerLoop", "autoSendEventName:" + autoSendEventName, "store.target:" + this.store.targetService , DefaultSessionParameter)
+
 		if (events && autoSendEventName && events[autoSendEventName] instanceof Array) {
 			events[autoSendEventName].forEach((pev: any) => play.amflow.enqueueEvent(pev));
 		} else if (events && autoSendEvents && events[autoSendEvents] instanceof Array) {
 			// TODO: `autoSendEvents` は deprecated となった。互換性のためこのパスを残しているが、`autoSendEvents` の削除時にこのパスも削除する。
 			console.warn("[deprecated] `autoSendEvents` in sandbox.config.js is deprecated. Please use `autoSendEventName`.");
 			events[autoSendEvents].forEach((pev: any) => play.amflow.enqueueEvent(pev));
+		} else if (!autoSendEventName && this.store.targetService === ServiceType.NicoLive) {
+			play.amflow.enqueueEvent(DefaultSessionParameter); // 既定のセッションパラメータを送る
 		}
 
 		if (this.store.devtoolUiStore.isAutoSendEvent) {
