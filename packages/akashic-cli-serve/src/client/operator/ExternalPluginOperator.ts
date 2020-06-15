@@ -20,5 +20,11 @@ export class ExternalPluginOperator {
 				gameContent.onExternalPluginRegister.fire("send");
 			}
 		});
+		gameViewManager.registerExternalPlugin({
+			name: "coeLimited",
+			onload: (_game: agv.GameLike, _dataBus: any, gameContent: agv.GameContent) => {
+				gameContent.onExternalPluginRegister.fire("coeLimited");
+			}
+		});
 	}
 }

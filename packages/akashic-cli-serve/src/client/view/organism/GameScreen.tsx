@@ -1,6 +1,10 @@
 import * as React from "react";
 import { observer } from "mobx-react";
 import * as styles from "./GameScreen.css";
+import {
+	UsernameDisplayAuthorizationDialog,
+	UsernameDisplayAuthorizationDialogProps
+} from "../molecule/UsernameDisplayAuthorizationDialog";
 
 export interface GameScreenProps {
 	showsBackgroundImage: boolean;
@@ -9,6 +13,7 @@ export interface GameScreenProps {
 	gameWidth: number;
 	gameHeight: number;
 	screenElement: HTMLElement;
+	usernameDisplayAuthorizationDialogProps?: UsernameDisplayAuthorizationDialogProps;
 	shouldStopPropagationFunc: () => boolean;
 	onMouseMoveCapture?: (p: { x: number, y: number }) => void;
 	onClickCapture?: (p: { x: number, y: number }) => void;
@@ -17,7 +22,14 @@ export interface GameScreenProps {
 @observer
 export class GameScreen extends React.Component<GameScreenProps, {}> {
 	render(): React.ReactNode {
-		const { showsBackgroundImage: showsBgImage, backgroundImage: bgImage, showsGrid, gameWidth, gameHeight } = this.props;
+		const {
+			showsBackgroundImage: showsBgImage,
+			backgroundImage: bgImage,
+			showsGrid,
+			gameWidth,
+			gameHeight,
+			usernameDisplayAuthorizationDialogProps
+		 } = this.props;
 		const bgImageStyle = (showsBgImage && !bgImage) ?  (" " + styles["pseudo-transparent-bg"]) : "";
 		return <div className={styles["game-screen"]} style={{ width: gameWidth, height: gameHeight }}>
 			{
@@ -33,6 +45,11 @@ export class GameScreen extends React.Component<GameScreenProps, {}> {
 						className={styles["grid-canvas"]}
 						style={{ width: gameWidth, height: gameHeight }}
 						ref={this._createGridCanvas}/> :
+					null
+			}
+			{
+				usernameDisplayAuthorizationDialogProps ?
+					<UsernameDisplayAuthorizationDialog {...usernameDisplayAuthorizationDialogProps} /> :
 					null
 			}
 		</div>;

@@ -20,6 +20,7 @@ storiesOf("o-GameScreen", module)
 			gameWidth={320}
 			gameHeight={240}
 			screenElement={createDummyDiv(320, 240)}
+			usernameDisplayAuthorizationDialogProps={undefined}
 			shouldStopPropagationFunc={() => {
 				action("shouldStopPropagation");
 				return false;
@@ -36,6 +37,7 @@ storiesOf("o-GameScreen", module)
 			gameWidth={320}
 			gameHeight={240}
 			screenElement={createDummyDiv(320, 240)}
+			usernameDisplayAuthorizationDialogProps={undefined}
 			shouldStopPropagationFunc={() => {
 				action("shouldStopPropagation");
 				return false;
@@ -52,6 +54,27 @@ storiesOf("o-GameScreen", module)
 			gameWidth={320}
 			gameHeight={240}
 			screenElement={createDummyDiv(320, 240)}
+			usernameDisplayAuthorizationDialogProps={undefined}
+			shouldStopPropagationFunc={() => {
+				action("shouldStopPropagation");
+				return false;
+			}}
+			onMouseMoveCapture={action("onMouseMoveCapture")}
+			onClickCapture={action("onClickCapture")}
+		/>
+	))
+	.add("confirmDialog", () => (
+		<GameScreen
+			showsBackgroundImage={false}
+			showsGrid={false}
+			backgroundImage={null}
+			gameWidth={320}
+			gameHeight={240}
+			screenElement={createDummyDiv(320, 240)}
+			usernameDisplayAuthorizationDialogProps={{
+				remainingSeconds: 15,
+				onClick: action("onClick")
+			}}
 			shouldStopPropagationFunc={() => {
 				action("shouldStopPropagation");
 				return false;
@@ -60,4 +83,3 @@ storiesOf("o-GameScreen", module)
 			onClickCapture={action("onClickCapture")}
 		/>
 	));
-

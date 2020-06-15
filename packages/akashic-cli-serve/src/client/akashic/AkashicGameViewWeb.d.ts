@@ -147,6 +147,7 @@ declare module agv {
 		coe?: any;
 		send?: any;
 		nico?: any;
+		coeLimited?: any;
 	}
 
 	enum ExecutionMode {
