@@ -79,6 +79,7 @@ export class Configuration extends cmn.Configuration {
 	}
 
 	scanAssets(info: ScanAssetsInformation): Promise<void> {
+		this.scanAssetsDir(info);
 		return Promise.resolve()
 
 			.then(() => this.scanAssetsAudio(info.scanDirectoryTable.audio))
@@ -114,6 +115,23 @@ export class Configuration extends cmn.Configuration {
 		});
 	}
 
+	scanAssetsDir(info: ScanAssetsInformation): void {
+		var files: string[] = readdirRecursive(path.join(this._basepath,  "assets/"));
+		files.forEach(async (file) => {
+			const targetDir = path.join("assets/", path.dirname(file));
+			if (_isImageFilePath(file)) {
+				this._addDirectoryTable(info.scanDirectoryTable.image, targetDir);
+			} else if (_isAudioFilePath(file)) {
+				this._addDirectoryTable(info.scanDirectoryTable.audio, targetDir);
+			} else if (_isScriptAssetPath(file)) {
+				this._addDirectoryTable(info.scanDirectoryTable.script, targetDir);
+			} else {
+				// image, auido, script 以外は text とする
+				this._addDirectoryTable(info.scanDirectoryTable.text, targetDir);
+			}
+		});
+	}
+
 	_scanAssetsImage(imageAssetDir: string): void {
 		var files: string[] = readdirRecursive(path.join(this._basepath, imageAssetDir + "/"));
 		if (! this._content.assets)
@@ -136,7 +154,9 @@ export class Configuration extends cmn.Configuration {
 					if (this._forceUpdateAssetIds) {
 						const basename = path.basename(f, path.extname(f));
 						if (this._resolveAssetIdsFromPath) {
-							newAssetId = cmn.Util.makeUnixPath(path.join("image", path.dirname(f), basename));
+							newAssetId = cmn.Util.makeUnixPath(path.join(path.dirname(unixPath), basename));
+						} else if (this._isAssetsDir(unixPath)) {
+							newAssetId = this._generateAssetsDirId();
 						} else {
 							newAssetId = basename;
 							if (!this._includeExtensionToAssetId)
@@ -164,7 +184,9 @@ export class Configuration extends cmn.Configuration {
 			const basename = path.basename(f, path.extname(f));
 			let aid: string;
 			if (this._resolveAssetIdsFromPath) {
-				aid = cmn.Util.makeUnixPath(path.join("image", path.dirname(f), basename));
+				aid = cmn.Util.makeUnixPath(path.join(path.dirname(unixPath), basename));
+			} else if (this._isAssetsDir(unixPath)) {
+				aid = this._generateAssetsDirId();
 			} else {
 				aid = basename;
 				_assertAssetFilenameValid(aid);
@@ -209,6 +231,8 @@ export class Configuration extends cmn.Configuration {
 								const basename = path.basename(f);
 								if (this._resolveAssetIdsFromPath) {
 									newAssetId = cmn.Util.makeUnixPath(path.join(path.dirname(f), basename));
+								} else if (this._isAssetsDir(durationMap[current].path)) {
+									newAssetId = this._generateAssetsDirId();
 								} else {
 									newAssetId = basename;
 								}
@@ -236,6 +260,8 @@ export class Configuration extends cmn.Configuration {
 					let aid: string;
 					if (this._resolveAssetIdsFromPath) {
 						aid = cmn.Util.makeUnixPath(path.join(path.dirname(f), basename));
+					} else if (this._isAssetsDir(durationMap[current].path)) {
+						aid = this._generateAssetsDirId();
 					} else {
 						aid = basename;
 						_assertAssetFilenameValid(aid);
@@ -271,6 +297,8 @@ export class Configuration extends cmn.Configuration {
 						const basename = path.basename(f, path.extname(f));
 						if (this._resolveAssetIdsFromPath) {
 							newAssetId = cmn.Util.makeUnixPath(path.join(path.dirname(unixPath), basename));
+						} else if (this._isAssetsDir(unixPath)) {
+							newAssetId = this._generateAssetsDirId();
 						} else {
 							newAssetId = basename;
 							if (!this._includeExtensionToAssetId)
@@ -288,6 +316,8 @@ export class Configuration extends cmn.Configuration {
 				let aid: string;
 				if (this._resolveAssetIdsFromPath) {
 					aid = cmn.Util.makeUnixPath(path.join(path.dirname(unixPath), basename));
+				} else if (this._isAssetsDir(unixPath)) {
+					aid = this._generateAssetsDirId();
 				} else {
 					aid = basename;
 					_assertAssetFilenameValid(aid);
@@ -485,6 +515,23 @@ export class Configuration extends cmn.Configuration {
 		this._logger.info(`Detected change of the Asset ID from ${from} to ${to}`);
 		this._content.assets[to] = this._content.assets[from];
 		delete this._content.assets[from];
+	}
+
+	private _addDirectoryTable(targetDir: string[], path: string): void {
+		if (!targetDir.some((v) => v === path))
+			targetDir.push(path);
+	}
+
+	private _isAssetsDir(path: string): boolean {
+		return /^assets\//.test(path);
+	}
+
+	/**
+	 * assets ディレクトリ配下のファイルの アッセトID を生成する
+	 * `assets_xxxxxxx` の形式とする。
+	 */
+	private  _generateAssetsDirId(): string {
+		return "assets_" + Math.floor(Date.now() * Math.random()).toString(32);
 	}
 }
 
