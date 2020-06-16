@@ -186,7 +186,6 @@ export class Operator {
 		const sandboxConfig = content.sandboxConfig || {};
 
 		const { events, autoSendEvents, autoSendEventName } = sandboxConfig;
-
 		if (events && autoSendEventName && events[autoSendEventName] instanceof Array) {
 			events[autoSendEventName].forEach((pev: any) => play.amflow.enqueueEvent(pev));
 		} else if (events && autoSendEvents && events[autoSendEvents] instanceof Array) {
