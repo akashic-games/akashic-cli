@@ -5,7 +5,7 @@ export const DefaultSessionParameter: playlog.Event = [
     0,
     ":akashic",
     {
-        "type":"start",
-        "parameters":{}
+        "type": "start",
+        "parameters": {}
     }
-]
+];
