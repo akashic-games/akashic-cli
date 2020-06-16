@@ -1805,6 +1805,7 @@ describe("Configuration", function () {
 		expect(conf.getContent().assets["script"]).not.toBe(undefined);
 
 		conf._forceUpdateAssetIds = true;
+		conf._assetIdResolveMode = "path";
 		await conf.scanAssets({scanDirectoryTable, extension});
 		expect(conf.getContent().assets["image/foo/dummy"]).not.toBe(undefined);
 		expect(conf.getContent().assets["audio/some/se"]).not.toBe(undefined);
@@ -1812,6 +1813,7 @@ describe("Configuration", function () {
 		expect(conf.getContent().assets["script/foo/script"]).not.toBe(undefined);
 
 		conf._resolveAssetIdsFromPath = false;
+		conf._assetIdResolveMode = "basename";
 		await conf.scanAssets({scanDirectoryTable, extension});
 		expect(conf.getContent().assets["dummy"]).not.toBe(undefined);
 		expect(conf.getContent().assets["se"]).not.toBe(undefined);
@@ -1915,6 +1917,7 @@ describe("Configuration", function () {
 		conf._forceUpdateAssetIds = true;
 		conf._resolveAssetIdsFromPath = true;
 		conf._includeExtensionToAssetId = true;
+		conf._assetIdResolveMode = "path";
 		await conf.scanAssets({scanDirectoryTable, extension});
 		expect(conf.getContent().assets["image/foo/dummy.png"]).not.toBe(undefined);
 		expect(conf.getContent().assets["audio/some/se"]).not.toBe(undefined);
@@ -1925,6 +1928,7 @@ describe("Configuration", function () {
 		conf._forceUpdateAssetIds = true;
 		conf._resolveAssetIdsFromPath = false;
 		conf._includeExtensionToAssetId = false;
+		conf._assetIdResolveMode = "basename";
 		await conf.scanAssets({scanDirectoryTable, extension});
 		expect(conf.getContent().assets["dummy"]).not.toBe(undefined);
 		expect(conf.getContent().assets["se"]).not.toBe(undefined);
@@ -2004,38 +2008,28 @@ describe("Configuration", function () {
 			text: ["txt", ""]
 		};
 
-		await conf.scanAssets({ scanDirectoryTable, extension });
+		await conf.scanAssetsDir();
 		expect(conf.getContent().assets["dummy"]).not.toBeUndefined();
 		expect(conf.getContent().assets["se"]).not.toBeUndefined();
 		expect(conf.getContent().assets["txt"]).not.toBeUndefined();
 		expect(conf.getContent().assets["script"]).not.toBeUndefined();
 
-		const checkAssetPath = (type: string): string => {
-			if (type === "image")
-				return "assets/image/dummy.png";
-			else if (type === "audio")
-				return "assets/audio/some/se";
-			else if (type === "script")
-				return "assets/script/foo/script.js";
-			else if (type === "text")
-				return "assets/text/foo/textdata.txt";
+
+		const genhashPath = (filePath: string) => {
+			const hashPath = cmn.Renamer.hashFilepath(filePath, 6);
+			return "asset:" + path.basename(hashPath, path.extname(filePath));
 		};
 
-		const keys = Object.keys(conf.getContent().assets).filter((k) => /^assets_/.test(k));
-		keys.forEach((key) => {
-			expect(conf.getContent().assets[key]).not.toBeUndefined();
-			const type = conf.getContent().assets[key].type;
-			const path = checkAssetPath(type);
-			expect(conf.getContent().assets[key].path).toBe(path);
-		});
+		expect(conf.getContent().assets[genhashPath("assets/image/dummy.png")]).toBeDefined();
+		expect(conf.getContent().assets[genhashPath("assets/audio/some/se")]).toBeDefined();
+		expect(conf.getContent().assets[genhashPath("assets/script/foo/script.js")]).toBeDefined();
+		expect(conf.getContent().assets[genhashPath("assets/text/foo/textdata.txt")]).toBeDefined();
 
 		conf._forceUpdateAssetIds = true;
 		conf._resolveAssetIdsFromPath = true;
 		conf._includeExtensionToAssetId = true;
-		await conf.scanAssets({ scanDirectoryTable, extension });
-		keys.forEach((key) => expect(conf.getContent().assets[key]).toBeUndefined());
-
-		let newKeys = Object.keys(conf.getContent().assets).filter((k) => /^assets/.test(k));
+		conf._assetIdResolveMode = "path";
+		await conf.scanAssetsDir();
 		expect(conf.getContent().assets["assets/image/dummy.png"]).toBeDefined();
 		expect(conf.getContent().assets["assets/audio/some/se"]).toBeDefined();
 		expect(conf.getContent().assets["assets/script/foo/script.js"]).toBeDefined();
@@ -2044,16 +2038,12 @@ describe("Configuration", function () {
 		conf._forceUpdateAssetIds = true;
 		conf._resolveAssetIdsFromPath = false;
 		conf._includeExtensionToAssetId = false;
-		await conf.scanAssets({ scanDirectoryTable, extension });
-		newKeys.forEach((key) => expect(conf.getContent().assets[key]).toBeUndefined());
-		newKeys = Object.keys(conf.getContent().assets).filter((k) => /^assets_/.test(k));
-
-		newKeys.forEach((key) => {
-			expect(conf.getContent().assets[key]).not.toBeUndefined();
-			const type = conf.getContent().assets[key].type;
-			const path = checkAssetPath(type);
-			expect(conf.getContent().assets[key].path).toBe(path);
-		});
+		conf._assetIdResolveMode = "basename";
+		await conf.scanAssetsDir();
+		expect(conf.getContent().assets[genhashPath("assets/image/dummy.png")]).toBeDefined();
+		expect(conf.getContent().assets[genhashPath("assets/audio/some/se")]).toBeDefined();
+		expect(conf.getContent().assets[genhashPath("assets/script/foo/script.js")]).toBeDefined();
+		expect(conf.getContent().assets[genhashPath("assets/text/foo/textdata.txt")]).toBeDefined();
 
 	});
 });
