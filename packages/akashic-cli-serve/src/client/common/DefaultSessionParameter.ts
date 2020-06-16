@@ -1,6 +1,6 @@
 import * as playlog from "@akashic/playlog";
 
-export const DefaultSessionParameter: playlog.Event = [
+export const defaultSessionParameter: playlog.Event = [
     32,
     0,
     ":akashic",
