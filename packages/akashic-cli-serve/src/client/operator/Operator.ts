@@ -13,7 +13,7 @@ import { DevtoolOperator } from "./DevtoolOperator";
 import { ExternalPluginOperator } from "./ExternalPluginOperator";
 import { ServiceType } from "../../common/types/ServiceType";
 import { RPGAtsumaruApi } from "../atsumaru/RPGAtsumaruApi";
-import { DefaultSessionParameter } from "../../server/common/DefaultSessionParameter"
+import { DefaultSessionParameter } from "../../server/common/DefaultSessionParameter";
 
 export interface OperatorParameterObject {
 	store: Store;
@@ -186,7 +186,6 @@ export class Operator {
 		const sandboxConfig = content.sandboxConfig || {};
 
 		const { events, autoSendEvents, autoSendEventName } = sandboxConfig;
-		console.log("_createServerLoop", "autoSendEventName:" + autoSendEventName, "store.target:" + this.store.targetService , DefaultSessionParameter)
 
 		if (events && autoSendEventName && events[autoSendEventName] instanceof Array) {
 			events[autoSendEventName].forEach((pev: any) => play.amflow.enqueueEvent(pev));
