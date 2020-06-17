@@ -1812,7 +1812,6 @@ describe("Configuration", function () {
 		expect(conf.getContent().assets["text/foo/textdata"]).not.toBe(undefined);
 		expect(conf.getContent().assets["script/foo/script"]).not.toBe(undefined);
 
-		conf._resolveAssetIdsFromPath = false;
 		conf._assetIdResolveMode = "basename";
 		await conf.scanAssets({scanDirectoryTable, extension});
 		expect(conf.getContent().assets["dummy"]).not.toBe(undefined);
@@ -1905,8 +1904,8 @@ describe("Configuration", function () {
 		expect(conf.getContent().assets["script"]).not.toBe(undefined);
 
 		conf._forceUpdateAssetIds = true;
-		conf._resolveAssetIdsFromPath = false;
 		conf._includeExtensionToAssetId = true;
+		conf._assetIdResolveMode = "basename";
 		await conf.scanAssets({scanDirectoryTable, extension});
 		expect(conf.getContent().assets["dummy.png"]).not.toBe(undefined);
 		expect(conf.getContent().assets["se"]).not.toBe(undefined);
@@ -1915,7 +1914,6 @@ describe("Configuration", function () {
 		expect(conf.getContent().assets["script.js"]).not.toBe(undefined);
 
 		conf._forceUpdateAssetIds = true;
-		conf._resolveAssetIdsFromPath = true;
 		conf._includeExtensionToAssetId = true;
 		conf._assetIdResolveMode = "path";
 		await conf.scanAssets({scanDirectoryTable, extension});
@@ -1926,7 +1924,6 @@ describe("Configuration", function () {
 		expect(conf.getContent().assets["script/foo/script.js"]).not.toBe(undefined);
 
 		conf._forceUpdateAssetIds = true;
-		conf._resolveAssetIdsFromPath = false;
 		conf._includeExtensionToAssetId = false;
 		conf._assetIdResolveMode = "basename";
 		await conf.scanAssets({scanDirectoryTable, extension});
@@ -2026,7 +2023,6 @@ describe("Configuration", function () {
 		expect(conf.getContent().assets[genhashPath("assets/text/foo/textdata.txt")]).toBeDefined();
 
 		conf._forceUpdateAssetIds = true;
-		conf._resolveAssetIdsFromPath = true;
 		conf._includeExtensionToAssetId = true;
 		conf._assetIdResolveMode = "path";
 		await conf.scanAssetsDir();
@@ -2036,7 +2032,6 @@ describe("Configuration", function () {
 		expect(conf.getContent().assets["assets/text/foo/textdata.txt"]).toBeDefined();
 
 		conf._forceUpdateAssetIds = true;
-		conf._resolveAssetIdsFromPath = false;
 		conf._includeExtensionToAssetId = false;
 		conf._assetIdResolveMode = "basename";
 		await conf.scanAssetsDir();
@@ -2044,6 +2039,5 @@ describe("Configuration", function () {
 		expect(conf.getContent().assets[genhashPath("assets/audio/some/se")]).toBeDefined();
 		expect(conf.getContent().assets[genhashPath("assets/script/foo/script.js")]).toBeDefined();
 		expect(conf.getContent().assets[genhashPath("assets/text/foo/textdata.txt")]).toBeDefined();
-
 	});
 });
