@@ -120,9 +120,10 @@ export class Configuration extends cmn.Configuration {
 			const files: string[] = readdirRecursive(path.join(this._basepath, "assets/"));
 			const audioPaths: string[] = [];
 			// scanAssets() で最後に実行されるため、assets ディレクトリでは mode が path でなければ mode を `hash` とする
+			// TODO: _assetIdResolveMode は引数として指定できるようにする
 			this._assetIdResolveMode = this._assetIdResolveMode === "path" ? "path" : "hash";
+			const revmap = cmn.Util.invertMap(this._content.assets, "path");
 			files.forEach((file) => {
-				const revmap = cmn.Util.invertMap(this._content.assets, "path");
 				const targetDir = path.join("assets/", path.dirname(file));
 
 				if (_isImageFilePath(file)) {
@@ -130,14 +131,13 @@ export class Configuration extends cmn.Configuration {
 				} else if (_isAudioFilePath(file)) {
 					audioPaths.push(path.join("assets/", file));
 				} else if (_isScriptAssetPath(file)) {
-					this._registerXXXAsset( targetDir + "/" + path.basename(file), revmap, "script");
+					this._registerXXXAsset(targetDir + "/" + path.basename(file), revmap, "script");
 				} else {
 					// image, auido, script 以外は text とする
 					this._registerXXXAsset(targetDir + "/" + path.basename(file), revmap, "text");
 				}
 			});
 
-			const revmap = cmn.Util.invertMap(this._content.assets, "path");
 			this._makeDurationMap(audioPaths, this._content.assets, revmap).then((durationMap: DurationMap) => {
 				for (var current in durationMap) {
 					if (!current) continue;
@@ -187,7 +187,7 @@ export class Configuration extends cmn.Configuration {
 		var assets = this._content.assets || (this._content.assets = {});
 		var revmap = cmn.Util.invertMap(assets, "path");
 		files.filter(filter).forEach((f: string) => {
-			this._registerXXXAsset( path.join(dir, f), revmap, type);
+			this._registerXXXAsset(path.join(dir, f), revmap, type);
 		});
 	}
 
