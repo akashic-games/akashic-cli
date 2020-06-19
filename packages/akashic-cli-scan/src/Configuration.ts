@@ -208,7 +208,7 @@ export class Configuration extends cmn.Configuration {
 					if (this._assetIdResolveMode === "path") {
 						newAssetId = cmn.Util.makeUnixPath(path.join(path.dirname(unixPath), basename));
 					} else if (this._assetIdResolveMode === "hash") {
-						newAssetId = this._generateAssetsDirId(unixPath);
+						newAssetId = this._generateAssetsDirId(unixPath, revmap);
 					} else {
 						newAssetId = basename;
 						if (!this._includeExtensionToAssetId)
@@ -238,7 +238,7 @@ export class Configuration extends cmn.Configuration {
 		if (this._assetIdResolveMode === "path") {
 			aid = cmn.Util.makeUnixPath(path.join(path.dirname(unixPath), basename));
 		} else if (this._assetIdResolveMode === "hash") {
-			aid = this._generateAssetsDirId(unixPath);
+			aid = this._generateAssetsDirId(unixPath, revmap);
 		} else {
 			aid = basename;
 			_assertAssetFilenameValid(aid);
@@ -270,7 +270,7 @@ export class Configuration extends cmn.Configuration {
 					if (this._assetIdResolveMode === "path") {
 						newAssetId = cmn.Util.makeUnixPath(path.join(path.dirname(f), basename));
 					} else if (this._assetIdResolveMode === "hash") {
-						newAssetId = this._generateAssetsDirId(durationInfo.path);
+						newAssetId = this._generateAssetsDirId(durationInfo.path, revmap);
 					} else {
 						newAssetId = basename;
 					}
@@ -299,7 +299,7 @@ export class Configuration extends cmn.Configuration {
 		if (this._assetIdResolveMode === "path") {
 			aid = cmn.Util.makeUnixPath(path.join(path.dirname(f), basename));
 		} else if (this._assetIdResolveMode === "hash") {
-			aid = this._generateAssetsDirId(f);
+			aid = this._generateAssetsDirId(f, revmap);
 		} else {
 			aid = basename;
 			_assertAssetFilenameValid(aid);
@@ -327,7 +327,7 @@ export class Configuration extends cmn.Configuration {
 					if (this._assetIdResolveMode === "path") {
 						newAssetId = cmn.Util.makeUnixPath(path.join(path.dirname(unixPath), basename));
 					} else if (this._assetIdResolveMode === "hash") {
-						newAssetId = this._generateAssetsDirId(unixPath);
+						newAssetId = this._generateAssetsDirId(unixPath, revmap);
 					} else {
 						newAssetId = basename;
 						if (!this._includeExtensionToAssetId)
@@ -346,7 +346,7 @@ export class Configuration extends cmn.Configuration {
 			if (this._assetIdResolveMode === "path") {
 				aid = cmn.Util.makeUnixPath(path.join(path.dirname(unixPath), basename));
 			} else if (this._assetIdResolveMode === "hash") {
-				aid = this._generateAssetsDirId(unixPath);
+				aid = this._generateAssetsDirId(unixPath, revmap);
 			} else {
 				aid = basename;
 				_assertAssetFilenameValid(aid);
@@ -549,10 +549,15 @@ export class Configuration extends cmn.Configuration {
 	}
 
 	/**
-	 * assets ディレクトリ配下のファイルの アッセトID を生成する
+	 * assets ディレクトリ配下のファイルの アッセトID を生成する。
+	 * 既に同 ID が存在する場合は生成は行わない。
 	 * `asset:xxxxxx` の形式とする。
 	 */
-	private  _generateAssetsDirId(filePath: string): string {
+	private _generateAssetsDirId(filePath: string, revmap: {[key: string]: string[]}): string {
+		if (revmap[filePath] && !this._isAssetsDir(revmap[filePath][0])) {
+			return revmap[filePath][0];
+		}
+
 		const hashPath = cmn.Renamer.hashFilepath(filePath, 6);
 		return "asset:" + path.basename(hashPath, path.extname(filePath));
 	}
