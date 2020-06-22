@@ -544,22 +544,28 @@ export class Configuration extends cmn.Configuration {
 		delete this._content.assets[from];
 	}
 
-	private _isAssetsDir(path: string): boolean {
-		return /^assets\//.test(path);
-	}
-
 	/**
 	 * assets ディレクトリ配下のファイルの アッセトID を生成する。
-	 * 既に同 ID が存在する場合は生成は行わない。
+	 * 別ファイルで既に同 ID が存在する場合は、ファイルにランダムな1文字を末尾足して ID を生成する。
 	 * `asset:xxxxxx` の形式とする。
 	 */
 	private _generateAssetsDirId(filePath: string, revmap: {[key: string]: string[]}): string {
-		if (revmap[filePath] && !this._isAssetsDir(revmap[filePath][0])) {
-			return revmap[filePath][0];
+		let hashId = "asset:" + path.basename(cmn.Renamer.hashFilepath(filePath, 6), path.extname(filePath));
+		while (this.isDuplicateHashId(filePath, hashId, revmap) ) {
+			filePath += Math.random().toString(32).substring(2, 3);
+			hashId = "asset:" + path.basename(cmn.Renamer.hashFilepath(filePath, 6), path.extname(filePath));
 		}
+		return hashId;
+	}
 
-		const hashPath = cmn.Renamer.hashFilepath(filePath, 6);
-		return "asset:" + path.basename(hashPath, path.extname(filePath));
+	private isDuplicateHashId(filePath: string, hashId: string, revmap: { [key: string]: string[] }): boolean {
+		let ret = false;
+		Object.keys(revmap).forEach((k) => {
+			if (k && k !== filePath && !ret) {
+				ret = revmap[k].some(v => v === hashId);
+			}
+		});
+		return ret;
 	}
 }
 

@@ -2040,4 +2040,64 @@ describe("Configuration", function () {
 		expect(conf.getContent().assets[genhashPath("assets/script/foo/script.js")]).toBeDefined();
 		expect(conf.getContent().assets[genhashPath("assets/text/foo/textdata.txt")]).toBeDefined();
 	});
+
+	it("If the same key exists, another hashId will be generated", async () => {
+		const gamejson = {
+			width: 1,
+			height: 1,
+			assets: {
+				"dummy": {
+					"type": "image",
+					"path": "image/foo/dummy.png",
+					"width": 1,
+					"height": 1
+				},
+				"se": {
+					"type": "audio",
+					"path": "audio/some/se"
+				},
+				"txt": {
+					"type": "text",
+					"path": "text/foo/textdata.txt"
+				},
+				"script": {
+					"type": "script",
+					"path": "script/foo/script.js"
+				},
+				"asset:e45cb8": { //  dummy.png で 生成されるkeyを登録済みとする
+					"type": "image",
+					"width": 32,
+					"height": 32,
+					"path": "assets/image/dummy1.png"
+				}
+			}
+		};
+		mockfs({
+			"game.json": JSON.stringify(gamejson),
+			"assets": {
+				"image": {
+					"dummy.png": DUMMY_1x1_PNG_DATA
+				}
+			}
+		});
+		const conf = new cnf.Configuration({
+			content: gamejson,
+			logger: nullLogger,
+			basepath: process.cwd(),
+			forceUpdateAssetIds: false,
+			resolveAssetIdsFromPath: false
+		});
+
+		const genhashPath = (filePath: string) => {
+			const hashPath = cmn.Renamer.hashFilepath(filePath, 6);
+			return "asset:" + path.basename(hashPath, path.extname(filePath));
+		};
+		await conf.scanAssetsDir();
+		Object.keys(conf.getContent().assets).forEach(k => {
+			const asset = conf.getContent().assets[k];
+			if (asset.path === "assets/image/dummy.png") {
+				expect(k).not.toBe(genhashPath("assets/image/dummy.png"));
+			}
+		});
+	});
 });
