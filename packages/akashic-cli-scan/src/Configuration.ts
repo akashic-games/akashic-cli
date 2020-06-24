@@ -6,6 +6,7 @@ import { getAudioDuration } from "./getAudioDuration";
 import { imageSize } from "image-size";
 import { ISize } from "image-size/dist/types/interface";
 import { AssetScanDirectoryTable, AssetExtension } from "./scan";
+import { file } from "mock-fs";
 
 export function _isImageFilePath(p: string): boolean { return /.*\.(png|gif|jpg|jpeg)$/i.test(p); }
 export function _isAudioFilePath(p: string): boolean { return /.*\.(ogg|aac|mp4)$/i.test(p); }
@@ -208,7 +209,7 @@ export class Configuration extends cmn.Configuration {
 					if (this._assetIdResolveMode === "path") {
 						newAssetId = cmn.Util.makeUnixPath(path.join(path.dirname(unixPath), basename));
 					} else if (this._assetIdResolveMode === "hash") {
-						newAssetId = this._generateAssetsDirId(unixPath, revmap);
+						newAssetId = this._generateAssetsDirId(unixPath);
 					} else {
 						newAssetId = basename;
 						if (!this._includeExtensionToAssetId)
@@ -238,7 +239,7 @@ export class Configuration extends cmn.Configuration {
 		if (this._assetIdResolveMode === "path") {
 			aid = cmn.Util.makeUnixPath(path.join(path.dirname(unixPath), basename));
 		} else if (this._assetIdResolveMode === "hash") {
-			aid = this._generateAssetsDirId(unixPath, revmap);
+			aid = this._generateAssetsDirId(unixPath);
 		} else {
 			aid = basename;
 			_assertAssetFilenameValid(aid);
@@ -270,7 +271,7 @@ export class Configuration extends cmn.Configuration {
 					if (this._assetIdResolveMode === "path") {
 						newAssetId = cmn.Util.makeUnixPath(path.join(path.dirname(f), basename));
 					} else if (this._assetIdResolveMode === "hash") {
-						newAssetId = this._generateAssetsDirId(durationInfo.path, revmap);
+						newAssetId = this._generateAssetsDirId(durationInfo.path);
 					} else {
 						newAssetId = basename;
 					}
@@ -299,7 +300,7 @@ export class Configuration extends cmn.Configuration {
 		if (this._assetIdResolveMode === "path") {
 			aid = cmn.Util.makeUnixPath(path.join(path.dirname(f), basename));
 		} else if (this._assetIdResolveMode === "hash") {
-			aid = this._generateAssetsDirId(f, revmap);
+			aid = this._generateAssetsDirId(f);
 		} else {
 			aid = basename;
 			_assertAssetFilenameValid(aid);
@@ -327,7 +328,7 @@ export class Configuration extends cmn.Configuration {
 					if (this._assetIdResolveMode === "path") {
 						newAssetId = cmn.Util.makeUnixPath(path.join(path.dirname(unixPath), basename));
 					} else if (this._assetIdResolveMode === "hash") {
-						newAssetId = this._generateAssetsDirId(unixPath, revmap);
+						newAssetId = this._generateAssetsDirId(unixPath);
 					} else {
 						newAssetId = basename;
 						if (!this._includeExtensionToAssetId)
@@ -346,7 +347,7 @@ export class Configuration extends cmn.Configuration {
 			if (this._assetIdResolveMode === "path") {
 				aid = cmn.Util.makeUnixPath(path.join(path.dirname(unixPath), basename));
 			} else if (this._assetIdResolveMode === "hash") {
-				aid = this._generateAssetsDirId(unixPath, revmap);
+				aid = this._generateAssetsDirId(unixPath);
 			} else {
 				aid = basename;
 				_assertAssetFilenameValid(aid);
@@ -549,23 +550,13 @@ export class Configuration extends cmn.Configuration {
 	 * 別ファイルで既に同 ID が存在する場合は、ファイルにランダムな1文字を末尾足して ID を生成する。
 	 * `asset:xxxxxx` の形式とする。
 	 */
-	private _generateAssetsDirId(filePath: string, revmap: {[key: string]: string[]}): string {
+	private _generateAssetsDirId(filePath: string): string {
 		let hashId = "asset:" + path.basename(cmn.Renamer.hashFilepath(filePath, 6), path.extname(filePath));
-		while (this.isDuplicateHashId(filePath, hashId, revmap) ) {
+		while (!!this._content.assets[hashId] && this._content.assets[hashId].path !== filePath) {
 			filePath += Math.random().toString(32).substring(2, 3);
 			hashId = "asset:" + path.basename(cmn.Renamer.hashFilepath(filePath, 6), path.extname(filePath));
 		}
 		return hashId;
-	}
-
-	private isDuplicateHashId(filePath: string, hashId: string, revmap: { [key: string]: string[] }): boolean {
-		let ret = false;
-		Object.keys(revmap).forEach((k) => {
-			if (k && k !== filePath && !ret) {
-				ret = revmap[k].some(v => v === hashId);
-			}
-		});
-		return ret;
 	}
 }
 
