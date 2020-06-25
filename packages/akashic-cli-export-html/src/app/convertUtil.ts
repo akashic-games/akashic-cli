@@ -24,6 +24,7 @@ export interface ConvertTemplateParameterObject {
 	autoSendEvents?: string | boolean;
 	sandboxConfigJsCode?: string;
 	needsUntaintedImageAsset?: boolean;
+	preserveUnbundleScript?: boolean;
 }
 
 export function extractAssetDefinitions (conf: cmn.Configuration, type: string): string[] {
