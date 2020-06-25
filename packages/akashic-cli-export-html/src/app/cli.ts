@@ -45,7 +45,6 @@ function cli(param: CliConfigExportHtml): void {
 			})
 		}
 	};
-
 	Promise.resolve()
 		.then(() => {
 			if (param.output === undefined) {
