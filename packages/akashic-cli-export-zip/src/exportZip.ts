@@ -18,6 +18,7 @@ export interface ExportZipParameterObject {
 	hashLength?: number;
 	omitEmptyJs?: boolean;
 	exportInfo?: cmn.ExportZipInfo;
+	preserveUnbundleScript?: boolean;
 }
 
 function _createExportInfo(param: ExportZipParameterObject): cmn.ExportZipInfo {
@@ -46,7 +47,8 @@ export function _completeExportZipParameterObject(param: ExportZipParameterObjec
 		logger: param.logger || new cmn.ConsoleLogger(),
 		hashLength: param.hashLength,
 		omitEmptyJs: param.omitEmptyJs,
-		exportInfo: param.exportInfo || _createExportInfo(param)
+		exportInfo: param.exportInfo || _createExportInfo(param),
+		preserveUnbundleScript: !!param.preserveUnbundleScript
 	};
 }
 
@@ -87,7 +89,8 @@ export function promiseExportZip(param: ExportZipParameterObject): Promise<void>
 				hashLength: param.hashLength,
 				omitEmptyJs: param.omitEmptyJs,
 				logger: param.logger,
-				exportInfo: param.exportInfo
+				exportInfo: param.exportInfo,
+				preserveUnbundleScript: !!param.preserveUnbundleScript
 			});
 		})
 		.then(() => {
