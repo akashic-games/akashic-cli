@@ -20,7 +20,7 @@ export function cli(param: CliConfigExportZip): void {
 			hashLength: !param.hashFilename ? 0 : (param.hashFilename === true) ? 20 : Number(param.hashFilename),
 			omitEmptyJs: param.omitEmptyJs,
 			logger,
-			preserveUnbundleScript: param.bundle ? param.preserveUnbundleScript : false,
+			preserveUnbundleScript: param.bundle && param.preserveUnbundleScript,
 			exportInfo: {
 				version: ver,
 				option: {
