@@ -28,7 +28,7 @@ function cli(param: CliConfigExportHtml): void {
 		lint: !param.atsumaru,
 		autoSendEvents: param.autoSendEvents,
 		needsUntaintedImageAsset: param.atsumaru,
-		preserveUnbundleScript: param.atsumaru ? param.preserveUnbundleScript : false,
+		preserveUnbundleScript: param.atsumaru && param.preserveUnbundleScript,
 		// index.htmlに書き込むためのexport実行時の情報
 		exportInfo: {
 			version: ver, // export実行時のバージョン
@@ -45,7 +45,7 @@ function cli(param: CliConfigExportHtml): void {
 			})
 		}
 	};
-	console.log("@@@@ flg", param.preserveUnbundleScript, exportParam.preserveUnbundleScript);
+
 	Promise.resolve()
 		.then(() => {
 			if (param.output === undefined) {
