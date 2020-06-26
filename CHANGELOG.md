@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.14.3 (2020-06-26)
+
+#### Enhancement
+* `akashic-cli-scan`
+  * [#334](https://github.com/akashic-games/akashic-cli/pull/334) Add specification of assets directory in scan ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 1.14.2 (2020-06-22)
 
 #### Enhancement
