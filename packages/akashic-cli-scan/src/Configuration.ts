@@ -63,19 +63,19 @@ export interface ScanAssetsInformation {
 export class Configuration extends cmn.Configuration {
 	_basepath: string;
 	_noOmitPackagejson: boolean;
-	_resolveAssetIdsFromPath: boolean;
 	_forceUpdateAssetIds: boolean;
 	_includeExtensionToAssetId: boolean;
 	_npm: cmn.PromisedNpm;
+	_assetIdResolveMode: "basename" | "path" | "hash";
 
 	constructor(param: ConfigurationParameterObject) {
 		super(param);
 		this._basepath = param.basepath;
 		this._noOmitPackagejson = param.noOmitPackagejson;
-		this._resolveAssetIdsFromPath = param.resolveAssetIdsFromPath;
 		this._forceUpdateAssetIds = param.forceUpdateAssetIds;
 		this._includeExtensionToAssetId = param.includeExtensionToAssetId;
 		this._npm = param.debugNpm ? param.debugNpm : new cmn.PromisedNpm({ logger: param.logger });
+		this._assetIdResolveMode = param.resolveAssetIdsFromPath ? "path" : "basename" ;
 	}
 
 	scanAssets(info: ScanAssetsInformation): Promise<void> {
@@ -86,7 +86,8 @@ export class Configuration extends cmn.Configuration {
 				this.scanAssetsImage(info.scanDirectoryTable.image);
 				this.scanAssetsScript(info.scanDirectoryTable.script);
 				this.scanAssetsText(info.scanDirectoryTable.text, info.extension.text);
-			});
+			})
+			.then(() => this.scanAssetsDir());
 		}
 
 	scanAssetsImage(imageAssetScanDirs: string[]) {
@@ -114,6 +115,39 @@ export class Configuration extends cmn.Configuration {
 		});
 	}
 
+	scanAssetsDir(): Promise<void> {
+		return new Promise((resolve, _reject) => {
+			const files: string[] = readdirRecursive(path.join(this._basepath, "assets/"));
+			const audioPaths: string[] = [];
+			// scanAssets() で最後に実行されるため、assets ディレクトリでは mode が path でなければ mode を `hash` とする
+			// TODO: _assetIdResolveMode は引数として指定できるようにする
+			this._assetIdResolveMode = this._assetIdResolveMode === "path" ? "path" : "hash";
+			const revmap = cmn.Util.invertMap(this._content.assets, "path");
+			files.forEach((file) => {
+				const targetDir = path.join("assets/", path.dirname(file));
+
+				if (_isImageFilePath(file)) {
+					this._registerImageAsset(path.join(targetDir, path.basename(file)), revmap);
+				} else if (_isAudioFilePath(file)) {
+					audioPaths.push(path.join("assets/", file));
+				} else if (_isScriptAssetPath(file)) {
+					this._registerXXXAsset(targetDir + "/" + path.basename(file), revmap, "script");
+				} else {
+					// image, auido, script 以外は text とする
+					this._registerXXXAsset(targetDir + "/" + path.basename(file), revmap, "text");
+				}
+			});
+
+			this._makeDurationMap(audioPaths, this._content.assets, revmap).then((durationMap: DurationMap) => {
+				for (var current in durationMap) {
+					if (!current) continue;
+					this._registerAudioAsset(durationMap[current], revmap);
+				}
+				resolve();
+			});
+		});
+	}
+
 	_scanAssetsImage(imageAssetDir: string): void {
 		var files: string[] = readdirRecursive(path.join(this._basepath, imageAssetDir + "/"));
 		if (! this._content.assets)
@@ -121,66 +155,7 @@ export class Configuration extends cmn.Configuration {
 		var assets = this._content.assets;
 		var revmap = cmn.Util.invertMap(assets, "path");
 		files.filter(_isImageFilePath).forEach((f: string) => {
-			var unixPath = cmn.Util.makeUnixPath(imageAssetDir + "/" + f);
-			var size = imageSize(unixPath) as ISize;
-			if (!size) {
-				this._logger.warn(`Failed to get image size. Please check ${unixPath}`);
-				return;
-			}
-			var aidSet = revmap[unixPath];
-
-			// If a declaration already exists for the file then just update the image size.
-			if (aidSet && aidSet.length > 0) {
-				aidSet.forEach((aid: string) => {
-					let newAssetId = aid;
-					if (this._forceUpdateAssetIds) {
-						const basename = path.basename(f, path.extname(f));
-						if (this._resolveAssetIdsFromPath) {
-							newAssetId = cmn.Util.makeUnixPath(path.join("image", path.dirname(f), basename));
-						} else {
-							newAssetId = basename;
-							if (!this._includeExtensionToAssetId)
-								_assertAssetFilenameValid(newAssetId);
-						}
-						if (this._includeExtensionToAssetId)
-							newAssetId += path.extname(f);
-						if (aid !== newAssetId)
-							this._moveAssetDeclaration(aid, newAssetId);
-					}
-
-					const decl = assets[newAssetId];
-					_assertAssetTypeNoConflict(newAssetId, f, "image", decl.type);
-					if (decl.width !== size.width || decl.height !== size.height) {
-						this._logger.info("Detected change of the image size for " + newAssetId + " (" + unixPath +
-							") from " + decl.width + "x" + decl.height + " to " + size.width + "x" + size.height);
-						decl.width = size.width;
-						decl.height = size.height;
-					}
-				});
-				return;
-			}
-
-			// Otherwise add a new declaration.
-			const basename = path.basename(f, path.extname(f));
-			let aid: string;
-			if (this._resolveAssetIdsFromPath) {
-				aid = cmn.Util.makeUnixPath(path.join("image", path.dirname(f), basename));
-			} else {
-				aid = basename;
-				_assertAssetFilenameValid(aid);
-			}
-			if (this._includeExtensionToAssetId)
-				aid += path.extname(f);
-			_assertAssetNameNoConflict(assets, aid, f);
-
-			this._logger.info("Added/updated the declaration for " + aid + " (" + unixPath + ")");
-			assets[aid] = {
-				type: "image",
-				width: size.width,
-				height: size.height,
-				path: unixPath
-			};
-			revmap[assets[aid].path] = [aid];
+			this._registerImageAsset(imageAssetDir + "/" + f,  revmap);
 		});
 	}
 
@@ -198,57 +173,7 @@ export class Configuration extends cmn.Configuration {
 				for (var current in durationMap) {
 					if (!durationMap.hasOwnProperty(current))
 						continue;
-
-					// If a declaration already exists for the file then just update the duration info.
-					var aidSet = revmap[durationMap[current].path];
-					if (aidSet && aidSet.length > 0) {
-						aidSet.forEach((aid: string) => {
-							const f = durationMap[current].path;
-							let newAssetId = aid;
-							if (this._forceUpdateAssetIds) {
-								const basename = path.basename(f);
-								if (this._resolveAssetIdsFromPath) {
-									newAssetId = cmn.Util.makeUnixPath(path.join(path.dirname(f), basename));
-								} else {
-									newAssetId = basename;
-								}
-								if (aid !== newAssetId)
-									this._moveAssetDeclaration(aid, newAssetId);
-							}
-							if (!this._resolveAssetIdsFromPath) {
-								_assertAssetFilenameValid(newAssetId);
-							}
-							_assertAssetTypeNoConflict(newAssetId, f, "audio", assets[newAssetId].type);
-
-							if (assets[newAssetId].duration !== durationMap[current].duration) {
-								this._logger.info("Detected change of the audio duration for " + current + " ("
-									+ assets[newAssetId].path + ") from " + assets[newAssetId].duration + " to " + durationMap[current].duration);
-								assets[newAssetId].duration = durationMap[current].duration;
-							}
-						});
-						continue;
-					}
-
-					// Otherwise add a new declaration.
-					var f = durationMap[current].path;
-
-					const basename = path.basename(f);
-					let aid: string;
-					if (this._resolveAssetIdsFromPath) {
-						aid = cmn.Util.makeUnixPath(path.join(path.dirname(f), basename));
-					} else {
-						aid = basename;
-						_assertAssetFilenameValid(aid);
-					}
-					_assertAssetNameNoConflict(assets, aid, f);
-
-					this._logger.info("Added the declaration for '" + current + "' (" + durationMap[current].path + ")");
-					assets[aid] = {
-						type: "audio",
-						path: durationMap[current].path,  // Omit the extension for audio assets
-						systemId: "sound",
-						duration: durationMap[current].duration
-					};
+					this._registerAudioAsset(durationMap[current], revmap);
 				}
 			});
 	}
@@ -262,51 +187,183 @@ export class Configuration extends cmn.Configuration {
 		var assets = this._content.assets || (this._content.assets = {});
 		var revmap = cmn.Util.invertMap(assets, "path");
 		files.filter(filter).forEach((f: string) => {
-			var unixPath = cmn.Util.makeUnixPath(path.relative(this._basepath, dir + f));
-			var aidSet = revmap[unixPath];
-			if (aidSet && aidSet.length > 0) {
-				aidSet.forEach((aid: string) => {
-					let newAssetId = aid;
-					if (this._forceUpdateAssetIds) {
-						const basename = path.basename(f, path.extname(f));
-						if (this._resolveAssetIdsFromPath) {
-							newAssetId = cmn.Util.makeUnixPath(path.join(path.dirname(unixPath), basename));
-						} else {
-							newAssetId = basename;
-							if (!this._includeExtensionToAssetId)
-								_assertAssetFilenameValid(newAssetId);
-						}
-						if (this._includeExtensionToAssetId)
-							newAssetId += path.extname(f);
-						if (aid !== newAssetId)
-							this._moveAssetDeclaration(aid, newAssetId);
-					}
-					_assertAssetTypeNoConflict(newAssetId, f, type, assets[newAssetId].type);
-				});
-			} else {
-				const basename = path.basename(f, path.extname(f));
-				let aid: string;
-				if (this._resolveAssetIdsFromPath) {
-					aid = cmn.Util.makeUnixPath(path.join(path.dirname(unixPath), basename));
-				} else {
-					aid = basename;
-					_assertAssetFilenameValid(aid);
-				}
-				if (this._includeExtensionToAssetId)
-					aid += path.extname(f);
-				_assertAssetNameNoConflict(assets, aid, f);
-
-				this._logger.info("Added the declaration for '" + aid + "' (" + unixPath + ")");
-				assets[aid] = {
-					type: type,
-					path: unixPath
-				};
-				if (type === "script") {
-					assets[aid].global = true;
-				}
-				revmap[assets[aid].path] = [aid];
-			}
+			this._registerXXXAsset(path.join(dir, f), revmap, type);
 		});
+	}
+
+	_registerImageAsset(filePath: string,  revmap: { [key: string]: string[] }): void {
+		var unixPath = cmn.Util.makeUnixPath(filePath);
+		var size = imageSize(unixPath) as ISize;
+		if (!size) {
+			this._logger.warn(`Failed to get image size. Please check ${unixPath}`);
+			return;
+		}
+		const assets = this._content.assets;
+		const aidSet = revmap[unixPath];
+		if (aidSet && aidSet.length > 0) {
+			aidSet.forEach((aid: string) => {
+				let newAssetId = aid;
+				if (this._forceUpdateAssetIds) {
+					const basename = path.basename(filePath, path.extname(filePath));
+					if (this._assetIdResolveMode === "path") {
+						newAssetId = cmn.Util.makeUnixPath(path.join(path.dirname(unixPath), basename));
+					} else if (this._assetIdResolveMode === "hash") {
+						newAssetId = this._generateAssetsDirId(unixPath);
+					} else {
+						newAssetId = basename;
+						if (!this._includeExtensionToAssetId)
+							_assertAssetFilenameValid(newAssetId);
+					}
+					if (this._includeExtensionToAssetId)
+						newAssetId += path.extname(filePath);
+					if (aid !== newAssetId)
+						this._moveAssetDeclaration(aid, newAssetId);
+				}
+
+				const decl = assets[newAssetId];
+				_assertAssetTypeNoConflict(newAssetId, path.basename(filePath), "image", decl.type);
+				if (decl.width !== size.width || decl.height !== size.height) {
+					this._logger.info("Detected change of the image size for " + newAssetId + " (" + unixPath +
+						") from " + decl.width + "x" + decl.height + " to " + size.width + "x" + size.height);
+					decl.width = size.width;
+					decl.height = size.height;
+				}
+			});
+			return;
+		}
+
+		// Otherwise add a new declaration.
+		const basename = path.basename(filePath, path.extname(filePath));
+		let aid: string;
+		if (this._assetIdResolveMode === "path") {
+			aid = cmn.Util.makeUnixPath(path.join(path.dirname(unixPath), basename));
+		} else if (this._assetIdResolveMode === "hash") {
+			aid = this._generateAssetsDirId(unixPath);
+		} else {
+			aid = basename;
+			_assertAssetFilenameValid(aid);
+		}
+		if (this._includeExtensionToAssetId)
+			aid += path.extname(filePath);
+		_assertAssetNameNoConflict(assets, aid, path.basename(filePath));
+
+		this._logger.info("Added/updated the declaration for " + aid + " (" + unixPath + ")");
+		assets[aid] = {
+			type: "image",
+			width: size.width,
+			height: size.height,
+			path: unixPath
+		};
+		revmap[assets[aid].path] = [aid];
+	}
+
+	_registerAudioAsset(durationInfo: DurationInfo, revmap: { [key: string]: string[] }): void {
+		const assets = this._content.assets;
+		// If a declaration already exists for the file then just update the duration info.
+		const aidSet = revmap[durationInfo.path];
+		if (aidSet && aidSet.length > 0) {
+			aidSet.forEach((aid: string) => {
+				const f = durationInfo.path;
+				let newAssetId = aid;
+				if (this._forceUpdateAssetIds) {
+					const basename = path.basename(f);
+					if (this._assetIdResolveMode === "path") {
+						newAssetId = cmn.Util.makeUnixPath(path.join(path.dirname(f), basename));
+					} else if (this._assetIdResolveMode === "hash") {
+						newAssetId = this._generateAssetsDirId(durationInfo.path);
+					} else {
+						newAssetId = basename;
+					}
+					if (aid !== newAssetId)
+						this._moveAssetDeclaration(aid, newAssetId);
+				}
+				if (this._assetIdResolveMode === "basename") {
+					_assertAssetFilenameValid(newAssetId);
+				}
+				_assertAssetTypeNoConflict(newAssetId, f, "audio", assets[newAssetId].type);
+
+				if (assets[newAssetId].duration !== durationInfo.duration) {
+					this._logger.info("Detected change of the audio duration for " + durationInfo.basename + " ("
+						+ assets[newAssetId].path + ") from " + assets[newAssetId].duration + " to " + durationInfo.duration);
+					assets[newAssetId].duration = durationInfo.duration;
+				}
+			});
+			return;
+		}
+
+		// Otherwise add a new declaration.
+		const f = durationInfo.path;
+
+		const basename = path.basename(f);
+		let aid: string;
+		if (this._assetIdResolveMode === "path") {
+			aid = cmn.Util.makeUnixPath(path.join(path.dirname(f), basename));
+		} else if (this._assetIdResolveMode === "hash") {
+			aid = this._generateAssetsDirId(f);
+		} else {
+			aid = basename;
+			_assertAssetFilenameValid(aid);
+		}
+		_assertAssetNameNoConflict(assets, aid, f);
+
+		this._logger.info("Added the declaration for '" + durationInfo.basename + "' (" + f + ")");
+		assets[aid] = {
+			type: "audio",
+			path: f,  // Omit the extension for audio assets
+			systemId: "sound",
+			duration: durationInfo.duration
+		};
+	}
+
+	_registerXXXAsset(filePath: string, revmap: { [key: string]: string[] }, type: string): void {
+		const  unixPath = cmn.Util.makeUnixPath(path.relative(this._basepath, filePath));
+		const aidSet = revmap[unixPath];
+		const assets = this._content.assets;
+		if (aidSet && aidSet.length > 0) {
+			aidSet.forEach((aid: string) => {
+				let newAssetId = aid;
+				if (this._forceUpdateAssetIds) {
+					const basename = path.basename(filePath, path.extname(filePath));
+					if (this._assetIdResolveMode === "path") {
+						newAssetId = cmn.Util.makeUnixPath(path.join(path.dirname(unixPath), basename));
+					} else if (this._assetIdResolveMode === "hash") {
+						newAssetId = this._generateAssetsDirId(unixPath);
+					} else {
+						newAssetId = basename;
+						if (!this._includeExtensionToAssetId)
+							_assertAssetFilenameValid(newAssetId);
+					}
+					if (this._includeExtensionToAssetId)
+						newAssetId += path.extname(filePath);
+					if (aid !== newAssetId)
+						this._moveAssetDeclaration(aid, newAssetId);
+				}
+				_assertAssetTypeNoConflict(newAssetId, path.basename(filePath), type, assets[newAssetId].type);
+			});
+		} else {
+			const basename = path.basename(filePath, path.extname(filePath));
+			let aid: string;
+			if (this._assetIdResolveMode === "path") {
+				aid = cmn.Util.makeUnixPath(path.join(path.dirname(unixPath), basename));
+			} else if (this._assetIdResolveMode === "hash") {
+				aid = this._generateAssetsDirId(unixPath);
+			} else {
+				aid = basename;
+				_assertAssetFilenameValid(aid);
+			}
+			if (this._includeExtensionToAssetId)
+				aid += path.extname(filePath);
+			_assertAssetNameNoConflict(assets, aid, path.basename(filePath));
+
+			this._logger.info("Added the declaration for '" + aid + "' (" + unixPath + ")");
+			assets[aid] = {
+				type: type,
+				path: unixPath
+			};
+			if (type === "script") {
+				assets[aid].global = true;
+			}
+		}
 	}
 
 	_scanAssetsScript(scriptAssetDir: string): void {
@@ -485,6 +542,20 @@ export class Configuration extends cmn.Configuration {
 		this._logger.info(`Detected change of the Asset ID from ${from} to ${to}`);
 		this._content.assets[to] = this._content.assets[from];
 		delete this._content.assets[from];
+	}
+
+	/**
+	 * assets ディレクトリ配下のファイルの アッセトID を生成する。
+	 * 別ファイルで既に同 ID が存在する場合は、ファイルにランダムな1文字を末尾足して ID を生成する。
+	 * `asset:xxxxxx` の形式とする。
+	 */
+	private _generateAssetsDirId(filePath: string): string {
+		let hashId = "asset:" + path.basename(cmn.Renamer.hashFilepath(filePath, 6), path.extname(filePath));
+		while (!!this._content.assets[hashId] && this._content.assets[hashId].path !== filePath) {
+			filePath += Math.random().toString(32).substring(2, 3);
+			hashId = "asset:" + path.basename(cmn.Renamer.hashFilepath(filePath, 6), path.extname(filePath));
+		}
+		return hashId;
 	}
 }
 
