@@ -37,6 +37,7 @@
   },
   "devDependencies": {
     "@akashic/amflow": "~1.0.0",
+    "@akashic/pdi-types": "~1.0.0",
     "@akashic/playlog": "~2.0.0",
     "@storybook/addon-actions": "4.1.18",
     "@storybook/addon-knobs": "4.1.18",
