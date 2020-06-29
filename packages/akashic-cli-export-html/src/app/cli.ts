@@ -28,7 +28,7 @@ function cli(param: CliConfigExportHtml): void {
 		lint: !param.atsumaru,
 		autoSendEvents: param.autoSendEvents,
 		needsUntaintedImageAsset: param.atsumaru,
-		preserveUnbundleScript: param.atsumaru && param.preserveUnbundleScript,
+		unbundled: param.atsumaru && param.unbundled,
 		// index.htmlに書き込むためのexport実行時の情報
 		exportInfo: {
 			version: ver, // export実行時のバージョン
@@ -81,7 +81,7 @@ commander
 	.option("-i, --inject [fileName]", "specify injected file content into index.html", inject, [])
 	.option("-A, --autoSendEvents [eventName]", "event name that send automatically when game start")
 	.option("-a, --atsumaru", "generate files that can be posted to RPG-atsumaru")
-	.option("--preserve-unbundle-script", "Unnecessary script files are included even when the `--atsumaru` option is specified.");
+	.option("--unbundled", "Unnecessary script files are included even when the `--atsumaru` option is specified.");
 
 export function run(argv: string[]): void {
 	// Commander の制約により --strip と --no-strip 引数を両立できないため、暫定対応として Commander 前に argv を処理する
@@ -109,7 +109,7 @@ export function run(argv: string[]): void {
 			injects: commander["inject"] ?? conf.injects,
 			atsumaru: commander["atsumaru"] ?? conf.atsumaru,
 			autoSendEvents: commander["autoSendEvents"] ?? conf.autoSendEvents,
-			preserveUnbundleScript: commander["preserveUnbundleScript"] ?? conf.preserveUnbundleScript
+			unbundled: commander["unbundled"] ?? conf.unbundled
 		});
 	});
 }
