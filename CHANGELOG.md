@@ -1,5 +1,23 @@
 # CHANGELOG
 
+## 1.14.4 (2020-06-27)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#345](https://github.com/akashic-games/akashic-cli/pull/345) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
+## 1.14.3 (2020-06-26)
+
+#### Enhancement
+* `akashic-cli-scan`
+  * [#334](https://github.com/akashic-games/akashic-cli/pull/334) Add specification of assets directory in scan ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 1.14.2 (2020-06-22)
 
 #### Enhancement
