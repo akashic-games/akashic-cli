@@ -13,5 +13,5 @@ export interface CliConfigExportHtml {
 	injects?: string[];
 	atsumaru?: boolean;
 	autoSendEvents?: string | boolean;
-	preserveUnbundleScript?: boolean;
+	unbundled?: boolean;
 }
