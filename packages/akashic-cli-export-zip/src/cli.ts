@@ -20,7 +20,7 @@ export function cli(param: CliConfigExportZip): void {
 			hashLength: !param.hashFilename ? 0 : (param.hashFilename === true) ? 20 : Number(param.hashFilename),
 			omitEmptyJs: param.omitEmptyJs,
 			logger,
-			preserveUnbundledScript: param.bundle && param.preserveUnbundledScript,
+			omitUnbundledJs: param.bundle && param.omitUnbundledJs,
 			exportInfo: {
 				version: ver,
 				option: {
@@ -57,7 +57,7 @@ commander
 	.option("-b, --bundle", "Bundle script assets into a single file")
 	.option("--no-es5-downpile", "No convert JavaScript into es5")
 	.option("--no-omit-empty-js", "Disable omitting empty js from global assets")
-	.option("--preserve-unbundled-script", "Unnecessary script files are included even when the `--bundle` option is specified.");
+	.option("--no-omit-unbundled-js", "Unnecessary script files are included even when the `--bundle` option is specified.");
 
 export function run(argv: string[]): void {
 	// Commander の制約により --strip と --no-strip 引数を両立できないため、暫定対応として Commander 前に argv を処理する
@@ -82,7 +82,7 @@ export function run(argv: string[]): void {
 			bundle: commander["bundle"] ?? conf.bundle,
 			babel: commander["es5Downpile"] ?? conf.babel,
 			omitEmptyJs: commander["omitEmptyJs"] ?? conf.omitEmptyJs,
-			preserveUnbundledScript: commander["preserveUnbundledScript"] ?? conf.preserveUnbundledScript
+			omitUnbundledJs: commander["omitUnbundledJs"] ?? conf.omitUnbundledJs
 		});
 	});
 }
