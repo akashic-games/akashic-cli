@@ -24,7 +24,7 @@ export interface ConvertGameParameterObject {
 	 */
 	logger?: cmn.Logger;
 	exportInfo?: cmn.ExportZipInfo;
-	unbundled?: boolean;
+	preserveUnbundledScript?: boolean;
 }
 
 export function _completeConvertGameParameterObject(param: ConvertGameParameterObject): void {
@@ -37,7 +37,7 @@ export function _completeConvertGameParameterObject(param: ConvertGameParameterO
 	param.logger = param.logger || new cmn.ConsoleLogger();
 	param.omitEmptyJs = !!param.omitEmptyJs;
 	param.exportInfo = param.exportInfo;
-	param.unbundled = !!param.unbundled;
+	param.preserveUnbundledScript = !!param.preserveUnbundledScript;
 }
 
 export interface BundleResult {
@@ -104,7 +104,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			if (bundleResult) {
 				gcu.removeScriptFromFilePaths(gamejson, bundleResult.filePaths);
 				noCopyingFilePaths = new Set<string>(bundleResult.filePaths);
-				if (!param.unbundled) {
+				if (!param.preserveUnbundledScript) {
 					if (gamejson.globalScripts) {
 						gamejson.globalScripts = gamejson.globalScripts.filter(p => noCopyingFilePaths.has(p));
 					}
@@ -136,7 +136,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 				if (!noCopyingFilePaths.has(p)) {
 					let buff = fs.readFileSync(path.resolve(param.source, p));
 
-					if (bundleResult && gcu.isScriptJsFile(p) && !param.unbundled) {
+					if (bundleResult && gcu.isScriptJsFile(p) && !param.preserveUnbundledScript) {
 						Object.keys(gamejson.assets).some((key) => {
 							if (gamejson.assets[key].type === "script" && gamejson.assets[key].path === p) {
 								delete gamejson.assets[key];

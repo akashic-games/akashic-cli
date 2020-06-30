@@ -148,7 +148,7 @@ describe("convert", () => {
 				dest: destDir,
 				bundle: true,
 				omitEmptyJs: true,
-				unbundled: true
+				preserveUnbundledScript: true
 			};
 			convertGame(param)
 				.then(() => {
@@ -268,7 +268,7 @@ describe("convert", () => {
 				source: path.resolve(__dirname, "..", "fixtures", "simple_game_with_aez_bundle_main2"),
 				dest: destDir,
 				bundle: true,
-				unbundled: true
+				preserveUnbundledScript: true
 			};
 			convertGame(param)
 				.then(() => {
@@ -317,7 +317,7 @@ describe("convert", () => {
 				source: path.resolve(__dirname, "..", "fixtures", "simple_game_with_main_scene"),
 				dest: destDir,
 				bundle: true,
-				unbundled: true
+				preserveUnbundledScript: true
 			};
 			convertGame(param)
 				.then(() => {
@@ -377,7 +377,7 @@ describe("convert", () => {
 				source: path.resolve(__dirname, "..", "fixtures", "simple_game_with_aez_bundle_main4"),
 				dest: destDir,
 				bundle: true,
-				unbundled: true
+				preserveUnbundledScript: true
 			};
 			convertGame(param)
 				.then(() => {
@@ -391,7 +391,7 @@ describe("convert", () => {
 					expect(gameJson.assets["aez_bundle_main"].type).toBe("script");
 					expect(gameJson.assets["test"].path).toBe("text/test.json");
 					expect(gameJson.assets["test"].type).toBe("text");
-					// バントルされていないファイルも unbundled: true により残る。
+					// バントルされていないファイルも preserveUnbundledScript: true により残る。
 					expect(gameJson.assets["bar"].path).toBe("script/bar.js");
 					expect(gameJson.assets["bar"].type).toBe("script");
 					expect(gameJson.globalScripts.includes("node_modules/@hoge/testmodule/lib/ModuleB.js")).toBeTruthy();
