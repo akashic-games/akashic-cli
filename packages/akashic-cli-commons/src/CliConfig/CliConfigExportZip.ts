@@ -9,4 +9,5 @@ export interface CliConfigExportZip {
 	babel?: boolean;
 	hashFilename?: number | boolean;
 	omitEmptyJs?: boolean;
+	omitUnbundledJs?: boolean;
 }
