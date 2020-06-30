@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## 1.14.5 (2020-06-30)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#344](https://github.com/akashic-games/akashic-cli/pull/344) akashic-cli-serveで最新のengine-filesを導入した時にv3系のコンテンツを実行できなくなる不具合の修正 ([@dera-](https://github.com/dera-))
+* `akashic-cli-init`
+  * [#351](https://github.com/akashic-games/akashic-cli/pull/351) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+  * [#350](https://github.com/akashic-games/akashic-cli/pull/350) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+  * [#348](https://github.com/akashic-games/akashic-cli/pull/348) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Committers: 2
+- [@dera-](https://github.com/dera-)
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.14.4 (2020-06-27)
 
 #### Update Dependencies
