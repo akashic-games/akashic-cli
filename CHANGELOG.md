@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.14.6 (2020-06-30)
+
+#### Enhancement
+* `akashic-cli-commons`
+  * [#341](https://github.com/akashic-games/akashic-cli/pull/341) Add omitUnbundledJs parameter of export ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 1.14.5 (2020-06-30)
 
 #### Enhancement
