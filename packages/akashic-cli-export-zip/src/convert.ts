@@ -104,18 +104,8 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			if (bundleResult) {
 				gcu.removeScriptFromFilePaths(gamejson, bundleResult.filePaths);
 				noCopyingFilePaths = new Set<string>(bundleResult.filePaths);
-				if (!param.preserveUnbundledScript) {
-					if (gamejson.globalScripts) {
-						gamejson.globalScripts = gamejson.globalScripts.filter(p => noCopyingFilePaths.has(p));
-					}
-
-					if (gamejson.moduleMainScripts) {
-						gamejson.moduleMainScripts = Object.keys(gamejson.moduleMainScripts).filter(p => {
-							const regex = new RegExp(p);
-							return Array.from(noCopyingFilePaths).some(p => regex.test(p));
-						})
-						.reduce((obj, key) => ({ ...obj, [key]: gamejson.moduleMainScripts[key] }), {});
-					}
+				if (!param.preserveUnbundledScript && gamejson.globalScripts) {
+					gamejson.globalScripts = gamejson.globalScripts.filter(p => noCopyingFilePaths.has(p));
 				}
 			}
 
@@ -142,9 +132,12 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 								delete gamejson.assets[key];
 								return true;
 							}
+							return false;
 						});
 						return;
-					} else if (param.omitEmptyJs && gcu.isScriptJsFile(p) && gcu.isEmptyScriptJs(buff.toString().trim())) {
+					}
+
+					if (param.omitEmptyJs && gcu.isScriptJsFile(p) && gcu.isEmptyScriptJs(buff.toString().trim())) {
 						Object.keys(gamejson.assets).some((key) => {
 							if (gamejson.assets[key].type === "script" && gamejson.assets[key].path === p) {
 								gamejson.assets[key].global = false;
