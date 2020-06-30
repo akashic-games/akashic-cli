@@ -2,6 +2,7 @@ import { Trigger } from "@akashic/trigger";
 import { ClientContentLocator } from "../common/ClientContentLocator";
 import { generateTestbedScriptAsset } from "./TestbedScriptAsset";
 import { ServeGameContent } from "./ServeGameContent";
+import { NullScriptAssetV3 } from "./AssetV3";
 
 export interface Platform {
 	_resourceFactory: {
@@ -149,7 +150,8 @@ export class GameViewManager {
 	}
 
 	private customizePlatform(platform: Platform, options: any): void {
-		const TestbedScriptAsset = generateTestbedScriptAsset(options.g.ScriptAsset);
+		const scriptAssetClass = options.g.ScriptAsset || NullScriptAssetV3;
+		const TestbedScriptAsset = generateTestbedScriptAsset(scriptAssetClass);
 		platform._resourceFactory.createScriptAsset = (id: string, assetPath: string) => {
 			return new TestbedScriptAsset(
 				id,
