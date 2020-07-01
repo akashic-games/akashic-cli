@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 1.14.7 (2020-07-01)
+
+#### Enhancement
+* `akashic-cli-export-zip`
+  * [#342](https://github.com/akashic-games/akashic-cli/pull/342) Support tree-shaking of export-zip ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+* `akashic-cli-init`
+  * [#352](https://github.com/akashic-games/akashic-cli/pull/352) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Committers: 2
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.14.6 (2020-06-30)
 
 #### Enhancement
