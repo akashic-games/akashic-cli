@@ -24,6 +24,7 @@ export interface ConvertGameParameterObject {
 	 */
 	logger?: cmn.Logger;
 	exportInfo?: cmn.ExportZipInfo;
+	omitUnbundledJs?: boolean;
 }
 
 export function _completeConvertGameParameterObject(param: ConvertGameParameterObject): void {
@@ -36,6 +37,7 @@ export function _completeConvertGameParameterObject(param: ConvertGameParameterO
 	param.logger = param.logger || new cmn.ConsoleLogger();
 	param.omitEmptyJs = !!param.omitEmptyJs;
 	param.exportInfo = param.exportInfo;
+	param.omitUnbundledJs = !!param.omitUnbundledJs;
 }
 
 export interface BundleResult {
@@ -102,6 +104,9 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			if (bundleResult) {
 				gcu.removeScriptFromFilePaths(gamejson, bundleResult.filePaths);
 				noCopyingFilePaths = new Set<string>(bundleResult.filePaths);
+				if (param.omitUnbundledJs && gamejson.globalScripts) {
+					gamejson.globalScripts = gamejson.globalScripts.filter(p => noCopyingFilePaths.has(p));
+				}
 			}
 
 			const babelOption = {
@@ -119,8 +124,18 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			const files = param.strip ? gcu.extractFilePaths(gamejson, param.source) : readdir(param.source).map((p) => p.replace(/\\/g, "/"));
 			files.forEach(p => {
 				if (!noCopyingFilePaths.has(p)) {
-					cmn.Util.mkdirpSync(path.dirname(path.resolve(param.dest, p)));
 					let buff = fs.readFileSync(path.resolve(param.source, p));
+
+					if (bundleResult && gcu.isScriptJsFile(p) && param.omitUnbundledJs) {
+						Object.keys(gamejson.assets).some((key) => {
+							if (gamejson.assets[key].type === "script" && gamejson.assets[key].path === p) {
+								delete gamejson.assets[key];
+								return true;
+							}
+							return false;
+						});
+						return;
+					}
 
 					if (param.omitEmptyJs && gcu.isScriptJsFile(p) && gcu.isEmptyScriptJs(buff.toString().trim())) {
 						Object.keys(gamejson.assets).some((key) => {
@@ -131,6 +146,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 							return false;
 						});
 					}
+					cmn.Util.mkdirpSync(path.dirname(path.resolve(param.dest, p)));
 					const value: string | Buffer =
 						(param.babel && gcu.isScriptJsFile(p)) ? babel.transform(buff.toString().trim(), babelOption).code : buff;
 					fs.writeFileSync(path.resolve(param.dest, p), value);

@@ -92,7 +92,7 @@ export function extractScriptAssetFilePaths(gamejson: cmn.GameConfiguration): st
 }
 
 export function isScriptJsFile(filePath: string): boolean {
-	return /^script\/.+(\.js$)/.test(filePath);
+	return /^(script|assets)\/.+(\.js$)/.test(filePath);
 }
 
 export function isEmptyScriptJs(str: string): boolean {

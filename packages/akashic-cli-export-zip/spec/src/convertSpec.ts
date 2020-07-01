@@ -147,7 +147,8 @@ describe("convert", () => {
 				source: path.resolve(__dirname, "..", "fixtures", "simple_game_using_external"),
 				dest: destDir,
 				bundle: true,
-				omitEmptyJs: true
+				omitEmptyJs: true,
+				omitUnbundledJs: false
 			};
 			convertGame(param)
 				.then(() => {
@@ -176,13 +177,14 @@ describe("convert", () => {
 			const param = {
 				source: souceDirectory,
 				dest: outputDirectory,
-				bundle: true
+				bundle: true,
+				omitUnbundledJs: true
 			};
 			convertGame(param)
 				.then(() => {
-					expect(fs.existsSync(path.join(outputDirectory, "script/unrefered.js"))).toBe(true);
+					expect(fs.existsSync(path.join(outputDirectory, "script/unrefered.js"))).toBe(false);
 					expect(fs.existsSync(path.join(outputDirectory, "script/aez_bundle_main.js"))).toBe(true);
-					expect(fs.existsSync(path.join(outputDirectory, "script/ignore.js"))).toBe(true);
+					expect(fs.existsSync(path.join(outputDirectory, "script/ignore.js"))).toBe(false);
 					expect(fs.existsSync(path.join(outputDirectory, "game.json"))).toBe(true);
 					expect(fs.existsSync(path.join(outputDirectory, "package.json"))).toBe(true);
 					expect(fs.existsSync(path.join(outputDirectory, "output"))).toBe(false);
@@ -198,14 +200,15 @@ describe("convert", () => {
 				source: path.resolve(__dirname, "..", "fixtures", "simple_game_using_external"),
 				dest: destDir,
 				strip: true,
-				bundle: true
+				bundle: true,
+				omitUnbundledJs: true
 			};
 			convertGame(param)
 				.then(() => {
 					expect(fs.existsSync(path.join(destDir, "node_modules/external/index.js"))).toBe(false);
 					expect(fs.existsSync(path.join(destDir, "node_modules/external/package.json"))).toBe(false);
 					expect(fs.existsSync(path.join(destDir, "script/main.js"))).toBe(false);
-					expect(fs.existsSync(path.join(destDir, "script/ignore.js"))).toBe(true);
+					expect(fs.existsSync(path.join(destDir, "script/ignore.js"))).toBe(false);
 					expect(fs.existsSync(path.join(destDir, "script/unrefered.js"))).toBe(false);
 					expect(fs.existsSync(path.join(destDir, "script/aez_bundle_main.js"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "text/test.json"))).toBe(false);
@@ -266,7 +269,8 @@ describe("convert", () => {
 			const param = {
 				source: path.resolve(__dirname, "..", "fixtures", "simple_game_with_aez_bundle_main2"),
 				dest: destDir,
-				bundle: true
+				bundle: true,
+				omitUnbundledJs: false
 			};
 			convertGame(param)
 				.then(() => {
@@ -314,7 +318,8 @@ describe("convert", () => {
 			const param = {
 				source: path.resolve(__dirname, "..", "fixtures", "simple_game_with_main_scene"),
 				dest: destDir,
-				bundle: true
+				bundle: true,
+				omitUnbundledJs: false
 			};
 			convertGame(param)
 				.then(() => {
@@ -332,6 +337,74 @@ describe("convert", () => {
 					expect(gameJson.assets["mainScene"].type).toBe("script");
 					expect(gameJson.assets["mainScene"].global).toBe(true);
 					expect(gameJson.assets["notEntryPoint"].path).toBe("script/mainScene.js");
+					done();
+				}, done.fail);
+		});
+
+		it("Unnecessary files are deleted by bundle", (done) => {
+			const param = {
+				source: path.resolve(__dirname, "..", "fixtures", "simple_game_with_aez_bundle_main4"),
+				dest: destDir,
+				bundle: true,
+				omitUnbundledJs: true
+			};
+			convertGame(param)
+				.then(() => {
+					expect(fs.existsSync(path.join(destDir, "script/aez_bundle_main.js"))).toBe(true);
+					expect(fs.existsSync(path.join(destDir, "script/bar.js"))).toBe(false);
+					expect(fs.existsSync(path.join(destDir, "script/foo.js"))).toBe(false);
+					expect(fs.existsSync(path.join(destDir, "text/test.json"))).toBe(false);
+					expect(fs.existsSync(path.join(destDir, "game.json"))).toBe(true);
+					expect(fs.existsSync(path.join(destDir, "package.json"))).toBe(true);
+
+					const gameJson = JSON.parse(fs.readFileSync(path.join(destDir, "game.json")).toString());
+					expect(gameJson.assets["aez_bundle_main"].path).toBe("script/aez_bundle_main.js");
+					expect(gameJson.assets["aez_bundle_main"].type).toBe("script");
+					expect(gameJson.assets["test"].path).toBe("text/test.json");
+					expect(gameJson.assets["test"].type).toBe("text");
+					// バンドルされていない不要なファイルはgamejsonから取り除かれる
+					expect(gameJson.assets["main"]).toBeUndefined();
+					expect(gameJson.assets["foo"]).toBeUndefined();
+					expect(gameJson.assets["bar"]).toBeUndefined();
+
+					expect(gameJson.globalScripts.includes("node_modules/@hoge/testmodule/lib/ModuleA.js")).toBeFalsy();
+					expect(gameJson.globalScripts.includes("node_modules/@hoge/testmodule/lib/ModuleB.js")).toBeFalsy();
+					expect(gameJson.globalScripts.includes("node_modules/@hoge/testmodule/lib/ModuleC.js")).toBeFalsy();
+					expect(gameJson.globalScripts.includes("node_modules/@hoge/testmodule/lib/index.js")).toBeFalsy();
+					done();
+				}, done.fail);
+		});
+
+		it("Unnecessary files are also saved with bundle", (done) => {
+			const param = {
+				source: path.resolve(__dirname, "..", "fixtures", "simple_game_with_aez_bundle_main4"),
+				dest: destDir,
+				bundle: true,
+				omitUnbundledJs: false
+			};
+			convertGame(param)
+				.then(() => {
+					expect(fs.existsSync(path.join(destDir, "script/aez_bundle_main.js"))).toBe(true);
+					expect(fs.existsSync(path.join(destDir, "script/bar.js"))).toBe(true);
+					expect(fs.existsSync(path.join(destDir, "script/foo.js"))).toBe(false);
+					expect(fs.existsSync(path.join(destDir, "text/test.json"))).toBe(false);
+
+					const gameJson = JSON.parse(fs.readFileSync(path.join(destDir, "game.json")).toString());
+					expect(gameJson.assets["aez_bundle_main"].path).toBe("script/aez_bundle_main.js");
+					expect(gameJson.assets["aez_bundle_main"].type).toBe("script");
+					expect(gameJson.assets["test"].path).toBe("text/test.json");
+					expect(gameJson.assets["test"].type).toBe("text");
+					// バントルされていないファイルも omitUnbundledJs: false により残る。
+					expect(gameJson.assets["bar"].path).toBe("script/bar.js");
+					expect(gameJson.assets["bar"].type).toBe("script");
+					expect(gameJson.globalScripts.includes("node_modules/@hoge/testmodule/lib/ModuleB.js")).toBeTruthy();
+					expect(gameJson.globalScripts.includes("node_modules/@hoge/testmodule/lib/ModuleC.js")).toBeTruthy();
+					expect(gameJson.globalScripts.includes("node_modules/@hoge/testmodule/lib/index.js")).toBeTruthy();
+
+					// バンドルされたファイルは取り除かれる。
+					expect(gameJson.assets["main"]).toBeUndefined();
+					expect(gameJson.assets["foo"]).toBeUndefined();
+					expect(gameJson.globalScripts.includes("node_modules/@hoge/testmodule/lib/ModuleA.js")).toBeFalsy();
 					done();
 				}, done.fail);
 		});
