@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 1.14.8 (2020-07-01)
+
+#### Enhancement
+* `akashic-cli-export-html`
+  * [#343](https://github.com/akashic-games/akashic-cli/pull/343) Support tree-shaking of export-html ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+* `akashic-cli-init`
+  * [#353](https://github.com/akashic-games/akashic-cli/pull/353) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Committers: 2
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.14.7 (2020-07-01)
 
 #### Enhancement
