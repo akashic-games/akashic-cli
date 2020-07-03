@@ -1,4 +1,4 @@
-function main(param: g.GameMainParameterObject): void {
+function main(_param: g.GameMainParameterObject): void {
 	const scene = new g.Scene({
 		game: g.game,
 		// このシーンで利用するアセットのIDを列挙し、シーンに通知します

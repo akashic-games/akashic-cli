@@ -62,7 +62,7 @@ export function main(param: GameMainParameterObject): void {
 			font: font,
 			fontSize: font.size / 2,
 			textColor: "black",
-			x: 0.7 * g.game.width
+			x: 0.65 * g.game.width
 		});
 		scene.append(timeLabel);
 
@@ -99,7 +99,7 @@ export function main(param: GameMainParameterObject): void {
 			});
 			scene.append(shot);
 		});
-		const updateHandler = () => {
+		const updateHandler = (): void => {
 			if (time <= 0) {
 				// RPGアツマール環境であればランキングを表示します
 				if (param.isAtsumaru) {

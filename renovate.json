@@ -25,7 +25,8 @@
     },
     {
       "updateTypes": ["major"],
-      "enabled": false
+      "depTypeList": ["devDependencies"],
+      "groupName": "dev dependencies"
     }
   ],
   "ignorePaths": [
