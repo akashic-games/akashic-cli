@@ -122,11 +122,19 @@ export function getDefaultBundleScripts(templatePath: string, version: string, m
 		})();
 	`;
 	var postloadScriptNames =
-		["build/LocalScriptAsset.js", "game-storage.strip.js", "sandbox.js", "initGlobals.js"];
-	if (version === "1") postloadScriptNames.push("logger.js");
-	if (bundleText) {
-		postloadScriptNames.push("build/LocalTextAsset.js");
+		["game-storage.strip.js", "sandbox.js", "initGlobals.js"];
+	if (version === "3") {
+		postloadScriptNames.push("build/LocalScriptAssetV3.js");
+		if (bundleText) {
+			postloadScriptNames.push("build/LocalTextAssetV3.js");
+		}
+	} else {
+		postloadScriptNames.push("build/LocalScriptAsset.js");
+		if (bundleText) {
+			postloadScriptNames.push("build/LocalTextAsset.js");
+		}
 	}
+	if (version === "1") postloadScriptNames.push("logger.js");
 
 	var preloadScripts = preloadScriptNames.map((fileName) => loadScriptFile(fileName, templatePath));
 	preloadScripts.push(preloadScript);

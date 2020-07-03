@@ -62,13 +62,13 @@ window.addEventListener("load", function() {
 		};
 
 		pf._resourceFactory.createScriptAsset = function(id, assetPath) {
-			return new LocalScriptAsset(id, assetPath);
+			return new LocalScriptAssetV3(id, assetPath);
 		};
 
 		var createTextAsset = function(id, assetPath) {
-			return new LocalTextAsset(id, assetPath);
+			return new LocalTextAssetV3(id, assetPath);
 		};
-		if (typeof LocalTextAsset !== "undefined") {
+		if (typeof LocalTextAssetV3 !== "undefined") {
 			pf._resourceFactory.createTextAsset = createTextAsset;
 		}
 
