@@ -20,7 +20,7 @@ storiesOf("o-GameScreen", module)
 			gameWidth={320}
 			gameHeight={240}
 			screenElement={createDummyDiv(320, 240)}
-			usernameDisplayAuthorizationDialogProps={undefined}
+			playerInfoResolverDialogProps={undefined}
 			shouldStopPropagationFunc={() => {
 				action("shouldStopPropagation");
 				return false;
@@ -37,7 +37,7 @@ storiesOf("o-GameScreen", module)
 			gameWidth={320}
 			gameHeight={240}
 			screenElement={createDummyDiv(320, 240)}
-			usernameDisplayAuthorizationDialogProps={undefined}
+			playerInfoResolverDialogProps={undefined}
 			shouldStopPropagationFunc={() => {
 				action("shouldStopPropagation");
 				return false;
@@ -54,7 +54,7 @@ storiesOf("o-GameScreen", module)
 			gameWidth={320}
 			gameHeight={240}
 			screenElement={createDummyDiv(320, 240)}
-			usernameDisplayAuthorizationDialogProps={undefined}
+			playerInfoResolverDialogProps={undefined}
 			shouldStopPropagationFunc={() => {
 				action("shouldStopPropagation");
 				return false;
@@ -71,8 +71,10 @@ storiesOf("o-GameScreen", module)
 			gameWidth={320}
 			gameHeight={240}
 			screenElement={createDummyDiv(320, 240)}
-			usernameDisplayAuthorizationDialogProps={{
+			playerInfoResolverDialogProps={{
 				remainingSeconds: 15,
+				name: "プレイヤー名X",
+				guestName: "ゲスト名Y",
 				onClick: action("onClick")
 			}}
 			shouldStopPropagationFunc={() => {

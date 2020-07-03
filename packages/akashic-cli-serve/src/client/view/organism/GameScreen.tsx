@@ -2,9 +2,9 @@ import * as React from "react";
 import { observer } from "mobx-react";
 import * as styles from "./GameScreen.css";
 import {
-	UsernameDisplayAuthorizationDialog,
-	UsernameDisplayAuthorizationDialogProps
-} from "../molecule/UsernameDisplayAuthorizationDialog";
+	PlayerInfoResolverDialog,
+	PlayerInfoResolverDialogProps
+} from "../molecule/PlayerInfoResolverDialog";
 
 export interface GameScreenProps {
 	showsBackgroundImage: boolean;
@@ -13,7 +13,7 @@ export interface GameScreenProps {
 	gameWidth: number;
 	gameHeight: number;
 	screenElement: HTMLElement;
-	usernameDisplayAuthorizationDialogProps?: UsernameDisplayAuthorizationDialogProps;
+	playerInfoResolverDialogProps?: PlayerInfoResolverDialogProps;
 	shouldStopPropagationFunc: () => boolean;
 	onMouseMoveCapture?: (p: { x: number, y: number }) => void;
 	onClickCapture?: (p: { x: number, y: number }) => void;
@@ -28,7 +28,7 @@ export class GameScreen extends React.Component<GameScreenProps, {}> {
 			showsGrid,
 			gameWidth,
 			gameHeight,
-			usernameDisplayAuthorizationDialogProps
+			playerInfoResolverDialogProps
 		 } = this.props;
 		const bgImageStyle = (showsBgImage && !bgImage) ?  (" " + styles["pseudo-transparent-bg"]) : "";
 		return <div className={styles["game-screen"]} style={{ width: gameWidth, height: gameHeight }}>
@@ -48,8 +48,10 @@ export class GameScreen extends React.Component<GameScreenProps, {}> {
 					null
 			}
 			{
-				usernameDisplayAuthorizationDialogProps ?
-					<UsernameDisplayAuthorizationDialog {...usernameDisplayAuthorizationDialogProps} /> :
+				playerInfoResolverDialogProps ?
+					<div className={styles["dialog-wrapper"]}>
+						<PlayerInfoResolverDialog {...playerInfoResolverDialogProps} />
+					</div> :
 					null
 			}
 		</div>;

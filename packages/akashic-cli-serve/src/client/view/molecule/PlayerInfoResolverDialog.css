@@ -1,0 +1,27 @@
+
+.dialog {
+	flex: 1 1 auto;
+	align-self: center;
+	margin: 5px;
+	padding: 10px;
+
+	display: flex;
+	flex-flow: column nowrap;
+	background: white;
+	border: 1px solid silver;
+	border-radius: 2px;
+	box-shadow: 0 1px 11px silver;
+}
+
+.dialog-msg {
+	margin: 1.5rem auto;
+}
+
+.button-column {
+	margin: auto;
+}
+
+.button {
+	margin: 3px;
+	padding: 5px 10px;
+}
