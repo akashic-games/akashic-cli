@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 1.14.11 (2020-07-03)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#361](https://github.com/akashic-games/akashic-cli/pull/361) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Update Dependencies
+* `akashic-cli-serve`
+  * [#360](https://github.com/akashic-games/akashic-cli/pull/360) Update dependency whatwg-fetch to v3.1.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.14.10 (2020-07-03)
 
 #### Enhancement
