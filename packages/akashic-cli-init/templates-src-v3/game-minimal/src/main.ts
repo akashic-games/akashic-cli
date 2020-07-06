@@ -1,4 +1,4 @@
-function main(_param: g.GameMainParameterObject): void {
+function main(param: g.GameMainParameterObject): void {
 	const scene = new g.Scene({game: g.game});
 	scene.loaded.add(() => {
 		// 以下にゲームのロジックを記述します。

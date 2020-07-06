@@ -114,7 +114,7 @@ module.exports = {
 		}],
 		"@typescript-eslint/no-unused-vars": ["error", {
 			"vars": "all",
-			"args": "all",
+			"args": "none",
 			"argsIgnorePattern": "^_"
 		}],
 		"camelcase": "off",
