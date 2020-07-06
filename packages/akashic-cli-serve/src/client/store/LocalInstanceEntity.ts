@@ -54,7 +54,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 	readonly coePlugin: CoePluginEntity;
 	readonly nicoPlugin: NicoPluginEntity;
 	readonly content: ContentEntity;
-	readonly coeLimitdPlugin: CoeLimitedPluginEntity;
+	readonly coeLimitedPlugin: CoeLimitedPluginEntity;
 
 	private _timeKeeper: TimeKeeper;
 	private _gameViewManager: GameViewManager;
@@ -103,7 +103,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 				onLocalInstanceDelete: params.coeHandler.onLocalInstanceDelete,
 				instanceArgument: params.argument
 			});
-			this.coeLimitdPlugin = new CoeLimitedPluginEntity();
+			this.coeLimitedPlugin = new CoeLimitedPluginEntity();
 			const agvGameContent = this._serveGameContent.agvGameContent;
 			agvGameContent.onExternalPluginRegister.add((name: string) => {
 				const game = agvGameContent.getGame();
@@ -116,7 +116,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 						console.log("game.external.send: ", message);
 					};
 				} else if (name === "coeLimited") {
-					game.external.coeLimited = this.coeLimitdPlugin;
+					game.external.coeLimited = this.coeLimitedPlugin;
 				}
 			});
 		}

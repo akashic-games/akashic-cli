@@ -25,8 +25,13 @@ window.g = engineFiles.akashicEngine;
 })();
 </script>
 <script src="./js/initGlobals.js"></script>
+<% if (version === "3") { %>
+<script src="./js/build/LocalScriptAssetV3.js"></script>
+<script src="./js/build/LocalTextAssetV3.js"></script>
+<% } else { %>
 <script src="./js/build/LocalScriptAsset.js"></script>
 <script src="./js/build/LocalTextAsset.js"></script>
+<% } %>
 <script src="./js/game-storage.strip.js"></script>
 <% if (version === "1") { %>
 <script src="./js/logger.js"></script>

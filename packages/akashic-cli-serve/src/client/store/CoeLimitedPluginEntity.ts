@@ -2,7 +2,7 @@ import { observable, action, computed } from "mobx";
 import * as pl from "@akashic/playlog";
 import { storage } from "./storage";
 
-export interface UsernameDisplayAuthorizationMessage {
+export interface PlayerInfoResolverResultMessage {
 	result: {
 		name: string;
 		userData: {
@@ -15,7 +15,7 @@ export interface StartLocalSessionPameterObject {
 	sessionId: string;
 	applicationName: string;
 	localEvents: pl.Event[];
-	messageHandler: (message: UsernameDisplayAuthorizationMessage) => void;
+	messageHandler: (message: PlayerInfoResolverResultMessage) => void;
 }
 
 const DEFAULT_LIMIT_MILLISECONDS = 15 * 1000;
@@ -26,13 +26,17 @@ const ALLOWED_APPLICATION_NAME = "player-info-resolver";
 export class CoeLimitedPluginEntity {
 	@observable isDisplayingResolver: boolean;
 	@observable remainingMilliSeconds: number;
-	@observable messageHandler: (message: UsernameDisplayAuthorizationMessage) => void;
+	@observable messageHandler: (message: PlayerInfoResolverResultMessage) => void;
+	@observable name: string;
+	@observable guestName: string;
 	private sessionId: string;
 	private timerId: NodeJS.Timer | null;
 
 	constructor() {
 		this.isDisplayingResolver = false;
 		this.remainingMilliSeconds = DEFAULT_LIMIT_MILLISECONDS;
+		this.name = storage.data.playerName;
+		this.guestName = "ゲスト" + ((Math.random() * 100) | 0);
 	}
 
 	@action
@@ -75,7 +79,7 @@ export class CoeLimitedPluginEntity {
 		if (this.messageHandler) {
 			this.messageHandler({
 				result: {
-					name: accepted ? storage.data.playerName : DEFAULT_PLAYER_NAME,
+					name: accepted ? this.name : this.guestName,
 					userData: { accepted }
 				}
 			});

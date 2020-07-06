@@ -11,6 +11,8 @@
   "files": [
     "./../../node_modules/@akashic/akashic-engine/lib/main.d.ts",
     "./LocalScriptAsset.ts",
-    "./LocalTextAsset.ts"
+    "./LocalTextAsset.ts",
+    "./LocalScriptAssetV3.ts",
+    "./LocalTextAssetV3.ts"
   ]
 }

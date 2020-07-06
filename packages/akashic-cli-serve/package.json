@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-serve",
-  "version": "0.8.5",
+  "version": "0.8.8",
   "description": "A development server for Akashic Engine",
   "scripts": {
     "prepublish": "npm run setup && npm run build",
@@ -24,7 +24,7 @@
     "akashic-cli-serve": "./bin/run"
   },
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.5.10",
+    "@akashic/akashic-cli-commons": "0.5.11",
     "@akashic/headless-driver": "1.1.16",
     "@akashic/trigger": "1.0.0",
     "chalk": "2.4.2",
@@ -71,12 +71,12 @@
     "style-loader": "0.23.1",
     "ts-loader": "4.5.0",
     "tslint": "5.20.1",
-    "typescript": "3.9.5",
+    "typescript": "3.9.6",
     "uglify-js": "2.8.29",
     "uglify-save-license": "0.4.1",
     "webpack": "4.43.0",
     "webpack-cli": "3.3.12",
-    "whatwg-fetch": "3.0.0"
+    "whatwg-fetch": "3.1.0"
   },
   "optionalDependencies": {
     "@akashic/akashic-gameview-web": "2.1.0"

@@ -1,5 +1,43 @@
 # CHANGELOG
 
+## 1.14.11 (2020-07-03)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#361](https://github.com/akashic-games/akashic-cli/pull/361) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Update Dependencies
+* `akashic-cli-serve`
+  * [#360](https://github.com/akashic-games/akashic-cli/pull/360) Update dependency whatwg-fetch to v3.1.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
+## 1.14.10 (2020-07-03)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#357](https://github.com/akashic-games/akashic-cli/pull/357) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#359](https://github.com/akashic-games/akashic-cli/pull/359) Update dependency typescript to v3.9.6 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
+## 1.14.9 (2020-07-03)
+
+#### Enhancement
+* `akashic-cli-export-html`
+  * [#347](https://github.com/akashic-games/akashic-cli/pull/347) export-htmlに最新のengine-filesを導入した時にv3系のコンテンツを実行できなくなる不具合の修正 ([@dera-](https://github.com/dera-))
+* `akashic-cli-init`
+  * [#354](https://github.com/akashic-games/akashic-cli/pull/354) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Committers: 2
+- [@dera-](https://github.com/dera-)
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.14.8 (2020-07-01)
 
 #### Enhancement
