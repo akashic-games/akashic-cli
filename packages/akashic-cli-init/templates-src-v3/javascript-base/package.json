@@ -13,6 +13,6 @@
   "license": "",
   "devDependencies": {
     "@akashic/akashic-sandbox": "~0.16.13",
-    "eslint": "5.16.0"
+    "eslint": "7.3.1"
   }
 }

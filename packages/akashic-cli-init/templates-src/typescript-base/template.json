@@ -1,4 +1,0 @@
-{
-	"gameJson": "game.json",
-	"guideMessage": "Now your new Akashic game has been generated. To run with akashic-sandbox:\n  $ npm install\n  $ npm run build\n  $ npm start\nSee README.md (in Japanese) for more detail and make your Akashic game!"
-}
