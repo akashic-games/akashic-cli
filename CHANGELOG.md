@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.14.12 (2020-07-07)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#358](https://github.com/akashic-games/akashic-cli/pull/358) akashic-cli-initのテンプレートの依存モジュールを最新のものに更新 ([@dera-](https://github.com/dera-))
+
+#### Committers: 1
+- [@dera-](https://github.com/dera-)
+
 ## 1.14.11 (2020-07-03)
 
 #### Enhancement
