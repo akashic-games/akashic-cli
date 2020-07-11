@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.14.14 (2020-07-11)
+
+#### Update Dependencies
+* `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#374](https://github.com/akashic-games/akashic-cli/pull/374) Update dependency uglify-js to v3 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
 ## 1.14.13 (2020-07-11)
 
 #### Update Dependencies
