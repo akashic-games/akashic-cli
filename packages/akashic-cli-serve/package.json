@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-serve",
-  "version": "0.8.10",
+  "version": "0.8.11",
   "description": "A development server for Akashic Engine",
   "scripts": {
     "prepublish": "npm run setup && npm run build",
@@ -24,7 +24,7 @@
     "akashic-cli-serve": "./bin/run"
   },
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.5.12",
+    "@akashic/akashic-cli-commons": "0.5.13",
     "@akashic/headless-driver": "1.1.16",
     "@akashic/trigger": "1.0.0",
     "chalk": "2.4.2",
