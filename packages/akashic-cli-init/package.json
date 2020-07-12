@@ -65,7 +65,7 @@
     "@akashic/akashic-cli-commons": "0.5.13",
     "@akashic/akashic-cli-config": "0.4.16",
     "commander": "2.20.3",
-    "fs-extra": "0.30.0",
+    "fs-extra": "9.0.1",
     "prompt": "1.0.0",
     "request": "^2.74.0",
     "unzipper": "^0.10.0"
