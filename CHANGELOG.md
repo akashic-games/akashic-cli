@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 1.14.15 (2020-07-12)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#372](https://github.com/akashic-games/akashic-cli/pull/372) Update dependency fs-readdir-recursive to v1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-scan`
+  * [#373](https://github.com/akashic-games/akashic-cli/pull/373) Update dependency music-metadata to v7 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
 ## 1.14.14 (2020-07-11)
 
 #### Update Dependencies
