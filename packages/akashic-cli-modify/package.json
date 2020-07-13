@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-modify",
-  "version": "0.4.20",
+  "version": "0.4.21",
   "description": "A module to update game.json parameters",
   "main": "lib/index.js",
   "scripts": {
