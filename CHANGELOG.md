@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.14.16 (2020-07-13)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#371](https://github.com/akashic-games/akashic-cli/pull/371) Update dependency fs-extra to v9 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
 ## 1.14.15 (2020-07-12)
 
 #### Update Dependencies
