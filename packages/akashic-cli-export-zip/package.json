@@ -52,7 +52,7 @@
     "archiver": "4.0.2",
     "babel-preset-env": "^1.7.0",
     "browserify": "~16.5.0",
-    "commander": "2.20.3",
+    "commander": "5.1.0",
     "fs-extra": "^9.0.0",
     "fs-readdir-recursive": "~1.1.0",
     "uglify-js": "3.10.0"

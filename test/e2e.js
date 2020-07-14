@@ -95,7 +95,7 @@ try{
 
 	// TODO 出力結果検証
 	console.log("test @akashic/akashic-cli-export-zip");
-	execSync(`${akashicCliPath} zip --strip --bundle`);
+	execSync(`${akashicCliPath} export zip --strip --bundle`);
 
 	console.log("test @akashic/akashic-cli-modify");
 	execSync(`${akashicCliPath} modify width 816`);
