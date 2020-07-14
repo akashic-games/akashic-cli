@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 1.14.21 (2020-07-14)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#381](https://github.com/akashic-games/akashic-cli/pull/381) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Update Dependencies
+* `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-serve`, `akashic-cli`
+  * [#367](https://github.com/akashic-games/akashic-cli/pull/367) Update dependency chokidar to v3 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.14.20 (2020-07-14)
 
 #### Update Dependencies
