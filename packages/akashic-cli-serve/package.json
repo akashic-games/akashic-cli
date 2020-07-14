@@ -28,7 +28,7 @@
     "@akashic/headless-driver": "1.1.16",
     "@akashic/trigger": "1.0.0",
     "chalk": "4.1.0",
-    "chokidar": "2.1.8",
+    "chokidar": "3.4.0",
     "commander": "2.20.3",
     "ejs": "3.1.3",
     "express": "4.17.1",
