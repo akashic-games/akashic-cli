@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.14.20 (2020-07-14)
+
+#### Update Dependencies
+* `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#366](https://github.com/akashic-games/akashic-cli/pull/366) Update dependency chalk to v4 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
 ## 1.14.19 (2020-07-13)
 
 #### Enhancement
