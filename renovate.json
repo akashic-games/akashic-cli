@@ -31,7 +31,7 @@
     {
       "updateTypes": ["major"],
       "depTypeList": ["dependencies"],
-      "enabled": false
+      "draftPR": true
     }
   ],
   "ignorePaths": [
