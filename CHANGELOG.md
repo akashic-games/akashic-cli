@@ -1,5 +1,22 @@
 # CHANGELOG
 
+## 1.14.24 (2020-07-17)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#384](https://github.com/akashic-games/akashic-cli/pull/384) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Other Change
+* [#380](https://github.com/akashic-games/akashic-cli/pull/380) prohibit major update of dependencies ([@dera-](https://github.com/dera-))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`
+  * [#387](https://github.com/akashic-games/akashic-cli/pull/387) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- [@dera-](https://github.com/dera-)
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.14.23 (2020-07-14)
 
 #### Enhancement
