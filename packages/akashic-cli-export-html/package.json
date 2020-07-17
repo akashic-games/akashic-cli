@@ -22,7 +22,7 @@
     "build:template:ejs": "shx cp templates/bundle-index.ejs templates-build/ && shx cp templates/no-bundle-index.ejs templates-build/",
     "lint": "tslint -c ../tslint.json --project ./tsconfig.json",
     "lint-js": "eslint ./templates/**/*.js",
-    "test": "npm run test:jest && npm run lint",
+    "test": "npm run test:jest",
     "test:jest": "jest",
     "update-template": "npm run update-template:v1 && npm run update-template:v2 && npm run update-template:v3 && node ./build-template-support/updateEngineFiles.js",
     "update-template:v1": "node ./build-template-support/generateAkashicVersionsFile v1 && cd templates/template-export-html-v1 && npm run update && npm run build && cd ../../",

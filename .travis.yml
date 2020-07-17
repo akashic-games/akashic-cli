@@ -6,7 +6,7 @@ node_js:
 
 install: travis_wait 30 npm install # TODO: 一時的にタイムアウトを伸ばす
 
-script:
+script: travis_wait 15
   - npm test
 
 cache: npm
