@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 1.14.25 (2020-07-18)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#391](https://github.com/akashic-games/akashic-cli/pull/391) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Update Dependencies
+* `akashic-cli-init`
+  * [#392](https://github.com/akashic-games/akashic-cli/pull/392) Update dependency @types/jest to v26.0.5 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.14.24 (2020-07-17)
 
 #### Enhancement
