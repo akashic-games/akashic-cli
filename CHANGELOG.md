@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.14.26 (2020-07-19)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-serve`
+  * [#394](https://github.com/akashic-games/akashic-cli/pull/394) Update dependency eslint to v7.5.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
 ## 1.14.25 (2020-07-18)
 
 #### Enhancement
