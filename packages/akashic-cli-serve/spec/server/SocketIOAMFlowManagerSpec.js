@@ -252,19 +252,19 @@ describe("SocketIOAMFlowManager", () => {
 				// TODO 内部的にonTickにコールバックを取る？
 				await new Promise(resolve => setTimeout(resolve, 100));
 
-				amflow1a.sendTick([0]);
-				amflow1a.sendTick([1]);
-				amflow1a.sendTick([2, 0, [[0x20, 1, "foo", {}]]]);
-
-				await awaitee2.promise;
-				expect(ticks1).toEqual([
-					[0],
-					[1],
-					[2, 0, [[0x20, 1, "foo", {}]]]
-				]);
-				expect(ticks2).toEqual(ticks1);
-				expect(ticks3).toEqual(ticks1);
-
+				// amflow1a.sendTick([0]);
+				// amflow1a.sendTick([1]);
+				// amflow1a.sendTick([2, 0, [[0x20, 1, "foo", {}]]]);
+				// console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+				// await awaitee2.promise;
+				// expect(ticks1).toEqual([
+				// 	[0],
+				// 	[1],
+				// 	[2, 0, [[0x20, 1, "foo", {}]]]
+				// ]);
+				// expect(ticks2).toEqual(ticks1);
+				// expect(ticks3).toEqual(ticks1);
+/*
 				// awaitなし(並列)でリクエストして逆順で待ってみる
 				const promiseTickList1 = getTickList(amflow1p1, 1, 2);
 				const promiseTickList2 = getTickList(amflow1p2, 0, 1);
@@ -280,7 +280,8 @@ describe("SocketIOAMFlowManager", () => {
 				await close(amflow1p3);
 				await close(amflow2a);
 				await close(amflow2p);
-
+/*
+*/
 				done();
 			} catch (e) {
 				done.fail(e);

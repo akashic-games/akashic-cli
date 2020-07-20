@@ -11,4 +11,4 @@ script:
 
 cache: npm
 
-# dist: trusty
+dist: bionic
