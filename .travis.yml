@@ -12,4 +12,3 @@ script:
 cache: npm
 
 dist: trusty
-sudo: false
