@@ -254,7 +254,7 @@ describe("SocketIOAMFlowManager", () => {
 
 				amflow1a.sendTick([0]);
 				amflow1a.sendTick([1]);
-				amflow1a.sendTick([2, [[0, 0x20, 1, "foo",{}]]]);
+				amflow1a.sendTick([2, [[0, 0x20, 1, "foo", {}]]]);
 
 				await awaitee2.promise;
 				expect(ticks1).toEqual([
