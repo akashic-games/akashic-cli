@@ -254,13 +254,13 @@ describe("SocketIOAMFlowManager", () => {
 
 				amflow1a.sendTick([0]);
 				amflow1a.sendTick([1]);
-				amflow1a.sendTick([2, [[0, 0x20, 1, "foo", {}]]]);
+				amflow1a.sendTick([2, [[0x20, 1, "foo", {}]]]);
 
 				await awaitee2.promise;
 				expect(ticks1).toEqual([
 					[0],
 					[1],
-					[2, [[0, 0x20, 1, "foo", {}]]]
+					[2, [[0x20, 1, "foo", {}]]]
 				]);
 				expect(ticks2).toEqual(ticks1);
 				expect(ticks3).toEqual(ticks1);
@@ -271,7 +271,7 @@ describe("SocketIOAMFlowManager", () => {
 				const tl2 = await promiseTickList2;
 				const tl1 = await promiseTickList1;
 
-				expect(tl1).toEqual([1, 2, [[2, [[0, 0x20, 1, "foo", {}]]]]]);
+				expect(tl1).toEqual([1, 2, [[2, [[0x20, 1, "foo", {}]]]]]);
 				expect(tl2).toEqual([0, 1, []]);
 
 				await close(amflow1a);
