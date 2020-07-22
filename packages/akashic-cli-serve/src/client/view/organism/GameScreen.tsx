@@ -34,10 +34,10 @@ export class GameScreen extends React.Component<GameScreenProps, {}> {
 		return <div className={styles["game-screen"]} style={{ width: gameWidth, height: gameHeight }}>
 			{
 				(showsBgImage && bgImage) ?
-					<img src={bgImage} className={styles["bg-image"]}/> :
+					<img id="bgImage" src={bgImage} className={styles["bg-image"]}/> :
 					null
 			}
-			<div className={styles["game-content"] + bgImageStyle} ref={this._onRef} />
+			<div id="gameContent" className={styles["game-content"] + bgImageStyle} ref={this._onRef} />
 			{
 				showsGrid ?
 					<canvas
@@ -49,7 +49,7 @@ export class GameScreen extends React.Component<GameScreenProps, {}> {
 			}
 			{
 				playerInfoResolverDialogProps ?
-					<div className={styles["dialog-wrapper"]}>
+					<div id="dialogWrapper" className={styles["dialog-wrapper"]}>
 						<PlayerInfoResolverDialog {...playerInfoResolverDialogProps} />
 					</div> :
 					null

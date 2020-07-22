@@ -51,6 +51,7 @@ export class ToolBar extends React.Component<ToolBarProps, {}> {
 				</ToolLabel>
 				<DisplayOptionControl makeProps={props.makeDisplayOptionControlProps} />
 				<ToolIconButton
+					id="devTools"
 					icon="menu"
 					title={"Devtools"}
 					pushed={props.showsDevtools}

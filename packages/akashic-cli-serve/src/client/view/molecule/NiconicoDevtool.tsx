@@ -47,7 +47,7 @@ export class NiconicoDevtool extends React.Component<NiconicoDevtoolProps, {}> {
 					<div>
 						<label><b>ニコニコ新市場対応テスト</b></label>
 						<div>
-							<input type="checkbox" checked={this.props.isAutoSendEvent} onChange={this._onAutoSendEventChange} />
+							<input id="autoSendEvent" type="checkbox" checked={this.props.isAutoSendEvent} onChange={this._onAutoSendEventChange} />
 							セッションパラメータを送る(要新規プレイ)
 						</div>
 
@@ -71,13 +71,14 @@ export class NiconicoDevtool extends React.Component<NiconicoDevtoolProps, {}> {
 									<tr className={this.props.emulatingShinichibaMode !== "ranking" ? styles["text-silver"] : ""}>
 										<td>totalTimeLimit</td>
 										<td>
-											<input type="text" value={isNaN(this.props.totalTimeLimitInputValue) ? "" : this.props.totalTimeLimitInputValue }
+											<input id="totalTimeLimit" type="text"
+												value={isNaN(this.props.totalTimeLimitInputValue) ? "" : this.props.totalTimeLimitInputValue }
 												className={this.props.emulatingShinichibaMode !== "ranking" || this.props.usePreferredTimeLimit ? styles["text-silver"] : ""}
 												disabled={this.props.emulatingShinichibaMode !== "ranking" || this.props.usePreferredTimeLimit}
 												onChange={this._onTotalTimeLimitInputValueChanged} />
 											<div>
 												<label>
-													<input type="checkbox"
+													<input id="usePreferredTotalTimeLimit" type="checkbox"
 														checked={this.props.usePreferredTimeLimit}
 														disabled={this.props.emulatingShinichibaMode !== "ranking"}
 														onChange={this._onUsePreferredTotalTimeLimitChanged} />
@@ -85,7 +86,7 @@ export class NiconicoDevtool extends React.Component<NiconicoDevtoolProps, {}> {
 												</label>
 											</div>
 											<label>
-												<input type="checkbox"
+												<input id="stopsGameOnTimeout" type="checkbox"
 													checked={this.props.stopsGameOnTimeout}
 													onChange={this._onStopsGameChanged}
 													disabled={this.props.emulatingShinichibaMode !== "ranking"}/>

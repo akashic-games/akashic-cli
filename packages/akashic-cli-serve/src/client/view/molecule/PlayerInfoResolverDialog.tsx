@@ -16,8 +16,8 @@ export class PlayerInfoResolverDialog extends React.Component<PlayerInfoResolver
 		return <div className={styles["dialog"]}>
 			<p className={styles["dialog-msg"]}>このコンテンツは名前を利用します。どちらを使いますか？(残り時間：{ remainingSeconds })</p>
 			<div className={styles["button-column"]}>
-				<button className={styles["button"]} onClick={() => onClick(true)}>{name} (プレイヤー名)</button>
-				<button className={styles["button"]} onClick={() => onClick(false)}>{guestName}</button>
+				<button id="acceptToDisplayPlayerInfo" className={styles["button"]} onClick={() => onClick(true)}>{name} (プレイヤー名)</button>
+				<button id="rejectToDisplayPlayerInfo" className={styles["button"]} onClick={() => onClick(false)}>{guestName}</button>
 			</div>
 		</div>;
 	}

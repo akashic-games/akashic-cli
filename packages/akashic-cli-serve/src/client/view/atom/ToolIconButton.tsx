@@ -9,6 +9,10 @@ export interface ToolIconButtonProps {
 	 */
 	icon: string;
 	/**
+	 * 要素のid属性に与える文字列。
+	 */
+	id?: string;
+	/**
 	 * 要素のtitle属性に与える文字列。
 	 */
 	title?: string;
@@ -40,9 +44,9 @@ export interface ToolIconButtonProps {
 @observer
 export class ToolIconButton extends React.Component<ToolIconButtonProps, {}> {
 	render() {
-		const { icon, title, pushed, pushedIcon, disabled, children, size } = this.props;
+		const { id, icon, title, pushed, pushedIcon, disabled, children, size } = this.props;
 		const pushedClass = (pushed && !pushedIcon) ? " " + styles["pushed"] : "";
-		return <button className={styles["tool-icon-button"] + pushedClass}
+		return <button id={id} className={styles["tool-icon-button"] + pushedClass}
 		               disabled={disabled} title={title} onClick={this._onClick}>
 			<i className="material-icons" style={(size != null) ? { fontSize: size } : null}>
 				{(pushed && pushedIcon) ? pushedIcon : icon}

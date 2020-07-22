@@ -29,10 +29,12 @@ export class InstanceControl extends React.Component<InstanceControlProps, {}> {
 		const { currentTime, duration } = props;
 		return <ToolControlGroup label="Instance">
 			<ToolIconButton
+				id="pause"
 				icon="pause" onClick={props.onClickPause}
 				title={"このインスタンスをポーズ\r\rポーズ中も他インスタンスは進行します。"}
 				pushed={props.isPaused} pushedIcon="play_arrow" />
 			<ToolIconButton
+				id="realTimeExecution"
 				icon="skip_next" onClick={props.onClickFastForward}
 				title={"リアルタイム実行に戻る\r\rリプレイ再生をやめ、リアルタイム実行(他インスタンスと同期)します。"}
 				disabled={!props.enableFastForward} />
