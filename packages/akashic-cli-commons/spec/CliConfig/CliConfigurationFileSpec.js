@@ -26,7 +26,7 @@ describe("ConfigurationFile", function () {
 			mockfs.restore();
 		});
 		it("reads akashic.config.js", function (done) {
-			CliConfigurationFile.read(path.join(process.cwd(), "./akashic.config.js"), (error, config) => {
+			CliConfigurationFile.read(path.join(process.cwd(), "akashic.config.js"), (error, config) => {
 				if (error) return done.fail();
 				expect(config).toEqual({
 					commandOptions: {

@@ -20,9 +20,11 @@
   ],
   "devDependencies": {
     "@types/browserify": "12.0.36",
-    "@types/eslint": "7.2.0",
+    "@types/eslint": "4.16.8",
     "@types/fs-extra": "9.0.1",
-    "jest": "26.1.0",
+    "@types/node": "14.0.26",
+    "eslint": "7.2.0",
+    "jest": "^25.0.0",
     "mock-fs": "4.12.0",
     "shx": "0.3.2",
     "tslint": "5.20.1",
@@ -30,9 +32,7 @@
   },
   "typings": "lib/index.d.ts",
   "dependencies": {
-    "@types/node": "^13.9.0",
     "browserify": "16.5.1",
-    "eslint": "~7.5.0",
     "fs-extra": "9.0.1",
     "fs-readdir-recursive": "1.1.0",
     "js-sha256": "^0.9.0"

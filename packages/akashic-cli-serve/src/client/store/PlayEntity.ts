@@ -66,7 +66,7 @@ export class PlayEntity {
 
 	private readonly _timeKeeper: TimeKeeper;
 	private _serverInstanceWaiters: {[key: string]: (p: ServerInstanceEntity) => void };
-	private _timerId: any;
+	private _timerId: number | null;
 	private _parent?: PlayEntity;
 
 	constructor(param: PlayEntityParameterObject) {
@@ -245,14 +245,14 @@ export class PlayEntity {
 
 	private _startTimeKeeper(): void {
 		this._timeKeeper.start();
-		this._timerId = setInterval(this._handleFrame, 200);
+		this._timerId = window.setInterval(this._handleFrame, 200);
 	}
 
 	private _pauseTimeKeeper(): void {
 		this._timeKeeper.pause();
 		if (this._timerId) {
 			// cancelAnimationFrame(this._timerId);
-			clearInterval(this._timerId);
+			window.clearInterval(this._timerId);
 			this._timerId = null;
 		}
 	}

@@ -48,7 +48,7 @@
     "@types/ejs": "3.0.4",
     "@types/fs-extra": "9.0.1",
     "@types/fs-readdir-recursive": "1.0.0",
-    "@types/node": "8.10.61",
+    "@types/node": "14.0.26",
     "@types/uglify-js": "3.9.3",
     "browserify": "16.5.1",
     "eslint": "7.5.0",
