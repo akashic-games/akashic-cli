@@ -22,7 +22,7 @@ export class InstancesDevtool extends React.Component<InstancesDevtoolProps, {}>
 	render(): React.ReactNode {
 		return <div className={styles["instances-devtool"]}>
 			<div className={styles["instance-toolbar"]}>
-				<ToolIconButton id="addInstance" icon="group_add"
+				<ToolIconButton className="external-ref_button_add-instance" icon="group_add"
 				                title="インスタンスを追加"
 				                onClick={this.props.onClickAddInstance}>
 					Add Instance

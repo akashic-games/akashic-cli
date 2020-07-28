@@ -22,7 +22,7 @@ export class PlayerControl extends React.Component<PlayerControlProps, {}> {
 		return <ToolControlGroup label="Player">
 			<ToolLabel title="selfId">selfId: {props.selfId}</ToolLabel>
 			<ToolIconButton
-				id="joinLeave"
+				className="external-ref_button_join-leave"
 				icon="person_add"
 				pushedIcon="person_outline"
 				pushed={props.isJoined}

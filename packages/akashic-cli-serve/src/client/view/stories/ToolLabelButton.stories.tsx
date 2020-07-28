@@ -4,5 +4,5 @@ import { ToolLabelButton } from "../atom/ToolLabelButton";
 
 storiesOf("a-ToolLabelButton", module)
 	.add("basic", () => (
-		<ToolLabelButton id="someId" title="some title">selfId: 141l51g8bnag</ToolLabelButton>
+		<ToolLabelButton className="some" title="some title">selfId: 141l51g8bnag</ToolLabelButton>
 	));

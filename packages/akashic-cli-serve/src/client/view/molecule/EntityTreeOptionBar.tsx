@@ -19,7 +19,7 @@ export class EntityTreeOptionBar extends React.Component<EntityTreeOptionBarProp
 		const { isSelectingEntity, showsHidden, onClickSelectEntity, onClickUpdateEntityTrees } = this.props;
 		return <div className={styles["entity-tree-option-bar"]}>
 			<ToolIconButton
-				id="selectingEntity"
+				className="external-ref_button_select-entity-from-screen"
 				icon="input"
 				title="ゲーム画面からエンティティを選択"
 				pushed={isSelectingEntity}
@@ -28,7 +28,7 @@ export class EntityTreeOptionBar extends React.Component<EntityTreeOptionBarProp
 			/>
 			<div className={styles["sep"]} />
 			<ToolIconButton
-				id="refreshEntityTree"
+				className="external-ref_button_refresh-entity-tree"
 				icon="refresh"
 				title="エンティティツリーを更新"
 				size={20}
@@ -41,7 +41,7 @@ export class EntityTreeOptionBar extends React.Component<EntityTreeOptionBarProp
 				Show hidden
 			</label>
 			<ToolIconButton
-				id="dumpToConsole"
+				className="external-ref_button_dump-to-console"
 				icon="web_asset"
 				title="選択エンティティをコンソールにダンプ"
 				size={20}

@@ -41,10 +41,10 @@ export class EventsDevtool extends React.Component<EventsDevtoolProps, {}> {
 										<li key={name}>
 											{name}
 											<div className={styles["event-buttons"]}>
-												<ToolLabelButton id="sendEvent" title="Send to the play" onClick={() => onClickSendEvent(name)}>
+												<ToolLabelButton className="external-ref_button_send-event" title="Send to the play" onClick={() => onClickSendEvent(name)}>
 													Send
 												</ToolLabelButton>
-												<ToolLabelButton id="copyEvent" title="Copy to the editor" onClick={() => onClickCopyEvent(name)}>
+												<ToolLabelButton className="external-ref_button_copy-event" title="Copy to the editor" onClick={() => onClickCopyEvent(name)}>
 													Copy
 												</ToolLabelButton>
 											</div>
@@ -58,14 +58,14 @@ export class EventsDevtool extends React.Component<EventsDevtoolProps, {}> {
 			<div className={styles["editor-container"]}>
 				<div className={styles["events-toolbar"]}>
 					<ToolIconButton
-						id="showsEventList"
+						className="external-ref_button_shows-event-list"
 						icon="list"
 						title={"イベントリストの表示・非表示を切り替え"}
 						pushed={props.showsEventList}
 						onClick={props.onClickShowEventList} />
 					<div className={styles["sep"]} />
 					<ToolLabelButton
-						id="sendEditingEvent"
+						className="external-ref_button_send-editing-event"
 						title="Send to the play"
 						onClick={onClickSendEditingEvent}
 					>

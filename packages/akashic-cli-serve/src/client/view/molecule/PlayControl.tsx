@@ -21,12 +21,12 @@ export class PlayControl extends React.Component<PlayControlProps, {}> {
 		const props = this.props.makeProps();
 		return <ToolControlGroup label="Play">
 			<ToolIconButton
-				id="newPlay"
+				className="external-ref_button_new-play"
 				icon="power_settings_new"
 				title={"新規プレイ\r\r新しいプレイを作成し、現在の全インスタンスから接続します。"}
 				onClick={props.onClickReset} />
 			<ToolIconButton
-				id="activePause"
+				className="external-ref_button_active-pause"
 				icon="pause_circle_filled"
 				title={`アクティブインスタンスをポーズ${props.isActivePausing ? "解除" : ""}\r\r`
 				        + `ポーズ中は全インスタンスの進行が停止します。`}
@@ -34,7 +34,7 @@ export class PlayControl extends React.Component<PlayControlProps, {}> {
 				pushedIcon="play_circle_filled"
 				onClick={props.onClickActivePause} />
 			<ToolIconButton
-				id="addInstance"
+				className="external-ref_button_add-instance"
 				icon="group_add"
 				title={"インスタンスを追加\r\r新しいタブ・ウィンドウでこのプレイに接続するインスタンスを追加します。"}
 				onClick={props.onClickAddInstance} />
