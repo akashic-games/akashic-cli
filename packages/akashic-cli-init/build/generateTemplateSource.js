@@ -52,6 +52,7 @@ function generateTemplates(srcPath, outPath, data) {
 		shell.rm("-rf", path.join(outPath, data[key]["ts-dist"]));
 		shell.cp("-R", path.join(srcPath, data[key]["src"]), path.join(outPath, data[key]["ts-dist"]));
 		shell.cp("-R", path.join(srcPath, "typescript-base", "*"), path.join(outPath, data[key]["ts-dist"]));
+		shell.cp(path.join(srcPath, "typescript-base", ".eslintrc.js"), path.join(outPath, data[key]["ts-dist"]));
 		shell.cp(path.join(srcPath, "typescript-base", ".gitignore"), path.join(outPath, data[key]["ts-dist"]));
 	});
 	console.log("End to generate typescript-templates");
@@ -84,6 +85,7 @@ function generateTemplates(srcPath, outPath, data) {
 		// jsファイルに不要な行があれば削除する
 		deleteUnnecessaryLinesFromJsFile(path.join(outPath, data[key]["js-dist"], "script"));
 		shell.cp(path.join(srcPath, "javascript-base", ".eslintrc.json"), path.join(outPath, data[key]["js-dist"]));
+		shell.cp(path.join(srcPath, "javascript-base", ".gitignore"), path.join(outPath, data[key]["js-dist"]));
 		// game.jsonにscriptアセットが登録されていない状態なので、ここで登録する
 		execSync(`cd ${path.join(outPath, data[key]["js-dist"])} && ${path.join(outPath, data[key]["js-dist"], "..", "common", "node_modules", ".bin", "akashic-cli-scan")} asset script`);
 	});

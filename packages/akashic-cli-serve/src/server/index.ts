@@ -6,7 +6,7 @@ import * as express from "express";
 import * as bodyParser from "body-parser";
 import * as socketio from "socket.io";
 import * as commander from "commander";
-import chalk from "chalk";
+import * as chalk from "chalk";
 import { PlayManager, RunnerManager, setSystemLogger, getSystemLogger } from "@akashic/headless-driver";
 import { createApiRouter } from "./route/ApiRoute";
 import { RunnerStore } from "./domain/RunnerStore";

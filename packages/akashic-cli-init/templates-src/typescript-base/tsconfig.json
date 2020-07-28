@@ -4,7 +4,7 @@
     "lib": ["es5"],
     "noImplicitAny": true,
     "module": "commonjs" ,
-    "outDir": "./script",
+    "outDir": "script",
     "types" : [],
     "noImplicitUseStrict": true
   },
@@ -12,6 +12,6 @@
     "node_modules/@akashic/akashic-engine/lib/main.d.ts"
   ],
   "include": [
-    "./src/**/*.ts"
+    "src/**/*.ts"
   ]
 }
