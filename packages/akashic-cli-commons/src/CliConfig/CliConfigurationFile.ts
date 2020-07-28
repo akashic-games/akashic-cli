@@ -1,4 +1,3 @@
-import * as fs from "fs";
 import { CliConfiguration } from "./CliConfiguration";
 
 /**
@@ -14,11 +13,8 @@ export module CliConfigurationFile {
 	export function read(confPath: string, callback: (error: Error, conf: CliConfiguration) => void): void {
 		let cliConfig: CliConfiguration = { commandOptions: {} };
 		try {
-			if (fs.existsSync(confPath)) {
-				// TODO: これはあくまでテストを通すためだけの一旦の暫定的な対応。これは絶対に採用しない方法なので代替方法を即用意すること。
-				/* tslint:disable:no-eval */
-				cliConfig = eval(fs.readFileSync(confPath, "utf-8"));
-			}
+			cliConfig = require(confPath);
+			delete require.cache[require.resolve(confPath)];
 			setImmediate(() => callback(undefined, cliConfig));
 		} catch (error) {
 			if (error.code === "MODULE_NOT_FOUND") {
