@@ -10,4 +10,5 @@ export interface CliConfigExportZip {
 	hashFilename?: number | boolean;
 	omitEmptyJs?: boolean;
 	omitUnbundledJs?: boolean;
+	targetService?: string;
 }
