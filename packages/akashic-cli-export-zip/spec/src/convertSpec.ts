@@ -3,6 +3,7 @@ import * as mockfs from "mock-fs";
 import * as fs from "fs";
 import * as fsx from "fs-extra";
 import { bundleScripts, convertGame } from "../../lib/convert";
+import { ServiceType } from "../../lib/ServiceType";
 
 describe("convert", () => {
 
@@ -414,7 +415,7 @@ describe("convert", () => {
 			const param = {
 				source: path.resolve(__dirname, "..", "fixtures", "simple_game_with_aez_bundle_main3"),
 				dest: destDir,
-				targetService: "nicolive"
+				targetService: ServiceType.NicoLive
 			};
 			convertGame(param)
 				.then(() => {
@@ -433,21 +434,12 @@ describe("convert", () => {
 				}, done.fail);
 		});
 
-		it("No change in the gamejson image asset gamejson's image asset when targetService is not nicolive", (done) => {
+		it("No change in the gamejson image asset gamejson's image asset when targetService is none", (done) => {
 			const param = {
 				source: path.resolve(__dirname, "..", "fixtures", "simple_game_with_aez_bundle_main3"),
 				dest: destDir,
-				targetService: "none"
+				targetService: ServiceType.None
 			};
-			convertGame(param)
-				.then(() => {
-					const gameJson = JSON.parse(fs.readFileSync(path.join(destDir, "game.json")).toString());
-					const imgAsset = gameJson.assets["aez_bundle_main"];
-					expect(imgAsset.type).toBe("image");
-					expect(imgAsset.hint).not.toBeDefined();
-				}, done.fail);
-
-			param.targetService = "hoge";
 			convertGame(param)
 				.then(() => {
 					const gameJson = JSON.parse(fs.readFileSync(path.join(destDir, "game.json")).toString());

@@ -20,7 +20,7 @@ export interface ExportZipParameterObject {
 	omitEmptyJs?: boolean;
 	exportInfo?: cmn.ExportZipInfo;
 	omitUnbundledJs?: boolean;
-	targetService?: string;
+	targetService?: ServiceType;
 }
 
 function _createExportInfo(param: ExportZipParameterObject): cmn.ExportZipInfo {

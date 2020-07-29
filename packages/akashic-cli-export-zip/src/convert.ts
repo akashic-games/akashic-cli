@@ -26,7 +26,7 @@ export interface ConvertGameParameterObject {
 	logger?: cmn.Logger;
 	exportInfo?: cmn.ExportZipInfo;
 	omitUnbundledJs?: boolean;
-	targetService?: string;
+	targetService?: ServiceType;
 }
 
 export function _completeConvertGameParameterObject(param: ConvertGameParameterObject): void {

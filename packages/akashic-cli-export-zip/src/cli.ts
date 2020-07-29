@@ -22,7 +22,7 @@ export function cli(param: CliConfigExportZip): void {
 			omitEmptyJs: param.omitEmptyJs,
 			logger,
 			omitUnbundledJs: param.bundle && param.omitUnbundledJs,
-			targetService: param.targetService,
+			targetService: param.targetService as ServiceType,
 			exportInfo: {
 				version: ver,
 				option: {
@@ -74,7 +74,7 @@ export function run(argv: string[]): void {
 			process.exit(1);
 		}
 
-		if (commander["targetService"] && !Object.values(ServiceType).includes(commander["targetService"] as ServiceType)) {
+		if (commander["targetService"] && !Object.values(ServiceType).includes(commander["targetService"])) {
 			console.error("Invalid --target-service option argument: " + commander["targetService"]);
 			process.exit(1);
 		}
