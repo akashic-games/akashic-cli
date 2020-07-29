@@ -310,6 +310,7 @@ describe("convert", () => {
 					expect(gameJson.assets["aez_bundle_main0"].type).toBe("script");
 					expect(gameJson.assets["aez_bundle_main"].path).toBe("image/akashic-cli.png");
 					expect(gameJson.assets["aez_bundle_main"].type).toBe("image");
+					expect(gameJson.assets["aez_bundle_main"].hint).not.toBeDefined();
 					done();
 				}, done.fail);
 		});
@@ -405,6 +406,54 @@ describe("convert", () => {
 					expect(gameJson.assets["main"]).toBeUndefined();
 					expect(gameJson.assets["foo"]).toBeUndefined();
 					expect(gameJson.globalScripts.includes("node_modules/@hoge/testmodule/lib/ModuleA.js")).toBeFalsy();
+					done();
+				}, done.fail);
+		});
+
+		it("Add untainted: true to gamejson's image asset when targetService is nicolive", (done) => {
+			const param = {
+				source: path.resolve(__dirname, "..", "fixtures", "simple_game_with_aez_bundle_main3"),
+				dest: destDir,
+				targetService: "nicolive"
+			};
+			convertGame(param)
+				.then(() => {
+					expect(fs.existsSync(path.join(destDir, "script/bar.js"))).toBe(true);
+					expect(fs.existsSync(path.join(destDir, "script/foo.js"))).toBe(true);
+					expect(fs.existsSync(path.join(destDir, "script/main.js"))).toBe(true);
+
+					expect(fs.existsSync(path.join(destDir, "image/akashic-cli.png"))).toBe(true);
+					expect(fs.existsSync(path.join(destDir, "game.json"))).toBe(true);
+					expect(fs.existsSync(path.join(destDir, "package.json"))).toBe(true);
+					const gameJson = JSON.parse(fs.readFileSync(path.join(destDir, "game.json")).toString());
+					const imgAsset = gameJson.assets["aez_bundle_main"];
+					expect(imgAsset.type).toBe("image");
+					expect(imgAsset.hint.untainted).toBeTruthy();
+					done();
+				}, done.fail);
+		});
+
+		it("No change in the gamejson image asset gamejson's image asset when targetService is not nicolive", (done) => {
+			const param = {
+				source: path.resolve(__dirname, "..", "fixtures", "simple_game_with_aez_bundle_main3"),
+				dest: destDir,
+				targetService: "none"
+			};
+			convertGame(param)
+				.then(() => {
+					const gameJson = JSON.parse(fs.readFileSync(path.join(destDir, "game.json")).toString());
+					const imgAsset = gameJson.assets["aez_bundle_main"];
+					expect(imgAsset.type).toBe("image");
+					expect(imgAsset.hint).not.toBeDefined();
+				}, done.fail);
+
+			param.targetService = "hoge";
+			convertGame(param)
+				.then(() => {
+					const gameJson = JSON.parse(fs.readFileSync(path.join(destDir, "game.json")).toString());
+					const imgAsset = gameJson.assets["aez_bundle_main"];
+					expect(imgAsset.type).toBe("image");
+					expect(imgAsset.hint).not.toBeDefined();
 					done();
 				}, done.fail);
 		});

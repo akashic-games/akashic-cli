@@ -8,6 +8,7 @@ import * as gcu from "./GameConfigurationUtil";
 import * as UglifyJS from "uglify-js";
 import * as babel from "@babel/core";
 import * as presetEnv from "@babel/preset-env";
+import { ServiceType } from "./ServiceType";
 
 export interface ConvertGameParameterObject {
 	bundle?: boolean;
@@ -25,6 +26,7 @@ export interface ConvertGameParameterObject {
 	logger?: cmn.Logger;
 	exportInfo?: cmn.ExportZipInfo;
 	omitUnbundledJs?: boolean;
+	targetService?: string;
 }
 
 export function _completeConvertGameParameterObject(param: ConvertGameParameterObject): void {
@@ -38,6 +40,7 @@ export function _completeConvertGameParameterObject(param: ConvertGameParameterO
 	param.omitEmptyJs = !!param.omitEmptyJs;
 	param.exportInfo = param.exportInfo;
 	param.omitUnbundledJs = !!param.omitUnbundledJs;
+	param.targetService = param.targetService || ServiceType.None;
 }
 
 export interface BundleResult {
@@ -152,6 +155,11 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 					fs.writeFileSync(path.resolve(param.dest, p), value);
 				}
 			});
+
+			if (param.targetService === ServiceType.NicoLive) {
+				addUntaintedToImageAssets(gamejson);
+			}
+
 			if (bundleResult === null) {
 				return;
 			}
@@ -196,4 +204,19 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 				fs.writeFileSync(p, UglifyJS.minify(p).code);
 			});
 		});
+}
+
+
+/**
+ * 指定のgameJson中の全てのImageAssetに untainted:true を付与する
+ */
+function addUntaintedToImageAssets(gameJson: cmn.GameConfiguration): void {
+	Object.keys(gameJson.assets).forEach(key => {
+		if (gameJson.assets[key].type === "image") {
+			if (!gameJson.assets[key].hint) {
+				gameJson.assets[key].hint = {};
+			}
+			gameJson.assets[key].hint.untainted = true;
+		}
+	});
 }
