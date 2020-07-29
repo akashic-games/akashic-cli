@@ -32,7 +32,8 @@ function _createExportInfo(param: ExportZipParameterObject): cmn.ExportZipInfo {
 			minify: !!param.minify,
 			bundle: !!param.bundle,
 			babel: !!param.babel,
-			omitEmptyJs: !!param.omitEmptyJs
+			omitEmptyJs: !!param.omitEmptyJs,
+			targetService: param.targetService || ServiceType.None
 		}
 	};
 }
