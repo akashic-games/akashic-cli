@@ -8,3 +8,5 @@ install: travis_wait 30 npm install # TODO: 一時的にタイムアウトを伸
 
 script:
   - npm test
+
+dist: bionic
