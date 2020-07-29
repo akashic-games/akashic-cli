@@ -22,7 +22,7 @@
     "@types/browserify": "12.0.36",
     "@types/eslint": "4.16.8",
     "@types/fs-extra": "9.0.1",
-    "@types/node": "14.0.26",
+    "@types/node": "14.0.27",
     "jest": "26.1.0",
     "mock-fs": "4.12.0",
     "shx": "0.3.2",
