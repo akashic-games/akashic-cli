@@ -98,13 +98,14 @@ export class StartupScreen extends React.Component<StartupScreenProps, {}> {
 				<div className={styles["start-options"]}>
 					<label>
 						<input
+							className="external-ref_checkbox_joins-automatically"
 							type="checkbox"
 							checked={joinsAutomatically}
 							onChange={() => onChangeJoinsAutomatically(!joinsAutomatically)}/>
 						Send JoinEvent for the player
 					</label>
 				</div>
-				<button className={styles["start-button"]} disabled={!isValidArg} onClick={onClickStart}>
+				<button className={styles["start-button"] + " external-ref_button_start-content"} disabled={!isValidArg} onClick={onClickStart}>
 					Start
 				</button>
 			</div>

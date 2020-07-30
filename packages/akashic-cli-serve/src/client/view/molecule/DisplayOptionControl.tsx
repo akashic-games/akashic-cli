@@ -35,6 +35,7 @@ export class DisplayOptionControl extends React.Component<DisplayOptionControlPr
 
 		return <div ref={this._onRef} style={{position: "relative"}}>
 			<ToolIconButton
+				className="external-ref_button_display-option"
 				icon="image"
 				title={"表示オプション"}
 				pushed={showsDisplayOptionPopover}
@@ -47,7 +48,7 @@ export class DisplayOptionControl extends React.Component<DisplayOptionControlPr
 							<div className={styles["label"]}>
 								<label>
 									<input
-										className={styles["checkbox"]}
+										className={styles["checkbox"] + " external-ref_checkbox_shows-background-image"}
 										type="checkbox"
 										checked={showsBackgroundImage}
 										onChange={() => onChangeShowBackgroundImage(!showsBackgroundImage)}
@@ -58,7 +59,7 @@ export class DisplayOptionControl extends React.Component<DisplayOptionControlPr
 							<div className={styles["label"]}>
 								<label>
 									<input
-										className={styles["checkbox"]}
+										className={styles["checkbox"] + " external-ref_checkbox_shows-grid"}
 										type="checkbox"
 										checked={showsGrid}
 										onChange={() => onChangeShowGrid(!showsGrid)}
