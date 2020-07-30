@@ -30,7 +30,7 @@ export class CoeLimitedPluginEntity {
 	@observable name: string;
 	@observable guestName: string;
 	private sessionId: string;
-	private timerId: NodeJS.Timer | null;
+	private timerId: number | null;
 
 	constructor() {
 		this.isDisplayingResolver = false;
@@ -54,7 +54,7 @@ export class CoeLimitedPluginEntity {
 		if (localEventData && localEventData.parameters && localEventData.parameters.limitSeconds) {
 			limitMilliSeconds = localEventData.parameters.limitSeconds * 1000;
 		}
-		this.timerId = setInterval(() => {
+		this.timerId = window.setInterval(() => {
 			this.calculateRemainingMilliSeconds(limitMilliSeconds, startingDateTime);
 			if (this.remainingMilliSeconds === 0 && this.timerId != null) {
 				this.sendName(false);
@@ -64,7 +64,7 @@ export class CoeLimitedPluginEntity {
 
 	@action
 	exitLocalSession = (_sessionId: string): void => {
-		clearInterval(this.timerId);
+		window.clearInterval(this.timerId);
 		this.isDisplayingResolver = false;
 		this.timerId = null;
 	}
