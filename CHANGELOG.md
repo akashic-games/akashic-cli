@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.14.31 (2020-07-30)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#397](https://github.com/akashic-games/akashic-cli/pull/397) add class name to html dom in akashic-cli-serve ([@dera-](https://github.com/dera-))
+
+#### Committers: 1
+- [@dera-](https://github.com/dera-)
+
 ## 1.14.30 (2020-07-30)
 
 #### Enhancement
