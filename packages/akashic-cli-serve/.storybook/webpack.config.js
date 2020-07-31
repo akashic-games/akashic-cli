@@ -24,8 +24,9 @@ module.exports = (config, env) => {
 			{
 				loader: "css-loader",
 				options: {
-					localIdentName: "[local]--[hash:base64:5]",
-					modules: true
+					modules: {
+						localIdentName: "[local]--[hash:base64:5]"
+					}
 				}
 			}
 		]

@@ -5,28 +5,20 @@ var CliConfigurationFile = require("../../lib/CliConfig/CliConfigurationFile").C
 describe("ConfigurationFile", function () {
 
 	describe(".read()", function () {
-
-		var mockCAkashicConfigJs = {
-			"akashic.config.js": `
-			var config = {
-				commandOptions: {
-					serve: {
-						port: 3030
-					}
-				}
-			}
-			module.exports = config;
-			`
-		};
-
 		beforeEach(function () {
-			mockfs(mockCAkashicConfigJs);
+			jest.mock("akashic.config.js", () => {
+				return {
+					commandOptions: {
+						serve: {
+							port: 3030
+						}
+					}
+				};
+			}, {virtual: true});
 		});
-		afterEach(function () {
-			mockfs.restore();
-		});
+
 		it("reads akashic.config.js", function (done) {
-			CliConfigurationFile.read(path.join(process.cwd(), "./akashic.config.js"), (error, config) => {
+			CliConfigurationFile.read("akashic.config.js", (error, config) => {
 				if (error) return done.fail();
 				expect(config).toEqual({
 					commandOptions: {
@@ -36,7 +28,7 @@ describe("ConfigurationFile", function () {
 					}
 				});
 				done();
-			})
+			});
 		});
 		it("invalid path", function (done) {
 			CliConfigurationFile.read("./invalid/dir/akashic.config.js", (error, config) => {

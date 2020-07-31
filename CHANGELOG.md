@@ -1,5 +1,61 @@
 # CHANGELOG
 
+## 1.14.32 (2020-07-31)
+
+#### Enhancement
+* `akashic-cli-commons`
+  * [#403](https://github.com/akashic-games/akashic-cli/pull/403) Add targetService to CliConfigExportZip ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+## 1.14.31 (2020-07-30)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#397](https://github.com/akashic-games/akashic-cli/pull/397) add class name to html dom in akashic-cli-serve ([@dera-](https://github.com/dera-))
+
+#### Committers: 1
+- [@dera-](https://github.com/dera-)
+
+## 1.14.30 (2020-07-30)
+
+#### Enhancement
+* `akashic-cli-export-html`
+  * [#408](https://github.com/akashic-games/akashic-cli/pull/408) 【akashic-cli-export-html】内部コンポーネントの更新(engineFiles@3.0.0-beta.7, engineFiles@2.1.42, engineFiles@1.1.15) ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
+## 1.14.29 (2020-07-30)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#398](https://github.com/akashic-games/akashic-cli/pull/398) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
+## 1.14.28 (2020-07-29)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#362](https://github.com/akashic-games/akashic-cli/pull/362) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.0.0-beta.6, engineFiles@2.1.41, engineFiles@1.1.15) ([@xnv](https://github.com/xnv))
+* `akashic-cli-init`
+  * [#402](https://github.com/akashic-games/akashic-cli/pull/402) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Other Change
+* `akashic-cli-serve`
+  * [#386](https://github.com/akashic-games/akashic-cli/pull/386) Modify travis.yml, Fix serve spec ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#375](https://github.com/akashic-games/akashic-cli/pull/375) Update dev dependencies (major) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.14.27 (2020-07-24)
 
 #### Enhancement

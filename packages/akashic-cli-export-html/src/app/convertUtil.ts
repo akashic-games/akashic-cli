@@ -98,7 +98,7 @@ export function wrap(code: string, minify?: boolean): string {
 	var PRE_SCRIPT = "(function(exports, require, module, __filename, __dirname) {";
 	var POST_SCRIPT = "})(g.module.exports, g.module.require, g.module, g.filename, g.dirname);";
 	var ret = PRE_SCRIPT + "\n" + code + "\n" + POST_SCRIPT + "\n";
-	return minify ? UglifyJS.minify(ret, { fromString: true }).code : ret;
+	return minify ? UglifyJS.minify(ret, { sourceMap: true }).code : ret;
 }
 
 export function getDefaultBundleScripts(templatePath: string, version: string, minify?: boolean, bundleText: boolean = true): any {
@@ -140,8 +140,8 @@ export function getDefaultBundleScripts(templatePath: string, version: string, m
 	preloadScripts.push(preloadScript);
 	var postloadScripts = postloadScriptNames.map((fileName) => loadScriptFile(fileName, templatePath));
 	if (minify) {
-		preloadScripts = preloadScripts.map(script => UglifyJS.minify(script, { fromString: true }).code);
-		postloadScripts = postloadScripts.map(script => UglifyJS.minify(script, { fromString: true }).code);
+		preloadScripts = preloadScripts.map(script => UglifyJS.minify(script, { sourceMap: true }).code);
+		postloadScripts = postloadScripts.map(script => UglifyJS.minify(script, { sourceMap: true }).code);
 	}
 	return {
 		preloadScripts,

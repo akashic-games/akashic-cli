@@ -21,7 +21,7 @@ const store = observable({
 	isActivePausing: false
 });
 
-setInterval(() => {
+window.setInterval(() => {
 	store.duration += 1000;
 	store.currentTime += 1000;
 }, 1000);

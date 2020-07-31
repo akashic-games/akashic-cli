@@ -52,7 +52,7 @@ function copyFiles(copyFiles: CopyListItem[], srcDir: string, dstDir: string, pa
 				fs.copySync(
 					path.join(srcDir, file.src),
 					path.join(dstDir, dest, file.src),
-					{clobber: param.forceCopy}
+					{overwrite: param.forceCopy}
 				);
 				param.logger.info(`copied ${file.src}.`);
 			});
@@ -91,7 +91,7 @@ function copyAllTemplateFiles(param: InitParameterObject): Promise<void> {
 					const srcPath = path.join(srcDirPath, fileName);
 					const dstPath = path.join(dstDirPath, fileName);
 					if (fileName !== "template.json") {
-						fs.copySync(srcPath, dstPath, {clobber: param.forceCopy});
+						fs.copySync(srcPath, dstPath, {overwrite: param.forceCopy});
 						param.logger.info(`copied ${fileName}.`);
 					}
 				});

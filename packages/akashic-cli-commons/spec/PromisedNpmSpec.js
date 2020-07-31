@@ -5,10 +5,10 @@ describe("PromisedNpm", function () {
 		it("can get json-object", function () {
 			(new PromisedNpm({})).ls()
 				.then((result) => {
-					expect(result).toContain("name");
+					expect(result.name).toBeDefined();
 					expect(result.name).toBe("@akashic/akashic-cli-commons");
-					expect(result).toContain("version");
-					expect(result).toContain("dependencies");
+					expect(result.version).toBeDefined();
+					expect(result.dependencies).toBeDefined();
 				});
 		});
 	});

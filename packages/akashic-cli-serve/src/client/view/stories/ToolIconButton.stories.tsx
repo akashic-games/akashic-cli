@@ -10,29 +10,29 @@ const store = observable({
 });
 
 const TestWithBehaviour = observer(() => (
-	<ToolIconButton icon="face" pushed={store.pushed} pushedIcon="pause" onClick={v => (store.pushed = v)} />
+	<ToolIconButton className="test" icon="face" pushed={store.pushed} pushedIcon="pause" onClick={v => (store.pushed = v)} />
 ));
 
 storiesOf("a-ToolIconButton", module)
 	.add("basic", () => (
-		<ToolIconButton icon="face" title="face!" onClick={action("clicked")} />
+		<ToolIconButton className="basic" icon="face" title="face!" onClick={action("clicked")} />
 	))
 	.add("disabled", () => (
-		<ToolIconButton icon="face" disabled={true} onClick={action("should not fire")} />
+		<ToolIconButton className="disabled" icon="face" disabled={true} onClick={action("should not fire")} />
 	))
 	.add("pushed", () => (
-		<ToolIconButton icon="face" pushed={true} onClick={action("clicked")} />
+		<ToolIconButton className="pushed" icon="face" pushed={true} onClick={action("clicked")} />
 	))
 	.add("pushed&pushedIcon", () => (
-		<ToolIconButton icon="face" pushed={true} pushedIcon="pause" onClick={action("clicked")} />
+		<ToolIconButton className="pushed-and-pushed-icon" icon="face" pushed={true} pushedIcon="pause" onClick={action("clicked")} />
 	))
 	.add("non-pushed&pushedIcon", () => (
-		<ToolIconButton icon="face" pushed={false} pushedIcon="pause" onClick={action("clicked")} />
+		<ToolIconButton className="non-pushed-and-pushed-icon" icon="face" pushed={false} pushedIcon="pause" onClick={action("clicked")} />
 	))
 	.add("pushed&disabled", () => (
-		<ToolIconButton icon="face" pushed={true} disabled={true} onClick={action("should not fire")} />
+		<ToolIconButton className="pushed-and-disabled" icon="face" pushed={true} disabled={true} onClick={action("should not fire")} />
 	))
 	.add("with text", () => (
-		<ToolIconButton icon="pause" onClick={action("clicked")}>Send to the play</ToolIconButton>
+		<ToolIconButton className="with-text" icon="pause" onClick={action("clicked")}>Send to the play</ToolIconButton>
 	))
 	.add("with behavior (toggle)", () => <TestWithBehaviour />);
