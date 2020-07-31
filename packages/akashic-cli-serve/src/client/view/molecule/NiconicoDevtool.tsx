@@ -47,7 +47,11 @@ export class NiconicoDevtool extends React.Component<NiconicoDevtoolProps, {}> {
 					<div>
 						<label><b>ニコニコ新市場対応テスト</b></label>
 						<div>
-							<input type="checkbox" checked={this.props.isAutoSendEvent} onChange={this._onAutoSendEventChange} />
+							<input
+								className="external-ref_checkbox_auto-send-event"
+								type="checkbox"
+								checked={this.props.isAutoSendEvent}
+								onChange={this._onAutoSendEventChange} />
 							セッションパラメータを送る(要新規プレイ)
 						</div>
 
@@ -72,12 +76,12 @@ export class NiconicoDevtool extends React.Component<NiconicoDevtoolProps, {}> {
 										<td>totalTimeLimit</td>
 										<td>
 											<input type="text" value={isNaN(this.props.totalTimeLimitInputValue) ? "" : this.props.totalTimeLimitInputValue }
-												className={this.props.emulatingShinichibaMode !== "ranking" || this.props.usePreferredTimeLimit ? styles["text-silver"] : ""}
+												className={(this.props.emulatingShinichibaMode !== "ranking" || this.props.usePreferredTimeLimit ? styles["text-silver"] : "") + " external-ref_text_total-time-limit"}
 												disabled={this.props.emulatingShinichibaMode !== "ranking" || this.props.usePreferredTimeLimit}
 												onChange={this._onTotalTimeLimitInputValueChanged} />
 											<div>
 												<label>
-													<input type="checkbox"
+													<input className="external-ref_checkbox_use-preferred-total-time-limit" type="checkbox"
 														checked={this.props.usePreferredTimeLimit}
 														disabled={this.props.emulatingShinichibaMode !== "ranking"}
 														onChange={this._onUsePreferredTotalTimeLimitChanged} />
@@ -85,7 +89,7 @@ export class NiconicoDevtool extends React.Component<NiconicoDevtoolProps, {}> {
 												</label>
 											</div>
 											<label>
-												<input type="checkbox"
+												<input className="external-ref_checkbox_stops-game-on-timeout" type="checkbox"
 													checked={this.props.stopsGameOnTimeout}
 													onChange={this._onStopsGameChanged}
 													disabled={this.props.emulatingShinichibaMode !== "ranking"}/>

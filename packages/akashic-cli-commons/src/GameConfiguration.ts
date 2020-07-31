@@ -80,5 +80,6 @@ export interface ExportZipInfo {
 		babel?: boolean;
 		hashFilename?: number | boolean;
 		omitEmptyJs?: boolean;
+		targetService?: string;
 	};
 }

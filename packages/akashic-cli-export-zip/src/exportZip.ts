@@ -5,6 +5,7 @@ import * as cmn from "@akashic/akashic-cli-commons";
 import archiver = require("archiver");
 import readdir = require("fs-readdir-recursive");
 import { convertGame } from "./convert";
+import { ServiceType } from "./ServiceType";
 
 export interface ExportZipParameterObject {
 	bundle?: boolean;
@@ -19,6 +20,7 @@ export interface ExportZipParameterObject {
 	omitEmptyJs?: boolean;
 	exportInfo?: cmn.ExportZipInfo;
 	omitUnbundledJs?: boolean;
+	targetService?: ServiceType;
 }
 
 function _createExportInfo(param: ExportZipParameterObject): cmn.ExportZipInfo {
@@ -30,7 +32,8 @@ function _createExportInfo(param: ExportZipParameterObject): cmn.ExportZipInfo {
 			minify: !!param.minify,
 			bundle: !!param.bundle,
 			babel: !!param.babel,
-			omitEmptyJs: !!param.omitEmptyJs
+			omitEmptyJs: !!param.omitEmptyJs,
+			targetService: param.targetService || ServiceType.None
 		}
 	};
 }
@@ -48,7 +51,8 @@ export function _completeExportZipParameterObject(param: ExportZipParameterObjec
 		hashLength: param.hashLength,
 		omitEmptyJs: param.omitEmptyJs,
 		exportInfo: param.exportInfo || _createExportInfo(param),
-		omitUnbundledJs: param.omitUnbundledJs
+		omitUnbundledJs: param.omitUnbundledJs,
+		targetService: param.targetService || ServiceType.None
 	};
 }
 
@@ -90,7 +94,8 @@ export function promiseExportZip(param: ExportZipParameterObject): Promise<void>
 				omitEmptyJs: param.omitEmptyJs,
 				logger: param.logger,
 				exportInfo: param.exportInfo,
-				omitUnbundledJs: param.omitUnbundledJs
+				omitUnbundledJs: param.omitUnbundledJs,
+				targetService: param.targetService
 			});
 		})
 		.then(() => {

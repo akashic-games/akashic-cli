@@ -44,6 +44,42 @@ akashic-cli-serve [<options>] [<path>]
 
 [ae]: https://akashic-games.github.io/
 
+## 外部参照できる DOM 要素
+
+akashic-cli-serveの自動実行テストでDOMを参照できるようにするために、以下のように各DOMにclass名を付与しました。
+
+|        class名         |                     要素                     |
+| :--------------------: | :------------------------------------------: |
+| `external-ref_button_display-option`  | 表示オプションボタン |
+| `external-ref_checkbox_shows-background-image` | 背景表示チェックボックス |
+| `external-ref_checkbox_shows-grid` | グリッド表示チェックボックス |
+| `external-ref_button_select-entity-from-screen` | ゲーム画面からエンティティ選択ボタン |
+| `external-ref_button_refresh-entity-tree` | エンティティツリー更新ボタン |
+| `external-ref_button_dump-to-console` | 選択エンティティをコンソールにダンプするボタン |
+| `external-ref_button_send-event` | イベント送信ボタン |
+| `external-ref_button_copy-event` | イベントコピーボタン |
+| `external-ref_button_shows-event-list` | イベントリストの表示・非表示を切り替えるボタン |
+| `external-ref_button_send-editing-event` | 編集したイベントを送信するボタン |
+| `external-ref_button_pause` | インスタンスポーズボタン |
+| `external-ref_button_real-time-execution` | リアルタイム実行ボタン |
+| `external-ref_button_add-instance` | インスタンス追加ボタン |
+| `external-ref_checkbox_auto-send-event` | セッションパラメータ送信チェックボックス |
+| `external-ref_text_total-time-limit` | 制限時間入力テキストボックス |
+| `external-ref_checkbox_use-preferred-total-time-limit` | game.jsonのpreferredSessionParametersの値を利用チェックボックス |
+| `external-ref_checkbox_stops-game-on-timeout` | 時間経過後にゲームを停止チェックボックス |
+| `external-ref_button_new-play` | 新規プレイ作成ボタン |
+| `external-ref_button_active-pause` | アクティブインスタンスをポーズ/解除ボタン |
+| `external-ref_button_join-leave` | インスタンスのプレイヤーのJoin/Leaveを送信するボタン |
+| `external-ref_button_player-info-accept` | コンテンツでのプレイヤー名表示許諾ボタン |
+| `external-ref_button_player-info-reject` | コンテンツでのプレイヤー名表示拒否ボタン |
+| `external-ref_img_background` | 背景画像 |
+| `external-ref_div_game-content` | コンテンツ表示エリア |
+| `external-ref_canvas_grid` | グリッド |
+| `external-ref_div_player-info-dialog` | プレイヤー名表示に関するダイアログ |
+| `external-ref_checkbox_joins-automatically` | 自動的にJoinするチェックボックス |
+| `external-ref_button_start-content` | コンテンツ開始ボタン |
+| `external-ref_button_dev-tools` | Devtools表示ボタン |
+
 ## 開発
 
 初期化:
