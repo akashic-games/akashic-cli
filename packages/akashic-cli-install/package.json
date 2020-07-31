@@ -25,7 +25,7 @@
   ],
   "devDependencies": {
     "@types/commander": "2.12.2",
-    "@types/jasmine": "3.5.11",
+    "@types/jasmine": "3.5.12",
     "@types/node": "14.0.27",
     "@types/tar": "4.0.3",
     "jest": "26.1.0",
