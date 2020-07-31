@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.14.34 (2020-07-31)
+
+#### Enhancement
+* `akashic-cli-export-html`
+  * [#405](https://github.com/akashic-games/akashic-cli/pull/405) Add targetService parameter to exportZip of atumaru ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 1.14.33 (2020-07-31)
 
 #### Enhancement
