@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.14.32 (2020-07-31)
+
+#### Enhancement
+* `akashic-cli-commons`
+  * [#403](https://github.com/akashic-games/akashic-cli/pull/403) Add targetService to CliConfigExportZip ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 1.14.31 (2020-07-30)
 
 #### Enhancement
