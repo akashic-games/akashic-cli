@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 1.14.39 (2020-08-01)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#424](https://github.com/akashic-games/akashic-cli/pull/424) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`
+  * [#425](https://github.com/akashic-games/akashic-cli/pull/425) Update dependency ts-loader to v8.0.2 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.14.38 (2020-08-01)
 
 #### Enhancement
