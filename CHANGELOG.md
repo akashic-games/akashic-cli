@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 1.14.42 (2020-08-04)
+
+#### Enhancement
+* `akashic-cli-export-html`
+  * [#432](https://github.com/akashic-games/akashic-cli/pull/432) 【akashic-cli-export-html】内部コンポーネントの更新(engineFiles@3.0.0-beta.7, engineFiles@2.1.45, engineFiles@1.1.15) ([@xnv](https://github.com/xnv))
+* `akashic-cli-init`
+  * [#431](https://github.com/akashic-games/akashic-cli/pull/431) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.14.41 (2020-08-03)
 
 #### Enhancement
