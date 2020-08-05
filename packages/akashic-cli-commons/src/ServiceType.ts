@@ -4,5 +4,4 @@
  * atsumaru: RPGアツマール
  * none: サービスなし
  */
-
 export type ServiceType = "nicolive" | "atsumaru" | "none" ;
