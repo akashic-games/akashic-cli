@@ -32,11 +32,11 @@
       "updateTypes": ["major"],
       "depTypeList": ["dependencies"],
       "draftPR": true
-	},
-	{
-		"packagePatterns": ["^@storybook/"],
-		"enabled": false
-	}
+    },
+    {
+      "packagePatterns": ["^@storybook/"],
+      "enabled": false
+    }
   ],
   "ignorePaths": [
     "**/spec/**"
