@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as commander from "commander";
-import { ConsoleLogger, CliConfigurationFile, CliConfigExportZip, ServiceType } from "@akashic/akashic-cli-commons";
+import { ConsoleLogger, CliConfigurationFile, CliConfigExportZip } from "@akashic/akashic-cli-commons";
 import { promiseExportZip } from "./exportZip";
 
 var ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "package.json"), "utf8")).version;
@@ -21,7 +21,7 @@ export function cli(param: CliConfigExportZip): void {
 			omitEmptyJs: param.omitEmptyJs,
 			logger,
 			omitUnbundledJs: param.bundle && param.omitUnbundledJs,
-			targetService: param.targetService as ServiceType,
+			targetService: param.targetService,
 			exportInfo: {
 				version: ver,
 				option: {
