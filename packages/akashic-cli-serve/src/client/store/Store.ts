@@ -1,5 +1,6 @@
 import {observable, action} from "mobx";
 import * as queryString from "query-string";
+import { ServiceType } from "@akashic/akashic-cli-commons";
 import {Player} from "../../common/types/Player";
 import {AppOptions} from "../../common/types/AppOptions";
 import {ClientContentLocator} from "../common/ClientContentLocator";
@@ -13,8 +14,6 @@ import {ContentStore} from "./ContentStore";
 import {NotificationUiStore} from "./NotificationUiStore";
 import {storage} from "./storage";
 import {StartupScreenUiStore} from "./StartupScreenUiStore";
-import {ServiceType} from "../../common/types/ServiceType";
-import { RPGAtsumaruApi } from "../atsumaru/RPGAtsumaruApi";
 
 export class Store {
 	@observable contentStore: ContentStore;

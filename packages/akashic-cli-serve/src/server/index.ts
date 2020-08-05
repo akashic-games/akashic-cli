@@ -14,7 +14,6 @@ import { PlayStore } from "./domain/PlayStore";
 import { SocketIOAMFlowManager } from "./domain/SocketIOAMFlowManager";
 import { serverGlobalConfig } from "./common/ServerGlobalConfig";
 import { createContentsRouter } from "./route/ContentsRoute";
-import { ServiceType } from "../common/types/ServiceType";
 import { createHealthCheckRouter } from "./route/HealthCheckRoute";
 import { ServerContentLocator } from "./common/ServerContentLocator";
 import {  CliConfigurationFile, CliConfigServe } from "@akashic/akashic-cli-commons";
@@ -85,16 +84,16 @@ async function cli(cliConfigParam: CliConfigServe) {
 	}
 
 	if (cliConfigParam.targetService) {
-		if (!cliConfigParam.autoStart && cliConfigParam.targetService === ServiceType.NicoLive) {
+		if (!cliConfigParam.autoStart && cliConfigParam.targetService === "nicolive") {
 			getSystemLogger().error("--no-auto-start and --target-service nicolive can not be set at the same time.");
 			process.exit(1);
 		}
 
-		if (!Object.values(ServiceType).includes(cliConfigParam.targetService as ServiceType)) {
+		if (!["nicolive", "atsumaru", "none"].includes(cliConfigParam.targetService )) {
 			getSystemLogger().error("Invalid --target-service option argument: " + cliConfigParam.targetService);
 			process.exit(1);
 		}
-		serverGlobalConfig.targetService = cliConfigParam.targetService as ServiceType;
+		serverGlobalConfig.targetService = cliConfigParam.targetService;
 	}
 
 	if (cliConfigParam.allowExternal) {
@@ -207,8 +206,7 @@ export async function run(argv: any): Promise<void> {
 		.option("-H, --hostname <hostname>", `The host name of the server. default: ${serverGlobalConfig.hostname}`)
 		.option("-v, --verbose", `Display detailed information on console.`)
 		.option("-A, --no-auto-start", `Wait automatic startup of contents.`)
-		.option("-s, --target-service <service>",
-			`Simulate the specified service. arguments: ${Object.values(ServiceType)}`)
+		.option("-s, --target-service <service>", `Simulate the specified service. arguments: nicolive, atsumaru, none`)
 		.option("--server-external-script <path>",
 			`Evaluate the given JS and assign it to Game#external of the server instances`)
 		.option("--debug-playlog <path>", `Specify path of playlog-json.`)

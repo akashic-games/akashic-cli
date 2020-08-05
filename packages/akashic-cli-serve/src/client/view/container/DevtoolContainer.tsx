@@ -1,7 +1,7 @@
 import * as React from "react";
 import { observer } from "mobx-react";
+import { ServiceType } from "@akashic/akashic-cli-commons";
 import { SandboxConfig } from "../../../common/types/SandboxConfig";
-import { ServiceType } from "../../../common/types/ServiceType";
 import { PlayEntity } from "../../store/PlayEntity";
 import { DevtoolUiStore } from "../../store/DevtoolUiStore";
 import { Operator } from "../../operator/Operator";
@@ -70,14 +70,14 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 				onMouseLeaveEntityItem: operator.devtool.clearHighlightedEntity
 			}}
 			atsumaruDevtoolProps={{
-				disabled: targetService !== ServiceType.Atsumaru,
+				disabled: targetService !== "atsumaru",
 				volume: devtoolUiStore.volume,
 				isSeekingVolume: devtoolUiStore.isSeekingVolume,
 				changeVolume: operator.devtool.volumeChangeTo,
 				dicideVolume: operator.devtool.volumeSeekTo
 			}}
 			niconicoDevtoolProps={{
-				disabled: targetService === ServiceType.Atsumaru,
+				disabled: targetService === "atsumaru",
 				isAutoSendEvent: devtoolUiStore.isAutoSendEvent,
 				emulatingShinichibaMode: devtoolUiStore.emulatingShinichibaMode,
 				totalTimeLimitInputValue: devtoolUiStore.totalTimeLimitInputValue,
