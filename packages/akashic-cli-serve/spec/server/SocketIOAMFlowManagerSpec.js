@@ -266,13 +266,13 @@ describe("SocketIOAMFlowManager", () => {
 				expect(ticks3).toEqual(ticks1);
 
 				// awaitなし(並列)でリクエストして逆順で待ってみる
-				const promiseTickList1 = getTickList(amflow1p1, 1, 2);
+				const promiseTickList1 = getTickList(amflow1p1, 1, 3);
 				const promiseTickList2 = getTickList(amflow1p2, 0, 1);
 				const tl2 = await promiseTickList2;
 				const tl1 = await promiseTickList1;
 
 				expect(tl1).toEqual([1, 2, [[2, [[0x20, 1, "foo", {}]]]]]);
-				expect(tl2).toEqual([0, 1, []]);
+				expect(tl2).toEqual([0, 0, []]);
 
 				await close(amflow1a);
 				await close(amflow1p1);
