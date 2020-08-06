@@ -35,8 +35,8 @@ import * as Renamer from "./Renamer";
 export { Renamer };
 import * as LintUtil from "./LintUtil";
 export { LintUtil };
-import { ServiceType } from "./ServiceType";
-export { ServiceType };
+import { ServiceType, SERVICE_TYPES } from "./ServiceType";
+export { ServiceType, SERVICE_TYPES };
 
 import { CliConfigExportHtml } from "./CliConfig/CliConfigExportHtml";
 export { CliConfigExportHtml };
