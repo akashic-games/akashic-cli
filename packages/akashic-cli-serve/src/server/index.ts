@@ -16,7 +16,7 @@ import { serverGlobalConfig } from "./common/ServerGlobalConfig";
 import { createContentsRouter } from "./route/ContentsRoute";
 import { createHealthCheckRouter } from "./route/HealthCheckRoute";
 import { ServerContentLocator } from "./common/ServerContentLocator";
-import {  CliConfigurationFile, CliConfigServe } from "@akashic/akashic-cli-commons";
+import {  CliConfigurationFile, CliConfigServe, SERVICE_TYPES } from "@akashic/akashic-cli-commons";
 
 // 渡されたパラメータを全てstringに変換する
 // chalkを使用する場合、ログ出力時objectの中身を展開してくれないためstringに変換する必要がある
@@ -89,7 +89,7 @@ async function cli(cliConfigParam: CliConfigServe) {
 			process.exit(1);
 		}
 
-		if (!["nicolive", "atsumaru", "none"].includes(cliConfigParam.targetService )) {
+		if (!SERVICE_TYPES.includes(cliConfigParam.targetService )) {
 			getSystemLogger().error("Invalid --target-service option argument: " + cliConfigParam.targetService);
 			process.exit(1);
 		}
@@ -206,7 +206,7 @@ export async function run(argv: any): Promise<void> {
 		.option("-H, --hostname <hostname>", `The host name of the server. default: ${serverGlobalConfig.hostname}`)
 		.option("-v, --verbose", `Display detailed information on console.`)
 		.option("-A, --no-auto-start", `Wait automatic startup of contents.`)
-		.option("-s, --target-service <service>", `Simulate the specified service. arguments: nicolive, atsumaru, none`)
+		.option("-s, --target-service <service>", `Simulate the specified service. arguments: ${SERVICE_TYPES}`)
 		.option("--server-external-script <path>",
 			`Evaluate the given JS and assign it to Game#external of the server instances`)
 		.option("--debug-playlog <path>", `Specify path of playlog-json.`)
