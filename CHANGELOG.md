@@ -1,5 +1,126 @@
 # CHANGELOG
 
+## 1.14.44 (2020-08-07)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#441](https://github.com/akashic-games/akashic-cli/pull/441) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Other Change
+* `akashic-cli-export-html`, `akashic-cli-export-zip`
+  * [#435](https://github.com/akashic-games/akashic-cli/pull/435) export-zip refactor ServiceType ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 2
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- xnv ([@xnv](https://github.com/xnv))
+
+## 1.14.43 (2020-08-07)
+
+#### Enhancement
+* `akashic-cli-export-html`
+  * [#439](https://github.com/akashic-games/akashic-cli/pull/439) 【akashic-cli-export-html】内部コンポーネントの更新(engineFiles@3.0.0-beta.7, engineFiles@2.1.46, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+  * [#438](https://github.com/akashic-games/akashic-cli/pull/438) 【akashic-cli-export-html】内部コンポーネントの更新(engineFiles@3.0.0-beta.7, engineFiles@2.1.45, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+* `akashic-cli-init`
+  * [#433](https://github.com/akashic-games/akashic-cli/pull/433) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Other Change
+* `akashic-cli-commons`
+  * [#434](https://github.com/akashic-games/akashic-cli/pull/434) Add ServiceType ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 2
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- xnv ([@xnv](https://github.com/xnv))
+
+## 1.14.42 (2020-08-04)
+
+#### Enhancement
+* `akashic-cli-export-html`
+  * [#432](https://github.com/akashic-games/akashic-cli/pull/432) 【akashic-cli-export-html】内部コンポーネントの更新(engineFiles@3.0.0-beta.7, engineFiles@2.1.45, engineFiles@1.1.15) ([@xnv](https://github.com/xnv))
+* `akashic-cli-init`
+  * [#431](https://github.com/akashic-games/akashic-cli/pull/431) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
+## 1.14.41 (2020-08-03)
+
+#### Enhancement
+* `akashic-cli-export-html`
+  * [#430](https://github.com/akashic-games/akashic-cli/pull/430) 【akashic-cli-export-html】内部コンポーネントの更新(engineFiles@3.0.0-beta.7, engineFiles@2.1.44, engineFiles@1.1.15) ([@xnv](https://github.com/xnv))
+* `akashic-cli-init`
+  * [#429](https://github.com/akashic-games/akashic-cli/pull/429) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
+## 1.14.40 (2020-08-03)
+
+#### Enhancement
+* `akashic-cli-export-html`
+  * [#427](https://github.com/akashic-games/akashic-cli/pull/427) 【akashic-cli-export-html】内部コンポーネントの更新(engineFiles@3.0.0-beta.7, engineFiles@2.1.43, engineFiles@1.1.15) ([@xnv](https://github.com/xnv))
+* `akashic-cli-init`
+  * [#426](https://github.com/akashic-games/akashic-cli/pull/426) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
+## 1.14.39 (2020-08-01)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#424](https://github.com/akashic-games/akashic-cli/pull/424) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`
+  * [#425](https://github.com/akashic-games/akashic-cli/pull/425) Update dependency ts-loader to v8.0.2 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
+## 1.14.38 (2020-08-01)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#423](https://github.com/akashic-games/akashic-cli/pull/423) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Update Dependencies
+* `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`
+  * [#415](https://github.com/akashic-games/akashic-cli/pull/415) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
+## 1.14.37 (2020-08-01)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#421](https://github.com/akashic-games/akashic-cli/pull/421) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`
+  * [#416](https://github.com/akashic-games/akashic-cli/pull/416) Update all dependencies (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
+## 1.14.36 (2020-07-31)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#419](https://github.com/akashic-games/akashic-cli/pull/419) Update dependency tslint to v6 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
+## 1.14.35 (2020-07-31)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#417](https://github.com/akashic-games/akashic-cli/pull/417) Update dependency @types/eslint to v7 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
 ## 1.14.34 (2020-07-31)
 
 #### Enhancement

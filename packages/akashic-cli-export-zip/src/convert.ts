@@ -8,7 +8,6 @@ import * as gcu from "./GameConfigurationUtil";
 import * as UglifyJS from "uglify-js";
 import * as babel from "@babel/core";
 import * as presetEnv from "@babel/preset-env";
-import { ServiceType } from "./ServiceType";
 
 export interface ConvertGameParameterObject {
 	bundle?: boolean;
@@ -26,7 +25,7 @@ export interface ConvertGameParameterObject {
 	logger?: cmn.Logger;
 	exportInfo?: cmn.ExportZipInfo;
 	omitUnbundledJs?: boolean;
-	targetService?: ServiceType;
+	targetService?: cmn.ServiceType;
 }
 
 export function _completeConvertGameParameterObject(param: ConvertGameParameterObject): void {
@@ -40,7 +39,7 @@ export function _completeConvertGameParameterObject(param: ConvertGameParameterO
 	param.omitEmptyJs = !!param.omitEmptyJs;
 	param.exportInfo = param.exportInfo;
 	param.omitUnbundledJs = !!param.omitUnbundledJs;
-	param.targetService = param.targetService || ServiceType.None;
+	param.targetService = param.targetService || "none";
 }
 
 export interface BundleResult {
@@ -156,7 +155,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 				}
 			});
 
-			if (param.targetService === ServiceType.NicoLive) {
+			if (param.targetService === "nicolive") {
 				addUntaintedToImageAssets(gamejson);
 			}
 
