@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## 1.14.45 (2020-08-07)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#442](https://github.com/akashic-games/akashic-cli/pull/442) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Other Change
+* `akashic-cli-export-html`
+  * [#436](https://github.com/akashic-games/akashic-cli/pull/436) export-html refactor ServiceType ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 2
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.14.44 (2020-08-07)
 
 #### Enhancement
