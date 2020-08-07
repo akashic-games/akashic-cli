@@ -200,7 +200,8 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 				return;
 			const scriptAssetPaths = gcu.extractScriptAssetFilePaths(gamejson).map(p => path.resolve(param.dest, p));
 			scriptAssetPaths.forEach(p => {
-				fs.writeFileSync(p, UglifyJS.minify(p).code);
+				const code = fs.readFileSync(p).toString();
+				fs.writeFileSync(p, UglifyJS.minify(code).code);
 			});
 		});
 }
