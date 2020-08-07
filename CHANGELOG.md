@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.14.47 (2020-08-07)
+
+#### Bug Fix
+* `akashic-cli-export-html`
+  * [#444](https://github.com/akashic-games/akashic-cli/pull/444) fix akashic-export-html to run normally ([@dera-](https://github.com/dera-))
+
+#### Committers: 1
+- [@dera-](https://github.com/dera-)
+
 ## 1.14.46 (2020-08-07)
 
 #### Enhancement
