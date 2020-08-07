@@ -65,7 +65,7 @@
   "typings": "lib/index.d.ts",
   "dependencies": {
     "@akashic/akashic-cli-commons": "0.5.26",
-    "@akashic/akashic-cli-export-zip": "0.6.38",
+    "@akashic/akashic-cli-export-zip": "0.6.39",
     "archiver": "~4.0.0",
     "commander": "5.1.0",
     "ejs": "~3.1.0",
