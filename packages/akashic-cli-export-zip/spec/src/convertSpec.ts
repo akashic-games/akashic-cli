@@ -2,8 +2,7 @@ import * as path from "path";
 import * as mockfs from "mock-fs";
 import * as fs from "fs";
 import * as fsx from "fs-extra";
-import { bundleScripts, convertGame } from "../../lib/convert";
-import { ServiceType } from "../../lib/ServiceType";
+import { bundleScripts, convertGame, ConvertGameParameterObject } from "../../lib/convert";
 
 describe("convert", () => {
 
@@ -412,10 +411,10 @@ describe("convert", () => {
 		});
 
 		it("Add untainted: true to gamejson's image asset when targetService is nicolive", (done) => {
-			const param = {
+			const param: ConvertGameParameterObject = {
 				source: path.resolve(__dirname, "..", "fixtures", "simple_game_with_aez_bundle_main3"),
 				dest: destDir,
-				targetService: ServiceType.NicoLive
+				targetService: "nicolive"
 			};
 			convertGame(param)
 				.then(() => {
@@ -435,10 +434,10 @@ describe("convert", () => {
 		});
 
 		it("No change in the gamejson image asset gamejson's image asset when targetService is none", (done) => {
-			const param = {
+			const param: ConvertGameParameterObject = {
 				source: path.resolve(__dirname, "..", "fixtures", "simple_game_with_aez_bundle_main3"),
 				dest: destDir,
-				targetService: ServiceType.None
+				targetService: "none"
 			};
 			convertGame(param)
 				.then(() => {
