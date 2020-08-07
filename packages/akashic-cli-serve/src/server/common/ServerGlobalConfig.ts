@@ -1,4 +1,4 @@
-import { ServiceType } from "../../common/types/ServiceType";
+import { ServiceType } from "@akashic/akashic-cli-commons";
 
 export interface ServerGlobalConfig {
 	hostname: string;
@@ -25,6 +25,6 @@ export const serverGlobalConfig: ServerGlobalConfig = {
 	verbose: false,
 	untrusted: false,
 	proxyAudio: false,
-	targetService: ServiceType.None,
+	targetService: "none",
 	allowExternal: false
 };

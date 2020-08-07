@@ -1,6 +1,6 @@
 import * as React from "react";
 import { observer } from "mobx-react";
-import { ServiceType } from "../../../common/types/ServiceType";
+import { ServiceType } from "@akashic/akashic-cli-commons";
 import { ToolIconButton } from "../atom/ToolIconButton";
 import { ToolLabel } from "../atom/ToolLabel";
 import { PlayControl, PlayControlPropsData } from "../molecule/PlayControl";
