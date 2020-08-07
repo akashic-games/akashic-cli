@@ -22,6 +22,7 @@ var files = [
 
 files.forEach(filepath => {
 	const outputPath = path.resolve(__dirname, "../templates", templateName, "js", path.basename(filepath, ".js") + ".strip.js");
+	// uglify-jsのminify関数にファイルパスをそのまま渡すとminify処理に失敗する可能性があるので事前にコードを取得する
 	const code = fs.readFileSync(path.resolve(__dirname, "../templates", templateName, filepath)).toString();
 	fs.writeFileSync(outputPath, minify(code).code);
 });
