@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 1.14.50 (2020-08-08)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#450](https://github.com/akashic-games/akashic-cli/pull/450) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Update Dependencies
+* `akashic-cli-export-zip`, `akashic-cli-serve`
+  * [#451](https://github.com/akashic-games/akashic-cli/pull/451) Update dependency @types/react to v16.9.45 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.14.49 (2020-08-07)
 
 #### Enhancement
