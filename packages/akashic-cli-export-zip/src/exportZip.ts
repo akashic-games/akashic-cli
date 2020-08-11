@@ -5,7 +5,6 @@ import * as cmn from "@akashic/akashic-cli-commons";
 import archiver = require("archiver");
 import readdir = require("fs-readdir-recursive");
 import { convertGame } from "./convert";
-import { ServiceType } from "./ServiceType";
 
 export interface ExportZipParameterObject {
 	bundle?: boolean;
@@ -20,7 +19,7 @@ export interface ExportZipParameterObject {
 	omitEmptyJs?: boolean;
 	exportInfo?: cmn.ExportZipInfo;
 	omitUnbundledJs?: boolean;
-	targetService?: ServiceType;
+	targetService?: cmn.ServiceType;
 }
 
 function _createExportInfo(param: ExportZipParameterObject): cmn.ExportZipInfo {
@@ -33,7 +32,7 @@ function _createExportInfo(param: ExportZipParameterObject): cmn.ExportZipInfo {
 			bundle: !!param.bundle,
 			babel: !!param.babel,
 			omitEmptyJs: !!param.omitEmptyJs,
-			targetService: param.targetService || ServiceType.None
+			targetService: param.targetService || "none"
 		}
 	};
 }
@@ -52,7 +51,7 @@ export function _completeExportZipParameterObject(param: ExportZipParameterObjec
 		omitEmptyJs: param.omitEmptyJs,
 		exportInfo: param.exportInfo || _createExportInfo(param),
 		omitUnbundledJs: param.omitUnbundledJs,
-		targetService: param.targetService || ServiceType.None
+		targetService: param.targetService || "none"
 	};
 }
 

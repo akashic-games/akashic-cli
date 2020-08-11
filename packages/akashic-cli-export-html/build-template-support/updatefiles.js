@@ -3,8 +3,8 @@ var saveLicense = require('uglify-save-license');
 var path = require("path");
 var fs = require("fs");
 
-function minify(filepath) {
-	return UglifyJS.minify(filepath, {
+function minify(code) {
+	return UglifyJS.minify(code, {
 		mangle: false,
 		output: {
 			comments: saveLicense,
@@ -21,6 +21,8 @@ var files = [
 ];
 
 files.forEach(filepath => {
-	const outputPath = path.resolve(process.cwd(), "../../templates", templateName, "js", path.basename(filepath, ".js") + ".strip.js");
-	fs.writeFileSync(outputPath, minify(filepath).code);
+	const outputPath = path.resolve(__dirname, "../templates", templateName, "js", path.basename(filepath, ".js") + ".strip.js");
+	// uglify-js v3では、minify関数は引数としてファイルパスではなくソースコード文字列を受け取る仕様に変わったので、事前にソースコード文字列を取得する
+	const code = fs.readFileSync(path.resolve(__dirname, "../templates", templateName, filepath)).toString();
+	fs.writeFileSync(outputPath, minify(code).code);
 });

@@ -1,3 +1,5 @@
+import { ServiceType } from "./ServiceType";
+
 /**
  * 各アセット定義。
  * game.json の "assets" の各要素の型。
@@ -80,6 +82,6 @@ export interface ExportZipInfo {
 		babel?: boolean;
 		hashFilename?: number | boolean;
 		omitEmptyJs?: boolean;
-		targetService?: string;
+		targetService?: ServiceType;
 	};
 }

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { observer } from "mobx-react";
-import { ServiceType } from "../../../common/types/ServiceType";
+import { ServiceType } from "@akashic/akashic-cli-commons";
 import { PlayEntity } from "../../store/PlayEntity";
 import { LocalInstanceEntity } from "../../store/LocalInstanceEntity";
 import { ToolBarUiStore } from "../../store/ToolBarUiStore";
@@ -68,7 +68,7 @@ export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}>
 
 	private _makePlayerControlProps = (): PlayerControlPropsData => {
 		const { localInstance, operator, targetService } = this.props;
-		const joinEnabled = targetService !== ServiceType.NicoLive;
+		const joinEnabled = targetService !== "nicolive";
 		return {
 			selfId: localInstance.player.id,
 			isJoined: localInstance.isJoined,

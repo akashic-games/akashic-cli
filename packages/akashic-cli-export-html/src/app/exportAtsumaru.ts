@@ -3,7 +3,6 @@ import * as fsx from "fs-extra";
 import * as path from "path";
 import * as archiver from "archiver";
 import {promiseExportZip} from "@akashic/akashic-cli-export-zip/lib/exportZip";
-import {ServiceType} from "@akashic/akashic-cli-export-zip/lib/ServiceType";
 import {_completeExportHTMLParameterObject, ExportHTMLParameterObject, promiseExportHTML} from "./exportHTML";
 import {getFromHttps} from "./apiUtil";
 
@@ -32,7 +31,7 @@ export function promiseExportAtsumaru(param: ExportHTMLParameterObject): Promise
 				babel: true,
 				omitEmptyJs: true,
 				omitUnbundledJs: param.omitUnbundledJs,
-				targetService: ServiceType.NicoLive
+				targetService: "nicolive"
 			});
 		}).then(() => {
 			// game.jsonへの追記

@@ -1,3 +1,5 @@
+import { ServiceType } from "../ServiceType";
+
 export interface CliConfigExportZip {
 	cwd?: string;
 	quiet?: boolean;
@@ -10,5 +12,5 @@ export interface CliConfigExportZip {
 	hashFilename?: number | boolean;
 	omitEmptyJs?: boolean;
 	omitUnbundledJs?: boolean;
-	targetService?: string;
+	targetService?: ServiceType;
 }
