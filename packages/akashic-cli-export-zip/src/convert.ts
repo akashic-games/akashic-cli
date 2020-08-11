@@ -200,7 +200,6 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 				return;
 			const scriptAssetPaths = gcu.extractScriptAssetFilePaths(gamejson).map(p => path.resolve(param.dest, p));
 			scriptAssetPaths.forEach(p => {
-				// uglify-js v3では、minify関数は引数としてファイルパスではなくソースコード文字列を受け取る仕様に変わったので、事前にソースコード文字列を取得する
 				const code = fs.readFileSync(p).toString();
 				fs.writeFileSync(p, UglifyJS.minify(code).code);
 			});
