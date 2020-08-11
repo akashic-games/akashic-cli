@@ -20,6 +20,7 @@ function minify(filepath) {
 function build(inputFilePath, outputFilePath, propertyName) {
 	const browserify = path.join(__dirname, "..", "node_modules", ".bin", "browserify");
 	execSync(`${browserify} ${inputFilePath} -s ${propertyName} > ${outputFilePath}`);
+	// uglify-js v3では、minify関数は引数としてファイルパスではなくソースコード文字列を受け取る仕様に変わったので、事前にソースコード文字列を取得する
 	const code = fs.readFileSync(outputFilePath).toString();
 	fs.writeFileSync(outputFilePath, minify(code).code);
 }
