@@ -132,11 +132,11 @@ export class SocketIOAMFlowManager {
 
 		socket.on(
 			"amflow:getTickList",
-			(connectionId: string, begin: number, end: number, callback: (error: Error, tickList: pl.TickList) => void) => {
+			(connectionId: string, opts: amf.GetTickListOptions, callback: (error: Error, tickList: pl.TickList) => void) => {
 				const conn = this.getConncetion(connectionId);
 				if (!conn)
 					return callback(this.makeConnectionError(connectionId), null);
-				conn.amflow.getTickList(begin, end, callback);
+				conn.amflow.getTickList(opts, callback);
 			}
 		);
 

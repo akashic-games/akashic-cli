@@ -119,8 +119,26 @@ export class SocketIOAMFlowClient implements amflow.AMFlow {
 		}
 	}
 
-	getTickList(begin: number, end: number, callback: (error: Error, tickList: playlog.TickList) => void): void {
-		this._socket.emit("amflow:getTickList", this._connectionId, begin, end, callback);
+	getTickList(
+		optsOrBegin: number | amflow.GetTickListOptions,
+		endOrCallback: number | ((error: Error | null, tickList?: playlog.TickList) => void),
+		callbackOrUndefined?: (error: Error | null, tickList?: playlog.TickList) => void
+	): void {
+		let opts: amflow.GetTickListOptions;
+		let callback: (error: Error | null, tickList?: playlog.TickList) => void;
+		if (typeof optsOrBegin === "number") {
+			// NOTE: optsOrBegin === "number" であれば必ず amflow@2 以前の引数だとみなしてキャストする
+			opts = {
+				begin: optsOrBegin,
+				end: endOrCallback as number
+			};
+			callback = callbackOrUndefined;
+		} else {
+			// NOTE: optsOrBegin !== "number" であれば必ず amflow@3 以降の引数だとみなしてキャストする
+			opts = optsOrBegin;
+			callback = endOrCallback as (error: Error | null, tickList?: playlog.TickList) => void;
+		}
+		this._socket.emit("amflow:getTickList", this._connectionId, opts, callback);
 	}
 
 	putStartPoint(startPoint: amflow.StartPoint, callback: (error: Error) => void): void {
