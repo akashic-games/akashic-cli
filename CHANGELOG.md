@@ -1,5 +1,21 @@
 # CHANGELOG
 
+## 1.14.52 (2020-08-11)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#440](https://github.com/akashic-games/akashic-cli/pull/440) [akashic-cli-serve] Follow headless-driver@1.2.0 ([@yu-ogi](https://github.com/yu-ogi))
+* `akashic-cli-init`
+  * [#454](https://github.com/akashic-games/akashic-cli/pull/454) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Update Dependencies
+* `akashic-cli-serve`
+  * [#440](https://github.com/akashic-games/akashic-cli/pull/440) [akashic-cli-serve] Follow headless-driver@1.2.0 ([@yu-ogi](https://github.com/yu-ogi))
+
+#### Committers: 2
+- [@yu-ogi](https://github.com/yu-ogi)
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.14.51 (2020-08-09)
 
 #### Enhancement
