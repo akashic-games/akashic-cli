@@ -13,6 +13,6 @@ export interface CliConfigExportHtml {
 	injects?: string[];
 	atsumaru?: boolean;
 	autoSendEvents?: string | boolean;
-    autoSendEventName?: string | boolean;
+	autoSendEventName?: string | boolean;
 	omitUnbundledJs?: boolean;
 }

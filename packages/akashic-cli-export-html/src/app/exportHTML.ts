@@ -109,7 +109,6 @@ export function exportHTML(param: ExportHTMLParameterObject, cb: (err?: any) => 
 function createRenamedGame(sourcePath: string, hashLength: number, logger: cmn.Logger): Promise<string> {
 	const destDirPath = path.resolve(fs.mkdtempSync(path.join(os.tmpdir(), "akashic-export-html-")));
 	fsx.copySync(sourcePath, destDirPath);
-console.log("path", path.join(destDirPath, "game.json"));
 	return Promise.resolve()
 		.then(() => cmn.ConfigurationFile.read(path.join(destDirPath, "game.json"), logger))
 		.then((gamejson: cmn.GameConfiguration) => {
