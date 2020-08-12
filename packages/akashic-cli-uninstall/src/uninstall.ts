@@ -67,8 +67,7 @@ export function promiseUninstall(param: UninstallParameterObject): Promise<void>
 						return npm.unlink(param.moduleNames);
 					} else {
 						return Promise.resolve()
-							.then(() => npm.uninstall(param.moduleNames))
-							.then(() => npm.shrinkwrap());
+							.then(() => npm.uninstall(param.moduleNames));
 					}
 				})
 				.then(() => {

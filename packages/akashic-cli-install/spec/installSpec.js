@@ -11,17 +11,14 @@ describe("install()", function () {
 	it("handles npm install failure", function (done) {
 		mockfs({});
 		var logger = new cmn.ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
-		var shrinkwrapCalled = false;
 		var dummyNpm = {
-			install: function (names) { return Promise.reject("InstallFail:" + names); },
-			shrinkwrap: function (names) { shrinkwrapCalled = true; return Promise.resolve(); }
+			install: function (names) { return Promise.reject("InstallFail:" + names); }
 		};
 		Promise.resolve()
 			.then(() => promiseInstall({ moduleNames: ["bar"], logger: logger, debugNpm: dummyNpm }))
 			.then(done.fail)
 			.catch((err) => {
 				expect(err).toBe("InstallFail:bar");
-				expect(shrinkwrapCalled).toBe(false);
 			})
 			.then(() => cmn.ConfigurationFile.read("./game.json", logger))
 			.then((content) => {
@@ -104,7 +101,6 @@ describe("install()", function () {
 		};
 
 		mockfs(mockFsContent);
-		var shrinkwrapCalled = false;
 		var dummyNpm = {
 			install: function (names) {
 				names = (names instanceof Array) ? names : [names];
@@ -114,10 +110,6 @@ describe("install()", function () {
 				});
 
 				mockfs(mockFsContent.somedir);
-				return Promise.resolve();
-			},
-			shrinkwrap: function () {
-				shrinkwrapCalled = true;
 				return Promise.resolve();
 			}
 		};
@@ -144,8 +136,6 @@ describe("install()", function () {
 					"Please ensure that you are using akashic-engine@>=2.0.2, >=1.12.7."
 				);
 				warnLogs = []; // 初期化
-				expect(shrinkwrapCalled).toBe(true);
-				shrinkwrapCalled = false;
 			})
 			.then(() => promiseInstall({ moduleNames: ["dummy2@1.0.1"], cwd: "./somedir", plugin: 12, logger: logger, debugNpm: dummyNpm }))
 			.then(() => cmn.ConfigurationFile.read("./somedir/game.json", logger))
@@ -168,7 +158,6 @@ describe("install()", function () {
 					"dummy": "node_modules/dummy/main.js",
 					"dummyChild": "node_modules/dummy/node_modules/dummyChild/main.js"
 				});
-				expect(shrinkwrapCalled).toBe(true);
 				warnLogs = []; // 初期化
 			})
 			.then(() => promiseInstall({ moduleNames: ["noOmitPackagejson@0.0.0"], cwd: "./somedir", logger: logger, debugNpm: dummyNpm, noOmitPackagejson: true }))
@@ -249,8 +238,7 @@ describe("install()", function () {
 				++installCallCount;
 				// npm install (引数なし) が呼ばれることを確認するため、引数があったらreject。
 				return names ? Promise.reject() : Promise.resolve();
-			},
-			shrinkwrap: function () { return Promise.resolve(); }
+			}
 		};
 		Promise.resolve()
 			.then(() => promiseInstall({ cwd: ".", logger: logger, debugNpm: dummyNpm }))
