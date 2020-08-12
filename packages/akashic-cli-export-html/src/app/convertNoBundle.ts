@@ -34,12 +34,12 @@ export async function promiseConvertNoBundle(options: ConvertTemplateParameterOb
 	fsx.outputFileSync(gamejsonPath, wrapText(JSON.stringify(conf._content, null, "\t"), "game.json"));
 	assetPaths.push("./js/game.json.js");
 
-	if (options.autoSendEvents) {
+	if (options.autoSendEventName) {
 		try {
 			options.sandboxConfigJsCode = readSandboxConfigJs(options.source);
 		} catch (error) {
-			options.autoSendEvents = false;
-			console.log("failed read sandbox.config.js, autoSendEvents disabled.");
+			options.autoSendEventName = false;
+			console.log("failed read sandbox.config.js, autoSendEventName disabled.");
 		}
 	}
 
@@ -116,7 +116,7 @@ async function writeHtmlFile(
 		engineFilesVariable: versionsJson[`v${version}`].variable,
 		exportVersion: options.exportInfo !== undefined ? options.exportInfo.version : "",
 		exportOption: options.exportInfo !== undefined ? options.exportInfo.option : "",
-		autoSendEvents: options.autoSendEvents,
+		autoSendEventName: options.autoSendEventName,
 		sandboxConfigJsCode: options.sandboxConfigJsCode !== undefined ? options.sandboxConfigJsCode : ""
 	});
 	fs.writeFileSync(path.resolve(outputPath, "./index.html"), html);
