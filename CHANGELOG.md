@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.14.53 (2020-08-12)
+
+#### Bug Fix
+* `akashic-cli-export-zip`, `akashic-cli-serve`
+  * [#455](https://github.com/akashic-games/akashic-cli/pull/455) adapt to uglify-js major version update ([@dera-](https://github.com/dera-))
+
+#### Committers: 1
+- [@dera-](https://github.com/dera-)
+
 ## 1.14.52 (2020-08-11)
 
 #### Enhancement
