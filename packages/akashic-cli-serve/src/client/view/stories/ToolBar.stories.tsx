@@ -4,7 +4,6 @@ import { observer } from "mobx-react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
 import { ToolBar } from "../organism/ToolBar";
-import { ServiceType } from "../../../common/types/ServiceType";
 
 const store = observable({
 	realtime: true,
@@ -65,7 +64,7 @@ const TestWithBehaviour = observer(() => (
 			showsAppearance={store.showsAppearance}
 			showsDevtools={store.showsDevtools}
 			showsInstanceControl={store.showsDevtools}
-			targetService={ServiceType.None}
+			targetService={"none"}
 			onToggleAppearance={v => (store.showsAppearance = v)}
 			onClickDevTools={v => (store.showsDevtools = v)}
 		/>
@@ -108,7 +107,7 @@ storiesOf("o-ToolBar", module)
 			showsAppearance={false}
 			showsDevtools={true}
 			showsInstanceControl={true}
-			targetService={ServiceType.None}
+			targetService={"none"}
 			onToggleAppearance={action("toggle-appearance")}
 			onClickDevTools={action("dev-tools")}
 		/>

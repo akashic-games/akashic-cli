@@ -11,7 +11,6 @@ import { LocalInstanceOperator } from "./LocalInstanceOperator";
 import { UiOperator } from "./UiOperator";
 import { DevtoolOperator } from "./DevtoolOperator";
 import { ExternalPluginOperator } from "./ExternalPluginOperator";
-import { ServiceType } from "../../common/types/ServiceType";
 import { RPGAtsumaruApi } from "../atsumaru/RPGAtsumaruApi";
 import { defaultSessionParameter } from "../common/defaultSessionParameter";
 
@@ -72,7 +71,7 @@ export class Operator {
 				play = await this._createServerLoop(loc);
 			}
 		}
-		if (store.targetService === ServiceType.Atsumaru) {
+		if (store.targetService === "atsumaru") {
 			(window as any).RPGAtsumaru = new RPGAtsumaruApi({
 				// 元のAPIが0～1の実数を返す仕様になっているので、それに合わせた
 				getVolumeCallback: () => this.store.devtoolUiStore.volume / 100
@@ -99,7 +98,7 @@ export class Operator {
 
 		let isJoin = false;
 		let argument = undefined;
-		if (store.targetService === ServiceType.NicoLive) {
+		if (store.targetService === "nicolive") {
 			if (previousPlay) {
 				isJoin = previousPlay.joinedPlayerTable.has(store.player.id);
 			} else {
@@ -157,7 +156,7 @@ export class Operator {
 			}
 		});
 		store.setCurrentLocalInstance(instance);
-		if (store.targetService !== ServiceType.Atsumaru ) {
+		if (store.targetService !== "atsumaru" ) {
 			this.store.devtoolUiStore.initTotalTimeLimit(play.content.preferredSessionParameters.totalTimeLimit);
 			this.devtool.setupNiconicoDevtoolValueWatcher();
 		}
@@ -192,7 +191,7 @@ export class Operator {
 			// TODO: `autoSendEvents` は deprecated となった。互換性のためこのパスを残しているが、`autoSendEvents` の削除時にこのパスも削除する。
 			console.warn("[deprecated] `autoSendEvents` in sandbox.config.js is deprecated. Please use `autoSendEventName`.");
 			events[autoSendEvents].forEach((pev: any) => play.amflow.enqueueEvent(pev));
-		} else if (!autoSendEventName && this.store.targetService === ServiceType.NicoLive) {
+		} else if (!autoSendEventName && this.store.targetService === "nicolive") {
 			play.amflow.enqueueEvent(defaultSessionParameter); // 既定のセッションパラメータを送る
 		}
 

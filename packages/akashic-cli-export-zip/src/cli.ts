@@ -1,11 +1,11 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as commander from "commander";
-import { ConsoleLogger, CliConfigurationFile, CliConfigExportZip  } from "@akashic/akashic-cli-commons";
+import { ConsoleLogger, CliConfigurationFile, CliConfigExportZip, SERVICE_TYPES } from "@akashic/akashic-cli-commons";
 import { promiseExportZip } from "./exportZip";
-import { ServiceType } from "./ServiceType";
 
 var ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "package.json"), "utf8")).version;
+const availableServices = SERVICE_TYPES.filter(v => v !== "atsumaru");
 
 export function cli(param: CliConfigExportZip): void {
 	var logger = new ConsoleLogger({ quiet: param.quiet });
@@ -22,7 +22,7 @@ export function cli(param: CliConfigExportZip): void {
 			omitEmptyJs: param.omitEmptyJs,
 			logger,
 			omitUnbundledJs: param.bundle && param.omitUnbundledJs,
-			targetService: param.targetService as ServiceType,
+			targetService: param.targetService,
 			exportInfo: {
 				version: ver,
 				option: {
@@ -34,7 +34,7 @@ export function cli(param: CliConfigExportZip): void {
 					babel: param.babel,
 					hashFilename: param.hashFilename,
 					omitEmptyJs: param.omitEmptyJs,
-					targetService: param.targetService || ServiceType.None
+					targetService: param.targetService || "none"
 				}
 			}
 		}))
@@ -61,8 +61,7 @@ commander
 	.option("--no-es5-downpile", "No convert JavaScript into es5")
 	.option("--no-omit-empty-js", "Disable omitting empty js from global assets")
 	.option("--no-omit-unbundled-js", "Unnecessary script files are included even when the `--bundle` option is specified.")
-	.option("--target-service <service>",
-		`Specify the target service of the exported content: ${Object.values(ServiceType)}`);
+	.option("--target-service <service>", `Specify the target service of the exported content:${availableServices}`);
 
 export function run(argv: string[]): void {
 	// Commander の制約により --strip と --no-strip 引数を両立できないため、暫定対応として Commander 前に argv を処理する
@@ -75,7 +74,7 @@ export function run(argv: string[]): void {
 			process.exit(1);
 		}
 
-		if (commander["targetService"] && !Object.values(ServiceType).includes(commander["targetService"])) {
+		if (commander["targetService"] && !availableServices.includes(commander["targetService"])) {
 			console.error("Invalid --target-service option argument: " + commander["targetService"]);
 			process.exit(1);
 		}
