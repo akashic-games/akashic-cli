@@ -79,7 +79,7 @@ commander
 	.option("-m, --magnify", "fit game area to outer element size")
 	.option("-i, --inject [fileName]", "specify injected file content into index.html", inject, [])
 	.option("-A, --autoSendEvents [eventName]", "(deprecated)event name that send automatically when game start")
-	.option("--autoSendEventName [eventName]", "event name that send automatically when game start")
+	.option("--auto-send-event-name [eventName]", "event name that send automatically when game start")
 	.option("-a, --atsumaru", "generate files that can be posted to RPG-atsumaru")
 	.option("--no-omit-unbundled-js", "Unnecessary script files are included even when the `--atsumaru` option is specified.");
 
