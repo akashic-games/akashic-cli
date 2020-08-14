@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## 1.14.54 (2020-08-14)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#456](https://github.com/akashic-games/akashic-cli/pull/456) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Other Change
+* `akashic-cli-install`, `akashic-cli-uninstall`
+  * [#457](https://github.com/akashic-games/akashic-cli/pull/457) Changed to use package-lock.json in install and uninstall ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 2
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.14.53 (2020-08-12)
 
 #### Bug Fix
