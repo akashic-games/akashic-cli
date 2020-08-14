@@ -87,8 +87,7 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 						return npm.link(param.moduleNames);
 					} else {
 						return Promise.resolve()
-							.then(() => npm.install(param.moduleNames))
-							.then(() => npm.shrinkwrap());
+							.then(() => npm.install(param.moduleNames));
 					}
 				})
 				.then(() => {

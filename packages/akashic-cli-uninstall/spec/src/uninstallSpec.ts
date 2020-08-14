@@ -15,10 +15,8 @@ describe("uninstall()", function () {
 
 	it("handles npm failure", (done: any) => {
 		mockfs({});
-		var shrinkwrapCalled = false;
 		class DummyNpm extends cmn.PromisedNpm {
 			uninstall(names?: string[]) { return Promise.reject("UninstallFail:" + names); }
-			shrinkwrap(names?: string[]) { shrinkwrapCalled = true; return Promise.resolve(); }
 		}
 		var logger = new cmn.ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
 		Promise.resolve()
@@ -92,12 +90,10 @@ describe("uninstall()", function () {
 		class DummyNpm extends cmn.PromisedNpm {
 			uninstallLog: string[][];
 			unlinkLog: string[][];
-			shrinkwrapCount: number;
 			constructor() {
 				super({ logger });
 				this.uninstallLog = [];
 				this.unlinkLog = [];
-				this.shrinkwrapCount = 0;
 			}
 			uninstall(names?: string[]) {
 				this.uninstallLog.push(names);
@@ -115,7 +111,6 @@ describe("uninstall()", function () {
 				mockfs(mockfsContent.testdir.foo);
 				return Promise.resolve();
 			}
-			shrinkwrap(names?: string[]) { ++this.shrinkwrapCount; return Promise.resolve(); }
 		}
 		var dummyNpm = new DummyNpm();
 
@@ -130,7 +125,6 @@ describe("uninstall()", function () {
 			.then(() => cmn.ConfigurationFile.read("./testdir/foo/game.json", logger))
 			.then((content: cmn.GameConfiguration) => {
 				expect(dummyNpm.uninstallLog).toEqual([["foo"]]);
-				expect(dummyNpm.shrinkwrapCount).toBe(1);
 				var globalScripts = content.globalScripts;
 				expect(globalScripts).toEqual([
 					"node_modules/buzz/main.js",
@@ -153,7 +147,6 @@ describe("uninstall()", function () {
 			.then((content: cmn.GameConfiguration) => {
 				expect(dummyNpm.uninstallLog).toEqual([["foo"]]);
 				expect(dummyNpm.unlinkLog).toEqual([["buzz"]]);
-				expect(dummyNpm.shrinkwrapCount).toBe(1);  // unlink
 				var globalScripts = content.globalScripts;
 				expect(globalScripts).toEqual([]);
 				var moduleMainScripts = content.moduleMainScripts;
