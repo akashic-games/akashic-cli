@@ -1,5 +1,22 @@
 # CHANGELOG
 
+## 1.14.56 (2020-08-17)
+
+#### Bug Fix
+* `akashic-cli-init`
+  * [#466](https://github.com/akashic-games/akashic-cli/pull/466) fix to be able to build and test ([@dera-](https://github.com/dera-))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`
+  * [#460](https://github.com/akashic-games/akashic-cli/pull/460) Update all dependencies (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Republish
+* [#467](https://github.com/akashic-games/akashic-cli/pull/467) Republish ([@xnv](https://github.com/xnv))
+
+#### Committers: 2
+- [@dera-](https://github.com/dera-)
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.14.55 (2020-08-14)
 
 #### Update Dependencies
