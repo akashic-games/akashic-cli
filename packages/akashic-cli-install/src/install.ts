@@ -1,5 +1,7 @@
 import * as path from "path";
+import * as fs from "fs";
 import * as tar from "tar";
+import * as deepmerge from "deepmerge";
 import * as cmn from "@akashic/akashic-cli-commons";
 import { Configuration } from "./Configuration";
 
@@ -113,6 +115,21 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 						conf.addOperationPlugin(param.plugin, installedModuleNames[0]);
 				})
 				.then(() => conf.vacuumGlobalScripts())
+				.then(() => {
+					param.moduleNames.forEach((name) => {
+						const libPath = path.resolve(".", name, "akashic-lib.json");
+						try {
+							fs.accessSync(libPath);
+							const libJsonData = JSON.parse(fs.readFileSync(libPath, "utf8"));
+							if (libJsonData.gameJson && libJsonData.gameJson.environment) {
+								content.environment = deepmerge(content.environment || {}, libJsonData.gameJson.environment);
+							}
+						} catch (error) {
+							if (error.code === "ENOENT") return; // akashic-lib.jsonを持っていないケース
+							throw error;
+						}
+					})
+				})
 				.then(() => cmn.ConfigurationFile.write(conf.getContent(), gameJsonPath, param.logger));
 		})
 		.then(restoreDirectory, restoreDirectory)
@@ -140,4 +157,22 @@ function _getPackageNameFromTgzFile(fileName: string): string {
 	});
 	const json = JSON.parse(data);
 	return json.name;
+}
+
+function merge(a: any, b: any) {
+	Object.keys(b).forEach((e) => {
+		if (a[e] == null) {
+			a[e] = b[e];
+		} else {
+			if (typeof a[e] === "object" || !Array.isArray(a[e])) {
+				merge(a[e], b[e]);
+			} else if (typeof a[e] === "object" || Array.isArray(a[e])) {
+				if (Array.isArray(b[e])) {
+
+				}
+
+			}
+		}
+		
+	});
 }

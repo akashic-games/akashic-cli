@@ -37,6 +37,7 @@
   "dependencies": {
     "@akashic/akashic-cli-commons": "0.5.30",
     "commander": "5.1.0",
+    "deepmerge": "^4.2.2",
     "tar": "6.0.2"
   },
   "typings": "lib/index.d.ts",
