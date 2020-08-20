@@ -128,7 +128,7 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 							if (error.code === "ENOENT") return; // akashic-lib.jsonを持っていないケース
 							throw error;
 						}
-					})
+					});
 				})
 				.then(() => cmn.ConfigurationFile.write(conf.getContent(), gameJsonPath, param.logger));
 		})
@@ -157,22 +157,4 @@ function _getPackageNameFromTgzFile(fileName: string): string {
 	});
 	const json = JSON.parse(data);
 	return json.name;
-}
-
-function merge(a: any, b: any) {
-	Object.keys(b).forEach((e) => {
-		if (a[e] == null) {
-			a[e] = b[e];
-		} else {
-			if (typeof a[e] === "object" || !Array.isArray(a[e])) {
-				merge(a[e], b[e]);
-			} else if (typeof a[e] === "object" || Array.isArray(a[e])) {
-				if (Array.isArray(b[e])) {
-
-				}
-
-			}
-		}
-		
-	});
 }
