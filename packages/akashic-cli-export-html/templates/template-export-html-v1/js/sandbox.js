@@ -31,12 +31,14 @@ window.addEventListener("load", function() {
 
 		if (window.__akashic__.autoSendEventName === true || typeof window.__akashic__.autoSendEventName === "string") {
 			var sandboxConfig = window.__akashic__.sandboxConfigFunc();
-			var autoSendEventName = (window.__akashic__.autoSendEventName === true) ? sandboxConfig.autoSendEventName : window.__akashic__.autoSendEventName;
-			// deprecatedなautoSendEventsが指定されているケースに対応する
-			if (!autoSendEventName && window.__akashic__.autoSendEventName === true) autoSendEventName = sandboxConfig.autoSendEvents;
+			var autoSendEventName = window.__akashic__.autoSendEventName;
+			if (autoSendEventName === true) {
+			  autoSendEventName = sandboxConfig.autoSendEventName || sandboxConfig.autoSendEvents;
+			}
 			if (!!sandboxConfig && autoSendEventName && sandboxConfig.events && sandboxConfig.events[autoSendEventName]) {
 				sandboxConfig.events[autoSendEventName].forEach(function (ev){amflowClient.sendEvent(ev)});
 			}
+
 		}
 
 		var audioPlugins;
