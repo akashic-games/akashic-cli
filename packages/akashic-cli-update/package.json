@@ -25,9 +25,9 @@
   ],
   "devDependencies": {
     "@types/commander": "2.12.2",
-    "@types/jasmine": "3.5.12",
+    "@types/jasmine": "3.5.13",
     "@types/node": "14.0.27",
-    "jest": "26.4.0",
+    "jest": "26.4.2",
     "mock-fs": "4.12.0",
     "rimraf": "3.0.2",
     "tslint": "6.1.3",
