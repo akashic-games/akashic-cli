@@ -42,12 +42,12 @@ export async function promiseConvertBundle(options: ConvertTemplateParameterObje
 		code: encodeText(JSON.stringify(conf._content, null, "\t"))
 	});
 
-	if (options.autoSendEvents) {
+	if (options.autoSendEventName) {
 		try {
 			options.sandboxConfigJsCode = readSandboxConfigJs(options.source);
 		} catch (error) {
-			options.autoSendEvents = false;
-			console.log("failed read sandbox.config.js, autoSendEvents disabled.");
+			options.autoSendEventName = false;
+			console.log("failed read sandbox.config.js, autoSendEventName disabled.");
 		}
 	}
 
@@ -139,7 +139,7 @@ async function writeHtmlFile(
 		injectedContents: getInjectedContents(options.cwd, injects),
 		exportVersion: options.exportInfo !== undefined ? options.exportInfo.version : "",
 		exportOption: options.exportInfo !== undefined ? options.exportInfo.option : "",
-		autoSendEvents: options.autoSendEvents,
+		autoSendEventName: options.autoSendEventName,
 		sandboxConfigJsCode: options.sandboxConfigJsCode !== undefined ? options.sandboxConfigJsCode : ""
 	});
 	fs.writeFileSync(path.resolve(outputPath, "./index.html"), html);

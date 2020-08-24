@@ -42,9 +42,9 @@ window.g = engineFiles.akashicEngine;
 <script src="<%- asset %>"></script>
 <% } %>
 
-<% if (autoSendEvents) { %>
+<% if (autoSendEventName) { %>
 <script>
-	window.__akashic__.autoSendEvents = <%- JSON.stringify(autoSendEvents) %>;
+	window.__akashic__.autoSendEventName = <%- JSON.stringify(autoSendEventName) %>;
 	window.__akashic__.sandboxConfigFunc = function () {
 		var module = { exports: {} };
 		var exports = module.exports;
