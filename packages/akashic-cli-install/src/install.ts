@@ -1,7 +1,6 @@
 import * as path from "path";
 import * as fs from "fs";
 import * as tar from "tar";
-import * as deepmerge from "deepmerge";
 import * as cmn from "@akashic/akashic-cli-commons";
 import { Configuration } from "./Configuration";
 
