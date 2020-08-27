@@ -1,4 +1,5 @@
 import * as path from "path";
+import * as fs from "fs";
 import * as cmn from "@akashic/akashic-cli-commons";
 import { Configuration } from "./Configuration";
 
@@ -84,6 +85,21 @@ export function promiseUninstall(param: UninstallParameterObject): Promise<void>
 						delete conf._content.moduleMainScripts;
 					}
 					return cmn.ConfigurationFile.write(conf.getContent(), gameJsonPath, param.logger);
+				})
+				.then(() => {
+					if (content.environment && content.environment.external) {
+						const libPath = path.resolve(".", name, "akashic-lib.json");
+						try {
+							fs.accessSync(libPath);
+							const libJsonData = JSON.parse(fs.readFileSync(libPath, "utf8"));
+							if (libJsonData.gameJson && libJsonData.gameJson.environment && libJsonData.gameJson.environment.external) {
+								content.environment.external[libJsonData.gameJson.environment.external.name] = undefined;
+							}
+						} catch (error) {
+							if (error.code === "ENOENT") return; // akashic-lib.jsonを持っていないケース
+							throw error;
+						}
+					}
 				});
 		})
 		.then(restoreDirectory, restoreDirectory)
