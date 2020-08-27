@@ -121,8 +121,10 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 						try {
 							fs.accessSync(libPath);
 							const libJsonData = JSON.parse(fs.readFileSync(libPath, "utf8"));
-							if (libJsonData.gameJson && libJsonData.gameJson.environment) {
-								content.environment = deepmerge(content.environment || {}, libJsonData.gameJson.environment);
+							if (libJsonData.gameJson && libJsonData.gameJson.environment && libJsonData.gameJson.environment.external) {
+								if (!content.environment) content.environment = {};
+								if (!content.environment.external) content.environment.external = {};
+								content.environment.external[libJsonData.gameJson.environment.external.name] = libJsonData.gameJson.environment.external.version;
 							}
 						} catch (error) {
 							if (error.code === "ENOENT") return; // akashic-lib.jsonを持っていないケース
