@@ -65,6 +65,7 @@ export interface GameConfiguration {
 
 export interface ModuleEnvironment {
 	"sandbox-runtime"?: string;
+	external?: {[key: string]: string};
 }
 
 /**
