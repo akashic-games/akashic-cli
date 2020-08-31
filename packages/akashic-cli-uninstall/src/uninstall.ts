@@ -62,6 +62,7 @@ export function promiseUninstall(param: UninstallParameterObject): Promise<void>
 	return Promise.resolve()
 		.then(() => cmn.ConfigurationFile.read(gameJsonPath, param.logger))
 		.then((content: cmn.GameConfiguration) => {
+			const conf = new Configuration({ content: content, logger: param.logger });
 			return Promise.resolve()
 				.then(() => {
 					if (param.unlink) {
@@ -72,7 +73,6 @@ export function promiseUninstall(param: UninstallParameterObject): Promise<void>
 					}
 				})
 				.then(() => {
-					const conf = new Configuration({ content: content, logger: param.logger });
 					if (param.plugin)
 						conf.removeOperationPlugin(param.moduleNames[0]);
 					conf.vacuumGlobalScripts();
@@ -84,22 +84,26 @@ export function promiseUninstall(param: UninstallParameterObject): Promise<void>
 					} else {
 						delete conf._content.moduleMainScripts;
 					}
-					return cmn.ConfigurationFile.write(conf.getContent(), gameJsonPath, param.logger);
 				})
 				.then(() => {
-					if (content.environment && content.environment.external) {
-						const libPath = path.resolve(".", name, "akashic-lib.json");
-						try {
-							fs.accessSync(libPath);
-							const libJsonData = JSON.parse(fs.readFileSync(libPath, "utf8"));
-							if (libJsonData.gameJson && libJsonData.gameJson.environment && libJsonData.gameJson.environment.external) {
-								content.environment.external[libJsonData.gameJson.environment.external.name] = undefined;
+					param.moduleNames.forEach((name) => {
+						if (content.environment && content.environment.external) {
+							const libPath = path.resolve(".", name, "akashic-lib.json");
+							try {
+								fs.accessSync(libPath);
+								const libJsonData = JSON.parse(fs.readFileSync(libPath, "utf8"));
+								if (libJsonData.gameJson && libJsonData.gameJson.environment && libJsonData.gameJson.environment.external) {
+									content.environment.external[libJsonData.gameJson.environment.external.name] = undefined;
+								}
+							} catch (error) {
+								if (error.code === "ENOENT") return; // akashic-lib.jsonを持っていないケース
+								throw error;
 							}
-						} catch (error) {
-							if (error.code === "ENOENT") return; // akashic-lib.jsonを持っていないケース
-							throw error;
 						}
-					}
+					})
+				})
+				.then(() => {
+					return cmn.ConfigurationFile.write(conf.getContent(), gameJsonPath, param.logger);
 				});
 		})
 		.then(restoreDirectory, restoreDirectory)
