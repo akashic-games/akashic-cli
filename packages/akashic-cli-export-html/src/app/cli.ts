@@ -2,20 +2,19 @@ import * as fs from "fs";
 import * as path from "path";
 import * as commander from "commander";
 import { ConsoleLogger, CliConfigExportHtml, CliConfigurationFile } from "@akashic/akashic-cli-commons";
-import { promiseExportHTML } from "./exportHTML";
+import { promiseExportHTML, ExportHTMLParameterObject } from "./exportHTML";
 import { promiseExportAtsumaru } from "./exportAtsumaru";
 
 const ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "package.json"), "utf8")).version;
 
 function cli(param: CliConfigExportHtml): void {
 	const logger = new ConsoleLogger({ quiet: param.quiet });
-	const exportParam = {
+	const exportParam: ExportHTMLParameterObject = {
 		cwd: !param.cwd ? process.cwd() : path.resolve(param.cwd),
 		source: param.source,
 		force: param.force,
 		quiet: param.quiet,
 		output: param.output,
-		exclude: param.exclude,
 		logger: logger,
 		strip: (param.strip != null) ? param.strip : true,
 		hashLength: !param.hashFilename && !param.atsumaru ? 0 :
@@ -26,7 +25,7 @@ function cli(param: CliConfigExportHtml): void {
 		injects: param.injects,
 		unbundleText: !param.bundle || param.atsumaru,
 		lint: !param.atsumaru,
-		autoSendEvents: param.autoSendEvents,
+		autoSendEventName: param.autoSendEventName || param.autoSendEvents,
 		needsUntaintedImageAsset: param.atsumaru,
 		omitUnbundledJs: param.atsumaru && param.omitUnbundledJs,
 		// index.htmlに書き込むためのexport実行時の情報
@@ -79,7 +78,8 @@ commander
 	.option("-b, --bundle", "bundle assets and scripts in index.html (to reduce the number of files)")
 	.option("-m, --magnify", "fit game area to outer element size")
 	.option("-i, --inject [fileName]", "specify injected file content into index.html", inject, [])
-	.option("-A, --autoSendEvents [eventName]", "event name that send automatically when game start")
+	.option("--autoSendEvents [eventName]", "(deprecated)event name that send automatically when game start")
+	.option("-A, --auto-send-event-name [eventName]", "event name that send automatically when game start")
 	.option("-a, --atsumaru", "generate files that can be posted to RPG-atsumaru")
 	.option("--no-omit-unbundled-js", "Unnecessary script files are included even when the `--atsumaru` option is specified.");
 
@@ -108,7 +108,7 @@ export function run(argv: string[]): void {
 			hashFilename: commander["hashFilename"] ?? conf.hashFilename,
 			injects: commander["inject"] ?? conf.injects,
 			atsumaru: commander["atsumaru"] ?? conf.atsumaru,
-			autoSendEvents: commander["autoSendEvents"] ?? conf.autoSendEvents,
+			autoSendEventName: commander["autoSendEventName"] ?? commander["autoSendEvents"] ?? conf.autoSendEventName ?? conf.autoSendEvents,
 			omitUnbundledJs: commander["omitUnbundledJs"] ?? conf.omitUnbundledJs
 		});
 	});

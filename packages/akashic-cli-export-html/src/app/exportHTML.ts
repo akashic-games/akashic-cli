@@ -65,7 +65,7 @@ export function promiseExportHTML(p: ExportHTMLParameterObject): Promise<string>
 	})
 	.then((currentGamepath: string) => {
 		gamepath = currentGamepath;
-		const convertParam = {
+		const convertParam: ConvertTemplateParameterObject = {
 			output: param.output,
 			logger: param.logger,
 			strip: param.strip,
@@ -78,7 +78,7 @@ export function promiseExportHTML(p: ExportHTMLParameterObject): Promise<string>
 			unbundleText: param.unbundleText,
 			lint: param.lint,
 			exportInfo: param.exportInfo,
-			autoSendEvents: param.autoSendEvents,
+			autoSendEventName: param.autoSendEventName,
 			needsUntaintedImageAsset: param.needsUntaintedImageAsset
 		};
 		if (param.bundle) {
@@ -109,7 +109,6 @@ export function exportHTML(param: ExportHTMLParameterObject, cb: (err?: any) => 
 function createRenamedGame(sourcePath: string, hashLength: number, logger: cmn.Logger): Promise<string> {
 	const destDirPath = path.resolve(fs.mkdtempSync(path.join(os.tmpdir(), "akashic-export-html-")));
 	fsx.copySync(sourcePath, destDirPath);
-
 	return Promise.resolve()
 		.then(() => cmn.ConfigurationFile.read(path.join(destDirPath, "game.json"), logger))
 		.then((gamejson: cmn.GameConfiguration) => {

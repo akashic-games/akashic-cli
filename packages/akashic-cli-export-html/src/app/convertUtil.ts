@@ -21,7 +21,7 @@ export interface ConvertTemplateParameterObject {
 		version: string;
 		option: string;
 	};
-	autoSendEvents?: string | boolean;
+	autoSendEventName?: string | boolean;
 	sandboxConfigJsCode?: string;
 	needsUntaintedImageAsset?: boolean;
 	omitUnbundledJs?: boolean;
