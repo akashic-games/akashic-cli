@@ -13,6 +13,6 @@ export class Configuration extends cmn.Configuration {
 	}
 	removeExternal(name: string) {
 		if (!this._content.environment || !this._content.environment.external) return;
-		this._content.environment.external[name] = undefined;
+		delete this._content.environment.external[name];
 	}
 }
