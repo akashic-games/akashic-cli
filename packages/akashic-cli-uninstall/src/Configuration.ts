@@ -11,4 +11,8 @@ export class Configuration extends cmn.Configuration {
 			this._logger.info("No entry for " + moduleName + " in operationPlugins.");
 		this._content.operationPlugins = operationPlugins;
 	}
+	removeExternal(name: string) {
+		if (!this._content.environment || !this._content.environment.external) return;
+		this._content.environment.external[name] = undefined;
+	}
 }

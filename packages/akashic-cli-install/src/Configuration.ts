@@ -44,4 +44,9 @@ export class Configuration extends cmn.Configuration {
 			this._content.moduleMainScripts = Object.assign(this._content.moduleMainScripts || {}, moduleMainScripts);
 		}
 	}
+	addExternal(name: string, value: string) {
+		if (!this._content.environment) this._content.environment = {};
+		if (!this._content.environment.external) this._content.environment.external = {};
+		this._content.environment.external[name] = value;
+	} 
 }

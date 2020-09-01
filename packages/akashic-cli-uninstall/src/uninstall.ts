@@ -91,9 +91,9 @@ export function promiseUninstall(param: UninstallParameterObject): Promise<void>
 							const libPath = path.resolve(".", name, "akashic-lib.json");
 							try {
 								fs.accessSync(libPath);
-								const libJsonData = JSON.parse(fs.readFileSync(libPath, "utf8"));
+								const libJsonData: cmn.LibConfiguration = JSON.parse(fs.readFileSync(libPath, "utf8"));
 								if (libJsonData.gameJson && libJsonData.gameJson.environment && libJsonData.gameJson.environment.external) {
-									content.environment.external[libJsonData.gameJson.environment.external.name] = undefined;
+									conf.removeExternal(libJsonData.gameJson.environment.external.name);
 								}
 							} catch (error) {
 								if (error.code === "ENOENT") return; // akashic-lib.jsonを持っていないケース
