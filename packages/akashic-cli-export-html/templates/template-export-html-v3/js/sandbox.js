@@ -29,11 +29,14 @@ window.addEventListener("load", function() {
 			}
 		});
 
-		if (window.__akashic__.autoSendEvents === true || typeof window.__akashic__.autoSendEvents === "string") {
+		if (window.__akashic__.autoSendEventName === true || typeof window.__akashic__.autoSendEventName === "string") {
 			var sandboxConfig = window.__akashic__.sandboxConfigFunc();
-			var autoSendEvents = (window.__akashic__.autoSendEvents === true) ? sandboxConfig.autoSendEvents : window.__akashic__.autoSendEvents;
-			if (!!sandboxConfig && autoSendEvents && sandboxConfig.events && sandboxConfig.events[autoSendEvents]) {
-				sandboxConfig.events[autoSendEvents].forEach(function (ev){amflowClient.sendEvent(ev)});
+			var autoSendEventName = window.__akashic__.autoSendEventName;
+			if (autoSendEventName === true) {
+			  autoSendEventName = sandboxConfig.autoSendEventName || sandboxConfig.autoSendEvents;
+			}
+			if (!!sandboxConfig && autoSendEventName && sandboxConfig.events && sandboxConfig.events[autoSendEventName]) {
+				sandboxConfig.events[autoSendEventName].forEach(function (ev){amflowClient.sendEvent(ev)});
 			}
 		}
 

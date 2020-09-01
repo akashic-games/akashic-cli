@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-export-zip",
-  "version": "0.6.45",
+  "version": "0.6.48",
   "description": "A module to export akashic game as a zip",
   "main": "lib/index.js",
   "scripts": {
@@ -34,19 +34,19 @@
     "@types/commander": "2.12.0",
     "@types/fs-extra": "9.0.1",
     "@types/fs-readdir-recursive": "1.0.0",
-    "@types/jasmine": "3.5.12",
+    "@types/jasmine": "3.5.13",
     "@types/mock-fs": "4.10.0",
-    "@types/node": "14.0.27",
+    "@types/node": "14.6.0",
     "@types/uglify-js": "3.9.3",
-    "jest": "26.4.0",
-    "mock-fs": "4.12.0",
+    "jest": "26.4.2",
+    "mock-fs": "4.13.0",
     "rimraf": "3.0.2",
     "tslint": "6.1.3",
     "typescript": "3.9.7"
   },
   "typings": "lib/index.d.ts",
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.5.30",
+    "@akashic/akashic-cli-commons": "0.5.33",
     "@babel/core": "^7.2.2",
     "@babel/preset-env": "^7.3.1",
     "archiver": "4.0.2",
@@ -55,7 +55,7 @@
     "commander": "5.1.0",
     "fs-extra": "^9.0.0",
     "fs-readdir-recursive": "~1.1.0",
-    "uglify-js": "3.10.1"
+    "uglify-js": "3.10.2"
   },
   "publishConfig": {
     "access": "public",

@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-serve",
-  "version": "0.8.41",
+  "version": "0.8.45",
   "description": "A development server for Akashic Engine",
   "scripts": {
     "prepublish": "npm run setup && npm run build",
@@ -24,13 +24,13 @@
     "akashic-cli-serve": "./bin/run"
   },
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.5.30",
-    "@akashic/headless-driver": "1.2.0",
+    "@akashic/akashic-cli-commons": "0.5.33",
+    "@akashic/headless-driver": "1.2.4",
     "@akashic/trigger": "1.0.0",
     "chalk": "4.1.0",
     "chokidar": "3.4.2",
     "commander": "5.1.0",
-    "ejs": "3.1.3",
+    "ejs": "3.1.5",
     "express": "4.17.1",
     "lodash": "4.17.20",
     "socket.io": "2.3.0"
@@ -39,12 +39,12 @@
     "@akashic/amflow": "~3.0.0",
     "@akashic/pdi-types": "~1.1.0",
     "@akashic/playlog": "~3.1.0",
-    "@storybook/addon-actions": "4.1.18",
-    "@storybook/addon-knobs": "4.1.18",
-    "@storybook/react": "4.1.18",
+    "@storybook/addon-actions": "6.0.16",
+    "@storybook/addon-knobs": "6.0.16",
+    "@storybook/react": "6.0.16",
     "@types/express": "4.17.7",
     "@types/express-serve-static-core": "4.17.9",
-    "@types/node": "14.0.27",
+    "@types/node": "14.6.0",
     "@types/query-string": "6.2.0",
     "@types/react": "16.9.46",
     "@types/react-dom": "16.9.8",
@@ -53,12 +53,12 @@
     "@types/storybook__addon-actions": "3.4.3",
     "@types/storybook__react": "4.0.2",
     "browserify": "16.5.2",
-    "css-loader": "4.2.1",
+    "css-loader": "4.2.2",
     "es6-promise": "4.2.8",
     "get-port": "5.1.1",
-    "jest": "26.4.0",
+    "jest": "26.4.2",
     "material-design-icons": "3.0.1",
-    "mobx": "5.15.5",
+    "mobx": "5.15.6",
     "mobx-react": "6.2.5",
     "node-fetch": "2.6.0",
     "query-string": "6.13.1",
@@ -69,17 +69,17 @@
     "socket.io-client": "2.3.0",
     "storybook-addon-jsx": "7.3.4",
     "style-loader": "1.2.1",
-    "ts-loader": "8.0.2",
+    "ts-loader": "8.0.3",
     "tslint": "6.1.3",
     "typescript": "3.9.7",
-    "uglify-js": "3.10.1",
+    "uglify-js": "3.10.2",
     "uglify-save-license": "0.4.1",
     "webpack": "4.44.1",
     "webpack-cli": "3.3.12",
     "whatwg-fetch": "3.4.0"
   },
   "optionalDependencies": {
-    "@akashic/akashic-gameview-web": "2.1.0"
+    "@akashic/akashic-gameview-web": "2.1.1"
   },
   "files": [
     "package.json",
