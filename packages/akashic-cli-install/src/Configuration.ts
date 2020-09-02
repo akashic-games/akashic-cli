@@ -48,5 +48,5 @@ export class Configuration extends cmn.Configuration {
 		if (!this._content.environment) this._content.environment = {};
 		if (!this._content.environment.external) this._content.environment.external = {};
 		this._content.environment.external[name] = value;
-	} 
+	}
 }
