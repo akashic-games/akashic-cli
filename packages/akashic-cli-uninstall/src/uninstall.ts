@@ -100,7 +100,7 @@ export function promiseUninstall(param: UninstallParameterObject): Promise<void>
 								throw error;
 							}
 						}
-					})
+					});
 				})
 				.then(() => {
 					return cmn.ConfigurationFile.write(conf.getContent(), gameJsonPath, param.logger);
