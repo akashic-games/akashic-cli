@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 1.14.62 (2020-09-04)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#486](https://github.com/akashic-games/akashic-cli/pull/486) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.0.0-beta.8, engineFiles@2.1.47, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+* Other
+  * [#485](https://github.com/akashic-games/akashic-cli/pull/485) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+* `akashic-cli-init`
+  * [#484](https://github.com/akashic-games/akashic-cli/pull/484) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.14.61 (2020-09-04)
 
 #### Enhancement
