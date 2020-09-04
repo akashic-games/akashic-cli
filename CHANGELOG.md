@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## 1.14.61 (2020-09-04)
+
+#### Enhancement
+* `akashic-cli-export-html`
+  * [#483](https://github.com/akashic-games/akashic-cli/pull/483) 【akashic-cli-export-html】内部コンポーネントの更新(engineFiles@3.0.0-beta.8, engineFiles@2.1.47, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+
+#### Other Change
+* `akashic-cli-serve`
+  * [#472](https://github.com/akashic-games/akashic-cli/pull/472) apply to storybook v6 in akashic-cli-serve ([@dera-](https://github.com/dera-))
+
+#### Committers: 2
+- [@dera-](https://github.com/dera-)
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.14.60 (2020-08-25)
 
 #### Enhancement
