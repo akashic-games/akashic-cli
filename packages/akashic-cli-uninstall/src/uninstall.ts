@@ -88,7 +88,7 @@ export function promiseUninstall(param: UninstallParameterObject): Promise<void>
 				.then(() => {
 					param.moduleNames.forEach((name) => {
 						if (content.environment && content.environment.external) {
-							const libPath = path.resolve(".", name, "akashic-lib.json");
+							const libPath = path.resolve(".", "node_modules", name, "akashic-lib.json");
 							try {
 								fs.accessSync(libPath);
 								const libJsonData: cmn.LibConfiguration = JSON.parse(fs.readFileSync(libPath, "utf8"));
