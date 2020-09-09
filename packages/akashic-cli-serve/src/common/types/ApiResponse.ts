@@ -38,6 +38,11 @@ export interface PlayTokenPostApiResponseData {
 	playToken: string;
 }
 
+export interface PlayerPostApiResponseData {
+	player: Player;
+	isDuplicationId: boolean;
+}
+
 export interface RunnerPostApiResponseData {
 	playId: string;
 	runnerId: string;
@@ -64,6 +69,7 @@ export type PlayPostApiResponse = ApiResponse<PlayApiResponseData>;
 export type PlayDeleteApiResponse = ApiResponse<PlayDeleteApiResponseData>;
 export type PlayPatchApiResponse = ApiResponse<PlayPatchApiResponseData>;
 export type PlayTokenPostApiResponse = ApiResponse<PlayTokenPostApiResponseData>;
+export type PlayerPostApiResponse = ApiResponse<PlayerPostApiResponseData>;
 export type RunnerPostApiResponse = ApiResponse<RunnerPostApiResponseData>;
 export type RunnerDeleteApiResponse = ApiResponse<RunnerDeleteApiResponseData>;
 export type RunnerPatchApiResponse = ApiResponse<RunnerPatchApiResponseData>;

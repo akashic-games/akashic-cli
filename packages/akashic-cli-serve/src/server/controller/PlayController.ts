@@ -4,7 +4,8 @@ import { responseSuccess } from "../common/ApiResponse";
 import {
 	PlayApiResponseData,
 	PlayDeleteApiResponseData,
-	PlayPatchApiResponseData
+	PlayPatchApiResponseData,
+	PlayerPostApiResponseData
 } from "../../common/types/ApiResponse";
 import { ServerContentLocator } from "../common/ServerContentLocator";
 import { PlayStore } from "../domain/PlayStore";
@@ -168,6 +169,24 @@ export const createHandlerToGetPlaylog = (playStore: PlayStore): express.Request
 			res.setHeader("Content-disposition", "attachment; filename=" + fileName);
 			res.setHeader("Content-type", "application/x-download");
 			res.send(dumpJsonStr);
+		} catch (e) {
+			next(e);
+		}
+	};
+};
+
+export const createHandlerToRegisterPlayer = (playStore: PlayStore): express.RequestHandler => {
+	return (req, res, next) => {
+		try {
+			if (!req.params.playId) {
+				throw new BadRequestError({ errorMessage: "PlayId is not given" });
+			}
+			const playId = req.params.playId;
+			const playerId = req.body.playerId;
+			const playerName = req.body.playerName;
+			const isDuplicationId = playerId != null ? playStore.existSamePlayerId(playId, playerId) : false;
+			const player = playStore.registerPlayer(playId, { id: playerId, name: playerName });
+			responseSuccess<PlayerPostApiResponseData>(res, 200, { player, isDuplicationId });
 		} catch (e) {
 			next(e);
 		}

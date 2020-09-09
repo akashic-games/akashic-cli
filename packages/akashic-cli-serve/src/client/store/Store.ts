@@ -12,7 +12,6 @@ import {DevtoolUiStore} from "./DevtoolUiStore";
 import {ToolBarUiStore} from "./ToolBarUiStore";
 import {ContentStore} from "./ContentStore";
 import {NotificationUiStore} from "./NotificationUiStore";
-import {storage} from "./storage";
 import {StartupScreenUiStore} from "./StartupScreenUiStore";
 
 export class Store {
@@ -42,7 +41,7 @@ export class Store {
 		this.notificationUiStore = new NotificationUiStore();
 		this.startupScreenUiStore = new StartupScreenUiStore();
 		this.appOptions = null!;
-		this.player = { id: storage.data.playerId, name: storage.data.playerName };
+		this.player = null;
 		this.currentPlay = null;
 		this.currentLocalInstance = null;
 
@@ -70,6 +69,11 @@ export class Store {
 	@action
 	setCurrentPlay(play: PlayEntity): void {
 		this.currentPlay = play;
+	}
+
+	@action
+	setPlayer(player: Player): void {
+		this.player = player;
 	}
 
 	get targetService(): ServiceType {

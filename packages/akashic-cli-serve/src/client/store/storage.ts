@@ -1,4 +1,5 @@
 import * as queryString from "query-string";
+import * as ApiClient from "../api/ApiClient";
 
 export interface StorageData {
 	playerId: string;
@@ -59,22 +60,9 @@ export class Storage {
 			history.replaceState(null, null, location.pathname + "?" + queryString.stringify(qp));
 		}
 
-		let s: any;
-		if (ignoreSession) {
-			s = {};
-		} else {
-			try {
-				const sessionData = window.sessionStorage.getItem(Storage.SESSION_STORAGE_KEY) || "{}";
-				s = JSON.parse(sessionData);
-			} catch (e) {
-				s = {};
-			}
-		}
+		const s: any = ignoreSession ? {} : this.getSessionData();
 
-		const playerId =  choose(getQueryValue(qp.playerId), s.playerId, ("" + Date.now())); // TODO 名前も含めサーバに問い合わせる？
 		this.put({
-			playerId,
-			playerName: choose(getQueryValue(qp.playerName), s.playerName, ("player" + playerId)),
 			showsDevtools: choose(asBool(getQueryValue(qp.showsDevtools)), s.showsDevtools, false),
 			devtoolsHeight: choose(asNumber(getQueryValue(qp.devtoolsHeight)), s.devtoolsHeight, 200),
 			activeDevtool: choose(getQueryValue(qp.activeDevtool), s.activeDevtool, "Instances"),
@@ -94,6 +82,28 @@ export class Storage {
 			stopsGameOnTimeout: choose(asBool(getQueryValue(qp.stopsGameOnTimeout)), s.stopsGameOnTimeout, false),
 			totalTimeLimitInputValue: choose(asNumber(getQueryValue(qp.totalTimeLimitInputValue)), s.totalTimeLimitInputValue, 85)
 		});
+	}
+
+	// メソッド名これでよいのか不明
+	async assertInitialized(playId: string): Promise<void> {
+		const qp = queryString.parse(window.location.search);
+		const playerId: string = getQueryValue(qp.playerId);
+		const playerName: string = getQueryValue(qp.playerName);
+		const apiResponse = await ApiClient.registerPlayer(playId, playerId, playerName);
+		// プレイヤーID重複の警告等はどのように表示すべきか？
+		this.put({
+			playerId: apiResponse.data.player.id,
+			playerName: apiResponse.data.player.name
+		});
+	}
+
+	getSessionData(): any {
+		try {
+			const sessionData = window.sessionStorage.getItem(Storage.SESSION_STORAGE_KEY) || "{}";
+			return JSON.parse(sessionData);
+		} catch (e) {
+			return {};
+		}
 	}
 
 	put(data: Partial<StorageData>): void {
