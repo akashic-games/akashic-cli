@@ -6,8 +6,7 @@ import {
 	createHandlerToGetPlay,
 	createHandlerToDeletePlay,
 	createHandlerToPatchPlay,
-	createHandlerToGetPlaylog,
-	createHandlerToRegisterPlayer
+	createHandlerToGetPlaylog
 } from "../controller/PlayController";
 import { createHandlerToCreatePlayToken } from "../controller/PlayTokenController";
 import { createHandlerToBroadcast } from "../controller/BroadcastController";
@@ -20,10 +19,13 @@ import { PlayStore } from "../domain/PlayStore";
 import { RunnerStore } from "../domain/RunnerStore";
 import { SocketIOAMFlowManager } from "../domain/SocketIOAMFlowManager";
 import { handleToGetStartupOptions } from "../controller/StartupOptionsController";
+import { createHandlerToRegisterPlayer } from "../controller/PlayerController";
+import { PlayerStore } from "../domain/PlayerStore";
 
 export interface ApiRouterParameterObject {
 	playStore: PlayStore;
 	runnerStore: RunnerStore;
+	playerStore: PlayerStore;
 	amflowManager: SocketIOAMFlowManager;
 	io: socketio.Server;
 }
@@ -40,13 +42,14 @@ export const createApiRouter = (params: ApiRouterParameterObject): express.Route
 	apiRouter.post("/plays/:playId(\\d+)/token", createHandlerToCreatePlayToken(params.amflowManager));
 	apiRouter.post("/plays/:playId(\\d+)/broadcast", createHandlerToBroadcast(params.io));
 	apiRouter.get("/plays/:playId(\\d+)/playlog", createHandlerToGetPlaylog(params.playStore));
-	apiRouter.post("/plays/:playId(\\d+)/player", createHandlerToRegisterPlayer(params.playStore));
 
 	apiRouter.post("/runners", createHandlerToCreateRunner(params.playStore, params.runnerStore));
 	apiRouter.delete("/runners/:runnerId", createHandlerToDeleteRunner(params.runnerStore));
 	apiRouter.patch("/runners/:runnerId", createHandlerToPatchRunner(params.runnerStore));
 
 	apiRouter.get("/options", handleToGetStartupOptions);
+
+	apiRouter.post("/players", createHandlerToRegisterPlayer(params.playerStore));
 
 	return apiRouter;
 };

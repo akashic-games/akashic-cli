@@ -29,8 +29,7 @@ export interface PlayEntity {
 	timeKeeper: TimeKeeper;
 	clientInstances: ClientInstanceDescription[];
 	runners: RunnerDescription[];
-	players: Player[];
-	nextPlayerId: number;
+	joinedPlayers: Player[];
 }
 
 export class PlayStore {
@@ -71,8 +70,7 @@ export class PlayStore {
 			timeKeeper: new TimeKeeper(),
 			clientInstances: [],
 			runners: [],
-			players: [],
-			nextPlayerId: 0
+			joinedPlayers: []
 		};
 
 		if (playlog) {
@@ -127,35 +125,13 @@ export class PlayStore {
 		this.playEntities[playId].runners = this.playEntities[playId].runners.filter(i => i.runnerId !== param.runnerId);
 	}
 
-	existSamePlayerId(playId: string, playerId: string): boolean {
-		return this.playEntities[playId].players.some(player => player.id === playerId);
-	}
-
-	// unregisterも用意すべきか？
-	registerPlayer(playId: string, player: Player): Player {
-		const playerId: string = player.id || this.playEntities[playId].nextPlayerId.toString();
-		const playerName: string = player.name || "player" + playerId;
-		const registeredPlayer: Player = { id: playerId, name: playerName };
-		this.playEntities[playId].players.push(registeredPlayer);
-		this.playEntities[playId].nextPlayerId++;
-		return registeredPlayer;
-	}
-
 	join(playId: string, player: Player): void {
-		this.playEntities[playId].players.forEach(p => {
-			if (p.id === player.id) {
-				p.isJoined = true;
-			}
-		});
+		this.playEntities[playId].joinedPlayers.push(player);
 		this.onPlayerJoin.fire({playId, player});
 	}
 
 	leave(playId: string, playerId: string): void {
-		this.playEntities[playId].players.forEach(p => {
-			if (p.id === playerId) {
-				p.isJoined = false;
-			}
-		});
+		this.playEntities[playId].joinedPlayers = this.playEntities[playId].joinedPlayers.filter(player => player.id !== playerId);
 		this.onPlayerLeave.fire({playId, playerId});
 	}
 
@@ -171,7 +147,7 @@ export class PlayStore {
 	}
 
 	getJoinedPlayers(playId: string): Player[] {
-		return this.playEntities[playId].players.filter(player => player.isJoined);
+		return this.playEntities[playId].joinedPlayers;
 	}
 
 	getContentLocator(playId: string): ServerContentLocator {

@@ -13,7 +13,6 @@ import { DevtoolOperator } from "./DevtoolOperator";
 import { ExternalPluginOperator } from "./ExternalPluginOperator";
 import { RPGAtsumaruApi } from "../atsumaru/RPGAtsumaruApi";
 import { defaultSessionParameter } from "../common/defaultSessionParameter";
-import { storage } from "../store/storage";
 
 export interface OperatorParameterObject {
 	store: Store;
@@ -72,9 +71,6 @@ export class Operator {
 				play = await this._createServerLoop(loc);
 			}
 		}
-		// playIdがないとplayerIdの生成ができないのでplay生成直後に呼び出し
-		await storage.assertInitialized(play.playId);
-		store.setPlayer({id: storage.data.playerId, name: storage.data.playerName});
 		if (store.targetService === "atsumaru") {
 			(window as any).RPGAtsumaru = new RPGAtsumaruApi({
 				// 元のAPIが0～1の実数を返す仕様になっているので、それに合わせた

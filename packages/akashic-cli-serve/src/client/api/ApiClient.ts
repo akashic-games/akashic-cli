@@ -55,12 +55,11 @@ export const broadcast = async(playId: string, message: any): Promise<void> => {
 };
 
 export const registerPlayer = async(
-	playId: string,
 	playerId: string,
 	playerName: string
 ): Promise<PlayerPostApiResponse> => {
 	return await ApiRequest.post<PlayerPostApiResponse>(
-		`/api/plays/${playId}/player`,
+		`/api/players`,
 		{ playerId, playerName }
 	);
 };

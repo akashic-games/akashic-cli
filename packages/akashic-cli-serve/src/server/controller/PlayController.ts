@@ -174,21 +174,3 @@ export const createHandlerToGetPlaylog = (playStore: PlayStore): express.Request
 		}
 	};
 };
-
-export const createHandlerToRegisterPlayer = (playStore: PlayStore): express.RequestHandler => {
-	return (req, res, next) => {
-		try {
-			if (!req.params.playId) {
-				throw new BadRequestError({ errorMessage: "PlayId is not given" });
-			}
-			const playId = req.params.playId;
-			const playerId = req.body.playerId;
-			const playerName = req.body.playerName;
-			const isDuplicationId = playerId != null ? playStore.existSamePlayerId(playId, playerId) : false;
-			const player = playStore.registerPlayer(playId, { id: playerId, name: playerName });
-			responseSuccess<PlayerPostApiResponseData>(res, 200, { player, isDuplicationId });
-		} catch (e) {
-			next(e);
-		}
-	};
-};
