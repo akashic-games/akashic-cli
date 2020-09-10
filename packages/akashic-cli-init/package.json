@@ -50,7 +50,7 @@
     "@types/node": "14.6.4",
     "@types/request": "2.48.5",
     "@types/unzipper": "0.10.3",
-    "bestzip": "2.1.6",
+    "bestzip": "2.1.7",
     "http-server": "0.12.3",
     "jest": "26.4.2",
     "mock-fs": "4.13.0",
