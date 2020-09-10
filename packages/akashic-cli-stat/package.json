@@ -23,9 +23,9 @@
     "package.json"
   ],
   "devDependencies": {
-    "@types/jasmine": "3.5.13",
+    "@types/jasmine": "3.5.14",
     "@types/mock-fs": "4.10.0",
-    "@types/node": "14.6.0",
+    "@types/node": "14.6.4",
     "jest": "26.4.2",
     "mock-fs": "4.13.0",
     "shx": "0.3.2",
