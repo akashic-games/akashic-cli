@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-export-zip",
-  "version": "0.6.50",
+  "version": "0.6.51",
   "description": "A module to export akashic game as a zip",
   "main": "lib/index.js",
   "scripts": {
@@ -46,7 +46,7 @@
   },
   "typings": "lib/index.d.ts",
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.5.34",
+    "@akashic/akashic-cli-commons": "0.5.35",
     "@babel/core": "^7.2.2",
     "@babel/preset-env": "^7.3.1",
     "archiver": "4.0.2",
