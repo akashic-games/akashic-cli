@@ -1,5 +1,23 @@
 # CHANGELOG
 
+## 1.14.63 (2020-09-12)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#492](https://github.com/akashic-games/akashic-cli/pull/492) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.0.0-beta.8, engineFiles@2.1.47, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+* `akashic-cli-init`
+  * [#487](https://github.com/akashic-games/akashic-cli/pull/487) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Update Dependencies
+* `akashic-cli-init`
+  * [#482](https://github.com/akashic-games/akashic-cli/pull/482) Update dependency bestzip to v2.1.7 [SECURITY] ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#478](https://github.com/akashic-games/akashic-cli/pull/478) Update all dependencies (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#477](https://github.com/akashic-games/akashic-cli/pull/477) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.14.62 (2020-09-04)
 
 #### Enhancement
