@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 1.14.67 (2020-09-15)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#488](https://github.com/akashic-games/akashic-cli/pull/488) add sandbox.config.js to templates of akashic-cli-init ([@dera-](https://github.com/dera-))
+  * [#497](https://github.com/akashic-games/akashic-cli/pull/497) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+  * [#496](https://github.com/akashic-games/akashic-cli/pull/496) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Committers: 2
+- [@dera-](https://github.com/dera-)
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.14.66 (2020-09-12)
 
 #### Update Dependencies
