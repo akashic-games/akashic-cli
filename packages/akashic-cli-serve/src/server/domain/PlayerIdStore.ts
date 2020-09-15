@@ -23,9 +23,9 @@ export class PlayerIdStore {
 	}
 
 	createPlayerId(): string {
-		const newPlayerId = (this.knownMaxPlayerId + 1).toString();
-		this.playerIds.push(newPlayerId);
 		this.knownMaxPlayerId++;
+		const newPlayerId = this.knownMaxPlayerId.toString();
+		this.playerIds.push(newPlayerId);
 		return newPlayerId;
 	}
 }

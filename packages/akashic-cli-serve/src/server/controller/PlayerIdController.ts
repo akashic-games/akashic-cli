@@ -3,7 +3,7 @@ import { responseSuccess } from "../common/ApiResponse";
 import { PlayerIdPostApiResponseData } from "../../common/types/ApiResponse";
 import { PlayerIdStore } from "../domain/PlayerIdStore";
 
-export const createHandlerToRegisterPlayer = (playerIdStore: PlayerIdStore): express.RequestHandler => {
+export const createHandlerToRegisterPlayerId = (playerIdStore: PlayerIdStore): express.RequestHandler => {
 	return (req, res, next) => {
 		try {
 			let playerId = req.body.playerId;
