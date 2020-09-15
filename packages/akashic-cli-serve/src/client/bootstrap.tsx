@@ -18,8 +18,6 @@ const operator = new Operator({ store, gameViewManager });
 
 window.addEventListener("load", async () => {
 	try {
-		await storage.assertInitialized();
-		store.setPlayer({id: storage.data.playerId, name: storage.data.playerName});
 		await operator.assertInitialized();
 		ReactDOM.render(
 			<App store={store} operator={operator} gameViewManager={gameViewManager} />,

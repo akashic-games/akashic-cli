@@ -13,6 +13,7 @@ import {ToolBarUiStore} from "./ToolBarUiStore";
 import {ContentStore} from "./ContentStore";
 import {NotificationUiStore} from "./NotificationUiStore";
 import {StartupScreenUiStore} from "./StartupScreenUiStore";
+import { storage } from "./storage";
 
 export class Store {
 	@observable contentStore: ContentStore;
@@ -54,8 +55,11 @@ export class Store {
 		return Promise.all([
 			this.playStore.assertInitialized(),
 			this.contentStore.assertInitialized(),
+			storage.assertInitialized(),
 			this._initializationWaiter
-		]);
+		]).then(() => {
+			this.player = { id: storage.data.playerId, name: storage.data.playerName };
+		});
 	}
 
 	@action
@@ -69,11 +73,6 @@ export class Store {
 	@action
 	setCurrentPlay(play: PlayEntity): void {
 		this.currentPlay = play;
-	}
-
-	@action
-	setPlayer(player: Player): void {
-		this.player = player;
 	}
 
 	get targetService(): ServiceType {

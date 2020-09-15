@@ -19,13 +19,13 @@ import { PlayStore } from "../domain/PlayStore";
 import { RunnerStore } from "../domain/RunnerStore";
 import { SocketIOAMFlowManager } from "../domain/SocketIOAMFlowManager";
 import { handleToGetStartupOptions } from "../controller/StartupOptionsController";
-import { createHandlerToRegisterPlayer } from "../controller/PlayerController";
-import { PlayerStore } from "../domain/PlayerStore";
+import { createHandlerToRegisterPlayer } from "../controller/PlayerIdController";
+import { PlayerIdStore } from "../domain/PlayerIdStore";
 
 export interface ApiRouterParameterObject {
 	playStore: PlayStore;
 	runnerStore: RunnerStore;
-	playerStore: PlayerStore;
+	playerIdStore: PlayerIdStore;
 	amflowManager: SocketIOAMFlowManager;
 	io: socketio.Server;
 }
@@ -49,7 +49,7 @@ export const createApiRouter = (params: ApiRouterParameterObject): express.Route
 
 	apiRouter.get("/options", handleToGetStartupOptions);
 
-	apiRouter.post("/players", createHandlerToRegisterPlayer(params.playerStore));
+	apiRouter.post("/playerids", createHandlerToRegisterPlayer(params.playerIdStore));
 
 	return apiRouter;
 };

@@ -95,14 +95,12 @@ export class Storage {
 			totalTimeLimitInputValue: choose(asNumber(getQueryValue(qp.totalTimeLimitInputValue)), s.totalTimeLimitInputValue, 85)
 		});
 
-		const playerId: string = choose(getQueryValue(qp.playerId), s.playerId, "");
-		const playerName: string = choose(getQueryValue(qp.playerName), s.playerName, "");
-		this._initializationWaiter = ApiClient.registerPlayer(playerId, playerName).then(response => {
+		const playerId: string = choose(getQueryValue(qp.playerId), s.playerId, undefined);
+		this._initializationWaiter = ApiClient.registerPlayerId(playerId).then(response => {
 			// プレイヤーID重複の警告等はどのように表示すべきか？
-			this.put({
-				playerId: response.data.player.id,
-				playerName: response.data.player.name
-			});
+			const registered = response.data.playerId;
+			const playerName: string = choose(getQueryValue(qp.playerName), s.playerName, `player${registered}`);
+			this.put({ playerId: registered, playerName });
 		});
 	}
 
