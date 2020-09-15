@@ -115,16 +115,13 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 				})
 				.then(() => conf.vacuumGlobalScripts())
 				.then(() => {
-					param.moduleNames.forEach((name) => {
-						if (path.extname(name) === ".tgz") {
-							console.log("WARN: packed tgz file cannot use akashic-lib.json, ");
-							return;
-						}
+					installedModuleNames.forEach((name) => {
 						const libPath = path.resolve(".", "node_modules", name, "akashic-lib.json");
 						try {
 							const libJsonData: cmn.LibConfiguration = JSON.parse(fs.readFileSync(libPath, "utf8"));
-							if (libJsonData.gameJson && libJsonData.gameJson.environment && libJsonData.gameJson.environment.external) {
-								conf.addExternal(libJsonData.gameJson.environment.external.name, libJsonData.gameJson.environment.external.version);
+							const environment = libJsonData.gameJson.environment;
+							if (libJsonData.gameJson && environment && environment.external) {
+								conf.addExternal(environment.external.name, environment.external.version);
 							}
 						} catch (error) {
 							if (error.code === "ENOENT") return; // akashic-lib.jsonを持っていないケース
