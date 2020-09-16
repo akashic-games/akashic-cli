@@ -119,8 +119,8 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 						const libPath = path.resolve(".", "node_modules", name, "akashic-lib.json");
 						try {
 							const libJsonData: cmn.LibConfiguration = JSON.parse(fs.readFileSync(libPath, "utf8"));
-							const environment = libJsonData.gameJson.environment;
-							if (libJsonData.gameJson && environment && environment.external) {
+							const environment = libJsonData.gameJsonData.environment;
+							if (libJsonData.gameJsonData && environment && environment.external) {
 								conf.addExternal(environment.external.name, environment.external.version);
 							}
 						} catch (error) {

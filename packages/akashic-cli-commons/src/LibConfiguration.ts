@@ -2,10 +2,10 @@
  * akashic-lib.json の型。
  */
 export interface LibConfiguration {
-	gameJson: LibGameJson;
+	gameJsonData: LibGameJsonData;
 }
 
-export interface LibGameJson {
+export interface LibGameJsonData {
 	environment?: LibEnvironment;
 }
 
