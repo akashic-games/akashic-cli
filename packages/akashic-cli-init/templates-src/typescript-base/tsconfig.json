@@ -12,6 +12,7 @@
     "node_modules/@akashic/akashic-engine/lib/main.d.ts"
   ],
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "typings/console.d.ts"
   ]
 }
