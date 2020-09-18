@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.14.68 (2020-09-18)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#498](https://github.com/akashic-games/akashic-cli/pull/498) Add console.d.ts to TS template ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 1.14.67 (2020-09-15)
 
 #### Enhancement
