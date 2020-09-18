@@ -61,7 +61,7 @@
     "mobx": "5.15.6",
     "mobx-react": "6.3.0",
     "node-fetch": "2.6.1",
-    "query-string": "6.13.1",
+    "query-string": "6.13.2",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "scroll-into-view-if-needed": "2.2.26",
@@ -74,7 +74,7 @@
     "typescript": "3.9.7",
     "uglify-js": "3.10.4",
     "uglify-save-license": "0.4.1",
-    "webpack": "4.44.1",
+    "webpack": "4.44.2",
     "webpack-cli": "3.3.12",
     "whatwg-fetch": "3.4.1"
   },
