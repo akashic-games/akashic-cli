@@ -10,4 +10,5 @@ export interface LibGameJsonData {
 }
 
 export interface LibEnvironment {
-	external?: { [name: string]: string } };
+	external?: { [name: string]: string };
+}
