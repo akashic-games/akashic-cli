@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-config",
-  "version": "0.4.45",
+  "version": "0.4.46",
   "description": "Configuration manager for akashic.",
   "main": "lib/index.js",
   "scripts": {
