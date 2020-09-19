@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 1.14.73 (2020-09-19)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#505](https://github.com/akashic-games/akashic-cli/pull/505) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`
+  * [#506](https://github.com/akashic-games/akashic-cli/pull/506) Update dependency mobx to v5.15.7 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.14.72 (2020-09-19)
 
 #### Enhancement
