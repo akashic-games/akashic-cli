@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 1.14.71 (2020-09-19)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#502](https://github.com/akashic-games/akashic-cli/pull/502) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Update Dependencies
+* `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#499](https://github.com/akashic-games/akashic-cli/pull/499) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.14.70 (2020-09-18)
 
 #### Update Dependencies
