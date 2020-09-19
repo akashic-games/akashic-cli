@@ -58,7 +58,7 @@
     "get-port": "5.1.1",
     "jest": "26.4.2",
     "material-design-icons": "3.0.1",
-    "mobx": "5.15.6",
+    "mobx": "5.15.7",
     "mobx-react": "6.3.0",
     "node-fetch": "2.6.1",
     "query-string": "6.13.2",
