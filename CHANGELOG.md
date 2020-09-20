@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.14.76 (2020-09-20)
+
+#### Update Dependencies
+* `akashic-cli-export-zip`, `akashic-cli-scan`, `akashic-cli-serve`
+  * [#509](https://github.com/akashic-games/akashic-cli/pull/509) Update dependency music-metadata to v7.4.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
 ## 1.14.75 (2020-09-20)
 
 #### Enhancement
