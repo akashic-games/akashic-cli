@@ -15,8 +15,10 @@ export class PlayerIdStore {
 		if (this.playerIds.some(id => id === playerId)) {
 			return true;
 		}
-		if (this.knownMaxPlayerId < parseInt(playerId, 10)) {
-			this.knownMaxPlayerId = parseInt(playerId, 10);
+		const playerIdInt = parseInt(playerId, 10);
+		// playerIdが数値を表す文字列でない場合、NaNになってこの条件に弾かれるのでknownMaxPlayerIdに代入されることはない
+		if (this.knownMaxPlayerId < playerIdInt) {
+			this.knownMaxPlayerId = playerIdInt;
 		}
 		this.playerIds.push(playerId);
 		return false;

@@ -13,7 +13,7 @@ import {ToolBarUiStore} from "./ToolBarUiStore";
 import {ContentStore} from "./ContentStore";
 import {NotificationUiStore} from "./NotificationUiStore";
 import {StartupScreenUiStore} from "./StartupScreenUiStore";
-import { storage } from "./storage";
+import {storage} from "./storage";
 
 export class Store {
 	@observable contentStore: ContentStore;
