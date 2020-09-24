@@ -1,11 +1,11 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { configure as mobxConfigure } from "mobx";
-import { ClientContentLocator } from "./common/ClientContentLocator";
 import { Store } from "./store/Store";
 import { Operator } from "./operator/Operator";
 import { GameViewManager } from "./akashic/GameViewManager";
 import { App } from "./view/App";
+import { storage } from "./store/storage";
 
 mobxConfigure({ enforceActions: "observed" });
 

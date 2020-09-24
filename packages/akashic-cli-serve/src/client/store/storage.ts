@@ -1,4 +1,5 @@
 import * as queryString from "query-string";
+import * as ApiClient from "../api/ApiClient";
 
 export interface StorageData {
 	playerId: string;
@@ -47,6 +48,8 @@ export class Storage {
 
 	data: StorageData;
 
+	private _initializationWaiter: Promise<void>;
+
 	constructor() {
 		const qp = queryString.parse(window.location.search);
 
@@ -71,10 +74,7 @@ export class Storage {
 			}
 		}
 
-		const playerId =  choose(getQueryValue(qp.playerId), s.playerId, ("" + Date.now())); // TODO 名前も含めサーバに問い合わせる？
 		this.put({
-			playerId,
-			playerName: choose(getQueryValue(qp.playerName), s.playerName, ("player" + playerId)),
 			showsDevtools: choose(asBool(getQueryValue(qp.showsDevtools)), s.showsDevtools, false),
 			devtoolsHeight: choose(asNumber(getQueryValue(qp.devtoolsHeight)), s.devtoolsHeight, 200),
 			activeDevtool: choose(getQueryValue(qp.activeDevtool), s.activeDevtool, "Instances"),
@@ -94,6 +94,18 @@ export class Storage {
 			stopsGameOnTimeout: choose(asBool(getQueryValue(qp.stopsGameOnTimeout)), s.stopsGameOnTimeout, false),
 			totalTimeLimitInputValue: choose(asNumber(getQueryValue(qp.totalTimeLimitInputValue)), s.totalTimeLimitInputValue, 85)
 		});
+
+		const playerId: string = choose(getQueryValue(qp.playerId), s.playerId, undefined);
+		this._initializationWaiter = ApiClient.registerPlayerId(playerId).then(response => {
+			// プレイヤーID重複の警告等はどのように表示すべきか？
+			const registered = response.data.playerId;
+			const playerName: string = choose(getQueryValue(qp.playerName), s.playerName, `player${registered}`);
+			this.put({ playerId: registered, playerName });
+		});
+	}
+
+	assertInitialized(): Promise<void> {
+		return this._initializationWaiter;
 	}
 
 	put(data: Partial<StorageData>): void {
