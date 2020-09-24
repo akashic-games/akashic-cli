@@ -12,8 +12,8 @@ import {DevtoolUiStore} from "./DevtoolUiStore";
 import {ToolBarUiStore} from "./ToolBarUiStore";
 import {ContentStore} from "./ContentStore";
 import {NotificationUiStore} from "./NotificationUiStore";
-import {storage} from "./storage";
 import {StartupScreenUiStore} from "./StartupScreenUiStore";
+import {storage} from "./storage";
 
 export class Store {
 	@observable contentStore: ContentStore;
@@ -42,7 +42,7 @@ export class Store {
 		this.notificationUiStore = new NotificationUiStore();
 		this.startupScreenUiStore = new StartupScreenUiStore();
 		this.appOptions = null!;
-		this.player = { id: storage.data.playerId, name: storage.data.playerName };
+		this.player = null;
 		this.currentPlay = null;
 		this.currentLocalInstance = null;
 
@@ -55,8 +55,11 @@ export class Store {
 		return Promise.all([
 			this.playStore.assertInitialized(),
 			this.contentStore.assertInitialized(),
+			storage.assertInitialized(),
 			this._initializationWaiter
-		]);
+		]).then(() => {
+			this.player = { id: storage.data.playerId, name: storage.data.playerName };
+		});
 	}
 
 	@action

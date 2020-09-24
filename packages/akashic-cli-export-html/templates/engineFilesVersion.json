@@ -4,11 +4,11 @@
     "variable": "engineFilesV1_1_16"
   },
   "v2": {
-    "version": "2.1.46",
-    "variable": "engineFilesV2_1_46"
+    "version": "2.1.47",
+    "variable": "engineFilesV2_1_47"
   },
   "v3": {
-    "version": "3.0.0-beta.7",
-    "variable": "engineFilesV3_0_0_beta_7"
+    "version": "3.0.0-beta.8",
+    "variable": "engineFilesV3_0_0_beta_8"
   }
 }
