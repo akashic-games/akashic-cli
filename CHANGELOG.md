@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 1.14.77 (2020-09-24)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#489](https://github.com/akashic-games/akashic-cli/pull/489) unify player id in akashic-cli-serve ([@dera-](https://github.com/dera-))
+* `akashic-cli-init`
+  * [#511](https://github.com/akashic-games/akashic-cli/pull/511) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Committers: 2
+- [@dera-](https://github.com/dera-)
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.14.76 (2020-09-20)
 
 #### Update Dependencies
