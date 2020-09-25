@@ -62,3 +62,5 @@ import { CliConfigurationFile } from "./CliConfig/CliConfigurationFile";
 export { CliConfigurationFile };
 import { CliConfiguration } from "./CliConfig/CliConfiguration";
 export { CliConfiguration };
+import { LibConfiguration } from "./LibConfiguration";
+export { LibConfiguration };

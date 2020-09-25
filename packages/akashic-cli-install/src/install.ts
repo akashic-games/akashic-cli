@@ -1,4 +1,5 @@
 import * as path from "path";
+import * as fs from "fs";
 import * as tar from "tar";
 import * as cmn from "@akashic/akashic-cli-commons";
 import { Configuration } from "./Configuration";
@@ -113,6 +114,21 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 						conf.addOperationPlugin(param.plugin, installedModuleNames[0]);
 				})
 				.then(() => conf.vacuumGlobalScripts())
+				.then(() => {
+					installedModuleNames.forEach((name) => {
+						const libPath = path.resolve(".", "node_modules", name, "akashic-lib.json");
+						try {
+							const libJsonData: cmn.LibConfiguration = JSON.parse(fs.readFileSync(libPath, "utf8"));
+							const environment = libJsonData.gameConfigurationData.environment;
+							if (libJsonData.gameConfigurationData && environment && environment.external) {
+								conf.addExternal(environment.external.name, environment.external.version);
+							}
+						} catch (error) {
+							if (error.code === "ENOENT") return; // akashic-lib.jsonを持っていないケース
+							throw error;
+						}
+					});
+				})
 				.then(() => cmn.ConfigurationFile.write(conf.getContent(), gameJsonPath, param.logger));
 		})
 		.then(restoreDirectory, restoreDirectory)

@@ -1,4 +1,5 @@
 import * as path from "path";
+import * as fs from "fs";
 import * as cmn from "@akashic/akashic-cli-commons";
 import { Configuration } from "./Configuration";
 
@@ -61,6 +62,7 @@ export function promiseUninstall(param: UninstallParameterObject): Promise<void>
 	return Promise.resolve()
 		.then(() => cmn.ConfigurationFile.read(gameJsonPath, param.logger))
 		.then((content: cmn.GameConfiguration) => {
+			const conf = new Configuration({ content: content, logger: param.logger });
 			return Promise.resolve()
 				.then(() => {
 					if (param.unlink) {
@@ -71,7 +73,6 @@ export function promiseUninstall(param: UninstallParameterObject): Promise<void>
 					}
 				})
 				.then(() => {
-					const conf = new Configuration({ content: content, logger: param.logger });
 					if (param.plugin)
 						conf.removeOperationPlugin(param.moduleNames[0]);
 					conf.vacuumGlobalScripts();
@@ -83,6 +84,25 @@ export function promiseUninstall(param: UninstallParameterObject): Promise<void>
 					} else {
 						delete conf._content.moduleMainScripts;
 					}
+				})
+				.then(() => {
+					param.moduleNames.forEach((name) => {
+						if (content.environment && content.environment.external) {
+							const libPath = path.resolve(".", "node_modules", name, "akashic-lib.json");
+							try {
+								const libJsonData: cmn.LibConfiguration = JSON.parse(fs.readFileSync(libPath, "utf8"));
+								const environment = libJsonData.gameConfigurationData.environment;
+								if (libJsonData.gameConfigurationData && environment && environment.external) {
+									conf.removeExternal(environment.external.name);
+								}
+							} catch (error) {
+								if (error.code === "ENOENT") return; // akashic-lib.jsonを持っていないケース
+								throw error;
+							}
+						}
+					});
+				})
+				.then(() => {
 					return cmn.ConfigurationFile.write(conf.getContent(), gameJsonPath, param.logger);
 				});
 		})
