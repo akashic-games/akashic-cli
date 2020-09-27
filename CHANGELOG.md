@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 1.14.80 (2020-09-27)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#515](https://github.com/akashic-games/akashic-cli/pull/515) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Update Dependencies
+* `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#517](https://github.com/akashic-games/akashic-cli/pull/517) Update dependency uglify-js to v3.11.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.14.79 (2020-09-27)
 
 #### Enhancement
