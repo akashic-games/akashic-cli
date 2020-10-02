@@ -37,7 +37,7 @@
     "@types/jasmine": "3.5.14",
     "@types/mock-fs": "4.10.0",
     "@types/node": "14.11.2",
-    "@types/uglify-js": "3.9.3",
+    "@types/uglify-js": "3.11.0",
     "jest": "26.4.2",
     "mock-fs": "4.13.0",
     "rimraf": "3.0.2",
