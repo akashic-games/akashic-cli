@@ -49,7 +49,7 @@
     "@types/fs-extra": "9.0.1",
     "@types/fs-readdir-recursive": "1.0.0",
     "@types/node": "14.11.2",
-    "@types/uglify-js": "3.9.3",
+    "@types/uglify-js": "3.11.0",
     "browserify": "16.5.2",
     "eslint": "7.10.0",
     "jest": "26.4.2",
