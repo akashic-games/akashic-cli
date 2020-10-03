@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-stat",
-  "version": "0.4.53",
+  "version": "0.4.54",
   "description": "Project statistics tool for akashic.",
   "main": "lib/index.js",
   "scripts": {
