@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 1.14.87 (2020-10-03)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#527](https://github.com/akashic-games/akashic-cli/pull/527) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Update Dependencies
+* `akashic-cli-init`, `akashic-cli-serve`
+  * [#528](https://github.com/akashic-games/akashic-cli/pull/528) Update dependency style-loader to v1.3.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.14.86 (2020-10-03)
 
 #### Enhancement
