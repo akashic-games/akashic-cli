@@ -9,6 +9,7 @@ export interface PlayControlPropsData {
 	onClickReset?: () => void;
 	onClickActivePause?: (toPause: boolean) => void;
 	onClickAddInstance?: () => void;
+	onClickStep?: () => void;
 }
 
 export interface PlayControlProps {
@@ -33,6 +34,11 @@ export class PlayControl extends React.Component<PlayControlProps, {}> {
 				pushed={props.isActivePausing}
 				pushedIcon="play_circle_filled"
 				onClick={props.onClickActivePause} />
+			<ToolIconButton
+				className="external-ref_button_active-pause"
+				icon="skip_next"
+				title={`アクティブインスタンスのポーズ中、プレイを1フレーム進めます。`}
+				onClick={props.onClickStep} />
 			<ToolIconButton
 				className="external-ref_button_add-instance"
 				icon="group_add"

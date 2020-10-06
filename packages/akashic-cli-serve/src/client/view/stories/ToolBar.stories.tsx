@@ -32,7 +32,8 @@ const TestWithBehaviour = observer(() => (
 				isActivePausing: store.isActivePausing,
 				onClickReset: action("reset"),
 				onClickActivePause: (v => (store.isActivePausing = v)),
-				onClickAddInstance: action("add-instance")
+				onClickAddInstance: action("add-instance"),
+				onClickStep: action("step")
 			})}
 			makeInstanceControlProps={() => ({
 				currentTime:
@@ -78,7 +79,8 @@ storiesOf("o-ToolBar", module)
 				isActivePausing: false,
 				onClickReset: action("reset"),
 				onClickActivePause: action("active-pause"),
-				onClickAddInstance: action("add-instance")
+				onClickAddInstance: action("add-instance"),
+				onClickStep: action("step")
 			})}
 			makeInstanceControlProps={() => ({
 				currentTime: 2234 * 1000,

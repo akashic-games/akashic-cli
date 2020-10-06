@@ -72,23 +72,27 @@ export class RunnerStore {
 		delete this.playIdTable[runnerId];
 	}
 
-	pauseRunner(runnerId: string): void {
+	async pauseRunner(runnerId: string): Promise<void> {
 		const runner = this.runnerManager.getRunner(runnerId);
 		if (runner) {
-			// TODO headless-driver に pause()/resume() を作る
-			(runner as any).driver.stopGame();
+			await this.runnerManager.pauseRunner(runner.runnerId);
+			this.onRunnerPause.fire({ playId: runner.playId, runnerId: runnerId })
 		}
-		const playId = this.playIdTable[runnerId];
-		this.onRunnerPause.fire({ playId, runnerId });
 	}
 
-	resumeRunner(runnerId: string): void {
+	async resumeRunner(runnerId: string): Promise<void> {
 		const runner = this.runnerManager.getRunner(runnerId);
 		if (runner) {
-			(runner as any).driver.startGame();
+			await this.runnerManager.resumeRunner(runner.runnerId);
+			this.onRunnerResume.fire({ playId: runner.playId, runnerId: runnerId })
 		}
-		const playId = this.playIdTable[runnerId];
-		this.onRunnerResume.fire({ playId, runnerId });
+	}
+
+	async stepRunner(runnerId: string): Promise<void> {
+		const runner = this.runnerManager.getRunner(runnerId);
+		if (runner) {
+			await this.runnerManager.stepRunner(runner.runnerId);
+		}
 	}
 
 	private createAllowedUrls(contentId: string, externalAssets: (string | RegExp)[] | null): (string | RegExp)[] | null {

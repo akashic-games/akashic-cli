@@ -36,6 +36,10 @@ export const resumePlayDuration = async(playId: string): Promise<PlayPatchApiRes
 	return await ApiRequest.patch<PlayPatchApiResponse>(`/api/plays/${playId}`, {status: "running"});
 };
 
+export const stepPlayDuration = async(playId: string): Promise<PlayPatchApiResponse> => {
+	return await ApiRequest.patch<PlayPatchApiResponse>(`/api/plays/${playId}`, {status: "step"});
+};
+
 export const createPlayToken = async(
 	playId: string,
 	playerId: string,
@@ -69,7 +73,11 @@ export const pauseRunner = async(runnerId: string): Promise<RunnerPatchApiRespon
 };
 
 export const resumeRunner = async(runnerId: string): Promise<RunnerPatchApiResponse> => {
-	return await ApiRequest.patch<RunnerPatchApiResponse>(`/api/runners/${runnerId}`, {status: "running"});
+	return await ApiRequest.patch<RunnerPatchApiResponse>(`/api/runners/${runnerId}`, {status: "resumed"});
+};
+
+export const stepRunner = async(runnerId: string): Promise<RunnerPatchApiResponse> => {
+	return await ApiRequest.patch<RunnerPatchApiResponse>(`/api/runners/${runnerId}`, {status: "step"});
 };
 
 export const getContents = async (): Promise<ContentGetAllApiResponse> => {

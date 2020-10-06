@@ -15,6 +15,10 @@ export class PlayOperator {
 		}
 	}
 
+	step = (): void => {
+		this.store.currentPlay.stepActive();
+	}
+
 	toggleJoinLeaveSelf = (toJoin: boolean): void => {
 		const player = this.store.player;
 		if (toJoin) {
