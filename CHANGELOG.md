@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.14.88 (2020-10-08)
+
+#### Bug Fix
+* `akashic-cli-serve`
+  * [#530](https://github.com/akashic-games/akashic-cli/pull/530) Fix server-external-script option in serve ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 1.14.87 (2020-10-03)
 
 #### Enhancement
