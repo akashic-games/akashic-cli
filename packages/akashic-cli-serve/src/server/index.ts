@@ -104,7 +104,7 @@ async function cli(cliConfigParam: CliConfigServe) {
 	let gameExternalFactory: () => any = () => undefined;
 	if (commander.serverExternalScript) {
 		try {
-			gameExternalFactory = require(path.join(process.cwd(), commander.serverExternalScript));
+			gameExternalFactory = require(path.resolve(commander.serverExternalScript));
 		} catch (e) {
 			getSystemLogger().error(`Failed to evaluating --server-external-script (${commander.serverExternalScript}): ${e}`);
 			process.exit(1);
