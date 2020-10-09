@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.14.90 (2020-10-09)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#535](https://github.com/akashic-games/akashic-cli/pull/535) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.0.0-beta.9, engineFiles@2.1.47, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 
 ## 1.14.88 (2020-10-08)
 
