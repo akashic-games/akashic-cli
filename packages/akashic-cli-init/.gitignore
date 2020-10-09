@@ -14,5 +14,3 @@ tmp
 .idea
 spec/build
 .vscode
-templates/*
-!template-list.json
