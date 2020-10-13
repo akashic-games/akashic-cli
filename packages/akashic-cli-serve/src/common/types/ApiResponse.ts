@@ -49,7 +49,8 @@ export interface RunnerDeleteApiResponseData {
 
 export interface RunnerPatchApiResponseData {
 	runnerId: string;
-	status: "running" | "paused" | "step" | "resumed";
+	status: "running" | "paused" | "step";
+	step?: boolean;
 }
 
 export type ContentGetApiResponseData = ContentDesc;

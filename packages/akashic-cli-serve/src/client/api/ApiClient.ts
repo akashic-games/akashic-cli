@@ -73,11 +73,11 @@ export const pauseRunner = async(runnerId: string): Promise<RunnerPatchApiRespon
 };
 
 export const resumeRunner = async(runnerId: string): Promise<RunnerPatchApiResponse> => {
-	return await ApiRequest.patch<RunnerPatchApiResponse>(`/api/runners/${runnerId}`, {status: "resumed"});
+	return await ApiRequest.patch<RunnerPatchApiResponse>(`/api/runners/${runnerId}`, {status: "running"});
 };
 
 export const stepRunner = async(runnerId: string): Promise<RunnerPatchApiResponse> => {
-	return await ApiRequest.patch<RunnerPatchApiResponse>(`/api/runners/${runnerId}`, {status: "step"});
+	return await ApiRequest.patch<RunnerPatchApiResponse>(`/api/runners/${runnerId}`, {status: "paused", step: true});
 };
 
 export const getContents = async (): Promise<ContentGetAllApiResponse> => {

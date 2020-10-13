@@ -32,8 +32,4 @@ export class ServerInstanceEntity implements GameInstanceEntity {
 	async step(): Promise<void> {
 		await ApiClient.stepRunner(this.runnerId);
 	}
-
-	async tep(): Promise<void> {
-		await ApiClient.pauseRunner(this.runnerId);
-	}
 }
