@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 1.14.96 (2020-10-13)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#542](https://github.com/akashic-games/akashic-cli/pull/542) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export-zip`
+  * [#540](https://github.com/akashic-games/akashic-cli/pull/540) Update dependency browserify to v17 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.14.95 (2020-10-11)
 
 #### Update Dependencies
