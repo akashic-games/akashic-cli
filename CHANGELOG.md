@@ -1,5 +1,78 @@
 # CHANGELOG
 
+## 1.14.96 (2020-10-13)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#542](https://github.com/akashic-games/akashic-cli/pull/542) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export-zip`
+  * [#540](https://github.com/akashic-games/akashic-cli/pull/540) Update dependency browserify to v17 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
+## 1.14.95 (2020-10-11)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#541](https://github.com/akashic-games/akashic-cli/pull/541) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
+## 1.14.94 (2020-10-10)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#539](https://github.com/akashic-games/akashic-cli/pull/539) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#533](https://github.com/akashic-games/akashic-cli/pull/533) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
+## 1.14.93 (2020-10-10)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#537](https://github.com/akashic-games/akashic-cli/pull/537) Update dependency eslint to v7.11.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
+## 1.14.92 (2020-10-09)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#538](https://github.com/akashic-games/akashic-cli/pull/538) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.0.0-beta.9, engineFiles@2.1.47, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+* `akashic-cli-init`
+  * [#536](https://github.com/akashic-games/akashic-cli/pull/536) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
+## 1.14.91 (2020-10-09)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#534](https://github.com/akashic-games/akashic-cli/pull/534) Update all dependencies (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
+## 1.14.90 (2020-10-09)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#535](https://github.com/akashic-games/akashic-cli/pull/535) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.0.0-beta.9, engineFiles@2.1.47, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 
 ## 1.14.88 (2020-10-08)
 
