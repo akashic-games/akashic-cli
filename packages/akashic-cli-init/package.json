@@ -28,7 +28,6 @@
     "test:jest": "jest",
     "pretest": "npm run http",
     "posttest": "kill $(lsof -t -i:18080)",
-    "update:template": "npm run update:template-modules && npm run update:template-zips",
     "update:template-modules": "node ./build/updateModulesOfTemplates.js",
     "update:template-zips": "node ./build/generateTemplateSource.js && npm run zip && npm run zip-v3"
   },
