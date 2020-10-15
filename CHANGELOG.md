@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 1.14.97 (2020-10-15)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#532](https://github.com/akashic-games/akashic-cli/pull/532) add template zip in akashic-cli-init ([@dera-](https://github.com/dera-))
+  * [#543](https://github.com/akashic-games/akashic-cli/pull/543) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Committers: 2
+- [@dera-](https://github.com/dera-)
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.14.96 (2020-10-13)
 
 #### Enhancement
