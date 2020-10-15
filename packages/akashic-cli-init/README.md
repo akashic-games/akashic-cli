@@ -55,6 +55,12 @@ akashic-cli-init のテンプレートはローカルテンプレートディレ
 * typescript
 * typescript-minimal
 * typescript-shin-ichiba-ranking
+* javascript-v3
+* javascript-minimal-v3
+* javascript-shin-ichiba-ranking-v3
+* typescript-v3
+* typescript-minimal-v3
+* typescript-shin-ichiba-ranking-v3
 テンプレートを再ダウンロードする場合、一度ローカルテンプレートのディレクトリを手動で削除する必要があります。
 ローカルテンプレートのディレクトリは akashic-config で未設定の場合、
 `~/.akashic-templates` になります。
@@ -69,13 +75,12 @@ akashic-cli-init は以下の設定を利用します。設定は `akashic confi
 
 ### ファクトリテンプレートの更新
 
-ファクトリテンプレートを更新する場合は、 templates-src/ 以下を編集してください。
-publish 時に、 templates/ 以下の zip に自動的に反映されます。
+ファクトリテンプレートを更新する場合は、 templates-src/ 以下 と templates-src-v3/ 以下を編集後、 `npm run update:template-zips` を実行して zip ファイルを更新します。
 
 ### ファクトリテンプレートの追加
 
-ファクトリテンプレートを追加する場合は、 templates-src/ 以下に game-xxx/ デイレクトリを加えて、
-templates/template-list.json を編集してください。
+ファクトリテンプレートを追加する場合は、 templates-src/ 以下に game-xxx/ デイレクトリを加えて
+ `npm run update:template-zips` を実行後、 templates/template-list.json を編集してください。
 game-xxx/ ディレクトリは、 Akashic ゲームである必要があります。
 (実装上の制限から、現在は package.json を含むゲームを置くことはできないので注意してください。)
 
