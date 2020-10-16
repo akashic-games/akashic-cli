@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.14.98 (2020-10-16)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#545](https://github.com/akashic-games/akashic-cli/pull/545) Update all dependencies to v16.14.0 (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
 ## 1.14.97 (2020-10-15)
 
 #### Enhancement
