@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "@akashic/akashic-cli-commons": "0.5.46",
-    "@akashic/headless-driver": "1.2.14",
+    "@akashic/headless-driver": "1.2.15",
     "@akashic/trigger": "1.0.0",
     "chalk": "4.1.0",
     "chokidar": "3.4.2",
@@ -79,7 +79,7 @@
     "whatwg-fetch": "3.4.1"
   },
   "optionalDependencies": {
-    "@akashic/akashic-gameview-web": "2.1.2"
+    "@akashic/akashic-gameview-web": "3.0.0"
   },
   "files": [
     "package.json",
