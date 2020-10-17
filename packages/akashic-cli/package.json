@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli",
-  "version": "1.14.99",
+  "version": "1.14.100",
   "description": "Command-line utility for akashic game development",
   "bin": {
     "akashic": "./bin/akashic"
@@ -22,18 +22,18 @@
     "lib"
   ],
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.5.46",
-    "@akashic/akashic-cli-config": "0.4.58",
-    "@akashic/akashic-cli-export-html": "0.7.83",
-    "@akashic/akashic-cli-export-zip": "0.6.67",
-    "@akashic/akashic-cli-init": "0.10.105",
-    "@akashic/akashic-cli-install": "0.6.62",
-    "@akashic/akashic-cli-modify": "0.4.60",
-    "@akashic/akashic-cli-scan": "0.5.61",
-    "@akashic/akashic-cli-serve": "0.8.78",
-    "@akashic/akashic-cli-stat": "0.4.60",
-    "@akashic/akashic-cli-uninstall": "0.6.61",
-    "@akashic/akashic-cli-update": "0.5.60",
+    "@akashic/akashic-cli-commons": "0.5.47",
+    "@akashic/akashic-cli-config": "0.4.59",
+    "@akashic/akashic-cli-export-html": "0.7.84",
+    "@akashic/akashic-cli-export-zip": "0.6.68",
+    "@akashic/akashic-cli-init": "0.10.106",
+    "@akashic/akashic-cli-install": "0.6.63",
+    "@akashic/akashic-cli-modify": "0.4.61",
+    "@akashic/akashic-cli-scan": "0.5.62",
+    "@akashic/akashic-cli-serve": "0.8.79",
+    "@akashic/akashic-cli-stat": "0.4.61",
+    "@akashic/akashic-cli-uninstall": "0.6.62",
+    "@akashic/akashic-cli-update": "0.5.61",
     "commander": "5.1.0"
   },
   "devDependencies": {
