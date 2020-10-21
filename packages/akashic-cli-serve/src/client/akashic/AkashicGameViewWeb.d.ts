@@ -163,7 +163,7 @@ declare module agv {
 		_localDb: { [id: number]: ae.ELike };
 		focusingCamera?: ae.CameraLike;
 		vars: any;
-		_modified: boolean;
+		_modified?: boolean; // AEv3 でのみ存在
 		scene(): ae.SceneLike;
 		render(camera?: ae.CameraLike): void;
 		tick(advanceAge: boolean, omittedTickCount?: number): boolean;

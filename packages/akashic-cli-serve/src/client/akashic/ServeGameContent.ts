@@ -58,8 +58,10 @@ export class ServeGameContent {
 		const renderOriginal = game.render;
 		const self = this;
 		game.render = function (camera?: ae.CameraLike) {
-			if ("_modified" in game && !game._modified) return; // AEv3 は画面更新が不要ならなにもしない。
+			const gameModified = game._modified;
 			const ret = renderOriginal.apply(this, arguments);
+
+			if ("_modified" in game && !gameModified) return; // AEv3 は画面更新が不要ならなにもしない。
 
 			// エンティティハイライト描画
 			// TODO 子孫要素の包含矩形描画 (or サイズ 0 のエンティティの表示方法検討
@@ -102,8 +104,7 @@ export class ServeGameContent {
 			return;
 		this._highlightedEntityId = eid;
 		if (this._game) {
-			// AEv3では _modified が false の場合は game#render() で画面更新しないため、2回目以降のハイライトが `CanvasRenderingContext2D#restore` により黒くなる。
-			// _modified を true に設定し、既存オブジェクトを描画させることでハイライトが黒くなる事象を回避する。
+			// AEv3 では _modified フラグが false の場合 render() が画面更新をスキップするため、 true を設定して必ず描画させる。
 			if ("_modified" in this._game)
 				this._game._modified = true;
 			this._game.render();  // tick が止まっているとrender()が来ないので明示的に呼ぶ
