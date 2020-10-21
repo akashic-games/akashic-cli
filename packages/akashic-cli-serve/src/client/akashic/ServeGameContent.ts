@@ -60,7 +60,6 @@ export class ServeGameContent {
 		game.render = function (camera?: ae.CameraLike) {
 			const gameModified = game._modified;
 			const ret = renderOriginal.apply(this, arguments);
-
 			if ("_modified" in game && !gameModified) return; // AEv3 は画面更新が不要ならなにもしない。
 
 			// エンティティハイライト描画
