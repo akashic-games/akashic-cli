@@ -146,6 +146,11 @@ export class PlayStore {
 		this.onPlayDurationStateChange.fire({playId, isPaused: false, duration: timeKeeper.now() });
 	}
 
+	stepPlayDuration(playId: string): void {
+		const timeKeeper = this.playEntities[playId].timeKeeper;
+		this.onPlayDurationStateChange.fire({playId, isPaused: false, duration: timeKeeper.now() + 1000 / 60 });
+	}
+
 	getJoinedPlayers(playId: string): Player[] {
 		return this.playEntities[playId].joinedPlayers;
 	}

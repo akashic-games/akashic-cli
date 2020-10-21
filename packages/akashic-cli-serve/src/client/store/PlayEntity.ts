@@ -171,7 +171,8 @@ export class PlayEntity {
 
 	stepActive(): void {
 		// 手抜き実装: サーバインスタンスは全てアクティブ(つまり一つしかない)前提
-		ApiClient.stepRunner(this.playId);
+		this.serverInstances.forEach(si => si.step());
+		ApiClient.stepPlayDuration(this.playId);
 	}
 
 	@action

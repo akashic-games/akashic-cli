@@ -36,6 +36,10 @@ export const resumePlayDuration = async(playId: string): Promise<PlayPatchApiRes
 	return await ApiRequest.patch<PlayPatchApiResponse>(`/api/plays/${playId}`, {status: "running"});
 };
 
+export const stepPlayDuration = async(playId: string): Promise<PlayPatchApiResponse> => {
+	return await ApiRequest.patch<PlayPatchApiResponse>(`/api/plays/${playId}`, {status: "paused", step: true});
+};
+
 export const createPlayToken = async(
 	playId: string,
 	playerId: string,

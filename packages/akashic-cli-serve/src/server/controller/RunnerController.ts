@@ -57,18 +57,18 @@ export const createHandlerToPatchRunner = (runnerStore: RunnerStore): express.Re
 			if (!runnerId) {
 				throw new BadRequestError({ errorMessage: "Invalid runnerId" });
 			}
-			if (status !== "running" && status !== "paused" && status !== "step") {
+			if (status !== "running" && status !== "paused") {
 				throw new BadRequestError({ errorMessage: "Invalid status: " + status });
 			}
 
 			if (status === "paused") {
-				if (req.body.step) {
-					await runnerStore.stepRunner(runnerId);					
-				} else {
-					await runnerStore.pauseRunner(runnerId);
-				}
+				await runnerStore.pauseRunner(runnerId);
 			} else {
 				await runnerStore.resumeRunner(runnerId);
+			}
+
+			if (req.body.step) {
+				await runnerStore.stepRunner(runnerId);
 			}
 
 			responseSuccess<RunnerPatchApiResponseData>(res, 200, { runnerId, status });
