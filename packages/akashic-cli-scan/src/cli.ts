@@ -1,9 +1,8 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as commander from "commander";
-import * as chokidar from "chokidar";
 import { ConsoleLogger, CliConfigurationFile, CliConfigScanAsset, CliConfigScanGlobalScripts } from "@akashic/akashic-cli-commons";
-import { promiseScanAsset, promiseScanNodeModules, scanAsset, ScanAssetParameterObject } from "./scan";
+import { promiseScanAsset, promiseScanNodeModules, watchAsset, ScanAssetParameterObject } from "./scan";
 
 var ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "package.json"), "utf8")).version;
 
@@ -57,18 +56,12 @@ commander
 				assetExtension: assetExtension
 			};
 			if (opts.watch) {
-				logger.info("Start Watching Directories of Asset");
-				const watcher = chokidar.watch((opts.cwd ?? conf.cwd) || process.cwd(), { persistent: true });
-				const cb = () => {
-					scanAsset(parameter, (err) => {
-						if (err) {
-							logger.error(err);
-							process.exit(1);
-						}
-					});
-				}
-				watcher.on("change", cb);
-				watcher.on("unlink", cb);
+				watchAsset(parameter, (err) => {
+					if (err) {
+						logger.error(err);
+						process.exit(1);
+					}
+				});
 			} else {
 				promiseScanAsset(parameter)
 					.catch((err: any) => {

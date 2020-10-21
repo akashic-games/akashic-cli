@@ -1,4 +1,6 @@
 import * as cmn from "@akashic/akashic-cli-commons";
+import * as chokidar from "chokidar";
+import * as path from "path";
 import { Configuration } from "./Configuration";
 
 export interface AssetScanDirectoryTable  {
@@ -162,6 +164,24 @@ export function promiseScanAsset(param: ScanAssetParameterObject): Promise<void>
 
 export function scanAsset(param: ScanAssetParameterObject, cb: (err: any) => void): void {
 	promiseScanAsset(param).then(cb, cb);
+}
+
+export function watchAsset(param: ScanAssetParameterObject, cb: (err: any) => void): void {
+	_completeScanAssetParameterObject(param);
+	param.logger.info("Start Watching Directories of Asset");
+	const watcher = chokidar.watch(param.cwd, { persistent: true, ignored: "**/node_modules/**/*" });
+	const handler = (filePath: string) => {
+		if (
+			param.assetScanDirectoryTable.image.some(dir => filePath.indexOf(path.join(param.cwd, dir)) !== -1)
+			|| param.assetScanDirectoryTable.audio.some(dir => filePath.indexOf(path.join(param.cwd, dir)) !== -1)
+			|| param.assetScanDirectoryTable.script.some(dir => filePath.indexOf(path.join(param.cwd, dir)) !== -1)
+			|| param.assetScanDirectoryTable.text.some(dir => filePath.indexOf(path.join(param.cwd, dir)) !== -1)
+		) {
+			scanAsset(param, cb);
+		}
+	};
+	watcher.on("change", handler);
+	watcher.on("unlink", handler);
 }
 
 export interface ScanNodeModulesParameterObject {
