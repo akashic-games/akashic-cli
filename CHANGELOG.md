@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## 1.14.102 (2020-10-22)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#550](https://github.com/akashic-games/akashic-cli/pull/550) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Bug Fix
+* `akashic-cli-serve`
+  * [#551](https://github.com/akashic-games/akashic-cli/pull/551) Fix highlight in entityTree ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 2
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.14.101 (2020-10-17)
 
 #### Enhancement
