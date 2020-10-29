@@ -176,6 +176,7 @@ export function watchAsset(param: ScanAssetParameterObject, cb: (err: any) => vo
 			|| param.assetScanDirectoryTable.audio.some(dir => filePath.indexOf(path.join(param.cwd, dir)) !== -1)
 			|| param.assetScanDirectoryTable.script.some(dir => filePath.indexOf(path.join(param.cwd, dir)) !== -1)
 			|| param.assetScanDirectoryTable.text.some(dir => filePath.indexOf(path.join(param.cwd, dir)) !== -1)
+			|| filePath.indexOf(path.join(param.cwd, "assets")) !== -1 // akashic-cli-scanではassetsディレクトリもasset用のディレクトリとして扱われる
 		) {
 			scanAsset(param, cb);
 		}
