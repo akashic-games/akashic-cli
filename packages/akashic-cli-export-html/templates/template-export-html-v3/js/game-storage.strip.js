@@ -297,10 +297,7 @@
                     return Object.prototype.toString.call(obj);
                 }
                 function isView(arrbuf) {
-                    if (!isBuffer(arrbuf) && "function" == typeof global.ArrayBuffer) {
-                        if ("function" == typeof ArrayBuffer.isView) return ArrayBuffer.isView(arrbuf);
-                        if (arrbuf) return arrbuf instanceof DataView || !!(arrbuf.buffer && arrbuf.buffer instanceof ArrayBuffer);
-                    }
+                    return !isBuffer(arrbuf) && ("function" == typeof global.ArrayBuffer && ("function" == typeof ArrayBuffer.isView ? ArrayBuffer.isView(arrbuf) : arrbuf && (arrbuf instanceof DataView || !!(arrbuf.buffer && arrbuf.buffer instanceof ArrayBuffer))));
                 }
                 var assert = module.exports = ok, regex = /\s*function\s+([^\(\s]*)\s*/;
                 function getName(match) {
@@ -368,7 +365,7 @@
                         try {
                             if (actual instanceof expected) return 1;
                         } catch (e) {}
-                        if (!Error.isPrototypeOf(expected)) return !0 === expected.call({}, actual);
+                        return Error.isPrototypeOf(expected) ? void 0 : !0 === expected.call({}, actual);
                     }
                 }
                 function _throws(shouldThrow, isUnexpectedException, expected, message) {
