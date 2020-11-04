@@ -195,7 +195,9 @@ const TestWithBehaviour = observer(() => (
 		}}
 		niconicoDevtoolProps={nicoProps}
 		miscDevtoolProps={{
-			downloadPlaylog: action("download-playlog")
+			showProfiler: false,
+			downloadPlaylog: action("download-playlog"),
+			setShowProfiler: action("show-profiler")
 		}}
 	/>
 ));
@@ -299,7 +301,9 @@ storiesOf("o-Devtool", module)
 			}}
 			niconicoDevtoolProps={nicoProps}
 			miscDevtoolProps={{
-				downloadPlaylog: action("download-playlog")
+				showProfiler: false,
+				downloadPlaylog: action("download-playlog"),
+				setShowProfiler: action("show-profiler")
 			}}
 		/>
 	))
@@ -393,7 +397,9 @@ storiesOf("o-Devtool", module)
 			}}
 			niconicoDevtoolProps={nicoProps}
 			miscDevtoolProps={{
-				downloadPlaylog: action("download-playlog")
+				showProfiler: false,
+				downloadPlaylog: action("download-playlog"),
+				setShowProfiler: action("show-profiler")
 			}}
 		/>
 	))
@@ -491,7 +497,9 @@ storiesOf("o-Devtool", module)
 			}}
 			niconicoDevtoolProps={nicoProps}
 			miscDevtoolProps={{
-				downloadPlaylog: action("download-playlog")
+				showProfiler: false,
+				downloadPlaylog: action("download-playlog"),
+				setShowProfiler: action("show-profiler")
 			}}
 		/>
 	))
@@ -543,7 +551,9 @@ storiesOf("o-Devtool", module)
 			}}
 			niconicoDevtoolProps={nicoProps}
 			miscDevtoolProps={{
-				downloadPlaylog: action("download-playlog")
+				showProfiler: false,
+				downloadPlaylog: action("download-playlog"),
+				setShowProfiler: action("show-profiler")
 			}}
 		/>
 	))

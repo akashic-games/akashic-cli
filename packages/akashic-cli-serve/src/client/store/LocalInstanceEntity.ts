@@ -198,4 +198,12 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 		this.targetTime = t;
 		return t;
 	}
+
+	@action
+	setProfilerValueTrigger(cb: (value: any) => void): void {
+		const gameDriver = this._serveGameContent.agvGameContent.getGameDriver();
+		if (gameDriver) {
+			gameDriver._gameLoop._clock._profiler._calculateProfilerValueTrigger.add(cb);
+		}
+	}
 }

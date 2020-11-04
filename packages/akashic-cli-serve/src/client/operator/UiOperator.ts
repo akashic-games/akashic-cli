@@ -87,4 +87,8 @@ export class UiOperator {
 	hideNotification = (): void => {
 		this.store.notificationUiStore.setInactive();
 	}
+
+	setShowProfiler = (show: boolean): void => {
+		this.store.devtoolUiStore.setShowProfiler(show);
+	}
 }

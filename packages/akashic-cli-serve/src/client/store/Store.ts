@@ -1,6 +1,6 @@
 import {observable, action} from "mobx";
 import * as queryString from "query-string";
-import { ServiceType } from "@akashic/akashic-cli-commons";
+import {ServiceType} from "@akashic/akashic-cli-commons";
 import {Player} from "../../common/types/Player";
 import {AppOptions} from "../../common/types/AppOptions";
 import {ClientContentLocator} from "../common/ClientContentLocator";
@@ -13,7 +13,9 @@ import {ToolBarUiStore} from "./ToolBarUiStore";
 import {ContentStore} from "./ContentStore";
 import {NotificationUiStore} from "./NotificationUiStore";
 import {StartupScreenUiStore} from "./StartupScreenUiStore";
+import {GameScreenUiStore, ProfilerDataIndex} from "./GameScreenUiStore";
 import {storage} from "./storage";
+import {SimpleProfilerValue} from "../common/types/Profiler";
 
 export class Store {
 	@observable contentStore: ContentStore;
@@ -22,6 +24,7 @@ export class Store {
 	@observable devtoolUiStore: DevtoolUiStore;
 	@observable notificationUiStore: NotificationUiStore;
 	@observable startupScreenUiStore: StartupScreenUiStore;
+	@observable gameScreenUiStore: GameScreenUiStore;
 	@observable appOptions: AppOptions;
 	@observable player: Player | null;
 	@observable contentLocator: ClientContentLocator;
@@ -41,6 +44,7 @@ export class Store {
 		this.devtoolUiStore = new DevtoolUiStore();
 		this.notificationUiStore = new NotificationUiStore();
 		this.startupScreenUiStore = new StartupScreenUiStore();
+		this.gameScreenUiStore = new GameScreenUiStore();
 		this.appOptions = null!;
 		this.player = null;
 		this.currentPlay = null;
@@ -67,6 +71,13 @@ export class Store {
 		if (this.currentLocalInstance === instance)
 			return;
 		this.currentLocalInstance = instance;
+		this.currentLocalInstance.setProfilerValueTrigger((value: SimpleProfilerValue) => {
+			this.gameScreenUiStore.updateProfilerData(ProfilerDataIndex.Fps, value.framePerSecond);
+			this.gameScreenUiStore.updateProfilerData(ProfilerDataIndex.Skipped, value.skippedFrameCount);
+			this.gameScreenUiStore.updateProfilerData(ProfilerDataIndex.Interval, value.rawFrameInterval);
+			this.gameScreenUiStore.updateProfilerData(ProfilerDataIndex.Frame, value.frameTime);
+			this.gameScreenUiStore.updateProfilerData(ProfilerDataIndex.Rendering, value.renderingTime);
+		});
 		this.devtoolUiStore.setEntityTrees([]);
 	}
 

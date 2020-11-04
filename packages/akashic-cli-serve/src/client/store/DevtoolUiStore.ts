@@ -16,6 +16,7 @@ export class DevtoolUiStore {
 	@observable usePreferredTotalTimeLimit: boolean;
 	@observable stopsGameOnTimeout: boolean;
 	@observable totalTimeLimitInputValue: number;
+	@observable showProfiler: boolean;
 
 	// storage に保存しないもの
 	@observable isSelectingEntity: boolean;
@@ -48,6 +49,7 @@ export class DevtoolUiStore {
 		this.usePreferredTotalTimeLimit = storage.data.usePreferredTotalTimeLimit;
 		this.stopsGameOnTimeout = storage.data.stopsGameOnTimeout;
 		this.totalTimeLimitInputValue = storage.data.totalTimeLimitInputValue;
+		this.showProfiler = storage.data.showProfiler;
 	}
 
 	@action
@@ -169,5 +171,11 @@ export class DevtoolUiStore {
 	initTotalTimeLimit(_preferredTotalTimeLimit: number): void {
 		this.preferredTotalTimeLimit = _preferredTotalTimeLimit;
 		this.totalTimeLimit = this.usePreferredTotalTimeLimit ? _preferredTotalTimeLimit : this.totalTimeLimitInputValue;
+	}
+
+	@action
+	setShowProfiler(show: boolean): void {
+		this.showProfiler = show;
+		storage.put({ showProfiler: show });
 	}
 }

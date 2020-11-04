@@ -3,7 +3,9 @@ import { observer } from "mobx-react";
 import { ToolLabelButton } from "../atom/ToolLabelButton";
 
 export interface MiscDevtoolProps {
+	showProfiler: boolean;
 	downloadPlaylog: () => void;
+	setShowProfiler: (show: boolean) => void;
 }
 
 @observer
@@ -18,6 +20,18 @@ export class MiscDevtool extends React.Component<MiscDevtoolProps, {}> {
 			>
 				今までのリプレイ情報を保存
 			</ToolLabelButton>
+			<div>
+				<input
+					className="external-ref_checkbox_show-profiler"
+					type="checkbox"
+					checked={this.props.showProfiler}
+					onChange={this._onShowProfilerCheckboxChange} />
+				セッションパラメータを送る(要新規プレイ)
+			</div>
 		</div>;
+	}
+
+	private _onShowProfilerCheckboxChange = (): void => {
+		this.props.setShowProfiler(!this.props.showProfiler);
 	}
 }
