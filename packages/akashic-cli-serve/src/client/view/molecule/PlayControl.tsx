@@ -35,7 +35,7 @@ export class PlayControl extends React.Component<PlayControlProps, {}> {
 				pushedIcon="play_circle_filled"
 				onClick={props.onClickActivePause} />
 			<ToolIconButton
-				className="external-ref_button_active-pause"
+				className="external-ref_button_active-step"
 				icon="skip_next"
 				disabled={!props.isActivePausing}
 				title={`アクティブインスタンスのポーズ中、プレイを1フレーム進めます。`}
