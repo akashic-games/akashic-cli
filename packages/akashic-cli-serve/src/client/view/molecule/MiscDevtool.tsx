@@ -26,7 +26,7 @@ export class MiscDevtool extends React.Component<MiscDevtoolProps, {}> {
 					type="checkbox"
 					checked={this.props.showProfiler}
 					onChange={this._onShowProfilerCheckboxChange} />
-				セッションパラメータを送る(要新規プレイ)
+				プロファイラー情報の表示
 			</div>
 		</div>;
 	}

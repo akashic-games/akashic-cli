@@ -111,6 +111,7 @@ export class GameScreenUiStore {
 		}
 		if (min < profilerData.min) profilerData.min = min;
 		if (profilerData.max < max) profilerData.max = max;
+		// 以下の処理はコンポーネント側でprofilerDataArrayの変更を反映させるために必要
 		const array = this.profilerDataArray;
 		this.profilerDataArray = [];
 		array.forEach(elem => this.profilerDataArray.push(elem));

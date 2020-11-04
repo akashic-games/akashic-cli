@@ -9,7 +9,6 @@ export interface ProfilerCanvasProps {
 	canvasHeight: number;
 }
 @observer
-// 現状のUIでカテゴリ分けが難しいものを暫定的に置くためのタグ
 export class ProfilerCanvas extends React.Component<ProfilerCanvasProps, {}> {
 	private profilerCanvasContext: CanvasRenderingContext2D|null = null;
 
