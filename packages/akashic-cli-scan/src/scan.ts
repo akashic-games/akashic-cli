@@ -169,7 +169,7 @@ export function scanAsset(param: ScanAssetParameterObject, cb: (err: any) => voi
 export function watchAsset(param: ScanAssetParameterObject, cb: (err: any) => void): void {
 	_completeScanAssetParameterObject(param);
 	param.logger.info("Start Watching Directories of Asset");
-	const watcher = chokidar.watch(param.cwd, { persistent: true, ignored: "**/node_modules/**/*" });
+	const watcher = chokidar.watch(param.cwd, { persistent: true, ignoreInitial: true, ignored: "**/node_modules/**/*" });
 	const handler = (filePath: string) => {
 		if (
 			param.assetScanDirectoryTable.image.some(dir => filePath.indexOf(path.join(param.cwd, dir)) !== -1)
@@ -181,8 +181,22 @@ export function watchAsset(param: ScanAssetParameterObject, cb: (err: any) => vo
 			scanAsset(param, cb);
 		}
 	};
-	watcher.on("change", handler);
+	const changeHandler = (filePath: string) => {
+		// スクリプトやテキストは変更してもgame.jsonに記載されている情報に影響が無いので、changeではimageとaudioのみ対象とする。
+		if (
+			param.assetScanDirectoryTable.image.some(dir => filePath.indexOf(path.join(param.cwd, dir)) !== -1)
+			|| param.assetScanDirectoryTable.audio.some(dir => filePath.indexOf(path.join(param.cwd, dir)) !== -1)
+		) {
+			scanAsset(param, cb);
+		}
+	};
+	// watch開始時にgame.jsonのasstesの内容と実際のアセットの内容に誤差が無いかの確認を兼ねてscanAsset関数を実行する
+	watcher.on("ready", () => {
+		scanAsset(param, cb);
+	});
+	watcher.on("add", handler);
 	watcher.on("unlink", handler);
+	watcher.on("change", changeHandler);
 }
 
 export interface ScanNodeModulesParameterObject {
