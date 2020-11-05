@@ -8,22 +8,17 @@ export interface ProfilerCanvasProps {
 	canvasWidth: number;
 	canvasHeight: number;
 }
+
 @observer
 export class ProfilerCanvas extends React.Component<ProfilerCanvasProps, {}> {
 	private profilerCanvasContext: CanvasRenderingContext2D|null = null;
-
-	componentDidMount(): void {
-		if (!this.profilerCanvasContext) {
-			return;
-		}
-		this.profilerCanvasContext.font = this.props.profilerSetting.fontSize + "px sans-serif";
-	}
 
 	componentDidUpdate(): void {
 		if (!this.profilerCanvasContext) {
 			return;
 		}
 		const setting = this.props.profilerSetting;
+		this.profilerCanvasContext.font = setting.fontSize + "px sans-serif";
 		const deltaX = setting.align === "vertical" ? 0 : setting.width + setting.margin;
 		const deltaY = setting.align === "vertical" ? setting.height + setting.margin : 0;
 		for (let index = 0; index < this.props.profilerDataArray.length; index++) {
