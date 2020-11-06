@@ -76,7 +76,7 @@
     "uglify-save-license": "0.4.1",
     "webpack": "4.44.2",
     "webpack-cli": "3.3.12",
-    "whatwg-fetch": "3.4.1"
+    "whatwg-fetch": "3.5.0"
   },
   "optionalDependencies": {
     "@akashic/akashic-gameview-web": "3.0.0"
