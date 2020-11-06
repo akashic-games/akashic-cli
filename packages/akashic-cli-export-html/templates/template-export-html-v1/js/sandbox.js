@@ -133,19 +133,19 @@ window.addEventListener("load", function() {
 		});
 
 		function setAtsumaruHook() {
-			var canvas = pf.getPrimarySurface().canvas;
 			if (typeof window !== "undefined" && window.RPGAtsumaru) {
 				var volume = window.RPGAtsumaru.volume.getCurrentValue();
 				pf.setMasterVolume(volume);
-				window.RPGAtsumaru.volume.changed.subscribe((newVolume) => {
+				window.RPGAtsumaru.volume.changed.subscribe(function(newVolume) {
 					pf.setMasterVolume(newVolume);
 				});
 
 				window.RPGAtsumaru.experimental.screenshot.setScreenshotHandler(function() {
-				  const pngData = canvas.toDataURL("image/png");
-				  return Promise.resolve(pngData);
+					var canvas = pf.getPrimarySurface().canvas;
+					const pngData = canvas.toDataURL("image/png");
+					return Promise.resolve(pngData);
 				});
-			}	
+			}
 		}
 	}
 });
