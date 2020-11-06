@@ -127,7 +127,24 @@ window.addEventListener("load", function() {
 			if (e) {
 				throw e;
 			}
+			setAtsumaruHook();
 			driver.startGame();
 		});
+
+		function setAtsumaruHook() {
+			var canvas = pf.getPrimarySurface().canvas;
+			if (typeof window !== "undefined" && window.RPGAtsumaru) {
+				var volume = window.RPGAtsumaru.volume.getCurrentValue();
+				pf.setMasterVolume(volume);
+				window.RPGAtsumaru.volume.changed.subscribe((newVolume) => {
+					pf.setMasterVolume(newVolume);
+				});
+
+				window.RPGAtsumaru.experimental.screenshot.setScreenshotHandler(function() {
+				  const pngData = canvas.toDataURL("image/png");
+				  return Promise.resolve(pngData);
+				});
+			}	
+		}
 	}
 });
