@@ -17,6 +17,7 @@ import { createContentsRouter } from "./route/ContentsRoute";
 import { createHealthCheckRouter } from "./route/HealthCheckRoute";
 import { ServerContentLocator } from "./common/ServerContentLocator";
 import {  CliConfigurationFile, CliConfigServe, SERVICE_TYPES } from "@akashic/akashic-cli-commons";
+import { PlayerIdStore } from "./domain/PlayerIdStore";
 
 // 渡されたパラメータを全てstringに変換する
 // chalkを使用する場合、ログ出力時objectの中身を展開してくれないためstringに変換する必要がある
@@ -103,7 +104,7 @@ async function cli(cliConfigParam: CliConfigServe) {
 	let gameExternalFactory: () => any = () => undefined;
 	if (commander.serverExternalScript) {
 		try {
-			gameExternalFactory = require(path.join(process.cwd(), commander.serverExternalScript));
+			gameExternalFactory = require(path.resolve(commander.serverExternalScript));
 		} catch (e) {
 			getSystemLogger().error(`Failed to evaluating --server-external-script (${commander.serverExternalScript}): ${e}`);
 			process.exit(1);
@@ -119,6 +120,7 @@ async function cli(cliConfigParam: CliConfigServe) {
 	const runnerManager = new RunnerManager(playManager);
 	const playStore = new PlayStore({ playManager });
 	const runnerStore = new RunnerStore({ runnerManager, gameExternalFactory });
+	const playerIdStore = new PlayerIdStore();
 	const amflowManager = new SocketIOAMFlowManager({ playStore });
 
 	// TODO ここでRunner情報を外部からPlayStoreにねじ込むのではなく、PlayEntity や PlayEntity#createRunner() を作って管理する方が自然
@@ -144,7 +146,7 @@ async function cli(cliConfigParam: CliConfigServe) {
 	app.use("^\/$", (req, res, next) => res.redirect("/public/"));
 	app.use("/public/", express.static(path.join(__dirname, "..", "..", "www", "public")));
 	app.use("/internal/", express.static(path.join(__dirname, "..", "..", "www", "internal")));
-	app.use("/api/", createApiRouter({ playStore, runnerStore, amflowManager, io }));
+	app.use("/api/", createApiRouter({ playStore, runnerStore, playerIdStore, amflowManager, io }));
 	app.use("/contents/", createContentsRouter({ targetDirs }));
 	app.use("/health-check/", createHealthCheckRouter({ playStore }));
 

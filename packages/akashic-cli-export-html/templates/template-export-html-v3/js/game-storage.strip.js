@@ -5,13 +5,13 @@
         function s(o, u) {
             if (!n[o]) {
                 if (!t[o]) {
-                    var a = "function" == typeof require && require;
-                    if (!u && a) return a(o, !0);
+                    var l = "function" == typeof require && require;
+                    if (!u && l) return l(o, !0);
                     if (i) return i(o, !0);
-                    var f = new Error("Cannot find module '" + o + "'");
-                    throw f.code = "MODULE_NOT_FOUND", f;
+                    l = new Error("Cannot find module '" + o + "'");
+                    throw l.code = "MODULE_NOT_FOUND", l;
                 }
-                var l = n[o] = {
+                l = n[o] = {
                     exports: {}
                 };
                 t[o][0].call(l.exports, function(e) {
@@ -24,26 +24,26 @@
         for (var i = "function" == typeof require && require, o = 0; o < r.length; o++) s(r[o]);
         return s;
     }({
-        1: [ function(require, module, exports) {
+        1: [ function(GameStorage, module, exports) {
             "use strict";
-            var g = require("@akashic/akashic-engine"), validator = require("./validator"), GameStorage = function() {
+            var g = GameStorage("@akashic/akashic-engine"), validator = GameStorage("./validator"), GameStorage = function() {
                 function GameStorage(localStorage, metaData) {
                     this._localStorage = localStorage, this._metaData = metaData;
                 }
-                return GameStorage.prototype.set = function(key, value, option) {
+                return GameStorage.prototype.set = function(key, finalValue, date) {
                     validator.validateStorageKey(key), this.expandVariables(key);
-                    var date, finalValue, strKey = this.storageKeyToStringKey(key), current = this.getValue(strKey), newValue = null;
+                    var strKey = this.storageKeyToStringKey(key), current = this.getValue(strKey), newValue = null;
                     switch (key.region) {
                       case g.StorageRegion.Values:
-                        newValue = this.createValuesValue(current, value, option);
+                        newValue = this.createValuesValue(current, finalValue, date);
                         break;
 
                       case g.StorageRegion.Counts:
-                        newValue = this.createCountsValue(current, value, option);
+                        newValue = this.createCountsValue(current, finalValue, date);
                         break;
 
                       case g.StorageRegion.Scores:
-                        newValue = this.createScoresValue(current, value, option);
+                        newValue = this.createScoresValue(current, finalValue, date);
                         break;
 
                       case g.StorageRegion.Slots:
@@ -65,30 +65,29 @@
                     }, this.setValue(strKey, finalValue));
                 }, GameStorage.prototype.load = function(readKeys) {
                     var _this = this, allValues = {};
-                    Object.keys(this._localStorage).forEach(function(key) {
-                        var k;
-                        0 === key.indexOf("akst:") && (k = key.slice("akst:".length), allValues[k] = _this.getValue(k));
+                    Object.keys(this._localStorage).forEach(function(k) {
+                        0 === k.indexOf("akst:") && (k = k.slice("akst:".length), allValues[k] = _this.getValue(k));
                     });
                     var results = [];
-                    return readKeys.forEach(function(readKey) {
-                        validator.validateStorageReadKey(readKey), _this.expandVariables(readKey);
-                        var regexp, readStrKey, v, sv, values = [];
-                        -1 !== readKey.regionKey.indexOf("*") || "*" === readKey.userId ? (regexp = _this.storageReadKeyToRegExp(readKey), 
-                        Object.keys(allValues).forEach(function(key) {
-                            var lv, sv;
-                            regexp.test(key) && (sv = {
-                                data: (lv = allValues[key]).data,
-                                storageKey: _this.stringKeyToStorageKey(key)
+                    return readKeys.forEach(function(sv) {
+                        validator.validateStorageReadKey(sv), _this.expandVariables(sv);
+                        var regexp, v, values = [];
+                        -1 !== sv.regionKey.indexOf("*") || "*" === sv.userId ? (regexp = _this.storageReadKeyToRegExp(sv), 
+                        Object.keys(allValues).forEach(function(sv) {
+                            var lv;
+                            regexp.test(sv) && (sv = {
+                                data: (lv = allValues[sv]).data,
+                                storageKey: _this.stringKeyToStorageKey(sv)
                             }, null != lv.tag && (sv.tag = lv.tag), values.push(sv));
-                        }), readKey.option && (void 0 !== readKey.option.valueOrder && _this.sortByValue(values, readKey.option.valueOrder), 
-                        void 0 !== readKey.option.keyOrder && _this.sortByRegionKey(values, readKey.option.keyOrder))) : (readStrKey = _this.storageKeyToStringKey(readKey), 
-                        (v = allValues[readStrKey]) && (sv = {
+                        }), sv.option && (void 0 !== sv.option.valueOrder && _this.sortByValue(values, sv.option.valueOrder), 
+                        void 0 !== sv.option.keyOrder && _this.sortByRegionKey(values, sv.option.keyOrder))) : (v = _this.storageKeyToStringKey(sv), 
+                        (v = allValues[v]) && (sv = {
                             data: v.data,
                             storageKey: {
-                                region: readKey.region,
-                                regionKey: readKey.regionKey,
-                                userId: readKey.userId,
-                                gameId: readKey.gameId
+                                region: sv.region,
+                                regionKey: sv.regionKey,
+                                userId: sv.userId,
+                                gameId: sv.gameId
                             }
                         }, null != v.tag && (sv.tag = v.tag), values.push(sv))), results.push(values);
                     }), results;
@@ -97,32 +96,32 @@
                     Object.keys(this._localStorage).forEach(function(key) {
                         0 === key.indexOf("akst:") && _this._localStorage.removeItem(key);
                     });
-                }, GameStorage.prototype.createValuesValue = function(current, value, option) {
+                }, GameStorage.prototype.createValuesValue = function(current, value, result) {
                     if (!value) return null;
-                    if (option && null != option.condition && null != option.comparisonValue && current && null != current.data) {
-                        if (option.condition !== g.StorageCondition.Equal) throw new Error("Invalid condition.");
-                        if (current.data !== option.comparisonValue) return null;
+                    if (result && null != result.condition && null != result.comparisonValue && current && null != current.data) {
+                        if (result.condition !== g.StorageCondition.Equal) throw new Error("Invalid condition.");
+                        if (current.data !== result.comparisonValue) return null;
                     }
-                    var result = {
+                    result = {
                         data: value.data
                     };
                     return null != value.tag ? result.tag = value.tag : current && null != current.tag && (result.tag = current.tag), 
                     result;
-                }, GameStorage.prototype.createScoresValue = function(current, value, option) {
+                }, GameStorage.prototype.createScoresValue = function(current, value, result) {
                     if (!value) return null;
-                    if (option && null != option.condition && null != option.comparisonValue && current && null != current.data) switch (option.condition) {
+                    if (result && null != result.condition && null != result.comparisonValue && current && null != current.data) switch (result.condition) {
                       case g.StorageCondition.Equal:
-                        if (current.data !== option.comparisonValue) return null;
+                        if (current.data !== result.comparisonValue) return null;
                         break;
 
                       case g.StorageCondition.GreaterThan:
-                        if (!(current.data > option.comparisonValue)) return null;
+                        if (!(current.data > result.comparisonValue)) return null;
                         break;
 
                       case g.StorageCondition.LessThan:
-                        if (!(current.data < option.comparisonValue)) return null;
+                        if (!(current.data < result.comparisonValue)) return null;
                     }
-                    var result = {
+                    result = {
                         data: value.data
                     };
                     return null != value.tag ? result.tag = value.tag : current && null != current.tag && (result.tag = current.tag), 
@@ -149,23 +148,23 @@
                     }
                     return value && null != value.tag ? result.tag = value.tag : current && null != current.tag && (result.tag = current.tag), 
                     result;
-                }, GameStorage.prototype.createCountsValue = function(current, value, option) {
-                    if (option) {
-                        if (option.operation === g.StorageCountsOperation.Incr || option.operation === g.StorageCountsOperation.Decr) return this.createCountsIncrDecrValue(current, value, option);
-                        if (null != option.condition && null != option.comparisonValue && current && null != current.data) switch (option.condition) {
+                }, GameStorage.prototype.createCountsValue = function(current, value, result) {
+                    if (result) {
+                        if (result.operation === g.StorageCountsOperation.Incr || result.operation === g.StorageCountsOperation.Decr) return this.createCountsIncrDecrValue(current, value, result);
+                        if (null != result.condition && null != result.comparisonValue && current && null != current.data) switch (result.condition) {
                           case g.StorageCondition.Equal:
-                            if (current.data !== option.comparisonValue) return null;
+                            if (current.data !== result.comparisonValue) return null;
                             break;
 
                           case g.StorageCondition.GreaterThan:
-                            if (!(current.data > option.comparisonValue)) return null;
+                            if (!(current.data > result.comparisonValue)) return null;
                             break;
 
                           case g.StorageCondition.LessThan:
-                            if (!(current.data < option.comparisonValue)) return null;
+                            if (!(current.data < result.comparisonValue)) return null;
                         }
                     }
-                    var result = {
+                    result = {
                         data: value.data
                     };
                     return value && null != value.tag ? result.tag = value.tag : current && null != current.tag && (result.tag = current.tag), 
@@ -176,8 +175,8 @@
                     return JSON.parse(this._localStorage.getItem("akst:" + key));
                 }, GameStorage.prototype.storageKeyToStringKey = function(key) {
                     return (key.region || "") + "/" + (null != key.gameId ? String(key.gameId) : "") + "/" + (null != key.userId ? String(key.userId) : "") + "/" + (key.regionKey || "");
-                }, GameStorage.prototype.stringKeyToStorageKey = function(key) {
-                    var s = key.split("/"), res = {
+                }, GameStorage.prototype.stringKeyToStorageKey = function(res) {
+                    var s = res.split("/"), res = {
                         region: Number(s[0]),
                         regionKey: s[3]
                     };
@@ -189,8 +188,8 @@
                         index !== layerKeys.length - 1 && (regionKey += ".");
                     }) : regionKey = key.regionKey.replace(".", "."), new RegExp("^" + region + "/" + gameId + "/" + userId + "/" + regionKey + "$");
                 }, GameStorage.prototype.sortByValue = function(values, order) {
-                    values.sort(function(a, b) {
-                        var va = a.data, vb = b.data;
+                    values.sort(function(va, vb) {
+                        va = va.data, vb = vb.data;
                         if (order === g.StorageOrder.Asc) {
                             if (va < vb) return -1;
                             if (vb < va) return 1;
@@ -201,8 +200,8 @@
                         return 0;
                     });
                 }, GameStorage.prototype.sortByRegionKey = function(values, order) {
-                    values.sort(function(a, b) {
-                        var ka = a.storageKey.regionKey, kb = b.storageKey.regionKey;
+                    values.sort(function(ka, kb) {
+                        ka = ka.storageKey.regionKey, kb = kb.storageKey.regionKey;
                         if (order === g.StorageOrder.Asc) {
                             if (ka < kb) return -1;
                             if (kb < ka) return 1;
@@ -221,9 +220,9 @@
             "./validator": 3,
             "@akashic/akashic-engine": "@akashic/akashic-engine"
         } ],
-        2: [ function(require, module, exports) {
+        2: [ function(gs, module, exports) {
             "use strict";
-            var gs = require("./GameStorage");
+            gs = gs("./GameStorage");
             exports.GameStorage = gs.GameStorage;
         }, {
             "./GameStorage": 1
@@ -248,9 +247,8 @@
                 assert(-1 === key.regionKey.indexOf("*"), 'regionKey for reading must not include "*" when userId is "*".')) : assert("*" !== key.userId, 'userId for writing must not include "*".'));
             }
             exports.validateRegionKey = validateRegionKey, exports.validateStorageKey = validateStorageKey, 
-            exports.validateStorageReadKey = function(key) {
-                var opt;
-                validateStorageKey(key, !0), null != key.option && (null != (opt = key.option).keyOrder && assert(opt.keyOrder === g.StorageOrder.Asc || opt.keyOrder === g.StorageOrder.Desc, "Invalid keyOrder."), 
+            exports.validateStorageReadKey = function(opt) {
+                validateStorageKey(opt, !0), null != opt.option && (null != (opt = opt.option).keyOrder && assert(opt.keyOrder === g.StorageOrder.Asc || opt.keyOrder === g.StorageOrder.Desc, "Invalid keyOrder."), 
                 null != opt.valueOrder && assert(opt.valueOrder === g.StorageOrder.Asc || opt.valueOrder === g.StorageOrder.Desc, "Invalid valueOrder."));
             }, exports.validateStorageWriteOption = function(option) {};
         }, {
@@ -299,25 +297,22 @@
                     return Object.prototype.toString.call(obj);
                 }
                 function isView(arrbuf) {
-                    if (!isBuffer(arrbuf) && "function" == typeof global.ArrayBuffer) {
-                        if ("function" == typeof ArrayBuffer.isView) return ArrayBuffer.isView(arrbuf);
-                        if (arrbuf) return arrbuf instanceof DataView || !!(arrbuf.buffer && arrbuf.buffer instanceof ArrayBuffer);
-                    }
+                    return !isBuffer(arrbuf) && ("function" == typeof global.ArrayBuffer && ("function" == typeof ArrayBuffer.isView ? ArrayBuffer.isView(arrbuf) : arrbuf && (arrbuf instanceof DataView || !!(arrbuf.buffer && arrbuf.buffer instanceof ArrayBuffer))));
                 }
                 var assert = module.exports = ok, regex = /\s*function\s+([^\(\s]*)\s*/;
-                function getName(func) {
-                    if (util.isFunction(func)) {
-                        if (functionsHaveNames) return func.name;
-                        var match = func.toString().match(regex);
+                function getName(match) {
+                    if (util.isFunction(match)) {
+                        if (functionsHaveNames) return match.name;
+                        match = match.toString().match(regex);
                         return match && match[1];
                     }
                 }
                 function truncate(s, n) {
                     return "string" != typeof s || s.length < n ? s : s.slice(0, n);
                 }
-                function inspect(something) {
-                    if (functionsHaveNames || !util.isFunction(something)) return util.inspect(something);
-                    var rawname = getName(something);
+                function inspect(rawname) {
+                    if (functionsHaveNames || !util.isFunction(rawname)) return util.inspect(rawname);
+                    rawname = getName(rawname);
                     return "[Function" + (rawname ? ": " + rawname : "") + "]";
                 }
                 function fail(actual, expected, message, operator, stackStartFunction) {
@@ -370,12 +365,12 @@
                         try {
                             if (actual instanceof expected) return 1;
                         } catch (e) {}
-                        if (!Error.isPrototypeOf(expected)) return !0 === expected.call({}, actual);
+                        return Error.isPrototypeOf(expected) ? void 0 : !0 === expected.call({}, actual);
                     }
                 }
-                function _throws(shouldThrow, block, expected, message) {
+                function _throws(shouldThrow, isUnexpectedException, expected, message) {
                     var actual;
-                    if ("function" != typeof block) throw new TypeError('"block" argument must be a function');
+                    if ("function" != typeof isUnexpectedException) throw new TypeError('"block" argument must be a function');
                     "string" == typeof expected && (message = expected, expected = null), actual = function(block) {
                         var error;
                         try {
@@ -384,21 +379,19 @@
                             error = e;
                         }
                         return error;
-                    }(block), message = (expected && expected.name ? " (" + expected.name + ")." : ".") + (message ? " " + message : "."), 
+                    }(isUnexpectedException), message = (expected && expected.name ? " (" + expected.name + ")." : ".") + (message ? " " + message : "."), 
                     shouldThrow && !actual && fail(actual, expected, "Missing expected exception" + message);
                     var userProvidedMessage = "string" == typeof message, isUnexpectedException = !shouldThrow && actual && !expected;
                     if ((!shouldThrow && util.isError(actual) && userProvidedMessage && expectedException(actual, expected) || isUnexpectedException) && fail(actual, expected, "Got unwanted exception" + message), 
                     shouldThrow && actual && expected && !expectedException(actual, expected) || !shouldThrow && actual) throw actual;
                 }
-                assert.AssertionError = function(options) {
-                    var self;
-                    this.name = "AssertionError", this.actual = options.actual, this.expected = options.expected, 
-                    this.operator = options.operator, options.message ? (this.message = options.message, 
-                    this.generatedMessage = !1) : (this.message = truncate(inspect((self = this).actual), 128) + " " + self.operator + " " + truncate(inspect(self.expected), 128), 
+                assert.AssertionError = function(out) {
+                    this.name = "AssertionError", this.actual = out.actual, this.expected = out.expected, 
+                    this.operator = out.operator, out.message ? (this.message = out.message, this.generatedMessage = !1) : (this.message = truncate(inspect((next_line = this).actual), 128) + " " + next_line.operator + " " + truncate(inspect(next_line.expected), 128), 
                     this.generatedMessage = !0);
-                    var err, fn_name, idx, next_line, out, stackStartFunction = options.stackStartFunction || fail;
-                    Error.captureStackTrace ? Error.captureStackTrace(this, stackStartFunction) : (err = new Error()).stack && (out = err.stack, 
-                    fn_name = getName(stackStartFunction), 0 <= (idx = out.indexOf("\n" + fn_name)) && (next_line = out.indexOf("\n", idx + 1), 
+                    var next_line = out.stackStartFunction || fail;
+                    Error.captureStackTrace ? Error.captureStackTrace(this, next_line) : (out = new Error()).stack && (out = out.stack, 
+                    next_line = getName(next_line), 0 <= (next_line = out.indexOf("\n" + next_line)) && (next_line = out.indexOf("\n", next_line + 1), 
                     out = out.substring(next_line + 1)), this.stack = out);
                 }, util.inherits(assert.AssertionError, Error), assert.fail = fail, assert.ok = ok, 
                 assert.equal = function(actual, expected, message) {
@@ -425,16 +418,16 @@
                     if (err) throw err;
                 };
                 var objectKeys = Object.keys || function(obj) {
-                    var keys = [];
-                    for (var key in obj) hasOwn.call(obj, key) && keys.push(key);
+                    var key, keys = [];
+                    for (key in obj) hasOwn.call(obj, key) && keys.push(key);
                     return keys;
                 };
             }).call(this, "undefined" != typeof global ? global : "undefined" != typeof self ? self : "undefined" != typeof window ? window : {});
         }, {
             "util/": 8
         } ],
-        5: [ function(require, module, exports) {
-            var cachedSetTimeout, cachedClearTimeout, process = module.exports = {};
+        5: [ function(require, process, exports) {
+            var cachedSetTimeout, cachedClearTimeout, process = process.exports = {};
             function defaultSetTimout() {
                 throw new Error("setTimeout has not been defined");
             }
@@ -616,8 +609,8 @@
                     void 0 === ctx.customInspect && (ctx.customInspect = !0), ctx.colors && (ctx.stylize = stylizeWithColor), 
                     formatValue(ctx, obj, ctx.depth);
                 }
-                function stylizeWithColor(str, styleType) {
-                    var style = inspect.styles[styleType];
+                function stylizeWithColor(str, style) {
+                    style = inspect.styles[style];
                     return style ? "[" + inspect.colors[style][0] + "m" + str + "[" + inspect.colors[style][1] + "m" : str;
                 }
                 function stylizeNoColor(str, styleType) {
@@ -625,10 +618,10 @@
                 }
                 function formatValue(ctx, value, recurseTimes) {
                     if (ctx.customInspect && value && isFunction(value.inspect) && value.inspect !== exports.inspect && (!value.constructor || value.constructor.prototype !== value)) {
-                        var ret = value.inspect(recurseTimes, ctx);
-                        return isString(ret) || (ret = formatValue(ctx, ret, recurseTimes)), ret;
+                        var output = value.inspect(recurseTimes, ctx);
+                        return isString(output) || (output = formatValue(ctx, output, recurseTimes)), output;
                     }
-                    var primitive = function(ctx, value) {
+                    var base = function(ctx, value) {
                         if (void 0 === value) return ctx.stylize("undefined", "undefined");
                         if (isString(value)) {
                             var simple = "'" + JSON.stringify(value).replace(/^"|"$/g, "").replace(/'/g, "\\'").replace(/\\"/g, '"') + "'";
@@ -638,33 +631,33 @@
                         if (isBoolean(value)) return ctx.stylize("" + value, "boolean");
                         if (null === value) return ctx.stylize("null", "null");
                     }(ctx, value);
-                    if (primitive) return primitive;
-                    var keys = Object.keys(value), visibleKeys = function(array) {
+                    if (base) return base;
+                    var output = Object.keys(value), visibleKeys = function(array) {
                         var hash = {};
                         return array.forEach(function(val, idx) {
                             hash[val] = !0;
                         }), hash;
-                    }(keys);
-                    if (ctx.showHidden && (keys = Object.getOwnPropertyNames(value)), isError(value) && (0 <= keys.indexOf("message") || 0 <= keys.indexOf("description"))) return formatError(value);
-                    if (0 === keys.length) {
+                    }(output);
+                    if (ctx.showHidden && (output = Object.getOwnPropertyNames(value)), isError(value) && (0 <= output.indexOf("message") || 0 <= output.indexOf("description"))) return formatError(value);
+                    if (0 === output.length) {
                         if (isFunction(value)) {
-                            var name = value.name ? ": " + value.name : "";
-                            return ctx.stylize("[Function" + name + "]", "special");
+                            var braces = value.name ? ": " + value.name : "";
+                            return ctx.stylize("[Function" + braces + "]", "special");
                         }
                         if (isRegExp(value)) return ctx.stylize(RegExp.prototype.toString.call(value), "regexp");
                         if (isDate(value)) return ctx.stylize(Date.prototype.toString.call(value), "date");
                         if (isError(value)) return formatError(value);
                     }
-                    var output, base = "", array = !1, braces = [ "{", "}" ];
+                    var base = "", array = !1, braces = [ "{", "}" ];
                     return isArray(value) && (array = !0, braces = [ "[", "]" ]), isFunction(value) && (base = " [Function" + (value.name ? ": " + value.name : "") + "]"), 
                     isRegExp(value) && (base = " " + RegExp.prototype.toString.call(value)), isDate(value) && (base = " " + Date.prototype.toUTCString.call(value)), 
-                    isError(value) && (base = " " + formatError(value)), 0 !== keys.length || array && 0 != value.length ? recurseTimes < 0 ? isRegExp(value) ? ctx.stylize(RegExp.prototype.toString.call(value), "regexp") : ctx.stylize("[Object]", "special") : (ctx.seen.push(value), 
+                    isError(value) && (base = " " + formatError(value)), 0 !== output.length || array && 0 != value.length ? recurseTimes < 0 ? isRegExp(value) ? ctx.stylize(RegExp.prototype.toString.call(value), "regexp") : ctx.stylize("[Object]", "special") : (ctx.seen.push(value), 
                     output = array ? function(ctx, value, recurseTimes, visibleKeys, keys) {
                         for (var output = [], i = 0, l = value.length; i < l; ++i) hasOwnProperty(value, String(i)) ? output.push(formatProperty(ctx, value, recurseTimes, visibleKeys, String(i), !0)) : output.push("");
                         return keys.forEach(function(key) {
                             key.match(/^\d+$/) || output.push(formatProperty(ctx, value, recurseTimes, visibleKeys, key, !0));
                         }), output;
-                    }(ctx, value, recurseTimes, visibleKeys, keys) : keys.map(function(key) {
+                    }(ctx, value, recurseTimes, visibleKeys, output) : output.map(function(key) {
                         return formatProperty(ctx, value, recurseTimes, visibleKeys, key, array);
                     }), ctx.seen.pop(), function(output, base, braces) {
                         if (60 < output.reduce(function(prev, cur) {
@@ -676,9 +669,9 @@
                 function formatError(value) {
                     return "[" + Error.prototype.toString.call(value) + "]";
                 }
-                function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
-                    var name, str, desc = Object.getOwnPropertyDescriptor(value, key) || {
-                        value: value[key]
+                function formatProperty(ctx, desc, recurseTimes, visibleKeys, key, array) {
+                    var name, str, desc = Object.getOwnPropertyDescriptor(desc, key) || {
+                        value: desc[key]
                     };
                     if (desc.get ? str = desc.set ? ctx.stylize("[Getter/Setter]", "special") : ctx.stylize("[Getter]", "special") : desc.set && (str = ctx.stylize("[Setter]", "special")), 
                     hasOwnProperty(visibleKeys, key) || (name = "[" + key + "]"), str || (ctx.seen.indexOf(desc.value) < 0 ? -1 < (str = formatValue(ctx, desc.value, null === recurseTimes ? null : recurseTimes - 1)).indexOf("\n") && (str = array ? str.split("\n").map(function(line) {

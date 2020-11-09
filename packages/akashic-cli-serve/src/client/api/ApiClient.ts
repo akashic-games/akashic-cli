@@ -10,7 +10,8 @@ import {
 	ContentGetAllApiResponse,
 	ContentGetApiResponse,
 	SandboxConfigApiResponse,
-	OptionsApiResponse
+	OptionsApiResponse,
+	PlayerPostApiResponse
 } from "../../common/types/ApiResponse";
 import {ContentLocatorData} from "../../common/types/ContentLocatorData";
 import {GameConfiguration} from "../../common/types/GameConfiguration";
@@ -55,6 +56,13 @@ export const createPlayToken = async(
 
 export const broadcast = async(playId: string, message: any): Promise<void> => {
 	return await ApiRequest.post<void>(`/api/plays/${playId}/broadcast`, message);
+};
+
+export const registerPlayerId = async(playerId?: string): Promise<PlayerPostApiResponse> => {
+	return await ApiRequest.post<PlayerPostApiResponse>(
+		`/api/playerids`,
+		{ playerId }
+	);
 };
 
 export const createRunner = async(playId: string, isActive: boolean, token: string): Promise<RunnerPostApiResponse> => {

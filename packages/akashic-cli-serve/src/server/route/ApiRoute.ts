@@ -19,10 +19,13 @@ import { PlayStore } from "../domain/PlayStore";
 import { RunnerStore } from "../domain/RunnerStore";
 import { SocketIOAMFlowManager } from "../domain/SocketIOAMFlowManager";
 import { handleToGetStartupOptions } from "../controller/StartupOptionsController";
+import { createHandlerToRegisterPlayerId } from "../controller/PlayerIdController";
+import { PlayerIdStore } from "../domain/PlayerIdStore";
 
 export interface ApiRouterParameterObject {
 	playStore: PlayStore;
 	runnerStore: RunnerStore;
+	playerIdStore: PlayerIdStore;
 	amflowManager: SocketIOAMFlowManager;
 	io: socketio.Server;
 }
@@ -45,6 +48,8 @@ export const createApiRouter = (params: ApiRouterParameterObject): express.Route
 	apiRouter.patch("/runners/:runnerId", createHandlerToPatchRunner(params.runnerStore));
 
 	apiRouter.get("/options", handleToGetStartupOptions);
+
+	apiRouter.post("/playerids", createHandlerToRegisterPlayerId(params.playerIdStore));
 
 	return apiRouter;
 };
