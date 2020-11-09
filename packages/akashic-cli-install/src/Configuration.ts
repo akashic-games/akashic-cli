@@ -30,11 +30,11 @@ export class Configuration extends cmn.Configuration {
 		}
 	}
 
-	addToModuleMainScripts(packageJsonFiles: string[]): void {
+	addToModuleMainScripts(packageJsonFiles: string[], sandboxRuntime: string): void {
 		this._logger.info("Adding file paths to moduleMainScripts...");
 		var moduleMainScripts = cmn.NodeModules.listModuleMainScripts(packageJsonFiles);
 		if (moduleMainScripts && Object.keys(moduleMainScripts).length > 0) {
-			if (! this._content.moduleMainScripts) {
+			if (! this._content.moduleMainScripts && sandboxRuntime !== "3") {
 				this._logger.warn(
 					"Newly added the moduleMainScripts property to game.json." +
 					"This property, introduced by akashic-cli@>=1.12.2, is NOT supported by older versions of Akashic Engine." +
