@@ -1,5 +1,21 @@
 # CHANGELOG
 
+## 1.14.111 (2020-11-09)
+
+#### Update Dependencies
+* `akashic-cli-init`
+  * [#573](https://github.com/akashic-games/akashic-cli/pull/573) Update dependency ts-jest to v26.4.4 ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`, `akashic-cli-export-html`, `akashic-cli-init`
+  * [#571](https://github.com/akashic-games/akashic-cli/pull/571) Update dependency eslint to v7.13.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#572](https://github.com/akashic-games/akashic-cli/pull/572) Update dependency ts-loader to v8.0.10 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Republish
+* [#576](https://github.com/akashic-games/akashic-cli/pull/576) Republish ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.14.110 (2020-11-07)
 
 #### Enhancement
