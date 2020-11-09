@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-export-html",
-  "version": "0.7.87",
+  "version": "0.7.90",
   "description": "A module to convert your Akashic game to a runnable standalone.",
   "main": "lib/index.js",
   "scripts": {
@@ -46,13 +46,13 @@
     "@types/archiver": "3.1.1",
     "@types/commander": "2.12.0",
     "@types/ejs": "3.0.5",
-    "@types/fs-extra": "9.0.2",
+    "@types/fs-extra": "9.0.3",
     "@types/fs-readdir-recursive": "1.0.0",
-    "@types/node": "14.14.3",
-    "@types/uglify-js": "3.11.0",
+    "@types/node": "14.14.6",
+    "@types/uglify-js": "3.11.1",
     "browserify": "16.5.2",
-    "eslint": "7.12.0",
-    "jest": "26.6.1",
+    "eslint": "7.13.0",
+    "jest": "26.6.3",
     "mock-fs": "4.13.0",
     "node-fetch": "2.6.1",
     "shx": "0.3.3",
@@ -64,15 +64,15 @@
   },
   "typings": "lib/index.d.ts",
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.5.50",
-    "@akashic/akashic-cli-export-zip": "0.6.71",
+    "@akashic/akashic-cli-commons": "0.5.52",
+    "@akashic/akashic-cli-export-zip": "0.6.73",
     "archiver": "~4.0.0",
     "commander": "5.1.0",
     "ejs": "~3.1.0",
     "fs-extra": "9.0.1",
     "fs-readdir-recursive": "~1.1.0",
     "https": "~1.0.0",
-    "uglify-js": "3.11.4"
+    "uglify-js": "3.11.5"
   },
   "publishConfig": {
     "access": "public",
