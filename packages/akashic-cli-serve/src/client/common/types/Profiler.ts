@@ -1,7 +1,7 @@
 // TODO: プロファイラーの項目名のネーミング
 export type ProfilerName = "fps" | "skipped" | "interval" | "frame" | "rendering";
 
-export interface ProfilerSetting {
+export interface ProfilerSettingStyle {
 	width: number;
 	height: number;
 	margin: number;
@@ -27,34 +27,34 @@ export interface ProfilerData {
 	fixed: number;
 }
 
-export interface SimpleProfilerValue {
+export interface ProfilerValue {
 	/**
 	 * ｀interval｀ の区間において、描画がスキップされたフレームの数。
 	 */
-	skippedFrameCount: SimpleProfilerValueResult;
+	skippedFrameCount: ProfilerValueResult;
 
 	/**
 	 * ｀interval｀ の区間における、フレーム描画間隔。
 	 */
-	rawFrameInterval: SimpleProfilerValueResult;
+	rawFrameInterval: ProfilerValueResult;
 
 	/**
 	 * ｀interval｀ の区間における、1秒あたりの描画回数 (FPS)。
 	 */
-	framePerSecond: SimpleProfilerValueResult;
+	framePerSecond: ProfilerValueResult;
 
 	/**
 	 * ｀interval｀ の区間において、フレームの実行に要した時間。
 	 */
-	frameTime: SimpleProfilerValueResult;
+	frameTime: ProfilerValueResult;
 
 	/**
 	 * ｀interval｀ の区間において、フレームの描画に要した時間。
 	 */
-	renderingTime: SimpleProfilerValueResult;
+	renderingTime: ProfilerValueResult;
 }
 
-export interface SimpleProfilerValueResult {
+export interface ProfilerValueResult {
 	ave: number;
 	max: number;
 	min: number;

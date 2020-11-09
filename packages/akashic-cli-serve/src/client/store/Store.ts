@@ -13,9 +13,9 @@ import {ToolBarUiStore} from "./ToolBarUiStore";
 import {ContentStore} from "./ContentStore";
 import {NotificationUiStore} from "./NotificationUiStore";
 import {StartupScreenUiStore} from "./StartupScreenUiStore";
-import {GameScreenUiStore, ProfilerDataIndex} from "./GameScreenUiStore";
+import {GameScreenUiStore} from "./GameScreenUiStore";
 import {storage} from "./storage";
-import {SimpleProfilerValue} from "../common/types/Profiler";
+import {ProfilerValue} from "../common/types/Profiler";
 
 export class Store {
 	@observable contentStore: ContentStore;
@@ -71,12 +71,12 @@ export class Store {
 		if (this.currentLocalInstance === instance)
 			return;
 		this.currentLocalInstance = instance;
-		this.currentLocalInstance.setProfilerValueTrigger((value: SimpleProfilerValue) => {
-			this.gameScreenUiStore.updateProfilerData(ProfilerDataIndex.Fps, value.framePerSecond);
-			this.gameScreenUiStore.updateProfilerData(ProfilerDataIndex.Skipped, value.skippedFrameCount);
-			this.gameScreenUiStore.updateProfilerData(ProfilerDataIndex.Interval, value.rawFrameInterval);
-			this.gameScreenUiStore.updateProfilerData(ProfilerDataIndex.Frame, value.frameTime);
-			this.gameScreenUiStore.updateProfilerData(ProfilerDataIndex.Rendering, value.renderingTime);
+		this.currentLocalInstance.setProfilerValueTrigger((value: ProfilerValue) => {
+			this.gameScreenUiStore.updateProfilerData("fps", value.framePerSecond);
+			this.gameScreenUiStore.updateProfilerData("skipped", value.skippedFrameCount);
+			this.gameScreenUiStore.updateProfilerData("interval", value.rawFrameInterval);
+			this.gameScreenUiStore.updateProfilerData("frame", value.frameTime);
+			this.gameScreenUiStore.updateProfilerData("rendering", value.renderingTime);
 		});
 		this.devtoolUiStore.setEntityTrees([]);
 	}

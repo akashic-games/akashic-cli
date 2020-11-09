@@ -1,10 +1,10 @@
 import * as React from "react";
 import { observer } from "mobx-react";
-import { ProfilerData, ProfilerSetting } from "../../common/types/Profiler";
+import { ProfilerData, ProfilerSettingStyle } from "../../common/types/Profiler";
 
 export interface ProfilerCanvasProps {
 	profilerDataArray: ProfilerData[];
-	profilerSetting: ProfilerSetting;
+	profilerSetting: ProfilerSettingStyle;
 	canvasWidth: number;
 	canvasHeight: number;
 }
@@ -86,14 +86,15 @@ export class ProfilerCanvas extends React.Component<ProfilerCanvasProps, {}> {
 
 	render(): React.ReactNode {
 		return <div id="profiler-canvas">
-				<canvas
-					className="external-ref_profiler_canvas"
-					width={ this.props.canvasWidth }
-					height={ this.props.canvasHeight }
-					style={{ width: this.props.canvasWidth, height: this.props.canvasHeight }}
-					ref={ node => {
-						if (node) this.profilerCanvasContext = node.getContext("2d");
-					}}/>
+			<canvas
+				className="external-ref_profiler_canvas"
+				width={ this.props.canvasWidth }
+				height={ this.props.canvasHeight }
+				style={{ width: this.props.canvasWidth, height: this.props.canvasHeight }}
+				ref={ node => {
+					if (node) this.profilerCanvasContext = node.getContext("2d");
+				}}
+			/>
 		</div>;
 	}
 

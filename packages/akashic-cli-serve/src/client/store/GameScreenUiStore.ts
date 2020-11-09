@@ -1,17 +1,9 @@
 import { action, observable } from "mobx";
-import { ProfilerData, ProfilerSetting, SimpleProfilerValueResult } from "../common/types/Profiler";
-
-export const enum ProfilerDataIndex {
-	Fps = 0,
-	Skipped = 1,
-	Interval = 2,
-	Frame = 3,
-	Rendering = 4
-}
+import { ProfilerData, ProfilerName, ProfilerSettingStyle, ProfilerValueResult } from "../common/types/Profiler";
 
 export class GameScreenUiStore {
 	@observable profilerDataArray: ProfilerData[];
-	@observable profilerSetting: ProfilerSetting;
+	@observable profilerSetting: ProfilerSettingStyle;
 	@observable profilerWidth: number;
 	@observable profilerHeight: number;
 
@@ -84,14 +76,17 @@ export class GameScreenUiStore {
 
 	@action
 	updateProfilerData (
-		index: ProfilerDataIndex,
-		profileValue: SimpleProfilerValueResult
+		name: ProfilerName,
+		profileValueResult: ProfilerValueResult
 	) {
-		const profilerData = this.profilerDataArray[index];
-		if (!profilerData) {
+		const copiedProfilerDataArray = this.profilerDataArray.slice();
+		// 本来であればArray#find()を使うべきだが、ES5にない関数なので代わりにfilterを使用する
+		const targetProfilers = copiedProfilerDataArray.filter(profiler => profiler.name === name);
+		if (targetProfilers.length === 0) {
 			return;
 		}
-		profilerData.data.unshift(profileValue.ave);
+		const profilerData = targetProfilers[0];
+		profilerData.data.unshift(profileValueResult.ave);
 		const setting = this.profilerSetting;
 		let min = Number.MAX_VALUE;
 		let max = 0;
@@ -111,9 +106,6 @@ export class GameScreenUiStore {
 		}
 		if (min < profilerData.min) profilerData.min = min;
 		if (profilerData.max < max) profilerData.max = max;
-		// 以下の処理はコンポーネント側でprofilerDataArrayの変更を反映させるために必要
-		const array = this.profilerDataArray;
-		this.profilerDataArray = [];
-		array.forEach(elem => this.profilerDataArray.push(elem));
+		this.profilerDataArray = copiedProfilerDataArray;
 	}
 }
