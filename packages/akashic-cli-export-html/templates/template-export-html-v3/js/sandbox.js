@@ -141,7 +141,7 @@ window.addEventListener("load", function() {
 
 				window.RPGAtsumaru.experimental.screenshot.setScreenshotHandler(function() {
 					var canvas = pf.getPrimarySurface().canvas;
-					const pngData = canvas.toDataURL("image/png");
+					var pngData = canvas.toDataURL("image/png");
 					return Promise.resolve(pngData);
 				});
 			}
