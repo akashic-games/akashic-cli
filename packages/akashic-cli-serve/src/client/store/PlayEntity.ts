@@ -169,6 +169,12 @@ export class PlayEntity {
 		ApiClient.resumePlayDuration(this.playId);
 	}
 
+	stepActive(): void {
+		// 手抜き実装: サーバインスタンスは全てアクティブ(つまり一つしかない)前提
+		this.serverInstances.forEach(si => si.step());
+		ApiClient.stepPlayDuration(this.playId);
+	}
+
 	@action
 	handlePlayerJoin(player: Player): void {
 		this.joinedPlayerTable.set(player.id, player);
