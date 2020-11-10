@@ -1,7 +1,7 @@
 // TODO: プロファイラーの項目名のネーミング
 export type ProfilerName = "fps" | "skipped" | "interval" | "frame" | "rendering";
 
-export interface ProfilerSettingStyle {
+export interface ProfilerStyleSetting {
 	width: number;
 	height: number;
 	margin: number;

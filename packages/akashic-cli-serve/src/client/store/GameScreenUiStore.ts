@@ -1,9 +1,9 @@
 import { action, observable } from "mobx";
-import { ProfilerData, ProfilerName, ProfilerSettingStyle, ProfilerValueResult } from "../common/types/Profiler";
+import { ProfilerData, ProfilerName, ProfilerStyleSetting, ProfilerValueResult } from "../common/types/Profiler";
 
 export class GameScreenUiStore {
 	@observable profilerDataArray: ProfilerData[];
-	@observable profilerSetting: ProfilerSettingStyle;
+	@observable profilerStyleSetting: ProfilerStyleSetting;
 	@observable profilerWidth: number;
 	@observable profilerHeight: number;
 
@@ -46,7 +46,7 @@ export class GameScreenUiStore {
 			}
 		];
 		// TODO: プロファイラーのサイズ・色等の設定値をserveに適したものにする
-		this.profilerSetting = {
+		this.profilerStyleSetting = {
 			width: 150,
 			height: 0,
 			margin: 5,
@@ -63,7 +63,7 @@ export class GameScreenUiStore {
 			graphWidthMargin: 1,
 			graphPadding: 5
 		};
-		const setting = this.profilerSetting;
+		const setting = this.profilerStyleSetting;
 		setting.height =   setting.fontSize * 3 +  setting.padding * 2;
 		if ( setting.align === "vertical") {
 			this.profilerWidth =  setting.width;
@@ -87,7 +87,7 @@ export class GameScreenUiStore {
 		}
 		const profilerData = targetProfilers[0];
 		profilerData.data.unshift(profileValueResult.ave);
-		const setting = this.profilerSetting;
+		const setting = this.profilerStyleSetting;
 		let min = Number.MAX_VALUE;
 		let max = 0;
 		for (let i = 0; i < profilerData.data.length; ++i) {

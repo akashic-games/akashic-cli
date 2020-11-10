@@ -1,10 +1,10 @@
 import * as React from "react";
 import { observer } from "mobx-react";
-import { ProfilerData, ProfilerSettingStyle } from "../../common/types/Profiler";
+import { ProfilerData, ProfilerStyleSetting } from "../../common/types/Profiler";
 
 export interface ProfilerCanvasProps {
 	profilerDataArray: ProfilerData[];
-	profilerSetting: ProfilerSettingStyle;
+	profilerStyleSetting: ProfilerStyleSetting;
 	canvasWidth: number;
 	canvasHeight: number;
 }
@@ -17,7 +17,7 @@ export class ProfilerCanvas extends React.Component<ProfilerCanvasProps, {}> {
 		if (!this.profilerCanvasContext) {
 			return;
 		}
-		const setting = this.props.profilerSetting;
+		const setting = this.props.profilerStyleSetting;
 		this.profilerCanvasContext.font = setting.fontSize + "px sans-serif";
 		const deltaX = setting.align === "vertical" ? 0 : setting.width + setting.margin;
 		const deltaY = setting.align === "vertical" ? setting.height + setting.margin : 0;
