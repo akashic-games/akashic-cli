@@ -76,7 +76,7 @@ export class RunnerStore {
 		const runner = this.runnerManager.getRunner(runnerId);
 		if (runner) {
 			await this.runnerManager.pauseRunner(runner.runnerId);
-			this.onRunnerPause.fire({ playId: runner.playId, runnerId: runnerId })
+			this.onRunnerPause.fire({ playId: runner.playId, runnerId: runnerId });
 		}
 	}
 
@@ -84,7 +84,7 @@ export class RunnerStore {
 		const runner = this.runnerManager.getRunner(runnerId);
 		if (runner) {
 			await this.runnerManager.resumeRunner(runner.runnerId);
-			this.onRunnerResume.fire({ playId: runner.playId, runnerId: runnerId })
+			this.onRunnerResume.fire({ playId: runner.playId, runnerId: runnerId });
 		}
 	}
 
