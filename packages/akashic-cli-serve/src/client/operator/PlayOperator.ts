@@ -57,4 +57,8 @@ export class PlayOperator {
 		const amflow = this.store.currentPlay.amflow;
 		pevs.forEach((pev: any) => amflow.enqueueEvent(pev));
 	}
+
+	downloadPlaylog = (): void => {
+		location.href = `/api/plays/${this.store.currentPlay.playId}/playlog`;
+	}
 }

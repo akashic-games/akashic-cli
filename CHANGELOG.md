@@ -1,5 +1,28 @@
 # CHANGELOG
 
+## 1.14.113 (2020-11-10)
+
+#### Other Change
+* `akashic-cli-install`
+  * [#575](https://github.com/akashic-games/akashic-cli/pull/575) Fix akashic-install does not warn moduleMainScripts in AEv3 ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+* `akashic-cli-export-zip`
+  * [#578](https://github.com/akashic-games/akashic-cli/pull/578) Fix deprecated in install ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+## 1.14.112 (2020-11-09)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#561](https://github.com/akashic-games/akashic-cli/pull/561) add save playlog button in akashic-cli-serve ([@dera-](https://github.com/dera-))
+* `akashic-cli-init`
+  * [#577](https://github.com/akashic-games/akashic-cli/pull/577) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Committers: 2
+- [@dera-](https://github.com/dera-)
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.14.111 (2020-11-09)
 
 #### Update Dependencies
