@@ -183,7 +183,6 @@ export function watchAsset(param: ScanAssetParameterObject, cb: (err: any) => vo
 	};
 	const changeHandler = (filePath: string) => {
 		// スクリプトやテキストは変更してもgame.jsonに記載されている情報に影響が無いので、changeではimageアセットとaudioアセットのみ対象とする。
-		// isAudioFilePathとisImageFilePathは本来外部から呼び出すべきではないが、ファイルパスからaudioアセットやimageアセットの判定をするものが他にないのでここで利用する
 		if (
 			param.assetScanDirectoryTable.image.some(dir => filePath.indexOf(path.join(param.cwd, dir)) !== -1)
 			|| param.assetScanDirectoryTable.audio.some(dir => filePath.indexOf(path.join(param.cwd, dir)) !== -1)
