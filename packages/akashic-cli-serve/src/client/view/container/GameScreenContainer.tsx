@@ -70,8 +70,8 @@ export class GameScreenContainer extends React.Component<GameScreenContainerProp
 		return this.props.devtoolUiStore.showProfiler ? {
 			profilerDataArray: this.props.gameScreenUiStore.profilerDataArray,
 			profilerStyleSetting: this.props.gameScreenUiStore.profilerStyleSetting,
-			canvasWidth: this.props.gameScreenUiStore.profilerWidth,
-			canvasHeight: this.props.gameScreenUiStore.profilerHeight
+			canvasWidth: this.props.gameScreenUiStore.profilerCanvasWidth,
+			canvasHeight: this.props.gameScreenUiStore.profilerCanvasHeight
 		} : undefined;
 	}
 }

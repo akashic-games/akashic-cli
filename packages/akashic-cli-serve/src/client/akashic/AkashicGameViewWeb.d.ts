@@ -97,7 +97,7 @@ declare module agv {
 		removeErrorListener(errorListener: ErrorListener): void;
 		getGameVars(propertyName: string, listener: (vars: any) => void): void;
 		getGame(): agv.GameLike;
-		getGameDriver(): any;
+		getGameDriver(): agv.GameDriverLike;
 	}
 
 	interface PlaylogConfig {
@@ -168,5 +168,15 @@ declare module agv {
 		scene(): ae.SceneLike;
 		render(camera?: ae.CameraLike): void;
 		tick(advanceAge: boolean, omittedTickCount?: number): boolean;
+	}
+
+	interface GameDriverLike {
+		_gameLoop: {
+			_clock: {
+				_profiler: {
+					_calculateProfilerValueTrigger: agv.TriggerLike;
+				}
+			}
+		};
 	}
 }

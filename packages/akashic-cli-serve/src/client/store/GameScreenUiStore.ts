@@ -1,50 +1,50 @@
-import { action, observable } from "mobx";
+import { action, computed, observable } from "mobx";
 import { ProfilerData, ProfilerName, ProfilerStyleSetting, ProfilerValueResult } from "../common/types/Profiler";
 
 export class GameScreenUiStore {
-	@observable profilerDataArray: ProfilerData[];
+	@observable profilerDataMap: {[key: string]: ProfilerData};
 	@observable profilerStyleSetting: ProfilerStyleSetting;
-	@observable profilerWidth: number;
-	@observable profilerHeight: number;
+	@observable profilerCanvasWidth: number;
+	@observable profilerCanvasHeight: number;
 
 	constructor() {
-		this.profilerDataArray = [
-			{
+		this.profilerDataMap = {
+			fps: {
 				name: "fps",
 				data: [],
 				max: 0,
 				min: Number.MAX_VALUE,
 				fixed: 2
 			},
-			{
+			skipped: {
 				name: "skipped",
 				data: [],
 				max: 0,
 				min: Number.MAX_VALUE,
 				fixed: 1
 			},
-			{
+			interval: {
 				name: "interval",
 				data: [],
 				max: 0,
 				min: Number.MAX_VALUE,
 				fixed: 1
 			},
-			{
+			frame: {
 				name: "frame",
 				data: [],
 				max: 0,
 				min: Number.MAX_VALUE,
 				fixed: 1
 			},
-			{
+			rendering: {
 				name: "rendering",
 				data: [],
 				max: 0,
 				min: Number.MAX_VALUE,
 				fixed: 1
 			}
-		];
+		};
 		// TODO: プロファイラーのサイズ・色等の設定値をserveに適したものにする
 		this.profilerStyleSetting = {
 			width: 150,
@@ -64,14 +64,20 @@ export class GameScreenUiStore {
 			graphPadding: 5
 		};
 		const setting = this.profilerStyleSetting;
+		const profilersCount = Object.keys(this.profilerDataMap).length;
 		setting.height =   setting.fontSize * 3 +  setting.padding * 2;
 		if ( setting.align === "vertical") {
-			this.profilerWidth =  setting.width;
-			this.profilerHeight = (setting.height + setting.margin) * this.profilerDataArray.length - setting.margin;
+			this.profilerCanvasWidth =  setting.width;
+			this.profilerCanvasHeight = (setting.height + setting.margin) * profilersCount - setting.margin;
 		} else {
-			this.profilerWidth = (setting.width + setting.margin) * this.profilerDataArray.length - setting.margin;
-			this.profilerHeight = setting.height;
+			this.profilerCanvasWidth = (setting.width + setting.margin) * profilersCount - setting.margin;
+			this.profilerCanvasHeight = setting.height;
 		}
+	}
+
+	@computed
+	get profilerDataArray(): ProfilerData[] {
+		return Object.values(this.profilerDataMap);
 	}
 
 	@action
@@ -79,13 +85,8 @@ export class GameScreenUiStore {
 		name: ProfilerName,
 		profileValueResult: ProfilerValueResult
 	) {
-		const copiedProfilerDataArray = this.profilerDataArray.slice();
-		// 本来であればArray#find()を使うべきだが、ES5にない関数なので代わりにfilterを使用する
-		const targetProfilers = copiedProfilerDataArray.filter(profiler => profiler.name === name);
-		if (targetProfilers.length === 0) {
-			return;
-		}
-		const profilerData = targetProfilers[0];
+		const copiedProfilerDataMap = {...this.profilerDataMap};
+		const profilerData = copiedProfilerDataMap[name];
 		profilerData.data.unshift(profileValueResult.ave);
 		const setting = this.profilerStyleSetting;
 		let min = Number.MAX_VALUE;
@@ -106,6 +107,6 @@ export class GameScreenUiStore {
 		}
 		if (min < profilerData.min) profilerData.min = min;
 		if (profilerData.max < max) profilerData.max = max;
-		this.profilerDataArray = copiedProfilerDataArray;
+		this.profilerDataMap = copiedProfilerDataMap;
 	}
 }

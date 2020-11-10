@@ -13,7 +13,29 @@ export interface ProfilerCanvasProps {
 export class ProfilerCanvas extends React.Component<ProfilerCanvasProps, {}> {
 	private profilerCanvasContext: CanvasRenderingContext2D|null = null;
 
+	componentDidMount(): void {
+		this.updateProfiler();
+	}
+
 	componentDidUpdate(): void {
+		this.updateProfiler();
+	}
+
+	render(): React.ReactNode {
+		return <div id="profiler-canvas">
+			<canvas
+				className="external-ref_profiler_canvas"
+				width={ this.props.canvasWidth }
+				height={ this.props.canvasHeight }
+				style={{ width: this.props.canvasWidth, height: this.props.canvasHeight }}
+				ref={ node => {
+					if (node) this.profilerCanvasContext = node.getContext("2d");
+				}}
+			/>
+		</div>;
+	}
+
+	private updateProfiler = (): void => {
 		if (!this.profilerCanvasContext) {
 			return;
 		}
@@ -84,21 +106,7 @@ export class ProfilerCanvas extends React.Component<ProfilerCanvasProps, {}> {
 		}
 	}
 
-	render(): React.ReactNode {
-		return <div id="profiler-canvas">
-			<canvas
-				className="external-ref_profiler_canvas"
-				width={ this.props.canvasWidth }
-				height={ this.props.canvasHeight }
-				style={{ width: this.props.canvasWidth, height: this.props.canvasHeight }}
-				ref={ node => {
-					if (node) this.profilerCanvasContext = node.getContext("2d");
-				}}
-			/>
-		</div>;
-	}
-
-	private drawText = (text: string, x: number, y: number, color: string, maxWidth: number) => {
+	private drawText = (text: string, x: number, y: number, color: string, maxWidth: number): void => {
 		if (!this.profilerCanvasContext) {
 			return;
 		}

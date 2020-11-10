@@ -12,6 +12,7 @@ import {ExecutionMode} from "./ExecutionMode";
 import {ContentEntity} from "./ContentEntity";
 import {NicoPluginEntity} from "./NicoPluginEntity";
 import {CoeLimitedPluginEntity} from "./CoeLimitedPluginEntity";
+import {ProfilerValue} from "../common/types/Profiler";
 
 const toAgvExecutionMode = (() => {
 	const executionModeTable = {
@@ -200,7 +201,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 	}
 
 	@action
-	setProfilerValueTrigger(cb: (value: any) => void): void {
+	setProfilerValueTrigger(cb: (value: ProfilerValue) => void): void {
 		const gameDriver = this._serveGameContent.agvGameContent.getGameDriver();
 		if (gameDriver) {
 			gameDriver._gameLoop._clock._profiler._calculateProfilerValueTrigger.add(cb);
