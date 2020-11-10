@@ -7,11 +7,11 @@ import { imageSize } from "image-size";
 import { ISize } from "image-size/dist/types/interface";
 import { AssetScanDirectoryTable, AssetExtension } from "./scan";
 
-export function _isImageFilePath(p: string): boolean { return /.*\.(png|gif|jpg|jpeg)$/i.test(p); }
-export function _isAudioFilePath(p: string): boolean { return /.*\.(ogg|aac|mp4)$/i.test(p); }
-export function _isScriptAssetPath(p: string): boolean { return /.*\.(js|json)$/i.test(p); }
-export function _isTextAssetPath(p: string): boolean { return true; }  // no limitation...
-export function _isPackageJsonPath(p: string): boolean { return /.*[\/\\]package.json$/.test(p) || (p === "package.json"); }
+export function isImageFilePath(p: string): boolean { return /.*\.(png|gif|jpg|jpeg)$/i.test(p); }
+export function isAudioFilePath(p: string): boolean { return /.*\.(ogg|aac|mp4)$/i.test(p); }
+export function isScriptAssetPath(p: string): boolean { return /.*\.(js|json)$/i.test(p); }
+export function isTextAssetPath(p: string): boolean { return true; }  // no limitation...
+export function isPackageJsonPath(p: string): boolean { return /.*[\/\\]package.json$/.test(p) || (p === "package.json"); }
 
 export function _listDirectoryContents(dir: string): string[] {
 	if (!fs.existsSync(dir) || !fs.statSync(dir).isDirectory())
@@ -126,11 +126,11 @@ export class Configuration extends cmn.Configuration {
 			files.forEach((file) => {
 				const targetDir = path.join("assets/", path.dirname(file));
 
-				if (_isImageFilePath(file)) {
+				if (isImageFilePath(file)) {
 					this._registerImageAsset(path.join(targetDir, path.basename(file)), revmap);
-				} else if (_isAudioFilePath(file)) {
+				} else if (isAudioFilePath(file)) {
 					audioPaths.push(path.join("assets/", file));
-				} else if (_isScriptAssetPath(file)) {
+				} else if (isScriptAssetPath(file)) {
 					this._registerXXXAsset(targetDir + "/" + path.basename(file), revmap, "script");
 				} else {
 					// image, auido, script 以外は text とする
@@ -154,13 +154,13 @@ export class Configuration extends cmn.Configuration {
 			this._content.assets = {};
 		var assets = this._content.assets;
 		var revmap = cmn.Util.invertMap(assets, "path");
-		files.filter(_isImageFilePath).forEach((f: string) => {
+		files.filter(isImageFilePath).forEach((f: string) => {
 			this._registerImageAsset(imageAssetDir + "/" + f,  revmap);
 		});
 	}
 
 	_scanAssetsAudio(audioAssetDir: string): Promise<void> {
-		var files: string[] = readdirRecursive(path.join(this._basepath, audioAssetDir + "/")).filter(_isAudioFilePath);
+		var files: string[] = readdirRecursive(path.join(this._basepath, audioAssetDir + "/")).filter(isAudioFilePath);
 		if (files.length === 0)
 			return Promise.resolve();
 		files = files.map((filepath: string) => path.join(audioAssetDir, filepath));
@@ -367,11 +367,11 @@ export class Configuration extends cmn.Configuration {
 	}
 
 	_scanAssetsScript(scriptAssetDir: string): void {
-		this.scanAssetsXXX(path.join(this._basepath, scriptAssetDir + "/"), _isScriptAssetPath, "script");
+		this.scanAssetsXXX(path.join(this._basepath, scriptAssetDir + "/"), isScriptAssetPath, "script");
 	}
 
-	_scanAssetsText(textAssetDir: string, _isTextAssetPath: (p: string) => boolean): void {
-		this.scanAssetsXXX(path.join(this._basepath, textAssetDir + "/"), _isTextAssetPath, "text");
+	_scanAssetsText(textAssetDir: string, isTextAssetPath: (p: string) => boolean): void {
+		this.scanAssetsXXX(path.join(this._basepath, textAssetDir + "/"), isTextAssetPath, "text");
 	}
 
 	scanGlobalScripts(): Promise<void> {
@@ -456,9 +456,9 @@ export class Configuration extends cmn.Configuration {
 		function audioPathMaker(f: string): string {
 			return path.join(path.dirname(f), path.basename(f, path.extname(f)));  // remove the extension
 		}
-		assetScanDir.audio.forEach((assetDir) => {this.vacuumXXX(assetDir + "/", "audio", _isAudioFilePath, audioPathMaker); });
-		assetScanDir.image.forEach((assetDir) => {this.vacuumXXX(assetDir + "/", "image", _isImageFilePath); });
-		assetScanDir.script.forEach((assetDir) => {this.vacuumXXX(assetDir + "/", "script", _isScriptAssetPath); });
+		assetScanDir.audio.forEach((assetDir) => {this.vacuumXXX(assetDir + "/", "audio", isAudioFilePath, audioPathMaker); });
+		assetScanDir.image.forEach((assetDir) => {this.vacuumXXX(assetDir + "/", "image", isImageFilePath); });
+		assetScanDir.script.forEach((assetDir) => {this.vacuumXXX(assetDir + "/", "script", isScriptAssetPath); });
 
 		const textAssetExtensionFilter = createTextAssetExtensionFilter(assetExtension.text);
 		assetScanDir.text.forEach((assetDir) => {this.vacuumXXX(assetDir + "/", "text", textAssetExtensionFilter); });

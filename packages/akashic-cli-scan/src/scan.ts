@@ -1,7 +1,7 @@
 import * as cmn from "@akashic/akashic-cli-commons";
 import * as chokidar from "chokidar";
 import * as path from "path";
-import { Configuration, _isAudioFilePath, _isImageFilePath } from "./Configuration";
+import { Configuration, isAudioFilePath, isImageFilePath } from "./Configuration";
 
 export interface AssetScanDirectoryTable  {
 	/**
@@ -183,11 +183,11 @@ export function watchAsset(param: ScanAssetParameterObject, cb: (err: any) => vo
 	};
 	const changeHandler = (filePath: string) => {
 		// スクリプトやテキストは変更してもgame.jsonに記載されている情報に影響が無いので、changeではimageアセットとaudioアセットのみ対象とする。
-		// _isAudioFilePathと_isImageFilePathは本来外部から呼び出すべきではないが、ファイルパスからaudioアセットやimageアセットの判定をするものが他にないのでここで利用する
+		// isAudioFilePathとisImageFilePathは本来外部から呼び出すべきではないが、ファイルパスからaudioアセットやimageアセットの判定をするものが他にないのでここで利用する
 		if (
 			param.assetScanDirectoryTable.image.some(dir => filePath.indexOf(path.join(param.cwd, dir)) !== -1)
 			|| param.assetScanDirectoryTable.audio.some(dir => filePath.indexOf(path.join(param.cwd, dir)) !== -1)
-			|| (filePath.indexOf(path.join(param.cwd, "assets")) !== -1 && (_isAudioFilePath(filePath) || _isImageFilePath(filePath)))
+			|| (filePath.indexOf(path.join(param.cwd, "assets")) !== -1 && (isAudioFilePath(filePath) || isImageFilePath(filePath)))
 		) {
 			scanAsset(param, cb);
 		}
