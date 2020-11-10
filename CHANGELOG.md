@@ -1,5 +1,59 @@
 # CHANGELOG
 
+## 1.14.113 (2020-11-10)
+
+#### Other Change
+* `akashic-cli-install`
+  * [#575](https://github.com/akashic-games/akashic-cli/pull/575) Fix akashic-install does not warn moduleMainScripts in AEv3 ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+* `akashic-cli-export-zip`
+  * [#578](https://github.com/akashic-games/akashic-cli/pull/578) Fix deprecated in install ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+## 1.14.112 (2020-11-09)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#561](https://github.com/akashic-games/akashic-cli/pull/561) add save playlog button in akashic-cli-serve ([@dera-](https://github.com/dera-))
+* `akashic-cli-init`
+  * [#577](https://github.com/akashic-games/akashic-cli/pull/577) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Committers: 2
+- [@dera-](https://github.com/dera-)
+- xnv ([@xnv](https://github.com/xnv))
+
+## 1.14.111 (2020-11-09)
+
+#### Update Dependencies
+* `akashic-cli-init`
+  * [#573](https://github.com/akashic-games/akashic-cli/pull/573) Update dependency ts-jest to v26.4.4 ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`, `akashic-cli-export-html`, `akashic-cli-init`
+  * [#571](https://github.com/akashic-games/akashic-cli/pull/571) Update dependency eslint to v7.13.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#572](https://github.com/akashic-games/akashic-cli/pull/572) Update dependency ts-loader to v8.0.10 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Republish
+* [#576](https://github.com/akashic-games/akashic-cli/pull/576) Republish ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
+## 1.14.110 (2020-11-07)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#564](https://github.com/akashic-games/akashic-cli/pull/564) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`
+  * [#568](https://github.com/akashic-games/akashic-cli/pull/568) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#569](https://github.com/akashic-games/akashic-cli/pull/569) Update all dependencies (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.14.109 (2020-10-31)
 
 #### Update Dependencies

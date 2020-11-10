@@ -194,6 +194,9 @@ const TestWithBehaviour = observer(() => (
 			dicideVolume: (v => (store.isSeekingVolume = false, store.volume = v))
 		}}
 		niconicoDevtoolProps={nicoProps}
+		miscDevtoolProps={{
+			downloadPlaylog: action("download-playlog")
+		}}
 	/>
 ));
 
@@ -295,6 +298,9 @@ storiesOf("o-Devtool", module)
 				dicideVolume: (v => (store.isSeekingVolume = false, store.volume = v))
 			}}
 			niconicoDevtoolProps={nicoProps}
+			miscDevtoolProps={{
+				downloadPlaylog: action("download-playlog")
+			}}
 		/>
 	))
 	.add("events", () => (
@@ -386,6 +392,9 @@ storiesOf("o-Devtool", module)
 				dicideVolume: (v => (store.isSeekingVolume = false, store.volume = v))
 			}}
 			niconicoDevtoolProps={nicoProps}
+			miscDevtoolProps={{
+				downloadPlaylog: action("download-playlog")
+			}}
 		/>
 	))
 	.add("entity-tree", () => (
@@ -481,6 +490,9 @@ storiesOf("o-Devtool", module)
 				dicideVolume: (v => (store.isSeekingVolume = false, store.volume = v))
 			}}
 			niconicoDevtoolProps={nicoProps}
+			miscDevtoolProps={{
+				downloadPlaylog: action("download-playlog")
+			}}
 		/>
 	))
 	.add("niconico", () => (
@@ -530,6 +542,9 @@ storiesOf("o-Devtool", module)
 				dicideVolume: (v => (store.isSeekingVolume = false, store.volume = v))
 			}}
 			niconicoDevtoolProps={nicoProps}
+			miscDevtoolProps={{
+				downloadPlaylog: action("download-playlog")
+			}}
 		/>
 	))
 	.add("with-behavior", () => <TestWithBehaviour />);
