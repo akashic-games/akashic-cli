@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 1.14.113 (2020-11-10)
+
+#### Other Change
+* `akashic-cli-install`
+  * [#575](https://github.com/akashic-games/akashic-cli/pull/575) Fix akashic-install does not warn moduleMainScripts in AEv3 ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+* `akashic-cli-export-zip`
+  * [#578](https://github.com/akashic-games/akashic-cli/pull/578) Fix deprecated in install ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 1.14.112 (2020-11-09)
 
 #### Enhancement
