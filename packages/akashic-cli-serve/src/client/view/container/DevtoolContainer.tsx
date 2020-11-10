@@ -95,6 +95,9 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 				onUseStopGameChanged: operator.devtool.toggleUseStopGame,
 				onTotalTimeLimitInputValueChanged: operator.devtool.setTotalTimeLimitInputValue
 			}}
+			miscDevtoolProps={{
+				downloadPlaylog: operator.play.downloadPlaylog
+			}}
 		/>;
 	}
 }
