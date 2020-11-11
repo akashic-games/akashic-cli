@@ -1,6 +1,7 @@
 export interface CliConfigScanAsset {
 	cwd?: string;
 	quiet?: boolean;
+	watch?: boolean;
 	usePathAssetId?: boolean;
 	updateAssetId?: boolean;
 	includeExtensionToAssetId?: boolean;

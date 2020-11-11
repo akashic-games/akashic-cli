@@ -1,5 +1,7 @@
 import * as cmn from "@akashic/akashic-cli-commons";
-import { Configuration } from "./Configuration";
+import * as chokidar from "chokidar";
+import * as path from "path";
+import { Configuration, isAudioFilePath, isImageFilePath } from "./Configuration";
 
 export interface AssetScanDirectoryTable  {
 	/**
@@ -162,6 +164,40 @@ export function promiseScanAsset(param: ScanAssetParameterObject): Promise<void>
 
 export function scanAsset(param: ScanAssetParameterObject, cb: (err: any) => void): void {
 	promiseScanAsset(param).then(cb, cb);
+}
+
+export function watchAsset(param: ScanAssetParameterObject, cb: (err: any) => void): void {
+	_completeScanAssetParameterObject(param);
+	param.logger.info("Start Watching Directories of Asset");
+	const watcher = chokidar.watch(param.cwd, { persistent: true, ignoreInitial: true, ignored: "**/node_modules/**/*" });
+	const handler = (filePath: string) => {
+		if (
+			param.assetScanDirectoryTable.image.some(dir => filePath.indexOf(path.join(param.cwd, dir)) !== -1)
+			|| param.assetScanDirectoryTable.audio.some(dir => filePath.indexOf(path.join(param.cwd, dir)) !== -1)
+			|| param.assetScanDirectoryTable.script.some(dir => filePath.indexOf(path.join(param.cwd, dir)) !== -1)
+			|| param.assetScanDirectoryTable.text.some(dir => filePath.indexOf(path.join(param.cwd, dir)) !== -1)
+			|| filePath.indexOf(path.join(param.cwd, "assets")) !== -1 // akashic-cli-scanではassetsディレクトリもasset用のディレクトリとして扱われる
+		) {
+			scanAsset(param, cb);
+		}
+	};
+	const changeHandler = (filePath: string) => {
+		// スクリプトやテキストは変更してもgame.jsonに記載されている情報に影響が無いので、changeではimageアセットとaudioアセットのみ対象とする。
+		if (
+			param.assetScanDirectoryTable.image.some(dir => filePath.indexOf(path.join(param.cwd, dir)) !== -1)
+			|| param.assetScanDirectoryTable.audio.some(dir => filePath.indexOf(path.join(param.cwd, dir)) !== -1)
+			|| (filePath.indexOf(path.join(param.cwd, "assets")) !== -1 && (isAudioFilePath(filePath) || isImageFilePath(filePath)))
+		) {
+			scanAsset(param, cb);
+		}
+	};
+	// watch開始時にgame.jsonのasstesの内容と実際のアセットの内容に誤差が無いかの確認を兼ねてscanAsset関数を実行する
+	watcher.on("ready", () => {
+		scanAsset(param, cb);
+	});
+	watcher.on("add", handler);
+	watcher.on("unlink", handler);
+	watcher.on("change", changeHandler);
 }
 
 export interface ScanNodeModulesParameterObject {
