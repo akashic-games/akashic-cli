@@ -1,5 +1,23 @@
 # CHANGELOG
 
+## 1.14.114 (2020-11-11)
+
+#### Enhancement
+* `akashic-cli-commons`, `akashic-cli-scan`
+  * [#552](https://github.com/akashic-games/akashic-cli/pull/552) add watch option in akashic-cli-scan ([@dera-](https://github.com/dera-))
+* `akashic-cli-init`
+  * [#579](https://github.com/akashic-games/akashic-cli/pull/579) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Other Change
+* [#580](https://github.com/akashic-games/akashic-cli/pull/580) fix: Invalid node version ([@yu-ogi](https://github.com/yu-ogi))
+* [#574](https://github.com/akashic-games/akashic-cli/pull/574) test: replace travis-ci with github actions ([@yu-ogi](https://github.com/yu-ogi))
+
+#### Committers: 4
+- [@dera-](https://github.com/dera-)
+- [@yu-ogi](https://github.com/yu-ogi)
+- kamakiri_ys ([@kamakiri01](https://github.com/kamakiri01))
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.14.113 (2020-11-10)
 
 #### Other Change
