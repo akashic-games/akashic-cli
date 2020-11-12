@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## 1.14.117 (2020-11-12)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#587](https://github.com/akashic-games/akashic-cli/pull/587) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Bug Fix
+* `akashic-cli-init`
+  * [#582](https://github.com/akashic-games/akashic-cli/pull/582) fix npm-scripts about generating zips ([@dera-](https://github.com/dera-))
+
+#### Committers: 2
+- [@dera-](https://github.com/dera-)
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.14.116 (2020-11-12)
 
 #### Enhancement
