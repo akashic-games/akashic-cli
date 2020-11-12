@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-export-html",
-  "version": "0.7.93",
+  "version": "0.7.95",
   "description": "A module to convert your Akashic game to a runnable standalone.",
   "main": "lib/index.js",
   "scripts": {
@@ -42,7 +42,7 @@
     "package.json"
   ],
   "devDependencies": {
-    "@akashic/akashic-engine": "~2.6.5",
+    "@akashic/akashic-engine": "~2.6.6",
     "@types/archiver": "3.1.1",
     "@types/commander": "2.12.0",
     "@types/ejs": "3.0.5",

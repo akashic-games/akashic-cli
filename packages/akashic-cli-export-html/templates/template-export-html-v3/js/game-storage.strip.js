@@ -30,20 +30,20 @@
                 function GameStorage(localStorage, metaData) {
                     this._localStorage = localStorage, this._metaData = metaData;
                 }
-                return GameStorage.prototype.set = function(key, finalValue, date) {
-                    validator.validateStorageKey(key), this.expandVariables(key);
-                    var strKey = this.storageKeyToStringKey(key), current = this.getValue(strKey), newValue = null;
-                    switch (key.region) {
+                return GameStorage.prototype.set = function(date, value, option) {
+                    validator.validateStorageKey(date), this.expandVariables(date);
+                    var finalValue, strKey = this.storageKeyToStringKey(date), current = this.getValue(strKey), newValue = null;
+                    switch (date.region) {
                       case g.StorageRegion.Values:
-                        newValue = this.createValuesValue(current, finalValue, date);
+                        newValue = this.createValuesValue(current, value, option);
                         break;
 
                       case g.StorageRegion.Counts:
-                        newValue = this.createCountsValue(current, finalValue, date);
+                        newValue = this.createCountsValue(current, value, option);
                         break;
 
                       case g.StorageRegion.Scores:
-                        newValue = this.createScoresValue(current, finalValue, date);
+                        newValue = this.createScoresValue(current, value, option);
                         break;
 
                       case g.StorageRegion.Slots:
@@ -107,21 +107,21 @@
                     };
                     return null != value.tag ? result.tag = value.tag : current && null != current.tag && (result.tag = current.tag), 
                     result;
-                }, GameStorage.prototype.createScoresValue = function(current, value, result) {
+                }, GameStorage.prototype.createScoresValue = function(current, value, option) {
                     if (!value) return null;
-                    if (result && null != result.condition && null != result.comparisonValue && current && null != current.data) switch (result.condition) {
+                    if (option && null != option.condition && null != option.comparisonValue && current && null != current.data) switch (option.condition) {
                       case g.StorageCondition.Equal:
-                        if (current.data !== result.comparisonValue) return null;
+                        if (current.data !== option.comparisonValue) return null;
                         break;
 
                       case g.StorageCondition.GreaterThan:
-                        if (!(current.data > result.comparisonValue)) return null;
+                        if (!(current.data > option.comparisonValue)) return null;
                         break;
 
                       case g.StorageCondition.LessThan:
-                        if (!(current.data < result.comparisonValue)) return null;
+                        if (!(current.data < option.comparisonValue)) return null;
                     }
-                    result = {
+                    var result = {
                         data: value.data
                     };
                     return null != value.tag ? result.tag = value.tag : current && null != current.tag && (result.tag = current.tag), 
@@ -148,23 +148,23 @@
                     }
                     return value && null != value.tag ? result.tag = value.tag : current && null != current.tag && (result.tag = current.tag), 
                     result;
-                }, GameStorage.prototype.createCountsValue = function(current, value, result) {
-                    if (result) {
-                        if (result.operation === g.StorageCountsOperation.Incr || result.operation === g.StorageCountsOperation.Decr) return this.createCountsIncrDecrValue(current, value, result);
-                        if (null != result.condition && null != result.comparisonValue && current && null != current.data) switch (result.condition) {
+                }, GameStorage.prototype.createCountsValue = function(current, value, option) {
+                    if (option) {
+                        if (option.operation === g.StorageCountsOperation.Incr || option.operation === g.StorageCountsOperation.Decr) return this.createCountsIncrDecrValue(current, value, option);
+                        if (null != option.condition && null != option.comparisonValue && current && null != current.data) switch (option.condition) {
                           case g.StorageCondition.Equal:
-                            if (current.data !== result.comparisonValue) return null;
+                            if (current.data !== option.comparisonValue) return null;
                             break;
 
                           case g.StorageCondition.GreaterThan:
-                            if (!(current.data > result.comparisonValue)) return null;
+                            if (!(current.data > option.comparisonValue)) return null;
                             break;
 
                           case g.StorageCondition.LessThan:
-                            if (!(current.data < result.comparisonValue)) return null;
+                            if (!(current.data < option.comparisonValue)) return null;
                         }
                     }
-                    result = {
+                    var result = {
                         data: value.data
                     };
                     return value && null != value.tag ? result.tag = value.tag : current && null != current.tag && (result.tag = current.tag), 
