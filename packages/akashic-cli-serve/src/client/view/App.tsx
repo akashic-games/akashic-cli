@@ -53,7 +53,7 @@ export class App extends React.Component<AppProps, {}> {
 						localInstance={store.currentLocalInstance}
 						gameViewManager={this.props.gameViewManager}
 						devtoolUiStore={store.devtoolUiStore}
-						gameScreenUiStore={store.gameScreenUiStore}
+						profilerStore={store.profilerStore}
 						operator={this.props.operator}
 					/>
 				</div>

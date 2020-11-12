@@ -13,7 +13,7 @@ import {ToolBarUiStore} from "./ToolBarUiStore";
 import {ContentStore} from "./ContentStore";
 import {NotificationUiStore} from "./NotificationUiStore";
 import {StartupScreenUiStore} from "./StartupScreenUiStore";
-import {GameScreenUiStore} from "./GameScreenUiStore";
+import {ProfilerStore} from "./ProfilerStore";
 import {storage} from "./storage";
 import {ProfilerValue} from "../common/types/Profiler";
 
@@ -24,7 +24,7 @@ export class Store {
 	@observable devtoolUiStore: DevtoolUiStore;
 	@observable notificationUiStore: NotificationUiStore;
 	@observable startupScreenUiStore: StartupScreenUiStore;
-	@observable gameScreenUiStore: GameScreenUiStore;
+	@observable profilerStore: ProfilerStore;
 	@observable appOptions: AppOptions;
 	@observable player: Player | null;
 	@observable contentLocator: ClientContentLocator;
@@ -44,7 +44,7 @@ export class Store {
 		this.devtoolUiStore = new DevtoolUiStore();
 		this.notificationUiStore = new NotificationUiStore();
 		this.startupScreenUiStore = new StartupScreenUiStore();
-		this.gameScreenUiStore = new GameScreenUiStore();
+		this.profilerStore = new ProfilerStore();
 		this.appOptions = null!;
 		this.player = null;
 		this.currentPlay = null;
@@ -72,11 +72,11 @@ export class Store {
 			return;
 		this.currentLocalInstance = instance;
 		this.currentLocalInstance.setProfilerValueTrigger((value: ProfilerValue) => {
-			this.gameScreenUiStore.updateProfilerData("fps", value.framePerSecond);
-			this.gameScreenUiStore.updateProfilerData("skipped", value.skippedFrameCount);
-			this.gameScreenUiStore.updateProfilerData("interval", value.rawFrameInterval);
-			this.gameScreenUiStore.updateProfilerData("frame", value.frameTime);
-			this.gameScreenUiStore.updateProfilerData("rendering", value.renderingTime);
+			this.profilerStore.updateProfilerData("fps", value.framePerSecond);
+			this.profilerStore.updateProfilerData("skipped", value.skippedFrameCount);
+			this.profilerStore.updateProfilerData("interval", value.rawFrameInterval);
+			this.profilerStore.updateProfilerData("frame", value.frameTime);
+			this.profilerStore.updateProfilerData("rendering", value.renderingTime);
 		});
 		this.devtoolUiStore.setEntityTrees([]);
 	}

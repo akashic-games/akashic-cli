@@ -102,22 +102,42 @@ storiesOf("o-GameScreen", module)
 				profilerDataArray: [
 					{
 						name: "fps",
-						data: [30, 31, 28, 32, 35],
+						data: [30, 31, 28, 32, 35, 30, 31, 28, 32, 35],
 						max: 35,
 						min: 28,
 						fixed: 2
 					},
 					{
+						name: "skipped",
+						data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						max: 0,
+						min: 0,
+						fixed: 1
+					},
+					{
+						name: "interval",
+						data: [36, 31, 32, 32, 34, 36, 33, 33, 30, 30],
+						max: 36,
+						min: 30,
+						fixed: 1
+					},
+					{
 						name: "frame",
-						data: [4, 1, 0, 0, 0],
+						data: [4, 1, 0, 0, 0, 1, 2, 0, 0, 0],
 						max: 4,
+						min: 0,
+						fixed: 1
+					},
+					{
+						name: "rendering",
+						data: [1, 0, 1, 0, 1, 0, 1, 0, 1, 0],
+						max: 1,
 						min: 0,
 						fixed: 1
 					}
 				],
 				profilerStyleSetting: {
 					width: 150,
-					height: 0,
 					margin: 5,
 					padding: 5,
 					align: "horizontal",
@@ -131,9 +151,7 @@ storiesOf("o-GameScreen", module)
 					graphWidth: 3,
 					graphWidthMargin: 1,
 					graphPadding: 5
-				},
-				canvasWidth: 350,
-				canvasHeight: 200
+				}
 			}}
 			shouldStopPropagationFunc={() => {
 				action("shouldStopPropagation");

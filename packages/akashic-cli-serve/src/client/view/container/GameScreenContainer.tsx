@@ -9,13 +9,13 @@ import { Operator } from "../../operator/Operator";
 import { GameScreen } from "../organism/GameScreen";
 import { PlayerInfoResolverDialogProps } from "../molecule/PlayerInfoResolverDialog";
 import { ProfilerCanvasProps } from "../molecule/ProfilerCanvas";
-import { GameScreenUiStore } from "../../store/GameScreenUiStore";
+import { ProfilerStore } from "../../store/ProfilerStore";
 
 export interface GameScreenContainerProps {
 	sandboxConfig: SandboxConfig;
 	toolBarUiStore: ToolBarUiStore;
 	devtoolUiStore: DevtoolUiStore;
-	gameScreenUiStore: GameScreenUiStore;
+	profilerStore: ProfilerStore;
 	localInstance: LocalInstanceEntity;
 	gameViewManager: GameViewManager;
 	operator: Operator;
@@ -68,10 +68,8 @@ export class GameScreenContainer extends React.Component<GameScreenContainerProp
 
 	private _makeProfilerCanvasProps = (): ProfilerCanvasProps | undefined => {
 		return this.props.devtoolUiStore.showProfiler ? {
-			profilerDataArray: this.props.gameScreenUiStore.profilerDataArray,
-			profilerStyleSetting: this.props.gameScreenUiStore.profilerStyleSetting,
-			canvasWidth: this.props.gameScreenUiStore.profilerCanvasWidth,
-			canvasHeight: this.props.gameScreenUiStore.profilerCanvasHeight
+			profilerDataArray: this.props.profilerStore.profilerDataArray,
+			profilerStyleSetting: this.props.profilerStore.profilerStyleSetting
 		} : undefined;
 	}
 }
