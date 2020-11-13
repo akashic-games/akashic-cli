@@ -5,6 +5,8 @@ import { ProfilerData, ProfilerStyleSetting } from "../../common/types/Profiler"
 export interface ProfilerCanvasProps {
 	profilerDataArray: ProfilerData[];
 	profilerStyleSetting: ProfilerStyleSetting;
+	profilerWidth: number;
+	profilerHeight: number;
 }
 
 @observer
@@ -21,10 +23,11 @@ export class ProfilerCanvas extends React.Component<ProfilerCanvasProps, {}> {
 
 	render(): React.ReactNode {
 		const setting = this.props.profilerStyleSetting;
-		const profilerHeight = this.getProfilerHeight();
+		const profilerWidth = this.props.profilerWidth;
+		const profilerHeight = this.props.profilerHeight;
 		const profilersCount = Object.keys(this.props.profilerDataArray).length;
 		const profilerCanvasWidth =
-			setting.align === "vertical" ? setting.width : (setting.width + setting.margin) * profilersCount - setting.margin;
+			setting.align === "vertical" ? profilerWidth : (profilerWidth + setting.margin) * profilersCount - setting.margin;
 		const profilerCanvasHeight =
 			setting.align === "vertical" ? (profilerHeight + setting.margin) * profilersCount - setting.margin : profilerHeight;
 		return <div id="profiler-canvas">
@@ -45,16 +48,17 @@ export class ProfilerCanvas extends React.Component<ProfilerCanvasProps, {}> {
 			return;
 		}
 		const setting = this.props.profilerStyleSetting;
-		const profilerHeight = this.getProfilerHeight();
+		const profilerWidth = this.props.profilerWidth;
+		const profilerHeight = this.props.profilerHeight;
 		this.profilerCanvasContext.font = setting.fontSize + "px sans-serif";
-		const deltaX = setting.align === "vertical" ? 0 : setting.width + setting.margin;
+		const deltaX = setting.align === "vertical" ? 0 : profilerWidth + setting.margin;
 		const deltaY = setting.align === "vertical" ? profilerHeight + setting.margin : 0;
 		for (let index = 0; index < this.props.profilerDataArray.length; index++) {
 			const profilerData = this.props.profilerDataArray[index];
 			const x = index * deltaX;
 			const y = index * deltaY;
 			this.profilerCanvasContext.fillStyle = setting.bgColor;
-			this.profilerCanvasContext.fillRect(x, y, setting.width, profilerHeight);
+			this.profilerCanvasContext.fillRect(x, y, profilerWidth, profilerHeight);
 			this.profilerCanvasContext.fillStyle = setting.graphColor;
 			// 表示するプロファイラデータの個数とmax/minを算出
 			let min = Number.MAX_VALUE;
@@ -69,7 +73,7 @@ export class ProfilerCanvas extends React.Component<ProfilerCanvasProps, {}> {
 					max = data;
 				}
 				const offsetX =
-					setting.width - i * (setting.graphWidth + setting.graphWidthMargin) - setting.graphWidth - setting.graphPadding;
+					profilerWidth - i * (setting.graphWidth + setting.graphWidthMargin) - setting.graphWidth - setting.graphPadding;
 				if (offsetX < setting.graphWidth + setting.graphPadding / 2) {
 					showedDataCount = i;
 					break;
@@ -80,15 +84,15 @@ export class ProfilerCanvas extends React.Component<ProfilerCanvasProps, {}> {
 			for (let i = 0; i < showedDataCount; ++i) {
 				const height = profilerData.data[i] * rate;
 				this.profilerCanvasContext.fillRect(
-					x + setting.width - i * (setting.graphWidth + setting.graphWidthMargin) - setting.graphWidth - setting.graphPadding,
+					x + profilerWidth - i * (setting.graphWidth + setting.graphWidthMargin) - setting.graphWidth - setting.graphPadding,
 					y + profilerHeight - height - setting.graphPadding,
 					setting.graphWidth,
 					height
 				);
 			}
-			const valueOffsetX = setting.width * 0.6;
+			const valueOffsetX = profilerWidth * 0.6;
 			const maxWidth = valueOffsetX - setting.padding;
-			const maxValueWidth = (setting.width - valueOffsetX) - setting.padding;
+			const maxValueWidth = (profilerWidth - valueOffsetX) - setting.padding;
 			this.drawText(
 				profilerData.name + ":",
 				x + setting.padding,
@@ -127,11 +131,6 @@ export class ProfilerCanvas extends React.Component<ProfilerCanvasProps, {}> {
 				maxWidth
 			);
 		}
-	}
-
-	private getProfilerHeight = () => {
-		const setting = this.props.profilerStyleSetting;
-		return setting.fontSize * 3 +  setting.padding * 2;
 	}
 
 	private drawText = (text: string, x: number, y: number, color: string, maxWidth: number): void => {

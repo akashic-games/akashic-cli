@@ -137,7 +137,6 @@ storiesOf("o-GameScreen", module)
 					}
 				],
 				profilerStyleSetting: {
-					width: 150,
 					margin: 5,
 					padding: 5,
 					align: "horizontal",
@@ -151,7 +150,9 @@ storiesOf("o-GameScreen", module)
 					graphWidth: 3,
 					graphWidthMargin: 1,
 					graphPadding: 5
-				}
+				},
+				profilerWidth: 150,
+				profilerHeight: 61
 			}}
 			shouldStopPropagationFunc={() => {
 				action("shouldStopPropagation");

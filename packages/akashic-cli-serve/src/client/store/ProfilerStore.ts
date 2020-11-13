@@ -1,53 +1,53 @@
 import { action, computed, observable } from "mobx";
 import { ProfilerData, ProfilerName, ProfilerStyleSetting, ProfilerValueResult } from "../common/types/Profiler";
 
-const PROFILER_DATA_LIMIT = 100;
+const PROFILER_DATA_LIMIT = 100; // １つのプロファイラが保持できるデータの個数。本来は画面上に表示可能な最大個数を算出してその値を指定すべきだが、store側ではそれが分からないので十分に大きい値を指定している。
 
 export class ProfilerStore {
-	@observable profilerDataMap: {[key: string]: ProfilerData};
+	@observable profilerDataArray: ProfilerData[];
 	@observable profilerStyleSetting: ProfilerStyleSetting;
+	@observable profilerWidth: number;
 
 	constructor() {
-		this.profilerDataMap = {
-			fps: {
+		this.profilerDataArray = [
+			{
 				name: "fps",
 				data: [],
 				max: 0,
 				min: Number.MAX_VALUE,
 				fixed: 2
 			},
-			skipped: {
+			{
 				name: "skipped",
 				data: [],
 				max: 0,
 				min: Number.MAX_VALUE,
 				fixed: 1
 			},
-			interval: {
+			{
 				name: "interval",
 				data: [],
 				max: 0,
 				min: Number.MAX_VALUE,
 				fixed: 1
 			},
-			frame: {
+			{
 				name: "frame",
 				data: [],
 				max: 0,
 				min: Number.MAX_VALUE,
 				fixed: 1
 			},
-			rendering: {
+			{
 				name: "rendering",
 				data: [],
 				max: 0,
 				min: Number.MAX_VALUE,
 				fixed: 1
 			}
-		};
+		];
 		// TODO: プロファイラーのサイズ・色等の設定値をserveに適したものにする
 		this.profilerStyleSetting = {
-			width: 150,
 			margin: 5,
 			padding: 5,
 			align: "horizontal",
@@ -62,11 +62,12 @@ export class ProfilerStore {
 			graphWidthMargin: 1,
 			graphPadding: 5
 		};
+		this.profilerWidth = 150;
 	}
 
 	@computed
-	get profilerDataArray(): ProfilerData[] {
-		return Object.keys(this.profilerDataMap).map(key => this.profilerDataMap[key]);
+	get profilerHeight() {
+		return this.profilerStyleSetting.fontSize * 3 +  this.profilerStyleSetting.padding * 2;
 	}
 
 	@action
@@ -74,8 +75,13 @@ export class ProfilerStore {
 		name: ProfilerName,
 		profileValueResult: ProfilerValueResult
 	) {
-		const copiedProfilerDataMap = {...this.profilerDataMap};
-		const profilerData = copiedProfilerDataMap[name];
+		const copiedProfilerDataArray = this.profilerDataArray.slice();
+		// 本来であればArray#find()を使うべきだが、ES5にない関数なので代わりにfilterを使用する
+		const targetProfilers = copiedProfilerDataArray.filter(profiler => profiler.name === name);
+		if (targetProfilers.length === 0) {
+			return;
+		}
+		const profilerData = targetProfilers[0];
 		const currentValue = profileValueResult.ave;
 		profilerData.data.unshift(currentValue);
 		if (profilerData.data.length > PROFILER_DATA_LIMIT) {
@@ -87,6 +93,6 @@ export class ProfilerStore {
 		if (profilerData.max < currentValue) {
 			profilerData.max = currentValue;
 		}
-		this.profilerDataMap = copiedProfilerDataMap;
+		this.profilerDataArray = copiedProfilerDataArray;
 	}
 }
