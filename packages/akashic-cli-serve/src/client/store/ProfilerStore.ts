@@ -1,12 +1,11 @@
-import { action, computed, observable } from "mobx";
+import { action, observable } from "mobx";
 import { ProfilerData, ProfilerName, ProfilerStyleSetting, ProfilerValueResult } from "../common/types/Profiler";
 
-const PROFILER_DATA_LIMIT = 100; // １つのプロファイラが保持できるデータの個数。本来は画面上に表示可能な最大個数を算出してその値を指定すべきだが、store側ではそれが分からないので十分に大きい値を指定している。
+const PROFILER_DATA_LIMIT = 100; // １つのプロファイラが保持できるデータの個数。
 
 export class ProfilerStore {
 	@observable profilerDataArray: ProfilerData[];
 	@observable profilerStyleSetting: ProfilerStyleSetting;
-	@observable profilerWidth: number;
 
 	constructor() {
 		this.profilerDataArray = [
@@ -62,12 +61,6 @@ export class ProfilerStore {
 			graphWidthMargin: 1,
 			graphPadding: 5
 		};
-		this.profilerWidth = 150;
-	}
-
-	@computed
-	get profilerHeight() {
-		return this.profilerStyleSetting.fontSize * 3 +  this.profilerStyleSetting.padding * 2;
 	}
 
 	@action

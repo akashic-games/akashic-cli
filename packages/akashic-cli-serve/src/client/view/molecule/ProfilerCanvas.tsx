@@ -5,8 +5,8 @@ import { ProfilerData, ProfilerStyleSetting } from "../../common/types/Profiler"
 export interface ProfilerCanvasProps {
 	profilerDataArray: ProfilerData[];
 	profilerStyleSetting: ProfilerStyleSetting;
-	profilerWidth: number;
-	profilerHeight: number;
+	profilerWidth: number; // プロファイラ１つ分の横幅
+	profilerHeight: number; // プロファイラ１つ分の縦幅
 }
 
 @observer
@@ -14,11 +14,11 @@ export class ProfilerCanvas extends React.Component<ProfilerCanvasProps, {}> {
 	private profilerCanvasContext: CanvasRenderingContext2D|null = null;
 
 	componentDidMount(): void {
-		this.updateProfiler();
+		this.renderProfiler();
 	}
 
 	componentDidUpdate(): void {
-		this.updateProfiler();
+		this.renderProfiler();
 	}
 
 	render(): React.ReactNode {
@@ -26,6 +26,7 @@ export class ProfilerCanvas extends React.Component<ProfilerCanvasProps, {}> {
 		const profilerWidth = this.props.profilerWidth;
 		const profilerHeight = this.props.profilerHeight;
 		const profilersCount = Object.keys(this.props.profilerDataArray).length;
+		// Canvas領域のサイズは外部から指定されるプロファイラ1つ分のサイズによって決まる
 		const profilerCanvasWidth =
 			setting.align === "vertical" ? profilerWidth : (profilerWidth + setting.margin) * profilersCount - setting.margin;
 		const profilerCanvasHeight =
@@ -43,7 +44,7 @@ export class ProfilerCanvas extends React.Component<ProfilerCanvasProps, {}> {
 		</div>;
 	}
 
-	private updateProfiler = (): void => {
+	private renderProfiler = (): void => {
 		if (!this.profilerCanvasContext) {
 			return;
 		}
