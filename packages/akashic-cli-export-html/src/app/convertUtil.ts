@@ -108,7 +108,6 @@ export function getDefaultBundleScripts(templatePath: string, version: string, m
 	var preloadScript = `
 		window.engineFiles = ${engineFilesVariable};
 		window.g = engineFiles.akashicEngine;
-		// game-storageでrequireが使用されているので、requireの内容をgame-storage用のものに書き換える
 		(function() {
 			var originalRequire = window.require;
 			window.require = function(moduleName) {
@@ -122,7 +121,7 @@ export function getDefaultBundleScripts(templatePath: string, version: string, m
 		})();
 	`;
 	var postloadScriptNames =
-		["game-storage.strip.js", "sandbox.js", "initGlobals.js"];
+		["sandbox.js", "initGlobals.js"];
 	if (version === "3") {
 		postloadScriptNames.push("build/LocalScriptAssetV3.js");
 		if (bundleText) {
