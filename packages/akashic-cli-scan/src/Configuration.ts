@@ -9,7 +9,7 @@ import { AssetScanDirectoryTable, AssetExtension } from "./scan";
 
 export function isImageFilePath(p: string): boolean { return /.*\.(png|gif|jpg|jpeg)$/i.test(p); }
 export function isAudioFilePath(p: string): boolean { return /.*\.(ogg|aac|mp4)$/i.test(p); }
-export function isScriptAssetPath(p: string): boolean { return /.*\.(js|json)$/i.test(p); }
+export function isScriptAssetPath(p: string): boolean { return /.*\.js$/i.test(p); }
 export function isTextAssetPath(p: string): boolean { return true; }  // no limitation...
 export function isPackageJsonPath(p: string): boolean { return /.*[\/\\]package.json$/.test(p) || (p === "package.json"); }
 
