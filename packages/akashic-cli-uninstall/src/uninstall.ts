@@ -72,9 +72,6 @@ export function promiseUninstall(param: UninstallParameterObject): Promise<void>
 						const libPath = path.resolve(".", "node_modules", name, "akashic-lib.json");
 						try {
 							const libJsonData: cmn.LibConfiguration = JSON.parse(fs.readFileSync(libPath, "utf8"));
-							console.log("0");
-
-							console.log("libJsonData", libJsonData, libJsonData.gameConfigurationData.environment.external);
 							if (libJsonData.gameConfigurationData &&
 									libJsonData.gameConfigurationData.environment &&
 									libJsonData.gameConfigurationData.environment.external) {
@@ -111,30 +108,6 @@ export function promiseUninstall(param: UninstallParameterObject): Promise<void>
 					}
 				})
 				.then(() => {
-					/*
-					param.moduleNames.forEach((name) => {
-						console.log("2");
-
-						if (content.environment && content.environment.external) {
-							console.log("environment", content.environment);
-
-							const libPath = path.resolve(".", "node_modules", name, "akashic-lib.json");
-							try {
-								const libJsonData: cmn.LibConfiguration = JSON.parse(fs.readFileSync(libPath, "utf8"));
-								const environment = libJsonData.gameConfigurationData.environment;
-								console.log("4");
-
-								if (libJsonData.gameConfigurationData && environment && environment.external) {
-									// conf.removeExternal(environment.external.name);
-								}
-							} catch (error) {
-								if (error.code === "ENOENT") return; // akashic-lib.jsonを持っていないケース
-								throw error;
-							}
-						}
-					});
-					*/
-
 					// 依存しなくなったexternalをgame.jsonから削除する
 					const globalScripts = conf._content.globalScripts;
 					const libPaths = cmn.NodeModules.listPackageJsonsFromScriptsPath(".", globalScripts).map((filepath) => {
@@ -155,8 +128,6 @@ export function promiseUninstall(param: UninstallParameterObject): Promise<void>
 							throw error;
 						}
 					});
-					console.log("remainExternal", remainExternals);
-					console.log("uninstallExternal", uninstallExternals);
 					Object.keys(uninstallExternals).forEach((externalName) => {
 						if (!remainExternals[externalName]) conf.removeExternal(externalName);
 					});
