@@ -112,7 +112,7 @@ export function promiseUninstall(param: UninstallParameterObject): Promise<void>
 					const globalScripts = conf._content.globalScripts;
 					const libPaths = cmn.NodeModules.listPackageJsonsFromScriptsPath(".", globalScripts).map((filepath) => {
 						return path.join(path.dirname(filepath), "akashic-lib.json");
-					})
+					});
 					const remainExternals: {[key: string]: string} = {};
 					libPaths.forEach((libPath) => {
 						try {
