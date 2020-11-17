@@ -27,6 +27,7 @@ export class ProfilerCanvas extends React.Component<ProfilerCanvasProps, {}> {
 		const profilerHeight = this.props.profilerHeight;
 		const profilersCount = Object.keys(this.props.profilerDataArray).length;
 		// Canvas領域のサイズは外部から指定されるプロファイラ1つ分のサイズによって決まる
+		// TODO: プロファイラ１つ分のサイズではなくCanvas領域のサイズを外部から指定できるようにする
 		const profilerCanvasWidth =
 			setting.align === "vertical" ? profilerWidth : (profilerWidth + setting.margin) * profilersCount - setting.margin;
 		const profilerCanvasHeight =

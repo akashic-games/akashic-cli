@@ -73,11 +73,11 @@ export class Store {
 		this.currentLocalInstance = instance;
 		if (this.currentLocalInstance) {
 			this.currentLocalInstance.setProfilerValueTrigger((value: ProfilerValue) => {
-				this.profilerStore.updateProfilerData("fps", value.framePerSecond);
-				this.profilerStore.updateProfilerData("skipped", value.skippedFrameCount);
-				this.profilerStore.updateProfilerData("interval", value.rawFrameInterval);
-				this.profilerStore.updateProfilerData("frame", value.frameTime);
-				this.profilerStore.updateProfilerData("rendering", value.renderingTime);
+				this.profilerStore.pushProfilerData("fps", value.framePerSecond);
+				this.profilerStore.pushProfilerData("skipped", value.skippedFrameCount);
+				this.profilerStore.pushProfilerData("interval", value.rawFrameInterval);
+				this.profilerStore.pushProfilerData("frame", value.frameTime);
+				this.profilerStore.pushProfilerData("rendering", value.renderingTime);
 			});
 		}
 		this.devtoolUiStore.setEntityTrees([]);

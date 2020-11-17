@@ -64,7 +64,7 @@ export class ProfilerStore {
 	}
 
 	@action
-	updateProfilerData (
+	pushProfilerData (
 		name: ProfilerName,
 		profileValueResult: ProfilerValueResult
 	) {
