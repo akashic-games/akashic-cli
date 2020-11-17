@@ -3,9 +3,9 @@ import { observer } from "mobx-react";
 import { ToolLabelButton } from "../atom/ToolLabelButton";
 
 export interface MiscDevtoolProps {
-	showProfiler: boolean;
+	showsProfiler: boolean;
 	downloadPlaylog: () => void;
-	setShowProfiler: (show: boolean) => void;
+	setShowsProfiler: (show: boolean) => void;
 }
 
 @observer
@@ -24,7 +24,7 @@ export class MiscDevtool extends React.Component<MiscDevtoolProps, {}> {
 				<input
 					className="external-ref_checkbox_show-profiler"
 					type="checkbox"
-					checked={this.props.showProfiler}
+					checked={this.props.showsProfiler}
 					onChange={this._onShowProfilerCheckboxChange} />
 				プロファイラー情報の表示
 			</div>
@@ -32,6 +32,6 @@ export class MiscDevtool extends React.Component<MiscDevtoolProps, {}> {
 	}
 
 	private _onShowProfilerCheckboxChange = (): void => {
-		this.props.setShowProfiler(!this.props.showProfiler);
+		this.props.setShowsProfiler(!this.props.showsProfiler);
 	}
 }

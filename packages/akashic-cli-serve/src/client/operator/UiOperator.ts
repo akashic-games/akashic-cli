@@ -88,7 +88,7 @@ export class UiOperator {
 		this.store.notificationUiStore.setInactive();
 	}
 
-	setShowProfiler = (show: boolean): void => {
-		this.store.devtoolUiStore.setShowProfiler(show);
+	setShowsProfiler = (show: boolean): void => {
+		this.store.devtoolUiStore.setShowsProfiler(show);
 	}
 }

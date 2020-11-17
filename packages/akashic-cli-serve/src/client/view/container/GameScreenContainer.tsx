@@ -67,7 +67,7 @@ export class GameScreenContainer extends React.Component<GameScreenContainerProp
 	}
 
 	private _makeProfilerCanvasProps = (): ProfilerCanvasProps | undefined => {
-		return this.props.devtoolUiStore.showProfiler ? {
+		return this.props.devtoolUiStore.showsProfiler ? {
 			profilerDataArray: this.props.profilerStore.profilerDataArray,
 			profilerStyleSetting: this.props.profilerStore.profilerStyleSetting,
 			profilerWidth: this.props.profilerStore.profilerWidth,

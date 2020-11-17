@@ -21,7 +21,7 @@ export interface ProfilerData {
 	data: number[];
 	max: number;
 	min: number;
-	fixed: number;
+	fixed: number; // 値の表示時に小数点何位まで表示するか
 }
 
 export interface ProfilerValue {
