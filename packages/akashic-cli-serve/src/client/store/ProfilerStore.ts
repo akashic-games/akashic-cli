@@ -6,6 +6,8 @@ const PROFILER_DATA_LIMIT = 100; // １つのプロファイラが保持でき�
 export class ProfilerStore {
 	@observable profilerDataArray: ProfilerData[];
 	@observable profilerStyleSetting: ProfilerStyleSetting;
+	@observable profilerWidth: number; // プロファイラ1つ分の横幅
+	@observable profilerHeight: number; // プロファイラ1つ分の縦幅
 
 	constructor() {
 		this.profilerDataArray = [
@@ -61,6 +63,8 @@ export class ProfilerStore {
 			graphWidthMargin: 1,
 			graphPadding: 5
 		};
+		this.profilerWidth = 150;
+		this.profilerHeight = 61;
 	}
 
 	@action
