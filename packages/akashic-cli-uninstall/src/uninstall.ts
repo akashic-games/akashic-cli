@@ -2,7 +2,6 @@ import * as path from "path";
 import * as fs from "fs";
 import * as cmn from "@akashic/akashic-cli-commons";
 import { Configuration } from "./Configuration";
-import { file } from "mock-fs/lib/filesystem";
 
 export interface UninstallParameterObject {
 	/**
@@ -69,19 +68,16 @@ export function promiseUninstall(param: UninstallParameterObject): Promise<void>
 			return Promise.resolve()
 				.then(() => {
 					param.moduleNames.forEach((name) => {
-						const libPath = path.resolve(".", "node_modules", name, "akashic-lib.json");
+						const libPath = path.resolve(process.cwd(), "node_modules", name, "akashic-lib.json");
 						try {
 							const libJsonData: cmn.LibConfiguration = JSON.parse(fs.readFileSync(libPath, "utf8"));
-							if (libJsonData.gameConfigurationData &&
-									libJsonData.gameConfigurationData.environment &&
-									libJsonData.gameConfigurationData.environment.external) {
-									const environment = libJsonData.gameConfigurationData.environment;
-									Object.keys(environment.external).forEach(externalName => {
-										uninstallExternals[externalName] = environment.external[externalName];
-								});
-							}
+							const environment = libJsonData.gameConfigurationData.environment;
+							Object.keys(environment.external).forEach(externalName => {
+								uninstallExternals[externalName] = environment.external[externalName];
+							});
 						} catch (error) {
 							if (error.code === "ENOENT") return; // akashic-lib.jsonを持っていないケース
+							if (error.message.indexOf("TypeError:") !== -1) return; // externalを持っていないケース
 							throw error;
 						}
 					});
