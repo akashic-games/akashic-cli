@@ -484,6 +484,7 @@ describe("Configuration", function () {
 		expect(conf.getContent().assets["newDummy"]).toBe(undefined);
 		conf.scanAssetsScript(["script"]);
 		expect(conf.getContent().assets["dummyCode"].type).toBe("script");
+		expect(conf.getContent().assets["newDummy"]).toBe(undefined);
 
 		gamejson = {
 			assets: {
