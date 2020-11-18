@@ -41,3 +41,4 @@ socket.on("runnerResume", (arg: RunnerResumeTestbedEvent) => onRunnerResume.fire
 socket.on("clientInstanceAppear", (arg: ClientInstanceAppearTestbedEvent) => onClientInstanceAppear.fire(arg));
 socket.on("clientInstanceDisappear", (arg: ClientInstanceDisappearTestbedEvent) => onClientInstanceDisappear.fire(arg));
 socket.on("playBroadcast", (arg: PlayBroadcastTestbedEvent) => onBroadcast.fire(arg));
+socket.on("reconnect", () => location.reload());
