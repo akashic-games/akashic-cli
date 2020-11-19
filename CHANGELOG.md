@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 1.15.0 (2020-11-19)
+
+#### Breaking Change
+* `akashic-cli-export-html`
+  * [#592](https://github.com/akashic-games/akashic-cli/pull/592) stop to depend on game-storage ([@dera-](https://github.com/dera-))
+
+#### Other Change
+* `akashic-cli-export-html`
+  * [#592](https://github.com/akashic-games/akashic-cli/pull/592) stop to depend on game-storage ([@dera-](https://github.com/dera-))
+
+#### Committers: 1
+- [@dera-](https://github.com/dera-)
+
 ## 1.14.119 (2020-11-18)
 
 #### Enhancement
