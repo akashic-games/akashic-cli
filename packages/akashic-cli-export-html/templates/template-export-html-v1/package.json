@@ -5,14 +5,10 @@
   "scripts": {
     "build": "npm run build:mkdir && npm run copy",
     "build:mkdir": "shx mkdir -p ../../templates-build/v1/js",
-    "copy": "shx cp -r js ../../templates-build/v1 && shx cp -r css ../../templates-build/v1",
-    "update": "node ../../build-template-support/updatefiles.js template-export-html-v1"
+    "copy": "shx cp -r js ../../templates-build/v1 && shx cp -r css ../../templates-build/v1"
   },
   "devDependencies": {
     "shx": "0.3.3"
-  },
-  "optionalDependencies": {
-    "@akashic/game-storage": "0.0.6"
   },
   "private": true
 }

@@ -7,7 +7,14 @@ module.exports = {
     },
     "globals": {
         "Atomics": "readonly",
-        "SharedArrayBuffer": "readonly"
+        "SharedArrayBuffer": "readonly",
+        "Promise": "readonly",
+        "engineFiles": "readonly",
+        "driver": "readonly",
+        "LocalScriptAsset": "readonly",
+        "LocalTextAsset": "readonly",
+        "LocalScriptAssetV3": "readonly",
+        "LocalTextAssetV3": "readonly"
     },
     "parserOptions": {
         "ecmaVersion": 5
