@@ -19,7 +19,7 @@
     "@akashic/akashic-cli-export-zip": "0.6.76",
     "@akashic/akashic-cli-scan": "0.5.69",
     "@akashic/akashic-engine": "~3.0.0-beta.33",
-    "@akashic/akashic-sandbox": "~0.16.25",
+    "@akashic/akashic-sandbox": "~0.17.0",
     "@types/jest": "26.0.15",
     "@types/node": "14.14.6",
     "@typescript-eslint/eslint-plugin": "3.10.1",
