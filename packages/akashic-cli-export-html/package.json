@@ -1,10 +1,10 @@
 {
   "name": "@akashic/akashic-cli-export-html",
-  "version": "0.7.95",
+  "version": "0.8.0",
   "description": "A module to convert your Akashic game to a runnable standalone.",
   "main": "lib/index.js",
   "scripts": {
-    "prepublish": "npm run clean && npm run build && node ./build-template-support/checkAkashicVersions",
+    "prepublish": "npm run clean && npm run build",
     "clean": "shx rm -rf lib && shx rm -rf spec/build",
     "start": "npm run build && node bin/run",
     "build": "npm run build:app && npm run build:export && npm run build:templates && shx cp ./templates/engineFilesVersion.json ./lib",
@@ -24,10 +24,7 @@
     "lint-js": "eslint ./templates/**/*.js",
     "test": "npm run test:jest && npm run lint",
     "test:jest": "jest",
-    "update-template": "npm run update-template:v1 && npm run update-template:v2 && npm run update-template:v3 && node ./build-template-support/updateEngineFiles.js",
-    "update-template:v1": "node ./build-template-support/generateAkashicVersionsFile v1 && cd templates/template-export-html-v1 && npm run update && npm run build && cd ../../",
-    "update-template:v2": "node ./build-template-support/generateAkashicVersionsFile v2 && cd templates/template-export-html-v2 && npm run update && npm run build && cd ../../",
-    "update-template:v3": "node ./build-template-support/generateAkashicVersionsFile v3 && cd templates/template-export-html-v3 && npm run update && npm run build && cd ../../"
+    "update-template": "node ./build-template-support/updateEngineFiles.js"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",

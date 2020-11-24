@@ -1,5 +1,41 @@
 # CHANGELOG
 
+## 1.15.0 (2020-11-19)
+
+#### Breaking Change
+* `akashic-cli-export-html`
+  * [#592](https://github.com/akashic-games/akashic-cli/pull/592) stop to depend on game-storage ([@dera-](https://github.com/dera-))
+
+#### Other Change
+* `akashic-cli-export-html`
+  * [#592](https://github.com/akashic-games/akashic-cli/pull/592) stop to depend on game-storage ([@dera-](https://github.com/dera-))
+
+#### Committers: 1
+- [@dera-](https://github.com/dera-)
+
+## 1.14.119 (2020-11-18)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#595](https://github.com/akashic-games/akashic-cli/pull/595) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Update Dependencies
+* `akashic-cli-serve`
+  * [#597](https://github.com/akashic-games/akashic-cli/pull/597) feat(serve): update @akashic/headless-driver to 1.5.0 ([@yu-ogi](https://github.com/yu-ogi))
+
+#### Committers: 2
+- [@yu-ogi](https://github.com/yu-ogi)
+- xnv ([@xnv](https://github.com/xnv))
+
+## 1.14.118 (2020-11-13)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#588](https://github.com/akashic-games/akashic-cli/pull/588) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.0.0-beta.11, engineFiles@2.1.48, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.14.117 (2020-11-12)
 
 #### Enhancement
