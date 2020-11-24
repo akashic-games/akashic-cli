@@ -39,7 +39,7 @@ describe("Utilities for Configuration", function () {
 
 	it("can check script file path", function() {
 		expect(cnf.isScriptAssetPath("hoge.js")).toBe(true);
-		expect(cnf.isScriptAssetPath("hoge.json")).toBe(true);
+		expect(cnf.isScriptAssetPath("hoge.json")).toBe(false);
 		expect(cnf.isScriptAssetPath("hoge.txt.js")).toBe(true);
 		expect(cnf.isScriptAssetPath("hoge.txt")).toBe(false);
 		expect(cnf.isScriptAssetPath("hoge.js.txt")).toBe(false);
@@ -484,7 +484,7 @@ describe("Configuration", function () {
 		expect(conf.getContent().assets["newDummy"]).toBe(undefined);
 		conf.scanAssetsScript(["script"]);
 		expect(conf.getContent().assets["dummyCode"].type).toBe("script");
-		expect(conf.getContent().assets["newDummy"].type).toBe("script");
+		expect(conf.getContent().assets["newDummy"]).toBe(undefined);
 
 		gamejson = {
 			assets: {
