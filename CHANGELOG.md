@@ -1,5 +1,22 @@
 # CHANGELOG
 
+## 1.15.1 (2020-11-24)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#598](https://github.com/akashic-games/akashic-cli/pull/598) reconnection when server restart ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+* `akashic-cli-init`
+  * [#602](https://github.com/akashic-games/akashic-cli/pull/602) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+  * [#601](https://github.com/akashic-games/akashic-cli/pull/601) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Other Change
+* `akashic-cli-init`, `akashic-cli-scan`
+  * [#590](https://github.com/akashic-games/akashic-cli/pull/590) Change game size in init template ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 2
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.15.0 (2020-11-19)
 
 #### Breaking Change
