@@ -191,7 +191,7 @@ async function cli(cliConfigParam: CliConfigServe) {
 		}
 		let url = `http://${serverGlobalConfig.hostname}:${serverGlobalConfig.port}/public`;
 		// サーバー起動のログに関してはSystemLoggerで使用していない色を使いたいので緑を選択
-		console.log(chalk.green(`Hosting ${targetDirs.join(", ")} on ${url}`));
+		console.log(chalk.green(`Hosting ${targetDirs.join(", ")} on http://${serverGlobalConfig.hostname}:${serverGlobalConfig.port}`));
 		if (loadedPlaylogPlayId) {
 			console.log(`play(id: ${loadedPlaylogPlayId}) read playlog(path: ${path.join(process.cwd(), commander.debugPlaylog)}).`);
 			url += `?playId=${loadedPlaylogPlayId}&mode=replay`;
