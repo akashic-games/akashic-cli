@@ -24,7 +24,7 @@
     "akashic-cli-serve": "./bin/run"
   },
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.5.54",
+    "@akashic/akashic-cli-commons": "../akashic-cli-commons",
     "@akashic/headless-driver": "1.5.0",
     "@akashic/trigger": "1.0.0",
     "chalk": "4.1.0",
@@ -61,6 +61,7 @@
     "mobx": "5.15.7",
     "mobx-react": "6.3.1",
     "node-fetch": "2.6.1",
+    "open": "7.3.0",
     "query-string": "6.13.7",
     "react": "16.14.0",
     "react-dom": "16.14.0",
