@@ -6,7 +6,7 @@ export class PlayOperator {
 
 	constructor(store: Store) {
 		this.store = store;
-		Subscriber.onDisconnect.add(this.closeSubWindows);
+		Subscriber.onDisconnect.add(this.closeSubWindowsIfNeeded);
 	}
 
 	togglePauseActive = (pauses: boolean): void => {
@@ -31,8 +31,8 @@ export class PlayOperator {
 	}
 
 	openNewClientInstance = (): void => {
-		// ignoreSession は Mac Chrome の不具合(？)対策でやむなくつけているフラグ。 (ref. ../store/storage.ts)
-		console.log(`OPENWINDOW: width=${window.innerWidth},height=${window.innerHeight}`);
+		// Mac Chrome で正しく動作しないのと、親ウィンドウかどうかの判別をしたいことがあるので noopener は付けない。
+		// 代わりに ignoreSession を指定して自前でセッションストレージをウィンドウごとに使い分ける (ref. ../store/storage.ts)
 		window.open(
 			`${window.location.pathname}?ignoreSession=1`,
 			"_blank",
@@ -40,7 +40,7 @@ export class PlayOperator {
 		);
 	}
 
-	closeSubWindows = (): void => {
+	closeSubWindowsIfNeeded = (): void => {
 		// TODO: ゲームごとに、開いた window の位置とサイズ情報を閉じる直前で localStorage に保存し、
 		// 再度 window を開いた時に localStorage に情報があればそのサイズで window.open() したい。
 		if (this.store.appOptions.preserveDisconnected)  return;

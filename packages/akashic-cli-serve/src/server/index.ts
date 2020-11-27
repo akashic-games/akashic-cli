@@ -198,7 +198,7 @@ async function cli(cliConfigParam: CliConfigServe) {
 			console.log(`if access ${url}, you can show this play.`);
 		}
 
-		if (cliConfigParam.openBrowser ) {
+		if (cliConfigParam.openBrowser) {
 			open(url);
 		}
 	});
@@ -222,8 +222,8 @@ export async function run(argv: any): Promise<void> {
 		.option("--debug-untrusted", `An internal debug option`)
 		.option("--debug-proxy-audio", `An internal debug option`)
 		.option("--allow-external", `Read the URL allowing external access from sandbox.config.js`)
-		.option("--no-open-browser", "No open browser at startup")
-		.option("--preserve-disconnected", "Preserve the state of window disconnected from the network")
+		.option("--no-open-browser", "Disable to open a browser window at startup")
+		.option("--preserve-disconnected", "Disable auto closing for disconnected windows.")
 		.parse(argv);
 
 	CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashic.config.js"), async (error, configuration) => {
