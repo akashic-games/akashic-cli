@@ -21,6 +21,7 @@
     "@akashic/akashic-cli-scan": "0.5.70",
     "@akashic/akashic-engine": "~2.6.6",
     "@akashic/akashic-sandbox": "~0.17.0",
+    "@akashic/headless-akashic": "^1.0.0",
     "@types/jest": "26.0.15",
     "@types/node": "14.14.6",
     "@typescript-eslint/eslint-plugin": "3.10.1",
