@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.15.3 (2020-12-01)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#606](https://github.com/akashic-games/akashic-cli/pull/606) Add serve startup options ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 1.15.2 (2020-12-01)
 
 #### Enhancement
