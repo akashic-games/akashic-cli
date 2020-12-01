@@ -6,7 +6,7 @@ export class PlayOperator {
 
 	constructor(store: Store) {
 		this.store = store;
-		Subscriber.onDisconnect.add(this.closeSubWindowsIfNeeded);
+		Subscriber.onDisconnect.add(this.closeThisWindowIfNeeded);
 	}
 
 	togglePauseActive = (pauses: boolean): void => {
@@ -40,7 +40,7 @@ export class PlayOperator {
 		);
 	}
 
-	closeSubWindowsIfNeeded = (): void => {
+	closeThisWindowIfNeeded = (): void => {
 		// TODO: ゲームごとに、開いた window の位置とサイズ情報を閉じる直前で localStorage に保存し、
 		// 再度 window を開いた時に localStorage に情報があればそのサイズで window.open() したい。
 		if (this.store.appOptions.preserveDisconnected)  return;
