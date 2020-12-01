@@ -5,4 +5,5 @@ export interface AppOptions {
 	verbose: boolean;
 	proxyAudio: boolean;
 	targetService: ServiceType;
+	preserveDisconnected: boolean;
 }

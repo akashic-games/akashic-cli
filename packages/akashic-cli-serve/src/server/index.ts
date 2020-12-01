@@ -7,6 +7,7 @@ import * as bodyParser from "body-parser";
 import * as socketio from "socket.io";
 import * as commander from "commander";
 import * as chalk from "chalk";
+import * as open from "open";
 import { PlayManager, RunnerManager, setSystemLogger, getSystemLogger } from "@akashic/headless-driver";
 import { createApiRouter } from "./route/ApiRoute";
 import { RunnerStore } from "./domain/RunnerStore";
@@ -39,6 +40,7 @@ async function cli(cliConfigParam: CliConfigServe) {
 
 	serverGlobalConfig.untrusted = !!cliConfigParam.debugUntrusted;
 	serverGlobalConfig.proxyAudio = !!cliConfigParam.debugProxyAudio;
+	serverGlobalConfig.preserveDisconnected = !!cliConfigParam.preserveDisconnected;
 
 	if (cliConfigParam.hostname) {
 		serverGlobalConfig.hostname = cliConfigParam.hostname;
@@ -187,12 +189,17 @@ async function cli(cliConfigParam: CliConfigServe) {
 			getSystemLogger().warn("Akashic Serve is a development server which is not appropriate for public release. " +
 				`We do not recommend to listen on a well-known port ${serverGlobalConfig.port}.`);
 		}
+		let url = `http://${serverGlobalConfig.hostname}:${serverGlobalConfig.port}/public`;
 		// サーバー起動のログに関してはSystemLoggerで使用していない色を使いたいので緑を選択
 		console.log(chalk.green(`Hosting ${targetDirs.join(", ")} on http://${serverGlobalConfig.hostname}:${serverGlobalConfig.port}`));
 		if (loadedPlaylogPlayId) {
 			console.log(`play(id: ${loadedPlaylogPlayId}) read playlog(path: ${path.join(process.cwd(), commander.debugPlaylog)}).`);
-			const url = `http://${serverGlobalConfig.hostname}:${serverGlobalConfig.port}/public?playId=${loadedPlaylogPlayId}&mode=replay`;
+			url += `?playId=${loadedPlaylogPlayId}&mode=replay`;
 			console.log(`if access ${url}, you can show this play.`);
+		}
+
+		if (cliConfigParam.openBrowser) {
+			open(url);
 		}
 	});
 }
@@ -215,6 +222,8 @@ export async function run(argv: any): Promise<void> {
 		.option("--debug-untrusted", `An internal debug option`)
 		.option("--debug-proxy-audio", `An internal debug option`)
 		.option("--allow-external", `Read the URL allowing external access from sandbox.config.js`)
+		.option("--no-open-browser", "Disable to open a browser window at startup")
+		.option("--preserve-disconnected", "Disable auto closing for disconnected windows.")
 		.parse(argv);
 
 	CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashic.config.js"), async (error, configuration) => {
@@ -234,7 +243,9 @@ export async function run(argv: any): Promise<void> {
 			debugUntrusted: commander.debugUntrusted ?? conf.debugUntrusted,
 			debugProxyAudio: commander.proxyAudio ?? conf.debugProxyAudio,
 			allowExternal: commander.allowExternal ?? conf.allowExternal,
-			targetDirs: commander.args.length > 0 ? commander.args : (conf.targetDirs ?? [process.cwd()])
+			targetDirs: commander.args.length > 0 ? commander.args : (conf.targetDirs ?? [process.cwd()]),
+			openBrowser: commander.openBrowser ?? conf.openBrowser,
+			preserveDisconnected: commander.preserveDisconnected ?? conf.preserveDisconnected
 		};
 		await cli(cliConfigParam);
 	});
