@@ -3,10 +3,8 @@ const path = require("path");
 const ncu = require("npm-check-updates");
 
 const templateSrcPath = path.join(__dirname, "..", "templates-src");
-const templateSrcV3Path = path.join(__dirname, "..", "templates-src-v3");
 
 updateModules(templateSrcPath);
-updateModules(templateSrcV3Path);
 
 function updateModules(srcPath) {
 	const templates = fs.readdirSync(srcPath).filter(dir => fs.existsSync(path.join(srcPath, dir, "package.json")));
