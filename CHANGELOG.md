@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 1.15.2 (2020-12-01)
+
+#### Enhancement
+* `akashic-cli-commons`
+  * [#605](https://github.com/akashic-games/akashic-cli/pull/605) Add property to commons CliConfigServe ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+* `akashic-cli-init`
+  * [#604](https://github.com/akashic-games/akashic-cli/pull/604) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Committers: 2
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 1.15.1 (2020-11-24)
 
 #### Enhancement
