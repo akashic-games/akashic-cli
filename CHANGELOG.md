@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 2.0.0 (2020-12-02)
+
+#### Breaking Change
+* `akashic-cli-export-html`, `akashic-cli-init`, `akashic-cli-serve`
+  * [#611](https://github.com/akashic-games/akashic-cli/pull/611) engineFIles更新スクリプトをv3のリリースに合わせて修正+akashic-cli-initのテンプレートでakashic-engine v3を利用するようにしてv2を利用しないように修正 ([@dera-](https://github.com/dera-))
+
+#### Other Change
+* `akashic-cli-export-html`, `akashic-cli-init`, `akashic-cli-serve`
+  * [#611](https://github.com/akashic-games/akashic-cli/pull/611) engineFIles更新スクリプトをv3のリリースに合わせて修正+akashic-cli-initのテンプレートでakashic-engine v3を利用するようにしてv2を利用しないように修正 ([@dera-](https://github.com/dera-))
+
+#### Committers: 1
+- [@dera-](https://github.com/dera-)
+
 ## 1.15.4 (2020-12-02)
 
 #### Enhancement
