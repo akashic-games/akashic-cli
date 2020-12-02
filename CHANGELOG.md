@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.15.4 (2020-12-02)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#608](https://github.com/akashic-games/akashic-cli/pull/608) feat(akashic-cli-init): add specs ([@yu-ogi](https://github.com/yu-ogi))
+
+#### Committers: 1
+- [@yu-ogi](https://github.com/yu-ogi)
+
 ## 1.15.3 (2020-12-01)
 
 #### Enhancement
