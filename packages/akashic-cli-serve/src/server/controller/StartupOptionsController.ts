@@ -9,7 +9,8 @@ export const handleToGetStartupOptions = (req: express.Request, res: express.Res
 			autoStart: serverGlobalConfig.autoStart,
 			verbose: serverGlobalConfig.verbose,
 			targetService: serverGlobalConfig.targetService,
-			proxyAudio: serverGlobalConfig.proxyAudio
+			proxyAudio: serverGlobalConfig.proxyAudio,
+			preserveDisconnected: serverGlobalConfig.preserveDisconnected
 		});
 	} catch (e) {
 		next(e);
