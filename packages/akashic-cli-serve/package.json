@@ -33,6 +33,7 @@
     "ejs": "3.1.5",
     "express": "4.17.1",
     "lodash": "4.17.20",
+    "open": "7.3.0",
     "socket.io": "2.3.0"
   },
   "devDependencies": {
@@ -61,7 +62,6 @@
     "mobx": "5.15.7",
     "mobx-react": "6.3.1",
     "node-fetch": "2.6.1",
-    "open": "7.3.0",
     "query-string": "6.13.7",
     "react": "16.14.0",
     "react-dom": "16.14.0",
