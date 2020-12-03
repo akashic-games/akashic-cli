@@ -38,10 +38,17 @@ window.addEventListener("load", function() {
 			// file:の場合ブラウザによってCORSの制約にひっかかるWebAudioは避ける
 			audioPlugins = [pdiBrowser.HTMLAudioPlugin];
 		}
+		var elem = document.getElementById("container");
 		var pf = new pdiBrowser.Platform({
 			amflow: amflowClient,
-			containerView: document.getElementById("container"),
-			audioPlugins: audioPlugins
+			containerView: elem,
+			audioPlugins: audioPlugins,
+			// iframe 下の場合 preventDefault すると iframe 領域外での mousemove が通知されなくなってしまうので無効化
+			disablePreventDefault: true
+		});
+		elem.addEventListener("touchstart", function (ev) {
+			// disablePreventDefault の場合 touchstart のデフォルト処理を止めないと mousestart が二重になる場合がある
+			ev.preventDefault();
 		});
 
 		pf.loadGameConfiguration = function(url, callback) {
