@@ -255,7 +255,7 @@ describe("uninstall()", function () {
 		}).then(done, done.fail)
 	});
 
-	it("dont remove remaining external", function (done: any) {
+	it("does not remove remaining external", function (done: any) {
 		const mockfsContent: any = {
 			testdir: {
 				foo: {

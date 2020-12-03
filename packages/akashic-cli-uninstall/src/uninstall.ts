@@ -102,8 +102,7 @@ export function promiseUninstall(param: UninstallParameterObject): Promise<void>
 					});
 					const remainExternals: {[key: string]: string} = {};
 					libPaths.forEach((libPath) => {
-					extractExternalsFromLibJson(libPath, remainExternals);
-
+						extractExternalsFromLibJson(libPath, remainExternals);
 					});
 					Object.keys(uninstallExternals).forEach((externalName) => {
 						if (!remainExternals[externalName]) conf.removeExternal(externalName);
@@ -121,13 +120,15 @@ export function uninstall(param: UninstallParameterObject, cb: (err: any) => voi
 	promiseUninstall(param).then(cb, cb);
 }
 
-function extractExternalsFromLibJson(libPath: string, uninstallExternals: {[key: string]: string}) {
+function extractExternalsFromLibJson(libPath: string, externals: {[key: string]: string}): void {
 	try {
 		const libJsonData: cmn.LibConfiguration = JSON.parse(fs.readFileSync(libPath, "utf8"));
+		if (!libJsonData || !libJsonData.gameConfigurationData) return;
+
 		const environment = libJsonData.gameConfigurationData.environment;
 		if (!environment.external) return;
 		Object.keys(environment.external).forEach(externalName => {
-			uninstallExternals[externalName] = environment.external[externalName];
+			externals[externalName] = environment.external[externalName];
 		});
 	} catch (error) {
 		if (error.code === "ENOENT") return; // akashic-lib.jsonを持っていないケース
