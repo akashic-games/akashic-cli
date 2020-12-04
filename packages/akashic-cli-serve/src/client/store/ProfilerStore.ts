@@ -1,16 +1,16 @@
-import { action, observable } from "mobx";
+import { action, observable, IObservableArray, computed } from "mobx";
 import { ProfilerData, ProfilerName, ProfilerStyleSetting, ProfilerValueResult } from "../common/types/Profiler";
 
 const PROFILER_DATA_LIMIT = 100; // １つのプロファイラが保持できるデータの個数。
 
 export class ProfilerStore {
-	@observable profilerDataArray: ProfilerData[];
+	@observable profilerDataArray: IObservableArray<ProfilerData>;
 	@observable profilerStyleSetting: ProfilerStyleSetting;
 	@observable profilerWidth: number; // プロファイラ1つ分の横幅
 	@observable profilerHeight: number; // プロファイラ1つ分の縦幅
 
 	constructor() {
-		this.profilerDataArray = [
+		this.profilerDataArray = observable.array([
 			{
 				name: "fps",
 				data: [],
@@ -46,7 +46,7 @@ export class ProfilerStore {
 				min: Number.MAX_VALUE,
 				fixed: 1
 			}
-		];
+		]);
 		// TODO: プロファイラーのサイズ・色等の設定値をserveに適したものにする
 		this.profilerStyleSetting = {
 			margin: 5,
@@ -72,13 +72,10 @@ export class ProfilerStore {
 		name: ProfilerName,
 		profileValueResult: ProfilerValueResult
 	) {
-		const copiedProfilerDataArray = this.profilerDataArray.slice();
-		// 本来であればArray#find()を使うべきだが、ES5にない関数なので代わりにfilterを使用する
-		const targetProfilers = copiedProfilerDataArray.filter(profiler => profiler.name === name);
-		if (targetProfilers.length === 0) {
+		const profilerData = this.profilerDataArray.find(profiler => profiler.name === name);
+		if (!profilerData) {
 			return;
 		}
-		const profilerData = targetProfilers[0];
 		const currentValue = profileValueResult.ave;
 		profilerData.data.unshift(currentValue);
 		if (profilerData.data.length > PROFILER_DATA_LIMIT) {
@@ -90,6 +87,5 @@ export class ProfilerStore {
 		if (profilerData.max < currentValue) {
 			profilerData.max = currentValue;
 		}
-		this.profilerDataArray = copiedProfilerDataArray;
 	}
 }

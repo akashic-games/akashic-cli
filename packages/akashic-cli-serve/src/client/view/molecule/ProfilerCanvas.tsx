@@ -1,4 +1,5 @@
 import * as React from "react";
+import { autorun } from "mobx";
 import { observer } from "mobx-react";
 import { ProfilerData, ProfilerStyleSetting } from "../../common/types/Profiler";
 
@@ -12,15 +13,9 @@ export interface ProfilerCanvasProps {
 @observer
 export class ProfilerCanvas extends React.Component<ProfilerCanvasProps, {}> {
 	private profilerCanvasContext: CanvasRenderingContext2D|null = null;
+	private disposeAutoRun: (() => void) | null = null;
 
-	componentDidMount(): void {
-		this.renderProfiler();
-	}
-
-	componentDidUpdate(): void {
-		this.renderProfiler();
-	}
-
+	// TODO: 現実装ではprofilerDataArrayの中身が変わった時に対応できないので、プロファイラの描画用にCanvasではなくDOMを利用するように修正する
 	render(): React.ReactNode {
 		const setting = this.props.profilerStyleSetting;
 		const profilerWidth = this.props.profilerWidth;
@@ -39,7 +34,18 @@ export class ProfilerCanvas extends React.Component<ProfilerCanvasProps, {}> {
 				height={ profilerCanvasHeight }
 				style={{ width: profilerCanvasWidth, height: profilerCanvasHeight }}
 				ref={ node => {
-					if (node) this.profilerCanvasContext = node.getContext("2d");
+					if (node) {
+						this.profilerCanvasContext = node.getContext("2d");
+						this.disposeAutoRun = autorun(() => {
+							this.renderProfiler();
+						});
+					} else {
+						this.profilerCanvasContext = null;
+						if (this.disposeAutoRun) {
+							this.disposeAutoRun();
+							this.disposeAutoRun = null;
+						}
+					}
 				}}
 			/>
 		</div>;
