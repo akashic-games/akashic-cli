@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 2.0.3 (2020-12-04)
+
+#### Bug Fix
+* `akashic-cli-export-html`
+  * [#607](https://github.com/akashic-games/akashic-cli/pull/607) fix dragging to outside of the screen on exported html ([@xnv](https://github.com/xnv))
+* `akashic-cli-serve`
+  * [#616](https://github.com/akashic-games/akashic-cli/pull/616) Move open module to dependencies ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+  * [#610](https://github.com/akashic-games/akashic-cli/pull/610) fix(akashic-cli-serve): deadlock for --debug-untrusted ([@xnv](https://github.com/xnv))
+
+#### Committers: 2
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.0.2 (2020-12-02)
 
 #### Enhancement
