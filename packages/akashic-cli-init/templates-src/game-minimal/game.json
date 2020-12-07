@@ -1,11 +1,11 @@
 {
-	"width": 320,
-	"height": 320,
+	"width": 1280,
+	"height": 720,
 	"fps": 30,
 	"main": "./script/main.js",
 	"assets": {},
 	"moduleMainScripts": {},
 	"environment": {
-		"sandbox-runtime": "2"
+		"sandbox-runtime": "3"
 	}
 }

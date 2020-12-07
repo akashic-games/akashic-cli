@@ -50,7 +50,7 @@ export const del = async<T>(url: string, params?: {[key: string]: string}): Prom
 	return await response.json();
 };
 
-export const patch = async<T>(url: string, params?: {[key: string]: string}): Promise<T> => {
+export const patch = async<T>(url: string, params?: {[key: string]: any}): Promise<T> => {
 	const method = "PATCH";
 	const body = JSON.stringify(params);
 	const headers = {

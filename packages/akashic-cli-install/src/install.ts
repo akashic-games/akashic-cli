@@ -106,7 +106,8 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 					conf.addToGlobalScripts(filePaths);
 					const packageJsonFiles = cmn.NodeModules.listPackageJsonsFromScriptsPath(".", filePaths);
 					if (packageJsonFiles) {
-						conf.addToModuleMainScripts(packageJsonFiles);
+						const sandboxRuntime = conf._content.environment && conf._content.environment["sandbox-runtime"] ? conf._content.environment["sandbox-runtime"] : "1";
+						conf.addToModuleMainScripts(packageJsonFiles, sandboxRuntime);
 					}
 				})
 				.then(() => {

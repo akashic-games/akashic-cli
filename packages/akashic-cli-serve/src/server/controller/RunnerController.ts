@@ -62,9 +62,13 @@ export const createHandlerToPatchRunner = (runnerStore: RunnerStore): express.Re
 			}
 
 			if (status === "paused") {
-				runnerStore.pauseRunner(runnerId);
+				await runnerStore.pauseRunner(runnerId);
 			} else {
-				runnerStore.resumeRunner(runnerId);
+				await runnerStore.resumeRunner(runnerId);
+			}
+
+			if (req.body.step) {
+				await runnerStore.stepRunner(runnerId);
 			}
 
 			responseSuccess<RunnerPatchApiResponseData>(res, 200, { runnerId, status });

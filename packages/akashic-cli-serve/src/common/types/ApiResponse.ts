@@ -31,6 +31,7 @@ export interface PlayDeleteApiResponseData {
 export interface PlayPatchApiResponseData {
 	playId: string;
 	status: "running" | "paused";
+	step?: boolean;
 }
 
 export interface PlayTokenPostApiResponseData {
@@ -54,7 +55,8 @@ export interface RunnerDeleteApiResponseData {
 
 export interface RunnerPatchApiResponseData {
 	runnerId: string;
-	status: "running" | "paused";
+	status: "running" | "paused" | "step";
+	step?: boolean;
 }
 
 export type ContentGetApiResponseData = ContentDesc;

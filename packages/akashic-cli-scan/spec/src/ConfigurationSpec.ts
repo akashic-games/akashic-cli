@@ -16,50 +16,50 @@ describe("Utilities for Configuration", function () {
 	});
 
 	it("can check image file path", function() {
-		expect(cnf._isImageFilePath("hoge.png")).toBe(true);
-		expect(cnf._isImageFilePath("hoge.gif")).toBe(true);
-		expect(cnf._isImageFilePath("hoge.jpg")).toBe(true);
-		expect(cnf._isImageFilePath("hoge.jpeg")).toBe(true);
-		expect(cnf._isImageFilePath("hoge.txt.png")).toBe(true);
-		expect(cnf._isImageFilePath("hoge.txt")).toBe(false);
-		expect(cnf._isImageFilePath("hoge.png.txt")).toBe(false);
-		expect(cnf._isImageFilePath("hoge")).toBe(false);
+		expect(cnf.isImageFilePath("hoge.png")).toBe(true);
+		expect(cnf.isImageFilePath("hoge.gif")).toBe(true);
+		expect(cnf.isImageFilePath("hoge.jpg")).toBe(true);
+		expect(cnf.isImageFilePath("hoge.jpeg")).toBe(true);
+		expect(cnf.isImageFilePath("hoge.txt.png")).toBe(true);
+		expect(cnf.isImageFilePath("hoge.txt")).toBe(false);
+		expect(cnf.isImageFilePath("hoge.png.txt")).toBe(false);
+		expect(cnf.isImageFilePath("hoge")).toBe(false);
 	});
 
 	it("can check audio file path", function() {
-		expect(cnf._isAudioFilePath("hoge.ogg")).toBe(true);
-		expect(cnf._isAudioFilePath("hoge.wav")).toBe(false);
-		expect(cnf._isAudioFilePath("hoge.aac")).toBe(true);
-		expect(cnf._isAudioFilePath("hoge.mp4")).toBe(true);
-		expect(cnf._isAudioFilePath("hoge.txt.ogg")).toBe(true);
-		expect(cnf._isAudioFilePath("hoge.txt")).toBe(false);
-		expect(cnf._isAudioFilePath("hoge.ogg.txt")).toBe(false);
-		expect(cnf._isAudioFilePath("hoge")).toBe(false);
+		expect(cnf.isAudioFilePath("hoge.ogg")).toBe(true);
+		expect(cnf.isAudioFilePath("hoge.wav")).toBe(false);
+		expect(cnf.isAudioFilePath("hoge.aac")).toBe(true);
+		expect(cnf.isAudioFilePath("hoge.mp4")).toBe(true);
+		expect(cnf.isAudioFilePath("hoge.txt.ogg")).toBe(true);
+		expect(cnf.isAudioFilePath("hoge.txt")).toBe(false);
+		expect(cnf.isAudioFilePath("hoge.ogg.txt")).toBe(false);
+		expect(cnf.isAudioFilePath("hoge")).toBe(false);
 	});
 
 	it("can check script file path", function() {
-		expect(cnf._isScriptAssetPath("hoge.js")).toBe(true);
-		expect(cnf._isScriptAssetPath("hoge.json")).toBe(true);
-		expect(cnf._isScriptAssetPath("hoge.txt.js")).toBe(true);
-		expect(cnf._isScriptAssetPath("hoge.txt")).toBe(false);
-		expect(cnf._isScriptAssetPath("hoge.js.txt")).toBe(false);
-		expect(cnf._isScriptAssetPath("hoge")).toBe(false);
+		expect(cnf.isScriptAssetPath("hoge.js")).toBe(true);
+		expect(cnf.isScriptAssetPath("hoge.json")).toBe(false);
+		expect(cnf.isScriptAssetPath("hoge.txt.js")).toBe(true);
+		expect(cnf.isScriptAssetPath("hoge.txt")).toBe(false);
+		expect(cnf.isScriptAssetPath("hoge.js.txt")).toBe(false);
+		expect(cnf.isScriptAssetPath("hoge")).toBe(false);
 	});
 
 	it("can check text file path", function() {
-		expect(cnf._isTextAssetPath("hoge.txt")).toBe(true);
-		expect(cnf._isTextAssetPath("hoge.txt.js")).toBe(true);
-		expect(cnf._isTextAssetPath("hoge.png")).toBe(true);
-		expect(cnf._isTextAssetPath("hoge.wav")).toBe(true);
-		expect(cnf._isTextAssetPath("hoge")).toBe(true);
+		expect(cnf.isTextAssetPath("hoge.txt")).toBe(true);
+		expect(cnf.isTextAssetPath("hoge.txt.js")).toBe(true);
+		expect(cnf.isTextAssetPath("hoge.png")).toBe(true);
+		expect(cnf.isTextAssetPath("hoge.wav")).toBe(true);
+		expect(cnf.isTextAssetPath("hoge")).toBe(true);
 	});
 
 	it("can check package.json path", function() {
-		expect(cnf._isPackageJsonPath("foo/bar/package.json")).toBe(true);
-		expect(cnf._isPackageJsonPath("package.json")).toBe(true);
-		expect(cnf._isPackageJsonPath("foo/barpackage.json")).toBe(false);
-		expect(cnf._isPackageJsonPath("barpackage.json")).toBe(false);
-		expect(cnf._isPackageJsonPath("package.json/")).toBe(false);
+		expect(cnf.isPackageJsonPath("foo/bar/package.json")).toBe(true);
+		expect(cnf.isPackageJsonPath("package.json")).toBe(true);
+		expect(cnf.isPackageJsonPath("foo/barpackage.json")).toBe(false);
+		expect(cnf.isPackageJsonPath("barpackage.json")).toBe(false);
+		expect(cnf.isPackageJsonPath("package.json/")).toBe(false);
 	});
 
 	describe("._listDirectoryContents()", function () {
@@ -484,7 +484,7 @@ describe("Configuration", function () {
 		expect(conf.getContent().assets["newDummy"]).toBe(undefined);
 		conf.scanAssetsScript(["script"]);
 		expect(conf.getContent().assets["dummyCode"].type).toBe("script");
-		expect(conf.getContent().assets["newDummy"].type).toBe("script");
+		expect(conf.getContent().assets["newDummy"]).toBe(undefined);
 
 		gamejson = {
 			assets: {

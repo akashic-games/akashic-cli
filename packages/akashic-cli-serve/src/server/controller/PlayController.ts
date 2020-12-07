@@ -142,6 +142,8 @@ export const createHandlerToPatchPlay = (playStore: PlayStore): express.RequestH
 				} else {
 					await playStore.resumePlayDuration(playId);
 				}
+
+				if (req.body.step) await playStore.stepPlayDuration(playId);
 			}
 			responseSuccess<PlayPatchApiResponseData>(res, 200, { playId, status });
 		} catch (e) {

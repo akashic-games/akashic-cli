@@ -10,7 +10,9 @@ storiesOf("m-PlayControl", module)
 			isActivePausing: false,
 			onClickReset: action("reset"),
 			onClickActivePause: action("active-pause"),
-			onClickAddInstance: action("add-instance")
+			onClickAddInstance: action("add-instance"),
+			onClickStep: action("step")
+
 		})} />
 	))
 	.add("pausing", () => (
@@ -19,6 +21,7 @@ storiesOf("m-PlayControl", module)
 			isActivePausing: true,
 			onClickReset: action("reset"),
 			onClickActivePause: action("active-pause"),
-			onClickAddInstance: action("add-instance")
+			onClickAddInstance: action("add-instance"),
+			onClickStep: action("step")
 		})} />
 	));

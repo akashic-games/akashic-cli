@@ -136,7 +136,7 @@ export class Operator {
 						throw new Error("Not supported");
 					}
 					const childPlay = await this._createClientLoop(params.contentUrl, params.playId);
-					return await childPlay.createLocalInstance({
+					const localInstance = await childPlay.createLocalInstance({
 						gameViewManager: this.gameViewManager,
 						player: this.store.player,
 						playId: params.playId,
@@ -145,6 +145,8 @@ export class Operator {
 						initialEvents: params.initialEvents,
 						proxyAudio: store.appOptions.proxyAudio
 					});
+					await localInstance.start();
+					return localInstance;
 				},
 				onLocalInstanceDelete: async playId => {
 					const play = this.store.playStore.plays[playId];
@@ -156,6 +158,7 @@ export class Operator {
 			}
 		});
 		store.setCurrentLocalInstance(instance);
+		await instance.start();
 		if (store.targetService !== "atsumaru" ) {
 			this.store.devtoolUiStore.initTotalTimeLimit(play.content.preferredSessionParameters.totalTimeLimit);
 			this.devtool.setupNiconicoDevtoolValueWatcher();

@@ -44,7 +44,8 @@ export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}>
 			isActivePausing: play.isActivePausing,
 			onClickReset: operator.restartWithNewPlay,
 			onClickActivePause: operator.play.togglePauseActive,
-			onClickAddInstance: operator.play.openNewClientInstance
+			onClickAddInstance: operator.play.openNewClientInstance,
+			onClickStep: operator.play.step
 		};
 	}
 

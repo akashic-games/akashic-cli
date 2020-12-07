@@ -120,7 +120,7 @@ export class PlayEntity {
 		});
 		i.onStop.add(this._handleLocalInstanceStopped);
 		this.localInstances.push(i);
-		await i.start();
+		await i.assertInitialized();
 		return i;
 	}
 
@@ -167,6 +167,12 @@ export class PlayEntity {
 		// 手抜き実装: サーバインスタンスは全てアクティブ(つまり一つしかない)前提
 		this.serverInstances.forEach(si => si.resume());
 		ApiClient.resumePlayDuration(this.playId);
+	}
+
+	stepActive(): void {
+		// 手抜き実装: サーバインスタンスは全てアクティブ(つまり一つしかない)前提
+		this.serverInstances.forEach(si => si.step());
+		ApiClient.stepPlayDuration(this.playId);
 	}
 
 	@action
