@@ -85,6 +85,7 @@ window.addEventListener("load", function() {
 					resize(game);
 				});
 			}
+			injectGameExternalStorage(game);
 		});
 
 		function resize(game) {
@@ -146,6 +147,10 @@ window.addEventListener("load", function() {
 			} catch (error) {
 				console.error(error);
 			}
+		}
+
+		function injectGameExternalStorage(game) {
+			// TODO: game.external.contentStorage に GameExternalStorage を inject する。
 		}
 	}
 });
