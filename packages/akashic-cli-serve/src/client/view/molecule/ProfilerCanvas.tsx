@@ -15,7 +15,7 @@ export class ProfilerCanvas extends React.Component<ProfilerCanvasProps, {}> {
 	private profilerCanvasContext: CanvasRenderingContext2D|null = null;
 	private disposeAutoRun: (() => void) | null = null;
 
-	// TODO: 現実装ではprofilerDataArrayの中身が変わった時に対応できないので、プロファイラの描画用にCanvasではなくDOMを利用するように修正する
+	// TODO: Canvas ではなく DOM で描画するようにして autorun() を利用しないようにする
 	render(): React.ReactNode {
 		const setting = this.props.profilerStyleSetting;
 		const profilerWidth = this.props.profilerWidth;
