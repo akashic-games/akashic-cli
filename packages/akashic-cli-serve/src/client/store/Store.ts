@@ -1,6 +1,6 @@
 import {observable, action} from "mobx";
 import * as queryString from "query-string";
-import { ServiceType } from "@akashic/akashic-cli-commons";
+import {ServiceType} from "@akashic/akashic-cli-commons";
 import {Player} from "../../common/types/Player";
 import {AppOptions} from "../../common/types/AppOptions";
 import {ClientContentLocator} from "../common/ClientContentLocator";
@@ -13,7 +13,9 @@ import {ToolBarUiStore} from "./ToolBarUiStore";
 import {ContentStore} from "./ContentStore";
 import {NotificationUiStore} from "./NotificationUiStore";
 import {StartupScreenUiStore} from "./StartupScreenUiStore";
+import {ProfilerStore} from "./ProfilerStore";
 import {storage} from "./storage";
+import {ProfilerValue} from "../common/types/Profiler";
 
 export class Store {
 	@observable contentStore: ContentStore;
@@ -22,6 +24,7 @@ export class Store {
 	@observable devtoolUiStore: DevtoolUiStore;
 	@observable notificationUiStore: NotificationUiStore;
 	@observable startupScreenUiStore: StartupScreenUiStore;
+	@observable profilerStore: ProfilerStore;
 	@observable appOptions: AppOptions;
 	@observable player: Player | null;
 	@observable contentLocator: ClientContentLocator;
@@ -41,6 +44,7 @@ export class Store {
 		this.devtoolUiStore = new DevtoolUiStore();
 		this.notificationUiStore = new NotificationUiStore();
 		this.startupScreenUiStore = new StartupScreenUiStore();
+		this.profilerStore = new ProfilerStore();
 		this.appOptions = null!;
 		this.player = null;
 		this.currentPlay = null;
@@ -67,6 +71,15 @@ export class Store {
 		if (this.currentLocalInstance === instance)
 			return;
 		this.currentLocalInstance = instance;
+		if (this.currentLocalInstance) {
+			this.currentLocalInstance.setProfilerValueTrigger((value: ProfilerValue) => {
+				this.profilerStore.pushProfilerValueResult("fps", value.framePerSecond);
+				this.profilerStore.pushProfilerValueResult("skipped", value.skippedFrameCount);
+				this.profilerStore.pushProfilerValueResult("interval", value.rawFrameInterval);
+				this.profilerStore.pushProfilerValueResult("frame", value.frameTime);
+				this.profilerStore.pushProfilerValueResult("rendering", value.renderingTime);
+			});
+		}
 		this.devtoolUiStore.setEntityTrees([]);
 	}
 

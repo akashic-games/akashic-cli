@@ -87,7 +87,6 @@ export class CoePluginEntity {
 
 	exitSession = async (sessionId: string, parameters: CoeExitSessionParameterObject): Promise<void> => {
 		try {
-			console.log("exitSession", sessionId, parameters);
 			if (parameters == null) {
 				return;
 			}
