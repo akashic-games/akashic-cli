@@ -1,5 +1,20 @@
 # CHANGELOG
 
+## 2.1.0 (2020-12-08)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#565](https://github.com/akashic-games/akashic-cli/pull/565) add profiler screen in akashic-cli-serve ([@dera-](https://github.com/dera-))
+* `akashic-cli-export-html`
+  * [#609](https://github.com/akashic-games/akashic-cli/pull/609) feat(export-html): add GameExternalStorage impl ([@yu-ogi](https://github.com/yu-ogi))
+* `akashic-cli-init`
+  * [#617](https://github.com/akashic-games/akashic-cli/pull/617) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Committers: 3
+- [@dera-](https://github.com/dera-)
+- [@yu-ogi](https://github.com/yu-ogi)
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.0.3 (2020-12-04)
 
 #### Bug Fix
