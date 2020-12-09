@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## 2.1.1 (2020-12-09)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#618](https://github.com/akashic-games/akashic-cli/pull/618) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Bug Fix
+* `akashic-cli-serve`
+  * [#619](https://github.com/akashic-games/akashic-cli/pull/619) akashic-cli-serveのプロファイラ機能の修正 ([@dera-](https://github.com/dera-))
+
+#### Committers: 2
+- [@dera-](https://github.com/dera-)
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.1.0 (2020-12-08)
 
 #### Enhancement
