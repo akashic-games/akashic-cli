@@ -15,7 +15,6 @@ import {NotificationUiStore} from "./NotificationUiStore";
 import {StartupScreenUiStore} from "./StartupScreenUiStore";
 import {ProfilerStore} from "./ProfilerStore";
 import {storage} from "./storage";
-import {ProfilerValue} from "../common/types/Profiler";
 
 export class Store {
 	@observable contentStore: ContentStore;
@@ -71,15 +70,6 @@ export class Store {
 		if (this.currentLocalInstance === instance)
 			return;
 		this.currentLocalInstance = instance;
-		if (this.currentLocalInstance) {
-			this.currentLocalInstance.setProfilerValueTrigger((value: ProfilerValue) => {
-				this.profilerStore.pushProfilerValueResult("fps", value.framePerSecond);
-				this.profilerStore.pushProfilerValueResult("skipped", value.skippedFrameCount);
-				this.profilerStore.pushProfilerValueResult("interval", value.rawFrameInterval);
-				this.profilerStore.pushProfilerValueResult("frame", value.frameTime);
-				this.profilerStore.pushProfilerValueResult("rendering", value.renderingTime);
-			});
-		}
 		this.devtoolUiStore.setEntityTrees([]);
 	}
 
