@@ -203,7 +203,10 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 	setProfilerValueTrigger(cb: (value: ProfilerValue) => void): void {
 		const gameDriver = this._serveGameContent.agvGameContent.getGameDriver();
 		if (gameDriver) {
+			// TODO gameDriver の中身を触る処理なので ServeGameContent に移すべき
 			gameDriver._gameLoop._clock._profiler._calculateProfilerValueTrigger.add(cb);
+		} else {
+			this._serveGameContent.agvGameContent.addContentLoadListener(() => this.setProfilerValueTrigger(cb));
 		}
 	}
 
