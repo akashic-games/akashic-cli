@@ -25,6 +25,6 @@
 	},
 	"moduleMainScripts": {},
 	"environment": {
-		"sandbox-runtime": "3"
+		"sandbox-runtime": "2"
 	}
 }
