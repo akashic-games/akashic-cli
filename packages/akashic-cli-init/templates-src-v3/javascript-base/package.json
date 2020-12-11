@@ -1,5 +1,5 @@
 {
-  "name": "javascript-game-sample-v3",
+  "name": "javascript-game-sample",
   "private": true,
   "version": "0.1.0",
   "description": "",
@@ -12,7 +12,7 @@
   "author": "",
   "license": "",
   "devDependencies": {
-    "@akashic/akashic-sandbox": "~0.17.0",
+    "@akashic/akashic-sandbox": "~0.17.1",
     "eslint": "7.13.0"
   }
 }

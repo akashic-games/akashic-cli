@@ -19,7 +19,6 @@
     "@akashic/akashic-cli-export-html": "1.1.0",
     "@akashic/akashic-cli-export-zip": "0.6.77",
     "@akashic/akashic-cli-scan": "0.5.71",
-    "@akashic/akashic-engine": "~3.0.0",
     "@akashic/akashic-engine": "~2.6.6",
     "@akashic/akashic-sandbox": "~0.17.1",
     "@types/jest": "26.0.15",
