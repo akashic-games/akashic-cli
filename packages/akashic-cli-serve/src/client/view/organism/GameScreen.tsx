@@ -13,6 +13,7 @@ import {
 export interface GameScreenProps {
 	showsBackgroundImage: boolean;
 	showsGrid: boolean;
+	showsDesignGuideline: boolean;
 	backgroundImage: string | null;
 	gameWidth: number;
 	gameHeight: number;
@@ -31,6 +32,7 @@ export class GameScreen extends React.Component<GameScreenProps, {}> {
 			showsBackgroundImage: showsBgImage,
 			backgroundImage: bgImage,
 			showsGrid,
+			showsDesignGuideline,
 			gameWidth,
 			gameHeight,
 			playerInfoResolverDialogProps,
@@ -57,6 +59,13 @@ export class GameScreen extends React.Component<GameScreenProps, {}> {
 					<div className={styles["dialog-wrapper"] + " external-ref_div_player-info-dialog"}>
 						<PlayerInfoResolverDialog {...playerInfoResolverDialogProps} />
 					</div> :
+					null
+			}
+			{
+				showsDesignGuideline ?
+					<img src={"/public/img/design-guideline.png"}
+						className={styles["design-guideline"] + " external-ref_div_design-guideline"}
+						style={this._getDesignGuideLineStyle()}/> :
 					null
 			}
 			{
@@ -127,5 +136,28 @@ export class GameScreen extends React.Component<GameScreenProps, {}> {
 			context.lineTo(this.props.gameWidth, y);
 		}
 		context.stroke();
+	}
+
+	private _getDesignGuideLineStyle = (): { width: number, height: number, top: number, left: number } => {
+		const aspectRatioForHeight = 9 / 16;
+		const isHorizontal = aspectRatioForHeight * this.props.gameWidth >= this.props.gameHeight;
+		const size = isHorizontal ? this.props.gameWidth : this.props.gameHeight;
+		if (isHorizontal) {
+			const height = aspectRatioForHeight * size;
+			return {
+				width: size,
+				height: height,
+				top: (this.props.gameHeight - height) / 2,
+				left: 0
+			};
+		} else {
+			const width = (1 / aspectRatioForHeight) * size;
+			return {
+				width: width,
+				height: size,
+				top: 0,
+				left: (this.props.gameWidth - width) / 2
+			};
+		}
 	}
 }

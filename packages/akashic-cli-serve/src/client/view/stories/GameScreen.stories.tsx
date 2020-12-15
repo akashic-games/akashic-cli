@@ -16,6 +16,7 @@ storiesOf("o-GameScreen", module)
 		<GameScreen
 			showsBackgroundImage={false}
 			showsGrid={false}
+			showsDesignGuideline={false}
 			backgroundImage={null}
 			gameWidth={320}
 			gameHeight={240}
@@ -34,6 +35,7 @@ storiesOf("o-GameScreen", module)
 		<GameScreen
 			showsBackgroundImage={true}
 			showsGrid={false}
+			showsDesignGuideline={false}
 			backgroundImage={null}
 			gameWidth={320}
 			gameHeight={240}
@@ -52,6 +54,26 @@ storiesOf("o-GameScreen", module)
 		<GameScreen
 			showsBackgroundImage={true}
 			showsGrid={true}
+			showsDesignGuideline={false}
+			backgroundImage={null}
+			gameWidth={320}
+			gameHeight={240}
+			screenElement={createDummyDiv(320, 240)}
+			playerInfoResolverDialogProps={undefined}
+			profilerCanvasProps={undefined}
+			shouldStopPropagationFunc={() => {
+				action("shouldStopPropagation");
+				return false;
+			}}
+			onMouseMoveCapture={action("onMouseMoveCapture")}
+			onClickCapture={action("onClickCapture")}
+		/>
+	))
+	.add("designGuideline", () => (
+		<GameScreen
+			showsBackgroundImage={false}
+			showsGrid={false}
+			showsDesignGuideline={true}
 			backgroundImage={null}
 			gameWidth={320}
 			gameHeight={240}
@@ -70,6 +92,7 @@ storiesOf("o-GameScreen", module)
 		<GameScreen
 			showsBackgroundImage={false}
 			showsGrid={false}
+			showsDesignGuideline={false}
 			backgroundImage={null}
 			gameWidth={320}
 			gameHeight={240}
@@ -93,6 +116,7 @@ storiesOf("o-GameScreen", module)
 		<GameScreen
 			showsBackgroundImage={false}
 			showsGrid={false}
+			showsDesignGuideline={false}
 			backgroundImage={null}
 			gameWidth={320}
 			gameHeight={240}

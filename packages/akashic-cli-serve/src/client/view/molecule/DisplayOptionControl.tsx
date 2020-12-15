@@ -7,9 +7,11 @@ export interface DisplayOptionControlPropsData {
 	showsDisplayOptionPopover: boolean;
 	showsBackgroundImage: boolean;
 	showsGrid: boolean;
+	showsDesignGuideline: boolean;
 	onClickDisplayOptionPopover: (show: boolean) => void;
 	onChangeShowBackgroundImage: (show: boolean) => void;
 	onChangeShowGrid: (show: boolean) => void;
+	onChangeShowDesignGuideline: (show: boolean) => void;
 }
 
 export interface DisplayOptionControlProps {
@@ -28,9 +30,11 @@ export class DisplayOptionControl extends React.Component<DisplayOptionControlPr
 			showsDisplayOptionPopover,
 			showsBackgroundImage,
 			showsGrid,
+			showsDesignGuideline,
 			onClickDisplayOptionPopover,
 			onChangeShowBackgroundImage,
-			onChangeShowGrid
+			onChangeShowGrid,
+			onChangeShowDesignGuideline
 		} = this._lastProps!;
 
 		return <div ref={this._onRef} style={{position: "relative"}}>
@@ -65,6 +69,20 @@ export class DisplayOptionControl extends React.Component<DisplayOptionControlPr
 										onChange={() => onChangeShowGrid(!showsGrid)}
 									/>
 									Show grid
+								</label>
+							</div>
+							<div className={styles["label"]}>
+								<label>
+									<input
+										className={styles["checkbox"] + " external-ref_checkbox_shows-design-guideline"}
+										type="checkbox"
+										checked={showsDesignGuideline}
+										onChange={() => onChangeShowDesignGuideline(!showsDesignGuideline)}
+									/>
+									Shows Design Guidelines for "ニコ生ゲーム"
+									<a href="https://akashic-games.github.io/shin-ichiba/design-guidelines.html" target="_blank">
+										ここに？の画像をおきます
+									</a>
 								</label>
 							</div>
 						</div>
