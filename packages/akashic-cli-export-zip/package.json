@@ -49,7 +49,7 @@
     "@akashic/akashic-cli-commons": "0.5.55",
     "@babel/core": "^7.2.2",
     "@babel/preset-env": "^7.3.1",
-    "archiver": "4.0.2",
+    "archiver": "5.1.0",
     "browserify": "~17.0.0",
     "commander": "5.1.0",
     "fs-extra": "^9.0.0",
