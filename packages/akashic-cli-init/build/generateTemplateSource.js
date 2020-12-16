@@ -4,6 +4,7 @@ const shell = require('shelljs');
 const { execSync } = require("child_process");
 
 const templatesSrcDirPath = path.join(__dirname, "..", "templates-src");
+const templatesSrcV3DirPath = path.join(__dirname, "..", "templates-src-v3");
 const templatesDirPath = path.join(__dirname, "..", "templates");
 const templateData = {
 	"default": {
@@ -22,8 +23,26 @@ const templateData = {
 		"ts-dist": "typescript-shin-ichiba-ranking"
 	}
 };
+const templateDataV3 = {
+	"default": {
+		"src": "game-default",
+		"js-dist": "javascript-v3",
+		"ts-dist": "typescript-v3"
+	},
+	"minimal": {
+		"src": "game-minimal",
+		"js-dist": "javascript-minimal-v3",
+		"ts-dist": "typescript-minimal-v3"
+	},
+	"shin-ichiba-ranking": {
+		"src": "game-shin-ichiba-ranking",
+		"js-dist": "javascript-shin-ichiba-ranking-v3",
+		"ts-dist": "typescript-shin-ichiba-ranking-v3"
+	}
+};
 
 generateTemplates(templatesSrcDirPath, templatesDirPath, templateData);
+generateTemplates(templatesSrcV3DirPath, templatesDirPath, templateDataV3);
 
 function generateTemplates(srcPath, outPath, data) {
 	// typescriptテンプレートを作成
