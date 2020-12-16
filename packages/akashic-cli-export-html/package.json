@@ -63,7 +63,7 @@
   "dependencies": {
     "@akashic/akashic-cli-commons": "0.5.55",
     "@akashic/akashic-cli-export-zip": "0.6.77",
-    "archiver": "~4.0.0",
+    "archiver": "~5.1.0",
     "commander": "5.1.0",
     "ejs": "~3.1.0",
     "fs-extra": "9.0.1",
