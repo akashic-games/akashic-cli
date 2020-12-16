@@ -81,7 +81,7 @@ export class DisplayOptionControl extends React.Component<DisplayOptionControlPr
 									/>
 									Shows Design Guidelines for "ニコ生ゲーム"
 									<a href="https://akashic-games.github.io/shin-ichiba/design-guidelines.html" target="_blank">
-										ここに？の画像をおきます
+										<i className="material-icons">help</i>
 									</a>
 								</label>
 							</div>
