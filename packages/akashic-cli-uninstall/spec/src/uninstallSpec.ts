@@ -1,6 +1,7 @@
 import * as mockfs from "mock-fs";
 import * as cmn from "@akashic/akashic-cli-commons";
 import { uninstall, promiseUninstall } from "../../lib/uninstall";
+import path = require("path");
 
 
 describe("uninstall()", function () {
@@ -153,5 +154,338 @@ describe("uninstall()", function () {
 				expect(moduleMainScripts).toBeUndefined();
 			})
 			.then(done, done.fail);
+	});
+
+	describe("removes external from conf", function () {
+		const mockfsContent: any = {
+			testdir: {
+				foo: {
+					node_modules: {
+						foo: {
+							lib: {
+								"index.js": {},
+								"sub.js": {}
+							},
+							"package.json": JSON.stringify({
+								name: "foo",
+								version: "0.0.0",
+								dependencies: "bar",
+								main: "lib/index.js"
+							}),
+							"akashic-lib.json": JSON.stringify({
+								gameConfigurationData: {
+									environment: {
+										external: {
+											"fooEx": "100"
+										}
+									}
+								}
+							})
+						},
+						buzz: {
+							sub: {
+								"foo.js": {}
+							},
+							"main.js": {},
+							"package.json": JSON.stringify({
+								name: "buzz",
+								version: "0.0.0",
+								dependencies: "sub",
+								main: "main.js"
+							}),
+							"akashic-lib.json": JSON.stringify({
+								gameConfigurationData: {
+									environment: {
+										external: {
+											"buzzEx": "10000"
+										}
+									}
+								}
+							})
+						}
+					},
+					"game.json": JSON.stringify({
+						width: 10,
+						height: 20,
+						fps: 30,
+						globalScripts: [
+							"node_modules/foo/lib/index.js",
+							"node_modules/foo/lib/sub.js",
+							"node_modules/foo/node_modules/bar/index.js",
+							"node_modules/buzz/main.js",
+							"node_modules/buzz/sub/foo.js"
+						],
+						moduleMainScripts: {
+							"foo": "node_modules/foo/index.js",
+							"buzz": "node_modules/buzz/main.js"
+						},
+						environment: {
+							external: {
+								"fooEx": "100",
+								"buzzEx": "10000"
+							}
+						}
+					})
+				}
+			}
+		};
+
+		interface DummyPromisedNpmParameterObject extends cmn.PromisedNpmParameterObject {
+			fsContent: any;
+		}
+		class DummyNpm extends cmn.PromisedNpm {
+			fsContent: any;
+			constructor(param: DummyPromisedNpmParameterObject) {
+				super(param);
+				this.fsContent = param.fsContent;
+			}
+			uninstall(names?: string[]) {
+				names.forEach((name) => {
+					this.fsContent.testdir.foo.node_modules[name] = null;
+				});
+				mockfs(this.fsContent.testdir.foo);
+				return Promise.resolve();
+			}
+		}
+		var logger = new cmn.ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
+
+		it("with uninstall akashic-lib.json, gameConfigurationData, environment", function (done: any) {
+			var fsContent = JSON.parse(JSON.stringify(mockfsContent));
+			mockfs(fsContent);
+
+			promiseUninstall({
+				moduleNames: ["foo"],
+				cwd: "./testdir/foo",
+				logger: logger,
+				debugNpm: new DummyNpm({ logger, fsContent })
+			}).then(() => cmn.ConfigurationFile.read(path.join("./testdir/foo", "game.json"), logger))
+			.then((content: cmn.GameConfiguration) => {
+				expect(content.environment.external.fooEx).toBe(undefined);
+				expect(content.environment.external.buzzEx).toBe("10000");
+				done();
+			}).then(done, done.fail)
+		});
+
+		
+		it("with uninstall akashic-lib.json, gameConfigurationData", function (done: any) {
+			var fsContent = JSON.parse(JSON.stringify(mockfsContent));
+			mockfs(fsContent);
+
+			promiseUninstall({
+				moduleNames: ["foo"],
+				cwd: "./testdir/foo",
+				logger: logger,
+				debugNpm: new DummyNpm({ logger, fsContent })
+			}).then(() => cmn.ConfigurationFile.read(path.join("./testdir/foo", "game.json"), logger))
+			.then((content: cmn.GameConfiguration) => {
+				expect(content.environment.external.fooEx).toBe(undefined);
+				expect(content.environment.external.buzzEx).toBe("10000");
+				done();
+			}).then(done, done.fail)
+		});
+
+		
+		it("with uninstall akashic-lib.json", function (done: any) {
+			var fsContent = JSON.parse(JSON.stringify(mockfsContent));
+			mockfs(fsContent);
+
+			promiseUninstall({
+				moduleNames: ["foo"],
+				cwd: "./testdir/foo",
+				logger: logger,
+				debugNpm: new DummyNpm({ logger, fsContent })
+			}).then(() => cmn.ConfigurationFile.read(path.join("./testdir/foo", "game.json"), logger))
+			.then((content: cmn.GameConfiguration) => {
+				expect(content.environment.external.fooEx).toBe(undefined);
+				expect(content.environment.external.buzzEx).toBe("10000");
+				done();
+			}).then(done, done.fail)
+		});
+
+		it("without uninstall akashic-lib.json", function (done: any) {
+			var fsContent = JSON.parse(JSON.stringify(mockfsContent));
+			delete fsContent.testdir.foo["akashic-lib.json"];
+
+			mockfs(fsContent);
+
+			promiseUninstall({
+				moduleNames: ["foo"],
+				cwd: "./testdir/foo",
+				logger: logger,
+				debugNpm: new DummyNpm({ logger, fsContent })
+			}).then(() => cmn.ConfigurationFile.read(path.join("./testdir/foo", "game.json"), logger))
+			.then((content: cmn.GameConfiguration) => {
+				expect(content.environment.external.fooEx).toBe(undefined);
+				expect(content.environment.external.buzzEx).toBe("10000");
+				done();
+			}).then(done, done.fail)
+		});
+	});
+
+	describe("does not remove remaining external", function () {
+		const mockfsContent: any = {
+			testdir: {
+				foo: {
+					node_modules: {
+						foo: {
+							lib: {
+								"index.js": {},
+								"sub.js": {}
+							},
+							"package.json": JSON.stringify({
+								name: "foo",
+								version: "0.0.0",
+								dependencies: "bar",
+								main: "lib/index.js"
+							}),
+							"akashic-lib.json": JSON.stringify({
+								gameConfigurationData: {
+									environment: {
+										external: {
+											"fooEx": "100"
+										}
+									}
+								}
+							})
+						},
+						buzz: {
+							sub: {
+								"foo.js": {}
+							},
+							"main.js": {},
+							"package.json": JSON.stringify({
+								name: "buzz",
+								version: "0.0.0",
+								dependencies: "sub",
+								main: "main.js"
+							}),
+							"akashic-lib.json": JSON.stringify({
+								gameConfigurationData: {
+									environment: {
+										external: {
+											"fooEx": "100", // buzz also has fooEx external
+											"buzzEx": "10000"
+										}
+									}
+								}
+							})
+						}
+					},
+					"game.json": JSON.stringify({
+						width: 10,
+						height: 20,
+						fps: 30,
+						globalScripts: [
+							"node_modules/foo/lib/index.js",
+							"node_modules/foo/lib/sub.js",
+							"node_modules/foo/node_modules/bar/index.js",
+							"node_modules/buzz/main.js",
+							"node_modules/buzz/sub/foo.js"
+						],
+						moduleMainScripts: {
+							"foo": "node_modules/foo/index.js",
+							"buzz": "node_modules/buzz/main.js"
+						},
+						environment: {
+							external: {
+								"fooEx": "100",
+								"buzzEx": "10000"
+							}
+						}
+					})
+				}
+			}
+		};
+
+		interface DummyPromisedNpmParameterObject extends cmn.PromisedNpmParameterObject {
+			fsContent: any;
+		}
+		class DummyNpm extends cmn.PromisedNpm {
+			fsContent: any;
+			constructor(param: DummyPromisedNpmParameterObject) {
+				super(param);
+				this.fsContent = param.fsContent;
+			}
+			uninstall(names?: string[]) {
+				names.forEach((name) => {
+					this.fsContent.testdir.foo.node_modules[name] = null;
+				});
+				mockfs(this.fsContent.testdir.foo);
+				return Promise.resolve();
+			}
+		}
+		var logger = new cmn.ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
+
+		it("with uninstall akashic-lib.json, gameConfigurationData, environment", function (done: any) {
+			var fsContent = JSON.parse(JSON.stringify(mockfsContent));
+			mockfs(fsContent);
+
+			promiseUninstall({
+				moduleNames: ["foo"],
+				cwd: "./testdir/foo",
+				logger: logger,
+				debugNpm: new DummyNpm({ logger, fsContent })
+			}).then(() => cmn.ConfigurationFile.read(path.join("./testdir/foo", "game.json"), logger))
+			.then((content: cmn.GameConfiguration) => {
+				expect(content.environment.external.fooEx).toBe("100");
+				expect(content.environment.external.buzzEx).toBe("10000");
+				done();
+			}).then(done, done.fail)
+		});
+
+		
+		it("with uninstall akashic-lib.json, gameConfigurationData", function (done: any) {
+			var fsContent = JSON.parse(JSON.stringify(mockfsContent));
+			mockfs(fsContent);
+
+			promiseUninstall({
+				moduleNames: ["foo"],
+				cwd: "./testdir/foo",
+				logger: logger,
+				debugNpm: new DummyNpm({ logger, fsContent })
+			}).then(() => cmn.ConfigurationFile.read(path.join("./testdir/foo", "game.json"), logger))
+			.then((content: cmn.GameConfiguration) => {
+				expect(content.environment.external.fooEx).toBe("100");
+				expect(content.environment.external.buzzEx).toBe("10000");
+				done();
+			}).then(done, done.fail)
+		});
+
+		
+		it("with uninstall akashic-lib.json", function (done: any) {
+			var fsContent = JSON.parse(JSON.stringify(mockfsContent));
+			mockfs(fsContent);
+
+			promiseUninstall({
+				moduleNames: ["foo"],
+				cwd: "./testdir/foo",
+				logger: logger,
+				debugNpm: new DummyNpm({ logger, fsContent })
+			}).then(() => cmn.ConfigurationFile.read(path.join("./testdir/foo", "game.json"), logger))
+			.then((content: cmn.GameConfiguration) => {
+				expect(content.environment.external.fooEx).toBe("100");
+				expect(content.environment.external.buzzEx).toBe("10000");
+				done();
+			}).then(done, done.fail)
+		});
+
+		it("without uninstall akashic-lib.json", function (done: any) {
+			var fsContent = JSON.parse(JSON.stringify(mockfsContent));
+			delete fsContent.testdir.foo["akashic-lib.json"];
+
+			mockfs(fsContent);
+
+			promiseUninstall({
+				moduleNames: ["foo"],
+				cwd: "./testdir/foo",
+				logger: logger,
+				debugNpm: new DummyNpm({ logger, fsContent })
+			}).then(() => cmn.ConfigurationFile.read(path.join("./testdir/foo", "game.json"), logger))
+			.then((content: cmn.GameConfiguration) => {
+				expect(content.environment.external.fooEx).toBe("100");
+				expect(content.environment.external.buzzEx).toBe("10000");
+				done();
+			}).then(done, done.fail)
+		});
 	});
 });
