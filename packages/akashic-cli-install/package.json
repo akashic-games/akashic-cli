@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "@akashic/akashic-cli-commons": "0.5.55",
-    "commander": "5.1.0",
+    "commander": "6.2.1",
     "tar": "6.0.5"
   },
   "typings": "lib/index.d.ts",

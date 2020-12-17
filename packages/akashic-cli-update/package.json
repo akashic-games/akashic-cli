@@ -36,7 +36,7 @@
   "typings": "lib/index.d.ts",
   "dependencies": {
     "@akashic/akashic-cli-commons": "0.5.55",
-    "commander": "5.1.0"
+    "commander": "6.2.1"
   },
   "publishConfig": {
     "access": "public",

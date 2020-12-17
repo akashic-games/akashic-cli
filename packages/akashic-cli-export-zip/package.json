@@ -51,7 +51,7 @@
     "@babel/preset-env": "^7.3.1",
     "archiver": "5.1.0",
     "browserify": "~17.0.0",
-    "commander": "5.1.0",
+    "commander": "6.2.1",
     "fs-extra": "^9.0.0",
     "fs-readdir-recursive": "~1.1.0",
     "uglify-js": "3.12.1"
