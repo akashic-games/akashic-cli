@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-init",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "A module to get your Akashic game started.",
   "main": "lib/index.js",
   "scripts": {
@@ -62,8 +62,8 @@
   },
   "typings": "lib/index.d.ts",
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.5.55",
-    "@akashic/akashic-cli-config": "0.4.67",
+    "@akashic/akashic-cli-commons": "0.5.56",
+    "@akashic/akashic-cli-config": "0.4.68",
     "commander": "5.1.0",
     "fs-extra": "9.0.1",
     "prompt": "1.0.0",
