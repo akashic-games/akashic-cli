@@ -70,6 +70,7 @@ export function promiseUninstall(param: UninstallParameterObject): Promise<void>
 					param.moduleNames.forEach((name) => {
 						const libPath = path.resolve(process.cwd(), "node_modules", name, "akashic-lib.json");
 						extractExternalsFromLibJson(libPath, uninstallExternals);
+						removeAssetListFromLibJson(name, libPath, conf._content);
 					});
 				})
 				.then(() => {
@@ -134,4 +135,23 @@ function extractExternalsFromLibJson(libPath: string, externals: {[key: string]:
 		if (error.code === "ENOENT") return; // akashic-lib.jsonを持っていないケース
 		throw error;
 	}
+}
+
+function removeAssetListFromLibJson(name: string, libPath: string, conf: cmn.GameConfiguration): void {
+	if (!fs.existsSync(libPath)) return;
+
+	const libJsonData: cmn.LibConfiguration = JSON.parse(fs.readFileSync(libPath, "utf8"));
+	if (
+		!libJsonData ||
+		!libJsonData.assetList ||
+		!conf.assets // アセット情報が存在しなければ消す必要もないので何もしない
+	) {
+		return;
+	}
+
+	libJsonData.assetList.forEach(asset => {
+		const relativePath = cmn.Util.makeUnixPath(path.join("node_modules", name, asset.path));
+		if (!conf.assets[relativePath]) return;
+		delete conf.assets[relativePath];
+	});
 }

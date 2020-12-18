@@ -266,7 +266,6 @@ describe("uninstall()", function () {
 			}).then(done, done.fail)
 		});
 
-		
 		it("with uninstall akashic-lib.json, gameConfigurationData", function (done: any) {
 			var fsContent = JSON.parse(JSON.stringify(mockfsContent));
 			mockfs(fsContent);
@@ -486,6 +485,191 @@ describe("uninstall()", function () {
 				expect(content.environment.external.buzzEx).toBe("10000");
 				done();
 			}).then(done, done.fail)
+		});
+	});
+
+	describe("should remove the assets written akashic-lib.json", function () {
+		const mockfsContent: any = {
+			testdir: {
+				node_modules: {
+					"@akashic-extension": {
+						"ui-library": {
+							lib: {
+								"index.js": "module.exports = {};"
+							},
+							"package.json": JSON.stringify({
+								name: "@akashic-extension/ui-library",
+								version: "0.0.0",
+								main: "lib/index.js"
+							}),
+							"akashic-lib.json": JSON.stringify({
+								assetList: [
+									{
+										type: "image",
+										path: "assets/images/player.png",
+										width: 100,
+										height: 120
+									},
+									{
+										type: "image",
+										path: "assets/images/enemy.png",
+										width: 100,
+										height: 120
+									},
+									{
+										type: "audio",
+										path: "assets/audios/se_1",
+										systemId: "sound",
+										duration: 1270
+									}
+								]
+							})
+						},
+						"audio-library": {
+							lib: {
+								"index.js": "module.exports = {};"
+							},
+							"package.json": JSON.stringify({
+								name: "@akashic-extension/audio-library",
+								version: "0.0.0",
+								main: "lib/index.js"
+							}),
+							"akashic-lib.json": JSON.stringify({
+								assetList: [
+									{
+										type: "audio",
+										path: "assets/audios/bgm_1",
+										systemId: "music",
+										duration: 15364
+									},
+									{
+										type: "audio",
+										path: "assets/audios/bgm_2",
+										systemId: "music",
+										duration: 32412
+									},
+									{
+										type: "audio",
+										path: "assets/audios/bgm_3",
+										systemId: "music",
+										duration: 51214
+									}
+								]
+							})
+						}
+					}
+				},
+				"game.json": JSON.stringify({
+					width: 1280,
+					height: 720,
+					fps: 60,
+					globalScripts: [
+						"node_modules/@akashic-extension/ui-library/lib/index.js",
+						"node_modules/@akashic-extension/audio-library/lib/index.js"
+					],
+					moduleMainScripts: {
+						"@akashic-extension/ui-library": "@akashic-extension/ui-library/lib/index.js",
+						"@akashic-extension/audio-library": "@akashic-extension/audio-library/lib/index.js"
+					},
+					assets: {
+						"node_modules/@akashic-extension/ui-library/assets/images/player.png": {
+							type: "image",
+							path: "assets/images/player.png",
+							width: 100,
+							height: 120
+						},
+						"node_modules/@akashic-extension/ui-library/assets/images/enemy.png":{
+							type: "image",
+							path: "assets/images/enemy.png",
+							width: 100,
+							height: 120
+						},
+						"node_modules/@akashic-extension/ui-library/assets/audios/se_1": {
+							type: "audio",
+							path: "assets/audios/se_1",
+							systemId: "sound",
+							duration: 1270
+						},
+						"node_modules/@akashic-extension/audio-library/assets/audios/bgm_1": {
+							type: "audio",
+							path: "assets/audios/bgm_1",
+							systemId: "music",
+							duration: 15364
+						},
+						"node_modules/@akashic-extension/audio-library/assets/audios/bgm_2": {
+							type: "audio",
+							path: "assets/audios/bgm_2",
+							systemId: "music",
+							duration: 32412
+						},
+						"node_modules/@akashic-extension/audio-library/assets/audios/bgm_3": {
+							type: "audio",
+							path: "assets/audios/bgm_3",
+							systemId: "music",
+							duration: 51214
+						}
+					}
+				})
+			}
+		};
+
+		interface DummyPromisedNpmParameterObject extends cmn.PromisedNpmParameterObject {
+			fsContent: any;
+		}
+		class DummyNpm extends cmn.PromisedNpm {
+			fsContent: any;
+			constructor(param: DummyPromisedNpmParameterObject) {
+				super(param);
+				this.fsContent = param.fsContent;
+			}
+			uninstall(names?: string[]) {
+				names.forEach((name) => {
+					this.fsContent.testdir.node_modules[name] = null;
+				});
+				mockfs(this.fsContent.testdir);
+				return Promise.resolve();
+			}
+		}
+		const logger = new cmn.ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
+
+		it("should remove the assets when uninstalled module with akashic-lib.json", async () => {
+			const fsContent = JSON.parse(JSON.stringify(mockfsContent));
+			mockfs(fsContent);
+
+			await promiseUninstall({
+				moduleNames: ["@akashic-extension/ui-library"],
+				cwd: "./testdir",
+				logger,
+				debugNpm: new DummyNpm({ logger, fsContent })
+			});
+			const content = await cmn.ConfigurationFile.read(path.join("./testdir", "game.json"), logger);
+			expect(Object.keys(content.assets).length).toBe(3);
+			expect(content.assets["node_modules/@akashic-extension/ui-library/assets/images/player.png"]).toBeUndefined();
+			expect(content.assets["node_modules/@akashic-extension/ui-library/assets/images/enemy.png"]).toBeUndefined();
+			expect(content.assets["node_modules/@akashic-extension/ui-library/assets/images/se_1"]).toBeUndefined();
+			expect(content.assets["node_modules/@akashic-extension/audio-library/assets/audios/bgm_1"]).toBeDefined();
+			expect(content.assets["node_modules/@akashic-extension/audio-library/assets/audios/bgm_2"]).toBeDefined();
+			expect(content.assets["node_modules/@akashic-extension/audio-library/assets/audios/bgm_3"]).toBeDefined();
+		});
+
+		it("should remove the assets when uninstalled multiple modules with akashic-lib.json", async () => {
+			const fsContent = JSON.parse(JSON.stringify(mockfsContent));
+			mockfs(fsContent);
+
+			await promiseUninstall({
+				moduleNames: ["@akashic-extension/ui-library", "@akashic-extension/audio-library"],
+				cwd: "./testdir",
+				logger,
+				debugNpm: new DummyNpm({ logger, fsContent })
+			});
+			const content = await cmn.ConfigurationFile.read(path.join("./testdir", "game.json"), logger);
+			expect(Object.keys(content.assets).length).toBe(0);
+			expect(content.assets["node_modules/@akashic-extension/ui-library/assets/images/player.png"]).toBeUndefined();
+			expect(content.assets["node_modules/@akashic-extension/ui-library/assets/images/enemy.png"]).toBeUndefined();
+			expect(content.assets["node_modules/@akashic-extension/ui-library/assets/images/se_1"]).toBeUndefined();
+			expect(content.assets["node_modules/@akashic-extension/audio-library/assets/audios/bgm_1"]).toBeUndefined();
+			expect(content.assets["node_modules/@akashic-extension/audio-library/assets/audios/bgm_2"]).toBeUndefined();
+			expect(content.assets["node_modules/@akashic-extension/audio-library/assets/audios/bgm_3"]).toBeUndefined();
 		});
 	});
 });
