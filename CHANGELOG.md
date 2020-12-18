@@ -1,5 +1,29 @@
 # CHANGELOG
 
+## 2.1.2 (2020-12-18)
+
+#### Enhancement
+* `akashic-cli-export-html`
+  * [#624](https://github.com/akashic-games/akashic-cli/pull/624) 【akashic-cli-export-html】内部コンポーネントの更新(engineFiles@3.0.2, engineFiles@2.1.50, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+* `akashic-cli-init`
+  * [#625](https://github.com/akashic-games/akashic-cli/pull/625) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Bug Fix
+* `akashic-cli-init`
+  * [#620](https://github.com/akashic-games/akashic-cli/pull/620) fix(init): revert to v2 tempaltes as default ([@xnv](https://github.com/xnv))
+
+#### Update Dependencies
+* `akashic-cli-export-html`, `akashic-cli-export-zip`
+  * [#400](https://github.com/akashic-games/akashic-cli/pull/400) fix(deps): update dependency archiver to v5 ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-serve`
+  * [#603](https://github.com/akashic-games/akashic-cli/pull/603) chore(deps): update all dependencies (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#589](https://github.com/akashic-games/akashic-cli/pull/589) chore(deps): update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- kamakiri_ys ([@kamakiri01](https://github.com/kamakiri01))
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.1.1 (2020-12-09)
 
 #### Enhancement
