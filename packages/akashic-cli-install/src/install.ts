@@ -149,9 +149,9 @@ function _getPackageNameFromTgzFile(fileName: string): string {
 		const splitPath = entry.header.path.split("/");
 		// splitPath[0] は解凍後のディレクトリ名が入る。そのディレクトリ直下のpackage.jsonのみを対象とする。
 		if (splitPath[1] === "package.json") {
-			let data: Uint8Array[]  = [];
-			entry.on("data", c => data.push(c));
-			entry.on("finish", () =>  buf = Buffer.concat(data) );
+			let chunks: Uint8Array[]  = [];
+			entry.on("data", c => chunks.push(c));
+			entry.on("finish", () => buf = Buffer.concat(chunks));
 		}
 	};
 	tar.t({
