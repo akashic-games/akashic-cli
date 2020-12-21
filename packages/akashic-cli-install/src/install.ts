@@ -136,8 +136,10 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 							}
 							libJsonData.assetList.forEach(asset => {
 								const assetPath = cmn.Util.makeUnixPath(path.join("node_modules", name, asset.path));
-								asset.path = assetPath;
-								conf._content.assets[assetPath] = asset;
+								conf._content.assets[assetPath] = {
+									...asset,
+									path: assetPath
+								};
 							});
 						}
 					});
