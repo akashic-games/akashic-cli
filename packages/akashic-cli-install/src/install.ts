@@ -118,6 +118,7 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 				.then(() => {
 					installedModuleNames.forEach((name) => {
 						const libPath = path.resolve(".", "node_modules", name, "akashic-lib.json");
+						// NOTE: akashic-lib.json の存在確認後に akashic-lib.json が削除された場合は処理が中断されてしまうことに注意
 						if (!fs.existsSync(libPath)) return;
 
 						const libJsonData: cmn.LibConfiguration = JSON.parse(fs.readFileSync(libPath, "utf8"));
