@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.2.0 (2020-12-22)
+
+#### Enhancement
+* `akashic-cli-commons`, `akashic-cli-install`, `akashic-cli-uninstall`
+  * [#626](https://github.com/akashic-games/akashic-cli/pull/626) feat: add/remove assets when install/uninstall ([@yu-ogi](https://github.com/yu-ogi))
+
+#### Committers: 1
+- [@yu-ogi](https://github.com/yu-ogi)
+
 
 ## 2.1.3 (2020-12-21)
 
