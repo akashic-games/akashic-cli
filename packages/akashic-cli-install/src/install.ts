@@ -118,17 +118,30 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 				.then(() => {
 					installedModuleNames.forEach((name) => {
 						const libPath = path.resolve(".", "node_modules", name, "akashic-lib.json");
-						try {
-							const libJsonData: cmn.LibConfiguration = JSON.parse(fs.readFileSync(libPath, "utf8"));
+						// NOTE: akashic-lib.json の存在確認後に akashic-lib.json が削除された場合は処理が中断されてしまうことに注意
+						if (!fs.existsSync(libPath)) return;
+
+						const libJsonData: cmn.LibConfiguration = JSON.parse(fs.readFileSync(libPath, "utf8"));
+						if (libJsonData.gameConfigurationData) {
 							const environment = libJsonData.gameConfigurationData.environment;
-							if (libJsonData.gameConfigurationData && environment && environment.external) {
+							if (environment && environment.external) {
 								Object.keys(environment.external).forEach(name => {
 									conf.addExternal(name, environment.external[name]);
 								});
 							}
-						} catch (error) {
-							if (error.code === "ENOENT") return; // akashic-lib.jsonを持っていないケース
-							throw error;
+						}
+
+						if (libJsonData.assetList) {
+							if (!conf._content.assets) {
+								conf._content.assets = {};
+							}
+							libJsonData.assetList.forEach(asset => {
+								const assetPath = cmn.Util.makeUnixPath(path.join("node_modules", name, asset.path));
+								conf._content.assets[assetPath] = {
+									...asset,
+									path: assetPath
+								};
+							});
 						}
 					});
 				})

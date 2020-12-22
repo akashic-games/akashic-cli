@@ -1,8 +1,11 @@
+import { AssetConfiguration } from "./GameConfiguration";
+
 /**
  * akashic-lib.json の型。
  */
 export interface LibConfiguration {
-	gameConfigurationData: LibGameJsonData;
+	gameConfigurationData?: LibGameJsonData;
+	assetList?: AssetConfiguration[];
 }
 
 export interface LibGameJsonData {
