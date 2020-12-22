@@ -144,12 +144,14 @@ export function install(param: InstallParameterObject, cb: (err: any) => void): 
 
 
 function _getPackageNameFromTgzFile(fileName: string): string {
-	let data: string;
+	let buf: Buffer;
 	const onentry = (entry: tar.FileStat) => {
 		const splitPath = entry.header.path.split("/");
 		// splitPath[0] は解凍後のディレクトリ名が入る。そのディレクトリ直下のpackage.jsonのみを対象とする。
 		if (splitPath[1] === "package.json") {
-			entry.on("data", c => data = c.toString());
+			let chunks: Uint8Array[]  = [];
+			entry.on("data", c => chunks.push(c));
+			entry.on("finish", () => buf = Buffer.concat(chunks));
 		}
 	};
 	tar.t({
@@ -157,6 +159,7 @@ function _getPackageNameFromTgzFile(fileName: string): string {
 		file: fileName,
 		sync: true
 	});
-	const json = JSON.parse(data);
+
+	const json = JSON.parse(buf.toString());
 	return json.name;
 }
