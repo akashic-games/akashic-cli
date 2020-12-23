@@ -6,7 +6,7 @@
   "scripts": {
     "build": "rimraf ./script && tsc && akashic-cli-scan asset script",
     "update": "akashic-cli-scan asset && akashic-cli-scan globalScripts",
-    "lint": "tslint -c tslint.json -p tsconfig.json",
+    "lint": "eslint -c .eslintrc.js \"src/**/*.ts\" --fix",
     "start": "akashic-sandbox .",
     "export-zip": "rimraf game.zip && akashic-cli-export-zip -o game.zip -s",
     "export-html": "rimraf game && akashic-cli-export-html -o game",
