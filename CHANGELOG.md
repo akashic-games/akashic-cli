@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## 2.2.1 (2020-12-23)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#634](https://github.com/akashic-games/akashic-cli/pull/634) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Bug Fix
+* `akashic-cli-init`
+  * [#635](https://github.com/akashic-games/akashic-cli/pull/635) fix lint script in akashic-cli-init templates ([@dera-](https://github.com/dera-))
+
+#### Committers: 2
+- [@dera-](https://github.com/dera-)
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.2.0 (2020-12-22)
 
 #### Enhancement
