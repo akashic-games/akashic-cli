@@ -18,22 +18,25 @@ describe("mainScene", () => {
 		const scene = client.game.scene()!;
 
 		expect(scene).toBeDefined();
-		// player, shot, se のアセットが読み込まれていることを確認
-		expect(Object.keys(scene.assets).length).toBe(3);
-		expect(scene.children.length).toBe(1);
 
-		// ゲーム画面をクリックすると弾 (g.Sprite) が生成されることを確認
-		client.sendPointDown(Math.ceil(Math.random() * game.width), Math.ceil(Math.random() * game.height), 0);
-		context.step();
-		expect(scene.children.length).toBe(2);
+		// ここでゲーム毎の内容を確認する。
+		//
+		// // player, shot, se のアセットが読み込まれていることを確認
+		// expect(Object.keys(scene.assets).length).toBe(3);
+		// expect(scene.children.length).toBe(1);
 
-		client.sendPointDown(Math.ceil(Math.random() * game.width), Math.ceil(Math.random() * game.height), 0);
-		context.step();
-		expect(scene.children.length).toBe(3);
+		// // ゲーム画面をクリックすると弾 (g.Sprite) が生成されることを確認
+		// client.sendPointDown(Math.ceil(Math.random() * game.width), Math.ceil(Math.random() * game.height), 0);
+		// context.step();
+		// expect(scene.children.length).toBe(2);
 
-		// 時間が十分に経ったらすべての弾が消えていることを確認
-		await context.advance(3000);
-		expect(scene.children.length).toBe(1);
+		// client.sendPointDown(Math.ceil(Math.random() * game.width), Math.ceil(Math.random() * game.height), 0);
+		// context.step();
+		// expect(scene.children.length).toBe(3);
+
+		// // 時間が十分に経ったらすべての弾が消えていることを確認
+		// await context.advance(3000);
+		// expect(scene.children.length).toBe(1);
 
 		await context.destroy();
 	});
