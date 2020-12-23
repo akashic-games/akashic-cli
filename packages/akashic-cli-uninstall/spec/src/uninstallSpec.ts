@@ -268,6 +268,9 @@ describe("uninstall()", function () {
 
 		it("with uninstall akashic-lib.json, gameConfigurationData", function (done: any) {
 			var fsContent = JSON.parse(JSON.stringify(mockfsContent));
+			var fooAkashicLib = JSON.parse(fsContent.testdir.foo.node_modules.foo["akashic-lib.json"]);
+			delete fooAkashicLib.gameConfigurationData.environment;
+			fsContent.testdir.foo.node_modules.foo["akashic-lib.json"] = JSON.stringify(fooAkashicLib);
 			mockfs(fsContent);
 
 			promiseUninstall({
@@ -277,25 +280,7 @@ describe("uninstall()", function () {
 				debugNpm: new DummyNpm({ logger, fsContent })
 			}).then(() => cmn.ConfigurationFile.read(path.join("./testdir/foo", "game.json"), logger))
 			.then((content: cmn.GameConfiguration) => {
-				expect(content.environment.external.fooEx).toBe(undefined);
-				expect(content.environment.external.buzzEx).toBe("10000");
-				done();
-			}).then(done, done.fail)
-		});
-
-		
-		it("with uninstall akashic-lib.json", function (done: any) {
-			var fsContent = JSON.parse(JSON.stringify(mockfsContent));
-			mockfs(fsContent);
-
-			promiseUninstall({
-				moduleNames: ["foo"],
-				cwd: "./testdir/foo",
-				logger: logger,
-				debugNpm: new DummyNpm({ logger, fsContent })
-			}).then(() => cmn.ConfigurationFile.read(path.join("./testdir/foo", "game.json"), logger))
-			.then((content: cmn.GameConfiguration) => {
-				expect(content.environment.external.fooEx).toBe(undefined);
+				expect(content.environment.external.fooEx).toBe("100");
 				expect(content.environment.external.buzzEx).toBe("10000");
 				done();
 			}).then(done, done.fail)
@@ -303,8 +288,7 @@ describe("uninstall()", function () {
 
 		it("without uninstall akashic-lib.json", function (done: any) {
 			var fsContent = JSON.parse(JSON.stringify(mockfsContent));
-			delete fsContent.testdir.foo["akashic-lib.json"];
-
+			delete fsContent.testdir.foo.node_modules.foo["akashic-lib.json"];
 			mockfs(fsContent);
 
 			promiseUninstall({
@@ -314,7 +298,7 @@ describe("uninstall()", function () {
 				debugNpm: new DummyNpm({ logger, fsContent })
 			}).then(() => cmn.ConfigurationFile.read(path.join("./testdir/foo", "game.json"), logger))
 			.then((content: cmn.GameConfiguration) => {
-				expect(content.environment.external.fooEx).toBe(undefined);
+				expect(content.environment.external.fooEx).toBe("100");
 				expect(content.environment.external.buzzEx).toBe("10000");
 				done();
 			}).then(done, done.fail)
