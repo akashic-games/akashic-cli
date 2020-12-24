@@ -14,21 +14,26 @@ export function main(param: GameMainParameterObject): void {
 	}
 	// 市場コンテンツのランキングモードでは、g.game.vars.gameState.score の値をスコアとして扱います
 	g.game.vars.gameState = { score: 0 };
-	scene.loaded.add(() => {
+	scene.onLoad.add(() => {
 		// ここからゲーム内容を記述します
+
+		// 各アセットオブジェクトを取得します
+		const playerImageAsset = scene.asset.getImageById("player");
+		const shotImageAsset = scene.asset.getImageById("shot");
+		const seAudioAsset = scene.asset.getAudioById("se");
 
 		// プレイヤーを生成します
 		const player = new g.Sprite({
 			scene: scene,
-			src: scene.assets["player"],
-			width: (scene.assets["player"] as g.ImageAsset).width,
-			height: (scene.assets["player"] as g.ImageAsset).height
+			src: playerImageAsset,
+			width: playerImageAsset.width,
+			height: playerImageAsset.height
 		});
 
 		// プレイヤーの初期座標を、画面の中心に設定します
 		player.x = (g.game.width - player.width) / 2;
 		player.y = (g.game.height - player.height) / 2;
-		player.update.add(() => {
+		player.onUpdate.add(() => {
 			// 毎フレームでY座標を再計算し、プレイヤーの飛んでいる動きを表現します
 			// ここではMath.sinを利用して、時間経過によって増加するg.game.ageと組み合わせて
 			player.y = (g.game.height - player.height) / 2 + Math.sin(g.game.age % (g.game.fps * 10) / 4) * 10;
@@ -41,7 +46,7 @@ export function main(param: GameMainParameterObject): void {
 		// フォントの生成
 		const font = new g.DynamicFont({
 			game: g.game,
-			fontFamily: g.FontFamily.Serif,
+			fontFamily: "sans-serif",
 			size: 48
 		});
 
@@ -67,27 +72,27 @@ export function main(param: GameMainParameterObject): void {
 		scene.append(timeLabel);
 
 		// 画面をタッチしたとき、SEを鳴らします
-		scene.pointDownCapture.add(() => {
+		scene.onPointDownCapture.add(() => {
 			// 制限時間以内であればタッチ1回ごとにSCOREに+1します
 			if (time > 0) {
 				g.game.vars.gameState.score++;
 				scoreLabel.text = "SCORE: " + g.game.vars.gameState.score;
 				scoreLabel.invalidate();
 			}
-			(scene.assets["se"] as g.AudioAsset).play();
+			seAudioAsset.play();
 
 			// プレイヤーが発射する弾を生成します
 			const shot = new g.Sprite({
 				scene: scene,
-				src: scene.assets["shot"],
-				width: (scene.assets["shot"] as g.ImageAsset).width,
-				height: (scene.assets["shot"] as g.ImageAsset).height
+				src: shotImageAsset,
+				width: shotImageAsset.width,
+				height: shotImageAsset.height
 			});
 
 			// 弾の初期座標を、プレイヤーの少し右に設定します
 			shot.x = player.x + player.width;
 			shot.y = player.y;
-			shot.update.add(() => {
+			shot.onUpdate.add(() => {
 				// 毎フレームで座標を確認し、画面外に出ていたら弾をシーンから取り除きます
 				if (shot.x > g.game.width) shot.destroy();
 
@@ -108,14 +113,14 @@ export function main(param: GameMainParameterObject): void {
 						window.RPGAtsumaru.experimental.scoreboards.display(boardId);
 					});
 				}
-				scene.update.remove(updateHandler); // カウントダウンを止めるためにこのイベントハンドラを削除します
+				scene.onUpdate.remove(updateHandler); // カウントダウンを止めるためにこのイベントハンドラを削除します
 			}
 			// カウントダウン処理
 			time -= 1 / g.game.fps;
 			timeLabel.text = "TIME: " + Math.ceil(time);
 			timeLabel.invalidate();
 		};
-		scene.update.add(updateHandler);
+		scene.onUpdate.add(updateHandler);
 		// ここまでゲーム内容を記述します
 	});
 	g.game.pushScene(scene);
