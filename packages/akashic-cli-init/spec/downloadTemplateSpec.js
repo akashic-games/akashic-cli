@@ -25,7 +25,7 @@ describe("downloadTemplate.ts", () => {
 
 			lt.listTemplates(param)
 				.then(() => {
-					expect(str).toBe("javascript-minimal-v3\njavascript-minimal\njavascript-shin-ichiba-ranking-v3\njavascript-shin-ichiba-ranking\njavascript-v3\njavascript\ntypescript-minimal-v3\ntypescript-minimal\ntypescript-shin-ichiba-ranking-v3\ntypescript-shin-ichiba-ranking\ntypescript-v3\ntypescript\n");
+					expect(str).toBe("javascript-minimal\njavascript-shin-ichiba-ranking\njavascript\ntypescript-minimal\ntypescript-shin-ichiba-ranking\ntypescript\n");
 				})
 				.then(done, done.fail);
 		});
