@@ -13,6 +13,7 @@ import { DevtoolOperator } from "./DevtoolOperator";
 import { ExternalPluginOperator } from "./ExternalPluginOperator";
 import { RPGAtsumaruApi } from "../atsumaru/RPGAtsumaruApi";
 import { defaultSessionParameter } from "../common/defaultSessionParameter";
+import {ProfilerValue} from "../common/types/Profiler";
 
 export interface OperatorParameterObject {
 	store: Store;
@@ -159,6 +160,13 @@ export class Operator {
 		});
 		store.setCurrentLocalInstance(instance);
 		await instance.start();
+		instance.setProfilerValueTrigger((value: ProfilerValue) => {
+			this.store.profilerStore.pushProfilerValueResult("fps", value.framePerSecond);
+			this.store.profilerStore.pushProfilerValueResult("skipped", value.skippedFrameCount);
+			this.store.profilerStore.pushProfilerValueResult("interval", value.rawFrameInterval);
+			this.store.profilerStore.pushProfilerValueResult("frame", value.frameTime);
+			this.store.profilerStore.pushProfilerValueResult("rendering", value.renderingTime);
+		});
 		if (store.targetService !== "atsumaru" ) {
 			this.store.devtoolUiStore.initTotalTimeLimit(play.content.preferredSessionParameters.totalTimeLimit);
 			this.devtool.setupNiconicoDevtoolValueWatcher();

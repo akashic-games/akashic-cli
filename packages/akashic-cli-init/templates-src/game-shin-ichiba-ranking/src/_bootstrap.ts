@@ -22,7 +22,7 @@ export = (originalParam: g.GameMainParameterObject) => {
 		game: g.game
 	});
 	// セッションパラメーターを受け取ってゲームを開始します
-	scene.onMessage.add((msg) => {
+	scene.message.add((msg) => {
 		if (msg.data && msg.data.type === "start" && msg.data.parameters) {
 			param.sessionParameter = msg.data.parameters; // sessionParameterフィールドを追加
 			if (msg.data.parameters.randomSeed != null) {
@@ -32,9 +32,9 @@ export = (originalParam: g.GameMainParameterObject) => {
 			main(param);
 		}
 	});
-	scene.onLoad.add(() => {
+	scene.loaded.add(() => {
 		let currentTickCount = 0;
-		scene.onUpdate.add(function() {
+		scene.update.add(function() {
 			currentTickCount++;
 			// 待ち時間を超えた場合はゲームを開始します
 			if (currentTickCount > limitTickToWait) {

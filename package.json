@@ -32,11 +32,11 @@
   },
   "devDependencies": {
     "@akashic/remark-preset-lint": "~0.1.1",
-    "cross-env": "7.0.2",
+    "cross-env": "7.0.3",
     "lerna": "3.22.1",
     "lerna-changelog": "1.0.1",
     "remark-cli": "8.0.1",
-    "semver": "7.3.2",
+    "semver": "7.3.4",
     "shelljs": "0.8.4"
   },
   "repository": {

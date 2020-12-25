@@ -247,4 +247,155 @@ describe("install()", function () {
 			})
 			.then(done, done.fail);
 	});
+
+	it("should import assets from the akashic-lib.json", async () => {
+		const logger = new cmn.ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
+
+		const mockModules = {
+			"ui-library": {
+				lib: {
+					"index.js": "module.exports = {};"
+				},
+				"package.json": JSON.stringify({
+					name: "ui-library",
+					version: "0.0.0",
+					main: "lib/index.js"
+				}),
+				"akashic-lib.json": JSON.stringify({
+					assetList: [
+						{
+							type: "image",
+							path: "assets/images/player.png",
+							width: 100,
+							height: 120
+						},
+						{
+							type: "image",
+							path: "assets/images/enemy.png",
+							width: 100,
+							height: 120
+						},
+						{
+							type: "audio",
+							path: "assets/audios/se_1",
+							systemId: "sound",
+							duration: 1270
+						}
+					]
+				})
+			},
+			"audio-library": {
+				lib: {
+					"index.js": "module.exports = {};"
+				},
+				"package.json": JSON.stringify({
+					name: "@akashic-extension/audio-library",
+					version: "0.0.0",
+					main: "lib/index.js"
+				}),
+				"akashic-lib.json": JSON.stringify({
+					assetList: [
+						{
+							type: "audio",
+							path: "assets/audios/bgm_1",
+							systemId: "music",
+							duration: 15364
+						},
+						{
+							type: "audio",
+							path: "assets/audios/bgm_2",
+							systemId: "music",
+							duration: 32412
+						},
+						{
+							type: "audio",
+							path: "assets/audios/bgm_3",
+							systemId: "music",
+							duration: 51214
+						}
+					]
+				})
+			}
+		};
+
+		const mockFsContent = {
+			somedir: {
+				node_modules: {},
+				"game.json": JSON.stringify({
+					width: 1280,
+					height: 720,
+					fps: 60,
+					assets: {}
+				})
+			}
+		};
+
+		mockfs(mockFsContent);
+		class dummyNpm {
+			async install(names) {
+				names = (names instanceof Array) ? names : [names];
+				names.forEach(name => {
+					const nameNoVer = cmn.Util.makeModuleNameNoVer(name);
+					mockFsContent.somedir.node_modules[nameNoVer] = mockModules[nameNoVer];
+				});
+				mockfs(mockFsContent.somedir);
+			}
+		};
+
+		await promiseInstall({
+			moduleNames: ["ui-library"],
+			cwd: "./somedir",
+			logger,
+			debugNpm: new dummyNpm()
+		});
+		let content = await cmn.ConfigurationFile.read("./somedir/game.json", logger);
+
+		expect(Object.keys(content.assets).length).toBe(3);
+		expect(content.assets["node_modules/ui-library/assets/audios/se_1"]).toEqual({
+			type: "audio",
+			path: "node_modules/ui-library/assets/audios/se_1",
+			systemId: "sound",
+			duration: 1270
+		});
+		expect(content.assets["node_modules/ui-library/assets/images/player.png"]).toEqual({
+			type: "image",
+			path: "node_modules/ui-library/assets/images/player.png",
+			width: 100,
+			height: 120
+		});
+		expect(content.assets["node_modules/ui-library/assets/images/enemy.png"]).toEqual({
+			type: "image",
+			path: "node_modules/ui-library/assets/images/enemy.png",
+			width: 100,
+			height: 120
+		});
+
+		await promiseInstall({
+			moduleNames: ["audio-library"],
+			cwd: "./somedir",
+			logger,
+			debugNpm: new dummyNpm()
+		});
+		content = await cmn.ConfigurationFile.read("./somedir/game.json", logger);
+
+		expect(Object.keys(content.assets).length).toBe(6);
+		expect(content.assets["node_modules/audio-library/assets/audios/bgm_1"]).toEqual({
+			type: "audio",
+			path: "node_modules/audio-library/assets/audios/bgm_1",
+			systemId: "music",
+			duration: 15364
+		});
+		expect(content.assets["node_modules/audio-library/assets/audios/bgm_2"]).toEqual({
+			type: "audio",
+			path: "node_modules/audio-library/assets/audios/bgm_2",
+			systemId: "music",
+			duration: 32412
+		});
+		expect(content.assets["node_modules/audio-library/assets/audios/bgm_3"]).toEqual({
+			type: "audio",
+			path: "node_modules/audio-library/assets/audios/bgm_3",
+			systemId: "music",
+			duration: 51214
+		});
+	});
 });

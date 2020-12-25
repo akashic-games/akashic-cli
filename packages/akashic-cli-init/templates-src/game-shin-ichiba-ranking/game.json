@@ -25,11 +25,9 @@
 	},
 	"moduleMainScripts": {},
 	"environment": {
-		"sandbox-runtime": "3",
+		"sandbox-runtime": "2",
 		"niconico": {
-			"supportedModes": [
-				"ranking"
-			]
+			"supportedModes": ["ranking"]
 		}
 	}
 }
