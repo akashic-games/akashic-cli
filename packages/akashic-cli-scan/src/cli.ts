@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import * as commander from "commander";
 import { ConsoleLogger, CliConfigurationFile, CliConfigScanAsset, CliConfigScanGlobalScripts } from "@akashic/akashic-cli-commons";
-import { promiseScanAsset, promiseScanNodeModules, watchAsset, ScanAssetParameterObject } from "./scan";
+import { promiseScanAsset, promiseScanNodeModules, ScanAssetParameterObject } from "./scan";
 
 var ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "package.json"), "utf8")).version;
 
@@ -15,7 +15,6 @@ commander
 	.description("Update 'assets' property of game.json")
 	.option("-C, --cwd <dir>", "The directory incluedes game.json")
 	.option("-q, --quiet", "Suppress output")
-	.option("-w, --watch", "Watch Directories of asset")
 	.option("--use-path-asset-id", "Resolve Asset IDs from these path instead of name")
 	.option("--update-asset-id", "Update previously registered Asset IDs")
 	.option(
@@ -55,20 +54,11 @@ commander
 				assetScanDirectoryTable: assetScanDirectoryTable,
 				assetExtension: assetExtension
 			};
-			if (opts.watch) {
-				watchAsset(parameter, (err) => {
-					if (err) {
-						logger.error(err);
-						process.exit(1);
-					}
+			promiseScanAsset(parameter)
+				.catch((err: any) => {
+					logger.error(err);
+					process.exit(1);
 				});
-			} else {
-				promiseScanAsset(parameter)
-					.catch((err: any) => {
-						logger.error(err);
-						process.exit(1);
-					});
-			}
 		});
 	})
 	.on("--help", () => {

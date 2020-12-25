@@ -13,4 +13,5 @@ export interface CliConfigServe {
 	targetDirs?: string[];
 	openBrowser?: boolean;
 	preserveDisconnected?: boolean;
+	watch?: boolean;
 }

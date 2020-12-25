@@ -103,6 +103,24 @@ async function cli(cliConfigParam: CliConfigServe) {
 		serverGlobalConfig.allowExternal = cliConfigParam.allowExternal;
 	}
 
+	if (cliConfigParam.watch) {
+		// akashic-cli-scanはwatchオプション指定時しか使われないので動的importする
+		import("@akashic/akashic-cli-scan/lib/scan").then(scan => {
+			(cliConfigParam.targetDirs as string[]).forEach(dir => {
+				scan.watchAsset({
+					target: "all",
+					cwd: dir
+				}, (err: any) => {
+					if (err) {
+						getSystemLogger().error(err.message);
+					}
+				});
+			});
+		}).catch(error => {
+			getSystemLogger().error(error.message);
+		});
+	}
+
 	let gameExternalFactory: () => any = () => undefined;
 	if (commander.serverExternalScript) {
 		try {
@@ -216,6 +234,7 @@ export async function run(argv: any): Promise<void> {
 		.option("-v, --verbose", `Display detailed information on console.`)
 		.option("-A, --no-auto-start", `Wait automatic startup of contents.`)
 		.option("-s, --target-service <service>", `Simulate the specified service. arguments: ${SERVICE_TYPES}`)
+		.option("-w, --watch", `Watch directories of asset`)
 		.option("--server-external-script <path>",
 			`Evaluate the given JS and assign it to Game#external of the server instances`)
 		.option("--debug-playlog <path>", `Specify path of playlog-json.`)
@@ -245,7 +264,8 @@ export async function run(argv: any): Promise<void> {
 			allowExternal: commander.allowExternal ?? conf.allowExternal,
 			targetDirs: commander.args.length > 0 ? commander.args : (conf.targetDirs ?? [process.cwd()]),
 			openBrowser: commander.openBrowser ?? conf.openBrowser,
-			preserveDisconnected: commander.preserveDisconnected ?? conf.preserveDisconnected
+			preserveDisconnected: commander.preserveDisconnected ?? conf.preserveDisconnected,
+			watch: commander.watch ?? conf.watch
 		};
 		await cli(cliConfigParam);
 	});
