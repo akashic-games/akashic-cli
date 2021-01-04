@@ -103,24 +103,6 @@ async function cli(cliConfigParam: CliConfigServe) {
 		serverGlobalConfig.allowExternal = cliConfigParam.allowExternal;
 	}
 
-	if (cliConfigParam.watch) {
-		// akashic-cli-scanはwatchオプション指定時しか使われないので動的importする
-		import("@akashic/akashic-cli-scan/lib/scan").then(scan => {
-			(cliConfigParam.targetDirs as string[]).forEach(dir => {
-				scan.watchAsset({
-					target: "all",
-					cwd: dir
-				}, (err: any) => {
-					if (err) {
-						getSystemLogger().error(err.message);
-					}
-				});
-			});
-		}).catch(error => {
-			getSystemLogger().error(error.message);
-		});
-	}
-
 	let gameExternalFactory: () => any = () => undefined;
 	if (commander.serverExternalScript) {
 		try {
@@ -150,6 +132,26 @@ async function cli(cliConfigParam: CliConfigServe) {
 	const app = express();
 	const httpServer = http.createServer(app);
 	const io = socketio(httpServer);
+
+	if (cliConfigParam.watch) {
+		// akashic-cli-scanはwatchオプション指定時しか使われないので動的importする
+		import("@akashic/akashic-cli-scan/lib/scan").then(scan => {
+			(cliConfigParam.targetDirs as string[]).forEach(dir => {
+				scan.watchAsset({
+					target: "all",
+					cwd: dir
+				}, (err: any) => {
+					if (err) {
+						getSystemLogger().error(err.message);
+						return;
+					}
+					io.emit("playRestart");
+				});
+			});
+		}).catch(error => {
+			getSystemLogger().error(error.message);
+		});
+	}
 
 	app.set("views", path.join(__dirname, "..", "..", "views"));
 	app.set("view engine", "ejs");

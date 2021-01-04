@@ -46,6 +46,9 @@ export class Operator {
 		this.gameViewManager = param.gameViewManager;
 
 		Subscriber.onBroadcast.add(this._handleBroadcast);
+		Subscriber.onRestart.add(() => {
+			this.restartWithNewPlay();
+		});
 	}
 
 	assertInitialized(): Promise<unknown> {
