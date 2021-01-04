@@ -25,7 +25,7 @@ describe("SocketIOAMFlowManager", () => {
 	let socketIOServer = null;
 	beforeEach((done) => {
 		const server = http.Server();
-		socketIOServer = socketio(server);
+		socketIOServer = new socketio.Server(server);
 		server.listen(testServerPort, () => done());
 	});
 	afterEach((done) => {
