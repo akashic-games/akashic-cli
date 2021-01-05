@@ -137,12 +137,26 @@ async function cli(cliConfigParam: CliConfigServe) {
 	if (cliConfigParam.watch && cliConfigParam.targetDirs) {
 		console.log("Start watching contents");
 		for (let i = 0; i < cliConfigParam.targetDirs.length; i++) {
-			watchContent(cliConfigParam.targetDirs[i], (err: any) => {
+			watchContent(cliConfigParam.targetDirs[i], async (err: any) => {
 				if (err) {
 					getSystemLogger().error(err.message);
 				}
+				// コンテンツに変更があったらplayを新規に作り直して再起動
+				const contentId = `${i}`;
+				// 先に対応するコンテンツのrunnerを全て停止させる
+				playStore.getPlayEntityFromContentId(contentId).forEach(entity => {
+					entity.runners.forEach(runner => {
+						runnerStore.stopRunner(runner.runnerId);
+					});
+				});
+				const playId = await playStore.createPlay(new ServerContentLocator({ contentId }));
+				const token = amflowManager.createPlayToken(playId, "", "", true, {});
+				const amflow = playStore.createAMFlow(playId);
+				await runnerStore.createAndStartRunner({ playId, isActive: true, token, amflow, contentId });
+				await playStore.resumePlayDuration(playId);
+				// クライアント側ではmessageしか利用せずplayIdは恐らく不要だと思うが、受け取り側の型がこの形になっているのでplayIdも送る
+				io.emit("playBroadcast", { playId, message: { type: "switchPlay", nextPlayId: playId } });
 			});
-			io.emit("playRestart");
 		}
 	}
 

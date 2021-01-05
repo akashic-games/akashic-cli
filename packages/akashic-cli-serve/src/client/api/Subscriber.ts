@@ -27,7 +27,6 @@ export const onRunnerResume = new Trigger<RunnerResumeTestbedEvent>();
 export const onClientInstanceAppear = new Trigger<ClientInstanceAppearTestbedEvent>();
 export const onClientInstanceDisappear = new Trigger<ClientInstanceDisappearTestbedEvent>();
 export const onBroadcast = new Trigger<any>();
-export const onRestart = new Trigger<void>();
 export const onDisconnect = new Trigger<void>();
 
 const socket = socketInstance();
@@ -43,5 +42,4 @@ socket.on("runnerResume", (arg: RunnerResumeTestbedEvent) => onRunnerResume.fire
 socket.on("clientInstanceAppear", (arg: ClientInstanceAppearTestbedEvent) => onClientInstanceAppear.fire(arg));
 socket.on("clientInstanceDisappear", (arg: ClientInstanceDisappearTestbedEvent) => onClientInstanceDisappear.fire(arg));
 socket.on("playBroadcast", (arg: PlayBroadcastTestbedEvent) => onBroadcast.fire(arg));
-socket.on("playRestart", () => onRestart.fire());
 socket.on("disconnect", () => onDisconnect.fire());

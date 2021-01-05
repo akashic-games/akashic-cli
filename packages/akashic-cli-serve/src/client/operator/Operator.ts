@@ -46,9 +46,6 @@ export class Operator {
 		this.gameViewManager = param.gameViewManager;
 
 		Subscriber.onBroadcast.add(this._handleBroadcast);
-		Subscriber.onRestart.add(() => {
-			this.restartWithNewPlay();
-		});
 	}
 
 	assertInitialized(): Promise<unknown> {
@@ -180,6 +177,7 @@ export class Operator {
 		}
 	}
 
+	// TODO: このメソッドの処理は本来サーバー側で行うべき
 	restartWithNewPlay = async (): Promise<void> => {
 		await this.store.currentPlay.content.updateSandboxConfig();
 		const play = await this._createServerLoop(this.store.currentPlay.content.locator);
