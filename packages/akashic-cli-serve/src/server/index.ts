@@ -19,6 +19,7 @@ import { createHealthCheckRouter } from "./route/HealthCheckRoute";
 import { ServerContentLocator } from "./common/ServerContentLocator";
 import {  CliConfigurationFile, CliConfigServe, SERVICE_TYPES } from "@akashic/akashic-cli-commons";
 import { PlayerIdStore } from "./domain/PlayerIdStore";
+import { watchContents } from "./domain/GameConfigs";
 
 // 渡されたパラメータを全てstringに変換する
 // chalkを使用する場合、ログ出力時objectの中身を展開してくれないためstringに変換する必要がある
@@ -103,21 +104,12 @@ async function cli(cliConfigParam: CliConfigServe) {
 		serverGlobalConfig.allowExternal = cliConfigParam.allowExternal;
 	}
 
-	if (cliConfigParam.watch) {
-		// akashic-cli-scanはwatchオプション指定時しか使われないので動的importする
-		import("@akashic/akashic-cli-scan/lib/scan").then(scan => {
-			(cliConfigParam.targetDirs as string[]).forEach(dir => {
-				scan.watchAsset({
-					target: "all",
-					cwd: dir
-				}, (err: any) => {
-					if (err) {
-						getSystemLogger().error(err.message);
-					}
-				});
-			});
-		}).catch(error => {
-			getSystemLogger().error(error.message);
+	if (cliConfigParam.watch && cliConfigParam.targetDirs) {
+		console.log("Start watching contents");
+		watchContents(cliConfigParam.targetDirs, (err: any) => {
+			if (err) {
+				getSystemLogger().error(err.message);
+			}
 		});
 	}
 
