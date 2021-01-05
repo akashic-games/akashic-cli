@@ -26,24 +26,22 @@ export function get(contentId: string): GameConfiguration {
 	return configs[contentId];
 }
 
-export function watchContents(targetDirs: string[], cb: (err: any) => void): void {
+export function watchContent(targetDir: string, cb: (err: any) => void): void {
 	// akashic-cli-scanはwatchオプション指定時しか使われないので動的importする
 	import("@akashic/akashic-cli-scan/lib/scan").then(scan => {
-		targetDirs.forEach(targetDir => {
-			const watcher = chokidar.watch(targetDir, { persistent: true, ignoreInitial: true, ignored: "**/node_modules/**/*" });
-			const handler = (filePath: string) => {
-				if (["assets", "audio", "image", "script", "text"].some(dir => filePath.indexOf(path.join(targetDir, dir)) !== -1)) {
-					scan.scanAsset({ target: "all", cwd: targetDir }, cb);
-				}
-			};
-			// watch開始時にgame.jsonのasstesの内容と実際のアセットの内容に誤差が無いかの確認を兼ねてscanAsset関数を実行する
-			watcher.on("ready", () => {
+		const watcher = chokidar.watch(targetDir, { persistent: true, ignoreInitial: true, ignored: "**/node_modules/**/*" });
+		const handler = (filePath: string) => {
+			if (["assets", "audio", "image", "script", "text"].some(dir => filePath.indexOf(path.join(targetDir, dir)) !== -1)) {
 				scan.scanAsset({ target: "all", cwd: targetDir }, cb);
-			});
-			watcher.on("add", handler);
-			watcher.on("unlink", handler);
-			watcher.on("change", handler);
+			}
+		};
+		// watch開始時にgame.jsonのasstesの内容と実際のアセットの内容に誤差が無いかの確認を兼ねてscanAsset関数を実行する
+		watcher.on("ready", () => {
+			scan.scanAsset({ target: "all", cwd: targetDir }, () => {});
 		});
+		watcher.on("add", handler);
+		watcher.on("unlink", handler);
+		watcher.on("change", handler);
 	});
 }
 
