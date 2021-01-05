@@ -1,5 +1,204 @@
 # CHANGELOG
 
+
+
+## 2.2.1 (2020-12-23)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#634](https://github.com/akashic-games/akashic-cli/pull/634) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Bug Fix
+* `akashic-cli-init`
+  * [#635](https://github.com/akashic-games/akashic-cli/pull/635) fix lint script in akashic-cli-init templates ([@dera-](https://github.com/dera-))
+
+#### Committers: 2
+- [@dera-](https://github.com/dera-)
+- xnv ([@xnv](https://github.com/xnv))
+
+## 2.2.0 (2020-12-22)
+
+#### Enhancement
+* `akashic-cli-commons`, `akashic-cli-install`, `akashic-cli-uninstall`
+  * [#626](https://github.com/akashic-games/akashic-cli/pull/626) feat: add/remove assets when install/uninstall ([@yu-ogi](https://github.com/yu-ogi))
+
+#### Committers: 1
+- [@yu-ogi](https://github.com/yu-ogi)
+
+
+## 2.1.3 (2020-12-21)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#633](https://github.com/akashic-games/akashic-cli/pull/633) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.0.2, engineFiles@2.1.50, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+* `akashic-cli-init`
+  * [#627](https://github.com/akashic-games/akashic-cli/pull/627) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
+## 2.1.2 (2020-12-18)
+
+#### Enhancement
+* `akashic-cli-export-html`
+  * [#624](https://github.com/akashic-games/akashic-cli/pull/624) 【akashic-cli-export-html】内部コンポーネントの更新(engineFiles@3.0.2, engineFiles@2.1.50, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+* `akashic-cli-init`
+  * [#625](https://github.com/akashic-games/akashic-cli/pull/625) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Bug Fix
+* `akashic-cli-init`
+  * [#620](https://github.com/akashic-games/akashic-cli/pull/620) fix(init): revert to v2 tempaltes as default ([@xnv](https://github.com/xnv))
+
+#### Update Dependencies
+* `akashic-cli-export-html`, `akashic-cli-export-zip`
+  * [#400](https://github.com/akashic-games/akashic-cli/pull/400) fix(deps): update dependency archiver to v5 ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-serve`
+  * [#603](https://github.com/akashic-games/akashic-cli/pull/603) chore(deps): update all dependencies (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#589](https://github.com/akashic-games/akashic-cli/pull/589) chore(deps): update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- kamakiri_ys ([@kamakiri01](https://github.com/kamakiri01))
+- xnv ([@xnv](https://github.com/xnv))
+
+## 2.1.1 (2020-12-09)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#618](https://github.com/akashic-games/akashic-cli/pull/618) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Bug Fix
+* `akashic-cli-serve`
+  * [#619](https://github.com/akashic-games/akashic-cli/pull/619) akashic-cli-serveのプロファイラ機能の修正 ([@dera-](https://github.com/dera-))
+
+#### Committers: 2
+- [@dera-](https://github.com/dera-)
+- xnv ([@xnv](https://github.com/xnv))
+
+## 2.1.0 (2020-12-08)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#565](https://github.com/akashic-games/akashic-cli/pull/565) add profiler screen in akashic-cli-serve ([@dera-](https://github.com/dera-))
+* `akashic-cli-export-html`
+  * [#609](https://github.com/akashic-games/akashic-cli/pull/609) feat(export-html): add GameExternalStorage impl ([@yu-ogi](https://github.com/yu-ogi))
+* `akashic-cli-init`
+  * [#617](https://github.com/akashic-games/akashic-cli/pull/617) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Committers: 3
+- [@dera-](https://github.com/dera-)
+- [@yu-ogi](https://github.com/yu-ogi)
+- xnv ([@xnv](https://github.com/xnv))
+
+## 2.0.3 (2020-12-04)
+
+#### Bug Fix
+* `akashic-cli-export-html`
+  * [#607](https://github.com/akashic-games/akashic-cli/pull/607) fix dragging to outside of the screen on exported html ([@xnv](https://github.com/xnv))
+* `akashic-cli-serve`
+  * [#616](https://github.com/akashic-games/akashic-cli/pull/616) Move open module to dependencies ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+  * [#610](https://github.com/akashic-games/akashic-cli/pull/610) fix(akashic-cli-serve): deadlock for --debug-untrusted ([@xnv](https://github.com/xnv))
+
+#### Committers: 2
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- xnv ([@xnv](https://github.com/xnv))
+
+## 2.0.2 (2020-12-02)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#615](https://github.com/akashic-games/akashic-cli/pull/615) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.0.1, engineFiles@2.1.50, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+* `akashic-cli-init`
+  * [#614](https://github.com/akashic-games/akashic-cli/pull/614) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
+## 2.0.1 (2020-12-02)
+
+#### Enhancement
+* `akashic-cli-export-html`
+  * [#600](https://github.com/akashic-games/akashic-cli/pull/600) 【akashic-cli-export-html】内部コンポーネントの更新(engineFiles@3.0.0-beta.11, engineFiles@2.1.49, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+* `akashic-cli-init`
+  * [#613](https://github.com/akashic-games/akashic-cli/pull/613) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+  * [#612](https://github.com/akashic-games/akashic-cli/pull/612) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
+## 2.0.0 (2020-12-02)
+
+#### Breaking Change
+* `akashic-cli-export-html`, `akashic-cli-init`, `akashic-cli-serve`
+  * [#611](https://github.com/akashic-games/akashic-cli/pull/611) engineFIles更新スクリプトをv3のリリースに合わせて修正+akashic-cli-initのテンプレートでakashic-engine v3を利用するようにしてv2を利用しないように修正 ([@dera-](https://github.com/dera-))
+
+#### Other Change
+* `akashic-cli-export-html`, `akashic-cli-init`, `akashic-cli-serve`
+  * [#611](https://github.com/akashic-games/akashic-cli/pull/611) engineFIles更新スクリプトをv3のリリースに合わせて修正+akashic-cli-initのテンプレートでakashic-engine v3を利用するようにしてv2を利用しないように修正 ([@dera-](https://github.com/dera-))
+
+#### Committers: 1
+- [@dera-](https://github.com/dera-)
+
+## 1.15.4 (2020-12-02)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#608](https://github.com/akashic-games/akashic-cli/pull/608) feat(akashic-cli-init): add specs ([@yu-ogi](https://github.com/yu-ogi))
+
+#### Committers: 1
+- [@yu-ogi](https://github.com/yu-ogi)
+
+## 1.15.3 (2020-12-01)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#606](https://github.com/akashic-games/akashic-cli/pull/606) Add serve startup options ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+## 1.15.2 (2020-12-01)
+
+#### Enhancement
+* `akashic-cli-commons`
+  * [#605](https://github.com/akashic-games/akashic-cli/pull/605) Add property to commons CliConfigServe ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+* `akashic-cli-init`
+  * [#604](https://github.com/akashic-games/akashic-cli/pull/604) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Committers: 2
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- xnv ([@xnv](https://github.com/xnv))
+
+## 1.15.1 (2020-11-24)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#598](https://github.com/akashic-games/akashic-cli/pull/598) reconnection when server restart ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+* `akashic-cli-init`
+  * [#602](https://github.com/akashic-games/akashic-cli/pull/602) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+  * [#601](https://github.com/akashic-games/akashic-cli/pull/601) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Other Change
+* `akashic-cli-init`, `akashic-cli-scan`
+  * [#590](https://github.com/akashic-games/akashic-cli/pull/590) Change game size in init template ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 2
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- xnv ([@xnv](https://github.com/xnv))
+
+## 1.15.0 (2020-11-19)
+
+#### Breaking Change
+* `akashic-cli-export-html`
+  * [#592](https://github.com/akashic-games/akashic-cli/pull/592) stop to depend on game-storage ([@dera-](https://github.com/dera-))
+
+#### Other Change
+* `akashic-cli-export-html`
+  * [#592](https://github.com/akashic-games/akashic-cli/pull/592) stop to depend on game-storage ([@dera-](https://github.com/dera-))
+
+#### Committers: 1
+- [@dera-](https://github.com/dera-)
+
 ## 1.14.119 (2020-11-18)
 
 #### Enhancement

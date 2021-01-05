@@ -195,7 +195,9 @@ const TestWithBehaviour = observer(() => (
 		}}
 		niconicoDevtoolProps={nicoProps}
 		miscDevtoolProps={{
-			downloadPlaylog: action("download-playlog")
+			showsProfiler: false,
+			downloadPlaylog: action("download-playlog"),
+			setShowsProfiler: action("show-profiler")
 		}}
 	/>
 ));
@@ -299,7 +301,9 @@ storiesOf("o-Devtool", module)
 			}}
 			niconicoDevtoolProps={nicoProps}
 			miscDevtoolProps={{
-				downloadPlaylog: action("download-playlog")
+				showsProfiler: false,
+				downloadPlaylog: action("download-playlog"),
+				setShowsProfiler: action("show-profiler")
 			}}
 		/>
 	))
@@ -393,7 +397,9 @@ storiesOf("o-Devtool", module)
 			}}
 			niconicoDevtoolProps={nicoProps}
 			miscDevtoolProps={{
-				downloadPlaylog: action("download-playlog")
+				showsProfiler: false,
+				downloadPlaylog: action("download-playlog"),
+				setShowsProfiler: action("show-profiler")
 			}}
 		/>
 	))
@@ -491,7 +497,9 @@ storiesOf("o-Devtool", module)
 			}}
 			niconicoDevtoolProps={nicoProps}
 			miscDevtoolProps={{
-				downloadPlaylog: action("download-playlog")
+				showsProfiler: false,
+				downloadPlaylog: action("download-playlog"),
+				setShowsProfiler: action("show-profiler")
 			}}
 		/>
 	))
@@ -543,7 +551,63 @@ storiesOf("o-Devtool", module)
 			}}
 			niconicoDevtoolProps={nicoProps}
 			miscDevtoolProps={{
-				downloadPlaylog: action("download-playlog")
+				showsProfiler: false,
+				downloadPlaylog: action("download-playlog"),
+				setShowsProfiler: action("show-profiler")
+			}}
+		/>
+	))
+	.add("misc", () => (
+		<Devtool
+			height={300}
+			minHeight={200}
+			onResizeHeight={action("resize-height")}
+			activeDevtool={"Misc"}
+			onSelectDevtool={action("select-tool")}
+			eventsDevtoolProps={{
+				showsEventList: true,
+				eventListWidth: 250,
+				eventListMinWidth: 200,
+				onEventListResize: action("events:list-resize"),
+				onClickShowEventList: action("events:toggle-list"),
+				eventNames: ["Foo", "Test 0"],
+				eventEditContent: `["test", 1]`,
+				onClickSendEvent: action("events:send"),
+				onClickCopyEvent: action("events:copy"),
+				onClickSendEditingEvent: action("events:send-edit"),
+				onEventEditContentChanged: action("events:edit")
+			}}
+			instancesDevtoolProps={{
+				instances: [],
+				onClickAddInstance: action("add-instance")
+			}}
+			entityTreeDevtoolProps={{
+				entityTrees: [],
+				entityTreeStateTable: observable.map({}),
+				selectedEntityId: null,
+				isSelectingEntity: false,
+				showsHidden: false,
+				onClickDump: action("dump"),
+				onChangeShowsHidden: action("change-shows-hidden"),
+				onClickSelectEntity: action("click-select-entity"),
+				onClickUpdateEntityTrees: action("update-entity-tree"),
+				onClickToggleOpenEntityChildren: action("toggle"),
+				onClickEntityItem: action("click-entity"),
+				onMouseOverEntityItem: action("mouseover"),
+				onMouseLeaveEntityItem: action("mouseleave")
+			}}
+			atsumaruDevtoolProps={{
+				disabled: false,
+				volume: store.volume,
+				isSeekingVolume: store.isSeekingVolume,
+				changeVolume: (v => (store.isSeekingVolume = true, store.volume = v)),
+				dicideVolume: (v => (store.isSeekingVolume = false, store.volume = v))
+			}}
+			niconicoDevtoolProps={nicoProps}
+			miscDevtoolProps={{
+				showsProfiler: false,
+				downloadPlaylog: action("download-playlog"),
+				setShowsProfiler: action("show-profiler")
 			}}
 		/>
 	))

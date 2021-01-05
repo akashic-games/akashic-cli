@@ -12,6 +12,7 @@ import {ExecutionMode} from "./ExecutionMode";
 import {ContentEntity} from "./ContentEntity";
 import {NicoPluginEntity} from "./NicoPluginEntity";
 import {CoeLimitedPluginEntity} from "./CoeLimitedPluginEntity";
+import {ProfilerValue} from "../common/types/Profiler";
 
 const toAgvExecutionMode = (() => {
 	const executionModeTable = {
@@ -60,6 +61,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 	private _gameViewManager: GameViewManager;
 	private _serveGameContent: ServeGameContent;
 	private _resizeGameView: boolean;
+	private _initializationWaiter: Promise<void>;
 
 	constructor(params: LocalInstanceEntityParameterObject) {
 		this.onStop = new Trigger<LocalInstanceEntity>();
@@ -120,6 +122,11 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 				}
 			});
 		}
+		this._initializationWaiter = this._initialize();
+	}
+
+	assertInitialized(): Promise<void> {
+		return this._initializationWaiter;
 	}
 
 	@computed
@@ -137,13 +144,6 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 	}
 
 	async start(): Promise<void> {
-		if (this._resizeGameView) {
-			const url = this.content.locator.asAbsoluteUrl();
-			const contentJson = await ApiRequest.get<{ content_url: string }>(url);
-			const gameJson = await ApiRequest.get<{ width: number, height: number }>(contentJson.content_url);
-			this._gameViewManager.setViewSize(gameJson.width, gameJson.height);
-		}
-
 		await this._gameViewManager.startGameContent(this._serveGameContent);
 		this._timeKeeper.start();
 	}
@@ -197,5 +197,25 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 		const t = Math.min(this._timeKeeper.now(), this.play.duration);
 		this.targetTime = t;
 		return t;
+	}
+
+	@action
+	setProfilerValueTrigger(cb: (value: ProfilerValue) => void): void {
+		const gameDriver = this._serveGameContent.agvGameContent.getGameDriver();
+		if (gameDriver) {
+			// TODO gameDriver の中身を触る処理なので ServeGameContent に移すべき
+			gameDriver._gameLoop._clock._profiler._calculateProfilerValueTrigger.add(cb);
+		} else {
+			this._serveGameContent.agvGameContent.addContentLoadListener(() => this.setProfilerValueTrigger(cb));
+		}
+	}
+
+	private async _initialize(): Promise<void> {
+		if (!this._resizeGameView)
+			return;
+		const url = this.content.locator.asAbsoluteUrl();
+		const contentJson = await ApiRequest.get<{ content_url: string }>(url);
+		const gameJson = await ApiRequest.get<{ width: number, height: number }>(contentJson.content_url);
+		this._gameViewManager.setViewSize(gameJson.width, gameJson.height);
 	}
 }

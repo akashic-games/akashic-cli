@@ -11,7 +11,6 @@
 <script>
 window.engineFiles = <%= engineFilesVariable %>;
 window.g = engineFiles.akashicEngine;
-// game-storageでrequireが使用されているので、requireの内容をgame-storage用のものに書き換える
 (function() {
     var originalRequire = window.require;
     window.require = function(moduleName) {
@@ -32,7 +31,6 @@ window.g = engineFiles.akashicEngine;
 <script src="./js/build/LocalScriptAsset.js"></script>
 <script src="./js/build/LocalTextAsset.js"></script>
 <% } %>
-<script src="./js/game-storage.strip.js"></script>
 <% if (version === "1") { %>
 <script src="./js/logger.js"></script>
 <% } %>

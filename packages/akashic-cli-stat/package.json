@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-stat",
-  "version": "0.4.68",
+  "version": "0.5.0",
   "description": "Project statistics tool for akashic.",
   "main": "lib/index.js",
   "scripts": {
@@ -23,9 +23,9 @@
     "package.json"
   ],
   "devDependencies": {
-    "@types/jasmine": "3.6.1",
+    "@types/jasmine": "3.6.2",
     "@types/mock-fs": "4.13.0",
-    "@types/node": "14.14.6",
+    "@types/node": "14.14.20",
     "jest": "26.6.3",
     "mock-fs": "4.13.0",
     "shx": "0.3.3",
@@ -34,7 +34,7 @@
   },
   "typings": "lib/index.d.ts",
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.5.54",
+    "@akashic/akashic-cli-commons": "0.6.0",
     "commander": "^5.0.0"
   },
   "publishConfig": {

@@ -10,6 +10,7 @@
   },
   "files": [
     "./../../node_modules/@akashic/akashic-engine/lib/main.d.ts",
+    "./storage/GameExternalStorage.ts",
     "./LocalScriptAsset.ts",
     "./LocalTextAsset.ts",
     "./LocalScriptAssetV3.ts",

@@ -1,10 +1,10 @@
 {
   "name": "@akashic/akashic-cli-export-html",
-  "version": "0.7.95",
+  "version": "1.2.0",
   "description": "A module to convert your Akashic game to a runnable standalone.",
   "main": "lib/index.js",
   "scripts": {
-    "prepublish": "npm run clean && npm run build && node ./build-template-support/checkAkashicVersions",
+    "prepublish": "npm run clean && npm run build",
     "clean": "shx rm -rf lib && shx rm -rf spec/build",
     "start": "npm run build && node bin/run",
     "build": "npm run build:app && npm run build:export && npm run build:templates && shx cp ./templates/engineFilesVersion.json ./lib",
@@ -24,10 +24,7 @@
     "lint-js": "eslint ./templates/**/*.js",
     "test": "npm run test:jest && npm run lint",
     "test:jest": "jest",
-    "update-template": "npm run update-template:v1 && npm run update-template:v2 && npm run update-template:v3 && node ./build-template-support/updateEngineFiles.js",
-    "update-template:v1": "node ./build-template-support/generateAkashicVersionsFile v1 && cd templates/template-export-html-v1 && npm run update && npm run build && cd ../../",
-    "update-template:v2": "node ./build-template-support/generateAkashicVersionsFile v2 && cd templates/template-export-html-v2 && npm run update && npm run build && cd ../../",
-    "update-template:v3": "node ./build-template-support/generateAkashicVersionsFile v3 && cd templates/template-export-html-v3 && npm run update && npm run build && cd ../../"
+    "update-template": "node ./build-template-support/updateEngineFiles.js"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
@@ -46,12 +43,12 @@
     "@types/archiver": "3.1.1",
     "@types/commander": "2.12.0",
     "@types/ejs": "3.0.5",
-    "@types/fs-extra": "9.0.3",
+    "@types/fs-extra": "9.0.6",
     "@types/fs-readdir-recursive": "1.0.0",
-    "@types/node": "14.14.6",
+    "@types/node": "14.14.20",
     "@types/uglify-js": "3.11.1",
     "browserify": "16.5.2",
-    "eslint": "7.13.0",
+    "eslint": "7.17.0",
     "jest": "26.6.3",
     "mock-fs": "4.13.0",
     "node-fetch": "2.6.1",
@@ -64,15 +61,15 @@
   },
   "typings": "lib/index.d.ts",
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.5.54",
-    "@akashic/akashic-cli-export-zip": "0.6.76",
-    "archiver": "~4.0.0",
+    "@akashic/akashic-cli-commons": "0.6.0",
+    "@akashic/akashic-cli-export-zip": "0.7.0",
+    "archiver": "~5.1.0",
     "commander": "5.1.0",
     "ejs": "~3.1.0",
     "fs-extra": "9.0.1",
     "fs-readdir-recursive": "~1.1.0",
     "https": "~1.0.0",
-    "uglify-js": "3.11.5"
+    "uglify-js": "3.12.4"
   },
   "publishConfig": {
     "access": "public",

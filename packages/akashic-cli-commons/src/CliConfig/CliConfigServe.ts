@@ -11,4 +11,6 @@ export interface CliConfigServe {
 	debugProxyAudio?: boolean;
 	allowExternal?: boolean;
 	targetDirs?: string[];
+	openBrowser?: boolean;
+	preserveDisconnected?: boolean;
 }

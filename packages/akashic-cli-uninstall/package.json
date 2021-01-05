@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-uninstall",
-  "version": "0.6.69",
+  "version": "0.7.1",
   "description": "npm uninstall wrapper module for Akashic games.",
   "main": "lib/index.js",
   "scripts": {
@@ -27,10 +27,10 @@
   "devDependencies": {
     "@types/commander": "2.12.2",
     "@types/form-data": "2.2.1",
-    "@types/fs-extra": "9.0.3",
-    "@types/jasmine": "3.6.1",
+    "@types/fs-extra": "9.0.6",
+    "@types/jasmine": "3.6.2",
     "@types/mock-fs": "4.13.0",
-    "@types/node": "14.14.6",
+    "@types/node": "14.14.20",
     "jest": "26.6.3",
     "mock-fs": "4.13.0",
     "rimraf": "3.0.2",
@@ -38,7 +38,7 @@
     "typescript": "3.9.7"
   },
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.5.54",
+    "@akashic/akashic-cli-commons": "0.6.0",
     "commander": "5.1.0"
   },
   "typings": "lib/index.d.ts",

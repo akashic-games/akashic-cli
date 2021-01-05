@@ -120,7 +120,7 @@ export class PlayEntity {
 		});
 		i.onStop.add(this._handleLocalInstanceStopped);
 		this.localInstances.push(i);
-		await i.start();
+		await i.assertInitialized();
 		return i;
 	}
 

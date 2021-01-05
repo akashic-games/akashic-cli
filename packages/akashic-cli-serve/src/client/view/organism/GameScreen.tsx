@@ -5,6 +5,10 @@ import {
 	PlayerInfoResolverDialog,
 	PlayerInfoResolverDialogProps
 } from "../molecule/PlayerInfoResolverDialog";
+import {
+	ProfilerCanvas,
+	ProfilerCanvasProps
+} from "../molecule/ProfilerCanvas";
 
 export interface GameScreenProps {
 	showsBackgroundImage: boolean;
@@ -14,6 +18,7 @@ export interface GameScreenProps {
 	gameHeight: number;
 	screenElement: HTMLElement;
 	playerInfoResolverDialogProps?: PlayerInfoResolverDialogProps;
+	profilerCanvasProps?: ProfilerCanvasProps;
 	shouldStopPropagationFunc: () => boolean;
 	onMouseMoveCapture?: (p: { x: number, y: number }) => void;
 	onClickCapture?: (p: { x: number, y: number }) => void;
@@ -28,7 +33,8 @@ export class GameScreen extends React.Component<GameScreenProps, {}> {
 			showsGrid,
 			gameWidth,
 			gameHeight,
-			playerInfoResolverDialogProps
+			playerInfoResolverDialogProps,
+			profilerCanvasProps
 		 } = this.props;
 		const bgImageStyle = (showsBgImage && !bgImage) ?  (" " + styles["pseudo-transparent-bg"]) : "";
 		return <div className={styles["game-screen"]} style={{ width: gameWidth, height: gameHeight }}>
@@ -50,6 +56,14 @@ export class GameScreen extends React.Component<GameScreenProps, {}> {
 				playerInfoResolverDialogProps ?
 					<div className={styles["dialog-wrapper"] + " external-ref_div_player-info-dialog"}>
 						<PlayerInfoResolverDialog {...playerInfoResolverDialogProps} />
+					</div> :
+					null
+			}
+			{
+				// TODO: プロファイラーの位置を調整する。横長のままセンターラインをゲーム画面と合わせるか、縦長にしてゲーム画面の右側に置く。
+				profilerCanvasProps ?
+					<div className={"external-ref_div_profiler-canvas"}>
+						<ProfilerCanvas {...profilerCanvasProps} />
 					</div> :
 					null
 			}

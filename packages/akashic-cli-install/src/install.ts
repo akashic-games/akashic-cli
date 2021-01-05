@@ -118,15 +118,30 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 				.then(() => {
 					installedModuleNames.forEach((name) => {
 						const libPath = path.resolve(".", "node_modules", name, "akashic-lib.json");
-						try {
-							const libJsonData: cmn.LibConfiguration = JSON.parse(fs.readFileSync(libPath, "utf8"));
+						// NOTE: akashic-lib.json の存在確認後に akashic-lib.json が削除された場合は処理が中断されてしまうことに注意
+						if (!fs.existsSync(libPath)) return;
+
+						const libJsonData: cmn.LibConfiguration = JSON.parse(fs.readFileSync(libPath, "utf8"));
+						if (libJsonData.gameConfigurationData) {
 							const environment = libJsonData.gameConfigurationData.environment;
-							if (libJsonData.gameConfigurationData && environment && environment.external) {
-								conf.addExternal(environment.external.name, environment.external.version);
+							if (environment && environment.external) {
+								Object.keys(environment.external).forEach(name => {
+									conf.addExternal(name, environment.external[name]);
+								});
 							}
-						} catch (error) {
-							if (error.code === "ENOENT") return; // akashic-lib.jsonを持っていないケース
-							throw error;
+						}
+
+						if (libJsonData.assetList) {
+							if (!conf._content.assets) {
+								conf._content.assets = {};
+							}
+							libJsonData.assetList.forEach(asset => {
+								const assetPath = cmn.Util.makeUnixPath(path.join("node_modules", name, asset.path));
+								conf._content.assets[assetPath] = {
+									...asset,
+									path: assetPath
+								};
+							});
 						}
 					});
 				})
@@ -142,12 +157,14 @@ export function install(param: InstallParameterObject, cb: (err: any) => void): 
 
 
 function _getPackageNameFromTgzFile(fileName: string): string {
-	let data: string;
+	let buf: Buffer;
 	const onentry = (entry: tar.FileStat) => {
 		const splitPath = entry.header.path.split("/");
 		// splitPath[0] は解凍後のディレクトリ名が入る。そのディレクトリ直下のpackage.jsonのみを対象とする。
 		if (splitPath[1] === "package.json") {
-			entry.on("data", c => data = c.toString());
+			let chunks: Uint8Array[]  = [];
+			entry.on("data", c => chunks.push(c));
+			entry.on("finish", () => buf = Buffer.concat(chunks));
 		}
 	};
 	tar.t({
@@ -155,6 +172,7 @@ function _getPackageNameFromTgzFile(fileName: string): string {
 		file: fileName,
 		sync: true
 	});
-	const json = JSON.parse(data);
+
+	const json = JSON.parse(buf.toString());
 	return json.name;
 }
