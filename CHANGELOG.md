@@ -1,5 +1,28 @@
 # CHANGELOG
 
+## 2.2.4 (2021-01-07)
+
+#### Enhancement
+* `akashic-cli-export-html`
+  * [#643](https://github.com/akashic-games/akashic-cli/pull/643) 【akashic-cli-export-html】内部コンポーネントの更新(engineFiles@3.0.3, engineFiles@2.1.50, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+* `akashic-cli-init`
+  * [#639](https://github.com/akashic-games/akashic-cli/pull/639) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Update Dependencies
+* `akashic-cli-config`
+  * [#642](https://github.com/akashic-games/akashic-cli/pull/642) fix(deps): update dependency ini to v1.3.6 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#570](https://github.com/akashic-games/akashic-cli/pull/570) fix(deps): update dependency socket.io to v3 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#628](https://github.com/akashic-games/akashic-cli/pull/628) chore(deps): update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`
+  * [#631](https://github.com/akashic-games/akashic-cli/pull/631) chore(deps): update all dependencies (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#629](https://github.com/akashic-games/akashic-cli/pull/629) chore(deps): update actions/setup-node action to v2 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- xnv ([@xnv](https://github.com/xnv))
+
 
 
 ## 2.2.1 (2020-12-23)
