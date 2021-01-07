@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "@akashic/akashic-cli-commons": "0.6.1",
-    "@akashic/headless-driver": "1.5.2",
+    "@akashic/headless-driver": "1.5.3",
     "@akashic/trigger": "1.0.0",
     "chalk": "4.1.0",
     "chokidar": "3.4.3",
@@ -38,7 +38,7 @@
   },
   "devDependencies": {
     "@akashic/amflow": "~3.0.0",
-    "@akashic/pdi-types": "~1.1.0",
+    "@akashic/pdi-types": "~1.1.1",
     "@akashic/playlog": "~3.1.0",
     "@storybook/addon-actions": "6.0.16",
     "@storybook/addon-knobs": "6.0.16",
