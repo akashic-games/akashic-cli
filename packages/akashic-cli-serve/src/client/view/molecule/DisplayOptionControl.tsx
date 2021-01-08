@@ -73,16 +73,18 @@ export class DisplayOptionControl extends React.Component<DisplayOptionControlPr
 							</div>
 							<div className={styles["label"]}>
 								<label>
-									<input
-										className={styles["checkbox"] + " external-ref_checkbox_shows-design-guideline"}
-										type="checkbox"
-										checked={showsDesignGuideline}
-										onChange={() => onChangeShowDesignGuideline(!showsDesignGuideline)}
-									/>
-									Shows Design Guidelines for "ニコ生ゲーム"
-									<a href="https://akashic-games.github.io/shin-ichiba/design-guidelines.html" target="_blank">
-										<i className="material-icons">help</i>
-									</a>
+									<span className={styles["design-guideline"]}>
+										<input
+											className={styles["checkbox"] + " external-ref_checkbox_shows-design-guideline"}
+											type="checkbox"
+											checked={showsDesignGuideline}
+											onChange={() => onChangeShowDesignGuideline(!showsDesignGuideline)}
+										/>
+										Show Design Guidelines
+										<a href="https://akashic-games.github.io/shin-ichiba/design-guidelines.html" target="_blank">
+											<i className={"material-icons " + styles["help-link-icon"]}>help</i>
+										</a>
+									</span>
 								</label>
 							</div>
 						</div>
