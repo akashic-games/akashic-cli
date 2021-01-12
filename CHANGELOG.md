@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.3.0 (2021-01-12)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#622](https://github.com/akashic-games/akashic-cli/pull/622) add design guideline image in akashic-cli-serve ([@dera-](https://github.com/dera-))
+
+#### Committers: 1
+- [@dera-](https://github.com/dera-)
+
 ## 2.2.5 (2021-01-07)
 
 #### Enhancement
