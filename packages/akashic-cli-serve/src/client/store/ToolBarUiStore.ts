@@ -9,6 +9,7 @@ export class ToolBarUiStore {
 	@observable showsDisplayOptionPopover: boolean;
 	@observable showsBackgroundImage: boolean;
 	@observable showsGrid: boolean;
+	@observable showsDesignGuideline: boolean;
 
 	constructor() {
 		this.currentTimePreview = 0;
@@ -18,6 +19,7 @@ export class ToolBarUiStore {
 		this.showsDisplayOptionPopover = false;
 		this.showsBackgroundImage = storage.data.showsBackgroundImage;
 		this.showsGrid = storage.data.showsGrid;
+		this.showsDesignGuideline = storage.data.showsDesignGuideline;
 	}
 
 	@action
@@ -57,5 +59,11 @@ export class ToolBarUiStore {
 	setShowGrid(show: boolean): void {
 		this.showsGrid = show;
 		storage.put({ showsGrid: show });
+	}
+
+	@action
+	setShowDesignGuideline(show: boolean): void {
+		this.showsDesignGuideline = show;
+		storage.put({ showsDesignGuideline: show });
 	}
 }

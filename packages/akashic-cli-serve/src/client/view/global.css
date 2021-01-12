@@ -33,6 +33,7 @@
 
 	--zindex-game-screen-bg: -1;
 	--zindex-game-screen: calc(var(--zindex-game-screen-bg) + 1);
+	--zindex-game-screen-guideline: calc(var(--zindex-game-screen-bg) + 1);
 	--zindex-game-screen-grid: calc(var(--zindex-game-screen-bg) + 1);
 	--zindex-popover: 10;
 	--zindex-notification: 20;
