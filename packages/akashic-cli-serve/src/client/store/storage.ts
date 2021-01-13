@@ -23,6 +23,7 @@ export interface StorageData {
 	stopsGameOnTimeout: boolean;
 	totalTimeLimitInputValue: number;
 	showsProfiler: boolean;
+	showsDesignGuideline: boolean;
 }
 
 function asBool(s: string | null): boolean | null {
@@ -94,7 +95,8 @@ export class Storage {
 			usePreferredTotalTimeLimit: choose(asBool(getQueryValue(qp.usePreferredTotalTimeLimit)), s.usePreferredTotalTimeLimit, false),
 			stopsGameOnTimeout: choose(asBool(getQueryValue(qp.stopsGameOnTimeout)), s.stopsGameOnTimeout, false),
 			totalTimeLimitInputValue: choose(asNumber(getQueryValue(qp.totalTimeLimitInputValue)), s.totalTimeLimitInputValue, 85),
-			showsProfiler: choose(asBool(getQueryValue(qp.showsProfiler)), s.showsProfiler, false)
+			showsProfiler: choose(asBool(getQueryValue(qp.showsProfiler)), s.showsProfiler, false),
+			showsDesignGuideline: choose(asBool(getQueryValue(qp.showsDesignGuideline)), s.showsDesignGuideline, false)
 		});
 
 		const playerId: string = choose(getQueryValue(qp.playerId), s.playerId, undefined);

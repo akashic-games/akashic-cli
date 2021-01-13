@@ -33,6 +33,10 @@ export class UiOperator {
 		this.store.toolBarUiStore.setShowGrid(show);
 	}
 
+	setShowDesignGuideline = (show: boolean) => {
+		this.store.toolBarUiStore.setShowDesignGuideline(show);
+	}
+
 	setDevtoolHeight = (height: number) => {
 		this.store.devtoolUiStore.setHeight(height);
 	}

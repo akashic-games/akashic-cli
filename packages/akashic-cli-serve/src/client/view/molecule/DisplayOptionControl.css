@@ -1,7 +1,7 @@
 
 .popover {
 	position: absolute;
-	min-width: 190px;
+	min-width: 200px;
 	right: 0;
 	margin: 1px;
 	padding: 5px;
@@ -38,4 +38,14 @@
 .checkbox {
 	margin: 3px 0.5ex;
 	padding: initial;
+}
+
+.design-guideline {
+	display: flex;
+}
+
+.help-link-icon {
+	font-size: 16px;
+	color: var(--color-tool-text);
+	margin: 0px 3px;
 }
