@@ -8,6 +8,8 @@ import { NodeModules } from "./NodeModules";
 export { NodeModules };
 import { ConfigurationFile } from "./ConfigurationFile";
 export { ConfigurationFile };
+import { LibConfigurationFile } from "./LibConfigurationFile";
+export { LibConfigurationFile };
 import { Configuration, ConfigurationParameterObject } from "./Configuration";
 export { Configuration, ConfigurationParameterObject };
 import {
