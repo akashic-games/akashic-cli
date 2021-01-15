@@ -144,8 +144,8 @@ async function cli(cliConfigParam: CliConfigServe) {
 				// コンテンツに変更があったらplayを新規に作り直して再起動
 				const contentId = `${i}`;
 				// 先に対応するコンテンツのrunnerを全て停止させる
-				playStore.getPlayEntityFromContentId(contentId).forEach(entity => {
-					entity.runners.forEach(runner => {
+				playStore.getPlayIdsFromContentId(contentId).forEach(playId => {
+					playStore.getRunners(playId).forEach(runner => {
 						runnerStore.stopRunner(runner.runnerId);
 					});
 				});

@@ -92,9 +92,8 @@ export class PlayStore {
 		return this.playManager.getAllPlays();
 	}
 
-	getPlayEntityFromContentId(contentId: string): PlayEntity[] {
-		const playIds = Object.keys(this.playEntities).filter(key => contentId === this.playEntities[key].contentLocator.contentId);
-		return playIds.map(playId => this.playEntities[playId]).filter(entity => entity != null);
+	getPlayIdsFromContentId(contentId: string): string[] {
+		return Object.keys(this.playEntities).filter(key => contentId === this.playEntities[key].contentLocator.contentId);
 	}
 
 	async stopPlay(playId: string): Promise<void> {
