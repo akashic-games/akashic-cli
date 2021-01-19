@@ -143,19 +143,20 @@ async function cli(cliConfigParam: CliConfigServe) {
 				}
 				// コンテンツに変更があったらplayを新規に作り直して再起動
 				const contentId = `${i}`;
-				// 先に対応するコンテンツのrunnerを全て停止させる
+				const targetPlayIds: string[] = [];
+				// 対象のコンテンツIDしか分からないので先に対応するコンテンツのrunnerを全て停止させる
 				playStore.getPlayIdsFromContentId(contentId).forEach(playId => {
 					playStore.getRunners(playId).forEach(runner => {
 						runnerStore.stopRunner(runner.runnerId);
 					});
+					targetPlayIds.push(playId);
 				});
 				const playId = await playStore.createPlay(new ServerContentLocator({ contentId }));
 				const token = amflowManager.createPlayToken(playId, "", "", true, {});
 				const amflow = playStore.createAMFlow(playId);
 				await runnerStore.createAndStartRunner({ playId, isActive: true, token, amflow, contentId });
 				await playStore.resumePlayDuration(playId);
-				// クライアント側ではmessageしか利用せずplayIdは恐らく不要だと思うが、受け取り側の型がこの形になっているのでplayIdも送る
-				io.emit("playBroadcast", { playId, message: { type: "switchPlay", nextPlayId: playId } });
+				targetPlayIds.forEach(id => io.emit("playBroadcast", { playId: id, message: { type: "switchPlay", nextPlayId: playId } }));
 			});
 		}
 	}
