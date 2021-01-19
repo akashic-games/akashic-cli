@@ -1,7 +1,9 @@
 import * as cmn from "@akashic/akashic-cli-commons";
 import * as chokidar from "chokidar";
 import * as path from "path";
+import * as fs from "fs";
 import { Configuration, isAudioFilePath, isImageFilePath } from "./Configuration";
+import { LibConfiguration } from "./LibConfiguration";
 
 export interface AssetScanDirectoryTable  {
 	/**
@@ -117,6 +119,8 @@ export function promiseScanAsset(param: ScanAssetParameterObject): Promise<void>
 
 	var restoreDirectory = cmn.Util.chdir(param.cwd);
 	return Promise.resolve()
+		// TODO: game.json が存在しなければ処理をスキップするように
+		// (game.json と akashic-lib.json が双方存在しなかった場合の挙動は要検討)
 		.then(() => cmn.ConfigurationFile.read("./game.json", param.logger))
 		.then((content: cmn.GameConfiguration) => {
 			var conf = new Configuration({
@@ -154,6 +158,35 @@ export function promiseScanAsset(param: ScanAssetParameterObject): Promise<void>
 			})
 			.then(() => cmn.ConfigurationFile.write(conf.getContent(), "./game.json", param.logger))
 			.then(() => param.logger.info("Done!"));
+		})
+		.then(() => {
+			const libPath = "./akashic-lib.json";
+			if (!fs.existsSync(libPath)) return;
+
+			return cmn.LibConfigurationFile.read(libPath).then(content => {
+				const lib = new LibConfiguration({
+					content,
+					basepath: "."
+				});
+				return Promise.resolve()
+					.then(() => {
+						if (param.target === "all") {
+							// NOTE: target = all の場合のみ assets ディレクトリもスキャン対象とする
+							const imageDirs = param.assetScanDirectoryTable.image.concat("assets");
+							const audioDirs = param.assetScanDirectoryTable.audio.concat("assets");
+							return lib
+								.scanImageAssets(imageDirs)
+								.then(() => lib.scanAudioAssets(audioDirs));
+						} else if (param.target === "image") {
+							return lib
+								.scanImageAssets(param.assetScanDirectoryTable.image);
+						} else if (param.target === "audio") {
+							return lib
+								.scanAudioAssets(param.assetScanDirectoryTable.audio);
+						}
+					})
+					.then(() => cmn.LibConfigurationFile.write(lib.sortAssets().getContent(), libPath));
+			});
 		})
 		.then(restoreDirectory)
 		.catch((err) => {

@@ -19,6 +19,8 @@
     "./src/helpers/MockPromisedNpm.ts",
     "./src/getAudioDurationSpec.ts",
     "./src/ConfigurationSpec.ts",
-    "./src/scanSpec.ts"
+    "./src/LibConfigurationSpec.ts",
+    "./src/scanSpec.ts",
+    "./src/scanUtilsSpec.ts"
   ]
 }
