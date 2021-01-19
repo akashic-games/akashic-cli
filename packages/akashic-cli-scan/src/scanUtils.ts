@@ -6,6 +6,19 @@ import { getAudioDuration } from "./getAudioDuration";
 
 export type AssetFilter = (path: string) => boolean;
 
+export function scriptAssetFilter(p: string): boolean {
+	return /.*\.js$/i.test(p);
+}
+
+export function textAssetFilter(p: string): boolean {
+	// NOTE: その他ファイルはすべてスクリプトアセットとして扱う
+	return !(
+		scriptAssetFilter(p) ||
+		imageAssetFilter(p) ||
+		audioAssetFilter(p)
+	);
+}
+
 export function imageAssetFilter(p: string): boolean {
 	return /.*\.(png|gif|jp(?:e)?g)$/i.test(p);
 }
@@ -22,6 +35,41 @@ export interface AudioDurationInfo {
 }
 
 export type AudioDurationInfoMap = { [path: string]: AudioDurationInfo };
+
+export async function scanScriptAssets(
+	baseDir: string,
+	dir: string,
+	_logger?: cmn.Logger,
+	filter: AssetFilter = scriptAssetFilter
+): Promise<cmn.AssetConfiguration[]> {
+	const relativeFilePaths: string[] = readdirRecursive(path.join(baseDir, dir)).filter(filter);
+	return relativeFilePaths
+		.map(relativeFilePath => {
+			return {
+				type: "script",
+				path: cmn.Util.makeUnixPath(path.join(dir, relativeFilePath)),
+				global: true
+			};
+		})
+		.filter(asset => asset != null);
+}
+
+export async function scanTextAssets(
+	baseDir: string,
+	dir: string,
+	_logger?: cmn.Logger,
+	filter: AssetFilter = textAssetFilter
+): Promise<cmn.AssetConfiguration[]> {
+	const relativeFilePaths: string[] = readdirRecursive(path.join(baseDir, dir)).filter(filter);
+	return relativeFilePaths
+		.map(relativeFilePath => {
+			return {
+				type: "text",
+				path: cmn.Util.makeUnixPath(path.join(dir, relativeFilePath))
+			};
+		})
+		.filter(asset => asset != null);
+}
 
 export async function scanImageAssets(
 	baseDir: string,

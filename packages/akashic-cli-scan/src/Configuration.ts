@@ -6,6 +6,7 @@ import { getAudioDuration } from "./getAudioDuration";
 import { imageSize } from "image-size";
 import { ISize } from "image-size/dist/types/interface";
 import { AssetScanDirectoryTable, AssetExtension } from "./scan";
+import { scanAudioAssets, scanImageAssets, scanScriptAssets, scanTextAssets } from "./scanUtils";
 
 export function isImageFilePath(p: string): boolean { return /.*\.(png|gif|jpg|jpeg)$/i.test(p); }
 export function isAudioFilePath(p: string): boolean { return /.*\.(ogg|aac|mp4)$/i.test(p); }
@@ -78,9 +79,38 @@ export class Configuration extends cmn.Configuration {
 		this._assetIdResolveMode = param.resolveAssetIdsFromPath ? "path" : "basename" ;
 	}
 
-	scanAssets(info: ScanAssetsInformation): Promise<void> {
-		return Promise.resolve()
+	async scanAssets(info: ScanAssetsInformation): Promise<void> {
+		if (Array.isArray(this.getContent().assets)) {
+			// NOTE: 急場しのぎ対応。game.json の assets フィールドが配列であれば配列としてアセットをスキャンする。
+			const base = this._basepath;
+			const scriptDir = info.scanDirectoryTable.script.concat("assets");
+			const textDir = info.scanDirectoryTable.text.concat("assets");
+			const imageDir = info.scanDirectoryTable.image.concat("assets");
+			const audioDir = info.scanDirectoryTable.audio.concat("assets");
 
+			const assetArray: cmn.AssetConfiguration[] = [];
+			for (const dir of scriptDir) {
+				const assets = await scanScriptAssets(base, dir, this._logger);
+				assetArray.push(...assets);
+			}
+			for (const dir of textDir) {
+				const assets = await scanTextAssets(base, dir, this._logger, createTextAssetExtensionFilter(info.extension.text));
+				assetArray.push(...assets);
+			}
+			for (const dir of imageDir) {
+				const assets = await scanImageAssets(base, dir, this._logger);
+				assetArray.push(...assets);
+			}
+			for (const dir of audioDir) {
+				const assets = await scanAudioAssets(base, dir, this._logger);
+				assetArray.push(...assets);
+			}
+
+			const content = this.getContent();
+			content.assets = assetArray as any;
+			return;
+		}
+		return Promise.resolve()
 			.then(() => this.scanAssetsAudio(info.scanDirectoryTable.audio))
 			.then(() => {
 				this.scanAssetsImage(info.scanDirectoryTable.image);
