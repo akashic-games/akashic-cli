@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 2.4.0 (2021-01-19)
+
+#### Enhancement
+* `akashic-cli-commons`, `akashic-cli-scan`
+  * [#651](https://github.com/akashic-games/akashic-cli/pull/651) feat(scan): write asset config to the akashic-lib.json if exists ([@yu-ogi](https://github.com/yu-ogi))
+* `akashic-cli-init`
+  * [#649](https://github.com/akashic-games/akashic-cli/pull/649) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Committers: 2
+- [@yu-ogi](https://github.com/yu-ogi)
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.3.0 (2021-01-12)
 
 #### Enhancement
