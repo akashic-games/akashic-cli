@@ -119,6 +119,8 @@ export function promiseScanAsset(param: ScanAssetParameterObject): Promise<void>
 
 	var restoreDirectory = cmn.Util.chdir(param.cwd);
 	return Promise.resolve()
+		// TODO: game.json が存在しなければ処理をスキップするように
+		// (game.json と akashic-lib.json が双方存在しなかった場合の挙動は要検討)
 		.then(() => cmn.ConfigurationFile.read("./game.json", param.logger))
 		.then((content: cmn.GameConfiguration) => {
 			var conf = new Configuration({
