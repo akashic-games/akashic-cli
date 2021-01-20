@@ -228,7 +228,9 @@ export class Operator {
 		try {
 			switch (arg.message.type) {
 			case "switchPlay":  // TODO typeを型づける
-				this.setCurrentPlay(this.store.playStore.plays[arg.message.nextPlayId]);
+				if (this.store.currentPlay.playId === arg.playId) {
+					this.setCurrentPlay(this.store.playStore.plays[arg.message.nextPlayId]);
+				}
 				break;
 			default:
 				throw new Error("invalid type: " + arg.message.type);
