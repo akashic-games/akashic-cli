@@ -6,7 +6,7 @@ import { getAudioDuration } from "./getAudioDuration";
 import { imageSize } from "image-size";
 import { ISize } from "image-size/dist/types/interface";
 import { AssetScanDirectoryTable, AssetExtension } from "./scan";
-import { scanAudioAssets, scanImageAssets, scanScriptAssets, scanTextAssets } from "./scanUtils";
+import { scanAudioAssets, scanImageAssets, scanScriptAssets, scanTextAssets, textAssetFilter } from "./scanUtils";
 
 export function isImageFilePath(p: string): boolean { return /.*\.(png|gif|jpg|jpeg)$/i.test(p); }
 export function isAudioFilePath(p: string): boolean { return /.*\.(ogg|aac|mp4)$/i.test(p); }
@@ -94,7 +94,16 @@ export class Configuration extends cmn.Configuration {
 				assetArray.push(...assets);
 			}
 			for (const dir of textDir) {
-				const assets = await scanTextAssets(base, dir, this._logger, createTextAssetExtensionFilter(info.extension.text));
+				const assets = await scanTextAssets(
+					base,
+					dir,
+					this._logger,
+					p => {
+						if (info.extension.text && info.extension.text.length) {
+							return (new RegExp(info.extension.text.join("|"), "i")).test(p);
+						}
+						return textAssetFilter(p);
+					});
 				assetArray.push(...assets);
 			}
 			for (const dir of imageDir) {

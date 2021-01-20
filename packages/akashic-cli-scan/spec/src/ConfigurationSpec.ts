@@ -234,6 +234,12 @@ describe("Configuration", function () {
 					"_1.js": "var x = 1;",
 				},
 			},
+			"assets": {
+				"assets_d.png": DUMMY_1x1_PNG_DATA,
+				"assets_$.conf": "dummy",
+				"assets_.ogg": DUMMY_OGG_DATA,
+				"assets_1.js": "var x = 1;",
+			},
 		});
 
 		const conf = new cnf.Configuration({
@@ -257,25 +263,46 @@ describe("Configuration", function () {
 		// NOTE: 要素の順番は実装に依存する
 		expect(assets).toEqual([
 			{
-				type: "script",
-				path: "script/foo/_1.js",
-				global: true
+				"type": "script",
+				"path": "script/foo/_1.js",
+				"global": true
 			},
 			{
-				type: "text",
-				path: "text/foo/$.txt"
+				"type": "script",
+				"path": "assets/assets_1.js",
+				"global": true
 			},
 			{
-				type: "image",
-				path: "image/foo/d.png",
-				width: 1,
-				height: 1
+				"type": "text",
+				"path": "text/foo/$.txt"
 			},
 			{
-				type: "audio",
-				path: "audio/foo/_",
-				systemId: "sound",
-				duration: 1250
+				"type": "text",
+				"path": "assets/assets_$.conf"
+			},
+			{
+				"type": "image",
+				"path": "image/foo/d.png",
+				"width": 1,
+				"height": 1
+			},
+			{
+				"type": "image",
+				"path": "assets/assets_d.png",
+				"width": 1,
+				"height": 1
+			},
+			{
+				"type": "audio",
+				"path": "audio/foo/_",
+				"systemId": "sound",
+				"duration": 1250
+			},
+			{
+				"type": "audio",
+				"path": "assets/assets_",
+				"systemId": "sound",
+				"duration": 1250
 			}
 		]);
 	});
