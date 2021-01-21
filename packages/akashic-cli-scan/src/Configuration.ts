@@ -93,17 +93,17 @@ export class Configuration extends cmn.Configuration {
 				const assets = await scanScriptAssets(base, dir, this._logger);
 				assetArray.push(...assets);
 			}
+			const textAssetFilterRe =
+				info.extension.text && info.extension.text.length
+					? new RegExp(info.extension.text.join("|"), "i")
+					: null;
 			for (const dir of textDir) {
 				const assets = await scanTextAssets(
 					base,
 					dir,
 					this._logger,
-					p => {
-						if (info.extension.text && info.extension.text.length) {
-							return (new RegExp(info.extension.text.join("|"), "i")).test(p);
-						}
-						return textAssetFilter(p);
-					});
+					p => textAssetFilterRe ? textAssetFilterRe.test(p) : textAssetFilter(p)
+				);
 				assetArray.push(...assets);
 			}
 			for (const dir of imageDir) {

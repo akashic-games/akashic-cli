@@ -236,6 +236,7 @@ describe("Configuration", function () {
 			},
 			"assets": {
 				"assets_d.png": DUMMY_1x1_PNG_DATA,
+				"assets_#.yml": "dummy",
 				"assets_$.conf": "dummy",
 				"assets_.ogg": DUMMY_OGG_DATA,
 				"assets_1.js": "var x = 1;",
@@ -259,9 +260,8 @@ describe("Configuration", function () {
 			}
 		});
 
-		const assets = conf.getContent().assets as any;
 		// NOTE: 要素の順番は実装に依存する
-		expect(assets).toEqual([
+		expect(conf.getContent().assets as any).toEqual([
 			{
 				"type": "script",
 				"path": "script/foo/_1.js",
@@ -278,7 +278,69 @@ describe("Configuration", function () {
 			},
 			{
 				"type": "text",
+				"path": "assets/assets_#.yml"
+			},
+			{
+				"type": "text",
 				"path": "assets/assets_$.conf"
+			},
+			{
+				"type": "image",
+				"path": "image/foo/d.png",
+				"width": 1,
+				"height": 1
+			},
+			{
+				"type": "image",
+				"path": "assets/assets_d.png",
+				"width": 1,
+				"height": 1
+			},
+			{
+				"type": "audio",
+				"path": "audio/foo/_",
+				"systemId": "sound",
+				"duration": 1250
+			},
+			{
+				"type": "audio",
+				"path": "assets/assets_",
+				"systemId": "sound",
+				"duration": 1250
+			}
+		]);
+
+		await conf.scanAssets({
+			scanDirectoryTable: {
+				audio: ["audio"],
+				image: ["image"],
+				script: ["script"],
+				text: ["text"]
+			},
+			extension: {
+				text: ["txt", "yml"]
+			}
+		});
+
+		// NOTE: 要素の順番は実装に依存する
+		expect(conf.getContent().assets as any).toEqual([
+			{
+				"type": "script",
+				"path": "script/foo/_1.js",
+				"global": true
+			},
+			{
+				"type": "script",
+				"path": "assets/assets_1.js",
+				"global": true
+			},
+			{
+				"type": "text",
+				"path": "text/foo/$.txt"
+			},
+			{
+				"type": "text",
+				"path": "assets/assets_#.yml"
 			},
 			{
 				"type": "image",
