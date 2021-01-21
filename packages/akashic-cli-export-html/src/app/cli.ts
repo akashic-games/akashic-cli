@@ -1,9 +1,9 @@
 import * as fs from "fs";
 import * as path from "path";
-import * as commander from "commander";
 import { ConsoleLogger, CliConfigExportHtml, CliConfigurationFile } from "@akashic/akashic-cli-commons";
-import { promiseExportHTML, ExportHTMLParameterObject } from "./exportHTML";
+import * as commander from "commander";
 import { promiseExportAtsumaru } from "./exportAtsumaru";
+import { promiseExportHTML, ExportHTMLParameterObject } from "./exportHTML";
 
 const ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "package.json"), "utf8")).version;
 
@@ -88,7 +88,7 @@ export function run(argv: string[]): void {
 	const argvCopy = dropDeprecatedArgs(argv);
 	commander.parse(argvCopy);
 
-	CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashic.config.js"), (error, configuration) => {
+	CliConfigurationFile.read(path.join(commander.cwd || process.cwd(), "akashic.config.js"), (error, configuration) => {
 		if (error) {
 			console.error(error);
 			process.exit(1);
@@ -96,20 +96,20 @@ export function run(argv: string[]): void {
 
 		const conf = configuration.commandOptions.export ? (configuration.commandOptions.export.html || {}) : {};
 		cli({
-			cwd: commander["cwd"] ?? conf.cwd,
-			force: commander["force"] ?? conf.force,
-			quiet: commander["quiet"] ?? conf.quiet,
-			output: commander["output"] ?? conf.output,
-			source: commander["source"] ?? conf.source,
-			strip: commander["strip"] ?? conf.strip,
-			minify: commander["minify"] ?? conf.minify,
-			bundle: commander["bundle"] ?? conf.bundle,
-			magnify: commander["magnify"] ?? conf.magnify,
-			hashFilename: commander["hashFilename"] ?? conf.hashFilename,
-			injects: commander["inject"] ?? conf.injects,
-			atsumaru: commander["atsumaru"] ?? conf.atsumaru,
-			autoSendEventName: commander["autoSendEventName"] ?? commander["autoSendEvents"] ?? conf.autoSendEventName ?? conf.autoSendEvents,
-			omitUnbundledJs: commander["omitUnbundledJs"] ?? conf.omitUnbundledJs
+			cwd: commander.cwd ?? conf.cwd,
+			force: commander.force ?? conf.force,
+			quiet: commander.quiet ?? conf.quiet,
+			output: commander.output ?? conf.output,
+			source: commander.source ?? conf.source,
+			strip: commander.strip ?? conf.strip,
+			minify: commander.minify ?? conf.minify,
+			bundle: commander.bundle ?? conf.bundle,
+			magnify: commander.magnify ?? conf.magnify,
+			hashFilename: commander.hashFilename ?? conf.hashFilename,
+			injects: commander.inject ?? conf.injects,
+			atsumaru: commander.atsumaru ?? conf.atsumaru,
+			autoSendEventName: commander.autoSendEventName ?? commander.autoSendEvents ?? conf.autoSendEventName ?? conf.autoSendEvents,
+			omitUnbundledJs: commander.omitUnbundledJs ?? conf.omitUnbundledJs
 		});
 	});
 }

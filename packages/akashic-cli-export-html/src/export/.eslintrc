@@ -1,0 +1,12 @@
+{
+    "extends": "@akashic/eslint-config",
+    "parserOptions": {
+        "project": "./src/export/tsconfig.json",
+        "sourceType": "module"
+    },
+    "rules": {
+        "@typescript-eslint/no-unused-vars": ["error", {
+            "vars": "local"
+        }]
+    }
+}
