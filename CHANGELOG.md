@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 2.5.0 (2021-01-21)
+
+#### Enhancement
+* `akashic-cli-scan`
+  * [#653](https://github.com/akashic-games/akashic-cli/pull/653) feat(scan): scan assets as array ([@yu-ogi](https://github.com/yu-ogi))
+* `akashic-cli-init`
+  * [#652](https://github.com/akashic-games/akashic-cli/pull/652) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Committers: 2
+- [@yu-ogi](https://github.com/yu-ogi)
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.4.0 (2021-01-19)
 
 #### Enhancement
