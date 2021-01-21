@@ -205,6 +205,170 @@ describe("Configuration", function () {
 		}, done.fail);
 	});
 
+	it("scan assets as array if 'assets' filed of the game.json defined as array", async () => {
+		const gamejson = {
+			width: 320,
+			height: 240,
+			fps: 30,
+			assets: [] as any
+		};
+		mockfs({
+			"game.json": JSON.stringify(gamejson),
+			"image": {
+				"foo": {
+					"d.png": DUMMY_1x1_PNG_DATA,
+				},
+			},
+			"text": {
+				"foo": {
+					"$.txt": "dummy",
+				},
+			},
+			"audio": {
+				"foo": {
+					"_.ogg": DUMMY_OGG_DATA,
+				},
+			},
+			"script": {
+				"foo": {
+					"_1.js": "var x = 1;",
+				},
+			},
+			"assets": {
+				"assets_d.png": DUMMY_1x1_PNG_DATA,
+				"assets_#.yml": "dummy",
+				"assets_$.conf": "dummy",
+				"assets_.ogg": DUMMY_OGG_DATA,
+				"assets_1.js": "var x = 1;",
+			},
+		});
+
+		const conf = new cnf.Configuration({
+			content: gamejson,
+			logger: nullLogger,
+			basepath: "./"
+		});
+		await conf.scanAssets({
+			scanDirectoryTable: {
+				audio: ["audio"],
+				image: ["image"],
+				script: ["script"],
+				text: ["text"]
+			},
+			extension: {
+				text: []
+			}
+		});
+
+		// NOTE: 要素の順番は実装に依存する
+		expect(conf.getContent().assets as any).toEqual([
+			{
+				"type": "script",
+				"path": "script/foo/_1.js",
+				"global": true
+			},
+			{
+				"type": "script",
+				"path": "assets/assets_1.js",
+				"global": true
+			},
+			{
+				"type": "text",
+				"path": "text/foo/$.txt"
+			},
+			{
+				"type": "text",
+				"path": "assets/assets_#.yml"
+			},
+			{
+				"type": "text",
+				"path": "assets/assets_$.conf"
+			},
+			{
+				"type": "image",
+				"path": "image/foo/d.png",
+				"width": 1,
+				"height": 1
+			},
+			{
+				"type": "image",
+				"path": "assets/assets_d.png",
+				"width": 1,
+				"height": 1
+			},
+			{
+				"type": "audio",
+				"path": "audio/foo/_",
+				"systemId": "sound",
+				"duration": 1250
+			},
+			{
+				"type": "audio",
+				"path": "assets/assets_",
+				"systemId": "sound",
+				"duration": 1250
+			}
+		]);
+
+		await conf.scanAssets({
+			scanDirectoryTable: {
+				audio: ["audio"],
+				image: ["image"],
+				script: ["script"],
+				text: ["text"]
+			},
+			extension: {
+				text: ["txt", "yml"]
+			}
+		});
+
+		// NOTE: 要素の順番は実装に依存する
+		expect(conf.getContent().assets as any).toEqual([
+			{
+				"type": "script",
+				"path": "script/foo/_1.js",
+				"global": true
+			},
+			{
+				"type": "script",
+				"path": "assets/assets_1.js",
+				"global": true
+			},
+			{
+				"type": "text",
+				"path": "text/foo/$.txt"
+			},
+			{
+				"type": "text",
+				"path": "assets/assets_#.yml"
+			},
+			{
+				"type": "image",
+				"path": "image/foo/d.png",
+				"width": 1,
+				"height": 1
+			},
+			{
+				"type": "image",
+				"path": "assets/assets_d.png",
+				"width": 1,
+				"height": 1
+			},
+			{
+				"type": "audio",
+				"path": "audio/foo/_",
+				"systemId": "sound",
+				"duration": 1250
+			},
+			{
+				"type": "audio",
+				"path": "assets/assets_",
+				"systemId": "sound",
+				"duration": 1250
+			}
+		]);
+	});
+
 	it("scan image assets info", function () {
 		var gamejson: any = {
 			assets: {

@@ -2,7 +2,7 @@ import * as path from "path";
 import * as fs from "fs";
 import * as cmn from "@akashic/akashic-cli-commons";
 import * as mockfs from "mock-fs";
-import { scanAudioAssets, scanImageAssets } from "../../lib/scanUtils";
+import { scanAudioAssets, scanImageAssets, scanScriptAssets, scanTextAssets } from "../../lib/scanUtils";
 
 describe("scanUtils", () => {
 	const nullLogger = new cmn.ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
@@ -17,8 +17,8 @@ describe("scanUtils", () => {
 			"game": {
 				"text": {
 					"foo": {
-						"$.txt": "dummy",
-					},
+						"$.json": "{}",
+					}
 				},
 				"audio": {
 					"foo": {
@@ -49,6 +49,64 @@ describe("scanUtils", () => {
 
 	afterEach(() => {
 		mockfs.restore();
+	});
+
+	it("scanScirptAssets()", async () => {
+		expect(
+			await scanScriptAssets(
+				"./game",
+				"script",
+				nullLogger
+			)
+		).toEqual([
+			{
+				type: "script",
+				path: "script/foo/_1.js",
+				global: true
+			}
+		]);
+
+		expect(
+			await scanScriptAssets(
+				"./game",
+				"assets",
+				nullLogger
+			)
+		).toEqual([
+			{
+				type: "script",
+				path: "assets/_.js",
+				global: true
+			}
+		]);
+	});
+
+	it("scanTextAssets()", async () => {
+		expect(
+			await scanTextAssets(
+				"./game",
+				"text",
+				nullLogger
+			)
+		).toEqual([
+			{
+				type: "text",
+				path: "text/foo/$.json"
+			}
+		]);
+
+		expect(
+			await scanTextAssets(
+				"./game",
+				"assets",
+				nullLogger
+			)
+		).toEqual([
+			{
+				type: "text",
+				path: "assets/_.txt"
+			}
+		]);
 	});
 
 	it("scanImageAssets()", async () => {
