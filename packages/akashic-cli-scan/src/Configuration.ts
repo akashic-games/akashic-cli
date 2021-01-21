@@ -119,6 +119,8 @@ export class Configuration extends cmn.Configuration {
 			content.assets = assetArray as any;
 			return;
 		}
+
+		// TODO: 全体的に async/await を使うようにする
 		return Promise.resolve()
 			.then(() => this.scanAssetsAudio(info.scanDirectoryTable.audio))
 			.then(() => {
