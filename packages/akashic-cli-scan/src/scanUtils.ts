@@ -11,7 +11,7 @@ export function scriptAssetFilter(p: string): boolean {
 }
 
 export function textAssetFilter(p: string): boolean {
-	// NOTE: その他ファイルはすべてスクリプトアセットとして扱う
+	// NOTE: その他ファイルはすべてテキストアセットとして扱う
 	return !(
 		scriptAssetFilter(p) ||
 		imageAssetFilter(p) ||
