@@ -65,17 +65,27 @@ try{
 	// ゲームディレクトリを作成しつつakashic-cli-initのテスト
 	console.log("test @akashic/akashic-cli-init");
 	shell.cd(`${targetDir}/game`);
-	execSync(`${akashicCliPath} init -y`);
+	execSync(`${akashicCliPath} init --type typescript -y`);
+	execSync("npm install");
+	execSync("npm run build");
+	execSync("npm test");
+	execSync("npm run lint");
 
 	const files = fs.readdirSync(`${targetDir}/game`);
 	assertContains(files, "audio");
 	assertContains(files, "image");
+	assertContains(files, "src");
 	assertContains(files, "script");
 	assertContains(files, "text");
-	assertContains(files, ".eslintrc.json");
 	assertContains(files, "game.json");
 	assertContains(files, "package.json");
 	assertContains(files, "README.md");
+	assertContains(files, "sandbox.config.js");
+	assertContains(files, ".eslintrc.js");
+	assertContains(files, ".gitignore");
+	assertContains(files, "jest.config.js");
+	assertContains(files, "tsconfig.jest.json");
+	assertContains(files, "tsconfig.json");
 
 	// 各akashic-cli-xxxモジュールのテスト
 	// TODO 出力確認
