@@ -87,8 +87,8 @@ function showSize(param: StatSizeParameterObject, sizeResult: SizeResult): void 
 	}
 
 	if (!param.raw) {
-		const persent = (value: number) => (value / totalSize * 100).toFixed(0);
-		const formatSize = (name: string, size: number) => `${name}: ${sizeToString(size)} (${persent(size)}%)`;
+		const persent = (value: number): string => (value / totalSize * 100).toFixed(0);
+		const formatSize = (name: string, size: number): string => `${name}: ${sizeToString(size)} (${persent(size)}%)`;
 		param.logger.print(formatSize("image", sizeResult.imageSize));
 		param.logger.print(formatSize("text", sizeResult.textSize));
 
@@ -118,7 +118,7 @@ function showSize(param: StatSizeParameterObject, sizeResult: SizeResult): void 
 		Object.keys(sizeResult.otherDetail).forEach(key =>
 			param.logger.print(`  ${key}: ${sizeToString(sizeResult.otherDetail[key])}`)
 		);
-		const mark = (enabled: boolean) => enabled ? "[*]" : "[ ]";
+		const mark = (enabled: boolean): string => enabled ? "[*]" : "[ ]";
 		param.logger.print(
 			`${mark(largestFileType === FileType.Ogg)} TOTAL SIZE (using ogg): ` +
 			sizeToString(sizeResult.totalSizeOgg()) +
@@ -191,27 +191,43 @@ function sizeOfAssets(param: StatSizeParameterObject, sizeResult: SizeResult): P
 		switch (asset.type) {
 			case "image":
 				return fileSize(path.join(param.basepath, asset.path))
-					.then(size => { sizeResult.imageSize += size; });
+					.then(size => {
+						sizeResult.imageSize += size;
+					});
 			case "text":
 				return fileSize(path.join(param.basepath, asset.path))
-					.then(size => { sizeResult.textSize += size; });
+					.then(size => {
+						sizeResult.textSize += size;
+					});
 			case "script":
 				return fileSize(path.join(param.basepath, asset.path))
-					.then(size => { sizeResult.scriptSize += size; });
+					.then(size => {
+						sizeResult.scriptSize += size;
+					});
 			case "audio":
 				return fileSize(path.join(param.basepath, asset.path + ".ogg"))
 					.then(
-						size => { sizeResult.oggAudioSize += size; },
-						() => { if (!param.raw) param.logger.warn(asset.path + ".ogg, No such file."); })
+						size => {
+							sizeResult.oggAudioSize += size;
+						},
+						() => {
+							if (!param.raw) param.logger.warn(asset.path + ".ogg, No such file.");
+						})
 
 					.then(() => fileSize(path.join(param.basepath, asset.path + ".mp4")))
 					.then(
-						size => { sizeResult.mp4AudioSize += size; },
-						() => {if (!param.raw) param.logger.warn(asset.path + ".mp4, No such file."); })
+						size => {
+							sizeResult.mp4AudioSize += size;
+						},
+						() => {
+							if (!param.raw) param.logger.warn(asset.path + ".mp4, No such file.");
+						})
 
 					.then(() => fileSize(path.join(param.basepath, asset.path + ".aac")))
 					.then(
-						size => { sizeResult.aacAudioSize += size; },
+						size => {
+							sizeResult.aacAudioSize += size;
+						},
 						() => {/* .aacファイルは存在すれば対応するが、deprecatedなのでファイルが存在しない場合でも警告を表示しない */});
 			default:
 				throw new Error(`${asset.type} is not a valid asset type name`);

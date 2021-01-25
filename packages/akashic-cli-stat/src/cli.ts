@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
-import * as commander from "commander";
 import { Logger, ConsoleLogger, ConfigurationFile, CliConfigurationFile, CliConfigStat } from "@akashic/akashic-cli-commons";
+import * as commander from "commander";
 import * as stat from "./stat";
 
 function statSize(logger: Logger, param: CliConfigStat): void {
@@ -50,7 +50,7 @@ function cli(param: CliConfigStat): void {
 
 export function run(argv: string[]): void {
 	commander.parse(argv);
-	CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashic.config.js"), (error, configuration) => {
+	CliConfigurationFile.read(path.join(commander.cwd || process.cwd(), "akashic.config.js"), (error, configuration) => {
 		if (error) {
 			console.error(error);
 			process.exit(1);
