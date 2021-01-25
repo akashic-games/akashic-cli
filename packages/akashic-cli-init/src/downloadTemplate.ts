@@ -1,7 +1,7 @@
-import * as request from "request";
-import * as unzipper from "unzipper";
 import * as fs from "fs";
 import * as path from "path";
+import * as request from "request";
+import * as unzipper from "unzipper";
 import { InitParameterObject } from "./InitParameterObject";
 
 interface TemplateList {
@@ -60,27 +60,27 @@ function downloadTemplate(param: InitParameterObject): Promise<void> {
 		}
 		return resolve();
 	})
-	.then(() => getTemplateListJson(param))
-	.then(jsonFile => {
-		if (!jsonFile.templates[param.type]) {
-			return Promise.reject(new Error(`server doesn't have template: ${param.type}`));
-		}
-		const templateUri = param.repository + jsonFile.templates[param.type];
-		return Promise.resolve()
-			.then<Buffer>(() => promisedRequest({
+		.then(() => getTemplateListJson(param))
+		.then(jsonFile => {
+			if (!jsonFile.templates[param.type]) {
+				return Promise.reject(new Error(`server doesn't have template: ${param.type}`));
+			}
+			const templateUri = param.repository + jsonFile.templates[param.type];
+			return Promise.resolve()
+				.then<Buffer>(() => promisedRequest({
 				uri: templateUri,
 				method: "GET",
 				encoding: null
 			}))
-			.then(buf => promisedExtract(
-				buf,
-				path.join(param._realTemplateDirectory, param.type)
-			));
-	})
-	.catch(err => {
-		param.logger.warn(err);
-		param.logger.info("using built-in template");
-	});
+				.then(buf => promisedExtract(
+					buf,
+					path.join(param._realTemplateDirectory, param.type)
+				));
+		})
+		.catch(err => {
+			param.logger.warn(err);
+			param.logger.info("using built-in template");
+		});
 }
 
 export function getFactoryTemplate(param: InitParameterObject): Promise<Buffer> {
@@ -131,7 +131,7 @@ export function promisedExtract(buf: Buffer, extractPath: string): Promise<void>
 export function downloadTemplateIfNeeded(param: InitParameterObject): Promise<void> {
 	return new Promise<void>((resolve, reject) => {
 		const templatePath = path.join(param._realTemplateDirectory, param.type);
-		fs.stat(templatePath, (err: any, stats: any) => {
+		fs.stat(templatePath, (err: any, _stats: any) => {
 			if (err) {
 				if (err.code === "ENOENT") {
 					downloadTemplate(param).then(resolve, reject);

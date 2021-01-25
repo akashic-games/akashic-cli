@@ -1,5 +1,5 @@
-import * as Prompt from "prompt";
 import * as commons from "@akashic/akashic-cli-commons";
+import * as Prompt from "prompt";
 
 /**
  * game.jsonの初期値として与えるパラメータ。
