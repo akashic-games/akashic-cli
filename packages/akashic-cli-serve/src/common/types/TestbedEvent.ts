@@ -1,6 +1,6 @@
+import {ContentLocatorData} from "./ContentLocatorData";
 import {Player} from "./Player";
 import {PlayStatus} from "./PlayStatus";
-import {ContentLocatorData} from "./ContentLocatorData";
 
 export interface PlayCreateTestbedEvent {
 	playId: string;

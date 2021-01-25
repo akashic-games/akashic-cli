@@ -1,4 +1,5 @@
 import { observable } from "mobx";
+import { ContentLocatorData } from "../../common/types/ContentLocatorData";
 import {
 	PlayCreateTestbedEvent,
 	PlayStatusChangedTestbedEvent,
@@ -12,10 +13,9 @@ import {
 	ClientInstanceAppearTestbedEvent,
 	ClientInstanceDisappearTestbedEvent
 } from "../../common/types/TestbedEvent";
-import { ContentLocatorData } from "../../common/types/ContentLocatorData";
-import { ClientContentLocator } from "../common/ClientContentLocator";
-import * as Subscriber from "../api/Subscriber";
 import * as ApiClient from "../api/ApiClient";
+import * as Subscriber from "../api/Subscriber";
+import { ClientContentLocator } from "../common/ClientContentLocator";
 import { ContentStore } from "./ContentStore";
 import { PlayEntity, PlayEntityParameterObject } from "./PlayEntity";
 
@@ -118,7 +118,7 @@ export class PlayStore {
 		if (this._creationWaiters[e.playId]) {
 			this._creationWaiters[e.playId](play);
 		}
-	}
+	};
 
 	private handlePlayStatusChange = (e: PlayStatusChangedTestbedEvent): void => {
 		const play = this.plays[e.playId];
@@ -129,41 +129,41 @@ export class PlayStore {
 			play.teardown();
 			delete this.plays[e.playId];
 		}
-	}
+	};
 
 	private handlePlayDurationStateChange = (e: PlayDurationStateChangeTestbedEvent): void => {
 		this.plays[e.playId].handlePlayDurationStateChange(e.isPaused, e.duration);
-	}
+	};
 
 	private handlePlayerJoin = (e: PlayerJoinTestbedEvent): void => {
 		this.plays[e.playId].handlePlayerJoin(e.player);
-	}
+	};
 
 	private handlePlayerLeave = (e: PlayerLeaveTestbedEvent): void => {
 		this.plays[e.playId].handlePlayerLeave(e.playerId);
-	}
+	};
 
 	private handleClientInstanceAppear = (e: ClientInstanceAppearTestbedEvent): void => {
 		this.plays[e.playId].handleClientInstanceAppear(e);
-	}
+	};
 
 	private handleClientInstanceDisappear = (e: ClientInstanceDisappearTestbedEvent): void => {
 		this.plays[e.playId].handleClientInstanceDisappear(e);
-	}
+	};
 
 	private handleRunnerCreate = (e: RunnerCreateTestbedEvent): void => {
 		this.plays[e.playId].handleRunnerCreate(e.runnerId);
-	}
+	};
 
 	private handleRunnerRemove = (e: RunnerRemoveTestbedEvent): void => {
 		this.plays[e.playId].handleRunnerRemove(e.runnerId);
-	}
+	};
 
 	private handleRunnerPause = (e: RunnerPauseTestbedEvent): void => {
 		this.plays[e.playId].handleRunnerPause(/* e.runnerId */);  // runnerIdを扱う処理は未実装
-	}
+	};
 
 	private handleRunnerResume = (e: RunnerResumeTestbedEvent): void => {
 		this.plays[e.playId].handleRunnerResume(/* e.runnerId */);  // runnerIdを扱う処理は未実装
-	}
+	};
 }

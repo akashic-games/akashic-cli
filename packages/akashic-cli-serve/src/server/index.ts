@@ -1,24 +1,24 @@
 import * as fs from "fs";
+import * as http from "http";
 import * as path from "path";
 import * as util from "util";
-import * as http from "http";
-import * as express from "express";
-import * as bodyParser from "body-parser";
-import * as socketio from "socket.io";
-import * as commander from "commander";
-import * as chalk from "chalk";
-import * as open from "open";
+import {  CliConfigurationFile, CliConfigServe, SERVICE_TYPES } from "@akashic/akashic-cli-commons";
 import { PlayManager, RunnerManager, setSystemLogger, getSystemLogger } from "@akashic/headless-driver";
-import { createApiRouter } from "./route/ApiRoute";
-import { RunnerStore } from "./domain/RunnerStore";
-import { PlayStore } from "./domain/PlayStore";
-import { SocketIOAMFlowManager } from "./domain/SocketIOAMFlowManager";
+import * as bodyParser from "body-parser";
+import * as chalk from "chalk";
+import * as commander from "commander";
+import * as express from "express";
+import * as open from "open";
+import * as socketio from "socket.io";
+import { ServerContentLocator } from "./common/ServerContentLocator";
 import { serverGlobalConfig } from "./common/ServerGlobalConfig";
+import { PlayerIdStore } from "./domain/PlayerIdStore";
+import { PlayStore } from "./domain/PlayStore";
+import { RunnerStore } from "./domain/RunnerStore";
+import { SocketIOAMFlowManager } from "./domain/SocketIOAMFlowManager";
+import { createApiRouter } from "./route/ApiRoute";
 import { createContentsRouter } from "./route/ContentsRoute";
 import { createHealthCheckRouter } from "./route/HealthCheckRoute";
-import { ServerContentLocator } from "./common/ServerContentLocator";
-import {  CliConfigurationFile, CliConfigServe, SERVICE_TYPES } from "@akashic/akashic-cli-commons";
-import { PlayerIdStore } from "./domain/PlayerIdStore";
 
 // 渡されたパラメータを全てstringに変換する
 // chalkを使用する場合、ログ出力時objectの中身を展開してくれないためstringに変換する必要がある
@@ -152,19 +152,43 @@ async function cli(cliConfigParam: CliConfigServe) {
 	app.use("/contents/", createContentsRouter({ targetDirs }));
 	app.use("/health-check/", createHealthCheckRouter({ playStore }));
 
-	io.on("connection", (socket: socketio.Socket) => { amflowManager.setupSocketIOAMFlow(socket); });
+	io.on("connection", (socket: socketio.Socket) => {
+		amflowManager.setupSocketIOAMFlow(socket);
+	});
 	// TODO 全体ブロードキャストせず該当するプレイにだけ通知するべき？
-	playStore.onPlayStatusChange.add(arg => { io.emit("playStatusChange", arg); });
-	playStore.onPlayDurationStateChange.add(arg => { io.emit("playDurationStateChange", arg); });
-	playStore.onPlayCreate.add(arg => { io.emit("playCreate", arg); });
-	playStore.onPlayerJoin.add(arg => { io.emit("playerJoin", arg); });
-	playStore.onPlayerLeave.add(arg => { io.emit("playerLeave", arg); });
-	playStore.onClientInstanceAppear.add(arg => { io.emit("clientInstanceAppear", arg); });
-	playStore.onClientInstanceDisappear.add(arg => { io.emit("clientInstanceDisappear", arg); });
-	runnerStore.onRunnerCreate.add(arg => { io.emit("runnerCreate", arg); });
-	runnerStore.onRunnerRemove.add(arg => { io.emit("runnerRemove", arg); });
-	runnerStore.onRunnerPause.add(arg => { io.emit("runnerPause", arg); });
-	runnerStore.onRunnerResume.add(arg => { io.emit("runnerResume", arg); });
+	playStore.onPlayStatusChange.add(arg => {
+		io.emit("playStatusChange", arg);
+	});
+	playStore.onPlayDurationStateChange.add(arg => {
+		io.emit("playDurationStateChange", arg);
+	});
+	playStore.onPlayCreate.add(arg => {
+		io.emit("playCreate", arg);
+	});
+	playStore.onPlayerJoin.add(arg => {
+		io.emit("playerJoin", arg);
+	});
+	playStore.onPlayerLeave.add(arg => {
+		io.emit("playerLeave", arg);
+	});
+	playStore.onClientInstanceAppear.add(arg => {
+		io.emit("clientInstanceAppear", arg);
+	});
+	playStore.onClientInstanceDisappear.add(arg => {
+		io.emit("clientInstanceDisappear", arg);
+	});
+	runnerStore.onRunnerCreate.add(arg => {
+		io.emit("runnerCreate", arg);
+	});
+	runnerStore.onRunnerRemove.add(arg => {
+		io.emit("runnerRemove", arg);
+	});
+	runnerStore.onRunnerPause.add(arg => {
+		io.emit("runnerPause", arg);
+	});
+	runnerStore.onRunnerResume.add(arg => {
+		io.emit("runnerResume", arg);
+	});
 
 	let loadedPlaylogPlayId: string;
 	if (cliConfigParam.debugPlaylog) {
@@ -213,20 +237,20 @@ export async function run(argv: any): Promise<void> {
 		.usage("[options] <gamepath>")
 		.option("-p, --port <port>", `The port number to listen. default: ${serverGlobalConfig.port}`, (x => parseInt(x, 10)))
 		.option("-H, --hostname <hostname>", `The host name of the server. default: ${serverGlobalConfig.hostname}`)
-		.option("-v, --verbose", `Display detailed information on console.`)
-		.option("-A, --no-auto-start", `Wait automatic startup of contents.`)
+		.option("-v, --verbose", "Display detailed information on console.")
+		.option("-A, --no-auto-start", "Wait automatic startup of contents.")
 		.option("-s, --target-service <service>", `Simulate the specified service. arguments: ${SERVICE_TYPES}`)
 		.option("--server-external-script <path>",
-			`Evaluate the given JS and assign it to Game#external of the server instances`)
-		.option("--debug-playlog <path>", `Specify path of playlog-json.`)
-		.option("--debug-untrusted", `An internal debug option`)
-		.option("--debug-proxy-audio", `An internal debug option`)
-		.option("--allow-external", `Read the URL allowing external access from sandbox.config.js`)
+			"Evaluate the given JS and assign it to Game#external of the server instances")
+		.option("--debug-playlog <path>", "Specify path of playlog-json.")
+		.option("--debug-untrusted", "An internal debug option")
+		.option("--debug-proxy-audio", "An internal debug option")
+		.option("--allow-external", "Read the URL allowing external access from sandbox.config.js")
 		.option("--no-open-browser", "Disable to open a browser window at startup")
 		.option("--preserve-disconnected", "Disable auto closing for disconnected windows.")
 		.parse(argv);
 
-	CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashic.config.js"), async (error, configuration) => {
+	CliConfigurationFile.read(path.join(commander.cwd || process.cwd(), "akashic.config.js"), async (error, configuration) => {
 		if (error) {
 			console.error(error);
 			process.exit(1);

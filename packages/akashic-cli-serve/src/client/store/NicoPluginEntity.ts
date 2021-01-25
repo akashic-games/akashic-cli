@@ -18,12 +18,16 @@ export class NicoPluginEntity {
 	constructor() {
 		this.camera = {
 			exists: (callback: (exists: boolean) => void) => {
-				window.setTimeout(() => { callback(false); }, 0);
+				window.setTimeout(() => {
+					callback(false);
+				}, 0);
 			}
 		};
 		this.share = {
 			isSupported: (callback: (supported: boolean) => void) => {
-				window.setTimeout(() => { callback(false); }, 0);
+				window.setTimeout(() => {
+					callback(false);
+				}, 0);
 			},
 			requestShare: (message: string) => {
 				console.log("game.external.nico.share.requestShare: ", message);
@@ -41,10 +45,14 @@ export class NicoPluginEntity {
 		};
 		this.requestPremiumUpgrade = () => {};
 		this.requestGetApplicationStatus = (_application: any, callback: (err: any, data?: any) => void) => {
-			window.setTimeout(() => { callback(null, {isAvailable: true}); }, 0);
+			window.setTimeout(() => {
+				callback(null, {isAvailable: true});
+			}, 0);
 		};
 		this.getFollowStatus = (callback: (err: any, data?: any) => void) => {
-			window.setTimeout(() => { callback(null, {isFollowing: true}); }, 0);
+			window.setTimeout(() => {
+				callback(null, {isFollowing: true});
+			}, 0);
 		};
 
 	}

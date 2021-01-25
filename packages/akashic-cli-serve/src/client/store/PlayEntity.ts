@@ -1,20 +1,20 @@
-import { observable, action, ObservableMap } from "mobx";
 import * as playlog from "@akashic/playlog";
 import { Trigger } from "@akashic/trigger";
-import { Player } from "../../common/types/Player";
+import { observable, action, ObservableMap } from "mobx";
 import { TimeKeeper } from "../../common/TimeKeeper";
-import { PlayStatus } from "../../common/types/PlayStatus";
 import { PlayDurationState } from "../../common/types/PlayDurationState";
+import { Player } from "../../common/types/Player";
+import { PlayStatus } from "../../common/types/PlayStatus";
 import { RunnerDescription, ClientInstanceDescription } from "../../common/types/TestbedEvent";
-import * as ApiClient from "../api/ApiClient";
-import { socketInstance } from "../api/socketInstance";
 import { GameViewManager } from "../akashic/GameViewManager";
 import { SocketIOAMFlowClient } from "../akashic/SocketIOAMFlowClient";
-import { ExecutionMode } from "./ExecutionMode";
+import * as ApiClient from "../api/ApiClient";
+import { socketInstance } from "../api/socketInstance";
+import { CreateCoeLocalInstanceParameterObject } from "./CoePluginEntity";
 import { ContentEntity } from "./ContentEntity";
+import { ExecutionMode } from "./ExecutionMode";
 import { LocalInstanceEntity } from "./LocalInstanceEntity";
 import { ServerInstanceEntity } from "./ServerInstanceEntity";
-import { CreateCoeLocalInstanceParameterObject } from "./CoePluginEntity";
 
 export interface CreateLocalInstanceParameterObject {
 	gameViewManager: GameViewManager;
@@ -247,7 +247,7 @@ export class PlayEntity {
 
 	private _handleLocalInstanceStopped = (instance: LocalInstanceEntity): void => {
 		this.localInstances = this.localInstances.filter(i => i !== instance);
-	}
+	};
 
 	private _startTimeKeeper(): void {
 		this._timeKeeper.start();
@@ -265,11 +265,11 @@ export class PlayEntity {
 
 	private _handleParentTeardown = () => {
 		this.teardown();
-	}
+	};
 
 	@action
 	private _handleFrame = (): void => {
 		this.duration = this._timeKeeper.now();
 		// this._timerId = setTimeout(this._handleFrame, 200);
-	}
+	};
 }

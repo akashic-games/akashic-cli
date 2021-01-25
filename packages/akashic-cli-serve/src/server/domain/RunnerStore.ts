@@ -1,5 +1,5 @@
-import { Trigger } from "@akashic/trigger";
 import { AMFlowClient, RunnerManager, RunnerV1, RunnerV2, RunnerV3 } from "@akashic/headless-driver";
+import { Trigger } from "@akashic/trigger";
 import {
 	RunnerCreateTestbedEvent,
 	RunnerRemoveTestbedEvent,

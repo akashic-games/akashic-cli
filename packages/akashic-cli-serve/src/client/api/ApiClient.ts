@@ -60,7 +60,7 @@ export const broadcast = async(playId: string, message: any): Promise<void> => {
 
 export const registerPlayerId = async(playerId?: string): Promise<PlayerPostApiResponse> => {
 	return await ApiRequest.post<PlayerPostApiResponse>(
-		`/api/playerids`,
+		"/api/playerids",
 		{ playerId }
 	);
 };
@@ -89,7 +89,7 @@ export const stepRunner = async(runnerId: string): Promise<RunnerPatchApiRespons
 };
 
 export const getContents = async (): Promise<ContentGetAllApiResponse> => {
-	return await ApiRequest.get<ContentGetAllApiResponse>(`/contents/`);
+	return await ApiRequest.get<ContentGetAllApiResponse>("/contents/");
 };
 
 export const getContent = async (contentId: string): Promise<ContentGetApiResponse> => {

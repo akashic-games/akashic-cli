@@ -1,8 +1,8 @@
 import * as path from "path";
 import * as chokidar from "chokidar";
 import { SandboxConfig } from "../../common/types/SandboxConfig";
-import { dynamicRequire } from "./dynamicRequire";
 import { BadRequestError } from "../common/ApiError";
+import { dynamicRequire } from "./dynamicRequire";
 
 const configs: { [key: string]: SandboxConfig } = {};
 

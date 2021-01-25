@@ -1,9 +1,9 @@
 import * as path from "path";
-import * as express from "express";
 import { getSystemLogger } from "@akashic/headless-driver";
-import { responseSuccess } from "../common/ApiResponse";
+import * as express from "express";
 import { SandboxConfigApiResponseData } from "../../common/types/ApiResponse";
 import { NotFoundError } from "../common/ApiError";
+import { responseSuccess } from "../common/ApiResponse";
 import { dynamicRequire } from "../domain/dynamicRequire";
 
 export const createHandlerToGetSandboxConfig = (dirPaths: string[]): express.RequestHandler => {

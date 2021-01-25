@@ -11,38 +11,38 @@ export class DevtoolOperator {
 	updateEntityTrees = (): void => {
 		const dumpItems = this.store.currentLocalInstance.gameContent.dumpEntities();
 		this.store.devtoolUiStore.setEntityTrees(dumpItems);
-	}
+	};
 
 	toggleOpenEntityTreeChildren = (e: EDumpItem): void => {
 		this.store.devtoolUiStore.toggleOpenEntityTreeChildren(e);
-	}
+	};
 
 	setHighlightedEntity = (e: EDumpItem): void => {
 		this.store.currentLocalInstance.gameContent.changeHighlightedEntity(e.id);
-	}
+	};
 
 	clearHighlightedEntity = (): void => {
 		this.store.currentLocalInstance.gameContent.changeHighlightedEntity(null);
-	}
+	};
 
 	toggleShowHiddenEntity = (shows: boolean): void => {
 		this.store.devtoolUiStore.toggleShowHiddenEntity(shows);
-	}
+	};
 
 	selectEntityByEDumpItem = (e: EDumpItem): void => {
 		this.store.devtoolUiStore.setSelectedEntityId(e.id);
-	}
+	};
 
 	selectEntityByPoint = (x: number, y: number): void => {
 		const gameContent = this.store.currentLocalInstance.gameContent;
 		const eid = gameContent.getEntityIdByPoint(x, y);
 		this.store.devtoolUiStore.setSelectedEntityId(eid);
 		gameContent.changeHighlightedEntity(eid);
-	}
+	};
 
 	startEntitySelection = (): void => {
 		this.store.devtoolUiStore.toggleIsSelectingEntity(true);
-	}
+	};
 
 	finishEntitySelection = (x: number, y: number): void => {
 		const gameContent = this.store.currentLocalInstance.gameContent;
@@ -50,7 +50,7 @@ export class DevtoolOperator {
 		this.store.devtoolUiStore.toggleIsSelectingEntity(false);
 		this.store.devtoolUiStore.setSelectedEntityId(gameContent.getEntityIdByPoint(x, y));
 		gameContent.changeHighlightedEntity(null);
-	}
+	};
 
 	dumpSelectedEntity = (): void => {
 		const gameContent = this.store.currentLocalInstance.gameContent;
@@ -60,7 +60,7 @@ export class DevtoolOperator {
 		// 暫定便利機能: ダンプついでにしれっとグローバル変数に刺しておく (c.f. Chrome/Firefox の $0)
 		// (console からグローバルに格納できる Chrome などでは不要なので暫定)
 		(window as any).__testbed.$0 = e;
-	}
+	};
 
 	volumeChangeTo = (vol: number): void => {
 		this.store.devtoolUiStore.volumeSeekTo(vol);
@@ -68,7 +68,7 @@ export class DevtoolOperator {
 		if (atsumaruApi) {
 			atsumaruApi.volumeTrigger.fire(vol / 100);
 		}
-	}
+	};
 
 	volumeSeekTo = (vol: number): void => {
 		this.store.devtoolUiStore.endVolumeSeek(vol);
@@ -76,27 +76,27 @@ export class DevtoolOperator {
 		if (atsumaruApi) {
 			atsumaruApi.volumeTrigger.fire(vol / 100);
 		}
-	}
+	};
 
 	toggleAutoSendEvents = (isSend: boolean): void => {
 		this.store.devtoolUiStore.toggleAutoSendEvents(isSend);
-	}
+	};
 
 	toggleUsePreferredTotalTimeLimit = (use: boolean): void => {
 		this.store.devtoolUiStore.toggleUsePreferredTotalTimeLimit(use);
-	}
+	};
 
 	toggleUseStopGame = (use: boolean): void => {
 		this.store.devtoolUiStore.toggleUseStopGame(use);
-	}
+	};
 
 	setSupportedMode = (value: string): void => {
 		this.store.devtoolUiStore.setSupportedMode(value);
-	}
+	};
 
 	setTotalTimeLimitInputValue = (value: number): void => {
 		this.store.devtoolUiStore.setTotalTimeLimitInputValue(value);
-	}
+	};
 
 	createNicoEvent = (): any => {
 		const emulatingShinichibaMode = this.store.devtoolUiStore.emulatingShinichibaMode;
@@ -104,20 +104,20 @@ export class DevtoolOperator {
 			"mode": emulatingShinichibaMode
 		};
 		if (emulatingShinichibaMode === "ranking") {
-			params["totalTimeLimit"] = this.store.devtoolUiStore.totalTimeLimit;
+			params.totalTimeLimit = this.store.devtoolUiStore.totalTimeLimit;
 		}
 		const event = [[32, 0, "dummy", {
 			"type": "start",
 			"parameters": params
 		}]];
 		return event;
-	}
+	};
 
 	setupNiconicoDevtoolValueWatcher = (): void => {
 		const gameContent = this.store.currentLocalInstance.gameContent;
 		if (!gameContent.onTick.contains(this.tickHandler, this))
 			gameContent.onTick.add(this.tickHandler, this);
-	}
+	};
 
 	private tickHandler(game: agv.GameLike) {
 		if (this.store.devtoolUiStore.stopsGameOnTimeout)
