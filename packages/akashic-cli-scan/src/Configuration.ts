@@ -1,17 +1,27 @@
-import * as path from "path";
 import * as fs from "fs";
-import * as readdirRecursive from "fs-readdir-recursive";
+import * as path from "path";
 import * as cmn from "@akashic/akashic-cli-commons";
-import { getAudioDuration } from "./getAudioDuration";
+import * as readdirRecursive from "fs-readdir-recursive";
 import { imageSize } from "image-size";
 import { ISize } from "image-size/dist/types/interface";
+import { getAudioDuration } from "./getAudioDuration";
 import { AssetScanDirectoryTable, AssetExtension } from "./scan";
 
-export function isImageFilePath(p: string): boolean { return /.*\.(png|gif|jpg|jpeg)$/i.test(p); }
-export function isAudioFilePath(p: string): boolean { return /.*\.(ogg|aac|mp4)$/i.test(p); }
-export function isScriptAssetPath(p: string): boolean { return /.*\.js$/i.test(p); }
-export function isTextAssetPath(p: string): boolean { return true; }  // no limitation...
-export function isPackageJsonPath(p: string): boolean { return /.*[\/\\]package.json$/.test(p) || (p === "package.json"); }
+export function isImageFilePath(p: string): boolean {
+	return /.*\.(png|gif|jpg|jpeg)$/i.test(p);
+}
+export function isAudioFilePath(p: string): boolean {
+	return /.*\.(ogg|aac|mp4)$/i.test(p);
+}
+export function isScriptAssetPath(p: string): boolean {
+	return /.*\.js$/i.test(p);
+}
+export function isTextAssetPath(p: string): boolean {
+	return true;
+}  // no limitation...
+export function isPackageJsonPath(p: string): boolean {
+	return /.*[\/\\]package.json$/.test(p) || (p === "package.json");
+}
 
 export function _listDirectoryContents(dir: string): string[] {
 	if (!fs.existsSync(dir) || !fs.statSync(dir).isDirectory())
@@ -88,7 +98,7 @@ export class Configuration extends cmn.Configuration {
 				this.scanAssetsText(info.scanDirectoryTable.text, info.extension.text);
 			})
 			.then(() => this.scanAssetsDir());
-		}
+	}
 
 	scanAssetsImage(imageAssetScanDirs: string[]) {
 		imageAssetScanDirs.forEach((dirname) => {
@@ -406,7 +416,7 @@ export class Configuration extends cmn.Configuration {
 	}
 
 	scanGlobalScriptsFromEntryPoint(): Promise<void> {
-		var entryPointPath = this._content.main || ("./" + path.join(this._basepath, this._content.assets["mainScene"].path));
+		var entryPointPath = this._content.main || ("./" + path.join(this._basepath, this._content.assets.mainScene.path));
 		return Promise.resolve()
 			.then(() => {
 				const listFiles = this._noOmitPackagejson ? cmn.NodeModules.listModuleFiles : cmn.NodeModules.listScriptFiles;
@@ -456,12 +466,20 @@ export class Configuration extends cmn.Configuration {
 		function audioPathMaker(f: string): string {
 			return path.join(path.dirname(f), path.basename(f, path.extname(f)));  // remove the extension
 		}
-		assetScanDir.audio.forEach((assetDir) => {this.vacuumXXX(assetDir + "/", "audio", isAudioFilePath, audioPathMaker); });
-		assetScanDir.image.forEach((assetDir) => {this.vacuumXXX(assetDir + "/", "image", isImageFilePath); });
-		assetScanDir.script.forEach((assetDir) => {this.vacuumXXX(assetDir + "/", "script", isScriptAssetPath); });
+		assetScanDir.audio.forEach((assetDir) => {
+			this.vacuumXXX(assetDir + "/", "audio", isAudioFilePath, audioPathMaker);
+		});
+		assetScanDir.image.forEach((assetDir) => {
+			this.vacuumXXX(assetDir + "/", "image", isImageFilePath);
+		});
+		assetScanDir.script.forEach((assetDir) => {
+			this.vacuumXXX(assetDir + "/", "script", isScriptAssetPath);
+		});
 
 		const textAssetExtensionFilter = createTextAssetExtensionFilter(assetExtension.text);
-		assetScanDir.text.forEach((assetDir) => {this.vacuumXXX(assetDir + "/", "text", textAssetExtensionFilter); });
+		assetScanDir.text.forEach((assetDir) => {
+			this.vacuumXXX(assetDir + "/", "text", textAssetExtensionFilter);
+		});
 	}
 
 	/**
@@ -562,7 +580,9 @@ export class Configuration extends cmn.Configuration {
 function createTextAssetExtensionFilter(assetExtension: string[]) {
 	const assetExtensionRegExp = new RegExp(assetExtension.join("|"), "i");
 	const assetExtensionFilter = assetExtension.length === 0 ?
-		(p: string) => { return true; } :
+		(p: string) => {
+			return true;
+		} :
 		(p: string) => {
 			return assetExtensionRegExp.test(p);
 		};

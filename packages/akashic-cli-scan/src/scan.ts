@@ -1,7 +1,7 @@
+import * as fs from "fs";
+import * as path from "path";
 import * as cmn from "@akashic/akashic-cli-commons";
 import * as chokidar from "chokidar";
-import * as path from "path";
-import * as fs from "fs";
 import { Configuration, isAudioFilePath, isImageFilePath } from "./Configuration";
 import { LibConfiguration } from "./LibConfiguration";
 
@@ -135,29 +135,29 @@ export function promiseScanAsset(param: ScanAssetParameterObject): Promise<void>
 			conf.vacuum(param.assetScanDirectoryTable, param.assetExtension);
 			return new Promise<void>((resolve, reject) => {
 				switch (param.target) {
-				case "image":
-					conf.scanAssetsImage(param.assetScanDirectoryTable.image);
-					break;
-				case "audio":
-					return conf.scanAssetsAudio(param.assetScanDirectoryTable.audio).then(resolve, reject);
-				case "script":
-					conf.scanAssetsScript(param.assetScanDirectoryTable.script);
-					break;
-				case "text":
-					conf.scanAssetsText(param.assetScanDirectoryTable.text, param.assetExtension.text);
-					break;
-				case "all":
-					return conf.scanAssets({
-						scanDirectoryTable: param.assetScanDirectoryTable,
-						extension: param.assetExtension
-					}).then(resolve, reject);
-				default:
-					return reject("scan asset " + param.target + ": unknown target " + param.target);
+					case "image":
+						conf.scanAssetsImage(param.assetScanDirectoryTable.image);
+						break;
+					case "audio":
+						return conf.scanAssetsAudio(param.assetScanDirectoryTable.audio).then(resolve, reject);
+					case "script":
+						conf.scanAssetsScript(param.assetScanDirectoryTable.script);
+						break;
+					case "text":
+						conf.scanAssetsText(param.assetScanDirectoryTable.text, param.assetExtension.text);
+						break;
+					case "all":
+						return conf.scanAssets({
+							scanDirectoryTable: param.assetScanDirectoryTable,
+							extension: param.assetExtension
+						}).then(resolve, reject);
+					default:
+						return reject("scan asset " + param.target + ": unknown target " + param.target);
 				}
 				resolve();
 			})
-			.then(() => cmn.ConfigurationFile.write(conf.getContent(), "./game.json", param.logger))
-			.then(() => param.logger.info("Done!"));
+				.then(() => cmn.ConfigurationFile.write(conf.getContent(), "./game.json", param.logger))
+				.then(() => param.logger.info("Done!"));
 		})
 		.then(() => {
 			const libPath = "./akashic-lib.json";
@@ -304,7 +304,7 @@ export function promiseScanNodeModules(param: ScanNodeModulesParameterObject): P
 			var conf = new Configuration({
 				content: content,
 				logger: param.logger,
-				basepath: "." ,
+				basepath: ".",
 				debugNpm: param.debugNpm,
 				noOmitPackagejson: !!param.noOmitPackagejson,
 				resolveAssetIdsFromPath: !!param.resolveAssetIdsFromPath,
