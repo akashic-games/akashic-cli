@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
-import * as commander from "commander";
 import { ConsoleLogger, CliConfigurationFile, CliConfigModify } from "@akashic/akashic-cli-commons";
+import * as commander from "commander";
 import { promiseModifyBasicParameter } from "./modify";
 
 function cliBasicParameter(target: string, value: string, opts: CliConfigModify): void {
@@ -21,7 +21,7 @@ function defineCommand(commandName: string): void {
 		.option("-C, --cwd <dir>", "The directory incluedes game.json")
 		.option("-q, --quiet", "Suppress output")
 		.action((value: string, opts: CliConfigModify = {}) => {
-			CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashic.config.js"), (error, configuration) => {
+			CliConfigurationFile.read(path.join(commander.cwd || process.cwd(), "akashic.config.js"), (error, configuration) => {
 				if (error) {
 					console.error(error);
 					process.exit(1);
