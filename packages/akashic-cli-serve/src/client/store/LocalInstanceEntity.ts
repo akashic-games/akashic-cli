@@ -149,6 +149,9 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 	}
 
 	stop(): Promise<void> {
+		if (this.coeLimitedPlugin) {
+			this.coeLimitedPlugin.stopToDisplayResolver();
+		}
 		this._gameViewManager.removeGameContent(this._serveGameContent);
 		this.onStop.fire(this);
 		return Promise.resolve();
