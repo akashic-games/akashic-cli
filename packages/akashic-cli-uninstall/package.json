@@ -8,8 +8,7 @@
     "clean": "rimraf ./lib && rimraf ./spec/build",
     "start": "npm run build && node bin/run",
     "build": "tsc -p ./",
-    "lint": "tslint -c ../tslint.json --project ./tsconfig.json",
-    "lint2": "eslint -c .eslintrc src/**/*.ts --fix",
+    "lint": "eslint -c .eslintrc src/**/*.ts --fix",
     "test": "npm run build && npm run test:compile  && npm run test:jest && npm run lint",
     "test:compile": "tsc -p ./spec",
     "test:jest": "jest"
