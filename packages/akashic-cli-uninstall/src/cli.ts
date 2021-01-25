@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
-import * as commander from "commander";
 import { ConsoleLogger, CliConfigurationFile, CliConfigUninstall } from "@akashic/akashic-cli-commons";
+import * as commander from "commander";
 import { promiseUninstall } from "./uninstall";
 
 function cli(param: CliConfigUninstall): void {
@@ -30,7 +30,7 @@ commander
 
 export function run(argv: string[]): void {
 	commander.parse(argv);
-	CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashic.config.js"), (error, configuration) => {
+	CliConfigurationFile.read(path.join(commander.cwd || process.cwd(), "akashic.config.js"), (error, configuration) => {
 		if (error) {
 			console.error(error);
 			process.exit(1);
