@@ -1,0 +1,7 @@
+{
+    "extends": "@akashic/eslint-config",
+    "parserOptions": {
+        "project": "./src/server/tsconfig.json",
+        "sourceType": "module"
+    }
+}

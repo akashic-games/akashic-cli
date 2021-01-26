@@ -15,11 +15,11 @@ export class PlayOperator {
 		} else {
 			this.store.currentPlay.resumeActive();
 		}
-	}
+	};
 
 	step = (): void => {
 		this.store.currentPlay.stepActive();
-	}
+	};
 
 	toggleJoinLeaveSelf = (toJoin: boolean): void => {
 		const player = this.store.player;
@@ -28,7 +28,7 @@ export class PlayOperator {
 		} else {
 			this.store.currentPlay.leave(this.store.player.id);
 		}
-	}
+	};
 
 	openNewClientInstance = (): void => {
 		// Mac Chrome で正しく動作しないのと、親ウィンドウかどうかの判別をしたいことがあるので noopener は付けない。
@@ -38,7 +38,7 @@ export class PlayOperator {
 			"_blank",
 			`width=${window.innerWidth},height=${window.innerHeight}`
 		);
-	}
+	};
 
 	closeThisWindowIfNeeded = (): void => {
 		// TODO: ゲームごとに、開いた window の位置とサイズ情報を閉じる直前で localStorage に保存し、
@@ -48,14 +48,14 @@ export class PlayOperator {
 		if (window.opener) {
 			window.close();
 		}
-	}
+	};
 
 	sendRegisteredEvent = (eventName: string): void => {
 		const sandboxConfig = this.store.currentLocalInstance.content.sandboxConfig || {};
 		const pevs = sandboxConfig.events[eventName];
 		const amflow = this.store.currentPlay.amflow;
 		pevs.forEach((pev: any) => amflow.enqueueEvent(pev));
-	}
+	};
 
 	sendEditorEvent = (): void => {
 		// TODO: 入力された JSON が不正な値の場合に Send ボタンを disabled にし、このパスでは正常な値が取れるようにする。
@@ -68,9 +68,9 @@ export class PlayOperator {
 		}
 		const amflow = this.store.currentPlay.amflow;
 		pevs.forEach((pev: any) => amflow.enqueueEvent(pev));
-	}
+	};
 
 	downloadPlaylog = (): void => {
 		location.href = `/api/plays/${this.store.currentPlay.playId}/playlog`;
-	}
+	};
 }

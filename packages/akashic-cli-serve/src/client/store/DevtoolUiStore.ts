@@ -101,12 +101,12 @@ export class DevtoolUiStore {
 	@action
 	toggleIsSelectingEntity = (select: boolean): void => {
 		this.isSelectingEntity = select;
-	}
+	};
 
 	@action
 	setSelectedEntityId = (eid: number | null): void => {
 		this.selectedEntityId = eid;
-	}
+	};
 
 	@action
 	volumeSeekTo(volume: number): void {

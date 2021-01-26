@@ -1,5 +1,5 @@
-import * as gameConfigs from "../domain/GameConfigs";
 import { serverGlobalConfig } from "../common/ServerGlobalConfig";
+import * as gameConfigs from "../domain/GameConfigs";
 
 export interface EngineConfig {
 	engine_urls: string[];
@@ -22,12 +22,12 @@ export const getEngineConfig = (param: GetEngineConfigParameterObject): EngineCo
 	const gameJson = gameConfigs.get(param.contentId.toString());
 	let version = "1";
 	let external: string[] = [];
-	if (gameJson["environment"] != null) {
-		if (gameJson["environment"]["sandbox-runtime"] != null) {
-			version = gameJson["environment"]["sandbox-runtime"];
+	if (gameJson.environment != null) {
+		if (gameJson.environment["sandbox-runtime"] != null) {
+			version = gameJson.environment["sandbox-runtime"];
 		}
-		if (gameJson["environment"]["external"] != null) {
-			external = Object.keys(gameJson["environment"]["external"]);
+		if (gameJson.environment.external != null) {
+			external = Object.keys(gameJson.environment.external);
 		}
 	}
 	const versionsJson = require("../engineFilesVersion.json");

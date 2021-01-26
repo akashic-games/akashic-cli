@@ -169,11 +169,11 @@ export class SocketIOAMFlowClient implements amflow.AMFlow {
 		if (connectionId !== this._connectionId)
 			return;
 		this._tickHandlers.forEach(h => h(tick));
-	}
+	};
 
 	private _onEvent = (connectionId: string, pev: playlog.Event): void => {
 		if (connectionId !== this._connectionId)
 			return;
 		this._eventHandlers.forEach(h => h(pev));
-	}
+	};
 }

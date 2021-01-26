@@ -1,10 +1,10 @@
+import {AppOptions} from "./AppOptions";
+import {ContentDesc} from "./ContentDesc";
+import {ContentLocatorData} from "./ContentLocatorData";
 import {PlayDurationState} from "./PlayDurationState";
+import {Player} from "./Player";
 import {SandboxConfig} from "./SandboxConfig";
 import {ClientInstanceDescription, RunnerDescription} from "./TestbedEvent";
-import {Player} from "./Player";
-import {ContentLocatorData} from "./ContentLocatorData";
-import {ContentDesc} from "./ContentDesc";
-import {AppOptions} from "./AppOptions";
 
 export interface ApiResponse<T> {
 	meta: {

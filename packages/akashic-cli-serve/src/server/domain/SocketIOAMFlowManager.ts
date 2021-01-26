@@ -1,7 +1,7 @@
-import { Socket } from "socket.io";
-import * as pl from "@akashic/playlog";
 import * as amf from "@akashic/amflow";
 import { getSystemLogger } from "@akashic/headless-driver";
+import * as pl from "@akashic/playlog";
+import { Socket } from "socket.io";
 import { ClientInstanceDescription } from "../../common/types/TestbedEvent";
 import { PlayStore } from "../domain/PlayStore";
 
@@ -59,8 +59,12 @@ export class SocketIOAMFlowManager {
 				amflow,
 				socket,
 				lastToken: null,
-				emitTick: (tick: pl.Tick) => { socket.emit("amflow:[tick]", connId, tick); },
-				emitEvent: (event: pl.Event) => { socket.emit("amflow:[event]", connId, event); }
+				emitTick: (tick: pl.Tick) => {
+					socket.emit("amflow:[tick]", connId, tick);
+				},
+				emitEvent: (event: pl.Event) => {
+					socket.emit("amflow:[event]", connId, event);
+				}
 			};
 			amflow.open(playId, callback ? (e => callback(e, connId)) : null);
 		});
@@ -215,6 +219,6 @@ export class SocketIOAMFlowManager {
 			return new Error(`Invalid connectionId: ${connectionId}`);
 		if (!this.playStore.getPlay(conn.playId))
 			return new Error(`Already closed play. play: ${connectionId}`);
-		return Error(`Unknown Error on SocketIOAMFlowManager`);
+		return Error("Unknown Error on SocketIOAMFlowManager");
 	}
 }
