@@ -104,17 +104,6 @@ async function cli(cliConfigParam: CliConfigServe) {
 		serverGlobalConfig.allowExternal = cliConfigParam.allowExternal;
 	}
 
-	if (cliConfigParam.watch && cliConfigParam.targetDirs) {
-		console.log("Start watching contents");
-		for (let i = 0; i < cliConfigParam.targetDirs.length; i++) {
-			watchContent(cliConfigParam.targetDirs[i], (err: any) => {
-				if (err) {
-					getSystemLogger().error(err.message);
-				}
-			});
-		}
-	}
-
 	let gameExternalFactory: () => any = () => undefined;
 	if (commander.serverExternalScript) {
 		try {
@@ -144,6 +133,33 @@ async function cli(cliConfigParam: CliConfigServe) {
 	const app = express();
 	const httpServer = http.createServer(app);
 	const io = new socketio.Server(httpServer);
+
+	if (cliConfigParam.watch && cliConfigParam.targetDirs) {
+		console.log("Start watching contents");
+		for (let i = 0; i < cliConfigParam.targetDirs.length; i++) {
+			watchContent(cliConfigParam.targetDirs[i], async (err: any) => {
+				if (err) {
+					getSystemLogger().error(err.message);
+				}
+				// コンテンツに変更があったらplayを新規に作り直して再起動
+				const contentId = `${i}`;
+				const targetPlayIds: string[] = [];
+				// 対象のコンテンツIDしか分からないので先に対応するコンテンツのrunnerを全て停止させる
+				playStore.getPlayIdsFromContentId(contentId).forEach(playId => {
+					playStore.getRunners(playId).forEach(runner => {
+						runnerStore.stopRunner(runner.runnerId);
+					});
+					targetPlayIds.push(playId);
+				});
+				const playId = await playStore.createPlay(new ServerContentLocator({ contentId }));
+				const token = amflowManager.createPlayToken(playId, "", "", true, {});
+				const amflow = playStore.createAMFlow(playId);
+				await runnerStore.createAndStartRunner({ playId, isActive: true, token, amflow, contentId });
+				await playStore.resumePlayDuration(playId);
+				targetPlayIds.forEach(id => io.emit("playBroadcast", { playId: id, message: { type: "switchPlay", nextPlayId: playId } }));
+			});
+		}
+	}
 
 	app.set("views", path.join(__dirname, "..", "..", "views"));
 	app.set("view engine", "ejs");
