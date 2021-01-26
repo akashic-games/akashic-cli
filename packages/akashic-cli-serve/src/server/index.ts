@@ -143,7 +143,7 @@ async function cli(cliConfigParam: CliConfigServe) {
 
 	const app = express();
 	const httpServer = http.createServer(app);
-	const io = socketio(httpServer);
+	const io = new socketio.Server(httpServer);
 
 	app.set("views", path.join(__dirname, "..", "..", "views"));
 	app.set("view engine", "ejs");

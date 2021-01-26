@@ -84,9 +84,11 @@ export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}>
 			showsDisplayOptionPopover: toolBarUiStore.showsDisplayOptionPopover,
 			showsBackgroundImage: toolBarUiStore.showsBackgroundImage,
 			showsGrid: toolBarUiStore.showsGrid,
+			showsDesignGuideline: toolBarUiStore.showsDesignGuideline,
 			onClickDisplayOptionPopover: operator.ui.setShowDisplayOptionPopover,
 			onChangeShowBackgroundImage: operator.ui.setShowBackgroundImage,
-			onChangeShowGrid: operator.ui.setShowGrid
+			onChangeShowGrid: operator.ui.setShowGrid,
+			onChangeShowDesignGuideline: operator.ui.setShowDesignGuideline
 		};
 	}
 }

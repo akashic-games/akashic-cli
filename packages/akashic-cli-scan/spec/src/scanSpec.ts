@@ -3,12 +3,12 @@ import * as fs from "fs";
 import * as cmn from "@akashic/akashic-cli-commons";
 import * as mockfs from "mock-fs";
 import { promiseScanAsset, scanAsset, scanNodeModules } from "../../lib/scan";
-import * as conf from "../../lib/Configuration";
 import { MockPromisedNpm } from "./helpers/MockPromisedNpm";
 
 describe("scan", function () {
 	var nullLogger = new cmn.ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
 	var DUMMY_OGG_DATA2 = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy2.ogg"));
+	const DUMMY_1x1_PNG_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy1x1.png"));
 
 	afterEach(() => {
 		mockfs.restore();
@@ -52,6 +52,7 @@ describe("scan", function () {
 					expect(conf.assets["$"]).toEqual({ type: "text", path: "text/foo/$.txt" });
 					expect(conf.assets["_"]).toEqual({ type: "audio", path: "audio/foo/_", systemId: "sound", duration: 8000 });
 					expect(conf.assets["_1"]).toBe(undefined);
+					expect(fs.existsSync("./game/akashic-lib.json")).toBe(false)
 					done();
 				});
 		});
@@ -89,6 +90,84 @@ describe("scan", function () {
 					expect(path.relative("./", process.cwd())).toBe("");
 					done();
 				});
+		});
+	});
+
+	describe("scanAsset() - with akashic-lib.json", () => {
+		const mockFsContent = {
+			"dir": {
+				"akashic-lib.json": JSON.stringify({}),
+				"assets": {
+					"text": {
+						"foo": {
+							"$.txt": "dummy",
+						},
+					},
+					"image": {
+						"foo": {
+							"_$.png": DUMMY_1x1_PNG_DATA
+						}
+					},
+					"audio": {
+						"foo": {
+							"_.ogg": DUMMY_OGG_DATA2,
+						},
+					},
+					"script": {
+						"foo": {
+							"_1.js": "var x = 1;",
+						},
+					},
+				}
+			}
+		};
+
+		it("scan assets", async () => {
+			mockfs(mockFsContent);
+
+			await promiseScanAsset({
+				cwd: "./dir",
+				target: "all",
+				assetScanDirectoryTable: {
+					image: ["assets/image"],
+					audio: ["assets/audio"]
+				},
+				logger: nullLogger
+			});
+			let conf = JSON.parse(fs.readFileSync("./dir/akashic-lib.json").toString());
+
+			// NOTE: アセットのスキャン順は仕様としては明記されていない。
+			expect(conf.assetList[0]).toEqual({
+				type: "audio",
+				path: "assets/audio/foo/_",
+				systemId: "sound",
+				duration: 8000
+			});
+			expect(conf.assetList[1]).toEqual({
+				type: "image",
+				path: "assets/image/foo/_$.png",
+				width: 1,
+				height: 1
+			});
+
+			await promiseScanAsset({
+				cwd: "./dir",
+				target: "image",
+				assetScanDirectoryTable: {
+					image: ["not_exists"]
+				},
+				logger: nullLogger
+			});
+			conf = JSON.parse(fs.readFileSync("./dir/akashic-lib.json").toString());
+
+			expect(conf.assetList).toEqual([
+				{
+					type: "audio",
+					path: "assets/audio/foo/_",
+					systemId: "sound",
+					duration: 8000
+				}
+			]);
 		});
 	});
 
