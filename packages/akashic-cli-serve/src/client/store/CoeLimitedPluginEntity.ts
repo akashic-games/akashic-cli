@@ -39,6 +39,7 @@ export class CoeLimitedPluginEntity {
 		this.guestName = "ゲスト" + ((Math.random() * 100) | 0);
 	}
 
+	// 名前表示確認ダイアログを表示する。この関数はコンテンツ側から呼ばれる想定
 	@action
 	startLocalSession = (param: StartLocalSessionPameterObject): void => {
 		if (param.applicationName !== ALLOWED_APPLICATION_NAME) {
@@ -62,12 +63,13 @@ export class CoeLimitedPluginEntity {
 		}, 200); // 1s毎だと表示と実際の時間に若干のズレが生まれそうなので、やや間隔短めに残り時間の算出を行う
 	}
 
+	// 名前表示確認ダイアログを消す。この関数はコンテンツ側から呼ばれる想定
 	@action
 	exitLocalSession = (_sessionId: string): void => {
 		this.stopToDisplayResolver();
 	}
 
-	// serve側からも名前確認ダイアログを消すことがあるため、exitLocalSession()とは別にメソッドに切り出した
+	// コンテンツ側だけではなくserve側からも名前表示確認ダイアログを消すことがあるため、exitLocalSession()とは別にメソッドに切り出した
 	@action
 	stopToDisplayResolver(): void {
 		window.clearInterval(this.timerId);
