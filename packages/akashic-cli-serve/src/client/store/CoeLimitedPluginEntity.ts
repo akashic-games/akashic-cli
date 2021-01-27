@@ -69,10 +69,11 @@ export class CoeLimitedPluginEntity {
 		this.stopToDisplayResolver();
 	}
 
-	// コンテンツ側だけではなくserve側からも名前表示確認ダイアログを消すことがあるため、exitLocalSession()とは別にメソッドに切り出した
 	@action
 	stopToDisplayResolver(): void {
-		window.clearInterval(this.timerId);
+		if (this.timerId != null) {
+			window.clearInterval(this.timerId);
+		}
 		this.isDisplayingResolver = false;
 		this.timerId = null;
 	}
