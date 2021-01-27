@@ -29,15 +29,32 @@ export function get(contentId: string): GameConfiguration {
 export function watchContent(targetDir: string, cb: (err: any) => void): void {
 	// akashic-cli-scanはwatchオプション指定時しか使われないので動的importする
 	import("@akashic/akashic-cli-scan/lib/scan").then(scan => {
-		const watcher = chokidar.watch(targetDir, { persistent: true, ignoreInitial: true, ignored: "**/node_modules/**/*" });
+		const gameJsonPath = path.join(targetDir, "game.json");
+		const watcher = chokidar.watch(targetDir, {
+			persistent: true,
+			ignoreInitial: true,
+			ignored: "**/node_modules/**/*",
+			awaitWriteFinish: true
+		});
 		const handler = (filePath: string) => {
 			if (["assets", "audio", "image", "script", "text"].some(dir => filePath.indexOf(path.join(targetDir, dir)) !== -1)) {
-				scan.scanAsset({ target: "all", cwd: targetDir }, cb);
+				// scanAssetメソッドで行われるgame.jsonの更新に反応して2重で再起動しないようにするために、メソッドの実行が終わるまでgame.jsonを監視対象から外す
+				watcher.unwatch(gameJsonPath);
+				scan.scanAsset({ target: "all", cwd: targetDir }, (err) => {
+					watcher.add(gameJsonPath);
+					cb(err);
+				});
+			} else if (filePath === gameJsonPath) {
+				console.log("Reflect changes of game.json");
+				cb(null);
 			}
 		};
 		// watch開始時にgame.jsonのasstesの内容と実際のアセットの内容に誤差が無いかの確認を兼ねてscanAsset関数を実行する
 		watcher.on("ready", () => {
-			scan.scanAsset({ target: "all", cwd: targetDir }, () => {});
+			scan.scanAsset({ target: "all", cwd: targetDir }, () => {
+				watcher.add(gameJsonPath);
+			});
+			watcher.unwatch(gameJsonPath);
 		});
 		watcher.on("add", handler);
 		watcher.on("unlink", handler);
