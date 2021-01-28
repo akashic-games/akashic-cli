@@ -27,7 +27,8 @@ module.exports = {
 				test: /\.css$/,
 				use: [
 					{
-						loader: "style-loader"
+						loader: "style-loader",
+						options: { esModule: false }
 					}, {
 						loader: "css-loader",
 						options: {
