@@ -1,5 +1,26 @@
 # CHANGELOG
 
+## 2.5.1 (2021-01-29)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#665](https://github.com/akashic-games/akashic-cli/pull/665) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.0.6, engineFiles@2.1.50, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+* `akashic-cli-init`
+  * [#664](https://github.com/akashic-games/akashic-cli/pull/664) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+  * [#654](https://github.com/akashic-games/akashic-cli/pull/654) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+* `akashic-cli-export-html`
+  * [#663](https://github.com/akashic-games/akashic-cli/pull/663) 【akashic-cli-export-html】内部コンポーネントの更新(engineFiles@3.0.6, engineFiles@2.1.50, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+  * [#662](https://github.com/akashic-games/akashic-cli/pull/662) 【akashic-cli-export-html】内部コンポーネントの更新(engineFiles@3.0.5, engineFiles@2.1.50, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+  * [#661](https://github.com/akashic-games/akashic-cli/pull/661) 【akashic-cli-export-html】内部コンポーネントの更新(engineFiles@3.0.4, engineFiles@2.1.50, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+
+#### Bug Fix
+* `akashic-cli-serve`
+  * [#657](https://github.com/akashic-games/akashic-cli/pull/657) fix coeLimitedPlugin function to stop to display dialog ([@dera-](https://github.com/dera-))
+
+#### Committers: 2
+- [@dera-](https://github.com/dera-)
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.5.0 (2021-01-21)
 
 #### Enhancement
