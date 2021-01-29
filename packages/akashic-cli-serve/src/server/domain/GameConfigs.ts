@@ -1,6 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as chokidar from "chokidar";
+import { getSystemLogger } from "@akashic/headless-driver";
 import { GameConfiguration } from "../../common/types/GameConfiguration";
 
 const configs: { [key: string]: GameConfiguration } = {};
@@ -51,8 +52,11 @@ export function watchContent(targetDir: string, cb: (err: any) => void): void {
 		};
 		// watch開始時にgame.jsonのasstesの内容と実際のアセットの内容に誤差が無いかの確認を兼ねてscanAsset関数を実行する
 		watcher.on("ready", () => {
-			scan.scanAsset({ target: "all", cwd: targetDir }, () => {
+			scan.scanAsset({ target: "all", cwd: targetDir }, (err) => {
 				watcher.add(gameJsonPath);
+				if (err) {
+					getSystemLogger().error(err.message);
+				}
 			});
 			watcher.unwatch(gameJsonPath);
 		});
