@@ -65,17 +65,25 @@ try{
 	// ゲームディレクトリを作成しつつakashic-cli-initのテスト
 	console.log("test @akashic/akashic-cli-init");
 	shell.cd(`${targetDir}/game`);
-	execSync(`${akashicCliPath} init -y`);
-
+	execSync(`${akashicCliPath} init --type typescript -y`);
 	const files = fs.readdirSync(`${targetDir}/game`);
 	assertContains(files, "audio");
 	assertContains(files, "image");
-	assertContains(files, "script");
+	assertContains(files, "src");
 	assertContains(files, "text");
-	assertContains(files, ".eslintrc.json");
 	assertContains(files, "game.json");
 	assertContains(files, "package.json");
 	assertContains(files, "README.md");
+	assertContains(files, "sandbox.config.js");
+	assertContains(files, ".eslintrc.js");
+	assertContains(files, ".gitignore");
+	assertContains(files, "jest.config.js");
+	assertContains(files, "tsconfig.jest.json");
+	assertContains(files, "tsconfig.json");
+	execSync("npm install");
+	execSync("npm run build");
+	execSync("npm test");
+	execSync("npm run lint");
 
 	// 各akashic-cli-xxxモジュールのテスト
 	// TODO 出力確認
@@ -126,6 +134,9 @@ try{
 	process.exit(0);
 } catch (e) {
 	console.error(e);
-	console.log("Failed!");
+	if (e.output) {
+		console.error(e.output.toString());
+	}
+	console.error("Failed!");
 	process.exit(1);
 }
