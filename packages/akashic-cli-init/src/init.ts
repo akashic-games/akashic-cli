@@ -6,12 +6,18 @@ import * as copyTemplate from "./copyTemplate";
 import { showTemplateMessage } from "./showTemplateMessage";
 import { TemplateConfig } from "./TemplateConfig";
 import { readTemplateFile } from "./readTemplateFile";
+import { listTemplates } from "./listTemplates";
 
 export function promiseInit(param: InitParameterObject): Promise<void> {
 	let templateConfig: TemplateConfig;
 
 	return Promise.resolve<void>(undefined)
 		.then(() => completeInitParameterObject(param))
+		.then(() => {
+			return listTemplates(param).then(templates => {
+				if (!templates.has(param.type)) throw new Error ("unknown template name " + param.type);
+			});
+		})
 		.then(() => extractZipIfNeeded(param))
 		.then(() => downloadTemplateIfNeeded(param))
 		.then(() => readTemplateFile(param))

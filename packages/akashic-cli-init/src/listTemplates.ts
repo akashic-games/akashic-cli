@@ -6,7 +6,7 @@ import { InitParameterObject, completeInitParameterObject } from "./InitParamete
 /**
  * サーバに存在するテンプレート一覧を表示
  */
-export function listTemplates(param: InitParameterObject): Promise<void> {
+export function listTemplates(param: InitParameterObject): Promise<Set<string>> {
 	var templates: string[] = [];
 
 	return completeInitParameterObject(param)
@@ -35,7 +35,7 @@ export function listTemplates(param: InitParameterObject): Promise<void> {
 			}
 		})
 		.then(() => {
-			(new Set(templates)).forEach(t => param.logger.print(t));
+			return Promise.resolve(new Set(templates));
 		});
 }
 

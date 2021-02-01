@@ -12,7 +12,9 @@ function cli(param: CliConfigInit): void {
 		Promise.resolve()
 			.then(() => {
 				if (param.list) {
-					return listTemplates(initParam);
+					return listTemplates(initParam).then((templates) => {
+						templates.forEach(t => logger.print(t));
+					});
 				}
 				return promiseInit(initParam);
 			})
