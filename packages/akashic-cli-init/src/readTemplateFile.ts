@@ -12,6 +12,8 @@ export function readTemplateFile(param: InitParameterObject): Promise<TemplateCo
 					console.log("reg", err);
 					reject(err);
 					return;
+				} else {
+					reject(new Error ("unknown template name " + param.type));
 				}
 				resolve({});
 				return;
