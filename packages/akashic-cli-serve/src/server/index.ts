@@ -137,9 +137,12 @@ async function cli(cliConfigParam: CliConfigServe) {
 	if (cliConfigParam.watch && cliConfigParam.targetDirs) {
 		console.log("Start watching contents");
 		for (let i = 0; i < cliConfigParam.targetDirs.length; i++) {
-			watchContent(cliConfigParam.targetDirs[i], async (err: any) => {
+			await watchContent(cliConfigParam.targetDirs[i], async (err: any, isChangedGameJson: boolean) => {
 				if (err) {
 					getSystemLogger().error(err.message);
+				}
+				if (isChangedGameJson) {
+					console.log("Reflect changes of game.json");
 				}
 				// コンテンツに変更があったらplayを新規に作り直して再起動
 				const contentId = `${i}`;

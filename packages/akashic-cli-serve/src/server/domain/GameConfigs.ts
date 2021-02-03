@@ -27,9 +27,9 @@ export function get(contentId: string): GameConfiguration {
 	return configs[contentId];
 }
 
-export function watchContent(targetDir: string, cb: (err: any) => void): void {
+export async function watchContent(targetDir: string, cb: (err: any, isChangedGameJson: boolean) => void): Promise<void> {
 	// akashic-cli-scanはwatchオプション指定時しか使われないので動的importする
-	import("@akashic/akashic-cli-scan/lib/scan").then(scan => {
+	await import("@akashic/akashic-cli-scan/lib/scan").then(scan => {
 		const gameJsonPath = path.join(targetDir, "game.json");
 		const watcher = chokidar.watch(targetDir, {
 			persistent: true,
@@ -43,23 +43,13 @@ export function watchContent(targetDir: string, cb: (err: any) => void): void {
 				watcher.unwatch(gameJsonPath);
 				scan.scanAsset({ target: "all", cwd: targetDir }, (err) => {
 					watcher.add(gameJsonPath);
-					cb(err);
+					cb(err, false);
 				});
 			} else if (filePath === gameJsonPath) {
 				console.log("Reflect changes of game.json");
-				cb(null);
+				cb(null, true);
 			}
 		};
-		// watch開始時にgame.jsonのasstesの内容と実際のアセットの内容に誤差が無いかの確認を兼ねてscanAsset関数を実行する
-		watcher.on("ready", () => {
-			scan.scanAsset({ target: "all", cwd: targetDir }, (err) => {
-				watcher.add(gameJsonPath);
-				if (err) {
-					getSystemLogger().error(err.message);
-				}
-			});
-			watcher.unwatch(gameJsonPath);
-		});
 		watcher.on("add", handler);
 		watcher.on("unlink", handler);
 		watcher.on("change", handler);
