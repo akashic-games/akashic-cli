@@ -6,7 +6,18 @@ import { InitParameterObject, completeInitParameterObject } from "./InitParamete
 /**
  * サーバに存在するテンプレート一覧を表示
  */
+
 export function listTemplates(param: InitParameterObject): Promise<void> {
+	return collectTemplatesNames(param)
+		.then((templates) => {
+			templates.forEach(t => param.logger.print(t));
+		});
+}
+
+/**
+ * 利用できるテンプレート一覧を取得
+ */
+ export function collectTemplatesNames(param: InitParameterObject): Promise<Set<string>> {
 	var templates: string[] = [];
 
 	return completeInitParameterObject(param)
@@ -35,9 +46,11 @@ export function listTemplates(param: InitParameterObject): Promise<void> {
 			}
 		})
 		.then(() => {
-			(new Set(templates)).forEach(t => param.logger.print(t));
+			return new Set(templates);
 		});
 }
+
+
 
 function promisedReaddir(dir: string): Promise<string[]> {
 	return new Promise<string[]>((resolve, reject) => {
