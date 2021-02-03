@@ -34,25 +34,42 @@ export async function watchContent(targetDir: string, cb: (err: any, isChangedGa
 		const watcher = chokidar.watch(targetDir, {
 			persistent: true,
 			ignoreInitial: true,
-			ignored: "**/node_modules/**/*",
-			awaitWriteFinish: true
+			ignored: "**/node_modules/**/*"
 		});
-		const handler = (filePath: string) => {
-			if (["assets", "audio", "image", "script", "text"].some(dir => filePath.indexOf(path.join(targetDir, dir)) !== -1)) {
-				// scanAssetメソッドで行われるgame.jsonの更新に反応して2重で再起動しないようにするために、メソッドの実行が終わるまでgame.jsonを監視対象から外す
-				watcher.unwatch(gameJsonPath);
-				scan.scanAsset({ target: "all", cwd: targetDir }, (err) => {
-					watcher.add(gameJsonPath);
-					cb(err, false);
-				});
-			} else if (filePath === gameJsonPath) {
-				console.log("Reflect changes of game.json");
-				cb(null, true);
+		let lastUpdateTime: number = null;
+		let timerSetTime: number = null;
+		let timerId: NodeJS.Timeout = null;
+		let updateDelay = 1000;
+		// scanAssetメソッドやcb関数を1イベント毎に逐次的に実行するためsetTimeoutを用いて実行する
+		const watcherHandler = (filePath: string) => {
+			const currentTime = Date.now();
+			lastUpdateTime = currentTime;
+			if (timerId === null) {
+				timerSetTime = currentTime;
 			}
+			const handler = (filePath: string) => {
+				if (timerSetTime !== lastUpdateTime) {
+					lastUpdateTime = timerSetTime = Date.now();
+					timerId = setTimeout(handler, updateDelay, filePath);
+					return;
+				}
+				if (["assets", "audio", "image", "script", "text"].some(dir => filePath.indexOf(path.join(targetDir, dir)) !== -1)) {
+					// scanAssetメソッドで行われるgame.jsonの更新に反応して2重で再起動しないようにするために、メソッドの実行が終わるまでgame.jsonを監視対象から外す
+					watcher.unwatch(gameJsonPath);
+					scan.scanAsset({ target: "all", cwd: targetDir }, (err) => {
+						watcher.add(gameJsonPath);
+						cb(err, false);
+					});
+				} else if (filePath === gameJsonPath) {
+					cb(null, true);
+				}
+				timerId = null;
+			};
+			timerId = setTimeout(handler, updateDelay, filePath);
 		};
-		watcher.on("add", handler);
-		watcher.on("unlink", handler);
-		watcher.on("change", handler);
+		watcher.on("add", watcherHandler);
+		watcher.on("unlink", watcherHandler);
+		watcher.on("change", watcherHandler);
 	});
 }
 
