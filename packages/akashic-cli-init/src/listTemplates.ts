@@ -17,7 +17,7 @@ export function listTemplates(param: InitParameterObject): Promise<void> {
 /**
  * 利用できるテンプレート一覧を取得
  */
- export function collectTemplatesNames(param: InitParameterObject): Promise<Set<string>> {
+export function collectTemplatesNames(param: InitParameterObject): Promise<Set<string>> {
 	var templates: string[] = [];
 
 	return completeInitParameterObject(param)

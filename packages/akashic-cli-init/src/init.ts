@@ -17,7 +17,7 @@ export function promiseInit(param: InitParameterObject): Promise<void> {
 			return collectTemplatesNames(param)
 				.then(templates => {
 					if (!templates.has(param.type)) throw new Error ("unknown template name " + param.type);
-				})
+				});
 		})
 		.then(() => extractZipIfNeeded(param))
 		.then(() => downloadTemplateIfNeeded(param))
