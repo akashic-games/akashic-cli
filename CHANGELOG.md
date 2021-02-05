@@ -1,5 +1,21 @@
 # CHANGELOG
 
+## 2.5.4 (2021-02-05)
+
+#### Enhancement
+* `akashic-cli-export-html`
+  * [#674](https://github.com/akashic-games/akashic-cli/pull/674) 【akashic-cli-export-html】内部コンポーネントの更新(engineFiles@2.1.51, engineFiles@2.1.51, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+* `akashic-cli-init`
+  * [#676](https://github.com/akashic-games/akashic-cli/pull/676) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+  * [#675](https://github.com/akashic-games/akashic-cli/pull/675) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Other Change
+* [#656](https://github.com/akashic-games/akashic-cli/pull/656) add test of akashic-li-init template in test/e2e.js ([@dera-](https://github.com/dera-))
+
+#### Committers: 2
+- [@dera-](https://github.com/dera-)
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.5.3 (2021-01-29)
 
 #### Enhancement
