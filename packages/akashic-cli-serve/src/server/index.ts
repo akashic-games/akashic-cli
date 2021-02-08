@@ -19,7 +19,7 @@ import { createHealthCheckRouter } from "./route/HealthCheckRoute";
 import { ServerContentLocator } from "./common/ServerContentLocator";
 import {  CliConfigurationFile, CliConfigServe, SERVICE_TYPES } from "@akashic/akashic-cli-commons";
 import { PlayerIdStore } from "./domain/PlayerIdStore";
-import { watchContent } from "./domain/GameConfigs";
+import { ModTargetFlags, watchContent } from "./domain/GameConfigs";
 
 // 渡されたパラメータを全てstringに変換する
 // chalkを使用する場合、ログ出力時objectの中身を展開してくれないためstringに変換する必要がある
@@ -137,11 +137,11 @@ async function cli(cliConfigParam: CliConfigServe) {
 	if (cliConfigParam.watch && cliConfigParam.targetDirs) {
 		console.log("Start watching contents");
 		for (let i = 0; i < cliConfigParam.targetDirs.length; i++) {
-			await watchContent(cliConfigParam.targetDirs[i], async (err: any, isChangedGameJson: boolean) => {
+			await watchContent(cliConfigParam.targetDirs[i], async (err: any, modTargetFlag: ModTargetFlags) => {
 				if (err) {
 					getSystemLogger().error(err.message);
 				}
-				if (isChangedGameJson) {
+				if (modTargetFlag === ModTargetFlags.GameJson) {
 					console.log("Reflect changes of game.json");
 				}
 				// コンテンツに変更があったらplayを新規に作り直して再起動
