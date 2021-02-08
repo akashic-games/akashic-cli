@@ -14,6 +14,7 @@
     "publish:major": "node build/updateChangelog.js major && npm run commit-changelog && lerna publish major --dist-tag ${PUBLISH_DIST_TAG:-latest} --yes",
     "publish:force-patch-all": "node build/prepareRepublish.js && cross-env PUBLISH_MODE=force node build/updateChangelog.js patch && npm run commit-changelog && lerna publish patch --force-publish=* --dist-tag ${PUBLISH_DIST_TAG:-latest} --yes",
     "publish:prerelease": "lerna publish prerelease --dist-tag ${PUBLISH_DIST_TAG:-next} --yes",
+    "publish:from-package": "lerna publish from-package --dist-tag ${PUBLISH_DIST_TAG:-latest} --yes",
     "commit-changelog": "git add ./CHANGELOG.md && git commit -m 'Update Changelog'"
   },
   "author": "DWANGO Co., Ltd.",
