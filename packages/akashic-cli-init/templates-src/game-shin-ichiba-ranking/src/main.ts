@@ -106,7 +106,7 @@ export function main(param: GameMainParameterObject): void {
 		});
 		const updateHandler = (): void => {
 			if (time <= 0) {
-				// GAMEアツマール環境であればランキングを表示します
+				// ゲームアツマール環境であればランキングを表示します
 				if (param.isAtsumaru) {
 					const boardId = 1;
 					window.RPGAtsumaru.experimental.scoreboards.setRecord(boardId, g.game.vars.gameState.score).then(function() {
