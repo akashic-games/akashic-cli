@@ -11,7 +11,7 @@ export = (originalParam: g.GameMainParameterObject) => {
 	});
 	// セッションパラメーター
 	param.sessionParameter = {};
-	// コンテンツが動作している環境がRPGアツマール上かどうか
+	// コンテンツが動作している環境がGAMEアツマール上かどうか
 	param.isAtsumaru = typeof window !== "undefined" && typeof window.RPGAtsumaru !== "undefined";
 	// 乱数生成器
 	param.random = g.game.random;

@@ -50,7 +50,7 @@ npm run build
   * 基本的に`src/_bootstrap.ts`を編集する必要はありません。
 * 基本的な使い方は typescript テンプレートと同じですが、このテンプレートでは `src/main.ts` の `main` 関数の引数`param`に以下の値が新たに付与されています。
   * `param.sessionParameter`: [セッションパラメーター](https://akashic-games.github.io/guide/ranking.html#session-parameters)
-  * `param.isAtsumaru`:コンテンツが動作している環境がRPGアツマール上かどうかを表すbool値
+  * `param.isAtsumaru`:コンテンツが動作している環境がGAMEアツマール上かどうかを表すbool値
 * ランキングモードに対応したニコニコ新市場コンテンツの作り方の詳細については、[こちら](https://akashic-games.github.io/guide/ranking.html)を参照してください。
 
 ### アセットの更新方法

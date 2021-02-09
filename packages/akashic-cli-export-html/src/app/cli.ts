@@ -80,7 +80,7 @@ commander
 	.option("-i, --inject [fileName]", "specify injected file content into index.html", inject, [])
 	.option("--autoSendEvents [eventName]", "(deprecated)event name that send automatically when game start")
 	.option("-A, --auto-send-event-name [eventName]", "event name that send automatically when game start")
-	.option("-a, --atsumaru", "generate files that can be posted to RPG-atsumaru")
+	.option("-a, --atsumaru", "generate files that can be posted to GAME-atsumaru")
 	.option("--no-omit-unbundled-js", "Unnecessary script files are included even when the `--atsumaru` option is specified.");
 
 export function run(argv: string[]): void {

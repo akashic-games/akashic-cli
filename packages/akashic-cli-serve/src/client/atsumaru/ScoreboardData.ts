@@ -1,4 +1,4 @@
-// RPGアツマールのスコアボードの情報
+// GAMEアツマールのスコアボードの情報
 export interface ScoreboardData {
 	myRecord: null | {
 	  isNewRecord: boolean,
