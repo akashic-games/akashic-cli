@@ -234,7 +234,7 @@ export class RPGAtsumaruApi implements RPGAtsumaruApiLike {
 		}
 	};
 
-	// アツマールAPIでexperimentalはdeprecated扱いになったが、RPGアツマールでまだ対応しているのでserveでも利用できるようにしておく
+	// アツマールAPIでexperimentalはdeprecated扱いになったが、ゲームアツマールでまだ対応しているのでserveでも利用できるようにしておく
 	experimental = {
 		popups: {
 			displayCreatorInformationModal: this.popups.displayCreatorInformationModal
