@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 2.5.8 (2021-02-12)
+
+#### Other Change
+* `akashic-cli-commons`, `akashic-cli-export-html`, `akashic-cli-init`, `akashic-cli-serve`
+  * [#683](https://github.com/akashic-games/akashic-cli/pull/683) Rename RPG-Atsumaru -> GAME-atsumaru ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+* Other
+  * [#673](https://github.com/akashic-games/akashic-cli/pull/673) add publish script as npm-scripts ([@dera-](https://github.com/dera-))
+
+#### Committers: 2
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- [@dera-](https://github.com/dera-)
+
 ## 2.5.7 (2021-02-05)
 
 #### Enhancement
