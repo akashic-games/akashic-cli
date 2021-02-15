@@ -135,7 +135,6 @@ function showSize(param: StatSizeParameterObject, sizeResult: SizeResult): void 
 				sizeToString(sizeResult.totalSizeAac()) +
 				` (${sizeResult.totalSizeAac()}B)`
 			);
-			param.logger.warn("AAC (.aac) is deprecated. Use MP4(AAC) (.mp4) instead.");
 		}
 	} else {
 		param.logger.print(totalSize.toString());
@@ -206,8 +205,7 @@ function sizeOfAssets(param: StatSizeParameterObject, sizeResult: SizeResult): P
 
 					.then(() => fileSize(path.join(param.basepath, asset.path + ".mp4")))
 					.then(
-						size => { sizeResult.mp4AudioSize += size; },
-						() => {if (!param.raw) param.logger.warn(asset.path + ".mp4, No such file."); })
+						size => { sizeResult.mp4AudioSize += size; })
 
 					.then(() => fileSize(path.join(param.basepath, asset.path + ".aac")))
 					.then(

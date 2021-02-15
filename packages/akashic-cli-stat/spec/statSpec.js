@@ -126,8 +126,7 @@ describe("format stat result", () => {
 		"  game.json: 367B\n" +
 		"[*] TOTAL SIZE (using ogg): 8.43KB (8632B)\n" +
 		"[ ] TOTAL SIZE (using mp4): 6.29KB (6443B)\n" +
-		"[ ] TOTAL SIZE (using aac): 5.14KB (5267B)\n" +
-		"WARN: AAC (.aac) is deprecated. Use MP4(AAC) (.mp4) instead.\n";
+		"[ ] TOTAL SIZE (using aac): 5.14KB (5267B)\n";
 
 	it("will output following text", done => {
 		let buffer = "";
@@ -155,8 +154,7 @@ describe("format stat result - maximum mp4", () => {
 		"  game.json: 168B\n" +
 		"[ ] TOTAL SIZE (using ogg): 7.61KB (7795B)\n" +
 		"[*] TOTAL SIZE (using mp4): 9.48KB (9704B)\n" +
-		"[ ] TOTAL SIZE (using aac): 4.33KB (4430B)\n" +
-		"WARN: AAC (.aac) is deprecated. Use MP4(AAC) (.mp4) instead.\n";
+		"[ ] TOTAL SIZE (using aac): 4.33KB (4430B)\n";
 
 	it("will output following text", done => {
 		let buffer = "";
