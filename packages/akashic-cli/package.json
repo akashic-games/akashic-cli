@@ -34,7 +34,7 @@
     "@akashic/akashic-cli-stat": "0.6.1",
     "@akashic/akashic-cli-uninstall": "0.8.1",
     "@akashic/akashic-cli-update": "0.7.1",
-    "commander": "5.1.0"
+    "commander": "7.1.0"
   },
   "devDependencies": {
     "@types/commander": "2.12.0",
