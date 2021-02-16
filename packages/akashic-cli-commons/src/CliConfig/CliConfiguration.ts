@@ -17,7 +17,7 @@ export interface CliConfiguration {
 		export?: {
 			html?: Partial<CliConfigExportHtml>;
 			zip?: Partial<CliConfigExportZip>;
-		}
+		};
 		init?: Partial<CliConfigInit>;
 		install?: Partial<CliConfigInstall>;
 		modify?: Partial<CliConfigModify>;

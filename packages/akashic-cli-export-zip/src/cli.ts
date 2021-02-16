@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
-import * as commander from "commander";
 import { ConsoleLogger, CliConfigurationFile, CliConfigExportZip, SERVICE_TYPES } from "@akashic/akashic-cli-commons";
+import * as commander from "commander";
 import { promiseExportZip } from "./exportZip";
 
 var ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "package.json"), "utf8")).version;
@@ -68,31 +68,31 @@ export function run(argv: string[]): void {
 	const argvCopy = dropDeprecatedArgs(argv);
 	commander.parse(argvCopy);
 
-	CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashic.config.js"), (error, configuration) => {
+	CliConfigurationFile.read(path.join(commander.cwd || process.cwd(), "akashic.config.js"), (error, configuration) => {
 		if (error) {
 			console.error(error);
 			process.exit(1);
 		}
 
-		if (commander["targetService"] && !availableServices.includes(commander["targetService"])) {
-			console.error("Invalid --target-service option argument: " + commander["targetService"]);
+		if (commander.targetService && !availableServices.includes(commander.targetService)) {
+			console.error("Invalid --target-service option argument: " + commander.targetService);
 			process.exit(1);
 		}
 
 		const conf = configuration.commandOptions.export ? (configuration.commandOptions.export.zip || {}) : {};
 		cli({
-			cwd: commander["cwd"] ?? conf.cwd,
-			quiet: commander["quiet"] ?? conf.quiet,
-			output: commander["output"] ?? conf.output,
-			force: commander["force"] ?? conf.force,
-			strip: commander["strip"] ?? conf.strip,
-			minify: commander["minify"] ?? conf.minify,
-			hashFilename: commander["hashFilename"] ?? conf.hashFilename,
-			bundle: commander["bundle"] ?? conf.bundle,
-			babel: commander["es5Downpile"] ?? conf.babel,
-			omitEmptyJs: commander["omitEmptyJs"] ?? conf.omitEmptyJs,
-			omitUnbundledJs: commander["omitUnbundledJs"] ?? conf.omitUnbundledJs,
-			targetService: commander["targetService"] ?? conf.targetService
+			cwd: commander.cwd ?? conf.cwd,
+			quiet: commander.quiet ?? conf.quiet,
+			output: commander.output ?? conf.output,
+			force: commander.force ?? conf.force,
+			strip: commander.strip ?? conf.strip,
+			minify: commander.minify ?? conf.minify,
+			hashFilename: commander.hashFilename ?? conf.hashFilename,
+			bundle: commander.bundle ?? conf.bundle,
+			babel: commander.es5Downpile ?? conf.babel,
+			omitEmptyJs: commander.omitEmptyJs ?? conf.omitEmptyJs,
+			omitUnbundledJs: commander.omitUnbundledJs ?? conf.omitUnbundledJs,
+			targetService: commander.targetService ?? conf.targetService
 		});
 	});
 }

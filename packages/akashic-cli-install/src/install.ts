@@ -1,7 +1,7 @@
-import * as path from "path";
 import * as fs from "fs";
-import * as tar from "tar";
+import * as path from "path";
 import * as cmn from "@akashic/akashic-cli-commons";
+import * as tar from "tar";
 import { Configuration } from "./Configuration";
 
 export interface InstallParameterObject {

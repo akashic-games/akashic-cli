@@ -17,7 +17,7 @@ class LocalScriptAssetV3 {
 		this.originalPath = path;
 		this.path = this._assetPathFilter(path);
 		this.onDestroyed = new g.Trigger<g.Asset>();
-		this.func = window.gLocalAssetContainer[id]; // gLocalScriptContainer は index.ect 上のscriptタグ内で宣言されている 
+		this.func = window.gLocalAssetContainer[id]; // gLocalScriptContainer は index.ect 上のscriptタグ内で宣言されている
 	}
 
 	destroy(): void {

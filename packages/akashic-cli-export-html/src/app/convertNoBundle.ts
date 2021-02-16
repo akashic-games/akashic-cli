@@ -1,8 +1,8 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as cmn from "@akashic/akashic-cli-commons";
-import * as fsx from "fs-extra";
 import * as ejs from "ejs";
+import * as fsx from "fs-extra";
 import {
 	ConvertTemplateParameterObject,
 	copyAssetFilesStrip,

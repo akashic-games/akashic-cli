@@ -1,13 +1,13 @@
 import * as fs from "fs";
-import * as fsx from "fs-extra";
 import * as path from "path";
 import * as cmn from "@akashic/akashic-cli-commons";
-import * as browserify from "browserify";
-import readdir = require("fs-readdir-recursive");
-import * as gcu from "./GameConfigurationUtil";
-import * as UglifyJS from "uglify-js";
 import * as babel from "@babel/core";
 import * as presetEnv from "@babel/preset-env";
+import * as browserify from "browserify";
+import * as fsx from "fs-extra";
+import readdir = require("fs-readdir-recursive");
+import * as UglifyJS from "uglify-js";
+import * as gcu from "./GameConfigurationUtil";
 
 export interface ConvertGameParameterObject {
 	bundle?: boolean;
@@ -168,7 +168,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 				gamejson.main = "./" + entryPointPath;
 			} else {
 				entryPointPath = gcu.makeUniqueAssetPath(gamejson, "script/mainScene.js");
-				gamejson.assets["mainScene"] = {
+				gamejson.assets.mainScene = {
 					type: "script",
 					global: true,
 					path: entryPointPath

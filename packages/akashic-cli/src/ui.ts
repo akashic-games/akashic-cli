@@ -1,6 +1,6 @@
-import * as commander from "commander";
 import * as fs from "fs";
 import * as path from "path";
+import * as commander from "commander";
 var ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "package.json"), "utf8")).version;
 
 commander
