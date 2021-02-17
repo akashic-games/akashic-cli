@@ -1,5 +1,5 @@
 import * as commons from "@akashic/akashic-cli-commons";
-import * as config from "@akashic/akashic-cli-config";
+import * as config from "@akashic/akashic-cli-extra/lib/config";
 import * as os from "os";
 import * as path from "path";
 

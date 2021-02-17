@@ -1,2 +1,2 @@
 #!/usr/bin/env node
-require("@akashic/akashic-cli-modify").run(process.argv);
+require("@akashic/akashic-cli-extra/lib/modify").run(process.argv);
