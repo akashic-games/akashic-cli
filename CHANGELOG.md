@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.5.13 (2021-02-18)
+
+#### Bug Fix
+* `akashic-cli-stat`
+  * [#685](https://github.com/akashic-games/akashic-cli/pull/685) Fix warning message of akashic-cli-stat ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 2.5.12 (2021-02-16)
 
 #### Enhancement
