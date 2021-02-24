@@ -6,7 +6,6 @@ import { InitParameterObject, completeInitParameterObject } from "./InitParamete
 /**
  * サーバに存在するテンプレート一覧を表示
  */
-
 export function listTemplates(param: InitParameterObject): Promise<void> {
 	return collectTemplatesNames(param)
 		.then((templates) => {
@@ -49,8 +48,6 @@ export function collectTemplatesNames(param: InitParameterObject): Promise<Set<s
 			return new Set(templates);
 		});
 }
-
-
 
 function promisedReaddir(dir: string): Promise<string[]> {
 	return new Promise<string[]>((resolve, reject) => {
