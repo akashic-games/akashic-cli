@@ -16,7 +16,8 @@
   "include": [
     "./view/stories/**/*.tsx",
     "./css.d.ts",
-    "./akashic/AkashicGameViewWeb.d.ts",
-    "./bootstrap.tsx"
+    "akashic/AkashicGameViewWeb.d.ts",
+    "./bootstrap.tsx",
+    "./bootstrapRoot.tsx",
   ]
 }

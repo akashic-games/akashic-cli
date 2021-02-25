@@ -1,5 +1,5 @@
-import { EDumpItem } from "../common/types/EDumpItem";
-import { Store } from "../store/Store";
+import { EDumpItem } from "../../common/types/EDumpItem";
+import { Store } from "../../store/Store";
 
 export class DevtoolOperator {
 	private store: Store;

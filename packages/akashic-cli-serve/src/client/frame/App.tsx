@@ -2,14 +2,14 @@ import * as React from "react";
 import { observer } from "mobx-react";
 import { GameViewManager } from "../akashic/GameViewManager";
 import { Store } from "../store/Store";
-import { Operator } from "../operator/Operator";
-import { FlexScrollY } from "./atom/FlexScrollY";
+import { Operator } from "./operator/Operator";
+import { FlexScrollY } from "../view/atom/FlexScrollY";
 import { ToolBarContainer } from "./container/ToolbarContainer";
 import { DevtoolContainer } from "./container/DevtoolContainer";
 import { StartupScreenContainer } from "./container/StartupScreenContainer";
 import { NotificationContainer } from "./container/NotificationContainer";
 import { GameScreenContainer } from "./container/GameScreenContainer";
-import "./global.css";
+import "../view/global.css";
 import * as styles from "./App.css";
 
 export interface AppProps {
@@ -43,6 +43,7 @@ export class App extends React.Component<AppProps, {}> {
 				localInstance={store.currentLocalInstance}
 				operator={operator}
 				toolBarUiStore={store.toolBarUiStore}
+				framePaneStore={store.framePaneStore}
 				targetService={store.targetService}
 			/>
 			<FlexScrollY>

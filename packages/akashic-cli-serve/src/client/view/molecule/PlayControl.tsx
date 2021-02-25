@@ -6,9 +6,11 @@ import { ToolControlGroup } from "../atom/ToolControlGroup";
 export interface PlayControlPropsData {
 	playbackRate: number;
 	isActivePausing: boolean;
+	disablesFrameAdd?: boolean;
 	onClickReset?: () => void;
 	onClickActivePause?: (toPause: boolean) => void;
 	onClickAddInstance?: () => void;
+	onClickAddFrame?: () => void;
 	onClickStep?: () => void;
 }
 
@@ -42,9 +44,15 @@ export class PlayControl extends React.Component<PlayControlProps, {}> {
 				onClick={props.onClickStep} />
 			<ToolIconButton
 				className="external-ref_button_add-instance"
-				icon="group_add"
-				title={"インスタンスを追加\r\r新しいタブ・ウィンドウでこのプレイに接続するインスタンスを追加します。"}
+				icon="web_asset"
+				title={"インスタンスを追加(ウィンドウ)\r\r現在のプレイに接続するインスタンスを新しいタブ・ウィンドウで追加します。"}
 				onClick={props.onClickAddInstance} />
+			<ToolIconButton
+				className="external-ref_button_add-frame"
+				icon="group_add"
+				title={"インスタンスを追加(フレーム)\r\r現在のプレイに接続するインスタンスをこのウィンドウ内に追加します。"}
+				disabled={props.disablesFrameAdd}
+				onClick={props.onClickAddFrame} />
 			{/* // 未実装
 			<ToolLabelButton title="Playback Rate (Active)" onClick={props.onClickActivePlaybackRate}>
 				x{"" + props.playbackRate}

@@ -5,7 +5,6 @@ import { SelfInformation, dummySelfInfomation } from "./SelfInformation";
 import { TweetSettings } from "./TweetSettings";
 import { UserIdName, dummyUserIdName } from "./UserIdName";
 import { UserInformation, dummyUserInformation } from "./UserInformation";
-import { ServeGameContent } from "../akashic/ServeGameContent";
 import { Trigger } from "@akashic/trigger";
 
 interface SubscriptionMock {

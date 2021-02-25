@@ -4,10 +4,14 @@ const path = require("path");
 module.exports = {
 	mode: "development",
 	target: "node",
-	entry: ["whatwg-fetch", "./src/client/bootstrap.tsx"],
+	entry: {
+		"whatwg-fetch": "whatwg-fetch",
+		app: "./src/client/bootstrapRoot.tsx",
+		frame: "./src/client/bootstrap.tsx"
+	},
 	output: {
 		path: path.resolve(__dirname, "../../www/public/js"),
-		filename: "index.js"
+		filename: "[name].index.js"
 	},
 	devtool: "source-map",
 	resolve: {

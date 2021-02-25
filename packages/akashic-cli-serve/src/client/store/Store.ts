@@ -7,6 +7,7 @@ import {ClientContentLocator} from "../common/ClientContentLocator";
 import * as ApiClient from "../api/ApiClient";
 import {PlayEntity} from "./PlayEntity";
 import {PlayStore} from "./PlayStore";
+import {FramePaneStore} from "./FramePaneStore";
 import {LocalInstanceEntity} from "./LocalInstanceEntity";
 import {DevtoolUiStore} from "./DevtoolUiStore";
 import {ToolBarUiStore} from "./ToolBarUiStore";
@@ -19,6 +20,7 @@ import {storage} from "./storage";
 export class Store {
 	@observable contentStore: ContentStore;
 	@observable playStore: PlayStore;
+	@observable framePaneStore: FramePaneStore;
 	@observable toolBarUiStore: ToolBarUiStore;
 	@observable devtoolUiStore: DevtoolUiStore;
 	@observable notificationUiStore: NotificationUiStore;
@@ -31,14 +33,18 @@ export class Store {
 	@observable currentPlay: PlayEntity | null;
 	@observable currentLocalInstance: LocalInstanceEntity | null;
 
+	@observable paneKey: string | null;
+
 	private _initializationWaiter: Promise<void>;
 
 	constructor() {
 		const query = queryString.parse(window.location.search);
 		// TODO xnv bootstrapから渡す方が自然では？
+		this.paneKey = (query.paneKey as string) || null;
 		this.contentLocator = new ClientContentLocator({ contentId: (query.id != null) ? query.id as string : "0" });
 		this.contentStore = new ContentStore();
 		this.playStore = new PlayStore({ contentStore: this.contentStore });
+		this.framePaneStore = new FramePaneStore();
 		this.toolBarUiStore = new ToolBarUiStore();
 		this.devtoolUiStore = new DevtoolUiStore();
 		this.notificationUiStore = new NotificationUiStore();

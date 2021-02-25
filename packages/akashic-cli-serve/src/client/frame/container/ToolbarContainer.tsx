@@ -4,27 +4,29 @@ import { ServiceType } from "@akashic/akashic-cli-commons";
 import { PlayEntity } from "../../store/PlayEntity";
 import { LocalInstanceEntity } from "../../store/LocalInstanceEntity";
 import { ToolBarUiStore } from "../../store/ToolBarUiStore";
-import { Operator } from "../../operator/Operator";
-import { PlayControlPropsData } from "../molecule/PlayControl";
-import { InstanceControlPropsData } from "../molecule/InstanceControl";
-import { PlayerControlPropsData } from "../molecule/PlayerControl";
-import { DisplayOptionControlPropsData } from "../molecule/DisplayOptionControl";
-import { ToolBar } from "../organism/ToolBar";
+import { Operator } from "../operator/Operator";
+import { PlayControlPropsData } from "../../view/molecule/PlayControl";
+import { InstanceControlPropsData } from "../../view/molecule/InstanceControl";
+import { PlayerControlPropsData } from "../../view/molecule/PlayerControl";
+import { DisplayOptionControlPropsData } from "../../view/molecule/DisplayOptionControl";
+import { ToolBar } from "../../view/organism/ToolBar";
+import { FramePaneStore } from "../../store/FramePaneStore";
 
 export interface ToolBarContainerProps {
 	play: PlayEntity;
 	localInstance: LocalInstanceEntity;
 	operator: Operator;
 	toolBarUiStore: ToolBarUiStore;
+	framePaneStore: FramePaneStore;
 	targetService: ServiceType;
 }
 
 @observer
 export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}> {
 	render(): React.ReactNode {
-		const { operator, localInstance, toolBarUiStore, targetService } = this.props;
+		const { operator, localInstance, toolBarUiStore, framePaneStore, targetService } = this.props;
 		return <ToolBar
-			makePlayControlProps={this._makePlayControlProps}
+			// makePlayControlProps={this._makePlayControlProps}
 			makeInstanceControlProps={this._makeInstanceControlProps}
 			makePlayerControlProps={this._makePlayerControlProps}
 			makeDisplayOptionControlProps={this._makeDisplayOptionControlProps}
@@ -32,22 +34,24 @@ export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}>
 			showsDevtools={toolBarUiStore.showsDevtools}
 			showsInstanceControl={(localInstance.executionMode === "replay") || toolBarUiStore.showsDevtools}
 			targetService={targetService}
+			disablesClose={framePaneStore.panes.length <= 1}
 			onToggleAppearance={operator.ui.setShowAppearance}
 			onClickDevTools={operator.ui.setShowDevtools}
+			onClickClose={operator.play.requestCloseThisFrame}
 		/>;
 	}
 
-	private _makePlayControlProps = (): PlayControlPropsData => {
-		const { play, operator } = this.props;
-		return {
-			playbackRate: play.activePlaybackRate,
-			isActivePausing: play.isActivePausing,
-			onClickReset: operator.restartWithNewPlay,
-			onClickActivePause: operator.play.togglePauseActive,
-			onClickAddInstance: operator.play.openNewClientInstance,
-			onClickStep: operator.play.step
-		};
-	}
+	// private _makePlayControlProps = (): PlayControlPropsData => {
+	// 	const { play, operator } = this.props;
+	// 	return {
+	// 		playbackRate: play.activePlaybackRate,
+	// 		isActivePausing: play.isActivePausing,
+	// 		onClickReset: operator.restartWithNewPlay,
+	// 		onClickActivePause: operator.play.togglePauseActive,
+	// 		onClickAddInstance: operator.play.openNewClientInstance,
+	// 		onClickStep: operator.play.step
+	// 	};
+	// }
 
 	private _makeInstanceControlProps = (): InstanceControlPropsData => {
 		const { play, localInstance, operator, toolBarUiStore } = this.props;

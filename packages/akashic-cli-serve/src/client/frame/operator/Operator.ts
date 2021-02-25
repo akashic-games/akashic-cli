@@ -1,19 +1,20 @@
 import * as queryString from "query-string";
-import { PlayBroadcastTestbedEvent } from "../../common/types/TestbedEvent";
-import { ClientContentLocator } from "../common/ClientContentLocator";
-import * as ApiClient from "../api/ApiClient";
-import * as Subscriber from "../api/Subscriber";
-import { GameViewManager } from "../akashic/GameViewManager";
-import { PlayEntity } from "../store/PlayEntity";
-import { Store } from "../store/Store";
+import { PlayBroadcastTestbedEvent } from "../../../common/types/TestbedEvent";
+import { ClientContentLocator } from "../../common/ClientContentLocator";
+import * as ApiClient from "../../api/ApiClient";
+import * as Subscriber from "../../api/Subscriber";
+import * as RootFrameApi from "../../api/RootFrameApi";
+import { GameViewManager } from "../../akashic/GameViewManager";
+import { PlayEntity } from "../../store/PlayEntity";
+import { Store } from "../../store/Store";
 import { PlayOperator } from "./PlayOperator";
 import { LocalInstanceOperator } from "./LocalInstanceOperator";
 import { UiOperator } from "./UiOperator";
 import { DevtoolOperator } from "./DevtoolOperator";
 import { ExternalPluginOperator } from "./ExternalPluginOperator";
-import { RPGAtsumaruApi } from "../atsumaru/RPGAtsumaruApi";
-import { defaultSessionParameter } from "../common/defaultSessionParameter";
-import {ProfilerValue} from "../common/types/Profiler";
+import { RPGAtsumaruApi } from "../../atsumaru/RPGAtsumaruApi";
+import { defaultSessionParameter } from "../../common/defaultSessionParameter";
+import { ProfilerValue } from "../../common/types/Profiler";
 
 export interface OperatorParameterObject {
 	store: Store;
@@ -54,6 +55,8 @@ export class Operator {
 
 	async bootstrap(contentLocator?: ClientContentLocator): Promise<void> {
 		const store = this.store;
+		RootFrameApi.notifyPlayerId(store.player.id);
+
 		const query = queryString.parse(window.location.search);
 		let play: PlayEntity = null;
 		if (query.playId != null) {
@@ -78,6 +81,7 @@ export class Operator {
 				getVolumeCallback: () => this.store.devtoolUiStore.volume / 100
 			});
 		}
+
 		await this.setCurrentPlay(play, query.mode === "replay");
 	}
 

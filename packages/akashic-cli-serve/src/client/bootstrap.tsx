@@ -2,10 +2,9 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { configure as mobxConfigure } from "mobx";
 import { Store } from "./store/Store";
-import { Operator } from "./operator/Operator";
+import { Operator } from "./frame/operator/Operator";
 import { GameViewManager } from "./akashic/GameViewManager";
-import { App } from "./view/App";
-import { storage } from "./store/storage";
+import { App } from "./frame/App";
 
 mobxConfigure({ enforceActions: "observed" });
 

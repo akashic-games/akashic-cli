@@ -1,10 +1,10 @@
-import * as Subscriber from "../api/Subscriber";
-import { Store } from "../store/Store";
+import * as Subscriber from "../../api/Subscriber";
+import { RootFrameStore } from "../../store/RootFrameStore";
 
-export class PlayOperator {
-	private store: Store;
+export class RootPlayOperator {
+	private store: RootFrameStore;
 
-	constructor(store: Store) {
+	constructor(store: RootFrameStore) {
 		this.store = store;
 		Subscriber.onDisconnect.add(this.closeThisWindowIfNeeded);
 	}
@@ -21,15 +21,6 @@ export class PlayOperator {
 		this.store.currentPlay.stepActive();
 	}
 
-	toggleJoinLeaveSelf = (toJoin: boolean): void => {
-		const player = this.store.player;
-		if (toJoin) {
-			this.store.currentPlay.join(player.id, player.name);
-		} else {
-			this.store.currentPlay.leave(this.store.player.id);
-		}
-	}
-
 	openNewClientInstance = (): void => {
 		// Mac Chrome で正しく動作しないのと、親ウィンドウかどうかの判別をしたいことがあるので noopener は付けない。
 		// 代わりに ignoreSession を指定して自前でセッションストレージをウィンドウごとに使い分ける (ref. ../store/storage.ts)
@@ -38,6 +29,14 @@ export class PlayOperator {
 			"_blank",
 			`width=${window.innerWidth},height=${window.innerHeight}`
 		);
+	}
+
+	openNewClientFrame = (): void => {
+		this.store.addPane();
+	}
+
+	closeClientFrame = (paneKey: string): void => {
+		this.store.removePane(paneKey);
 	}
 
 	closeThisWindowIfNeeded = (): void => {
@@ -50,27 +49,8 @@ export class PlayOperator {
 		}
 	}
 
-	sendRegisteredEvent = (eventName: string): void => {
-		const sandboxConfig = this.store.currentLocalInstance.content.sandboxConfig || {};
-		const pevs = sandboxConfig.events[eventName];
-		const amflow = this.store.currentPlay.amflow;
-		pevs.forEach((pev: any) => amflow.enqueueEvent(pev));
-	}
-
-	sendEditorEvent = (): void => {
-		// TODO: 入力された JSON が不正な値の場合に Send ボタンを disabled にし、このパスでは正常な値が取れるようにする。
-		if (this.store.devtoolUiStore.eventEditContent.trim() === "")  return;
-		let pevs;
-		try {
-			pevs = JSON.parse(this.store.devtoolUiStore.eventEditContent);
-		} catch (e) {
-			throw new Error(e);
-		}
-		const amflow = this.store.currentPlay.amflow;
-		pevs.forEach((pev: any) => amflow.enqueueEvent(pev));
-	}
-
 	downloadPlaylog = (): void => {
 		location.href = `/api/plays/${this.store.currentPlay.playId}/playlog`;
 	}
 }
+

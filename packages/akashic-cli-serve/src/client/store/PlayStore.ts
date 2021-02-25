@@ -17,7 +17,7 @@ import { ClientContentLocator } from "../common/ClientContentLocator";
 import * as Subscriber from "../api/Subscriber";
 import * as ApiClient from "../api/ApiClient";
 import { ContentStore } from "./ContentStore";
-import { PlayEntity, PlayEntityParameterObject } from "./PlayEntity";
+import { PlayEntity } from "./PlayEntity";
 
 export interface PlayStoreParameterObject {
 	contentStore: ContentStore;

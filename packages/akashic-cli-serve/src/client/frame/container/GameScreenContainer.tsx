@@ -5,10 +5,10 @@ import { GameViewManager } from "../../akashic/GameViewManager";
 import { LocalInstanceEntity } from "../../store/LocalInstanceEntity";
 import { ToolBarUiStore } from "../../store/ToolBarUiStore";
 import { DevtoolUiStore } from "../../store/DevtoolUiStore";
-import { Operator } from "../../operator/Operator";
-import { GameScreen } from "../organism/GameScreen";
-import { PlayerInfoResolverDialogProps } from "../molecule/PlayerInfoResolverDialog";
-import { ProfilerCanvasProps } from "../molecule/ProfilerCanvas";
+import { Operator } from "../operator/Operator";
+import { GameScreen } from "../../view/organism/GameScreen";
+import { PlayerInfoResolverDialogProps } from "../../view/molecule/PlayerInfoResolverDialog";
+import { ProfilerCanvasProps } from "../../view/molecule/ProfilerCanvas";
 import { ProfilerStore } from "../../store/ProfilerStore";
 
 export interface GameScreenContainerProps {

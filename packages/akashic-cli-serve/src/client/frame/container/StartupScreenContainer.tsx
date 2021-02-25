@@ -1,7 +1,7 @@
 import * as React from "react";
 import { observer } from "mobx-react";
-import { Operator } from "../../operator/Operator";
-import { StartupScreen } from "../organism/StartupScreen";
+import { Operator } from "../operator/Operator";
+import { StartupScreen } from "../../view/organism/StartupScreen";
 import { StartupScreenUiStore } from "../../store/StartupScreenUiStore";
 
 export interface StartupScreenContainerProps {

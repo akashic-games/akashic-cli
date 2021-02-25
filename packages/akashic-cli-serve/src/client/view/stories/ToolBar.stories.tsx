@@ -28,14 +28,14 @@ window.setInterval(() => {
 
 const TestWithBehaviour = observer(() => (
 		<ToolBar
-			makePlayControlProps={() => ({
-				playbackRate: 150,
-				isActivePausing: store.isActivePausing,
-				onClickReset: action("reset"),
-				onClickActivePause: (v => (store.isActivePausing = v)),
-				onClickAddInstance: action("add-instance"),
-				onClickStep: action("step")
-			})}
+			// makePlayControlProps={() => ({
+			// 	playbackRate: 150,
+			// 	isActivePausing: store.isActivePausing,
+			// 	onClickReset: action("reset"),
+			// 	onClickActivePause: (v => (store.isActivePausing = v)),
+			// 	onClickAddInstance: action("add-instance"),
+			// 	onClickStep: action("step")
+			// })}
 			makeInstanceControlProps={() => ({
 				currentTime:
 					store.realtime ? store.duration :
@@ -69,22 +69,24 @@ const TestWithBehaviour = observer(() => (
 			showsDevtools={store.showsDevtools}
 			showsInstanceControl={store.showsDevtools}
 			targetService={"none"}
+			disablesClose={false}
 			onToggleAppearance={v => (store.showsAppearance = v)}
 			onClickDevTools={v => (store.showsDevtools = v)}
+			onClickClose={() => {}}
 		/>
 ));
 
 storiesOf("o-ToolBar", module)
 	.add("basic", () => (
 		<ToolBar
-			makePlayControlProps={() => ({
-				playbackRate: 150,
-				isActivePausing: false,
-				onClickReset: action("reset"),
-				onClickActivePause: action("active-pause"),
-				onClickAddInstance: action("add-instance"),
-				onClickStep: action("step")
-			})}
+			// makePlayControlProps={() => ({
+			// 	playbackRate: 150,
+			// 	isActivePausing: false,
+			// 	onClickReset: action("reset"),
+			// 	onClickActivePause: action("active-pause"),
+			// 	onClickAddInstance: action("add-instance"),
+			// 	onClickStep: action("step")
+			// })}
 			makeInstanceControlProps={() => ({
 				currentTime: 2234 * 1000,
 				duration: 7501 * 1000,
@@ -115,8 +117,10 @@ storiesOf("o-ToolBar", module)
 			showsDevtools={true}
 			showsInstanceControl={true}
 			targetService={"none"}
+			disablesClose={true}
 			onToggleAppearance={action("toggle-appearance")}
 			onClickDevTools={action("dev-tools")}
+			onClickClose={() => {}}
 		/>
 	))
 	.add("with-behavior", () => <TestWithBehaviour />);
