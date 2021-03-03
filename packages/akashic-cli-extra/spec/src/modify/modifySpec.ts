@@ -3,7 +3,7 @@ import * as mockfs from "mock-fs";
 import * as cmn from "@akashic/akashic-cli-commons";
 import { modifyBasicParameter } from "../../../lib/modify/modify";
 
-describe("modify", function () {
+xdescribe("modify", function () {
 	var nullLogger = new cmn.ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
 
 	describe("modifyBasicParameter()", function () {
