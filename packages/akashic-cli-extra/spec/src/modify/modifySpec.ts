@@ -1,25 +1,20 @@
+import * as os from "os";
+import * as path from "path";
 import * as fs from "fs";
-import * as mockfs from "mock-fs";
 import * as cmn from "@akashic/akashic-cli-commons";
 import { modifyBasicParameter } from "../../../lib/modify/modify";
 
-xdescribe("modify", function () {
-	var nullLogger = new cmn.ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
+describe("modify", function () {
+	const nullLogger = new cmn.ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
+	const modifyDirPath = fs.mkdtempSync(path.join(os.tmpdir(), "akashic-cli-modify"));
 
 	describe("modifyBasicParameter()", function () {
-		afterEach(() => {
-			mockfs.restore();
-		});
-
 		it("rejects for negative values", function (done: any) {
-			mockfs({
-				some: {
-					"game.json": JSON.stringify({ width: 320, height: 240, fps: 15 })
-				}
-			});
-			modifyBasicParameter({ cwd: "./some", target: "height", value: -10, logger: nullLogger }, (err: any) => {
+			const fixtureDirPath = fs.mkdtempSync(path.join(modifyDirPath, "fixture"));
+			fs.writeFileSync(path.join(fixtureDirPath, "game.json"), JSON.stringify({ width: 320, height: 240, fps: 15 }));
+			modifyBasicParameter({ cwd: fixtureDirPath, target: "height", value: -10, logger: nullLogger }, (err: any) => {
 				expect(!!err).toBe(true);
-				modifyBasicParameter({ cwd: "./some", target: "height", value: 15.5, logger: nullLogger }, (err: any) => {
+				modifyBasicParameter({ cwd: fixtureDirPath, target: "height", value: 15.5, logger: nullLogger }, (err: any) => {
 					expect(!!err).toBe(true);
 					done();
 				});
@@ -27,38 +22,31 @@ xdescribe("modify", function () {
 		});
 
 		it("rejects for invalid target", function (done: any) {
-			mockfs({
-				some: {
-					"game.json": JSON.stringify({ width: 320, height: 240, fps: 15 })
-				}
-			});
-			modifyBasicParameter({ cwd: "./some", target: "foo", value: 10, logger: nullLogger }, (err: any) => {
+			const fixtureDirPath = fs.mkdtempSync(path.join(modifyDirPath, "fixture"));
+			fs.writeFileSync(path.join(fixtureDirPath, "game.json"), JSON.stringify({ width: 320, height: 240, fps: 15 }));
+			modifyBasicParameter({ cwd: fixtureDirPath, target: "foo", value: 10, logger: nullLogger }, (err: any) => {
 				expect(!!err).toBe(true);
 				done();
 			});
 		});
 
 		it("modify width/height/fps", function (done: any) {
-			mockfs({
-				some: {
-					"game.json": JSON.stringify({
-						width: 320, height: 240, fps: 15,
-						assets: {
-							mainScene: { type: "script", path: "script/mainScene.js", global: true }
-						}
-					}),
-					"script": {
-						"mainScene": "MAINSCENE"
-					}
+			const fixtureDirPath = fs.mkdtempSync(path.join(modifyDirPath, "fixture"));
+			fs.writeFileSync(path.join(fixtureDirPath, "game.json"), JSON.stringify({
+				width: 320, height: 240, fps: 15,
+				assets: {
+					mainScene: { type: "script", path: "script/mainScene.js", global: true }
 				}
-			});
-			modifyBasicParameter({ cwd: "./some", target: "height", value: 80, logger: nullLogger }, (err: any) => {
+			}));
+			fs.mkdirSync(path.join(fixtureDirPath, "script"));
+			fs.writeFileSync(path.join(fixtureDirPath, "script", "mainScene"), "MAINSCENE");
+			modifyBasicParameter({ cwd: fixtureDirPath, target: "height", value: 80, logger: nullLogger }, (err: any) => {
 				expect(!!err).toBe(false);
-				modifyBasicParameter({ cwd: "./some", target: "width", value: 160, logger: nullLogger }, (err: any) => {
+				modifyBasicParameter({ cwd: fixtureDirPath, target: "width", value: 160, logger: nullLogger }, (err: any) => {
 					expect(!!err).toBe(false);
-					modifyBasicParameter({ cwd: "./some", target: "fps", value: 60, logger: nullLogger }, (err: any) => {
+					modifyBasicParameter({ cwd: fixtureDirPath, target: "fps", value: 60, logger: nullLogger }, (err: any) => {
 						expect(!!err).toBe(false);
-						var gamejson = JSON.parse(fs.readFileSync("./some/game.json").toString());
+						var gamejson = JSON.parse(fs.readFileSync(path.join(fixtureDirPath, "game.json")).toString());
 						expect(gamejson.width).toBe(160);
 						expect(gamejson.height).toBe(80);
 						expect(gamejson.fps).toBe(60);

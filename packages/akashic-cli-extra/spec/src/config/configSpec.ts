@@ -4,7 +4,7 @@ import * as fs from "fs";
 import * as akashicConfig from "../../../lib/config/config";
 
 describe("config module", () => {
-	const confDirPath = fs.mkdtempSync(path.join(os.tmpdir(), "akashic-cli-extra"));
+	const confDirPath = fs.mkdtempSync(path.join(os.tmpdir(), "akashic-cli-config"));
 
 	const testValidator = {
 		"apple.item1": "^\\w+$",
