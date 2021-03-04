@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 2.5.14 (2021-03-01)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#647](https://github.com/akashic-games/akashic-cli/pull/647) Update all dependencies (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#646](https://github.com/akashic-games/akashic-cli/pull/646) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- kamakiri_ys ([@kamakiri01](https://github.com/kamakiri01))
+
 ## 2.5.13 (2021-02-18)
 
 #### Bug Fix
