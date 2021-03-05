@@ -1,9 +1,11 @@
-import * as commander from "commander";
+import { Command } from "commander";
 import * as fs from "fs";
 import * as path from "path";
 var ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "package.json"), "utf8")).version;
 
+const commander = new Command();
 commander
+	.storeOptionsAsProperties()
 	.version(ver)
 	.command("init", "Initialize game.json and make asset directories")
 	.command("scan", "Update asset and globalScripts properties of game.json")
@@ -19,7 +21,8 @@ commander
 	.command("serve", "Start a server that hosts a game to test multiplaying")
 	.parse(process.argv);
 
-if (!commander.runningCommand) {
+const optionNames = commander.commands.map((cmd) => cmd.name());
+if (!optionNames.includes(commander.args[0])) {
 	console.log("Unknown command : " + process.argv[2]);
 	commander.help();
 }

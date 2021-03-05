@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
-import * as commander from "commander";
+import { Command } from "commander";
 import { ConsoleLogger, CliConfigurationFile, CliConfigExportZip, SERVICE_TYPES } from "@akashic/akashic-cli-commons";
 import { promiseExportZip } from "./exportZip";
 
@@ -45,6 +45,7 @@ export function cli(param: CliConfigExportZip): void {
 		});
 }
 
+const commander = new Command();
 commander
 	.version(ver);
 
@@ -67,32 +68,33 @@ export function run(argv: string[]): void {
 	// Commander の制約により --strip と --no-strip 引数を両立できないため、暫定対応として Commander 前に argv を処理する
 	const argvCopy = dropDeprecatedArgs(argv);
 	commander.parse(argvCopy);
+	const options = commander.opts();
 
-	CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashic.config.js"), (error, configuration) => {
+	CliConfigurationFile.read(path.join(options["cwd"] || process.cwd(), "akashic.config.js"), (error, configuration) => {
 		if (error) {
 			console.error(error);
 			process.exit(1);
 		}
 
-		if (commander["targetService"] && !availableServices.includes(commander["targetService"])) {
-			console.error("Invalid --target-service option argument: " + commander["targetService"]);
+		if (options["targetService"] && !availableServices.includes(options["targetService"])) {
+			console.error("Invalid --target-service option argument: " + options["targetService"]);
 			process.exit(1);
 		}
 
 		const conf = configuration.commandOptions.export ? (configuration.commandOptions.export.zip || {}) : {};
 		cli({
-			cwd: commander["cwd"] ?? conf.cwd,
-			quiet: commander["quiet"] ?? conf.quiet,
-			output: commander["output"] ?? conf.output,
-			force: commander["force"] ?? conf.force,
-			strip: commander["strip"] ?? conf.strip,
-			minify: commander["minify"] ?? conf.minify,
-			hashFilename: commander["hashFilename"] ?? conf.hashFilename,
-			bundle: commander["bundle"] ?? conf.bundle,
-			babel: commander["es5Downpile"] ?? conf.babel,
-			omitEmptyJs: commander["omitEmptyJs"] ?? conf.omitEmptyJs,
-			omitUnbundledJs: commander["omitUnbundledJs"] ?? conf.omitUnbundledJs,
-			targetService: commander["targetService"] ?? conf.targetService
+			cwd: options["cwd"] ?? conf.cwd,
+			quiet: options["quiet"] ?? conf.quiet,
+			output: options["output"] ?? conf.output,
+			force: options["force"] ?? conf.force,
+			strip: options["strip"] ?? conf.strip,
+			minify: options["minify"] ?? conf.minify,
+			hashFilename: options["hashFilename"] ?? conf.hashFilename,
+			bundle: options["bundle"] ?? conf.bundle,
+			babel: options["es5Downpile"] ?? conf.babel,
+			omitEmptyJs: options["omitEmptyJs"] ?? conf.omitEmptyJs,
+			omitUnbundledJs: options["omitUnbundledJs"] ?? conf.omitUnbundledJs,
+			targetService: options["targetService"] ?? conf.targetService
 		});
 	});
 }
