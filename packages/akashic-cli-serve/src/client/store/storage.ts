@@ -4,6 +4,7 @@ import * as ApiClient from "../api/ApiClient";
 export interface StorageData {
 	playerId: string;
 	playerName: string;
+	premium: boolean;
 	showsDevtools: boolean;
 	devtoolsHeight: number;
 	activeDevtool: string;
@@ -96,7 +97,8 @@ export class Storage {
 			stopsGameOnTimeout: choose(asBool(getQueryValue(qp.stopsGameOnTimeout)), s.stopsGameOnTimeout, false),
 			totalTimeLimitInputValue: choose(asNumber(getQueryValue(qp.totalTimeLimitInputValue)), s.totalTimeLimitInputValue, 85),
 			showsProfiler: choose(asBool(getQueryValue(qp.showsProfiler)), s.showsProfiler, false),
-			showsDesignGuideline: choose(asBool(getQueryValue(qp.showsDesignGuideline)), s.showsDesignGuideline, false)
+			showsDesignGuideline: choose(asBool(getQueryValue(qp.showsDesignGuideline)), s.showsDesignGuideline, false),
+			premium: choose(asBool(getQueryValue(qp.premium)), s.premium, false)
 		});
 
 		const playerId: string = choose(getQueryValue(qp.playerId), s.playerId, undefined);

@@ -7,6 +7,7 @@ export interface PlayerInfoResolverResultMessage {
 		name: string;
 		userData: {
 			accepted: boolean;
+			premium: boolean;
 		};
 	};
 }
@@ -19,7 +20,6 @@ export interface StartLocalSessionPameterObject {
 }
 
 const DEFAULT_LIMIT_MILLISECONDS = 15 * 1000;
-const DEFAULT_PLAYER_NAME = "akashic-cli-serve-player";
 const ALLOWED_APPLICATION_NAME = "player-info-resolver";
 
 // TODO: 本来このEntityはakashicの文脈に依存するものなのでakashicディレクトリで定義して、コンポーネントで利用するプロパティはStoreに、関数はOperatorに定義すべき
@@ -89,7 +89,7 @@ export class CoeLimitedPluginEntity {
 			this.messageHandler({
 				result: {
 					name: accepted ? this.name : this.guestName,
-					userData: { accepted }
+					userData: { accepted, premium: storage.data.premium }
 				}
 			});
 		}
