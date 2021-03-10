@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 2.5.15 (2021-03-10)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#705](https://github.com/akashic-games/akashic-cli/pull/705) update player-info-resolver (add premium to userData) in akashic-cli-serve ([@dera-](https://github.com/dera-))
+* `akashic-cli-init`
+  * [#698](https://github.com/akashic-games/akashic-cli/pull/698) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Committers: 2
+- [@dera-](https://github.com/dera-)
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.5.14 (2021-03-01)
 
 #### Update Dependencies
