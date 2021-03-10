@@ -79,7 +79,6 @@ function downloadTemplate(param: InitParameterObject): Promise<void> {
 	})
 	.catch(err => {
 		param.logger.warn(err);
-		param.logger.info("using built-in template");
 	});
 }
 

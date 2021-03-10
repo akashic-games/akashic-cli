@@ -1,5 +1,27 @@
 # CHANGELOG
 
+## 2.5.15 (2021-03-10)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#705](https://github.com/akashic-games/akashic-cli/pull/705) update player-info-resolver (add premium to userData) in akashic-cli-serve ([@dera-](https://github.com/dera-))
+* `akashic-cli-init`
+  * [#698](https://github.com/akashic-games/akashic-cli/pull/698) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Committers: 2
+- [@dera-](https://github.com/dera-)
+- xnv ([@xnv](https://github.com/xnv))
+
+## 2.5.14 (2021-03-01)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#647](https://github.com/akashic-games/akashic-cli/pull/647) Update all dependencies (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#646](https://github.com/akashic-games/akashic-cli/pull/646) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- kamakiri_ys ([@kamakiri01](https://github.com/kamakiri01))
+
 ## 2.5.13 (2021-02-18)
 
 #### Bug Fix

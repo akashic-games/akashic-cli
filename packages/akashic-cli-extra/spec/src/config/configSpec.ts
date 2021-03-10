@@ -1,11 +1,10 @@
 import * as os from "os";
 import * as path from "path";
 import * as fs from "fs";
-import * as mockfs from "mock-fs";
 import * as akashicConfig from "../../../lib/config/config";
 
 describe("config module", () => {
-	const confPath = fs.mkdtempSync(path.join(os.tmpdir(), ".akashicrc"));
+	const confDirPath = fs.mkdtempSync(path.join(os.tmpdir(), "akashic-cli-config"));
 
 	const testValidator = {
 		"apple.item1": "^\\w+$",
@@ -13,15 +12,9 @@ describe("config module", () => {
 		"banana.item3": "^\\w+$"
 	};
 
-	beforeEach(() => {
-		mockfs({});
-	});
-
-	afterEach(() => {
-		mockfs.restore();
-	});
-
 	it("AkashicConfigFile", (done) => {
+		const confPath = path.join(confDirPath, ".akashicrc");
+		fs.writeFileSync(confPath, "");
 		const config = new akashicConfig.AkashicConfigFile(testValidator, confPath);
 		config.setItem("apple.item1", "testValue")
 			.then(() => config.setItem("apple.item2", "42"))
@@ -41,14 +34,6 @@ describe("cli functions", () => {
 	const testValidator = {
 		"test.testKey1": "^\\w*$"
 	};
-
-	beforeEach(() => {
-		mockfs({});
-	});
-
-	afterEach(() => {
-		mockfs.restore();
-	});
 
 	it("setConfigItem", done => {
 		Promise.resolve()
