@@ -173,7 +173,7 @@ export class GameExternalStorage implements types.GameExternalStorageLike {
 
 	private getDataTableFromKVS(
 		playScope: types.StoragePlayScope,
-		loc: types.GameExternalStorageLocator,
+		loc: types.GameExternalStorageLocator
 	): GameExternalStorageDataTable | null {
 		const str = this.kvs.getItem(
 			GameExternalStorage.kvsPrefix +
@@ -185,7 +185,9 @@ export class GameExternalStorage implements types.GameExternalStorageLike {
 		try {
 			const data = JSON.parse(str);
 			return data;
-		} catch (_e) {}
+		} catch (_e) {
+			//
+		}
 		return null;
 	}
 
@@ -201,7 +203,7 @@ export class GameExternalStorage implements types.GameExternalStorageLike {
 			this._locatorIdOf(loc) +
 			"__",
 			JSON.stringify(data)
-		)
+		);
 	}
 
 	private _resolvePlayId(playScope: types.StoragePlayScope | undefined): string {

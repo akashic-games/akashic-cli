@@ -157,5 +157,8 @@ export interface GameExternalStorageLike {
 	/**
 	 * 永続化領域に書き込む。
 	 */
-	write(req: GameExternalStorageWriteRequest, callback: (error: Error | null, response: GameExternalStorageWriteResponse | null) => void): void;
+	write(
+		req: GameExternalStorageWriteRequest,
+		callback: (error: Error | null, response: GameExternalStorageWriteResponse | null) => void
+	): void;
 }

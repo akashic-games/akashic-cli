@@ -7,7 +7,7 @@ class LocalScriptAsset extends g.ScriptAsset {
 
 	constructor(id: string, path: string) {
 		super(id, path);
-		this.func = window.gLocalAssetContainer[id]; // gLocalScriptContainer は index.ect 上のscriptタグ内で宣言されている 
+		this.func = window.gLocalAssetContainer[id]; // gLocalScriptContainer は index.ect 上のscriptタグ内で宣言されている
 	}
 
 	_load(loader: g.AssetLoadHandler): void {

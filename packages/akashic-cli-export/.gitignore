@@ -4,14 +4,8 @@ npm-debug.log
 *.iml
 coverage
 lib
-tmp
 .idea
 spec/build
-templates-build/
-templates/template-export-html-v1/js/akashic-engine.strip.js
-templates/template-export-html-v2/js/akashic-engine.strip.js
-templates/template-export-html-v1/js/node_modules
-templates/template-export-html-v2/js/node_modules
 .vscode
 !spec/fixtures/simple_game_using_external/node_modules
 !spec/fixtures/simple_game_with_aez_bundle_main4/node_modules/

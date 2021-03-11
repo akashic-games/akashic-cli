@@ -1,6 +1,6 @@
 // TODO: このテストは将来的には外部で実行するようにする
-// tslint:disable-next-line:no-var-requires
-const GameExternalStorage = require("../../../tmp/export/build/storage/GameExternalStorage").GameExternalStorage;
+import { GameExternalStorage } from "../../../lib/pdi/storage/GameExternalStorage";
+import * as types from "../../../lib/pdi/storage/content-storage-types";
 
 // NOTE: 簡易 KVS 実装
 class KVS {
@@ -15,13 +15,12 @@ class KVS {
 	}
 }
 
-// 本来ならanyではなくGameExternalStorageを使うべきだが参照先で型定義ファイルは作られてないので利用できない。
-function promisize(storage: any) {
+function promisize(storage: GameExternalStorage) {
 	return {
-		read: (req: any) =>
-			new Promise((res, rej) => storage.read(req, (e: any, r: any) => e ? rej(e) : res(r))),
-		write: (req: any) =>
-			new Promise((res, rej) => storage.write(req, (e: any, r: any) => e ? rej(e) : res(r)))
+		read: (req: types.GameExternalStorageReadRequest) =>
+			new Promise((res, rej) => storage.read(req, (e, r) => e ? rej(e) : res(r))),
+		write: (req: types.GameExternalStorageWriteRequest) =>
+			new Promise((res, rej) => storage.write(req, (e, r) => e ? rej(e) : res(r)))
 	};
 }
 

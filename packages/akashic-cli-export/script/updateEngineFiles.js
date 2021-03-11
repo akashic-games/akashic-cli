@@ -4,7 +4,7 @@ var fetch = require("node-fetch");
 var execSync = require("child_process").execSync;
 
 console.log("start to generate files");
-var jsonPath = path.join(__dirname, "..", "templates", "engineFilesVersion.json");
+var jsonPath = path.join(__dirname, "..", "src", "template", "engineFilesVersion.json");
 var currentVersions = {
 	v1: {
 		version: "",
@@ -52,7 +52,7 @@ var promises = Object.keys(versions).filter(v => versions[v].version !== current
 		return new Promise((resolve, reject) => {
 			var majorVersion = `v${version.substring(0, 1)}`;
 			var fileStream = fs.createWriteStream(
-				path.join(__dirname, "..", "templates", `template-export-html-${majorVersion}`, "js", fileName)
+				path.join(__dirname, "..", "src", "template", `template-export-html-${majorVersion}`, "js", fileName)
 			);
 			res.body.pipe(fileStream);
 			res.body.on("error", (err) => {

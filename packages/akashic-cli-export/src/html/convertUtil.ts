@@ -123,14 +123,14 @@ export function getDefaultBundleScripts(templatePath: string, version: string, m
 	var postloadScriptNames =
 		["sandbox.js", "initGlobals.js"];
 	if (version === "3") {
-		postloadScriptNames.push("build/LocalScriptAssetV3.js");
+		postloadScriptNames.push("pdi/LocalScriptAssetV3.js");
 		if (bundleText) {
-			postloadScriptNames.push("build/LocalTextAssetV3.js");
+			postloadScriptNames.push("pdi/LocalTextAssetV3.js");
 		}
 	} else {
-		postloadScriptNames.push("build/LocalScriptAsset.js");
+		postloadScriptNames.push("pdi/LocalScriptAsset.js");
 		if (bundleText) {
-			postloadScriptNames.push("build/LocalTextAsset.js");
+			postloadScriptNames.push("pdi/LocalTextAsset.js");
 		}
 	}
 	if (version === "1") postloadScriptNames.push("logger.js");
@@ -201,7 +201,7 @@ function loadScriptFile(fileName: string, templatePath: string): string {
 		return fs.readFileSync(filepath, "utf8").replace(/\r\n|\r/g, "\n");
 	} catch (e) {
 		if (e.code === "ENOENT") {
-			throw new Error(fileName + " is not found. Try re-install akashic-cli" + path.resolve(__dirname, "..", templatePath, fileName));
+			throw new Error(fileName + " is not found. Try re-install akashic-cli" + path.resolve(__dirname, "..", templatePath, "js", fileName));
 		} else {
 			throw e;
 		}

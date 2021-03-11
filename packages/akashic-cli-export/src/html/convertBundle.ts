@@ -73,13 +73,13 @@ export async function promiseConvertBundle(options: ConvertTemplateParameterObje
 	let templatePath: string;
 	switch (conf._content.environment["sandbox-runtime"]) {
 		case "1":
-			templatePath = "../templates-build/v1";
+			templatePath = "template/v1";
 			break;
 		case "2":
-			templatePath = "../templates-build/v2";
+			templatePath = "template/v2";
 			break;
 		case "3":
-			templatePath = "../templates-build/v3";
+			templatePath = "template/v3";
 			break;
 		default:
 			throw Error("Unknown engine version: `environment[\"sandbox-runtime\"]` field in game.json should be \"1\", \"2\", or \"3\".");
@@ -129,7 +129,7 @@ async function writeHtmlFile(
 	conf: cmn.Configuration, options: ConvertTemplateParameterObject, templatePath: string): Promise<void> {
 	const injects = options.injects ? options.injects : [];
 	var scripts = getDefaultBundleScripts(templatePath, conf._content.environment["sandbox-runtime"], options.minify, !options.unbundleText);
-	const filePath = path.resolve(__dirname + "/../../templates-build/bundle-index.ejs");
+	const filePath = path.resolve(__dirname + "/../template/bundle-index.ejs");
 	const html = await ejs.renderFile(filePath, {
 		assets: innerHTMLAssetArray,
 		preloadScripts: scripts.preloadScripts,

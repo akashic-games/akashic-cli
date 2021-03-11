@@ -107,7 +107,7 @@ async function writeHtmlFile(
 	const injects = options.injects ? options.injects : [];
 	var version = conf._content.environment["sandbox-runtime"];
 	var versionsJson = require("../engineFilesVersion.json");
-	const filePath = path.resolve(__dirname + "/../../templates-build/no-bundle-index.ejs");
+	const filePath = path.resolve(__dirname + "/../template/no-bundle-index.ejs");
 	const html = await ejs.renderFile(filePath, {
 		assets: assetPaths,
 		magnify: !!options.magnify,
@@ -134,13 +134,13 @@ function writeCommonFiles(
 	let templatePath: string;
 	switch (conf._content.environment["sandbox-runtime"]) {
 		case "1":
-			templatePath = "../templates-build/v1";
+			templatePath = "template/v1";
 			break;
 		case "2":
-			templatePath = "../templates-build/v2";
+			templatePath = "template/v2";
 			break;
 		case "3":
-			templatePath = "../templates-build/v3";
+			templatePath = "template/v3";
 			break;
 		default:
 			throw Error("Unknown engine version: `environment[\"sandbox-runtime\"]` field in game.json should be \"1\", \"2\", or \"3\".");
