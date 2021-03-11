@@ -564,7 +564,7 @@ export class Configuration extends cmn.Configuration {
 
 	private _fetchDependencyPackageNames(): Promise<string[]> {
 		return Promise.resolve()
-			.then(() => this._npm.ls(true))
+			.then(() => this._npm.ls())
 			// lsResultオブジェクトは、package.jsonのdependenciesに書かれたモジュールと、それらの各依存モジュールをツリー構造で表したオブジェクトである。
 			// これらのうち、dependenciesに直接書かれていない依存モジュールのファイルパスは、依存モジュールのバージョン・インストール順序によって不定である。
 			// よって、依存モジュールのファイルパスを解決する方法として、node_modules/直下にあるモジュール名（つまりpackage.jsonのdependenciesに書かれたモジュール）のみをcmn.NodeModules.listModuleFilesに渡す。
@@ -572,6 +572,12 @@ export class Configuration extends cmn.Configuration {
 			.then((lsResult: cmn.NpmLsResultObject) => {
 				lsResult.dependencies = lsResult.dependencies || {};
 				return Object.keys(lsResult.dependencies);
+			})
+			.catch(err => {
+				// モジュールがない場合(npm install 未実施)は scan の前に npm install を実行するメッセージを追加表示
+				if ( /missing:/.test(err.message))
+					err.message += "run “npm install” before scanning globalScripts.";
+				return Promise.reject(err);
 			});
 	}
 
