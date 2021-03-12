@@ -1,2 +1,2 @@
 #!/usr/bin/env node
-require("@akashic/akashic-cli-install").run(process.argv);
+require("@akashic/akashic-cli-npm-command/lib/install").run(process.argv);
