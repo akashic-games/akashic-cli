@@ -1,2 +1,2 @@
 #!/usr/bin/env node
-require("../lib/html").run(argv);
+require("../lib/html").run(process.argv);

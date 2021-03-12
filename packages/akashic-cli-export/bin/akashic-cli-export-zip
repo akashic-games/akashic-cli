@@ -1,2 +1,2 @@
 #!/usr/bin/env node
-require("../lib/zip").run(argv);
+require("../lib/zip").run(process.argv);
