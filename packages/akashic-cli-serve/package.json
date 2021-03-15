@@ -34,7 +34,7 @@
     "express": "4.17.1",
     "lodash": "4.17.21",
     "open": "8.0.2",
-    "socket.io": "3.1.2"
+    "socket.io": "4.0.0"
   },
   "devDependencies": {
     "@akashic/amflow": "~3.0.0",
