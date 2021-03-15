@@ -1,5 +1,34 @@
 # CHANGELOG
 
+## 2.5.16 (2021-03-15)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#708](https://github.com/akashic-games/akashic-cli/pull/708) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.0.9, engineFiles@2.1.52, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+
+#### Other Change
+* `akashic-cli-scan`
+  * [#706](https://github.com/akashic-games/akashic-cli/pull/706) Fix akashic-scan error message ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+* `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#704](https://github.com/akashic-games/akashic-cli/pull/704) Fix renovate error ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Update Dependencies
+* `akashic-cli-serve`
+  * [#707](https://github.com/akashic-games/akashic-cli/pull/707) Update dependency socket.io to v4 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#703](https://github.com/akashic-games/akashic-cli/pull/703) Update dependency open to v8 ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-serve`
+  * [#702](https://github.com/akashic-games/akashic-cli/pull/702) Update all dependencies (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`, `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#701](https://github.com/akashic-games/akashic-cli/pull/701) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#699](https://github.com/akashic-games/akashic-cli/pull/699) Update dependency highlight.js to 10.4.1 [SECURITY] ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#650](https://github.com/akashic-games/akashic-cli/pull/650) Update dependency commander to v7 ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#700](https://github.com/akashic-games/akashic-cli/pull/700) Update dependency ini to 1.3.6 [SECURITY] ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.5.15 (2021-03-10)
 
 #### Enhancement
