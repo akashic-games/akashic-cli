@@ -29,7 +29,7 @@
     "@akashic/trigger": "1.0.0",
     "chalk": "4.1.0",
     "chokidar": "3.5.1",
-    "commander": "5.1.0",
+    "commander": "7.1.0",
     "ejs": "3.1.6",
     "express": "4.17.1",
     "lodash": "4.17.21",
