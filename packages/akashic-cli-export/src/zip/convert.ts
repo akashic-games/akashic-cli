@@ -124,11 +124,18 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			};
 
 			const files = param.strip ? gcu.extractFilePaths(gamejson, param.source) : readdir(param.source).map((p) => p.replace(/\\/g, "/"));
+			// operation plugin に登録されているスクリプトファイルは bundle されていても残しておく必要がある
+			const operationPluginScripts = (gamejson.operationPlugins ?? []).map(plugin => plugin.script.replace(/^\.\//g, ""));
+			operationPluginScripts.forEach(script => {
+				if (noCopyingFilePaths.has(script)) {
+					noCopyingFilePaths.delete(script);
+				}
+			});
 			files.forEach(p => {
 				if (!noCopyingFilePaths.has(p)) {
 					let buff = fs.readFileSync(path.resolve(param.source, p));
 
-					if (bundleResult && gcu.isScriptJsFile(p) && param.omitUnbundledJs) {
+					if (bundleResult && gcu.isScriptJsFile(p) && param.omitUnbundledJs && operationPluginScripts.indexOf(p) === -1) {
 						Object.keys(gamejson.assets).some((key) => {
 							if (gamejson.assets[key].type === "script" && gamejson.assets[key].path === p) {
 								delete gamejson.assets[key];

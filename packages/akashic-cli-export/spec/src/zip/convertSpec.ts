@@ -448,5 +448,26 @@ describe("convert", () => {
 					done();
 				}, done.fail);
 		});
+
+		it("Operation plugin scripts are saved even if they are depended by bundled file", (done) => {
+			const param: ConvertGameParameterObject = {
+				source: path.resolve(__dirname, "..", "..", "fixtures", "simple_game_with_operation_plugins"),
+				dest: destDir,
+				bundle: true,
+				targetService: "nicolive",
+				omitUnbundledJs: true
+			};
+			convertGame(param)
+				.then(() => {
+					expect(fs.existsSync(path.join(destDir, "script/aez_bundle_main.js"))).toBe(true);
+					console.log(fs.readdirSync(path.join(destDir, "script")));
+					// bundle済みのファイルは残らない
+					expect(fs.existsSync(path.join(destDir, "script/main.js"))).toBe(false);
+					expect(fs.existsSync(path.join(destDir, "script/foo.js"))).toBe(false);
+					// bundleされていたとしてもoperationPluginsとして登録されているスクリプトファイルは残る
+					expect(fs.existsSync(path.join(destDir, "script/bar.js"))).toBe(true);
+					done();
+				}, done.fail);
+		});
 	});
 });
