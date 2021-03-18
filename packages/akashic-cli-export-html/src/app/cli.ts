@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
-import * as commander from "commander";
+import { Command } from "commander";
 import { ConsoleLogger, CliConfigExportHtml, CliConfigurationFile } from "@akashic/akashic-cli-commons";
 import { promiseExportHTML, ExportHTMLParameterObject } from "./exportHTML";
 import { promiseExportAtsumaru } from "./exportAtsumaru";
@@ -62,6 +62,7 @@ function cli(param: CliConfigExportHtml): void {
 		});
 }
 
+const commander = new Command();
 commander
 	.version(ver);
 
@@ -80,15 +81,16 @@ commander
 	.option("-i, --inject [fileName]", "specify injected file content into index.html", inject, [])
 	.option("--autoSendEvents [eventName]", "(deprecated)event name that send automatically when game start")
 	.option("-A, --auto-send-event-name [eventName]", "event name that send automatically when game start")
-	.option("-a, --atsumaru", "generate files that can be posted to RPG-atsumaru")
+	.option("-a, --atsumaru", "generate files that can be posted to GAME-atsumaru")
 	.option("--no-omit-unbundled-js", "Unnecessary script files are included even when the `--atsumaru` option is specified.");
 
 export function run(argv: string[]): void {
 	// Commander の制約により --strip と --no-strip 引数を両立できないため、暫定対応として Commander 前に argv を処理する
 	const argvCopy = dropDeprecatedArgs(argv);
 	commander.parse(argvCopy);
+	const options = commander.opts();
 
-	CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashic.config.js"), (error, configuration) => {
+	CliConfigurationFile.read(path.join(options["cwd"] || process.cwd(), "akashic.config.js"), (error, configuration) => {
 		if (error) {
 			console.error(error);
 			process.exit(1);
@@ -96,20 +98,20 @@ export function run(argv: string[]): void {
 
 		const conf = configuration.commandOptions.export ? (configuration.commandOptions.export.html || {}) : {};
 		cli({
-			cwd: commander["cwd"] ?? conf.cwd,
-			force: commander["force"] ?? conf.force,
-			quiet: commander["quiet"] ?? conf.quiet,
-			output: commander["output"] ?? conf.output,
-			source: commander["source"] ?? conf.source,
-			strip: commander["strip"] ?? conf.strip,
-			minify: commander["minify"] ?? conf.minify,
-			bundle: commander["bundle"] ?? conf.bundle,
-			magnify: commander["magnify"] ?? conf.magnify,
-			hashFilename: commander["hashFilename"] ?? conf.hashFilename,
-			injects: commander["inject"] ?? conf.injects,
-			atsumaru: commander["atsumaru"] ?? conf.atsumaru,
-			autoSendEventName: commander["autoSendEventName"] ?? commander["autoSendEvents"] ?? conf.autoSendEventName ?? conf.autoSendEvents,
-			omitUnbundledJs: commander["omitUnbundledJs"] ?? conf.omitUnbundledJs
+			cwd: options["cwd"] ?? conf.cwd,
+			force: options["force"] ?? conf.force,
+			quiet: options["quiet"] ?? conf.quiet,
+			output: options["output"] ?? conf.output,
+			source: options["source"] ?? conf.source,
+			strip: options["strip"] ?? conf.strip,
+			minify: options["minify"] ?? conf.minify,
+			bundle: options["bundle"] ?? conf.bundle,
+			magnify: options["magnify"] ?? conf.magnify,
+			hashFilename: options["hashFilename"] ?? conf.hashFilename,
+			injects: options["inject"] ?? conf.injects,
+			atsumaru: options["atsumaru"] ?? conf.atsumaru,
+			autoSendEventName: options["autoSendEventName"] ?? options["autoSendEvents"] ?? conf.autoSendEventName ?? conf.autoSendEvents,
+			omitUnbundledJs: options["omitUnbundledJs"] ?? conf.omitUnbundledJs
 		});
 	});
 }

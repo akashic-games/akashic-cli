@@ -1,11 +1,11 @@
 import * as fs from "fs";
 import * as path from "path";
-import * as commander from "commander";
+import { Command } from "commander";
 import { ConsoleLogger, CliConfigurationFile, CliConfigScanAsset, CliConfigScanGlobalScripts } from "@akashic/akashic-cli-commons";
 import { promiseScanAsset, promiseScanNodeModules, ScanAssetParameterObject } from "./scan";
 
 var ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "package.json"), "utf8")).version;
-
+const commander = new Command();
 commander
 	.description("Update various properties of game.json")
 	.version(ver);
@@ -27,7 +27,7 @@ commander
 	.option("--text-asset-dir <dir>", "specify TextAsset directory", commanderArgsCoordinater)
 	.option("--text-asset-extension <extension>", "specify TextAsset extension", commanderArgsCoordinater)
 	.action((target: string, opts: CliConfigScanAsset = {}) => {
-		CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashic.config.js"), (error, configuration) => {
+		CliConfigurationFile.read(path.join(opts["cwd"] || process.cwd(), "akashic.config.js"), (error, configuration) => {
 			if (error) {
 				console.error(error);
 				process.exit(1);

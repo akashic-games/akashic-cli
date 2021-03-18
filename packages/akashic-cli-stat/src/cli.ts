@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
-import * as commander from "commander";
+import { Command } from "commander";
 import { Logger, ConsoleLogger, ConfigurationFile, CliConfigurationFile, CliConfigStat } from "@akashic/akashic-cli-commons";
 import * as stat from "./stat";
 
@@ -26,6 +26,7 @@ function errorExit(logger: Logger, message: string): void {
 
 const version = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "package.json"), "utf8")).version;
 
+const commander = new Command();
 commander
 	.description("Show statistics information")
 	.version(version)
@@ -50,7 +51,8 @@ function cli(param: CliConfigStat): void {
 
 export function run(argv: string[]): void {
 	commander.parse(argv);
-	CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashic.config.js"), (error, configuration) => {
+	const options = commander.opts();
+	CliConfigurationFile.read(path.join(options["cwd"] || process.cwd(), "akashic.config.js"), (error, configuration) => {
 		if (error) {
 			console.error(error);
 			process.exit(1);
@@ -59,10 +61,10 @@ export function run(argv: string[]): void {
 		const conf = configuration.commandOptions.stat || {};
 		cli({
 			args: commander.args ?? conf.args,
-			cwd: commander.cwd ?? conf.cwd,
-			quiet: commander.quiet ?? conf.quiet,
-			limit: commander.limit ?? conf.limit,
-			raw: commander.raw ?? conf.raw
+			cwd: options.cwd ?? conf.cwd,
+			quiet: options.quiet ?? conf.quiet,
+			limit: options.limit ?? conf.limit,
+			raw: options.raw ?? conf.raw
 		});
 	});
 }

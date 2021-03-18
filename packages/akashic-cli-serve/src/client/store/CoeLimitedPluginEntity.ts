@@ -7,6 +7,7 @@ export interface PlayerInfoResolverResultMessage {
 		name: string;
 		userData: {
 			accepted: boolean;
+			premium: boolean;
 		};
 	};
 }
@@ -19,7 +20,6 @@ export interface StartLocalSessionPameterObject {
 }
 
 const DEFAULT_LIMIT_MILLISECONDS = 15 * 1000;
-const DEFAULT_PLAYER_NAME = "akashic-cli-serve-player";
 const ALLOWED_APPLICATION_NAME = "player-info-resolver";
 
 // TODO: 本来このEntityはakashicの文脈に依存するものなのでakashicディレクトリで定義して、コンポーネントで利用するプロパティはStoreに、関数はOperatorに定義すべき
@@ -39,6 +39,7 @@ export class CoeLimitedPluginEntity {
 		this.guestName = "ゲスト" + ((Math.random() * 100) | 0);
 	}
 
+	// 名前表示確認ダイアログを表示する。この関数はコンテンツ側から呼ばれる想定
 	@action
 	startLocalSession = (param: StartLocalSessionPameterObject): void => {
 		if (param.applicationName !== ALLOWED_APPLICATION_NAME) {
@@ -62,9 +63,17 @@ export class CoeLimitedPluginEntity {
 		}, 200); // 1s毎だと表示と実際の時間に若干のズレが生まれそうなので、やや間隔短めに残り時間の算出を行う
 	}
 
+	// 名前表示確認ダイアログを消す。この関数はコンテンツ側から呼ばれる想定
 	@action
 	exitLocalSession = (_sessionId: string): void => {
-		window.clearInterval(this.timerId);
+		this.stopToDisplayResolver();
+	}
+
+	@action
+	stopToDisplayResolver(): void {
+		if (this.timerId != null) {
+			window.clearInterval(this.timerId);
+		}
 		this.isDisplayingResolver = false;
 		this.timerId = null;
 	}
@@ -80,7 +89,7 @@ export class CoeLimitedPluginEntity {
 			this.messageHandler({
 				result: {
 					name: accepted ? this.name : this.guestName,
-					userData: { accepted }
+					userData: { accepted, premium: storage.data.premium }
 				}
 			});
 		}

@@ -1,7 +1,7 @@
 /*
  * 対象のサービス
  * nicolive: ニコニコ生放送
- * atsumaru: RPGアツマール
+ * atsumaru: ゲームアツマール
  * none: サービスなし
  */
 export const SERVICE_TYPES = ["nicolive", "atsumaru", "none"] as const;

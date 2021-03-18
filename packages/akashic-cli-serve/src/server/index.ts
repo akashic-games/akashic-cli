@@ -5,7 +5,7 @@ import * as http from "http";
 import * as express from "express";
 import * as bodyParser from "body-parser";
 import * as socketio from "socket.io";
-import * as commander from "commander";
+import { Command, OptionValues } from "commander";
 import * as chalk from "chalk";
 import * as open from "open";
 import { PlayManager, RunnerManager, setSystemLogger, getSystemLogger } from "@akashic/headless-driver";
@@ -33,7 +33,7 @@ function convertToStrings(params: any[]): string[] {
 	});
 }
 
-async function cli(cliConfigParam: CliConfigServe) {
+async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues) {
 	if (cliConfigParam.port && isNaN(cliConfigParam.port)) {
 		console.error("Invalid --port option: " + cliConfigParam.port);
 		process.exit(1);
@@ -105,15 +105,15 @@ async function cli(cliConfigParam: CliConfigServe) {
 	}
 
 	let gameExternalFactory: () => any = () => undefined;
-	if (commander.serverExternalScript) {
+	if (cmdOptions.serverExternalScript) {
 		try {
-			gameExternalFactory = require(path.resolve(commander.serverExternalScript));
+			gameExternalFactory = require(path.resolve(cmdOptions.serverExternalScript));
 		} catch (e) {
-			getSystemLogger().error(`Failed to evaluating --server-external-script (${commander.serverExternalScript}): ${e}`);
+			getSystemLogger().error(`Failed to evaluating --server-external-script (${cmdOptions.serverExternalScript}): ${e}`);
 			process.exit(1);
 		}
 		if (typeof gameExternalFactory !== "function") {
-			getSystemLogger().error(`${commander.serverExternalScript}, given as --server-external-script, does not export a function`);
+			getSystemLogger().error(`${cmdOptions.serverExternalScript}, given as --server-external-script, does not export a function`);
 			process.exit(1);
 		}
 	}
@@ -221,7 +221,7 @@ async function cli(cliConfigParam: CliConfigServe) {
 		// サーバー起動のログに関してはSystemLoggerで使用していない色を使いたいので緑を選択
 		console.log(chalk.green(`Hosting ${targetDirs.join(", ")} on http://${serverGlobalConfig.hostname}:${serverGlobalConfig.port}`));
 		if (loadedPlaylogPlayId) {
-			console.log(`play(id: ${loadedPlaylogPlayId}) read playlog(path: ${path.join(process.cwd(), commander.debugPlaylog)}).`);
+			console.log(`play(id: ${loadedPlaylogPlayId}) read playlog(path: ${path.join(process.cwd(), cmdOptions.debugPlaylog)}).`);
 			url += `?playId=${loadedPlaylogPlayId}&mode=replay`;
 			console.log(`if access ${url}, you can show this play.`);
 		}
@@ -235,6 +235,7 @@ async function cli(cliConfigParam: CliConfigServe) {
 // TODOこのファイルを改名してcli.tsにする
 export async function run(argv: any): Promise<void> {
 	const ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "..", "package.json"), "utf8")).version;
+	const commander = new Command();
 	commander
 		.version(ver)
 		.description("Development server for Akashic Engine to debug multiple-player games")
@@ -255,7 +256,8 @@ export async function run(argv: any): Promise<void> {
 		.option("--preserve-disconnected", "Disable auto closing for disconnected windows.")
 		.parse(argv);
 
-	CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashic.config.js"), async (error, configuration) => {
+	const options = commander.opts();
+	CliConfigurationFile.read(path.join(options["cwd"] || process.cwd(), "akashic.config.js"), async (error, configuration) => {
 		if (error) {
 			console.error(error);
 			process.exit(1);
@@ -263,20 +265,20 @@ export async function run(argv: any): Promise<void> {
 
 		const conf = configuration.commandOptions.serve || {};
 		const cliConfigParam: CliConfigServe = {
-			port: commander.port ?? conf.port,
-			hostname: commander.hostname ?? conf.hostname,
-			verbose: commander.verbose ?? conf.verbose,
-			autoStart: commander.autoStart ?? conf.autoStart,
-			targetService: commander.targetService ?? conf.targetService,
-			debugPlaylog: commander.debugPlaylog ?? conf.debugPlaylog,
-			debugUntrusted: commander.debugUntrusted ?? conf.debugUntrusted,
-			debugProxyAudio: commander.proxyAudio ?? conf.debugProxyAudio,
-			allowExternal: commander.allowExternal ?? conf.allowExternal,
+			port: options.port ?? conf.port,
+			hostname: options.hostname ?? conf.hostname,
+			verbose: options.verbose ?? conf.verbose,
+			autoStart: options.autoStart ?? conf.autoStart,
+			targetService: options.targetService ?? conf.targetService,
+			debugPlaylog: options.debugPlaylog ?? conf.debugPlaylog,
+			debugUntrusted: options.debugUntrusted ?? conf.debugUntrusted,
+			debugProxyAudio: options.proxyAudio ?? conf.debugProxyAudio,
+			allowExternal: options.allowExternal ?? conf.allowExternal,
 			targetDirs: commander.args.length > 0 ? commander.args : (conf.targetDirs ?? [process.cwd()]),
-			openBrowser: commander.openBrowser ?? conf.openBrowser,
-			preserveDisconnected: commander.preserveDisconnected ?? conf.preserveDisconnected,
-			watch: commander.watch ?? conf.watch
+			openBrowser: options.openBrowser ?? conf.openBrowser,
+			preserveDisconnected: options.preserveDisconnected ?? conf.preserveDisconnected,
+			watch: options.watch ?? conf.watch
 		};
-		await cli(cliConfigParam);
+		await cli(cliConfigParam, options);
 	});
 }
