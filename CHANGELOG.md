@@ -1,5 +1,20 @@
 # CHANGELOG
 
+## 2.6.0 (2021-03-19)
+
+#### Breaking Change
+* `akashic-cli-commons`, `akashic-cli-scan`, `akashic-cli-serve`
+  * [#640](https://github.com/akashic-games/akashic-cli/pull/640) add watch option in akashic-cli-serve ([@dera-](https://github.com/dera-))
+
+#### Enhancement
+* `akashic-cli-commons`, `akashic-cli-scan`, `akashic-cli-serve`
+  * [#640](https://github.com/akashic-games/akashic-cli/pull/640) add watch option in akashic-cli-serve ([@dera-](https://github.com/dera-))
+* `akashic-cli-serve`
+  * [#641](https://github.com/akashic-games/akashic-cli/pull/641) create new play by watch option in akashic-cli-serve ([@dera-](https://github.com/dera-))
+
+#### Committers: 1
+- [@dera-](https://github.com/dera-)
+
 ## 2.5.19 (2021-03-16)
 
 #### Enhancement
