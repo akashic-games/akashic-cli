@@ -15,7 +15,7 @@ commander
 	.description("Update 'assets' property of game.json")
 	.option("-C, --cwd <dir>", "The directory incluedes game.json")
 	.option("-q, --quiet", "Suppress output")
-	.option("-w, --watch", "Watch Directories of asset")
+	.option("-w, --watch", "Watch Directories of asset (deprecated)")
 	.option("--use-path-asset-id", "Resolve Asset IDs from these path instead of name")
 	.option("--update-asset-id", "Update previously registered Asset IDs")
 	.option(
@@ -56,6 +56,7 @@ commander
 				assetExtension: assetExtension
 			};
 			if (opts.watch) {
+				console.warn("--watch option is deprecated. DO NOT USE.");
 				watchAsset(parameter, (err) => {
 					if (err) {
 						logger.error(err);

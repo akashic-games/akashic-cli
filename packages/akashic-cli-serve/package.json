@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@akashic/akashic-cli-commons": "0.7.3",
+    "@akashic/akashic-cli-scan": "0.8.0",
     "@akashic/headless-driver": "1.5.11",
     "@akashic/trigger": "1.0.0",
     "chalk": "4.1.0",
@@ -65,6 +66,7 @@
     "query-string": "6.14.1",
     "react": "16.14.0",
     "react-dom": "16.14.0",
+    "rimraf": "^3.0.2",
     "scroll-into-view-if-needed": "2.2.27",
     "shx": "0.3.3",
     "socket.io-client": "3.1.3",

@@ -19,6 +19,7 @@ import { createHealthCheckRouter } from "./route/HealthCheckRoute";
 import { ServerContentLocator } from "./common/ServerContentLocator";
 import {  CliConfigurationFile, CliConfigServe, SERVICE_TYPES } from "@akashic/akashic-cli-commons";
 import { PlayerIdStore } from "./domain/PlayerIdStore";
+import { ModTargetFlags, watchContent } from "./domain/GameConfigs";
 
 // 渡されたパラメータを全てstringに変換する
 // chalkを使用する場合、ログ出力時objectの中身を展開してくれないためstringに変換する必要がある
@@ -133,6 +134,36 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues) {
 	const httpServer = http.createServer(app);
 	const io = new socketio.Server(httpServer);
 
+	if (cliConfigParam.watch && cliConfigParam.targetDirs) {
+		console.log("Start watching contents");
+		for (let i = 0; i < cliConfigParam.targetDirs.length; i++) {
+			await watchContent(cliConfigParam.targetDirs[i], async (err: any, modTargetFlag: ModTargetFlags) => {
+				if (err) {
+					getSystemLogger().error(err.message);
+				}
+				if (modTargetFlag === ModTargetFlags.GameJson) {
+					console.log("Reflect changes of game.json");
+				}
+				// コンテンツに変更があったらplayを新規に作り直して再起動
+				const contentId = `${i}`;
+				const targetPlayIds: string[] = [];
+				// 対象のコンテンツIDしか分からないので先に対応するコンテンツのrunnerを全て停止させる
+				playStore.getPlayIdsFromContentId(contentId).forEach(playId => {
+					playStore.getRunners(playId).forEach(runner => {
+						runnerStore.stopRunner(runner.runnerId);
+					});
+					targetPlayIds.push(playId);
+				});
+				const playId = await playStore.createPlay(new ServerContentLocator({ contentId }));
+				const token = amflowManager.createPlayToken(playId, "", "", true, {});
+				const amflow = playStore.createAMFlow(playId);
+				await runnerStore.createAndStartRunner({ playId, isActive: true, token, amflow, contentId });
+				await playStore.resumePlayDuration(playId);
+				targetPlayIds.forEach(id => io.emit("playBroadcast", { playId: id, message: { type: "switchPlay", nextPlayId: playId } }));
+			});
+		}
+	}
+
 	app.set("views", path.join(__dirname, "..", "..", "views"));
 	app.set("view engine", "ejs");
 
@@ -217,6 +248,7 @@ export async function run(argv: any): Promise<void> {
 		.option("-v, --verbose", `Display detailed information on console.`)
 		.option("-A, --no-auto-start", `Wait automatic startup of contents.`)
 		.option("-s, --target-service <service>", `Simulate the specified service. arguments: ${SERVICE_TYPES}`)
+		.option("-w, --watch", `Watch directories of asset`)
 		.option("--server-external-script <path>",
 			`Evaluate the given JS and assign it to Game#external of the server instances`)
 		.option("--debug-playlog <path>", `Specify path of playlog-json.`)
@@ -247,7 +279,8 @@ export async function run(argv: any): Promise<void> {
 			allowExternal: options.allowExternal ?? conf.allowExternal,
 			targetDirs: commander.args.length > 0 ? commander.args : (conf.targetDirs ?? [process.cwd()]),
 			openBrowser: options.openBrowser ?? conf.openBrowser,
-			preserveDisconnected: options.preserveDisconnected ?? conf.preserveDisconnected
+			preserveDisconnected: options.preserveDisconnected ?? conf.preserveDisconnected,
+			watch: options.watch ?? conf.watch
 		};
 		await cli(cliConfigParam, options);
 	});

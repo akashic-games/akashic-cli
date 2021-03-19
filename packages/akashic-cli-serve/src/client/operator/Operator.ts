@@ -177,6 +177,7 @@ export class Operator {
 		}
 	}
 
+	// TODO: このメソッドの処理は本来サーバー側で行うべき
 	restartWithNewPlay = async (): Promise<void> => {
 		await this.store.currentPlay.content.updateSandboxConfig();
 		const play = await this._createServerLoop(this.store.currentPlay.content.locator);
@@ -227,7 +228,9 @@ export class Operator {
 		try {
 			switch (arg.message.type) {
 			case "switchPlay":  // TODO typeを型づける
-				this.setCurrentPlay(this.store.playStore.plays[arg.message.nextPlayId]);
+				if (this.store.currentPlay.playId === arg.playId) {
+					this.setCurrentPlay(this.store.playStore.plays[arg.message.nextPlayId]);
+				}
 				break;
 			default:
 				throw new Error("invalid type: " + arg.message.type);
