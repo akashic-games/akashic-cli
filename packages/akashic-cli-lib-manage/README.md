@@ -2,8 +2,8 @@
 <img src="https://github.com/akashic-games/akashic-cli/blob/master/img/akashic-cli.png"/>
 </p>
 
-# akashic-cli-npm-command
-**akashic-cli-npm-command** には以下のツールが含まれています。
+# akashic-cli-lib-manage
+**akashic-cli-lib-manage** には以下のツールが含まれています。
 * akashic-cli-install
 * akashic-cli-uninstall
 * akashic-cli-update
@@ -45,7 +45,7 @@ akashic-cli-update
 
 ## ビルド方法
 
-**akashic-cli-npm-command** はTypeScriptで書かれたjsモジュールであるため、ビルドにはNode.jsが必要です。
+**akashic-cli-lib-manage** はTypeScriptで書かれたjsモジュールであるため、ビルドにはNode.jsが必要です。
 
 `npm run build` によりgulpを使ってビルドできます。
 
