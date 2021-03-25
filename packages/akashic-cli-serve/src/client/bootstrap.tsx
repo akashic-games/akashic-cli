@@ -40,7 +40,6 @@ window.addEventListener("load", async () => {
 window.addEventListener("unload", () => {
 	if (!(window as any).isChildWin || !store.appOptions.experimentalOpen) return;
 
-	// experimental-open オプションが有効の時、子ウィンドウのみ情報を保存
 	const maxSaveCount = store.appOptions.experimentalOpen;
 	if (maxSaveCount) {
 		const name = store.contentStore.defaultContent().gameName;

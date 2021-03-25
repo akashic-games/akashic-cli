@@ -32,8 +32,9 @@ export class PlayOperator {
 
 	openNewClientInstance = (): void => {
 		let restoreData;
-		// experimentalOpen オプションが有効の場合、localStorage から保存した window データを取得し、window の位置/サイズを復元して表示する。
 		if (this.store.appOptions.experimentalOpen ) {
+			// localStorage から保存した window 情報を取得し、window の位置/サイズを復元して表示。
+			// 取得した情報は localStorage から除去する。
 			const name = this.store.contentStore.defaultContent().gameName;
 			const saveDataStr = localStorage.getItem(name);
 			const saveDataAry = saveDataStr ? JSON.parse(saveDataStr) : [];
