@@ -118,6 +118,15 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues) {
 		}
 	}
 
+	if (cmdOptions.experimentalOpen) {
+		if(isNaN(cmdOptions.experimentalOpen)) {
+			console.error(`Invalid --experimental-open option:${cmdOptions.experimentalOpen}`);
+			process.exit(1);
+		} else {
+			serverGlobalConfig.experimentalOpen = parseInt(cmdOptions.experimentalOpen, 10);
+		}
+	}
+
 	const targetDirs: string[] = cliConfigParam.targetDirs;
 	const playManager = new PlayManager();
 	const runnerManager = new RunnerManager(playManager);
@@ -257,6 +266,7 @@ export async function run(argv: any): Promise<void> {
 		.option("--allow-external", `Read the URL allowing external access from sandbox.config.js`)
 		.option("--no-open-browser", "Disable to open a browser window at startup")
 		.option("--preserve-disconnected", "Disable auto closing for disconnected windows.")
+		.option("--experimental-open <Number to open>", "Starts the specified number of windows automatically.") // TODO: open-browser と統合
 		.parse(argv);
 
 	const options = commander.opts();
@@ -280,7 +290,8 @@ export async function run(argv: any): Promise<void> {
 			targetDirs: commander.args.length > 0 ? commander.args : (conf.targetDirs ?? [process.cwd()]),
 			openBrowser: options.openBrowser ?? conf.openBrowser,
 			preserveDisconnected: options.preserveDisconnected ?? conf.preserveDisconnected,
-			watch: options.watch ?? conf.watch
+			watch: options.watch ?? conf.watch,
+			experimentalOpen: options.experimentalOpen ?? conf.experimentalOpen
 		};
 		await cli(cliConfigParam, options);
 	});

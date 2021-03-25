@@ -6,4 +6,5 @@ export interface AppOptions {
 	proxyAudio: boolean;
 	targetService: ServiceType;
 	preserveDisconnected: boolean;
+	experimentalOpen: number;
 }

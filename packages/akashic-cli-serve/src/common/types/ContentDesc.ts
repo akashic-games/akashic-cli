@@ -6,4 +6,5 @@ export interface ContentDesc {
 	contentLocatorData: ContentLocatorData;
 	sandboxConfig?: SandboxConfig;
 	gameJson?: GameConfiguration;
+	gameName?: string;
 }

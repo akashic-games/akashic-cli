@@ -10,7 +10,8 @@ export const handleToGetStartupOptions = (req: express.Request, res: express.Res
 			verbose: serverGlobalConfig.verbose,
 			targetService: serverGlobalConfig.targetService,
 			proxyAudio: serverGlobalConfig.proxyAudio,
-			preserveDisconnected: serverGlobalConfig.preserveDisconnected
+			preserveDisconnected: serverGlobalConfig.preserveDisconnected,
+			experimentalOpen: serverGlobalConfig.experimentalOpen
 		});
 	} catch (e) {
 		next(e);

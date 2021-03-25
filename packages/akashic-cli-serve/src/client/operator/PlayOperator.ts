@@ -31,18 +31,41 @@ export class PlayOperator {
 	}
 
 	openNewClientInstance = (): void => {
+		let restoreData;
+		// experimentalOpen オプションが有効の場合、localStorage から保存した window データを取得し、window の位置/サイズを復元して表示する。
+		if (this.store.appOptions.experimentalOpen ) {
+			const name = this.store.contentStore.defaultContent().gameName;
+			const saveDataStr = localStorage.getItem(name);
+			const saveDataAry = saveDataStr ? JSON.parse(saveDataStr) : [];
+			restoreData = saveDataAry.shift();
+			localStorage.setItem(name, JSON.stringify(saveDataAry));
+
+			if (restoreData) {
+				// screen サイズを超過している場合は window が表示されるように位置を調整
+				if (screen.width <= restoreData.x) {
+					restoreData.x = screen.width - restoreData.width;
+				}
+				if (screen.height <= restoreData.y) {
+					restoreData.y = screen.height - restoreData.height;
+				}
+			}
+		}
+
+		const width = restoreData?.width || window.innerWidth;
+		const height = restoreData?.height || window.innerHeight;
+		const top = restoreData?.y || 0;
+		const left = restoreData?.x || 0;
 		// Mac Chrome で正しく動作しないのと、親ウィンドウかどうかの判別をしたいことがあるので noopener は付けない。
 		// 代わりに ignoreSession を指定して自前でセッションストレージをウィンドウごとに使い分ける (ref. ../store/storage.ts)
-		window.open(
+		const win = window.open(
 			`${window.location.pathname}?ignoreSession=1`,
 			"_blank",
-			`width=${window.innerWidth},height=${window.innerHeight}`
+			`width=${width},height=${height},top=${top},left=${left}`
 		);
+		(win as any).isChildWin = true; // ここから開いた window は子 window としてフラグを付ける。
 	}
 
 	closeThisWindowIfNeeded = (): void => {
-		// TODO: ゲームごとに、開いた window の位置とサイズ情報を閉じる直前で localStorage に保存し、
-		// 再度 window を開いた時に localStorage に情報があればそのサイズで window.open() したい。
 		if (this.store.appOptions.preserveDisconnected)  return;
 
 		if (window.opener) {
