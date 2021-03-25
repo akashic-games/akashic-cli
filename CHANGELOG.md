@@ -1,4 +1,17 @@
 # CHANGELOG
+Deprecated as of 10.7.0. highlight(lang, code, ...args) has been deprecated.
+Deprecated as of 10.7.0. Please use highlight(code, options) instead.
+https://github.com/highlightjs/highlight.js/issues/2277
+
+## 2.6.1 (2021-03-25)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#715](https://github.com/akashic-games/akashic-cli/pull/715) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Committers: 2
+- kamakiri_ys ([@kamakiri01](https://github.com/kamakiri01))
+- xnv ([@xnv](https://github.com/xnv))
 
 ## 2.6.0 (2021-03-19)
 
