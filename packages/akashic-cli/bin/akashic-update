@@ -1,2 +1,2 @@
 #!/usr/bin/env node
-require("@akashic/akashic-cli-update").run(process.argv);
+require("@akashic/akashic-cli-lib-manage/lib/update").run(process.argv);
