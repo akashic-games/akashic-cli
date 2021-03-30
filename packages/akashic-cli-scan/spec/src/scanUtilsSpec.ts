@@ -1,11 +1,11 @@
 import * as path from "path";
 import * as fs from "fs";
-import * as cmn from "@akashic/akashic-cli-commons";
+import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
 import * as mockfs from "mock-fs";
 import { scanAudioAssets, scanImageAssets, scanScriptAssets, scanTextAssets } from "../../lib/scanUtils";
 
 describe("scanUtils", () => {
-	const nullLogger = new cmn.ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
+	const nullLogger = new ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
 	const DUMMY_MP4_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy.mp4"));
 	const DUMMY_AAC_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy.aac"));
 	const DUMMY_OGG_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy.ogg"));
@@ -143,7 +143,7 @@ describe("scanUtils", () => {
 
 	it("scanAudioAssets()", async () => {
 		const warnLogs: string[] = [];
-		class Logger extends cmn.ConsoleLogger {
+		class Logger extends ConsoleLogger {
 			warn(message: string) {
 				warnLogs.push(message);
 			}

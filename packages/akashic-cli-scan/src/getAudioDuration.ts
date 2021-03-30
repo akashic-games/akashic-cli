@@ -3,9 +3,9 @@ import * as path from "path";
 import * as aacDuration from "aac-duration";
 import * as musicMetaData from "music-metadata";
 import { mp4Inspector } from "thumbcoil";
-import * as cmn from "@akashic/akashic-cli-commons";
+import { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
 
-export function getAudioDuration(filepath: string, logger?: cmn.Logger): Promise<number> {
+export function getAudioDuration(filepath: string, logger?: Logger): Promise<number> {
 	var ext = path.extname(filepath);
 	switch (ext) {
 	case ".aac":

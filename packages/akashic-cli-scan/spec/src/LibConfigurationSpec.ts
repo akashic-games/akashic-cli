@@ -1,8 +1,8 @@
-import * as cmn from "@akashic/akashic-cli-commons";
+import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
 import { LibConfiguration } from "../../lib/LibConfiguration";
 
 describe("LibConfiguration", () => {
-	const nullLogger = new cmn.ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
+	const nullLogger = new ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
 
 	it("add/remove/clear", () => {
 		const conf = new LibConfiguration({

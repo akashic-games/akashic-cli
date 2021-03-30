@@ -1,7 +1,9 @@
 import * as fs from "fs";
 import * as path from "path";
 import { Command } from "commander";
-import { ConsoleLogger, CliConfigurationFile, CliConfigInit } from "@akashic/akashic-cli-commons";
+import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
+import { CliConfigurationFile } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigurationFile";
+import { CliConfigInit } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigInit";
 import { promiseInit } from "./init";
 import { listTemplates } from "./listTemplates";
 

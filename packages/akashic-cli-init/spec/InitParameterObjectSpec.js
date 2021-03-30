@@ -1,14 +1,14 @@
-var MockConfigFile = require("./support/mockConfigFile");
-var target = require("../lib/InitParameterObject");
-var commons = require("@akashic/akashic-cli-commons");
 var os = require("os");
 var path = require("path");
+var ConsoleLogger = require("@akashic/akashic-cli-commons/lib/ConsoleLogger").ConsoleLogger;
+var target = require("../lib/InitParameterObject");
+var MockConfigFile = require("./support/mockConfigFile");
 
 describe("InitParameterObject.ts", () => {
 	describe("completeInitParameterObject()", () => {
 		it("complete InitParameterObject", done => {
 			var param = {
-				logger: new commons.ConsoleLogger({quiet: true}),
+				logger: new ConsoleLogger({quiet: true}),
 				configFile: new MockConfigFile({
 					"init.repository": "dummyRepositoryUrl",
 					"init.localTemplateDirectory": "dummyTemplateDirectory",
@@ -28,7 +28,7 @@ describe("InitParameterObject.ts", () => {
 
 		it("using default values", done => {
 			var param = {
-				logger: new commons.ConsoleLogger({quiet: true}),
+				logger: new ConsoleLogger({quiet: true}),
 				configFile: new MockConfigFile({})
 			};
 			target.completeInitParameterObject(param)

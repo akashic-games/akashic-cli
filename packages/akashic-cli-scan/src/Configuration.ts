@@ -1,7 +1,12 @@
 import * as path from "path";
 import * as fs from "fs";
 import * as readdirRecursive from "fs-readdir-recursive";
-import * as cmn from "@akashic/akashic-cli-commons";
+import * as cmnconf from "@akashic/akashic-cli-commons/lib/Configuration";
+import { Assets, AssetConfiguration } from "@akashic/akashic-cli-commons/lib/GameConfiguration";
+import { NodeModules }from "@akashic/akashic-cli-commons/lib/NodeModules";
+import { NpmLsResultObject, PromisedNpm }from "@akashic/akashic-cli-commons/lib/PromisedNpm";
+import { hashFilepath } from "@akashic/akashic-cli-commons/lib/Renamer";
+import { invertMap, makeUnixPath } from "@akashic/akashic-cli-commons/lib/Util";
 import { getAudioDuration } from "./getAudioDuration";
 import { imageSize } from "image-size";
 import { ISize } from "image-size/dist/types/interface";
@@ -22,7 +27,7 @@ export function _listDirectoryContents(dir: string): string[] {
 	});
 }
 
-export function _assertAssetNameNoConflict(assets: cmn.Assets, aid: string, filepath: string): void {
+export function _assertAssetNameNoConflict(assets: Assets, aid: string, filepath: string): void {
 	if (assets.hasOwnProperty(aid))
 		throw new Error("Conflicted Asset ID. " + aid + " for " + filepath + " is already used.");
 }
@@ -47,10 +52,10 @@ export interface DurationInfo {
 }
 export type DurationMap = { [basename: string]: DurationInfo };
 
-export interface ConfigurationParameterObject extends cmn.ConfigurationParameterObject {
+export interface ConfigurationParameterObject extends cmnconf.ConfigurationParameterObject {
 	basepath: string;
 	noOmitPackagejson?: boolean;
-	debugNpm?: cmn.PromisedNpm;
+	debugNpm?: PromisedNpm;
 	resolveAssetIdsFromPath?: boolean;
 	forceUpdateAssetIds?: boolean;
 	includeExtensionToAssetId?: boolean;
@@ -61,12 +66,12 @@ export interface ScanAssetsInformation {
 	extension: AssetExtension;
 }
 
-export class Configuration extends cmn.Configuration {
+export class Configuration extends cmnconf.Configuration {
 	_basepath: string;
 	_noOmitPackagejson: boolean;
 	_forceUpdateAssetIds: boolean;
 	_includeExtensionToAssetId: boolean;
-	_npm: cmn.PromisedNpm;
+	_npm: PromisedNpm;
 	_assetIdResolveMode: "basename" | "path" | "hash";
 
 	constructor(param: ConfigurationParameterObject) {
@@ -75,7 +80,7 @@ export class Configuration extends cmn.Configuration {
 		this._noOmitPackagejson = param.noOmitPackagejson;
 		this._forceUpdateAssetIds = param.forceUpdateAssetIds;
 		this._includeExtensionToAssetId = param.includeExtensionToAssetId;
-		this._npm = param.debugNpm ? param.debugNpm : new cmn.PromisedNpm({ logger: param.logger });
+		this._npm = param.debugNpm ? param.debugNpm : new PromisedNpm({ logger: param.logger });
 		this._assetIdResolveMode = param.resolveAssetIdsFromPath ? "path" : "basename" ;
 	}
 
@@ -88,7 +93,7 @@ export class Configuration extends cmn.Configuration {
 			const imageDir = info.scanDirectoryTable.image.concat("assets");
 			const audioDir = info.scanDirectoryTable.audio.concat("assets");
 
-			const assetArray: cmn.AssetConfiguration[] = [];
+			const assetArray: AssetConfiguration[] = [];
 			for (const dir of scriptDir) {
 				const assets = await scanScriptAssets(base, dir, this._logger);
 				assetArray.push(...assets);
@@ -163,7 +168,7 @@ export class Configuration extends cmn.Configuration {
 			// scanAssets() で最後に実行されるため、assets ディレクトリでは mode が path でなければ mode を `hash` とする
 			// TODO: _assetIdResolveMode は引数として指定できるようにする
 			this._assetIdResolveMode = this._assetIdResolveMode === "path" ? "path" : "hash";
-			const revmap = cmn.Util.invertMap(this._content.assets, "path");
+			const revmap = invertMap(this._content.assets, "path");
 			files.forEach((file) => {
 				const targetDir = path.join("assets/", path.dirname(file));
 
@@ -194,7 +199,7 @@ export class Configuration extends cmn.Configuration {
 		if (! this._content.assets)
 			this._content.assets = {};
 		var assets = this._content.assets;
-		var revmap = cmn.Util.invertMap(assets, "path");
+		var revmap = invertMap(assets, "path");
 		files.filter(isImageFilePath).forEach((f: string) => {
 			this._registerImageAsset(imageAssetDir + "/" + f,  revmap);
 		});
@@ -206,7 +211,7 @@ export class Configuration extends cmn.Configuration {
 			return Promise.resolve();
 		files = files.map((filepath: string) => path.join(audioAssetDir, filepath));
 		var assets = this._content.assets || (this._content.assets = {});
-		var revmap = cmn.Util.invertMap(assets, "path");
+		var revmap = invertMap(assets, "path");
 
 		return Promise.resolve()
 			.then(() => this._makeDurationMap(files, assets, revmap))
@@ -226,14 +231,14 @@ export class Configuration extends cmn.Configuration {
 	): void {
 		var files: string[] = readdirRecursive(dir);
 		var assets = this._content.assets || (this._content.assets = {});
-		var revmap = cmn.Util.invertMap(assets, "path");
+		var revmap = invertMap(assets, "path");
 		files.filter(filter).forEach((f: string) => {
 			this._registerXXXAsset(path.join(dir, f), revmap, type);
 		});
 	}
 
 	_registerImageAsset(filePath: string,  revmap: { [key: string]: string[] }): void {
-		var unixPath = cmn.Util.makeUnixPath(filePath);
+		var unixPath = makeUnixPath(filePath);
 		var size = imageSize(unixPath) as ISize;
 		if (!size) {
 			this._logger.warn(`Failed to get image size. Please check ${unixPath}`);
@@ -247,7 +252,7 @@ export class Configuration extends cmn.Configuration {
 				if (this._forceUpdateAssetIds) {
 					const basename = path.basename(filePath, path.extname(filePath));
 					if (this._assetIdResolveMode === "path") {
-						newAssetId = cmn.Util.makeUnixPath(path.join(path.dirname(unixPath), basename));
+						newAssetId = makeUnixPath(path.join(path.dirname(unixPath), basename));
 					} else if (this._assetIdResolveMode === "hash") {
 						newAssetId = this._generateAssetsDirId(unixPath);
 					} else {
@@ -277,7 +282,7 @@ export class Configuration extends cmn.Configuration {
 		const basename = path.basename(filePath, path.extname(filePath));
 		let aid: string;
 		if (this._assetIdResolveMode === "path") {
-			aid = cmn.Util.makeUnixPath(path.join(path.dirname(unixPath), basename));
+			aid = makeUnixPath(path.join(path.dirname(unixPath), basename));
 		} else if (this._assetIdResolveMode === "hash") {
 			aid = this._generateAssetsDirId(unixPath);
 		} else {
@@ -309,7 +314,7 @@ export class Configuration extends cmn.Configuration {
 				if (this._forceUpdateAssetIds) {
 					const basename = path.basename(f);
 					if (this._assetIdResolveMode === "path") {
-						newAssetId = cmn.Util.makeUnixPath(path.join(path.dirname(f), basename));
+						newAssetId = makeUnixPath(path.join(path.dirname(f), basename));
 					} else if (this._assetIdResolveMode === "hash") {
 						newAssetId = this._generateAssetsDirId(durationInfo.path);
 					} else {
@@ -338,7 +343,7 @@ export class Configuration extends cmn.Configuration {
 		const basename = path.basename(f);
 		let aid: string;
 		if (this._assetIdResolveMode === "path") {
-			aid = cmn.Util.makeUnixPath(path.join(path.dirname(f), basename));
+			aid = makeUnixPath(path.join(path.dirname(f), basename));
 		} else if (this._assetIdResolveMode === "hash") {
 			aid = this._generateAssetsDirId(f);
 		} else {
@@ -357,7 +362,7 @@ export class Configuration extends cmn.Configuration {
 	}
 
 	_registerXXXAsset(filePath: string, revmap: { [key: string]: string[] }, type: string): void {
-		const  unixPath = cmn.Util.makeUnixPath(path.relative(this._basepath, filePath));
+		const  unixPath = makeUnixPath(path.relative(this._basepath, filePath));
 		const aidSet = revmap[unixPath];
 		const assets = this._content.assets;
 		if (aidSet && aidSet.length > 0) {
@@ -366,7 +371,7 @@ export class Configuration extends cmn.Configuration {
 				if (this._forceUpdateAssetIds) {
 					const basename = path.basename(filePath, path.extname(filePath));
 					if (this._assetIdResolveMode === "path") {
-						newAssetId = cmn.Util.makeUnixPath(path.join(path.dirname(unixPath), basename));
+						newAssetId = makeUnixPath(path.join(path.dirname(unixPath), basename));
 					} else if (this._assetIdResolveMode === "hash") {
 						newAssetId = this._generateAssetsDirId(unixPath);
 					} else {
@@ -385,7 +390,7 @@ export class Configuration extends cmn.Configuration {
 			const basename = path.basename(filePath, path.extname(filePath));
 			let aid: string;
 			if (this._assetIdResolveMode === "path") {
-				aid = cmn.Util.makeUnixPath(path.join(path.dirname(unixPath), basename));
+				aid = makeUnixPath(path.join(path.dirname(unixPath), basename));
 			} else if (this._assetIdResolveMode === "hash") {
 				aid = this._generateAssetsDirId(unixPath);
 			} else {
@@ -419,7 +424,7 @@ export class Configuration extends cmn.Configuration {
 		return Promise.resolve()
 			.then(() => this._fetchDependencyPackageNames())
 			.then((dependencyNames) => {
-				const listFiles = this._noOmitPackagejson ? cmn.NodeModules.listModuleFiles : cmn.NodeModules.listScriptFiles;
+				const listFiles = this._noOmitPackagejson ? NodeModules.listModuleFiles : NodeModules.listScriptFiles;
 				return listFiles(this._basepath, dependencyNames, this._logger);
 			})
 			.then((filePaths: string[]) => {
@@ -430,8 +435,8 @@ export class Configuration extends cmn.Configuration {
 
 	scanModuleMainScripts(filePaths: string[]): Promise<void> {
 		return Promise.resolve()
-			.then(() => cmn.NodeModules.listPackageJsonsFromScriptsPath(this._basepath, filePaths))
-			.then((packageJsonFiles) => cmn.NodeModules.listModuleMainScripts(packageJsonFiles))
+			.then(() => NodeModules.listPackageJsonsFromScriptsPath(this._basepath, filePaths))
+			.then((packageJsonFiles) => NodeModules.listModuleMainScripts(packageJsonFiles))
 			.then((moduleMainScripts) => {
 				if (moduleMainScripts && Object.keys(moduleMainScripts).length > 0) {
 					if (! this._content.moduleMainScripts) {
@@ -450,7 +455,7 @@ export class Configuration extends cmn.Configuration {
 		var entryPointPath = this._content.main || ("./" + path.join(this._basepath, this._content.assets["mainScene"].path));
 		return Promise.resolve()
 			.then(() => {
-				const listFiles = this._noOmitPackagejson ? cmn.NodeModules.listModuleFiles : cmn.NodeModules.listScriptFiles;
+				const listFiles = this._noOmitPackagejson ? NodeModules.listModuleFiles : NodeModules.listScriptFiles;
 				return listFiles(this._basepath, entryPointPath, this._logger);
 			})
 			.then((filePaths: string[]) => {
@@ -473,16 +478,16 @@ export class Configuration extends cmn.Configuration {
 
 		var relpath = path.relative(this._basepath, dir);
 		var files: string[] = readdirRecursive(relpath);
-		var revmap = cmn.Util.invertMap(assets, "path");
+		var revmap = invertMap(assets, "path");
 		var liveKeys: {[key: string]: boolean} = {};
 		files.filter(pathFilter).map(pathMaker).forEach((f: string) => {
-			var unixPath = cmn.Util.makeUnixPath(dir + f);
+			var unixPath = makeUnixPath(dir + f);
 			(revmap[unixPath] || []).forEach((aid: string) => {
 				liveKeys[aid] = true;
 			});
 		});
 
-		var relUnixPath = cmn.Util.makeUnixPath(relpath);
+		var relUnixPath = makeUnixPath(relpath);
 		Object.keys(assets).forEach((k: string) => {
 			if (assets[k].type === type && assets[k].path.indexOf(relUnixPath) === 0 && !liveKeys.hasOwnProperty(k)) {
 				this._logger.info("Removed the declaration for '" + k + "' (" + assets[k].path + "). "
@@ -519,10 +524,10 @@ export class Configuration extends cmn.Configuration {
 		}));
 	}
 
-	private _getDurationInfo(filepath: string, assets: cmn.Assets, assetsRevmap: { [key: string]: string[] }): Promise<DurationInfo> {
+	private _getDurationInfo(filepath: string, assets: Assets, assetsRevmap: { [key: string]: string[] }): Promise<DurationInfo> {
 		var ext = path.extname(filepath);
 		var basename = path.basename(filepath, ext);
-		var noextUnixPath = cmn.Util.makeUnixPath(path.join(path.dirname(filepath), basename));
+		var noextUnixPath = makeUnixPath(path.join(path.dirname(filepath), basename));
 
 		return Promise.resolve()
 			.then(() => getAudioDuration(path.join(this._basepath, filepath), this._logger))
@@ -536,13 +541,13 @@ export class Configuration extends cmn.Configuration {
 			});
 	}
 
-	private _makeDurationMap(filepaths: string[], assets: cmn.Assets, assetsRevmap: { [key: string]: string[] }): Promise<DurationMap> {
+	private _makeDurationMap(filepaths: string[], assets: Assets, assetsRevmap: { [key: string]: string[] }): Promise<DurationMap> {
 		var promisesDurationInfo = filepaths.map((p) => this._getDurationInfo(p, assets, assetsRevmap));
 
 		return this._promiseSequence<DurationInfo>(promisesDurationInfo).then((durationInfoSet: DurationInfo[]) => {
 			// お節介機能: 拡張子が違うだけの音声ファイル間で、500ms以上長さが違ったら警告しておく。
 			// (別のファイルがまぎれているかもしれない) お節介なので数値に深い意味はない。
-			var durationRevMap = cmn.Util.invertMap(<any>durationInfoSet, "path");
+			var durationRevMap = invertMap(<any>durationInfoSet, "path");
 			for (var noextUnixPath in durationRevMap) {
 				if (!durationRevMap.hasOwnProperty(noextUnixPath)) continue;
 				var keys = durationRevMap[noextUnixPath];
@@ -567,9 +572,9 @@ export class Configuration extends cmn.Configuration {
 			.then(() => this._npm.ls())
 			// lsResultオブジェクトは、package.jsonのdependenciesに書かれたモジュールと、それらの各依存モジュールをツリー構造で表したオブジェクトである。
 			// これらのうち、dependenciesに直接書かれていない依存モジュールのファイルパスは、依存モジュールのバージョン・インストール順序によって不定である。
-			// よって、依存モジュールのファイルパスを解決する方法として、node_modules/直下にあるモジュール名（つまりpackage.jsonのdependenciesに書かれたモジュール）のみをcmn.NodeModules.listModuleFilesに渡す。
+			// よって、依存モジュールのファイルパスを解決する方法として、node_modules/直下にあるモジュール名（つまりpackage.jsonのdependenciesに書かれたモジュール）のみをNodeModules.listModuleFilesに渡す。
 			// これにより、requireチェーンによって依存モジュールのファイルパスが解決される。
-			.then((lsResult: cmn.NpmLsResultObject) => {
+			.then((lsResult: NpmLsResultObject) => {
 				lsResult.dependencies = lsResult.dependencies || {};
 				return Object.keys(lsResult.dependencies);
 			})
@@ -597,10 +602,10 @@ export class Configuration extends cmn.Configuration {
 	 * `asset:xxxxxx` の形式とする。
 	 */
 	private _generateAssetsDirId(filePath: string): string {
-		let hashId = "asset:" + path.basename(cmn.Renamer.hashFilepath(filePath, 6), path.extname(filePath));
+		let hashId = "asset:" + path.basename(hashFilepath(filePath, 6), path.extname(filePath));
 		while (!!this._content.assets[hashId] && this._content.assets[hashId].path !== filePath) {
 			filePath += Math.random().toString(32).substring(2, 3);
-			hashId = "asset:" + path.basename(cmn.Renamer.hashFilepath(filePath, 6), path.extname(filePath));
+			hashId = "asset:" + path.basename(hashFilepath(filePath, 6), path.extname(filePath));
 		}
 		return hashId;
 	}
