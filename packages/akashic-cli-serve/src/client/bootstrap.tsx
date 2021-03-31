@@ -30,7 +30,7 @@ window.addEventListener("load", async () => {
 				operator.play.openNewClientInstance();
 			}
 			// 保存数,順序を保つため、指定数 window を開いたら localStorage に対象のデータが残っていてもクリアする。
-			localStorage.removeItem(store.contentStore.defaultContent().gameName);
+			localStorage.removeItem("win_" + store.contentStore.defaultContent().gameName);
 		}
 	} catch (e) {
 		console.error(e);
@@ -42,7 +42,7 @@ window.addEventListener("unload", () => {
 
 	const maxSaveCount = store.appOptions.experimentalOpen;
 	if (maxSaveCount) {
-		const name = store.contentStore.defaultContent().gameName;
+		const name = "win_" + store.contentStore.defaultContent().gameName;
 		const savedDataStr = localStorage.getItem(name);
 		const saveData = savedDataStr ? JSON.parse(savedDataStr) : [];
 		if (saveData.length >= maxSaveCount) return;
