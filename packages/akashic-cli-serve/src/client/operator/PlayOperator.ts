@@ -40,16 +40,6 @@ export class PlayOperator {
 			const saveDataAry = saveDataStr ? JSON.parse(saveDataStr) : [];
 			restoreData = saveDataAry.shift();
 			localStorage.setItem(name, JSON.stringify(saveDataAry));
-
-			if (restoreData) {
-				// screen サイズを超過している場合は window が表示されるように位置を調整
-				if (screen.width <= restoreData.x) {
-					restoreData.x = screen.width - restoreData.width;
-				}
-				if (screen.height <= restoreData.y) {
-					restoreData.y = screen.height - restoreData.height;
-				}
-			}
 		}
 
 		const width = restoreData?.width || window.innerWidth;
