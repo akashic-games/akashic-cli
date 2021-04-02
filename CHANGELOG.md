@@ -1,5 +1,22 @@
 # CHANGELOG
 
+## 2.6.2 (2021-04-02)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#729](https://github.com/akashic-games/akashic-cli/pull/729) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.0.11, engineFiles@2.1.53, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+* `akashic-cli-init`
+  * [#728](https://github.com/akashic-games/akashic-cli/pull/728) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+  * [#723](https://github.com/akashic-games/akashic-cli/pull/723) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+* `akashic-cli-export-html`
+  * [#727](https://github.com/akashic-games/akashic-cli/pull/727) 【akashic-cli-export-html】内部コンポーネントの更新(engineFiles@3.0.11, engineFiles@2.1.53, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+
+#### Other Change
+* [#730](https://github.com/akashic-games/akashic-cli/pull/730) fix broken CHANGELOG.md and make updateChangelog.js more robust ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.6.1 (2021-03-25)
 
 #### Enhancement
