@@ -126,7 +126,7 @@ try{
 	execSync(`${akashicCliPath} uninstall @akashic-extension/akashic-label`);
 	packageJson = JSON.parse(fs.readFileSync(`${targetDir}/game/package.json`).toString());
 	gameJson = JSON.parse(fs.readFileSync(`${targetDir}/game/game.json`).toString());
-	// TODO Node15だとここでエラーになるのでpackage.json中にdependenciesキーがあるかどうかだけ確認するテストに変える
+	// TODO npm7だとpackageJson["dependencies"]がundefinedとなるためエラーになる。そのためpackage.json中にdependenciesキーがあるかどうかだけ確認するテストに変える必要がある。
 	assertNotContains(Object.keys(packageJson["dependencies"]), "@akashic-extension/akashic-label");
 	assertNotContains(Object.keys(gameJson), "moduleMainScripts");
 	assertNotContains(gameJson["globalScripts"], "node_modules/@akashic-extension/akashic-label/lib/index.js");
