@@ -25,8 +25,18 @@
 	},
 	"operationPlugins": [
 		{
-			"code": 5,
+			"code": 1,
 			"script": "./script/bar.js"
+		},
+		{
+			"code": 2,
+			"script": "./node_modules/@hoge/testmodule/lib/ModuleA.js"
 		}
+	],
+	"globalScripts": [
+		"node_modules/@hoge/testmodule/lib/ModuleA.js",
+		"node_modules/@hoge/testmodule/lib/ModuleB.js",
+		"node_modules/@hoge/testmodule/lib/ModuleC.js",
+		"node_modules/@hoge/testmodule/lib/index.js"
 	]
 }

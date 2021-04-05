@@ -464,8 +464,12 @@ describe("convert", () => {
 					// bundle済みのファイルは残らない
 					expect(fs.existsSync(path.join(destDir, "script/main.js"))).toBe(false);
 					expect(fs.existsSync(path.join(destDir, "script/foo.js"))).toBe(false);
+					expect(fs.existsSync(path.join(destDir, "node_modules/@hoge/testmodule/lib/ModuleC.js"))).toBe(false);
+					expect(fs.existsSync(path.join(destDir, "node_modules/@hoge/testmodule/lib/index.js"))).toBe(false);
 					// bundleされていたとしてもoperationPluginsとして登録されているスクリプトファイルは残る
 					expect(fs.existsSync(path.join(destDir, "script/bar.js"))).toBe(true);
+					expect(fs.existsSync(path.join(destDir, "node_modules/@hoge/testmodule/lib/ModuleA.js"))).toBe(true);
+					expect(fs.existsSync(path.join(destDir, "node_modules/@hoge/testmodule/lib/ModuleB.js"))).toBe(true);
 					done();
 				}, done.fail);
 		});
