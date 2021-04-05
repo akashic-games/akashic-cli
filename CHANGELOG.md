@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## 2.6.3 (2021-04-05)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#731](https://github.com/akashic-games/akashic-cli/pull/731) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Other Change
+* `akashic-cli-init`, `akashic-cli-scan`, `akashic-cli-serve`
+  * [#726](https://github.com/akashic-games/akashic-cli/pull/726) change reference method of akashic-cli-commons in init, scan, serve ([@dera-](https://github.com/dera-))
+
+#### Committers: 2
+- [@dera-](https://github.com/dera-)
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.6.2 (2021-04-02)
 
 #### Enhancement
