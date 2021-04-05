@@ -1,10 +1,9 @@
-var dt = require("../lib/downloadTemplate");
-var lt = require("../lib/listTemplates");
-var commons = require("@akashic/akashic-cli-commons");
 var fs = require("fs");
 var os = require("os");
 var path = require("path");
-var MockConfigFile = require("./support/mockConfigFile");
+var ConsoleLogger = require("@akashic/akashic-cli-commons/lib/ConsoleLogger").ConsoleLogger;
+var dt = require("../lib/downloadTemplate");
+var lt = require("../lib/listTemplates");
 
 describe("downloadTemplate.ts", () => {
 
@@ -40,7 +39,7 @@ describe("downloadTemplate.ts", () => {
 				})
 			}).then((dir) => {
 				var param = {
-					logger: new commons.ConsoleLogger({quiet: true}),
+					logger: new ConsoleLogger({quiet: true}),
 					_realTemplateDirectory: dir,
 					repository: "http://127.0.0.1:18080/templates/",
 					templateListJsonPath: "template-list.json",
@@ -74,7 +73,7 @@ describe("downloadTemplate.ts", () => {
 			})
 			.then((dir) =>{
 				param = {
-					logger: new commons.ConsoleLogger({ quiet: true }),
+					logger: new ConsoleLogger({ quiet: true }),
 					_realTemplateDirectory: dir,
 					repository: "http://127.0.0.1:18080/templates/",
 					templateListJsonPath: "template-list.json",

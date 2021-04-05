@@ -1,5 +1,7 @@
 import * as path from "path";
-import * as cmn from "@akashic/akashic-cli-commons";
+import { AssetConfiguration } from "@akashic/akashic-cli-commons/lib/GameConfiguration";
+import { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
+import { invertMap, makeUnixPath } from "@akashic/akashic-cli-commons/lib/Util";
 import * as readdirRecursive from "fs-readdir-recursive";
 import { imageSize } from "image-size";
 import { getAudioDuration } from "./getAudioDuration";
@@ -39,15 +41,15 @@ export type AudioDurationInfoMap = { [path: string]: AudioDurationInfo };
 export async function scanScriptAssets(
 	baseDir: string,
 	dir: string,
-	_logger?: cmn.Logger,
+	_logger?: Logger,
 	filter: AssetFilter = scriptAssetFilter
-): Promise<cmn.AssetConfiguration[]> {
+): Promise<AssetConfiguration[]> {
 	const relativeFilePaths: string[] = readdirRecursive(path.join(baseDir, dir)).filter(filter);
 	return relativeFilePaths
 		.map(relativeFilePath => {
 			return {
 				type: "script",
-				path: cmn.Util.makeUnixPath(path.join(dir, relativeFilePath)),
+				path: makeUnixPath(path.join(dir, relativeFilePath)),
 				global: true
 			};
 		})
@@ -57,15 +59,15 @@ export async function scanScriptAssets(
 export async function scanTextAssets(
 	baseDir: string,
 	dir: string,
-	_logger?: cmn.Logger,
+	_logger?: Logger,
 	filter: AssetFilter = textAssetFilter
-): Promise<cmn.AssetConfiguration[]> {
+): Promise<AssetConfiguration[]> {
 	const relativeFilePaths: string[] = readdirRecursive(path.join(baseDir, dir)).filter(filter);
 	return relativeFilePaths
 		.map(relativeFilePath => {
 			return {
 				type: "text",
-				path: cmn.Util.makeUnixPath(path.join(dir, relativeFilePath))
+				path: makeUnixPath(path.join(dir, relativeFilePath))
 			};
 		})
 		.filter(asset => asset != null);
@@ -74,9 +76,9 @@ export async function scanTextAssets(
 export async function scanImageAssets(
 	baseDir: string,
 	dir: string,
-	logger?: cmn.Logger,
+	logger?: Logger,
 	filter: AssetFilter = imageAssetFilter
-): Promise<cmn.AssetConfiguration[]> {
+): Promise<AssetConfiguration[]> {
 	const relativeFilePaths: string[] = readdirRecursive(path.join(baseDir, dir)).filter(filter);
 	return relativeFilePaths
 		.map(relativeFilePath => {
@@ -88,7 +90,7 @@ export async function scanImageAssets(
 			}
 			return {
 				type: "image",
-				path: cmn.Util.makeUnixPath(path.join(dir, relativeFilePath)),
+				path: makeUnixPath(path.join(dir, relativeFilePath)),
 				width: size.width,
 				height: size.height
 			};
@@ -99,9 +101,9 @@ export async function scanImageAssets(
 export async function scanAudioAssets(
 	baseDir: string,
 	dir: string,
-	logger?: cmn.Logger,
+	logger?: Logger,
 	filter: AssetFilter = audioAssetFilter
-): Promise<cmn.AssetConfiguration[]> {
+): Promise<AssetConfiguration[]> {
 	const relativeFilePaths: string[] = readdirRecursive(path.join(baseDir, dir)).filter(filter);
 
 	const durationInfos: AudioDurationInfo[] = [];
@@ -115,11 +117,11 @@ export async function scanAudioAssets(
 			basename,
 			ext: ext,
 			duration: Math.ceil(duration * 1000),
-			path: cmn.Util.makeUnixPath(nonExtRelativeFilePath)
+			path: makeUnixPath(nonExtRelativeFilePath)
 		});
 	}
 
-	const durationRevMap = cmn.Util.invertMap(durationInfos as any, "path");
+	const durationRevMap = invertMap(durationInfos as any, "path");
 	for (const nonExtFilePath in durationRevMap) {
 		// お節介機能: 拡張子が違うだけの音声ファイル間で、500ms以上長さが違ったら警告しておく。
 		// (別のファイルがまぎれているかもしれない) お節介なので数値に深い意味はない。
@@ -139,7 +141,7 @@ export async function scanAudioAssets(
 		}
 	}
 
-	const audioAssets: cmn.AssetConfiguration[] = [];
+	const audioAssets: AssetConfiguration[] = [];
 	for (const filePath in durationMap) {
 		if (!durationMap.hasOwnProperty(filePath)) continue;
 		audioAssets.push({

@@ -1,7 +1,9 @@
 import * as fs from "fs";
 import * as path from "path";
 import { Command } from "commander";
-import { ConsoleLogger, CliConfigurationFile, CliConfigScanAsset, CliConfigScanGlobalScripts } from "@akashic/akashic-cli-commons";
+import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
+import { CliConfigurationFile } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigurationFile";
+import { CliConfigScanAsset, CliConfigScanGlobalScripts } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigScan";
 import { promiseScanAsset, promiseScanNodeModules, watchAsset, ScanAssetParameterObject } from "./scan";
 
 var ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "package.json"), "utf8")).version;

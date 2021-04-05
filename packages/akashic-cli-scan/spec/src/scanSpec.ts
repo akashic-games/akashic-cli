@@ -1,12 +1,13 @@
 import * as path from "path";
 import * as fs from "fs";
-import * as cmn from "@akashic/akashic-cli-commons";
+import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
+import { PromisedNpm } from "@akashic/akashic-cli-commons/lib/PromisedNpm";
 import * as mockfs from "mock-fs";
 import { promiseScanAsset, scanAsset, scanNodeModules } from "../../lib/scan";
 import { MockPromisedNpm } from "./helpers/MockPromisedNpm";
 
 describe("scan", function () {
-	var nullLogger = new cmn.ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
+	var nullLogger = new ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
 	var DUMMY_OGG_DATA2 = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy2.ogg"));
 	const DUMMY_1x1_PNG_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy1x1.png"));
 
@@ -201,7 +202,7 @@ describe("scan", function () {
 			};
 			mockfs(mockFsContent);
 
-			var nullNpm: cmn.PromisedNpm = new MockPromisedNpm({
+			var nullNpm: PromisedNpm = new MockPromisedNpm({
 				expectDependencies: { "dummy": {}, "dummy2": {} }
 			});
 			scanNodeModules({ cwd: "./", logger: nullLogger, debugNpm: nullNpm }, (err: any) => {
