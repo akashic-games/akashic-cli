@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.6.5 (2021-04-08)
+
+#### Enhancement
+* `akashic-cli-export-html`
+  * [#735](https://github.com/akashic-games/akashic-cli/pull/735) 【akashic-cli-export-html】内部コンポーネントの更新(engineFiles@3.0.13, engineFiles@2.1.53, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.6.4 (2021-04-06)
 
 #### Enhancement
