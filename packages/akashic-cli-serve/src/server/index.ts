@@ -123,7 +123,8 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues) {
 			console.error(`Invalid --experimental-open option:${cmdOptions.experimentalOpen}`);
 			process.exit(1);
 		} else {
-			serverGlobalConfig.experimentalOpen = parseInt(cmdOptions.experimentalOpen, 10);
+			const experimentalOpenValue = parseInt(cmdOptions.experimentalOpen, 10);
+			serverGlobalConfig.experimentalOpen = experimentalOpenValue > 10 ? 10 : experimentalOpenValue;
 		}
 	}
 
@@ -266,7 +267,7 @@ export async function run(argv: any): Promise<void> {
 		.option("--allow-external", `Read the URL allowing external access from sandbox.config.js`)
 		.option("--no-open-browser", "Disable to open a browser window at startup")
 		.option("--preserve-disconnected", "Disable auto closing for disconnected windows.")
-		.option("--experimental-open <Number to open>", "Starts the specified number of windows automatically.") // TODO: open-browser と統合
+		.option("--experimental-open <num>", "Open <num> browser windows at startup. The upper limit of <num> is 10.") // TODO: open-browser と統合
 		.parse(argv);
 
 	const options = commander.opts();

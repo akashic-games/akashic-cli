@@ -18,7 +18,7 @@ export const createHandlerToGetContents = (targetDirs: string[]): express.Reques
 				contentLocatorData: { contentId: "" + i },
 				sandboxConfig: sandboxConfigs.get(i.toString()),
 				gameJson: gameConfigs.get(i.toString()),
-				gameName: path.basename(path.resolve(targetDir))
+				gameLocationKey: path.basename(path.resolve(targetDir))
 			}));
 			responseSuccess<ContentGetApiResponseData[]>(res, 200, contents);
 		} catch (e) {

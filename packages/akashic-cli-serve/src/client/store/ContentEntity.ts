@@ -10,7 +10,7 @@ export class ContentEntity {
 	readonly locator: ClientContentLocator;
 	gameJson: GameConfiguration; // 現状では view に反映しないので observable はつけない
 	preferredSessionParameters: PreferredSessionParameters; // 現状では view に反映しないので observable はつけない
-	gameName: string;
+	gameLocationKey: string; // 仕様未定のため --experimental-open オプション以外で使用してはいけない
 	@observable sandboxConfig: SandboxConfig;
 	@observable argumentsTable: { [name: string]: string };
 
@@ -20,7 +20,7 @@ export class ContentEntity {
 		this.argumentsTable = {};
 		const args = this.sandboxConfig.arguments || {};
 		this.gameJson = desc.gameJson;
-		this.gameName = desc.gameName;
+		this.gameLocationKey = desc.gameLocationKey;
 		this.calculatePreferredSessionParameters();
 		Object.keys(args).forEach(key => {
 			this.argumentsTable[key] = JSON.stringify(args[key], null, 2);

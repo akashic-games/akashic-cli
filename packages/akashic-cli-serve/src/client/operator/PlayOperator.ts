@@ -35,25 +35,24 @@ export class PlayOperator {
 		if (this.store.appOptions.experimentalOpen) {
 			// localStorage から保存した window 情報を取得し、window の位置/サイズを復元して表示。
 			// 取得した情報は localStorage から除去する。
-			const name = "win_" + this.store.contentStore.defaultContent().gameName;
+			const name = "win_" + this.store.contentStore.defaultContent().gameLocationKey;
 			const saveDataStr = localStorage.getItem(name);
 			const saveDataAry = saveDataStr ? JSON.parse(saveDataStr) : [];
 			restoreData = saveDataAry.shift();
 			localStorage.setItem(name, JSON.stringify(saveDataAry));
 		}
 
-		const width = restoreData?.width || window.innerWidth;
-		const height = restoreData?.height || window.innerHeight;
-		const top = restoreData?.y || 0;
-		const left = restoreData?.x || 0;
+		const width = typeof restoreData?.width === "number" ? restoreData?.width : window.innerWidth;;
+		const height = typeof restoreData?.height === "number" ? restoreData?.height : window.innerHeight;
+		const top = typeof restoreData?.y === "number" ? restoreData?.y : 0;
+		const left = typeof restoreData?.y === "number" ? restoreData?.x : 0;
 		// Mac Chrome で正しく動作しないのと、親ウィンドウかどうかの判別をしたいことがあるので noopener は付けない。
 		// 代わりに ignoreSession を指定して自前でセッションストレージをウィンドウごとに使い分ける (ref. ../store/storage.ts)
-		const win = window.open(
-			`${window.location.pathname}?ignoreSession=1`,
+		window.open(
+			`${window.location.pathname}?ignoreSession=1&isChildWindow=true`,
 			"_blank",
 			`width=${width},height=${height},top=${top},left=${left}`
 		);
-		(win as any).isChildWin = true; // ここから開いた window は子 window としてフラグを付ける。
 	}
 
 	closeThisWindowIfNeeded = (): void => {

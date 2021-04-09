@@ -43,7 +43,7 @@ akashic-cli-serve [<options>] [<path>]
 |`--allow-external`|N/A|`外部アセットを許可します。許可する値は sandbox.config.js から読み込みます。|N/A|
 |`--no-open-browser`|N/A|起動時に自動でブラウザを開かないようにします。|N/A|
 |`--preserve-disconnected`|N/A|サーバ切断時に開いている子ウィンドウを閉じないようにします。|N/A|
-|`--experimental-open <Number to open>`|N/A|起動時に子ウィンドウを指定数開いて起動します。ウィンドウの情報がある場合、位置やサイズを復元してウィンドウを開きます。|N/A|
+|`--experimental-open <num>`|N/A|起動時に子ウィンドウを指定数開いて起動します。指定数の上限は 10 となります。|N/A|
 
 [ae]: https://akashic-games.github.io/
 
