@@ -109,7 +109,7 @@ function deleteUnnecessaryLinesFromJsFile(targetPath) {
 function deleteUnnecessarySpecfilesFromTs(templateName, targetPath) {
 	const specFilePath = path.join(targetPath, "spec/testSpec.ts");
 
-	if (templateName === "default" ) {
+	if (templateName === "default") {
 		fs.unlinkSync(path.join(targetPath, "spec/minimal-testSpec.ts"));
 		fs.unlinkSync(path.join(targetPath, "spec/shin-ichiba-ranking-testSpec.ts"));
 
