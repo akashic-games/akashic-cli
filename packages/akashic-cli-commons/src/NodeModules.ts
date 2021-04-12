@@ -59,6 +59,8 @@ export module NodeModules {
 		return moduleMainScripts;
 	}
 
+	// TODO: node_modules/ 以下以外でも利用するメソッドのため、NodeModules ではなく別の適切な場所に移動する
+	// checkAllModules は実験的なものです。 akashic-cli の外部から利用しないでください
 	export function listScriptFiles(
 		basepath: string,
 		modules: string|string[],

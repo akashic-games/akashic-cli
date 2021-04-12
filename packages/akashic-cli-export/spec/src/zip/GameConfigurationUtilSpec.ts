@@ -88,6 +88,45 @@ describe("GameConfigurationUtil", () => {
 		});
 	});
 
+	describe("extractScripts", () => {
+		const filter = (filePath: string): boolean => {
+			return ["node_modules/foobar/package.json", "script/main.js"].indexOf(filePath) !== -1;
+		};
+		it("extract script assets", () => {
+			gcu.extractScripts(gamejsonNoGlobalScripts, filter);
+			expect(gamejsonNoGlobalScripts).toEqual({
+				width: 120,
+				height: 120,
+				fps: 40,
+				assets: {
+					"main": {
+						type: "script",
+						global: true,
+						path: "script/main.js"
+					}
+				}
+			});
+		});
+		it("extract scripts from globalScripts", () => {
+			gcu.extractScripts(gamejson, filter);
+			expect(gamejson).toEqual({
+				width: 120,
+				height: 120,
+				fps: 40,
+				assets: {
+					"main": {
+						type: "script",
+						global: true,
+						path: "script/main.js"
+					}
+				},
+				globalScripts: [
+					"node_modules/foobar/package.json"
+				]
+			});
+		});
+	});
+
 	describe("findUniqueScriptAssetName", () => {
 		it("uses the given prefix if can be used", () => {
 			expect(gcu.findUniqueScriptAssetName(gamejson, "foo")).toBe("foo");
