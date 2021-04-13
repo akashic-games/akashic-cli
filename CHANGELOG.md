@@ -1,5 +1,22 @@
 # CHANGELOG
 
+## 2.7.0 (2021-04-13)
+
+#### Breaking Change
+* `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-export`, `akashic-cli`
+  * [#697](https://github.com/akashic-games/akashic-cli/pull/697) akashic-cli-export-htmlとakashic-cli-export-zipを1つのパッケージ(akashic-cli-export)に統合 ([@dera-](https://github.com/dera-))
+* `akashic-cli-config`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-modify`, `akashic-cli-stat`, `akashic-cli`
+  * [#696](https://github.com/akashic-games/akashic-cli/pull/696) config, modify, statを１つのツール(akashic-cli-extra)としてまとめる対応 ([@dera-](https://github.com/dera-))
+
+#### Enhancement
+* `akashic-cli-config`, `akashic-cli-export-html`, `akashic-cli-export-zip`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-install`, `akashic-cli-lib-manage`, `akashic-cli-modify`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli-stat`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#741](https://github.com/akashic-games/akashic-cli/pull/741) akashic-cliのpackages下のディレクトリを減らす対応 ([@dera-](https://github.com/dera-))
+* `akashic-cli-install`, `akashic-cli-lib-manage`, `akashic-cli-uninstall`, `akashic-cli-update`, `akashic-cli`
+  * [#710](https://github.com/akashic-games/akashic-cli/pull/710) integrate akashic-cli-XXX about npm command ([@dera-](https://github.com/dera-))
+
+#### Committers: 1
+- [@dera-](https://github.com/dera-)
+
 ## 2.6.9 (2021-04-13)
 
 #### Enhancement
