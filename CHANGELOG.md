@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 2.6.9 (2021-04-13)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#724](https://github.com/akashic-games/akashic-cli/pull/724) Add experimental-open to serve ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+* `akashic-cli-init`
+  * [#740](https://github.com/akashic-games/akashic-cli/pull/740) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Committers: 2
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.6.8 (2021-04-13)
 
 #### Enhancement
