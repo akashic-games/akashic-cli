@@ -1,6 +1,6 @@
 import {observable, action} from "mobx";
 import * as queryString from "query-string";
-import {ServiceType} from "@akashic/akashic-cli-commons";
+import {ServiceType} from "@akashic/akashic-cli-commons/lib/ServiceType";
 import {Player} from "../../common/types/Player";
 import {AppOptions} from "../../common/types/AppOptions";
 import {ClientContentLocator} from "../common/ClientContentLocator";

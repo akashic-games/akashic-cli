@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
-import * as commander from "commander";
+import { Command } from "commander";
 import { ConsoleLogger, CliConfigurationFile, CliConfigUninstall } from "@akashic/akashic-cli-commons";
 import { promiseUninstall } from "./uninstall";
 
@@ -17,6 +17,7 @@ function cli(param: CliConfigUninstall): void {
 
 var ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "..", "package.json"), "utf8")).version;
 
+const commander = new Command();
 commander
 	.version(ver);
 
@@ -30,7 +31,8 @@ commander
 
 export function run(argv: string[]): void {
 	commander.parse(argv);
-	CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashic.config.js"), (error, configuration) => {
+	const options = commander.opts();
+	CliConfigurationFile.read(path.join(options["cwd"] || process.cwd(), "akashic.config.js"), (error, configuration) => {
 		if (error) {
 			console.error(error);
 			process.exit(1);
@@ -39,10 +41,10 @@ export function run(argv: string[]): void {
 		const conf = configuration.commandOptions.uninstall || {};
 		cli({
 			args: commander.args ?? conf.args,
-			cwd: commander.cwd ?? conf.cwd,
-			unlink: commander.unlink ?? conf.unlink,
-			quiet: commander.quiet ?? conf.quiet,
-			plugin: commander.plugin ?? conf.plugin
+			cwd: options.cwd ?? conf.cwd,
+			unlink: options.unlink ?? conf.unlink,
+			quiet: options.quiet ?? conf.quiet,
+			plugin: options.plugin ?? conf.plugin
 		});
 	});
 }

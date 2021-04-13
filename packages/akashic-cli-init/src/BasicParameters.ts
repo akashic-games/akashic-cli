@@ -1,5 +1,7 @@
 import * as Prompt from "prompt";
-import * as commons from "@akashic/akashic-cli-commons";
+import { ConfigurationFile } from "@akashic/akashic-cli-commons/lib/ConfigurationFile";
+import { GameConfiguration } from "@akashic/akashic-cli-commons/lib/GameConfiguration";
+import { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
 
 /**
  * game.jsonの初期値として与えるパラメータ。
@@ -87,7 +89,7 @@ function validateBasicParameters(params: any, props: any): string {
 /**
  * game.json に BasicParameters の内容をセットする。
  */
-function setBasicParameters(conf: commons.GameConfiguration, basicParams: BasicParameters): void {
+function setBasicParameters(conf: GameConfiguration, basicParams: BasicParameters): void {
 	conf.width = basicParams.width;
 	conf.height = basicParams.height;
 	conf.fps = basicParams.fps;
@@ -96,8 +98,8 @@ function setBasicParameters(conf: commons.GameConfiguration, basicParams: BasicP
 /**
  * 指定した game.json の基本パラメータを更新する
  */
-export function updateConfigurationFile(confPath: string, logger: commons.Logger, skipAsk: boolean): Promise<void> {
-	return commons.ConfigurationFile.read(confPath, logger)
+export function updateConfigurationFile(confPath: string, logger: Logger, skipAsk: boolean): Promise<void> {
+	return ConfigurationFile.read(confPath, logger)
 		.then(conf =>
 			promptGetBasicParameters({
 				width: conf.width,
@@ -106,7 +108,7 @@ export function updateConfigurationFile(confPath: string, logger: commons.Logger
 			}, skipAsk)
 				.then(basicParams => {
 					setBasicParameters(conf, basicParams);
-					return commons.ConfigurationFile.write(conf, confPath, logger);
+					return ConfigurationFile.write(conf, confPath, logger);
 				})
 		);
 }

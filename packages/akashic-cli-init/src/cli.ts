@@ -1,7 +1,9 @@
 import * as fs from "fs";
 import * as path from "path";
-import * as commander from "commander";
-import { ConsoleLogger, CliConfigurationFile, CliConfigInit } from "@akashic/akashic-cli-commons";
+import { Command } from "commander";
+import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
+import { CliConfigurationFile } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigurationFile";
+import { CliConfigInit } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigInit";
 import { promiseInit } from "./init";
 import { listTemplates } from "./listTemplates";
 
@@ -25,6 +27,7 @@ function cli(param: CliConfigInit): void {
 
 var ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "package.json"), "utf8")).version;
 
+const commander = new Command();
 commander
 	.version(ver);
 
@@ -40,8 +43,9 @@ commander
 
 export function run(argv: string[]): void {
 	commander.parse(argv);
+	const options = commander.opts();
 
-	CliConfigurationFile.read(path.join(commander["cwd"] || process.cwd(), "akashic.config.js"), (error, configuration) => {
+	CliConfigurationFile.read(path.join(options["cwd"] || process.cwd(), "akashic.config.js"), (error, configuration) => {
 		if (error) {
 			console.error(error);
 			process.exit(1);
@@ -49,12 +53,12 @@ export function run(argv: string[]): void {
 
 		const conf = configuration.commandOptions.init || {};
 		cli({
-			cwd: commander.cwd ?? conf.cwd,
-			quiet: commander.quiet ?? conf.quiet,
-			type: commander.type ?? conf.type,
-			list: commander.list ?? conf.list,
-			yes: commander.yes ?? conf.yes,
-			force: commander.force ?? conf.force
+			cwd: options.cwd ?? conf.cwd,
+			quiet: options.quiet ?? conf.quiet,
+			type: options.type ?? conf.type,
+			list: options.list ?? conf.list,
+			yes: options.yes ?? conf.yes,
+			force: options.force ?? conf.force
 		});
 	});
 }

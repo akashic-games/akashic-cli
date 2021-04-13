@@ -92,6 +92,10 @@ export class PlayStore {
 		return this.playManager.getAllPlays();
 	}
 
+	getPlayIdsFromContentId(contentId: string): string[] {
+		return Object.keys(this.playEntities).filter(key => contentId === this.playEntities[key].contentLocator.contentId);
+	}
+
 	async stopPlay(playId: string): Promise<void> {
 		await this.playManager.deletePlay(playId);
 		this.onPlayStatusChange.fire({playId, playStatus: "suspending"});
