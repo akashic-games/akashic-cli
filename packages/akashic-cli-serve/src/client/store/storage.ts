@@ -50,6 +50,7 @@ export class Storage {
 	static SESSION_STORAGE_KEY: string = "aktb:config";
 
 	data: StorageData;
+	experimentalIsChildWindow = false;
 
 	private _initializationWaiter: Promise<void>;
 
@@ -75,6 +76,10 @@ export class Storage {
 			} catch (e) {
 				s = {};
 			}
+		}
+
+		if (qp.experimentalIsChildWindow) {
+			this.experimentalIsChildWindow = qp.experimentalIsChildWindow === "1";
 		}
 
 		this.put({

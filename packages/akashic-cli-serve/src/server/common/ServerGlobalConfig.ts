@@ -12,6 +12,7 @@ export interface ServerGlobalConfig {
 	targetService: ServiceType;
 	allowExternal: boolean;
 	preserveDisconnected: boolean;
+	experimentalOpen: number;
 }
 
 export const DEFAULT_HOSTNAME = "localhost";
@@ -28,5 +29,6 @@ export const serverGlobalConfig: ServerGlobalConfig = {
 	proxyAudio: false,
 	targetService: "none",
 	allowExternal: false,
-	preserveDisconnected: false
+	preserveDisconnected: false,
+	experimentalOpen: null
 };

@@ -1,5 +1,57 @@
 # CHANGELOG
 
+## 2.6.9 (2021-04-13)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#724](https://github.com/akashic-games/akashic-cli/pull/724) Add experimental-open to serve ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+* `akashic-cli-init`
+  * [#740](https://github.com/akashic-games/akashic-cli/pull/740) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Committers: 2
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- xnv ([@xnv](https://github.com/xnv))
+
+## 2.6.8 (2021-04-13)
+
+#### Enhancement
+* `akashic-cli-commons`
+  * [#722](https://github.com/akashic-games/akashic-cli/pull/722) Add experimentalOpen to CliConfigServe ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+## 2.6.7 (2021-04-09)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#739](https://github.com/akashic-games/akashic-cli/pull/739) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.0.14, engineFiles@2.1.53, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+* `akashic-cli-init`
+  * [#737](https://github.com/akashic-games/akashic-cli/pull/737) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
+## 2.6.6 (2021-04-08)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#738](https://github.com/akashic-games/akashic-cli/pull/738) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.0.13, engineFiles@2.1.53, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+* `akashic-cli-init`
+  * [#736](https://github.com/akashic-games/akashic-cli/pull/736) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
+## 2.6.5 (2021-04-08)
+
+#### Enhancement
+* `akashic-cli-export-html`
+  * [#735](https://github.com/akashic-games/akashic-cli/pull/735) 【akashic-cli-export-html】内部コンポーネントの更新(engineFiles@3.0.13, engineFiles@2.1.53, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.6.4 (2021-04-06)
 
 #### Enhancement
