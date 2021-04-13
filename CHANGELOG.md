@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.6.8 (2021-04-13)
+
+#### Enhancement
+* `akashic-cli-commons`
+  * [#722](https://github.com/akashic-games/akashic-cli/pull/722) Add experimentalOpen to CliConfigServe ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 2.6.7 (2021-04-09)
 
 #### Enhancement
