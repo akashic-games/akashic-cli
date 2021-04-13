@@ -1,2 +1,2 @@
 #!/usr/bin/env node
-require("@akashic/akashic-cli-uninstall").run(process.argv);
+require("@akashic/akashic-cli-lib-manage/lib/uninstall").run(process.argv);

@@ -2,9 +2,9 @@
 var argv = process.argv.slice(0);
 var type = argv.splice(2, 1)[0];
 if (type === "html") {
-	require("@akashic/akashic-cli-export-html").run(argv);
+	require("@akashic/akashic-cli-export/lib/html").run(argv);
 } else if (type === "zip") {
-	require("@akashic/akashic-cli-export-zip").run(argv);
+	require("@akashic/akashic-cli-export/lib/zip").run(argv);
 } else if (type === "help" || type === "--help" || type === "-h") {
 	console.log([
 		"  ",
