@@ -1,6 +1,6 @@
 import * as React from "react";
 import { observer } from "mobx-react";
-import { ServiceType } from "@akashic/akashic-cli-commons";
+import { ServiceType } from "@akashic/akashic-cli-commons/lib/ServiceType";
 import { PlayEntity } from "../../store/PlayEntity";
 import { LocalInstanceEntity } from "../../store/LocalInstanceEntity";
 import { ToolBarUiStore } from "../../store/ToolBarUiStore";

@@ -1,8 +1,8 @@
-var ct = require("../lib/copyTemplate");
-var mockfs = require("mock-fs");
-var commons = require("@akashic/akashic-cli-commons");
 var fs = require("fs-extra");
+var mockfs = require("mock-fs");
 var path = require("path");
+var ConsoleLogger = require("@akashic/akashic-cli-commons/lib/ConsoleLogger").ConsoleLogger;
+var ct = require("../lib/copyTemplate");
 
 describe("copyTemplate.ts", () => {
 	describe("copyTemplate()", () => {
@@ -48,7 +48,7 @@ describe("copyTemplate.ts", () => {
 
 		it("copy simple template", done => {
 			var param = {
-				logger: new commons.ConsoleLogger({quiet: true}),
+				logger: new ConsoleLogger({quiet: true}),
 				_realTemplateDirectory: ".akashic-templates",
 				type: "simple",
 				cwd: "home"
@@ -65,7 +65,7 @@ describe("copyTemplate.ts", () => {
 
 		it("copy manual template", done => {
 			var param = {
-				logger: new commons.ConsoleLogger({quiet: true}),
+				logger: new ConsoleLogger({quiet: true}),
 				_realTemplateDirectory: ".akashic-templates",
 				type: "manual",
 				cwd: "home"
@@ -80,7 +80,7 @@ describe("copyTemplate.ts", () => {
 
 		it("can not copy when file exists", done => {
 			var param = {
-				logger: new commons.ConsoleLogger({quiet: true}),
+				logger: new ConsoleLogger({quiet: true}),
 				_realTemplateDirectory: ".akashic-templates",
 				type: "simple",
 				cwd: ".akashic-templates/copyTo"
@@ -95,7 +95,7 @@ describe("copyTemplate.ts", () => {
 
 		it("can not copy when file exists (specify files)", done => {
 			var param = {
-				logger: new commons.ConsoleLogger({quiet: true}),
+				logger: new ConsoleLogger({quiet: true}),
 				_realTemplateDirectory: ".akashic-templates",
 				type: "simple",
 				cwd: ".akashic-templates/copyTo"
@@ -110,7 +110,7 @@ describe("copyTemplate.ts", () => {
 
 		it("can copy files with force-option even if file exists", done => {
 			var param = {
-				logger: new commons.ConsoleLogger({quiet: true}),
+				logger: new ConsoleLogger({quiet: true}),
 				_realTemplateDirectory: ".akashic-templates",
 				type: "simple",
 				cwd: ".akashic-templates/copyTo",
@@ -127,7 +127,7 @@ describe("copyTemplate.ts", () => {
 
 		it("can copy files with force-option even if file exists (specify files)", done => {
 			var param = {
-				logger: new commons.ConsoleLogger({quiet: true}),
+				logger: new ConsoleLogger({quiet: true}),
 				_realTemplateDirectory: ".akashic-templates",
 				type: "simple",
 				cwd: ".akashic-templates/copyTo",

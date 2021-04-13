@@ -1,6 +1,7 @@
 import * as path from "path";
 import * as fs from "fs";
-import * as cmn from "@akashic/akashic-cli-commons";
+import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
+import { hashFilepath } from "@akashic/akashic-cli-commons/lib/Renamer";
 import * as cnf from "../../lib/Configuration";
 import { MockPromisedNpm } from "./helpers/MockPromisedNpm";
 
@@ -124,7 +125,7 @@ describe("Utilities for Configuration", function () {
 });
 
 describe("Configuration", function () {
-	var nullLogger = new cmn.ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
+	var nullLogger = new ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
 	var DUMMY_1x1_PNG_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy1x1.png"));
 	var DUMMY_OGG_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy.ogg"));
 	var DUMMY_AAC_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy.aac"));
@@ -591,7 +592,7 @@ describe("Configuration", function () {
 			}
 		});
 		var loggedCount = 0;
-		var logger = new cmn.ConsoleLogger({ quiet: false, debugLogMethod: () => ++loggedCount });
+		var logger = new ConsoleLogger({ quiet: false, debugLogMethod: () => ++loggedCount });
 		var conf = new cnf.Configuration({ content: <any>{}, logger: logger, basepath: process.cwd() });
 		conf.scanAssetsAudio(["audio"]).then(() => {
 			// アセット追加のログが1つ + duration差のwarnが1つ + AAC利用のwarnが1つ
@@ -1763,7 +1764,7 @@ describe("Configuration", function () {
 		mockfs(mockFsContent);
 
 		var warnLogs: string[] = [];
-		class Logger extends cmn.ConsoleLogger {
+		class Logger extends ConsoleLogger {
 			warn(message: any) {
 				warnLogs.push(message);
 			}
@@ -1813,7 +1814,7 @@ describe("Configuration", function () {
 		mockfs(mockFsContent);
 
 		var warnLogs: string[] = [];
-		class Logger extends cmn.ConsoleLogger {
+		class Logger extends ConsoleLogger {
 			warn(message: any) {
 				warnLogs.push(message);
 			}
@@ -2177,7 +2178,7 @@ describe("Configuration", function () {
 
 
 		const genhashPath = (filePath: string) => {
-			const hashPath = cmn.Renamer.hashFilepath(filePath, 6);
+			const hashPath = hashFilepath(filePath, 6);
 			return "asset:" + path.basename(hashPath, path.extname(filePath));
 		};
 
@@ -2253,7 +2254,7 @@ describe("Configuration", function () {
 		});
 
 		const genhashPath = (filePath: string) => {
-			const hashPath = cmn.Renamer.hashFilepath(filePath, 6);
+			const hashPath = hashFilepath(filePath, 6);
 			return "asset:" + path.basename(hashPath, path.extname(filePath));
 		};
 		await conf.scanAssetsDir();

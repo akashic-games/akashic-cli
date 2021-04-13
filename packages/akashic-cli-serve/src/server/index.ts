@@ -17,7 +17,9 @@ import { serverGlobalConfig } from "./common/ServerGlobalConfig";
 import { createContentsRouter } from "./route/ContentsRoute";
 import { createHealthCheckRouter } from "./route/HealthCheckRoute";
 import { ServerContentLocator } from "./common/ServerContentLocator";
-import {  CliConfigurationFile, CliConfigServe, SERVICE_TYPES } from "@akashic/akashic-cli-commons";
+import { CliConfigurationFile } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigurationFile";
+import { CliConfigServe } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigServe";
+import { SERVICE_TYPES } from "@akashic/akashic-cli-commons/lib/ServiceType";
 import { PlayerIdStore } from "./domain/PlayerIdStore";
 import { ModTargetFlags, watchContent } from "./domain/GameConfigs";
 

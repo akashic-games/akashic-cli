@@ -1,12 +1,12 @@
-import * as cmn from "@akashic/akashic-cli-commons";
+import { PromisedNpm, PromisedNpmParameterObject } from "@akashic/akashic-cli-commons/lib/PromisedNpm";
 
-export interface MockPromisedNpmParameterObject extends cmn.PromisedNpmParameterObject {
+export interface MockPromisedNpmParameterObject extends PromisedNpmParameterObject {
 	expectDependencies: {[key: string]: any};
 	expectDevDependencies?: {[key: string]: any};
 }
 
 // テスト実行に必要な最低限のNPMメソッドをモック化します。
-export class MockPromisedNpm extends cmn.PromisedNpm {
+export class MockPromisedNpm extends PromisedNpm {
 	expectDependencies: {[key: string]: any};
 	expectDevDependencies: {[key: string]: any};
 	constructor(param: MockPromisedNpmParameterObject) {

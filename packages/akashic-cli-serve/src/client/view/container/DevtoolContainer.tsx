@@ -1,6 +1,6 @@
 import * as React from "react";
 import { observer } from "mobx-react";
-import { ServiceType } from "@akashic/akashic-cli-commons";
+import { ServiceType } from "@akashic/akashic-cli-commons/lib/ServiceType";
 import { SandboxConfig } from "../../../common/types/SandboxConfig";
 import { PlayEntity } from "../../store/PlayEntity";
 import { DevtoolUiStore } from "../../store/DevtoolUiStore";
