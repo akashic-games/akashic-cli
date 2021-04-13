@@ -42,14 +42,14 @@ export class PlayOperator {
 			localStorage.setItem(name, JSON.stringify(saveDataAry));
 		}
 
-		const width = typeof restoreData?.width === "number" ? restoreData?.width : window.innerWidth;;
+		const width = typeof restoreData?.width === "number" ? restoreData?.width : window.innerWidth;
 		const height = typeof restoreData?.height === "number" ? restoreData?.height : window.innerHeight;
 		const top = typeof restoreData?.y === "number" ? restoreData?.y : 0;
 		const left = typeof restoreData?.y === "number" ? restoreData?.x : 0;
 		// Mac Chrome で正しく動作しないのと、親ウィンドウかどうかの判別をしたいことがあるので noopener は付けない。
 		// 代わりに ignoreSession を指定して自前でセッションストレージをウィンドウごとに使い分ける (ref. ../store/storage.ts)
 		window.open(
-			`${window.location.pathname}?ignoreSession=1&isChildWindow=true`,
+			`${window.location.pathname}?ignoreSession=1&experimentalIsChildWindow=1`,
 			"_blank",
 			`width=${width},height=${height},top=${top},left=${left}`
 		);

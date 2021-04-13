@@ -38,7 +38,7 @@ window.addEventListener("load", async () => {
 });
 
 window.addEventListener("unload", () => {
-	if (!storage.isChildWindow || !store.appOptions.experimentalOpen) return;
+	if (!storage.experimentalIsChildWindow || !store.appOptions.experimentalOpen) return;
 
 	const maxSaveCount = store.appOptions.experimentalOpen;
 	if (maxSaveCount) {
