@@ -24,7 +24,7 @@
     "akashic-cli-serve": "./bin/run"
   },
   "dependencies": {
-    "@akashic/akashic-cli-commons": "../akashic-cli-commons",
+    "@akashic/akashic-cli-commons": "0.8.1",
     "@akashic/akashic-cli-scan": "0.8.0",
     "@akashic/headless-driver": "1.5.11",
     "@akashic/trigger": "1.0.0",
