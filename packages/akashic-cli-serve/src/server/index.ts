@@ -198,7 +198,6 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues) {
 		}
 		app.use("/public/external/engineFilesV3*.js", (_req, res, _next) => {
 			res.send(fs.readFileSync(engineFilesPath));
-			return;
 		});
 	}
 
