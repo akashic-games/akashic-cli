@@ -14,4 +14,5 @@ export interface CliConfigServe {
 	openBrowser?: boolean;
 	preserveDisconnected?: boolean;
 	watch?: boolean;
+	experimentalOpen?: number;
 }
