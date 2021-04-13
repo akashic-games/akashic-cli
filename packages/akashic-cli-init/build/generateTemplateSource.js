@@ -35,7 +35,6 @@ function generateTemplates(srcPath, outPath, data) {
 		shell.cp("-R", path.join(srcPath, "typescript-base", "*"), path.join(outPath, data[key]["ts-dist"]));
 		shell.cp(path.join(srcPath, "typescript-base", ".eslintrc.js"), path.join(outPath, data[key]["ts-dist"]));
 		shell.cp(path.join(srcPath, "typescript-base", ".gitignore"), path.join(outPath, data[key]["ts-dist"]));
-		deleteUnnecessarySpecfilesFromTs(key, path.join(outPath, data[key]["ts-dist"]));
 	});
 	console.log("End to generate typescript-templates");
 
@@ -58,6 +57,8 @@ function generateTemplates(srcPath, outPath, data) {
 		shell.rm("-rf", path.join(outPath, data[key]["js-dist"]));
 		// テンプレートを新たに生成
 		shell.cp("-R", path.join(srcPath, data[key]["src"]), path.join(outPath, data[key]["js-dist"]));
+		// spec は不要のため削除
+		shell.rm("-rf", path.join(outPath, data[key]["js-dist"], "spec"));
 		// common下でビルド済みのためソースファイルディレクトリは不要なので削除
 		shell.rm("-rf", path.join(outPath, data[key]["js-dist"], "src"));
 		// common下でビルドしたものをテンプレートに移す
@@ -99,30 +100,4 @@ function deleteUnnecessaryLinesFromJsFile(targetPath) {
 			fs.writeFileSync(filePath, writeData, "utf-8");
 		}
 	});
-}
-
-/**
- * 対象ディレクトリの不要な spec ファイルを削除する。
- * @param templateName 対象のテンプレート名
- * @param targetPath 対象のパス
- */
-function deleteUnnecessarySpecfilesFromTs(templateName, targetPath) {
-	const specFilePath = path.join(targetPath, "spec/testSpec.ts");
-
-	if (templateName === "default") {
-		fs.unlinkSync(path.join(targetPath, "spec/minimal-testSpec.ts"));
-		fs.unlinkSync(path.join(targetPath, "spec/shin-ichiba-ranking-testSpec.ts"));
-
-	} else if (templateName === "minimal") {
-		fs.unlinkSync(path.join(targetPath, "spec/shin-ichiba-ranking-testSpec.ts"));
-		fs.rename(path.join(targetPath, "spec/minimal-testSpec.ts"), specFilePath, err => {
-			if (err) throw err;
-		});
-
-	} else if (templateName === "shin-ichiba-ranking") {
-		fs.unlinkSync(path.join(targetPath, "spec/minimal-testSpec.ts"));
-		fs.rename(path.join(targetPath, "spec/shin-ichiba-ranking-testSpec.ts"), specFilePath, err => {
-			if (err) throw err;
-		});
-	}
 }

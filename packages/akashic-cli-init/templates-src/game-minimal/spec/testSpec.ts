@@ -19,7 +19,6 @@ describe("mainScene", () => {
 		expect(scene).toBeDefined();
 
 		// ここでゲーム毎の内容を確認する。
-
 		expect(scene.children.length).toBe(1);
 		// 初期状態で子要素(g.FilledRect) の x 座標は 0
 		expect(scene.children[0].x).toBe(0);
