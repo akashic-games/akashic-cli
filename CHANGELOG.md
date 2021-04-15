@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 2.8.0 (2021-04-15)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#742](https://github.com/akashic-games/akashic-cli/pull/742) v3 系の engine-files を外部から指定できるように ([@yu-ogi](https://github.com/yu-ogi))
+* `akashic-cli-init`
+  * [#744](https://github.com/akashic-games/akashic-cli/pull/744) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Committers: 2
+- [@yu-ogi](https://github.com/yu-ogi)
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.7.1 (2021-04-15)
 
 #### Enhancement
