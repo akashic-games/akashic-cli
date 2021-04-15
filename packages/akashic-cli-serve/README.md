@@ -15,6 +15,8 @@ Akashic Engineの詳細な利用方法については、 [公式ページ](https
 現時点では、マルチプレイの動作確認環境です。
 シングルプレイの動作確認には、より多機能な `akashic-sandbox` をご利用ください。
 
+[ae]: https://akashic-games.github.io/
+
 ## インストール
 
 ```
@@ -45,7 +47,11 @@ akashic-cli-serve [<options>] [<path>]
 |`--preserve-disconnected`|N/A|サーバ切断時に開いている子ウィンドウを閉じないようにします。|N/A|
 |`--experimental-open <num>`|N/A|起動時に子ウィンドウを指定数開いて起動します。上限は 10 です。試験中の機能です。通常、利用しないでください。|N/A|
 
-[ae]: https://akashic-games.github.io/
+## 環境変数
+
+| 環境変数 | 説明 | 注釈 |
+|--------|-----|-----|
+| `ENGINE_FILES_V3_PATH` | engine-files v3 のビルド成果物のパス。 (e.g. `./engineFilesV3_x_y.js`) <br> この値が指定された場合、 対象の engine-files を akashic-engine v3 コンテンツ実行時に利用します。 | エンジン開発用のオプションです。通常、ゲーム開発時に利用する必要はありません。 |
 
 ## 外部参照できる DOM 要素
 

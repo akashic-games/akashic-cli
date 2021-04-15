@@ -189,6 +189,18 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues) {
 	app.use(bodyParser.json());
 
 	app.use("^\/$", (req, res, next) => res.redirect("/public/"));
+
+	if (process.env.ENGINE_FILES_V3_PATH) {
+		const engineFilesPath = path.resolve(process.cwd(), process.env.ENGINE_FILES_V3_PATH);
+		if (!fs.existsSync(engineFilesPath)) {
+			console.error(`ENGINE_FILES_V3_PATH: ${engineFilesPath} was not found.`);
+			process.exit(1);
+		}
+		app.use("/public/external/engineFilesV3*.js", (_req, res, _next) => {
+			res.send(fs.readFileSync(engineFilesPath));
+		});
+	}
+
 	app.use("/public/", express.static(path.join(__dirname, "..", "..", "www", "public")));
 	app.use("/internal/", express.static(path.join(__dirname, "..", "..", "www", "internal")));
 	app.use("/api/", createApiRouter({ playStore, runnerStore, playerIdStore, amflowManager, io }));
