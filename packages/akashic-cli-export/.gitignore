@@ -1,0 +1,11 @@
+node_modules
+.DS_Store*
+npm-debug.log
+*.iml
+coverage
+lib
+.idea
+spec/build
+.vscode
+!spec/fixtures/simple_game_using_external/node_modules
+!spec/fixtures/simple_game_with_aez_bundle_main4/node_modules/

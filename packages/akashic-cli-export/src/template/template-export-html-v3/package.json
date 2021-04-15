@@ -1,0 +1,14 @@
+{
+  "name": "@akashic/akashic-cli-export-html-template-v3",
+  "version": "0.0.1",
+  "description": "Modules for export html template.",
+  "scripts": {
+    "build": "npm run build:mkdir && npm run copy",
+    "build:mkdir": "shx mkdir -p ../../../lib/template/v3/js",
+    "copy": "shx cp -r js ../../../lib/template/v3 && shx cp -r css ../../../lib/template/v3"
+  },
+  "devDependencies": {
+    "shx": "0.3.3"
+  },
+  "private": true
+}
