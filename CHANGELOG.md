@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 2.7.1 (2021-04-15)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#734](https://github.com/akashic-games/akashic-cli/pull/734) Fix akashic-cli-init template spec files ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+  * [#743](https://github.com/akashic-games/akashic-cli/pull/743) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Committers: 2
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.7.0 (2021-04-13)
 
 #### Breaking Change
