@@ -117,8 +117,10 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			};
 			let files: string[] = param.strip ? gcu.extractFilePaths(gamejson, param.source) :
 				listFiles(param.source).map(p => p.replace(`${param.source}/`, ""));
+			let bundledFilePaths: string[] = [];
 			const preservingFilePathSet = new Set<string>(files);
 			if (bundleResult) {
+				bundledFilePaths = bundleResult.filePaths;
 				let excludedFilePaths = bundleResult.filePaths;
 				if (param.omitUnbundledJs) {
 					// omitUnbundledJsがtrueであれば、結果的に全てのscriptアセットとglobalScriptsはgame.jsonから消えるので、bundleしないscriptファイルではなく全scriptファイルを取得する
@@ -143,7 +145,11 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 				operationFiles.forEach(file => {
 					const realPath = path.join(path.dirname(scriptPath), file).replace(`${param.source}/`, "");
 					if (files.indexOf(realPath) !== -1) {
+						// TODO: 操作プラグインによって preserve するファイルは bundle から除外する必要がある
 						preservingFilePathSet.add(realPath);
+						if (bundledFilePaths.indexOf(realPath) !== -1) {
+							console.warn(`${realPath} is duplicated`);
+						}
 					}
 				});
 			}
@@ -159,7 +165,6 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 					{ type: "preset" })
 				]
 			};
-			const noPreservingFilePaths: string[] = [];
 
 			preservingFilePathSet.forEach(p => {
 				let buff = fs.readFileSync(path.resolve(param.source, p));
@@ -177,7 +182,9 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 					(param.babel && gcu.isScriptJsFile(p)) ? babel.transform(buff.toString().trim(), babelOption).code : buff;
 				fs.writeFileSync(path.resolve(param.dest, p), value);
 			});
-			gcu.extractScripts(gamejson, (filePath: string) => preservingFilePathSet.has(filePath));
+			// コピーしなかったアセットやファイルをgmae.jsonから削除する
+			gcu.removeScriptAssets(gamejson, (filePath: string) => preservingFilePathSet.has(filePath));
+			gcu.removeGlobalScripts(gamejson, (filePath: string) => preservingFilePathSet.has(filePath));
 
 			if (param.targetService === "nicolive") {
 				addUntaintedToImageAssets(gamejson);

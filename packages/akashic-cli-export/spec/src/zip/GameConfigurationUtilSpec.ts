@@ -88,27 +88,12 @@ describe("GameConfigurationUtil", () => {
 		});
 	});
 
-	describe("extractScripts", () => {
+	describe("removeScriptAssets", () => {
 		const filter = (filePath: string): boolean => {
 			return ["node_modules/foobar/package.json", "script/main.js"].indexOf(filePath) !== -1;
 		};
-		it("extract script assets", () => {
-			gcu.extractScripts(gamejsonNoGlobalScripts, filter);
-			expect(gamejsonNoGlobalScripts).toEqual({
-				width: 120,
-				height: 120,
-				fps: 40,
-				assets: {
-					"main": {
-						type: "script",
-						global: true,
-						path: "script/main.js"
-					}
-				}
-			});
-		});
-		it("extract scripts from globalScripts", () => {
-			gcu.extractScripts(gamejson, filter);
+		it("remove script assets", () => {
+			gcu.removeScriptAssets(gamejson, filter);
 			expect(gamejson).toEqual({
 				width: 120,
 				height: 120,
@@ -118,6 +103,36 @@ describe("GameConfigurationUtil", () => {
 						type: "script",
 						global: true,
 						path: "script/main.js"
+					}
+				},
+				globalScripts: [
+					"node_modules/foobar/lib/x.js",
+					"node_modules/foobar/package.json"
+				]
+			});
+		});
+	});
+
+	describe("removeGlobalScripts", () => {
+		const filter = (filePath: string): boolean => {
+			return ["node_modules/foobar/package.json", "script/main.js"].indexOf(filePath) !== -1;
+		};
+		it("remove scripts from globalScripts", () => {
+			gcu.removeGlobalScripts(gamejson, filter);
+			expect(gamejson).toEqual({
+				width: 120,
+				height: 120,
+				fps: 40,
+				assets: {
+					"main": {
+						type: "script",
+						global: true,
+						path: "script/main.js"
+					},
+					"sub": {
+						type: "script",
+						global: true,
+						path: "script/sub.js"
 					}
 				},
 				globalScripts: [

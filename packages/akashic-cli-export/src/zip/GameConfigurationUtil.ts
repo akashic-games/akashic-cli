@@ -19,15 +19,18 @@ export function removeScriptFromFilePaths(gamejson: cmn.GameConfiguration, fileP
 		gamejson.globalScripts = gamejson.globalScripts.filter(p => !table.hasOwnProperty(p));
 }
 
-export function extractScripts(gamejson: cmn.GameConfiguration, filter: (filepath: string) => boolean): void {
+export function removeScriptAssets(gamejson: cmn.GameConfiguration, filter: (filepath: string) => boolean): void {
 	Object.keys(gamejson.assets).forEach(key => {
 		const asset = gamejson.assets[key];
 		if (asset.type === "script" && !filter(asset.path)) {
 			delete gamejson.assets[key];
 		}
 	});
+}
+
+export function removeGlobalScripts(gamejson: cmn.GameConfiguration, filter: (filepath: string) => boolean): void {
 	if (gamejson.globalScripts) {
-		gamejson.globalScripts = gamejson.globalScripts.filter(p => filter(p));
+		gamejson.globalScripts = gamejson.globalScripts.filter((p: string) => filter(p));
 	}
 }
 
