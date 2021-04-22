@@ -1,15 +1,15 @@
-var mockPrompt = require("./support/mockPrompt");
-var bp = require("../lib/BasicParameters");
-var mockfs = require("mock-fs");
 var fs = require("fs-extra");
+var mockfs = require("mock-fs");
 var os = require("os");
 var path = require("path");
-var commons = require("@akashic/akashic-cli-commons");
+var ConsoleLogger = require("@akashic/akashic-cli-commons/lib/ConsoleLogger").ConsoleLogger;
+var bp = require("../lib/BasicParameters");
+var mockPrompt = require("./support/mockPrompt");
 
 describe("BasicParameters", function () {
 	describe("updateConfigurationFile()", function () {
 		var confPath = fs.mkdtempSync(path.join(os.tmpdir(), ".akashicrc"));
-		var quietLogger = new commons.ConsoleLogger({quiet: true});
+		var quietLogger = new ConsoleLogger({quiet: true});
 
 		beforeEach(() => {
 			mockfs({});

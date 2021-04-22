@@ -1,7 +1,13 @@
-import * as cmn from "@akashic/akashic-cli-commons";
 import * as chokidar from "chokidar";
 import * as path from "path";
 import * as fs from "fs";
+import { ConfigurationFile } from "@akashic/akashic-cli-commons/lib/ConfigurationFile";
+import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
+import { GameConfiguration } from "@akashic/akashic-cli-commons/lib/GameConfiguration";
+import { LibConfigurationFile } from "@akashic/akashic-cli-commons/lib/LibConfigurationFile";
+import { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
+import { PromisedNpm }from "@akashic/akashic-cli-commons/lib/PromisedNpm";
+import { chdir } from "@akashic/akashic-cli-commons/lib/Util";
 import { Configuration, isAudioFilePath, isImageFilePath } from "./Configuration";
 import { LibConfiguration } from "./LibConfiguration";
 
@@ -57,7 +63,7 @@ export interface ScanAssetParameterObject {
 	 * コマンドの出力を受け取るロガー。
 	 * 省略された場合、akashic-cli-commons の `new ConsoleLogger()` 。
 	 */
-	logger?: cmn.Logger;
+	logger?: Logger;
 
 	/**
 	 * `globalScripts` に外部モジュールの package.json のパスを含めるかどうか。
@@ -99,7 +105,7 @@ export interface ScanAssetParameterObject {
 export function _completeScanAssetParameterObject(param: ScanAssetParameterObject): void {
 	param.target = param.target || "all";
 	param.cwd = param.cwd || process.cwd();
-	param.logger = param.logger || new cmn.ConsoleLogger();
+	param.logger = param.logger || new ConsoleLogger();
 
 	param.resolveAssetIdsFromPath = !!param.resolveAssetIdsFromPath;
 	param.forceUpdateAssetIds = !!param.forceUpdateAssetIds;
@@ -117,12 +123,12 @@ export function _completeScanAssetParameterObject(param: ScanAssetParameterObjec
 export function promiseScanAsset(param: ScanAssetParameterObject): Promise<void> {
 	_completeScanAssetParameterObject(param);
 
-	var restoreDirectory = cmn.Util.chdir(param.cwd);
+	var restoreDirectory = chdir(param.cwd);
 	return Promise.resolve()
 		// TODO: game.json が存在しなければ処理をスキップするように
 		// (game.json と akashic-lib.json が双方存在しなかった場合の挙動は要検討)
-		.then(() => cmn.ConfigurationFile.read("./game.json", param.logger))
-		.then((content: cmn.GameConfiguration) => {
+		.then(() => ConfigurationFile.read("./game.json", param.logger))
+		.then((content: GameConfiguration) => {
 			var conf = new Configuration({
 				content: content,
 				logger: param.logger,
@@ -156,14 +162,14 @@ export function promiseScanAsset(param: ScanAssetParameterObject): Promise<void>
 				}
 				resolve();
 			})
-			.then(() => cmn.ConfigurationFile.write(conf.getContent(), "./game.json", param.logger))
+			.then(() => ConfigurationFile.write(conf.getContent(), "./game.json", param.logger))
 			.then(() => param.logger.info("Done!"));
 		})
 		.then(() => {
 			const libPath = "./akashic-lib.json";
 			if (!fs.existsSync(libPath)) return;
 
-			return cmn.LibConfigurationFile.read(libPath).then(content => {
+			return LibConfigurationFile.read(libPath).then(content => {
 				const lib = new LibConfiguration({
 					content,
 					basepath: "."
@@ -185,7 +191,7 @@ export function promiseScanAsset(param: ScanAssetParameterObject): Promise<void>
 								.scanAudioAssets(param.assetScanDirectoryTable.audio);
 						}
 					})
-					.then(() => cmn.LibConfigurationFile.write(lib.sortAssets().getContent(), libPath));
+					.then(() => LibConfigurationFile.write(lib.sortAssets().getContent(), libPath));
 			});
 		})
 		.then(restoreDirectory)
@@ -244,7 +250,7 @@ export interface ScanNodeModulesParameterObject {
 	 * コマンドの出力を受け取るロガー。
 	 * 省略された場合、akashic-cli-commons の `new ConsoleLogger()` 。
 	 */
-	logger?: cmn.Logger;
+	logger?: Logger;
 
 	/**
 	 * エントリポイントスクリプトの内容からスキャンするようにするか否か。
@@ -257,7 +263,7 @@ export interface ScanNodeModulesParameterObject {
 	 * デバッグ用のNPMを受け取る。
 	 * 省略された場合、NPMを引き渡さない。
 	 */
-	debugNpm?: cmn.PromisedNpm;
+	debugNpm?: PromisedNpm;
 
 	/**
 	 * `globalScripts` に外部モジュールの package.json のパスを含めるかどうか。
@@ -288,7 +294,7 @@ export interface ScanNodeModulesParameterObject {
 
 export function _completeScanNodeModulesParameterObject(param: ScanNodeModulesParameterObject): void {
 	param.cwd = param.cwd || process.cwd();
-	param.logger = param.logger || new cmn.ConsoleLogger();
+	param.logger = param.logger || new ConsoleLogger();
 	param.fromEntryPoint = param.fromEntryPoint || false;
 	param.resolveAssetIdsFromPath = !!param.resolveAssetIdsFromPath;
 	param.forceUpdateAssetIds = !!param.forceUpdateAssetIds;
@@ -297,10 +303,10 @@ export function _completeScanNodeModulesParameterObject(param: ScanNodeModulesPa
 
 export function promiseScanNodeModules(param: ScanNodeModulesParameterObject): Promise<void> {
 	_completeScanNodeModulesParameterObject(param);
-	var restoreDirectory = cmn.Util.chdir(param.cwd);
+	var restoreDirectory = chdir(param.cwd);
 	return Promise.resolve()
-		.then(() => cmn.ConfigurationFile.read("./game.json", param.logger))
-		.then((content: cmn.GameConfiguration) => {
+		.then(() => ConfigurationFile.read("./game.json", param.logger))
+		.then((content: GameConfiguration) => {
 			var conf = new Configuration({
 				content: content,
 				logger: param.logger,
@@ -312,7 +318,7 @@ export function promiseScanNodeModules(param: ScanNodeModulesParameterObject): P
 			});
 			return Promise.resolve()
 				.then(() => (param.fromEntryPoint ? conf.scanGlobalScriptsFromEntryPoint() : conf.scanGlobalScripts()))
-				.then(() => cmn.ConfigurationFile.write(conf.getContent(), "./game.json", param.logger))
+				.then(() => ConfigurationFile.write(conf.getContent(), "./game.json", param.logger))
 				.then(() => param.logger.info("Done!"));
 		})
 		.then(restoreDirectory, restoreDirectory);

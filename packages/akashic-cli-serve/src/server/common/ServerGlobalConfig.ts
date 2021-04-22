@@ -1,4 +1,4 @@
-import { ServiceType } from "@akashic/akashic-cli-commons";
+import { ServiceType } from "@akashic/akashic-cli-commons/lib/ServiceType";
 
 export interface ServerGlobalConfig {
 	hostname: string;
@@ -12,6 +12,7 @@ export interface ServerGlobalConfig {
 	targetService: ServiceType;
 	allowExternal: boolean;
 	preserveDisconnected: boolean;
+	experimentalOpen: number;
 }
 
 export const DEFAULT_HOSTNAME = "localhost";
@@ -28,5 +29,6 @@ export const serverGlobalConfig: ServerGlobalConfig = {
 	proxyAudio: false,
 	targetService: "none",
 	allowExternal: false,
-	preserveDisconnected: false
+	preserveDisconnected: false,
+	experimentalOpen: null
 };

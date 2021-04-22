@@ -1,4 +1,4 @@
-import { ServiceType } from "@akashic/akashic-cli-commons";
+import { ServiceType } from "@akashic/akashic-cli-commons/lib/ServiceType";
 
 export interface AppOptions {
 	autoStart: boolean;
@@ -6,4 +6,5 @@ export interface AppOptions {
 	proxyAudio: boolean;
 	targetService: ServiceType;
 	preserveDisconnected: boolean;
+	experimentalOpen: number;
 }

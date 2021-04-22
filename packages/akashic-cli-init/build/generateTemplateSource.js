@@ -57,6 +57,8 @@ function generateTemplates(srcPath, outPath, data) {
 		shell.rm("-rf", path.join(outPath, data[key]["js-dist"]));
 		// テンプレートを新たに生成
 		shell.cp("-R", path.join(srcPath, data[key]["src"]), path.join(outPath, data[key]["js-dist"]));
+		// JS テンプレートは単純化のため spec を置かないので削除
+		shell.rm("-rf", path.join(outPath, data[key]["js-dist"], "spec"));
 		// common下でビルド済みのためソースファイルディレクトリは不要なので削除
 		shell.rm("-rf", path.join(outPath, data[key]["js-dist"], "src"));
 		// common下でビルドしたものをテンプレートに移す

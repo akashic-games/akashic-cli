@@ -1,3 +1,4 @@
+import * as path from "path";
 import * as gameConfigs from "../domain/GameConfigs";
 import { serverGlobalConfig } from "../common/ServerGlobalConfig";
 
@@ -31,6 +32,11 @@ export const getEngineConfig = (param: GetEngineConfigParameterObject): EngineCo
 		}
 	}
 	const versionsJson = require("../engineFilesVersion.json");
+
+	if (process.env.ENGINE_FILES_V3_PATH) {
+		versionsJson.v3.fileName = path.basename(process.env.ENGINE_FILES_V3_PATH);
+	}
+
 	return {
 		engine_urls: [
 			`${param.baseUrl}/public/external/${versionsJson[`v${version}`].fileName}`,

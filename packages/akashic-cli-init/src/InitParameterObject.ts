@@ -1,4 +1,5 @@
-import * as commons from "@akashic/akashic-cli-commons";
+import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
+import { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
 import * as config from "@akashic/akashic-cli-extra/lib/config";
 import * as os from "os";
 import * as path from "path";
@@ -8,7 +9,7 @@ export interface InitParameterObject {
 	 * コマンドの出力を受け取るロガー。
 	 * 省略された場合、akashic-cli-commons の `new ConsoleLogger()` 。
 	 */
-	logger?: commons.Logger;
+	logger?: Logger;
 
 	/**
 	 * 利用する設定ファイル
@@ -73,7 +74,7 @@ const templateConfigValidator: config.StringMap = {
  * 未代入のパラメータを補完する
  */
 export function completeInitParameterObject(param: InitParameterObject): Promise<void> {
-	param.logger = param.logger || new commons.ConsoleLogger();
+	param.logger = param.logger || new ConsoleLogger();
 	param.configFile = param.configFile || new config.AkashicConfigFile(templateConfigValidator);
 	param.cwd = param.cwd || process.cwd();
 	param.templateListJsonPath = param.templateListJsonPath || "template-list.json";

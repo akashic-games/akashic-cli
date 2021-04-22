@@ -1,24 +1,27 @@
-import * as cmn from "@akashic/akashic-cli-commons";
+import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
+import { AssetConfiguration } from "@akashic/akashic-cli-commons/lib/GameConfiguration";
+import * as cmnlibconf from "@akashic/akashic-cli-commons/lib/LibConfiguration";
+import { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
 import { scanAudioAssets, scanImageAssets } from "./scanUtils";
 
 export interface LibConfigurationParameterObject {
-	content: cmn.LibConfiguration;
+	content: cmnlibconf.LibConfiguration;
 	basepath: string;
-	logger?: cmn.Logger;
+	logger?: Logger;
 }
 
 export class LibConfiguration {
-	_content: cmn.LibConfiguration;
+	_content: cmnlibconf.LibConfiguration;
 	_basepath: string;
-	_logger: cmn.Logger;
+	_logger: Logger;
 
 	constructor(param: LibConfigurationParameterObject) {
 		this._content = param.content;
 		this._basepath = param.basepath;
-		this._logger = param.logger || new cmn.ConsoleLogger();
+		this._logger = param.logger || new ConsoleLogger();
 	}
 
-	getContent(): cmn.LibConfiguration {
+	getContent(): cmnlibconf.LibConfiguration {
 		return this._content;
 	}
 
@@ -80,7 +83,7 @@ export class LibConfiguration {
 		return this;
 	}
 
-	addAsset(asset: cmn.AssetConfiguration): this {
+	addAsset(asset: AssetConfiguration): this {
 		if (!this._content.assetList) {
 			this._content.assetList = [];
 		}
