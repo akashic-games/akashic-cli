@@ -148,7 +148,12 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 						// TODO: 操作プラグインによって preserve するファイルは bundle から除外する必要がある
 						preservingFilePathSet.add(realPath);
 						if (bundledFilePaths.indexOf(realPath) !== -1) {
-							console.warn(`${realPath} is duplicated`);
+							console.warn(
+								`${realPath} IS DUPLICATED: the file is required from both the game and an operation plugin.`
+								+ "The current akashic export command duplicates the file. "
+								+ "This may breaks the code, especially using the instanceof operator."
+								+ "Try --no-bundle option if you have a trouble."
+							);
 						}
 					}
 				});
