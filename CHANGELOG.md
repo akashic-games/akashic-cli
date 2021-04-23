@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## 2.9.0 (2021-04-23)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#747](https://github.com/akashic-games/akashic-cli/pull/747) feat(serve): use headless-driver@1.6.0 ([@yu-ogi](https://github.com/yu-ogi))
+
+#### Update Dependencies
+* `akashic-cli-serve`
+  * [#747](https://github.com/akashic-games/akashic-cli/pull/747) feat(serve): use headless-driver@1.6.0 ([@yu-ogi](https://github.com/yu-ogi))
+
+#### Committers: 2
+- [@yu-ogi](https://github.com/yu-ogi)
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.8.0 (2021-04-15)
 
 #### Enhancement
