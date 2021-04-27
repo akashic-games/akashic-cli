@@ -102,33 +102,18 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			return bundleScripts(gamejson.main || gamejson.assets.mainScene.path, param.source);
 		})
 		.then(async (bundleResult) => {
-			// NOTE: ディレクトリ下のファイルすべて取得するためとはいえ、ここで関数定義していいのか？(commons等で新たに関数定義すべきかもしれない)
-			const listFiles = (dir: string): string[] => {
-				let filePaths: string[] = [];
-				fs.readdirSync(dir, { withFileTypes: true }).forEach(dirent => {
-					const targetPath = `${dir}/${dirent.name}`;
-					if (dirent.isFile()) {
-						filePaths.push(targetPath);
-					} else {
-						filePaths = filePaths.concat(listFiles(targetPath));
-					}
-				});
-				return filePaths;
-			};
 			let files: string[] = param.strip ? gcu.extractFilePaths(gamejson, param.source) :
-				listFiles(param.source).map(p => p.replace(`${param.source}/`, ""));
+				readdir(param.source).map(p => p.replace(`${param.source}/`, ""));
 			let bundledFilePaths: string[] = [];
 			const preservingFilePathSet = new Set<string>(files);
 			if (bundleResult) {
 				bundledFilePaths = bundleResult.filePaths;
-				let excludedFilePaths = bundleResult.filePaths;
+				// 不要なスクリプトを削る。omitUnbundledJs ならば全スクリプト取り除く点に注意 (bundle されたものは不要、されなかったものは omit なので)
+				let unneeded = bundleResult.filePaths;
 				if (param.omitUnbundledJs) {
-					// omitUnbundledJsがtrueであれば、結果的に全てのscriptアセットとglobalScriptsはgame.jsonから消えるので、bundleしないscriptファイルではなく全scriptファイルを取得する
-					excludedFilePaths = excludedFilePaths.concat(files.filter(p =>
-						gcu.isScriptJsFile(p) || (gamejson.globalScripts || []).indexOf(p) !== -1
-					));
+					unneeded = unneeded.concat(files.filter(p => p.endsWith(".js")));
 				}
-				excludedFilePaths.forEach(p => preservingFilePathSet.delete(p));
+				unneeded.forEach(p => preservingFilePathSet.delete(p));
 			}
 
 			// operation plugin に登録されているスクリプトファイルは bundle されていても残しておく必要がある
