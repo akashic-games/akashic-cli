@@ -35,6 +35,7 @@
     "express": "4.17.1",
     "lodash": "4.17.21",
     "open": "8.0.2",
+    "rxjs": "^6.5.3",
     "socket.io": "4.0.0"
   },
   "devDependencies": {
