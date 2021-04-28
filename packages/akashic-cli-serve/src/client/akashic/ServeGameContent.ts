@@ -77,6 +77,11 @@ export class ServeGameContent {
 			renderer.transform(mat);
 			renderer.fillRect(0, 0, e.width, e.height, "rgba(255, 0, 0, 0.3)");
 			renderer.restore();
+			mat[0] = 1;
+			mat[3] = 1;
+			renderer.transform(mat);
+			renderer.fillRect(e.width/2 - 2, e.height/2 - 2,  4, 4, "rgba(0, 255, 255, 1)");
+			renderer.restore();
 			renderer.end();
 			return ret;
 		};
