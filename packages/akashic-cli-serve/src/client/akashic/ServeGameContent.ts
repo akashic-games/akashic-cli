@@ -80,7 +80,7 @@ export class ServeGameContent {
 			mat[0] = 1;
 			mat[3] = 1;
 			renderer.transform(mat);
-			renderer.fillRect(e.width/2 - 2, e.height/2 - 2,  4, 4, "rgba(0, 255, 255, 1)");
+			renderer.fillRect(e.width / 2 - 2, e.height / 2 - 2, 4, 4, "rgba(0, 255, 255, 1)");
 			renderer.restore();
 			renderer.end();
 			return ret;
