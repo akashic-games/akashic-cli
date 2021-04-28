@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.9.1 (2021-04-28)
+
+#### Bug Fix
+* `akashic-cli-commons`, `akashic-cli-export`
+  * [#717](https://github.com/akashic-games/akashic-cli/pull/717) save opreration plugin scripts when export ([@dera-](https://github.com/dera-))
+
+#### Committers: 1
+- [@dera-](https://github.com/dera-)
+
 ## 2.9.0 (2021-04-23)
 
 #### Enhancement
