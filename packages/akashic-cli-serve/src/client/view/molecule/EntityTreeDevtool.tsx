@@ -31,6 +31,11 @@ function strigifyEDumpItemScale(e: EDumpItem): string {
 	return (sx === 1 && sy === 1) ? "" : (sx === sy) ? `x${formatNum(sx)}` : `(x${formatNum(sx)}, x${formatNum(sy)})`;
 }
 
+function stringifyDumoItemAnchor(e: EDumpItem): string {
+	const ax = e.anchorX === null ? "null" : e.anchorX.toString(), ay = e.anchorY === null ? "null" : e.anchorY.toString();
+	return `[${ax}:${ay}]`;
+}
+
 function scrollRefIntoView(e: HTMLElement | null): void {
 	if (e) {
 		scrollIntoView(e, { scrollMode: "if-needed", block: "center", inline: "nearest" });
@@ -73,7 +78,7 @@ function renderEDumpItem(e: EDumpItem, props: EntityTreeDevtoolProps): React.Rea
 			<span className={styles["entity-mini-info"]}>
 				{ e.local ? <span className={styles["entity-local"]}>Local</span> : null }
 				{ `#${e.id} (${formatNum(e.x)}, ${formatNum(e.y)}) ${formatNum(e.width)}x${formatNum(e.height)}` }
-				{ `${e.angle !== 0 ? ` ${formatNum(e.angle)}°` : ""} ${strigifyEDumpItemScale(e)}` }
+				{ `${e.angle !== 0 ? ` ${formatNum(e.angle)}°` : ""} ${strigifyEDumpItemScale(e)} ${stringifyDumoItemAnchor(e)}` }
 				{ e.touchable ? <span className={styles["entity-touchable"]}>Touchable</span> : null }
 				{ (e.text != null) ? <span className={styles["entity-text"]}>{formatText(e.text)}</span> : null }
 			</span>
