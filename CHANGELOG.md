@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## 2.9.2 (2021-05-12)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#750](https://github.com/akashic-games/akashic-cli/pull/750) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Other Change
+* `akashic-cli-init`
+  * [#756](https://github.com/akashic-games/akashic-cli/pull/756) Modify .gitignore of akashic-init template ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 2
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.9.1 (2021-04-28)
 
 #### Bug Fix
