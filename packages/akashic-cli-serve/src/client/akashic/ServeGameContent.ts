@@ -76,6 +76,7 @@ export class ServeGameContent {
 			const mat = getMatrixFromRoot(e, camera || game.focusingCamera)._matrix;
 			renderer.transform(mat);
 			renderer.fillRect(0, 0, e.width, e.height, "rgba(255, 0, 0, 0.3)");
+			renderer.restore();
 			const anchorEdge = 4;
 			renderer.fillRect(
 				e.width * e.anchorX - anchorEdge / 2,
