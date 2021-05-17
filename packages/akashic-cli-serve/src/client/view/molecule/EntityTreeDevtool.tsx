@@ -90,11 +90,11 @@ function renderEDumpItem(e: EDumpItem, props: EntityTreeDevtoolProps): React.Rea
 			<span className={styles["entity-mini-info"]}>
 				{ e.local ? <span className={styles["entity-local"]}>Local</span> : null }
 				{ `#${e.id}`}&nbsp;
-				{stringifyEDumpItemPosition(e)}&nbsp;
-				{stringifyEDumpItemSize(e)}&nbsp;
-				{stringifyEDumpItemAngle(e)}&nbsp;
-				{strigifyEDumpItemScale(e)}&nbsp;
-				{stringifyEDumpItemAnchor(e)}&nbsp;
+				{ stringifyEDumpItemPosition(e) }&nbsp;
+				{ stringifyEDumpItemSize(e) }&nbsp;
+				{ stringifyEDumpItemAngle(e) }&nbsp;
+				{ strigifyEDumpItemScale(e) }&nbsp;
+				{ stringifyEDumpItemAnchor(e) }&nbsp;
 				{ e.touchable ? <span className={styles["entity-touchable"]}>Touchable</span> : null }
 				{ (e.text != null) ? <span className={styles["entity-text"]}>{formatText(e.text)}</span> : null }
 			</span>
