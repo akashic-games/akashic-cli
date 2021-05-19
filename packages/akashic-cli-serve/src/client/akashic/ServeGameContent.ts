@@ -73,15 +73,15 @@ export class ServeGameContent {
 			const renderer = game.renderers[0];  // TODO 0番だけで描画するのは暫定。現実的には0しかない。
 			renderer.begin();
 			renderer.save();
-			const mat = getMatrixFromRoot(e, camera || game.focusingCamera)._matrix;
-			renderer.transform(mat);
+			const mat = getMatrixFromRoot(e, camera || game.focusingCamera);
+			renderer.transform(mat._matrix);
 			renderer.fillRect(0, 0, e.width, e.height, "rgba(255, 0, 0, 0.3)");
-			const anchorEdge = 4;
-			renderer.fillRect(
-				e.width * e.anchorX - anchorEdge / 2,
-				e.height * e.anchorY - anchorEdge / 2,
-				anchorEdge, anchorEdge, "rgba(0, 255, 255, 1)");
+			const anchorSize = 4;
+			const anchorX = e.anchorX == null ? 0 : e.anchorX;
+			const anchorY = e.anchorY == null ? 0 : e.anchorY;
 			renderer.restore();
+			const anchor = mat.multiplyPoint({x: e.width * anchorX, y: e.height * anchorY});
+			renderer.fillRect(anchor.x - anchorSize / 2, anchor.y - anchorSize / 2, anchorSize, anchorSize, "rgba(0, 255, 255, 1)");
 			renderer.end();
 			return ret;
 		};

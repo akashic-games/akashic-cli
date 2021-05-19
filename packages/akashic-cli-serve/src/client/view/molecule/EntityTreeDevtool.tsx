@@ -4,7 +4,6 @@ import { observer } from "mobx-react";
 import scrollIntoView from "scroll-into-view-if-needed";
 import { EDumpItem } from "../../common/types/EDumpItem";
 import { FlexScrollY } from "../atom/FlexScrollY";
-import { ToolIconButton } from "../atom/ToolIconButton";
 import { EntityTreeOptionBar, EntityTreeOptionBarProps } from "./EntityTreeOptionBar";
 import * as styles from "./EntityTreeDevtool.css";
 
@@ -32,20 +31,20 @@ function strigifyEDumpItemScale(e: EDumpItem): string {
 }
 
 function stringifyEDumpItemAnchor(e: EDumpItem): React.ReactNode {
-	const ax = e.anchorX === null ? "null" : e.anchorX.toString(), ay = e.anchorY === null ? "null" : e.anchorY.toString();
-	return <span>✛<abbr title="anchorX anchorY">({ax}, {ay}) </abbr></span>;
+	const ax = e.anchorX == null ? "null" : e.anchorX.toString(), ay = e.anchorY == null ? "null" : e.anchorY.toString();
+	return <span title="anchorX anchorY">✛({ax}, {ay})</span>;
 }
 
 function stringifyEDumpItemSize(e: EDumpItem): React.ReactNode {
-	return <span>□<abbr title="width height">{formatNum(e.width)}x{formatNum(e.height)}</abbr></span>;
+	return <span title="width height">□{formatNum(e.width)}x{formatNum(e.height)}</span>;
 }
 
 function stringifyEDumpItemAngle(e: EDumpItem): React.ReactNode {
-	return e.angle === 0 ? null : <span>⊾<abbr title="angle">{formatNum(e.angle)}°</abbr></span>;
+	return e.angle === 0 ? null : <span title="angle">⊾{formatNum(e.angle)}°</span>;
 }
 
 function stringifyEDumpItemPosition(e: EDumpItem): React.ReactNode {
-	return <abbr title="x y"> ({formatNum(e.x)}, {formatNum(e.y)})</abbr>;
+	return <span title="x y"> ({formatNum(e.x)}, {formatNum(e.y)})</span>;
 }
 
 function scrollRefIntoView(e: HTMLElement | null): void {
