@@ -36,11 +36,11 @@ function stringifyEDumpItemAnchor(e: EDumpItem): React.ReactNode {
 }
 
 function stringifyEDumpItemSize(e: EDumpItem): React.ReactNode {
-	return <span title="width height">□{formatNum(e.width)}x{formatNum(e.height)}</span>;
+	return <span title="width height">&#9633;{formatNum(e.width)}x{formatNum(e.height)}</span>; // □
 }
 
 function stringifyEDumpItemAngle(e: EDumpItem): React.ReactNode {
-	return e.angle === 0 ? null : <span title="angle">⊾{formatNum(e.angle)}°</span>;
+	return e.angle === 0 ? null : <span title="angle">&#8894;{formatNum(e.angle)}°</span>; // ⊾
 }
 
 function stringifyEDumpItemPosition(e: EDumpItem): React.ReactNode {
