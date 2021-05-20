@@ -52,7 +52,8 @@ export class RunnerStore {
 			executionMode: params.isActive ? "active" : "passive",
 			playToken: params.token,
 			allowedUrls,
-			externalValue: this.gameExternalFactory()
+			externalValue: this.gameExternalFactory(),
+			trusted: !serverGlobalConfig.untrusted
 		});
 		const runner = this.runnerManager.getRunner(runnerId);
 		await this.runnerManager.startRunner(runner.runnerId);

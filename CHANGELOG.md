@@ -1,5 +1,37 @@
 # CHANGELOG
 
+## 2.10.0 (2021-05-20)
+
+#### Update Dependencies
+* `akashic-cli-serve`
+  * [#757](https://github.com/akashic-games/akashic-cli/pull/757) headless-driver@1.7.0 を利用するように ([@yu-ogi](https://github.com/yu-ogi))
+
+#### Committers: 1
+- [@yu-ogi](https://github.com/yu-ogi)
+
+## 2.9.2 (2021-05-12)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#750](https://github.com/akashic-games/akashic-cli/pull/750) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Other Change
+* `akashic-cli-init`
+  * [#756](https://github.com/akashic-games/akashic-cli/pull/756) Modify .gitignore of akashic-init template ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 2
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- xnv ([@xnv](https://github.com/xnv))
+
+## 2.9.1 (2021-04-28)
+
+#### Bug Fix
+* `akashic-cli-commons`, `akashic-cli-export`
+  * [#717](https://github.com/akashic-games/akashic-cli/pull/717) save opreration plugin scripts when export ([@dera-](https://github.com/dera-))
+
+#### Committers: 1
+- [@dera-](https://github.com/dera-)
+
 ## 2.9.0 (2021-04-23)
 
 #### Enhancement

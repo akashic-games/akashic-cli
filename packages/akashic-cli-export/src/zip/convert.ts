@@ -101,14 +101,47 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 				return null;
 			return bundleScripts(gamejson.main || gamejson.assets.mainScene.path, param.source);
 		})
-		.then((bundleResult) => {
-			let noCopyingFilePaths = new Set<string>();
+		.then(async (bundleResult) => {
+			let files: string[] = param.strip ? gcu.extractFilePaths(gamejson, param.source) :
+				readdir(param.source).map(p => p.replace(`${param.source}/`, ""));
+			let bundledFilePaths: string[] = [];
+			const preservingFilePathSet = new Set<string>(files);
 			if (bundleResult) {
-				gcu.removeScriptFromFilePaths(gamejson, bundleResult.filePaths);
-				noCopyingFilePaths = new Set<string>(bundleResult.filePaths);
-				if (param.omitUnbundledJs && gamejson.globalScripts) {
-					gamejson.globalScripts = gamejson.globalScripts.filter(p => noCopyingFilePaths.has(p));
+				bundledFilePaths = bundleResult.filePaths;
+				// 不要なスクリプトを削る。omitUnbundledJs ならば全スクリプト取り除く点に注意 (bundle されたものは不要、されなかったものは omit なので)
+				let unneeded = bundleResult.filePaths;
+				if (param.omitUnbundledJs) {
+					unneeded = unneeded.concat(files.filter(p => p.endsWith(".js")));
 				}
+				unneeded.forEach(p => preservingFilePathSet.delete(p));
+			}
+
+			// operation plugin に登録されているスクリプトファイルは bundle されていても残しておく必要がある
+			const operationPluginScripts = (gamejson.operationPlugins ?? []).map(plugin => plugin.script.replace(/^\.\//g, ""));
+			for (let script of operationPluginScripts) {
+				const scriptPath = path.join(param.source, script);
+				// TODO: Promise#then() と async/await が混在する状態を改め、 async/await に統一する
+				const operationFiles = await cmn.NodeModules.listScriptFiles(
+					path.dirname(scriptPath),
+					"./" + path.basename(scriptPath),
+					param.logger,
+					true
+				);
+				operationFiles.forEach(file => {
+					const realPath = path.join(path.dirname(scriptPath), file).replace(`${param.source}/`, "");
+					if (files.indexOf(realPath) !== -1) {
+						// TODO: 操作プラグインによって preserve するファイルは bundle から除外する必要がある
+						preservingFilePathSet.add(realPath);
+						if (bundledFilePaths.indexOf(realPath) !== -1) {
+							console.warn(
+								`${realPath} IS DUPLICATED: the file is required from both the game and an operation plugin.`
+								+ "The current akashic export command duplicates the file. "
+								+ "This may breaks the code, especially using the instanceof operator."
+								+ "Try --no-bundle option if you have a trouble."
+							);
+						}
+					}
+				});
 			}
 
 			const babelOption = {
@@ -123,37 +156,25 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 				]
 			};
 
-			const files = param.strip ? gcu.extractFilePaths(gamejson, param.source) : readdir(param.source).map((p) => p.replace(/\\/g, "/"));
-			files.forEach(p => {
-				if (!noCopyingFilePaths.has(p)) {
-					let buff = fs.readFileSync(path.resolve(param.source, p));
-
-					if (bundleResult && gcu.isScriptJsFile(p) && param.omitUnbundledJs) {
-						Object.keys(gamejson.assets).some((key) => {
-							if (gamejson.assets[key].type === "script" && gamejson.assets[key].path === p) {
-								delete gamejson.assets[key];
-								return true;
-							}
-							return false;
-						});
-						return;
-					}
-
-					if (param.omitEmptyJs && gcu.isScriptJsFile(p) && gcu.isEmptyScriptJs(buff.toString().trim())) {
-						Object.keys(gamejson.assets).some((key) => {
-							if (gamejson.assets[key].type === "script" && gamejson.assets[key].path === p) {
-								gamejson.assets[key].global = false;
-								return true;
-							}
-							return false;
-						});
-					}
-					cmn.Util.mkdirpSync(path.dirname(path.resolve(param.dest, p)));
-					const value: string | Buffer =
-						(param.babel && gcu.isScriptJsFile(p)) ? babel.transform(buff.toString().trim(), babelOption).code : buff;
-					fs.writeFileSync(path.resolve(param.dest, p), value);
+			preservingFilePathSet.forEach(p => {
+				let buff = fs.readFileSync(path.resolve(param.source, p));
+				if (param.omitEmptyJs && gcu.isScriptJsFile(p) && gcu.isEmptyScriptJs(buff.toString().trim())) {
+					Object.keys(gamejson.assets).some((key) => {
+						if (gamejson.assets[key].type === "script" && gamejson.assets[key].path === p) {
+							gamejson.assets[key].global = false;
+							return true;
+						}
+						return false;
+					});
 				}
+				cmn.Util.mkdirpSync(path.dirname(path.resolve(param.dest, p)));
+				const value: string | Buffer =
+					(param.babel && gcu.isScriptJsFile(p)) ? babel.transform(buff.toString().trim(), babelOption).code : buff;
+				fs.writeFileSync(path.resolve(param.dest, p), value);
 			});
+			// コピーしなかったアセットやファイルをgmae.jsonから削除する
+			gcu.removeScriptAssets(gamejson, (filePath: string) => preservingFilePathSet.has(filePath));
+			gcu.removeGlobalScripts(gamejson, (filePath: string) => preservingFilePathSet.has(filePath));
 
 			if (param.targetService === "nicolive") {
 				addUntaintedToImageAssets(gamejson);
