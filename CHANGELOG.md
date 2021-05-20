@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.10.0 (2021-05-20)
+
+#### Update Dependencies
+* `akashic-cli-serve`
+  * [#757](https://github.com/akashic-games/akashic-cli/pull/757) headless-driver@1.7.0 を利用するように ([@yu-ogi](https://github.com/yu-ogi))
+
+#### Committers: 1
+- [@yu-ogi](https://github.com/yu-ogi)
+
 ## 2.9.2 (2021-05-12)
 
 #### Enhancement
