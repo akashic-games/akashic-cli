@@ -81,7 +81,8 @@ export class ServeGameContent {
 			const anchorY = e.anchorY == null ? 0 : e.anchorY;
 			renderer.restore();
 			const anchor = mat.multiplyPoint({x: e.width * anchorX, y: e.height * anchorY});
-			renderer.fillRect(anchor.x - anchorSize / 2, anchor.y - anchorSize / 2, anchorSize, anchorSize, "rgba(0, 255, 255, 1)");
+			const color = (e.anchorX == null || e.anchorY == null) ? "rgba(0, 0, 255, 1)" : "rgba(0, 255, 255, 1)";
+			renderer.fillRect(anchor.x - anchorSize / 2, anchor.y - anchorSize / 2, anchorSize, anchorSize, color);
 			renderer.end();
 			return ret;
 		};

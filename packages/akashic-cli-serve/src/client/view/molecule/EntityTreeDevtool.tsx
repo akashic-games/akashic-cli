@@ -31,7 +31,7 @@ function strigifyEDumpItemScale(e: EDumpItem): string {
 }
 
 function stringifyEDumpItemAnchor(e: EDumpItem): React.ReactNode {
-	const ax = e.anchorX == null ? "null" : e.anchorX.toString(), ay = e.anchorY == null ? "null" : e.anchorY.toString();
+	const ax = e.anchorX == null ? "null" : formatNum(e.anchorX), ay = e.anchorY == null ? "null" : formatNum(e.anchorY);
 	return <span title="anchorX anchorY">✛({ax}, {ay})</span>;
 }
 
