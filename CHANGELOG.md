@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.10.1 (2021-05-24)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#758](https://github.com/akashic-games/akashic-cli/pull/758) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.0.15, engineFiles@2.1.53, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.10.0 (2021-05-20)
 
 #### Update Dependencies
