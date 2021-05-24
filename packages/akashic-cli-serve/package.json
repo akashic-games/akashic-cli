@@ -14,7 +14,7 @@
     "build:server": "tsc -p ./src/server",
     "test": "jest && npm run lint",
     "lint": "npm run lint:client && npm run lint:server",
-    "lint:client": "tslint -p ./src/client -c tslint.json 'src/client/**/*.ts*' 'src/common/**/*.ts'",
+    "lint:client": "tslint -p ./src/client -c tslint.json src/client/**/*.ts* src/common/**/*.ts",
     "lint:server": "tslint -p ./src/server -c tslint.json 'src/server/**/*.ts'",
     "storybook": "start-storybook -p 9001 -c .storybook -s ./www"
   },
@@ -35,6 +35,7 @@
     "express": "4.17.1",
     "lodash": "4.17.21",
     "open": "8.0.2",
+    "rxjs": "^6.5.3",
     "socket.io": "4.0.0"
   },
   "devDependencies": {
