@@ -19,7 +19,7 @@
     "@akashic/akashic-cli-export-zip": "0.9.1",
     "@akashic/akashic-cli-scan": "0.10.1",
     "@akashic/akashic-engine": "~3.0.4",
-    "@akashic/akashic-sandbox": "~0.17.21",
+    "@akashic/akashic-sandbox": "~0.17.23",
     "@akashic/headless-akashic": "^1.1.1",
     "@types/jest": "26.0.20",
     "@types/node": "14.14.34",
