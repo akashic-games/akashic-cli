@@ -7,11 +7,14 @@ import * as fs from "fs";
 import * as fsx from "fs-extra";
 import * as path from "path";
 import * as os from "os";
+import archiver = require("archiver");
+import readdir = require("fs-readdir-recursive");
 
 export interface ExportHTMLParameterObject extends ConvertTemplateParameterObject {
 	quiet?: boolean;
 	bundle?: boolean;
 	hashLength?: number;
+	atsumaru?: boolean;
 }
 
 export function _completeExportHTMLParameterObject(p: ExportHTMLParameterObject): ExportHTMLParameterObject {
@@ -25,6 +28,7 @@ export function _completeExportHTMLParameterObject(p: ExportHTMLParameterObject)
 
 export function promiseExportHTML(p: ExportHTMLParameterObject): Promise<string> {
 	const param = _completeExportHTMLParameterObject(p);
+	const outputZip = param.output && !param.atsumaru ? path.extname(param.output) === ".zip" : false;
 	let gamepath: string;
 
 	param.logger.info("exporting content into html...");
@@ -48,7 +52,7 @@ export function promiseExportHTML(p: ExportHTMLParameterObject): Promise<string>
 					}
 					resolve();
 				});
-			} else if (stat) {
+			} else if (stat && !outputZip) {
 				if (!stat.isDirectory()) {
 					return reject(param.output + " is not directory.");
 				}
@@ -56,6 +60,18 @@ export function promiseExportHTML(p: ExportHTMLParameterObject): Promise<string>
 					return reject("The output directory " + param.output + " already exists. Cannot overwrite without force option.");
 				}
 				resolve();
+			} else {
+				if (!param.force) {
+					return reject("The output file " + param.output + " already exists. Cannot overwrite without force option.");
+				}
+
+				fsx.removeSync(param.output); //  zip 拡張子の場合、同名でディレクトリを作成不可のため存在するファイルを削除
+				fs.mkdir(path.resolve(param.output), (err: any) => {
+					if (err) {
+						return reject("Create temporary directory failed.");
+					}
+					resolve();
+				});
 			}
 		});
 	})
@@ -92,6 +108,29 @@ export function promiseExportHTML(p: ExportHTMLParameterObject): Promise<string>
 		if (param.hashLength > 0) {
 			param.logger.info("removing temp files...");
 			fsx.removeSync(gamepath);
+		}
+	})
+	.then(() => {
+		// output が zip 拡張子の場合は zip 化
+		if (outputZip) {
+			const dirName = `export-html-temp-${new Date().getTime().toString(16)}`;
+			fs.renameSync(param.output, dirName);
+			// TODO: zip 化処理の共通化
+			return new Promise<void>((resolve, reject) => {
+				const files = readdir(dirName).map(p => ({
+					src: path.resolve(dirName, p),
+					entryName: p
+				}));
+				const ostream = fs.createWriteStream(param.output);
+				const archive = archiver("zip");
+				ostream.on("close", () => resolve());
+				archive.on("error", (err) => reject(err));
+				archive.pipe(ostream);
+				files.forEach((f) => archive.file(f.src, { name: f.entryName }));
+				archive.finalize();
+			}).finally(() => {
+				fsx.removeSync(dirName);
+			});
 		}
 	})
 	.catch((error) => {
