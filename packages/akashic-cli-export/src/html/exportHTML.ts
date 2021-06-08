@@ -111,14 +111,13 @@ export function promiseExportHTML(p: ExportHTMLParameterObject): Promise<string>
 		}
 	})
 	.then(() => {
-		// output が zip 拡張子の場合は zip 化
 		if (outputZip) {
-			const dirName = `export-html-temp-${new Date().getTime().toString(16)}`;
-			fs.renameSync(param.output, dirName);
-			// TODO: zip 化処理の共通化
+			const targetDir = `export-html-temp-${new Date().getTime().toString(16)}`;
+			fs.renameSync(param.output, targetDir);
+
 			return new Promise<void>((resolve, reject) => {
-				const files = readdir(dirName).map(p => ({
-					src: path.resolve(dirName, p),
+				const files = readdir(targetDir).map(p => ({
+					src: path.resolve(targetDir, p),
 					entryName: p
 				}));
 				const ostream = fs.createWriteStream(param.output);
@@ -129,7 +128,7 @@ export function promiseExportHTML(p: ExportHTMLParameterObject): Promise<string>
 				files.forEach((f) => archive.file(f.src, { name: f.entryName }));
 				archive.finalize();
 			}).finally(() => {
-				fsx.removeSync(dirName);
+				fsx.removeSync(targetDir);
 			});
 		}
 	})
