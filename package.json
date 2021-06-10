@@ -37,7 +37,7 @@
     "lerna": "3.22.1",
     "lerna-changelog": "1.0.1",
     "remark-cli": "8.0.1",
-    "semver": "7.3.4",
+    "semver": "7.3.5",
     "shelljs": "0.8.4"
   },
   "repository": {
