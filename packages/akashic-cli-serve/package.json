@@ -35,7 +35,7 @@
     "express": "4.17.1",
     "lodash": "4.17.21",
     "open": "8.0.2",
-    "rxjs": "^6.5.3",
+    "rxjs": "6.5.3",
     "socket.io": "4.0.0"
   },
   "devDependencies": {
@@ -67,7 +67,7 @@
     "query-string": "6.14.1",
     "react": "16.14.0",
     "react-dom": "16.14.0",
-    "rimraf": "^3.0.2",
+    "rimraf": "3.0.2",
     "scroll-into-view-if-needed": "2.2.27",
     "shx": "0.3.3",
     "socket.io-client": "3.1.3",
