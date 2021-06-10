@@ -24,7 +24,7 @@
   ],
   "devDependencies": {
     "@types/image-size": "0.7.0",
-    "@types/jasmine": "3.6.6",
+    "@types/jasmine": "3.6.11",
     "@types/mock-fs": "4.13.0",
     "@types/node": "6.14.13",
     "istanbul": "0.4.5",
@@ -44,7 +44,7 @@
     "commander": "^7.0.0",
     "fs-readdir-recursive": "1.1.0",
     "image-size": "~0.9.0",
-    "music-metadata": "7.8.1",
+    "music-metadata": "7.8.6",
     "thumbcoil": "~1.2.0"
   },
   "publishConfig": {
