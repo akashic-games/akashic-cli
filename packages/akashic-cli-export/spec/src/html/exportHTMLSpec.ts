@@ -105,7 +105,8 @@ describe("exportHTML", function () {
 				minify: false,
 				magnify: false,
 				unbundleText: false,
-				lint: false
+				lint: false,
+				compress: true
 			};
 			return exp.promiseExportHTML(param);
 		})

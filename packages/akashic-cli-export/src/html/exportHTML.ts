@@ -14,7 +14,7 @@ export interface ExportHTMLParameterObject extends ConvertTemplateParameterObjec
 	quiet?: boolean;
 	bundle?: boolean;
 	hashLength?: number;
-	atsumaru?: boolean;
+	compress?: boolean;
 }
 
 export function _completeExportHTMLParameterObject(p: ExportHTMLParameterObject): ExportHTMLParameterObject {
@@ -26,9 +26,7 @@ export function _completeExportHTMLParameterObject(p: ExportHTMLParameterObject)
 	return param;
 }
 
-export function promiseExportHTML(p: ExportHTMLParameterObject): Promise<string> {
-	const param = _completeExportHTMLParameterObject(p);
-	const outputZip = param.output && !param.atsumaru ? path.extname(param.output) === ".zip" : false;
+export function promiseExportHtmlRaw(param: ExportHTMLParameterObject): Promise<string> {
 	let gamepath: string;
 
 	param.logger.info("exporting content into html...");
@@ -52,7 +50,7 @@ export function promiseExportHTML(p: ExportHTMLParameterObject): Promise<string>
 					}
 					resolve();
 				});
-			} else if (stat && !outputZip) {
+			} else if (stat) {
 				if (!stat.isDirectory()) {
 					return reject(param.output + " is not directory.");
 				}
@@ -60,18 +58,6 @@ export function promiseExportHTML(p: ExportHTMLParameterObject): Promise<string>
 					return reject("The output directory " + param.output + " already exists. Cannot overwrite without force option.");
 				}
 				resolve();
-			} else {
-				if (!param.force) {
-					return reject("The output file " + param.output + " already exists. Cannot overwrite without force option.");
-				}
-
-				fsx.removeSync(param.output); //  zip 拡張子の場合、同名でディレクトリを作成不可のため存在するファイルを削除
-				fs.mkdir(path.resolve(param.output), (err: any) => {
-					if (err) {
-						return reject("Create temporary directory failed.");
-					}
-					resolve();
-				});
 			}
 		});
 	})
@@ -110,34 +96,47 @@ export function promiseExportHTML(p: ExportHTMLParameterObject): Promise<string>
 			fsx.removeSync(gamepath);
 		}
 	})
-	.then(() => {
-		if (outputZip) {
-			const targetDir = `export-html-temp-${new Date().getTime().toString(16)}`;
-			fs.renameSync(param.output, targetDir);
-
-			return new Promise<void>((resolve, reject) => {
-				const files = readdir(targetDir).map(p => ({
-					src: path.resolve(targetDir, p),
-					entryName: p
-				}));
-				const ostream = fs.createWriteStream(param.output);
-				const archive = archiver("zip");
-				ostream.on("close", () => resolve());
-				archive.on("error", (err) => reject(err));
-				archive.pipe(ostream);
-				files.forEach((f) => archive.file(f.src, { name: f.entryName }));
-				archive.finalize();
-			}).finally(() => {
-				fsx.removeSync(targetDir);
-			});
-		}
-	})
 	.catch((error) => {
 		throw error;
 	})
 	.then(() => {
 		return param.output;
 	});
+}
+
+export function promiseExportHTML(p: ExportHTMLParameterObject): Promise<string> {
+	const param = _completeExportHTMLParameterObject(p);
+	const output = param.output;
+	if (param.compress) {
+		// promiseExportHtmlRaw() で一時ディレクトリを作成させるため、param.output に null を代入
+		param.output = null;
+	}
+	return promiseExportHtmlRaw(param)
+		.then((dest: string) => {
+			if (param.compress) {
+				return new Promise<void>((resolve, reject) => {
+					const files = readdir(dest).map(p => ({
+						src: path.resolve(dest, p),
+						entryName: p
+					}));
+					const ostream = fs.createWriteStream(output);
+					const archive = archiver("zip");
+					ostream.on("close", () => resolve());
+					archive.on("error", (err) => reject(err));
+					archive.pipe(ostream);
+					files.forEach((f) => archive.file(f.src, { name: f.entryName }));
+					archive.finalize();
+				}).finally(() => {
+					fsx.removeSync(dest);
+				});
+			}
+		})
+		.then(() => {
+			return param.compress ? output : param.output;
+		})
+		.catch((error) => {
+			throw error;
+		});
 }
 
 export function exportHTML(param: ExportHTMLParameterObject, cb: (err?: any) => void): void {
