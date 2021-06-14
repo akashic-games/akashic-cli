@@ -133,9 +133,6 @@ export function promiseExportHTML(p: ExportHTMLParameterObject): Promise<string>
 		})
 		.then(() => {
 			return param.compress ? output : param.output;
-		})
-		.catch((error) => {
-			throw error;
 		});
 }
 
