@@ -1,5 +1,30 @@
 # CHANGELOG
 
+## 2.10.5 (2021-06-15)
+
+#### Enhancement
+* `akashic-cli-export`
+  * [#767](https://github.com/akashic-games/akashic-cli/pull/767) Support compress if zip extension with -o option of export-html ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Update Dependencies
+* Other
+  * [#769](https://github.com/akashic-games/akashic-cli/pull/769) Update dependency glob-parent to 5.1.2 [SECURITY] ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#768](https://github.com/akashic-games/akashic-cli/pull/768) Update dependency trim-newlines to 3.0.1 [SECURITY] ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#770](https://github.com/akashic-games/akashic-cli/pull/770) Update dependency normalize-url to 4.5.1 [SECURITY] ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#755](https://github.com/akashic-games/akashic-cli/pull/755) Update dependency hosted-git-info to 2.8.9 [SECURITY] ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#753](https://github.com/akashic-games/akashic-cli/pull/753) Update dependency lodash to 4.17.21 [SECURITY] ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-export`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli`
+  * [#752](https://github.com/akashic-games/akashic-cli/pull/752) Update dependency handlebars to 4.7.7 [SECURITY] ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-serve`
+  * [#749](https://github.com/akashic-games/akashic-cli/pull/749) Update dependency ssri to 6.0.2 [SECURITY] ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli`
+  * [#720](https://github.com/akashic-games/akashic-cli/pull/720) Update all dependencies (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#719](https://github.com/akashic-games/akashic-cli/pull/719) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#718](https://github.com/akashic-games/akashic-cli/pull/718) Pin dependencies ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 2.10.4 (2021-05-25)
 
 #### Enhancement
