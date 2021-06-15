@@ -91,4 +91,30 @@ describe("exportHTML", function () {
 		})
 		.then(done, done.fail);
 	});
+
+	it("output option has zip extension", function (done) {
+		Promise.resolve()
+		.then(function () {
+			const param: exp.ExportHTMLParameterObject = {
+				logger: undefined,
+				cwd: path.join(__dirname, "..", "..", "fixtures", "sample_game"),
+				source: ".",
+				output: "../output.zip",
+				force: true,
+				strip: true,
+				minify: false,
+				magnify: false,
+				unbundleText: false,
+				lint: false,
+				compress: true
+			};
+			return exp.promiseExportHTML(param);
+		})
+		.then((dest) => {
+			expect(dest).toBe(path.join(__dirname, "..", "..", "fixtures", "output.zip"));
+			fsx.removeSync(dest);
+		})
+		.then(done, done.fail);
+	});
+
 });

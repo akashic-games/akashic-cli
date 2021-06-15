@@ -7,11 +7,14 @@ import * as fs from "fs";
 import * as fsx from "fs-extra";
 import * as path from "path";
 import * as os from "os";
+import archiver = require("archiver");
+import readdir = require("fs-readdir-recursive");
 
 export interface ExportHTMLParameterObject extends ConvertTemplateParameterObject {
 	quiet?: boolean;
 	bundle?: boolean;
 	hashLength?: number;
+	compress?: boolean;
 }
 
 export function _completeExportHTMLParameterObject(p: ExportHTMLParameterObject): ExportHTMLParameterObject {
@@ -23,8 +26,7 @@ export function _completeExportHTMLParameterObject(p: ExportHTMLParameterObject)
 	return param;
 }
 
-export function promiseExportHTML(p: ExportHTMLParameterObject): Promise<string> {
-	const param = _completeExportHTMLParameterObject(p);
+export function promiseExportHtmlRaw(param: ExportHTMLParameterObject): Promise<string> {
 	let gamepath: string;
 
 	param.logger.info("exporting content into html...");
@@ -100,6 +102,38 @@ export function promiseExportHTML(p: ExportHTMLParameterObject): Promise<string>
 	.then(() => {
 		return param.output;
 	});
+}
+
+export function promiseExportHTML(p: ExportHTMLParameterObject): Promise<string> {
+	const param = _completeExportHTMLParameterObject(p);
+	const output = param.output;
+	if (param.compress) {
+		// promiseExportHtmlRaw() で一時ディレクトリを作成させるため、param.output に null を代入
+		param.output = null;
+	}
+	return promiseExportHtmlRaw(param)
+		.then((dest: string) => {
+			if (param.compress) {
+				return new Promise<void>((resolve, reject) => {
+					const files = readdir(dest).map(p => ({
+						src: path.resolve(dest, p),
+						entryName: p
+					}));
+					const ostream = fs.createWriteStream(output);
+					const archive = archiver("zip");
+					ostream.on("close", () => resolve());
+					archive.on("error", (err) => reject(err));
+					archive.pipe(ostream);
+					files.forEach((f) => archive.file(f.src, { name: f.entryName }));
+					archive.finalize();
+				}).finally(() => {
+					fsx.removeSync(dest);
+				});
+			}
+		})
+		.then(() => {
+			return param.compress ? output : param.output;
+		});
 }
 
 export function exportHTML(param: ExportHTMLParameterObject, cb: (err?: any) => void): void {
