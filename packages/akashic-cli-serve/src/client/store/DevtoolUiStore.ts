@@ -30,6 +30,7 @@ export class DevtoolUiStore {
 	@observable clearThreshold: number;
 	@observable totalTimeLimit: number;
 	@observable preferredTotalTimeLimit: number;
+	@observable startPointFrames: number[];
 
 	constructor() {
 		this.height = storage.data.devtoolsHeight;
@@ -50,6 +51,7 @@ export class DevtoolUiStore {
 		this.stopsGameOnTimeout = storage.data.stopsGameOnTimeout;
 		this.totalTimeLimitInputValue = storage.data.totalTimeLimitInputValue;
 		this.showsProfiler = storage.data.showsProfiler;
+		this.startPointFrames = [];
 	}
 
 	@action
@@ -177,5 +179,10 @@ export class DevtoolUiStore {
 	setShowsProfiler(show: boolean): void {
 		this.showsProfiler = show;
 		storage.put({ showsProfiler: show });
+	}
+
+	@action
+	setStartPointFrames(vs: number[]): void {
+		this.startPointFrames = vs;
 	}
 }

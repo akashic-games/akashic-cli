@@ -21,6 +21,7 @@ import { SocketIOAMFlowManager } from "../domain/SocketIOAMFlowManager";
 import { handleToGetStartupOptions } from "../controller/StartupOptionsController";
 import { createHandlerToRegisterPlayerId } from "../controller/PlayerIdController";
 import { PlayerIdStore } from "../domain/PlayerIdStore";
+import { createHandlerToGetStartPointHeaderList } from "../controller/StartPointHeaderListController";
 
 export interface ApiRouterParameterObject {
 	playStore: PlayStore;
@@ -50,6 +51,7 @@ export const createApiRouter = (params: ApiRouterParameterObject): express.Route
 	apiRouter.get("/options", handleToGetStartupOptions);
 
 	apiRouter.post("/playerids", createHandlerToRegisterPlayerId(params.playerIdStore));
+	apiRouter.get("/plays/:playId(\\d+)/start-point-header-list", createHandlerToGetStartPointHeaderList());
 
 	return apiRouter;
 };

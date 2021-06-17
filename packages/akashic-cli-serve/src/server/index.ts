@@ -22,6 +22,9 @@ import { CliConfigServe } from "@akashic/akashic-cli-commons/lib/CliConfig/CliCo
 import { SERVICE_TYPES } from "@akashic/akashic-cli-commons/lib/ServiceType";
 import { PlayerIdStore } from "./domain/PlayerIdStore";
 import { ModTargetFlags, watchContent } from "./domain/GameConfigs";
+import { AMFlowStoreFactory } from "./domain/AMFlowStoreFactory";
+import { AMFlowStore, StartPointHeader } from "@akashic/headless-driver/lib/play/amflow/AMFlowStore";
+import { PutStartPointEvent } from "../common/types/TestbedEvent";
 
 // 渡されたパラメータを全てstringに変換する
 // chalkを使用する場合、ログ出力時objectの中身を展開してくれないためstringに変換する必要がある
@@ -131,7 +134,16 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues) {
 	}
 
 	const targetDirs: string[] = cliConfigParam.targetDirs;
-	const playManager = new PlayManager();
+	let currentStore: AMFlowStore;
+	let onPutStartPointHandler: (e: PutStartPointEvent) => void;
+	const playManager = new PlayManager((playId: string) => {
+		const store = AMFlowStoreFactory(playId);
+		currentStore = store;
+		store.onPutStartPoint.add((startPointHeader) => {
+			if (onPutStartPointHandler) onPutStartPointHandler({ playId, startPointHeader });
+		});
+		return store;
+	});
 	const runnerManager = new RunnerManager(playManager);
 	const playStore = new PlayStore({ playManager });
 	const runnerStore = new RunnerStore({ runnerManager, gameExternalFactory });
@@ -220,6 +232,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues) {
 	runnerStore.onRunnerRemove.add(arg => { io.emit("runnerRemove", arg); });
 	runnerStore.onRunnerPause.add(arg => { io.emit("runnerPause", arg); });
 	runnerStore.onRunnerResume.add(arg => { io.emit("runnerResume", arg); });
+	onPutStartPointHandler = (arg: PutStartPointEvent) => { io.emit("putStartPoint", arg); };
 
 	let loadedPlaylogPlayId: string;
 	if (cliConfigParam.debugPlaylog) {

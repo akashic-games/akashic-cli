@@ -15,6 +15,7 @@ import { ContentEntity } from "./ContentEntity";
 import { LocalInstanceEntity } from "./LocalInstanceEntity";
 import { ServerInstanceEntity } from "./ServerInstanceEntity";
 import { CreateCoeLocalInstanceParameterObject } from "./CoePluginEntity";
+import { StartPointHeader } from "@akashic/headless-driver/lib/play/amflow/AMFlowStore";
 
 export interface CreateLocalInstanceParameterObject {
 	gameViewManager: GameViewManager;
@@ -44,6 +45,7 @@ export interface PlayEntityParameterObject {
 	clientInstances?: ClientInstanceDescription[];
 	durationState?: PlayDurationState;
 	parent?: PlayEntity;
+	startPointHeaderList?: StartPointHeader[];
 }
 
 export class PlayEntity {
@@ -60,6 +62,7 @@ export class PlayEntity {
 	@observable clientInstances: ClientInstanceDescription[];
 	@observable joinedPlayerTable: ObservableMap;
 	@observable status: PlayStatus;
+	@observable startPointHeaderList: StartPointHeader[];
 
 	@observable localInstances: LocalInstanceEntity[];
 	@observable serverInstances: ServerInstanceEntity[];
@@ -76,6 +79,7 @@ export class PlayEntity {
 		this.isActivePausing = !!param.durationState && param.durationState.isPaused;
 		this.duration = param.durationState ? param.durationState.duration : 0;
 		this.clientInstances = param.clientInstances || [];
+		this.startPointHeaderList = param.startPointHeaderList || [];
 		this.joinedPlayerTable = observable.map((param.joinedPlayers || []).map(p => [p.id, p] as [string, Player]));
 		this.status = "preparing";
 		this.localInstances = [];
@@ -236,6 +240,11 @@ export class PlayEntity {
 	@action
 	handleRunnerResume(): void {
 		this.isActivePausing = false;
+	}
+
+	@action
+	handleStartPointHeaderList(startPointHeader: StartPointHeader): void {
+		this.startPointHeaderList.push(startPointHeader);
 	}
 
 	async teardown(): Promise<void> {

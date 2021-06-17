@@ -11,7 +11,8 @@ import {
 	ContentGetApiResponse,
 	SandboxConfigApiResponse,
 	OptionsApiResponse,
-	PlayerPostApiResponse
+	PlayerPostApiResponse,
+	StartPointHeaderListResponse
 } from "../../common/types/ApiResponse";
 import {ContentLocatorData} from "../../common/types/ContentLocatorData";
 import {GameConfiguration} from "../../common/types/GameConfiguration";
@@ -107,4 +108,8 @@ export const getSandboxConfig = async(contentId: number): Promise<SandboxConfigA
 
 export const getOptions = async(): Promise<OptionsApiResponse> => {
 	return await ApiRequest.get<OptionsApiResponse>("/api/options");
+};
+
+export const getStartPointHeaderList = async(playId: string): Promise<StartPointHeaderListResponse> => {
+	return await ApiRequest.get<StartPointHeaderListResponse>(`/api/plays/${playId}/start-point-header-list`);
 };

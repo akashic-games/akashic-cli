@@ -199,6 +199,9 @@ const TestWithBehaviour = observer(() => (
 			downloadPlaylog: action("download-playlog"),
 			setShowsProfiler: action("show-profiler")
 		}}
+		snapshotDevtoolProps={{
+			startPointHeaderList: []
+		}}
 	/>
 ));
 
@@ -305,6 +308,9 @@ storiesOf("o-Devtool", module)
 				downloadPlaylog: action("download-playlog"),
 				setShowsProfiler: action("show-profiler")
 			}}
+			snapshotDevtoolProps={{
+				startPointHeaderList: []
+			}}
 		/>
 	))
 	.add("events", () => (
@@ -400,6 +406,9 @@ storiesOf("o-Devtool", module)
 				showsProfiler: false,
 				downloadPlaylog: action("download-playlog"),
 				setShowsProfiler: action("show-profiler")
+			}}
+			snapshotDevtoolProps={{
+				startPointHeaderList: []
 			}}
 		/>
 	))
@@ -501,6 +510,9 @@ storiesOf("o-Devtool", module)
 				downloadPlaylog: action("download-playlog"),
 				setShowsProfiler: action("show-profiler")
 			}}
+			snapshotDevtoolProps={{
+				startPointHeaderList: []
+			}}
 		/>
 	))
 	.add("niconico", () => (
@@ -555,6 +567,9 @@ storiesOf("o-Devtool", module)
 				downloadPlaylog: action("download-playlog"),
 				setShowsProfiler: action("show-profiler")
 			}}
+			snapshotDevtoolProps={{
+				startPointHeaderList: []
+			}}
 		/>
 	))
 	.add("misc", () => (
@@ -608,6 +623,9 @@ storiesOf("o-Devtool", module)
 				showsProfiler: false,
 				downloadPlaylog: action("download-playlog"),
 				setShowsProfiler: action("show-profiler")
+			}}
+			snapshotDevtoolProps={{
+				startPointHeaderList: []
 			}}
 		/>
 	))
