@@ -51,7 +51,7 @@ describe("scanUtils", () => {
 		mockfs.restore();
 	});
 
-	it("scanScirptAssets()", async () => {
+	it("scanScriptAssets()", async () => {
 		expect(
 			await scanScriptAssets(
 				"./game",

@@ -1,9 +1,3 @@
-import {
-	scanAsset, promiseScanAsset,
-	scanNodeModules, promiseScanNodeModules
-} from "./scan";
-export {
-	scanAsset, promiseScanAsset,
-	scanNodeModules, promiseScanNodeModules
-};
+export { scanAsset } from "./scanAsset";
+export { scanNodeModules } from "./scanNodeModules";
 export { run } from "./cli";
