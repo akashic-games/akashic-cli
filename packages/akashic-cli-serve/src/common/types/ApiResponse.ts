@@ -6,6 +6,7 @@ import {ContentLocatorData} from "./ContentLocatorData";
 import {ContentDesc} from "./ContentDesc";
 import {AppOptions} from "./AppOptions";
 import { StartPointHeader } from "@akashic/headless-driver/lib/play/amflow/AMFlowStore";
+import { StartPoint } from "@akashic/amflow";
 
 export interface ApiResponse<T> {
 	meta: {
@@ -70,6 +71,10 @@ export type OptionsApiResponseData = AppOptions;
 export type StartPointHeaderListResponseData = {
 	startPointHeaderList: StartPointHeader[];
 };
+
+export type StartPointResponseData = {
+	startPoint: StartPoint;
+}
 
 export type PlayGetAllApiResponse = ApiResponse<PlayApiResponseData[]>;
 export type PlayPostApiResponse = ApiResponse<PlayApiResponseData>;

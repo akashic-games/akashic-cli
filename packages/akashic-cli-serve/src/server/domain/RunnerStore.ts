@@ -55,6 +55,7 @@ export class RunnerStore {
 			externalValue: this.gameExternalFactory(),
 			trusted: !serverGlobalConfig.untrusted
 		});
+
 		const runner = this.runnerManager.getRunner(runnerId);
 		await this.runnerManager.startRunner(runner.runnerId);
 		this.onRunnerCreate.fire({ playId: params.playId, runnerId, isActive: params.isActive });

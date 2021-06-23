@@ -200,7 +200,8 @@ const TestWithBehaviour = observer(() => (
 			setShowsProfiler: action("show-profiler")
 		}}
 		snapshotDevtoolProps={{
-			startPointHeaderList: []
+			startPointHeaderList: [],
+			downloadSnapshot: action("download-snapshot")
 		}}
 	/>
 ));
@@ -309,7 +310,8 @@ storiesOf("o-Devtool", module)
 				setShowsProfiler: action("show-profiler")
 			}}
 			snapshotDevtoolProps={{
-				startPointHeaderList: []
+				startPointHeaderList: [],
+				downloadSnapshot: action("download-snapshot")
 			}}
 		/>
 	))
@@ -408,7 +410,8 @@ storiesOf("o-Devtool", module)
 				setShowsProfiler: action("show-profiler")
 			}}
 			snapshotDevtoolProps={{
-				startPointHeaderList: []
+				startPointHeaderList: [],
+				downloadSnapshot: action("download-snapshot")
 			}}
 		/>
 	))
@@ -511,7 +514,8 @@ storiesOf("o-Devtool", module)
 				setShowsProfiler: action("show-profiler")
 			}}
 			snapshotDevtoolProps={{
-				startPointHeaderList: []
+				startPointHeaderList: [],
+				downloadSnapshot: action("download-snapshot")
 			}}
 		/>
 	))
@@ -568,7 +572,8 @@ storiesOf("o-Devtool", module)
 				setShowsProfiler: action("show-profiler")
 			}}
 			snapshotDevtoolProps={{
-				startPointHeaderList: []
+				startPointHeaderList: [],
+				downloadSnapshot: action("download-snapshot")
 			}}
 		/>
 	))
@@ -625,7 +630,8 @@ storiesOf("o-Devtool", module)
 				setShowsProfiler: action("show-profiler")
 			}}
 			snapshotDevtoolProps={{
-				startPointHeaderList: []
+				startPointHeaderList: [],
+				downloadSnapshot: action("download-snapshot")
 			}}
 		/>
 	))
