@@ -109,7 +109,7 @@ export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 		const scriptDirs = param.assetScanDirectoryTable.script.concat();
 		const textDirs = param.assetScanDirectoryTable.text.concat();
 
-		const assetScanMap: AssetScanDirectoryTable = {
+		const scanTargetDirsTable: AssetScanDirectoryTable = {
 			audio: [],
 			image: [],
 			script: [],
@@ -126,23 +126,23 @@ export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 		if (target === "all") {
 			// NOTE: target = all の場合のみ assets ディレクトリもスキャン対象とする
 			const assetsDirs: string[] = ["assets"];
-			assetScanMap.audio.push(...audioDirs, ...assetsDirs);
-			assetScanMap.image.push(...imageDirs, ...assetsDirs);
-			assetScanMap.script.push(...scriptDirs, ...assetsDirs);
-			assetScanMap.text.push(...textDirs, ...assetsDirs);
+			scanTargetDirsTable.audio.push(...audioDirs, ...assetsDirs);
+			scanTargetDirsTable.image.push(...imageDirs, ...assetsDirs);
+			scanTargetDirsTable.script.push(...scriptDirs, ...assetsDirs);
+			scanTargetDirsTable.text.push(...textDirs, ...assetsDirs);
 			assetPathFilterMap.all = new RegExp([...audioDirs, ...imageDirs, ...scriptDirs, ...textDirs, ...assetsDirs].join("|"), "i");
 		} else if (target === "audio") {
-			assetScanMap.audio.push(...audioDirs);
-			assetPathFilterMap.audio = new RegExp(assetScanMap.audio.join("|"), "i");
+			scanTargetDirsTable.audio.push(...audioDirs);
+			assetPathFilterMap.audio = new RegExp(scanTargetDirsTable.audio.join("|"), "i");
 		} else if (target === "image") {
-			assetScanMap.image.push(...imageDirs);
-			assetPathFilterMap.image = new RegExp(assetScanMap.image.join("|"), "i");
+			scanTargetDirsTable.image.push(...imageDirs);
+			assetPathFilterMap.image = new RegExp(scanTargetDirsTable.image.join("|"), "i");
 		} else if (target === "script") {
-			assetScanMap.script.push(...scriptDirs);
-			assetPathFilterMap.script = new RegExp(assetScanMap.script.join("|"), "i");
+			scanTargetDirsTable.script.push(...scriptDirs);
+			assetPathFilterMap.script = new RegExp(scanTargetDirsTable.script.join("|"), "i");
 		} else if (target === "text") {
-			assetScanMap.text.push(...textDirs);
-			assetPathFilterMap.text = new RegExp(assetScanMap.text.join("|"), "i");
+			scanTargetDirsTable.text.push(...textDirs);
+			assetPathFilterMap.text = new RegExp(scanTargetDirsTable.text.join("|"), "i");
 		} else {
 			throw new Error(`Unknown target "${param.target}"`);
 		}
@@ -156,19 +156,19 @@ export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 				: undefined;
 
 		// 1. 対象のフォルダをスキャンし、各ファイルの情報をアセット定義
-		for (const dir of assetScanMap.audio) {
+		for (const dir of scanTargetDirsTable.audio) {
 			const assets = await scanAudioAssets(base, dir, logger);
 			scannedAssets.push(...assets);
 		}
-		for (const dir of assetScanMap.image) {
+		for (const dir of scanTargetDirsTable.image) {
 			const assets = await scanImageAssets(base, dir, logger);
 			scannedAssets.push(...assets);
 		}
-		for (const dir of assetScanMap.script) {
+		for (const dir of scanTargetDirsTable.script) {
 			const assets = await scanScriptAssets(base, dir, logger);
 			scannedAssets.push(...assets);
 		}
-		for (const dir of assetScanMap.text) {
+		for (const dir of scanTargetDirsTable.text) {
 			const assets = await scanTextAssets(
 				base,
 				dir,
