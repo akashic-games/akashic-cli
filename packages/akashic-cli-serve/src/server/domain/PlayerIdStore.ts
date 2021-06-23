@@ -15,7 +15,7 @@ export class PlayerIdStore {
 		if (this.playerIds.some(id => id === playerId)) {
 			return true;
 		}
-		const playerIdInt = parseInt(playerId.replace("pl", ""), 10);
+		const playerIdInt = parseInt(playerId.replace("pid", ""), 10);
 		// playerIdが数値を表す文字列でない場合、NaNになってこの条件に弾かれるのでknownMaxPlayerIdに代入されることはない
 		if (this.knownMaxPlayerId < playerIdInt) {
 			this.knownMaxPlayerId = playerIdInt;
@@ -26,7 +26,7 @@ export class PlayerIdStore {
 
 	createPlayerId(): string {
 		this.knownMaxPlayerId++;
-		const newPlayerId = this.knownMaxPlayerId.toString();
+		const newPlayerId = "pid" + this.knownMaxPlayerId.toString();
 		this.playerIds.push(newPlayerId);
 		return newPlayerId;
 	}

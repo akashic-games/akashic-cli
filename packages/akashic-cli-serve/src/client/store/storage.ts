@@ -109,10 +109,9 @@ export class Storage {
 		const playerId: string = choose(getQueryValue(qp.playerId), s.playerId, undefined);
 		this._initializationWaiter = ApiClient.registerPlayerId(playerId).then(response => {
 			// プレイヤーID重複の警告等はどのように表示すべきか？
-			const registered = response.data.playerId.replace("pl", "");
-			const playerId = `pl${registered}`;
-			const playerName: string = choose(getQueryValue(qp.playerName), s.playerName, `player${registered}`);
-			this.put({ playerId: playerId, playerName });
+			const registered = response.data.playerId;
+			const playerName: string = choose(getQueryValue(qp.playerName), s.playerName, `player-${registered}`);
+			this.put({ playerId: registered, playerName });
 		});
 	}
 
