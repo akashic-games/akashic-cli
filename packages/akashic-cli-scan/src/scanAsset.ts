@@ -130,19 +130,19 @@ export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 			scanTargetDirsTable.image.push(...imageDirs, ...assetsDirs);
 			scanTargetDirsTable.script.push(...scriptDirs, ...assetsDirs);
 			scanTargetDirsTable.text.push(...textDirs, ...assetsDirs);
-			assetPathFilterMap.all = new RegExp([...audioDirs, ...imageDirs, ...scriptDirs, ...textDirs, ...assetsDirs].join("|"), "i");
+			assetPathFilterMap.all = new RegExp([...audioDirs, ...imageDirs, ...scriptDirs, ...textDirs, ...assetsDirs].map(s => `^(?:${s})`).join("|"));
 		} else if (target === "audio") {
 			scanTargetDirsTable.audio.push(...audioDirs);
-			assetPathFilterMap.audio = new RegExp(scanTargetDirsTable.audio.join("|"), "i");
+			assetPathFilterMap.audio = new RegExp(scanTargetDirsTable.audio.map(s => `^(?:${s})`).join("|"));
 		} else if (target === "image") {
 			scanTargetDirsTable.image.push(...imageDirs);
-			assetPathFilterMap.image = new RegExp(scanTargetDirsTable.image.join("|"), "i");
+			assetPathFilterMap.image = new RegExp(scanTargetDirsTable.image.map(s => `^(?:${s})`).join("|"));
 		} else if (target === "script") {
 			scanTargetDirsTable.script.push(...scriptDirs);
-			assetPathFilterMap.script = new RegExp(scanTargetDirsTable.script.join("|"), "i");
+			assetPathFilterMap.script = new RegExp(scanTargetDirsTable.script.map(s => `^(?:${s})`).join("|"));
 		} else if (target === "text") {
 			scanTargetDirsTable.text.push(...textDirs);
-			assetPathFilterMap.text = new RegExp(scanTargetDirsTable.text.join("|"), "i");
+			assetPathFilterMap.text = new RegExp(scanTargetDirsTable.text.map(s => `^(?:${s})`).join("|"));
 		} else {
 			throw new Error(`Unknown target "${param.target}"`);
 		}
@@ -202,7 +202,8 @@ export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 			newAssets = AssetModule.merge(
 				newAssets,
 				scannedAssets,
-				AssetModule.createDefaultMergeCustomizer(logger)
+				AssetModule.createDefaultMergeCustomizer(logger),
+				logger
 			);
 
 			// 3. 上書きしてファイル書き込み
@@ -236,7 +237,8 @@ export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 			newAssets = AssetModule.merge(
 				newAssets,
 				scannedAssets,
-				AssetModule.createDefaultMergeCustomizer(logger)
+				AssetModule.createDefaultMergeCustomizer(logger),
+				logger
 			);
 
 			// 3. 上書きしてファイル書き込み
