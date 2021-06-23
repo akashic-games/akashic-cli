@@ -104,11 +104,6 @@ export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 			throw new Error("game.json or akashic-lib.json does not exists");
 		}
 
-		const assetIdResolver = AssetModule.createAssetIdResolver({
-			resolveAssetIdsFromPath,
-			includeExtensionToAssetId
-		});
-
 		const audioDirs = param.assetScanDirectoryTable.audio.concat();
 		const imageDirs = param.assetScanDirectoryTable.image.concat();
 		const scriptDirs = param.assetScanDirectoryTable.script.concat();
@@ -217,6 +212,10 @@ export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 			if (Array.isArray(configuration.assets)) {
 				configuration.assets = newAssets;
 			} else {
+				const assetIdResolver = AssetModule.createAssetIdResolver({
+					resolveAssetIdsFromPath,
+					includeExtensionToAssetId
+				});
 				configuration.assets = AssetModule.toObject(newAssets, assetIdResolver, param.forceUpdateAssetIds);
 			}
 			await FileModule.writeJSON<GameConfiguration>(gamePath, configuration);
