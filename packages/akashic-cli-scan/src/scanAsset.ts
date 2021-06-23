@@ -205,10 +205,7 @@ export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 				AssetModule.createDefaultMergeCustomizer(logger)
 			);
 
-			// 3. 重複するアセット情報を削除
-			newAssets = AssetModule.removeDuplicates(newAssets, (a, b) => a.path === b.path);
-
-			// 4. 上書きしてファイル書き込み
+			// 3. 上書きしてファイル書き込み
 			if (Array.isArray(configuration.assets)) {
 				configuration.assets = newAssets;
 			} else {
@@ -242,10 +239,7 @@ export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 				AssetModule.createDefaultMergeCustomizer(logger)
 			);
 
-			// 3. 重複するアセット情報を削除
-			newAssets = AssetModule.removeDuplicates(newAssets, (a, b) => a.path === b.path);
-
-			// 4. 上書きしてファイル書き込み
+			// 3. 上書きしてファイル書き込み
 			configuration.assetList = newAssets;
 			await FileModule.writeJSON<LibConfiguration>(akashicLibPath, configuration);
 		}
