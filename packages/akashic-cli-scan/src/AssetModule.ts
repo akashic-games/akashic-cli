@@ -9,8 +9,6 @@ export interface AssetIdResolverParameterObject {
 	includeExtensionToAssetId: boolean;
 }
 
-export type AssetPathFilterMap = { [K in AssetTargetType]: RegExp | undefined };
-
 export type MergeCustomizer = (old: AssetConfiguration | null, fresh: AssetConfiguration) => AssetConfiguration;
 
 export type AssetIdResolver = (asset: AssetConfiguration) => string;
@@ -58,23 +56,6 @@ export namespace AssetModule {
 			assetMap[assetId] = asset;
 		}
 		return assetMap;
-	}
-
-	export function filterByPath(
-		asset: AssetConfiguration,
-		scannedAssets: AssetConfiguration[],
-		filterMap: AssetPathFilterMap
-	): boolean {
-		const reg = filterMap.all ?? filterMap[asset.type as AssetTargetType];
-		if (!reg) {
-			return true;
-		}
-		if (reg.test(asset.path)) {
-			if (!scannedAssets.some(scannedAsset => scannedAsset.path === asset.path)) {
-				return false;
-			}
-		}
-		return true;
 	}
 
 	export function merge(

@@ -3,7 +3,7 @@ import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
 import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
 import { chdir } from "@akashic/akashic-cli-commons/lib/Util";
 import type { AssetConfiguration, GameConfiguration } from "@akashic/game-configuration";
-import { AssetModule, AssetPathFilterMap } from "./AssetModule";
+import { AssetModule } from "./AssetModule";
 import { FileModule } from "./FileModule";
 import { scanAudioAssets, scanImageAssets, scanScriptAssets, scanTextAssets, textAssetFilter } from "./scanUtils";
 import type { AssetExtension, AssetScanDirectoryTable, AssetTargetType, LibConfiguration } from "./types";
@@ -115,13 +115,6 @@ export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 			script: [],
 			text: []
 		};
-		const assetPathFilterMap: AssetPathFilterMap = {
-			all: undefined,
-			audio: undefined,
-			image: undefined,
-			script: undefined,
-			text: undefined
-		};
 
 		if (target === "all") {
 			// NOTE: target = all の場合のみ assets ディレクトリもスキャン対象とする
@@ -130,19 +123,14 @@ export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 			scanTargetDirsTable.image.push(...imageDirs, ...assetsDirs);
 			scanTargetDirsTable.script.push(...scriptDirs, ...assetsDirs);
 			scanTargetDirsTable.text.push(...textDirs, ...assetsDirs);
-			assetPathFilterMap.all = new RegExp([...audioDirs, ...imageDirs, ...scriptDirs, ...textDirs, ...assetsDirs].map(s => `^(?:${s})`).join("|"));
 		} else if (target === "audio") {
 			scanTargetDirsTable.audio.push(...audioDirs);
-			assetPathFilterMap.audio = new RegExp(scanTargetDirsTable.audio.map(s => `^(?:${s})`).join("|"));
 		} else if (target === "image") {
 			scanTargetDirsTable.image.push(...imageDirs);
-			assetPathFilterMap.image = new RegExp(scanTargetDirsTable.image.map(s => `^(?:${s})`).join("|"));
 		} else if (target === "script") {
 			scanTargetDirsTable.script.push(...scriptDirs);
-			assetPathFilterMap.script = new RegExp(scanTargetDirsTable.script.map(s => `^(?:${s})`).join("|"));
 		} else if (target === "text") {
 			scanTargetDirsTable.text.push(...textDirs);
-			assetPathFilterMap.text = new RegExp(scanTargetDirsTable.text.map(s => `^(?:${s})`).join("|"));
 		} else {
 			throw new Error(`Unknown target "${param.target}"`);
 		}
