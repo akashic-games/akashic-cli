@@ -1,3 +1,4 @@
+import type { AssetConfiguration } from "@akashic/game-configuration";
 import { AssetModule } from "../../lib/AssetModule";
 
 describe("AssetManagerSpec", () => {
@@ -108,96 +109,497 @@ describe("AssetManagerSpec", () => {
 		});
 	});
 
-	it("merge()", () => {
-		expect(
-			AssetModule.merge(
-				[
-					{
-						type: "script",
-						path: "path/to/script1.js",
-						global: true
-					},
-					{
-						type: "image",
-						path: "path/to/image1.png",
-						width: 100,
-						height: 200,
-						hint: {
-							untainted: true
-						}
-					},
-					{
-						type: "audio",
-						path: "path/to/audio1",
-						duration: 340,
-						systemId: "music",
-						global: true
-					},
-					{
-						type: "text",
-						path: "path/to/text1.txt",
-						global: true
-					}
-				],
-				[
-					{
-						type: "script",
-						path: "path/to/script1.js",
-					},
-					{
-						type: "image",
-						path: "path/to/image1.png",
-						width: 300,
-						height: 400
-					},
-					{
-						type: "audio",
-						path: "path/to/audio1",
-						duration: 120,
-						systemId: "sound"
-					},
-					{
-						type: "text",
-						path: "path/to/text1.txt"
-					},
-					{
-						type: "text",
-						path: "path/to/text2.txt"
-					}
-				],
-				AssetModule.createDefaultMergeCustomizer()
-			)
-		).toEqual([
+	describe("merge()", () => {
+		const definedAssets: AssetConfiguration[] = [
 			{
-				type: "script",
-				path: "path/to/script1.js",
+				type: "audio",
+				path: "path/to/already_exists",
+				duration: 340,
+				systemId: "music",
 				global: true
 			},
 			{
+				type: "audio",
+				path: "path/to/not_exists",
+				duration: 560,
+				systemId: "sound"
+			},
+			{
 				type: "image",
-				path: "path/to/image1.png",
-				width: 300,
-				height: 400,
+				path: "path/to/already_exists.png",
+				width: 100,
+				height: 200,
 				hint: {
 					untainted: true
 				}
 			},
 			{
-				type: "audio",
-				path: "path/to/audio1",
-				duration: 120,
-				systemId: "music",
+				type: "image",
+				path: "path/to/not_exists.png",
+				width: 300,
+				height: 400
+			},
+			{
+				type: "script",
+				path: "path/to/already_exists.js",
+				global: true
+			},
+			{
+				type: "script",
+				path: "path/to/not_exists.js",
 				global: true
 			},
 			{
 				type: "text",
-				path: "path/to/text1.txt",
+				path: "path/to/already_exists.txt",
 				global: true
 			},
 			{
 				type: "text",
-				path: "path/to/text2.txt"
+				path: "path/to/not_exists.txt",
+				global: true
 			}
-		])
+		];
+
+		const scannedAssets: AssetConfiguration[] = [
+			{
+				type: "audio",
+				path: "path/to/already_exists",
+				duration: 340,
+				systemId: "music"
+			},
+			{
+				type: "audio",
+				path: "path/to/new_one",
+				duration: 1234,
+				systemId: "sound",
+				global: true
+			},
+			{
+				type: "image",
+				path: "path/to/already_exists.png",
+				width: 100,
+				height: 200,
+				hint: {
+					untainted: false
+				}
+			},
+			{
+				type: "image",
+				path: "path/to/new_one.png",
+				width: 500,
+				height: 600
+			},
+			{
+				type: "script",
+				path: "path/to/already_exists.js",
+				global: true
+			},
+			{
+				type: "script",
+				path: "path/to/new_one.js",
+				global: true
+			},
+			{
+				type: "text",
+				path: "path/to/already_exists.txt",
+				global: true
+			},
+			{
+				type: "text",
+				path: "path/to/new_one.txt"
+			}
+		];
+
+		it("merge all assets", () => {
+			expect(
+				AssetModule.merge(
+					definedAssets,
+					scannedAssets,
+					{
+						audio: ["path/to"],
+						image: ["path/to"],
+						script: ["path/to"],
+						text: ["path/to"]
+					},
+					AssetModule.createDefaultMergeCustomizer()
+				)
+			).toEqual([
+				{
+					type: "audio",
+					path: "path/to/already_exists",
+					duration: 340,
+					systemId: "music",
+					global: true
+				},
+				{
+					type: "image",
+					path: "path/to/already_exists.png",
+					width: 100,
+					height: 200,
+					hint: {
+						untainted: true
+					}
+				},
+				{
+					type: "script",
+					path: "path/to/already_exists.js",
+					global: true
+				},
+				{
+					type: "text",
+					path: "path/to/already_exists.txt",
+					global: true
+				},
+				{
+					type: "audio",
+					path: "path/to/new_one",
+					duration: 1234,
+					systemId: "sound",
+					global: true
+				},
+				{
+					type: "image",
+					path: "path/to/new_one.png",
+					width: 500,
+					height: 600
+				},
+				{
+					type: "script",
+					path: "path/to/new_one.js",
+					global: true
+				},
+				{
+					type: "text",
+					path: "path/to/new_one.txt"
+				}
+			]);
+		});
+
+		it("merge audio assets", () => {
+			expect(
+				AssetModule.merge(
+					definedAssets,
+					scannedAssets,
+					{
+						audio: ["path/to"],
+						image: [],
+						script: [],
+						text: []
+					},
+					AssetModule.createDefaultMergeCustomizer()
+				)
+			).toEqual([
+				{
+					type: "audio",
+					path: "path/to/already_exists",
+					duration: 340,
+					systemId: "music",
+					global: true
+				},
+				{
+					type: "image",
+					path: "path/to/already_exists.png",
+					width: 100,
+					height: 200,
+					hint: {
+						untainted: true
+					}
+				},
+				{
+					type: "image",
+					path: "path/to/not_exists.png",
+					width: 300,
+					height: 400
+				},
+				{
+					type: "script",
+					path: "path/to/already_exists.js",
+					global: true
+				},
+				{
+					type: "script",
+					path: "path/to/not_exists.js",
+					global: true
+				},
+				{
+					type: "text",
+					path: "path/to/already_exists.txt",
+					global: true
+				},
+				{
+					type: "text",
+					path: "path/to/not_exists.txt",
+					global: true
+				},
+				{
+					type: "audio",
+					path: "path/to/new_one",
+					duration: 1234,
+					systemId: "sound",
+					global: true
+				},
+				{
+					type: "image",
+					path: "path/to/new_one.png",
+					width: 500,
+					height: 600
+				},
+				{
+					type: "script",
+					path: "path/to/new_one.js",
+					global: true
+				},
+				{
+					type: "text",
+					path: "path/to/new_one.txt"
+				}
+			]);
+		});
+
+		it("merge image assets", () => {
+			expect(
+				AssetModule.merge(
+					definedAssets,
+					scannedAssets,
+					{
+						audio: [],
+						image: ["path/to"],
+						script: [],
+						text: []
+					},
+					AssetModule.createDefaultMergeCustomizer()
+				)
+			).toEqual([
+				{
+					type: "audio",
+					path: "path/to/already_exists",
+					duration: 340,
+					systemId: "music",
+					global: true
+				},
+				{
+					type: "audio",
+					path: "path/to/not_exists",
+					duration: 560,
+					systemId: "sound"
+				},
+				{
+					type: "image",
+					path: "path/to/already_exists.png",
+					width: 100,
+					height: 200,
+					hint: {
+						untainted: true
+					}
+				},
+				{
+					type: "script",
+					path: "path/to/already_exists.js",
+					global: true
+				},
+				{
+					type: "script",
+					path: "path/to/not_exists.js",
+					global: true
+				},
+				{
+					type: "text",
+					path: "path/to/already_exists.txt",
+					global: true
+				},
+				{
+					type: "text",
+					path: "path/to/not_exists.txt",
+					global: true
+				},
+				{
+					type: "audio",
+					path: "path/to/new_one",
+					duration: 1234,
+					systemId: "sound",
+					global: true
+				},
+				{
+					type: "image",
+					path: "path/to/new_one.png",
+					width: 500,
+					height: 600
+				},
+				{
+					type: "script",
+					path: "path/to/new_one.js",
+					global: true
+				},
+				{
+					type: "text",
+					path: "path/to/new_one.txt"
+				}
+			]);
+		});
+
+		it("merge script assets", () => {
+			expect(
+				AssetModule.merge(
+					definedAssets,
+					scannedAssets,
+					{
+						audio: [],
+						image: [],
+						script: ["path/to"],
+						text: []
+					},
+					AssetModule.createDefaultMergeCustomizer()
+				)
+			).toEqual([
+				{
+					type: "audio",
+					path: "path/to/already_exists",
+					duration: 340,
+					systemId: "music",
+					global: true
+				},
+				{
+					type: "audio",
+					path: "path/to/not_exists",
+					duration: 560,
+					systemId: "sound"
+				},
+				{
+					type: "image",
+					path: "path/to/already_exists.png",
+					width: 100,
+					height: 200,
+					hint: {
+						untainted: true
+					}
+				},
+				{
+					type: "image",
+					path: "path/to/not_exists.png",
+					width: 300,
+					height: 400
+				},
+				{
+					type: "script",
+					path: "path/to/already_exists.js",
+					global: true
+				},
+				{
+					type: "text",
+					path: "path/to/already_exists.txt",
+					global: true
+				},
+				{
+					type: "text",
+					path: "path/to/not_exists.txt",
+					global: true
+				},
+				{
+					type: "audio",
+					path: "path/to/new_one",
+					duration: 1234,
+					systemId: "sound",
+					global: true
+				},
+				{
+					type: "image",
+					path: "path/to/new_one.png",
+					width: 500,
+					height: 600
+				},
+				{
+					type: "script",
+					path: "path/to/new_one.js",
+					global: true
+				},
+				{
+					type: "text",
+					path: "path/to/new_one.txt"
+				}
+			]);
+		});
+
+		it("merge text assets", () => {
+			expect(
+				AssetModule.merge(
+					definedAssets,
+					scannedAssets,
+					{
+						audio: [],
+						image: [],
+						script: [],
+						text: ["path/to"]
+					},
+					AssetModule.createDefaultMergeCustomizer()
+				)
+			).toEqual([
+				{
+					type: "audio",
+					path: "path/to/already_exists",
+					duration: 340,
+					systemId: "music",
+					global: true
+				},
+				{
+					type: "audio",
+					path: "path/to/not_exists",
+					duration: 560,
+					systemId: "sound"
+				},
+				{
+					type: "image",
+					path: "path/to/already_exists.png",
+					width: 100,
+					height: 200,
+					hint: {
+						untainted: true
+					}
+				},
+				{
+					type: "image",
+					path: "path/to/not_exists.png",
+					width: 300,
+					height: 400
+				},
+				{
+					type: "script",
+					path: "path/to/already_exists.js",
+					global: true
+				},
+				{
+					type: "script",
+					path: "path/to/not_exists.js",
+					global: true
+				},
+				{
+					type: "text",
+					path: "path/to/already_exists.txt",
+					global: true
+				},
+				{
+					type: "audio",
+					path: "path/to/new_one",
+					duration: 1234,
+					systemId: "sound",
+					global: true
+				},
+				{
+					type: "image",
+					path: "path/to/new_one.png",
+					width: 500,
+					height: 600
+				},
+				{
+					type: "script",
+					path: "path/to/new_one.js",
+					global: true
+				},
+				{
+					type: "text",
+					path: "path/to/new_one.txt"
+				}
+			]);
+		});
 	});
 });

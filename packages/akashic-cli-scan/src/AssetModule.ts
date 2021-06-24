@@ -2,7 +2,7 @@ import * as path from "path";
 import type { Logger } from "@akashic/akashic-cli-commons";
 import { makeUnixPath } from "@akashic/akashic-cli-commons/lib/Util";
 import type { AssetConfiguration, AssetConfigurationMap } from "@akashic/game-configuration";
-import type { AssetConfigurationWithID, AssetTargetType } from "./types";
+import type { AssetConfigurationWithID, AssetScanDirectoryTable, AssetTargetType } from "./types";
 
 export interface AssetIdResolverParameterObject {
 	resolveAssetIdsFromPath: boolean;
@@ -80,10 +80,29 @@ export namespace AssetModule {
 	export function merge(
 		definedAssets: AssetConfiguration[],
 		scannedAssets: AssetConfiguration[],
+		assetDirTable: AssetScanDirectoryTable,
 		customizer: MergeCustomizer,
 		logger?: Logger
 	): AssetConfiguration[] {
 		const ret: AssetConfiguration[] = [];
+
+		// スキャン対象のディレクトリに存在する定義済みアセットの中からすでに存在しないものを削除
+		definedAssets = definedAssets.filter(asset => {
+			const dirs = assetDirTable[asset.type as "audio" | "image" | "script" | "text"];
+			if (!dirs || !dirs.length) {
+				return true;
+			}
+			if (dirs.some(dir => asset.path.startsWith(dir))) {
+				if (!scannedAssets.some(scannedAsset => asset.path === scannedAsset.path)) {
+					logger?.info(
+						`Removed the declaration for '${asset.path}. The corresponding files to the path are not found.`
+					);
+					return false;
+				}
+			}
+			return true;
+		});
+		scannedAssets = scannedAssets.concat();
 
 		// 既存のアセット情報を更新
 		for (const definedAsset of definedAssets) {

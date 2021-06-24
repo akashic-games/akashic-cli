@@ -195,18 +195,16 @@ export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 
 			const definedAssets = (Array.isArray(configuration.assets) ? configuration.assets : AssetModule.toArray(configuration.assets));
 
-			// 1. スキャン対象のディレクトリのアセットが存在しなければ削除
-			let newAssets = definedAssets.filter((asset) => AssetModule.filterByPath(asset, scannedAssets, assetPathFilterMap));
-
-			// 2. 既存のアセット情報と新規追加のアセット情報をマージ
-			newAssets = AssetModule.merge(
-				newAssets,
+			// 既存のアセット情報と新規追加のアセット情報をマージ
+			const newAssets = AssetModule.merge(
+				definedAssets,
 				scannedAssets,
+				scanTargetDirsTable,
 				AssetModule.createDefaultMergeCustomizer(logger),
 				logger
 			);
 
-			// 3. 上書きしてファイル書き込み
+			// 上書きしてファイル書き込み
 			if (Array.isArray(configuration.assets)) {
 				configuration.assets = newAssets;
 			} else {
@@ -230,18 +228,16 @@ export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 
 			const definedAssets = (configuration.assetList || []);
 
-			// 1. スキャン対象のディレクトリのアセットが存在しなければ削除
-			let newAssets = definedAssets.filter((asset) => AssetModule.filterByPath(asset, scannedAssets, assetPathFilterMap));
-
-			// 2. 既存のアセット情報と新規追加のアセット情報をマージ
-			newAssets = AssetModule.merge(
-				newAssets,
+			// 既存のアセット情報と新規追加のアセット情報をマージ
+			const newAssets = AssetModule.merge(
+				definedAssets,
 				scannedAssets,
+				scanTargetDirsTable,
 				AssetModule.createDefaultMergeCustomizer(logger),
 				logger
 			);
 
-			// 3. 上書きしてファイル書き込み
+			// 上書きしてファイル書き込み
 			configuration.assetList = newAssets;
 			await FileModule.writeJSON<LibConfiguration>(akashicLibPath, configuration);
 		}

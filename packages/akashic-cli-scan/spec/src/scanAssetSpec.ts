@@ -689,8 +689,8 @@ describe("scanAsset()", () => {
 			}
 		});
 
-		// アセット追加のログが1つ + duration差のwarnが1つ + AAC利用のwarnが1つ
-		expect(loggedCount).toBe(3);
+		// AAC利用のwarnが1つ + duration差のwarnが1つ + アセット追加のログが1つ + Done!のログが1つ
+		expect(loggedCount).toBe(4);
 	});
 
 	it("scan audio assets info with not supported ext", async () => {
