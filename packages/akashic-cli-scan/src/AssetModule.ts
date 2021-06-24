@@ -13,8 +13,6 @@ export type MergeCustomizer = (old: AssetConfiguration | null, fresh: AssetConfi
 
 export type AssetIdResolver = (asset: AssetConfiguration) => string;
 
-export type RemoveDuplicatesCondition = (a: AssetConfiguration, b: AssetConfiguration) => boolean;
-
 export namespace AssetModule {
 	/**
 	 * アセットのオブジェクトを配列に変換する。
@@ -103,14 +101,6 @@ export namespace AssetModule {
 		}
 
 		return ret;
-	}
-
-	export function removeDuplicates(assets: AssetConfiguration[], condition: RemoveDuplicatesCondition): AssetConfiguration[] {
-		return assets.filter(
-			(asset, i, self) => {
-				return i === self.findIndex(a => condition(a, asset));
-			}
-		);
 	}
 
 	export function createDefaultMergeCustomizer(logger?: Logger): MergeCustomizer {
