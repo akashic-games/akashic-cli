@@ -15,7 +15,7 @@ import { ContentEntity } from "./ContentEntity";
 import { LocalInstanceEntity } from "./LocalInstanceEntity";
 import { ServerInstanceEntity } from "./ServerInstanceEntity";
 import { CreateCoeLocalInstanceParameterObject } from "./CoePluginEntity";
-import { StartPointHeader } from "@akashic/headless-driver/lib/play/amflow/AMFlowStore";
+import { StartPointHeader } from "../../common/types/StartPointHeader";
 
 export interface CreateLocalInstanceParameterObject {
 	gameViewManager: GameViewManager;

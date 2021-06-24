@@ -5,7 +5,7 @@ import {Player} from "./Player";
 import {ContentLocatorData} from "./ContentLocatorData";
 import {ContentDesc} from "./ContentDesc";
 import {AppOptions} from "./AppOptions";
-import { StartPointHeader } from "@akashic/headless-driver/lib/play/amflow/AMFlowStore";
+import { StartPointHeader } from "./StartPointHeader";
 
 export interface ApiResponse<T> {
 	meta: {
