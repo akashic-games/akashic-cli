@@ -97,7 +97,7 @@ export async function scanNodeModules(p: ScanNodeModulesParameterObject): Promis
 				}
 			}
 			if (!entryPointPath) {
-				throw new Error("Unable to find an valid entry point.");
+				throw new Error("Unable to find a valid entry point.");
 			}
 			entryPaths = entryPointPath;
 		} else {
