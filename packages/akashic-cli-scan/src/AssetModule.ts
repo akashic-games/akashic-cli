@@ -132,18 +132,20 @@ export namespace AssetModule {
 		);
 	}
 
-	export function createDefaultMergeCustomizer(_logger?: Logger): MergeCustomizer {
+	export function createDefaultMergeCustomizer(logger?: Logger): MergeCustomizer {
 		return (old, fresh) => {
 			if (old.type !== fresh.type) {
 				throw new Error(`Conflicted Asset Type. ${fresh.path} must be ${old.type} but not ${fresh.type}.`);
 			}
-			if (fresh.type === "audio") {
+			if (fresh.type === "audio" && old.type === "audio") {
+				logger?.info(`Detected change of the audio duration for ${fresh.path} from ${old.duration} to ${fresh.duration}`);
 				return {
 					...old,
 					duration: fresh.duration
 				};
 			}
-			if (fresh.type === "image") {
+			if (fresh.type === "image" && old.type === "image") {
+				logger?.info(`Detected change of the image size for ${fresh.path} from ${old.width}x${old.height} to ${fresh.width}x${fresh.height}`);
 				return {
 					...old,
 					width: fresh.width,
