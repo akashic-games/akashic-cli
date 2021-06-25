@@ -41,7 +41,7 @@
   },
   "dependencies": {
     "@akashic/akashic-cli-commons": "0.8.4",
-    "commander": "7.2.0",
+    "commander": "8.0.0",
     "tar": "6.1.0"
   },
   "publishConfig": {

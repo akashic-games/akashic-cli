@@ -29,7 +29,7 @@
     "@akashic/akashic-cli-lib-manage": "1.2.3",
     "@akashic/akashic-cli-scan": "0.10.3",
     "@akashic/akashic-cli-serve": "1.9.5",
-    "commander": "7.2.0"
+    "commander": "8.0.0"
   },
   "devDependencies": {
     "@types/commander": "2.12.0",
