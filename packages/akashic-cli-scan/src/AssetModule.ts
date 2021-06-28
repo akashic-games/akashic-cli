@@ -109,14 +109,18 @@ export namespace AssetModule {
 				throw new Error(`Conflicted Asset Type. ${fresh.path} must be ${old.type} but not ${fresh.type}.`);
 			}
 			if (fresh.type === "audio" && old.type === "audio") {
-				logger?.info(`Detected change of the audio duration for ${fresh.path} from ${old.duration} to ${fresh.duration}`);
+				if (fresh.duration !== old.duration) {
+					logger?.info(`Detected change of the audio duration for ${fresh.path} from ${old.duration} to ${fresh.duration}`);
+				}
 				return {
 					...old,
 					duration: fresh.duration
 				};
 			}
 			if (fresh.type === "image" && old.type === "image") {
-				logger?.info(`Detected change of the image size for ${fresh.path} from ${old.width}x${old.height} to ${fresh.width}x${fresh.height}`);
+				if (fresh.width !== old.width || fresh.height !== old.height) {
+					logger?.info(`Detected change of the image size for ${fresh.path} from ${old.width}x${old.height} to ${fresh.width}x${fresh.height}`);
+				}
 				return {
 					...old,
 					width: fresh.width,
