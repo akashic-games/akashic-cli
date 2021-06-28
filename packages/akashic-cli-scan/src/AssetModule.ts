@@ -63,28 +63,25 @@ export namespace AssetModule {
 		customizer: MergeCustomizer,
 		logger?: Logger
 	): AssetConfiguration[] {
+		scannedAssets = scannedAssets.concat();
 		const ret: AssetConfiguration[] = [];
 
-		// スキャン対象のディレクトリに存在する定義済みアセットの中からすでに存在しないものを削除
-		definedAssets = definedAssets.filter(asset => {
-			const dirs = assetDirTable[asset.type as "audio" | "image" | "script" | "text"];
-			if (!dirs || !dirs.length) {
-				return true;
-			}
-			if (dirs.some(dir => asset.path.startsWith(dir))) {
-				if (!scannedAssets.some(scannedAsset => asset.path === scannedAsset.path)) {
-					logger?.info(
-						`Removed the declaration for '${asset.path}'. The corresponding files to the path are not found.`
-					);
-					return false;
+		// スキャン対象のディレクトリの定義済みアセットの中からすでに存在しないものを削除
+		for (const definedAsset of definedAssets) {
+			let dirs = assetDirTable[definedAsset.type as "audio" | "image" | "script" | "text"];
+			if (dirs && dirs.length) {
+				dirs = dirs.map(dir => dir.endsWith("/") ? dir : dir + "/");
+				if (dirs.some(dir => definedAsset.path.startsWith(dir))) {
+					if (!scannedAssets.some(scannedAsset => definedAsset.path === scannedAsset.path)) {
+						logger?.info(
+							`Removed the declaration for '${definedAsset.path}'. The corresponding files to the path are not found.`
+						);
+						continue;
+					}
 				}
 			}
-			return true;
-		});
-		scannedAssets = scannedAssets.concat();
 
-		// 既存のアセット情報を更新
-		for (const definedAsset of definedAssets) {
+			// 既存のアセット情報を更新
 			const scannedAssetIndex = scannedAssets.findIndex(scannedAsset => scannedAsset.path === definedAsset.path);
 			if (0 <= scannedAssetIndex) {
 				ret.push(customizer(definedAsset, scannedAssets[scannedAssetIndex]));
@@ -138,7 +135,7 @@ export namespace AssetModule {
 		const includeExtensionToAssetId = param.includeExtensionToAssetId;
 		return asset => {
 			let id: string;
-			if (asset.path.startsWith("assets")) {
+			if (asset.path.startsWith("assets/")) {
 				// NOTE: assets/ 以下だけ常に resolveAssetIdsFromPath が有効という特殊扱い
 				id = makeUnixPath(asset.path);
 			} else {

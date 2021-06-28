@@ -989,6 +989,10 @@ describe("scanAsset()", () => {
 				"dummyText": {
 					"type": "text",
 					"path": "script/foo/dummyText.js",
+				},
+				"dummyText2": {
+					"type": "text",
+					"path": "txtDummy.txt"
 				}
 			}
 		};
@@ -1005,7 +1009,8 @@ describe("scanAsset()", () => {
 			},
 			"code": {
 				"dummyCode.js": "var x = 1;",
-			}
+			},
+			"txtDummy.txt": ""
 		});
 
 		await scanAsset({
@@ -1043,6 +1048,7 @@ describe("scanAsset()", () => {
 		conf = JSON.parse(fs.readFileSync("./game.json").toString());
 		expect(conf.assets["dummyTxt"].type).toBe("text");
 		expect(conf.assets["dummyText"].type).toBe("text");
+		expect(conf.assets["dummyText2"].type).toBe("text");
 
 		await scanAsset({
 			logger: nullLogger,
