@@ -74,7 +74,7 @@ export namespace AssetModule {
 			if (dirs.some(dir => asset.path.startsWith(dir))) {
 				if (!scannedAssets.some(scannedAsset => asset.path === scannedAsset.path)) {
 					logger?.info(
-						`Removed the declaration for '${asset.path}. The corresponding files to the path are not found.`
+						`Removed the declaration for '${asset.path}'. The corresponding files to the path are not found.`
 					);
 					return false;
 				}
