@@ -1,5 +1,26 @@
 # CHANGELOG
 
+## 2.10.6 (2021-06-24)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#772](https://github.com/akashic-games/akashic-cli/pull/772) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Other Change
+* `akashic-cli-serve`
+  * [#778](https://github.com/akashic-games/akashic-cli/pull/778) Update typescript v4 of serve ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+  * [#777](https://github.com/akashic-games/akashic-cli/pull/777) Mod playerId of serve ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-init`
+  * [#776](https://github.com/akashic-games/akashic-cli/pull/776) Update dependency eslint to v7.29.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli`
+  * [#775](https://github.com/akashic-games/akashic-cli/pull/775) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.10.5 (2021-06-15)
 
 #### Enhancement
