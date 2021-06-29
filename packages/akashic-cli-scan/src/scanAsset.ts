@@ -123,14 +123,24 @@ export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 			scanTargetDirsTable.image.push(...imageDirs, ...assetsDirs);
 			scanTargetDirsTable.script.push(...scriptDirs, ...assetsDirs);
 			scanTargetDirsTable.text.push(...textDirs, ...assetsDirs);
+
+			// NOTE: 重複するディレクトリを削除
+			scanTargetDirsTable.audio = scanTargetDirsTable.audio.filter((dir, i, self) => self.indexOf(dir) === i);
+			scanTargetDirsTable.image = scanTargetDirsTable.image.filter((dir, i, self) => self.indexOf(dir) === i);
+			scanTargetDirsTable.script = scanTargetDirsTable.script.filter((dir, i, self) => self.indexOf(dir) === i);
+			scanTargetDirsTable.text = scanTargetDirsTable.text.filter((dir, i, self) => self.indexOf(dir) === i);
 		} else if (target === "audio") {
 			scanTargetDirsTable.audio.push(...audioDirs);
+			scanTargetDirsTable.audio = scanTargetDirsTable.audio.filter((dir, i, self) => self.indexOf(dir) === i);
 		} else if (target === "image") {
 			scanTargetDirsTable.image.push(...imageDirs);
+			scanTargetDirsTable.image = scanTargetDirsTable.image.filter((dir, i, self) => self.indexOf(dir) === i);
 		} else if (target === "script") {
 			scanTargetDirsTable.script.push(...scriptDirs);
+			scanTargetDirsTable.script = scanTargetDirsTable.script.filter((dir, i, self) => self.indexOf(dir) === i);
 		} else if (target === "text") {
 			scanTargetDirsTable.text.push(...textDirs);
+			scanTargetDirsTable.text = scanTargetDirsTable.text.filter((dir, i, self) => self.indexOf(dir) === i);
 		} else {
 			throw new Error(`Unknown target "${param.target}"`);
 		}

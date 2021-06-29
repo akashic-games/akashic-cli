@@ -749,7 +749,10 @@ describe("scanAsset()", () => {
 
 		await scanAsset({
 			logger: nullLogger,
-			target: "all"
+			target: "all",
+			assetScanDirectoryTable: {
+				audio: ["audio"]
+			}
 		});
 
 		let conf = JSON.parse(fs.readFileSync("./game.json").toString());
