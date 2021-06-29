@@ -9,7 +9,7 @@ export interface AssetIdResolverParameterObject {
 	includeExtensionToAssetId: boolean;
 }
 
-export type MergeCustomizer = (old: AssetConfiguration | null, fresh: AssetConfiguration) => AssetConfiguration;
+export type MergeCustomizer = (old: AssetConfiguration, fresh: AssetConfiguration) => AssetConfiguration;
 
 export type AssetIdResolver = (asset: AssetConfiguration) => string;
 
