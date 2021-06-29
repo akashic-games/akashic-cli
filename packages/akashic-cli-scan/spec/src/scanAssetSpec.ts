@@ -731,6 +731,32 @@ describe("scanAsset()", () => {
 		}
 	});
 
+	it("scan audio assets (multiple extname)", async () => {
+		const gamejson: GameConfiguration = {
+			width: 320,
+			height: 34,
+			fps: 30,
+			main: "",
+			assets: {}
+		};
+		mockfs({
+			"game.json": JSON.stringify(gamejson),
+			"assets": {
+				"bgm.main.ogg": DUMMY_OGG_DATA,
+				"bgm.clear.ogg": DUMMY_OGG_DATA2
+			}
+		});
+
+		await scanAsset({
+			logger: nullLogger,
+			target: "all"
+		});
+
+		let conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		expect(conf.assets["assets/bgm.main"]).not.toBe(undefined);
+		expect(conf.assets["assets/bgm.clear"]).not.toBe(undefined);
+	});
+
 	it("scan script assets info", async () => {
 		const gamejson: GameConfiguration = {
 			width: 320,
