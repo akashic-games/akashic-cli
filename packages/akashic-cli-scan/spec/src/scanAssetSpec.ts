@@ -1552,10 +1552,11 @@ describe("scanAsset()", () => {
 		});
 
 		let conf = JSON.parse(fs.readFileSync("./game.json").toString());
-		expect(conf.assets["assets/image/dummy"]).toBeDefined();
+		// NOTE: assets/ 以下のアセットに関しては includeExtensionToAssetId の値によらず常に拡張子を含む
+		expect(conf.assets["assets/image/dummy.png"]).toBeDefined();
 		expect(conf.assets["assets/audio/some/se"]).toBeDefined();
-		expect(conf.assets["assets/script/foo/script"]).toBeDefined();
-		expect(conf.assets["assets/text/foo/textdata"]).toBeDefined();
+		expect(conf.assets["assets/script/foo/script.js"]).toBeDefined();
+		expect(conf.assets["assets/text/foo/textdata.txt"]).toBeDefined();
 
 		await scanAsset({
 			logger: nullLogger,
