@@ -1,6 +1,6 @@
 import * as React from "react";
 import { observer } from "mobx-react";
-import { StartPointHeader } from "@akashic/headless-driver/lib/play/amflow/AMFlowStore";
+import { StartPointHeader } from "../../../common/types/StartPointHeader";
 import { ToolLabelButton } from "../atom/ToolLabelButton";
 
 export interface SnapshotDevtoolProps {

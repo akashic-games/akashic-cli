@@ -1,13 +1,16 @@
+import * as socketio from "socket.io";
 import { Trigger } from "@akashic/trigger";
 import { AMFlowClient, RunnerManager, RunnerV1, RunnerV2, RunnerV3 } from "@akashic/headless-driver";
 import {
 	RunnerCreateTestbedEvent,
 	RunnerRemoveTestbedEvent,
 	RunnerPauseTestbedEvent,
-	RunnerResumeTestbedEvent
+	RunnerResumeTestbedEvent,
+	PutStartPointEvent
 } from "../../common/types/TestbedEvent";
 import { serverGlobalConfig } from "../common/ServerGlobalConfig";
 import * as sandboxConfigs from "./SandboxConfigs";
+import { StartPointHeader } from "../../common/types/StartPointHeader";
 
 export interface RunnerStoreParameterObject {
 	runnerManager: RunnerManager;
@@ -20,6 +23,7 @@ export interface CreateAndStartRunnerParameterObject {
 	token: string;
 	amflow: AMFlowClient;
 	contentId: string;
+	io: socketio.Server;
 }
 
 export class RunnerStore {
@@ -54,6 +58,13 @@ export class RunnerStore {
 			allowedUrls,
 			externalValue: this.gameExternalFactory(),
 			trusted: !serverGlobalConfig.untrusted
+		});
+		if (params.isActive) params.amflow.onPutStartPoint.add((startPoint) => {
+			const startPointHeader: StartPointHeader = {
+				frame: startPoint.frame,
+				timestamp: startPoint.timestamp
+			};
+			params.io.emit("putStartPoint", { startPointHeader, playId: params.playId } as PutStartPointEvent);
 		});
 
 		const runner = this.runnerManager.getRunner(runnerId);

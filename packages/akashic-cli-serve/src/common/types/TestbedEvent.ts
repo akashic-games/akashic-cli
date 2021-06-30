@@ -1,7 +1,7 @@
 import {Player} from "./Player";
 import {PlayStatus} from "./PlayStatus";
 import {ContentLocatorData} from "./ContentLocatorData";
-import { StartPointHeader } from "@akashic/headless-driver/lib/play/amflow/AMFlowStore";
+import { StartPointHeader } from "./StartPointHeader";
 
 export interface PlayCreateTestbedEvent {
 	playId: string;
