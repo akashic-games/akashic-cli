@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## 2.10.8 (2021-07-01)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#783](https://github.com/akashic-games/akashic-cli/pull/783) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Other Change
+* `akashic-cli-scan`
+  * [#773](https://github.com/akashic-games/akashic-cli/pull/773) akashic-cli-scan のリファクタリング ([@yu-ogi](https://github.com/yu-ogi))
+
+#### Committers: 2
+- [@yu-ogi](https://github.com/yu-ogi)
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.10.7 (2021-07-01)
 
 #### Enhancement
