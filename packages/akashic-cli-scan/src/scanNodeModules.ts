@@ -124,9 +124,9 @@ export async function scanNodeModules(p: ScanNodeModulesParameterObject): Promis
 		}
 
 		const listFiles = param.noOmitPackagejson ? NodeModules.listModuleFiles : NodeModules.listScriptFiles;
-		const modulePaths = await listFiles(base, entryPaths, logger);
+		const modulePaths = await listFiles(base, entryPaths, logger) ?? [];
 
-		if (modulePaths && modulePaths.length) {
+		if (modulePaths.length) {
 			const packageJsonFiles = NodeModules.listPackageJsonsFromScriptsPath(base, modulePaths);
 			const moduleMainScripts = NodeModules.listModuleMainScripts(packageJsonFiles);
 
@@ -142,7 +142,7 @@ export async function scanNodeModules(p: ScanNodeModulesParameterObject): Promis
 			}
 		}
 
-		content.globalScripts = modulePaths ?? [];
+		content.globalScripts = modulePaths;
 
 		await FileModule.writeJSON<GameConfiguration>(gamePath, content);
 
