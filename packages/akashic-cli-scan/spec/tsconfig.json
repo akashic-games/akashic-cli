@@ -8,19 +8,7 @@
     "outDir": "./build",
     "types" : ["image-size", "jasmine", "mock-fs", "node"]
   },
-  "filesGlob": [
-    "../node_modules/typescript/lib/lib.es6.d.ts",
-    "../typings/*.d.ts",
-    "./typings/*.d.ts",
-    "./src/**/*.ts"
-  ],
-  "files": [
-    "../node_modules/typescript/lib/lib.es6.d.ts",
-    "./src/helpers/MockPromisedNpm.ts",
-    "./src/getAudioDurationSpec.ts",
-    "./src/ConfigurationSpec.ts",
-    "./src/LibConfigurationSpec.ts",
-    "./src/scanSpec.ts",
-    "./src/scanUtilsSpec.ts"
+  "include": [
+    "src/**/*.ts"
   ]
 }

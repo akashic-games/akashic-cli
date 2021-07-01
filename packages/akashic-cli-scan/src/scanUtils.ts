@@ -1,6 +1,6 @@
 import * as path from "path";
-import { AssetConfiguration } from "@akashic/akashic-cli-commons/lib/GameConfiguration";
-import { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
+import type { AssetConfiguration } from "@akashic/game-configuration";
+import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
 import { invertMap, makeUnixPath } from "@akashic/akashic-cli-commons/lib/Util";
 import * as readdirRecursive from "fs-readdir-recursive";
 import { imageSize } from "image-size";
@@ -46,7 +46,7 @@ export async function scanScriptAssets(
 ): Promise<AssetConfiguration[]> {
 	const relativeFilePaths: string[] = readdirRecursive(path.join(baseDir, dir)).filter(filter);
 	return relativeFilePaths
-		.map(relativeFilePath => {
+		.map<AssetConfiguration>(relativeFilePath => {
 			return {
 				type: "script",
 				path: makeUnixPath(path.join(dir, relativeFilePath)),
@@ -64,7 +64,7 @@ export async function scanTextAssets(
 ): Promise<AssetConfiguration[]> {
 	const relativeFilePaths: string[] = readdirRecursive(path.join(baseDir, dir)).filter(filter);
 	return relativeFilePaths
-		.map(relativeFilePath => {
+		.map<AssetConfiguration>(relativeFilePath => {
 			return {
 				type: "text",
 				path: makeUnixPath(path.join(dir, relativeFilePath))
@@ -81,7 +81,7 @@ export async function scanImageAssets(
 ): Promise<AssetConfiguration[]> {
 	const relativeFilePaths: string[] = readdirRecursive(path.join(baseDir, dir)).filter(filter);
 	return relativeFilePaths
-		.map(relativeFilePath => {
+		.map<AssetConfiguration>(relativeFilePath => {
 			const absolutePath = path.join(baseDir, dir, relativeFilePath);
 			const size = imageSize(absolutePath);
 			if (!size) {
