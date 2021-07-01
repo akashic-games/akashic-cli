@@ -144,7 +144,10 @@ export namespace AssetModule {
 				} else {
 					id = path.basename(asset.path);
 				}
-				if (!includeExtensionToAssetId) {
+				if (
+					asset.type !== "audio" && // NOTE: オーディオアセットは拡張子が含まれていないため無視
+					!includeExtensionToAssetId
+				) {
 					id = id.replace(/\.[^/.]+$/, ""); // 拡張子を削除
 				}
 			}
