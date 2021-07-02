@@ -47,6 +47,7 @@ function generateTemplates(srcPath, outPath, data) {
 	Object.keys(data).forEach(key => {
 		console.log(`"${key}" template`);
 		shell.cp("-R", path.join(srcPath, data[key]["src"], "src"), path.join(outPath, "common", "src"));
+		shell.cp("-R", path.join(srcPath, data[key]["src"], "game.json"), path.join(outPath, "common", "game.json"));
 		console.log("  - start to build");
 		// node_modulesがcommon下にあるので、そこでそのままビルドする
 		execSync(`cd ${path.join(outPath, "common")} && npm run build`);
