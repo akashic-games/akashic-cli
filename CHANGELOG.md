@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.10.11 (2021-07-05)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#787](https://github.com/akashic-games/akashic-cli/pull/787) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.0.17, engineFiles@2.1.54, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.10.10 (2021-07-05)
 
 #### Bug Fix
