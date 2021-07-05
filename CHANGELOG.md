@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.10.10 (2021-07-05)
+
+#### Bug Fix
+* `akashic-cli-init`
+  * [#785](https://github.com/akashic-games/akashic-cli/pull/785) Fix init generate template ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 2.10.9 (2021-07-01)
 
 #### Enhancement
