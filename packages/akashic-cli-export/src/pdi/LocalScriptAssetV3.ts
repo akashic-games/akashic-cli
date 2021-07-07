@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+// 定義のみ必要なため no-unused-vars を無効とする。
 interface Window {
 	gScriptContainer: {[key: string]: Function};
 }
@@ -63,3 +65,4 @@ class LocalScriptAssetV3 {
 		return path;
 	}
 }
+/* eslint-enable @typescript-eslint/no-unused-vars */

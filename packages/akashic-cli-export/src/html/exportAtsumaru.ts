@@ -1,10 +1,10 @@
 import * as fs from "fs";
-import * as fsx from "fs-extra";
 import * as path from "path";
 import * as archiver from "archiver";
+import * as fsx from "fs-extra";
 import { promiseExportZip } from "../zip/exportZip";
-import { _completeExportHTMLParameterObject, ExportHTMLParameterObject, promiseExportHTML } from "./exportHTML";
 import { getFromHttps } from "./apiUtil";
+import { _completeExportHTMLParameterObject, ExportHTMLParameterObject, promiseExportHTML } from "./exportHTML";
 
 export function promiseExportAtsumaru(param: ExportHTMLParameterObject): Promise<string> {
 	if (param.output === undefined) {
@@ -61,19 +61,20 @@ export function promiseExportAtsumaru(param: ExportHTMLParameterObject): Promise
 				"https://raw.githubusercontent.com/akashic-games/akashic-runtime-version-table/master/versions.json").then((data) => {
 				const versionInfo = JSON.parse(data);
 				if (!gameJson.environment["sandbox-runtime"] || gameJson.environment["sandbox-runtime"] === "1") {
-					gameJson.environment["akashic-runtime"]["version"] = "~" + versionInfo["latest"]["1"];
+					gameJson.environment["akashic-runtime"].version = "~" + versionInfo.latest["1"];
 				} else {
-					gameJson.environment["akashic-runtime"]["version"] =
-						"~" + versionInfo["latest"][gameJson.environment["sandbox-runtime"]];
+					gameJson.environment["akashic-runtime"].version =
+						"~" + versionInfo.latest[gameJson.environment["sandbox-runtime"]];
 					if (!gameJson.renderers || gameJson.renderers.indexOf("webgl") === -1) {
-						gameJson.environment["akashic-runtime"]["flavor"] = "-canvas";
+						gameJson.environment["akashic-runtime"].flavor = "-canvas";
 					}
 				}
-				if (/\d+\.\d+\.\d+-\w+/.test(gameJson.environment["akashic-runtime"]["version"])) {
-					const runtimeVersion = gameJson.environment["akashic-runtime"]["version"].slice(1);
+				if (/\d+\.\d+\.\d+-\w+/.test(gameJson.environment["akashic-runtime"].version)) {
+					const runtimeVersion = gameJson.environment["akashic-runtime"].version.slice(1);
 					const engineVersion = gameJson.environment["sandbox-runtime"] || "1";
 					completedParam.logger.warn(
-						`UNSTABLE: Akashic Engine v${engineVersion} (akashic-runtime@${runtimeVersion}) is in beta. The game exported MAY NOT WORK PROPERLY.`
+						`UNSTABLE: Akashic Engine v${engineVersion} (akashic-runtime@${runtimeVersion})`
+						+ " is in beta. The game exported MAY NOT WORK PROPERLY."
 					);
 				}
 				return gameJson;
@@ -103,7 +104,7 @@ export function promiseExportAtsumaru(param: ExportHTMLParameterObject): Promise
 
 export function _checkDestinationValidity(dest: string, force: boolean): Promise<void> {
 	return new Promise<void>((resolve, reject) => {
-		fs.stat(path.resolve(dest), (error: any, stat: any) => {
+		fs.stat(path.resolve(dest), (error: any, _stat: any) => {
 			if (error) {
 				if (error.code === "ENOENT") {
 					resolve();

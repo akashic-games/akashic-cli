@@ -1,7 +1,7 @@
 import * as fs from "fs";
-import * as fsx from "fs-extra";
 import * as path from "path";
 import * as cmn from "@akashic/akashic-cli-commons";
+import * as fsx from "fs-extra";
 import * as atsumaru from "../../../lib/html/exportAtsumaru";
 import { ExportHTMLParameterObject } from "../../../lib/html/exportHTML";
 
@@ -34,12 +34,12 @@ describe("exportAtsumaru", function () {
 		fsx.removeSync(outputDirPath);
 	});
 	describe("promiseExportAtsumaru", function () {
-		it("output bundeled file(index.html) and hashed files", function (done) {
+		it("output bundeled file(index.html) and hashed files", function (done: DoneFn) {
 			Promise.resolve()
 				.then(function () {
 					return atsumaru.promiseExportAtsumaru(cliParam);
 				})
-				.then(function (dest) {
+				.then(function (dest: string) {
 					expect(dest).toBe(outputDirPath);
 					expect(fs.existsSync(path.join(outputDirPath, "index.html"))).toBe(true);
 					const expectedFilePath = cmn.Renamer.hashFilepath("script/aez_bundle_main.js", 20);
@@ -48,12 +48,12 @@ describe("exportAtsumaru", function () {
 				})
 				.then(done, done.fail);
 		});
-		it("add untainted to image assets on game.json", function (done) {
+		it("add untainted to image assets on game.json", function (done: DoneFn) {
 			Promise.resolve()
 				.then(function () {
 					return atsumaru.promiseExportAtsumaru(cliParam);
 				})
-				.then(function (dest) {
+				.then(function (dest: string) {
 					expect(dest).toBe(outputDirPath);
 					const gameJson = require(path.join(outputDirPath, "game.json"));
 					// ImageAssetならばuntaintedオプションが付与されることを確認
@@ -65,23 +65,23 @@ describe("exportAtsumaru", function () {
 				})
 				.then(done, done.fail);
 		});
-		it("add information about environment to game.json (v1)", function (done) {
+		it("add information about environment to game.json (v1)", function (done: DoneFn) {
 			Promise.resolve()
 				.then(function () {
 					return atsumaru.promiseExportAtsumaru(cliParam);
 				})
-				.then(function (dest) {
+				.then(function (dest: string) {
 					expect(dest).toBe(outputDirPath);
 					const gameJson = require(path.join(outputDirPath, "game.json"));
 					expect(gameJson.environment.external.send).toBe("0");
-					expect(gameJson.environment["akashic-runtime"]["version"]).toMatch(/^~1\.1\.\d+$/);
-					expect(gameJson.environment["akashic-runtime"]["flavor"]).toBe(undefined);
-					expect(gameJson.environment["niconico"]["supportedModes"].length).toBe(1);
-					expect(gameJson.environment["niconico"]["supportedModes"]).toContain("single");
+					expect(gameJson.environment["akashic-runtime"].version).toMatch(/^~1\.1\.\d+$/);
+					expect(gameJson.environment["akashic-runtime"].flavor).toBe(undefined);
+					expect(gameJson.environment.niconico.supportedModes.length).toBe(1);
+					expect(gameJson.environment.niconico.supportedModes).toContain("single");
 				})
 				.then(done, done.fail);
 		});
-		it("add information about environment to game.json (v2)", function (done) {
+		it("add information about environment to game.json (v2)", function (done: DoneFn) {
 			const targetDirPath = path.join(__dirname, "..", "..", "fixtures", "sample_game_v2");
 			const outputDirPath = path.join(targetDirPath, "output");
 			Promise.resolve()
@@ -89,21 +89,21 @@ describe("exportAtsumaru", function () {
 					cliParam.cwd = targetDirPath;
 					return atsumaru.promiseExportAtsumaru(cliParam);
 				})
-				.then(function (dest) {
+				.then(function (dest: string) {
 					expect(dest).toBe(outputDirPath);
 					const gameJson = require(path.join(outputDirPath, "game.json"));
 					expect(gameJson.environment.external.send).toBe("0");
-					expect(gameJson.environment["akashic-runtime"]["version"]).toMatch(/^~2\.1\.\d+$/);
-					expect(gameJson.environment["akashic-runtime"]["flavor"]).toBe("-canvas");
-					expect(gameJson.environment["niconico"]["supportedModes"].length).toBe(1);
-					expect(gameJson.environment["niconico"]["supportedModes"]).toContain("single");
+					expect(gameJson.environment["akashic-runtime"].version).toMatch(/^~2\.1\.\d+$/);
+					expect(gameJson.environment["akashic-runtime"].flavor).toBe("-canvas");
+					expect(gameJson.environment.niconico.supportedModes.length).toBe(1);
+					expect(gameJson.environment.niconico.supportedModes).toContain("single");
 				})
 				.then(function() {
 					fsx.removeSync(outputDirPath);
 				})
 				.then(done, done.fail);
 		});
-		it("add information about environment to game.json (v3)", function (done) {
+		it("add information about environment to game.json (v3)", function (done: DoneFn) {
 			const targetDirPath = path.join(__dirname, "..", "..", "fixtures", "sample_game_v3");
 			const outputDirPath = path.join(targetDirPath, "output");
 			Promise.resolve()
@@ -111,21 +111,21 @@ describe("exportAtsumaru", function () {
 					cliParam.cwd = targetDirPath;
 					return atsumaru.promiseExportAtsumaru(cliParam);
 				})
-				.then(function (dest) {
+				.then(function (dest: string) {
 					expect(dest).toBe(outputDirPath);
 					const gameJson = require(path.join(outputDirPath, "game.json"));
 					expect(gameJson.environment.external.send).toBe("0");
-					expect(gameJson.environment["akashic-runtime"]["version"]).toMatch(/^~3\.\d+\.\d+.*$/);
-					expect(gameJson.environment["akashic-runtime"]["flavor"]).toBe("-canvas");
-					expect(gameJson.environment["niconico"]["supportedModes"].length).toBe(1);
-					expect(gameJson.environment["niconico"]["supportedModes"]).toContain("single");
+					expect(gameJson.environment["akashic-runtime"].version).toMatch(/^~3\.\d+\.\d+.*$/);
+					expect(gameJson.environment["akashic-runtime"].flavor).toBe("-canvas");
+					expect(gameJson.environment.niconico.supportedModes.length).toBe(1);
+					expect(gameJson.environment.niconico.supportedModes).toContain("single");
 				})
 				.then(function() {
 					fsx.removeSync(outputDirPath);
 				})
 				.then(done, done.fail);
 		});
-		it("does not add akashic-runtime-information about environment to game.json, if it is already written", function (done) {
+		it("does not add akashic-runtime-information about environment to game.json, if it is already written", function (done: DoneFn) {
 			const targetDirPath = path.join(__dirname, "..", "..", "fixtures", "sample_game_with_akashic_runtime");
 			const outputDirPath = path.join(targetDirPath, "output");
 			Promise.resolve()
@@ -133,28 +133,28 @@ describe("exportAtsumaru", function () {
 					cliParam.cwd = targetDirPath;
 					return atsumaru.promiseExportAtsumaru(cliParam);
 				})
-				.then(function (dest) {
+				.then(function (dest: string) {
 					expect(dest).toBe(outputDirPath);
 					const gameJson = require(path.join(outputDirPath, "game.json"));
 					expect(gameJson.environment.external.send).toBe("0");
-					expect(gameJson.environment["akashic-runtime"]["version"]).toBe("~1.0.9-beta");
-					expect(gameJson.environment["akashic-runtime"]["flavor"]).toBe(undefined);
-					expect(gameJson.environment["niconico"]["supportedModes"].length).toBe(2);
-					expect(gameJson.environment["niconico"]["supportedModes"]).toContain("single");
-					expect(gameJson.environment["niconico"]["supportedModes"]).toContain("ranking");
+					expect(gameJson.environment["akashic-runtime"].version).toBe("~1.0.9-beta");
+					expect(gameJson.environment["akashic-runtime"].flavor).toBe(undefined);
+					expect(gameJson.environment.niconico.supportedModes.length).toBe(2);
+					expect(gameJson.environment.niconico.supportedModes).toContain("single");
+					expect(gameJson.environment.niconico.supportedModes).toContain("ranking");
 				})
 				.then(function() {
 					fsx.removeSync(outputDirPath);
 				})
 				.then(done, done.fail);
 		});
-		it("create zip when output destination includes '.zip'", function (done) {
-			cliParam["output"] = outputDirPath + ".zip";
+		it("create zip when output destination includes '.zip'", function (done: DoneFn) {
+			cliParam.output = outputDirPath + ".zip";
 			Promise.resolve()
 				.then(function () {
 					return atsumaru.promiseExportAtsumaru(cliParam);
 				})
-				.then(function (dest) {
+				.then(function (dest: string) {
 					expect(dest).toBe(outputDirPath + ".zip");
 					const files = zip.Reader(fs.readFileSync(outputDirPath + ".zip")).toObject("utf8");
 					const fileNames = Object.keys(files);
@@ -168,8 +168,8 @@ describe("exportAtsumaru", function () {
 				})
 				.then(done, done.fail);
 		});
-		it("throw error when output destination is not specified", function (done) {
-			delete cliParam["output"];
+		it("throw error when output destination is not specified", function (done: DoneFn) {
+			delete cliParam.output;
 			Promise.resolve()
 				.then(function () {
 					return atsumaru.promiseExportAtsumaru(cliParam);
@@ -177,12 +177,12 @@ describe("exportAtsumaru", function () {
 				.then(function () {
 					return done.fail();
 				})
-				.catch(function (err) {
+				.catch(function (err: any) {
 					expect(err.message).toBe("--output option must be specified.");
 					done();
 				});
 		});
-		it("If already outputted, force option error will be returned", function (done) {
+		it("If already outputted, force option error will be returned", function (done: DoneFn) {
 			const targetDirPath = path.join(__dirname, "..", "..", "fixtures", "sample_game_with_akashic_runtime");
 			const outputDirPath = path.join(targetDirPath, "output");
 			Promise.resolve()
@@ -190,10 +190,10 @@ describe("exportAtsumaru", function () {
 					return atsumaru.promiseExportAtsumaru(cliParam);
 				})
 				.then(function () {
-					delete cliParam["force"];
+					delete cliParam.force;
 					return atsumaru.promiseExportAtsumaru(cliParam);
 				})
-				.catch(function (err) {
+				.catch(function (err: any) {
 					expect(err.indexOf("Cannot overwrite without force option.") !== -1).toBeTruthy();
 					fsx.removeSync(outputDirPath);
 					done();
