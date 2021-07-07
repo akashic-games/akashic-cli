@@ -1,11 +1,11 @@
 import * as fs from "fs";
-import * as path from "path";
 import * as os from "os";
+import * as path from "path";
+import { Logger } from "@akashic/akashic-cli-commons";
 import * as ini from "ini";
 import * as lodashGet from "lodash.get";
 import * as lodashSet from "lodash.set";
 import * as lodashUnset from "lodash.unset";
-import { Logger } from "@akashic/akashic-cli-commons";
 
 export type StringMap = {[key: string]: string};
 
