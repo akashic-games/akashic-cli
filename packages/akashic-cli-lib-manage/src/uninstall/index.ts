@@ -1,4 +1,2 @@
-import { uninstall, promiseUninstall } from "./uninstall";
-export { uninstall, promiseUninstall };
-import { run } from "./cli";
-export { run };
+export { run } from "./cli";
+export { uninstall, promiseUninstall } from "./uninstall";
