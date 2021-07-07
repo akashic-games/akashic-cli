@@ -1,8 +1,8 @@
+import * as os from "os";
+import * as path from "path";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
 import { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
 import * as config from "@akashic/akashic-cli-extra/lib/config";
-import * as os from "os";
-import * as path from "path";
 
 export interface InitParameterObject {
 	/**
@@ -93,10 +93,10 @@ export function completeInitParameterObject(param: InitParameterObject): Promise
 			return param.configFile.getItem("init.defaultTemplateType");
 		})
 		.then<void>(defaultType => {
-			param.type = (param.type || defaultType || "javascript").toLowerCase();
-			// 以下の正規表現は、akashic-configのvalidatorとそろえる必要があります。
-			if (!/^[\w\-]+$/.test(param.type))
-				return Promise.reject(new Error("invalid template type name"));
-			return Promise.resolve();
-		});
+		param.type = (param.type || defaultType || "javascript").toLowerCase();
+		// 以下の正規表現は、akashic-configのvalidatorとそろえる必要があります。
+		if (!/^[\w\-]+$/.test(param.type))
+			return Promise.reject(new Error("invalid template type name"));
+		return Promise.resolve();
+	});
 }
