@@ -1,7 +1,7 @@
 import * as path from "path";
-import type { AssetConfiguration } from "@akashic/game-configuration";
 import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
 import { invertMap, makeUnixPath } from "@akashic/akashic-cli-commons/lib/Util";
+import type { AssetConfiguration } from "@akashic/game-configuration";
 import * as readdirRecursive from "fs-readdir-recursive";
 import { imageSize } from "image-size";
 import { getAudioDuration } from "./getAudioDuration";
@@ -47,12 +47,12 @@ export async function scanScriptAssets(
 	const relativeFilePaths: string[] = readdirRecursive(path.join(baseDir, dir)).filter(filter);
 	return relativeFilePaths
 		.map<AssetConfiguration>(relativeFilePath => {
-			return {
-				type: "script",
-				path: makeUnixPath(path.join(dir, relativeFilePath)),
-				global: true
-			};
-		})
+		return {
+			type: "script",
+			path: makeUnixPath(path.join(dir, relativeFilePath)),
+			global: true
+		};
+	})
 		.filter(asset => asset != null);
 }
 
@@ -65,11 +65,11 @@ export async function scanTextAssets(
 	const relativeFilePaths: string[] = readdirRecursive(path.join(baseDir, dir)).filter(filter);
 	return relativeFilePaths
 		.map<AssetConfiguration>(relativeFilePath => {
-			return {
-				type: "text",
-				path: makeUnixPath(path.join(dir, relativeFilePath))
-			};
-		})
+		return {
+			type: "text",
+			path: makeUnixPath(path.join(dir, relativeFilePath))
+		};
+	})
 		.filter(asset => asset != null);
 }
 
@@ -82,19 +82,19 @@ export async function scanImageAssets(
 	const relativeFilePaths: string[] = readdirRecursive(path.join(baseDir, dir)).filter(filter);
 	return relativeFilePaths
 		.map<AssetConfiguration>(relativeFilePath => {
-			const absolutePath = path.join(baseDir, dir, relativeFilePath);
-			const size = imageSize(absolutePath);
-			if (!size) {
-				logger?.warn(`Failed to get image size. Please check ${absolutePath}`);
-				return null;
-			}
-			return {
-				type: "image",
-				path: makeUnixPath(path.join(dir, relativeFilePath)),
-				width: size.width,
-				height: size.height
-			};
-		})
+		const absolutePath = path.join(baseDir, dir, relativeFilePath);
+		const size = imageSize(absolutePath);
+		if (!size) {
+			logger?.warn(`Failed to get image size. Please check ${absolutePath}`);
+			return null;
+		}
+		return {
+			type: "image",
+			path: makeUnixPath(path.join(dir, relativeFilePath)),
+			width: size.width,
+			height: size.height
+		};
+	})
 		.filter(asset => asset != null);
 }
 
