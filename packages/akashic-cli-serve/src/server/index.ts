@@ -1,27 +1,27 @@
 import * as fs from "fs";
+import * as http from "http";
 import * as path from "path";
 import * as util from "util";
-import * as http from "http";
-import * as express from "express";
-import * as bodyParser from "body-parser";
-import * as socketio from "socket.io";
-import { Command, OptionValues } from "commander";
-import * as chalk from "chalk";
-import * as open from "open";
+import { CliConfigServe } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigServe";
+import { CliConfigurationFile } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigurationFile";
+import { SERVICE_TYPES } from "@akashic/akashic-cli-commons/lib/ServiceType";
 import { PlayManager, RunnerManager, setSystemLogger, getSystemLogger } from "@akashic/headless-driver";
-import { createApiRouter } from "./route/ApiRoute";
-import { RunnerStore } from "./domain/RunnerStore";
-import { PlayStore } from "./domain/PlayStore";
-import { SocketIOAMFlowManager } from "./domain/SocketIOAMFlowManager";
+import * as bodyParser from "body-parser";
+import * as chalk from "chalk";
+import { Command, OptionValues } from "commander";
+import * as express from "express";
+import * as open from "open";
+import * as socketio from "socket.io";
+import { ServerContentLocator } from "./common/ServerContentLocator";
 import { serverGlobalConfig } from "./common/ServerGlobalConfig";
+import { ModTargetFlags, watchContent } from "./domain/GameConfigs";
+import { PlayerIdStore } from "./domain/PlayerIdStore";
+import { PlayStore } from "./domain/PlayStore";
+import { RunnerStore } from "./domain/RunnerStore";
+import { SocketIOAMFlowManager } from "./domain/SocketIOAMFlowManager";
+import { createApiRouter } from "./route/ApiRoute";
 import { createContentsRouter } from "./route/ContentsRoute";
 import { createHealthCheckRouter } from "./route/HealthCheckRoute";
-import { ServerContentLocator } from "./common/ServerContentLocator";
-import { CliConfigurationFile } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigurationFile";
-import { CliConfigServe } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigServe";
-import { SERVICE_TYPES } from "@akashic/akashic-cli-commons/lib/ServiceType";
-import { PlayerIdStore } from "./domain/PlayerIdStore";
-import { ModTargetFlags, watchContent } from "./domain/GameConfigs";
 
 // 渡されたパラメータを全てstringに変換する
 // chalkを使用する場合、ログ出力時objectの中身を展開してくれないためstringに変換する必要がある
@@ -35,7 +35,7 @@ function convertToStrings(params: any[]): string[] {
 	});
 }
 
-async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues) {
+async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Promise<void> {
 	if (cliConfigParam.port && isNaN(cliConfigParam.port)) {
 		console.error("Invalid --port option: " + cliConfigParam.port);
 		process.exit(1);
@@ -74,8 +74,8 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues) {
 	} else {
 		serverGlobalConfig.verbose = false;
 		setSystemLogger({
-			info: (...messages: any[]) => {},
-			debug: (...messages: any[]) => {},
+			info: (..._messages: any[]) => {}, // eslint-disable-line @typescript-eslint/no-empty-function
+			debug: (..._messages: any[]) => {}, // eslint-disable-line @typescript-eslint/no-empty-function
 			warn: (...messages: any[]) => {
 				console.warn(chalk.yellow(...convertToStrings(messages)));
 			},
@@ -179,7 +179,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues) {
 	app.set("views", path.join(__dirname, "..", "..", "views"));
 	app.set("view engine", "ejs");
 
-	app.use((req, res, next) => {
+	app.use((_req, res, next) => {
 		res.removeHeader("X-Powered-By");
 		res.removeHeader("ETag");
 		res.header("Cache-Control", ["private", "no-store", "no-cache", "must-revalidate", "proxy-revalidate"].join(","));
@@ -188,7 +188,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues) {
 	});
 	app.use(bodyParser.json());
 
-	app.use("^\/$", (req, res, next) => res.redirect("/public/"));
+	app.use("^\/$", (_req, res, _next) => res.redirect("/public/"));
 
 	if (process.env.ENGINE_FILES_V3_PATH) {
 		const engineFilesPath = path.resolve(process.cwd(), process.env.ENGINE_FILES_V3_PATH);
@@ -207,19 +207,43 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues) {
 	app.use("/contents/", createContentsRouter({ targetDirs }));
 	app.use("/health-check/", createHealthCheckRouter({ playStore }));
 
-	io.on("connection", (socket: socketio.Socket) => { amflowManager.setupSocketIOAMFlow(socket); });
+	io.on("connection", (socket: socketio.Socket) => {
+		amflowManager.setupSocketIOAMFlow(socket);
+	});
 	// TODO 全体ブロードキャストせず該当するプレイにだけ通知するべき？
-	playStore.onPlayStatusChange.add(arg => { io.emit("playStatusChange", arg); });
-	playStore.onPlayDurationStateChange.add(arg => { io.emit("playDurationStateChange", arg); });
-	playStore.onPlayCreate.add(arg => { io.emit("playCreate", arg); });
-	playStore.onPlayerJoin.add(arg => { io.emit("playerJoin", arg); });
-	playStore.onPlayerLeave.add(arg => { io.emit("playerLeave", arg); });
-	playStore.onClientInstanceAppear.add(arg => { io.emit("clientInstanceAppear", arg); });
-	playStore.onClientInstanceDisappear.add(arg => { io.emit("clientInstanceDisappear", arg); });
-	runnerStore.onRunnerCreate.add(arg => { io.emit("runnerCreate", arg); });
-	runnerStore.onRunnerRemove.add(arg => { io.emit("runnerRemove", arg); });
-	runnerStore.onRunnerPause.add(arg => { io.emit("runnerPause", arg); });
-	runnerStore.onRunnerResume.add(arg => { io.emit("runnerResume", arg); });
+	playStore.onPlayStatusChange.add(arg => {
+		io.emit("playStatusChange", arg);
+	});
+	playStore.onPlayDurationStateChange.add(arg => {
+		io.emit("playDurationStateChange", arg);
+	});
+	playStore.onPlayCreate.add(arg => {
+		io.emit("playCreate", arg);
+	});
+	playStore.onPlayerJoin.add(arg => {
+		io.emit("playerJoin", arg);
+	});
+	playStore.onPlayerLeave.add(arg => {
+		io.emit("playerLeave", arg);
+	});
+	playStore.onClientInstanceAppear.add(arg => {
+		io.emit("clientInstanceAppear", arg);
+	});
+	playStore.onClientInstanceDisappear.add(arg => {
+		io.emit("clientInstanceDisappear", arg);
+	});
+	runnerStore.onRunnerCreate.add(arg => {
+		io.emit("runnerCreate", arg);
+	});
+	runnerStore.onRunnerRemove.add(arg => {
+		io.emit("runnerRemove", arg);
+	});
+	runnerStore.onRunnerPause.add(arg => {
+		io.emit("runnerPause", arg);
+	});
+	runnerStore.onRunnerResume.add(arg => {
+		io.emit("runnerResume", arg);
+	});
 
 	let loadedPlaylogPlayId: string;
 	if (cliConfigParam.debugPlaylog) {
@@ -231,6 +255,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues) {
 		// 現状 playlog は一つしか受け取らない。それは contentId: 0 のコンテンツの playlog として扱う。
 		const contentLocator = new ServerContentLocator({contentId: "0"});
 		try {
+			// eslint-disable-next-line @typescript-eslint/no-var-requires
 			const playlog = require(absolutePath);
 			loadedPlaylogPlayId = await playStore.createPlay(contentLocator, playlog);
 		} catch (e) {
@@ -269,16 +294,16 @@ export async function run(argv: any): Promise<void> {
 		.usage("[options] <gamepath>")
 		.option("-p, --port <port>", `The port number to listen. default: ${serverGlobalConfig.port}`, (x => parseInt(x, 10)))
 		.option("-H, --hostname <hostname>", `The host name of the server. default: ${serverGlobalConfig.hostname}`)
-		.option("-v, --verbose", `Display detailed information on console.`)
-		.option("-A, --no-auto-start", `Wait automatic startup of contents.`)
+		.option("-v, --verbose", "Display detailed information on console.")
+		.option("-A, --no-auto-start", "Wait automatic startup of contents.")
 		.option("-s, --target-service <service>", `Simulate the specified service. arguments: ${SERVICE_TYPES}`)
-		.option("-w, --watch", `Watch directories of asset`)
+		.option("-w, --watch", "Watch directories of asset")
 		.option("--server-external-script <path>",
-			`Evaluate the given JS and assign it to Game#external of the server instances`)
-		.option("--debug-playlog <path>", `Specify path of playlog-json.`)
-		.option("--debug-untrusted", `An internal debug option`)
-		.option("--debug-proxy-audio", `An internal debug option`)
-		.option("--allow-external", `Read the URL allowing external access from sandbox.config.js`)
+			"Evaluate the given JS and assign it to Game#external of the server instances")
+		.option("--debug-playlog <path>", "Specify path of playlog-json.")
+		.option("--debug-untrusted", "An internal debug option")
+		.option("--debug-proxy-audio", "An internal debug option")
+		.option("--allow-external", "Read the URL allowing external access from sandbox.config.js")
 		.option("--no-open-browser", "Disable to open a browser window at startup")
 		.option("--preserve-disconnected", "Disable auto closing for disconnected windows.")
 		.option("--experimental-open <num>",
@@ -286,7 +311,7 @@ export async function run(argv: any): Promise<void> {
 		.parse(argv);
 
 	const options = commander.opts();
-	CliConfigurationFile.read(path.join(options["cwd"] || process.cwd(), "akashic.config.js"), async (error, configuration) => {
+	CliConfigurationFile.read(path.join(options.cwd || process.cwd(), "akashic.config.js"), async (error, configuration) => {
 		if (error) {
 			console.error(error);
 			process.exit(1);

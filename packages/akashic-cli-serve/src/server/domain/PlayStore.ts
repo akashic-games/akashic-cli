@@ -1,5 +1,7 @@
 import { AMFlowClient, Play, PlayManager } from "@akashic/headless-driver";
 import { Trigger } from "@akashic/trigger";
+import { TimeKeeper } from "../../common/TimeKeeper";
+import { PlayDurationState } from "../../common/types/PlayDurationState";
 import { Player } from "../../common/types/Player";
 import {
 	PlayCreateTestbedEvent,
@@ -14,8 +16,6 @@ import {
 	RunnerDescription,
 	ClientInstanceDescription
 } from "../../common/types/TestbedEvent";
-import { PlayDurationState } from "../../common/types/PlayDurationState";
-import { TimeKeeper } from "../../common/TimeKeeper";
 import { ServerContentLocator } from "../common/ServerContentLocator";
 import { DumpedPlaylog } from "../common/types/DumpedPlaylog";
 import { activePermission, passivePermission } from "./AMFlowPermisson";
@@ -190,7 +190,8 @@ export class PlayStore {
 				if (pevs[j][0] === 2) { // TimestampEvent
 					const timestamp = pevs[j][3]; // Timestamp
 					// Timestamp の時刻がゲームの開始時刻より小さかった場合は相対時刻とみなす
-					replayLastTime = (timestamp < replayStartTime ? timestamp + replayStartTime : timestamp) + (replayLastAge - tick[0]) * 1000 / fps;
+					replayLastTime =
+						(timestamp < replayStartTime ? timestamp + replayStartTime : timestamp) + (replayLastAge - tick[0]) * 1000 / fps;
 					break loop;
 				}
 			}
