@@ -10,7 +10,5 @@ module.exports = {
 	},
 	ignorePatterns: [
 		"**/*.js"
-	],
-	rules: {
-	}
+	]
 }
