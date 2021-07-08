@@ -6,7 +6,6 @@ import * as atsumaru from "../../../lib/html/exportAtsumaru";
 import { ExportHTMLParameterObject } from "../../../lib/html/exportHTML";
 
 // zipの型定義ファイルが存在しないのでimportではなくrequireする
-// tslint:disable-next-line:no-var-requires
 const zip = require("zip");
 
 describe("exportAtsumaru", function () {

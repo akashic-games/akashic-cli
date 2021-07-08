@@ -1,5 +1,4 @@
 import * as path from "path";
-// import * as cmn from "@akashic/akashic-cli-commons";
 import * as fsx from "fs-extra";
 import * as exp from "../../../lib/html/exportHTML";
 
