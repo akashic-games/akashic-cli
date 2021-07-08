@@ -120,7 +120,6 @@ export class RPGAtsumaruApi implements RPGAtsumaruApiLike {
 					},
 					add: (_teardown: any): void => { }, // eslint-disable-line @typescript-eslint/no-empty-function
 					remove: (_subscription: any): void => {} // eslint-disable-line @typescript-eslint/no-empty-function
-
 				};
 			}
 		}
