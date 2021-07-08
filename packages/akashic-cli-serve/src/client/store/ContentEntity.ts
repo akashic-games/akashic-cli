@@ -1,10 +1,10 @@
 import { action, observable } from "mobx";
-import { SandboxConfig } from "../../common/types/SandboxConfig";
 import { ContentDesc } from "../../common/types/ContentDesc";
-import { ClientContentLocator } from "../common/ClientContentLocator";
 import { GameConfiguration, PreferredSessionParameters } from "../../common/types/GameConfiguration";
-import { DevtoolUiStore } from "./DevtoolUiStore";
+import { SandboxConfig } from "../../common/types/SandboxConfig";
 import * as ApiClient from "../api/ApiClient";
+import { ClientContentLocator } from "../common/ClientContentLocator";
+import { DevtoolUiStore } from "./DevtoolUiStore";
 
 export class ContentEntity {
 	readonly locator: ClientContentLocator;

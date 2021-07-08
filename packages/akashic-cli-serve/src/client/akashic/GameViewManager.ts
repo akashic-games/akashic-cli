@@ -1,8 +1,8 @@
 import { Trigger } from "@akashic/trigger";
 import { ClientContentLocator } from "../common/ClientContentLocator";
-import { generateTestbedScriptAsset } from "./TestbedScriptAsset";
-import { ServeGameContent } from "./ServeGameContent";
 import { NullScriptAssetV3 } from "./AssetV3";
+import { ServeGameContent } from "./ServeGameContent";
+import { generateTestbedScriptAsset } from "./TestbedScriptAsset";
 
 export interface Platform {
 	_resourceFactory: {
@@ -32,7 +32,7 @@ export interface CreateGameContentParameterObject {
 // --debug-proxy-audio用の暫定実装。デバッグ用なのでログに出すのみ。
 // 将来的にはこれを使って、音を鳴らしつつ再生状況を devtools に表示するようにもしてもいいかもしれない。
 export class LogAudioPdiHandler {
-	loadAudioAsset(param: { id: string, assetPath: string }, handler: (err?: any) => void): void {
+	loadAudioAsset(param: { id: string; assetPath: string }, handler: (err?: any) => void): void {
 		console.log("AUDIOLOG: loadAudioAsset", param);
 		setTimeout(() => handler(), 0);
 	}
@@ -133,7 +133,7 @@ export class GameViewManager {
 		this.gameView.setViewSize(width, height);
 	}
 
-	getViewSize(): {width: number, height: number} {
+	getViewSize(): {width: number; height: number} {
 		return this.gameView.getViewSize();
 	}
 
@@ -151,6 +151,7 @@ export class GameViewManager {
 
 	private customizePlatform(platform: Platform, options: any): void {
 		const scriptAssetClass = options.g.ScriptAsset || NullScriptAssetV3;
+		// eslint-disable-next-line @typescript-eslint/naming-convention
 		const TestbedScriptAsset = generateTestbedScriptAsset(scriptAssetClass);
 		platform._resourceFactory.createScriptAsset = (id: string, assetPath: string) => {
 			return new TestbedScriptAsset(

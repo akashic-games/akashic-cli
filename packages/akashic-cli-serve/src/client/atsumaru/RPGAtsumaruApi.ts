@@ -1,3 +1,4 @@
+import { Trigger } from "@akashic/trigger";
 import { Observer } from "rxjs";
 import { ScoreboardData } from "./ScoreboardData";
 import { ScreenshotModalResults } from "./ScreenshotModalResults";
@@ -5,8 +6,6 @@ import { SelfInformation, dummySelfInfomation } from "./SelfInformation";
 import { TweetSettings } from "./TweetSettings";
 import { UserIdName, dummyUserIdName } from "./UserIdName";
 import { UserInformation, dummyUserInformation } from "./UserInformation";
-import { ServeGameContent } from "../akashic/ServeGameContent";
-import { Trigger } from "@akashic/trigger";
 
 interface SubscriptionMock {
 	unsubscribe(): void;
@@ -24,8 +23,8 @@ export interface RPGAtsumaruApiLike {
 		setContext: (context: string) => void;
 	};
 	storage: {
-		getItems: () => Promise<{key: string, value: string}[]>;
-		setItems: (items: {key: string, value: string}[]) => Promise<void>;
+		getItems: () => Promise<{key: string; value: string}[]>;
+		setItems: (items: {key: string; value: string}[]) => Promise<void>;
 		removeItem: (key: string) => Promise<void>;
 	};
 	volume: {
@@ -33,7 +32,7 @@ export interface RPGAtsumaruApiLike {
 		changed: {
 			// マスターボリュームの情報はserve側で持っていてコンテンツ側で監視すべきものでないので、Subscriptionのmockを返している
 			subscribe: (observer: Observer<number> | ((volume: number) => void)) => SubscriptionMock;
-		}
+		};
 	};
 	popups: {
 		openLink: (url: string, comment?: string) => Promise<void>;
@@ -75,7 +74,7 @@ export class RPGAtsumaruApi implements RPGAtsumaruApiLike {
 			console.log(`called window.RPGAtsumaru.comment.pushContextFactor (factor: ${factor})`);
 		},
 		pushMinorContext: () => {
-			console.log(`called window.RPGAtsumaru.comment.pushMinorContext`);
+			console.log("called window.RPGAtsumaru.comment.pushMinorContext");
 		},
 		setContext: (context: string) => {
 			console.log(`called window.RPGAtsumaru.comment.setContext (context: ${context})`);
@@ -89,7 +88,7 @@ export class RPGAtsumaruApi implements RPGAtsumaruApiLike {
 			console.log(`called window.RPGAtsumaru.storage.getItems. it will return ${items}.`);
 			return Promise.resolve().then(() => items);
 		},
-		setItems: (items: {key: string, value: string}[]) => {
+		setItems: (items: {key: string; value: string}[]) => {
 			console.log(`called window.RPGAtsumaru.storage.setItems (items: ${items})`);
 			return Promise.resolve();
 		},
@@ -101,13 +100,13 @@ export class RPGAtsumaruApi implements RPGAtsumaruApiLike {
 
 	volume = {
 		getCurrentValue: () => {
-			console.log(`called window.RPGAtsumaru.volume.getCurrentValue`);
+			console.log("called window.RPGAtsumaru.volume.getCurrentValue");
 			return this._param.getVolumeCallback();
 		},
 		changed: {
 			subscribe: (observer: Observer<number> | ((volume: number) => void)) => {
-				console.log(`called window.RPGAtsumaru.volume.changed.subscribe`);
-				const func = (vol: number) => {
+				console.log("called window.RPGAtsumaru.volume.changed.subscribe");
+				const func = (vol: number): void => {
 					if (observer.hasOwnProperty("next")) {
 						(observer as Observer<number>).next(vol);
 					} else {
@@ -119,8 +118,10 @@ export class RPGAtsumaruApi implements RPGAtsumaruApiLike {
 					unsubscribe: () => {
 						this.volumeTrigger.remove(func);
 					},
+					/* eslint-disable @typescript-eslint/no-empty-function */
 					add: (_teardown: any) => {},
 					remove: (_subscription: any) => {}
+					/* eslint-enable @typescript-eslint/no-empty-function */
 				};
 			}
 		}
@@ -214,7 +215,10 @@ export class RPGAtsumaruApi implements RPGAtsumaruApiLike {
 				"boardId": boardId,
 				"boardName": "スコアボードの名前"
 			};
-			console.log(`called window.RPGAtsumaru.scoreboards.getRecords (boardId: ${boardId}). it will return ${JSON.stringify(dummyScoreboardData)}.`);
+			console.log(
+				`called window.RPGAtsumaru.scoreboards.getRecords (boardId: ${boardId}).`
+				+ ` it will return ${JSON.stringify(dummyScoreboardData)}.`
+			);
 			return Promise.resolve().then(() => dummyScoreboardData);
 		}
 	};
@@ -227,7 +231,7 @@ export class RPGAtsumaruApi implements RPGAtsumaruApiLike {
 		},
 		// TODO: API本実装時に引数に付与したアンダースコアを除去する
 		setScreenshotHandler: (_handler: () => Promise<string>) => {
-			console.log(`called window.RPGAtsumaru.screenshot.setScreenshotHandler`);
+			console.log("called window.RPGAtsumaru.screenshot.setScreenshotHandler");
 		},
 		setTweetMessage: (tweetSettings: TweetSettings | null) => {
 			console.log(`called window.RPGAtsumaru.screenshot.setTweetMessage (tweetSettings: ${JSON.stringify(tweetSettings)})`);

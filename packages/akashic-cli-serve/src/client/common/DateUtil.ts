@@ -1,6 +1,6 @@
 export class DateUtil {
-	static toHms(sec: number) {
-		function pad(x: number) {
+	static toHms(sec: number): string {
+		function pad(x: number): string | number {
 			return (x < 10) ? "0" + x : x;
 		}
 		const sign = sec < 0 ? "-" : "";
@@ -11,7 +11,7 @@ export class DateUtil {
 		return sign + ((h === 0) ? `${m}:${pad(s)}` : `${h}:${pad(m)}:${pad(s)}`);
 	}
 
-	static toHmsFromMsec(msec: number) {
+	static toHmsFromMsec(msec: number): string {
 		return DateUtil.toHms(Math.floor(msec / 1000));
 	}
 }
