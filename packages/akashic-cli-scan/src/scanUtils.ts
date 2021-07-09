@@ -45,8 +45,7 @@ export async function scanScriptAssets(
 	filter: AssetFilter = scriptAssetFilter
 ): Promise<AssetConfiguration[]> {
 	const relativeFilePaths: string[] = readdirRecursive(path.join(baseDir, dir)).filter(filter);
-	return relativeFilePaths
-		.map<AssetConfiguration>(relativeFilePath => {
+	return relativeFilePaths.map<AssetConfiguration>(relativeFilePath => {
 		return {
 			type: "script",
 			path: makeUnixPath(path.join(dir, relativeFilePath)),
@@ -63,8 +62,7 @@ export async function scanTextAssets(
 	filter: AssetFilter = textAssetFilter
 ): Promise<AssetConfiguration[]> {
 	const relativeFilePaths: string[] = readdirRecursive(path.join(baseDir, dir)).filter(filter);
-	return relativeFilePaths
-		.map<AssetConfiguration>(relativeFilePath => {
+	return relativeFilePaths.map<AssetConfiguration>(relativeFilePath => {
 		return {
 			type: "text",
 			path: makeUnixPath(path.join(dir, relativeFilePath))
@@ -80,8 +78,7 @@ export async function scanImageAssets(
 	filter: AssetFilter = imageAssetFilter
 ): Promise<AssetConfiguration[]> {
 	const relativeFilePaths: string[] = readdirRecursive(path.join(baseDir, dir)).filter(filter);
-	return relativeFilePaths
-		.map<AssetConfiguration>(relativeFilePath => {
+	return relativeFilePaths.map<AssetConfiguration>(relativeFilePath => {
 		const absolutePath = path.join(baseDir, dir, relativeFilePath);
 		const size = imageSize(absolutePath);
 		if (!size) {
