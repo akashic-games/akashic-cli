@@ -1,5 +1,24 @@
 # CHANGELOG
 
+## 2.10.12 (2021-07-09)
+
+#### Enhancement
+* `akashic-cli-export`
+  * [#798](https://github.com/akashic-games/akashic-cli/pull/798) 【akashic-cli-export】内部コンポーネントの更新(engineFiles@3.0.18, engineFiles@2.1.54, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+* `akashic-cli-serve`
+  * [#788](https://github.com/akashic-games/akashic-cli/pull/788) feat(serve): add service property to the session parameter ([@xnv](https://github.com/xnv))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-init`, `akashic-cli-scan`
+  * [#786](https://github.com/akashic-games/akashic-cli/pull/786) Update all dependencies (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli`
+  * [#781](https://github.com/akashic-games/akashic-cli/pull/781) Update dependency commander to v8 ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli`
+  * [#780](https://github.com/akashic-games/akashic-cli/pull/780) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.10.11 (2021-07-05)
 
 #### Enhancement
