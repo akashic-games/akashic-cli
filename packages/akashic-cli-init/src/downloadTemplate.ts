@@ -66,8 +66,7 @@ function downloadTemplate(param: InitParameterObject): Promise<void> {
 				return Promise.reject(new Error(`server doesn't have template: ${param.type}`));
 			}
 			const templateUri = param.repository + jsonFile.templates[param.type];
-			return Promise.resolve()
-				.then<Buffer>(() => promisedRequest({
+			return Promise.resolve().then<Buffer>(() => promisedRequest({
 				uri: templateUri,
 				method: "GET",
 				encoding: null
