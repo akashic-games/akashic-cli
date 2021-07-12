@@ -118,7 +118,7 @@ export class RPGAtsumaruApi implements RPGAtsumaruApiLike {
 					unsubscribe: (): void => {
 						this.volumeTrigger.remove(func);
 					},
-					add: (_teardown: any): void => { }, // eslint-disable-line @typescript-eslint/no-empty-function
+					add: (_teardown: any): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
 					remove: (_subscription: any): void => {} // eslint-disable-line @typescript-eslint/no-empty-function
 				};
 			}
