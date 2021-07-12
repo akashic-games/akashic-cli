@@ -10,13 +10,5 @@ module.exports = {
 	},
 	ignorePatterns: [
 		"**/*.js"
-	],
-	rules: {
-		"no-unused-expressions": [
-			"error",
-			{
-				"allowTernary": true
-			}
-		]
-	}
+	]
 }

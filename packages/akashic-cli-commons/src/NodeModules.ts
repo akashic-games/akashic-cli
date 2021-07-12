@@ -117,7 +117,7 @@ export module NodeModules {
 				filePaths.push(filePath);
 			});
 			b.bundle((err: any) => {
-				err ? reject(err) : resolve(filePaths);
+				void (err ? reject(err) : resolve(filePaths));
 			});
 		});
 	}
