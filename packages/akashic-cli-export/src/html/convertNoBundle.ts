@@ -106,6 +106,7 @@ async function writeHtmlFile(
 	options: ConvertTemplateParameterObject): Promise<void> {
 	const injects = options.injects ? options.injects : [];
 	var version = conf._content.environment["sandbox-runtime"];
+	// eslint-disable-next-line @typescript-eslint/no-var-requires
 	var versionsJson = require("../engineFilesVersion.json");
 	const filePath = path.resolve(__dirname + "/../template/no-bundle-index.ejs");
 	const html = await ejs.renderFile(filePath, {

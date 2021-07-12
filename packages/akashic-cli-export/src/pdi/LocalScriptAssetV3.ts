@@ -1,10 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-// 定義のみ必要なため no-unused-vars を無効とする。
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface Window {
 	gScriptContainer: {[key: string]: Function};
 }
 
 // 本来であればv3系のg.ScriptAssetをimplementsすべきだが、ビルド時に使用しているakashic-engineはv2系なので一からクラス定義している
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 class LocalScriptAssetV3 {
 	type: string = "script";
 	script: string;
@@ -65,4 +65,3 @@ class LocalScriptAssetV3 {
 		return path;
 	}
 }
-/* eslint-enable @typescript-eslint/no-unused-vars */

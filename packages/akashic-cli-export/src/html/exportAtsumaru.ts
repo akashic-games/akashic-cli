@@ -35,6 +35,7 @@ export function promiseExportAtsumaru(param: ExportHTMLParameterObject): Promise
 			});
 		}).then(() => {
 			// game.jsonへの追記
+			// eslint-disable-next-line @typescript-eslint/no-var-requires
 			const gameJson = require(path.join(completedParam.output, "game.json"));
 			if (!gameJson.environment) {
 				gameJson.environment = {};

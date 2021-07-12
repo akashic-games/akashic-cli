@@ -102,6 +102,7 @@ export function wrap(code: string, minify?: boolean): string {
 }
 
 export function getDefaultBundleScripts(templatePath: string, version: string, minify?: boolean, bundleText: boolean = true): any {
+	// eslint-disable-next-line @typescript-eslint/no-var-requires
 	var versionsJson = require("../engineFilesVersion.json");
 	var engineFilesVariable = versionsJson[`v${version}`].variable;
 	var preloadScriptNames = [`${engineFilesVariable}.js`];
