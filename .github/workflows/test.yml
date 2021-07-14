@@ -29,6 +29,9 @@ jobs:
             ${{ env.cache-version }}-${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ env.cache-version }}-${{ runner.os }}-build-
             ${{ env.cache-version }}-${{ runner.os }}-
+      - name: Disable Git's CRLF conversion
+        run: |
+          git config --local core.autocrlf=input
       - name: Checkout code
         uses: actions/checkout@master
         with:
