@@ -6,6 +6,7 @@
   "scripts": {
     "postinstall": "lerna bootstrap --no-ci --loglevel silly",
     "build": "lerna run build",
+    "unittest": "npm run lint:md && lerna run test",
     "test": "npm run lint:md && lerna run test && node test/e2e.js --local",
     "test:published": "node test/e2e.js",
     "lint:md": "remark . --frail --no-stdout --quiet --rc-path ./.remarkrc",
