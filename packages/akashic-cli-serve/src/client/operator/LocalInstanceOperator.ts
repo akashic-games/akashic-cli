@@ -17,6 +17,13 @@ export class LocalInstanceOperator {
 		this.store.toolBarUiStore.endPreviewSeek();
 	}
 
+	seekToStartPoint = (frame: number): void => {
+		this.store.currentLocalInstance.setExecutionMode("replay");
+		this.store.currentLocalInstance.setTargetTimeWidhStartPoint(frame, (targetTime) => {
+			this.store.toolBarUiStore.seekTo(targetTime);
+		});
+	}
+
 	togglePause = (pause: boolean): void => {
 		this.store.currentLocalInstance.togglePause(pause);
 	}

@@ -5,7 +5,8 @@ import { ToolLabelButton } from "../atom/ToolLabelButton";
 
 export interface SnapshotDevtoolProps {
 	startPointHeaderList: StartPointHeader[];
-	downloadSnapshot: (frame: number)=> void;
+	downloadSnapshot: (frame: number) => void;
+	onClickSeekToSnapshot: (frame: number) => void;
 }
 
 @observer
@@ -23,6 +24,13 @@ export class SnapshotDevtool extends React.Component<SnapshotDevtoolProps, {}> {
 								onClick={() => {this.props.downloadSnapshot(header.frame)}}
 							>
 								ファイルに保存
+							</ToolLabelButton>
+							<ToolLabelButton
+								className="external-ref_button_download-playlog"
+								title="シーク"
+								onClick={() => {this.props.onClickSeekToSnapshot(header.frame)}}
+							>
+								シーク
 							</ToolLabelButton>
 							{header.frame}
 						</li>

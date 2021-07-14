@@ -201,7 +201,8 @@ const TestWithBehaviour = observer(() => (
 		}}
 		snapshotDevtoolProps={{
 			startPointHeaderList: [],
-			downloadSnapshot: action("download-snapshot")
+			downloadSnapshot: action("download-snapshot"),
+			onClickSeekToSnapshot: action("seekTo-snapshot")
 		}}
 	/>
 ));
@@ -311,7 +312,8 @@ storiesOf("o-Devtool", module)
 			}}
 			snapshotDevtoolProps={{
 				startPointHeaderList: [],
-				downloadSnapshot: action("download-snapshot")
+				downloadSnapshot: action("download-snapshot"),
+				onClickSeekToSnapshot: action("seekTo-snapshot")
 			}}
 		/>
 	))
@@ -411,7 +413,8 @@ storiesOf("o-Devtool", module)
 			}}
 			snapshotDevtoolProps={{
 				startPointHeaderList: [],
-				downloadSnapshot: action("download-snapshot")
+				downloadSnapshot: action("download-snapshot"),
+				onClickSeekToSnapshot: action("seekTo-snapshot")
 			}}
 		/>
 	))
@@ -515,7 +518,8 @@ storiesOf("o-Devtool", module)
 			}}
 			snapshotDevtoolProps={{
 				startPointHeaderList: [],
-				downloadSnapshot: action("download-snapshot")
+				downloadSnapshot: action("download-snapshot"),
+				onClickSeekToSnapshot: action("seekTo-snapshot")
 			}}
 		/>
 	))
@@ -573,7 +577,8 @@ storiesOf("o-Devtool", module)
 			}}
 			snapshotDevtoolProps={{
 				startPointHeaderList: [],
-				downloadSnapshot: action("download-snapshot")
+				downloadSnapshot: action("download-snapshot"),
+				onClickSeekToSnapshot: action("seekTo-snapshot")
 			}}
 		/>
 	))
@@ -631,7 +636,8 @@ storiesOf("o-Devtool", module)
 			}}
 			snapshotDevtoolProps={{
 				startPointHeaderList: [],
-				downloadSnapshot: action("download-snapshot")
+				downloadSnapshot: action("download-snapshot"),
+				onClickSeekToSnapshot: action("seekTo-snapshot")
 			}}
 		/>
 	))

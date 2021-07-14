@@ -176,7 +176,8 @@ declare module agv {
 				_profiler: {
 					_calculateProfilerValueTrigger: agv.TriggerLike;
 				}
-			}
+			},
+			reset: (startPoint: any) => void;
 		};
 	}
 }
