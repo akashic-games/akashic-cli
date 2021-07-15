@@ -133,7 +133,6 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues) {
 	}
 
 	const targetDirs: string[] = cliConfigParam.targetDirs;
-	let currentStore: AMFlowStore;
 	let onPutStartPointHandler: (e: PutStartPointEvent) => void;
 	const playManager = new PlayManager();
 	const runnerManager = new RunnerManager(playManager);

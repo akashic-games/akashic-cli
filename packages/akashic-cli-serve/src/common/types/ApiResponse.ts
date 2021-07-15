@@ -74,7 +74,7 @@ export type StartPointHeaderListResponseData = {
 
 export type StartPointResponseData = {
 	startPoint: StartPoint;
-}
+};
 
 export type PlayGetAllApiResponse = ApiResponse<PlayApiResponseData[]>;
 export type PlayPostApiResponse = ApiResponse<PlayApiResponseData>;
