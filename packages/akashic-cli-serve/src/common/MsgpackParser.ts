@@ -3,7 +3,7 @@ import { encode, decode } from "@msgpack/msgpack";
 import { Packet, PacketType } from "socket.io-parser";
 
 class Encoder {
-	encode(packet: Packet) {
+	encode(packet: Packet): any[] {
 		const encoded = encode(packet);
 		const buffer = new Uint8Array(encoded);
 		return [buffer];
@@ -11,7 +11,7 @@ class Encoder {
 }
 
 class Decoder extends Emitter {
-	add(chunk: any) {
+	add(chunk: any): void {
 		const packet = decode(chunk) as Packet;
 		if (this.isPacketValid(packet)) {
 			this.emit("decoded", packet);
@@ -20,7 +20,7 @@ class Decoder extends Emitter {
 		}
 	}
 
-	isPacketValid({ type, data, nsp, id }: Packet) {
+	isPacketValid({ type, data, nsp, id }: Packet): boolean {
 		const isNamespaceValid = typeof nsp === "string";
 		const isAckIdValid = id === undefined || Number.isInteger(id);
 		if (!isNamespaceValid || !isAckIdValid) {
@@ -42,7 +42,7 @@ class Decoder extends Emitter {
 		}
 	}
 
-	destroy() {
+	destroy(): void {
 		// do nothing
 	}
 }
