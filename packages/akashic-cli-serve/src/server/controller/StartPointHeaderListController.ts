@@ -39,7 +39,7 @@ export const createHandlerToGetStartPoint = (playStore: PlayStore): express.Requ
 			amflow.getStartPoint({ frame }, (err: Error | null, startPoint: StartPoint) => {
 				const dumpJsonStr = JSON.stringify(startPoint);
 				const fileName = `snapshot_${playId}_${frame}.json`;
-	
+
 				res.setHeader("Content-disposition", "attachment; filename=" + fileName);
 				res.setHeader("Content-type", "application/x-download");
 				res.send(dumpJsonStr);
@@ -49,4 +49,4 @@ export const createHandlerToGetStartPoint = (playStore: PlayStore): express.Requ
 			next(e);
 		}
 	};
-}
+};
