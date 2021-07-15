@@ -18,7 +18,7 @@ export class SnapshotDevtool extends React.Component<SnapshotDevtoolProps, {}> {
 				{
 					this.props.startPointHeaderList.map(header => (
 						<li key={header.frame}>
-							<FToolLabelButton
+							<ToolLabelButton
 								className="external-ref_button_download-playlog"
 								title="ファイルに保存"
 								onClick={() => {this.props.downloadSnapshot(header.frame); }}
