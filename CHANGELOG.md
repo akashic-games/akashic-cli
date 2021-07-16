@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.10.17 (2021-07-16)
+
+#### Other Change
+* `akashic-cli-serve`
+  * [#810](https://github.com/akashic-games/akashic-cli/pull/810) msgpack パーサーの追加 ([@yu-ogi](https://github.com/yu-ogi))
+
+#### Committers: 1
+- [@yu-ogi](https://github.com/yu-ogi)
+
 ## 2.10.16 (2021-07-12)
 
 #### Enhancement
