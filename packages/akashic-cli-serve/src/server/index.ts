@@ -22,8 +22,8 @@ import { CliConfigServe } from "@akashic/akashic-cli-commons/lib/CliConfig/CliCo
 import { SERVICE_TYPES } from "@akashic/akashic-cli-commons/lib/ServiceType";
 import { PlayerIdStore } from "./domain/PlayerIdStore";
 import { ModTargetFlags, watchContent } from "./domain/GameConfigs";
-import { AMFlowStore } from "@akashic/headless-driver/lib/play/amflow/AMFlowStore";
 import { PutStartPointEvent } from "../common/types/TestbedEvent";
+import parser from "../common/MsgpackParser";
 
 // 渡されたパラメータを全てstringに変換する
 // chalkを使用する場合、ログ出力時objectの中身を展開してくれないためstringに変換する必要がある
@@ -147,7 +147,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues) {
 
 	const app = express();
 	const httpServer = http.createServer(app);
-	const io = new socketio.Server(httpServer);
+	const io = new socketio.Server(httpServer, { parser });
 
 	if (cliConfigParam.watch && cliConfigParam.targetDirs) {
 		console.log("Start watching contents");
