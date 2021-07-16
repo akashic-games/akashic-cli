@@ -102,13 +102,18 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			return bundleScripts(gamejson.main || gamejson.assets.mainScene.path, param.source);
 		})
 		.then(async (bundleResult) => {
-			let files: string[] = param.strip ? gcu.extractFilePaths(gamejson, param.source) :
-				readdir(param.source).map(p => p.replace(`${param.source}/`, ""));
+			const files: string[] = param.strip ?
+				gcu.extractFilePaths(gamejson, param.source) :
+				readdir(param.source).map(p => cmn.Util.makeUnixPath(p));
+
 			let bundledFilePaths: string[] = [];
 			const preservingFilePathSet = new Set<string>(files);
 			if (bundleResult) {
 				bundledFilePaths = bundleResult.filePaths;
-				// 不要なスクリプトを削る。omitUnbundledJs ならば全スクリプト取り除く点に注意 (bundle されたものは不要、されなかったものは omit なので)
+				// 不要なスクリプトを削る。
+				// omitUnbundledJs ならば全スクリプト取り除く点に注意。
+				// (bundle されたスクリプトは不要、されなかったスクリプトは omit なので)
+				// また bundle されたものは .js とは限らない (.json がありうる) ことにも注意。
 				let unneeded = bundleResult.filePaths;
 				if (param.omitUnbundledJs) {
 					unneeded = unneeded.concat(files.filter(p => p.endsWith(".js")));
@@ -117,18 +122,19 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			}
 
 			// operation plugin に登録されているスクリプトファイルは bundle されていても残しておく必要がある
-			const operationPluginScripts = (gamejson.operationPlugins ?? []).map(plugin => plugin.script.replace(/^\.\//g, ""));
-			for (let script of operationPluginScripts) {
-				const scriptPath = path.join(param.source, script);
+			const operationPluginRoots = (gamejson.operationPlugins ?? []).map(plugin => plugin.script.replace(/^\.\//g, ""));
+			for (let pluginRoot of operationPluginRoots) {
+				const pluginRootAbsPath = cmn.Util.makeUnixPath(path.join(param.source, pluginRoot));  // abs
+				const pluginRootDir = path.dirname(pluginRootAbsPath);
 				// TODO: Promise#then() と async/await が混在する状態を改め、 async/await に統一する
-				const operationFiles = await cmn.NodeModules.listScriptFiles(
-					path.dirname(scriptPath),
-					"./" + path.basename(scriptPath),
+				const pluginScripts = await cmn.NodeModules.listScriptFiles(
+					pluginRootDir,
+					"./" + path.basename(pluginRootAbsPath),
 					param.logger,
 					true
 				);
-				operationFiles.forEach(file => {
-					const realPath = path.join(path.dirname(scriptPath), file).replace(`${param.source}/`, "");
+				pluginScripts.forEach(pluginScript => {
+					const realPath = cmn.Util.makeUnixPath(path.relative(param.source, path.join(pluginRootDir, pluginScript)));
 					if (files.indexOf(realPath) !== -1) {
 						// TODO: 操作プラグインによって preserve するファイルは bundle から除外する必要がある
 						preservingFilePathSet.add(realPath);
