@@ -10,13 +10,12 @@ var lt = require("../lib/listTemplates");
 describe("downloadTemplate.ts", () => {
 	let templateServer = null;
 	let repositoryUrl = "";
-	beforeAll(async (done) => {
+	beforeAll(async () => {
 		const port = await getPort();
 		const app = express();
 		app.use(express.static(path.resolve(__dirname, "..")));
 		templateServer = app.listen(port);
 		repositoryUrl = `http://127.0.0.1:${port}/templates/`;
-		done();
 	});
 	afterAll(() => {
 		if (templateServer) {
