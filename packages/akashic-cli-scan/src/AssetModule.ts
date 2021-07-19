@@ -18,8 +18,7 @@ export namespace AssetModule {
 	 * アセットのオブジェクトを配列に変換する。
 	 */
 	export function toArray(assets: AssetConfigurationMap): AssetConfigurationWithID[] {
-		return Object.keys(assets)
-			.map<AssetConfigurationWithID>(assetId => {
+		return Object.keys(assets).map<AssetConfigurationWithID>(assetId => {
 			return {
 				id: assetId,
 				...assets[assetId]
