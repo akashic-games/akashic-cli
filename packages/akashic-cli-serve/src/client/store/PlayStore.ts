@@ -10,7 +10,8 @@ import {
 	RunnerPauseTestbedEvent,
 	RunnerResumeTestbedEvent,
 	ClientInstanceAppearTestbedEvent,
-	ClientInstanceDisappearTestbedEvent
+	ClientInstanceDisappearTestbedEvent,
+	PutStartPointEvent
 } from "../../common/types/TestbedEvent";
 import { ContentLocatorData } from "../../common/types/ContentLocatorData";
 import { ClientContentLocator } from "../common/ClientContentLocator";
@@ -46,12 +47,25 @@ export class PlayStore {
 		this.plays = Object.create(null);
 		this._contentStore = param.contentStore;
 		this._creationWaiters = Object.create(null);
-		this._initializationWaiter = ApiClient.getPlays().then(res => {
+		this._initializationWaiter = ApiClient.getPlays()
+		.then((res) => {
 			const playsInfo = res.data;
-			playsInfo.forEach(playInfo => {
-				this.plays[playInfo.playId] = new PlayEntity({
-					...playInfo,
-					content: this._contentStore.findOrRegister(playInfo.contentLocatorData)
+			return Promise.all(playsInfo.map((playInfo) => {
+				return ApiClient.getStartPointHeaderList(playInfo.playId)
+					.then((res) => {
+						return {
+							playInfo,
+							startPointHeaderList: res.data.startPointHeaderList
+						};
+					});
+			}));
+		})
+		.then(res => {
+			res.forEach(o => {
+				this.plays[o.playInfo.playId] = new PlayEntity({
+					...o.playInfo,
+					content: this._contentStore.findOrRegister(o.playInfo.contentLocatorData),
+					startPointHeaderList: o.startPointHeaderList
 				});
 			});
 			Subscriber.onPlayCreate.add(this.handlePlayCreate);
@@ -65,6 +79,7 @@ export class PlayStore {
 			Subscriber.onRunnerRemove.add(this.handleRunnerRemove);
 			Subscriber.onRunnerPause.add(this.handleRunnerPause);
 			Subscriber.onRunnerResume.add(this.handleRunnerResume);
+			Subscriber.onPutStartPoint.add(this.handlePutStartPoint);
 		});
 	}
 
@@ -165,5 +180,9 @@ export class PlayStore {
 
 	private handleRunnerResume = (e: RunnerResumeTestbedEvent): void => {
 		this.plays[e.playId].handleRunnerResume(/* e.runnerId */);  // runnerIdを扱う処理は未実装
+	}
+
+	private handlePutStartPoint = (e: PutStartPointEvent): void => {
+		this.plays[e.playId].handleStartPointHeaderList(e.startPointHeader);
 	}
 }

@@ -22,6 +22,7 @@ import { CliConfigServe } from "@akashic/akashic-cli-commons/lib/CliConfig/CliCo
 import { SERVICE_TYPES } from "@akashic/akashic-cli-commons/lib/ServiceType";
 import { PlayerIdStore } from "./domain/PlayerIdStore";
 import { ModTargetFlags, watchContent } from "./domain/GameConfigs";
+import { PutStartPointEvent } from "../common/types/TestbedEvent";
 import parser from "../common/MsgpackParser";
 
 // 渡されたパラメータを全てstringに変換する
@@ -132,6 +133,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues) {
 	}
 
 	const targetDirs: string[] = cliConfigParam.targetDirs;
+	let onPutStartPointHandler: (e: PutStartPointEvent) => void;
 	const playManager = new PlayManager();
 	const runnerManager = new RunnerManager(playManager);
 	const playStore = new PlayStore({ playManager });
@@ -170,7 +172,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues) {
 				const playId = await playStore.createPlay(new ServerContentLocator({ contentId }));
 				const token = amflowManager.createPlayToken(playId, "", "", true, {});
 				const amflow = playStore.createAMFlow(playId);
-				await runnerStore.createAndStartRunner({ playId, isActive: true, token, amflow, contentId });
+				await runnerStore.createAndStartRunner({ playId, isActive: true, token, amflow, contentId, io });
 				await playStore.resumePlayDuration(playId);
 				targetPlayIds.forEach(id => io.emit("playBroadcast", { playId: id, message: { type: "switchPlay", nextPlayId: playId } }));
 			});
@@ -221,6 +223,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues) {
 	runnerStore.onRunnerRemove.add(arg => { io.emit("runnerRemove", arg); });
 	runnerStore.onRunnerPause.add(arg => { io.emit("runnerPause", arg); });
 	runnerStore.onRunnerResume.add(arg => { io.emit("runnerResume", arg); });
+	onPutStartPointHandler = (arg: PutStartPointEvent) => { io.emit("putStartPoint", arg); };
 
 	let loadedPlaylogPlayId: string;
 	if (cliConfigParam.debugPlaylog) {

@@ -5,6 +5,8 @@ import {Player} from "./Player";
 import {ContentLocatorData} from "./ContentLocatorData";
 import {ContentDesc} from "./ContentDesc";
 import {AppOptions} from "./AppOptions";
+import { StartPoint } from "@akashic/amflow";
+import { StartPointHeader } from "./StartPointHeader";
 
 export interface ApiResponse<T> {
 	meta: {
@@ -66,6 +68,14 @@ export interface SandboxConfigApiResponseData extends SandboxConfig {
 
 export type OptionsApiResponseData = AppOptions;
 
+export type StartPointHeaderListResponseData = {
+	startPointHeaderList: StartPointHeader[];
+};
+
+export type StartPointResponseData = {
+	startPoint: StartPoint;
+};
+
 export type PlayGetAllApiResponse = ApiResponse<PlayApiResponseData[]>;
 export type PlayPostApiResponse = ApiResponse<PlayApiResponseData>;
 export type PlayDeleteApiResponse = ApiResponse<PlayDeleteApiResponseData>;
@@ -79,3 +89,4 @@ export type ContentGetAllApiResponse = ApiResponse<ContentGetApiResponseData[]>;
 export type ContentGetApiResponse = ApiResponse<ContentGetApiResponseData>;
 export type SandboxConfigApiResponse = ApiResponse<SandboxConfigApiResponseData>;
 export type OptionsApiResponse = ApiResponse<OptionsApiResponseData>;
+export type StartPointHeaderListResponse = ApiResponse<StartPointHeaderListResponseData>;

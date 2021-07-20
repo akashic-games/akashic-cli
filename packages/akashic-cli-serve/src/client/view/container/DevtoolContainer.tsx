@@ -100,7 +100,11 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 				downloadPlaylog: operator.play.downloadPlaylog,
 				setShowsProfiler: operator.ui.setShowsProfiler
 			}}
+			snapshotDevtoolProps={{
+				startPointHeaderList: play.startPointHeaderList,
+				downloadSnapshot: operator.play.downloadSnapshot,
+				onClickSeekToSnapshot: operator.localInstance.seekToStartPoint
+			}}
 		/>;
 	}
 }
-

@@ -86,4 +86,8 @@ export class PlayOperator {
 	downloadPlaylog = (): void => {
 		location.href = `/api/plays/${this.store.currentPlay.playId}/playlog`;
 	}
+
+	downloadSnapshot = (frame: number): void => {
+		location.href = `/api/plays/${this.store.currentPlay.playId}/start-points/${frame}`;
+	}
 }

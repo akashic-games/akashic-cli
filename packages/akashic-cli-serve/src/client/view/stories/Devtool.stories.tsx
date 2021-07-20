@@ -199,6 +199,11 @@ const TestWithBehaviour = observer(() => (
 			downloadPlaylog: action("download-playlog"),
 			setShowsProfiler: action("show-profiler")
 		}}
+		snapshotDevtoolProps={{
+			startPointHeaderList: [],
+			downloadSnapshot: action("download-snapshot"),
+			onClickSeekToSnapshot: action("seekTo-snapshot")
+		}}
 	/>
 ));
 
@@ -305,6 +310,11 @@ storiesOf("o-Devtool", module)
 				downloadPlaylog: action("download-playlog"),
 				setShowsProfiler: action("show-profiler")
 			}}
+			snapshotDevtoolProps={{
+				startPointHeaderList: [],
+				downloadSnapshot: action("download-snapshot"),
+				onClickSeekToSnapshot: action("seekTo-snapshot")
+			}}
 		/>
 	))
 	.add("events", () => (
@@ -400,6 +410,11 @@ storiesOf("o-Devtool", module)
 				showsProfiler: false,
 				downloadPlaylog: action("download-playlog"),
 				setShowsProfiler: action("show-profiler")
+			}}
+			snapshotDevtoolProps={{
+				startPointHeaderList: [],
+				downloadSnapshot: action("download-snapshot"),
+				onClickSeekToSnapshot: action("seekTo-snapshot")
 			}}
 		/>
 	))
@@ -501,6 +516,11 @@ storiesOf("o-Devtool", module)
 				downloadPlaylog: action("download-playlog"),
 				setShowsProfiler: action("show-profiler")
 			}}
+			snapshotDevtoolProps={{
+				startPointHeaderList: [],
+				downloadSnapshot: action("download-snapshot"),
+				onClickSeekToSnapshot: action("seekTo-snapshot")
+			}}
 		/>
 	))
 	.add("niconico", () => (
@@ -555,6 +575,11 @@ storiesOf("o-Devtool", module)
 				downloadPlaylog: action("download-playlog"),
 				setShowsProfiler: action("show-profiler")
 			}}
+			snapshotDevtoolProps={{
+				startPointHeaderList: [],
+				downloadSnapshot: action("download-snapshot"),
+				onClickSeekToSnapshot: action("seekTo-snapshot")
+			}}
 		/>
 	))
 	.add("misc", () => (
@@ -608,6 +633,11 @@ storiesOf("o-Devtool", module)
 				showsProfiler: false,
 				downloadPlaylog: action("download-playlog"),
 				setShowsProfiler: action("show-profiler")
+			}}
+			snapshotDevtoolProps={{
+				startPointHeaderList: [],
+				downloadSnapshot: action("download-snapshot"),
+				onClickSeekToSnapshot: action("seekTo-snapshot")
 			}}
 		/>
 	))

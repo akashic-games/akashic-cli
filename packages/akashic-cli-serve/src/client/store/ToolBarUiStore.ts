@@ -34,6 +34,11 @@ export class ToolBarUiStore {
 	}
 
 	@action
+	seekTo(seconds: number): void {
+		this.currentTimePreview = seconds;
+	}
+
+	@action
 	setShowAppearance(show: boolean): void {
 		this.showsAppearanceMenu = show;
 	}
