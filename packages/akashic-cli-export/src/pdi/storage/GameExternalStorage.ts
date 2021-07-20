@@ -80,17 +80,17 @@ export class GameExternalStorage implements types.GameExternalStorageLike {
 		// asc/desc は JSON 上では効率的に実装できないので、全件取得したものをソートして limit 件切り出す。
 		// 最適化された実装は declare() 時点で type: "number" を踏まえた適切なデータ構造を採用できるはず。
 		switch (order) {
-		case "asc":
+			case "asc":
 			// order が asc/desc なら spec.type が number なのは上で確認済み、
 			// かつ spec.type と一致しない値は書き込まないのを write() が保証しているので、常に `as number` できる。
 			// (あるいは、TypeScript にこの invariant を推論させられないので明示的なキャストが必要)
-			data.sort((a, b) => (a.value as number) - (b.value as number));
-			return { gameCode, playScope, key, type, data: data.slice(offset, offset + limit) };
-		case "desc":
-			data.sort((a, b) => (b.value as number) - (a.value as number));
-			return { gameCode, playScope, key, type, data: data.slice(offset, offset + limit) };
-		default:
-			return { gameCode, playScope, key, type, data: data.slice(offset, offset + limit) };
+				data.sort((a, b) => (a.value as number) - (b.value as number));
+				return { gameCode, playScope, key, type, data: data.slice(offset, offset + limit) };
+			case "desc":
+				data.sort((a, b) => (b.value as number) - (a.value as number));
+				return { gameCode, playScope, key, type, data: data.slice(offset, offset + limit) };
+			default:
+				return { gameCode, playScope, key, type, data: data.slice(offset, offset + limit) };
 		}
 	}
 
@@ -164,7 +164,9 @@ export class GameExternalStorage implements types.GameExternalStorageLike {
 				dataTable[playerId] = calculated;
 				return null;
 			}
-		}).filter((failed: types.GameExternalStorageWriteFailureInfo): failed is types.GameExternalStorageWriteFailureInfo => failed != null);
+		}).filter(
+			(failed: types.GameExternalStorageWriteFailureInfo): failed is types.GameExternalStorageWriteFailureInfo => failed != null
+		);
 
 		this.setDataTableToKVS(playScope, req, dataTable);
 
@@ -214,7 +216,7 @@ export class GameExternalStorage implements types.GameExternalStorageLike {
 				return "$ROOTPLAY";
 			case "global": default:
 				return "$GLOBAL";
-			}
+		}
 	}
 
 	private _locatorIdOf(loc: types.GameExternalStorageLocator): string {

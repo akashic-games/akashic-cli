@@ -12,12 +12,12 @@ import {
 /**
  * GameExternalStorageReadRequest.limitのデフォルト値
  */
-export const DEFAULT_STORAGE_READ_REQUEST_LIMIT: number = 10;
+export const DEFAULT_STORAGE_READ_REQUEST_LIMIT = 10;
 
 /**
  * GameExternalStorageReadRequest.offsetのデフォルト値
  */
-export const DEFAULT_STORAGE_READ_REQUEST_OFFSET: number = 0;
+export const DEFAULT_STORAGE_READ_REQUEST_OFFSET = 0;
 
 /**
  * ストレージの領域を識別する情報。
@@ -152,7 +152,10 @@ export interface GameExternalStorageLike {
 	 * req.playerIds[i] に対応する値がない場合、response.data[i].value は null である。
 	 * req.offset が大きすぎる場合、 response.data は [] である。
 	 */
-	read(req: GameExternalStorageReadRequest, callback: (error: Error | null, response: GameExternalStorageReadResponse | null) => void): void;
+	read(
+		req: GameExternalStorageReadRequest,
+		callback: (error: Error | null, response: GameExternalStorageReadResponse | null) => void
+	): void;
 
 	/**
 	 * 永続化領域に書き込む。

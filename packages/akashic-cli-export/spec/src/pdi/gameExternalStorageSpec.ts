@@ -1,21 +1,21 @@
 // TODO: このテストは将来的には外部で実行するようにする
-import { GameExternalStorage } from "../../../lib/pdi/storage/GameExternalStorage";
 import * as types from "../../../lib/pdi/storage/content-storage-types";
+import { GameExternalStorage } from "../../../lib/pdi/storage/GameExternalStorage";
 
 // NOTE: 簡易 KVS 実装
 class KVS {
 	data: {[key: string]: any} = {};
 
-	getItem(key: string) {
+	getItem(key: string): any | null {
 		return this.data[key] || null;
 	}
 
-	setItem(key: string, value: any) {
+	setItem(key: string, value: any): void {
 		this.data[key] = value;
 	}
 }
 
-function promisize(storage: GameExternalStorage) {
+function promisize(storage: GameExternalStorage): any  {
 	return {
 		read: (req: types.GameExternalStorageReadRequest) =>
 			new Promise((res, rej) => storage.read(req, (e, r) => e ? rej(e) : res(r))),

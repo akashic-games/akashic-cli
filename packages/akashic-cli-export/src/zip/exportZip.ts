@@ -1,6 +1,6 @@
 import * as fs from "fs";
-import * as path from "path";
 import * as os from "os";
+import * as path from "path";
 import * as cmn from "@akashic/akashic-cli-commons";
 import archiver = require("archiver");
 import readdir = require("fs-readdir-recursive");
@@ -58,7 +58,7 @@ export function _completeExportZipParameterObject(param: ExportZipParameterObjec
 // TODO akashic-cli-commons に移して export html と実装を共有する
 export function _checkDestinationValidity(dest: string, force: boolean): Promise<void> {
 	return new Promise<void>((resolve, reject) => {
-		fs.stat(path.resolve(dest), (error: any, stat: any) => {
+		fs.stat(path.resolve(dest), (error: any, _stat: any) => {
 			if (error) {
 				if (error.code === "ENOENT") {
 					resolve();
