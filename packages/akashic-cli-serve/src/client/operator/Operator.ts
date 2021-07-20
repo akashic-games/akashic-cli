@@ -12,7 +12,7 @@ import { UiOperator } from "./UiOperator";
 import { DevtoolOperator } from "./DevtoolOperator";
 import { ExternalPluginOperator } from "./ExternalPluginOperator";
 import { RPGAtsumaruApi } from "../atsumaru/RPGAtsumaruApi";
-import { defaultSessionParameter } from "../common/defaultSessionParameter";
+import { createSessionParameter } from "../common/createSessionParameter";
 import {ProfilerValue} from "../common/types/Profiler";
 
 export interface OperatorParameterObject {
@@ -167,7 +167,7 @@ export class Operator {
 			this.store.profilerStore.pushProfilerValueResult("frame", value.frameTime);
 			this.store.profilerStore.pushProfilerValueResult("rendering", value.renderingTime);
 		});
-		if (store.targetService !== "atsumaru" ) {
+		if (store.targetService !== "atsumaru") {
 			this.store.devtoolUiStore.initTotalTimeLimit(play.content.preferredSessionParameters.totalTimeLimit);
 			this.devtool.setupNiconicoDevtoolValueWatcher();
 		}
@@ -200,11 +200,12 @@ export class Operator {
 		if (events && autoSendEventName && events[autoSendEventName] instanceof Array) {
 			events[autoSendEventName].forEach((pev: any) => play.amflow.enqueueEvent(pev));
 		} else if (events && autoSendEvents && events[autoSendEvents] instanceof Array) {
-			// TODO: `autoSendEvents` は deprecated となった。互換性のためこのパスを残しているが、`autoSendEvents` の削除時にこのパスも削除する。
+			// TODO: `autoSendEvents` は非推奨。互換性のためこのパスを残しているが、`autoSendEvents` の削除時にこのパスも削除する。
 			console.warn("[deprecated] `autoSendEvents` in sandbox.config.js is deprecated. Please use `autoSendEventName`.");
 			events[autoSendEvents].forEach((pev: any) => play.amflow.enqueueEvent(pev));
 		} else if (!autoSendEventName && this.store.targetService === "nicolive") {
-			play.amflow.enqueueEvent(defaultSessionParameter); // 既定のセッションパラメータを送る
+			// TODO: 現状は "nicolive" で固定。 "atsumaru" を使う方法は要検討
+			play.amflow.enqueueEvent(createSessionParameter("nicolive")); // セッションパラメータを送る
 		}
 
 		if (this.store.devtoolUiStore.isAutoSendEvent) {
