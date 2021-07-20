@@ -355,6 +355,9 @@ describe("GameConfigurationUtil", () => {
 
 			ret = gcu.isEmptyScriptJs("\"use strict\";Object.defineProperty(exports,\"__esModule\",{value:!0});var a=\"a\";");
 			expect(ret).toBeFalsy();
+
+			ret = gcu.isEmptyScriptJs("Object.defineProperty(exports, \"__esModule\", {value:true});");
+			expect(ret).toBeTruthy();
 		});
 	});
 });
