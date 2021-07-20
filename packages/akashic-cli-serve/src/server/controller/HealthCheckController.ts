@@ -2,7 +2,7 @@ import * as express from "express";
 import { PlayStore } from "../domain/PlayStore";
 
 export const createHandleToGetStatus = (playStore: PlayStore): express.RequestHandler => {
-	return async (req, res, next) => {
+	return async (_req, res, next) => {
 		try {
 			const plays = playStore.getPlays();
 			const playsInfo = plays.map(play => {

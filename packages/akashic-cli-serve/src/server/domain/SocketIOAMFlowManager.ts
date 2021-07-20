@@ -1,7 +1,7 @@
-import { Socket } from "socket.io";
-import * as pl from "@akashic/playlog";
 import * as amf from "@akashic/amflow";
 import { getSystemLogger } from "@akashic/headless-driver";
+import * as pl from "@akashic/playlog";
+import { Socket } from "socket.io";
 import { ClientInstanceDescription } from "../../common/types/TestbedEvent";
 import { PlayStore } from "../domain/PlayStore";
 
@@ -59,28 +59,34 @@ export class SocketIOAMFlowManager {
 				amflow,
 				socket,
 				lastToken: null,
-				emitTick: (tick: pl.Tick) => { socket.emit("amflow:[tick]", connId, tick); },
-				emitEvent: (event: pl.Event) => { socket.emit("amflow:[event]", connId, event); }
+				emitTick: (tick: pl.Tick) => {
+					socket.emit("amflow:[tick]", connId, tick);
+				},
+				emitEvent: (event: pl.Event) => {
+					socket.emit("amflow:[event]", connId, event);
+				}
 			};
 			amflow.open(playId, callback ? (e => callback(e, connId)) : null);
 		});
 
-		socket.on("amflow:authenticate", (connectionId: string, token: string, callback: (error: Error, permission: amf.Permission) => void) => {
-			const conn = this.getConncetion(connectionId);
-			if (!conn) {
-				callback(this.makeConnectionError(connectionId), null);
-				return;
-			}
-			conn.amflow.authenticate(token, (err, permission) => {
-				if (err) {
-					callback(err, null);
+		socket.on(
+			"amflow:authenticate",
+			(connectionId: string, token: string, callback: (error: Error, permission: amf.Permission) => void) => {
+				const conn = this.getConncetion(connectionId);
+				if (!conn) {
+					callback(this.makeConnectionError(connectionId), null);
 					return;
 				}
-				this.playStore.registerClientInstance(conn.playId, this.descMap[token]);
-				conn.lastToken = token;
-				callback(null, permission);
+				conn.amflow.authenticate(token, (err, permission) => {
+					if (err) {
+						callback(err, null);
+						return;
+					}
+					this.playStore.registerClientInstance(conn.playId, this.descMap[token]);
+					conn.lastToken = token;
+					callback(null, permission);
+				});
 			});
-		});
 
 		socket.on("amflow:onTick", (connectionId: string) => {
 			const conn = this.getConncetion(connectionId);
@@ -188,7 +194,7 @@ export class SocketIOAMFlowManager {
 		});
 
 		socket.on("disconnect", () => {
-			const doNothing = () => {};
+			const doNothing = (): void => {}; // eslint-disable-line @typescript-eslint/no-empty-function
 			Object.keys(this.connectionMap).forEach(connId => {
 				const conn = this.connectionMap[connId];
 				if (conn.socket === socket) {
@@ -215,6 +221,6 @@ export class SocketIOAMFlowManager {
 			return new Error(`Invalid connectionId: ${connectionId}`);
 		if (!this.playStore.getPlay(conn.playId))
 			return new Error(`Already closed play. play: ${connectionId}`);
-		return Error(`Unknown Error on SocketIOAMFlowManager`);
+		return Error("Unknown Error on SocketIOAMFlowManager");
 	}
 }

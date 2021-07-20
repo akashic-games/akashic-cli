@@ -1,3 +1,4 @@
+import { Trigger } from "@akashic/trigger";
 import { Observer } from "rxjs";
 import { ScoreboardData } from "./ScoreboardData";
 import { ScreenshotModalResults } from "./ScreenshotModalResults";
@@ -5,8 +6,6 @@ import { SelfInformation, dummySelfInfomation } from "./SelfInformation";
 import { TweetSettings } from "./TweetSettings";
 import { UserIdName, dummyUserIdName } from "./UserIdName";
 import { UserInformation, dummyUserInformation } from "./UserInformation";
-import { ServeGameContent } from "../akashic/ServeGameContent";
-import { Trigger } from "@akashic/trigger";
 
 interface SubscriptionMock {
 	unsubscribe(): void;
@@ -24,8 +23,8 @@ export interface RPGAtsumaruApiLike {
 		setContext: (context: string) => void;
 	};
 	storage: {
-		getItems: () => Promise<{key: string, value: string}[]>;
-		setItems: (items: {key: string, value: string}[]) => Promise<void>;
+		getItems: () => Promise<{key: string; value: string}[]>;
+		setItems: (items: {key: string; value: string}[]) => Promise<void>;
 		removeItem: (key: string) => Promise<void>;
 	};
 	volume: {
@@ -33,7 +32,7 @@ export interface RPGAtsumaruApiLike {
 		changed: {
 			// マスターボリュームの情報はserve側で持っていてコンテンツ側で監視すべきものでないので、Subscriptionのmockを返している
 			subscribe: (observer: Observer<number> | ((volume: number) => void)) => SubscriptionMock;
-		}
+		};
 	};
 	popups: {
 		openLink: (url: string, comment?: string) => Promise<void>;
@@ -65,49 +64,49 @@ export interface RPGAtsumaruAPIParameterObject {
 export class RPGAtsumaruApi implements RPGAtsumaruApiLike {
 	comment = {
 		verbose: false,
-		changeScene: (sceneName: string) => {
+		changeScene: (sceneName: string): void => {
 			console.log(`called window.RPGAtsumaru.comment.changeScene (sceneName: ${sceneName})`);
 		},
-		resetAndChangeScene: (sceneName: string) => {
+		resetAndChangeScene: (sceneName: string): void => {
 			console.log(`called window.RPGAtsumaru.comment.resetAndChangeScene (sceneName: ${sceneName})`);
 		},
-		pushContextFactor: (factor: string) => {
+		pushContextFactor: (factor: string): void => {
 			console.log(`called window.RPGAtsumaru.comment.pushContextFactor (factor: ${factor})`);
 		},
-		pushMinorContext: () => {
-			console.log(`called window.RPGAtsumaru.comment.pushMinorContext`);
+		pushMinorContext: (): void => {
+			console.log("called window.RPGAtsumaru.comment.pushMinorContext");
 		},
-		setContext: (context: string) => {
+		setContext: (context: string): void => {
 			console.log(`called window.RPGAtsumaru.comment.setContext (context: ${context})`);
 		}
 	};
 
 	storage = {
-		getItems: () => {
+		getItems: (): Promise<{ key: string; value: string }[]> => {
 			// コンパイルを通すためにダミーのセーブデータを用意
 			const items = [{key: "data1", value: "hoge"}, {key: "data2", value: "fuga"}];
 			console.log(`called window.RPGAtsumaru.storage.getItems. it will return ${items}.`);
 			return Promise.resolve().then(() => items);
 		},
-		setItems: (items: {key: string, value: string}[]) => {
+		setItems: (items: { key: string; value: string }[]): Promise<void> => {
 			console.log(`called window.RPGAtsumaru.storage.setItems (items: ${items})`);
 			return Promise.resolve();
 		},
-		removeItem: (key: string) => {
+		removeItem: (key: string): Promise<void> => {
 			console.log(`called window.RPGAtsumaru.storage.removeItem (key: ${key})`);
 			return Promise.resolve();
 		}
 	};
 
 	volume = {
-		getCurrentValue: () => {
-			console.log(`called window.RPGAtsumaru.volume.getCurrentValue`);
+		getCurrentValue: (): number => {
+			console.log("called window.RPGAtsumaru.volume.getCurrentValue");
 			return this._param.getVolumeCallback();
 		},
 		changed: {
 			subscribe: (observer: Observer<number> | ((volume: number) => void)) => {
-				console.log(`called window.RPGAtsumaru.volume.changed.subscribe`);
-				const func = (vol: number) => {
+				console.log("called window.RPGAtsumaru.volume.changed.subscribe");
+				const func = (vol: number): void => {
 					if (observer.hasOwnProperty("next")) {
 						(observer as Observer<number>).next(vol);
 					} else {
@@ -116,22 +115,22 @@ export class RPGAtsumaruApi implements RPGAtsumaruApiLike {
 				};
 				this.volumeTrigger.add(func);
 				return {
-					unsubscribe: () => {
+					unsubscribe: (): void => {
 						this.volumeTrigger.remove(func);
 					},
-					add: (_teardown: any) => {},
-					remove: (_subscription: any) => {}
+					add: (_teardown: any): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
+					remove: (_subscription: any): void => {} // eslint-disable-line @typescript-eslint/no-empty-function
 				};
 			}
 		}
 	};
 
 	popups = {
-		openLink: (url: string, comment?: string) => {
+		openLink: (url: string, comment?: string): Promise<void> => {
 			console.log(`called window.RPGAtsumaru.popups.openLink (url: ${url}, comment: ${comment})`);
 			return Promise.resolve();
 		},
-		displayCreatorInformationModal: (niconicoUserId?: number | null) => {
+		displayCreatorInformationModal: (niconicoUserId?: number | null): Promise<void> => {
 			console.log(`called window.RPGAtsumaru.popups.displayCreatorInformationModal (niconicoUserId: ${niconicoUserId})`);
 			return Promise.resolve();
 		}
@@ -145,11 +144,11 @@ export class RPGAtsumaruApi implements RPGAtsumaruApiLike {
 	};
 
 	user = {
-		getSelfInformation: () => {
+		getSelfInformation: (): Promise<SelfInformation> => {
 			console.log(`called window.RPGAtsumaru.user.getSelfInformation. it will return ${JSON.stringify(dummySelfInfomation)}.`);
 			return Promise.resolve().then(() => dummySelfInfomation);
 		},
-		getUserInformation: (userId: number) => {
+		getUserInformation: (userId: number): Promise<UserInformation> => {
 			const info = {
 				...dummyUserInformation,
 				id: userId
@@ -157,12 +156,12 @@ export class RPGAtsumaruApi implements RPGAtsumaruApiLike {
 			console.log(`called window.RPGAtsumaru.user.getUserInformation (userId: ${userId}). it will return ${JSON.stringify(info)}.`);
 			return Promise.resolve().then(() => info);
 		},
-		getRecentUsers: () => {
+		getRecentUsers: (): Promise<UserIdName[]> => {
 			console.log(`called window.RPGAtsumaru.user.getRecentUsers. it will return ${JSON.stringify([dummyUserIdName])}.`);
 			return Promise.resolve().then(() => [dummyUserIdName]);
 		},
 		// ダミー情報を返すため引数の値は利用しないので、アンダースコアを付与する
-		getActiveUserCount: (_minutes: number) => {
+		getActiveUserCount: (_minutes: number): Promise<number> => {
 			const dummyCount = 1; // ダミーの値として固定値を返す
 			console.log(`called window.RPGAtsumaru.user.getActiveUserCount. it will return ${dummyCount}.`);
 			return Promise.resolve().then(() => dummyCount);
@@ -170,15 +169,15 @@ export class RPGAtsumaruApi implements RPGAtsumaruApiLike {
 	};
 
 	scoreboards = {
-		setRecord: (boardId: number, score: number) => {
+		setRecord: (boardId: number, score: number): Promise<void> => {
 			console.log(`called window.RPGAtsumaru.scoreboards.setRecord (boardId: ${boardId}, score: ${score})`);
 			return Promise.resolve();
 		},
-		display: (boardId: number) => {
+		display: (boardId: number): Promise<void> => {
 			console.log(`called window.RPGAtsumaru.scoreboards.display (boardId: ${boardId})`);
 			return Promise.resolve();
 		},
-		getRecords: (boardId: number) => {
+		getRecords: (boardId: number): Promise<ScoreboardData> => {
 			const dummyScoreboardData = {
 				"myRecord": {
 					"isNewRecord": false,
@@ -214,22 +213,25 @@ export class RPGAtsumaruApi implements RPGAtsumaruApiLike {
 				"boardId": boardId,
 				"boardName": "スコアボードの名前"
 			};
-			console.log(`called window.RPGAtsumaru.scoreboards.getRecords (boardId: ${boardId}). it will return ${JSON.stringify(dummyScoreboardData)}.`);
+			console.log(
+				`called window.RPGAtsumaru.scoreboards.getRecords (boardId: ${boardId}).`
+				+ ` it will return ${JSON.stringify(dummyScoreboardData)}.`
+			);
 			return Promise.resolve().then(() => dummyScoreboardData);
 		}
 	};
 
 	screenshot = {
-		displayModal: () => {
+		displayModal: (): Promise<ScreenshotModalResults> => {
 			const dummyData = { tweeted: true };
 			console.log(`called window.RPGAtsumaru.screenshot.displayModal. it will return ${JSON.stringify(dummyData)}.`);
 			return Promise.resolve().then(() => dummyData);
 		},
 		// TODO: API本実装時に引数に付与したアンダースコアを除去する
-		setScreenshotHandler: (_handler: () => Promise<string>) => {
-			console.log(`called window.RPGAtsumaru.screenshot.setScreenshotHandler`);
+		setScreenshotHandler: (_handler: () => Promise<string>): void => {
+			console.log("called window.RPGAtsumaru.screenshot.setScreenshotHandler");
 		},
-		setTweetMessage: (tweetSettings: TweetSettings | null) => {
+		setTweetMessage: (tweetSettings: TweetSettings | null): void => {
 			console.log(`called window.RPGAtsumaru.screenshot.setTweetMessage (tweetSettings: ${JSON.stringify(tweetSettings)})`);
 		}
 	};

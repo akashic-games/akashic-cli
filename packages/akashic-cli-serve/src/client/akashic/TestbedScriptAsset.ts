@@ -32,7 +32,7 @@ type Constructor<T> = new(...args: any[]) => T;
  * ・agvがakashic-engineのgをengineFilesから参照しているため、コンパイル時にgを参照できない
  * ・@akashic/akashic-engineをinstallしてコンパイルできても、実行時に利用されるgが異なるのでTestbedScriptAssetはg.ScriptAssetの派生クラスとして認識されない
  */
-export const generateTestbedScriptAsset = <T extends Constructor<{}>>(Class: T) => {
+export const generateTestbedScriptAsset = <T extends Constructor<{}>>(Class: T): any => {
 	return class TestbedScriptAsset extends Class {
 		loading: boolean;
 		script: string;
@@ -68,7 +68,7 @@ export const generateTestbedScriptAsset = <T extends Constructor<{}>>(Class: T) 
 		}
 
 		_load(loader: AssetLoadHandler): void {
-			const waitLoader = () => {
+			const waitLoader = (): void => {
 				if (this.loading) {
 					setTimeout(waitLoader, 100);
 					return;

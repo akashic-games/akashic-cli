@@ -1,19 +1,19 @@
 import * as queryString from "query-string";
 import { PlayBroadcastTestbedEvent } from "../../common/types/TestbedEvent";
-import { ClientContentLocator } from "../common/ClientContentLocator";
+import { GameViewManager } from "../akashic/GameViewManager";
 import * as ApiClient from "../api/ApiClient";
 import * as Subscriber from "../api/Subscriber";
-import { GameViewManager } from "../akashic/GameViewManager";
-import { PlayEntity } from "../store/PlayEntity";
-import { Store } from "../store/Store";
-import { PlayOperator } from "./PlayOperator";
-import { LocalInstanceOperator } from "./LocalInstanceOperator";
-import { UiOperator } from "./UiOperator";
-import { DevtoolOperator } from "./DevtoolOperator";
-import { ExternalPluginOperator } from "./ExternalPluginOperator";
 import { RPGAtsumaruApi } from "../atsumaru/RPGAtsumaruApi";
+import { ClientContentLocator } from "../common/ClientContentLocator";
 import { createSessionParameter } from "../common/createSessionParameter";
 import {ProfilerValue} from "../common/types/Profiler";
+import { PlayEntity } from "../store/PlayEntity";
+import { Store } from "../store/Store";
+import { DevtoolOperator } from "./DevtoolOperator";
+import { ExternalPluginOperator } from "./ExternalPluginOperator";
+import { LocalInstanceOperator } from "./LocalInstanceOperator";
+import { PlayOperator } from "./PlayOperator";
+import { UiOperator } from "./UiOperator";
 
 export interface OperatorParameterObject {
 	store: Store;
@@ -114,7 +114,7 @@ export class Operator {
 				isReplay
 			});
 		}
-	}
+	};
 
 	startContent = async (params?: StartContentParameterObject): Promise<void> => {
 		const store = this.store;
@@ -175,7 +175,7 @@ export class Operator {
 		if (params != null && params.joinsSelf) {
 			store.currentPlay.join(store.player.id, store.player.name);
 		}
-	}
+	};
 
 	// TODO: このメソッドの処理は本来サーバー側で行うべき
 	restartWithNewPlay = async (): Promise<void> => {
@@ -184,7 +184,7 @@ export class Operator {
 		await this.store.currentPlay.deleteAllServerInstances();
 		await ApiClient.broadcast(this.store.currentPlay.playId, { type: "switchPlay", nextPlayId: play.playId });
 		this.ui.hideNotification();
-	}
+	};
 
 	private async _createServerLoop(contentLocator: ClientContentLocator): Promise<PlayEntity> {
 		const play = await this.store.playStore.createPlay({ contentLocator });
@@ -228,20 +228,20 @@ export class Operator {
 	private _handleBroadcast = (arg: PlayBroadcastTestbedEvent): void => {
 		try {
 			switch (arg.message.type) {
-			case "switchPlay":  // TODO typeを型づける
-				if (this.store.currentPlay.playId === arg.playId) {
-					this.setCurrentPlay(this.store.playStore.plays[arg.message.nextPlayId]);
-				}
-				break;
-			default:
-				throw new Error("invalid type: " + arg.message.type);
+				case "switchPlay":  // TODO typeを型づける
+					if (this.store.currentPlay.playId === arg.playId) {
+						this.setCurrentPlay(this.store.playStore.plays[arg.message.nextPlayId]);
+					}
+					break;
+				default:
+					throw new Error("invalid type: " + arg.message.type);
 			}
 		} catch (e) {
 			console.error("_handleBroadcast()", e);
 		}
-	}
+	};
 
-	private _createInstanceArgumentForNicolive(isBroadcaster: boolean) {
+	private _createInstanceArgumentForNicolive(isBroadcaster: boolean): any {
 		return {
 			coe: {
 				permission: {
