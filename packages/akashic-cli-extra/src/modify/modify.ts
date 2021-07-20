@@ -45,22 +45,22 @@ export function promiseModifyBasicParameter(param: ModifyBasicParameterParameter
 		.then((content: cmn.GameConfiguration) => {
 			return new Promise<void>((resolve, reject) => {
 				switch (param.target) {
-				case "width":
-					content.width = param.value;
-					break;
-				case "height":
-					content.height = param.value;
-					break;
-				case "fps":
-					content.fps = param.value;
-					break;
-				default:
-					return reject("unknown target: " + param.target);
+					case "width":
+						content.width = param.value;
+						break;
+					case "height":
+						content.height = param.value;
+						break;
+					case "fps":
+						content.fps = param.value;
+						break;
+					default:
+						return reject("unknown target: " + param.target);
 				}
 				resolve();
 			})
-			.then(() => cmn.ConfigurationFile.write(content, gameJsonPath, param.logger))
-			.then(() => param.logger.info("Done!"));
+				.then(() => cmn.ConfigurationFile.write(content, gameJsonPath, param.logger))
+				.then(() => param.logger.info("Done!"));
 		})
 		.then(restoreDirectory)
 		.catch((err) => {

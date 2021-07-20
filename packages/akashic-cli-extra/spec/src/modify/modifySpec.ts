@@ -1,6 +1,6 @@
+import * as fs from "fs";
 import * as os from "os";
 import * as path from "path";
-import * as fs from "fs";
 import * as cmn from "@akashic/akashic-cli-commons";
 import { modifyBasicParameter } from "../../../lib/modify/modify";
 

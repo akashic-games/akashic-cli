@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
-import { Command } from "commander";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons";
+import { Command } from "commander";
 import * as config from "./config";
 
 /**
@@ -29,14 +29,14 @@ export function run(argv: string[]): void {
 	commander
 		.command("set [target] [value]")
 		.description("set configuration to your .akashicrc")
-		.action((target: string, value: string, opts: any = {}) => {
+		.action((target: string, value: string, _opts: any = {}) => {
 			config.setConfigItem(null, target, value);
 		});
 
 	commander
 		.command("delete [target]")
 		.description("delete configuration from your .akashicrc")
-		.action((target: string, opts: any = {}) => {
+		.action((target: string, _opts: any = {}) => {
 			config.deleteConfigItem(null, target);
 		});
 
