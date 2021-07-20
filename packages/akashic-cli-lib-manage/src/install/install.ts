@@ -1,7 +1,7 @@
-import * as path from "path";
 import * as fs from "fs";
-import * as tar from "tar";
+import * as path from "path";
 import * as cmn from "@akashic/akashic-cli-commons";
+import * as tar from "tar";
 import { Configuration } from "./Configuration";
 
 export interface InstallParameterObject {
@@ -106,7 +106,9 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 					conf.addToGlobalScripts(filePaths);
 					const packageJsonFiles = cmn.NodeModules.listPackageJsonsFromScriptsPath(".", filePaths);
 					if (packageJsonFiles) {
-						const sandboxRuntime = conf._content.environment && conf._content.environment["sandbox-runtime"] ? conf._content.environment["sandbox-runtime"] : "1";
+						const sandboxRuntime =
+							conf._content.environment && conf._content.environment["sandbox-runtime"]
+							? conf._content.environment["sandbox-runtime"] : "1";
 						conf.addToModuleMainScripts(packageJsonFiles, sandboxRuntime);
 					}
 				})
@@ -158,7 +160,7 @@ export function install(param: InstallParameterObject, cb: (err: any) => void): 
 
 function _getPackageNameFromTgzFile(fileName: string): string {
 	let buf: Buffer;
-	const onentry = (entry: tar.FileStat) => {
+	const onentry = (entry: tar.FileStat): void => {
 		const splitPath = entry.header.path.split("/");
 		// splitPath[0] は解凍後のディレクトリ名が入る。そのディレクトリ直下のpackage.jsonのみを対象とする。
 		if (splitPath[1] === "package.json") {

@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
-import { Command } from "commander";
 import { ConsoleLogger, CliConfigurationFile, CliConfigUpdate } from "@akashic/akashic-cli-commons";
+import { Command } from "commander";
 import { promiseUpdate } from "./update";
 
 var ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "..", "package.json"), "utf8")).version;
@@ -12,7 +12,7 @@ commander
 	.description("Update installed npm modules")
 	.version(ver);
 
-function cli(param: CliConfigUpdate) {
+function cli(param: CliConfigUpdate): void {
 	var logger = new ConsoleLogger({ quiet: param.quiet });
 	promiseUpdate({ cwd: param.cwd, moduleNames: param.args, logger: logger })
 		.catch((err: any) => {
@@ -27,7 +27,7 @@ commander
 export function run(argv: string[]): void {
 	commander.parse(argv);
 	const options = commander.opts();
-	CliConfigurationFile.read(path.join(options["cwd"] || process.cwd(), "akashic.config.js"), (error, configuration) => {
+	CliConfigurationFile.read(path.join(options.cwd || process.cwd(), "akashic.config.js"), (error, configuration) => {
 		if (error) {
 			console.error(error);
 			process.exit(1);
