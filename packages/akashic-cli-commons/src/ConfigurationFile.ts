@@ -1,6 +1,6 @@
 import * as fs from "fs";
-import { Logger } from "./Logger";
 import { GameConfiguration } from "./GameConfiguration";
+import { Logger } from "./Logger";
 
 /**
  * game.json をファイルとして取り扱うモジュール。
@@ -37,7 +37,7 @@ export module ConfigurationFile {
 	 * @param confPath game.jsonを保存するディレクトリ。絶対パスであることを期待する。
 	 * @param logger ログ出力に用いるロガー。
 	 */
-	export function write(content: GameConfiguration, confPath: string, logger: Logger): Promise<void> {
+	export function write(content: GameConfiguration, confPath: string, _logger: Logger): Promise<void> {
 		return new Promise<void>((resolve: () => void, reject: (err: any) => void) => {
 			var text = JSON.stringify(content, null, "\t");
 			fs.writeFile(confPath, text, {encoding: "utf8"}, (err: any) => {

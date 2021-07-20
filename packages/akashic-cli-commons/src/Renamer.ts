@@ -1,5 +1,5 @@
-import * as path from "path";
 import * as fs from "fs";
+import * as path from "path";
 import * as fsx from "fs-extra";
 import { sha256 } from "js-sha256";
 import { GameConfiguration } from "./GameConfiguration";
@@ -36,7 +36,7 @@ export function renameAssetFilenames(content: GameConfiguration, basedir: string
  * @param filePath リネームするファイルのパス
  * @param newFilePath リネームされたファイルのパス
  */
-function _renameFilename(basedir: string, filePath: string, newFilePath: string, processedAssetPaths: Set<string>): void {
+function _renameFilename(basedir: string, filePath: string, newFilePath: string, _processedAssetPaths: Set<string>): void {
 	try {
 		fs.accessSync(path.resolve(basedir, newFilePath));
 	} catch (error) {
