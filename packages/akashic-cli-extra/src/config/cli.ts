@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
-import * as commander from "commander";
+import { Command } from "commander";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons";
 import * as config from "./config";
 
@@ -12,7 +12,7 @@ import * as config from "./config";
 export function run(argv: string[]): void {
 
 	const packageJson = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "..", "package.json"), "utf8"));
-
+	const commander = new Command();
 	commander
 		.description("List and edit configurations")
 		.version(packageJson.version)
