@@ -1,9 +1,9 @@
 import * as fs from "fs";
 import * as path from "path";
+import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
 import * as aacDuration from "aac-duration";
 import * as musicMetaData from "music-metadata";
 import { mp4Inspector } from "thumbcoil";
-import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
 
 export async function getAudioDuration(filepath: string, logger?: Logger): Promise<number> {
 	const ext = path.extname(filepath);

@@ -1,7 +1,7 @@
 import * as path from "path";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
 import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
-import { NodeModules }from "@akashic/akashic-cli-commons/lib/NodeModules";
+import { NodeModules } from "@akashic/akashic-cli-commons/lib/NodeModules";
 import { PromisedNpm } from "@akashic/akashic-cli-commons/lib/PromisedNpm";
 import { chdir } from "@akashic/akashic-cli-commons/lib/Util";
 import type { GameConfiguration } from "@akashic/game-configuration";
@@ -91,8 +91,8 @@ export async function scanNodeModules(p: ScanNodeModulesParameterObject): Promis
 				entryPointPath = content.main;
 			} else {
 				if (!Array.isArray(content.assets)) {
-					if (content.assets["mainScene"]) {
-						path.join(base, content.assets["mainScene"].path);
+					if (content.assets.mainScene) {
+						path.join(base, content.assets.mainScene.path);
 					}
 				}
 			}
@@ -107,7 +107,8 @@ export async function scanNodeModules(p: ScanNodeModulesParameterObject): Promis
 			try {
 				// lsResultオブジェクトは、package.jsonのdependenciesに書かれたモジュールと、それらの各依存モジュールをツリー構造で表したオブジェクトである。
 				// これらのうち、dependenciesに直接書かれていない依存モジュールのファイルパスは、依存モジュールのバージョン・インストール順序によって不定である。
-				// よって、依存モジュールのファイルパスを解決する方法として、node_modules/直下にあるモジュール名（つまりpackage.jsonのdependenciesに書かれたモジュール）のみをNodeModules.listModuleFilesに渡す。
+				// よって、依存モジュールのファイルパスを解決する方法として、
+				// node_modules/直下にあるモジュール名（つまりpackage.jsonのdependenciesに書かれたモジュール）のみをNodeModules.listModuleFilesに渡す。
 				// これにより、requireチェーンによって依存モジュールのファイルパスが解決される。
 				const lsResult = await npm.ls();
 				lsResult.dependencies = lsResult.dependencies ?? {};

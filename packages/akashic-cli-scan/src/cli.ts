@@ -1,14 +1,14 @@
 import * as path from "path";
-import { Command } from "commander";
-import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
-import { CliConfigurationFile } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigurationFile";
 import { CliConfigScanAsset, CliConfigScanGlobalScripts } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigScan";
+import { CliConfigurationFile } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigurationFile";
+import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
+import { Command } from "commander";
 import { scanAsset, ScanAssetParameterObject } from "./scanAsset";
 import { scanNodeModules } from "./scanNodeModules";
-import { watchAsset } from "./watchAsset";
 import type { AssetTargetType } from "./types";
+import { watchAsset } from "./watchAsset";
 
-const ver = require("../package.json").version; // tslint:disable-line: no-var-requires
+const ver = require("../package.json").version; // eslint-disable-line @typescript-eslint/no-var-requires
 const commander = new Command();
 commander
 	.description("Update various properties of game.json")
@@ -32,7 +32,7 @@ commander
 	.option("--text-asset-dir <dir>", "specify TextAsset directory", commanderArgsCoordinator)
 	.option("--text-asset-extension <extension>", "specify TextAsset extension", commanderArgsCoordinator)
 	.action((target: AssetTargetType, opts: CliConfigScanAsset = {}) => {
-		CliConfigurationFile.read(path.join(opts["cwd"] ?? process.cwd(), "akashic.config.js"), (error, configuration) => {
+		CliConfigurationFile.read(path.join(opts.cwd ?? process.cwd(), "akashic.config.js"), (error, configuration) => {
 			if (error) {
 				console.error(error);
 				process.exit(1);
@@ -110,7 +110,7 @@ export function run(argv: string[]): void {
 	}
 }
 
-function commanderArgsCoordinator<T>(val: T, ret: T[] = []) {
+function commanderArgsCoordinator<T>(val: T, ret: T[] = []): T[] {
 	ret.push(val);
 	return ret;
 }

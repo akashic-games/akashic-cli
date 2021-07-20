@@ -2,7 +2,7 @@ import * as path from "path";
 import type { Logger } from "@akashic/akashic-cli-commons";
 import { makeUnixPath } from "@akashic/akashic-cli-commons/lib/Util";
 import type { AssetConfiguration, AssetConfigurationMap } from "@akashic/game-configuration";
-import type { AssetConfigurationWithID, AssetScanDirectoryTable, AssetTargetType } from "./types";
+import type { AssetConfigurationWithID, AssetScanDirectoryTable } from "./types";
 
 export interface AssetIdResolverParameterObject {
 	resolveAssetIdsFromPath: boolean;
@@ -18,13 +18,12 @@ export namespace AssetModule {
 	 * アセットのオブジェクトを配列に変換する。
 	 */
 	export function toArray(assets: AssetConfigurationMap): AssetConfigurationWithID[] {
-		return Object.keys(assets)
-			.map<AssetConfigurationWithID>(assetId => {
-				return {
-					id: assetId,
-					...assets[assetId]
-				};
-			});
+		return Object.keys(assets).map<AssetConfigurationWithID>(assetId => {
+			return {
+				id: assetId,
+				...assets[assetId]
+			};
+		});
 	}
 
 	/**
@@ -116,7 +115,10 @@ export namespace AssetModule {
 			}
 			if (fresh.type === "image" && old.type === "image") {
 				if (fresh.width !== old.width || fresh.height !== old.height) {
-					logger?.info(`Detected change of the image size for ${fresh.path} from ${old.width}x${old.height} to ${fresh.width}x${fresh.height}`);
+					logger?.info(
+						`Detected change of the image size for ${fresh.path}`
+						+ ` from ${old.width}x${old.height} to ${fresh.width}x${fresh.height}`
+					);
 				}
 				return {
 					...old,
