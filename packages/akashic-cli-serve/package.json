@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-serve",
-  "version": "1.9.7",
+  "version": "1.9.11",
   "description": "A development server for Akashic Engine",
   "scripts": {
     "prepublish": "npm run setup && npm run build",
@@ -24,19 +24,22 @@
     "akashic-cli-serve": "./bin/run"
   },
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.8.4",
+    "@akashic/akashic-cli-commons": "0.8.5",
     "@akashic/akashic-cli-scan": "0.8.0",
-    "@akashic/headless-driver": "1.8.1",
+    "@akashic/headless-driver": "1.8.3",
     "@akashic/trigger": "1.0.0",
+    "@msgpack/msgpack": "2.6.0",
     "chalk": "4.1.1",
     "chokidar": "3.5.2",
     "commander": "8.0.0",
+    "component-emitter": "1.3.0",
     "ejs": "3.1.6",
     "express": "4.17.1",
     "lodash": "4.17.21",
     "open": "8.2.1",
     "rxjs": "6.6.7",
-    "socket.io": "4.1.2"
+    "socket.io": "4.1.2",
+    "socket.io-parser": "4.0.4"
   },
   "devDependencies": {
     "@akashic/amflow": "~3.1.0",
@@ -52,8 +55,6 @@
     "@types/query-string": "6.2.0",
     "@types/react": "16.14.10",
     "@types/react-dom": "16.9.13",
-    "@types/socket.io": "2.1.13",
-    "@types/socket.io-client": "1.4.36",
     "@types/storybook__addon-actions": "3.4.3",
     "@types/storybook__react": "4.0.2",
     "@typescript-eslint/eslint-plugin": "4.28.2",

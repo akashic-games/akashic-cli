@@ -1,3 +1,4 @@
+import type { Socket } from "socket.io-client";
 import * as amflow from "@akashic/amflow";
 import * as playlog from "@akashic/playlog";
 import { Trigger } from "@akashic/trigger";
@@ -6,14 +7,14 @@ export class SocketIOAMFlowClient implements amflow.AMFlow {
 	onGotStartedAt: Trigger<number>;
 
 	_permission: amflow.Permission | null;  // デバッグ用に保持。
-	private _socket: SocketIOClient.Socket;
+	private _socket: Socket;
 	private _tickHandlers: ((tick: playlog.Tick) => void)[];
 	private _eventHandlers: ((ev: playlog.Event) => void)[];
 	private _startedAt: number | null;
 	private _eventQueue: playlog.Event[];
 	private _connectionId: string | null;
 
-	constructor(socket: SocketIOClient.Socket) {
+	constructor(socket: Socket) {
 		this.onGotStartedAt = new Trigger<number>();
 		this._socket = socket;
 		this._tickHandlers = [];
