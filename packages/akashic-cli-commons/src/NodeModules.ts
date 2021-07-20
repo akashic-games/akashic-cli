@@ -73,7 +73,8 @@ export module NodeModules {
 		// moduleNamesをrequireするだけのソースコード文字列を作って依存性解析の基点にする
 		// (moduleNamesを直接b.require()してもよいはずだが、そうするとモジュールのエントリポイントの代わりに
 		// モジュールの名前(ディレクトリ名であることが多い)が出力されてしまうので避ける)
-		var dummyRootName = path.join(basepath, "__akashic-cli_dummy_require_root.js");
+		var dummyRootName = "__akashic-cli_dummy_require_root.js";
+		var dummyRootPath = path.join(basepath, dummyRootName);
 		var rootRequirer = moduleNames.map((name: string) => {
 			return "require(\"" + Util.makeModuleNameNoVer(name) + "\");";
 		}).join("\n");
@@ -84,7 +85,7 @@ export module NodeModules {
 		const ignoreModulePaths = ["/akashic-cli-commons/node_modules/"];
 
 		var b = browserify({
-			entries: new StringStream(rootRequirer, dummyRootName),
+			entries: new StringStream(rootRequirer, dummyRootPath),
 			basedir: basepath,
 			builtins: true  // builtins (コアモジュール) はサポートしていないが、b.on("dep", ...) で検出するためにtrueにする
 		});
@@ -94,7 +95,7 @@ export module NodeModules {
 			var filePaths: string[] = [];
 			b.on("dep", (row: any) => {
 				var filePath = Util.makeUnixPath(path.relative(basepath, row.file));
-				if (!checkAllModules && !(/^(?:\.\/)?node_modules/.test(filePath))) {
+				if (filePath === dummyRootName || (!checkAllModules && !(/^(?:\.\/)?node_modules/.test(filePath)))) {
 					return;
 				}
 				if (/^\.\.\//.test(filePath)) {
