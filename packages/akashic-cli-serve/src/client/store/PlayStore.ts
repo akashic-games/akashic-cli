@@ -55,7 +55,7 @@ export class PlayStore {
 					.then((res) => {
 						return {
 							playInfo,
-							startPointHeaderList: res.data.startPointHeaderList
+							startPointHeaders: res.data.startPointHeaderList
 						};
 					});
 			}));
@@ -65,7 +65,7 @@ export class PlayStore {
 				this.plays[o.playInfo.playId] = new PlayEntity({
 					...o.playInfo,
 					content: this._contentStore.findOrRegister(o.playInfo.contentLocatorData),
-					startPointHeaderList: o.startPointHeaderList
+					startPointHeaders: o.startPointHeaders
 				});
 			});
 			Subscriber.onPlayCreate.add(this.handlePlayCreate);

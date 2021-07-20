@@ -101,7 +101,7 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 				setShowsProfiler: operator.ui.setShowsProfiler
 			}}
 			snapshotDevtoolProps={{
-				startPointHeaderList: play.startPointHeaderList,
+				startPointHeaders: play.startPointHeaders,
 				downloadSnapshot: operator.play.downloadSnapshot,
 				onClickSeekToSnapshot: operator.localInstance.seekToStartPoint
 			}}

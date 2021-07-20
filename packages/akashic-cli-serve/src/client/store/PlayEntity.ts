@@ -45,7 +45,7 @@ export interface PlayEntityParameterObject {
 	clientInstances?: ClientInstanceDescription[];
 	durationState?: PlayDurationState;
 	parent?: PlayEntity;
-	startPointHeaderList?: StartPointHeader[];
+	startPointHeaders?: StartPointHeader[];
 }
 
 export class PlayEntity {
@@ -62,7 +62,7 @@ export class PlayEntity {
 	@observable clientInstances: ClientInstanceDescription[];
 	@observable joinedPlayerTable: ObservableMap;
 	@observable status: PlayStatus;
-	@observable startPointHeaderList: StartPointHeader[];
+	@observable startPointHeaders: StartPointHeader[];
 
 	@observable localInstances: LocalInstanceEntity[];
 	@observable serverInstances: ServerInstanceEntity[];
@@ -79,7 +79,7 @@ export class PlayEntity {
 		this.isActivePausing = !!param.durationState && param.durationState.isPaused;
 		this.duration = param.durationState ? param.durationState.duration : 0;
 		this.clientInstances = param.clientInstances || [];
-		this.startPointHeaderList = param.startPointHeaderList || [];
+		this.startPointHeaders = param.startPointHeaders || [];
 		this.joinedPlayerTable = observable.map((param.joinedPlayers || []).map(p => [p.id, p] as [string, Player]));
 		this.status = "preparing";
 		this.localInstances = [];
@@ -244,7 +244,7 @@ export class PlayEntity {
 
 	@action
 	handleStartPointHeaderList(startPointHeader: StartPointHeader): void {
-		this.startPointHeaderList.push(startPointHeader);
+		this.startPointHeaders.push(startPointHeader);
 	}
 
 	async teardown(): Promise<void> {

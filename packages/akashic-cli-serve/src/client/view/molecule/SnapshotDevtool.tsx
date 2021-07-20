@@ -4,7 +4,7 @@ import { StartPointHeader } from "../../../common/types/StartPointHeader";
 import { ToolLabelButton } from "../atom/ToolLabelButton";
 
 export interface SnapshotDevtoolProps {
-	startPointHeaderList: StartPointHeader[];
+	startPointHeaders: StartPointHeader[];
 	downloadSnapshot: (frame: number) => void;
 	onClickSeekToSnapshot: (frame: number) => void;
 }
@@ -16,7 +16,7 @@ export class SnapshotDevtool extends React.Component<SnapshotDevtoolProps, {}> {
 			スナップショット一覧
 			<ul>
 				{
-					this.props.startPointHeaderList.map(header => (
+					this.props.startPointHeaders.map(header => (
 						<li key={header.frame}>
 							<ToolLabelButton
 								className="external-ref_button_download-playlog"
