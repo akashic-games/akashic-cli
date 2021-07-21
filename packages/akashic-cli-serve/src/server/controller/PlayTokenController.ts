@@ -1,7 +1,7 @@
 import * as express from "express";
+import { PlayTokenPostApiResponseData } from "../../common/types/ApiResponse";
 import { InternalServerError, BadRequestError } from "../common/ApiError";
 import { responseSuccess } from "../common/ApiResponse";
-import { PlayTokenPostApiResponseData } from "../../common/types/ApiResponse";
 import { SocketIOAMFlowManager } from "../domain/SocketIOAMFlowManager";
 
 export const createHandlerToCreatePlayToken = (amflowManager: SocketIOAMFlowManager): express.RequestHandler => {

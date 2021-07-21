@@ -1,5 +1,6 @@
 import * as express from "express";
 import * as socketio from "socket.io";
+import { createHandlerToBroadcast } from "../controller/BroadcastController";
 import {
 	createHandlerToCreatePlay,
 	createHandlerToGetPlays,
@@ -8,19 +9,18 @@ import {
 	createHandlerToPatchPlay,
 	createHandlerToGetPlaylog
 } from "../controller/PlayController";
+import { createHandlerToRegisterPlayerId } from "../controller/PlayerIdController";
 import { createHandlerToCreatePlayToken } from "../controller/PlayTokenController";
-import { createHandlerToBroadcast } from "../controller/BroadcastController";
 import {
 	createHandlerToCreateRunner,
 	createHandlerToDeleteRunner,
 	createHandlerToPatchRunner
 } from "../controller/RunnerController";
+import { handleToGetStartupOptions } from "../controller/StartupOptionsController";
+import { PlayerIdStore } from "../domain/PlayerIdStore";
 import { PlayStore } from "../domain/PlayStore";
 import { RunnerStore } from "../domain/RunnerStore";
 import { SocketIOAMFlowManager } from "../domain/SocketIOAMFlowManager";
-import { handleToGetStartupOptions } from "../controller/StartupOptionsController";
-import { createHandlerToRegisterPlayerId } from "../controller/PlayerIdController";
-import { PlayerIdStore } from "../domain/PlayerIdStore";
 
 export interface ApiRouterParameterObject {
 	playStore: PlayStore;

@@ -1,7 +1,7 @@
 import { observable, ObservableMap } from "mobx";
 import { ContentLocatorData } from "../../common/types/ContentLocatorData";
-import { ClientContentLocator } from "../common/ClientContentLocator";
 import * as ApiClient from "../api/ApiClient";
+import { ClientContentLocator } from "../common/ClientContentLocator";
 import { ContentEntity } from "./ContentEntity";
 
 export class ContentStore {
