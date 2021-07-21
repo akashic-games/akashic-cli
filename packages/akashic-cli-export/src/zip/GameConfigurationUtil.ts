@@ -113,8 +113,8 @@ export function isScriptJsFile(filePath: string): boolean {
 export function isEmptyScriptJs(str: string): boolean {
 	if (!str || str.length === 0) return true;
 
-	// jsファイルの中身が、Typescriptのinterfaceの記述のみの場合は空と同様とする
 	// TypeScirpt 2.2.0以下かminifyされた場合は、"use strict";だけの出力となる
-	const regex = /^"use strict";[\r\n\s]*(Object.defineProperty\(exports,\s*("__esModule",)\s*?({\s*?value\s*:\s*?[true|!0]+\s*})\);)*$/;
+	// jsファイルの中身が、Typescriptのinterfaceの記述のみの場合は空と同様とする
+	const regex = /^("use strict";)?[\r\n\s]*(Object.defineProperty\(exports,\s*"__esModule",\s*?{\s*?value\s*:\s*?(true|!0)\s*}\);)?$/;
 	return regex.test(str.trim());
 }
