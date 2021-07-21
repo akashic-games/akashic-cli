@@ -45,12 +45,12 @@ export type StorageWriteType = "incr" | "decr" | "overwrite";
 /**
  * "number" の最小値。
  */
-export const STORAGE_MIN_NUMBER: number = -1073741824; // -(2 ** 30)
+export const STORAGE_MIN_NUMBER = -1073741824; // -(2 ** 30)
 
 /**
  * "number" の最大値。
  */
-export const STORAGE_MAX_NUMBER: number = 1073741823; // (2 ** 30) - 1;
+export const STORAGE_MAX_NUMBER = 1073741823; // (2 ** 30) - 1;
 
 export interface StorageData {
 	/**

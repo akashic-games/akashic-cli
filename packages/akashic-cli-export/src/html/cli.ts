@@ -1,9 +1,9 @@
 import * as fs from "fs";
 import * as path from "path";
-import { Command } from "commander";
 import { ConsoleLogger, CliConfigExportHtml, CliConfigurationFile } from "@akashic/akashic-cli-commons";
-import { promiseExportHTML, ExportHTMLParameterObject } from "./exportHTML";
+import { Command } from "commander";
 import { promiseExportAtsumaru } from "./exportAtsumaru";
+import { promiseExportHTML, ExportHTMLParameterObject } from "./exportHTML";
 
 const ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "..", "package.json"), "utf8")).version;
 
@@ -91,7 +91,7 @@ export function run(argv: string[]): void {
 	commander.parse(argvCopy);
 	const options = commander.opts();
 
-	CliConfigurationFile.read(path.join(options["cwd"] || process.cwd(), "akashic.config.js"), (error, configuration) => {
+	CliConfigurationFile.read(path.join(options.cwd || process.cwd(), "akashic.config.js"), (error, configuration) => {
 		if (error) {
 			console.error(error);
 			process.exit(1);
@@ -99,20 +99,20 @@ export function run(argv: string[]): void {
 
 		const conf = configuration.commandOptions.export ? (configuration.commandOptions.export.html || {}) : {};
 		cli({
-			cwd: options["cwd"] ?? conf.cwd,
-			force: options["force"] ?? conf.force,
-			quiet: options["quiet"] ?? conf.quiet,
-			output: options["output"] ?? conf.output,
-			source: options["source"] ?? conf.source,
-			strip: options["strip"] ?? conf.strip,
-			minify: options["minify"] ?? conf.minify,
-			bundle: options["bundle"] ?? conf.bundle,
-			magnify: options["magnify"] ?? conf.magnify,
-			hashFilename: options["hashFilename"] ?? conf.hashFilename,
-			injects: options["inject"] ?? conf.injects,
-			atsumaru: options["atsumaru"] ?? conf.atsumaru,
-			autoSendEventName: options["autoSendEventName"] ?? options["autoSendEvents"] ?? conf.autoSendEventName ?? conf.autoSendEvents,
-			omitUnbundledJs: options["omitUnbundledJs"] ?? conf.omitUnbundledJs
+			cwd: options.cwd ?? conf.cwd,
+			force: options.force ?? conf.force,
+			quiet: options.quiet ?? conf.quiet,
+			output: options.output ?? conf.output,
+			source: options.source ?? conf.source,
+			strip: options.strip ?? conf.strip,
+			minify: options.minify ?? conf.minify,
+			bundle: options.bundle ?? conf.bundle,
+			magnify: options.magnify ?? conf.magnify,
+			hashFilename: options.hashFilename ?? conf.hashFilename,
+			injects: options.inject ?? conf.injects,
+			atsumaru: options.atsumaru ?? conf.atsumaru,
+			autoSendEventName: options.autoSendEventName ?? options.autoSendEvents ?? conf.autoSendEventName ?? conf.autoSendEvents,
+			omitUnbundledJs: options.omitUnbundledJs ?? conf.omitUnbundledJs
 		});
 	});
 }

@@ -2,8 +2,8 @@ import * as fs from "fs";
 import * as path from "path";
 import * as cmn from "@akashic/akashic-cli-commons";
 import * as fsx from "fs-extra";
-import * as UglifyJS from "uglify-js";
 import readdir = require("fs-readdir-recursive");
+import * as UglifyJS from "uglify-js";
 
 export interface ConvertTemplateParameterObject {
 	output: string;
@@ -74,7 +74,7 @@ export function copyAssetFiles(inputPath: string, outputPath: string, options: C
 	options.logger.info("copying files...");
 	const scriptPath = path.resolve(inputPath, "script");
 	const textPath = path.resolve(inputPath, "text");
-	const isAssetToBeCopied = (src: string) => {
+	const isAssetToBeCopied = (src: string): boolean => {
 		return path.relative(scriptPath, src)[0] === "." && (options.unbundleText || path.relative(textPath, src)[0] === ".");
 	};
 	try {
@@ -102,6 +102,7 @@ export function wrap(code: string, minify?: boolean): string {
 }
 
 export function getDefaultBundleScripts(templatePath: string, version: string, minify?: boolean, bundleText: boolean = true): any {
+	// eslint-disable-next-line @typescript-eslint/no-var-requires
 	var versionsJson = require("../engineFilesVersion.json");
 	var engineFilesVariable = versionsJson[`v${version}`].variable;
 	var preloadScriptNames = [`${engineFilesVariable}.js`];
@@ -171,7 +172,7 @@ export function validateEs5Code(fileName: string, code: string): string[] {
 		.map(info => `${fileName}(${info.line}:${info.column}): ${info.message}`);
 }
 
-export function readSandboxConfigJs(sourceDir: string) {
+export function readSandboxConfigJs(sourceDir: string): string {
 	const sandboxConfigJsPath = path.join(sourceDir, "sandbox.config.js");
 	return fs.readFileSync(sandboxConfigJsPath, "utf8").replace(/\r\n|\r/g, "\n");
 }
@@ -201,7 +202,9 @@ function loadScriptFile(fileName: string, templatePath: string): string {
 		return fs.readFileSync(filepath, "utf8").replace(/\r\n|\r/g, "\n");
 	} catch (e) {
 		if (e.code === "ENOENT") {
-			throw new Error(fileName + " is not found. Try re-install akashic-cli" + path.resolve(__dirname, "..", templatePath, "js", fileName));
+			throw new Error(
+				fileName + " is not found. Try re-install akashic-cli" + path.resolve(__dirname, "..", templatePath, "js", fileName)
+			);
 		} else {
 			throw e;
 		}

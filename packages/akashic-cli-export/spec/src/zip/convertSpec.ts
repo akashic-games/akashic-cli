@@ -1,7 +1,7 @@
-import * as path from "path";
-import * as mockfs from "mock-fs";
 import * as fs from "fs";
+import * as path from "path";
 import * as fsx from "fs-extra";
+import * as mockfs from "mock-fs";
 import { bundleScripts, convertGame, ConvertGameParameterObject } from "../../../lib/zip/convert";
 
 describe("convert", () => {
@@ -12,7 +12,10 @@ describe("convert", () => {
 
 	describe("bundleScripts", () => {
 		it("bundles scripts", (done) => {
-			bundleScripts(require("../../fixtures/simple_game/game.json").main, path.resolve(__dirname, "..", "..", "fixtures", "simple_game"))
+			bundleScripts(
+				require("../../fixtures/simple_game/game.json").main,
+				path.resolve(__dirname, "..", "..", "fixtures", "simple_game")
+			)
 				.then((result) => {
 					expect(result.filePaths).toEqual([
 						"script/bar.js",
@@ -163,10 +166,10 @@ describe("convert", () => {
 					expect(fs.existsSync(path.join(destDir, "package.json"))).toBe(true);
 					const gameJson = JSON.parse(fs.readFileSync(path.join(destDir, "game.json")).toString());
 					expect(gameJson.main).toBe("./script/aez_bundle_main.js");
-					expect(gameJson.assets["aez_bundle_main"].path).toBe("script/aez_bundle_main.js");
-					expect(gameJson.assets["aez_bundle_main"].type).toBe("script");
-					expect(gameJson.assets["aez_bundle_main"].global).toBe(true);
-					expect(gameJson.assets["ignore2"].global).toBeFalsy();
+					expect(gameJson.assets.aez_bundle_main.path).toBe("script/aez_bundle_main.js");
+					expect(gameJson.assets.aez_bundle_main.type).toBe("script");
+					expect(gameJson.assets.aez_bundle_main.global).toBe(true);
+					expect(gameJson.assets.ignore2.global).toBeFalsy();
 					done();
 				}, done.fail);
 		});
@@ -238,7 +241,7 @@ describe("convert", () => {
 					expect(fs.existsSync(path.join(destDir, "package.json"))).toBe(true);
 					const gameJson = fs.readFileSync(path.join(destDir, "game.json")).toString();
 					const gameJsonObj = JSON.parse(gameJson);
-					expect(gameJsonObj.assets["ignore2"].global).toBeTruthy();
+					expect(gameJsonObj.assets.ignore2.global).toBeTruthy();
 					done();
 				}, done.fail);
 		});
@@ -306,11 +309,11 @@ describe("convert", () => {
 					expect(fs.existsSync(path.join(destDir, "game.json"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "package.json"))).toBe(true);
 					const gameJson = JSON.parse(fs.readFileSync(path.join(destDir, "game.json")).toString());
-					expect(gameJson.assets["aez_bundle_main0"].path).toBe("script/aez_bundle_main0.js");
-					expect(gameJson.assets["aez_bundle_main0"].type).toBe("script");
-					expect(gameJson.assets["aez_bundle_main"].path).toBe("image/akashic-cli.png");
-					expect(gameJson.assets["aez_bundle_main"].type).toBe("image");
-					expect(gameJson.assets["aez_bundle_main"].hint).not.toBeDefined();
+					expect(gameJson.assets.aez_bundle_main0.path).toBe("script/aez_bundle_main0.js");
+					expect(gameJson.assets.aez_bundle_main0.type).toBe("script");
+					expect(gameJson.assets.aez_bundle_main.path).toBe("image/akashic-cli.png");
+					expect(gameJson.assets.aez_bundle_main.type).toBe("image");
+					expect(gameJson.assets.aez_bundle_main.hint).not.toBeDefined();
 					done();
 				}, done.fail);
 		});
@@ -334,10 +337,10 @@ describe("convert", () => {
 					expect(fs.readFileSync(path.join(destDir, "script/mainScene.js")).toString())
 						.toBe(fs.readFileSync(path.join(param.source, "script/mainScene.js")).toString());
 					const gameJson = JSON.parse(fs.readFileSync(path.join(destDir, "game.json")).toString());
-					expect(gameJson.assets["mainScene"].path).toBe("script/mainScene0.js");
-					expect(gameJson.assets["mainScene"].type).toBe("script");
-					expect(gameJson.assets["mainScene"].global).toBe(true);
-					expect(gameJson.assets["notEntryPoint"].path).toBe("script/mainScene.js");
+					expect(gameJson.assets.mainScene.path).toBe("script/mainScene0.js");
+					expect(gameJson.assets.mainScene.type).toBe("script");
+					expect(gameJson.assets.mainScene.global).toBe(true);
+					expect(gameJson.assets.notEntryPoint.path).toBe("script/mainScene.js");
 					done();
 				}, done.fail);
 		});
@@ -359,14 +362,14 @@ describe("convert", () => {
 					expect(fs.existsSync(path.join(destDir, "package.json"))).toBe(true);
 
 					const gameJson = JSON.parse(fs.readFileSync(path.join(destDir, "game.json")).toString());
-					expect(gameJson.assets["aez_bundle_main"].path).toBe("script/aez_bundle_main.js");
-					expect(gameJson.assets["aez_bundle_main"].type).toBe("script");
-					expect(gameJson.assets["test"].path).toBe("text/test.json");
-					expect(gameJson.assets["test"].type).toBe("text");
+					expect(gameJson.assets.aez_bundle_main.path).toBe("script/aez_bundle_main.js");
+					expect(gameJson.assets.aez_bundle_main.type).toBe("script");
+					expect(gameJson.assets.test.path).toBe("text/test.json");
+					expect(gameJson.assets.test.type).toBe("text");
 					// バンドルされていない不要なファイルはgamejsonから取り除かれる
-					expect(gameJson.assets["main"]).toBeUndefined();
-					expect(gameJson.assets["foo"]).toBeUndefined();
-					expect(gameJson.assets["bar"]).toBeUndefined();
+					expect(gameJson.assets.main).toBeUndefined();
+					expect(gameJson.assets.foo).toBeUndefined();
+					expect(gameJson.assets.bar).toBeUndefined();
 
 					expect(gameJson.globalScripts.includes("node_modules/@hoge/testmodule/lib/ModuleA.js")).toBeFalsy();
 					expect(gameJson.globalScripts.includes("node_modules/@hoge/testmodule/lib/ModuleB.js")).toBeFalsy();
@@ -391,20 +394,20 @@ describe("convert", () => {
 					expect(fs.existsSync(path.join(destDir, "text/test.json"))).toBe(false);
 
 					const gameJson = JSON.parse(fs.readFileSync(path.join(destDir, "game.json")).toString());
-					expect(gameJson.assets["aez_bundle_main"].path).toBe("script/aez_bundle_main.js");
-					expect(gameJson.assets["aez_bundle_main"].type).toBe("script");
-					expect(gameJson.assets["test"].path).toBe("text/test.json");
-					expect(gameJson.assets["test"].type).toBe("text");
+					expect(gameJson.assets.aez_bundle_main.path).toBe("script/aez_bundle_main.js");
+					expect(gameJson.assets.aez_bundle_main.type).toBe("script");
+					expect(gameJson.assets.test.path).toBe("text/test.json");
+					expect(gameJson.assets.test.type).toBe("text");
 					// バントルされていないファイルも omitUnbundledJs: false により残る。
-					expect(gameJson.assets["bar"].path).toBe("script/bar.js");
-					expect(gameJson.assets["bar"].type).toBe("script");
+					expect(gameJson.assets.bar.path).toBe("script/bar.js");
+					expect(gameJson.assets.bar.type).toBe("script");
 					expect(gameJson.globalScripts.includes("node_modules/@hoge/testmodule/lib/ModuleB.js")).toBeTruthy();
 					expect(gameJson.globalScripts.includes("node_modules/@hoge/testmodule/lib/ModuleC.js")).toBeTruthy();
 					expect(gameJson.globalScripts.includes("node_modules/@hoge/testmodule/lib/index.js")).toBeTruthy();
 
 					// バンドルされたファイルは取り除かれる。
-					expect(gameJson.assets["main"]).toBeUndefined();
-					expect(gameJson.assets["foo"]).toBeUndefined();
+					expect(gameJson.assets.main).toBeUndefined();
+					expect(gameJson.assets.foo).toBeUndefined();
 					expect(gameJson.globalScripts.includes("node_modules/@hoge/testmodule/lib/ModuleA.js")).toBeFalsy();
 					done();
 				}, done.fail);
@@ -426,7 +429,7 @@ describe("convert", () => {
 					expect(fs.existsSync(path.join(destDir, "game.json"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "package.json"))).toBe(true);
 					const gameJson = JSON.parse(fs.readFileSync(path.join(destDir, "game.json")).toString());
-					const imgAsset = gameJson.assets["aez_bundle_main"];
+					const imgAsset = gameJson.assets.aez_bundle_main;
 					expect(imgAsset.type).toBe("image");
 					expect(imgAsset.hint.untainted).toBeTruthy();
 					done();
@@ -442,7 +445,7 @@ describe("convert", () => {
 			convertGame(param)
 				.then(() => {
 					const gameJson = JSON.parse(fs.readFileSync(path.join(destDir, "game.json")).toString());
-					const imgAsset = gameJson.assets["aez_bundle_main"];
+					const imgAsset = gameJson.assets.aez_bundle_main;
 					expect(imgAsset.type).toBe("image");
 					expect(imgAsset.hint).not.toBeDefined();
 					done();
