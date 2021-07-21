@@ -1,12 +1,12 @@
-import { InitParameterObject, completeInitParameterObject } from "./InitParameterObject";
 import { updateConfigurationFile } from "./BasicParameters";
+import * as copyTemplate from "./copyTemplate";
 import { downloadTemplateIfNeeded } from "./downloadTemplate";
 import { extractZipIfNeeded } from "./extractZipIfNeeded";
-import * as copyTemplate from "./copyTemplate";
+import { InitParameterObject, completeInitParameterObject } from "./InitParameterObject";
+import { collectTemplatesNames } from "./listTemplates";
+import { readTemplateFile } from "./readTemplateFile";
 import { showTemplateMessage } from "./showTemplateMessage";
 import { TemplateConfig } from "./TemplateConfig";
-import { readTemplateFile } from "./readTemplateFile";
-import { collectTemplatesNames, listTemplates } from "./listTemplates";
 
 export function promiseInit(param: InitParameterObject): Promise<void> {
 	let templateConfig: TemplateConfig;
@@ -22,7 +22,9 @@ export function promiseInit(param: InitParameterObject): Promise<void> {
 		.then(() => extractZipIfNeeded(param))
 		.then(() => downloadTemplateIfNeeded(param))
 		.then(() => readTemplateFile(param))
-		.then((template) => { templateConfig = template; })
+		.then((template) => {
+			templateConfig = template;
+		})
 		.then(() => copyTemplate.copyTemplate(templateConfig, param))
 		.then(confPath => updateConfigurationFile(confPath, param.logger, param.skipAsk))
 		.then(() => showTemplateMessage(templateConfig, param))
