@@ -1,7 +1,7 @@
-import type { Socket } from "socket.io-client";
 import * as amflow from "@akashic/amflow";
 import * as playlog from "@akashic/playlog";
 import { Trigger } from "@akashic/trigger";
+import type { Socket } from "socket.io-client";
 
 export class SocketIOAMFlowClient implements amflow.AMFlow {
 	onGotStartedAt: Trigger<number>;

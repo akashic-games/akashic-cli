@@ -12,6 +12,7 @@ import { Command, OptionValues } from "commander";
 import * as express from "express";
 import * as open from "open";
 import * as socketio from "socket.io";
+import parser from "../common/MsgpackParser";
 import { ServerContentLocator } from "./common/ServerContentLocator";
 import { serverGlobalConfig } from "./common/ServerGlobalConfig";
 import { ModTargetFlags, watchContent } from "./domain/GameConfigs";
@@ -22,7 +23,6 @@ import { SocketIOAMFlowManager } from "./domain/SocketIOAMFlowManager";
 import { createApiRouter } from "./route/ApiRoute";
 import { createContentsRouter } from "./route/ContentsRoute";
 import { createHealthCheckRouter } from "./route/HealthCheckRoute";
-import parser from "../common/MsgpackParser";
 
 // 渡されたパラメータを全てstringに変換する
 // chalkを使用する場合、ログ出力時objectの中身を展開してくれないためstringに変換する必要がある
