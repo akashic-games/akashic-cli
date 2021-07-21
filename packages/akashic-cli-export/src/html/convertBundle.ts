@@ -1,8 +1,8 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as cmn from "@akashic/akashic-cli-commons";
-import * as fsx from "fs-extra";
 import * as ejs from "ejs";
+import * as fsx from "fs-extra";
 import {
 	ConvertTemplateParameterObject,
 	copyAssetFilesStrip,
@@ -128,7 +128,12 @@ async function writeHtmlFile(
 	innerHTMLAssetArray: InnerHTMLAssetData[], outputPath: string,
 	conf: cmn.Configuration, options: ConvertTemplateParameterObject, templatePath: string): Promise<void> {
 	const injects = options.injects ? options.injects : [];
-	var scripts = getDefaultBundleScripts(templatePath, conf._content.environment["sandbox-runtime"], options.minify, !options.unbundleText);
+	var scripts = getDefaultBundleScripts(
+		templatePath,
+		conf._content.environment["sandbox-runtime"],
+		options.minify,
+		!options.unbundleText
+	);
 	const filePath = path.resolve(__dirname + "/../template/bundle-index.ejs");
 	const html = await ejs.renderFile(filePath, {
 		assets: innerHTMLAssetArray,
@@ -160,6 +165,6 @@ function writeCommonFiles(
 	fsx.copySync(
 		path.resolve(__dirname, "..", templatePath),
 		outputPath,
-		{ filter: (src: string, dest: string): boolean => (dest !== jsDir && dest !== cssDir) }
+		{ filter: (_src: string, dest: string): boolean => (dest !== jsDir && dest !== cssDir) }
 	);
 }

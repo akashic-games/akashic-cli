@@ -1,6 +1,6 @@
-import { Logger } from "./Logger";
-import { ConsoleLogger } from "./ConsoleLogger";
 import { exec } from "child_process";
+import { ConsoleLogger } from "./ConsoleLogger";
+import { Logger } from "./Logger";
 
 export interface PromisedNpmParameterObject {
 	logger?: Logger;
@@ -21,7 +21,7 @@ export class PromisedNpm {
 		return new Promise<void>((resolve, reject) => {
 			this._logger.info("Installing " + moduleNames + "...");
 			exec("npm install --save " + moduleNames.join(" "), (err: any) => {
-				err ? reject(err) : resolve();
+				void (err ? reject(err) : resolve());
 			});
 		});
 	}
@@ -30,7 +30,7 @@ export class PromisedNpm {
 		return new Promise<void>((resolve, reject) => {
 			this._logger.info("Linking " + moduleNames + "...");
 			exec("npm link " + moduleNames.join(" "), (err: any) => {
-				err ? reject(err) : resolve();
+				void (err ? reject(err) : resolve());
 			});
 		});
 	}
@@ -39,7 +39,7 @@ export class PromisedNpm {
 		return new Promise<void>((resolve, reject) => {
 			this._logger.info("Uninstalling " + moduleNames + "...");
 			exec("npm uninstall --save " + moduleNames.join(" "), (err: any) => {
-				err ? reject(err) : resolve();
+				void (err ? reject(err) : resolve());
 			});
 		});
 	}
@@ -48,7 +48,7 @@ export class PromisedNpm {
 		return new Promise<void>((resolve, reject) => {
 			this._logger.info("Unlinking " + moduleNames + "...");
 			exec("npm unlink " + moduleNames.join(" "), (err: any) => {
-				err ? reject(err) : resolve();
+				void (err ? reject(err) : resolve());
 			});
 		});
 	}
@@ -87,7 +87,7 @@ export class PromisedNpm {
 		return new Promise<void>((resolve, reject) => {
 			this._logger.info("Update dependencies ...");
 			exec("npm update " + moduleNames.join(" "), (err: any) => {
-				err ? reject(err) : resolve();
+				void (err ? reject(err) : resolve());
 			});
 		});
 	}
