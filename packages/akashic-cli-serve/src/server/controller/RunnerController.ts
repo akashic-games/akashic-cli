@@ -9,12 +9,10 @@ import {
 import { PlayStore } from "../domain/PlayStore";
 import { RunnerStore } from "../domain/RunnerStore";
 import { serverGlobalConfig } from "../common/ServerGlobalConfig";
-import * as socketio from "socket.io";
 
 export const createHandlerToCreateRunner = (
 	playStore: PlayStore,
 	runnerStore: RunnerStore,
-	io: socketio.Server
 ): express.RequestHandler => {
 	return async (req, res, next) => {
 		try {
@@ -28,7 +26,7 @@ export const createHandlerToCreateRunner = (
 			const isActive = Boolean(req.body.isActive);
 			const token = req.body.token;
 			const amflow = playStore.createAMFlow(playId);
-			const runner = await runnerStore.createAndStartRunner({ playId, isActive, token, amflow, contentId, io });
+			const runner = await runnerStore.createAndStartRunner({ playId, isActive, token, amflow, contentId });
 			responseSuccess<RunnerPostApiResponseData>(res, 200, { playId: runner.playId, runnerId: runner.runnerId });
 		} catch (e) {
 			next(e);

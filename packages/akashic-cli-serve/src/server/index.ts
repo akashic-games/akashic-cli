@@ -24,6 +24,7 @@ import { PlayerIdStore } from "./domain/PlayerIdStore";
 import { ModTargetFlags, watchContent } from "./domain/GameConfigs";
 import { PutStartPointEvent } from "../common/types/TestbedEvent";
 import parser from "../common/MsgpackParser";
+import { StartPointHeader } from "../common/types/StartPointHeader";
 
 // 渡されたパラメータを全てstringに変換する
 // chalkを使用する場合、ログ出力時objectの中身を展開してくれないためstringに変換する必要がある
@@ -171,7 +172,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues) {
 				const playId = await playStore.createPlay(new ServerContentLocator({ contentId }));
 				const token = amflowManager.createPlayToken(playId, "", "", true, {});
 				const amflow = playStore.createAMFlow(playId);
-				await runnerStore.createAndStartRunner({ playId, isActive: true, token, amflow, contentId, io });
+				await runnerStore.createAndStartRunner({ playId, isActive: true, token, amflow, contentId });
 				await playStore.resumePlayDuration(playId);
 				targetPlayIds.forEach(id => io.emit("playBroadcast", { playId: id, message: { type: "switchPlay", nextPlayId: playId } }));
 			});
@@ -222,7 +223,13 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues) {
 	runnerStore.onRunnerRemove.add(arg => { io.emit("runnerRemove", arg); });
 	runnerStore.onRunnerPause.add(arg => { io.emit("runnerPause", arg); });
 	runnerStore.onRunnerResume.add(arg => { io.emit("runnerResume", arg); });
-	onPutStartPointHandler = (arg: PutStartPointEvent) => { io.emit("putStartPoint", arg); };
+	runnerStore.onRunnerPutStartPoint.add(arg => {
+		const startPointHeader: StartPointHeader = {
+			frame: arg.startPoint.frame,
+			timestamp: arg.startPoint.timestamp
+		};
+		io.emit("putStartPoint", { startPointHeader, playId: arg.playId } as PutStartPointEvent);
+	});
 
 	let loadedPlaylogPlayId: string;
 	if (cliConfigParam.debugPlaylog) {

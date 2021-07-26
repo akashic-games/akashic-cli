@@ -6,6 +6,7 @@ import {
 	RunnerRemoveTestbedEvent,
 	RunnerPauseTestbedEvent,
 	RunnerResumeTestbedEvent,
+	RunnerPutStartPointTestbedEvent,
 	PutStartPointEvent
 } from "../../common/types/TestbedEvent";
 import { serverGlobalConfig } from "../common/ServerGlobalConfig";
@@ -23,7 +24,6 @@ export interface CreateAndStartRunnerParameterObject {
 	token: string;
 	amflow: AMFlowClient;
 	contentId: string;
-	io: socketio.Server;
 }
 
 export class RunnerStore {
@@ -31,6 +31,7 @@ export class RunnerStore {
 	onRunnerRemove: Trigger<RunnerRemoveTestbedEvent>;
 	onRunnerPause: Trigger<RunnerPauseTestbedEvent>;
 	onRunnerResume: Trigger<RunnerResumeTestbedEvent>;
+	onRunnerPutStartPoint: Trigger<RunnerPutStartPointTestbedEvent>;
 	private runnerManager: RunnerManager;
 	private gameExternalFactory: () => any;
 	private playIdTable: { [runnerId: string]: string };
@@ -40,6 +41,7 @@ export class RunnerStore {
 		this.onRunnerRemove = new Trigger<RunnerRemoveTestbedEvent>();
 		this.onRunnerPause = new Trigger<RunnerPauseTestbedEvent>();
 		this.onRunnerResume = new Trigger<RunnerResumeTestbedEvent>();
+		this.onRunnerPutStartPoint = new Trigger<RunnerPutStartPointTestbedEvent>();
 		this.runnerManager = params.runnerManager;
 		this.gameExternalFactory = params.gameExternalFactory;
 		this.playIdTable = {};
@@ -60,11 +62,7 @@ export class RunnerStore {
 			trusted: !serverGlobalConfig.untrusted
 		});
 		if (params.isActive) params.amflow.onPutStartPoint.add((startPoint) => {
-			const startPointHeader: StartPointHeader = {
-				frame: startPoint.frame,
-				timestamp: startPoint.timestamp
-			};
-			params.io.emit("putStartPoint", { startPointHeader, playId: params.playId } as PutStartPointEvent);
+			this.onRunnerPutStartPoint.fire({ startPoint, playId: params.playId });
 		});
 
 		const runner = this.runnerManager.getRunner(runnerId);

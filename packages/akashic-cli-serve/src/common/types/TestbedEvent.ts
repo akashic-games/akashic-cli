@@ -2,6 +2,7 @@ import {Player} from "./Player";
 import {PlayStatus} from "./PlayStatus";
 import {ContentLocatorData} from "./ContentLocatorData";
 import { StartPointHeader } from "./StartPointHeader";
+import { StartPoint } from "@akashic/amflow";
 
 export interface PlayCreateTestbedEvent {
 	playId: string;
@@ -51,6 +52,11 @@ export interface RunnerPauseTestbedEvent {
 export interface RunnerResumeTestbedEvent {
 	playId: string;
 	runnerId: string;
+}
+
+export interface RunnerPutStartPointTestbedEvent {
+	playId: string;
+	startPoint: StartPoint;
 }
 
 export interface ClientInstanceDescription {
