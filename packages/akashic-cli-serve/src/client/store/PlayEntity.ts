@@ -243,7 +243,7 @@ export class PlayEntity {
 	}
 
 	@action
-	handleStartPointHeaderList(startPointHeader: StartPointHeader): void {
+	handleStartPointHeader(startPointHeader: StartPointHeader): void {
 		this.startPointHeaders.push(startPointHeader);
 	}
 

@@ -197,7 +197,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 	}
 
 	@action
-	setTargetTimeWidhStartPoint(frame: number, callback: (targetTime: number) => void): void {
+	setFrameWidhStartPoint(frame: number, callback: (targetTime: number) => void): void {
 		const gameDriver = this._serveGameContent.agvGameContent.getGameDriver();
 		const startedTime = this.play.amflow.getStartedAt();
 

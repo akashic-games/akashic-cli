@@ -19,7 +19,7 @@ export class LocalInstanceOperator {
 
 	seekToStartPoint = (frame: number): void => {
 		this.store.currentLocalInstance.setExecutionMode("replay");
-		this.store.currentLocalInstance.setTargetTimeWidhStartPoint(frame, (targetTime) => {
+		this.store.currentLocalInstance.setFrameWidhStartPoint(frame, (targetTime) => {
 			this.store.toolBarUiStore.seekTo(targetTime);
 		});
 	}

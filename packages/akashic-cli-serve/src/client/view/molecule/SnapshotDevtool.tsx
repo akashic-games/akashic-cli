@@ -1,7 +1,7 @@
 import * as React from "react";
 import { observer } from "mobx-react";
 import { StartPointHeader } from "../../../common/types/StartPointHeader";
-import { ToolLabelButton } from "../atom/ToolLabelButton";
+import { ToolSnapshotButton } from "../atom/ToolSnapshotButton";
 
 export interface SnapshotDevtoolProps {
 	startPointHeaders: StartPointHeader[];
@@ -18,20 +18,20 @@ export class SnapshotDevtool extends React.Component<SnapshotDevtoolProps, {}> {
 				{
 					this.props.startPointHeaders.map(header => (
 						<li key={header.frame}>
-							<ToolLabelButton
-								className="external-ref_button_download-playlog"
-								title="ファイルに保存"
-								onClick={() => {this.props.downloadSnapshot(header.frame); }}
-							>
-								ファイルに保存
-							</ToolLabelButton>
-							<ToolLabelButton
-								className="external-ref_button_download-playlog"
+							<ToolSnapshotButton
+								className="external-ref_button_download-snapshot"
 								title="シーク"
 								onClick={() => {this.props.onClickSeekToSnapshot(header.frame); }}
 							>
 								シーク
-							</ToolLabelButton>
+							</ToolSnapshotButton>
+							<ToolSnapshotButton
+								className="external-ref_button_download-snapshot"
+								title="ファイルに保存"
+								onClick={() => {this.props.downloadSnapshot(header.frame); }}
+							>
+								ファイルに保存
+							</ToolSnapshotButton>
 							{header.frame}
 						</li>
 					))

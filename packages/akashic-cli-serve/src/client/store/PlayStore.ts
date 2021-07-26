@@ -183,6 +183,6 @@ export class PlayStore {
 	}
 
 	private handlePutStartPoint = (e: PutStartPointEvent): void => {
-		this.plays[e.playId].handleStartPointHeaderList(e.startPointHeader);
+		this.plays[e.playId].handleStartPointHeader(e.startPointHeader);
 	}
 }

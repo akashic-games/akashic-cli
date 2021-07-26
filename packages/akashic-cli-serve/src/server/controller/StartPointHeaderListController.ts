@@ -17,34 +17,8 @@ export const createHandlerToGetStartPointHeaderList = (playStore: PlayStore): ex
 				});
 				responseSuccess<StartPointHeaderListResponseData>(res, 200, { startPointHeaderList });
 			} else {
-				responseError(res, new NotFoundError({}));
+				responseError(res, new NotFoundError({ errorMessage: "startPoint not found" }));
 			}
-		} catch (e) {
-			next(e);
-		}
-	};
-};
-
-export const createHandlerToGetStartPoint = (playStore: PlayStore): express.RequestHandler => {
-	return (req, res, next) => {
-		try {
-			let playId = req.params.playId;
-			let frame = parseInt(req.params.frame, 10);
-			const amflow = playStore.createAMFlow(playId);
-
-			if (!playId || !amflow || !frame) {
-				throw new NotFoundError({ errorMessage: `Snapshot is not found. playId:${playId}, frame:${frame}` });
-			}
-
-			amflow.getStartPoint({ frame }, (err: Error | null, startPoint: StartPoint) => {
-				const dumpJsonStr = JSON.stringify(startPoint);
-				const fileName = `snapshot_${playId}_${frame}.json`;
-
-				res.setHeader("Content-disposition", "attachment; filename=" + fileName);
-				res.setHeader("Content-type", "application/x-download");
-				res.send(dumpJsonStr);
-			});
-
 		} catch (e) {
 			next(e);
 		}
