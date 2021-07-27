@@ -145,7 +145,7 @@ describe("convert", () => {
 				}, done.fail);
 		});
 
-		it("copy bundled-script in target directory when bandle mode", (done) => {
+		it("copy bundled-script in target directory when bundle mode", (done) => {
 			const param = {
 				source: path.resolve(__dirname, "..", "..", "fixtures", "simple_game_using_external"),
 				dest: destDir,
@@ -463,7 +463,6 @@ describe("convert", () => {
 			convertGame(param)
 				.then(() => {
 					expect(fs.existsSync(path.join(destDir, "script/aez_bundle_main.js"))).toBe(true);
-					console.log(fs.readdirSync(path.join(destDir, "script")));
 					// bundle済みのファイルは残らない
 					expect(fs.existsSync(path.join(destDir, "script/main.js"))).toBe(false);
 					expect(fs.existsSync(path.join(destDir, "script/foo.js"))).toBe(false);

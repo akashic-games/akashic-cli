@@ -48,6 +48,14 @@ try{
 		akashicCliPath = `${targetDir}/node_modules/.bin/akashic`;
 	} else {
 		akashicCliPath = path.resolve(__dirname, "..", "packages", "akashic-cli", "bin", "akashic");
+
+		// workaround: Windows 環境は shebang を解釈しないのでそのままでは実行できない。
+		// (npm i @akashic/akashic-cli した時は実行可能な .cmd ファイルが作られるが、ここでは存在しない)
+		// 仕方がないので node をつけて node に実行させる。
+		if (process.platform === "win32") {
+			akashicCliPath = `node ${akashicCliPath}`;
+		}
+
 		console.log(`use ${akashicCliPath}`);
 	}
 
