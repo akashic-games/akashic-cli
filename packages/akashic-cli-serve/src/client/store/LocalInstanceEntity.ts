@@ -197,13 +197,13 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 	}
 
 	@action
-	setFrameWidhStartPoint(frame: number, callback: (targetTime: number) => void): void {
+	setFrameWithStartPoint(frame: number, callback: (targetTime: number) => void): void {
 		const gameDriver = this._serveGameContent.agvGameContent.getGameDriver();
 		const startedTime = this.play.amflow.getStartedAt();
 
 		// startPoint を取得後、ローカルインスタンスを startPoint を使ってリセットし、その時間までシークする
 		const getStartPointCallback = (error: Error, startPoint: StartPoint) => {
-			if (error) return;
+			if (error) throw error;
 			const targetTime = startPoint.timestamp - startedTime;
 			gameDriver._gameLoop.reset(startPoint);
 			this.setTargetTime(targetTime);

@@ -96,11 +96,11 @@ export class PlayOperator {
 			document.body.appendChild(a);
 			const blob = new Blob([ JSON.stringify(startPoint) ], { "type" : "application/octet-stream" });
 			const url = window.URL.createObjectURL(blob);
-			a.href = url
+			a.href = url;
 			a.download = `snapshot_${frame}.json`;
 			a.click();
 			window.URL.revokeObjectURL(url);
 			document.body.removeChild(a);
-		})
+		});
 	}
 }

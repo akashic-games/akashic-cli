@@ -49,4 +49,4 @@ class Decoder extends Emitter {
 
 export default {
 	Encoder, Decoder
-}
+};

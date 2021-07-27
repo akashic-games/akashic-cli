@@ -49,7 +49,7 @@ export class Devtool extends React.Component<DevtoolProps, {}> {
 			"Atsumaru": this._onSelectAtsumaruTool,
 			"Niconico": this._onSelectNiconicoTool,
 			"Misc": this._onSelectMiscTool,
-			"Snapshot": this._onSnapshotTool
+			"Snapshot": this._onSelectSnapshotTool
 		};
 	}
 
@@ -100,7 +100,7 @@ export class Devtool extends React.Component<DevtoolProps, {}> {
 		this.props.onSelectDevtool("Misc");
 	}
 
-	private _onSnapshotTool = (): void => {
+	private _onSelectSnapshotTool = (): void => {
 		this.props.onSelectDevtool("Snapshot");
 	}
 }
