@@ -82,7 +82,7 @@ declare module agv {
 		addContent(content: any): void;
 		removeContent(content: any): void;
 		setViewSize(width: number, height: number): void;
-		getViewSize(): {width: number, height: number};
+		getViewSize(): {width: number; height: number};
 		registerExternalPlugin(plugin: ExternalPlugin): void;
 	}
 
@@ -175,8 +175,8 @@ declare module agv {
 			_clock: {
 				_profiler: {
 					_calculateProfilerValueTrigger: agv.TriggerLike;
-				}
-			}
+				};
+			};
 		};
 	}
 }

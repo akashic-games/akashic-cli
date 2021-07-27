@@ -48,8 +48,8 @@ export async function watchContent(
 	}
 	let timer: NodeJS.Timer = null;
 	let mods: ModTargetFlags = ModTargetFlags.None;
-	const watcherHandler = (filePath: string) => {
-		const handler = () => {
+	const watcherHandler = (filePath: string): void => {
+		const handler = (): void => {
 			const lastMods = mods;
 			mods = ModTargetFlags.None;
 			if (lastMods & ModTargetFlags.Assets) {
@@ -95,7 +95,7 @@ export async function watchContent(
 function watchGameJson(gameJsonPath: string, callback: (gameJson: GameConfiguration) => void): GameConfiguration {
 	let gameJson: any = JSON.parse(fs.readFileSync(gameJsonPath).toString());
 
-	const changeEventListener = (event: string, path: string) => {
+	const changeEventListener = (event: string, path: string): void => {
 		if ( event === "change") {
 			gameJson = JSON.parse(fs.readFileSync(path).toString());
 			callback(gameJson);

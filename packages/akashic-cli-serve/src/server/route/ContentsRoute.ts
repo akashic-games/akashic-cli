@@ -1,7 +1,7 @@
 import * as express from "express";
 import { createHandlerToGetContent, createHandlerToGetContents, createHandlerToGetEngineConfig } from "../controller/ContentController";
-import { createScriptAssetController } from "../controller/ScriptAssetController";
 import { createHandlerToGetSandboxConfig } from "../controller/SandboxConfigController";
+import { createScriptAssetController } from "../controller/ScriptAssetController";
 
 export interface ContentsRouterParameterObject {
 	targetDirs: string[];
@@ -27,13 +27,13 @@ export const createContentsRouter = (params: ContentsRouterParameterObject): exp
 		contentsRouter.use(`/${i}/raw`, express.static(targetDirs[i]));
 	}
 
-	contentsRouter.get(`/`, createHandlerToGetContents(targetDirs));
-	contentsRouter.get(`/:contentId`, createHandlerToGetContent());
-	contentsRouter.get(`/:contentId/sandbox-config`, createHandlerToGetSandboxConfig(targetDirs));
+	contentsRouter.get("/", createHandlerToGetContents(targetDirs));
+	contentsRouter.get("/:contentId", createHandlerToGetContent());
+	contentsRouter.get("/:contentId/sandbox-config", createHandlerToGetSandboxConfig(targetDirs));
 
 	// content.json, content.raw.json はそれぞれ /contents/:contentId:/content/ と /contents/:contendId/raw/ に対応する。
-	contentsRouter.get(`/:contentId/content.json`, createHandlerToGetEngineConfig(targetDirs, false));
-	contentsRouter.get(`/:contentId/content.raw.json`, createHandlerToGetEngineConfig(targetDirs, true));
+	contentsRouter.get("/:contentId/content.json", createHandlerToGetEngineConfig(targetDirs, false));
+	contentsRouter.get("/:contentId/content.raw.json", createHandlerToGetEngineConfig(targetDirs, true));
 
 	return contentsRouter;
 };

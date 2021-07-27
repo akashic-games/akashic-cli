@@ -1,7 +1,7 @@
-import type { Socket } from "socket.io-client";
 import * as amflow from "@akashic/amflow";
 import * as playlog from "@akashic/playlog";
 import { Trigger } from "@akashic/trigger";
+import type { Socket } from "socket.io-client";
 
 export class SocketIOAMFlowClient implements amflow.AMFlow {
 	onGotStartedAt: Trigger<number>;
@@ -170,11 +170,11 @@ export class SocketIOAMFlowClient implements amflow.AMFlow {
 		if (connectionId !== this._connectionId)
 			return;
 		this._tickHandlers.forEach(h => h(tick));
-	}
+	};
 
 	private _onEvent = (connectionId: string, pev: playlog.Event): void => {
 		if (connectionId !== this._connectionId)
 			return;
 		this._eventHandlers.forEach(h => h(pev));
-	}
+	};
 }

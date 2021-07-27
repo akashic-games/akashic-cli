@@ -1,18 +1,18 @@
-import {action, observable, computed} from "mobx";
 import {Trigger} from "@akashic/trigger";
+import {action, observable, computed} from "mobx";
 import {TimeKeeper} from "../../common/TimeKeeper";
 import {Player} from "../../common/types/Player";
-import * as ApiRequest from "../api/ApiRequest";
 import {GameViewManager} from "../akashic/GameViewManager";
 import {ServeGameContent} from "../akashic/ServeGameContent";
-import {PlayEntity} from "./PlayEntity";
-import {CoePluginEntity, CreateCoeLocalInstanceParameterObject} from "./CoePluginEntity";
-import {GameInstanceEntity} from "./GameInstanceEntity";
-import {ExecutionMode} from "./ExecutionMode";
-import {ContentEntity} from "./ContentEntity";
-import {NicoPluginEntity} from "./NicoPluginEntity";
-import {CoeLimitedPluginEntity} from "./CoeLimitedPluginEntity";
+import * as ApiRequest from "../api/ApiRequest";
 import {ProfilerValue} from "../common/types/Profiler";
+import {CoeLimitedPluginEntity} from "./CoeLimitedPluginEntity";
+import {CoePluginEntity, CreateCoeLocalInstanceParameterObject} from "./CoePluginEntity";
+import {ContentEntity} from "./ContentEntity";
+import {ExecutionMode} from "./ExecutionMode";
+import {GameInstanceEntity} from "./GameInstanceEntity";
+import {NicoPluginEntity} from "./NicoPluginEntity";
+import {PlayEntity} from "./PlayEntity";
 
 const toAgvExecutionMode = (() => {
 	const executionModeTable = {
@@ -135,7 +135,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 	}
 
 	@computed
-	get gameViewSize(): {width: number, height: number} {
+	get gameViewSize(): {width: number; height: number} {
 		return this._gameViewManager.getViewSize();
 	}
 
@@ -218,7 +218,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 			return;
 		const url = this.content.locator.asAbsoluteUrl();
 		const contentJson = await ApiRequest.get<{ content_url: string }>(url);
-		const gameJson = await ApiRequest.get<{ width: number, height: number }>(contentJson.content_url);
+		const gameJson = await ApiRequest.get<{ width: number; height: number }>(contentJson.content_url);
 		this._gameViewManager.setViewSize(gameJson.width, gameJson.height);
 	}
 }

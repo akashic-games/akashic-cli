@@ -1,5 +1,37 @@
 # CHANGELOG
 
+## 2.10.18 (2021-07-21)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#811](https://github.com/akashic-games/akashic-cli/pull/811) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Bug Fix
+* `akashic-cli-export`
+  * [#813](https://github.com/akashic-games/akashic-cli/pull/813) Fix isEmptyScriptJs() in export-zip ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Other Change
+* `akashic-cli-init`
+  * [#794](https://github.com/akashic-games/akashic-cli/pull/794) Add eslint config to init ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+* `akashic-cli-scan`
+  * [#796](https://github.com/akashic-games/akashic-cli/pull/796) Add eslint config to scan ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+* `akashic-cli-export`, `akashic-cli-serve`
+  * [#797](https://github.com/akashic-games/akashic-cli/pull/797) Add eslint to serve ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+* `akashic-cli-lib-manage`
+  * [#795](https://github.com/akashic-games/akashic-cli/pull/795) Add eslint config to lib manage ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+* `akashic-cli-extra`
+  * [#793](https://github.com/akashic-games/akashic-cli/pull/793) Add akashic/eslint-config to extra ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+* `akashic-cli-export`
+  * [#792](https://github.com/akashic-games/akashic-cli/pull/792) Add akashic-eslint-config to export ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+* `akashic-cli-commons`, `akashic-cli-export`
+  * [#791](https://github.com/akashic-games/akashic-cli/pull/791) Add akashic-eslint-config to commons ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+* `akashic-cli`
+  * [#790](https://github.com/akashic-games/akashic-cli/pull/790) Add eslint config to akashic cli ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 2
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.10.17 (2021-07-16)
 
 #### Other Change

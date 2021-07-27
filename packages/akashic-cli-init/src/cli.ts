@@ -1,9 +1,9 @@
 import * as fs from "fs";
 import * as path from "path";
-import { Command } from "commander";
-import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
-import { CliConfigurationFile } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigurationFile";
 import { CliConfigInit } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigInit";
+import { CliConfigurationFile } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigurationFile";
+import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
+import { Command } from "commander";
 import { promiseInit } from "./init";
 import { listTemplates } from "./listTemplates";
 
@@ -45,7 +45,7 @@ export function run(argv: string[]): void {
 	commander.parse(argv);
 	const options = commander.opts();
 
-	CliConfigurationFile.read(path.join(options["cwd"] || process.cwd(), "akashic.config.js"), (error, configuration) => {
+	CliConfigurationFile.read(path.join(options.cwd || process.cwd(), "akashic.config.js"), (error, configuration) => {
 		if (error) {
 			console.error(error);
 			process.exit(1);

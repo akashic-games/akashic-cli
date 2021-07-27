@@ -1,10 +1,10 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as browserify from "browserify";
-import * as Util from "./Util";
-import { Logger } from "./Logger";
 import { ConsoleLogger } from "./ConsoleLogger";
+import { Logger } from "./Logger";
 import { StringStream } from "./StringStream";
+import * as Util from "./Util";
 import { ModuleMainScripts } from "./index";
 
 export module NodeModules {
@@ -118,7 +118,7 @@ export module NodeModules {
 				filePaths.push(filePath);
 			});
 			b.bundle((err: any) => {
-				err ? reject(err) : resolve(filePaths);
+				void (err ? reject(err) : resolve(filePaths));
 			});
 		});
 	}

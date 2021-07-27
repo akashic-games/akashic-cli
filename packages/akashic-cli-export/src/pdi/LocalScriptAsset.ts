@@ -1,7 +1,9 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface Window {
-		gLocalAssetContainer: {[key: string]: any};
-	}
+	gLocalAssetContainer: {[key: string]: any};
+}
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 class LocalScriptAsset extends g.ScriptAsset {
 	func: Function;
 

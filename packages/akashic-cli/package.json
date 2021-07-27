@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli",
-  "version": "2.10.17",
+  "version": "2.10.18",
   "description": "Command-line utility for akashic game development",
   "bin": {
     "akashic": "./bin/akashic"
@@ -10,7 +10,7 @@
     "clean": "rimraf ./lib && rimraf ./spec/build",
     "start": "npm run build && node bin/run",
     "build": "tsc -p ./",
-    "lint": "tslint -c ../tslint.json --project ./tsconfig.json",
+    "lint": "eslint \"src/**/*.ts\" --fix",
     "test": "npm run lint"
   },
   "author": "DWANGO Co., Ltd.",
@@ -22,20 +22,25 @@
     "lib"
   ],
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.8.5",
-    "@akashic/akashic-cli-export": "1.2.9",
-    "@akashic/akashic-cli-extra": "1.2.3",
-    "@akashic/akashic-cli-init": "1.8.12",
-    "@akashic/akashic-cli-lib-manage": "1.2.4",
-    "@akashic/akashic-cli-scan": "0.10.5",
-    "@akashic/akashic-cli-serve": "1.9.11",
+    "@akashic/akashic-cli-commons": "0.8.6",
+    "@akashic/akashic-cli-export": "1.2.10",
+    "@akashic/akashic-cli-extra": "1.2.4",
+    "@akashic/akashic-cli-init": "1.8.13",
+    "@akashic/akashic-cli-lib-manage": "1.2.5",
+    "@akashic/akashic-cli-scan": "0.10.6",
+    "@akashic/akashic-cli-serve": "1.9.12",
     "commander": "8.0.0"
   },
   "devDependencies": {
+    "@akashic/eslint-config": "0.1.2",
     "@types/commander": "2.12.0",
     "@types/node": "14.17.4",
+    "@typescript-eslint/eslint-plugin": "4.28.2",
+    "eslint": "7.30.0",
+    "eslint-config-prettier": "8.1.0",
+    "eslint-plugin-import": "2.22.1",
+    "eslint-plugin-jest": "24.3.6",
     "rimraf": "3.0.2",
-    "tslint": "6.1.3",
     "typescript": "3.9.10"
   },
   "publishConfig": {
