@@ -12,7 +12,7 @@ import { serverGlobalConfig } from "../common/ServerGlobalConfig";
 
 export const createHandlerToCreateRunner = (
 	playStore: PlayStore,
-	runnerStore: RunnerStore,
+	runnerStore: RunnerStore
 ): express.RequestHandler => {
 	return async (req, res, next) => {
 		try {
