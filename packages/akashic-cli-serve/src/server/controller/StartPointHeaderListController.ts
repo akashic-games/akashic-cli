@@ -16,7 +16,7 @@ export const createHandlerToGetStartPointHeaderList = (playStore: PlayStore): ex
 
 			const amflow = playStore.createAMFlow(playId);
 			if (!amflow) {
-				throw new NotFoundError({ errorMessage: `StartPoint is not found. playId:${playId}` });
+				throw new NotFoundError({ errorMessage: `Play is not found. playId:${playId}` });
 			}
 			const startPointHeaderList: StartPointHeader[] = amflow.dump().startPoints.map(startPoint => {
 				return { frame: startPoint.frame, timestamp: startPoint.timestamp };

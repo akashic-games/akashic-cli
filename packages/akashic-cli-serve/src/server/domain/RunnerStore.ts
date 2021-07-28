@@ -60,9 +60,11 @@ export class RunnerStore {
 			externalValue: this.gameExternalFactory(),
 			trusted: !serverGlobalConfig.untrusted
 		});
-		if (params.isActive) params.amflow.onPutStartPoint.add((startPoint) => {
-			this.onRunnerPutStartPoint.fire({ startPoint, playId: params.playId });
-		});
+		if (params.isActive) {
+			params.amflow.onPutStartPoint.add((startPoint) => {
+				this.onRunnerPutStartPoint.fire({ startPoint, playId: params.playId });
+			});
+		}
 
 		const runner = this.runnerManager.getRunner(runnerId);
 		await this.runnerManager.startRunner(runner.runnerId);

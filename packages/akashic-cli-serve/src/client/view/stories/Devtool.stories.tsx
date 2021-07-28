@@ -200,7 +200,11 @@ const TestWithBehaviour = observer(() => (
 			setShowsProfiler: action("show-profiler")
 		}}
 		snapshotDevtoolProps={{
-			startPointHeaders: [],
+			startPointHeaders: [
+				{frame: 150, timestamp: 1627467453814},
+				{frame: 300, timestamp: 1627467458813},
+				{frame: 450, timestamp: 1627467463814}
+			],
 			downloadSnapshot: action("download-snapshot"),
 			onClickSeekToSnapshot: action("seekTo-snapshot")
 		}}
