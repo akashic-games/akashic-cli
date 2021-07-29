@@ -19,7 +19,7 @@ export class SnapshotDevtool extends React.Component<SnapshotDevtoolProps, {}> {
 					this.props.startPointHeaders.map(header => (
 						<li key={header.frame}>
 							<ToolSnapshotButton
-								className="external-ref_button_download-snapshot"
+								className="external-ref_button_seek-snapshot"
 								title="シーク"
 								onClick={() => {this.props.onClickSeekToSnapshot(header.frame); }}
 							>
