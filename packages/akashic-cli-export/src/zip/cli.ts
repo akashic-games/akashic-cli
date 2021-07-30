@@ -9,6 +9,11 @@ const availableServices = SERVICE_TYPES.filter(v => v !== "atsumaru");
 
 export function cli(param: CliConfigExportZip): void {
 	var logger = new ConsoleLogger({ quiet: param.quiet });
+
+	if (param.omitEmptyJs != null) {
+		logger.info("deprecated: --no-omit-empty-js is now always enabled since output may be broken without this option.");
+	}
+
 	Promise.resolve()
 		.then(() => promiseExportZip({
 			bundle: param.bundle,
@@ -19,7 +24,6 @@ export function cli(param: CliConfigExportZip): void {
 			dest: param.output,
 			force: param.force,
 			hashLength: !param.hashFilename ? 0 : (param.hashFilename === true) ? 20 : Number(param.hashFilename),
-			omitEmptyJs: param.omitEmptyJs,
 			logger,
 			omitUnbundledJs: param.bundle && param.omitUnbundledJs,
 			targetService: param.targetService,
@@ -33,7 +37,6 @@ export function cli(param: CliConfigExportZip): void {
 					bundle: param.bundle,
 					babel: param.babel,
 					hashFilename: param.hashFilename,
-					omitEmptyJs: param.omitEmptyJs,
 					targetService: param.targetService || "none"
 				}
 			}

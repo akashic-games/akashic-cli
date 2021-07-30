@@ -16,7 +16,6 @@ export interface ExportZipParameterObject {
 	force?: boolean;
 	logger?: cmn.Logger;
 	hashLength?: number;
-	omitEmptyJs?: boolean;
 	exportInfo?: cmn.ExportZipInfo;
 	omitUnbundledJs?: boolean;
 	targetService?: cmn.ServiceType;
@@ -31,7 +30,6 @@ function _createExportInfo(param: ExportZipParameterObject): cmn.ExportZipInfo {
 			minify: !!param.minify,
 			bundle: !!param.bundle,
 			babel: !!param.babel,
-			omitEmptyJs: !!param.omitEmptyJs,
 			targetService: param.targetService || "none"
 		}
 	};
@@ -48,7 +46,6 @@ export function _completeExportZipParameterObject(param: ExportZipParameterObjec
 		force: !!param.force,
 		logger: param.logger || new cmn.ConsoleLogger(),
 		hashLength: param.hashLength,
-		omitEmptyJs: param.omitEmptyJs,
 		exportInfo: param.exportInfo || _createExportInfo(param),
 		omitUnbundledJs: param.omitUnbundledJs,
 		targetService: param.targetService || "none"
@@ -90,7 +87,6 @@ export function promiseExportZip(param: ExportZipParameterObject): Promise<void>
 				source: param.source,
 				dest: destDir,
 				hashLength: param.hashLength,
-				omitEmptyJs: param.omitEmptyJs,
 				logger: param.logger,
 				exportInfo: param.exportInfo,
 				omitUnbundledJs: param.omitUnbundledJs,
