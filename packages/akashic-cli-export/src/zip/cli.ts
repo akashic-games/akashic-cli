@@ -10,7 +10,7 @@ const availableServices = SERVICE_TYPES.filter(v => v !== "atsumaru");
 export function cli(param: CliConfigExportZip): void {
 	var logger = new ConsoleLogger({ quiet: param.quiet });
 
-	if (param.omitEmptyJs != null) {
+	if (!param.omitEmptyJs) {
 		logger.info("deprecated: --no-omit-empty-js is now always enabled since output may be broken without this option.");
 	}
 
