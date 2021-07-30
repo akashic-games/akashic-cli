@@ -63,8 +63,8 @@ commander
 	.option("-H, --hash-filename [length]", "Rename asset files with their hash values")
 	.option("-b, --bundle", "Bundle script assets into a single file")
 	.option("--no-es5-downpile", "No convert JavaScript into es5")
-	.option("--no-omit-empty-js", "Disable omitting empty js from global assets")
-	.option("--no-omit-unbundled-js", "Unnecessary script files are included even when the `--bundle` option is specified.")
+	.option("--no-omit-empty-js", "(DEPRECATED) Changes nothing. Provided for backward compatibility")
+	.option("--no-omit-unbundled-js", "Preserve unbundled .js files (not required from root). Works with --bundle only")
 	.option("--target-service <service>", `Specify the target service of the exported content:${availableServices}`);
 
 export function run(argv: string[]): void {
