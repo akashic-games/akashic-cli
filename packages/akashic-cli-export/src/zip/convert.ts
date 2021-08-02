@@ -17,7 +17,6 @@ export interface ConvertGameParameterObject {
 	source?: string;
 	hashLength?: number;
 	dest: string;
-	omitEmptyJs?: boolean;
 	/**
 	 * コマンドの出力を受け取るロガー。
 	 * 省略された場合、akashic-cli-commons の `new ConsoleLogger()` 。
@@ -36,7 +35,6 @@ export function _completeConvertGameParameterObject(param: ConvertGameParameterO
 	param.source = param.source || process.cwd();
 	param.hashLength = param.hashLength || 0;
 	param.logger = param.logger || new cmn.ConsoleLogger();
-	param.omitEmptyJs = !!param.omitEmptyJs;
 	param.exportInfo = param.exportInfo;
 	param.omitUnbundledJs = !!param.omitUnbundledJs;
 	param.targetService = param.targetService || "none";
@@ -109,16 +107,16 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			let bundledFilePaths: string[] = [];
 			const preservingFilePathSet = new Set<string>(files);
 			if (bundleResult) {
-				bundledFilePaths = bundleResult.filePaths;
 				// 不要なスクリプトを削る。
-				// omitUnbundledJs ならば全スクリプト取り除く点に注意。
-				// (bundle されたスクリプトは不要、されなかったスクリプトは omit なので)
-				// また bundle されたものは .js とは限らない (.json がありうる) ことにも注意。
-				let unneeded = bundleResult.filePaths;
+				// bundle されたものは .js とは限らない (.json がありうる) ことに注意。
+				bundledFilePaths = bundleResult.filePaths;
+				bundledFilePaths.forEach(p => preservingFilePathSet.delete(p));
+
 				if (param.omitUnbundledJs) {
-					unneeded = unneeded.concat(files.filter(p => p.endsWith(".js")));
+					// omitUnbundledJs ならば全てのスクリプト (.js) を削る。
+					// (bundle されたスクリプトは不要、されなかったスクリプトは omit なので区別せず全部削ればよい)
+					files.filter(p => p.endsWith(".js")).forEach(p => preservingFilePathSet.delete(p));
 				}
-				unneeded.forEach(p => preservingFilePathSet.delete(p));
 			}
 
 			// operation plugin に登録されているスクリプトファイルは bundle されていても残しておく必要がある
@@ -163,16 +161,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			};
 
 			preservingFilePathSet.forEach(p => {
-				let buff = fs.readFileSync(path.resolve(param.source, p));
-				if (param.omitEmptyJs && gcu.isScriptJsFile(p) && gcu.isEmptyScriptJs(buff.toString().trim())) {
-					Object.keys(gamejson.assets).some((key) => {
-						if (gamejson.assets[key].type === "script" && gamejson.assets[key].path === p) {
-							gamejson.assets[key].global = false;
-							return true;
-						}
-						return false;
-					});
-				}
+				const buff = fs.readFileSync(path.resolve(param.source, p));
 				cmn.Util.mkdirpSync(path.dirname(path.resolve(param.dest, p)));
 				const value: string | Buffer =
 					(param.babel && gcu.isScriptJsFile(p)) ? babel.transform(buff.toString().trim(), babelOption).code : buff;

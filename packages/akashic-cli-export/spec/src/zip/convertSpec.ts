@@ -150,7 +150,6 @@ describe("convert", () => {
 				source: path.resolve(__dirname, "..", "..", "fixtures", "simple_game_using_external"),
 				dest: destDir,
 				bundle: true,
-				omitEmptyJs: true,
 				omitUnbundledJs: false
 			};
 			convertGame(param)
@@ -169,7 +168,7 @@ describe("convert", () => {
 					expect(gameJson.assets.aez_bundle_main.path).toBe("script/aez_bundle_main.js");
 					expect(gameJson.assets.aez_bundle_main.type).toBe("script");
 					expect(gameJson.assets.aez_bundle_main.global).toBe(true);
-					expect(gameJson.assets.ignore2.global).toBeFalsy();
+					expect(gameJson.assets.ignore2.global).toBeTruthy(); // omitEmptyJs があった時は偽になりえたので念のため確認
 					done();
 				}, done.fail);
 		});
@@ -223,11 +222,10 @@ describe("convert", () => {
 				}, done.fail);
 		});
 
-		it("Include empty files when in no-omit-empty-js mode", (done) => {
+		it("includes empty .js (regression test for omitEmptyJs, a removed option)", (done) => {
 			const param = {
 				source: path.resolve(__dirname, "..", "..", "fixtures", "simple_game_using_external"),
-				dest: destDir,
-				omitEmptyJs: false
+				dest: destDir
 			};
 			convertGame(param)
 				.then(() => {
