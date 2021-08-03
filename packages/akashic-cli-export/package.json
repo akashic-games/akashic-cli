@@ -32,7 +32,8 @@
   "bin": {
     "akashic-cli-export": "./bin/run",
     "akashic-cli-export-html": "./bin/akashic-cli-export-html",
-    "akashic-cli-export-zip": "./bin/akashic-cli-export-zip"
+    "akashic-cli-export-zip": "./bin/akashic-cli-export-zip",
+    "akashic-cli-zip": "./bin/akashic-cli-export-zip"
   },
   "files": [
     "README.md",
