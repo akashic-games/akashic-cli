@@ -1,5 +1,25 @@
 # CHANGELOG
 
+## 2.10.19 (2021-08-04)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#814](https://github.com/akashic-games/akashic-cli/pull/814) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Bug Fix
+* `akashic-cli-export`
+  * [#815](https://github.com/akashic-games/akashic-cli/pull/815) fix(export): fix wrong bin name 'akashic-cli-zip' to 'akashic-cli-export-zip' ([@xnv](https://github.com/xnv))
+  * [#816](https://github.com/akashic-games/akashic-cli/pull/816) fix(export): deprecate and always enable --no-omit-empty-js ([@xnv](https://github.com/xnv))
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-init`
+  * [#812](https://github.com/akashic-games/akashic-cli/pull/812) fix(test): fix for Windows, enable Windows tests in CI ([@xnv](https://github.com/xnv))
+
+#### Other Change
+* `akashic-cli-export`
+  * [#817](https://github.com/akashic-games/akashic-cli/pull/817) chore(export): restore removed bin name for compatiblity ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.10.18 (2021-07-21)
 
 #### Enhancement
