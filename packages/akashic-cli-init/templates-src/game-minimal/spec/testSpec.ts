@@ -1,4 +1,5 @@
 import * as path from "path";
+import * as g from "@akashic/akashic-engine";
 import { GameContext } from "@akashic/headless-akashic";
 
 describe("mainScene", () => {
@@ -15,6 +16,9 @@ describe("mainScene", () => {
 		expect(game.height).toBe(720);
 		expect(game.fps).toBe(30);
 
+		await client.advanceUntil(() => {
+			return game.scene().children[0] instanceof g.FilledRect; // g.FilledRect を持つ Scene まで進める
+		});
 		const scene = client.game.scene()!;
 		expect(scene).toBeDefined();
 
