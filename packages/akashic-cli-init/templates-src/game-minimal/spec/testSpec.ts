@@ -15,6 +15,9 @@ describe("mainScene", () => {
 		expect(game.height).toBe(720);
 		expect(game.fps).toBe(30);
 
+		await client.advanceUntil(() => {
+			return game.scene().local !== "full-local"; // 非ローカルシーンまで進める
+		});
 		const scene = client.game.scene()!;
 		expect(scene).toBeDefined();
 
