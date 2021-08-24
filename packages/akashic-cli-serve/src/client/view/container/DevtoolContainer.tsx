@@ -70,14 +70,14 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 				onMouseLeaveEntityItem: operator.devtool.clearHighlightedEntity
 			}}
 			atsumaruDevtoolProps={{
-				disabled: targetService !== "atsumaru",
+				disabled: targetService !== "atsumaru:single",
 				volume: devtoolUiStore.volume,
 				isSeekingVolume: devtoolUiStore.isSeekingVolume,
 				changeVolume: operator.devtool.volumeChangeTo,
 				dicideVolume: operator.devtool.volumeSeekTo
 			}}
 			niconicoDevtoolProps={{
-				disabled: targetService === "atsumaru",
+				disabled: targetService === "atsumaru:single",
 				isAutoSendEvent: devtoolUiStore.isAutoSendEvent,
 				emulatingShinichibaMode: devtoolUiStore.emulatingShinichibaMode,
 				totalTimeLimitInputValue: devtoolUiStore.totalTimeLimitInputValue,

@@ -69,7 +69,7 @@ export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}>
 
 	private _makePlayerControlProps = (): PlayerControlPropsData => {
 		const { localInstance, operator, targetService } = this.props;
-		const joinEnabled = targetService !== "nicolive";
+		const joinEnabled = !/^nicolive.*/.test(targetService) && targetService !== "atsumaru:multi";
 		return {
 			selfId: localInstance.player.id,
 			isJoined: localInstance.isJoined,

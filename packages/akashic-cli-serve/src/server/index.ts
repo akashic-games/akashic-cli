@@ -91,14 +91,30 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 	}
 
 	if (cliConfigParam.targetService) {
-		if (!cliConfigParam.autoStart && cliConfigParam.targetService === "nicolive") {
-			getSystemLogger().error("--no-auto-start and --target-service nicolive can not be set at the same time.");
+		if (!cliConfigParam.autoStart &&
+			(/^nicolive.*/.test(cliConfigParam.targetService) || cliConfigParam.targetService === "atsumaru:multi")
+		) {
+			getSystemLogger().error("--no-auto-start and --target-service nicolive or atsumaru:multi can not be set at the same time.");
 			process.exit(1);
 		}
 
 		if (!SERVICE_TYPES.includes(cliConfigParam.targetService )) {
-			getSystemLogger().error("Invalid --target-service option argument: " + cliConfigParam.targetService);
+			const serviceName: string = cliConfigParam.targetService;
+			if (serviceName === "nicolive:ranking" || serviceName === "nicolive:single") {
+				// モードとしてあるがサポートしてないものは未実装のエラーとする
+				getSystemLogger().error("Unimplemented --target-service option argument: " + cliConfigParam.targetService);
+			} else {
+				getSystemLogger().error("Invalid --target-service option argument: " + cliConfigParam.targetService);
+			}
 			process.exit(1);
+		}
+
+		if (cliConfigParam.targetService === "atsumaru") {
+			cliConfigParam.targetService = "atsumaru:single"; // "atsumaru" は "atsumaru:single" のエイリアスとする
+		}
+
+		if (cliConfigParam.targetService === "nicolive") {
+			cliConfigParam.targetService = "nicolive:multi"; // "nicolive"  は "nicolive:multi" のエイリアスとする
 		}
 		serverGlobalConfig.targetService = cliConfigParam.targetService;
 	}

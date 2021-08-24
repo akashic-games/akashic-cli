@@ -72,7 +72,7 @@ export class Operator {
 				play = await this._createServerLoop(loc);
 			}
 		}
-		if (store.targetService === "atsumaru") {
+		if (store.targetService === "atsumaru:single") {
 			(window as any).RPGAtsumaru = new RPGAtsumaruApi({
 				// 元のAPIが0～1の実数を返す仕様になっているので、それに合わせた
 				getVolumeCallback: () => this.store.devtoolUiStore.volume / 100
@@ -99,7 +99,7 @@ export class Operator {
 
 		let isJoin = false;
 		let argument = undefined;
-		if (store.targetService === "nicolive") {
+		if (/^nicolive.*/.test(store.targetService) || store.targetService === "atsumaru:multi") {
 			if (previousPlay) {
 				isJoin = previousPlay.joinedPlayerTable.has(store.player.id);
 			} else {
@@ -167,7 +167,7 @@ export class Operator {
 			this.store.profilerStore.pushProfilerValueResult("frame", value.frameTime);
 			this.store.profilerStore.pushProfilerValueResult("rendering", value.renderingTime);
 		});
-		if (store.targetService !== "atsumaru") {
+		if (store.targetService !== "atsumaru:single") {
 			this.store.devtoolUiStore.initTotalTimeLimit(play.content.preferredSessionParameters.totalTimeLimit);
 			this.devtool.setupNiconicoDevtoolValueWatcher();
 		}
@@ -203,9 +203,8 @@ export class Operator {
 			// TODO: `autoSendEvents` は非推奨。互換性のためこのパスを残しているが、`autoSendEvents` の削除時にこのパスも削除する。
 			console.warn("[deprecated] `autoSendEvents` in sandbox.config.js is deprecated. Please use `autoSendEventName`.");
 			events[autoSendEvents].forEach((pev: any) => play.amflow.enqueueEvent(pev));
-		} else if (!autoSendEventName && this.store.targetService === "nicolive") {
-			// TODO: 現状は "nicolive" で固定。 "atsumaru" を使う方法は要検討
-			play.amflow.enqueueEvent(createSessionParameter("nicolive")); // セッションパラメータを送る
+		} else if (!autoSendEventName && (/^nicolive.*/.test(this.store.targetService) || this.store.targetService === "atsumaru:multi")) {
+			play.amflow.enqueueEvent(createSessionParameter(this.store.targetService)); // セッションパラメータを送る
 		}
 
 		if (this.store.devtoolUiStore.isAutoSendEvent) {
