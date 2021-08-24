@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 2.10.22 (2021-08-24)
+
+#### Enhancement
+* `akashic-cli-commons`, `akashic-cli-serve`
+  * [#824](https://github.com/akashic-games/akashic-cli/pull/824) Extend serve --target-service option ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+* `akashic-cli-init`
+  * [#829](https://github.com/akashic-games/akashic-cli/pull/829) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Committers: 2
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.10.21 (2021-08-24)
 
 #### Enhancement
