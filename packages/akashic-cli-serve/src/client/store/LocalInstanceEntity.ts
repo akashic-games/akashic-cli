@@ -1,5 +1,6 @@
 import {action, observable, computed} from "mobx";
 import {Trigger} from "@akashic/trigger";
+import * as amf from "@akashic/amflow";
 import {TimeKeeper} from "../../common/TimeKeeper";
 import {Player} from "../../common/types/Player";
 import * as ApiRequest from "../api/ApiRequest";
@@ -140,6 +141,12 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 		return this._gameViewManager.getViewSize();
 	}
 
+	@computed
+	get isResettable(): boolean {
+		const gameDriver = this._serveGameContent.agvGameContent.getGameDriver();
+		return !!gameDriver._gameLoop.reset;
+	}
+
 	get gameContent(): ServeGameContent {
 		return this._serveGameContent;
 	}
@@ -156,6 +163,18 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 		this._gameViewManager.removeGameContent(this._serveGameContent);
 		this.onStop.fire(this);
 		return Promise.resolve();
+	}
+
+	/**
+	 * ローカルインスタンスの内部状態を startPoint でリセットする。
+	 * 内部状態が変化するだけで、targetTime はそのままであることに注意。
+	 * (リセット後また targetTime に向けて進行する)
+	 *
+	 * isResettable() が真でない場合、何もしない。
+	 */
+	reset(startPoint: amf.StartPoint): void {
+		const gameDriver = this._serveGameContent.agvGameContent.getGameDriver();
+		gameDriver._gameLoop.reset?.(startPoint);
 	}
 
 	togglePause(pause: boolean): Promise<void> {
@@ -180,6 +199,21 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 		this._timeKeeper.start();
 		this.isPaused = false;
 		return Promise.resolve();
+	}
+
+	/**
+	 * 擬似ポーズ。
+	 *
+	 * 外部観測的にはポーズと同じだが、_timeKeeper だけを止めるので、インスタンスは _timeKeeper.now() まで進む。
+	 * ゲーム開始時に特定時間まで進めてポーズしたい場合に使う。
+	 * (通常ポーズではインスタンスが完全に止まるので目的の時間まで進められない)
+	 */
+	@action
+	targetTimePause(): void {
+		if (this.isPaused)
+			return;
+		this._timeKeeper.pause();
+		this.isPaused = true;
 	}
 
 	@action

@@ -175,9 +175,11 @@ declare module agv {
 			_clock: {
 				_profiler: {
 					_calculateProfilerValueTrigger: agv.TriggerLike;
-				}
-			},
-			reset: (startPoint: any) => void;
+				};
+			};
+			// Akashic Engine v2 系以前では存在しないため optional
+			// startPoint は @akashic/amflow の StartPoint だがここでは import できないため any
+			reset?(startPoint: any): void;
 		};
 	}
 }

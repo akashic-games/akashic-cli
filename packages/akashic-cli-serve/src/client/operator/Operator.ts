@@ -79,6 +79,23 @@ export class Operator {
 			});
 		}
 		await this.setCurrentPlay(play, query.mode === "replay");
+
+		if (query.mode === "replay") {
+			if (typeof query.replayResetFrame === "string") {
+				const resetFrame = parseInt(query.replayResetFrame);
+				if (!isNaN(resetFrame))
+					this.localInstance.resetByNearestStartPointOf({ frame: resetFrame }, false);
+			}
+			if (typeof query.replayTargetTime === "string") {
+				const time = parseFloat(query.replayTargetTime);
+				if (!isNaN(time))
+					this.localInstance.seekTo(time);
+			}
+		}
+
+		if (query.paused) {
+			store.currentLocalInstance.targetTimePause();
+		}
 	}
 
 	setCurrentPlay = async (play: PlayEntity, isReplay: boolean = false): Promise<void> => {
