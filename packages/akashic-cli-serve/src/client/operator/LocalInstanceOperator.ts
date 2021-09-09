@@ -27,7 +27,7 @@ export class LocalInstanceOperator {
 
 	seekToStartPointOf = async (frame: number): Promise<void> => {
 		this.resetByNearestStartPointOf({ frame }, true);
-	};
+	}
 
 	/**
 	 * 条件にもっとも近いスタートポイントでローカルインスタンスをリセットする。
@@ -44,7 +44,7 @@ export class LocalInstanceOperator {
 		if (toSeek) {
 			this.seekTo(sp.timestamp - amflow.getStartedAt());
 		}
-	};
+	}
 
 	togglePause = (pause: boolean): void => {
 		this.store.currentLocalInstance.togglePause(pause);
