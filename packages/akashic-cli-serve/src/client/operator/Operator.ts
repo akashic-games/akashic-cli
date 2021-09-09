@@ -1,6 +1,6 @@
-import * as queryString from "query-string";
 import { PlayBroadcastTestbedEvent } from "../../common/types/TestbedEvent";
 import { ClientContentLocator } from "../common/ClientContentLocator";
+import { queryParameters as query } from "../common/queryParameters";
 import * as ApiClient from "../api/ApiClient";
 import * as Subscriber from "../api/Subscriber";
 import { GameViewManager } from "../akashic/GameViewManager";
@@ -54,10 +54,9 @@ export class Operator {
 
 	async bootstrap(contentLocator?: ClientContentLocator): Promise<void> {
 		const store = this.store;
-		const query = queryString.parse(window.location.search);
 		let play: PlayEntity = null;
 		if (query.playId != null) {
-			play = store.playStore.plays[query.playId as string];
+			play = store.playStore.plays[query.playId];
 			if (!play) {
 				throw new Error(`play(id: ${query.playId}) is not found.`);
 			}
@@ -81,15 +80,11 @@ export class Operator {
 		await this.setCurrentPlay(play, query.mode === "replay");
 
 		if (query.mode === "replay") {
-			if (typeof query.replayResetFrame === "string") {
-				const resetFrame = parseInt(query.replayResetFrame);
-				if (!isNaN(resetFrame))
-					this.localInstance.resetByNearestStartPointOf({ frame: resetFrame }, false);
+			if (query.replayResetAge != null) {
+				this.localInstance.resetByNearestStartPointOf({ frame: query.replayResetAge }, false);
 			}
-			if (typeof query.replayTargetTime === "string") {
-				const time = parseFloat(query.replayTargetTime);
-				if (!isNaN(time))
-					this.localInstance.seekTo(time);
+			if (query.replayTargetTime != null) {
+				this.localInstance.seekTo(query.replayTargetTime);
 			}
 		}
 
