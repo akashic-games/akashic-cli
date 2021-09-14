@@ -31,7 +31,17 @@ describe("NodeModules", function () {
 			"dummy2": {
 				"index.js": "require('./sub')",
 				"sub.js": "",
-			}
+			},
+			"dummy3": mockfs.symlink({ path: "../dummy3-original" })
+		},
+		"dummy3-original": {
+			"index.js": "require('./sub')",
+			"sub.js": "",
+			"package.json": JSON.stringify({
+				name: "dummy3",
+				version: "0.0.0",
+				main: "index.js"
+			})
 		}
 	};
 
@@ -45,7 +55,7 @@ describe("NodeModules", function () {
 		it("list the script files and all package.json", function (done) {
 			mockfs(mockFsContent);
 			Promise.resolve()
-				.then(() => NodeModules.listModuleFiles(".", ["dummy@1", "dummy2"]))
+				.then(() => NodeModules.listModuleFiles(".", ["dummy@1", "dummy2", "dummy3"]))
 				.then((pkgjsonPaths) => {
 					expect(pkgjsonPaths.sort((a, b) => ((a > b) ? 1 : (a < b) ? -1 : 0))).toEqual([
 						"node_modules/dummy/foo.js",
@@ -54,7 +64,10 @@ describe("NodeModules", function () {
 						"node_modules/dummy/node_modules/dummyChild/package.json",
 						"node_modules/dummy/package.json",
 						"node_modules/dummy2/index.js",
-						"node_modules/dummy2/sub.js"
+						"node_modules/dummy2/sub.js",
+						"node_modules/dummy3/package.json",
+						"node_modules/dummy3/index.js",
+						"node_modules/dummy3/sub.js"
 					].sort((a, b) => ((a > b) ? 1 : (a < b) ? -1 : 0)));
 				})
 				.then(() => NodeModules.listModuleFiles(".", "dummy2"))
@@ -73,12 +86,13 @@ describe("NodeModules", function () {
 		it("list the files named package.json", function (done) {
 			mockfs(mockFsContent);
 			Promise.resolve()
-				.then(() => NodeModules.listScriptFiles(".", ["dummy", "dummy2"]))
+				.then(() => NodeModules.listScriptFiles(".", ["dummy", "dummy2", "dummy3"]))
 				.then((filePaths) => NodeModules.listPackageJsonsFromScriptsPath(".", filePaths))
 				.then((pkgJsonPaths) => {
 					expect(pkgJsonPaths.sort((a, b) => ((a > b) ? 1 : (a < b) ? -1 : 0))).toEqual([
 						"node_modules/dummy/package.json",
-						"node_modules/dummy/node_modules/dummyChild/package.json"
+						"node_modules/dummy/node_modules/dummyChild/package.json",
+						"node_modules/dummy3/package.json"
 					].sort((a, b) => ((a > b) ? 1 : (a < b) ? -1 : 0)))
 				})
 				.then(() => NodeModules.listScriptFiles(".", "dummy2"))
@@ -95,14 +109,16 @@ describe("NodeModules", function () {
 		it("list the scripts in node_modules/ up", function (done) {
 			mockfs(mockFsContent);
 			Promise.resolve()
-				.then(() => NodeModules.listScriptFiles(".", ["dummy", "dummy2"]))
+				.then(() => NodeModules.listScriptFiles(".", ["dummy", "dummy2", "dummy3"]))
 				.then((filePaths) => {
 					expect(filePaths.sort((a, b) => ((a > b) ? 1 : (a < b) ? -1 : 0))).toEqual([
 						"node_modules/dummy/foo.js",
 						"node_modules/dummy/main.js",
 						"node_modules/dummy/node_modules/dummyChild/main.js",
 						"node_modules/dummy2/index.js",
-						"node_modules/dummy2/sub.js"
+						"node_modules/dummy2/sub.js",
+						"node_modules/dummy3/index.js",
+						"node_modules/dummy3/sub.js",
 					]);
 				})
 				.then(() => NodeModules.listScriptFiles(".", "dummy"))
@@ -122,13 +138,14 @@ describe("NodeModules", function () {
 		it("list the files named package.json", function (done) {
 			mockfs(mockFsContent);
 			Promise.resolve()
-				.then(() => NodeModules.listScriptFiles(".", ["dummy", "dummy2"]))
+				.then(() => NodeModules.listScriptFiles(".", ["dummy", "dummy2", "dummy3"]))
 				.then((filePaths) => NodeModules.listPackageJsonsFromScriptsPath(".", filePaths))
 				.then((packageJsonFiles) => NodeModules.listModuleMainScripts(packageJsonFiles))
 				.then((moduleMainScripts) => {
 					expect(moduleMainScripts).toEqual({
 						"dummy": "node_modules/dummy/main.js",
-						"dummyChild": "node_modules/dummy/node_modules/dummyChild/main.js"
+						"dummyChild": "node_modules/dummy/node_modules/dummyChild/main.js",
+						"dummy3": "node_modules/dummy3/index.js"
 					});
 				})
 				.then(done)
