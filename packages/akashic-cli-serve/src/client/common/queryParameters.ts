@@ -218,7 +218,8 @@ function asEnum<T extends string>(v: string | string[] | null, candidates: strin
 }
 
 function asBool(v: string | string[] | null): boolean | null {
-	const s = asString(v); if (s === "true" || s === "1")
+	const s = asString(v);
+	if (s === "true" || s === "1")
 		return true;
 	if (s === "false" || s === "0")
 		return false;
