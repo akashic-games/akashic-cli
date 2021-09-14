@@ -99,7 +99,6 @@ export module NodeModules {
 				if (filePath === dummyRootName || (!checkAllModules && !(/^(?:\.\/)?node_modules/.test(filePath)))) {
 					return;
 				}
-
 				if (/^\.\.\//.test(filePath)) {
 					const rawFilePath = Util.makeUnixPath(row.file);
 					if (ignoreModulePaths.find((modulePath) => rawFilePath.includes(modulePath))) {
