@@ -11,6 +11,7 @@ export class ToolBarUiStore {
 	@observable showsDisplayOptionPopover: boolean;
 	@observable showsBackgroundImage: boolean;
 	@observable showsGrid: boolean;
+	@observable showsProfiler: boolean;
 	@observable showsDesignGuideline: boolean;
 
 	constructor() {
@@ -22,6 +23,7 @@ export class ToolBarUiStore {
 		this.showsDisplayOptionPopover = false;
 		this.showsBackgroundImage = storage.data.showsBackgroundImage;
 		this.showsGrid = storage.data.showsGrid;
+		this.showsProfiler = storage.data.showsProfiler;
 		this.showsDesignGuideline = storage.data.showsDesignGuideline;
 	}
 
@@ -72,6 +74,12 @@ export class ToolBarUiStore {
 	setShowGrid(show: boolean): void {
 		this.showsGrid = show;
 		storage.put({ showsGrid: show });
+	}
+
+	@action
+	setShowsProfiler(show: boolean): void {
+		this.showsProfiler = show;
+		storage.put({ showsProfiler: show });
 	}
 
 	@action

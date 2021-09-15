@@ -195,9 +195,7 @@ const TestWithBehaviour = observer(() => (
 		}}
 		niconicoDevtoolProps={nicoProps}
 		miscDevtoolProps={{
-			showsProfiler: false,
-			downloadPlaylog: action("download-playlog"),
-			setShowsProfiler: action("show-profiler")
+			downloadPlaylog: action("download-playlog")
 		}}
 		snapshotDevtoolProps={{
 			startPointHeaders: [
@@ -310,9 +308,7 @@ storiesOf("o-Devtool", module)
 			}}
 			niconicoDevtoolProps={nicoProps}
 			miscDevtoolProps={{
-				showsProfiler: false,
-				downloadPlaylog: action("download-playlog"),
-				setShowsProfiler: action("show-profiler")
+				downloadPlaylog: action("download-playlog")
 			}}
 			snapshotDevtoolProps={{
 				startPointHeaders: [],
@@ -411,9 +407,7 @@ storiesOf("o-Devtool", module)
 			}}
 			niconicoDevtoolProps={nicoProps}
 			miscDevtoolProps={{
-				showsProfiler: false,
-				downloadPlaylog: action("download-playlog"),
-				setShowsProfiler: action("show-profiler")
+				downloadPlaylog: action("download-playlog")
 			}}
 			snapshotDevtoolProps={{
 				startPointHeaders: [],
@@ -516,9 +510,7 @@ storiesOf("o-Devtool", module)
 			}}
 			niconicoDevtoolProps={nicoProps}
 			miscDevtoolProps={{
-				showsProfiler: false,
-				downloadPlaylog: action("download-playlog"),
-				setShowsProfiler: action("show-profiler")
+				downloadPlaylog: action("download-playlog")
 			}}
 			snapshotDevtoolProps={{
 				startPointHeaders: [],
@@ -575,9 +567,7 @@ storiesOf("o-Devtool", module)
 			}}
 			niconicoDevtoolProps={nicoProps}
 			miscDevtoolProps={{
-				showsProfiler: false,
-				downloadPlaylog: action("download-playlog"),
-				setShowsProfiler: action("show-profiler")
+				downloadPlaylog: action("download-playlog")
 			}}
 			snapshotDevtoolProps={{
 				startPointHeaders: [],
@@ -634,9 +624,7 @@ storiesOf("o-Devtool", module)
 			}}
 			niconicoDevtoolProps={nicoProps}
 			miscDevtoolProps={{
-				showsProfiler: false,
-				downloadPlaylog: action("download-playlog"),
-				setShowsProfiler: action("show-profiler")
+				downloadPlaylog: action("download-playlog")
 			}}
 			snapshotDevtoolProps={{
 				startPointHeaders: [],
