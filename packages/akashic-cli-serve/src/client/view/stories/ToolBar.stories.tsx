@@ -17,6 +17,7 @@ const store = observable({
 	showsDisplayOptionPopover: false,
 	showsBackgroundImage: false,
 	showsGrid: false,
+	showsProfiler: false,
 	isActivePausing: false,
 	showsDesignGuideline: false
 });
@@ -59,10 +60,12 @@ const TestWithBehaviour = observer(() => (
 				showsDisplayOptionPopover: store.showsDisplayOptionPopover,
 				showsBackgroundImage: store.showsBackgroundImage,
 				showsGrid: store.showsGrid,
+				showsProfiler: store.showsProfiler,
 				showsDesignGuideline: store.showsDesignGuideline,
 				onClickDisplayOptionPopover: (show => store.showsDisplayOptionPopover = show),
 				onChangeShowBackgroundImage: (show => store.showsBackgroundImage = show),
 				onChangeShowGrid: (show => store.showsGrid = show),
+				onChangeShowProfiler: (show => store.showsProfiler = show),
 				onChangeShowDesignGuideline: (show => store.showsDesignGuideline = show)
 			})}
 			showsAppearance={store.showsAppearance}
@@ -105,10 +108,12 @@ storiesOf("o-ToolBar", module)
 				showsDisplayOptionPopover: true,
 				showsBackgroundImage: false,
 				showsGrid: true,
+				showsProfiler: true,
 				showsDesignGuideline: false,
 				onClickDisplayOptionPopover: action("display-option"),
 				onChangeShowBackgroundImage: action("bgimage"),
 				onChangeShowGrid: action("grid"),
+				onChangeShowProfiler: action("profiler"),
 				onChangeShowDesignGuideline: action("design-guideline")
 			})}
 			showsAppearance={false}

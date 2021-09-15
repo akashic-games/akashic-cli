@@ -96,9 +96,7 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 				onTotalTimeLimitInputValueChanged: operator.devtool.setTotalTimeLimitInputValue
 			}}
 			miscDevtoolProps={{
-				showsProfiler: devtoolUiStore.showsProfiler,
-				downloadPlaylog: operator.play.downloadPlaylog,
-				setShowsProfiler: operator.ui.setShowsProfiler
+				downloadPlaylog: operator.play.downloadPlaylog
 			}}
 			snapshotDevtoolProps={{
 				startPointHeaders: play.startPointHeaders,
