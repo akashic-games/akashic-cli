@@ -87,6 +87,7 @@ export module NodeModules {
 		var b = browserify({
 			entries: new StringStream(rootRequirer, dummyRootPath),
 			basedir: basepath,
+			preserveSymlinks: true, // npm link で node_modules 以下に置かれたモジュールを symlink パスのまま扱う
 			builtins: true  // builtins (コアモジュール) はサポートしていないが、b.on("dep", ...) で検出するためにtrueにする
 		});
 		b.external("g");
