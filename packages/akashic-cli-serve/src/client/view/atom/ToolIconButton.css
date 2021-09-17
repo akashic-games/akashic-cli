@@ -1,6 +1,7 @@
 @import "../global.css";
 
 .tool-icon-button {
+	flex: 0 0 auto;
 	border: 1px solid transparent;
 	border-radius: 3px;
 	padding: 1px 2px;
@@ -16,7 +17,9 @@
 	vertical-align: center;
 	outline: none;
 
-	cursor: default;
+	white-space: nowrap;
+
+	cursor: pointer;
 	user-select: none;
 	moz-user-select: none;
 	-ms-user-select: none;

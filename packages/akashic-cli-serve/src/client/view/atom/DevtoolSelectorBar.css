@@ -13,7 +13,7 @@
 	flex: 0 0 auto;
 	padding: 4px 10px 3px 10px;
 	border-bottom: 2px solid transparent;
-	cursor: default;
+	cursor: pointer;
 	user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
