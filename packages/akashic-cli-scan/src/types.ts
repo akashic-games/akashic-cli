@@ -12,9 +12,10 @@ export interface AssetScanDirectoryTable {
 	audio?: string[];
 
 	/**
-	 * ImageAssetを取得するパス。
+	 * ImageAsset, VectorImageAssetを取得するパス。
 	 * 省略された場合、 `["image"]` 。
 	 */
+	// TODO: "image" と "vector-image" でテーブルを分けるべきかもしれないが一旦は同一とみなす
 	image?: string[];
 
 	/**

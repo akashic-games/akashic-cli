@@ -9,6 +9,7 @@ module.exports = {
 		tsconfigRootDir: __dirname
 	},
 	ignorePatterns: [
-		"**/*.js"
+		"**/*.js",
+		"spec/**/*"
 	]
 }

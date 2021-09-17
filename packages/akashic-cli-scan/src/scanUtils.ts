@@ -3,8 +3,8 @@ import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
 import { invertMap, makeUnixPath } from "@akashic/akashic-cli-commons/lib/Util";
 import type { AssetConfiguration } from "@akashic/game-configuration";
 import * as readdirRecursive from "fs-readdir-recursive";
-import { imageSize } from "image-size";
 import { getAudioDuration } from "./getAudioDuration";
+import { getImageSize } from "./getImageSize";
 
 export type AssetFilter = (path: string) => boolean;
 
@@ -17,12 +17,17 @@ export function textAssetFilter(p: string): boolean {
 	return !(
 		scriptAssetFilter(p) ||
 		imageAssetFilter(p) ||
+		vectorImageAssetFilter(p) ||
 		audioAssetFilter(p)
 	);
 }
 
 export function imageAssetFilter(p: string): boolean {
 	return /.*\.(png|gif|jp(?:e)?g)$/i.test(p);
+}
+
+export function vectorImageAssetFilter(p: string): boolean {
+	return /.*\.svg$/i.test(p);
 }
 
 export function audioAssetFilter(p: string): boolean {
@@ -80,13 +85,37 @@ export async function scanImageAssets(
 	const relativeFilePaths: string[] = readdirRecursive(path.join(baseDir, dir)).filter(filter);
 	return relativeFilePaths.map<AssetConfiguration>(relativeFilePath => {
 		const absolutePath = path.join(baseDir, dir, relativeFilePath);
-		const size = imageSize(absolutePath);
+		const size = getImageSize(absolutePath);
 		if (!size) {
 			logger?.warn(`Failed to get image size. Please check ${absolutePath}`);
 			return null;
 		}
 		return {
 			type: "image",
+			path: makeUnixPath(path.join(dir, relativeFilePath)),
+			width: size.width,
+			height: size.height
+		};
+	})
+		.filter(asset => asset != null);
+}
+
+export async function scanVectorImageAssets(
+	baseDir: string,
+	dir: string,
+	logger?: Logger,
+	filter: AssetFilter = vectorImageAssetFilter
+): Promise<AssetConfiguration[]> {
+	const relativeFilePaths: string[] = readdirRecursive(path.join(baseDir, dir)).filter(filter);
+	return relativeFilePaths.map<AssetConfiguration>(relativeFilePath => {
+		const absolutePath = path.join(baseDir, dir, relativeFilePath);
+		const size = getImageSize(absolutePath);
+		if (!size) {
+			logger?.warn(`Failed to get vector-image size. Please check ${absolutePath}`);
+			return null;
+		}
+		return {
+			type: "vector-image",
 			path: makeUnixPath(path.join(dir, relativeFilePath)),
 			width: size.width,
 			height: size.height
