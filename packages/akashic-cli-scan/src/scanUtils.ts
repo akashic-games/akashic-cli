@@ -111,7 +111,10 @@ export async function scanVectorImageAssets(
 		const absolutePath = path.join(baseDir, dir, relativeFilePath);
 		const size = getImageSize(absolutePath);
 		if (!size) {
-			logger?.warn(`Failed to get vector-image size. Please check ${absolutePath}`);
+			logger?.warn(
+				`Failed to get vector-image size. Please check ${absolutePath}. ` +
+				"Akashic Engine requires 'width' and 'height' attributes (denoted with 'px' or without units) in 'svg' element."
+			);
 			return null;
 		}
 		return {
