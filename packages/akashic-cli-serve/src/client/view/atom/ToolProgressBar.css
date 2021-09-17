@@ -18,25 +18,42 @@
 	-ms-user-select: none;
 }
 
-.bar {
+.bar, .subbar {
 	position: relative;
 	width: 0%;  /* style属性で上書き */
 	height: 100%;
 	background: #aaa;
 }
 
+.subbar {
+	position: absolute;
+	top: 0;
+	left: 0;
+	background: #ddd;
+}
+
 .circle {
 	position: absolute;
-	width: 10px;
-	height: 10px;
+	width: 8px;
+	height: 8px;
 	background: #999;
 	border-radius: 5px;
-	right: -5px;
-	top: -4px;
+	top: -3px;
+	left: -4px; /* style属性で上書き */
 }
 
 .circle:hover,
 .active .bar,
 .active .circle {
 	background: gray;
+}
+
+.marker {
+	position: absolute;
+	left: -4px; /* style属性で上書き */
+	width: 0;
+	height: 0;
+	border-left: 4px solid transparent;
+	border-right: 4px solid transparent;
+	border-bottom: 7px solid #aaf;
 }

@@ -5,10 +5,17 @@ import * as styles from "./ToolProgressBar.css";
 export interface ToolProgressBarProps {
 	max: number;
 	value: number;
+	subValue?: number;
+	markerValue?: number;
 	width?: number;
 	active?: boolean;
+	showsKnob?: boolean;
 	onChange?: (val: number) => void;
 	onCommit?: (val: number) => void;
+}
+
+function clamp(v: number, min: number, max: number): number {
+	return Math.max(min, Math.min(max, v));
 }
 
 @observer
@@ -21,15 +28,21 @@ export class ToolProgressBar extends React.Component<ToolProgressBarProps, {}> {
 	}
 
 	render() {
-		const { width, max, value, active } = this.props;
-		const ratio = value / max;
+		const { width, max, value, subValue, markerValue, active } = this.props;
+		const showsKnob = this.props.showsKnob ?? true; // TODO: 移行措置。後でデフォルトを false にする
+		const ratio = clamp(value, 0, max) / max;
+		const subRatio = clamp((subValue ?? 0), 0, max) / max;
+		const markerRatio = (markerValue != null) ? clamp(markerValue, 0, max) / max : null;
 		const className = styles["tool-progress-bar"] + (active ? ` ${styles["active"]}` : "");
+		const subBar = <div className={styles["subbar"]} style={{ width: `${subRatio * 100}%` }} />;
 		return (
 			<div className={styles["container"]} style={{ width }} onMouseDown={this._onMouseDownGauge} >
 				<div className={className} ref={this._onRef}>
-					<div className={styles["bar"]} style={{ width: `${ratio * 100}%` }}>
-						<div className={styles["circle"]} onMouseDown={this._onMouseDown} />
-					</div>
+					{ (subRatio > ratio) && subBar }
+					<div className={styles["bar"]} style={{ width: `${ratio * 100}%` }} />
+					{ (subRatio <= ratio) && subBar }
+					{ (markerRatio != null) && <div className={styles["marker"]} style={{ left: `calc(${markerRatio * 100}% - 4px)` }} /> }
+					{ showsKnob && <div className={styles["circle"]} style={{ left: `calc(${ratio * 100}% - 4px)` }} onMouseDown={this._onMouseDown} /> }
 				</div>
 			</div>
 		);
@@ -89,6 +102,6 @@ export class ToolProgressBar extends React.Component<ToolProgressBarProps, {}> {
 		const max = this.props.max;
 		const { left, width } = this._ref.getBoundingClientRect();
 		const offset = pageX - (window.pageXOffset + left);
-		return Math.round(Math.min(1, Math.max(0, offset / width)) * max);
+		return Math.round(clamp(offset / width, 0, 1) * max);
 	}
 }
