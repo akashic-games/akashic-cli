@@ -104,6 +104,9 @@ describe("scanAsset()", () => {
 			"dir": {
 				"akashic-lib.json": JSON.stringify({}),
 				"assets": {
+					"image": {
+						"$$$.svg": DUMMY_300x200_SVG_DATA
+					},
 					"text": {
 						"foo": {
 							"$.txt": "dummy",
@@ -166,11 +169,17 @@ describe("scanAsset()", () => {
 			});
 			// NOTE: target = "all" であるので assets ディレクトリの他アセットもスキャン対象
 			expect(conf.assetList[3]).toEqual({
+				type: "vector-image",
+				path: "assets/image/$$$.svg",
+				width: 300,
+				height: 200
+			});
+			expect(conf.assetList[4]).toEqual({
 				type: "script",
 				path: "assets/script/foo/_1.js",
 				global: true
 			});
-			expect(conf.assetList[4]).toEqual({
+			expect(conf.assetList[5]).toEqual({
 				type: "text",
 				path: "assets/text/foo/$.txt"
 			});
@@ -196,11 +205,17 @@ describe("scanAsset()", () => {
 				duration: 8000
 			});
 			expect(conf.assetList[1]).toEqual({
+				type: "vector-image",
+				path: "assets/image/$$$.svg",
+				width: 300,
+				height: 200
+			});
+			expect(conf.assetList[2]).toEqual({
 				type: "script",
 				path: "assets/script/foo/_1.js",
 				global: true
 			});
-			expect(conf.assetList[2]).toEqual({
+			expect(conf.assetList[3]).toEqual({
 				type: "text",
 				path: "assets/text/foo/$.txt"
 			});
