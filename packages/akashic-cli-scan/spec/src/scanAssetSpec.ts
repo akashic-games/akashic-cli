@@ -13,6 +13,7 @@ describe("scanAsset()", () => {
 	const DUMMY_OGG_DATA2 = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy2.ogg"));
 	const DUMMY_1x1_PNG_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy1x1.png"));
 	const DUMMY_300x200_SVG_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy_300x200.svg"));
+	const DUMMY_300x200_SUBPX_SVG_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy_300x200_subpx.svg"));
 	const DUMMY_NO_SIZE_SVG_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy_no_size.svg"));
 	const DUMMY_NO_PIXEL_SVG_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy_no_px.svg"));
 
@@ -105,7 +106,8 @@ describe("scanAsset()", () => {
 				"akashic-lib.json": JSON.stringify({}),
 				"assets": {
 					"image": {
-						"$$$.svg": DUMMY_300x200_SVG_DATA
+						"$$$.svg": DUMMY_300x200_SVG_DATA,
+						"@__.svg": DUMMY_300x200_SUBPX_SVG_DATA,
 					},
 					"text": {
 						"foo": {
@@ -144,7 +146,7 @@ describe("scanAsset()", () => {
 					image: ["image"],
 					audio: ["audio"]
 				},
-				logger: nullLogger
+				// logger: nullLogger
 			});
 			let conf = JSON.parse(fs.readFileSync("./dir/akashic-lib.json").toString());
 
@@ -175,11 +177,17 @@ describe("scanAsset()", () => {
 				height: 200
 			});
 			expect(conf.assetList[4]).toEqual({
+				type: "vector-image",
+				path: "assets/image/@__.svg",
+				width: 300,
+				height: 200
+			});
+			expect(conf.assetList[5]).toEqual({
 				type: "script",
 				path: "assets/script/foo/_1.js",
 				global: true
 			});
-			expect(conf.assetList[5]).toEqual({
+			expect(conf.assetList[6]).toEqual({
 				type: "text",
 				path: "assets/text/foo/$.txt"
 			});
@@ -211,11 +219,17 @@ describe("scanAsset()", () => {
 				height: 200
 			});
 			expect(conf.assetList[2]).toEqual({
+				type: "vector-image",
+				path: "assets/image/@__.svg",
+				width: 300,
+				height: 200
+			});
+			expect(conf.assetList[3]).toEqual({
 				type: "script",
 				path: "assets/script/foo/_1.js",
 				global: true
 			});
-			expect(conf.assetList[3]).toEqual({
+			expect(conf.assetList[4]).toEqual({
 				type: "text",
 				path: "assets/text/foo/$.txt"
 			});

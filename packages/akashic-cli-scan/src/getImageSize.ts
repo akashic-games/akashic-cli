@@ -8,7 +8,7 @@ export interface ISize {
 	height: number | undefined;
 }
 
-const validSizeRegExp = /^(\d+)(?:px)?$/;
+const validSizeRegExp = /^(\d+(:?\.\d+)?)(?:px)?$/;
 
 export function getImageSize(path: string): ISize | null {
 
@@ -26,6 +26,7 @@ export function getImageSize(path: string): ISize | null {
 			return null;
 		}
 
+		// 3. サブピクセルの場合は小数点以下を切り捨て
 		const width = parseInt(attr.width.replace(validSizeRegExp, "$1"), 10);
 		const height = parseInt(attr.height.replace(validSizeRegExp, "$1"), 10);
 
