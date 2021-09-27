@@ -1,5 +1,4 @@
 import * as fs from "fs";
-import * as http from "http";
 import * as path from "path";
 import * as util from "util";
 import { CliConfigServe } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigServe";
@@ -160,7 +159,40 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 	runnerStore.onRunnerRemove.add(arg => playStore.unregisterRunner(arg));
 
 	const app = express();
-	const httpServer = http.createServer(app);
+	let httpServer;
+	if (cliConfigParam.certificate || cliConfigParam.privatekey) {
+		if (cliConfigParam.certificate && !cliConfigParam.privatekey) {
+			getSystemLogger().error("Please specify the --privatekey option.");
+			process.exit(1);
+		}
+		if (!cliConfigParam.certificate && cliConfigParam.privatekey) {
+			getSystemLogger().error("Please specify the --certificate option.");
+			process.exit(1);
+		}
+
+		const keyPath = path.join(process.cwd(), cliConfigParam.privatekey);
+		const certPath = path.join(process.cwd(), cliConfigParam.certificate);
+		if (!fs.existsSync(keyPath)) {
+			getSystemLogger().error(`--privatekey option parameter ${cliConfigParam.privatekey} not found.`);
+			process.exit(1);
+		}
+		if (!fs.existsSync(certPath)) {
+			getSystemLogger().error(`--certificate option parameter ${cliConfigParam.certificate} not found.`);
+			process.exit(1);
+		}
+
+		serverGlobalConfig.protocol = "https";
+		const https = await import("https");
+		const options = {
+			key: fs.readFileSync(keyPath),
+			cert: fs.readFileSync(certPath)
+		};
+		httpServer = https.createServer(options, app);
+	} else {
+		const server = await import("http");
+		httpServer = server.createServer(app);
+	}
+
 	const io = new socketio.Server(httpServer, { parser });
 
 	if (cliConfigParam.watch && cliConfigParam.targetDirs) {
@@ -286,9 +318,9 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 			getSystemLogger().warn("Akashic Serve is a development server which is not appropriate for public release. " +
 				`We do not recommend to listen on a well-known port ${serverGlobalConfig.port}.`);
 		}
-		let url = `http://${serverGlobalConfig.hostname}:${serverGlobalConfig.port}/public`;
+		let url = `${serverGlobalConfig.protocol}://${serverGlobalConfig.hostname}:${serverGlobalConfig.port}/public`;
 		// サーバー起動のログに関してはSystemLoggerで使用していない色を使いたいので緑を選択
-		console.log(chalk.green(`Hosting ${targetDirs.join(", ")} on http://${serverGlobalConfig.hostname}:${serverGlobalConfig.port}`));
+		console.log(chalk.green(`Hosting ${targetDirs.join(", ")} on ${serverGlobalConfig.protocol}://${serverGlobalConfig.hostname}:${serverGlobalConfig.port}`)); // eslint-disable-line max-len
 		if (loadedPlaylogPlayId) {
 			console.log(`play(id: ${loadedPlaylogPlayId}) read playlog(path: ${path.join(process.cwd(), cmdOptions.debugPlaylog)}).`);
 			url += `?playId=${loadedPlaylogPlayId}&mode=replay`;
@@ -325,6 +357,8 @@ export async function run(argv: any): Promise<void> {
 		.option("--preserve-disconnected", "Disable auto closing for disconnected windows.")
 		.option("--experimental-open <num>",
 			"EXPERIMENTAL: Open <num> browser windows at startup. The upper limit of <num> is 10.") // TODO: open-browser と統合
+		.option("--certificate <certificatePath>", "Specify the certificate and start with https")
+		.option("--privatekey <privatekeyPath>", "Specify the privatekey and start with https")
 		.parse(argv);
 
 	const options = commander.opts();
@@ -349,7 +383,9 @@ export async function run(argv: any): Promise<void> {
 			openBrowser: options.openBrowser ?? conf.openBrowser,
 			preserveDisconnected: options.preserveDisconnected ?? conf.preserveDisconnected,
 			watch: options.watch ?? conf.watch,
-			experimentalOpen: options.experimentalOpen ?? conf.experimentalOpen
+			experimentalOpen: options.experimentalOpen ?? conf.experimentalOpen,
+			certificate: options.certificate ?? conf.certificate,
+			privatekey: options.privatekey ?? conf.privatekey
 		};
 		await cli(cliConfigParam, options);
 	});

@@ -97,7 +97,8 @@ export class RunnerStore {
 	}
 
 	private createAllowedUrls(contentId: string, externalAssets: (string | RegExp)[] | null): (string | RegExp)[] | null {
-		let allowedUrls: (string | RegExp)[] = [`http://${serverGlobalConfig.hostname}:${serverGlobalConfig.port}/contents/${contentId}/`];
+		let allowedUrls: (string | RegExp)[] =
+			[`${serverGlobalConfig.protocol}://${serverGlobalConfig.hostname}:${serverGlobalConfig.port}/contents/${contentId}/`];
 		if (serverGlobalConfig.allowExternal) {
 			// null は全てのアクセスを許可するため、nullが指定された場合は他の値を参照せず null を返す
 			if (externalAssets === null) return null;

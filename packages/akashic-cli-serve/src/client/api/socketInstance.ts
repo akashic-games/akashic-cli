@@ -3,7 +3,8 @@ import parser from "../../common/MsgpackParser";
 
 declare var io: typeof ioc.io;
 
-const socket = io("ws://" + window.location.host, {
+const wsProtocol = window.location.protocol.includes("https") ? "wss" : "ws";
+const socket = io(`${wsProtocol}://${window.location.host}`, {
 	// デフォルトはInfinityだが、過去に同じホスト・ポートで起動されたサーバに
 	// 接続していたクライアントが生きている(i.e. ブラウザのタブが開いたまま)時、
 	// つなぎなおして来てしまうのでやむなく1にしている。(0だとInfinity扱いされる)
