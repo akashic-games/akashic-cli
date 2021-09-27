@@ -357,8 +357,8 @@ export async function run(argv: any): Promise<void> {
 		.option("--preserve-disconnected", "Disable auto closing for disconnected windows.")
 		.option("--experimental-open <num>",
 			"EXPERIMENTAL: Open <num> browser windows at startup. The upper limit of <num> is 10.") // TODO: open-browser と統合
-		.option("--certificate <certificatePath>", "Specify the certificate and start with https")
-		.option("--privatekey <privatekeyPath>", "Specify the privatekey and start with https")
+		.option("--certificate <certificatePath>", "Specify the certificate and privatekey and start with https")
+		.option("--privatekey <privatekeyPath>", "Specify the privatekey and certificate and start with https")
 		.parse(argv);
 
 	const options = commander.opts();
