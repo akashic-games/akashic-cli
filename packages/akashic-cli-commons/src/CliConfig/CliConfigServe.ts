@@ -15,4 +15,6 @@ export interface CliConfigServe {
 	preserveDisconnected?: boolean;
 	watch?: boolean;
 	experimentalOpen?: number;
+	certificate?: string;
+	privatekey?: string;
 }
