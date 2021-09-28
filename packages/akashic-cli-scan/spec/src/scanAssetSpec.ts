@@ -146,7 +146,7 @@ describe("scanAsset()", () => {
 					image: ["image"],
 					audio: ["audio"]
 				},
-				// logger: nullLogger
+				logger: nullLogger
 			});
 			let conf = JSON.parse(fs.readFileSync("./dir/akashic-lib.json").toString());
 
