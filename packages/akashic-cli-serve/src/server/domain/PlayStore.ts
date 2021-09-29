@@ -1,9 +1,9 @@
 import { AMFlowClient, Play, PlayManager } from "@akashic/headless-driver";
 import { Trigger } from "@akashic/trigger";
 import { TimeKeeper } from "../../common/TimeKeeper";
+import { PlayAudioState } from "../../common/types/PlayAudioState";
 import { PlayDurationState } from "../../common/types/PlayDurationState";
 import { Player } from "../../common/types/Player";
-import { MuteType, PlayAudioState } from "../../common/types/PlayAudioState";
 import {
 	PlayCreateTestbedEvent,
 	PlayStatusChangedTestbedEvent,
