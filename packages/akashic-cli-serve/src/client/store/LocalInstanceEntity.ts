@@ -162,6 +162,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 
 	async start(): Promise<void> {
 		await this._gameViewManager.startGameContent(this._serveGameContent);
+		this.followPlayAudioStateChange(); // 生成時にすでに指定されていた play.audioState を反映する
 		this._timeKeeper.start();
 	}
 
@@ -233,7 +234,6 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 	followPlayAudioStateChange(): void {
 		const { muteType, soloPlayerId } = this.play.audioState;
 		const muted = (muteType === "mute") || (muteType === "solo" && this.player?.id !== soloPlayerId);
-		console.log(muted ? "MUTED!" : "UNMUTED!");
 		this._serveGameContent.agvGameContent.setMasterVolume(muted ? 0 : 1);
 	}
 

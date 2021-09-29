@@ -6,6 +6,7 @@ import {PlayAudioState} from "./PlayAudioState";
 export interface PlayCreateTestbedEvent {
 	playId: string;
 	contentLocatorData: ContentLocatorData;
+	audioState: PlayAudioState;
 }
 
 export interface PlayStatusChangedTestbedEvent {

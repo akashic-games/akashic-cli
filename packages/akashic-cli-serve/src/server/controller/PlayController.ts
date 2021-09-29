@@ -15,10 +15,9 @@ export const createHandlerToCreatePlay = (playStore: PlayStore): express.Request
 			if (!req.body.contentLocator || (!req.body.contentLocator.contentId && !req.body.contentLocator.path)) {
 				throw new BadRequestError({ errorMessage: "handleCreatePlay(): contentLocator is not given or invalid" });
 			}
-			const muteType = req.body.muteType ?? "none";
+			const audioState = req.body.audioState ?? { muteType: "none", soloPlayerId: null };
 			const contentLocator = new ServerContentLocator(req.body.contentLocator);
-			const playId = await playStore.createPlay(contentLocator, null, { muteType, soloPlayerId: null });
-			const audioState = playStore.getPlayAudioState(playId);
+			const playId = await playStore.createPlay(contentLocator, audioState, null);
 			responseSuccess<PlayApiResponseData>(res, 200, {
 				playId,
 				contentLocatorData: contentLocator,

@@ -22,8 +22,8 @@ export const getPlays = async(): Promise<PlayGetAllApiResponse> => {
 	return await ApiRequest.get<PlayGetAllApiResponse>("/api/plays");
 };
 
-export const createPlay = async(contentLocator: ContentLocatorData): Promise<PlayPostApiResponse> => {
-	return await ApiRequest.post<PlayPostApiResponse>("/api/plays", { contentLocator });
+export const createPlay = async(contentLocator: ContentLocatorData, audioState?: PlayAudioState): Promise<PlayPostApiResponse> => {
+	return await ApiRequest.post<PlayPostApiResponse>("/api/plays", { contentLocator, audioState });
 };
 
 export const suspendPlay = async(playId: string): Promise<PlayDeleteApiResponse> => {

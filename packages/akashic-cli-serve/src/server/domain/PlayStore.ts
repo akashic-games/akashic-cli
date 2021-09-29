@@ -66,7 +66,11 @@ export class PlayStore {
 	/**
 	 * Playを生成するが、返すものはPlayId
 	 */
-	async createPlay(loc: ServerContentLocator, playlog?: DumpedPlaylog | null, audioState?: PlayAudioState): Promise<string> {
+	async createPlay(
+		loc: ServerContentLocator,
+		audioState: PlayAudioState = { muteType: "none", soloPlayerId: null },
+		playlog?: DumpedPlaylog | null
+	): Promise<string> {
 		const playId = await this.playManager.createPlay({
 			contentUrl: loc.asAbsoluteUrl()
 		}, playlog);
@@ -76,7 +80,7 @@ export class PlayStore {
 			clientInstances: [],
 			runners: [],
 			joinedPlayers: [],
-			audioState: audioState ?? { muteType: "none", soloPlayerId: null }
+			audioState
 		};
 
 		if (playlog) {
@@ -85,7 +89,7 @@ export class PlayStore {
 			const finishedTime = this.calculataFinishedTime(playlog);
 			timeKeeper.setTime(finishedTime);
 		}
-		this.onPlayCreate.fire({playId, contentLocatorData: loc});
+		this.onPlayCreate.fire({playId, contentLocatorData: loc, audioState});
 		this.onPlayStatusChange.fire({playId, playStatus: "running"});
 		return playId;
 	}

@@ -170,7 +170,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 				if (targetPlayIds.length === 0)
 					return;
 				const audioState = playStore.getPlayAudioState(targetPlayIds[targetPlayIds.length - 1]); // 暫定: どれを持ち越すべきか検討が必要
-				const playId = await playStore.createPlay(new ServerContentLocator({ contentId }), null, audioState);
+				const playId = await playStore.createPlay(new ServerContentLocator({ contentId }), audioState, null);
 				const token = amflowManager.createPlayToken(playId, "", "", true, {});
 				const amflow = playStore.createAMFlow(playId);
 				await runnerStore.createAndStartRunner({ playId, isActive: true, token, amflow, contentId });
