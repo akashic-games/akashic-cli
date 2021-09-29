@@ -1,4 +1,3 @@
-import { MuteType } from "../../common/types/PlayAudioState";
 import * as Subscriber from "../api/Subscriber";
 import { Store } from "../store/Store";
 
@@ -90,13 +89,13 @@ export class PlayOperator {
 
 	muteAll = (): void => {
 		this.store.currentPlay.changeMuteType("mute");
-	}
+	};
 
 	muteOthers = (): void => {
 		this.store.currentPlay.changeMuteType("solo");
-	}
+	};
 
 	unmuteAll = (): void => {
 		this.store.currentPlay.changeMuteType("none");
-	}
+	};
 }

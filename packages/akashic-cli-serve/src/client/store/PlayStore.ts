@@ -147,7 +147,7 @@ export class PlayStore {
 	private handlePlayAudioStateChange = (e: PlayAudioStateChangeTestbedEvent): void => {
 		const play = this.plays[e.playId];
 		play.handlePlayAudioStateChange(e.audioState);
-	}
+	};
 
 	private handlePlayerJoin = (e: PlayerJoinTestbedEvent): void => {
 		this.plays[e.playId].handlePlayerJoin(e.player);

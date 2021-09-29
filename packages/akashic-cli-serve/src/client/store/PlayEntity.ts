@@ -1,6 +1,6 @@
 import * as playlog from "@akashic/playlog";
 import { Trigger } from "@akashic/trigger";
-import { observable, action, computed, ObservableMap } from "mobx";
+import { observable, action, ObservableMap } from "mobx";
 import { TimeKeeper } from "../../common/TimeKeeper";
 import { MuteType, PlayAudioState } from "../../common/types/PlayAudioState";
 import { PlayDurationState } from "../../common/types/PlayDurationState";
