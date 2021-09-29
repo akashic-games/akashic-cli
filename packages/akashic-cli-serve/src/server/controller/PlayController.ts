@@ -15,8 +15,10 @@ export const createHandlerToCreatePlay = (playStore: PlayStore): express.Request
 			if (!req.body.contentLocator || (!req.body.contentLocator.contentId && !req.body.contentLocator.path)) {
 				throw new BadRequestError({ errorMessage: "handleCreatePlay(): contentLocator is not given or invalid" });
 			}
+			const muteType = req.body.muteType ?? "none";
 			const contentLocator = new ServerContentLocator(req.body.contentLocator);
-			const playId = await playStore.createPlay(contentLocator);
+			const playId = await playStore.createPlay(contentLocator, null, { muteType, soloPlayerId: null });
+			const audioState = playStore.getPlayAudioState(playId);
 			responseSuccess<PlayApiResponseData>(res, 200, {
 				playId,
 				contentLocatorData: contentLocator,
@@ -26,7 +28,8 @@ export const createHandlerToCreatePlay = (playStore: PlayStore): express.Request
 				durationState: {
 					duration: 0,
 					isPaused: true
-				}
+				},
+				audioState
 			});
 		} catch (e) {
 			next(e);
@@ -50,7 +53,8 @@ export const createHandlerToGetPlay = (playStore: PlayStore): express.RequestHan
 				joinedPlayers: playStore.getJoinedPlayers(playId),
 				runners: playStore.getRunners(playId),
 				clientInstances: playStore.getClientInstances(playId),
-				durationState: playStore.getPlayDurationState(playId)
+				durationState: playStore.getPlayDurationState(playId),
+				audioState: playStore.getPlayAudioState(playId)
 			});
 		} catch (e) {
 			next(e);
@@ -71,7 +75,8 @@ export const createHandlerToGetPlays = (playStore: PlayStore): express.RequestHa
 					joinedPlayers: playStore.getJoinedPlayers(play.playId),
 					runners: playStore.getRunners(play.playId),
 					clientInstances: playStore.getClientInstances(play.playId),
-					durationState: playStore.getPlayDurationState(play.playId)
+					durationState: playStore.getPlayDurationState(play.playId),
+					audioState: playStore.getPlayAudioState(play.playId)
 				}))
 			);
 		} catch (e) {
@@ -175,3 +180,23 @@ export const createHandlerToGetPlaylog = (playStore: PlayStore): express.Request
 		}
 	};
 };
+
+export const createHandlerToPatchAudioState = (playStore: PlayStore): express.RequestHandler => {
+	return async (req, res, next) => {
+		try {
+			const playId = req.params.playId;
+			if (!playId) {
+				throw new BadRequestError({ errorMessage: "PlayId is not given" });
+			}
+			const { audioState } = req.body;
+			if (!audioState) {
+				throw new BadRequestError({ errorMessage: "audioState is not given" });
+			}
+			playStore.setPlayAudioState(playId, audioState);
+			responseSuccess<void>(res, 200, null);
+		} catch (e) {
+			next(e);
+		}
+	};
+};
+

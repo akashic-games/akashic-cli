@@ -1,3 +1,4 @@
+import { MuteType } from "../../common/types/PlayAudioState";
 import * as Subscriber from "../api/Subscriber";
 import { Store } from "../store/Store";
 
@@ -86,4 +87,16 @@ export class PlayOperator {
 	downloadPlaylog = (): void => {
 		location.href = `/api/plays/${this.store.currentPlay.playId}/playlog`;
 	};
+
+	muteAll = (): void => {
+		this.store.currentPlay.changeMuteType("mute");
+	}
+
+	muteOthers = (): void => {
+		this.store.currentPlay.changeMuteType("solo");
+	}
+
+	unmuteAll = (): void => {
+		this.store.currentPlay.changeMuteType("none");
+	}
 }

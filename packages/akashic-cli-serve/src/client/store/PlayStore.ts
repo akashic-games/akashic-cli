@@ -11,7 +11,8 @@ import {
 	RunnerPauseTestbedEvent,
 	RunnerResumeTestbedEvent,
 	ClientInstanceAppearTestbedEvent,
-	ClientInstanceDisappearTestbedEvent
+	ClientInstanceDisappearTestbedEvent,
+	PlayAudioStateChangeTestbedEvent
 } from "../../common/types/TestbedEvent";
 import * as ApiClient from "../api/ApiClient";
 import * as Subscriber from "../api/Subscriber";
@@ -57,6 +58,7 @@ export class PlayStore {
 			Subscriber.onPlayCreate.add(this.handlePlayCreate);
 			Subscriber.onPlayStatusChange.add(this.handlePlayStatusChange);
 			Subscriber.onPlayDurationStateChange.add(this.handlePlayDurationStateChange);
+			Subscriber.onPlayAudioStateChange.add(this.handlePlayAudioStateChange);
 			Subscriber.onPlayerJoin.add(this.handlePlayerJoin);
 			Subscriber.onPlayerLeave.add(this.handlePlayerLeave);
 			Subscriber.onClientInstanceAppear.add(this.handleClientInstanceAppear);
@@ -134,6 +136,11 @@ export class PlayStore {
 	private handlePlayDurationStateChange = (e: PlayDurationStateChangeTestbedEvent): void => {
 		this.plays[e.playId].handlePlayDurationStateChange(e.isPaused, e.duration);
 	};
+
+	private handlePlayAudioStateChange = (e: PlayAudioStateChangeTestbedEvent): void => {
+		const play = this.plays[e.playId];
+		play.handlePlayAudioStateChange(e.audioState);
+	}
 
 	private handlePlayerJoin = (e: PlayerJoinTestbedEvent): void => {
 		this.plays[e.playId].handlePlayerJoin(e.player);

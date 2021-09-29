@@ -3,6 +3,7 @@ import { Trigger } from "@akashic/trigger";
 import { TimeKeeper } from "../../common/TimeKeeper";
 import { PlayDurationState } from "../../common/types/PlayDurationState";
 import { Player } from "../../common/types/Player";
+import { MuteType, PlayAudioState } from "../../common/types/PlayAudioState";
 import {
 	PlayCreateTestbedEvent,
 	PlayStatusChangedTestbedEvent,
@@ -14,7 +15,8 @@ import {
 	ClientInstanceAppearTestbedEvent,
 	ClientInstanceDisappearTestbedEvent,
 	RunnerDescription,
-	ClientInstanceDescription
+	ClientInstanceDescription,
+	PlayAudioStateChangeTestbedEvent
 } from "../../common/types/TestbedEvent";
 import { ServerContentLocator } from "../common/ServerContentLocator";
 import { DumpedPlaylog } from "../common/types/DumpedPlaylog";
@@ -30,12 +32,14 @@ export interface PlayEntity {
 	clientInstances: ClientInstanceDescription[];
 	runners: RunnerDescription[];
 	joinedPlayers: Player[];
+	audioState: PlayAudioState;
 }
 
 export class PlayStore {
 	onPlayCreate: Trigger<PlayCreateTestbedEvent>;
 	onPlayStatusChange: Trigger<PlayStatusChangedTestbedEvent>;
 	onPlayDurationStateChange: Trigger<PlayDurationStateChangeTestbedEvent>;
+	onPlayAudioStateChange: Trigger<PlayAudioStateChangeTestbedEvent>;
 	onPlayerJoin: Trigger<PlayerJoinTestbedEvent>;
 	onPlayerLeave: Trigger<PlayerLeaveTestbedEvent>;
 	onClientInstanceAppear: Trigger<ClientInstanceAppearTestbedEvent>;
@@ -50,6 +54,7 @@ export class PlayStore {
 		this.onPlayCreate = new Trigger<PlayCreateTestbedEvent>();
 		this.onPlayStatusChange = new Trigger<PlayStatusChangedTestbedEvent>();
 		this.onPlayDurationStateChange = new Trigger<PlayDurationStateChangeTestbedEvent>();
+		this.onPlayAudioStateChange = new Trigger<PlayAudioStateChangeTestbedEvent>();
 		this.onPlayerJoin = new Trigger<PlayerJoinTestbedEvent>();
 		this.onPlayerLeave = new Trigger<PlayerLeaveTestbedEvent>();
 		this.onClientInstanceAppear = new Trigger<ClientInstanceAppearTestbedEvent>();
@@ -61,7 +66,7 @@ export class PlayStore {
 	/**
 	 * Playを生成するが、返すものはPlayId
 	 */
-	async createPlay(loc: ServerContentLocator, playlog?: DumpedPlaylog): Promise<string> {
+	async createPlay(loc: ServerContentLocator, playlog?: DumpedPlaylog | null, audioState?: PlayAudioState): Promise<string> {
 		const playId = await this.playManager.createPlay({
 			contentUrl: loc.asAbsoluteUrl()
 		}, playlog);
@@ -70,7 +75,8 @@ export class PlayStore {
 			timeKeeper: new TimeKeeper(),
 			clientInstances: [],
 			runners: [],
-			joinedPlayers: []
+			joinedPlayers: [],
+			audioState: audioState ?? { muteType: "none", soloPlayerId: null }
 		};
 
 		if (playlog) {
@@ -147,12 +153,17 @@ export class PlayStore {
 	resumePlayDuration(playId: string): void {
 		const timeKeeper = this.playEntities[playId].timeKeeper;
 		timeKeeper.start();
-		this.onPlayDurationStateChange.fire({playId, isPaused: false, duration: timeKeeper.now() });
+		this.onPlayDurationStateChange.fire({playId, isPaused: false, duration: timeKeeper.now()});
 	}
 
 	stepPlayDuration(playId: string): void {
 		const timeKeeper = this.playEntities[playId].timeKeeper;
-		this.onPlayDurationStateChange.fire({playId, isPaused: false, duration: timeKeeper.now() + 1000 / 60 });
+		this.onPlayDurationStateChange.fire({playId, isPaused: false, duration: timeKeeper.now() + 1000 / 60});
+	}
+
+	setPlayAudioState(playId: string, audioState: PlayAudioState): void {
+		this.playEntities[playId].audioState = audioState;
+		this.onPlayAudioStateChange.fire({playId, audioState});
 	}
 
 	getJoinedPlayers(playId: string): Player[] {
@@ -174,6 +185,10 @@ export class PlayStore {
 	getPlayDurationState(playId: string): PlayDurationState {
 		const timeKeeper = this.playEntities[playId].timeKeeper;
 		return { duration: timeKeeper.now(), isPaused: timeKeeper.isPausing() };
+	}
+
+	getPlayAudioState(playId: string): PlayAudioState {
+		return this.playEntities[playId].audioState;
 	}
 
 	// コンテンツの終了時間をplaylogから算出する

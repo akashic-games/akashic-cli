@@ -98,6 +98,8 @@ declare module agv {
 		getGameVars(propertyName: string, listener: (vars: any) => void): void;
 		getGame(): agv.GameLike;
 		getGameDriver(): agv.GameDriverLike;
+		setMasterVolume(vol: number): void;
+		getMasterVolume(): number;
 	}
 
 	interface PlaylogConfig {

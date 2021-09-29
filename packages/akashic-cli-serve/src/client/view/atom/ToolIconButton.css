@@ -16,7 +16,7 @@
 	vertical-align: center;
 	outline: none;
 
-	cursor: default;
+	cursor: pointer;
 	user-select: none;
 	moz-user-select: none;
 	-ms-user-select: none;

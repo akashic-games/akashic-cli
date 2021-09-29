@@ -21,6 +21,10 @@ export class UiOperator {
 		this.store.toolBarUiStore.setShowDevtools(show);
 	};
 
+	setShowAudioOptionPopover = (show: boolean): void => {
+		this.store.toolBarUiStore.setShowAudioOptionPopover(show);
+	};
+
 	setShowDisplayOptionPopover = (show: boolean): void => {
 		this.store.toolBarUiStore.setShowDisplayOptionPopover(show);
 	};

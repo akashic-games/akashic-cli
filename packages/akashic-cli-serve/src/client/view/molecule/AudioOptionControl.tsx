@@ -1,0 +1,83 @@
+import * as React from "react";
+import { observer } from "mobx-react";
+import { ToolIconButton } from "../atom/ToolIconButton";
+import { Popover } from "../atom/Popover";
+import * as styles from "./AudioOptionControl.css";
+import { PlayAudioStateSummary } from "../../../common/types/PlayAudioState";
+import { ToolChoiceButton, ToolChoiceButtonItem } from "../atom/ToolChoiceButton";
+
+export interface AudioOptionControlPropsData {
+  showsAudioOptionPopover: boolean;
+	audioStateSummary?: PlayAudioStateSummary;
+	onClickAudioOptionPopover: (show: boolean) => void;
+	onClickMuteAll: () => void;
+	onClickSolo: () => void;
+	onClickMuteNone: () => void;
+}
+
+export interface AudioOptionControlProps {
+	makeProps: () => AudioOptionControlPropsData;
+}
+
+const muteButtonItems: ToolChoiceButtonItem[] = [
+	{
+		label: "All",
+		title: "Mute all instances"
+	},
+	{
+		label: "Solo",
+		title: "Mute all instances and unmute this"
+	},
+	{
+		label: "None",
+		title: "Unmute all instances"
+	},
+];
+
+export const AudioOptionControl = observer(function AudioOptionControl(props: AudioOptionControlProps) {
+	const {
+		showsAudioOptionPopover,
+		audioStateSummary,
+		onClickAudioOptionPopover,
+		onClickMuteAll,
+		onClickSolo,
+		onClickMuteNone
+	} = props.makeProps();
+	const ref = React.useRef();
+
+	const handleClickMuteChoice = React.useCallback((index: number) => {
+		const handlers = [onClickMuteAll, onClickSolo, onClickMuteNone]; // muteButtonItems に対応
+		return handlers[index]!();
+	}, [onClickMuteAll, onClickSolo, onClickMuteNone]);
+
+	// muteButtonItems の順序に対応
+	const muteChoicePushedIndex =
+		(audioStateSummary === "anyone-muted") ? 0 :
+		(audioStateSummary === "only-me-unmuted") ? 1 :
+		(audioStateSummary === "anyone-unmuted") ? 2 : null;
+	const isMuted = audioStateSummary === "anyone-muted" || audioStateSummary  === "only-someone-unmuted";
+
+	return <div ref={ref} style={{ position: "relative" }}>
+		<ToolIconButton
+			className="external-ref_button_audio-option"
+			icon={isMuted ? "volume_mute" : "volume_up"}
+			title={"オーディオオプション"}
+			pushed={showsAudioOptionPopover}
+			onClick={onClickAudioOptionPopover} />
+		<Popover
+			className={styles["popover"]}
+			shows={showsAudioOptionPopover}
+			caption={"Audio Options"}
+			onChangeShows={onClickAudioOptionPopover}
+			outsideRef={ref}
+		>
+			<div className={styles["mutebar"]}>
+				<span className={styles["mutebar-label"]}>Mute:</span>
+				<ToolChoiceButton
+					items={muteButtonItems}
+					pushedIndex={muteChoicePushedIndex}
+					onClick={handleClickMuteChoice} />
+			</div>
+		</Popover>
+	</div>
+});

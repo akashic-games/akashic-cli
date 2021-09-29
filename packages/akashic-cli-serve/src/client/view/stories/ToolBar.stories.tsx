@@ -4,6 +4,7 @@ import { observer } from "mobx-react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
 import { ToolBar } from "../organism/ToolBar";
+import { PlayAudioStateSummary } from "../../../common/types/PlayAudioState";
 
 const store = observable({
 	realtime: true,
@@ -14,10 +15,12 @@ const store = observable({
 	duration: 380 * 1000,
 	showsAppearance: false,
 	showsDevtools: false,
+	showsAudioOptionPopover: true,
 	showsDisplayOptionPopover: false,
 	showsBackgroundImage: false,
 	showsGrid: false,
 	isActivePausing: false,
+	audioStateSummary: "anyone-unmuted" as PlayAudioStateSummary,
 	showsDesignGuideline: false
 });
 
@@ -54,6 +57,14 @@ const TestWithBehaviour = observer(() => (
 				isJoined: true,
 				isJoinEnabled: store.realtime,
 				onClickJoinLeave: action("joinleave")
+			})}
+			makeAudioOptionControlProps={() => ({
+				showsAudioOptionPopover: store.showsAudioOptionPopover,
+				audioStateSummary: store.audioStateSummary,
+				onClickAudioOptionPopover: (show => store.showsAudioOptionPopover = show),
+				onClickSolo: (() => store.audioStateSummary = "only-me-unmuted"),
+				onClickMuteAll: (() => store.audioStateSummary = "anyone-muted"),
+				onClickMuteNone: (() => store.audioStateSummary = "anyone-unmuted")
 			})}
 			makeDisplayOptionControlProps={() => ({
 				showsDisplayOptionPopover: store.showsDisplayOptionPopover,
@@ -100,6 +111,14 @@ storiesOf("o-ToolBar", module)
 				isJoined: true,
 				isJoinEnabled: false,
 				onClickJoinLeave: action("joinleave")
+			})}
+			makeAudioOptionControlProps={() => ({
+				showsAudioOptionPopover: false,
+				audioStateSummary: "only-me-unmuted",
+				onClickAudioOptionPopover: action("audio-option"),
+				onClickSolo: () => {},
+				onClickMuteAll: () => {},
+				onClickMuteNone: () => {}
 			})}
 			makeDisplayOptionControlProps={() => ({
 				showsDisplayOptionPopover: true,
