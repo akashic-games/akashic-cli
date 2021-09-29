@@ -160,24 +160,24 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 
 	const app = express();
 	let httpServer;
-	if (cliConfigParam.certificate || cliConfigParam.privatekey) {
-		if (cliConfigParam.certificate && !cliConfigParam.privatekey) {
-			getSystemLogger().error("Please specify the --privatekey option.");
+	if (cliConfigParam.sslCert || cliConfigParam.sslKey) {
+		if (cliConfigParam.sslCert && !cliConfigParam.sslKey) {
+			getSystemLogger().error("Please specify the --ssl-key option.");
 			process.exit(1);
 		}
-		if (!cliConfigParam.certificate && cliConfigParam.privatekey) {
-			getSystemLogger().error("Please specify the --certificate option.");
+		if (!cliConfigParam.sslCert && cliConfigParam.sslKey) {
+			getSystemLogger().error("Please specify the --ssl-cert option.");
 			process.exit(1);
 		}
 
-		const keyPath = path.join(process.cwd(), cliConfigParam.privatekey);
-		const certPath = path.join(process.cwd(), cliConfigParam.certificate);
+		const keyPath = path.join(process.cwd(), cliConfigParam.sslKey);
+		const certPath = path.join(process.cwd(), cliConfigParam.sslCert);
 		if (!fs.existsSync(keyPath)) {
-			getSystemLogger().error(`--privatekey option parameter ${cliConfigParam.privatekey} not found.`);
+			getSystemLogger().error(`--ssl-key option parameter ${cliConfigParam.sslKey} not found.`);
 			process.exit(1);
 		}
 		if (!fs.existsSync(certPath)) {
-			getSystemLogger().error(`--certificate option parameter ${cliConfigParam.certificate} not found.`);
+			getSystemLogger().error(`--ssl-cert option parameter ${cliConfigParam.sslCert} not found.`);
 			process.exit(1);
 		}
 
@@ -357,8 +357,8 @@ export async function run(argv: any): Promise<void> {
 		.option("--preserve-disconnected", "Disable auto closing for disconnected windows.")
 		.option("--experimental-open <num>",
 			"EXPERIMENTAL: Open <num> browser windows at startup. The upper limit of <num> is 10.") // TODO: open-browser と統合
-		.option("--certificate <certificatePath>", "Specify the certificate and privatekey and start with https")
-		.option("--privatekey <privatekeyPath>", "Specify the privatekey and certificate and start with https")
+		.option("--ssl-cert <certificatePath>", "Specify path to an SSL/TLS certificate to use HTTPS")
+		.option("--ssl-key <privatekeyPath>", "Specify path to an SSL/TLS privatekey to use HTTPS")
 		.parse(argv);
 
 	const options = commander.opts();
@@ -384,8 +384,8 @@ export async function run(argv: any): Promise<void> {
 			preserveDisconnected: options.preserveDisconnected ?? conf.preserveDisconnected,
 			watch: options.watch ?? conf.watch,
 			experimentalOpen: options.experimentalOpen ?? conf.experimentalOpen,
-			certificate: options.certificate ?? conf.certificate,
-			privatekey: options.privatekey ?? conf.privatekey
+			sslCert: options.sslCert ?? conf.sslCert,
+			sslKey: options.sslKey ?? conf.sslKey
 		};
 		await cli(cliConfigParam, options);
 	});
