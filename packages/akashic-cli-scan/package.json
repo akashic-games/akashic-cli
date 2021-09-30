@@ -24,7 +24,7 @@
   ],
   "devDependencies": {
     "@akashic/eslint-config": "0.1.2",
-    "@akashic/game-configuration": "1.0.1",
+    "@akashic/game-configuration": "1.1.0-feature.0",
     "@types/image-size": "0.7.0",
     "@types/jasmine": "3.9.0",
     "@types/mock-fs": "4.13.1",
@@ -49,6 +49,7 @@
     "fs-readdir-recursive": "1.1.0",
     "image-size": "~0.9.0",
     "music-metadata": "7.11.4",
+    "svgson": "^5.2.1",
     "thumbcoil": "~1.2.0"
   },
   "publishConfig": {

@@ -67,7 +67,8 @@ export namespace AssetModule {
 
 		// スキャン対象のディレクトリの定義済みアセットの中からすでに存在しないものを削除
 		for (const definedAsset of definedAssets) {
-			let dirs = assetDirTable[definedAsset.type as "audio" | "image" | "script" | "text"];
+			const key = definedAsset.type === "vector-image" ? "image" : definedAsset.type as "audio" | "image" | "script" | "text";
+			let dirs = assetDirTable[key];
 			if (dirs && dirs.length) {
 				dirs = dirs.map(dir => dir.endsWith("/") ? dir : dir + "/");
 				if (dirs.some(dir => definedAsset.path.startsWith(dir))) {
@@ -113,10 +114,13 @@ export namespace AssetModule {
 					duration: fresh.duration
 				};
 			}
-			if (fresh.type === "image" && old.type === "image") {
+			if (
+				(fresh.type === "image" && old.type === "image") ||
+				(fresh.type === "vector-image" && old.type === "vector-image")
+			) {
 				if (fresh.width !== old.width || fresh.height !== old.height) {
 					logger?.info(
-						`Detected change of the image size for ${fresh.path}`
+						`Detected change of the ${fresh.type} size for ${fresh.path}`
 						+ ` from ${old.width}x${old.height} to ${fresh.width}x${fresh.height}`
 					);
 				}

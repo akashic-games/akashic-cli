@@ -5,7 +5,7 @@ import { chdir } from "@akashic/akashic-cli-commons/lib/Util";
 import type { AssetConfiguration, GameConfiguration } from "@akashic/game-configuration";
 import { AssetModule } from "./AssetModule";
 import { FileModule } from "./FileModule";
-import { scanAudioAssets, scanImageAssets, scanScriptAssets, scanTextAssets, textAssetFilter } from "./scanUtils";
+import { scanAudioAssets, scanImageAssets, scanScriptAssets, scanTextAssets, scanVectorImageAssets, textAssetFilter } from "./scanUtils";
 import type { AssetExtension, AssetScanDirectoryTable, AssetTargetType, LibConfiguration } from "./types";
 
 export interface ScanAssetParameterObject {
@@ -159,7 +159,10 @@ export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 			scannedAssets.push(...assets);
 		}
 		for (const dir of scanTargetDirsTable.image) {
-			const assets = await scanImageAssets(base, dir, logger);
+			const assets = [
+				...(await scanImageAssets(base, dir, logger)),
+				...(await scanVectorImageAssets(base, dir, logger))
+			];
 			scannedAssets.push(...assets);
 		}
 		for (const dir of scanTargetDirsTable.script) {
