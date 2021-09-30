@@ -1,5 +1,22 @@
 # CHANGELOG
 
+## 2.11.0 (2021-09-30)
+
+#### Other Change
+* `akashic-cli-init`
+  * [#854](https://github.com/akashic-games/akashic-cli/pull/854) Modify akashic-cli-init template package.json ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-serve`, `akashic-cli`
+  * [#848](https://github.com/akashic-games/akashic-cli/pull/848) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli`
+  * [#849](https://github.com/akashic-games/akashic-cli/pull/849) Update dependency commander to v8.2.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 3
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- [@yu-ogi](https://github.com/yu-ogi)
+- kamakiri_ys ([@kamakiri01](https://github.com/kamakiri01))
+
 ## 2.10.26 (2021-09-10)
 
 #### Enhancement
