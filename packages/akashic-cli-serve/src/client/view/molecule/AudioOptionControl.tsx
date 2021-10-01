@@ -52,10 +52,13 @@ export const AudioOptionControl = observer(function AudioOptionControl(props: Au
 
 	// muteButtonItems の順序に対応
 	const muteChoicePushedIndex =
-		(audioStateSummary === "anyone-muted") ? 0 :
-		(audioStateSummary === "only-me-unmuted") ? 1 :
-		(audioStateSummary === "anyone-unmuted") ? 2 : null;
-	const isMuted = audioStateSummary === "anyone-muted" || audioStateSummary === "only-someone-unmuted";
+		(audioStateSummary === "all-player-muted") ? 0 :
+		(audioStateSummary === "only-this-player-unmuted") ? 1 :
+		(audioStateSummary === "all-player-unmuted") ? 2 : null;
+	const isMuted = (
+		audioStateSummary === "all-player-muted" ||
+		audioStateSummary === "only-other-player-unmuted"
+	);
 
 	return <div ref={ref} style={{ position: "relative" }}>
 		<ToolIconButton

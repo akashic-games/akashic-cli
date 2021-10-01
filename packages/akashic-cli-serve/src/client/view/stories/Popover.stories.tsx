@@ -2,7 +2,6 @@ import * as React from "react";
 import { observable } from "mobx";
 import { observer } from "mobx-react";
 import { storiesOf } from "@storybook/react";
-// import { action } from "@storybook/addon-actions";
 import { Popover } from "../atom/Popover";
 
 const store = observable({
@@ -37,4 +36,3 @@ storiesOf("a-Popover", module)
 		</Popover>
 	))
 	.add("with-behavior", () => <TestWithBehaviour />);
-

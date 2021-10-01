@@ -88,7 +88,7 @@ export class PlayOperator {
 	};
 
 	muteAll = (): void => {
-		this.store.currentPlay.changeMuteType("mute");
+		this.store.currentPlay.changeMuteType("all");
 	};
 
 	muteOthers = (): void => {

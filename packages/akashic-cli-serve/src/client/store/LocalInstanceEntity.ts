@@ -132,16 +132,18 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 
 	@computed
 	get playAudioStateSummary(): PlayAudioStateSummary {
-		const { muteType, soloPlayerId } = this.play.audioState;
-		switch (muteType) {
-			case "mute": {
-				return "anyone-muted";
+		const audioState = this.play.audioState;
+		switch (audioState.muteType) {
+			case "all": {
+				return "all-player-muted";
 			}
 			case "solo": {
-				return (this.player?.id === soloPlayerId) ? "only-me-unmuted" : "only-someone-unmuted";
+				return (this.player?.id === audioState.soloPlayerId) ?
+					"only-this-player-unmuted" :
+					"only-other-player-unmuted";
 			}
 			case "none": {
-				return "anyone-unmuted";
+				return "all-player-unmuted";
 			}
 		}
 	}
@@ -232,8 +234,11 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 	}
 
 	followPlayAudioStateChange(): void {
-		const { muteType, soloPlayerId } = this.play.audioState;
-		const muted = (muteType === "mute") || (muteType === "solo" && this.player?.id !== soloPlayerId);
+		const audioState = this.play.audioState;
+		const muted = (
+			(audioState.muteType === "all") ||
+			(audioState.muteType === "solo" && this.player?.id !== audioState.soloPlayerId)
+		);
 		this._serveGameContent.agvGameContent.setMasterVolume(muted ? 0 : 1);
 	}
 

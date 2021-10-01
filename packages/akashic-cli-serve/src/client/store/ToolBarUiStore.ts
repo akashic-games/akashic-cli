@@ -6,7 +6,6 @@ export class ToolBarUiStore {
 	@observable isSeeking: boolean;
 	@observable showsAppearanceMenu: boolean;
 	@observable showsDevtools: boolean;
-
 	@observable showsAudioOptionPopover: boolean;
 
 	@observable showsDisplayOptionPopover: boolean;

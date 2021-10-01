@@ -68,7 +68,7 @@ export class PlayStore {
 	 */
 	async createPlay(
 		loc: ServerContentLocator,
-		audioState: PlayAudioState = { muteType: "none", soloPlayerId: null },
+		audioState: PlayAudioState = { muteType: "none" },
 		playlog?: DumpedPlaylog | null
 	): Promise<string> {
 		const playId = await this.playManager.createPlay({

@@ -20,7 +20,7 @@ const store = observable({
 	showsBackgroundImage: false,
 	showsGrid: false,
 	isActivePausing: false,
-	audioStateSummary: "anyone-unmuted" as PlayAudioStateSummary,
+	audioStateSummary: "all-player-unmuted" as PlayAudioStateSummary,
 	showsDesignGuideline: false
 });
 
@@ -62,9 +62,9 @@ const TestWithBehaviour = observer(() => (
 				showsAudioOptionPopover: store.showsAudioOptionPopover,
 				audioStateSummary: store.audioStateSummary,
 				onClickAudioOptionPopover: (show => store.showsAudioOptionPopover = show),
-				onClickSolo: (() => store.audioStateSummary = "only-me-unmuted"),
-				onClickMuteAll: (() => store.audioStateSummary = "anyone-muted"),
-				onClickMuteNone: (() => store.audioStateSummary = "anyone-unmuted")
+				onClickSolo: (() => store.audioStateSummary = "only-this-player-unmuted"),
+				onClickMuteAll: (() => store.audioStateSummary = "all-player-muted"),
+				onClickMuteNone: (() => store.audioStateSummary = "all-player-unmuted")
 			})}
 			makeDisplayOptionControlProps={() => ({
 				showsDisplayOptionPopover: store.showsDisplayOptionPopover,
@@ -114,7 +114,7 @@ storiesOf("o-ToolBar", module)
 			})}
 			makeAudioOptionControlProps={() => ({
 				showsAudioOptionPopover: false,
-				audioStateSummary: "only-me-unmuted",
+				audioStateSummary: "only-this-player-unmuted",
 				onClickAudioOptionPopover: action("audio-option"),
 				onClickSolo: () => {},
 				onClickMuteAll: () => {},

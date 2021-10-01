@@ -81,10 +81,7 @@ export class PlayEntity {
 		this.clientInstances = param.clientInstances ?? [];
 		this.joinedPlayerTable = observable.map((param.joinedPlayers || []).map(p => [p.id, p] as [string, Player]));
 		this.status = "preparing";
-		this.audioState = param.audioState ?? {
-			muteType: "none",
-			soloPlayerId: null
-		};
+		this.audioState = param.audioState ?? { muteType: "none" };
 		this.localInstances = [];
 		this.serverInstances = !param.runners ? [] : param.runners.map(desc => {
 			return new ServerInstanceEntity({ runnerId: desc.runnerId, play: this });
