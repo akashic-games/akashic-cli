@@ -26,7 +26,7 @@ export class LocalInstanceOperator {
 	}
 
 	seekToStartPointOf = async (frame: number): Promise<void> => {
-		this.resetByNearestStartPointOf({ frame }, true);
+		await this.resetByNearestStartPointOf({ frame }, true);
 	}
 
 	/**
