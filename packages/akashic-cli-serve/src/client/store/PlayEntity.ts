@@ -192,14 +192,6 @@ export class PlayEntity {
 		ApiClient.changePlayAudioState(this.playId, { muteType: "none" });
 	}
 
-	changeMuteType(muteType: MuteType): void {
-		const pid = this.localInstances[0]?.player?.id;
-		ApiClient.changePlayAudioState(this.playId, {
-			muteType,
-			soloPlayerId: muteType === "solo" ? pid : null
-		});
-	}
-
 	@action
 	handlePlayerJoin(player: Player): void {
 		this.joinedPlayerTable.set(player.id, player);
