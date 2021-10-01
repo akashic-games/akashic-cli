@@ -7,13 +7,14 @@ describe("mainScene", () => {
 			gameJsonPath: path.join(__dirname, "..", "game.json")
 		});
 		const client = await context.getGameClient();
-
 		expect(client.type).toBe("active");
 
 		const game = client.game!;
 		expect(game.width).toBe(1280);
 		expect(game.height).toBe(720);
 		expect(game.fps).toBe(30);
+
+		await client.advanceUntil(() => game.scene().local !== "full-local"); // ローカル(ローディング)シーンを抜けるまで進める
 
 		const scene = client.game.scene()!;
 		expect(scene).toBeDefined();

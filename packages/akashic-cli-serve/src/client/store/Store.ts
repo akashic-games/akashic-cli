@@ -1,9 +1,9 @@
 import {observable, action} from "mobx";
-import * as queryString from "query-string";
 import {ServiceType} from "@akashic/akashic-cli-commons/lib/ServiceType";
 import {Player} from "../../common/types/Player";
 import {AppOptions} from "../../common/types/AppOptions";
 import {ClientContentLocator} from "../common/ClientContentLocator";
+import {queryParameters as query} from "../common/queryParameters";
 import * as ApiClient from "../api/ApiClient";
 import {PlayEntity} from "./PlayEntity";
 import {PlayStore} from "./PlayStore";
@@ -34,9 +34,8 @@ export class Store {
 	private _initializationWaiter: Promise<void>;
 
 	constructor() {
-		const query = queryString.parse(window.location.search);
 		// TODO xnv bootstrapから渡す方が自然では？
-		this.contentLocator = new ClientContentLocator({ contentId: (query.id != null) ? query.id as string : "0" });
+		this.contentLocator = new ClientContentLocator({ contentId: (query.id != null) ? query.id : "0" });
 		this.contentStore = new ContentStore();
 		this.playStore = new PlayStore({ contentStore: this.contentStore });
 		this.toolBarUiStore = new ToolBarUiStore();
