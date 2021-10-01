@@ -170,7 +170,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 	 * 内部状態が変化するだけで、targetTime はそのままであることに注意。
 	 * (リセット後また targetTime に向けて進行する)
 	 *
-	 * isResettable() が真でない場合、何もしない。
+	 * isResettable が真でない場合、何もしない。
 	 */
 	reset(startPoint: amf.StartPoint): void {
 		const gameDriver = this._serveGameContent.agvGameContent.getGameDriver();
