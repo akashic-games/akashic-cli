@@ -88,14 +88,14 @@ export class PlayOperator {
 	};
 
 	muteAll = (): void => {
-		this.store.currentPlay.changeMuteType("all");
+		this.store.currentPlay.muteAll();
 	};
 
 	muteOthers = (): void => {
-		this.store.currentPlay.changeMuteType("solo");
+		this.store.currentPlay.muteOthers();
 	};
 
 	unmuteAll = (): void => {
-		this.store.currentPlay.changeMuteType("none");
+		this.store.currentPlay.unmuteAll();
 	};
 }

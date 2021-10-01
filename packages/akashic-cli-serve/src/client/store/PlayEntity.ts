@@ -179,6 +179,19 @@ export class PlayEntity {
 		ApiClient.stepPlayDuration(this.playId);
 	}
 
+	muteAll(): void {
+		ApiClient.changePlayAudioState(this.playId, { muteType: "all" });
+	}
+
+	muteOthers(): void {
+		const soloPlayerId = this.localInstances[0]?.player?.id;
+		ApiClient.changePlayAudioState(this.playId, { muteType: "solo", soloPlayerId });
+	}
+
+	unmuteAll(): void {
+		ApiClient.changePlayAudioState(this.playId, { muteType: "none" });
+	}
+
 	changeMuteType(muteType: MuteType): void {
 		const pid = this.localInstances[0]?.player?.id;
 		ApiClient.changePlayAudioState(this.playId, {

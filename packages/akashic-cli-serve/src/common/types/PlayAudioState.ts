@@ -18,7 +18,6 @@ export type PlayAudioState =
 	PlayAudioStateMuteTypeSolo |
 	PlayAudioStateMuteTypeNone;
 
-
 /**
  * PlayAudioState の要約。
  * (UI など localInstance を意識しないレイヤーのためにある)
