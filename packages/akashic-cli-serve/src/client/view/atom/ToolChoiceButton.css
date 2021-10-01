@@ -2,12 +2,12 @@
 
 .tool-choice-button {
 	display: inline-flex;
-  flex-flow: row nowrap;
+	flex-flow: row nowrap;
 }
 
 .tool-choice-button-single {
 	border: 1px solid var(--color-tool-border);
-  border-width: 1px 0 1px 1px;
+	border-width: 1px 0 1px 1px;
 	border-radius: 0;
 	padding: 1px 12px;
 	margin: 2px 0;
@@ -29,14 +29,14 @@
 }
 
 .tool-choice-button-single:first-child {
-  border-radius: 3px 0 0 3px;
-  margin-right: 0;
+	border-radius: 3px 0 0 3px;
+	margin-right: 0;
 }
 
 .tool-choice-button-single:last-child {
-  border-width: 1px;
-  border-radius: 0 3px 3px 0;
-  margin-left: 0;
+	border-width: 1px;
+	border-radius: 0 3px 3px 0;
+	margin-left: 0;
 }
 
 .tool-choice-button-single:disabled {
@@ -62,11 +62,11 @@
 
 .pushed {
 	/* css-loader にクラスを認識させるための空定義 */
-  border-width: 1px;
+	border-width: 1px;
 }
 
 .pushed + .tool-choice-button-single {
-  border-left-width: 0;
+	border-left-width: 0;
 }
 
 .tool-choice-button-single.pushed:not(:disabled) {

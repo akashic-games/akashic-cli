@@ -7,7 +7,7 @@ import { PlayAudioStateSummary } from "../../../common/types/PlayAudioState";
 import { ToolChoiceButton, ToolChoiceButtonItem } from "../atom/ToolChoiceButton";
 
 export interface AudioOptionControlPropsData {
-  showsAudioOptionPopover: boolean;
+	showsAudioOptionPopover: boolean;
 	audioStateSummary?: PlayAudioStateSummary;
 	onClickAudioOptionPopover: (show: boolean) => void;
 	onClickMuteAll: () => void;
@@ -55,7 +55,7 @@ export const AudioOptionControl = observer(function AudioOptionControl(props: Au
 		(audioStateSummary === "anyone-muted") ? 0 :
 		(audioStateSummary === "only-me-unmuted") ? 1 :
 		(audioStateSummary === "anyone-unmuted") ? 2 : null;
-	const isMuted = audioStateSummary === "anyone-muted" || audioStateSummary  === "only-someone-unmuted";
+	const isMuted = audioStateSummary === "anyone-muted" || audioStateSummary === "only-someone-unmuted";
 
 	return <div ref={ref} style={{ position: "relative" }}>
 		<ToolIconButton
