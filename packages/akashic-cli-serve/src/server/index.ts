@@ -170,8 +170,8 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 			process.exit(1);
 		}
 
-		const keyPath = path.join(process.cwd(), cliConfigParam.sslKey);
-		const certPath = path.join(process.cwd(), cliConfigParam.sslCert);
+		const keyPath = path.resolve(process.cwd(), cliConfigParam.sslKey);
+		const certPath = path.resolve(process.cwd(), cliConfigParam.sslCert);
 		if (!fs.existsSync(keyPath)) {
 			getSystemLogger().error(`--ssl-key option parameter ${cliConfigParam.sslKey} not found.`);
 			process.exit(1);
