@@ -1,6 +1,7 @@
 import {Trigger} from "@akashic/trigger";
 import {action, observable, computed} from "mobx";
 import {TimeKeeper} from "../../common/TimeKeeper";
+import {PlayAudioStateSummary} from "../../common/types/PlayAudioState";
 import {Player} from "../../common/types/Player";
 import {GameViewManager} from "../akashic/GameViewManager";
 import {ServeGameContent} from "../akashic/ServeGameContent";
@@ -130,6 +131,24 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 	}
 
 	@computed
+	get playAudioStateSummary(): PlayAudioStateSummary {
+		const audioState = this.play.audioState;
+		switch (audioState.muteType) {
+			case "all": {
+				return "all-player-muted";
+			}
+			case "solo": {
+				return (this.player?.id === audioState.soloPlayerId) ?
+					"only-this-player-unmuted" :
+					"only-other-player-unmuted";
+			}
+			case "none": {
+				return "all-player-unmuted";
+			}
+		}
+	}
+
+	@computed
 	get isJoined(): boolean {
 		return this.play.joinedPlayerTable.has(this.player.id);
 	}
@@ -145,6 +164,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 
 	async start(): Promise<void> {
 		await this._gameViewManager.startGameContent(this._serveGameContent);
+		this.followPlayAudioStateChange(); // 生成時にすでに指定されていた play.audioState を反映する
 		this._timeKeeper.start();
 	}
 
@@ -211,6 +231,15 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 		} else {
 			this._serveGameContent.agvGameContent.addContentLoadListener(() => this.setProfilerValueTrigger(cb));
 		}
+	}
+
+	followPlayAudioStateChange(): void {
+		const audioState = this.play.audioState;
+		const muted = (
+			(audioState.muteType === "all") ||
+			(audioState.muteType === "solo" && this.player?.id !== audioState.soloPlayerId)
+		);
+		this._serveGameContent.agvGameContent.setMasterVolume(muted ? 0 : 1);
 	}
 
 	private async _initialize(): Promise<void> {

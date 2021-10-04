@@ -1,10 +1,11 @@
-import {AppOptions} from "./AppOptions";
-import {ContentDesc} from "./ContentDesc";
-import {ContentLocatorData} from "./ContentLocatorData";
-import {PlayDurationState} from "./PlayDurationState";
-import {Player} from "./Player";
-import {SandboxConfig} from "./SandboxConfig";
-import {ClientInstanceDescription, RunnerDescription} from "./TestbedEvent";
+import { AppOptions } from "./AppOptions";
+import { ContentDesc } from "./ContentDesc";
+import { ContentLocatorData } from "./ContentLocatorData";
+import { PlayAudioState } from "./PlayAudioState";
+import { PlayDurationState } from "./PlayDurationState";
+import { Player } from "./Player";
+import { SandboxConfig } from "./SandboxConfig";
+import { ClientInstanceDescription, RunnerDescription } from "./TestbedEvent";
 
 export interface ApiResponse<T> {
 	meta: {
@@ -22,6 +23,7 @@ export interface PlayApiResponseData {
 	runners: RunnerDescription[];
 	clientInstances: ClientInstanceDescription[];
 	durationState: PlayDurationState;
+	audioState: PlayAudioState;
 }
 
 export interface PlayDeleteApiResponseData {

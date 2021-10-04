@@ -86,4 +86,16 @@ export class PlayOperator {
 	downloadPlaylog = (): void => {
 		location.href = `/api/plays/${this.store.currentPlay.playId}/playlog`;
 	};
+
+	muteAll = (): void => {
+		this.store.currentPlay.muteAll();
+	};
+
+	muteOthers = (): void => {
+		this.store.currentPlay.muteOthers();
+	};
+
+	unmuteAll = (): void => {
+		this.store.currentPlay.unmuteAll();
+	};
 }

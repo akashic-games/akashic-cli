@@ -1,4 +1,5 @@
 import * as queryString from "query-string";
+import { PlayAudioState } from "../../common/types/PlayAudioState";
 import { PlayBroadcastTestbedEvent } from "../../common/types/TestbedEvent";
 import { GameViewManager } from "../akashic/GameViewManager";
 import * as ApiClient from "../api/ApiClient";
@@ -64,12 +65,10 @@ export class Operator {
 		} else if (contentLocator) {
 			play = await this._createServerLoop(contentLocator);
 		} else {
-			const plays = store.playStore.playsList();
-			if (plays.length > 0) {
-				play = plays[plays.length - 1];
-			} else {
+			play = store.playStore.getLastPlay();
+			if (!play) {
 				const loc = store.contentStore.defaultContent().locator;
-				play = await this._createServerLoop(loc);
+				play = await this._createServerLoop(loc, null); // TODO: (起動時の最初のプレイで) audioState を指定する方法
 			}
 		}
 		if (store.targetService === "atsumaru:single") {
@@ -180,14 +179,15 @@ export class Operator {
 	// TODO: このメソッドの処理は本来サーバー側で行うべき
 	restartWithNewPlay = async (): Promise<void> => {
 		await this.store.currentPlay.content.updateSandboxConfig();
-		const play = await this._createServerLoop(this.store.currentPlay.content.locator);
+		const audioState = this.store.playStore.getLastPlay()?.audioState;
+		const play = await this._createServerLoop(this.store.currentPlay.content.locator, audioState);
 		await this.store.currentPlay.deleteAllServerInstances();
 		await ApiClient.broadcast(this.store.currentPlay.playId, { type: "switchPlay", nextPlayId: play.playId });
 		this.ui.hideNotification();
 	};
 
-	private async _createServerLoop(contentLocator: ClientContentLocator): Promise<PlayEntity> {
-		const play = await this.store.playStore.createPlay({ contentLocator });
+	private async _createServerLoop(contentLocator: ClientContentLocator, audioState?: PlayAudioState): Promise<PlayEntity> {
+		const play = await this.store.playStore.createPlay({ contentLocator, audioState });
 		const tokenResult = await ApiClient.createPlayToken(play.playId, "", true);  // TODO 空文字列でなくnullを使う
 		await play.createServerInstance({ playToken: tokenResult.data.playToken });
 		await ApiClient.resumePlayDuration(play.playId);

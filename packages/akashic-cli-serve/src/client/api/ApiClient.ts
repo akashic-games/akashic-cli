@@ -15,14 +15,15 @@ import {
 } from "../../common/types/ApiResponse";
 import {ContentLocatorData} from "../../common/types/ContentLocatorData";
 import {GameConfiguration} from "../../common/types/GameConfiguration";
+import { PlayAudioState } from "../../common/types/PlayAudioState";
 import * as ApiRequest from "./ApiRequest";
 
 export const getPlays = async(): Promise<PlayGetAllApiResponse> => {
 	return await ApiRequest.get<PlayGetAllApiResponse>("/api/plays");
 };
 
-export const createPlay = async(contentLocator: ContentLocatorData): Promise<PlayPostApiResponse> => {
-	return await ApiRequest.post<PlayPostApiResponse>("/api/plays", { contentLocator });
+export const createPlay = async(contentLocator: ContentLocatorData, audioState?: PlayAudioState): Promise<PlayPostApiResponse> => {
+	return await ApiRequest.post<PlayPostApiResponse>("/api/plays", { contentLocator, audioState });
 };
 
 export const suspendPlay = async(playId: string): Promise<PlayDeleteApiResponse> => {
@@ -39,6 +40,10 @@ export const resumePlayDuration = async(playId: string): Promise<PlayPatchApiRes
 
 export const stepPlayDuration = async(playId: string): Promise<PlayPatchApiResponse> => {
 	return await ApiRequest.patch<PlayPatchApiResponse>(`/api/plays/${playId}`, {status: "paused", step: true});
+};
+
+export const changePlayAudioState = async(playId: string, audioState: PlayAudioState): Promise<void> => {
+	return await ApiRequest.patch<void>(`/api/plays/${playId}/audio`, { audioState });
 };
 
 export const createPlayToken = async(

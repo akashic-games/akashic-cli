@@ -2,6 +2,7 @@ import * as playlog from "@akashic/playlog";
 import { Trigger } from "@akashic/trigger";
 import { observable, action, ObservableMap } from "mobx";
 import { TimeKeeper } from "../../common/TimeKeeper";
+import { PlayAudioState } from "../../common/types/PlayAudioState";
 import { PlayDurationState } from "../../common/types/PlayDurationState";
 import { Player } from "../../common/types/Player";
 import { PlayStatus } from "../../common/types/PlayStatus";
@@ -43,6 +44,7 @@ export interface PlayEntityParameterObject {
 	runners?: RunnerDescription[];
 	clientInstances?: ClientInstanceDescription[];
 	durationState?: PlayDurationState;
+	audioState?: PlayAudioState;
 	parent?: PlayEntity;
 }
 
@@ -60,6 +62,7 @@ export class PlayEntity {
 	@observable clientInstances: ClientInstanceDescription[];
 	@observable joinedPlayerTable: ObservableMap;
 	@observable status: PlayStatus;
+	@observable audioState: PlayAudioState;
 
 	@observable localInstances: LocalInstanceEntity[];
 	@observable serverInstances: ServerInstanceEntity[];
@@ -75,9 +78,10 @@ export class PlayEntity {
 		this.activePlaybackRate = 1;
 		this.isActivePausing = !!param.durationState && param.durationState.isPaused;
 		this.duration = param.durationState ? param.durationState.duration : 0;
-		this.clientInstances = param.clientInstances || [];
+		this.clientInstances = param.clientInstances ?? [];
 		this.joinedPlayerTable = observable.map((param.joinedPlayers || []).map(p => [p.id, p] as [string, Player]));
 		this.status = "preparing";
+		this.audioState = param.audioState ?? { muteType: "none" };
 		this.localInstances = [];
 		this.serverInstances = !param.runners ? [] : param.runners.map(desc => {
 			return new ServerInstanceEntity({ runnerId: desc.runnerId, play: this });
@@ -175,6 +179,19 @@ export class PlayEntity {
 		ApiClient.stepPlayDuration(this.playId);
 	}
 
+	muteAll(): void {
+		ApiClient.changePlayAudioState(this.playId, { muteType: "all" });
+	}
+
+	muteOthers(): void {
+		const soloPlayerId = this.localInstances[0]?.player?.id;
+		ApiClient.changePlayAudioState(this.playId, { muteType: "solo", soloPlayerId });
+	}
+
+	unmuteAll(): void {
+		ApiClient.changePlayAudioState(this.playId, { muteType: "none" });
+	}
+
 	@action
 	handlePlayerJoin(player: Player): void {
 		this.joinedPlayerTable.set(player.id, player);
@@ -210,6 +227,12 @@ export class PlayEntity {
 		if (duration != null) {
 			this._timeKeeper.setTime(duration);
 		}
+	}
+
+	@action
+	handlePlayAudioStateChange(audioState: PlayAudioState): void {
+		this.audioState = audioState;
+		this.localInstances.forEach(li => li.followPlayAudioStateChange());
 	}
 
 	@action

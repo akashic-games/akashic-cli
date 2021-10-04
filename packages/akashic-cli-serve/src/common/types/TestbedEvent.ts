@@ -1,10 +1,12 @@
 import {ContentLocatorData} from "./ContentLocatorData";
+import {PlayAudioState} from "./PlayAudioState";
 import {Player} from "./Player";
 import {PlayStatus} from "./PlayStatus";
 
 export interface PlayCreateTestbedEvent {
 	playId: string;
 	contentLocatorData: ContentLocatorData;
+	audioState: PlayAudioState;
 }
 
 export interface PlayStatusChangedTestbedEvent {
@@ -70,4 +72,9 @@ export interface ClientInstanceDisappearTestbedEvent extends ClientInstanceDescr
 export interface PlayBroadcastTestbedEvent {
 	playId: string;
 	message: any;
+}
+
+export interface PlayAudioStateChangeTestbedEvent {
+	playId: string;
+	audioState: PlayAudioState;
 }

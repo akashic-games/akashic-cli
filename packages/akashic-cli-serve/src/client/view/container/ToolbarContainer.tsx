@@ -10,6 +10,7 @@ import { InstanceControlPropsData } from "../molecule/InstanceControl";
 import { PlayerControlPropsData } from "../molecule/PlayerControl";
 import { DisplayOptionControlPropsData } from "../molecule/DisplayOptionControl";
 import { ToolBar } from "../organism/ToolBar";
+import { AudioOptionControlPropsData } from "../molecule/AudioOptionControl";
 
 export interface ToolBarContainerProps {
 	play: PlayEntity;
@@ -27,6 +28,7 @@ export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}>
 			makePlayControlProps={this._makePlayControlProps}
 			makeInstanceControlProps={this._makeInstanceControlProps}
 			makePlayerControlProps={this._makePlayerControlProps}
+			makeAudioOptionControlProps={this._makeAudioOptionControlProps}
 			makeDisplayOptionControlProps={this._makeDisplayOptionControlProps}
 			showsAppearance={toolBarUiStore.showsAppearanceMenu}
 			showsDevtools={toolBarUiStore.showsDevtools}
@@ -75,6 +77,18 @@ export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}>
 			isJoined: localInstance.isJoined,
 			isJoinEnabled: (localInstance.executionMode === "passive" && joinEnabled),
 			onClickJoinLeave: operator.play.toggleJoinLeaveSelf
+		};
+	}
+
+	private _makeAudioOptionControlProps = (): AudioOptionControlPropsData => {
+		const { operator, localInstance, toolBarUiStore } = this.props;
+		return {
+			showsAudioOptionPopover: toolBarUiStore.showsAudioOptionPopover,
+			audioStateSummary: localInstance.playAudioStateSummary,
+			onClickAudioOptionPopover: operator.ui.setShowAudioOptionPopover,
+			onClickMuteAll: operator.play.muteAll,
+			onClickSolo: operator.play.muteOthers,
+			onClickMuteNone: operator.play.unmuteAll,
 		};
 	}
 

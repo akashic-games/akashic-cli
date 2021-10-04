@@ -183,12 +183,17 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 					});
 					targetPlayIds.push(playId);
 				});
-				const playId = await playStore.createPlay(new ServerContentLocator({ contentId }));
+				if (targetPlayIds.length === 0)
+					return;
+				const audioState = playStore.getPlayAudioState(targetPlayIds[targetPlayIds.length - 1]); // 暫定: どれを持ち越すべきか検討が必要
+				const playId = await playStore.createPlay(new ServerContentLocator({ contentId }), audioState, null);
 				const token = amflowManager.createPlayToken(playId, "", "", true, {});
 				const amflow = playStore.createAMFlow(playId);
 				await runnerStore.createAndStartRunner({ playId, isActive: true, token, amflow, contentId });
 				await playStore.resumePlayDuration(playId);
-				targetPlayIds.forEach(id => io.emit("playBroadcast", { playId: id, message: { type: "switchPlay", nextPlayId: playId } }));
+				targetPlayIds.forEach(id => {
+					io.emit("playBroadcast", { playId: id, message: { type: "switchPlay", nextPlayId: playId } });
+				});
 			});
 		}
 	}
@@ -233,6 +238,9 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 	});
 	playStore.onPlayDurationStateChange.add(arg => {
 		io.emit("playDurationStateChange", arg);
+	});
+	playStore.onPlayAudioStateChange.add(arg => {
+		io.emit("playAudioStateChange", arg);
 	});
 	playStore.onPlayCreate.add(arg => {
 		io.emit("playCreate", arg);
