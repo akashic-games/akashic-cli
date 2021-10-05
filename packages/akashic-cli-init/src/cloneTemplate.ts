@@ -19,7 +19,7 @@ interface GitCloneParameterObject {
 export async function cloneTemplate(o: GitCloneParameterObject, param: InitParameterObject): Promise<void> {
 	const opts = completeParameter(o);
 	const { owner, repo, targetPath } = opts;
-	const uri = createUri(owner, repo);
+	const uri = createGitHubUri(owner, repo);
 	const gitBinPath = "git";
 	const command = createGitCloneCommand(gitBinPath, uri, targetPath, opts);
 
@@ -44,7 +44,7 @@ function completeParameter(opts: GitCloneParameterObject): Required<GitClonePara
 	};
 }
 
-function createUri(owner: string, repo: string): string {
+function createGitHubUri(owner: string, repo: string): string {
 	return `https://github.com/${owner}/${repo}.git`;
 }
 
