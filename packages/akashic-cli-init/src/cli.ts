@@ -46,8 +46,7 @@ commander
 	.option("-r, --registry <regname>", "Template registry to search template")
 	.option(
 		"-t, --type <type>",
-		"Type of template" +
-		" or initialize project from remote repository (supported only on github.com). e.g. github:<owner>/<repo>"
+		"Type of template or a Git repository name (on github.com, requires git command). e.g. github:<owner>/<repo>"
 	)
 	.option("-l, --list", "Display available template list")
 	.option("-f, --force", "If files to be copied already exist, overwrite them")
