@@ -14,6 +14,7 @@ import * as socketio from "socket.io";
 import parser from "../common/MsgpackParser";
 import { ServerContentLocator } from "./common/ServerContentLocator";
 import { serverGlobalConfig } from "./common/ServerGlobalConfig";
+import { DumpedPlaylog } from "./common/types/DumpedPlaylog";
 import { ModTargetFlags, watchContent } from "./domain/GameConfigs";
 import { PlayerIdStore } from "./domain/PlayerIdStore";
 import { PlayStore } from "./domain/PlayStore";
@@ -304,7 +305,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 
 	let loadedPlaylogPlayId: string;
 	if (cliConfigParam.debugPlaylog) {
-		const absolutePath = path.join(process.cwd(), cliConfigParam.debugPlaylog);
+		const absolutePath = path.resolve(process.cwd(), cliConfigParam.debugPlaylog);
 		if (!fs.existsSync(absolutePath)) {
 			getSystemLogger().error(`Can not find ${absolutePath}`);
 			process.exit(1);
@@ -313,8 +314,8 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 		const contentLocator = new ServerContentLocator({contentId: "0"});
 		try {
 			// eslint-disable-next-line @typescript-eslint/no-var-requires
-			const playlog = require(absolutePath);
-			loadedPlaylogPlayId = await playStore.createPlay(contentLocator, playlog);
+			const playlog = require(absolutePath) as DumpedPlaylog;
+			loadedPlaylogPlayId = await playStore.createPlay(contentLocator, { muteType: "none" }, playlog);
 		} catch (e) {
 			getSystemLogger().error(e.message);
 			process.exit(1);
@@ -330,7 +331,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 		// サーバー起動のログに関してはSystemLoggerで使用していない色を使いたいので緑を選択
 		console.log(chalk.green(`Hosting ${targetDirs.join(", ")} on ${serverGlobalConfig.protocol}://${serverGlobalConfig.hostname}:${serverGlobalConfig.port}`)); // eslint-disable-line max-len
 		if (loadedPlaylogPlayId) {
-			console.log(`play(id: ${loadedPlaylogPlayId}) read playlog(path: ${path.join(process.cwd(), cmdOptions.debugPlaylog)}).`);
+			console.log(`play(id: ${loadedPlaylogPlayId}) read playlog(path: ${path.resolve(process.cwd(), cmdOptions.debugPlaylog)}).`);
 			url += `?playId=${loadedPlaylogPlayId}&mode=replay`;
 			console.log(`if access ${url}, you can show this play.`);
 		}
