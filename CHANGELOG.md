@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 2.11.4 (2021-10-05)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#867](https://github.com/akashic-games/akashic-cli/pull/867) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Bug Fix
+* `akashic-cli-serve`
+  * [#868](https://github.com/akashic-games/akashic-cli/pull/868) fix(serve): fix --debug-playlog and accept absolute path ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.11.3 (2021-10-05)
 
 #### Enhancement
