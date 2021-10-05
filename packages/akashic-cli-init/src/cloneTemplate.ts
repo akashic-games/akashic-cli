@@ -39,7 +39,7 @@ function completeParameter(opts: GitCloneParameterObject): Required<GitClonePara
 	return {
 		...opts,
 		preserveGitDirectory: opts.preserveGitDirectory ?? false,
-		shallow: opts.shallow ?? false
+		shallow: opts.shallow ?? !opts.preserveGitDirectory
 	};
 }
 
