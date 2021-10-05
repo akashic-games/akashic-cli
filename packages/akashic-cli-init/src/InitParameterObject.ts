@@ -94,9 +94,6 @@ export function completeInitParameterObject(param: InitParameterObject): Promise
 		})
 		.then(defaultType => {
 			param.type = (param.type || defaultType || "javascript").toLowerCase();
-			// 以下の正規表現は、akashic-configのvalidatorとそろえる必要があります。
-			if (!/^[\w\-]+$/.test(param.type))
-				return Promise.reject(new Error("invalid template type name"));
 			return Promise.resolve();
 		});
 }
