@@ -76,7 +76,7 @@ async function rmPromise(path: string, opts?: fs.RmOptions): Promise<void> {
 					resolve();
 				});
 			} else {
-				fs.rm(path, opts, err => {
+				fs.unlink(path, err => {
 					if (err) {
 						return void reject(err);
 					}
