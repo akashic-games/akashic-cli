@@ -9,13 +9,15 @@ const targetDir = path.join(__dirname, "tmp");
 describe("cloneTemplate.js", () => {
 	beforeEach(() => {
 		if (fs.existsSync(targetDir)) {
-			fs.rmSync(targetDir, { recursive:true, force:true });
+			// TODO: fs.rm() に以降
+			fs.rmdirSync(targetDir, { recursive:true, force:true });
 		}
 		fs.mkdirSync(targetDir);
 	});
 
 	afterEach(() => {
-		fs.rmSync(targetDir, { recursive:true, force:true });
+		// TODO: fs.rm() に以降
+		fs.rmdirSync(targetDir, { recursive:true, force:true });
 	});
 
 	it("clone via promiseInit()", async () => {

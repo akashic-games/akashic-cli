@@ -59,7 +59,8 @@ function createGitCloneCommand(gitBinPath: string, uri: string, targetPath: stri
 // for Node 12
 async function rmPromise(path: string, opts?: fs.RmOptions): Promise<void> {
 	return new Promise((resolve, reject) => {
-		fs.rm(path, opts, err => {
+		// TODO: fs.rm() に以降
+		fs.rmdir(path, opts, err => {
 			if (err) {
 				return void reject(err);
 			}
