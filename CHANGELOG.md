@@ -1,5 +1,21 @@
 # CHANGELOG
 
+## 2.11.3 (2021-10-05)
+
+#### Enhancement
+* `akashic-cli-commons`, `akashic-cli-serve`
+  * [#853](https://github.com/akashic-games/akashic-cli/pull/853) Support https serve ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+* `akashic-cli-init`
+  * [#865](https://github.com/akashic-games/akashic-cli/pull/865) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli`
+  * [#866](https://github.com/akashic-games/akashic-cli/pull/866) Update all dependencies (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.11.2 (2021-10-01)
 
 #### Enhancement
