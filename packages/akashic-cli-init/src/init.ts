@@ -13,20 +13,13 @@ export async function promiseInit(param: InitParameterObject): Promise<void> {
 	const m = param.type.match(/(.+):(.+)\/(.+)/) ?? [];
 
 	if (m[1] === "github") {
-		if (m[2] == null) {
-			throw new Error("invalid github owner");
-		}
-		if (m[3] == null) {
-			throw new Error("invalid github repo");
-		}
 		const owner = m[2];
 		const repo = m[3];
 		await cloneTemplate(
 			{
 				owner,
 				repo,
-				targetPath: param.cwd,
-				shallow: true
+				targetPath: param.cwd
 			},
 			param
 		);
