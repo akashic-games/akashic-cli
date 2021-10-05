@@ -10,7 +10,7 @@ import { listTemplates } from "./listTemplates";
 
 function cli(param: CliConfigInit): void {
 	var logger = new ConsoleLogger({ quiet: param.quiet });
-	var initParam: InitParameterObject ={
+	var initParam: InitParameterObject = {
 		cwd: param.cwd,
 		type: param.type,
 		logger: logger,
