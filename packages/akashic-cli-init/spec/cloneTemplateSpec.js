@@ -31,6 +31,7 @@ describe("cloneTemplate.js", () => {
 		// NOTE: akashic-runtime-version-table 側のファイル構造に依存するがとりあえず
 		expect(fs.statSync(path.join(targetDir, "versions.json")).isFile()).toBe(true);
 		expect(fs.statSync(path.join(targetDir, "README.md")).isFile()).toBe(true);
+		expect(fs.statSync(path.join(targetDir, ".gitignore")).isFile()).toBe(true);
 	});
 
 	it("clone via cloneTemplate()", async () => {
@@ -51,5 +52,6 @@ describe("cloneTemplate.js", () => {
 		// NOTE: akashic-runtime-version-table 側のファイル構造に依存するがとりあえず
 		expect(fs.statSync(path.join(targetDir, "versions.json")).isFile()).toBe(true);
 		expect(fs.statSync(path.join(targetDir, "README.md")).isFile()).toBe(true);
+		expect(fs.statSync(path.join(targetDir, ".gitignore")).isFile()).toBe(true);
 	});
 });

@@ -32,7 +32,6 @@ export async function cloneTemplate(o: GitCloneParameterObject, param: InitParam
 
 	if (!opts.preserveGitDirectory) {
 		await rmPromise(path.join(targetPath, ".git"), { recursive: true });
-		await rmPromise(path.join(targetPath, ".gitignore"));
 	}
 }
 
