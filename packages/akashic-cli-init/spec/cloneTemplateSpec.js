@@ -9,14 +9,14 @@ const targetDir = path.join(__dirname, "tmp");
 describe("cloneTemplate.js", () => {
 	beforeEach(() => {
 		if (fs.existsSync(targetDir)) {
-			// TODO: fs.rm() に以降
+			// TODO: fs.rm() に移行
 			fs.rmdirSync(targetDir, { recursive:true, force:true });
 		}
 		fs.mkdirSync(targetDir);
 	});
 
 	afterEach(() => {
-		// TODO: fs.rm() に以降
+		// TODO: fs.rm() に移行
 		fs.rmdirSync(targetDir, { recursive:true, force:true });
 	});
 
