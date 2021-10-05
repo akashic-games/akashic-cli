@@ -32,6 +32,7 @@ export async function cloneTemplate(o: GitCloneParameterObject, param: InitParam
 
 	if (!opts.preserveGitDirectory) {
 		await rmPromise(path.join(targetPath, ".git"), { recursive: true });
+		await rmPromise(path.join(targetPath, ".gitignore"));
 	}
 }
 
@@ -59,12 +60,30 @@ function createGitCloneCommand(gitBinPath: string, uri: string, targetPath: stri
 // for Node 12
 async function rmPromise(path: string, opts?: fs.RmOptions): Promise<void> {
 	return new Promise((resolve, reject) => {
-		// TODO: fs.rm() に以降
-		fs.rmdir(path, opts, err => {
+		fs.stat(path, (err, stat) => {
 			if (err) {
+				if (err.code === "ENOENT") {
+					// NOTE: 存在しない場合は何もせず終了
+					return void resolve();
+				}
 				return void reject(err);
 			}
-			resolve();
+			if (stat.isDirectory()) {
+				// TODO: fs.rm() に移行
+				fs.rmdir(path, opts, err => {
+					if (err) {
+						return void reject(err);
+					}
+					resolve();
+				});
+			} else {
+				fs.rm(path, opts, err => {
+					if (err) {
+						return void reject(err);
+					}
+					resolve();
+				});
+			}
 		});
 	});
 }
