@@ -1,5 +1,20 @@
 # CHANGELOG
 
+## 2.11.5 (2021-10-06)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#873](https://github.com/akashic-games/akashic-cli/pull/873) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.1.1, engineFiles@2.1.57, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+* `akashic-cli-init`
+  * [#872](https://github.com/akashic-games/akashic-cli/pull/872) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+  * [#869](https://github.com/akashic-games/akashic-cli/pull/869) feat(init): support to initialize project from GitHub repo ([@yu-ogi](https://github.com/yu-ogi))
+* `akashic-cli-export`
+  * [#871](https://github.com/akashic-games/akashic-cli/pull/871) 【akashic-cli-export】内部コンポーネントの更新(engineFiles@3.1.1, engineFiles@2.1.57, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+
+#### Committers: 2
+- [@yu-ogi](https://github.com/yu-ogi)
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.11.4 (2021-10-05)
 
 #### Enhancement
