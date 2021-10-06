@@ -4,7 +4,7 @@ var ConsoleLogger = require("@akashic/akashic-cli-commons/lib/ConsoleLogger").Co
 var ct = require("../lib/cloneTemplate");
 var init = require("../lib/init");
 
-const targetDir = path.join(__dirname, "tmp");
+const targetDir = path.join(__dirname, "clone_repo_temp");
 
 describe("cloneTemplate.js", () => {
 	beforeEach(() => {
