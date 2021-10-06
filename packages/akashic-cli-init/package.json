@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-init",
-  "version": "1.9.4",
+  "version": "1.9.5",
   "description": "A module to get your Akashic game started.",
   "main": "lib/index.js",
   "scripts": {
