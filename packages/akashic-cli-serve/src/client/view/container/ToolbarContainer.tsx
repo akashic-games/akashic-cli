@@ -42,7 +42,7 @@ export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}>
 		return {
 			playbackRate: play.activePlaybackRate,
 			isActivePausing: play.isActivePausing,
-			isActiveStatusRunning: play.status === "running",
+			isActiveStatusRunning: play.status === "running", // NOTE: アクティブインスタンスの実行状態を PlayStatus から判定するのは現実装で一致しているだけであり、厳密には異なるケースがある
 			onClickReset: operator.restartWithNewPlay,
 			onClickActivePause: operator.play.togglePauseActive,
 			onClickAddInstance: operator.play.openNewClientInstance,

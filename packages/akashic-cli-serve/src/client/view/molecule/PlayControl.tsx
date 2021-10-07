@@ -45,7 +45,6 @@ export class PlayControl extends React.Component<PlayControlProps, {}> {
 			<ToolIconButton
 				className="external-ref_button_add-instance"
 				icon="group_add"
-				disabled={!props.isActiveStatusRunning}
 				title={"インスタンスを追加\r\r新しいタブ・ウィンドウでこのプレイに接続するインスタンスを追加します。"}
 				onClick={props.onClickAddInstance} />
 			{/* // 未実装
