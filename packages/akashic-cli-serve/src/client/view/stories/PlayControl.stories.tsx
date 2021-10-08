@@ -8,7 +8,7 @@ storiesOf("m-PlayControl", module)
 		<PlayControl makeProps={() => ({
 			playbackRate: 1.5,
 			isActivePausing: false,
-			isActiveStatusRunning: true,
+			isActiveExists: true,
 			onClickReset: action("reset"),
 			onClickActivePause: action("active-pause"),
 			onClickAddInstance: action("add-instance"),
@@ -20,7 +20,7 @@ storiesOf("m-PlayControl", module)
 		<PlayControl makeProps={() => ({
 			playbackRate: 1.5,
 			isActivePausing: true,
-			isActiveStatusRunning: true,
+			isActiveExists: true,
 			onClickReset: action("reset"),
 			onClickActivePause: action("active-pause"),
 			onClickAddInstance: action("add-instance"),
