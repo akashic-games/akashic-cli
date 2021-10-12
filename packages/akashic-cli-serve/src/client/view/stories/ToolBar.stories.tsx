@@ -34,6 +34,7 @@ const TestWithBehaviour = observer(() => (
 			makePlayControlProps={() => ({
 				playbackRate: 150,
 				isActivePausing: store.isActivePausing,
+				isActiveExists: true,
 				onClickReset: action("reset"),
 				onClickActivePause: (v => (store.isActivePausing = v)),
 				onClickAddInstance: action("add-instance"),
@@ -91,6 +92,7 @@ storiesOf("o-ToolBar", module)
 			makePlayControlProps={() => ({
 				playbackRate: 150,
 				isActivePausing: false,
+				isActiveExists: true,
 				onClickReset: action("reset"),
 				onClickActivePause: action("active-pause"),
 				onClickAddInstance: action("add-instance"),
