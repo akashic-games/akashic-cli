@@ -20,6 +20,21 @@ const templateData = {
 		"src": "game-shin-ichiba-ranking",
 		"js-dist": "javascript-shin-ichiba-ranking",
 		"ts-dist": "typescript-shin-ichiba-ranking"
+	},
+	"shin-ichiba-multi": {
+		"src": "game-shin-ichiba-multi",
+		"js-dist": "javascript-shin-ichiba-multi",
+		"ts-dist": "typescript-shin-ichiba-multi"
+	},
+	"atsumaru-ranking": {
+		"src": "game-atsumaru-ranking",
+		"js-dist": "javascript-atsumaru-ranking",
+		"ts-dist": "typescript-atsumaru-ranking"
+	},
+	"atsumaru-multi": {
+		"src": "game-atsumaru-multi",
+		"js-dist": "javascript-atsumaru-multi",
+		"ts-dist": "typescript-atsumaru-multi"
 	}
 };
 
