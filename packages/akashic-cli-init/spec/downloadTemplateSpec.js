@@ -42,7 +42,19 @@ describe("downloadTemplate.ts", () => {
 
 			lt.listTemplates(param)
 				.then(() => {
-					expect(str).toBe("javascript-minimal\njavascript-shin-ichiba-ranking\njavascript\ntypescript-minimal\ntypescript-shin-ichiba-ranking\ntypescript\n");
+					expect(str).toBe(`javascript-atsumaru-multi
+javascript-atsumaru-ranking
+javascript-minimal
+javascript-shin-ichiba-multi
+javascript-shin-ichiba-ranking
+javascript
+typescript-atsumaru-multi
+typescript-atsumaru-ranking
+typescript-minimal
+typescript-shin-ichiba-multi
+typescript-shin-ichiba-ranking
+typescript
+`);
 				})
 				.then(done, done.fail);
 		});
