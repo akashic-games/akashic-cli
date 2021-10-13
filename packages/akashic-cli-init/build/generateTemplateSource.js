@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const shell = require('shelljs');
-const { execSync } = require("child_process");
+const childProcess = require("child_process");
 
 const templatesSrcDirPath = path.join(__dirname, "..", "templates-src");
 const templatesDirPath = path.join(__dirname, "..", "templates");
@@ -116,4 +116,8 @@ function deleteUnnecessaryLinesFromJsFile(targetPath) {
 			fs.writeFileSync(filePath, writeData, "utf-8");
 		}
 	});
+}
+
+function execSync(command) {
+	return childProcess.execSync(command, { encoding: "utf-8" });
 }
