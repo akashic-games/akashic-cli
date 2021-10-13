@@ -41,9 +41,9 @@ export class InstancesDevtool extends React.Component<InstancesDevtoolProps, {}>
 					</thead>
 					<tbody>
 						{
-							this.props.instances.map(i => (
+							this.props.instances.map((i, index) => (
 								// TODO playerId をkeyにすると複数サーバインスタンスができない
-								<tr key={i.playerId} >
+								<tr key={ `${index}-${i.playerId}` } >
 									<td>{ i.type }</td>
 									<td>{ (i.playerId != null) ? i.playerId : "(null)" }</td>
 									<td>{ (i.name != null) ? i.name : "(null)" }</td>
