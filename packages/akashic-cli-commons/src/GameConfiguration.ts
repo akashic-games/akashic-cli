@@ -79,6 +79,8 @@ export interface ExportZipInfo {
 		force?: boolean;
 		strip?: boolean;
 		minify?: boolean;
+		minifyJs?: boolean;
+		minifyJson?: boolean;
 		bundle?: boolean;
 		babel?: boolean;
 		hashFilename?: number | boolean;
