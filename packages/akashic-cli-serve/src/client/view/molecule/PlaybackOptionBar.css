@@ -1,10 +1,20 @@
-.entity-tree-option-bar {
+.replay-option-bar {
+	flex: 0 0 auto;
+	display: flex;
+	flex-flow: column nowrap;
+}
+
+.row {
 	flex: 0 0 auto;
 	display: flex;
 	flex-flow: row wrap;
 	padding: 1px 3px;
 	align-items: center;
 	border-bottom: 1px solid var(--color-base-grid);
+}
+
+.progress {
+	flex: 1 1 auto;
 }
 
 .sep {
@@ -14,4 +24,12 @@
 	height: 20px;
 	margin: 0 3px;
 	border-left:1px solid silver;
+}
+
+.time {
+	padding: 2px 0;
+	margin-right: 7px;
+	user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
 }

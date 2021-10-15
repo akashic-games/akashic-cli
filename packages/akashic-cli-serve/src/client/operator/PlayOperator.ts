@@ -88,19 +88,20 @@ export class PlayOperator {
 		location.href = `/api/plays/${this.store.currentPlay.playId}/playlog`;
 	}
 
-	downloadSnapshot = (frame: number): void => {
-		this.store.currentPlay?.amflow.getStartPoint({ frame }, (err: Error | null, startPoint: StartPoint) => {
-			if (err) throw err;
+	// TODO: 削除
+	// downloadSnapshot = (frame: number): void => {
+	// 	this.store.currentPlay?.amflow.getStartPoint({ frame }, (err: Error | null, startPoint: StartPoint) => {
+	// 		if (err) throw err;
 
-			const a = document.createElement("a");
-			document.body.appendChild(a);
-			const blob = new Blob([ JSON.stringify(startPoint) ], { "type" : "application/octet-stream" });
-			const url = window.URL.createObjectURL(blob);
-			a.href = url;
-			a.download = `snapshot_${frame}.json`;
-			a.click();
-			window.URL.revokeObjectURL(url);
-			document.body.removeChild(a);
-		});
-	}
+	// 		const a = document.createElement("a");
+	// 		document.body.appendChild(a);
+	// 		const blob = new Blob([ JSON.stringify(startPoint) ], { "type" : "application/octet-stream" });
+	// 		const url = window.URL.createObjectURL(blob);
+	// 		a.href = url;
+	// 		a.download = `snapshot_${frame}.json`;
+	// 		a.click();
+	// 		window.URL.revokeObjectURL(url);
+	// 		document.body.removeChild(a);
+	// 	});
+	// }
 }

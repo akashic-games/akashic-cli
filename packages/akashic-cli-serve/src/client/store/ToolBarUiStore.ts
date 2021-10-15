@@ -2,8 +2,6 @@ import {action, observable} from "mobx";
 import {storage} from "./storage";
 
 export class ToolBarUiStore {
-	@observable currentTimePreview: number;
-	@observable isSeeking: boolean;
 	@observable showsAppearanceMenu: boolean;
 	@observable showsDevtools: boolean;
 	@observable showsDisplayOptionPopover: boolean;
@@ -13,8 +11,6 @@ export class ToolBarUiStore {
 	@observable showsDesignGuideline: boolean;
 
 	constructor() {
-		this.currentTimePreview = 0;
-		this.isSeeking = false;
 		this.showsAppearanceMenu = false;
 		this.showsDevtools = storage.data.showsDevtools;
 		this.showsDisplayOptionPopover = false;
@@ -22,22 +18,6 @@ export class ToolBarUiStore {
 		this.showsGrid = storage.data.showsGrid;
 		this.showsProfiler = storage.data.showsProfiler;
 		this.showsDesignGuideline = storage.data.showsDesignGuideline;
-	}
-
-	@action
-	previewSeekTo(seconds: number): void {
-		this.currentTimePreview = seconds;
-		this.isSeeking = true;
-	}
-
-	@action
-	endPreviewSeek(): void {
-		this.isSeeking = false;
-	}
-
-	@action
-	seekTo(seconds: number): void {
-		this.currentTimePreview = seconds;
 	}
 
 	@action

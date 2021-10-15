@@ -1,6 +1,7 @@
 import * as React from "react";
 import { observer } from "mobx-react";
 import { ToolIconButton } from "../atom/ToolIconButton";
+import { ToolCheckbox } from "../atom/ToolCheckbox";
 import * as styles from "./EntityTreeOptionBar.css";
 
 export interface EntityTreeOptionBarProps {
@@ -16,7 +17,7 @@ export interface EntityTreeOptionBarProps {
 @observer
 export class EntityTreeOptionBar extends React.Component<EntityTreeOptionBarProps, {}> {
 	render(): React.ReactNode {
-		const { isSelectingEntity, showsHidden, onClickSelectEntity, onClickUpdateEntityTrees } = this.props;
+		const { isSelectingEntity, showsHidden, onChangeShowsHidden, onClickSelectEntity, onClickUpdateEntityTrees } = this.props;
 		return <div className={styles["entity-tree-option-bar"]}>
 			<ToolIconButton
 				className="external-ref_button_select-entity-from-screen"
@@ -36,10 +37,10 @@ export class EntityTreeOptionBar extends React.Component<EntityTreeOptionBarProp
 			>
 				Update
 			</ToolIconButton>
-			<label className={styles["switch-option"]}>
-				<input type="checkbox" checked={this.props.showsHidden} onChange={this._onInputChange} />
-				Show hidden
-			</label>
+			<ToolCheckbox
+				checked={showsHidden}
+				label="Show hidden"
+				onChange={onChangeShowsHidden} />
 			<ToolIconButton
 				className="external-ref_button_dump-to-console"
 				icon="web_asset"

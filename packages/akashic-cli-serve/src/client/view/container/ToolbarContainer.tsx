@@ -10,12 +10,14 @@ import { InstanceControlPropsData } from "../molecule/InstanceControl";
 import { PlayerControlPropsData } from "../molecule/PlayerControl";
 import { DisplayOptionControlPropsData } from "../molecule/DisplayOptionControl";
 import { ToolBar } from "../organism/ToolBar";
+import { DevtoolUiStore } from "../../store/DevtoolUiStore";
 
 export interface ToolBarContainerProps {
 	play: PlayEntity;
 	localInstance: LocalInstanceEntity;
 	operator: Operator;
 	toolBarUiStore: ToolBarUiStore;
+	devtoolUiStore: DevtoolUiStore; // シークバーの値を devtool と共有しているためその参照にのみ利用
 	targetService: ServiceType;
 }
 
@@ -50,15 +52,15 @@ export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}>
 	}
 
 	private _makeInstanceControlProps = (): InstanceControlPropsData => {
-		const { play, localInstance, operator, toolBarUiStore } = this.props;
+		const { play, localInstance, operator, devtoolUiStore } = this.props;
 		return {
 			currentTime: (
 				(localInstance.executionMode !== "replay") ? play.duration :
-				(toolBarUiStore.isSeeking) ? toolBarUiStore.currentTimePreview : localInstance.targetTime
+				(devtoolUiStore.isSeeking) ? devtoolUiStore.currentTimePreview : localInstance.targetTime
 			),
 			duration: play.duration,
 			isPaused: localInstance.isPaused,
-			isProgressActive: toolBarUiStore.isSeeking,
+			isProgressActive: devtoolUiStore.isSeeking,
 			enableFastForward: (localInstance.executionMode === "replay"),
 			onProgressChange: operator.localInstance.previewSeekTo,
 			onProgressCommit: operator.localInstance.seekTo,

@@ -5,25 +5,38 @@ import { storage } from "./storage";
 export class DevtoolUiStore {
 	static DEFAULT_TOTAL_TIME_LIMIT = 85;
 
+	// storage に保存するもの
 	@observable height: number;
 	@observable activeDevtool: string;
+	// storage に保存するもの - playback
+	@observable isPauseOnSeek: boolean;
+	@observable isForceJumpOnSeek: boolean;
+	// storege に保存するもの - events
 	@observable showsEventList: boolean;
 	@observable eventListWidth: number;
 	@observable eventEditContent: string;
+	// storege に保存するもの - entity
 	@observable showsHiddenEntity: boolean;
+	// storege に保存するもの - niconico
 	@observable isAutoSendEvent: boolean;
 	@observable emulatingShinichibaMode: string;
 	@observable usePreferredTotalTimeLimit: boolean;
 	@observable stopsGameOnTimeout: boolean;
 	@observable totalTimeLimitInputValue: number;
 
-	// storage に保存しないもの
+	// storage に保存しないもの - playback
+	@observable isSeeking: boolean;
+	@observable currentTimePreview: number;
+	@observable selectedStartPointHeaderIndex: number | null;
+	// storage に保存しないもの - entity
 	@observable isSelectingEntity: boolean;
 	@observable selectedEntityId: number | null;
 	@observable entityTrees: EDumpItem[];
 	@observable entityTreeStateTable: ObservableMap<number, boolean>;
+	// storage に保存しないもの - atsumaru
 	@observable isSeekingVolume: boolean;
 	@observable volume: number;
+	// storage に保存しないもの - niconico
 	@observable score: number;
 	@observable playThreshold: number;
 	@observable clearThreshold: number;
@@ -33,10 +46,15 @@ export class DevtoolUiStore {
 	constructor() {
 		this.height = storage.data.devtoolsHeight;
 		this.activeDevtool = storage.data.activeDevtool;
+		this.isPauseOnSeek = false; // TODO
+		this.isForceJumpOnSeek = false; // TODO
 		this.showsEventList = storage.data.showsEventList;
 		this.eventListWidth = storage.data.eventListWidth;
 		this.eventEditContent = storage.data.eventEditContent;
 		this.showsHiddenEntity = storage.data.showsHiddenEntity;
+		this.isSeeking = false;
+		this.currentTimePreview = 0;
+		this.selectedStartPointHeaderIndex = null;
 		this.isSelectingEntity = false;
 		this.selectedEntityId = null;
 		this.entityTrees = [];
@@ -63,6 +81,16 @@ export class DevtoolUiStore {
 	}
 
 	@action
+	togglePauseOnSeek(pauses: boolean): void {
+		this.isPauseOnSeek = pauses;
+	}
+
+	@action
+	toggleForceJumpOnSeek(jumps: boolean): void {
+		this.isForceJumpOnSeek = jumps;
+	}
+
+	@action
 	setShowEventList(show: boolean): void {
 		this.showsEventList = show;
 		storage.put({ showsEventList: show });
@@ -78,6 +106,27 @@ export class DevtoolUiStore {
 	setEventEditContent(content: string): void {
 		this.eventEditContent = content;
 		storage.put({ eventEditContent: content });
+	}
+
+	@action
+	previewSeekTo(seconds: number): void {
+		this.currentTimePreview = seconds;
+		this.isSeeking = true;
+	}
+
+	@action
+	endPreviewSeek(): void {
+		this.isSeeking = false;
+	}
+
+	@action
+	seekTo(seconds: number): void {
+		this.currentTimePreview = seconds;
+	}
+
+	@action
+	setSelectedStartPointHeaderIndex(index: number | null): void {
+		this.selectedStartPointHeaderIndex = index;
 	}
 
 	@action

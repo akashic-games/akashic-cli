@@ -6,10 +6,12 @@ import { PlayEntity } from "../../store/PlayEntity";
 import { DevtoolUiStore } from "../../store/DevtoolUiStore";
 import { Operator } from "../../operator/Operator";
 import { Devtool } from "../organism/Devtool";
+import { LocalInstanceEntity } from "../../store/LocalInstanceEntity";
 
 export interface DevtoolContainerProps {
 	play: PlayEntity;
 	operator: Operator;
+	localInstance: LocalInstanceEntity;
 	devtoolUiStore: DevtoolUiStore;
 	sandboxConfig: SandboxConfig;
 	targetService: ServiceType;
@@ -18,7 +20,7 @@ export interface DevtoolContainerProps {
 @observer
 export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}> {
 	render(): React.ReactNode {
-		const { play, operator, devtoolUiStore, sandboxConfig, targetService } = this.props;
+		const { play, operator, localInstance, devtoolUiStore, sandboxConfig, targetService } = this.props;
 		return <Devtool
 			height={devtoolUiStore.height}
 			minHeight={200}
@@ -98,10 +100,33 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 			miscDevtoolProps={{
 				downloadPlaylog: operator.play.downloadPlaylog
 			}}
-			snapshotDevtoolProps={{
+			playbackDevtoolProps={{
 				startPointHeaders: play.startPointHeaders,
-				downloadSnapshot: operator.play.downloadSnapshot,
-				onClickSeekToSnapshot: operator.localInstance.seekToStartPoint
+				selectedStartPointHeaderIndex: devtoolUiStore.selectedStartPointHeaderIndex,
+				currentTime: (
+					(localInstance.executionMode !== "replay") ? play.duration :
+					(devtoolUiStore.isSeeking) ? devtoolUiStore.currentTimePreview : localInstance.targetTime
+				),
+				duration: play.duration,
+				isPaused: localInstance.isPaused,
+				isProgressActive: devtoolUiStore.isSeeking,
+				isReplay: (localInstance.executionMode === "replay"),
+				isActiveExists: true, // TODO
+				isActivePaused: play.isActivePausing,
+				isPauseOnSeek: devtoolUiStore.isPauseOnSeek,
+				isForceJumpOnSeek: devtoolUiStore.isForceJumpOnSeek,
+				onClickPauseActive:operator.play.togglePauseActive,
+				onClickSavePlaylog: operator.play.downloadPlaylog,
+				onClickPauseOnSeek: operator.devtool.togglePauseOnSeek,
+				onClickForceJumpOnSeek: operator.devtool.toggleForceJumpOnSeek,
+				onProgressChange: operator.localInstance.previewSeekTo,
+				onProgressCommit: operator.localInstance.seekTo,
+				onClickPause: operator.localInstance.togglePause,
+				onClickFastForward: operator.localInstance.switchToRealtime,
+				onClickJumpBySelectedStartPoint: operator.localInstance.resetBySelectedStartPoint,
+				onClickDumpSelectedStartPoint: operator.devtool.dumpSelectedStartPoint,
+				onClickStartPoint: operator.devtool.selectStartPointHeader,
+				onDoubleClikStartPoint: operator.localInstance.resetByStartPointHeaderIndex
 			}}
 		/>;
 	}

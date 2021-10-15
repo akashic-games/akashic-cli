@@ -9,24 +9,35 @@ export class LocalInstanceOperator {
 	}
 
 	previewSeekTo = (time: number): void => {
-		this.store.toolBarUiStore.previewSeekTo(time);
+		this.store.devtoolUiStore.previewSeekTo(time);
 	}
 
 	seekTo = (time: number): void => {
 		this.store.currentLocalInstance.setExecutionMode("replay");
 		this.store.currentLocalInstance.setTargetTime(time);
-		this.store.toolBarUiStore.endPreviewSeek();
+		this.store.devtoolUiStore.endPreviewSeek();
 	}
 
-	seekToStartPoint = (frame: number): void => {
-		this.store.currentLocalInstance.setExecutionMode("replay");
-		this.store.currentLocalInstance.setFrameWithStartPoint(frame, (targetTime) => {
-			this.store.toolBarUiStore.seekTo(targetTime);
-		});
-	}
+	// TODO 削除
+	// seekToStartPoint = (frame: number): void => {
+	// 	this.store.currentLocalInstance.setExecutionMode("replay");
+	// 	this.store.currentLocalInstance.setFrameWithStartPoint(frame, (targetTime) => {
+	// 		this.store.devtoolUiStore.seekTo(targetTime);
+	// 	});
+	// }
 
 	seekToStartPointOf = async (frame: number): Promise<void> => {
-		this.resetByNearestStartPointOf({ frame }, true);
+		await this.resetByNearestStartPointOf({ frame }, true);
+	}
+
+	resetByStartPointHeaderIndex = async (index: number): Promise<void> => {
+		const sps = this.store.currentPlay.startPointHeaders;
+		await this.resetByNearestStartPointOf({ frame: sps[index].frame }, true);
+	}
+
+	resetBySelectedStartPoint = async (): Promise<void> => {
+		const index = this.store.devtoolUiStore.selectedStartPointHeaderIndex;
+		await this.resetByStartPointHeaderIndex(index);
 	}
 
 	/**
@@ -35,11 +46,10 @@ export class LocalInstanceOperator {
 	 * ローカルインスタンスがリセット可能でない (Akashic Engine v2 以前) 場合、何もしない。
 	 */
 	resetByNearestStartPointOf = async (opts: GetStartPointOptions, toSeek: boolean): Promise<void> => {
-		const amflow = this.store.currentLocalInstance.play.amflow;
-		const startedAt = amflow.getStartedAt();
-		const sp = await amflow.getStartPointPromise(opts);
 		if (!this.store.currentLocalInstance.isResettable)
 			return;
+		const amflow = this.store.currentLocalInstance.play.amflow;
+		const sp = await amflow.getStartPointPromise(opts);
 		this.store.currentLocalInstance.reset(sp);
 		if (toSeek) {
 			this.seekTo(sp.timestamp - amflow.getStartedAt());

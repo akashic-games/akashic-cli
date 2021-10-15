@@ -11,6 +11,7 @@ import { NotificationContainer } from "./container/NotificationContainer";
 import { GameScreenContainer } from "./container/GameScreenContainer";
 import "./global.css";
 import * as styles from "./App.css";
+import { LocalInstanceEntity } from "../store/LocalInstanceEntity";
 
 export interface AppProps {
 	store: Store;
@@ -43,6 +44,7 @@ export class App extends React.Component<AppProps, {}> {
 				localInstance={store.currentLocalInstance}
 				operator={operator}
 				toolBarUiStore={store.toolBarUiStore}
+				devtoolUiStore={store.devtoolUiStore}
 				targetService={store.targetService}
 			/>
 			<FlexScrollY>
@@ -63,6 +65,7 @@ export class App extends React.Component<AppProps, {}> {
 					<div className={styles["devtools"]}>
 						<DevtoolContainer
 							play={store.currentPlay}
+							localInstance={store.currentLocalInstance}
 							operator={operator}
 							devtoolUiStore={store.devtoolUiStore}
 							sandboxConfig={sandboxConfig}

@@ -1,0 +1,60 @@
+
+.playback-devtool {
+	flex: 1 1 auto;
+	background: var(--color-tool-bg);
+	display: flex;
+	flex-flow: column nowrap;
+}
+
+.startpoint-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 12px;
+	text-align: left;
+	color: var(--color-base-text);
+	background: var(--color-base-bg);
+	cursor: default;
+	user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+}
+
+.startpoint-table th:not(:last-child),
+.startpoint-table td:not(:last-child) {
+	border-right: 1px solid var(--color-base-grid);
+}
+
+.startpoint-table th {
+	padding: 4px 8px;
+	font-size: 95%;
+	font-weight: normal;
+	background: var(--color-tool-bg);
+	border-bottom: 1px solid var(--color-base-grid);
+}
+
+.startpoint-table td {
+	padding: 2px 8px;
+}
+
+.startpoint-table tr .rawvalue {
+	font-size: 90%;
+	margin-left: 6px;
+	color: #bbb;
+}
+
+.startpoint-table tr:nth-child(odd) {
+	background: var(--color-base-bg-alt);
+}
+
+.startpoint-table tr:hover {
+	background: var(--color-base-bg-hover);
+}
+
+.startpoint-table tr.active {
+	color: var(--color-base-text-active);
+	background: var(--color-base-bg-active);
+}
+
+.startpoint-table tr.active .rawvalue {
+	color: var(--color-base-text-active);
+}
