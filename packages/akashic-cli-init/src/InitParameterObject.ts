@@ -147,7 +147,7 @@ async function _complete<T>(val: T | undefined, altVal: Promise<T | undefined>, 
 		return val;
 	} else {
 		const resolved = await altVal;
-		if (resolved) {
+		if (resolved != null) {
 			return resolved;
 		} else {
 			return defaultVal;
