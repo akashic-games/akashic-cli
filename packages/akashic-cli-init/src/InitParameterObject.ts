@@ -142,11 +142,11 @@ export async function completeInitParameterObject(param: InitParameterObject): P
 	param.gheProtocol = gheProtocol as GitProtocol;
 }
 
-async function _complete<T>(val: T | undefined, altFunc: Promise<T | undefined>, defaultVal: T): Promise<T> {
+async function _complete<T>(val: T | undefined, altVal: Promise<T | undefined>, defaultVal: T): Promise<T> {
 	if (val != null) {
 		return val;
 	} else {
-		const resolved = await altFunc;
+		const resolved = await altVal;
 		if (resolved) {
 			return resolved;
 		} else {
