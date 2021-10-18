@@ -46,7 +46,7 @@ commander
 	.option("-r, --registry <regname>", "Template registry to search template")
 	.option(
 		"-t, --type <type>",
-		"Type of template or a Git repository name (on github.com or GitHub Enterprise, requires git command)." +
+		"Type of template or a Git repository name (on GitHub, requires git command)." +
 		" e.g. github:<owner>/<repo>\n See README file for details."
 	)
 	.option("-l, --list", "Display available template list")
