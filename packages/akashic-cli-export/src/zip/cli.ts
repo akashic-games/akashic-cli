@@ -19,6 +19,8 @@ export function cli(param: CliConfigExportZip): void {
 			bundle: param.bundle,
 			babel: (param.babel != null) ? param.babel : true,
 			minify: param.minify,
+			minifyJs: param.minifyJs,
+			minifyJson: param.minifyJson,
 			strip: (param.strip != null) ? param.strip : true,
 			source: param.cwd,
 			dest: param.output,
@@ -34,6 +36,8 @@ export function cli(param: CliConfigExportZip): void {
 					force: param.force,
 					strip: param.strip,
 					minify: param.minify,
+					minifyJs: param.minifyJs,
+					minifyJson: param.minifyJson,
 					bundle: param.bundle,
 					babel: param.babel,
 					hashFilename: param.hashFilename,
@@ -59,12 +63,14 @@ commander
 	.option("-o, --output <fileName>", "Name of output file (default: game.zip)")
 	.option("-f, --force", "Overwrites existing files")
 	.option("-S, --no-strip", "output fileset without strip")
-	.option("-M, --minify", "Minify JavaScript files")
+	.option("-M, --minify", "(DEPRECATED) Minify JavaScript files")
 	.option("-H, --hash-filename [length]", "Rename asset files with their hash values")
 	.option("-b, --bundle", "Bundle script assets into a single file")
 	.option("--no-es5-downpile", "No convert JavaScript into es5")
 	.option("--no-omit-empty-js", "(DEPRECATED) Changes nothing. Provided for backward compatibility")
 	.option("--no-omit-unbundled-js", "Preserve unbundled .js files (not required from root). Works with --bundle only")
+	.option("--minify-js", "Minify JavaScript files")
+	.option("--minify-json", "Minify JSON files")
 	.option("--target-service <service>", `Specify the target service of the exported content:${availableServices}`);
 
 export function run(argv: string[]): void {
@@ -92,6 +98,8 @@ export function run(argv: string[]): void {
 			force: options.force ?? conf.force,
 			strip: options.strip ?? conf.strip,
 			minify: options.minify ?? conf.minify,
+			minifyJs: options.minifyJs ?? conf.minifyJs,
+			minifyJson: options.minifyJson ?? conf.minifyJson,
 			hashFilename: options.hashFilename ?? conf.hashFilename,
 			bundle: options.bundle ?? conf.bundle,
 			babel: options.es5Downpile ?? conf.babel,

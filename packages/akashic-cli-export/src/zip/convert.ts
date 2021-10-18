@@ -13,6 +13,8 @@ export interface ConvertGameParameterObject {
 	bundle?: boolean;
 	babel?: boolean;
 	minify?: boolean;
+	minifyJs?: boolean;
+	minifyJson?: boolean;
 	strip?: boolean;
 	source?: string;
 	hashLength?: number;
@@ -31,6 +33,8 @@ export function _completeConvertGameParameterObject(param: ConvertGameParameterO
 	param.bundle = !!param.bundle;
 	param.babel = !!param.babel;
 	param.minify = !!param.minify;
+	param.minifyJs = !!param.minifyJs;
+	param.minifyJson = !!param.minifyJson;
 	param.strip = !!param.strip;
 	param.source = param.source || process.cwd();
 	param.hashLength = param.hashLength || 0;
@@ -164,7 +168,9 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 				const buff = fs.readFileSync(path.resolve(param.source, p));
 				cmn.Util.mkdirpSync(path.dirname(path.resolve(param.dest, p)));
 				const value: string | Buffer =
-					(param.babel && gcu.isScriptJsFile(p)) ? babel.transform(buff.toString().trim(), babelOption).code : buff;
+					(param.babel && gcu.isScriptJsFile(p)) ? babel.transform(buff.toString().trim(), babelOption).code :
+					(param.minifyJson && gcu.isTextJsonFile(p)) ? JSON.stringify(JSON.parse(buff.toString())) :
+					buff;
 				fs.writeFileSync(path.resolve(param.dest, p), value);
 			});
 			// コピーしなかったアセットやファイルをgmae.jsonから削除する
@@ -212,7 +218,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			return cmn.ConfigurationFile.write(gamejson, path.resolve(param.dest, "game.json"), param.logger);
 		})
 		.then(() => {
-			if (!param.minify)
+			if (!param.minify || !param.minifyJs)
 				return;
 			const scriptAssetPaths = gcu.extractScriptAssetFilePaths(gamejson).map(p => path.resolve(param.dest, p));
 			scriptAssetPaths.forEach(p => {
