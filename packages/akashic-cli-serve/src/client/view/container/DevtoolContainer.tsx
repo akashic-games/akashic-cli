@@ -114,11 +114,9 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 				isReplay: (localInstance.executionMode === "replay"),
 				isActiveExists: true, // TODO
 				isActivePaused: play.isActivePausing,
-				isPauseOnSeek: devtoolUiStore.isPauseOnSeek,
 				isForceResetOnSeek: devtoolUiStore.isForceResetOnSeek,
 				onClickPauseActive:operator.play.togglePauseActive,
 				onClickSavePlaylog: operator.play.downloadPlaylog,
-				onClickPauseOnSeek: operator.devtool.togglePauseOnSeek,
 				onClickForceResetOnSeek: operator.devtool.toggleForceResetOnSeek,
 				onProgressChange: operator.localInstance.previewSeekTo,
 				onProgressCommit: operator.localInstance.seekTo,

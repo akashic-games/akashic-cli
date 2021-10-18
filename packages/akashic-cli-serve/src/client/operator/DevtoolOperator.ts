@@ -16,10 +16,6 @@ export class DevtoolOperator {
 		this.store = store;
 	}
 
-	togglePauseOnSeek = (pauses: boolean): void => {
-		this.store.devtoolUiStore.togglePauseOnSeek(pauses);
-	}
-
 	toggleForceResetOnSeek = (pauses: boolean): void => {
 		this.store.devtoolUiStore.toggleForceResetOnSeek(pauses);
 	}

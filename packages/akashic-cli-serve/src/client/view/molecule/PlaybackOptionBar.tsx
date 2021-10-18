@@ -16,13 +16,11 @@ export interface PlaybackOptionBarProps {
 	isReplay: boolean;
 	isActiveExists: boolean;
 	isActivePaused: boolean;
-	isPauseOnSeek: boolean;
 	isForceResetOnSeek: boolean;
 	startPointHeaders: StartPointHeader[];
 	selectedStartPointHeaderIndex: number;
 	onClickPauseActive: (pause: boolean) => void;
 	onClickSavePlaylog: () => void;
-	onClickPauseOnSeek: (pause: boolean) => void;
 	onClickForceResetOnSeek: (reset: boolean) => void;
 	onProgressChange: (val: number) => void;
 	onProgressCommit: (val: number) => void;
@@ -42,13 +40,11 @@ export const PlaybackOptionBar = observer(function (props: PlaybackOptionBarProp
 		isReplay,
 		isActiveExists,
 		isActivePaused,
-		isPauseOnSeek,
 		isForceResetOnSeek,
 		startPointHeaders,
 		selectedStartPointHeaderIndex,
 		onClickPauseActive,
 		onClickSavePlaylog,
-		onClickPauseOnSeek,
 		onClickForceResetOnSeek,
 		onProgressChange,
 		onProgressCommit,
@@ -87,10 +83,6 @@ export const PlaybackOptionBar = observer(function (props: PlaybackOptionBarProp
 				Save playlog
 			</ToolIconButton>
 			<div className={styles["sep"]} />
-			<ToolCheckbox
-				checked={isPauseOnSeek}
-				label="Pause on jump/seek"
-				onChange={onClickPauseOnSeek} />
 			<ToolCheckbox
 				checked={isForceResetOnSeek}
 				label="Force reset on seek"
