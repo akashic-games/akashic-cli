@@ -1,9 +1,9 @@
-import * as process from "child_process";
+import * as childProcess from "child_process";
 import * as fs from "fs";
 import * as path from "path";
 import * as util from "util";
-import { InitParameterObject } from "./InitParameterObject";
-const exec = util.promisify(process.exec);
+import { GitProtocol, InitParameterObject } from "./InitParameterObject";
+const exec = util.promisify(childProcess.exec);
 
 interface GitCloneParameterObject {
 	owner: string;
@@ -14,17 +14,22 @@ interface GitCloneParameterObject {
 }
 
 /**
- * GitHub から リポジトリを clone する。
+ * GitHub または GitHub Enterprise から リポジトリを clone する。
  */
-export async function cloneTemplate(o: GitCloneParameterObject, param: InitParameterObject): Promise<void> {
+export async function cloneTemplate(
+	host: string,
+	protocol: GitProtocol,
+	o: GitCloneParameterObject,
+	param: InitParameterObject
+): Promise<void> {
 	const opts = completeParameter(o);
 	const { owner, repo, targetPath } = opts;
-	const uri = createGitHubUri(owner, repo);
-	const gitBinPath = "git";
+	const uri = createGitUri(host, protocol, owner, repo);
+	const gitBinPath = process.env.GIT_BIN_PATH ?? "git";
 	const command = createGitCloneCommand(gitBinPath, uri, targetPath, opts);
 
 	try {
-		param.logger?.info(`clone github repository from "${owner}/${repo}".`);
+		param.logger?.info(`clone git repository from "${host}/${owner}/${repo}".`);
 		await exec(`${command}`, { encoding: "utf-8" });
 	} catch (e) {
 		throw new Error(e.stderr);
@@ -43,8 +48,13 @@ function completeParameter(opts: GitCloneParameterObject): Required<GitClonePara
 	};
 }
 
-function createGitHubUri(owner: string, repo: string): string {
-	return `https://github.com/${owner}/${repo}.git`;
+function createGitUri(host: string, protocol: GitProtocol, owner: string, repo: string): string {
+	if (protocol === "https") {
+		return `${protocol}://${host}/${owner}/${repo}.git`;
+	} else if (protocol === "ssh") {
+		return `git@${host}:${owner}/${repo}.git`;
+	}
+	throw new Error(`unknown protocol: ${protocol}`);
 }
 
 function createGitCloneCommand(gitBinPath: string, uri: string, targetPath: string, opts: GitCloneParameterObject): string {

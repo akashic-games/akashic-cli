@@ -1,57 +1,106 @@
-var fs = require("fs-extra");
-var path = require("path");
 var ConsoleLogger = require("@akashic/akashic-cli-commons/lib/ConsoleLogger").ConsoleLogger;
 var ct = require("../lib/cloneTemplate");
 var init = require("../lib/init");
 
-const targetDir = path.join(__dirname, "clone_repo_temp");
+jest.mock("child_process");
+const mockExec = require("child_process").exec;
+mockExec.mockImplementation((_command, _opts, callback) => {
+	callback();
+});
 
 describe("cloneTemplate.js", () => {
 	beforeEach(() => {
-		if (fs.existsSync(targetDir)) {
-			// TODO: fs.rm() に移行
-			fs.rmdirSync(targetDir, { recursive:true, force:true });
-		}
-		fs.mkdirSync(targetDir);
+		mockExec.mockClear();
 	});
 
-	afterEach(() => {
-		// TODO: fs.rm() に移行
-		fs.rmdirSync(targetDir, { recursive:true, force:true });
-	});
-
-	it("clone via promiseInit()", async () => {
-		var param = {
+	it("can execute a command to clone repository from github.com via promiseInit()", async () => {
+		await init.promiseInit({
 			logger: new ConsoleLogger({quiet: true}),
-			type: "github:akashic-games/akashic-runtime-version-table",
-			cwd: targetDir
-		};
-		await init.promiseInit(param);
+			type: "github:akashic-games/akashic-template",
+			cwd: "/path/to/dummy/dir"
+		});
 
-		// NOTE: akashic-runtime-version-table 側のファイル構造に依存するがとりあえず
-		expect(fs.statSync(path.join(targetDir, "versions.json")).isFile()).toBe(true);
-		expect(fs.statSync(path.join(targetDir, "README.md")).isFile()).toBe(true);
-		expect(fs.statSync(path.join(targetDir, ".gitignore")).isFile()).toBe(true);
+		expect(mockExec.mock.calls[0][0]).toEqual(
+			"git clone --depth 1 https://github.com/akashic-games/akashic-template.git /path/to/dummy/dir"
+		);
 	});
 
-	it("clone via cloneTemplate()", async () => {
-		var param = {
-			logger: new ConsoleLogger({quiet: true}),
-			type: "github:akashic-games/akashic-runtime-version-table",
-			cwd: targetDir
-		};
+	it("can execute a command to clone repository from github.com via cloneTemplate()", async () => {
 		await ct.cloneTemplate(
+			"github.com",
+			"ssh",
 			{
 				owner: "akashic-games",
-				repo: "akashic-runtime-version-table",
-				targetPath: param.cwd
+				repo: "akashic-template",
+				targetPath: "/path/to/dummy/dir",
+				shallow: false
 			},
-			param
+			{
+				logger: new ConsoleLogger({quiet: true}),
+				type: "github:akashic-games/akashic-template",
+				cwd: "/path/to/dummy/dir"
+			}
 		);
 
-		// NOTE: akashic-runtime-version-table 側のファイル構造に依存するがとりあえず
-		expect(fs.statSync(path.join(targetDir, "versions.json")).isFile()).toBe(true);
-		expect(fs.statSync(path.join(targetDir, "README.md")).isFile()).toBe(true);
-		expect(fs.statSync(path.join(targetDir, ".gitignore")).isFile()).toBe(true);
+		// NOTE: clone の後の半角スペース2つは実装上の都合
+		expect(mockExec.mock.calls[0][0]).toEqual(
+			"git clone  git@github.com:akashic-games/akashic-template.git /path/to/dummy/dir"
+		);
+	});
+
+	it("can execute a command to clone repository from GitHub Enterprise via promiseInit()", async () => {
+		await init.promiseInit({
+			logger: new ConsoleLogger({quiet: true}),
+			type: "ghe:my-orgs/my-repo",
+			gheHost: "my.company.com",
+			gheProtocol: "ssh",
+			cwd: "/path/to/local/dir"
+		});
+
+		expect(mockExec.mock.calls[0][0]).toEqual(
+			"git clone --depth 1 git@my.company.com:my-orgs/my-repo.git /path/to/local/dir"
+		);
+	});
+
+	it("can execute a command to clone repository from GitHub Enterprise via cloneTemplate()", async () => {
+		await ct.cloneTemplate(
+			"my.another.company.com",
+			"https",
+			{
+				owner: "my-another-orgs",
+				repo: "my-another-repo",
+				targetPath: "/path/to/another/local/dir",
+				shallow: false
+			},
+			{
+				logger: new ConsoleLogger({quiet: true}),
+				type: "ghe:my-orgs/my-repo",
+				gheHost: "my.another.company.com",
+				cwd: "/path/to/another/local/dir"
+			}
+		);
+
+		// NOTE: clone の後の半角スペース2つは実装上の都合
+		expect(mockExec.mock.calls[0][0]).toEqual(
+			"git clone  https://my.another.company.com/my-another-orgs/my-another-repo.git " +
+			"/path/to/another/local/dir"
+		);
+	});
+
+	it("should reference env.GIT_BIN_PATH", async () => {
+		process.env.GIT_BIN_PATH = "/path/to/git/bin/git";
+
+		await init.promiseInit({
+			logger: new ConsoleLogger({quiet: true}),
+			type: "github:akashic-games/akashic-template",
+			cwd: "/path/to/dummy/dir"
+		});
+
+		expect(mockExec.mock.calls[0][0]).toEqual(
+			"/path/to/git/bin/git clone --depth 1 https://github.com/akashic-games/akashic-template.git " +
+			"/path/to/dummy/dir"
+		);
+
+		process.env.GIT_BIN_PATH = undefined;
 	});
 });
