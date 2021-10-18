@@ -137,7 +137,7 @@ export async function completeInitParameterObject(param: InitParameterObject): P
 	param.localTemplateDirectory = localTemplateDirectory;
 	param.type = defaultType.toLowerCase();
 	param.githubHost = githubHost;
-	param.githubProtocol =githubProtocol as GitProtocol;
+	param.githubProtocol = githubProtocol as GitProtocol;
 	param.gheHost = gheHost;
 	param.gheProtocol = gheProtocol as GitProtocol;
 }
