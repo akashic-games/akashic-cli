@@ -66,7 +66,7 @@ akashic-cli-init のテンプレートはローカルテンプレートディレ
 private repository など認証が必要な場合は `akashic config` で `init.github.protocol` を `ssh` に設定してください。
 
 ```sh
-akashic config set init.ghe.protocol ssh # 初回のみ。認証を必要としない場合は不要。
+akashic config set init.github.protocol ssh # 初回のみ。認証を必要としない場合は不要。
 akashic-cli-init -t github:your-orgs/your-repo
 ```
 
