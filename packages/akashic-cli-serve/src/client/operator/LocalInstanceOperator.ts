@@ -18,14 +18,6 @@ export class LocalInstanceOperator {
 		this.store.devtoolUiStore.endPreviewSeek();
 	}
 
-	// TODO 削除
-	// seekToStartPoint = (frame: number): void => {
-	// 	this.store.currentLocalInstance.setExecutionMode("replay");
-	// 	this.store.currentLocalInstance.setFrameWithStartPoint(frame, (targetTime) => {
-	// 		this.store.devtoolUiStore.seekTo(targetTime);
-	// 	});
-	// }
-
 	seekToStartPointOf = async (frame: number): Promise<void> => {
 		await this.resetByNearestStartPointOf({ frame }, true);
 	}

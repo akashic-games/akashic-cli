@@ -20,8 +20,9 @@ const store = observable({
 	isSeekingVolume: false,
 
 	// playback
-	currentTime: 10,
+	currentTime: 20,
 	duration: 100,
+	resetTime: 10,
 	isPaused: false,
 	isProgressActive: false,
 	isReplay: false,
@@ -57,6 +58,7 @@ const dummyPlaybackDevtoolProps: PlaybackDevtoolProps = {
 	selectedStartPointHeaderIndex: null,
 	currentTime: 10,
 	duration: 100,
+	resetTime: 0,
 	isPaused: false,
 	isProgressActive: false,
 	isReplay: false,
@@ -245,6 +247,7 @@ const TestWithBehaviour = observer(() => (
 			selectedStartPointHeaderIndex: store.selectedStartPointIndex,
 			currentTime: store.currentTime,
 			duration: store.duration,
+			resetTime: store.resetTime,
 			isPaused: store.isPaused,
 			isProgressActive: store.isProgressActive,
 			isReplay: store.isReplay,

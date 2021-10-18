@@ -10,7 +10,7 @@ import { StartPointHeader } from "../../../common/types/StartPointHeader";
 export interface PlaybackOptionBarProps {
 	currentTime: number;
 	duration: number;
-	resetTime?: number;
+	resetTime: number;
 	isPaused: boolean;
 	isProgressActive: boolean;
 	isReplay: boolean;

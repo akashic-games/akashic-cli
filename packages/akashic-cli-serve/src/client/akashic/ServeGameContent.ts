@@ -1,3 +1,4 @@
+import * as amf from "@akashic/amflow";
 import { Trigger } from "@akashic/trigger";
 import { EDumpItem } from "../common/types/EDumpItem";
 
@@ -42,25 +43,31 @@ function makeEDumpItem(e: ae.ELike): EDumpItem {
 export class ServeGameContent {
 	readonly agvGameContent: agv.GameContent;
 	onTick: Trigger<agv.GameLike>;
+	onReset: Trigger<amf.StartPoint>;
 	private _game: agv.GameLike;
+	private _gameDriver: agv.GameDriverLike;
 	private _highlightedEntityId: number | null;
 
 	constructor(agvGameContent: agv.GameContent) {
 		this.agvGameContent = agvGameContent;
 		this._game = null!;
+		this._gameDriver = null!;
 		this._highlightedEntityId = null;
 		this.onTick = new Trigger<agv.GameLike>();
+		this.onReset = new Trigger<amf.StartPoint>();
 	}
 
 	setup(): void {
 		this._game = this.agvGameContent.getGame();
+		this._gameDriver = this.agvGameContent.getGameDriver();
+
+		const self = this;
 		const game = this._game;
 		const renderOriginal = game.render;
-		const self = this;
 		game.render = function (camera?: ae.CameraLike) {
 			const gameModified = game._modified;
 			const ret = renderOriginal.apply(this, arguments);
-			if ("_modified" in game && !gameModified) return; // AEv3 は画面更新が不要ならなにもしない。
+			if ("_modified" in game && !gameModified) return ret; // AEv3 は画面更新が不要ならなにもしない。
 
 			// エンティティハイライト描画
 			// TODO 子孫要素の包含矩形描画 (or サイズ 0 のエンティティの表示方法検討
@@ -92,6 +99,35 @@ export class ServeGameContent {
 			self.onTick.fire(game);
 			return tickOriginal.apply(this, arguments);
 		};
+
+		const gameDriver = this._gameDriver;
+		const resetOriginal = gameDriver._gameLoop?.reset;
+		if (resetOriginal) {
+			gameDriver._gameLoop.reset = function (startPoint: amf.StartPoint) {
+				self.onReset.fire(startPoint);
+				return resetOriginal.apply(this, arguments);
+			};
+		}
+	}
+
+	/**
+	 * ゲームを外部からリセットできるか。
+	 * v2 系以前は外部からリセットするメソッドがないため false を返す。
+	 */
+	isResettable(): boolean {
+		return !!this._gameDriver._gameLoop?.reset;
+	}
+
+	/**
+	 * ゲームをリセットする。
+	 *
+	 * isResettable() が偽の場合、何もしない。
+	 * onReset はこれと独立に、内部契機のリセットで fire されることもあるので注意。
+	 *
+	 * @param sp リセットに使うスタートポイント
+	 */
+	reset(startPoint: amf.StartPoint): void {
+		this._gameDriver._gameLoop?.reset?.(startPoint);
 	}
 
 	dumpEntities(): EDumpItem[] {

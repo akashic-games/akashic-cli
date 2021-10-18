@@ -108,6 +108,7 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 					(devtoolUiStore.isSeeking) ? devtoolUiStore.currentTimePreview : localInstance.targetTime
 				),
 				duration: play.duration,
+				resetTime: localInstance.resetTime,
 				isPaused: localInstance.isPaused,
 				isProgressActive: devtoolUiStore.isSeeking,
 				isReplay: (localInstance.executionMode === "replay"),
