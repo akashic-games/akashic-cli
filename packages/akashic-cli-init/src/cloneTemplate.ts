@@ -25,7 +25,7 @@ export async function cloneTemplate(
 	const opts = completeParameter(o);
 	const { owner, repo, targetPath } = opts;
 	const uri = createGitUri(host, protocol, owner, repo);
-	const gitBinPath = process.env.GIT_BIN_PATH ?? "git";
+	const gitBinPath = process.env.GIT_BIN_PATH ?? param.gitBinPath ?? "git";
 	const command = createGitCloneCommand(gitBinPath, uri, targetPath, opts);
 
 	try {
