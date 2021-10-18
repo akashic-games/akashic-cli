@@ -12,24 +12,38 @@ export class LocalInstanceOperator {
 		this.store.devtoolUiStore.previewSeekTo(time);
 	}
 
-	seekTo = (time: number): void => {
+	seekTo = async (time: number): Promise<void> => {
+		this.switchToReplay(time);
+
+		if (this.store.devtoolUiStore.isForceResetOnSeek) {
+			const timestamp = time + this.store.currentPlay.amflow.getStartedAt();
+			this.resetByNearestStartPointOf({ timestamp }, false);
+		}
+	}
+
+	switchToReplay = (time: number): void => {
 		this.store.currentLocalInstance.setExecutionMode("replay");
 		this.store.currentLocalInstance.setTargetTime(time);
 		this.store.devtoolUiStore.endPreviewSeek();
 	}
 
-	seekToStartPointOf = async (frame: number): Promise<void> => {
+	switchToRealtime = (): void => {
+		this.store.currentLocalInstance.setExecutionMode("passive");
+		this.store.currentLocalInstance.resume();
+	}
+
+	resetToStartPointOfFrame = async (frame: number): Promise<void> => {
 		await this.resetByNearestStartPointOf({ frame }, true);
 	}
 
-	resetByStartPointHeaderIndex = async (index: number): Promise<void> => {
+	resetToStartPointOfIndex = async (index: number): Promise<void> => {
 		const sps = this.store.currentPlay.startPointHeaders;
 		await this.resetByNearestStartPointOf({ frame: sps[index].frame }, true);
 	}
 
-	resetBySelectedStartPoint = async (): Promise<void> => {
+	resetToStartPointSelectedInDevtool = async (): Promise<void> => {
 		const index = this.store.devtoolUiStore.selectedStartPointHeaderIndex;
-		await this.resetByStartPointHeaderIndex(index);
+		await this.resetToStartPointOfIndex(index);
 	}
 
 	/**
@@ -50,10 +64,5 @@ export class LocalInstanceOperator {
 
 	togglePause = (pause: boolean): void => {
 		this.store.currentLocalInstance.togglePause(pause);
-	}
-
-	switchToRealtime = (): void => {
-		this.store.currentLocalInstance.setExecutionMode("passive");
-		this.store.currentLocalInstance.resume();
 	}
 }

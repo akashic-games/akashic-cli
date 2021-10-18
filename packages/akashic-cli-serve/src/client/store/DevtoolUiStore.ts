@@ -10,7 +10,7 @@ export class DevtoolUiStore {
 	@observable activeDevtool: string;
 	// storage に保存するもの - playback
 	@observable isPauseOnSeek: boolean;
-	@observable isForceJumpOnSeek: boolean;
+	@observable isForceResetOnSeek: boolean;
 	// storege に保存するもの - events
 	@observable showsEventList: boolean;
 	@observable eventListWidth: number;
@@ -47,7 +47,7 @@ export class DevtoolUiStore {
 		this.height = storage.data.devtoolsHeight;
 		this.activeDevtool = storage.data.activeDevtool;
 		this.isPauseOnSeek = false; // TODO
-		this.isForceJumpOnSeek = false; // TODO
+		this.isForceResetOnSeek = false; // TODO
 		this.showsEventList = storage.data.showsEventList;
 		this.eventListWidth = storage.data.eventListWidth;
 		this.eventEditContent = storage.data.eventEditContent;
@@ -86,8 +86,8 @@ export class DevtoolUiStore {
 	}
 
 	@action
-	toggleForceJumpOnSeek(jumps: boolean): void {
-		this.isForceJumpOnSeek = jumps;
+	toggleForceResetOnSeek(resets: boolean): void {
+		this.isForceResetOnSeek = resets;
 	}
 
 	@action

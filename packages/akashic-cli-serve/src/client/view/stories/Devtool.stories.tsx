@@ -29,7 +29,7 @@ const store = observable({
 	isActiveExists: true,
 	isActivePaused: false,
 	isPauseOnSeek: false,
-	isForceJumpOnSeek: true,
+	isForceResetOnSeek: true,
 	selectedStartPointIndex: null as number | null,
 });
 
@@ -65,11 +65,11 @@ const dummyPlaybackDevtoolProps: PlaybackDevtoolProps = {
 	isActiveExists: true,
 	isActivePaused: false,
 	isPauseOnSeek: false,
-	isForceJumpOnSeek: true,
+	isForceResetOnSeek: true,
 	onClickPauseActive: action("click-pause-active"),
 	onClickSavePlaylog: action("click-save-playlog"),
 	onClickPauseOnSeek: action("click-pause-on-seek"),
-	onClickForceJumpOnSeek: action("click-force-jump-on-seek"),
+	onClickForceResetOnSeek: action("click-force-jump-on-seek"),
 	onProgressChange: action("progress-change"),
 	onProgressCommit: action("progress-commit"),
 	onClickPause: action("click-pause"),
@@ -254,11 +254,11 @@ const TestWithBehaviour = observer(() => (
 			isActiveExists: true,
 			isActivePaused: store.isActivePaused,
 			isPauseOnSeek: store.isPauseOnSeek,
-			isForceJumpOnSeek: store.isForceJumpOnSeek,
+			isForceResetOnSeek: store.isForceResetOnSeek,
 			onClickPauseActive: (v => store.isActivePaused = v),
 			onClickSavePlaylog: action("click-save-playlog"),
 			onClickPauseOnSeek: (v => store.isPauseOnSeek = v),
-			onClickForceJumpOnSeek: (v => store.isForceJumpOnSeek = v),
+			onClickForceResetOnSeek: (v => store.isForceResetOnSeek = v),
 			onProgressChange: (v => store.currentTime = v),
 			onProgressCommit: (v => {
 				store.currentTime = v;

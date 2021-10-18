@@ -20,8 +20,8 @@ export class DevtoolOperator {
 		this.store.devtoolUiStore.togglePauseOnSeek(pauses);
 	}
 
-	toggleForceJumpOnSeek = (pauses: boolean): void => {
-		this.store.devtoolUiStore.toggleForceJumpOnSeek(pauses);
+	toggleForceResetOnSeek = (pauses: boolean): void => {
+		this.store.devtoolUiStore.toggleForceResetOnSeek(pauses);
 	}
 
 	selectStartPointHeader = (index: number): void => {

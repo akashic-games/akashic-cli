@@ -17,13 +17,13 @@ export interface PlaybackOptionBarProps {
 	isActiveExists: boolean;
 	isActivePaused: boolean;
 	isPauseOnSeek: boolean;
-	isForceJumpOnSeek: boolean;
+	isForceResetOnSeek: boolean;
 	startPointHeaders: StartPointHeader[];
 	selectedStartPointHeaderIndex: number;
 	onClickPauseActive: (pause: boolean) => void;
 	onClickSavePlaylog: () => void;
 	onClickPauseOnSeek: (pause: boolean) => void;
-	onClickForceJumpOnSeek: (jump: boolean) => void;
+	onClickForceResetOnSeek: (reset: boolean) => void;
 	onProgressChange: (val: number) => void;
 	onProgressCommit: (val: number) => void;
 	onClickPause: (pause: boolean) => void;
@@ -43,13 +43,13 @@ export const PlaybackOptionBar = observer(function (props: PlaybackOptionBarProp
 		isActiveExists,
 		isActivePaused,
 		isPauseOnSeek,
-		isForceJumpOnSeek,
+		isForceResetOnSeek,
 		startPointHeaders,
 		selectedStartPointHeaderIndex,
 		onClickPauseActive,
 		onClickSavePlaylog,
 		onClickPauseOnSeek,
-		onClickForceJumpOnSeek,
+		onClickForceResetOnSeek,
 		onProgressChange,
 		onProgressCommit,
 		onClickPause,
@@ -92,9 +92,9 @@ export const PlaybackOptionBar = observer(function (props: PlaybackOptionBarProp
 				label="Pause on jump/seek"
 				onChange={onClickPauseOnSeek} />
 			<ToolCheckbox
-				checked={isForceJumpOnSeek}
-				label="Force jump on seek"
-				onChange={onClickForceJumpOnSeek} />
+				checked={isForceResetOnSeek}
+				label="Force reset on seek"
+				onChange={onClickForceResetOnSeek} />
 		</div>
 
 		<div className={styles["row"]}>

@@ -115,19 +115,19 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 				isActiveExists: true, // TODO
 				isActivePaused: play.isActivePausing,
 				isPauseOnSeek: devtoolUiStore.isPauseOnSeek,
-				isForceJumpOnSeek: devtoolUiStore.isForceJumpOnSeek,
+				isForceResetOnSeek: devtoolUiStore.isForceResetOnSeek,
 				onClickPauseActive:operator.play.togglePauseActive,
 				onClickSavePlaylog: operator.play.downloadPlaylog,
 				onClickPauseOnSeek: operator.devtool.togglePauseOnSeek,
-				onClickForceJumpOnSeek: operator.devtool.toggleForceJumpOnSeek,
+				onClickForceResetOnSeek: operator.devtool.toggleForceResetOnSeek,
 				onProgressChange: operator.localInstance.previewSeekTo,
 				onProgressCommit: operator.localInstance.seekTo,
 				onClickPause: operator.localInstance.togglePause,
 				onClickFastForward: operator.localInstance.switchToRealtime,
-				onClickJumpBySelectedStartPoint: operator.localInstance.resetBySelectedStartPoint,
+				onClickJumpBySelectedStartPoint: operator.localInstance.resetToStartPointSelectedInDevtool,
 				onClickDumpSelectedStartPoint: operator.devtool.dumpSelectedStartPoint,
 				onClickStartPoint: operator.devtool.selectStartPointHeader,
-				onDoubleClikStartPoint: operator.localInstance.resetByStartPointHeaderIndex
+				onDoubleClikStartPoint: operator.localInstance.resetToStartPointOfIndex
 			}}
 		/>;
 	}
