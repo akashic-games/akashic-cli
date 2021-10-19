@@ -104,6 +104,11 @@ export interface ServeQueryParameters {
 	activeDevtool: string | null;
 
 	/**
+	 * シークバーでのシーク時に強制的に最も近いスナップショット(スタートポイント)から開始するか。
+	 */
+	isForceResetOnSeek: boolean | null;
+
+	/**
 	 * Events ツールでイベントリストを表示するか。
 	 */
 	showsEventList: boolean | null;
@@ -251,6 +256,7 @@ export function makeServeQueryParameters(query: RawParsedQuery): ServeQueryParam
 		showsDevtools: asBool(query.showsDevtools),
 		devtoolsHeight: asNumber(query.devtoolsHeight),
 		activeDevtool: asString(query.activeDevtool),
+		isForceResetOnSeek: asBool(query.isForceResetOnSeek),
 		showsEventList: asBool(query.showsEventList),
 		eventListWidth: asNumber(query.eventListWidth),
 		eventEditContent: asString(query.eventEditContent),

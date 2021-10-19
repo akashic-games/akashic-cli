@@ -45,7 +45,7 @@ export class DevtoolUiStore {
 	constructor() {
 		this.height = storage.data.devtoolsHeight;
 		this.activeDevtool = storage.data.activeDevtool;
-		this.isForceResetOnSeek = false; // TODO
+		this.isForceResetOnSeek = storage.data.isForceResetOnSeek;
 		this.showsEventList = storage.data.showsEventList;
 		this.eventListWidth = storage.data.eventListWidth;
 		this.eventEditContent = storage.data.eventEditContent;
@@ -79,8 +79,9 @@ export class DevtoolUiStore {
 	}
 
 	@action
-	toggleForceResetOnSeek(resets: boolean): void {
-		this.isForceResetOnSeek = resets;
+	toggleForceResetOnSeek(reset: boolean): void {
+		this.isForceResetOnSeek = reset;
+		storage.put({ isForceResetOnSeek: reset });
 	}
 
 	@action

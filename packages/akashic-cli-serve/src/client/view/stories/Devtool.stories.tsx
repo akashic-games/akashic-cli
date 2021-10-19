@@ -1,8 +1,8 @@
 import * as React from "react";
-import { observable, ObservableMap } from "mobx";
+import { observable } from "mobx";
 import { observer } from "mobx-react";
 import { storiesOf } from "@storybook/react";
-import { action, CYCLIC_KEY } from "@storybook/addon-actions";
+import { action } from "@storybook/addon-actions";
 import { EDumpItem } from "../../common/types/EDumpItem";
 import { Devtool } from "../organism/Devtool";
 import { NiconicoDevtoolProps } from "../molecule/NiconicoDevtool";
