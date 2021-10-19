@@ -218,7 +218,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			return cmn.ConfigurationFile.write(gamejson, path.resolve(param.dest, "game.json"), param.logger);
 		})
 		.then(() => {
-			if (!param.minify || !param.minifyJs)
+			if (!param.minify && !param.minifyJs)
 				return;
 			const scriptAssetPaths = gcu.extractScriptAssetFilePaths(gamejson).map(p => path.resolve(param.dest, p));
 			scriptAssetPaths.forEach(p => {
