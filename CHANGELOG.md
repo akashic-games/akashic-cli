@@ -1,5 +1,27 @@
 # CHANGELOG
 
+## 2.12.0 (2021-10-19)
+
+#### Enhancement
+* `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`
+  * [#881](https://github.com/akashic-games/akashic-cli/pull/881) feat(init): GitHub Enterprise でのテンプレート初期化に対応 ([@yu-ogi](https://github.com/yu-ogi))
+* `akashic-cli-init`
+  * [#874](https://github.com/akashic-games/akashic-cli/pull/874) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Bug Fix
+* `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`
+  * [#881](https://github.com/akashic-games/akashic-cli/pull/881) feat(init): GitHub Enterprise でのテンプレート初期化に対応 ([@yu-ogi](https://github.com/yu-ogi))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli`
+  * [#875](https://github.com/akashic-games/akashic-cli/pull/875) Update all dependencies (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#852](https://github.com/akashic-games/akashic-cli/pull/852) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 3
+- [@yu-ogi](https://github.com/yu-ogi)
+- kamakiri_ys ([@kamakiri01](https://github.com/kamakiri01))
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.11.5 (2021-10-06)
 
 #### Enhancement
