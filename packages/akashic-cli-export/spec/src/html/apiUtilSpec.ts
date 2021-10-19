@@ -2,21 +2,21 @@ import * as apiUtil from "../../../lib/html/apiUtil";
 
 describe("apiUtil", function () {
 	describe("getFromHttps", function () {
-		it("can get resource with https-protocol", function (done) {
+		it("can get resource with https-protocol", function (done: DoneFn) {
 			Promise.resolve()
 				.then(function () {
 					return apiUtil.getFromHttps(
 						"https://raw.githubusercontent.com/akashic-games/akashic-cli-export-html/master/package.json"
 					);
 				})
-				.then(function (data) {
+				.then(function (data: string): void {
 					const jsonData = JSON.parse(data);
-					expect(jsonData["name"]).toBe("@akashic/akashic-cli-export-html");
-					expect(jsonData["version"]).toMatch(/^\d+\.\d+\.\d+$/);
+					expect(jsonData.name).toBe("@akashic/akashic-cli-export-html");
+					expect(jsonData.version).toMatch(/^\d+\.\d+\.\d+$/);
 				})
 				.then(done, done.fail);
 		});
-		it("can not get resource with protocol other than https", function (done) {
+		it("can not get resource with protocol other than https", function (done: DoneFn) {
 			Promise.resolve()
 				.then(function () {
 					return apiUtil.getFromHttps("http://example.com");
@@ -24,12 +24,12 @@ describe("apiUtil", function () {
 				.then(function () {
 					return done.fail();
 				})
-				.catch(function (err) {
-					expect(err.message).toBe(`Protocol "http:" not supported. Expected "https:"`);
+				.catch(function (err: any) {
+					expect(err.message).toBe("Protocol \"http:\" not supported. Expected \"https:\"");
 					done();
 				});
 		});
-		it("throw error when http-status-code is over 400", function (done) {
+		it("throw error when http-status-code is over 400", function (done: DoneFn) {
 			Promise.resolve()
 				.then(function () {
 					return apiUtil.getFromHttps("https://example.com/notfound");
@@ -37,7 +37,7 @@ describe("apiUtil", function () {
 				.then(function () {
 					return done.fail();
 				})
-				.catch(function (err) {
+				.catch(function (err: any) {
 					expect(err.message).toBe("Failed to get resource. url: https://example.com/notfound. status code: 404.");
 					done();
 				});

@@ -1,8 +1,8 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as cmn from "@akashic/akashic-cli-commons";
-import * as fsx from "fs-extra";
 import * as ejs from "ejs";
+import * as fsx from "fs-extra";
 import {
 	ConvertTemplateParameterObject,
 	copyAssetFilesStrip,
@@ -106,6 +106,7 @@ async function writeHtmlFile(
 	options: ConvertTemplateParameterObject): Promise<void> {
 	const injects = options.injects ? options.injects : [];
 	var version = conf._content.environment["sandbox-runtime"];
+	// eslint-disable-next-line @typescript-eslint/no-var-requires
 	var versionsJson = require("../engineFilesVersion.json");
 	const filePath = path.resolve(__dirname + "/../template/no-bundle-index.ejs");
 	const html = await ejs.renderFile(filePath, {

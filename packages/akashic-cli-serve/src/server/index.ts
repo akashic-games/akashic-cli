@@ -1,30 +1,29 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as util from "util";
-import * as http from "http";
-import * as express from "express";
-import * as bodyParser from "body-parser";
-import * as socketio from "socket.io";
-import { Command, OptionValues } from "commander";
-import * as chalk from "chalk";
-import * as open from "open";
+import { CliConfigServe } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigServe";
+import { CliConfigurationFile } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigurationFile";
+import { SERVICE_TYPES } from "@akashic/akashic-cli-commons/lib/ServiceType";
 import { PlayManager, RunnerManager, setSystemLogger, getSystemLogger } from "@akashic/headless-driver";
-import { createApiRouter } from "./route/ApiRoute";
-import { RunnerStore } from "./domain/RunnerStore";
-import { PlayStore } from "./domain/PlayStore";
-import { SocketIOAMFlowManager } from "./domain/SocketIOAMFlowManager";
+import * as bodyParser from "body-parser";
+import * as chalk from "chalk";
+import { Command, OptionValues } from "commander";
+import * as express from "express";
+import * as open from "open";
+import * as socketio from "socket.io";
+import parser from "../common/MsgpackParser";
+import { PutStartPointEvent } from "../common/types/TestbedEvent";
+import { ServerContentLocator } from "./common/ServerContentLocator";
 import { serverGlobalConfig } from "./common/ServerGlobalConfig";
+import { DumpedPlaylog } from "./common/types/DumpedPlaylog";
+import { ModTargetFlags, watchContent } from "./domain/GameConfigs";
+import { PlayerIdStore } from "./domain/PlayerIdStore";
+import { PlayStore } from "./domain/PlayStore";
+import { RunnerStore } from "./domain/RunnerStore";
+import { SocketIOAMFlowManager } from "./domain/SocketIOAMFlowManager";
+import { createApiRouter } from "./route/ApiRoute";
 import { createContentsRouter } from "./route/ContentsRoute";
 import { createHealthCheckRouter } from "./route/HealthCheckRoute";
-import { ServerContentLocator } from "./common/ServerContentLocator";
-import { CliConfigurationFile } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigurationFile";
-import { CliConfigServe } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigServe";
-import { SERVICE_TYPES } from "@akashic/akashic-cli-commons/lib/ServiceType";
-import { PlayerIdStore } from "./domain/PlayerIdStore";
-import { ModTargetFlags, watchContent } from "./domain/GameConfigs";
-import { PutStartPointEvent } from "../common/types/TestbedEvent";
-import parser from "../common/MsgpackParser";
-import { StartPointHeader } from "../common/types/StartPointHeader";
 
 // 渡されたパラメータを全てstringに変換する
 // chalkを使用する場合、ログ出力時objectの中身を展開してくれないためstringに変換する必要がある
@@ -38,7 +37,7 @@ function convertToStrings(params: any[]): string[] {
 	});
 }
 
-async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues) {
+async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Promise<void> {
 	if (cliConfigParam.port && isNaN(cliConfigParam.port)) {
 		console.error("Invalid --port option: " + cliConfigParam.port);
 		process.exit(1);
@@ -77,8 +76,8 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues) {
 	} else {
 		serverGlobalConfig.verbose = false;
 		setSystemLogger({
-			info: (...messages: any[]) => {},
-			debug: (...messages: any[]) => {},
+			info: (..._messages: any[]) => {}, // eslint-disable-line @typescript-eslint/no-empty-function
+			debug: (..._messages: any[]) => {}, // eslint-disable-line @typescript-eslint/no-empty-function
 			warn: (...messages: any[]) => {
 				console.warn(chalk.yellow(...convertToStrings(messages)));
 			},
@@ -93,14 +92,30 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues) {
 	}
 
 	if (cliConfigParam.targetService) {
-		if (!cliConfigParam.autoStart && cliConfigParam.targetService === "nicolive") {
-			getSystemLogger().error("--no-auto-start and --target-service nicolive can not be set at the same time.");
+		if (!cliConfigParam.autoStart &&
+			(/^nicolive.*/.test(cliConfigParam.targetService) || cliConfigParam.targetService === "atsumaru:multi")
+		) {
+			getSystemLogger().error("--no-auto-start and --target-service nicolive or atsumaru:multi can not be set at the same time.");
 			process.exit(1);
 		}
 
 		if (!SERVICE_TYPES.includes(cliConfigParam.targetService )) {
-			getSystemLogger().error("Invalid --target-service option argument: " + cliConfigParam.targetService);
+			const serviceName: string = cliConfigParam.targetService;
+			if (serviceName === "nicolive:ranking" || serviceName === "nicolive:single") {
+				// モードとしてあるがサポートしてないものは未実装のエラーとする
+				getSystemLogger().error("Unimplemented --target-service option argument: " + cliConfigParam.targetService);
+			} else {
+				getSystemLogger().error("Invalid --target-service option argument: " + cliConfigParam.targetService);
+			}
 			process.exit(1);
+		}
+
+		if (cliConfigParam.targetService === "atsumaru") {
+			cliConfigParam.targetService = "atsumaru:single"; // "atsumaru" は "atsumaru:single" のエイリアスとする
+		}
+
+		if (cliConfigParam.targetService === "nicolive") {
+			cliConfigParam.targetService = "nicolive:multi"; // "nicolive"  は "nicolive:multi" のエイリアスとする
 		}
 		serverGlobalConfig.targetService = cliConfigParam.targetService;
 	}
@@ -146,7 +161,40 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues) {
 	runnerStore.onRunnerRemove.add(arg => playStore.unregisterRunner(arg));
 
 	const app = express();
-	const httpServer = http.createServer(app);
+	let httpServer;
+	if (cliConfigParam.sslCert || cliConfigParam.sslKey) {
+		if (cliConfigParam.sslCert && !cliConfigParam.sslKey) {
+			getSystemLogger().error("Please specify the --ssl-key option.");
+			process.exit(1);
+		}
+		if (!cliConfigParam.sslCert && cliConfigParam.sslKey) {
+			getSystemLogger().error("Please specify the --ssl-cert option.");
+			process.exit(1);
+		}
+
+		const keyPath = path.resolve(process.cwd(), cliConfigParam.sslKey);
+		const certPath = path.resolve(process.cwd(), cliConfigParam.sslCert);
+		if (!fs.existsSync(keyPath)) {
+			getSystemLogger().error(`--ssl-key option parameter ${cliConfigParam.sslKey} not found.`);
+			process.exit(1);
+		}
+		if (!fs.existsSync(certPath)) {
+			getSystemLogger().error(`--ssl-cert option parameter ${cliConfigParam.sslCert} not found.`);
+			process.exit(1);
+		}
+
+		serverGlobalConfig.protocol = "https";
+		const https = await import("https");
+		const options = {
+			key: fs.readFileSync(keyPath),
+			cert: fs.readFileSync(certPath)
+		};
+		httpServer = https.createServer(options, app);
+	} else {
+		const server = await import("http");
+		httpServer = server.createServer(app);
+	}
+
 	const io = new socketio.Server(httpServer, { parser });
 
 	if (cliConfigParam.watch && cliConfigParam.targetDirs) {
@@ -169,12 +217,17 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues) {
 					});
 					targetPlayIds.push(playId);
 				});
-				const playId = await playStore.createPlay(new ServerContentLocator({ contentId }));
+				if (targetPlayIds.length === 0)
+					return;
+				const audioState = playStore.getPlayAudioState(targetPlayIds[targetPlayIds.length - 1]); // 暫定: どれを持ち越すべきか検討が必要
+				const playId = await playStore.createPlay(new ServerContentLocator({ contentId }), audioState, null);
 				const token = amflowManager.createPlayToken(playId, "", "", true, {});
 				const amflow = playStore.createAMFlow(playId);
 				await runnerStore.createAndStartRunner({ playId, isActive: true, token, amflow, contentId });
 				await playStore.resumePlayDuration(playId);
-				targetPlayIds.forEach(id => io.emit("playBroadcast", { playId: id, message: { type: "switchPlay", nextPlayId: playId } }));
+				targetPlayIds.forEach(id => {
+					io.emit("playBroadcast", { playId: id, message: { type: "switchPlay", nextPlayId: playId } });
+				});
 			});
 		}
 	}
@@ -182,7 +235,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues) {
 	app.set("views", path.join(__dirname, "..", "..", "views"));
 	app.set("view engine", "ejs");
 
-	app.use((req, res, next) => {
+	app.use((_req, res, next) => {
 		res.removeHeader("X-Powered-By");
 		res.removeHeader("ETag");
 		res.header("Cache-Control", ["private", "no-store", "no-cache", "must-revalidate", "proxy-revalidate"].join(","));
@@ -191,7 +244,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues) {
 	});
 	app.use(bodyParser.json());
 
-	app.use("^\/$", (req, res, next) => res.redirect("/public/"));
+	app.use("^\/$", (_req, res, _next) => res.redirect("/public/"));
 
 	if (process.env.ENGINE_FILES_V3_PATH) {
 		const engineFilesPath = path.resolve(process.cwd(), process.env.ENGINE_FILES_V3_PATH);
@@ -210,30 +263,55 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues) {
 	app.use("/contents/", createContentsRouter({ targetDirs }));
 	app.use("/health-check/", createHealthCheckRouter({ playStore }));
 
-	io.on("connection", (socket: socketio.Socket) => { amflowManager.setupSocketIOAMFlow(socket); });
+	io.on("connection", (socket: socketio.Socket) => {
+		amflowManager.setupSocketIOAMFlow(socket);
+	});
 	// TODO 全体ブロードキャストせず該当するプレイにだけ通知するべき？
-	playStore.onPlayStatusChange.add(arg => { io.emit("playStatusChange", arg); });
-	playStore.onPlayDurationStateChange.add(arg => { io.emit("playDurationStateChange", arg); });
-	playStore.onPlayCreate.add(arg => { io.emit("playCreate", arg); });
-	playStore.onPlayerJoin.add(arg => { io.emit("playerJoin", arg); });
-	playStore.onPlayerLeave.add(arg => { io.emit("playerLeave", arg); });
-	playStore.onClientInstanceAppear.add(arg => { io.emit("clientInstanceAppear", arg); });
-	playStore.onClientInstanceDisappear.add(arg => { io.emit("clientInstanceDisappear", arg); });
-	runnerStore.onRunnerCreate.add(arg => { io.emit("runnerCreate", arg); });
-	runnerStore.onRunnerRemove.add(arg => { io.emit("runnerRemove", arg); });
-	runnerStore.onRunnerPause.add(arg => { io.emit("runnerPause", arg); });
-	runnerStore.onRunnerResume.add(arg => { io.emit("runnerResume", arg); });
+	playStore.onPlayStatusChange.add(arg => {
+		io.emit("playStatusChange", arg);
+	});
+	playStore.onPlayDurationStateChange.add(arg => {
+		io.emit("playDurationStateChange", arg);
+	});
+	playStore.onPlayAudioStateChange.add(arg => {
+		io.emit("playAudioStateChange", arg);
+	});
+	playStore.onPlayCreate.add(arg => {
+		io.emit("playCreate", arg);
+	});
+	playStore.onPlayerJoin.add(arg => {
+		io.emit("playerJoin", arg);
+	});
+	playStore.onPlayerLeave.add(arg => {
+		io.emit("playerLeave", arg);
+	});
+	playStore.onClientInstanceAppear.add(arg => {
+		io.emit("clientInstanceAppear", arg);
+	});
+	playStore.onClientInstanceDisappear.add(arg => {
+		io.emit("clientInstanceDisappear", arg);
+	});
+	runnerStore.onRunnerCreate.add(arg => {
+		io.emit("runnerCreate", arg);
+	});
+	runnerStore.onRunnerRemove.add(arg => {
+		io.emit("runnerRemove", arg);
+	});
+	runnerStore.onRunnerPause.add(arg => {
+		io.emit("runnerPause", arg);
+	});
+	runnerStore.onRunnerResume.add(arg => {
+		io.emit("runnerResume", arg);
+	});
 	runnerStore.onRunnerPutStartPoint.add(arg => {
-		const startPointHeader: StartPointHeader = {
-			frame: arg.startPoint.frame,
-			timestamp: arg.startPoint.timestamp
-		};
-		io.emit("putStartPoint", { startPointHeader, playId: arg.playId } as PutStartPointEvent);
+		const { playId, startPoint } = arg;
+		const startPointHeader = { frame: startPoint.frame, timestamp: startPoint.timestamp };
+		io.emit("putStartPoint", { startPointHeader, playId } as PutStartPointEvent);
 	});
 
 	let loadedPlaylogPlayId: string;
 	if (cliConfigParam.debugPlaylog) {
-		const absolutePath = path.join(process.cwd(), cliConfigParam.debugPlaylog);
+		const absolutePath = path.resolve(process.cwd(), cliConfigParam.debugPlaylog);
 		if (!fs.existsSync(absolutePath)) {
 			getSystemLogger().error(`Can not find ${absolutePath}`);
 			process.exit(1);
@@ -241,8 +319,9 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues) {
 		// 現状 playlog は一つしか受け取らない。それは contentId: 0 のコンテンツの playlog として扱う。
 		const contentLocator = new ServerContentLocator({contentId: "0"});
 		try {
-			const playlog = require(absolutePath);
-			loadedPlaylogPlayId = await playStore.createPlay(contentLocator, playlog);
+			// eslint-disable-next-line @typescript-eslint/no-var-requires
+			const playlog = require(absolutePath) as DumpedPlaylog;
+			loadedPlaylogPlayId = await playStore.createPlay(contentLocator, { muteType: "none" }, playlog);
 		} catch (e) {
 			getSystemLogger().error(e.message);
 			process.exit(1);
@@ -254,11 +333,11 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues) {
 			getSystemLogger().warn("Akashic Serve is a development server which is not appropriate for public release. " +
 				`We do not recommend to listen on a well-known port ${serverGlobalConfig.port}.`);
 		}
-		let url = `http://${serverGlobalConfig.hostname}:${serverGlobalConfig.port}/public`;
+		let url = `${serverGlobalConfig.protocol}://${serverGlobalConfig.hostname}:${serverGlobalConfig.port}/public`;
 		// サーバー起動のログに関してはSystemLoggerで使用していない色を使いたいので緑を選択
-		console.log(chalk.green(`Hosting ${targetDirs.join(", ")} on http://${serverGlobalConfig.hostname}:${serverGlobalConfig.port}`));
+		console.log(chalk.green(`Hosting ${targetDirs.join(", ")} on ${serverGlobalConfig.protocol}://${serverGlobalConfig.hostname}:${serverGlobalConfig.port}`)); // eslint-disable-line max-len
 		if (loadedPlaylogPlayId) {
-			console.log(`play(id: ${loadedPlaylogPlayId}) read playlog(path: ${path.join(process.cwd(), cmdOptions.debugPlaylog)}).`);
+			console.log(`play(id: ${loadedPlaylogPlayId}) read playlog(path: ${path.resolve(process.cwd(), cmdOptions.debugPlaylog)}).`);
 			url += `?playId=${loadedPlaylogPlayId}&mode=replay`;
 			console.log(`if access ${url}, you can show this play.`);
 		}
@@ -279,24 +358,26 @@ export async function run(argv: any): Promise<void> {
 		.usage("[options] <gamepath>")
 		.option("-p, --port <port>", `The port number to listen. default: ${serverGlobalConfig.port}`, (x => parseInt(x, 10)))
 		.option("-H, --hostname <hostname>", `The host name of the server. default: ${serverGlobalConfig.hostname}`)
-		.option("-v, --verbose", `Display detailed information on console.`)
-		.option("-A, --no-auto-start", `Wait automatic startup of contents.`)
+		.option("-v, --verbose", "Display detailed information on console.")
+		.option("-A, --no-auto-start", "Wait automatic startup of contents.")
 		.option("-s, --target-service <service>", `Simulate the specified service. arguments: ${SERVICE_TYPES}`)
-		.option("-w, --watch", `Watch directories of asset`)
+		.option("-w, --watch", "Watch directories of asset")
 		.option("--server-external-script <path>",
-			`Evaluate the given JS and assign it to Game#external of the server instances`)
-		.option("--debug-playlog <path>", `Specify path of playlog-json.`)
-		.option("--debug-untrusted", `An internal debug option`)
-		.option("--debug-proxy-audio", `An internal debug option`)
-		.option("--allow-external", `Read the URL allowing external access from sandbox.config.js`)
+			"Evaluate the given JS and assign it to Game#external of the server instances")
+		.option("--debug-playlog <path>", "Specify path of playlog-json.")
+		.option("--debug-untrusted", "An internal debug option")
+		.option("--debug-proxy-audio", "An internal debug option")
+		.option("--allow-external", "Read the URL allowing external access from sandbox.config.js")
 		.option("--no-open-browser", "Disable to open a browser window at startup")
 		.option("--preserve-disconnected", "Disable auto closing for disconnected windows.")
 		.option("--experimental-open <num>",
 			"EXPERIMENTAL: Open <num> browser windows at startup. The upper limit of <num> is 10.") // TODO: open-browser と統合
+		.option("--ssl-cert <certificatePath>", "Specify path to an SSL/TLS certificate to use HTTPS")
+		.option("--ssl-key <privatekeyPath>", "Specify path to an SSL/TLS privatekey to use HTTPS")
 		.parse(argv);
 
 	const options = commander.opts();
-	CliConfigurationFile.read(path.join(options["cwd"] || process.cwd(), "akashic.config.js"), async (error, configuration) => {
+	CliConfigurationFile.read(path.join(options.cwd || process.cwd(), "akashic.config.js"), async (error, configuration) => {
 		if (error) {
 			console.error(error);
 			process.exit(1);
@@ -317,7 +398,9 @@ export async function run(argv: any): Promise<void> {
 			openBrowser: options.openBrowser ?? conf.openBrowser,
 			preserveDisconnected: options.preserveDisconnected ?? conf.preserveDisconnected,
 			watch: options.watch ?? conf.watch,
-			experimentalOpen: options.experimentalOpen ?? conf.experimentalOpen
+			experimentalOpen: options.experimentalOpen ?? conf.experimentalOpen,
+			sslCert: options.sslCert ?? conf.sslCert,
+			sslKey: options.sslKey ?? conf.sslKey
 		};
 		await cli(cliConfigParam, options);
 	});

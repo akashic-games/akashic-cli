@@ -82,7 +82,7 @@ declare module agv {
 		addContent(content: any): void;
 		removeContent(content: any): void;
 		setViewSize(width: number, height: number): void;
-		getViewSize(): {width: number, height: number};
+		getViewSize(): {width: number; height: number};
 		registerExternalPlugin(plugin: ExternalPlugin): void;
 	}
 
@@ -98,6 +98,8 @@ declare module agv {
 		getGameVars(propertyName: string, listener: (vars: any) => void): void;
 		getGame(): agv.GameLike;
 		getGameDriver(): agv.GameDriverLike;
+		setMasterVolume(vol: number): void;
+		getMasterVolume(): number;
 	}
 
 	interface PlaylogConfig {

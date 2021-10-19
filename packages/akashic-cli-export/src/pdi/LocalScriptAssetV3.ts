@@ -1,8 +1,10 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface Window {
 	gScriptContainer: {[key: string]: Function};
 }
 
 // 本来であればv3系のg.ScriptAssetをimplementsすべきだが、ビルド時に使用しているakashic-engineはv2系なので一からクラス定義している
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 class LocalScriptAssetV3 {
 	type: string = "script";
 	script: string;

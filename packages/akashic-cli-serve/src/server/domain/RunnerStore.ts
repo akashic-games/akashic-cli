@@ -1,16 +1,14 @@
-import { Trigger } from "@akashic/trigger";
 import { AMFlowClient, RunnerManager, RunnerV1, RunnerV2, RunnerV3 } from "@akashic/headless-driver";
+import { Trigger } from "@akashic/trigger";
 import {
 	RunnerCreateTestbedEvent,
 	RunnerRemoveTestbedEvent,
 	RunnerPauseTestbedEvent,
 	RunnerResumeTestbedEvent,
-	RunnerPutStartPointTestbedEvent,
-	PutStartPointEvent
+	RunnerPutStartPointTestbedEvent
 } from "../../common/types/TestbedEvent";
 import { serverGlobalConfig } from "../common/ServerGlobalConfig";
 import * as sandboxConfigs from "./SandboxConfigs";
-import { StartPointHeader } from "../../common/types/StartPointHeader";
 
 export interface RunnerStoreParameterObject {
 	runnerManager: RunnerManager;
@@ -108,7 +106,8 @@ export class RunnerStore {
 	}
 
 	private createAllowedUrls(contentId: string, externalAssets: (string | RegExp)[] | null): (string | RegExp)[] | null {
-		let allowedUrls: (string | RegExp)[] = [`http://${serverGlobalConfig.hostname}:${serverGlobalConfig.port}/contents/${contentId}/`];
+		let allowedUrls: (string | RegExp)[] =
+			[`${serverGlobalConfig.protocol}://${serverGlobalConfig.hostname}:${serverGlobalConfig.port}/contents/${contentId}/`];
 		if (serverGlobalConfig.allowExternal) {
 			// null は全てのアクセスを許可するため、nullが指定された場合は他の値を参照せず null を返す
 			if (externalAssets === null) return null;

@@ -39,7 +39,7 @@ export class NiconicoDevtool extends React.Component<NiconicoDevtoolProps, {}> {
 
 		return <div className={styles["niconico-devtool"]}>
 			<div className={this.props.disabled ? "" : styles["hidden"]}>
-				<b>起動オプションの --target-service atsumaru が指定されている場合、このタブは無効になります。</b>
+				<b>起動オプションの --target-service atsumaru:single が指定されている場合、このタブは無効になります。</b>
 			</div>
 
 			<FlexScrollY>

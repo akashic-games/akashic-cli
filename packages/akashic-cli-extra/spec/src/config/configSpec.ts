@@ -1,6 +1,6 @@
+import * as fs from "fs";
 import * as os from "os";
 import * as path from "path";
-import * as fs from "fs";
 import * as akashicConfig from "../../../lib/config/config";
 
 describe("config module", () => {
@@ -31,42 +31,45 @@ describe("config module", () => {
 });
 
 describe("cli functions", () => {
+	const confDirPath = fs.mkdtempSync(path.join(os.tmpdir(), "akashic-cli-config"));
+	const confPath = path.join(confDirPath, ".akashicrc");
+
 	const testValidator = {
 		"test.testKey1": "^\\w*$"
 	};
 
 	it("setConfigItem", done => {
 		Promise.resolve()
-			.then(() => akashicConfig.setConfigItem(testValidator, "test.testKey1", "testValue"))
+			.then(() => akashicConfig.setConfigItem(testValidator, "test.testKey1", "testValue", confPath))
 			.then(done, done.fail);
 	});
 
 	it("getConfigItem", done => {
 		Promise.resolve()
-			.then(() => akashicConfig.setConfigItem(testValidator, "test.testKey1", "testValue"))
-			.then(() => akashicConfig.getConfigItem(testValidator, "test.testKey1"))
+			.then(() => akashicConfig.setConfigItem(testValidator, "test.testKey1", "testValue", confPath))
+			.then(() => akashicConfig.getConfigItem(testValidator, "test.testKey1", confPath))
 			.then(value => expect(value).toBe("testValue"))
 			.then(done, done.fail);
 	});
 
 	it("deleteConfigItem", done => {
 		Promise.resolve()
-			.then(() => akashicConfig.setConfigItem(testValidator, "test.testKey1", "testValue"))
-			.then(() => akashicConfig.deleteConfigItem(testValidator, "test.testKey1"))
-			.then(() => akashicConfig.getConfigItem(testValidator, "test.testKey1"))
+			.then(() => akashicConfig.setConfigItem(testValidator, "test.testKey1", "testValue", confPath))
+			.then(() => akashicConfig.deleteConfigItem(testValidator, "test.testKey1", confPath))
+			.then(() => akashicConfig.getConfigItem(testValidator, "test.testKey1", confPath))
 			.then(value => expect(value).toBeNull())
 			.then(done, done.fail);
 	});
 
 	it("listConfigItems", done => {
 		Promise.resolve()
-			.then(() => akashicConfig.setConfigItem(testValidator, "test.testKey1", "testValue"))
+			.then(() => akashicConfig.setConfigItem(testValidator, "test.testKey1", "testValue", confPath))
 			.then(() => akashicConfig.listConfigItems({
 				print: () => {},
 				error: () => {},
 				warn: () => {},
 				info: () => {}
-			}))
+			}, confPath))
 			.then(done, done.fail);
 	});
 
@@ -77,7 +80,7 @@ describe("cli functions", () => {
 				error: () => {},
 				warn: () => {},
 				info: () => {}
-			}, testValidator))
+			}, testValidator, confPath))
 			.then(done, done.fail);
 	});
 });

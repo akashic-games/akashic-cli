@@ -71,7 +71,7 @@ export class ProfilerStore {
 	pushProfilerValueResult (
 		name: ProfilerName,
 		profileValueResult: ProfilerValueResult
-	) {
+	): void {
 		const profilerData = this.profilerDataArray.find(profiler => profiler.name === name);
 		if (!profilerData) {
 			return;

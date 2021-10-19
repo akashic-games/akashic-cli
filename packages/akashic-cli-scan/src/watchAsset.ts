@@ -1,12 +1,13 @@
-import * as chokidar from "chokidar";
 import * as path from "path";
+import * as chokidar from "chokidar";
 import { scanAsset, ScanAssetParameterObject, _completeScanAssetParameterObject } from "./scanAsset";
 
-function isImageFilePath(p: string): boolean { return /.*\.(png|gif|jpg|jpeg)$/i.test(p); }
-function isAudioFilePath(p: string): boolean { return /.*\.(ogg|aac|mp4)$/i.test(p); }
-function isScriptAssetPath(p: string): boolean { return /.*\.js$/i.test(p); }
-function isTextAssetPath(p: string): boolean { return true; }  // no limitation...
-function isPackageJsonPath(p: string): boolean { return /.*[\/\\]package.json$/.test(p) || (p === "package.json"); }
+function isImageFilePath(p: string): boolean {
+	return /.*\.(png|gif|jpg|jpeg)$/i.test(p);
+}
+function isAudioFilePath(p: string): boolean {
+	return /.*\.(ogg|aac|mp4)$/i.test(p);
+}
 
 function scanAssetWithCallback(param: ScanAssetParameterObject, cb: (error: Error | null) => void): void {
 	scanAsset(param).then(() => cb(null)).catch(cb);
@@ -17,7 +18,7 @@ export function watchAsset(p: ScanAssetParameterObject, cb: (err: Error | null) 
 
 	param.logger.info("Start Watching Directories of Asset");
 	const watcher = chokidar.watch(param.cwd, { persistent: true, ignoreInitial: true, ignored: "**/node_modules/**/*" });
-	const handler = (filePath: string) => {
+	const handler = (filePath: string): void => {
 		if (
 			param.assetScanDirectoryTable.image.some(dir => filePath.indexOf(path.join(param.cwd, dir)) !== -1)
 			|| param.assetScanDirectoryTable.audio.some(dir => filePath.indexOf(path.join(param.cwd, dir)) !== -1)
@@ -28,7 +29,7 @@ export function watchAsset(p: ScanAssetParameterObject, cb: (err: Error | null) 
 			scanAssetWithCallback(param, cb);
 		}
 	};
-	const changeHandler = (filePath: string) => {
+	const changeHandler = (filePath: string): void => {
 		// スクリプトやテキストは変更してもgame.jsonに記載されている情報に影響が無いので、changeではimageアセットとaudioアセットのみ対象とする。
 		if (
 			param.assetScanDirectoryTable.image.some(dir => filePath.indexOf(path.join(param.cwd, dir)) !== -1)

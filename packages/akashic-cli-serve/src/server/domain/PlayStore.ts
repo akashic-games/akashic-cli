@@ -1,5 +1,8 @@
 import { AMFlowClient, Play, PlayManager } from "@akashic/headless-driver";
 import { Trigger } from "@akashic/trigger";
+import { TimeKeeper } from "../../common/TimeKeeper";
+import { PlayAudioState } from "../../common/types/PlayAudioState";
+import { PlayDurationState } from "../../common/types/PlayDurationState";
 import { Player } from "../../common/types/Player";
 import {
 	PlayCreateTestbedEvent,
@@ -12,10 +15,9 @@ import {
 	ClientInstanceAppearTestbedEvent,
 	ClientInstanceDisappearTestbedEvent,
 	RunnerDescription,
-	ClientInstanceDescription
+	ClientInstanceDescription,
+	PlayAudioStateChangeTestbedEvent
 } from "../../common/types/TestbedEvent";
-import { PlayDurationState } from "../../common/types/PlayDurationState";
-import { TimeKeeper } from "../../common/TimeKeeper";
 import { ServerContentLocator } from "../common/ServerContentLocator";
 import { DumpedPlaylog } from "../common/types/DumpedPlaylog";
 import { activePermission, passivePermission } from "./AMFlowPermisson";
@@ -30,12 +32,14 @@ export interface PlayEntity {
 	clientInstances: ClientInstanceDescription[];
 	runners: RunnerDescription[];
 	joinedPlayers: Player[];
+	audioState: PlayAudioState;
 }
 
 export class PlayStore {
 	onPlayCreate: Trigger<PlayCreateTestbedEvent>;
 	onPlayStatusChange: Trigger<PlayStatusChangedTestbedEvent>;
 	onPlayDurationStateChange: Trigger<PlayDurationStateChangeTestbedEvent>;
+	onPlayAudioStateChange: Trigger<PlayAudioStateChangeTestbedEvent>;
 	onPlayerJoin: Trigger<PlayerJoinTestbedEvent>;
 	onPlayerLeave: Trigger<PlayerLeaveTestbedEvent>;
 	onClientInstanceAppear: Trigger<ClientInstanceAppearTestbedEvent>;
@@ -50,6 +54,7 @@ export class PlayStore {
 		this.onPlayCreate = new Trigger<PlayCreateTestbedEvent>();
 		this.onPlayStatusChange = new Trigger<PlayStatusChangedTestbedEvent>();
 		this.onPlayDurationStateChange = new Trigger<PlayDurationStateChangeTestbedEvent>();
+		this.onPlayAudioStateChange = new Trigger<PlayAudioStateChangeTestbedEvent>();
 		this.onPlayerJoin = new Trigger<PlayerJoinTestbedEvent>();
 		this.onPlayerLeave = new Trigger<PlayerLeaveTestbedEvent>();
 		this.onClientInstanceAppear = new Trigger<ClientInstanceAppearTestbedEvent>();
@@ -61,7 +66,11 @@ export class PlayStore {
 	/**
 	 * Playを生成するが、返すものはPlayId
 	 */
-	async createPlay(loc: ServerContentLocator, playlog?: DumpedPlaylog): Promise<string> {
+	async createPlay(
+		loc: ServerContentLocator,
+		audioState: PlayAudioState = { muteType: "none" },
+		playlog?: DumpedPlaylog | null
+	): Promise<string> {
 		const playId = await this.playManager.createPlay({
 			contentUrl: loc.asAbsoluteUrl()
 		}, playlog);
@@ -70,7 +79,8 @@ export class PlayStore {
 			timeKeeper: new TimeKeeper(),
 			clientInstances: [],
 			runners: [],
-			joinedPlayers: []
+			joinedPlayers: [],
+			audioState
 		};
 
 		if (playlog) {
@@ -79,7 +89,7 @@ export class PlayStore {
 			const finishedTime = this.calculataFinishedTime(playlog);
 			timeKeeper.setTime(finishedTime);
 		}
-		this.onPlayCreate.fire({playId, contentLocatorData: loc});
+		this.onPlayCreate.fire({playId, contentLocatorData: loc, audioState});
 		this.onPlayStatusChange.fire({playId, playStatus: "running"});
 		return playId;
 	}
@@ -147,12 +157,17 @@ export class PlayStore {
 	resumePlayDuration(playId: string): void {
 		const timeKeeper = this.playEntities[playId].timeKeeper;
 		timeKeeper.start();
-		this.onPlayDurationStateChange.fire({playId, isPaused: false, duration: timeKeeper.now() });
+		this.onPlayDurationStateChange.fire({playId, isPaused: false, duration: timeKeeper.now()});
 	}
 
 	stepPlayDuration(playId: string): void {
 		const timeKeeper = this.playEntities[playId].timeKeeper;
-		this.onPlayDurationStateChange.fire({playId, isPaused: false, duration: timeKeeper.now() + 1000 / 60 });
+		this.onPlayDurationStateChange.fire({playId, isPaused: false, duration: timeKeeper.now() + 1000 / 60});
+	}
+
+	setPlayAudioState(playId: string, audioState: PlayAudioState): void {
+		this.playEntities[playId].audioState = audioState;
+		this.onPlayAudioStateChange.fire({playId, audioState});
 	}
 
 	getJoinedPlayers(playId: string): Player[] {
@@ -176,6 +191,10 @@ export class PlayStore {
 		return { duration: timeKeeper.now(), isPaused: timeKeeper.isPausing() };
 	}
 
+	getPlayAudioState(playId: string): PlayAudioState {
+		return this.playEntities[playId].audioState;
+	}
+
 	// コンテンツの終了時間をplaylogから算出する
 	private calculataFinishedTime(playlog: DumpedPlaylog): number {
 		const fps = playlog.startPoints[0].data.fps;
@@ -190,7 +209,8 @@ export class PlayStore {
 				if (pevs[j][0] === 2) { // TimestampEvent
 					const timestamp = pevs[j][3]; // Timestamp
 					// Timestamp の時刻がゲームの開始時刻より小さかった場合は相対時刻とみなす
-					replayLastTime = (timestamp < replayStartTime ? timestamp + replayStartTime : timestamp) + (replayLastAge - tick[0]) * 1000 / fps;
+					replayLastTime =
+						(timestamp < replayStartTime ? timestamp + replayStartTime : timestamp) + (replayLastAge - tick[0]) * 1000 / fps;
 					break loop;
 				}
 			}

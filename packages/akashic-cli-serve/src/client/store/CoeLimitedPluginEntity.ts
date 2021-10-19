@@ -1,5 +1,5 @@
-import { observable, action, computed } from "mobx";
 import * as pl from "@akashic/playlog";
+import { observable, action, computed } from "mobx";
 import { storage } from "./storage";
 
 export interface PlayerInfoResolverResultMessage {
@@ -61,13 +61,13 @@ export class CoeLimitedPluginEntity {
 				this.sendName(false);
 			}
 		}, 200); // 1s毎だと表示と実際の時間に若干のズレが生まれそうなので、やや間隔短めに残り時間の算出を行う
-	}
+	};
 
 	// 名前表示確認ダイアログを消す。この関数はコンテンツ側から呼ばれる想定
 	@action
 	exitLocalSession = (_sessionId: string): void => {
 		this.stopToDisplayResolver();
-	}
+	};
 
 	@action
 	stopToDisplayResolver(): void {
@@ -96,7 +96,7 @@ export class CoeLimitedPluginEntity {
 		if (this.timerId != null) {
 			this.exitLocalSession(this.sessionId);
 		}
-	}
+	};
 
 	@action
 	private calculateRemainingMilliSeconds = (limitTime: number, startingDateTime: number): void => {
@@ -104,5 +104,5 @@ export class CoeLimitedPluginEntity {
 		if (this.remainingMilliSeconds <= 0) {
 			this.remainingMilliSeconds = 0;
 		}
-	}
+	};
 }

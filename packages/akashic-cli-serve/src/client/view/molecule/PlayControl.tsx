@@ -6,6 +6,7 @@ import { ToolControlGroup } from "../atom/ToolControlGroup";
 export interface PlayControlPropsData {
 	playbackRate: number;
 	isActivePausing: boolean;
+	isActiveExists: boolean;
 	onClickReset?: () => void;
 	onClickActivePause?: (toPause: boolean) => void;
 	onClickAddInstance?: () => void;
@@ -29,6 +30,7 @@ export class PlayControl extends React.Component<PlayControlProps, {}> {
 			<ToolIconButton
 				className="external-ref_button_active-pause"
 				icon="pause_circle_filled"
+				disabled={!props.isActiveExists}
 				title={`アクティブインスタンスをポーズ${props.isActivePausing ? "解除" : ""}\r\r`
 				        + `ポーズ中は全インスタンスの進行が停止します。`}
 				pushed={props.isActivePausing}
@@ -37,7 +39,7 @@ export class PlayControl extends React.Component<PlayControlProps, {}> {
 			<ToolIconButton
 				className="external-ref_button_active-step"
 				icon="skip_next"
-				disabled={!props.isActivePausing}
+				disabled={!props.isActivePausing || !props.isActiveExists}
 				title={`アクティブインスタンスのポーズ中、プレイを1フレーム進めます。`}
 				onClick={props.onClickStep} />
 			<ToolIconButton

@@ -4,6 +4,7 @@ import { observer } from "mobx-react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
 import { ToolBar } from "../organism/ToolBar";
+import { PlayAudioStateSummary } from "../../../common/types/PlayAudioState";
 
 const store = observable({
 	realtime: true,
@@ -14,10 +15,12 @@ const store = observable({
 	duration: 380 * 1000,
 	showsAppearance: false,
 	showsDevtools: false,
+	showsAudioOptionPopover: true,
 	showsDisplayOptionPopover: false,
 	showsBackgroundImage: false,
 	showsGrid: false,
 	isActivePausing: false,
+	audioStateSummary: "all-player-unmuted" as PlayAudioStateSummary,
 	showsDesignGuideline: false
 });
 
@@ -31,6 +34,7 @@ const TestWithBehaviour = observer(() => (
 			makePlayControlProps={() => ({
 				playbackRate: 150,
 				isActivePausing: store.isActivePausing,
+				isActiveExists: true,
 				onClickReset: action("reset"),
 				onClickActivePause: (v => (store.isActivePausing = v)),
 				onClickAddInstance: action("add-instance"),
@@ -54,6 +58,14 @@ const TestWithBehaviour = observer(() => (
 				isJoined: true,
 				isJoinEnabled: store.realtime,
 				onClickJoinLeave: action("joinleave")
+			})}
+			makeAudioOptionControlProps={() => ({
+				showsAudioOptionPopover: store.showsAudioOptionPopover,
+				audioStateSummary: store.audioStateSummary,
+				onClickAudioOptionPopover: (show => store.showsAudioOptionPopover = show),
+				onClickSolo: (() => store.audioStateSummary = "only-this-player-unmuted"),
+				onClickMuteAll: (() => store.audioStateSummary = "all-player-muted"),
+				onClickMuteNone: (() => store.audioStateSummary = "all-player-unmuted")
 			})}
 			makeDisplayOptionControlProps={() => ({
 				showsDisplayOptionPopover: store.showsDisplayOptionPopover,
@@ -80,6 +92,7 @@ storiesOf("o-ToolBar", module)
 			makePlayControlProps={() => ({
 				playbackRate: 150,
 				isActivePausing: false,
+				isActiveExists: true,
 				onClickReset: action("reset"),
 				onClickActivePause: action("active-pause"),
 				onClickAddInstance: action("add-instance"),
@@ -100,6 +113,14 @@ storiesOf("o-ToolBar", module)
 				isJoined: true,
 				isJoinEnabled: false,
 				onClickJoinLeave: action("joinleave")
+			})}
+			makeAudioOptionControlProps={() => ({
+				showsAudioOptionPopover: false,
+				audioStateSummary: "only-this-player-unmuted",
+				onClickAudioOptionPopover: action("audio-option"),
+				onClickSolo: () => {},
+				onClickMuteAll: () => {},
+				onClickMuteNone: () => {}
 			})}
 			makeDisplayOptionControlProps={() => ({
 				showsDisplayOptionPopover: true,

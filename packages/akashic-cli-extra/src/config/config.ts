@@ -1,11 +1,11 @@
 import * as fs from "fs";
-import * as path from "path";
 import * as os from "os";
+import * as path from "path";
+import { Logger } from "@akashic/akashic-cli-commons";
 import * as ini from "ini";
 import * as lodashGet from "lodash.get";
 import * as lodashSet from "lodash.set";
 import * as lodashUnset from "lodash.unset";
-import { Logger } from "@akashic/akashic-cli-commons";
 
 export type StringMap = {[key: string]: string};
 
@@ -87,23 +87,23 @@ export class AkashicConfigFile {
 	}
 }
 
-export function getConfigItem(validator: StringMap, key: string): Promise<string> {
-	const config = new AkashicConfigFile(validator);
+export function getConfigItem(validator: StringMap, key: string, confPath?: string): Promise<string> {
+	const config = new AkashicConfigFile(validator, confPath);
 	return config.load().then(() => config.getItem(key));
 }
 
-export function setConfigItem(validator: StringMap, key: string, value: string): Promise<void> {
-	const config = new AkashicConfigFile(validator);
+export function setConfigItem(validator: StringMap, key: string, value: string, confPath?: string): Promise<void> {
+	const config = new AkashicConfigFile(validator, confPath);
 	return config.load().then(() => config.setItem(key, value)).then(() => config.save());
 }
 
-export function deleteConfigItem(validator: StringMap, key: string): Promise<void> {
-	const config = new AkashicConfigFile(validator);
+export function deleteConfigItem(validator: StringMap, key: string, confPath?: string): Promise<void> {
+	const config = new AkashicConfigFile(validator, confPath);
 	return config.load().then(() => config.deleteItem(key)).then(() => config.save());
 }
 
-export function listConfigItems(logger: Logger): Promise<void> {
-	const config = new AkashicConfigFile({});
+export function listConfigItems(logger: Logger, confPath?: string): Promise<void> {
+	const config = new AkashicConfigFile({}, confPath);
 	return config.load().then(() => {
 		function traverse(data: {[key: string]: any}, prefix: string = ""): void {
 			Object.keys(data).forEach(key => {
@@ -118,8 +118,8 @@ export function listConfigItems(logger: Logger): Promise<void> {
 	});
 }
 
-export function listAllConfigItems(logger: Logger, validator: StringMap): Promise<void> {
-	const config = new AkashicConfigFile({});
+export function listAllConfigItems(logger: Logger, validator: StringMap, confPath?: string): Promise<void> {
+	const config = new AkashicConfigFile({}, confPath);
 
 	return config.load().then(() =>
 		Object.keys(validator).forEach(key =>

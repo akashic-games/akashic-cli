@@ -1,0 +1,37 @@
+
+.popover {
+	position: absolute;
+	right: 0;
+}
+
+.mutebar {
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: center;
+	align-items: center;
+}
+
+.mutebar-label {
+	margin-right: 5px;
+}
+
+.mutebutton {
+	border: 1px solid silver;
+	border-radius: 0;
+	border-width: 1px;
+}
+
+.mutebutton-middle {
+	margin-left: 0;
+	margin-right: 0;
+}
+
+.mutebutton-left {
+	border-radius: 4px 0 0 4px;
+	margin-right: 0;
+}
+
+.mutebutton-right {
+	border-radius: 0 4px 4px 0;
+	margin-left: 0;
+}

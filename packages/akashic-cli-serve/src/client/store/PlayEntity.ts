@@ -1,21 +1,22 @@
-import { observable, action, ObservableMap } from "mobx";
 import * as playlog from "@akashic/playlog";
 import { Trigger } from "@akashic/trigger";
-import { Player } from "../../common/types/Player";
+import { observable, action, ObservableMap } from "mobx";
 import { TimeKeeper } from "../../common/TimeKeeper";
-import { PlayStatus } from "../../common/types/PlayStatus";
+import { PlayAudioState } from "../../common/types/PlayAudioState";
 import { PlayDurationState } from "../../common/types/PlayDurationState";
+import { Player } from "../../common/types/Player";
+import { PlayStatus } from "../../common/types/PlayStatus";
+import { StartPointHeader } from "../../common/types/StartPointHeader";
 import { RunnerDescription, ClientInstanceDescription } from "../../common/types/TestbedEvent";
-import * as ApiClient from "../api/ApiClient";
-import { socketInstance } from "../api/socketInstance";
 import { GameViewManager } from "../akashic/GameViewManager";
 import { SocketIOAMFlowClient } from "../akashic/SocketIOAMFlowClient";
-import { ExecutionMode } from "./ExecutionMode";
+import * as ApiClient from "../api/ApiClient";
+import { socketInstance } from "../api/socketInstance";
+import { CreateCoeLocalInstanceParameterObject } from "./CoePluginEntity";
 import { ContentEntity } from "./ContentEntity";
+import { ExecutionMode } from "./ExecutionMode";
 import { LocalInstanceEntity } from "./LocalInstanceEntity";
 import { ServerInstanceEntity } from "./ServerInstanceEntity";
-import { CreateCoeLocalInstanceParameterObject } from "./CoePluginEntity";
-import { StartPointHeader } from "../../common/types/StartPointHeader";
 
 export interface CreateLocalInstanceParameterObject {
 	gameViewManager: GameViewManager;
@@ -44,6 +45,7 @@ export interface PlayEntityParameterObject {
 	runners?: RunnerDescription[];
 	clientInstances?: ClientInstanceDescription[];
 	durationState?: PlayDurationState;
+	audioState?: PlayAudioState;
 	parent?: PlayEntity;
 	startPointHeaders?: StartPointHeader[];
 }
@@ -63,6 +65,7 @@ export class PlayEntity {
 	@observable joinedPlayerTable: ObservableMap;
 	@observable status: PlayStatus;
 	@observable startPointHeaders: StartPointHeader[];
+	@observable audioState: PlayAudioState;
 
 	@observable localInstances: LocalInstanceEntity[];
 	@observable serverInstances: ServerInstanceEntity[];
@@ -78,10 +81,11 @@ export class PlayEntity {
 		this.activePlaybackRate = 1;
 		this.isActivePausing = !!param.durationState && param.durationState.isPaused;
 		this.duration = param.durationState ? param.durationState.duration : 0;
-		this.clientInstances = param.clientInstances || [];
-		this.startPointHeaders = param.startPointHeaders || [];
+		this.clientInstances = param.clientInstances ?? [];
+		this.startPointHeaders = param.startPointHeaders ?? [];
 		this.joinedPlayerTable = observable.map((param.joinedPlayers || []).map(p => [p.id, p] as [string, Player]));
 		this.status = "preparing";
+		this.audioState = param.audioState ?? { muteType: "none" };
 		this.localInstances = [];
 		this.serverInstances = !param.runners ? [] : param.runners.map(desc => {
 			return new ServerInstanceEntity({ runnerId: desc.runnerId, play: this });
@@ -179,6 +183,19 @@ export class PlayEntity {
 		ApiClient.stepPlayDuration(this.playId);
 	}
 
+	muteAll(): void {
+		ApiClient.changePlayAudioState(this.playId, { muteType: "all" });
+	}
+
+	muteOthers(): void {
+		const soloPlayerId = this.localInstances[0]?.player?.id;
+		ApiClient.changePlayAudioState(this.playId, { muteType: "solo", soloPlayerId });
+	}
+
+	unmuteAll(): void {
+		ApiClient.changePlayAudioState(this.playId, { muteType: "none" });
+	}
+
 	@action
 	handlePlayerJoin(player: Player): void {
 		this.joinedPlayerTable.set(player.id, player);
@@ -214,6 +231,12 @@ export class PlayEntity {
 		if (duration != null) {
 			this._timeKeeper.setTime(duration);
 		}
+	}
+
+	@action
+	handlePlayAudioStateChange(audioState: PlayAudioState): void {
+		this.audioState = audioState;
+		this.localInstances.forEach(li => li.followPlayAudioStateChange());
 	}
 
 	@action
@@ -256,7 +279,7 @@ export class PlayEntity {
 
 	private _handleLocalInstanceStopped = (instance: LocalInstanceEntity): void => {
 		this.localInstances = this.localInstances.filter(i => i !== instance);
-	}
+	};
 
 	private _startTimeKeeper(): void {
 		this._timeKeeper.start();
@@ -272,13 +295,13 @@ export class PlayEntity {
 		}
 	}
 
-	private _handleParentTeardown = () => {
+	private _handleParentTeardown = (): void => {
 		this.teardown();
-	}
+	};
 
 	@action
 	private _handleFrame = (): void => {
 		this.duration = this._timeKeeper.now();
 		// this._timerId = setTimeout(this._handleFrame, 200);
-	}
+	};
 }

@@ -1,32 +1,58 @@
-import { InitParameterObject, completeInitParameterObject } from "./InitParameterObject";
 import { updateConfigurationFile } from "./BasicParameters";
+import { cloneTemplate } from "./cloneTemplate";
+import * as copyTemplate from "./copyTemplate";
 import { downloadTemplateIfNeeded } from "./downloadTemplate";
 import { extractZipIfNeeded } from "./extractZipIfNeeded";
-import * as copyTemplate from "./copyTemplate";
-import { showTemplateMessage } from "./showTemplateMessage";
-import { TemplateConfig } from "./TemplateConfig";
+import { InitParameterObject, completeInitParameterObject } from "./InitParameterObject";
+import { collectTemplatesNames } from "./listTemplates";
 import { readTemplateFile } from "./readTemplateFile";
-import { collectTemplatesNames, listTemplates } from "./listTemplates";
+import { showTemplateMessage } from "./showTemplateMessage";
 
-export function promiseInit(param: InitParameterObject): Promise<void> {
-	let templateConfig: TemplateConfig;
+export async function promiseInit(param: InitParameterObject): Promise<void> {
+	await completeInitParameterObject(param);
+	const m = param.type.match(/(.+):(.+)\/(.+)/) ?? [];
 
-	return Promise.resolve<void>(undefined)
-		.then(() => completeInitParameterObject(param))
-		.then(() => {
-			return collectTemplatesNames(param)
-				.then(templates => {
-					if (!templates.has(param.type)) throw new Error ("unknown template name " + param.type);
-				});
-		})
-		.then(() => extractZipIfNeeded(param))
-		.then(() => downloadTemplateIfNeeded(param))
-		.then(() => readTemplateFile(param))
-		.then((template) => { templateConfig = template; })
-		.then(() => copyTemplate.copyTemplate(templateConfig, param))
-		.then(confPath => updateConfigurationFile(confPath, param.logger, param.skipAsk))
-		.then(() => showTemplateMessage(templateConfig, param))
-		.then(() => param.logger.info("Done!"));
+	if (m[1] === "github") {
+		const owner = m[2];
+		const repo = m[3];
+		await cloneTemplate(
+			param.githubHost,
+			param.githubProtocol,
+			{
+				owner,
+				repo,
+				targetPath: param.cwd
+			},
+			param
+		);
+	} else if (m[1] === "ghe") {
+		const owner = m[2];
+		const repo = m[3];
+		await cloneTemplate(
+			param.gheHost,
+			param.gheProtocol,
+			{
+				owner,
+				repo,
+				targetPath: param.cwd
+			},
+			param
+		);
+	} else {
+		const templates = await collectTemplatesNames(param);
+		if (!templates.has(param.type)) {
+			throw new Error ("unknown template name " + param.type);
+		}
+		await extractZipIfNeeded(param);
+		await downloadTemplateIfNeeded(param);
+		const templateConfig = await readTemplateFile(param);
+
+		const confPath = await copyTemplate.copyTemplate(templateConfig, param);
+		await updateConfigurationFile(confPath, param.logger, param.skipAsk);
+		await showTemplateMessage(templateConfig, param);
+	}
+
+	param.logger.info("Done!");
 }
 
 export function init(param: InitParameterObject, cb: (err?: any) => void): void {

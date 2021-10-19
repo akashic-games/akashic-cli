@@ -35,7 +35,7 @@ export class Storage {
 	static SESSION_STORAGE_KEY: string = "aktb:config";
 
 	data: StorageData;
-	experimentalIsChildWindow = false;
+	experimentalIsChildWindow: boolean = false;
 
 	private _initializationWaiter: Promise<void>;
 

@@ -2,8 +2,8 @@ import * as path from "path";
 import * as commons from "@akashic/akashic-cli-commons";
 import * as stat from "../../../lib/stat/stat";
 
-function testWithSize(basepath: string, raw: boolean, limit?: string) {
-	const logger = new commons.ConsoleLogger({ debugLogMethod: msg => { /* do nothing */ } });
+function testWithSize(basepath: string, raw: boolean, limit?: string): Promise<void> {
+	const logger = new commons.ConsoleLogger({ debugLogMethod: _msg => { /* do nothing */ } });
 	return commons.ConfigurationFile.read(path.join(basepath, "game.json"), logger)
 		.then(game => stat.size({ logger, basepath, game, raw, limit }));
 }
@@ -127,14 +127,18 @@ describe("format stat result", () => {
 
 	it("will output following text", done => {
 		let buffer = "";
-		const logger = new commons.ConsoleLogger({ debugLogMethod: msg => { buffer += msg + "\n"; } });
+		const logger = new commons.ConsoleLogger({ debugLogMethod: msg => {
+			buffer += msg + "\n";
+		} });
 		const basepath = path.join(__dirname, "..", "..", "fixtures", "dummyGame2");
 		return commons.ConfigurationFile.read(
 			path.join(basepath, "game.json"),
 			logger
 		)
 			.then(game => stat.size({ logger, basepath, game, raw: false }))
-			.then(() => { expect(buffer).toBe(expectedText); })
+			.then(() => {
+				expect(buffer).toBe(expectedText);
+			})
 			.then(done, done.fail);
 	});
 });
@@ -156,14 +160,18 @@ describe("format stat result - maximum mp4", () => {
 
 	it("will output following text", done => {
 		let buffer = "";
-		const logger = new commons.ConsoleLogger({ quiet: true, debugLogMethod: msg => { buffer += msg + "\n"; } });
+		const logger = new commons.ConsoleLogger({ quiet: true, debugLogMethod: msg => {
+			buffer += msg + "\n";
+		} });
 		const basepath = path.join(__dirname, "..", "..", "fixtures", "dummyGame4");
 		return commons.ConfigurationFile.read(
 			path.join(basepath, "game.json"),
 			logger
 		)
 			.then(game => stat.size({ logger, basepath, game, raw: false }))
-			.then(() => { expect(buffer).toBe(expectedText); })
+			.then(() => {
+				expect(buffer).toBe(expectedText);
+			})
 			.then(done, done.fail);
 	});
 });
@@ -185,14 +193,18 @@ describe("format stat result - drop AAC", () => {
 
 	it("will output following text", done => {
 		let buffer = "";
-		const logger = new commons.ConsoleLogger({ debugLogMethod: msg => { buffer += msg + "\n"; } });
+		const logger = new commons.ConsoleLogger({ debugLogMethod: msg => {
+			buffer += msg + "\n";
+		} });
 		const basepath = path.join(__dirname, "..", "..", "fixtures", "dummyGame5");
 		return commons.ConfigurationFile.read(
 			path.join(basepath, "game.json"),
 			logger
 		)
 			.then(game => stat.size({ logger, basepath, game, raw: false }))
-			.then(() => { expect(buffer).toBe(expectedText); })
+			.then(() => {
+				expect(buffer).toBe(expectedText);
+			})
 			.then(done, done.fail);
 	});
 });

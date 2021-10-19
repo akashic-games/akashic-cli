@@ -10,24 +10,24 @@ export class LocalInstanceOperator {
 
 	previewSeekTo = (time: number): void => {
 		this.store.toolBarUiStore.previewSeekTo(time);
-	}
+	};
 
 	seekTo = (time: number): void => {
 		this.store.currentLocalInstance.setExecutionMode("replay");
 		this.store.currentLocalInstance.setTargetTime(time);
 		this.store.toolBarUiStore.endPreviewSeek();
-	}
+	};
 
 	seekToStartPoint = (frame: number): void => {
 		this.store.currentLocalInstance.setExecutionMode("replay");
 		this.store.currentLocalInstance.setFrameWithStartPoint(frame, (targetTime) => {
 			this.store.toolBarUiStore.seekTo(targetTime);
 		});
-	}
+	};
 
 	seekToStartPointOf = async (frame: number): Promise<void> => {
 		await this.resetByNearestStartPointOf({ frame }, true);
-	}
+	};
 
 	/**
 	 * 条件にもっとも近いスタートポイントでローカルインスタンスをリセットする。
@@ -36,7 +36,6 @@ export class LocalInstanceOperator {
 	 */
 	resetByNearestStartPointOf = async (opts: GetStartPointOptions, toSeek: boolean): Promise<void> => {
 		const amflow = this.store.currentLocalInstance.play.amflow;
-		const startedAt = amflow.getStartedAt();
 		const sp = await amflow.getStartPointPromise(opts);
 		if (!this.store.currentLocalInstance.isResettable)
 			return;
@@ -44,14 +43,14 @@ export class LocalInstanceOperator {
 		if (toSeek) {
 			this.seekTo(sp.timestamp - amflow.getStartedAt());
 		}
-	}
+	};
 
 	togglePause = (pause: boolean): void => {
 		this.store.currentLocalInstance.togglePause(pause);
-	}
+	};
 
 	switchToRealtime = (): void => {
 		this.store.currentLocalInstance.setExecutionMode("passive");
 		this.store.currentLocalInstance.resume();
-	}
+	};
 }

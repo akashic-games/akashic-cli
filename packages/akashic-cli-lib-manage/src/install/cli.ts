@@ -1,13 +1,18 @@
 import * as fs from "fs";
 import * as path from "path";
-import { Command } from "commander";
 import { ConsoleLogger, CliConfigurationFile, CliConfigInstall } from "@akashic/akashic-cli-commons";
+import { Command } from "commander";
 import { promiseInstall } from "./install";
 
 function cli(param: CliConfigInstall): void {
 	var logger = new ConsoleLogger({ quiet: param.quiet });
 	var installParam = {
-		moduleNames: param.args, cwd: param.cwd, plugin: param.plugin, logger: logger, link: param.link, noOmitPackagejson: !param.omitPackagejson
+		moduleNames: param.args,
+		cwd: param.cwd,
+		plugin: param.plugin,
+		logger: logger,
+		link: param.link,
+		noOmitPackagejson: !param.omitPackagejson
 	};
 	Promise.resolve()
 		.then(() => promiseInstall(installParam))
@@ -35,7 +40,7 @@ commander
 export function run(argv: string[]): void {
 	commander.parse(argv);
 	const options = commander.opts();
-	CliConfigurationFile.read(path.join(options["cwd"] || process.cwd(), "akashic.config.js"), (error, configuration) => {
+	CliConfigurationFile.read(path.join(options.cwd || process.cwd(), "akashic.config.js"), (error, configuration) => {
 		if (error) {
 			console.error(error);
 			process.exit(1);
@@ -43,12 +48,12 @@ export function run(argv: string[]): void {
 
 		const conf = configuration.commandOptions.install || {};
 		cli({
-			args: commander["args"] ?? conf.args,
-			cwd: options["cwd"] ?? conf.cwd,
-			link: options["link"] ?? conf.link,
-			quiet: options["quiet"] ?? conf.quiet,
-			plugin: options["plugin"] ?? conf.plugin,
-			omitPackagejson: options["omitPackagejson"] ?? conf.omitPackagejson
+			args: commander.args ?? conf.args,
+			cwd: options.cwd ?? conf.cwd,
+			link: options.link ?? conf.link,
+			quiet: options.quiet ?? conf.quiet,
+			plugin: options.plugin ?? conf.plugin,
+			omitPackagejson: options.omitPackagejson ?? conf.omitPackagejson
 		});
 	});
 }

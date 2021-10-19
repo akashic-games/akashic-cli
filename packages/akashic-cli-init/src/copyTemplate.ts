@@ -1,5 +1,5 @@
-import * as fs from "fs-extra";
 import * as path from "path";
+import * as fs from "fs-extra";
 import { InitParameterObject } from "./InitParameterObject";
 import { TemplateConfig, CopyListItem } from "./TemplateConfig";
 
@@ -48,7 +48,7 @@ function copyFiles(copyFiles: CopyListItem[], srcDir: string, dstDir: string, pa
 			copyFiles.forEach(file => {
 				const dest = file.dst || "";
 				if (file.src.indexOf("..") !== -1 || (dest.indexOf("..") !== -1))
-					throw(new Error("template.json has an invalid file name"));
+					throw (new Error("template.json has an invalid file name"));
 				fs.copySync(
 					path.join(srcDir, file.src),
 					path.join(dstDir, dest, file.src),
@@ -96,7 +96,7 @@ function copyAllTemplateFiles(param: InitParameterObject): Promise<void> {
 					}
 				});
 			} catch (err) {
-				reject(new Error(`failed to copy template`));
+				reject(new Error("failed to copy template"));
 				return;
 			}
 			// const gameJsonPath = path.join(dstDirPath, "game.json");

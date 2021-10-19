@@ -1,7 +1,7 @@
-import * as Prompt from "prompt";
 import { ConfigurationFile } from "@akashic/akashic-cli-commons/lib/ConfigurationFile";
 import { GameConfiguration } from "@akashic/akashic-cli-commons/lib/GameConfiguration";
 import { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
+import * as Prompt from "prompt";
 
 /**
  * game.jsonの初期値として与えるパラメータ。

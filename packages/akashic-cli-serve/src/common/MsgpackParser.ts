@@ -1,5 +1,5 @@
-import Emitter = require("component-emitter");
 import { encode, decode } from "@msgpack/msgpack";
+import Emitter = require("component-emitter");
 import { Packet, PacketType } from "socket.io-parser";
 
 class Encoder {

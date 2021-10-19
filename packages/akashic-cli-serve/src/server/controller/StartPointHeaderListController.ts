@@ -1,10 +1,9 @@
 import * as express from "express";
-import { responseError, responseSuccess } from "../common/ApiResponse";
-import { BadRequestError, NotFoundError } from "../common/ApiError";
 import { StartPointHeaderListResponseData } from "../../common/types/ApiResponse";
 import { StartPointHeader } from "../../common/types/StartPointHeader";
+import { BadRequestError, NotFoundError } from "../common/ApiError";
+import { responseSuccess } from "../common/ApiResponse";
 import { PlayStore } from "../domain/PlayStore";
-import { StartPoint } from "@akashic/amflow";
 
 export const createHandlerToGetStartPointHeaderList = (playStore: PlayStore): express.RequestHandler => {
 	return (req, res, next) => {

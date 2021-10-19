@@ -1,12 +1,13 @@
-import {PlayDurationState} from "./PlayDurationState";
-import {SandboxConfig} from "./SandboxConfig";
-import {ClientInstanceDescription, RunnerDescription} from "./TestbedEvent";
-import {Player} from "./Player";
-import {ContentLocatorData} from "./ContentLocatorData";
-import {ContentDesc} from "./ContentDesc";
-import {AppOptions} from "./AppOptions";
-import { StartPoint } from "@akashic/amflow";
+import * as amf from "@akashic/amflow";
+import { AppOptions } from "./AppOptions";
+import { ContentDesc } from "./ContentDesc";
+import { ContentLocatorData } from "./ContentLocatorData";
+import { PlayAudioState } from "./PlayAudioState";
+import { PlayDurationState } from "./PlayDurationState";
+import { Player } from "./Player";
+import { SandboxConfig } from "./SandboxConfig";
 import { StartPointHeader } from "./StartPointHeader";
+import { ClientInstanceDescription, RunnerDescription } from "./TestbedEvent";
 
 export interface ApiResponse<T> {
 	meta: {
@@ -24,6 +25,7 @@ export interface PlayApiResponseData {
 	runners: RunnerDescription[];
 	clientInstances: ClientInstanceDescription[];
 	durationState: PlayDurationState;
+	audioState: PlayAudioState;
 }
 
 export interface PlayDeleteApiResponseData {
@@ -73,7 +75,7 @@ export type StartPointHeaderListResponseData = {
 };
 
 export type StartPointResponseData = {
-	startPoint: StartPoint;
+	startPoint: amf.StartPoint;
 };
 
 export type PlayGetAllApiResponse = ApiResponse<PlayApiResponseData[]>;

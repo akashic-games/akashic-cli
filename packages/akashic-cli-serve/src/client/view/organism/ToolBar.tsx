@@ -6,6 +6,7 @@ import { ToolLabel } from "../atom/ToolLabel";
 import { PlayControl, PlayControlPropsData } from "../molecule/PlayControl";
 import { InstanceControl, InstanceControlPropsData } from "../molecule/InstanceControl";
 import { PlayerControl, PlayerControlPropsData } from "../molecule/PlayerControl";
+import { AudioOptionControl, AudioOptionControlPropsData } from "../molecule/AudioOptionControl";
 import { DisplayOptionControl, DisplayOptionControlPropsData } from "../molecule/DisplayOptionControl";
 import * as styles from "./ToolBar.css";
 
@@ -13,6 +14,7 @@ export interface ToolBarProps {
 	makePlayControlProps: () => PlayControlPropsData;
 	makeInstanceControlProps: () => InstanceControlPropsData;
 	makePlayerControlProps: () => PlayerControlPropsData;
+	makeAudioOptionControlProps: () => AudioOptionControlPropsData;
 	makeDisplayOptionControlProps: () => DisplayOptionControlPropsData;
 	showsAppearance: boolean;
 	showsDevtools: boolean;
@@ -49,6 +51,7 @@ export class ToolBar extends React.Component<ToolBarProps, {}> {
 				<ToolLabel>
 					TargetService: <b>{props.targetService}</b>
 				</ToolLabel>
+				<AudioOptionControl makeProps={props.makeAudioOptionControlProps} />
 				<DisplayOptionControl makeProps={props.makeDisplayOptionControlProps} />
 				<ToolIconButton
 					className="external-ref_button_dev-tools"

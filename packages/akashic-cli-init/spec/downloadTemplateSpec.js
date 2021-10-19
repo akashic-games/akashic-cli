@@ -1,11 +1,29 @@
 var fs = require("fs");
 var os = require("os");
 var path = require("path");
+var express = require("express");
+var getPort = require("get-port");
 var ConsoleLogger = require("@akashic/akashic-cli-commons/lib/ConsoleLogger").ConsoleLogger;
 var dt = require("../lib/downloadTemplate");
 var lt = require("../lib/listTemplates");
 
 describe("downloadTemplate.ts", () => {
+	let templateServer = null;
+	let repositoryUrl = "";
+	beforeAll(async () => {
+		const port = await getPort();
+		const app = express();
+		app.use(express.static(path.resolve(__dirname, "..")));
+		templateServer = app.listen(port);
+		repositoryUrl = `http://127.0.0.1:${port}/templates/`;
+	});
+	afterAll(() => {
+		if (templateServer) {
+			templateServer.close();
+			templateServer = null;
+			repositoryUrl = "";
+		}
+	});
 
 	describe("listTemplates()", () => {
 		it("list templates", done => {
@@ -16,7 +34,7 @@ describe("downloadTemplate.ts", () => {
 					print: s => { str = str + s + "\n"; },
 					info: s => { }
 				},
-				repository: "http://127.0.0.1:18080/templates/",
+				repository: repositoryUrl,
 				templateListJsonPath: "template-list.json",
 				type: "javascript",
 				_realTemplateDirectory: path.join(os.homedir(), ".akashic-templates")
@@ -41,7 +59,7 @@ describe("downloadTemplate.ts", () => {
 				var param = {
 					logger: new ConsoleLogger({quiet: true}),
 					_realTemplateDirectory: dir,
-					repository: "http://127.0.0.1:18080/templates/",
+					repository: repositoryUrl,
 					templateListJsonPath: "template-list.json",
 					type: "javascript",
 				};
@@ -75,7 +93,7 @@ describe("downloadTemplate.ts", () => {
 				param = {
 					logger: new ConsoleLogger({ quiet: true }),
 					_realTemplateDirectory: dir,
-					repository: "http://127.0.0.1:18080/templates/",
+					repository: repositoryUrl,
 					templateListJsonPath: "template-list.json",
 					type: "javascript",
 				};

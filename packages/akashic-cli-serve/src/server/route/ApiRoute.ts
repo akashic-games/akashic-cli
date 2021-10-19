@@ -1,27 +1,28 @@
 import * as express from "express";
 import * as socketio from "socket.io";
+import { createHandlerToBroadcast } from "../controller/BroadcastController";
 import {
 	createHandlerToCreatePlay,
 	createHandlerToGetPlays,
 	createHandlerToGetPlay,
 	createHandlerToDeletePlay,
 	createHandlerToPatchPlay,
-	createHandlerToGetPlaylog
+	createHandlerToGetPlaylog,
+	createHandlerToPatchAudioState
 } from "../controller/PlayController";
+import { createHandlerToRegisterPlayerId } from "../controller/PlayerIdController";
 import { createHandlerToCreatePlayToken } from "../controller/PlayTokenController";
-import { createHandlerToBroadcast } from "../controller/BroadcastController";
 import {
 	createHandlerToCreateRunner,
 	createHandlerToDeleteRunner,
 	createHandlerToPatchRunner
 } from "../controller/RunnerController";
+import { createHandlerToGetStartPointHeaderList } from "../controller/StartPointHeaderListController";
+import { handleToGetStartupOptions } from "../controller/StartupOptionsController";
+import { PlayerIdStore } from "../domain/PlayerIdStore";
 import { PlayStore } from "../domain/PlayStore";
 import { RunnerStore } from "../domain/RunnerStore";
 import { SocketIOAMFlowManager } from "../domain/SocketIOAMFlowManager";
-import { handleToGetStartupOptions } from "../controller/StartupOptionsController";
-import { createHandlerToRegisterPlayerId } from "../controller/PlayerIdController";
-import { PlayerIdStore } from "../domain/PlayerIdStore";
-import { createHandlerToGetStartPointHeaderList } from "../controller/StartPointHeaderListController";
 
 export interface ApiRouterParameterObject {
 	playStore: PlayStore;
@@ -43,6 +44,8 @@ export const createApiRouter = (params: ApiRouterParameterObject): express.Route
 	apiRouter.post("/plays/:playId(\\d+)/token", createHandlerToCreatePlayToken(params.amflowManager));
 	apiRouter.post("/plays/:playId(\\d+)/broadcast", createHandlerToBroadcast(params.io));
 	apiRouter.get("/plays/:playId(\\d+)/playlog", createHandlerToGetPlaylog(params.playStore));
+
+	apiRouter.patch("/plays/:playId(\\d+)/audio", createHandlerToPatchAudioState(params.playStore));
 
 	apiRouter.post("/runners", createHandlerToCreateRunner(params.playStore, params.runnerStore));
 	apiRouter.delete("/runners/:runnerId", createHandlerToDeleteRunner(params.runnerStore));

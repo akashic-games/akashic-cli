@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
-import { Command } from "commander";
 import { ConsoleLogger, CliConfigurationFile, CliConfigExportZip, SERVICE_TYPES } from "@akashic/akashic-cli-commons";
+import { Command } from "commander";
 import { promiseExportZip } from "./exportZip";
 
 var ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "..", "package.json"), "utf8")).version;
@@ -9,6 +9,11 @@ const availableServices = SERVICE_TYPES.filter(v => v !== "atsumaru");
 
 export function cli(param: CliConfigExportZip): void {
 	var logger = new ConsoleLogger({ quiet: param.quiet });
+
+	if (!param.omitEmptyJs) {
+		logger.info("deprecated: --no-omit-empty-js is now always enabled since output may be broken without this option.");
+	}
+
 	Promise.resolve()
 		.then(() => promiseExportZip({
 			bundle: param.bundle,
@@ -19,7 +24,6 @@ export function cli(param: CliConfigExportZip): void {
 			dest: param.output,
 			force: param.force,
 			hashLength: !param.hashFilename ? 0 : (param.hashFilename === true) ? 20 : Number(param.hashFilename),
-			omitEmptyJs: param.omitEmptyJs,
 			logger,
 			omitUnbundledJs: param.bundle && param.omitUnbundledJs,
 			targetService: param.targetService,
@@ -33,7 +37,6 @@ export function cli(param: CliConfigExportZip): void {
 					bundle: param.bundle,
 					babel: param.babel,
 					hashFilename: param.hashFilename,
-					omitEmptyJs: param.omitEmptyJs,
 					targetService: param.targetService || "none"
 				}
 			}
@@ -60,8 +63,8 @@ commander
 	.option("-H, --hash-filename [length]", "Rename asset files with their hash values")
 	.option("-b, --bundle", "Bundle script assets into a single file")
 	.option("--no-es5-downpile", "No convert JavaScript into es5")
-	.option("--no-omit-empty-js", "Disable omitting empty js from global assets")
-	.option("--no-omit-unbundled-js", "Unnecessary script files are included even when the `--bundle` option is specified.")
+	.option("--no-omit-empty-js", "(DEPRECATED) Changes nothing. Provided for backward compatibility")
+	.option("--no-omit-unbundled-js", "Preserve unbundled .js files (not required from root). Works with --bundle only")
 	.option("--target-service <service>", `Specify the target service of the exported content:${availableServices}`);
 
 export function run(argv: string[]): void {
@@ -70,31 +73,31 @@ export function run(argv: string[]): void {
 	commander.parse(argvCopy);
 	const options = commander.opts();
 
-	CliConfigurationFile.read(path.join(options["cwd"] || process.cwd(), "akashic.config.js"), (error, configuration) => {
+	CliConfigurationFile.read(path.join(options.cwd || process.cwd(), "akashic.config.js"), (error, configuration) => {
 		if (error) {
 			console.error(error);
 			process.exit(1);
 		}
 
-		if (options["targetService"] && !availableServices.includes(options["targetService"])) {
-			console.error("Invalid --target-service option argument: " + options["targetService"]);
+		if (options.targetService && !availableServices.includes(options.targetService)) {
+			console.error("Invalid --target-service option argument: " + options.targetService);
 			process.exit(1);
 		}
 
 		const conf = configuration.commandOptions.export ? (configuration.commandOptions.export.zip || {}) : {};
 		cli({
-			cwd: options["cwd"] ?? conf.cwd,
-			quiet: options["quiet"] ?? conf.quiet,
-			output: options["output"] ?? conf.output,
-			force: options["force"] ?? conf.force,
-			strip: options["strip"] ?? conf.strip,
-			minify: options["minify"] ?? conf.minify,
-			hashFilename: options["hashFilename"] ?? conf.hashFilename,
-			bundle: options["bundle"] ?? conf.bundle,
-			babel: options["es5Downpile"] ?? conf.babel,
-			omitEmptyJs: options["omitEmptyJs"] ?? conf.omitEmptyJs,
-			omitUnbundledJs: options["omitUnbundledJs"] ?? conf.omitUnbundledJs,
-			targetService: options["targetService"] ?? conf.targetService
+			cwd: options.cwd ?? conf.cwd,
+			quiet: options.quiet ?? conf.quiet,
+			output: options.output ?? conf.output,
+			force: options.force ?? conf.force,
+			strip: options.strip ?? conf.strip,
+			minify: options.minify ?? conf.minify,
+			hashFilename: options.hashFilename ?? conf.hashFilename,
+			bundle: options.bundle ?? conf.bundle,
+			babel: options.es5Downpile ?? conf.babel,
+			omitEmptyJs: options.omitEmptyJs ?? conf.omitEmptyJs,
+			omitUnbundledJs: options.omitUnbundledJs ?? conf.omitUnbundledJs,
+			targetService: options.targetService ?? conf.targetService
 		});
 	});
 }

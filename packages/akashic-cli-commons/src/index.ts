@@ -1,26 +1,18 @@
-import { Logger } from "./Logger";
-export { Logger };
-import { ConsoleLogger } from "./ConsoleLogger";
-export { ConsoleLogger };
-import { PromisedNpm, PromisedNpmParameterObject, NpmLsResultObject } from "./PromisedNpm";
-export { PromisedNpm, PromisedNpmParameterObject, NpmLsResultObject };
-import { NodeModules } from "./NodeModules";
-export { NodeModules };
-import { ConfigurationFile } from "./ConfigurationFile";
-export { ConfigurationFile };
-import { LibConfigurationFile } from "./LibConfigurationFile";
-export { LibConfigurationFile };
-import { Configuration, ConfigurationParameterObject } from "./Configuration";
-export { Configuration, ConfigurationParameterObject };
-import {
-	AssetConfiguration,
-	AudioSystemConfiguration,
-	Assets,
-	OperationPluginDeclaration,
-	GameConfiguration,
-	ModuleMainScripts,
-	ExportZipInfo
-} from "./GameConfiguration";
+export { CliConfigExportHtml } from "./CliConfig/CliConfigExportHtml";
+export { CliConfigExportZip } from "./CliConfig/CliConfigExportZip";
+export { CliConfigInit } from "./CliConfig/CliConfigInit";
+export { CliConfigInstall } from "./CliConfig/CliConfigInstall";
+export { CliConfigModify } from "./CliConfig/CliConfigModify";
+export { CliConfigScanAsset, CliConfigScanGlobalScripts } from "./CliConfig/CliConfigScan";
+export { CliConfigServe } from "./CliConfig/CliConfigServe";
+export { CliConfigStat } from "./CliConfig/CliConfigStat";
+export { CliConfigUninstall } from "./CliConfig/CliConfigUninstall";
+export { CliConfigUpdate } from "./CliConfig/CliConfigUpdate";
+export { CliConfiguration } from "./CliConfig/CliConfiguration";
+export { CliConfigurationFile } from "./CliConfig/CliConfigurationFile";
+export { Configuration, ConfigurationParameterObject } from "./Configuration";
+export { ConfigurationFile } from "./ConfigurationFile";
+export { ConsoleLogger } from "./ConsoleLogger";
 export {
 	AssetConfiguration,
 	AudioSystemConfiguration,
@@ -29,40 +21,13 @@ export {
 	GameConfiguration,
 	ModuleMainScripts,
 	ExportZipInfo
-};
-/* tslint:disable */  // tslintがUtilをunused variableとして誤検出するので無効化
-import * as Util from "./Util";
-export { Util };
-import * as Renamer from "./Renamer";
-export { Renamer };
-import * as LintUtil from "./LintUtil";
-export { LintUtil };
-import { ServiceType, SERVICE_TYPES } from "./ServiceType";
-export { ServiceType, SERVICE_TYPES };
-
-import { CliConfigExportHtml } from "./CliConfig/CliConfigExportHtml";
-export { CliConfigExportHtml };
-import { CliConfigExportZip } from "./CliConfig/CliConfigExportZip";
-export { CliConfigExportZip };
-import { CliConfigInit } from "./CliConfig/CliConfigInit";
-export { CliConfigInit };
-import { CliConfigInstall } from "./CliConfig/CliConfigInstall";
-export { CliConfigInstall };
-import { CliConfigModify } from "./CliConfig/CliConfigModify";
-export {CliConfigModify };
-import { CliConfigScanAsset, CliConfigScanGlobalScripts } from "./CliConfig/CliConfigScan";
-export { CliConfigScanAsset, CliConfigScanGlobalScripts };
-import { CliConfigServe } from "./CliConfig/CliConfigServe";
-export { CliConfigServe };
-import { CliConfigStat } from "./CliConfig/CliConfigStat";
-export { CliConfigStat };
-import { CliConfigUninstall } from "./CliConfig/CliConfigUninstall";
-export { CliConfigUninstall };
-import { CliConfigUpdate } from "./CliConfig/CliConfigUpdate";
-export { CliConfigUpdate };
-import { CliConfigurationFile } from "./CliConfig/CliConfigurationFile";
-export { CliConfigurationFile };
-import { CliConfiguration } from "./CliConfig/CliConfiguration";
-export { CliConfiguration };
-import { LibConfiguration } from "./LibConfiguration";
-export { LibConfiguration };
+} from "./GameConfiguration";
+export { LibConfiguration } from "./LibConfiguration";
+export { LibConfigurationFile } from "./LibConfigurationFile";
+export * as LintUtil from "./LintUtil";
+export { Logger } from "./Logger";
+export { NodeModules } from "./NodeModules";
+export { PromisedNpm, PromisedNpmParameterObject, NpmLsResultObject } from "./PromisedNpm";
+export * as Renamer from "./Renamer";
+export { ServiceType, SERVICE_TYPES } from "./ServiceType";
+export * as Util from "./Util";
