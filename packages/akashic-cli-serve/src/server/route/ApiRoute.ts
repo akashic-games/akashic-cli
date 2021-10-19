@@ -17,6 +17,7 @@ import {
 	createHandlerToDeleteRunner,
 	createHandlerToPatchRunner
 } from "../controller/RunnerController";
+import { createHandlerToGetStartPointHeaderList } from "../controller/StartPointHeaderListController";
 import { handleToGetStartupOptions } from "../controller/StartupOptionsController";
 import { PlayerIdStore } from "../domain/PlayerIdStore";
 import { PlayStore } from "../domain/PlayStore";
@@ -53,6 +54,7 @@ export const createApiRouter = (params: ApiRouterParameterObject): express.Route
 	apiRouter.get("/options", handleToGetStartupOptions);
 
 	apiRouter.post("/playerids", createHandlerToRegisterPlayerId(params.playerIdStore));
+	apiRouter.get("/plays/:playId(\\d+)/start-point-header-list", createHandlerToGetStartPointHeaderList(params.playStore));
 
 	return apiRouter;
 };

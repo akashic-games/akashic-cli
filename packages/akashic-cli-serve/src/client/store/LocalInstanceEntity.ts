@@ -1,3 +1,4 @@
+import * as amf from "@akashic/amflow";
 import {Trigger} from "@akashic/trigger";
 import {action, observable, computed} from "mobx";
 import {TimeKeeper} from "../../common/TimeKeeper";
@@ -158,6 +159,12 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 		return this._gameViewManager.getViewSize();
 	}
 
+	@computed
+	get isResettable(): boolean {
+		const gameDriver = this._serveGameContent.agvGameContent.getGameDriver();
+		return !!gameDriver._gameLoop.reset;
+	}
+
 	get gameContent(): ServeGameContent {
 		return this._serveGameContent;
 	}
@@ -175,6 +182,18 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 		this._gameViewManager.removeGameContent(this._serveGameContent);
 		this.onStop.fire(this);
 		return Promise.resolve();
+	}
+
+	/**
+	 * ローカルインスタンスの内部状態を startPoint でリセットする。
+	 * 内部状態が変化するだけで、targetTime はそのままであることに注意。
+	 * (リセット後また targetTime に向けて進行する)
+	 *
+	 * isResettable が真でない場合、何もしない。
+	 */
+	reset(startPoint: amf.StartPoint): void {
+		const gameDriver = this._serveGameContent.agvGameContent.getGameDriver();
+		gameDriver._gameLoop.reset?.(startPoint);
 	}
 
 	togglePause(pause: boolean): Promise<void> {
@@ -201,6 +220,21 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 		return Promise.resolve();
 	}
 
+	/**
+	 * 擬似ポーズ。
+	 *
+	 * 外部観測的にはポーズと同じだが、_timeKeeper だけを止めるので、インスタンスは _timeKeeper.now() まで進む。
+	 * ゲーム開始時に特定時間まで進めてポーズしたい場合に使う。
+	 * (通常ポーズではインスタンスが完全に止まるので目的の時間まで進められない)
+	 */
+	@action
+	targetTimePause(): void {
+		if (this.isPaused)
+			return;
+		this._timeKeeper.pause();
+		this.isPaused = true;
+	}
+
 	@action
 	setExecutionMode(mode: ExecutionMode): void {
 		if (this.executionMode === mode)
@@ -213,6 +247,22 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 	setTargetTime(targetTime?: number): void {
 		this._timeKeeper.setTime(targetTime);
 		this.targetTime = Math.min(this._timeKeeper.now(), this.play.duration);
+	}
+
+	@action
+	setFrameWithStartPoint(frame: number, callback: (targetTime: number) => void): void {
+		const gameDriver = this._serveGameContent.agvGameContent.getGameDriver();
+		const startedTime = this.play.amflow.getStartedAt();
+
+		// startPoint を取得後、ローカルインスタンスを startPoint を使ってリセットし、その時間までシークする
+		const getStartPointCallback = (error: Error, startPoint: amf.StartPoint): void => {
+			if (error) throw error;
+			const targetTime = startPoint.timestamp - startedTime;
+			gameDriver._gameLoop.reset(startPoint);
+			this.setTargetTime(targetTime);
+			callback(targetTime);
+		};
+		this.play.amflow.getStartPoint({ frame: frame }, action(getStartPointCallback));
 	}
 
 	@action.bound

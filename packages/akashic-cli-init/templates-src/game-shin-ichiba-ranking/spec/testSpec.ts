@@ -8,7 +8,6 @@ describe("mainScene", () => {
 			gameJsonPath: path.join(__dirname, "..", "game.json")
 		});
 		const client = await context.getGameClient();
-
 		expect(client.type).toBe("active");
 
 		const game = client.game!;
@@ -16,14 +15,11 @@ describe("mainScene", () => {
 		expect(game.height).toBe(720);
 		expect(game.fps).toBe(30);
 
-		let scene = client.game.scene()!;
+		await client.advanceUntil(() => game.scene().local !== "full-local"); // ローカル(ローディング)シーンを抜けるまで進める
+
+		const scene = client.game.scene()!;
 		expect(scene).toBeDefined();
 
-		await client.advanceUntil(() => {
-			return Object.keys(game.scene().assets).length > 0  // asset を持つ Scene まで進める
-		});
-
-		scene = game.scene()!;
 		// player, shot, se のアセットが読み込まれていることを確認
 		expect(Object.keys(scene.assets).length).toBe(3);
 		expect(scene.children.length).toBe(3);

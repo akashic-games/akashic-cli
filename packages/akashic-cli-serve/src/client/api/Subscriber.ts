@@ -12,7 +12,8 @@ import {
 	RunnerResumeTestbedEvent,
 	ClientInstanceAppearTestbedEvent,
 	ClientInstanceDisappearTestbedEvent,
-	PlayBroadcastTestbedEvent
+	PlayBroadcastTestbedEvent,
+	PutStartPointEvent
 } from "../../common/types/TestbedEvent";
 import { socketInstance } from "./socketInstance";
 
@@ -30,6 +31,7 @@ export const onClientInstanceAppear = new Trigger<ClientInstanceAppearTestbedEve
 export const onClientInstanceDisappear = new Trigger<ClientInstanceDisappearTestbedEvent>();
 export const onBroadcast = new Trigger<any>();
 export const onDisconnect = new Trigger<void>();
+export const onPutStartPoint = new Trigger<PutStartPointEvent>();
 
 const socket = socketInstance();
 socket.on("playCreate", (arg: PlayCreateTestbedEvent) => onPlayCreate.fire(arg));
@@ -46,3 +48,4 @@ socket.on("clientInstanceAppear", (arg: ClientInstanceAppearTestbedEvent) => onC
 socket.on("clientInstanceDisappear", (arg: ClientInstanceDisappearTestbedEvent) => onClientInstanceDisappear.fire(arg));
 socket.on("playBroadcast", (arg: PlayBroadcastTestbedEvent) => onBroadcast.fire(arg));
 socket.on("disconnect", () => onDisconnect.fire());
+socket.on("putStartPoint", (arg: PutStartPointEvent) => onPutStartPoint.fire(arg));

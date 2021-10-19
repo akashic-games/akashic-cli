@@ -6,6 +6,7 @@ import { PlayAudioState } from "../../common/types/PlayAudioState";
 import { PlayDurationState } from "../../common/types/PlayDurationState";
 import { Player } from "../../common/types/Player";
 import { PlayStatus } from "../../common/types/PlayStatus";
+import { StartPointHeader } from "../../common/types/StartPointHeader";
 import { RunnerDescription, ClientInstanceDescription } from "../../common/types/TestbedEvent";
 import { GameViewManager } from "../akashic/GameViewManager";
 import { SocketIOAMFlowClient } from "../akashic/SocketIOAMFlowClient";
@@ -46,6 +47,7 @@ export interface PlayEntityParameterObject {
 	durationState?: PlayDurationState;
 	audioState?: PlayAudioState;
 	parent?: PlayEntity;
+	startPointHeaders?: StartPointHeader[];
 }
 
 export class PlayEntity {
@@ -62,6 +64,7 @@ export class PlayEntity {
 	@observable clientInstances: ClientInstanceDescription[];
 	@observable joinedPlayerTable: ObservableMap;
 	@observable status: PlayStatus;
+	@observable startPointHeaders: StartPointHeader[];
 	@observable audioState: PlayAudioState;
 
 	@observable localInstances: LocalInstanceEntity[];
@@ -79,6 +82,7 @@ export class PlayEntity {
 		this.isActivePausing = !!param.durationState && param.durationState.isPaused;
 		this.duration = param.durationState ? param.durationState.duration : 0;
 		this.clientInstances = param.clientInstances ?? [];
+		this.startPointHeaders = param.startPointHeaders ?? [];
 		this.joinedPlayerTable = observable.map((param.joinedPlayers || []).map(p => [p.id, p] as [string, Player]));
 		this.status = "preparing";
 		this.audioState = param.audioState ?? { muteType: "none" };
@@ -259,6 +263,11 @@ export class PlayEntity {
 	@action
 	handleRunnerResume(): void {
 		this.isActivePausing = false;
+	}
+
+	@action
+	handleStartPointHeader(startPointHeader: StartPointHeader): void {
+		this.startPointHeaders.push(startPointHeader);
 	}
 
 	async teardown(): Promise<void> {

@@ -179,6 +179,9 @@ declare module agv {
 					_calculateProfilerValueTrigger: agv.TriggerLike;
 				};
 			};
+			// Akashic Engine v2 系以前では存在しないため optional
+			// startPoint は @akashic/amflow の StartPoint だがここでは import できないため any
+			reset?(startPoint: any): void;
 		};
 	}
 }

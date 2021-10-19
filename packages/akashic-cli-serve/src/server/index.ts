@@ -12,6 +12,7 @@ import * as express from "express";
 import * as open from "open";
 import * as socketio from "socket.io";
 import parser from "../common/MsgpackParser";
+import { PutStartPointEvent } from "../common/types/TestbedEvent";
 import { ServerContentLocator } from "./common/ServerContentLocator";
 import { serverGlobalConfig } from "./common/ServerGlobalConfig";
 import { DumpedPlaylog } from "./common/types/DumpedPlaylog";
@@ -301,6 +302,11 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 	});
 	runnerStore.onRunnerResume.add(arg => {
 		io.emit("runnerResume", arg);
+	});
+	runnerStore.onRunnerPutStartPoint.add(arg => {
+		const { playId, startPoint } = arg;
+		const startPointHeader = { frame: startPoint.frame, timestamp: startPoint.timestamp };
+		io.emit("putStartPoint", { startPointHeader, playId } as PutStartPointEvent);
 	});
 
 	let loadedPlaylogPlayId: string;

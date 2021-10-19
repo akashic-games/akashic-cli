@@ -1,4 +1,3 @@
-import * as queryString from "query-string";
 import { PlayAudioState } from "../../common/types/PlayAudioState";
 import { PlayBroadcastTestbedEvent } from "../../common/types/TestbedEvent";
 import { GameViewManager } from "../akashic/GameViewManager";
@@ -7,6 +6,7 @@ import * as Subscriber from "../api/Subscriber";
 import { RPGAtsumaruApi } from "../atsumaru/RPGAtsumaruApi";
 import { ClientContentLocator } from "../common/ClientContentLocator";
 import { createSessionParameter } from "../common/createSessionParameter";
+import { queryParameters as query } from "../common/queryParameters";
 import {ProfilerValue} from "../common/types/Profiler";
 import { PlayEntity } from "../store/PlayEntity";
 import { Store } from "../store/Store";
@@ -55,10 +55,9 @@ export class Operator {
 
 	async bootstrap(contentLocator?: ClientContentLocator): Promise<void> {
 		const store = this.store;
-		const query = queryString.parse(window.location.search);
 		let play: PlayEntity = null;
 		if (query.playId != null) {
-			play = store.playStore.plays[query.playId as string];
+			play = store.playStore.plays[query.playId];
 			if (!play) {
 				throw new Error(`play(id: ${query.playId}) is not found.`);
 			}
@@ -78,6 +77,19 @@ export class Operator {
 			});
 		}
 		await this.setCurrentPlay(play, query.mode === "replay");
+
+		if (query.mode === "replay") {
+			if (query.replayResetAge != null) {
+				await this.localInstance.resetByNearestStartPointOf({ frame: query.replayResetAge }, false);
+			}
+			if (query.replayTargetTime != null) {
+				this.localInstance.seekTo(query.replayTargetTime);
+			}
+		}
+
+		if (query.paused) {
+			store.currentLocalInstance.targetTimePause();
+		}
 	}
 
 	setCurrentPlay = async (play: PlayEntity, isReplay: boolean = false): Promise<void> => {

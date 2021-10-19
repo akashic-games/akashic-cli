@@ -13,6 +13,7 @@ import {
 	RunnerResumeTestbedEvent,
 	ClientInstanceAppearTestbedEvent,
 	ClientInstanceDisappearTestbedEvent,
+	PutStartPointEvent,
 	PlayAudioStateChangeTestbedEvent
 } from "../../common/types/TestbedEvent";
 import * as ApiClient from "../api/ApiClient";
@@ -51,29 +52,43 @@ export class PlayStore {
 		this._lastPlayId = null;
 		this._contentStore = param.contentStore;
 		this._creationWaiters = Object.create(null);
-		this._initializationWaiter = ApiClient.getPlays().then(res => {
-			const playsInfo = res.data;
-			playsInfo.forEach(playInfo => {
-				this.plays[playInfo.playId] = new PlayEntity({
-					...playInfo,
-					content: this._contentStore.findOrRegister(playInfo.contentLocatorData)
+		this._initializationWaiter = ApiClient.getPlays()
+			.then((res) => {
+				const playsInfo = res.data;
+				return Promise.all(playsInfo.map((playInfo) => {
+					return ApiClient.getStartPointHeaderList(playInfo.playId)
+						.then((res) => {
+							return {
+								playInfo,
+								startPointHeaders: res.data.startPointHeaderList
+							};
+						});
+				}));
+			})
+			.then(res => {
+				res.forEach(o => {
+					this.plays[o.playInfo.playId] = new PlayEntity({
+						...o.playInfo,
+						content: this._contentStore.findOrRegister(o.playInfo.contentLocatorData),
+						startPointHeaders: o.startPointHeaders
+					});
 				});
+				if (res.length > 0)
+					this._lastPlayId = res[res.length - 1].playInfo.playId;
+				Subscriber.onPlayCreate.add(this.handlePlayCreate);
+				Subscriber.onPlayStatusChange.add(this.handlePlayStatusChange);
+				Subscriber.onPlayDurationStateChange.add(this.handlePlayDurationStateChange);
+				Subscriber.onPlayAudioStateChange.add(this.handlePlayAudioStateChange);
+				Subscriber.onPlayerJoin.add(this.handlePlayerJoin);
+				Subscriber.onPlayerLeave.add(this.handlePlayerLeave);
+				Subscriber.onClientInstanceAppear.add(this.handleClientInstanceAppear);
+				Subscriber.onClientInstanceDisappear.add(this.handleClientInstanceDisappear);
+				Subscriber.onRunnerCreate.add(this.handleRunnerCreate);
+				Subscriber.onRunnerRemove.add(this.handleRunnerRemove);
+				Subscriber.onRunnerPause.add(this.handleRunnerPause);
+				Subscriber.onRunnerResume.add(this.handleRunnerResume);
+				Subscriber.onPutStartPoint.add(this.handlePutStartPoint);
 			});
-			if (playsInfo.length > 0)
-				this._lastPlayId = playsInfo[playsInfo.length - 1].playId;
-			Subscriber.onPlayCreate.add(this.handlePlayCreate);
-			Subscriber.onPlayStatusChange.add(this.handlePlayStatusChange);
-			Subscriber.onPlayDurationStateChange.add(this.handlePlayDurationStateChange);
-			Subscriber.onPlayAudioStateChange.add(this.handlePlayAudioStateChange);
-			Subscriber.onPlayerJoin.add(this.handlePlayerJoin);
-			Subscriber.onPlayerLeave.add(this.handlePlayerLeave);
-			Subscriber.onClientInstanceAppear.add(this.handleClientInstanceAppear);
-			Subscriber.onClientInstanceDisappear.add(this.handleClientInstanceDisappear);
-			Subscriber.onRunnerCreate.add(this.handleRunnerCreate);
-			Subscriber.onRunnerRemove.add(this.handleRunnerRemove);
-			Subscriber.onRunnerPause.add(this.handleRunnerPause);
-			Subscriber.onRunnerResume.add(this.handleRunnerResume);
-		});
 	}
 
 	assertInitialized(): Promise<void> {
@@ -179,5 +194,9 @@ export class PlayStore {
 
 	private handleRunnerResume = (e: RunnerResumeTestbedEvent): void => {
 		this.plays[e.playId].handleRunnerResume(/* e.runnerId */);  // runnerIdを扱う処理は未実装
+	};
+
+	private handlePutStartPoint = (e: PutStartPointEvent): void => {
+		this.plays[e.playId].handleStartPointHeader(e.startPointHeader);
 	};
 }

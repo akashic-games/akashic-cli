@@ -1,3 +1,4 @@
+import * as amf from "@akashic/amflow";
 import { AppOptions } from "./AppOptions";
 import { ContentDesc } from "./ContentDesc";
 import { ContentLocatorData } from "./ContentLocatorData";
@@ -5,6 +6,7 @@ import { PlayAudioState } from "./PlayAudioState";
 import { PlayDurationState } from "./PlayDurationState";
 import { Player } from "./Player";
 import { SandboxConfig } from "./SandboxConfig";
+import { StartPointHeader } from "./StartPointHeader";
 import { ClientInstanceDescription, RunnerDescription } from "./TestbedEvent";
 
 export interface ApiResponse<T> {
@@ -68,6 +70,14 @@ export interface SandboxConfigApiResponseData extends SandboxConfig {
 
 export type OptionsApiResponseData = AppOptions;
 
+export type StartPointHeaderListResponseData = {
+	startPointHeaderList: StartPointHeader[];
+};
+
+export type StartPointResponseData = {
+	startPoint: amf.StartPoint;
+};
+
 export type PlayGetAllApiResponse = ApiResponse<PlayApiResponseData[]>;
 export type PlayPostApiResponse = ApiResponse<PlayApiResponseData>;
 export type PlayDeleteApiResponse = ApiResponse<PlayDeleteApiResponseData>;
@@ -81,3 +91,4 @@ export type ContentGetAllApiResponse = ApiResponse<ContentGetApiResponseData[]>;
 export type ContentGetApiResponse = ApiResponse<ContentGetApiResponseData>;
 export type SandboxConfigApiResponse = ApiResponse<SandboxConfigApiResponseData>;
 export type OptionsApiResponse = ApiResponse<OptionsApiResponseData>;
+export type StartPointHeaderListResponse = ApiResponse<StartPointHeaderListResponseData>;

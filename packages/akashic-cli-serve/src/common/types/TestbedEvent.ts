@@ -1,7 +1,9 @@
+import * as amf from "@akashic/amflow";
 import {ContentLocatorData} from "./ContentLocatorData";
 import {PlayAudioState} from "./PlayAudioState";
 import {Player} from "./Player";
 import {PlayStatus} from "./PlayStatus";
+import {StartPointHeader} from "./StartPointHeader";
 
 export interface PlayCreateTestbedEvent {
 	playId: string;
@@ -54,6 +56,11 @@ export interface RunnerResumeTestbedEvent {
 	runnerId: string;
 }
 
+export interface RunnerPutStartPointTestbedEvent {
+	playId: string;
+	startPoint: amf.StartPoint;
+}
+
 export interface ClientInstanceDescription {
 	id: number;
 	playId: string;
@@ -72,6 +79,11 @@ export interface ClientInstanceDisappearTestbedEvent extends ClientInstanceDescr
 export interface PlayBroadcastTestbedEvent {
 	playId: string;
 	message: any;
+}
+
+export interface PutStartPointEvent {
+	playId: string;
+	startPointHeader: StartPointHeader;
 }
 
 export interface PlayAudioStateChangeTestbedEvent {

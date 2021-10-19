@@ -53,6 +53,18 @@ export class SocketIOAMFlowClient implements amflow.AMFlow {
 		}
 	}
 
+	/**
+	 * getStartPoint() の Promise 版。
+	 * SocketIOAMFlowClient独自拡張。
+	 */
+	getStartPointPromise(opts: amflow.GetStartPointOptions): Promise<amflow.StartPoint> {
+		return new Promise((resolve, reject) => {
+			this.getStartPoint(opts, (err, sp) => {
+				void (err ? reject(err) : resolve(sp));
+			});
+		});
+	}
+
 	open(playId: string, callback?: (error?: Error) => void): void {
 		this._socket.on("amflow:[tick]", this._onTick);
 		this._socket.on("amflow:[event]", this._onEvent);
