@@ -45,7 +45,6 @@ export class InstanceControl extends React.Component<InstanceControlProps, {}> {
 				value={currentTime}
 				subValue={resetTime}
 				active={props.isProgressActive}
-				showsKnob={true}
 				onChange={props.onProgressChange}
 				onCommit={props.onProgressCommit} />
 			<p className={styles["time"]}>

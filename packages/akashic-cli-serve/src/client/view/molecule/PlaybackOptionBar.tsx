@@ -105,7 +105,6 @@ export const PlaybackOptionBar = observer(function (props: PlaybackOptionBarProp
 					subValue={resetTime}
 					markerValue={startPointTime}
 					active={isProgressActive}
-					showsKnob={true}
 					onChange={onProgressChange}
 					onCommit={onProgressCommit} />
 			</div>

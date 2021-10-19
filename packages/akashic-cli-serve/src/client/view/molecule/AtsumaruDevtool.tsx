@@ -24,7 +24,6 @@ export class AtsumaruDevtool extends React.Component<AtsumaruDevtoolProps, {}> {
 				width={200}
 				max={100} value={props.volume}
 				active={props.isSeekingVolume}
-				showsKnob={true}
 				onChange={!props.disabled && props.changeVolume}
 				onCommit={!props.disabled && props.dicideVolume} />
 			{

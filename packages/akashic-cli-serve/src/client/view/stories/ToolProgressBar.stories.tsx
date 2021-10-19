@@ -20,7 +20,6 @@ const TestWithBehaviour = observer(() => (
 				<ToolProgressBar
 					max={store.max}
 					value={store.subValue}
-					showsKnob={true}
 					onChange={v => store.subValue = v}
 					onCommit={v => store.subValue = v}
 				/>
@@ -32,7 +31,6 @@ const TestWithBehaviour = observer(() => (
 				<ToolProgressBar
 					max={200}
 					value={store.max}
-					showsKnob={true}
 					onChange={v => store.max = v}
 					onCommit={v => store.max = v}
 				/>
@@ -44,7 +42,6 @@ const TestWithBehaviour = observer(() => (
 				<ToolProgressBar
 					max={store.max}
 					value={store.markerValue}
-					showsKnob={true}
 					onChange={v => store.markerValue = v}
 					onCommit={v => store.markerValue = v}
 				/>
@@ -56,7 +53,6 @@ const TestWithBehaviour = observer(() => (
 				value={store.value}
 				subValue={store.subValue}
 				markerValue={store.markerValue}
-				showsKnob={true}
 				onChange={v => store.value = v}
 				onCommit={v => store.value = v}
 			/>
@@ -67,25 +63,22 @@ const TestWithBehaviour = observer(() => (
 
 storiesOf("a-ToolProgressBar", module)
 	.add("basic", () => (
-		<ToolProgressBar width={200} max={100} value={64} showsKnob={true}
+		<ToolProgressBar width={200} max={100} value={64}
 		                 onChange={action("change")} onCommit={action("commit")} />
 	))
 	.add("active", () => (
-		<ToolProgressBar width={200} max={100} value={64} active showsKnob={true} />
+		<ToolProgressBar width={200} max={100} value={64} active />
 	))
 	.add("min", () => (
-		<ToolProgressBar width={200} max={10} value={0} showsKnob={true} />
+		<ToolProgressBar width={200} max={10} value={0} />
 	))
 	.add("max", () => (
-		<ToolProgressBar width={200} max={100} value={100} showsKnob={true} />
+		<ToolProgressBar width={200} max={100} value={100} />
 	))
 	.add("no-width", () => (
-		<ToolProgressBar max={100} value={50} showsKnob={true} />
-	))
-	.add("no-knob", () => (
-		<ToolProgressBar width={200} max={100} value={30} showsKnob={false} />
+		<ToolProgressBar max={100} value={50} />
 	))
 	.add("sub/marker", () => (
-		<ToolProgressBar width={200} max={100} value={30} subValue={50} markerValue={70} showsKnob={true} />
+		<ToolProgressBar width={200} max={100} value={30} subValue={50} markerValue={70} />
 	))
 	.add("with-behaviour", () => <TestWithBehaviour />);
