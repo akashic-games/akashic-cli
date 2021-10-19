@@ -42,6 +42,7 @@ const TestWithBehaviour = observer(() => (
 					store.realtime ? store.duration :
 					store.seeking ? store.currentTimePreview : store.currentTime,
 				duration: store.duration,
+				resetTime: 10,
 				isPaused: store.paused,
 				isProgressActive: store.seeking,
 				enableFastForward: !store.realtime,
@@ -91,6 +92,7 @@ storiesOf("o-ToolBar", module)
 			makeInstanceControlProps={() => ({
 				currentTime: 2234 * 1000,
 				duration: 7501 * 1000,
+				resetTime: 1111 * 1000,
 				isPaused: false,
 				isProgressActive: false,
 				onProgressChange: action("progress-change"),

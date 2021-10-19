@@ -59,6 +59,7 @@ export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}>
 				(devtoolUiStore.isSeeking) ? devtoolUiStore.currentTimePreview : localInstance.targetTime
 			),
 			duration: play.duration,
+			resetTime: localInstance.resetTime,
 			isPaused: localInstance.isPaused,
 			isProgressActive: devtoolUiStore.isSeeking,
 			enableFastForward: (localInstance.executionMode === "replay"),

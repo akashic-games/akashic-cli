@@ -9,6 +9,7 @@ import * as styles from "./InstanceControl.css";
 export interface InstanceControlPropsData {
 	currentTime: number;
 	duration: number;
+	resetTime: number;
 	isPaused: boolean;
 	isProgressActive?: boolean;
 	enableFastForward?: boolean;
@@ -26,7 +27,7 @@ export interface InstanceControlProps {
 export class InstanceControl extends React.Component<InstanceControlProps, {}> {
 	render(): React.ReactNode {
 		const props = this.props.makeProps();
-		const { currentTime, duration } = props;
+		const { currentTime, resetTime, duration } = props;
 		return <ToolControlGroup label="Instance">
 			<ToolIconButton
 				className="external-ref_button_pause"
@@ -40,7 +41,9 @@ export class InstanceControl extends React.Component<InstanceControlProps, {}> {
 				disabled={!props.enableFastForward} />
 			<ToolProgressBar
 				width={200}
-				max={duration} value={currentTime}
+				max={duration}
+				value={currentTime}
+				subValue={resetTime}
 				active={props.isProgressActive}
 				showsKnob={true}
 				onChange={props.onProgressChange}
