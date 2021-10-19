@@ -9,7 +9,6 @@ export interface ToolProgressBarProps {
 	markerValue?: number;
 	width?: number;
 	active?: boolean;
-	showsKnob?: boolean;
 	onChange?: (val: number) => void;
 	onCommit?: (val: number) => void;
 }
@@ -29,7 +28,6 @@ export class ToolProgressBar extends React.Component<ToolProgressBarProps, {}> {
 
 	render() {
 		const { width, max, value, subValue, markerValue, active } = this.props;
-		const showsKnob = this.props.showsKnob ?? true; // TODO: 移行措置。後でデフォルトを false にする
 		const ratio = clamp(value, 0, max) / max;
 		const subRatio = clamp((subValue ?? 0), 0, max) / max;
 		const markerRatio = (markerValue != null) ? clamp(markerValue, 0, max) / max : null;
@@ -42,7 +40,7 @@ export class ToolProgressBar extends React.Component<ToolProgressBarProps, {}> {
 					<div className={styles["bar"]} style={{ width: `${ratio * 100}%` }} />
 					{ (subRatio <= ratio) && subBar }
 					{ (markerRatio != null) && <div className={styles["marker"]} style={{ left: `calc(${markerRatio * 100}% - 4px)` }} /> }
-					{ showsKnob && <div className={styles["circle"]} style={{ left: `calc(${ratio * 100}% - 4px)` }} onMouseDown={this._onMouseDown} /> }
+					<div className={styles["circle"]} style={{ left: `calc(${ratio * 100}% - 4px)` }} onMouseDown={this._onMouseDown} />
 				</div>
 			</div>
 		);
