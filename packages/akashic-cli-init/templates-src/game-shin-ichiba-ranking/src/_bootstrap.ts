@@ -24,7 +24,6 @@ export = (originalParam: g.GameMainParameterObject) => {
 	// セッションパラメーターを受け取ってゲームを開始します
 	scene.onMessage.add((msg) => {
 		if (msg.data && msg.data.type === "start" && msg.data.parameters) {
-			const hasAtsumaru = typeof window !== "undefined" && typeof window.RPGAtsumaru !== "undefined";
 			param.sessionParameter = msg.data.parameters; // sessionParameterフィールドを追加
 			param.isAtsumaru = param.isAtsumaru || param.sessionParameter.service === "atsumaru";
 			if (msg.data.parameters.randomSeed != null) {
