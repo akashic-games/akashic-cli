@@ -24,11 +24,6 @@ npm run build
 
 ## テスト方法
 
-1. [TSLint](https://github.com/palantir/tslint "TSLint")を使ったLint
-2. [Jasmine](http://jasmine.github.io "Jasmine")を使ったテスト
-
-がそれぞれ実行されます。
-
 ```sh
 npm test
 ```
@@ -65,11 +60,43 @@ akashic-cli-init のテンプレートはローカルテンプレートディレ
 ローカルテンプレートのディレクトリは akashic-config で未設定の場合、
 `~/.akashic-templates` になります。
 
+### GitHub リポジトリからのテンプレート生成
+
+-t に `github:<owner>/<repository>` と指定することで github.com からテンプレートを生成できます。
+private repository など認証が必要な場合は `akashic config` で `init.github.protocol` を `ssh` に設定してください。
+
+```sh
+akashic config set init.github.protocol ssh # 初回のみ。認証を必要としない場合は不要。
+akashic-cli-init -t github:your-orgs/your-repo
+```
+
+また `ghe:<owner>/<repository>` と指定することで GitHub Enterprise からテンプレートを生成できます。
+GitHub Enterprise の URL は `akashic config` により設定できます。
+
+```sh
+akashic config set init.ghe.host your.company.com # 初回のみ
+akashic init -t ghe:your-orgs/your-repo
+```
+
+これらの実行には `git` コマンドが必要です。
+`git` コマンドのパスを直接指定する場合は環境変数 `GIT_BIN_PATH` に値を設定してください。
+
 ## 設定項目
 akashic-cli-init は以下の設定を利用します。設定は `akashic config` コマンドを利用して行います。
-* `init.repository`: テンプレート配信サーバのURL。空文字列の時はサーバを利用しない。デフォルトは空文字列。
-* `init.defaultTemplateType`: テンプレートの種類が省略されたときに利用するテンプレート名。デフォルトは `javascript`。
-* `init.localTemplateDirectory`: ローカルファイルシステムでテンプレートを保存する場所。デフォルトは `$HOME/.akashic-templates`。
+* `init.repository`
+  * テンプレート配信サーバのURL。空文字列の時はサーバを利用しない。デフォルトは空文字列。
+* `init.defaultTemplateType`
+  * テンプレートの種類が省略されたときに利用するテンプレート名。デフォルトは `javascript`。
+* `init.localTemplateDirectory`
+  * ローカルファイルシステムでテンプレートを保存する場所。デフォルトは `$HOME/.akashic-templates`。
+* `init.github.host`
+  * GitHub のホスト。デフォルトは `github.com`。
+* `init.github.protocol`
+  * GitHub からプロジェクトを clone する際のプロトコル。`https` または `ssh` が指定可能。デフォルトは `https`。
+* `init.ghe.host`
+  * GitHub Enterprise のホスト (e.g. `your.company.com`)。デフォルトは `undefined`。
+* `init.ghe.protocol`
+  * GitHub Enterprise からプロジェクトを clone する際のプロトコル。`https` または `ssh` が指定可能。デフォルトは `https`。
 
 ## 開発者向け
 

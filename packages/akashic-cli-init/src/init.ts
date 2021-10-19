@@ -16,6 +16,21 @@ export async function promiseInit(param: InitParameterObject): Promise<void> {
 		const owner = m[2];
 		const repo = m[3];
 		await cloneTemplate(
+			param.githubHost,
+			param.githubProtocol,
+			{
+				owner,
+				repo,
+				targetPath: param.cwd
+			},
+			param
+		);
+	} else if (m[1] === "ghe") {
+		const owner = m[2];
+		const repo = m[3];
+		await cloneTemplate(
+			param.gheHost,
+			param.gheProtocol,
 			{
 				owner,
 				repo,

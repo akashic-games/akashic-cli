@@ -12,7 +12,11 @@ describe("InitParameterObject.ts", () => {
 				configFile: new MockConfigFile({
 					"init.repository": "dummyRepositoryUrl",
 					"init.localTemplateDirectory": "dummyTemplateDirectory",
-					"init.defaultTemplateType": "dummyTemplateType"
+					"init.defaultTemplateType": "dummyTemplateType",
+					"init.github.host": "github.com",
+					"init.github.protocol": "ssh",
+					"init.ghe.host": "your.company.com",
+					"init.ghe.protocol": "https"
 				})
 			};
 			target.completeInitParameterObject(param)
@@ -22,6 +26,10 @@ describe("InitParameterObject.ts", () => {
 				expect(param.repository).toBe("dummyRepositoryUrl");
 				expect(param.localTemplateDirectory).toBe("dummyTemplateDirectory");
 				expect(param.type).toBe("dummytemplatetype");
+				expect(param.githubHost).toBe("github.com");
+				expect(param.githubProtocol).toBe("ssh");
+				expect(param.gheHost).toBe("your.company.com");
+				expect(param.gheProtocol).toBe("https");
 			})
 			.then(done, done.fail);
 		});
@@ -38,6 +46,10 @@ describe("InitParameterObject.ts", () => {
 				expect(param.repository).toBe("");
 				expect(param.localTemplateDirectory).toBe(path.join(os.homedir(), ".akashic-templates"));
 				expect(param.type).toBe("javascript");
+				expect(param.githubHost).toBe("github.com");
+				expect(param.githubProtocol).toBe("https");
+				expect(param.gheHost).toBeUndefined();
+				expect(param.gheProtocol).toBe("https");
 			})
 			.then(done, done.fail);
 		});
