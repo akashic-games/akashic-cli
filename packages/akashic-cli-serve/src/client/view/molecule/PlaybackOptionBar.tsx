@@ -18,7 +18,7 @@ export interface PlaybackOptionBarProps {
 	isActivePaused: boolean;
 	isForceResetOnSeek: boolean;
 	startPointHeaders: StartPointHeader[];
-	selectedStartPointHeaderIndex: number;
+	focusedStartPointHeaderIndex: number;
 	onClickPauseActive: (pause: boolean) => void;
 	onClickSavePlaylog: () => void;
 	onClickForceResetOnSeek: (reset: boolean) => void;
@@ -26,8 +26,6 @@ export interface PlaybackOptionBarProps {
 	onProgressCommit: (val: number) => void;
 	onClickPause: (pause: boolean) => void;
 	onClickFastForward: () => void;
-	onClickJumpBySelectedStartPoint: () => void;
-	onClickDumpSelectedStartPoint: () => void;
 }
 
 export const PlaybackOptionBar = observer(function (props: PlaybackOptionBarProps) {
@@ -42,7 +40,7 @@ export const PlaybackOptionBar = observer(function (props: PlaybackOptionBarProp
 		isActivePaused,
 		isForceResetOnSeek,
 		startPointHeaders,
-		selectedStartPointHeaderIndex,
+		focusedStartPointHeaderIndex,
 		onClickPauseActive,
 		onClickSavePlaylog,
 		onClickForceResetOnSeek,
@@ -50,12 +48,10 @@ export const PlaybackOptionBar = observer(function (props: PlaybackOptionBarProp
 		onProgressCommit,
 		onClickPause,
 		onClickFastForward,
-		onClickJumpBySelectedStartPoint,
-		onClickDumpSelectedStartPoint
 	} = props;
 
 	const startedAt = startPointHeaders[0]?.timestamp;
-	const startPoint = startPointHeaders[selectedStartPointHeaderIndex];
+	const startPoint = startPointHeaders[focusedStartPointHeaderIndex];
 	const startPointTime = (startedAt != null && startPoint != null) ? startPoint.timestamp - startedAt : null;
 
 	return <div className={styles["replay-option-bar"]}>
@@ -66,7 +62,7 @@ export const PlaybackOptionBar = observer(function (props: PlaybackOptionBarProp
 				title={`アクティブインスタンスをポーズ${isActivePaused ? "解除" : ""}\r\r`
 								+ `ポーズ中は全インスタンスの進行が停止します。`}
 				pushed={isActivePaused}
-				disabled={isActiveExists}
+				disabled={!isActiveExists}
 				pushedIcon="play_circle_filled"
 				size={18}
 				onClick={onClickPauseActive}
@@ -120,27 +116,6 @@ export const PlaybackOptionBar = observer(function (props: PlaybackOptionBarProp
 						"" + millisecondsToHms(duration)
 				}
 			</p>
-			<div className={styles["sep"]} />
-			<ToolIconButton
-				className="external-ref_button_jump"
-				icon="history"
-				size={20}
-				disabled={selectedStartPointHeaderIndex == null}
-				title={"選択されたスナップショットでジャンプします"}
-				onClick={onClickJumpBySelectedStartPoint}
-			>
-				Jump
-			</ToolIconButton>
-			<ToolIconButton
-				className="external-ref_button_dump-snapshot"
-				icon="web_asset"
-				size={20}
-				disabled={selectedStartPointHeaderIndex == null}
-				title={"選択されたスナップショットでジャンプします"}
-				onClick={onClickDumpSelectedStartPoint}
-			>
-				console.log()
-			</ToolIconButton>
 		</div>
 	</div>;
 });

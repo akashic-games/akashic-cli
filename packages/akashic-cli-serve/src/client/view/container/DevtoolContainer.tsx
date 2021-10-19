@@ -102,7 +102,7 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 			}}
 			playbackDevtoolProps={{
 				startPointHeaders: play.startPointHeaders,
-				selectedStartPointHeaderIndex: devtoolUiStore.selectedStartPointHeaderIndex,
+				focusedStartPointHeaderIndex: devtoolUiStore.focusedStartPointHeaderIndex,
 				currentTime: (
 					(localInstance.executionMode !== "replay") ? play.duration :
 					(devtoolUiStore.isSeeking) ? devtoolUiStore.currentTimePreview : localInstance.targetTime
@@ -122,10 +122,9 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 				onProgressCommit: operator.localInstance.seekTo,
 				onClickPause: operator.localInstance.togglePause,
 				onClickFastForward: operator.localInstance.switchToRealtime,
-				onClickJumpBySelectedStartPoint: operator.localInstance.resetToStartPointSelectedInDevtool,
-				onClickDumpSelectedStartPoint: operator.devtool.dumpSelectedStartPoint,
-				onClickStartPoint: operator.devtool.selectStartPointHeader,
-				onDoubleClikStartPoint: operator.localInstance.resetToStartPointOfIndex
+				onHoverStartPoint: operator.devtool.setHoveredStartPointIndex,
+				onJumpWithStartPoint: operator.localInstance.resetToStartPointOfIndex,
+				onDumpStartPoint: operator.devtool.dumpStartPointOfIndex
 			}}
 		/>;
 	}

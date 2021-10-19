@@ -20,15 +20,14 @@ export class DevtoolOperator {
 		this.store.devtoolUiStore.toggleForceResetOnSeek(pauses);
 	}
 
-	selectStartPointHeader = (index: number): void => {
-		this.store.devtoolUiStore.setSelectedStartPointHeaderIndex(index);
+	setHoveredStartPointIndex = (index: number, hover: boolean): void => {
+		this.store.devtoolUiStore.setFocusedStartPointHeaderIndex(hover ? index : null);
 	}
 
-	dumpSelectedStartPoint = (): Promise<void> => {
-		// TODO amflow-util の PromisifiedAMFlow 使う？
+	dumpStartPointOfIndex = (index: number): Promise<void> => {
 		return new Promise((resolve, reject) => {
 			const { currentPlay, devtoolUiStore } = this.store;
-			const frame = currentPlay?.startPointHeaders[devtoolUiStore.selectedStartPointHeaderIndex]?.frame;
+			const frame = currentPlay?.startPointHeaders[index]?.frame;
 			if (frame == null) {
 				reject();
 				return;

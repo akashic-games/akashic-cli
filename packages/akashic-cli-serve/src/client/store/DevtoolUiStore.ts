@@ -26,7 +26,7 @@ export class DevtoolUiStore {
 	// storage に保存しないもの - playback
 	@observable isSeeking: boolean;
 	@observable currentTimePreview: number;
-	@observable selectedStartPointHeaderIndex: number | null;
+	@observable focusedStartPointHeaderIndex: number | null;
 	// storage に保存しないもの - entity
 	@observable isSelectingEntity: boolean;
 	@observable selectedEntityId: number | null;
@@ -52,7 +52,7 @@ export class DevtoolUiStore {
 		this.showsHiddenEntity = storage.data.showsHiddenEntity;
 		this.isSeeking = false;
 		this.currentTimePreview = 0;
-		this.selectedStartPointHeaderIndex = null;
+		this.focusedStartPointHeaderIndex = null;
 		this.isSelectingEntity = false;
 		this.selectedEntityId = null;
 		this.entityTrees = [];
@@ -118,8 +118,8 @@ export class DevtoolUiStore {
 	}
 
 	@action
-	setSelectedStartPointHeaderIndex(index: number | null): void {
-		this.selectedStartPointHeaderIndex = index;
+	setFocusedStartPointHeaderIndex(index: number | null): void {
+		this.focusedStartPointHeaderIndex = index;
 	}
 
 	@action

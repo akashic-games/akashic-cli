@@ -54,7 +54,7 @@ const nicoProps: NiconicoDevtoolProps = {
 
 const dummyPlaybackDevtoolProps: PlaybackDevtoolProps = {
 	startPointHeaders: [],
-	selectedStartPointHeaderIndex: null,
+	focusedStartPointHeaderIndex: null,
 	currentTime: 10,
 	duration: 100,
 	resetTime: 0,
@@ -71,10 +71,9 @@ const dummyPlaybackDevtoolProps: PlaybackDevtoolProps = {
 	onProgressCommit: action("progress-commit"),
 	onClickPause: action("click-pause"),
 	onClickFastForward: action("click-fastforward"),
-	onClickJumpBySelectedStartPoint: action("click-jump-by-selected-snapshot"),
-	onClickDumpSelectedStartPoint: action("click-dump-selected-startpoint"),
-	onClickStartPoint: action("click-startpoint"),
-	onDoubleClikStartPoint: action("doubleclick-startpoint")
+	onHoverStartPoint: action("hover-startpoint"),
+	onJumpWithStartPoint: action("jump-startpoint"),
+	onDumpStartPoint: action("doubleclick-startpoint")
 };
 
 function createFilledRectDumpItem(id: number, cssColor: string = "black"): EDumpItem {
@@ -241,7 +240,7 @@ const TestWithBehaviour = observer(() => (
 				{frame: 300, timestamp: 1627467458813},
 				{frame: 450, timestamp: 1627467463814}
 			],
-			selectedStartPointHeaderIndex: store.selectedStartPointIndex,
+			focusedStartPointHeaderIndex: store.selectedStartPointIndex,
 			currentTime: store.currentTime,
 			duration: store.duration,
 			resetTime: store.resetTime,
@@ -261,10 +260,9 @@ const TestWithBehaviour = observer(() => (
 			}),
 			onClickPause: (v => store.isPaused = v),
 			onClickFastForward: (() => store.isReplay = false),
-			onClickJumpBySelectedStartPoint: action("click-jump-by-selected-startpoint"),
-			onClickDumpSelectedStartPoint: action("click-dump-selected-startpoint"),
-			onClickStartPoint: (v => store.selectedStartPointIndex = v),
-			onDoubleClikStartPoint: action("doubleclick-startpoint")
+			onHoverStartPoint: ((v, hovers) => store.selectedStartPointIndex = hovers ? v : null),
+			onJumpWithStartPoint: action("jump-startpoint"),
+			onDumpStartPoint: action("dump-startpoint")
 		}}
 	/>
 ));

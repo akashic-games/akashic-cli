@@ -41,11 +41,6 @@ export class LocalInstanceOperator {
 		await this.resetByNearestStartPointOf({ frame: sps[index].frame }, true);
 	}
 
-	resetToStartPointSelectedInDevtool = async (): Promise<void> => {
-		const index = this.store.devtoolUiStore.selectedStartPointHeaderIndex;
-		await this.resetToStartPointOfIndex(index);
-	}
-
 	/**
 	 * 条件にもっとも近いスタートポイントでローカルインスタンスをリセットする。
 	 * toSeek が真なら、さらにリセットした時点にシークする。

@@ -7,20 +7,21 @@ import { FlexScrollY } from "../atom/FlexScrollY";
 import { PlaybackOptionBar, PlaybackOptionBarProps } from "./PlaybackOptionBar";
 import * as styles from "./PlaybackDevtool.css";
 import { millisecondsToHms, timeValueToString } from "../../common/DateUtil";
+import { ToolIconButton } from "../atom/ToolIconButton";
 
 export interface PlaybackDevtoolProps extends PlaybackOptionBarProps {
 	startPointHeaders: StartPointHeader[];
-	selectedStartPointHeaderIndex: number;
-	onClickStartPoint: (index: number) => void;
-	onDoubleClikStartPoint: (idnex: number) => void;
+	onHoverStartPoint: (index: number, hover: boolean) => void;
+	onJumpWithStartPoint: (index: number) => void;
+	onDumpStartPoint: (index: number) => void;
 }
 
 export const PlaybackDevtool = observer(function(props: PlaybackDevtoolProps) {
 	const {
 		startPointHeaders,
-		selectedStartPointHeaderIndex,
-		onClickStartPoint,
-		onDoubleClikStartPoint
+		onHoverStartPoint,
+		onJumpWithStartPoint,
+		onDumpStartPoint
 	} = props;
 
 	return <div className={styles["playback-devtool"]}>
@@ -29,9 +30,11 @@ export const PlaybackDevtool = observer(function(props: PlaybackDevtoolProps) {
 			<table className={styles["startpoint-table"]}>
 				<thead>
 					<tr>
+						<th className={styles["shrank"]}></th>
 						<th>Age</th>
 						<th>Time (milliseconds)</th>
 						<th>Timestamp (time value)</th>
+						<th className={styles["shrank"]}></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -42,18 +45,38 @@ export const PlaybackDevtool = observer(function(props: PlaybackDevtoolProps) {
 							const time = timestamp - startedAt;
 							return <tr
 								key={frame}
-								className={(i === selectedStartPointHeaderIndex) ? styles["active"] : ""}
-								onClick={() => onClickStartPoint(i)}
-								onDoubleClick={() => onDoubleClikStartPoint(i)}
+								onMouseEnter={() => onHoverStartPoint(i, true)}
+								onMouseLeave={() => onHoverStartPoint(i, false)}
+								onDoubleClick={() => onJumpWithStartPoint(i)}
 							>
+								<td className={styles["shrank"]}>
+									<ToolIconButton
+										icon="play_arrow"
+										size={18}
+										title="このスナップショットでゲーム状態をリセットします"
+										onClick={() => onJumpWithStartPoint(i)}
+									>
+									</ToolIconButton>
+								</td>
 								<td>{ frame }</td>
 								<td>
 									{ millisecondsToHms(time) }
-									<span className={styles["rawvalue"]}>({ time })</span>
+									<span className={styles["raw-value"]}>({ time.toFixed(3) })</span>
 								</td>
 								<td>
 									{ timeValueToString(timestamp) }
-									<span className={styles["rawvalue"]}>({ timestamp })</span>
+									<span className={styles["raw-value"]}>({ timestamp.toFixed(3) })</span>
+								</td>
+								<td className={styles["shrank"]}>
+									<ToolIconButton
+										className="external-ref_button_dump-snapshot"
+										icon="web_asset"
+										size={18}
+										title={"このスナップショットをコンソールにダンプします"}
+										onClick={() => onDumpStartPoint(i)}
+									>
+										console.log()
+									</ToolIconButton>
 								</td>
 							</tr>;
 						})
