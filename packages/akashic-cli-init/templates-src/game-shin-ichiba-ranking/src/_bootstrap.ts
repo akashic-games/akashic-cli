@@ -12,6 +12,7 @@ export = (originalParam: g.GameMainParameterObject) => {
 	// セッションパラメーター
 	param.sessionParameter = {};
 	// コンテンツが動作している環境がゲームアツマール上かどうか
+	// マルチプレイのアツマール環境はセッションパラメータでしか判定できないため、 `onMessage` ハンドラで正しい判定結果が代入される
 	param.isAtsumaru = typeof window !== "undefined" && typeof window.RPGAtsumaru !== "undefined";
 	// 乱数生成器
 	param.random = g.game.random;
@@ -25,6 +26,7 @@ export = (originalParam: g.GameMainParameterObject) => {
 	scene.onMessage.add((msg) => {
 		if (msg.data && msg.data.type === "start" && msg.data.parameters) {
 			param.sessionParameter = msg.data.parameters; // sessionParameterフィールドを追加
+			param.isAtsumaru = param.isAtsumaru || param.sessionParameter.service === "atsumaru";
 			if (msg.data.parameters.randomSeed != null) {
 				param.random = new g.XorshiftRandomGenerator(msg.data.parameters.randomSeed);
 			}
