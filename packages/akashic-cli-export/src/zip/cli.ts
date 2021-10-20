@@ -63,7 +63,7 @@ commander
 	.option("-o, --output <fileName>", "Name of output file (default: game.zip)")
 	.option("-f, --force", "Overwrites existing files")
 	.option("-S, --no-strip", "output fileset without strip")
-	.option("-M, --minify", "(DEPRECATED) Minify JavaScript files")
+	.option("-M, --minify", "(DEPRECATED: use --minify-js) Minify JavaScript files")
 	.option("-H, --hash-filename [length]", "Rename asset files with their hash values")
 	.option("-b, --bundle", "Bundle script assets into a single file")
 	.option("--no-es5-downpile", "No convert JavaScript into es5")
