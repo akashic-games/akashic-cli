@@ -73,7 +73,10 @@ export class ToolProgressBar extends React.Component<ToolProgressBarProps, {}> {
 					{ (subRatio > ratio) && subBar }
 					<div className={styles["bar"]} style={{ width: `${ratio * 100}%` }} />
 					{ (subRatio <= ratio) && subBar }
-					{ (markerRatio != null) && <div className={styles["marker"]} style={{ left: `calc(${markerRatio * 100}% - 4px)` }} /> }
+					{
+						// 4px ずらすのは CSS に由来。.marker の定義を参照のこと。
+						(markerRatio != null) && <div className={styles["marker"]} style={{ left: `calc(${markerRatio * 100}% - 4px)` }} />
+					}
 					<div className={styles["circle"]} style={{ left: `calc(${ratio * 100}% - 4px)` }} onMouseDown={this._onMouseDown} />
 				</div>
 			</div>
