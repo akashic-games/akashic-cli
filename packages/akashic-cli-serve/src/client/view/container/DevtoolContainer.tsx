@@ -112,7 +112,7 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 				isPaused: localInstance.isPaused,
 				isProgressActive: devtoolUiStore.isSeeking,
 				isReplay: (localInstance.executionMode === "replay"),
-				isActiveExists: true, // TODO
+				isActiveExists: play.status === "running", // NOTE: 現実装に依存した実装。概念的には play.status とは独立な判定が必要
 				isActivePaused: play.isActivePausing,
 				isForceResetOnSeek: devtoolUiStore.isForceResetOnSeek,
 				onClickPauseActive:operator.play.togglePauseActive,
