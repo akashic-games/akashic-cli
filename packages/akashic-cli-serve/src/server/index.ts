@@ -149,6 +149,21 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 	}
 
 	const targetDirs: string[] = cliConfigParam.targetDirs;
+	const versionsJson = require("./engineFilesVersion.json");
+	console.log("The versions of engine-files used by akashic-cli-serve is as follows.");
+	["v1", "v2", "v3"].forEach(v => console.log(`* ${v}: ${versionsJson[v]["version"]}`));
+	targetDirs.forEach(dir => {
+		const contentPath = path.join(dir, "game.json");
+		if (!fs.existsSync(contentPath)) {
+			getSystemLogger().error(`Not found :${contentPath}`);
+			process.exit(1);
+		}
+		const gameJson = require(contentPath);
+		const engineVersion = gameJson["environment"]["sandbox-runtime"] ?? "1";
+		const engineFilesVersion = versionsJson[`v${engineVersion}`]["version"];
+		console.log(`Content(path: ${contentPath}) uses engine-files v${engineVersion}(${engineFilesVersion}).`);
+	});
+
 	const playManager = new PlayManager();
 	const runnerManager = new RunnerManager(playManager);
 	const playStore = new PlayStore({ playManager });
