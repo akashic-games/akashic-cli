@@ -2,8 +2,6 @@ import * as React from "react";
 import { observer } from "mobx-react";
 import { StartPointHeader } from "../../../common/types/StartPointHeader";
 import { FlexScrollY } from "../atom/FlexScrollY";
-// TODO コンポーネントごと削除
-// import { ToolSnapshotButton } from "../atom/ToolSnapshotButton";
 import { PlaybackOptionBar, PlaybackOptionBarProps } from "./PlaybackOptionBar";
 import * as styles from "./PlaybackDevtool.css";
 import { millisecondsToHms, timeValueToString } from "../../common/DateUtil";
