@@ -3,13 +3,47 @@ import { observer } from "mobx-react";
 import * as styles from "./ToolProgressBar.css";
 
 export interface ToolProgressBarProps {
+	/**
+	 * 最大値。
+	 */
 	max: number;
+
+	/**
+	 * 現在値。
+	 */
 	value: number;
+
+	/**
+	 * 補助的に表示する値。
+	 * 指定した場合、 (ドラッグ可能であることを示すノブ部分を持たない) 色だけのゲージで描画される。
+	 */
 	subValue?: number;
+
+	/**
+	 * マーカーの値。
+	 * 指定した場合、プログレスバーの下部の当該の値にあたる箇所に三角形のマーカーが描画される。
+	 */
 	markerValue?: number;
+
+	/**
+	 * 幅 (px)。
+	 */
 	width?: number;
+
+	/**
+	 * アクティブな状態として描画するか。
+	 * ドラッグ操作などで `value` を変化させている間などに真であることを期待する値。
+	 */
 	active?: boolean;
+
+	/**
+	 * ノブを操作した時 (ドラッグなど) に通知されるハンドラ。
+	 */
 	onChange?: (val: number) => void;
+
+	/**
+	 * ノブの操作が完了 (ドロップなど) して、値が確定した時に通知されるハンドラ。
+	 */
 	onCommit?: (val: number) => void;
 }
 
