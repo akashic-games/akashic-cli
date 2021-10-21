@@ -1,6 +1,6 @@
 import * as fs from "fs";
-import * as path from "path";
 import * as os from "os";
+import * as path from "path";
 import * as cmn from "@akashic/akashic-cli-commons";
 import archiver = require("archiver");
 import readdir = require("fs-readdir-recursive");
@@ -10,13 +10,14 @@ export interface ExportZipParameterObject {
 	bundle?: boolean;
 	babel?: boolean;
 	minify?: boolean;
+	minifyJs?: boolean;
+	minifyJson?: boolean;
 	strip?: boolean;
 	source?: string;
 	dest?: string;
 	force?: boolean;
 	logger?: cmn.Logger;
 	hashLength?: number;
-	omitEmptyJs?: boolean;
 	exportInfo?: cmn.ExportZipInfo;
 	omitUnbundledJs?: boolean;
 	targetService?: cmn.ServiceType;
@@ -29,9 +30,10 @@ function _createExportInfo(param: ExportZipParameterObject): cmn.ExportZipInfo {
 			force: !!param.force,
 			strip: !!param.strip,
 			minify: !!param.minify,
+			minifyJs: !!param.minifyJs,
+			minifyJson: !!param.minifyJson,
 			bundle: !!param.bundle,
 			babel: !!param.babel,
-			omitEmptyJs: !!param.omitEmptyJs,
 			targetService: param.targetService || "none"
 		}
 	};
@@ -42,13 +44,14 @@ export function _completeExportZipParameterObject(param: ExportZipParameterObjec
 		bundle: !!param.bundle,
 		babel: !!param.babel,
 		minify: !!param.minify,
+		minifyJs: !!param.minifyJs,
+		minifyJson: !!param.minifyJson,
 		strip: !!param.strip,
 		source: param.source || process.cwd(),
 		dest: param.dest || "./game.zip",
 		force: !!param.force,
 		logger: param.logger || new cmn.ConsoleLogger(),
 		hashLength: param.hashLength,
-		omitEmptyJs: param.omitEmptyJs,
 		exportInfo: param.exportInfo || _createExportInfo(param),
 		omitUnbundledJs: param.omitUnbundledJs,
 		targetService: param.targetService || "none"
@@ -58,7 +61,7 @@ export function _completeExportZipParameterObject(param: ExportZipParameterObjec
 // TODO akashic-cli-commons に移して export html と実装を共有する
 export function _checkDestinationValidity(dest: string, force: boolean): Promise<void> {
 	return new Promise<void>((resolve, reject) => {
-		fs.stat(path.resolve(dest), (error: any, stat: any) => {
+		fs.stat(path.resolve(dest), (error: any, _stat: any) => {
 			if (error) {
 				if (error.code === "ENOENT") {
 					resolve();
@@ -86,11 +89,12 @@ export function promiseExportZip(param: ExportZipParameterObject): Promise<void>
 				bundle: param.bundle,
 				babel: param.babel,
 				minify: param.minify,
+				minifyJs: param.minifyJs,
+				minifyJson: param.minifyJson,
 				strip: param.strip,
 				source: param.source,
 				dest: destDir,
 				hashLength: param.hashLength,
-				omitEmptyJs: param.omitEmptyJs,
 				logger: param.logger,
 				exportInfo: param.exportInfo,
 				omitUnbundledJs: param.omitUnbundledJs,

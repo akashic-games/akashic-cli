@@ -4,6 +4,8 @@ import {storage} from "./storage";
 export class ToolBarUiStore {
 	@observable showsAppearanceMenu: boolean;
 	@observable showsDevtools: boolean;
+	@observable showsAudioOptionPopover: boolean;
+
 	@observable showsDisplayOptionPopover: boolean;
 	@observable showsBackgroundImage: boolean;
 	@observable showsGrid: boolean;
@@ -13,6 +15,7 @@ export class ToolBarUiStore {
 	constructor() {
 		this.showsAppearanceMenu = false;
 		this.showsDevtools = storage.data.showsDevtools;
+		this.showsAudioOptionPopover = false;
 		this.showsDisplayOptionPopover = false;
 		this.showsBackgroundImage = storage.data.showsBackgroundImage;
 		this.showsGrid = storage.data.showsGrid;
@@ -29,6 +32,11 @@ export class ToolBarUiStore {
 	setShowDevtools(show: boolean): void {
 		this.showsDevtools = show;
 		storage.put({ showsDevtools: show });
+	}
+
+	@action
+	setShowAudioOptionPopover(show: boolean): void {
+		this.showsAudioOptionPopover = show;
 	}
 
 	@action

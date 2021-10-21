@@ -1,4 +1,3 @@
-import { StartPoint } from "@akashic/amflow";
 import * as Subscriber from "../api/Subscriber";
 import { Store } from "../store/Store";
 
@@ -16,11 +15,11 @@ export class PlayOperator {
 		} else {
 			this.store.currentPlay.resumeActive();
 		}
-	}
+	};
 
 	step = (): void => {
 		this.store.currentPlay.stepActive();
-	}
+	};
 
 	toggleJoinLeaveSelf = (toJoin: boolean): void => {
 		const player = this.store.player;
@@ -29,7 +28,7 @@ export class PlayOperator {
 		} else {
 			this.store.currentPlay.leave(this.store.player.id);
 		}
-	}
+	};
 
 	openNewClientInstance = (): void => {
 		let restoreData;
@@ -54,7 +53,7 @@ export class PlayOperator {
 			"_blank",
 			`width=${width},height=${height},top=${top},left=${left}`
 		);
-	}
+	};
 
 	closeThisWindowIfNeeded = (): void => {
 		if (this.store.appOptions.preserveDisconnected)  return;
@@ -62,14 +61,14 @@ export class PlayOperator {
 		if (window.opener) {
 			window.close();
 		}
-	}
+	};
 
 	sendRegisteredEvent = (eventName: string): void => {
 		const sandboxConfig = this.store.currentLocalInstance.content.sandboxConfig || {};
 		const pevs = sandboxConfig.events[eventName];
 		const amflow = this.store.currentPlay.amflow;
 		pevs.forEach((pev: any) => amflow.enqueueEvent(pev));
-	}
+	};
 
 	sendEditorEvent = (): void => {
 		// TODO: 入力された JSON が不正な値の場合に Send ボタンを disabled にし、このパスでは正常な値が取れるようにする。
@@ -82,9 +81,21 @@ export class PlayOperator {
 		}
 		const amflow = this.store.currentPlay.amflow;
 		pevs.forEach((pev: any) => amflow.enqueueEvent(pev));
-	}
+	};
 
 	downloadPlaylog = (): void => {
 		location.href = `/api/plays/${this.store.currentPlay.playId}/playlog`;
-	}
+	};
+
+	muteAll = (): void => {
+		this.store.currentPlay.muteAll();
+	};
+
+	muteOthers = (): void => {
+		this.store.currentPlay.muteOthers();
+	};
+
+	unmuteAll = (): void => {
+		this.store.currentPlay.unmuteAll();
+	};
 }

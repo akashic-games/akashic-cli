@@ -1,6 +1,7 @@
 import * as amf from "@akashic/amflow";
 import { Trigger } from "@akashic/trigger";
 import { EDumpItem } from "../common/types/EDumpItem";
+import { ProfilerValue } from "../common/types/Profiler";
 
 function getMatrixFromRoot(e: ae.ELike | null, camera: ae.CameraLike | null): ae.MatrixLike | null {
 	if (!e || !e.getMatrix)
@@ -156,5 +157,17 @@ export class ServeGameContent {
 		const game = this._game;
 		const pointSource = game.scene().findPointSourceByPoint({ x, y }, true, game.focusingCamera);
 		return (pointSource && pointSource.target) ? pointSource.target.id : null;
+	}
+
+	setProfilerValueTrigger(cb: (value: ProfilerValue) => void): void {
+		const gameDriver = this.agvGameContent.getGameDriver();
+		if (!gameDriver) {
+			this.agvGameContent.addContentLoadListener(() => this.setProfilerValueTrigger(cb));
+			return;
+		}
+
+		// 全体的に内部プロパティなので、存在しない場合に備えて ?. をつけておく。
+		// 特に _gameLoop は実際に存在しない場合がある (--debug-untrusted) 。
+		gameDriver._gameLoop?._clock?._profiler?._calculateProfilerValueTrigger?.add(cb);
 	}
 }

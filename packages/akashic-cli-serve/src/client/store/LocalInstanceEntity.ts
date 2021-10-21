@@ -1,20 +1,20 @@
-import {action, observable, computed} from "mobx";
-import {Trigger} from "@akashic/trigger";
 import * as amf from "@akashic/amflow";
+import {Trigger} from "@akashic/trigger";
+import {action, observable, computed} from "mobx";
 import {TimeKeeper} from "../../common/TimeKeeper";
+import {PlayAudioStateSummary} from "../../common/types/PlayAudioState";
 import {Player} from "../../common/types/Player";
-import * as ApiRequest from "../api/ApiRequest";
 import {GameViewManager} from "../akashic/GameViewManager";
 import {ServeGameContent} from "../akashic/ServeGameContent";
-import {PlayEntity} from "./PlayEntity";
-import {CoePluginEntity, CreateCoeLocalInstanceParameterObject} from "./CoePluginEntity";
-import {GameInstanceEntity} from "./GameInstanceEntity";
-import {ExecutionMode} from "./ExecutionMode";
-import {ContentEntity} from "./ContentEntity";
-import {NicoPluginEntity} from "./NicoPluginEntity";
-import {CoeLimitedPluginEntity} from "./CoeLimitedPluginEntity";
+import * as ApiRequest from "../api/ApiRequest";
 import {ProfilerValue} from "../common/types/Profiler";
-import { StartPoint } from "@akashic/amflow";
+import {CoeLimitedPluginEntity} from "./CoeLimitedPluginEntity";
+import {CoePluginEntity, CreateCoeLocalInstanceParameterObject} from "./CoePluginEntity";
+import {ContentEntity} from "./ContentEntity";
+import {ExecutionMode} from "./ExecutionMode";
+import {GameInstanceEntity} from "./GameInstanceEntity";
+import {NicoPluginEntity} from "./NicoPluginEntity";
+import {PlayEntity} from "./PlayEntity";
 
 const toAgvExecutionMode = (() => {
 	const executionModeTable = {
@@ -138,12 +138,30 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 	}
 
 	@computed
+	get playAudioStateSummary(): PlayAudioStateSummary {
+		const audioState = this.play.audioState;
+		switch (audioState.muteType) {
+			case "all": {
+				return "all-player-muted";
+			}
+			case "solo": {
+				return (this.player?.id === audioState.soloPlayerId) ?
+					"only-this-player-unmuted" :
+					"only-other-player-unmuted";
+			}
+			case "none": {
+				return "all-player-unmuted";
+			}
+		}
+	}
+
+	@computed
 	get isJoined(): boolean {
 		return this.play.joinedPlayerTable.has(this.player.id);
 	}
 
 	@computed
-	get gameViewSize(): {width: number, height: number} {
+	get gameViewSize(): {width: number; height: number} {
 		return this._gameViewManager.getViewSize();
 	}
 
@@ -158,6 +176,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 
 	async start(): Promise<void> {
 		await this._gameViewManager.startGameContent(this._serveGameContent);
+		this.followPlayAudioStateChange(); // 生成時にすでに指定されていた play.audioState を反映する
 		this._timeKeeper.start();
 	}
 
@@ -243,15 +262,17 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 		return t;
 	}
 
-	@action
 	setProfilerValueTrigger(cb: (value: ProfilerValue) => void): void {
-		const gameDriver = this._serveGameContent.agvGameContent.getGameDriver();
-		if (gameDriver) {
-			// TODO gameDriver の中身を触る処理なので ServeGameContent に移すべき
-			gameDriver._gameLoop._clock._profiler._calculateProfilerValueTrigger.add(cb);
-		} else {
-			this._serveGameContent.agvGameContent.addContentLoadListener(() => this.setProfilerValueTrigger(cb));
-		}
+		this._serveGameContent.setProfilerValueTrigger(cb);
+	}
+
+	followPlayAudioStateChange(): void {
+		const audioState = this.play.audioState;
+		const muted = (
+			(audioState.muteType === "all") ||
+			(audioState.muteType === "solo" && this.player?.id !== audioState.soloPlayerId)
+		);
+		this._serveGameContent.agvGameContent.setMasterVolume(muted ? 0 : 1);
 	}
 
 	private async _initialize(): Promise<void> {
@@ -259,7 +280,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 			return;
 		const url = this.content.locator.asAbsoluteUrl();
 		const contentJson = await ApiRequest.get<{ content_url: string }>(url);
-		const gameJson = await ApiRequest.get<{ width: number, height: number }>(contentJson.content_url);
+		const gameJson = await ApiRequest.get<{ width: number; height: number }>(contentJson.content_url);
 		this._gameViewManager.setViewSize(gameJson.width, gameJson.height);
 	}
 

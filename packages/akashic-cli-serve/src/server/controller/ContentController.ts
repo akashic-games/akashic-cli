@@ -1,18 +1,18 @@
+import path = require("path");
 import * as express from "express";
 import { ContentGetApiResponseData } from "../../common/types/ApiResponse";
-import * as EngineConfig from "../domain/EngineConfig";
-import { serverGlobalConfig } from "../common/ServerGlobalConfig";
-import { responseSuccess } from "../common/ApiResponse";
 import { NotFoundError, BadRequestError } from "../common/ApiError";
-import * as sandboxConfigs from "../domain/SandboxConfigs";
+import { responseSuccess } from "../common/ApiResponse";
+import { serverGlobalConfig } from "../common/ServerGlobalConfig";
+import * as EngineConfig from "../domain/EngineConfig";
 import * as gameConfigs from "../domain/GameConfigs";
-import path = require("path");
+import * as sandboxConfigs from "../domain/SandboxConfigs";
 
 export const createHandlerToGetContents = (targetDirs: string[]): express.RequestHandler => {
 	// サーバ開始後、sandbox.config.js はここで初めて読み込まれる。この処理以前に sandbox.config.js が必要な場合は、その部分で `register()` を行うこと。
 	targetDirs.forEach((targetDir, idx) => sandboxConfigs.register(idx.toString(), targetDir));
 
-	return (req, res, next) => {
+	return (_req, res, next) => {
 		try {
 			const contents = targetDirs.map((targetDir, i) => ({
 				contentLocatorData: { contentId: "" + i },
@@ -60,7 +60,7 @@ export const createHandlerToGetEngineConfig = (dirPaths: string[], isRaw: boolea
 			}
 			const hostname = serverGlobalConfig.useGivenHostname ? serverGlobalConfig.hostname : urlInfo[0];
 			const port = serverGlobalConfig.useGivenPort ? serverGlobalConfig.port : parseInt(urlInfo[1], 10);
-			const baseUrl = `http://${hostname}:${port}`;
+			const baseUrl = `${serverGlobalConfig.protocol}://${hostname}:${port}`;
 			const engineConfigJson = EngineConfig.getEngineConfig({ baseUrl, contentId, baseDir: dirPaths[contentId], isRaw });
 			// akashic-gameview側でレスポンスがengineConfigJsonの形式なっていることを前提にしているので、resoponseSuccessは使わない
 			res.status(200).json(engineConfigJson);

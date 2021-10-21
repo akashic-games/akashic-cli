@@ -1,8 +1,6 @@
-import { time, timeStamp } from "console";
-
 export function secondsToHms(sec: number): string {
-	function pad(x: number) {
-		return (x < 10) ? "0" + x : x;
+	function pad(x: number): string {
+		return ((x < 10) ? "0" : "") + x;
 	}
 	const sign = sec < 0 ? "-" : "";
 	const secAbs = Math.abs(sec);

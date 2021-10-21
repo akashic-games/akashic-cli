@@ -3,6 +3,7 @@ import {
 	PlayCreateTestbedEvent,
 	PlayStatusChangedTestbedEvent,
 	PlayDurationStateChangeTestbedEvent,
+	PlayAudioStateChangeTestbedEvent,
 	PlayerJoinTestbedEvent,
 	PlayerLeaveTestbedEvent,
 	RunnerCreateTestbedEvent,
@@ -19,6 +20,7 @@ import { socketInstance } from "./socketInstance";
 export const onPlayCreate = new Trigger<PlayCreateTestbedEvent>();
 export const onPlayStatusChange = new Trigger<PlayStatusChangedTestbedEvent>();
 export const onPlayDurationStateChange = new Trigger<PlayDurationStateChangeTestbedEvent>();
+export const onPlayAudioStateChange = new Trigger<PlayAudioStateChangeTestbedEvent>();
 export const onPlayerJoin = new Trigger<PlayerJoinTestbedEvent>();
 export const onPlayerLeave = new Trigger<PlayerLeaveTestbedEvent>();
 export const onRunnerCreate = new Trigger<RunnerCreateTestbedEvent>();
@@ -35,6 +37,7 @@ const socket = socketInstance();
 socket.on("playCreate", (arg: PlayCreateTestbedEvent) => onPlayCreate.fire(arg));
 socket.on("playStatusChange", (arg: PlayStatusChangedTestbedEvent) => onPlayStatusChange.fire(arg));
 socket.on("playDurationStateChange", (arg: PlayDurationStateChangeTestbedEvent) => onPlayDurationStateChange.fire(arg));
+socket.on("playAudioStateChange", (arg: PlayAudioStateChangeTestbedEvent) => onPlayAudioStateChange.fire(arg));
 socket.on("playerJoin", (arg: PlayerJoinTestbedEvent) => onPlayerJoin.fire(arg));
 socket.on("playerLeave", (arg: PlayerLeaveTestbedEvent) => onPlayerLeave.fire(arg));
 socket.on("runnerCreate", (arg: RunnerCreateTestbedEvent) => onRunnerCreate.fire(arg));

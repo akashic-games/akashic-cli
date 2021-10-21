@@ -13,6 +13,7 @@ export interface ServerGlobalConfig {
 	allowExternal: boolean;
 	preserveDisconnected: boolean;
 	experimentalOpen: number;
+	protocol: string;
 }
 
 export const DEFAULT_HOSTNAME = "localhost";
@@ -30,5 +31,6 @@ export const serverGlobalConfig: ServerGlobalConfig = {
 	targetService: "none",
 	allowExternal: false,
 	preserveDisconnected: false,
-	experimentalOpen: null
+	experimentalOpen: null,
+	protocol: "http"
 };

@@ -10,7 +10,7 @@ export class LocalInstanceOperator {
 
 	previewSeekTo = (time: number): void => {
 		this.store.devtoolUiStore.previewSeekTo(time);
-	}
+	};
 
 	seekTo = async (time: number): Promise<void> => {
 		this.switchToReplay(time);
@@ -19,27 +19,27 @@ export class LocalInstanceOperator {
 			const timestamp = time + this.store.currentPlay.amflow.getStartedAt();
 			this.resetByNearestStartPointOf({ timestamp }, false);
 		}
-	}
+	};
 
 	switchToReplay = (time: number): void => {
 		this.store.currentLocalInstance.setExecutionMode("replay");
 		this.store.currentLocalInstance.setTargetTime(time);
 		this.store.devtoolUiStore.endPreviewSeek();
-	}
+	};
 
 	switchToRealtime = (): void => {
 		this.store.currentLocalInstance.setExecutionMode("passive");
 		this.store.currentLocalInstance.resume();
-	}
+	};
 
 	resetToStartPointOfFrame = async (frame: number): Promise<void> => {
 		await this.resetByNearestStartPointOf({ frame }, true);
-	}
+	};
 
 	resetToStartPointOfIndex = async (index: number): Promise<void> => {
 		const sps = this.store.currentPlay.startPointHeaders;
 		await this.resetByNearestStartPointOf({ frame: sps[index].frame }, true);
-	}
+	};
 
 	/**
 	 * 条件にもっとも近いスタートポイントでローカルインスタンスをリセットする。
@@ -55,9 +55,9 @@ export class LocalInstanceOperator {
 		if (toSeek) {
 			this.seekTo(sp.timestamp - amflow.getStartedAt());
 		}
-	}
+	};
 
 	togglePause = (pause: boolean): void => {
 		this.store.currentLocalInstance.togglePause(pause);
-	}
+	};
 }

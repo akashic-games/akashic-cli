@@ -1,16 +1,17 @@
 import * as React from "react";
 import { observer } from "mobx-react";
 import { ServiceType } from "@akashic/akashic-cli-commons/lib/ServiceType";
+import { DevtoolUiStore } from "../../store/DevtoolUiStore";
 import { PlayEntity } from "../../store/PlayEntity";
 import { LocalInstanceEntity } from "../../store/LocalInstanceEntity";
 import { ToolBarUiStore } from "../../store/ToolBarUiStore";
 import { Operator } from "../../operator/Operator";
+import { AudioOptionControlPropsData } from "../molecule/AudioOptionControl";
 import { PlayControlPropsData } from "../molecule/PlayControl";
 import { InstanceControlPropsData } from "../molecule/InstanceControl";
 import { PlayerControlPropsData } from "../molecule/PlayerControl";
 import { DisplayOptionControlPropsData } from "../molecule/DisplayOptionControl";
 import { ToolBar } from "../organism/ToolBar";
-import { DevtoolUiStore } from "../../store/DevtoolUiStore";
 
 export interface ToolBarContainerProps {
 	play: PlayEntity;
@@ -29,6 +30,7 @@ export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}>
 			makePlayControlProps={this._makePlayControlProps}
 			makeInstanceControlProps={this._makeInstanceControlProps}
 			makePlayerControlProps={this._makePlayerControlProps}
+			makeAudioOptionControlProps={this._makeAudioOptionControlProps}
 			makeDisplayOptionControlProps={this._makeDisplayOptionControlProps}
 			showsAppearance={toolBarUiStore.showsAppearanceMenu}
 			showsDevtools={toolBarUiStore.showsDevtools}
@@ -44,6 +46,7 @@ export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}>
 		return {
 			playbackRate: play.activePlaybackRate,
 			isActivePausing: play.isActivePausing,
+			isActiveExists: play.status === "running", // NOTE: アクティブインスタンスの存在を PlayStatus から判定するのは現実装で一致しているだけであり、厳密には異なるケースがある
 			onClickReset: operator.restartWithNewPlay,
 			onClickActivePause: operator.play.togglePauseActive,
 			onClickAddInstance: operator.play.openNewClientInstance,
@@ -72,12 +75,24 @@ export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}>
 
 	private _makePlayerControlProps = (): PlayerControlPropsData => {
 		const { localInstance, operator, targetService } = this.props;
-		const joinEnabled = targetService !== "nicolive";
+		const joinEnabled = !/^nicolive.*/.test(targetService) && targetService !== "atsumaru:multi";
 		return {
 			selfId: localInstance.player.id,
 			isJoined: localInstance.isJoined,
 			isJoinEnabled: (localInstance.executionMode === "passive" && joinEnabled),
 			onClickJoinLeave: operator.play.toggleJoinLeaveSelf
+		};
+	}
+
+	private _makeAudioOptionControlProps = (): AudioOptionControlPropsData => {
+		const { operator, localInstance, toolBarUiStore } = this.props;
+		return {
+			showsAudioOptionPopover: toolBarUiStore.showsAudioOptionPopover,
+			audioStateSummary: localInstance.playAudioStateSummary,
+			onClickAudioOptionPopover: operator.ui.setShowAudioOptionPopover,
+			onClickMuteAll: operator.play.muteAll,
+			onClickSolo: operator.play.muteOthers,
+			onClickMuteNone: operator.play.unmuteAll,
 		};
 	}
 

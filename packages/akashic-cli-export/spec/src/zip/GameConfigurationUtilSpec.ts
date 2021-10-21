@@ -1,5 +1,5 @@
-import * as mockfs from "mock-fs";
 import * as cmn from "@akashic/akashic-cli-commons";
+import * as mockfs from "mock-fs";
 import * as gcu from "../../../lib/zip/GameConfigurationUtil";
 
 describe("GameConfigurationUtil", () => {
@@ -296,12 +296,12 @@ describe("GameConfigurationUtil", () => {
 
 	describe("makeUniqueAssetPath", () => {
 		it("can get asset path not used in game.json", () => {
-			gamejson.assets["main0"] = {
+			gamejson.assets.main0 = {
 				type: "script",
 				global: true,
 				path: "script/main0.js"
 			};
-			gamejson.assets["main2"] = {
+			gamejson.assets.main2 = {
 				type: "script",
 				global: true,
 				path: "script/main2.js"
@@ -318,42 +318,6 @@ describe("GameConfigurationUtil", () => {
 		});
 		it("when filepath prefix is not script, false is returned", () => {
 			const ret = gcu.isScriptJsFile("node_module/somewhere/test.js");
-			expect(ret).toBeFalsy();
-		});
-	});
-
-	describe("isEmptyScriptJs", () => {
-		it("when argument is empty true is returned", () => {
-			const ret = gcu.isEmptyScriptJs("");
-			expect(ret).toBeTruthy();
-		});
-		it("when argument isnt empty, false is returned", () => {
-			const ret = gcu.isEmptyScriptJs("aaaaaaaaaaa");
-			expect(ret).toBeFalsy();
-		});
-		it("For three or more lines", () => {
-			const ret = gcu.isEmptyScriptJs("\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\", { value: true });\nvar test = 123;");
-			expect(ret).toBeFalsy();
-		});
-		it("for two lines", () => {
-			let ret = gcu.isEmptyScriptJs("\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\", { value: true });");
-			expect(ret).toBeTruthy();
-
-			ret = gcu.isEmptyScriptJs("\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\", { value: true });var hoge = 2;");
-			expect(ret).toBeFalsy();
-		});
-		it("for one line", () => {
-			let ret = gcu.isEmptyScriptJs("\"use strict\";");
-			expect(ret).toBeTruthy();
-			ret = gcu.isEmptyScriptJs("\"use strict\";var hoge=0;");
-			expect(ret).toBeFalsy();
-
-			ret = gcu.isEmptyScriptJs("\"use strict\";Object.defineProperty(exports,\"__esModule\",{value:!0});");
-			expect(ret).toBeTruthy();
-			ret = gcu.isEmptyScriptJs("\"use strict\";Object.defineProperty(exports,\"__esModule\",{value:true});");
-			expect(ret).toBeTruthy();
-
-			ret = gcu.isEmptyScriptJs("\"use strict\";Object.defineProperty(exports,\"__esModule\",{value:!0});var a=\"a\";");
 			expect(ret).toBeFalsy();
 		});
 	});

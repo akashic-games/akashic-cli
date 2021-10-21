@@ -1,20 +1,20 @@
-import {observable, action} from "mobx";
 import {ServiceType} from "@akashic/akashic-cli-commons/lib/ServiceType";
-import {Player} from "../../common/types/Player";
+import {observable, action} from "mobx";
 import {AppOptions} from "../../common/types/AppOptions";
+import {Player} from "../../common/types/Player";
+import * as ApiClient from "../api/ApiClient";
 import {ClientContentLocator} from "../common/ClientContentLocator";
 import {queryParameters as query} from "../common/queryParameters";
-import * as ApiClient from "../api/ApiClient";
+import {ContentStore} from "./ContentStore";
+import {DevtoolUiStore} from "./DevtoolUiStore";
+import {LocalInstanceEntity} from "./LocalInstanceEntity";
+import {NotificationUiStore} from "./NotificationUiStore";
 import {PlayEntity} from "./PlayEntity";
 import {PlayStore} from "./PlayStore";
-import {LocalInstanceEntity} from "./LocalInstanceEntity";
-import {DevtoolUiStore} from "./DevtoolUiStore";
-import {ToolBarUiStore} from "./ToolBarUiStore";
-import {ContentStore} from "./ContentStore";
-import {NotificationUiStore} from "./NotificationUiStore";
-import {StartupScreenUiStore} from "./StartupScreenUiStore";
 import {ProfilerStore} from "./ProfilerStore";
+import {StartupScreenUiStore} from "./StartupScreenUiStore";
 import {storage} from "./storage";
+import {ToolBarUiStore} from "./ToolBarUiStore";
 
 export class Store {
 	@observable contentStore: ContentStore;

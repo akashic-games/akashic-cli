@@ -1,8 +1,8 @@
 import * as path from "path";
 import * as chokidar from "chokidar";
 import { SandboxConfig } from "../../common/types/SandboxConfig";
-import { dynamicRequire } from "./dynamicRequire";
 import { BadRequestError } from "../common/ApiError";
+import { dynamicRequire } from "./dynamicRequire";
 
 const configs: { [key: string]: SandboxConfig } = {};
 
@@ -30,7 +30,7 @@ export function get(contentId: string): SandboxConfig {
 function watchRequire(configPath: string, callback: (content: SandboxConfig) => void): SandboxConfig {
 	let config = dynamicRequire<SandboxConfig>(configPath, true);
 
-	const eventListener = (event: string, path: string) => {
+	const eventListener = (event: string, path: string): void => {
 		if ((event === "add" && !Object.keys(config).length) || event === "change") {
 			config = dynamicRequire<SandboxConfig>(path, true);
 			validateConfig(config);
@@ -58,7 +58,9 @@ function validateConfig(config: SandboxConfig): void {
 		if ( externalAssets.length > 0) {
 			const found = externalAssets.find((url: any) => typeof url !== "string" && !(url instanceof RegExp));
 			if (found) {
-				throw new BadRequestError({errorMessage: `Invalid externalAssets, The value is neither a string or regexp. value:${ found }` });
+				throw new BadRequestError(
+					{errorMessage: `Invalid externalAssets, The value is neither a string or regexp. value:${ found }` }
+				);
 			}
 		}
 	}

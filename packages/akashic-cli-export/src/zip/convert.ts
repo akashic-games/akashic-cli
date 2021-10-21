@@ -1,23 +1,24 @@
 import * as fs from "fs";
-import * as fsx from "fs-extra";
 import * as path from "path";
 import * as cmn from "@akashic/akashic-cli-commons";
-import * as browserify from "browserify";
-import readdir = require("fs-readdir-recursive");
-import * as gcu from "./GameConfigurationUtil";
-import * as UglifyJS from "uglify-js";
 import * as babel from "@babel/core";
 import * as presetEnv from "@babel/preset-env";
+import * as browserify from "browserify";
+import * as fsx from "fs-extra";
+import readdir = require("fs-readdir-recursive");
+import * as UglifyJS from "uglify-js";
+import * as gcu from "./GameConfigurationUtil";
 
 export interface ConvertGameParameterObject {
 	bundle?: boolean;
 	babel?: boolean;
 	minify?: boolean;
+	minifyJs?: boolean;
+	minifyJson?: boolean;
 	strip?: boolean;
 	source?: string;
 	hashLength?: number;
 	dest: string;
-	omitEmptyJs?: boolean;
 	/**
 	 * コマンドの出力を受け取るロガー。
 	 * 省略された場合、akashic-cli-commons の `new ConsoleLogger()` 。
@@ -32,11 +33,12 @@ export function _completeConvertGameParameterObject(param: ConvertGameParameterO
 	param.bundle = !!param.bundle;
 	param.babel = !!param.babel;
 	param.minify = !!param.minify;
+	param.minifyJs = !!param.minifyJs;
+	param.minifyJson = !!param.minifyJson;
 	param.strip = !!param.strip;
 	param.source = param.source || process.cwd();
 	param.hashLength = param.hashLength || 0;
 	param.logger = param.logger || new cmn.ConsoleLogger();
-	param.omitEmptyJs = !!param.omitEmptyJs;
 	param.exportInfo = param.exportInfo;
 	param.omitUnbundledJs = !!param.omitUnbundledJs;
 	param.targetService = param.targetService || "none";
@@ -102,33 +104,39 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			return bundleScripts(gamejson.main || gamejson.assets.mainScene.path, param.source);
 		})
 		.then(async (bundleResult) => {
-			let files: string[] = param.strip ? gcu.extractFilePaths(gamejson, param.source) :
-				readdir(param.source).map(p => p.replace(`${param.source}/`, ""));
+			const files: string[] = param.strip ?
+				gcu.extractFilePaths(gamejson, param.source) :
+				readdir(param.source).map(p => cmn.Util.makeUnixPath(p));
+
 			let bundledFilePaths: string[] = [];
 			const preservingFilePathSet = new Set<string>(files);
 			if (bundleResult) {
+				// 不要なスクリプトを削る。
+				// bundle されたものは .js とは限らない (.json がありうる) ことに注意。
 				bundledFilePaths = bundleResult.filePaths;
-				// 不要なスクリプトを削る。omitUnbundledJs ならば全スクリプト取り除く点に注意 (bundle されたものは不要、されなかったものは omit なので)
-				let unneeded = bundleResult.filePaths;
+				bundledFilePaths.forEach(p => preservingFilePathSet.delete(p));
+
 				if (param.omitUnbundledJs) {
-					unneeded = unneeded.concat(files.filter(p => p.endsWith(".js")));
+					// omitUnbundledJs ならば全てのスクリプト (.js) を削る。
+					// (bundle されたスクリプトは不要、されなかったスクリプトは omit なので区別せず全部削ればよい)
+					files.filter(p => p.endsWith(".js")).forEach(p => preservingFilePathSet.delete(p));
 				}
-				unneeded.forEach(p => preservingFilePathSet.delete(p));
 			}
 
 			// operation plugin に登録されているスクリプトファイルは bundle されていても残しておく必要がある
-			const operationPluginScripts = (gamejson.operationPlugins ?? []).map(plugin => plugin.script.replace(/^\.\//g, ""));
-			for (let script of operationPluginScripts) {
-				const scriptPath = path.join(param.source, script);
+			const operationPluginRoots = (gamejson.operationPlugins ?? []).map(plugin => plugin.script.replace(/^\.\//g, ""));
+			for (let pluginRoot of operationPluginRoots) {
+				const pluginRootAbsPath = cmn.Util.makeUnixPath(path.join(param.source, pluginRoot));
+				const pluginRootDir = path.dirname(pluginRootAbsPath);
 				// TODO: Promise#then() と async/await が混在する状態を改め、 async/await に統一する
-				const operationFiles = await cmn.NodeModules.listScriptFiles(
-					path.dirname(scriptPath),
-					"./" + path.basename(scriptPath),
+				const pluginScripts = await cmn.NodeModules.listScriptFiles(
+					pluginRootDir,
+					"./" + path.basename(pluginRootAbsPath),
 					param.logger,
 					true
 				);
-				operationFiles.forEach(file => {
-					const realPath = path.join(path.dirname(scriptPath), file).replace(`${param.source}/`, "");
+				pluginScripts.forEach(pluginScript => {
+					const realPath = cmn.Util.makeUnixPath(path.relative(param.source, path.join(pluginRootDir, pluginScript)));
 					if (files.indexOf(realPath) !== -1) {
 						// TODO: 操作プラグインによって preserve するファイルは bundle から除外する必要がある
 						preservingFilePathSet.add(realPath);
@@ -157,19 +165,12 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			};
 
 			preservingFilePathSet.forEach(p => {
-				let buff = fs.readFileSync(path.resolve(param.source, p));
-				if (param.omitEmptyJs && gcu.isScriptJsFile(p) && gcu.isEmptyScriptJs(buff.toString().trim())) {
-					Object.keys(gamejson.assets).some((key) => {
-						if (gamejson.assets[key].type === "script" && gamejson.assets[key].path === p) {
-							gamejson.assets[key].global = false;
-							return true;
-						}
-						return false;
-					});
-				}
+				const buff = fs.readFileSync(path.resolve(param.source, p));
 				cmn.Util.mkdirpSync(path.dirname(path.resolve(param.dest, p)));
 				const value: string | Buffer =
-					(param.babel && gcu.isScriptJsFile(p)) ? babel.transform(buff.toString().trim(), babelOption).code : buff;
+					(param.babel && gcu.isScriptJsFile(p)) ? babel.transform(buff.toString().trim(), babelOption).code :
+					(param.minifyJson && gcu.isTextJsonFile(p)) ? JSON.stringify(JSON.parse(buff.toString())) :
+					buff;
 				fs.writeFileSync(path.resolve(param.dest, p), value);
 			});
 			// コピーしなかったアセットやファイルをgmae.jsonから削除する
@@ -189,7 +190,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 				gamejson.main = "./" + entryPointPath;
 			} else {
 				entryPointPath = gcu.makeUniqueAssetPath(gamejson, "script/mainScene.js");
-				gamejson.assets["mainScene"] = {
+				gamejson.assets.mainScene = {
 					type: "script",
 					global: true,
 					path: entryPointPath
@@ -217,7 +218,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			return cmn.ConfigurationFile.write(gamejson, path.resolve(param.dest, "game.json"), param.logger);
 		})
 		.then(() => {
-			if (!param.minify)
+			if (!param.minify && !param.minifyJs)
 				return;
 			const scriptAssetPaths = gcu.extractScriptAssetFilePaths(gamejson).map(p => path.resolve(param.dest, p));
 			scriptAssetPaths.forEach(p => {

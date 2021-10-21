@@ -12,6 +12,10 @@ describe("scanAsset()", () => {
 	const DUMMY_MP4_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy.mp4"));
 	const DUMMY_OGG_DATA2 = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy2.ogg"));
 	const DUMMY_1x1_PNG_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy1x1.png"));
+	const DUMMY_300x200_SVG_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy_300x200.svg"));
+	const DUMMY_300x200_SUBPX_SVG_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy_300x200_subpx.svg"));
+	const DUMMY_NO_SIZE_SVG_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy_no_size.svg"));
+	const DUMMY_NO_PIXEL_SVG_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy_no_px.svg"));
 
 	afterEach(() => {
 		mockfs.restore();
@@ -101,6 +105,10 @@ describe("scanAsset()", () => {
 			"dir": {
 				"akashic-lib.json": JSON.stringify({}),
 				"assets": {
+					"image": {
+						"$$$.svg": DUMMY_300x200_SVG_DATA,
+						"@__.svg": DUMMY_300x200_SUBPX_SVG_DATA,
+					},
 					"text": {
 						"foo": {
 							"$.txt": "dummy",
@@ -115,6 +123,9 @@ describe("scanAsset()", () => {
 				"image": {
 					"foo": {
 						"_$.png": DUMMY_1x1_PNG_DATA
+					},
+					"bar": {
+						"_$_.svg": DUMMY_300x200_SVG_DATA
 					}
 				},
 				"audio": {
@@ -152,19 +163,38 @@ describe("scanAsset()", () => {
 				width: 1,
 				height: 1
 			});
-			// NOTE: target = "all" であるので assets ディレクトリの他アセットもスキャン対象
 			expect(conf.assetList[2]).toEqual({
+				type: "vector-image",
+				path: "image/bar/_$_.svg",
+				width: 300,
+				height: 200
+			});
+			// NOTE: target = "all" であるので assets ディレクトリの他アセットもスキャン対象
+			expect(conf.assetList[3]).toEqual({
+				type: "vector-image",
+				path: "assets/image/$$$.svg",
+				width: 300,
+				height: 200
+			});
+			expect(conf.assetList[4]).toEqual({
+				type: "vector-image",
+				path: "assets/image/@__.svg",
+				width: 300,
+				height: 200
+			});
+			expect(conf.assetList[5]).toEqual({
 				type: "script",
 				path: "assets/script/foo/_1.js",
 				global: true
 			});
-			expect(conf.assetList[3]).toEqual({
+			expect(conf.assetList[6]).toEqual({
 				type: "text",
 				path: "assets/text/foo/$.txt"
 			});
 
 			// remove image asset
 			fs.unlinkSync("./dir/image/foo/_$.png");
+			fs.unlinkSync("./dir/image/bar/_$_.svg");
 
 			await scanAsset({
 				cwd: "./dir",
@@ -183,11 +213,23 @@ describe("scanAsset()", () => {
 				duration: 8000
 			});
 			expect(conf.assetList[1]).toEqual({
+				type: "vector-image",
+				path: "assets/image/$$$.svg",
+				width: 300,
+				height: 200
+			});
+			expect(conf.assetList[2]).toEqual({
+				type: "vector-image",
+				path: "assets/image/@__.svg",
+				width: 300,
+				height: 200
+			});
+			expect(conf.assetList[3]).toEqual({
 				type: "script",
 				path: "assets/script/foo/_1.js",
 				global: true
 			});
-			expect(conf.assetList[2]).toEqual({
+			expect(conf.assetList[4]).toEqual({
 				type: "text",
 				path: "assets/text/foo/$.txt"
 			});
@@ -527,6 +569,64 @@ describe("scanAsset()", () => {
 			});
 			throw new Error("must throw error");
 		} catch (e) {}
+	});
+
+	it("scan SVG assets without width or height", async () => {
+		const gamejson: GameConfiguration = {
+			width: 320,
+			height: 34,
+			fps: 30,
+			main: "",
+			assets: {}
+		};
+		mockfs({
+			"game.json": JSON.stringify(gamejson),
+			"image": {
+				"dummy.svg": DUMMY_NO_SIZE_SVG_DATA
+			}
+		});
+
+		let loggedCount = 0;
+		const logger = new ConsoleLogger({ quiet: false, debugLogMethod: () => ++loggedCount });
+
+		await scanAsset({
+			logger,
+			assetScanDirectoryTable: {
+				audio: ["image"]
+			}
+		});
+
+		// サイズが取得できない旨のwarnが1つ + Done!のログが1つ
+		expect(loggedCount).toBe(2);
+	});
+
+	it("scan SVG assets whose unit of the root width or height element is not 'px'", async () => {
+		const gamejson: GameConfiguration = {
+			width: 320,
+			height: 34,
+			fps: 30,
+			main: "",
+			assets: {}
+		};
+		mockfs({
+			"game.json": JSON.stringify(gamejson),
+			"image": {
+				"dummy.svg": DUMMY_NO_PIXEL_SVG_DATA
+			}
+		});
+
+		let loggedCount = 0;
+		const logger = new ConsoleLogger({ quiet: false, debugLogMethod: () => ++loggedCount });
+
+		await scanAsset({
+			logger,
+			assetScanDirectoryTable: {
+				audio: ["image"]
+			}
+		});
+
+		// サイズが取得できない旨のwarnが1つ + Done!のログが1つ
+		expect(loggedCount).toBe(2);
 	});
 
 	it("scan audio assets info - ogg", async () => {

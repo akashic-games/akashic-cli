@@ -1,0 +1,76 @@
+@import "../global.css";
+
+.tool-choice-button {
+	display: inline-flex;
+	flex-flow: row nowrap;
+}
+
+.tool-choice-button-single {
+	border: 1px solid var(--color-tool-border);
+	border-width: 1px 0 1px 1px;
+	border-radius: 0;
+	padding: 1px 12px;
+	margin: 2px 0;
+
+	background: var(--color-tool-bg);
+	color: var(--color-tool-text);
+
+	box-sizing: border-box;
+	display: inline-flex;
+	align-items: center;
+	justify-content: space-around;
+	vertical-align: center;
+	outline: none;
+
+	cursor: pointer;
+	user-select: none;
+	moz-user-select: none;
+	-ms-user-select: none;
+}
+
+.tool-choice-button-single:first-child {
+	border-radius: 3px 0 0 3px;
+	margin-right: 0;
+}
+
+.tool-choice-button-single:last-child {
+	border-width: 1px;
+	border-radius: 0 3px 3px 0;
+	margin-left: 0;
+}
+
+.tool-choice-button-single:disabled {
+	color: var(--color-tool-text-disabled);
+}
+
+.tool-choice-button-single > p {
+	margin: 0 6px 0 3px;
+}
+
+.tool-choice-button-single > .material-icons {
+	font-size: 22px;
+}
+
+.tool-choice-button-single:not(:disabled):hover {
+	border-color: var(--color-tool-border-active);
+}
+
+.tool-choice-button-single.pushed:not(:disabled):active,
+.tool-choice-button-single:not(:disabled):active {
+	background: var(--color-tool-bg-active);
+}
+
+.pushed {
+	/* css-loader にクラスを認識させるための空定義 */
+	border-width: 1px;
+}
+
+.pushed + .tool-choice-button-single {
+	border-left-width: 0;
+}
+
+.tool-choice-button-single.pushed:not(:disabled) {
+	background: var(--color-tool-bg-pushed);
+	color: var(--color-tool-text-pushed);
+	border-color: var(--color-tool-border-pushed);
+}

@@ -1,14 +1,14 @@
-import * as cmn from "@akashic/akashic-cli-commons";
-import { ConvertTemplateParameterObject } from "./convertUtil";
-import { promiseConvertNoBundle } from "./convertNoBundle";
-import { promiseConvertBundle } from "./convertBundle";
 
 import * as fs from "fs";
-import * as fsx from "fs-extra";
-import * as path from "path";
 import * as os from "os";
+import * as path from "path";
+import * as cmn from "@akashic/akashic-cli-commons";
 import archiver = require("archiver");
+import * as fsx from "fs-extra";
 import readdir = require("fs-readdir-recursive");
+import { promiseConvertBundle } from "./convertBundle";
+import { promiseConvertNoBundle } from "./convertNoBundle";
+import { ConvertTemplateParameterObject } from "./convertUtil";
 
 export interface ExportHTMLParameterObject extends ConvertTemplateParameterObject {
 	quiet?: boolean;
@@ -61,47 +61,47 @@ export function promiseExportHtmlRaw(param: ExportHTMLParameterObject): Promise<
 			}
 		});
 	})
-	.then(() => {
-		if (param.hashLength === 0) return param.source;
-		return createRenamedGame(param.source, param.hashLength, param.logger);
-	})
-	.then((currentGamepath: string) => {
-		gamepath = currentGamepath;
-		const convertParam: ConvertTemplateParameterObject = {
-			output: param.output,
-			logger: param.logger,
-			strip: param.strip,
-			minify: param.minify,
-			magnify: param.magnify,
-			force: param.force,
-			source: gamepath,
-			cwd: param.cwd,
-			injects: param.injects,
-			unbundleText: param.unbundleText,
-			lint: param.lint,
-			exportInfo: param.exportInfo,
-			autoSendEventName: param.autoSendEventName,
-			needsUntaintedImageAsset: param.needsUntaintedImageAsset
-		};
-		if (param.bundle) {
-			return promiseConvertBundle(convertParam);
-		} else {
-			return promiseConvertNoBundle(convertParam);
-		}
-	})
-	.then(() => {
-		// ハッシュ化した場合一時ファイルが生成されるため削除する
-		if (param.hashLength > 0) {
-			param.logger.info("removing temp files...");
-			fsx.removeSync(gamepath);
-		}
-	})
-	.catch((error) => {
-		throw error;
-	})
-	.then(() => {
-		return param.output;
-	});
+		.then(() => {
+			if (param.hashLength === 0) return param.source;
+			return createRenamedGame(param.source, param.hashLength, param.logger);
+		})
+		.then((currentGamepath: string) => {
+			gamepath = currentGamepath;
+			const convertParam: ConvertTemplateParameterObject = {
+				output: param.output,
+				logger: param.logger,
+				strip: param.strip,
+				minify: param.minify,
+				magnify: param.magnify,
+				force: param.force,
+				source: gamepath,
+				cwd: param.cwd,
+				injects: param.injects,
+				unbundleText: param.unbundleText,
+				lint: param.lint,
+				exportInfo: param.exportInfo,
+				autoSendEventName: param.autoSendEventName,
+				needsUntaintedImageAsset: param.needsUntaintedImageAsset
+			};
+			if (param.bundle) {
+				return promiseConvertBundle(convertParam);
+			} else {
+				return promiseConvertNoBundle(convertParam);
+			}
+		})
+		.then(() => {
+			// ハッシュ化した場合一時ファイルが生成されるため削除する
+			if (param.hashLength > 0) {
+				param.logger.info("removing temp files...");
+				fsx.removeSync(gamepath);
+			}
+		})
+		.catch((error) => {
+			throw error;
+		})
+		.then(() => {
+			return param.output;
+		});
 }
 
 export function promiseExportHTML(p: ExportHTMLParameterObject): Promise<string> {

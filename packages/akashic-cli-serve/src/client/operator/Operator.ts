@@ -1,19 +1,20 @@
+import { PlayAudioState } from "../../common/types/PlayAudioState";
 import { PlayBroadcastTestbedEvent } from "../../common/types/TestbedEvent";
-import { ClientContentLocator } from "../common/ClientContentLocator";
-import { queryParameters as query } from "../common/queryParameters";
+import { GameViewManager } from "../akashic/GameViewManager";
 import * as ApiClient from "../api/ApiClient";
 import * as Subscriber from "../api/Subscriber";
-import { GameViewManager } from "../akashic/GameViewManager";
+import { RPGAtsumaruApi } from "../atsumaru/RPGAtsumaruApi";
+import { ClientContentLocator } from "../common/ClientContentLocator";
+import { createSessionParameter } from "../common/createSessionParameter";
+import { queryParameters as query } from "../common/queryParameters";
+import {ProfilerValue} from "../common/types/Profiler";
 import { PlayEntity } from "../store/PlayEntity";
 import { Store } from "../store/Store";
-import { PlayOperator } from "./PlayOperator";
-import { LocalInstanceOperator } from "./LocalInstanceOperator";
-import { UiOperator } from "./UiOperator";
 import { DevtoolOperator } from "./DevtoolOperator";
 import { ExternalPluginOperator } from "./ExternalPluginOperator";
-import { RPGAtsumaruApi } from "../atsumaru/RPGAtsumaruApi";
-import { createSessionParameter } from "../common/createSessionParameter";
-import {ProfilerValue} from "../common/types/Profiler";
+import { LocalInstanceOperator } from "./LocalInstanceOperator";
+import { PlayOperator } from "./PlayOperator";
+import { UiOperator } from "./UiOperator";
 
 export interface OperatorParameterObject {
 	store: Store;
@@ -63,15 +64,13 @@ export class Operator {
 		} else if (contentLocator) {
 			play = await this._createServerLoop(contentLocator);
 		} else {
-			const plays = store.playStore.playsList();
-			if (plays.length > 0) {
-				play = plays[plays.length - 1];
-			} else {
+			play = store.playStore.getLastPlay();
+			if (!play) {
 				const loc = store.contentStore.defaultContent().locator;
-				play = await this._createServerLoop(loc);
+				play = await this._createServerLoop(loc, null); // TODO: (起動時の最初のプレイで) audioState を指定する方法
 			}
 		}
-		if (store.targetService === "atsumaru") {
+		if (store.targetService === "atsumaru:single") {
 			(window as any).RPGAtsumaru = new RPGAtsumaruApi({
 				// 元のAPIが0～1の実数を返す仕様になっているので、それに合わせた
 				getVolumeCallback: () => this.store.devtoolUiStore.volume / 100
@@ -81,7 +80,7 @@ export class Operator {
 
 		if (query.mode === "replay") {
 			if (query.replayResetAge != null) {
-				this.localInstance.resetByNearestStartPointOf({ frame: query.replayResetAge }, false);
+				await this.localInstance.resetByNearestStartPointOf({ frame: query.replayResetAge }, false);
 			}
 			if (query.replayTargetTime != null) {
 				this.localInstance.seekTo(query.replayTargetTime);
@@ -111,7 +110,7 @@ export class Operator {
 
 		let isJoin = false;
 		let argument = undefined;
-		if (store.targetService === "nicolive") {
+		if (/^nicolive.*/.test(store.targetService) || store.targetService === "atsumaru:multi") {
 			if (previousPlay) {
 				isJoin = previousPlay.joinedPlayerTable.has(store.player.id);
 			} else {
@@ -126,7 +125,7 @@ export class Operator {
 				isReplay
 			});
 		}
-	}
+	};
 
 	startContent = async (params?: StartContentParameterObject): Promise<void> => {
 		const store = this.store;
@@ -179,7 +178,7 @@ export class Operator {
 			this.store.profilerStore.pushProfilerValueResult("frame", value.frameTime);
 			this.store.profilerStore.pushProfilerValueResult("rendering", value.renderingTime);
 		});
-		if (store.targetService !== "atsumaru") {
+		if (store.targetService !== "atsumaru:single") {
 			this.store.devtoolUiStore.initTotalTimeLimit(play.content.preferredSessionParameters.totalTimeLimit);
 			this.devtool.setupNiconicoDevtoolValueWatcher();
 		}
@@ -187,19 +186,20 @@ export class Operator {
 		if (params != null && params.joinsSelf) {
 			store.currentPlay.join(store.player.id, store.player.name);
 		}
-	}
+	};
 
 	// TODO: このメソッドの処理は本来サーバー側で行うべき
 	restartWithNewPlay = async (): Promise<void> => {
 		await this.store.currentPlay.content.updateSandboxConfig();
-		const play = await this._createServerLoop(this.store.currentPlay.content.locator);
+		const audioState = this.store.playStore.getLastPlay()?.audioState;
+		const play = await this._createServerLoop(this.store.currentPlay.content.locator, audioState);
 		await this.store.currentPlay.deleteAllServerInstances();
 		await ApiClient.broadcast(this.store.currentPlay.playId, { type: "switchPlay", nextPlayId: play.playId });
 		this.ui.hideNotification();
-	}
+	};
 
-	private async _createServerLoop(contentLocator: ClientContentLocator): Promise<PlayEntity> {
-		const play = await this.store.playStore.createPlay({ contentLocator });
+	private async _createServerLoop(contentLocator: ClientContentLocator, audioState?: PlayAudioState): Promise<PlayEntity> {
+		const play = await this.store.playStore.createPlay({ contentLocator, audioState });
 		const tokenResult = await ApiClient.createPlayToken(play.playId, "", true);  // TODO 空文字列でなくnullを使う
 		await play.createServerInstance({ playToken: tokenResult.data.playToken });
 		await ApiClient.resumePlayDuration(play.playId);
@@ -215,9 +215,8 @@ export class Operator {
 			// TODO: `autoSendEvents` は非推奨。互換性のためこのパスを残しているが、`autoSendEvents` の削除時にこのパスも削除する。
 			console.warn("[deprecated] `autoSendEvents` in sandbox.config.js is deprecated. Please use `autoSendEventName`.");
 			events[autoSendEvents].forEach((pev: any) => play.amflow.enqueueEvent(pev));
-		} else if (!autoSendEventName && this.store.targetService === "nicolive") {
-			// TODO: 現状は "nicolive" で固定。 "atsumaru" を使う方法は要検討
-			play.amflow.enqueueEvent(createSessionParameter("nicolive")); // セッションパラメータを送る
+		} else if (!autoSendEventName && (/^nicolive.*/.test(this.store.targetService) || this.store.targetService === "atsumaru:multi")) {
+			play.amflow.enqueueEvent(createSessionParameter(this.store.targetService)); // セッションパラメータを送る
 		}
 
 		if (this.store.devtoolUiStore.isAutoSendEvent) {
@@ -240,20 +239,20 @@ export class Operator {
 	private _handleBroadcast = (arg: PlayBroadcastTestbedEvent): void => {
 		try {
 			switch (arg.message.type) {
-			case "switchPlay":  // TODO typeを型づける
-				if (this.store.currentPlay.playId === arg.playId) {
-					this.setCurrentPlay(this.store.playStore.plays[arg.message.nextPlayId]);
-				}
-				break;
-			default:
-				throw new Error("invalid type: " + arg.message.type);
+				case "switchPlay":  // TODO typeを型づける
+					if (this.store.currentPlay.playId === arg.playId) {
+						this.setCurrentPlay(this.store.playStore.plays[arg.message.nextPlayId]);
+					}
+					break;
+				default:
+					throw new Error("invalid type: " + arg.message.type);
 			}
 		} catch (e) {
 			console.error("_handleBroadcast()", e);
 		}
-	}
+	};
 
-	private _createInstanceArgumentForNicolive(isBroadcaster: boolean) {
+	private _createInstanceArgumentForNicolive(isBroadcaster: boolean): any {
 		return {
 			coe: {
 				permission: {

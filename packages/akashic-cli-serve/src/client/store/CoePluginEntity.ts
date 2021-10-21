@@ -1,8 +1,8 @@
 import { Event } from "@akashic/playlog";
+import { GameViewManager } from "../akashic/GameViewManager";
 import {
 	CoeStartSessionParameterObject, CoeExitSessionParameterObject, CoeApplicationIdentifier, CoeExternalMessage
 } from "../common/types/plugin";
-import { GameViewManager } from "../akashic/GameViewManager";
 import { LocalInstanceEntity } from "./LocalInstanceEntity";
 
 export interface GameState {
@@ -83,7 +83,7 @@ export class CoePluginEntity {
 			// TODO: エラーハンドリング
 			console.error(e);
 		}
-	}
+	};
 
 	exitSession = async (sessionId: string, parameters: CoeExitSessionParameterObject): Promise<void> => {
 		try {
@@ -107,11 +107,11 @@ export class CoePluginEntity {
 			// TODO: エラーハンドリング
 			console.error(e);
 		}
-	}
+	};
 
 	sendLocalEvents = async (_sessionId: string, _events: Event[]): Promise<void> => {
 		// TODO
-	}
+	};
 
 	private async _startSession(_contentUrl: string, _parameters: any): Promise<void> {
 		// TODO
