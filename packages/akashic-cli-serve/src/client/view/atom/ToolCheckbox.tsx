@@ -1,6 +1,5 @@
 import * as React from "react";
 import { observer } from "mobx-react";
-import { ToolIconButton } from "../atom/ToolIconButton";
 import * as styles from "./ToolCheckbox.css";
 
 export interface ToolCheckboxProps {
@@ -9,7 +8,7 @@ export interface ToolCheckboxProps {
 	onChange: (checked: boolean) => void;
 }
 
-export const ToolCheckbox = observer(function (props: ToolCheckboxProps) {
+export const ToolCheckbox = observer(function ToolCheckbox(props: ToolCheckboxProps) {
 	const { checked, label, onChange } = props;
 	const handleChange = React.useCallback(() => onChange(!checked), [checked, onChange]);
 	return (
