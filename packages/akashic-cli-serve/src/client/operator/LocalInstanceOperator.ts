@@ -1,4 +1,3 @@
-import { GetStartPointOptions } from "@akashic/amflow";
 import { Store } from "../store/Store";
 
 export class LocalInstanceOperator {
@@ -13,43 +12,35 @@ export class LocalInstanceOperator {
 	};
 
 	seekTo = async (time: number): Promise<void> => {
-		this.store.currentLocalInstance.setExecutionMode("replay");
-		this.store.currentLocalInstance.setTargetTime(time);
 		this.store.toolBarUiStore.endPreviewSeek();
+		this.switchToReplay(time);
 
 		if (this.store.devtoolUiStore.isForceResetOnSeek) {
-			const timestamp = time + this.store.currentPlay.amflow.getStartedAt();
-			this.resetByNearestStartPointOf({ timestamp }, false);
+			const amflow = this.store.currentPlay.amflow;
+			const sp = await amflow.getStartPointPromise({ timestamp: time + amflow.getStartedAt() });
+			this.store.currentLocalInstance.reset(sp);
 		}
 	};
 
-	resetToStartPointOfFrame = async (frame: number): Promise<void> => {
-		await this.resetByNearestStartPointOf({ frame }, true);
-	};
-
-	resetToStartPointOfIndex = async (index: number): Promise<void> => {
-		const sps = this.store.currentPlay.startPointHeaders;
-		await this.resetByNearestStartPointOf({ frame: sps[index].frame }, true);
-	};
-
-	/**
-	 * 条件にもっとも近いスタートポイントでローカルインスタンスをリセットする。
-	 * toSeek が真なら、さらにリセットした時点にシークする。
-	 * ローカルインスタンスがリセット可能でない (Akashic Engine v2 以前) 場合、何もしない。
-	 */
-	resetByNearestStartPointOf = async (opts: GetStartPointOptions, toSeek: boolean): Promise<void> => {
-		if (!this.store.currentLocalInstance.isResettable)
-			return;
-		const amflow = this.store.currentLocalInstance.play.amflow;
-		const sp = await amflow.getStartPointPromise(opts);
+	jumpToStartPointOfIndex = async (index: number): Promise<void> => {
+		const { amflow, startPointHeaders } = this.store.currentPlay;
+		const sp = await amflow.getStartPointPromise({ frame: startPointHeaders[index].frame });
 		this.store.currentLocalInstance.reset(sp);
-		if (toSeek) {
-			this.seekTo(sp.timestamp - amflow.getStartedAt());
-		}
+		this.switchToReplay(sp.timestamp - amflow.getStartedAt());
+	};
+
+	resetByAge = async (age: number): Promise<void> => {
+		const sp = await this.store.currentPlay.amflow.getStartPointPromise({ frame: age });
+		this.store.currentLocalInstance.reset(sp);
 	};
 
 	togglePause = (pause: boolean): void => {
 		this.store.currentLocalInstance.togglePause(pause);
+	};
+
+	switchToReplay = (time: number): void => {
+		this.store.currentLocalInstance.setExecutionMode("replay");
+		this.store.currentLocalInstance.setTargetTime(time);
 	};
 
 	switchToRealtime = (): void => {

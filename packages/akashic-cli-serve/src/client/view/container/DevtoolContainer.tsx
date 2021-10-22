@@ -125,7 +125,7 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 				onClickPause: operator.localInstance.togglePause,
 				onClickFastForward: operator.localInstance.switchToRealtime,
 				onHoverStartPoint: operator.devtool.setHoveredStartPointIndex,
-				onJumpWithStartPoint: operator.localInstance.resetToStartPointOfIndex,
+				onJumpWithStartPoint: operator.localInstance.jumpToStartPointOfIndex,
 				onDumpStartPoint: operator.devtool.dumpStartPointOfIndex
 			}}
 		/>;

@@ -80,10 +80,10 @@ export class Operator {
 
 		if (query.mode === "replay") {
 			if (query.replayResetAge != null) {
-				await this.localInstance.resetByNearestStartPointOf({ frame: query.replayResetAge }, false);
+				await this.localInstance.resetByAge(query.replayResetAge);
 			}
 			if (query.replayTargetTime != null) {
-				this.localInstance.seekTo(query.replayTargetTime);
+				this.store.currentLocalInstance.setTargetTime(query.replayTargetTime);
 			}
 		}
 
