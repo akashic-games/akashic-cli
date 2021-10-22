@@ -13,23 +13,14 @@ export class LocalInstanceOperator {
 	};
 
 	seekTo = async (time: number): Promise<void> => {
-		this.switchToReplay(time);
+		this.store.currentLocalInstance.setExecutionMode("replay");
+		this.store.currentLocalInstance.setTargetTime(time);
+		this.store.toolBarUiStore.endPreviewSeek();
 
 		if (this.store.devtoolUiStore.isForceResetOnSeek) {
 			const timestamp = time + this.store.currentPlay.amflow.getStartedAt();
 			this.resetByNearestStartPointOf({ timestamp }, false);
 		}
-	};
-
-	switchToReplay = (time: number): void => {
-		this.store.currentLocalInstance.setExecutionMode("replay");
-		this.store.currentLocalInstance.setTargetTime(time);
-		this.store.toolBarUiStore.endPreviewSeek();
-	};
-
-	switchToRealtime = (): void => {
-		this.store.currentLocalInstance.setExecutionMode("passive");
-		this.store.currentLocalInstance.resume();
 	};
 
 	resetToStartPointOfFrame = async (frame: number): Promise<void> => {
@@ -59,5 +50,10 @@ export class LocalInstanceOperator {
 
 	togglePause = (pause: boolean): void => {
 		this.store.currentLocalInstance.togglePause(pause);
+	};
+
+	switchToRealtime = (): void => {
+		this.store.currentLocalInstance.setExecutionMode("passive");
+		this.store.currentLocalInstance.resume();
 	};
 }
