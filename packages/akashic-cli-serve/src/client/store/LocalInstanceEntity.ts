@@ -51,6 +51,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 	@observable player: Player;
 	@observable executionMode: ExecutionMode;
 	@observable targetTime: number;
+	@observable resetTime: number;
 	@observable isPaused: boolean;
 
 	readonly play: PlayEntity;
@@ -69,6 +70,8 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 		this.onStop = new Trigger<LocalInstanceEntity>();
 		this.player = params.player;
 		this.executionMode = params.executionMode;
+		this.targetTime = 0; // 値は _timeKeeper を元に更新される
+		this.resetTime = 0;
 		this.play = params.play;
 		this.isPaused = false;
 		this.content = params.content;
@@ -89,6 +92,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 		if (params.playToken != null) {
 			playConfig.playToken = params.playToken;
 		}
+
 		this._serveGameContent = this._gameViewManager.createGameContent({
 			contentLocator: this.content.locator,
 			player: {
@@ -100,6 +104,8 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 			argument: params.argument,
 			proxyAudio: params.proxyAudio
 		});
+		this._serveGameContent.onReset.add(this._handleReset, this);
+
 		if (params.coeHandler != null) {
 			this.coePlugin = new CoePluginEntity({
 				gameViewManager: this._gameViewManager,
@@ -161,8 +167,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 
 	@computed
 	get isResettable(): boolean {
-		const gameDriver = this._serveGameContent.agvGameContent.getGameDriver();
-		return !!gameDriver._gameLoop.reset;
+		return this._serveGameContent.isResettable();
 	}
 
 	get gameContent(): ServeGameContent {
@@ -192,8 +197,9 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 	 * isResettable が真でない場合、何もしない。
 	 */
 	reset(startPoint: amf.StartPoint): void {
-		const gameDriver = this._serveGameContent.agvGameContent.getGameDriver();
-		gameDriver._gameLoop.reset?.(startPoint);
+		if (!this.isResettable)
+			return;
+		this._serveGameContent.reset(startPoint);
 	}
 
 	togglePause(pause: boolean): Promise<void> {
@@ -292,5 +298,10 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 		const contentJson = await ApiRequest.get<{ content_url: string }>(url);
 		const gameJson = await ApiRequest.get<{ width: number; height: number }>(contentJson.content_url);
 		this._gameViewManager.setViewSize(gameJson.width, gameJson.height);
+	}
+
+	@action
+	private _handleReset(sp: amf.StartPoint): void {
+		this.resetTime = sp.timestamp - this.play.amflow.getStartedAt();
 	}
 }

@@ -8,6 +8,7 @@ storiesOf("m-InstanceControl", module)
 		<InstanceControl makeProps={() => ({
 			currentTime: 2234 * 1000,
 			duration: 7501 * 1000,
+			resetTime: 1111 * 1000,
 			isPaused: false,
 			isProgressActive: false,
 			onProgressChange: action("progress-change"),
