@@ -4,10 +4,10 @@ import { ServiceType } from "@akashic/akashic-cli-commons/lib/ServiceType";
 import { SandboxConfig } from "../../../common/types/SandboxConfig";
 import { PlayEntity } from "../../store/PlayEntity";
 import { DevtoolUiStore } from "../../store/DevtoolUiStore";
-import { Operator } from "../../operator/Operator";
-import { Devtool } from "../organism/Devtool";
 import { LocalInstanceEntity } from "../../store/LocalInstanceEntity";
 import { ToolBarUiStore } from "../../store/ToolBarUiStore";
+import { Operator } from "../../operator/Operator";
+import { Devtool } from "../organism/Devtool";
 
 export interface DevtoolContainerProps {
 	play: PlayEntity;

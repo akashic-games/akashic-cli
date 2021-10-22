@@ -11,7 +11,6 @@ import { NotificationContainer } from "./container/NotificationContainer";
 import { GameScreenContainer } from "./container/GameScreenContainer";
 import "./global.css";
 import * as styles from "./App.css";
-import { LocalInstanceEntity } from "../store/LocalInstanceEntity";
 
 export interface AppProps {
 	store: Store;

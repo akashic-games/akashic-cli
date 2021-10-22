@@ -1,11 +1,11 @@
 import * as React from "react";
 import { observer } from "mobx-react";
+import { StartPointHeader } from "../../../common/types/StartPointHeader";
 import { millisecondsToHms } from "../../common/DateUtil";
 import { ToolCheckbox } from "../atom/ToolCheckbox";
 import { ToolIconButton } from "../atom/ToolIconButton";
 import { ToolProgressBar } from "../atom/ToolProgressBar";
 import * as styles from "./PlaybackOptionBar.css";
-import { StartPointHeader } from "../../../common/types/StartPointHeader";
 
 export interface PlaybackOptionBarProps {
 	currentTime: number;
