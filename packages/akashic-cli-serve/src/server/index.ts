@@ -151,19 +151,14 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 	const targetDirs: string[] = cliConfigParam.targetDirs;
 	// eslint-disable-next-line @typescript-eslint/no-var-requires
 	const versionsJson = require("./engineFilesVersion.json");
-	console.log("The versions of engine-files used by akashic-cli-serve is as follows.");
-	["v1", "v2", "v3"].forEach(v => console.log(`* ${v}: ${versionsJson[v]["version"]}`));
+	const engineFilesVersions = Object.keys(versionsJson).map(key => `v${versionsJson[key].version}`);
+	console.log(`Included engine-files: ${engineFilesVersions.join(", ")}`);
 	targetDirs.forEach(dir => {
 		const contentPath = path.join(dir, "game.json");
 		if (!fs.existsSync(contentPath)) {
 			getSystemLogger().error(`Not found :${contentPath}`);
 			process.exit(1);
 		}
-		// eslint-disable-next-line @typescript-eslint/no-var-requires
-		const gameJson = require(contentPath);
-		const engineVersion = gameJson["environment"]["sandbox-runtime"] ?? "1";
-		const engineFilesVersion = versionsJson[`v${engineVersion}`]["version"];
-		console.log(`Content(path: ${contentPath}) uses engine-files v${engineVersion}(${engineFilesVersion}).`);
 	});
 
 	const playManager = new PlayManager();
