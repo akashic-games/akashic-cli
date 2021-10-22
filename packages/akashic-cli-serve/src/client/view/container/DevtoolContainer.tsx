@@ -7,11 +7,13 @@ import { DevtoolUiStore } from "../../store/DevtoolUiStore";
 import { Operator } from "../../operator/Operator";
 import { Devtool } from "../organism/Devtool";
 import { LocalInstanceEntity } from "../../store/LocalInstanceEntity";
+import { ToolBarUiStore } from "../../store/ToolBarUiStore";
 
 export interface DevtoolContainerProps {
 	play: PlayEntity;
 	operator: Operator;
 	localInstance: LocalInstanceEntity;
+	toolBarUiStore: ToolBarUiStore; // プログレスバーの値を共有してしまっているのでそれの参照に利用
 	devtoolUiStore: DevtoolUiStore;
 	sandboxConfig: SandboxConfig;
 	targetService: ServiceType;
@@ -20,7 +22,7 @@ export interface DevtoolContainerProps {
 @observer
 export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}> {
 	render(): React.ReactNode {
-		const { play, operator, localInstance, devtoolUiStore, sandboxConfig, targetService } = this.props;
+		const { play, operator, localInstance, toolBarUiStore, devtoolUiStore, sandboxConfig, targetService } = this.props;
 		return <Devtool
 			height={devtoolUiStore.height}
 			minHeight={200}
@@ -105,12 +107,12 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 				focusedStartPointHeaderIndex: devtoolUiStore.focusedStartPointHeaderIndex,
 				currentTime: (
 					(localInstance.executionMode !== "replay") ? play.duration :
-					(devtoolUiStore.isSeeking) ? devtoolUiStore.currentTimePreview : localInstance.targetTime
+					(toolBarUiStore.isSeeking) ? toolBarUiStore.currentTimePreview : localInstance.targetTime
 				),
 				duration: play.duration,
 				resetTime: localInstance.resetTime,
 				isPaused: localInstance.isPaused,
-				isProgressActive: devtoolUiStore.isSeeking,
+				isProgressActive: toolBarUiStore.isSeeking,
 				isReplay: (localInstance.executionMode === "replay"),
 				isActiveExists: play.status === "running", // NOTE: 現実装に依存した実装。概念的には play.status とは独立な判定が必要
 				isActivePaused: play.isActivePausing,

@@ -8,34 +8,25 @@ export class DevtoolUiStore {
 	// storage に保存するもの
 	@observable height: number;
 	@observable activeDevtool: string;
-	// storage に保存するもの - playback
 	@observable isForceResetOnSeek: boolean;
-	// storege に保存するもの - events
 	@observable showsEventList: boolean;
 	@observable eventListWidth: number;
 	@observable eventEditContent: string;
-	// storege に保存するもの - entity
 	@observable showsHiddenEntity: boolean;
-	// storege に保存するもの - niconico
 	@observable isAutoSendEvent: boolean;
 	@observable emulatingShinichibaMode: string;
 	@observable usePreferredTotalTimeLimit: boolean;
 	@observable stopsGameOnTimeout: boolean;
 	@observable totalTimeLimitInputValue: number;
 
-	// storage に保存しないもの - playback
-	@observable isSeeking: boolean;
-	@observable currentTimePreview: number;
+	// storage に保存しないもの
 	@observable focusedStartPointHeaderIndex: number | null;
-	// storage に保存しないもの - entity
 	@observable isSelectingEntity: boolean;
 	@observable selectedEntityId: number | null;
 	@observable entityTrees: EDumpItem[];
 	@observable entityTreeStateTable: ObservableMap<number, boolean>;
-	// storage に保存しないもの - atsumaru
 	@observable isSeekingVolume: boolean;
 	@observable volume: number;
-	// storage に保存しないもの - niconico
 	@observable score: number;
 	@observable playThreshold: number;
 	@observable clearThreshold: number;
@@ -50,8 +41,6 @@ export class DevtoolUiStore {
 		this.eventListWidth = storage.data.eventListWidth;
 		this.eventEditContent = storage.data.eventEditContent;
 		this.showsHiddenEntity = storage.data.showsHiddenEntity;
-		this.isSeeking = false;
-		this.currentTimePreview = 0;
 		this.focusedStartPointHeaderIndex = null;
 		this.isSelectingEntity = false;
 		this.selectedEntityId = null;
@@ -100,22 +89,6 @@ export class DevtoolUiStore {
 	setEventEditContent(content: string): void {
 		this.eventEditContent = content;
 		storage.put({ eventEditContent: content });
-	}
-
-	@action
-	previewSeekTo(seconds: number): void {
-		this.currentTimePreview = seconds;
-		this.isSeeking = true;
-	}
-
-	@action
-	endPreviewSeek(): void {
-		this.isSeeking = false;
-	}
-
-	@action
-	seekTo(seconds: number): void {
-		this.currentTimePreview = seconds;
 	}
 
 	@action

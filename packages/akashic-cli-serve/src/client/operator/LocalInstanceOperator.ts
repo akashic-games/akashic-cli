@@ -9,7 +9,7 @@ export class LocalInstanceOperator {
 	}
 
 	previewSeekTo = (time: number): void => {
-		this.store.devtoolUiStore.previewSeekTo(time);
+		this.store.toolBarUiStore.previewSeekTo(time);
 	};
 
 	seekTo = async (time: number): Promise<void> => {
@@ -24,7 +24,7 @@ export class LocalInstanceOperator {
 	switchToReplay = (time: number): void => {
 		this.store.currentLocalInstance.setExecutionMode("replay");
 		this.store.currentLocalInstance.setTargetTime(time);
-		this.store.devtoolUiStore.endPreviewSeek();
+		this.store.toolBarUiStore.endPreviewSeek();
 	};
 
 	switchToRealtime = (): void => {

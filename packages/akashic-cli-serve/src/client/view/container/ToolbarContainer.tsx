@@ -18,7 +18,6 @@ export interface ToolBarContainerProps {
 	localInstance: LocalInstanceEntity;
 	operator: Operator;
 	toolBarUiStore: ToolBarUiStore;
-	devtoolUiStore: DevtoolUiStore; // シークバーの値を devtool と共有しているためその参照にのみ利用
 	targetService: ServiceType;
 }
 
@@ -55,16 +54,16 @@ export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}>
 	}
 
 	private _makeInstanceControlProps = (): InstanceControlPropsData => {
-		const { play, localInstance, operator, devtoolUiStore } = this.props;
+		const { play, localInstance, operator, toolBarUiStore } = this.props;
 		return {
 			currentTime: (
 				(localInstance.executionMode !== "replay") ? play.duration :
-				(devtoolUiStore.isSeeking) ? devtoolUiStore.currentTimePreview : localInstance.targetTime
+				(toolBarUiStore.isSeeking) ? toolBarUiStore.currentTimePreview : localInstance.targetTime
 			),
 			duration: play.duration,
 			resetTime: localInstance.resetTime,
 			isPaused: localInstance.isPaused,
-			isProgressActive: devtoolUiStore.isSeeking,
+			isProgressActive: toolBarUiStore.isSeeking,
 			enableFastForward: (localInstance.executionMode === "replay"),
 			onProgressChange: operator.localInstance.previewSeekTo,
 			onProgressCommit: operator.localInstance.seekTo,

@@ -44,7 +44,6 @@ export class App extends React.Component<AppProps, {}> {
 				localInstance={store.currentLocalInstance}
 				operator={operator}
 				toolBarUiStore={store.toolBarUiStore}
-				devtoolUiStore={store.devtoolUiStore}
 				targetService={store.targetService}
 			/>
 			<FlexScrollY>
@@ -67,6 +66,7 @@ export class App extends React.Component<AppProps, {}> {
 							play={store.currentPlay}
 							localInstance={store.currentLocalInstance}
 							operator={operator}
+							toolBarUiStore={store.toolBarUiStore}
 							devtoolUiStore={store.devtoolUiStore}
 							sandboxConfig={sandboxConfig}
 							targetService={store.targetService}
