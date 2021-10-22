@@ -97,6 +97,6 @@ export class UiOperator {
 	};
 
 	setShowsProfiler = (show: boolean): void => {
-		this.store.devtoolUiStore.setShowsProfiler(show);
+		this.store.toolBarUiStore.setShowsProfiler(show);
 	};
 }

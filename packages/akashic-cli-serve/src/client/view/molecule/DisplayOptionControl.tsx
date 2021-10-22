@@ -8,10 +8,12 @@ export interface DisplayOptionControlPropsData {
 	showsDisplayOptionPopover: boolean;
 	showsBackgroundImage: boolean;
 	showsGrid: boolean;
+	showsProfiler: boolean;
 	showsDesignGuideline: boolean;
 	onClickDisplayOptionPopover: (show: boolean) => void;
 	onChangeShowBackgroundImage: (show: boolean) => void;
 	onChangeShowGrid: (show: boolean) => void;
+	onChangeShowProfiler: (show: boolean) => void;
 	onChangeShowDesignGuideline: (show: boolean) => void;
 }
 
@@ -24,10 +26,12 @@ export const DisplayOptionControl = observer(function (props: DisplayOptionContr
 		showsDisplayOptionPopover,
 		showsBackgroundImage,
 		showsGrid,
+		showsProfiler,
 		showsDesignGuideline,
 		onClickDisplayOptionPopover,
 		onChangeShowBackgroundImage,
 		onChangeShowGrid,
+		onChangeShowProfiler,
 		onChangeShowDesignGuideline
 	} = props.makeProps();
 	const ref = React.useRef();
@@ -66,6 +70,17 @@ export const DisplayOptionControl = observer(function (props: DisplayOptionContr
 						onChange={() => onChangeShowGrid(!showsGrid)}
 					/>
 					Show grid
+				</label>
+			</div>
+			<div className={styles["label"]}>
+				<label>
+					<input
+						className={styles["checkbox"] + " external-ref_checkbox_shows-profiler"}
+						type="checkbox"
+						checked={showsProfiler}
+						onChange={() => onChangeShowProfiler(!showsProfiler)}
+					/>
+					Show profiler
 				</label>
 			</div>
 			<div className={styles["label"]}>
