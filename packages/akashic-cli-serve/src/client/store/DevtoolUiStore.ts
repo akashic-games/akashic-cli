@@ -5,8 +5,10 @@ import { storage } from "./storage";
 export class DevtoolUiStore {
 	static DEFAULT_TOTAL_TIME_LIMIT = 85;
 
+	// storage に保存するもの
 	@observable height: number;
 	@observable activeDevtool: string;
+	@observable isForceResetOnSeek: boolean;
 	@observable showsEventList: boolean;
 	@observable eventListWidth: number;
 	@observable eventEditContent: string;
@@ -33,6 +35,7 @@ export class DevtoolUiStore {
 	constructor() {
 		this.height = storage.data.devtoolsHeight;
 		this.activeDevtool = storage.data.activeDevtool;
+		this.isForceResetOnSeek = storage.data.isForceResetOnSeek;
 		this.showsEventList = storage.data.showsEventList;
 		this.eventListWidth = storage.data.eventListWidth;
 		this.eventEditContent = storage.data.eventEditContent;
@@ -60,6 +63,12 @@ export class DevtoolUiStore {
 	setActiveDevtool(type: string): void {
 		this.activeDevtool = type;
 		storage.put({ activeDevtool: type });
+	}
+
+	@action
+	toggleForceResetOnSeek(reset: boolean): void {
+		this.isForceResetOnSeek = reset;
+		storage.put({ isForceResetOnSeek: reset });
 	}
 
 	@action
