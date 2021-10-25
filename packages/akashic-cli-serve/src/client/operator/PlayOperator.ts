@@ -112,7 +112,7 @@ export class PlayOperator {
 
 	// 指定したURLからファイルをダウンロードする
 	// download属性が無いとコンテンツが止まって可能性があるので、空文字をファイル名のデフォルト値にしている
-	private downloadFile = (url: string, fileName: string = "") => {
+	private downloadFile = (url: string, fileName: string = ""): void => {
 		const a = document.createElement("a");
 		document.body.appendChild(a);
 		a.href = url;
