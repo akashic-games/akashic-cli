@@ -44,7 +44,7 @@
     "@typescript-eslint/eslint-plugin": "4.33.0",
     "bestzip": "2.2.0",
     "eslint": "7.32.0",
-    "eslint-plugin-import": "2.24.2",
+    "eslint-plugin-import": "2.25.2",
     "eslint-plugin-jest": "24.7.0",
     "express": "4.17.1",
     "get-port": "5.1.1",
@@ -59,7 +59,7 @@
   "dependencies": {
     "@akashic/akashic-cli-commons": "0.10.0",
     "@akashic/akashic-cli-extra": "1.4.0",
-    "commander": "8.2.0",
+    "commander": "8.3.0",
     "fs-extra": "9.1.0",
     "prompt": "1.2.0",
     "request": "^2.74.0",
