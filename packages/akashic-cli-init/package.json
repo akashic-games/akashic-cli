@@ -38,7 +38,7 @@
     "@types/commander": "2.12.0",
     "@types/form-data": "2.2.1",
     "@types/fs-extra": "9.0.13",
-    "@types/node": "14.17.21",
+    "@types/node": "14.17.32",
     "@types/request": "2.48.7",
     "@types/unzipper": "0.10.4",
     "@typescript-eslint/eslint-plugin": "4.33.0",
