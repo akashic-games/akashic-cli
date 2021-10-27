@@ -1,18 +1,18 @@
-import * as React from "react";
-import { observable, ObservableMap } from "mobx";
-import { observer } from "mobx-react";
-import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
+import { storiesOf } from "@storybook/react";
+import { observable } from "mobx";
+import { observer } from "mobx-react";
+import * as React from "react";
 import { EDumpItem } from "../../common/types/EDumpItem";
-import { Devtool } from "../organism/Devtool";
 import { NiconicoDevtoolProps } from "../molecule/NiconicoDevtool";
+import { Devtool } from "../organism/Devtool";
 
 const store = observable({
 	devtoolsHeight: 300,
 	activeDevtool: "EntityTree",
 	showsEventList: true,
 	eventListWidth: 280,
-	eventEditContent: `["test": true]`,
+	eventEditContent: "[\"test\": true]",
 	entityTreeStateTable: observable.map({}),
 	showsHidden: true,
 	volume: 0,
@@ -177,7 +177,7 @@ const TestWithBehaviour = observer(() => (
 			showsHidden: store.showsHidden,
 			onClickDump: action("dump"),
 			onChangeShowsHidden: shows => store.showsHidden = shows,
-			onClickSelectEntity: () => {},
+			onClickSelectEntity: () => {}, // eslint-disable-line @typescript-eslint/no-empty-function
 			onClickUpdateEntityTrees: action("update-entity-tree"),
 			onClickToggleOpenEntityChildren: (e => {
 				store.entityTreeStateTable.set(e.id, !store.entityTreeStateTable.get(e.id));
@@ -229,7 +229,7 @@ storiesOf("o-Devtool", module)
 					"Stop",
 					"A very long event name to see how it will be shown on your display ya?"
 				],
-				eventEditContent: `["test", 1]`,
+				eventEditContent: "[\"test\", 1]",
 				onClickSendEvent: action("events:send"),
 				onClickCopyEvent: action("events:copy"),
 				onClickSendEditingEvent: action("events:send-edit"),
@@ -368,7 +368,7 @@ storiesOf("o-Devtool", module)
 					"Test 31",
 					"Test 32"
 				],
-				eventEditContent: `["test", 1]`,
+				eventEditContent: "[\"test\", 1]",
 				onClickSendEvent: action("events:send"),
 				onClickCopyEvent: action("events:copy"),
 				onClickSendEditingEvent: action("events:send-edit"),
@@ -430,7 +430,7 @@ storiesOf("o-Devtool", module)
 				onEventListResize: action("events:list-resize"),
 				onClickShowEventList: action("events:toggle-list"),
 				eventNames: [ "Foo", "Test 0" ],
-				eventEditContent: `["test", 1]`,
+				eventEditContent: "[\"test\", 1]",
 				onClickSendEvent: action("events:send"),
 				onClickCopyEvent: action("events:copy"),
 				onClickSendEditingEvent: action("events:send-edit"),
@@ -533,7 +533,7 @@ storiesOf("o-Devtool", module)
 				onEventListResize: action("events:list-resize"),
 				onClickShowEventList: action("events:toggle-list"),
 				eventNames: ["Foo", "Test 0"],
-				eventEditContent: `["test", 1]`,
+				eventEditContent: "[\"test\", 1]",
 				onClickSendEvent: action("events:send"),
 				onClickCopyEvent: action("events:copy"),
 				onClickSendEditingEvent: action("events:send-edit"),
@@ -590,7 +590,7 @@ storiesOf("o-Devtool", module)
 				onEventListResize: action("events:list-resize"),
 				onClickShowEventList: action("events:toggle-list"),
 				eventNames: ["Foo", "Test 0"],
-				eventEditContent: `["test", 1]`,
+				eventEditContent: "[\"test\", 1]",
 				onClickSendEvent: action("events:send"),
 				onClickCopyEvent: action("events:copy"),
 				onClickSendEditingEvent: action("events:send-edit"),

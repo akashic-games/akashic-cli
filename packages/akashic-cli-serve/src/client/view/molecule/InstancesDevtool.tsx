@@ -1,7 +1,7 @@
-import * as React from "react";
 import { observer } from "mobx-react";
-import { ToolIconButton } from "../atom/ToolIconButton";
+import * as React from "react";
 import { FlexScrollY } from "../atom/FlexScrollY";
+import { ToolIconButton } from "../atom/ToolIconButton";
 import * as styles from "./InstancesDevtool.css";
 
 export interface InstanceViewData {
@@ -23,8 +23,8 @@ export class InstancesDevtool extends React.Component<InstancesDevtoolProps, {}>
 		return <div className={styles["instances-devtool"]}>
 			<div className={styles["instance-toolbar"]}>
 				<ToolIconButton className="external-ref_button_add-instance" icon="group_add"
-				                title="インスタンスを追加"
-				                onClick={this.props.onClickAddInstance}>
+					title="インスタンスを追加"
+					onClick={this.props.onClickAddInstance}>
 					Add Instance
 				</ToolIconButton>
 			</div>
@@ -70,5 +70,5 @@ export class InstancesDevtool extends React.Component<InstancesDevtoolProps, {}>
 	private _onClickAddInstanceLink = (ev: React.MouseEvent<HTMLAnchorElement>): void => {
 		ev.preventDefault();
 		this.props.onClickAddInstance();
-	}
+	};
 }

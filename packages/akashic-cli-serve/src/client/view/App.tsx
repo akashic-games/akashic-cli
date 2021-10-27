@@ -1,16 +1,16 @@
-import * as React from "react";
 import { observer } from "mobx-react";
+import * as React from "react";
 import { GameViewManager } from "../akashic/GameViewManager";
-import { Store } from "../store/Store";
 import { Operator } from "../operator/Operator";
-import { FlexScrollY } from "./atom/FlexScrollY";
-import { ToolBarContainer } from "./container/ToolbarContainer";
-import { DevtoolContainer } from "./container/DevtoolContainer";
-import { StartupScreenContainer } from "./container/StartupScreenContainer";
-import { NotificationContainer } from "./container/NotificationContainer";
-import { GameScreenContainer } from "./container/GameScreenContainer";
-import "./global.css";
+import { Store } from "../store/Store";
 import * as styles from "./App.css";
+import { FlexScrollY } from "./atom/FlexScrollY";
+import { DevtoolContainer } from "./container/DevtoolContainer";
+import { GameScreenContainer } from "./container/GameScreenContainer";
+import { NotificationContainer } from "./container/NotificationContainer";
+import { StartupScreenContainer } from "./container/StartupScreenContainer";
+import { ToolBarContainer } from "./container/ToolbarContainer";
+import "./global.css";
 
 export interface AppProps {
 	store: Store;
@@ -20,7 +20,7 @@ export interface AppProps {
 
 @observer
 export class App extends React.Component<AppProps, {}> {
-	render() {
+	render(): JSX.Element {
 		const { store, operator } = this.props;
 		if (!store.currentLocalInstance) {
 			return <div id="whole" className={styles["whole-dialog"]}>
@@ -37,7 +37,7 @@ export class App extends React.Component<AppProps, {}> {
 		}
 
 		const sandboxConfig = store.currentLocalInstance.content.sandboxConfig || {};
-		return <div id="whole" className={styles["whole"]}>
+		return <div id="whole" className={styles.whole}>
 			<ToolBarContainer
 				play={store.currentPlay}
 				localInstance={store.currentLocalInstance}
@@ -46,7 +46,7 @@ export class App extends React.Component<AppProps, {}> {
 				targetService={store.targetService}
 			/>
 			<FlexScrollY>
-				<div id="agvcontainer" className={styles["main"] + " " + styles["centering"] }>
+				<div id="agvcontainer" className={styles.main + " " + styles.centering }>
 					<GameScreenContainer
 						sandboxConfig={sandboxConfig}
 						toolBarUiStore={store.toolBarUiStore}
@@ -60,7 +60,7 @@ export class App extends React.Component<AppProps, {}> {
 			</FlexScrollY>
 			{
 				store.toolBarUiStore.showsDevtools ?
-					<div className={styles["devtools"]}>
+					<div className={styles.devtools}>
 						<DevtoolContainer
 							play={store.currentPlay}
 							operator={operator}

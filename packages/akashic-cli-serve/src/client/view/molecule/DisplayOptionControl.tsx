@@ -1,8 +1,8 @@
-import * as React from "react";
 import { observer } from "mobx-react";
+import * as React from "react";
+import { Popover } from "../atom/Popover";
 import { ToolIconButton } from "../atom/ToolIconButton";
 import * as styles from "./DisplayOptionControl.css";
-import { Popover } from "../atom/Popover";
 
 export interface DisplayOptionControlPropsData {
 	showsDisplayOptionPopover: boolean;
@@ -44,16 +44,16 @@ export const DisplayOptionControl = observer(function (props: DisplayOptionContr
 			pushed={showsDisplayOptionPopover}
 			onClick={onClickDisplayOptionPopover} />
 		<Popover
-			className={styles["popover"]}
+			className={styles.popover}
 			shows={showsDisplayOptionPopover}
 			caption={"Display Options"}
 			onChangeShows={onClickDisplayOptionPopover}
 			outsideRef={ref}
 		>
-			<div className={styles["label"]}>
+			<div className={styles.label}>
 				<label>
 					<input
-						className={styles["checkbox"] + " external-ref_checkbox_shows-background-image"}
+						className={styles.checkbox + " external-ref_checkbox_shows-background-image"}
 						type="checkbox"
 						checked={showsBackgroundImage}
 						onChange={() => onChangeShowBackgroundImage(!showsBackgroundImage)}
@@ -61,10 +61,10 @@ export const DisplayOptionControl = observer(function (props: DisplayOptionContr
 					Show backgorund image
 				</label>
 			</div>
-			<div className={styles["label"]}>
+			<div className={styles.label}>
 				<label>
 					<input
-						className={styles["checkbox"] + " external-ref_checkbox_shows-grid"}
+						className={styles.checkbox + " external-ref_checkbox_shows-grid"}
 						type="checkbox"
 						checked={showsGrid}
 						onChange={() => onChangeShowGrid(!showsGrid)}
@@ -72,10 +72,10 @@ export const DisplayOptionControl = observer(function (props: DisplayOptionContr
 					Show grid
 				</label>
 			</div>
-			<div className={styles["label"]}>
+			<div className={styles.label}>
 				<label>
 					<input
-						className={styles["checkbox"] + " external-ref_checkbox_shows-profiler"}
+						className={styles.checkbox + " external-ref_checkbox_shows-profiler"}
 						type="checkbox"
 						checked={showsProfiler}
 						onChange={() => onChangeShowProfiler(!showsProfiler)}
@@ -83,17 +83,17 @@ export const DisplayOptionControl = observer(function (props: DisplayOptionContr
 					Show profiler
 				</label>
 			</div>
-			<div className={styles["label"]}>
+			<div className={styles.label}>
 				<label>
 					<span className={styles["design-guideline"]}>
 						<input
-							className={styles["checkbox"] + " external-ref_checkbox_shows-design-guideline"}
+							className={styles.checkbox + " external-ref_checkbox_shows-design-guideline"}
 							type="checkbox"
 							checked={showsDesignGuideline}
 							onChange={() => onChangeShowDesignGuideline(!showsDesignGuideline)}
 						/>
 						Show Design Guidelines
-						<a href="https://akashic-games.github.io/shin-ichiba/design-guidelines.html" target="_blank">
+						<a href="https://akashic-games.github.io/shin-ichiba/design-guidelines.html" target="_blank" rel="noreferrer">
 							<i className={"material-icons " + styles["help-link-icon"]}>help</i>
 						</a>
 					</span>

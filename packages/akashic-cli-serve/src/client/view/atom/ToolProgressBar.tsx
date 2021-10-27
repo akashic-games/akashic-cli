@@ -1,5 +1,5 @@
-import * as React from "react";
 import { observer } from "mobx-react";
+import * as React from "react";
 import * as styles from "./ToolProgressBar.css";
 
 export interface ToolProgressBarProps {
@@ -60,24 +60,24 @@ export class ToolProgressBar extends React.Component<ToolProgressBarProps, {}> {
 		this._ref = null;
 	}
 
-	render() {
+	render(): JSX.Element {
 		const { width, max, value, subValue, markerValue, active } = this.props;
 		const ratio = clamp(value, 0, max) / max;
 		const subRatio = clamp((subValue ?? 0), 0, max) / max;
 		const markerRatio = (markerValue != null) ? clamp(markerValue, 0, max) / max : null;
-		const className = styles["tool-progress-bar"] + (active ? ` ${styles["active"]}` : "");
-		const subBar = <div className={styles["subbar"]} style={{ width: `${subRatio * 100}%` }} />;
+		const className = styles["tool-progress-bar"] + (active ? ` ${styles.active}` : "");
+		const subBar = <div className={styles.subbar} style={{ width: `${subRatio * 100}%` }} />;
 		return (
-			<div className={styles["container"]} style={{ width }} onMouseDown={this._onMouseDownGauge} >
+			<div className={styles.container} style={{ width }} onMouseDown={this._onMouseDownGauge} >
 				<div className={className} ref={this._onRef}>
 					{ (subRatio > ratio) && subBar }
-					<div className={styles["bar"]} style={{ width: `${ratio * 100}%` }} />
+					<div className={styles.bar} style={{ width: `${ratio * 100}%` }} />
 					{ (subRatio <= ratio) && subBar }
 					{
 						// 4px ずらすのは CSS に由来。.marker の定義を参照のこと。
-						(markerRatio != null) && <div className={styles["marker"]} style={{ left: `calc(${markerRatio * 100}% - 4px)` }} />
+						(markerRatio != null) && <div className={styles.marker} style={{ left: `calc(${markerRatio * 100}% - 4px)` }} />
 					}
-					<div className={styles["circle"]} style={{ left: `calc(${ratio * 100}% - 4px)` }} onMouseDown={this._onMouseDown} />
+					<div className={styles.circle} style={{ left: `calc(${ratio * 100}% - 4px)` }} onMouseDown={this._onMouseDown} />
 				</div>
 			</div>
 		);
@@ -85,7 +85,7 @@ export class ToolProgressBar extends React.Component<ToolProgressBarProps, {}> {
 
 	private _onRef = (e: HTMLDivElement): void => {
 		this._ref = e;
-	}
+	};
 
 	private _onMouseDownGauge = (ev: React.MouseEvent<HTMLDivElement>): void => {
 		if (!this._ref || !this.props.onChange)
@@ -96,14 +96,14 @@ export class ToolProgressBar extends React.Component<ToolProgressBarProps, {}> {
 			return;
 		if (this.props.value !== v)
 			this.props.onChange(v);
-	}
+	};
 
 	private _onMouseDown = (ev: React.MouseEvent<HTMLDivElement>): void => {
 		ev.stopPropagation();
 		ev.preventDefault();
 		window.addEventListener("mousemove", this._onMouseMoveWindow);
 		window.addEventListener("mouseup", this._onMouseUpWindow);
-	}
+	};
 
 	private _onMouseMoveWindow = (ev: MouseEvent): void => {
 		ev.stopPropagation();
@@ -115,7 +115,7 @@ export class ToolProgressBar extends React.Component<ToolProgressBarProps, {}> {
 			return;
 		if (this.props.value !== v)
 			this.props.onChange(v);
-	}
+	};
 
 	private _onMouseUpWindow = (ev: MouseEvent): void => {
 		ev.stopPropagation();
@@ -129,7 +129,7 @@ export class ToolProgressBar extends React.Component<ToolProgressBarProps, {}> {
 			return;
 		// onChangeと異なり、値が変化していなくても通知する。さもなくばonChangeの後にonCommitが来る保証がなくなってしまう
 		this.props.onCommit(v);
-	}
+	};
 
 	private _valueFromPageX(pageX: number): number {
 		if (!this._ref)

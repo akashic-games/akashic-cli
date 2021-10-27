@@ -1,14 +1,14 @@
-import * as React from "react";
+import { action } from "@storybook/addon-actions";
+import { storiesOf } from "@storybook/react";
 import { observable } from "mobx";
 import { observer } from "mobx-react";
-import { storiesOf } from "@storybook/react";
-import { action } from "@storybook/addon-actions";
+import * as React from "react";
 import { StartupScreen } from "../organism/StartupScreen";
 
 const store = observable({
 	joinsAutomatically: false,
 	width: 280,
-	editContent: `{ "foo": 100 }`,
+	editContent: "{ \"foo\": 100 }",
 	argumentsTable: {
 		"Start (difficulty: 3)": JSON.stringify([[32, 0, "test1"]], null, 2),
 		"Start (difficulty: 10)": JSON.stringify([[32, 0, "test2"]], null, 2),
@@ -18,7 +18,7 @@ const store = observable({
 	selectedArgumentName: null
 });
 
-const Box = (props: any) => {
+const Box = (props: any): JSX.Element => {
 	const style = {
 		display: "flex",
 		flexFlow: "row nowrap",
@@ -59,7 +59,7 @@ storiesOf("m-StartupScreen", module)
 					"foo (a very long long argument name example to test, woo hoo!)": "1"
 				}}
 				selectedArgumentName={"Stop"}
-				argumentEditContent={`["test"]`}
+				argumentEditContent={"[\"test\"]"}
 				joinsAutomatically={false}
 				onListResize={action("argument-list-resize")}
 				onSelectArgument={action("select")}
@@ -112,7 +112,7 @@ storiesOf("m-StartupScreen", module)
 					"Test 32": "1"
 				}}
 				selectedArgumentName={"Test 9"}
-				argumentEditContent={`["test"]`}
+				argumentEditContent={"[\"test\"]"}
 				joinsAutomatically={false}
 				onListResize={action("argument-list-resize")}
 				onSelectArgument={action("select")}

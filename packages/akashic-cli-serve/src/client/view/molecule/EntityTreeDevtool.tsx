@@ -1,11 +1,11 @@
-import * as React from "react";
 import { ObservableMap } from "mobx";
 import { observer } from "mobx-react";
+import * as React from "react";
 import scrollIntoView from "scroll-into-view-if-needed";
 import { EDumpItem } from "../../common/types/EDumpItem";
 import { FlexScrollY } from "../atom/FlexScrollY";
-import { EntityTreeOptionBar, EntityTreeOptionBarProps } from "./EntityTreeOptionBar";
 import * as styles from "./EntityTreeDevtool.css";
+import { EntityTreeOptionBar, EntityTreeOptionBarProps } from "./EntityTreeOptionBar";
 
 export interface EntityTreeDevtoolProps extends EntityTreeOptionBarProps {
 	entityTrees: EDumpItem[];
@@ -57,15 +57,15 @@ function renderEDumpItem(e: EDumpItem, props: EntityTreeDevtoolProps): React.Rea
 	if (!props.showsHidden && !e.visible)
 		return null;
 
-	const toggle = (ev: React.MouseEvent<HTMLElement>) => {
+	const toggle = (ev: React.MouseEvent<HTMLElement>): void => {
 		ev.stopPropagation();
 		props.onClickToggleOpenEntityChildren(e);
 	};
-	const onMouseOver = (ev: React.MouseEvent<HTMLElement>) => {
+	const onMouseOver = (ev: React.MouseEvent<HTMLElement>): void => {
 		ev.stopPropagation();
 		props.onMouseOverEntityItem(e);
 	};
-	const onMouseLeave = (ev: React.MouseEvent<HTMLElement>) => {
+	const onMouseLeave = (ev: React.MouseEvent<HTMLElement>): void => {
 		ev.stopPropagation();
 		props.onMouseLeaveEntityItem(e);
 	};
@@ -75,7 +75,7 @@ function renderEDumpItem(e: EDumpItem, props: EntityTreeDevtoolProps): React.Rea
 	const buttonStyle = styles["entity-expand-button"] + (hasChildren ? ""  : " " + styles["entity-expand-button-hidden"]);
 	return <div key={e.id} className={e.visible ? null : styles["invisible-entity"]} ref={isSelected ? scrollRefIntoView : null}>
 		<div
-			className={styles["entity-item"] + (isSelected ? " " + styles["selected"] : "")}
+			className={styles["entity-item"] + (isSelected ? " " + styles.selected : "")}
 			onMouseOver={onMouseOver}
 			onMouseLeave={onMouseLeave}
 			onClick={() => props.onClickEntityItem(e)}
