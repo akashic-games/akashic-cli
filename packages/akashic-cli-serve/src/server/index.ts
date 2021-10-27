@@ -149,6 +149,18 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 	}
 
 	const targetDirs: string[] = cliConfigParam.targetDirs;
+	// eslint-disable-next-line @typescript-eslint/no-var-requires
+	const versionsJson = require("./engineFilesVersion.json");
+	const engineFilesVersions = Object.keys(versionsJson).map(key => `v${versionsJson[key].version}`);
+	console.log(`Included engine-files: ${engineFilesVersions.join(", ")}`);
+	targetDirs.forEach(dir => {
+		const contentPath = path.join(dir, "game.json");
+		if (!fs.existsSync(contentPath)) {
+			getSystemLogger().error(`Not found :${contentPath}`);
+			process.exit(1);
+		}
+	});
+
 	const playManager = new PlayManager();
 	const runnerManager = new RunnerManager(playManager);
 	const playStore = new PlayStore({ playManager });

@@ -30,13 +30,13 @@
     "@types/commander": "2.12.2",
     "@types/form-data": "2.2.1",
     "@types/fs-extra": "9.0.13",
-    "@types/jasmine": "3.9.1",
+    "@types/jasmine": "3.10.1",
     "@types/mock-fs": "4.13.1",
-    "@types/node": "14.17.21",
+    "@types/node": "14.17.32",
     "@types/tar": "4.0.5",
     "@typescript-eslint/eslint-plugin": "4.33.0",
     "eslint": "7.32.0",
-    "eslint-plugin-import": "2.24.2",
+    "eslint-plugin-import": "2.25.2",
     "eslint-plugin-jest": "24.7.0",
     "jest": "26.6.3",
     "mock-fs": "4.14.0",
@@ -45,7 +45,7 @@
   },
   "dependencies": {
     "@akashic/akashic-cli-commons": "0.10.0",
-    "commander": "8.2.0",
+    "commander": "8.3.0",
     "tar": "6.1.11"
   },
   "publishConfig": {

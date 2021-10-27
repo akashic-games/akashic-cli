@@ -85,22 +85,18 @@ export class PlayOperator {
 	};
 
 	downloadPlaylog = (): void => {
-		location.href = `/api/plays/${this.store.currentPlay.playId}/playlog`;
+		const playId = this.store.currentPlay.playId;
+		this.downloadFile(`/api/plays/${playId}/playlog`, `playlog_${playId}.json`);
 	};
 
 	downloadSnapshot = (frame: number): void => {
 		this.store.currentPlay?.amflow.getStartPoint({ frame }, (err: Error | null, startPoint: StartPoint) => {
 			if (err) throw err;
 
-			const a = document.createElement("a");
-			document.body.appendChild(a);
 			const blob = new Blob([ JSON.stringify(startPoint) ], { "type" : "application/octet-stream" });
 			const url = window.URL.createObjectURL(blob);
-			a.href = url;
-			a.download = `snapshot_${frame}.json`;
-			a.click();
+			this.downloadFile(url, `snapshot_${frame}.json`);
 			window.URL.revokeObjectURL(url);
-			document.body.removeChild(a);
 		});
 	};
 
@@ -114,5 +110,15 @@ export class PlayOperator {
 
 	unmuteAll = (): void => {
 		this.store.currentPlay.unmuteAll();
+	};
+
+	// 指定したURLからファイルをダウンロードする
+	private downloadFile = (url: string, fileName: string): void => {
+		const a = document.createElement("a");
+		document.body.appendChild(a);
+		a.href = url;
+		a.download = fileName;
+		a.click();
+		document.body.removeChild(a);
 	};
 }
