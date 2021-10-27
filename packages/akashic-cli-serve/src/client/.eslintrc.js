@@ -35,9 +35,5 @@ module.exports = {
 				"format": ["camelCase", "UPPER_CASE", "PascalCase"]
 			}
 		]
-	},
-	globals: {
-		React: true,
-		JSX: true
 	}
 }
