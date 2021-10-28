@@ -37,7 +37,7 @@
     "express": "4.17.1",
     "lodash": "4.17.21",
     "open": "8.4.0",
-    "rxjs": "6.6.7",
+    "rxjs": "7.4.0",
     "socket.io": "4.3.1",
     "socket.io-parser": "4.1.1"
   },
