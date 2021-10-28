@@ -177,7 +177,9 @@ const TestWithBehaviour = observer(() => (
 			showsHidden: store.showsHidden,
 			onClickDump: action("dump"),
 			onChangeShowsHidden: shows => store.showsHidden = shows,
-			onClickSelectEntity: () => {}, // eslint-disable-line @typescript-eslint/no-empty-function
+			onClickSelectEntity: () => {
+				// do noting
+			},
 			onClickUpdateEntityTrees: action("update-entity-tree"),
 			onClickToggleOpenEntityChildren: (e => {
 				store.entityTreeStateTable.set(e.id, !store.entityTreeStateTable.get(e.id));

@@ -30,7 +30,9 @@ storiesOf("a-Popover", module)
 			style={{ position: "absolute", minWidth: 200, padding: 20 }}
 			caption="A Popover"
 			shows={true}
-			onChangeShows={() => {}} // eslint-disable-line @typescript-eslint/no-empty-function
+			onChangeShows={() => {
+				// do noting
+			}}
 		>
 			<p style={{ flex: "1 1 auto", padding: 10, border: "1px solid gray" }}>Foo</p>
 		</Popover>

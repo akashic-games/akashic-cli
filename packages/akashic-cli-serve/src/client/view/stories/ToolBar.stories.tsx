@@ -121,11 +121,15 @@ storiesOf("o-ToolBar", module)
 				showsAudioOptionPopover: false,
 				audioStateSummary: "only-this-player-unmuted",
 				onClickAudioOptionPopover: action("audio-option"),
-				/* eslint-disable @typescript-eslint/no-empty-function */
-				onClickSolo: () => {},
-				onClickMuteAll: () => {},
-				onClickMuteNone: () => {}
-				/* eslint-enable */
+				onClickSolo: () => {
+					// do noting
+				},
+				onClickMuteAll: () => {
+					// do noting
+				},
+				onClickMuteNone: () => {
+					// do noting
+				}
 			})}
 			makeDisplayOptionControlProps={() => ({
 				showsDisplayOptionPopover: true,
