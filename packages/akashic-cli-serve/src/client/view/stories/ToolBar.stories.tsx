@@ -122,13 +122,13 @@ storiesOf("o-ToolBar", module)
 				audioStateSummary: "only-this-player-unmuted",
 				onClickAudioOptionPopover: action("audio-option"),
 				onClickSolo: () => {
-					// do noting
+					// do nothing
 				},
 				onClickMuteAll: () => {
-					// do noting
+					// do nothing
 				},
 				onClickMuteNone: () => {
-					// do noting
+					// do nothing
 				}
 			})}
 			makeDisplayOptionControlProps={() => ({

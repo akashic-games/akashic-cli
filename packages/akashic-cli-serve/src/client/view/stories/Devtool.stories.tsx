@@ -178,7 +178,7 @@ const TestWithBehaviour = observer(() => (
 			onClickDump: action("dump"),
 			onChangeShowsHidden: shows => store.showsHidden = shows,
 			onClickSelectEntity: () => {
-				// do noting
+				// do nothing
 			},
 			onClickUpdateEntityTrees: action("update-entity-tree"),
 			onClickToggleOpenEntityChildren: (e => {

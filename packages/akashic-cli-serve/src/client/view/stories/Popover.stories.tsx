@@ -31,7 +31,7 @@ storiesOf("a-Popover", module)
 			caption="A Popover"
 			shows={true}
 			onChangeShows={() => {
-				// do noting
+				// do nothing
 			}}
 		>
 			<p style={{ flex: "1 1 auto", padding: 10, border: "1px solid gray" }}>Foo</p>
