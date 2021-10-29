@@ -1,5 +1,5 @@
-import * as React from "react";
 import { observer } from "mobx-react";
+import * as React from "react";
 import * as styles from "./Popover.css";
 
 function useOnClickOutside(ref: React.RefObject<HTMLElement> | null, handler: () => void): void {
@@ -7,7 +7,7 @@ function useOnClickOutside(ref: React.RefObject<HTMLElement> | null, handler: ()
 		() => {
 			if (!ref || !ref.current)
 				return;
-			const handleDown = (ev: MouseEvent) => {
+			const handleDown = (ev: MouseEvent): void => {
 				const target = ev.target;
 				if (!ref || !ref.current || !(target instanceof Element) || ref.current.contains(target as Element)) {
 					return;
@@ -34,7 +34,7 @@ export interface PopoverProps {
 }
 
 export const Popover = observer(function Popover(props: PopoverProps) {
-	const { caption, shows, onChangeShows, className, style, children, outsideRef } = props;
+	const { caption, shows, onChangeShows, className, children, outsideRef } = props;
 	const handleClickOutside = React.useCallback(() => {
 		onChangeShows(false);
 	}, [shows, onChangeShows]);
@@ -45,9 +45,9 @@ export const Popover = observer(function Popover(props: PopoverProps) {
 
 	return (
 		<div className={className} style={{ zIndex: 1000 }}>
-			<div className={styles["popover"]}>
-				<h3 className={styles["caption"]}>{caption}</h3>
-				<div className={styles["controls"]}>
+			<div className={styles.popover}>
+				<h3 className={styles.caption}>{caption}</h3>
+				<div className={styles.controls}>
 					{ children }
 				</div>
 			</div>

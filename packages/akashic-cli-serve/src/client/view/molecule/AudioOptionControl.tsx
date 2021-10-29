@@ -1,10 +1,10 @@
-import * as React from "react";
 import { observer } from "mobx-react";
-import { ToolIconButton } from "../atom/ToolIconButton";
-import { Popover } from "../atom/Popover";
-import * as styles from "./AudioOptionControl.css";
+import * as React from "react";
 import { PlayAudioStateSummary } from "../../../common/types/PlayAudioState";
+import { Popover } from "../atom/Popover";
 import { ToolChoiceButton, ToolChoiceButtonItem } from "../atom/ToolChoiceButton";
+import { ToolIconButton } from "../atom/ToolIconButton";
+import * as styles from "./AudioOptionControl.css";
 
 export interface AudioOptionControlPropsData {
 	showsAudioOptionPopover: boolean;
@@ -68,13 +68,13 @@ export const AudioOptionControl = observer(function AudioOptionControl(props: Au
 			pushed={showsAudioOptionPopover}
 			onClick={onClickAudioOptionPopover} />
 		<Popover
-			className={styles["popover"]}
+			className={styles.popover}
 			shows={showsAudioOptionPopover}
 			caption={"Audio Options"}
 			onChangeShows={onClickAudioOptionPopover}
 			outsideRef={ref}
 		>
-			<div className={styles["mutebar"]}>
+			<div className={styles.mutebar}>
 				<span className={styles["mutebar-label"]}>Mute:</span>
 				<ToolChoiceButton
 					items={muteButtonItems}
@@ -82,5 +82,5 @@ export const AudioOptionControl = observer(function AudioOptionControl(props: Au
 					onClick={handleClickMuteChoice} />
 			</div>
 		</Popover>
-	</div>
+	</div>;
 });

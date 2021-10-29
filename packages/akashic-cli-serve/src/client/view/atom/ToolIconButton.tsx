@@ -1,5 +1,5 @@
-import * as React from "react";
 import { observer } from "mobx-react";
+import * as React from "react";
 import * as styles from "./ToolIconButton.css";
 
 export interface ToolIconButtonProps {
@@ -43,11 +43,11 @@ export interface ToolIconButtonProps {
 
 @observer
 export class ToolIconButton extends React.Component<ToolIconButtonProps, {}> {
-	render() {
+	render(): JSX.Element {
 		const { className, icon, title, pushed, pushedIcon, disabled, children, size } = this.props;
-		const pushedClass = (pushed && !pushedIcon) ? " " + styles["pushed"] : "";
+		const pushedClass = (pushed && !pushedIcon) ? " " + styles.pushed : "";
 		return <button className={styles["tool-icon-button"] + pushedClass + " " + className}
-		               disabled={disabled} title={title} onClick={this._onClick}>
+			disabled={disabled} title={title} onClick={this._onClick}>
 			<i className="material-icons" style={(size != null) ? { fontSize: size } : null}>
 				{(pushed && pushedIcon) ? pushedIcon : icon}
 			</i>
@@ -57,5 +57,5 @@ export class ToolIconButton extends React.Component<ToolIconButtonProps, {}> {
 
 	private _onClick = (): void => {
 		this.props.onClick(!this.props.pushed);
-	}
+	};
 }

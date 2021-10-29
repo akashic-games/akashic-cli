@@ -1,7 +1,7 @@
-import * as React from "react";
 import { observer } from "mobx-react";
-import { RightResizable } from "../atom/RightResizable";
+import * as React from "react";
 import { FlexScrollY } from "../atom/FlexScrollY";
+import { RightResizable } from "../atom/RightResizable";
 import * as styles from "./StartupScreen.css";
 
 export interface StartupScreenProps {
@@ -40,10 +40,10 @@ export class StartupScreen extends React.Component<StartupScreenProps, {}> {
 
 		const argumentsList =
 			<FlexScrollY>
-				<ul className={styles["args-list"] + (showsEditor ? (" " + styles["resizable"]) : "")}>
+				<ul className={styles["args-list"] + (showsEditor ? (" " + styles.resizable) : "")}>
 					<li
 						key={"sys:noarg"}
-						className={((selectedArgumentName == null) && isShowingSelected) ? styles["selected"] : ""}
+						className={((selectedArgumentName == null) && isShowingSelected) ? styles.selected : ""}
 						onClick={this._handleClickNoArguments}
 					>
 						(No Arguments)
@@ -52,7 +52,7 @@ export class StartupScreen extends React.Component<StartupScreenProps, {}> {
 						Object.keys(argumentsTable).map(name => (
 							<li
 								key={"template:" + name}
-								className={(name === selectedArgumentName && isShowingSelected) ? styles["selected"] : ""}
+								className={(name === selectedArgumentName && isShowingSelected) ? styles.selected : ""}
 								onClick={() => onSelectArgument(name)}
 							>
 								{name}
@@ -63,7 +63,7 @@ export class StartupScreen extends React.Component<StartupScreenProps, {}> {
 			</FlexScrollY>;
 
 		return <div className={styles["startup-screen"]}>
-			<h2 className={styles["caption"]}>
+			<h2 className={styles.caption}>
 				New Instance
 			</h2>
 			<div className={styles["args-tool"]}>
@@ -85,7 +85,7 @@ export class StartupScreen extends React.Component<StartupScreenProps, {}> {
 									</div>
 								</div>
 								<textarea
-									className={styles["editor"]}
+									className={styles.editor}
 									value={argumentEditContent}
 									placeholder={"Instance Arguments (JSON)"}
 									onChange={this._handleTextAreaChange} />
@@ -105,7 +105,10 @@ export class StartupScreen extends React.Component<StartupScreenProps, {}> {
 						Send JoinEvent for the player
 					</label>
 				</div>
-				<button className={styles["start-button"] + " external-ref_button_start-content"} disabled={!isValidArg} onClick={onClickStart}>
+				<button
+					className={styles["start-button"] + " external-ref_button_start-content"}
+					disabled={!isValidArg} onClick={onClickStart}
+				>
 					Start
 				</button>
 			</div>
@@ -125,9 +128,9 @@ export class StartupScreen extends React.Component<StartupScreenProps, {}> {
 
 	private _handleClickNoArguments = (): void => {
 		this.props.onSelectArgument(null);
-	}
+	};
 
 	private _handleTextAreaChange = (ev: React.ChangeEvent<HTMLTextAreaElement>): void => {
 		this.props.onArgumentsEditContentChanged(ev.target.value);
-	}
+	};
 }

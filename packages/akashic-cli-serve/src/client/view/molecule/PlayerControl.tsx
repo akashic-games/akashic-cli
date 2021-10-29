@@ -1,8 +1,8 @@
-import * as React from "react";
 import { observer } from "mobx-react";
-import { ToolLabel } from "../atom/ToolLabel";
-import { ToolIconButton } from "../atom/ToolIconButton";
+import * as React from "react";
 import { ToolControlGroup } from "../atom/ToolControlGroup";
+import { ToolIconButton } from "../atom/ToolIconButton";
+import { ToolLabel } from "../atom/ToolLabel";
 
 export interface PlayerControlPropsData {
 	selfId: string;

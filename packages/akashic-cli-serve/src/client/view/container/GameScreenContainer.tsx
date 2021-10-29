@@ -1,15 +1,15 @@
-import * as React from "react";
 import { observer } from "mobx-react";
+import * as React from "react";
 import { SandboxConfig } from "../../../common/types/SandboxConfig";
 import { GameViewManager } from "../../akashic/GameViewManager";
-import { LocalInstanceEntity } from "../../store/LocalInstanceEntity";
-import { ToolBarUiStore } from "../../store/ToolBarUiStore";
-import { DevtoolUiStore } from "../../store/DevtoolUiStore";
 import { Operator } from "../../operator/Operator";
-import { GameScreen } from "../organism/GameScreen";
+import { DevtoolUiStore } from "../../store/DevtoolUiStore";
+import { LocalInstanceEntity } from "../../store/LocalInstanceEntity";
+import { ProfilerStore } from "../../store/ProfilerStore";
+import { ToolBarUiStore } from "../../store/ToolBarUiStore";
 import { PlayerInfoResolverDialogProps } from "../molecule/PlayerInfoResolverDialog";
 import { ProfilerCanvasProps } from "../molecule/ProfilerCanvas";
-import { ProfilerStore } from "../../store/ProfilerStore";
+import { GameScreen } from "../organism/GameScreen";
 
 export interface GameScreenContainerProps {
 	sandboxConfig: SandboxConfig;
@@ -43,19 +43,19 @@ export class GameScreenContainer extends React.Component<GameScreenContainerProp
 
 	private _handleShouldStopPropgation = (): boolean => {
 		return this.props.devtoolUiStore.isSelectingEntity;
-	}
+	};
 
-	private _handleMouseMoveCapture = (p: { x: number, y: number}): void => {
+	private _handleMouseMoveCapture = (p: { x: number; y: number}): void => {
 		if (!this.props.devtoolUiStore.isSelectingEntity)
 			return;
 		this.props.operator.devtool.selectEntityByPoint(p.x, p.y);
-	}
+	};
 
-	private _handleClickCapture = (p: { x: number, y: number}): void => {
+	private _handleClickCapture = (p: { x: number; y: number}): void => {
 		if (!this.props.devtoolUiStore.isSelectingEntity)
 			return;
 		this.props.operator.devtool.finishEntitySelection(p.x, p.y);
-	}
+	};
 
 	private _makePlayerInfoResolverDialogProps = (): PlayerInfoResolverDialogProps | undefined => {
 		const coeLimitedPlugin = this.props.localInstance.coeLimitedPlugin;
@@ -65,7 +65,7 @@ export class GameScreenContainer extends React.Component<GameScreenContainerProp
 			guestName: coeLimitedPlugin.guestName,
 			onClick: coeLimitedPlugin.sendName
 		} : undefined;
-	}
+	};
 
 	private _makeProfilerCanvasProps = (): ProfilerCanvasProps | undefined => {
 		return this.props.toolBarUiStore.showsProfiler ? {
@@ -74,5 +74,5 @@ export class GameScreenContainer extends React.Component<GameScreenContainerProp
 			profilerWidth: this.props.profilerStore.profilerWidth,
 			profilerHeight: this.props.profilerStore.profilerHeight
 		} : undefined;
-	}
+	};
 }

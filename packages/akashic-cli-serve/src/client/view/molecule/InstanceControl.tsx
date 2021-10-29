@@ -1,9 +1,9 @@
-import * as React from "react";
 import { observer } from "mobx-react";
+import * as React from "react";
 import { DateUtil } from "../../common/DateUtil";
+import { ToolControlGroup } from "../atom/ToolControlGroup";
 import { ToolIconButton } from "../atom/ToolIconButton";
 import { ToolProgressBar } from "../atom/ToolProgressBar";
-import { ToolControlGroup } from "../atom/ToolControlGroup";
 import * as styles from "./InstanceControl.css";
 
 export interface InstanceControlPropsData {
@@ -44,7 +44,7 @@ export class InstanceControl extends React.Component<InstanceControlProps, {}> {
 				active={props.isProgressActive}
 				onChange={props.onProgressChange}
 				onCommit={props.onProgressCommit} />
-			<p className={styles["time"]}>
+			<p className={styles.time}>
 				{
 					props.enableFastForward ?
 						`${DateUtil.toHmsFromMsec(currentTime)} / ${DateUtil.toHmsFromMsec(duration)}` :

@@ -1,6 +1,5 @@
-import * as React from "react";
 import { observer } from "mobx-react";
-import * as styles from "./GameScreen.css";
+import * as React from "react";
 import {
 	PlayerInfoResolverDialog,
 	PlayerInfoResolverDialogProps
@@ -9,6 +8,7 @@ import {
 	ProfilerCanvas,
 	ProfilerCanvasProps
 } from "../molecule/ProfilerCanvas";
+import * as styles from "./GameScreen.css";
 
 export interface GameScreenProps {
 	showsBackgroundImage: boolean;
@@ -21,8 +21,8 @@ export interface GameScreenProps {
 	playerInfoResolverDialogProps?: PlayerInfoResolverDialogProps;
 	profilerCanvasProps?: ProfilerCanvasProps;
 	shouldStopPropagationFunc: () => boolean;
-	onMouseMoveCapture?: (p: { x: number, y: number }) => void;
-	onClickCapture?: (p: { x: number, y: number }) => void;
+	onMouseMoveCapture?: (p: { x: number; y: number }) => void;
+	onClickCapture?: (p: { x: number; y: number }) => void;
 }
 
 @observer
@@ -37,7 +37,7 @@ export class GameScreen extends React.Component<GameScreenProps, {}> {
 			gameHeight,
 			playerInfoResolverDialogProps,
 			profilerCanvasProps
-		 } = this.props;
+		} = this.props;
 		const bgImageStyle = (showsBgImage && !bgImage) ?  (" " + styles["pseudo-transparent-bg"]) : "";
 		return <div className={styles["game-screen"]} style={{ width: gameWidth, height: gameHeight }}>
 			{
@@ -82,17 +82,17 @@ export class GameScreen extends React.Component<GameScreenProps, {}> {
 	private _stopPropagationIfNeeded = (ev: MouseEvent): void => {
 		if (this.props.shouldStopPropagationFunc())
 			ev.stopPropagation();
-	}
+	};
 
 	private _onMouseMoveCapture = (ev: MouseEvent): void => {
 		this._stopPropagationIfNeeded(ev);
 		this.props.onMouseMoveCapture({ x: ev.offsetX, y: ev.offsetY });
-	}
+	};
 
 	private _onClickCapture = (ev: MouseEvent): void => {
 		this._stopPropagationIfNeeded(ev);
 		this.props.onClickCapture({ x: ev.offsetX, y: ev.offsetY });
-	}
+	};
 
 	private _onRef = (elem: HTMLDivElement): void => {
 		if (elem) {
@@ -106,7 +106,7 @@ export class GameScreen extends React.Component<GameScreenProps, {}> {
 			elem.addEventListener("mouseup", this._stopPropagationIfNeeded, true);
 			elem.addEventListener("click", this._onClickCapture, true);
 		}
-	}
+	};
 
 	private _createGridCanvas = (gridCanvas: HTMLCanvasElement): void => {
 		if (!gridCanvas)
@@ -123,7 +123,7 @@ export class GameScreen extends React.Component<GameScreenProps, {}> {
 		context.setLineDash([]);
 		this._drawGridLine(context, 100, 100);
 		context.restore();
-	}
+	};
 
 	private _drawGridLine = (context: CanvasRenderingContext2D, gridWidth: number, gridHeight: number): void => {
 		context.beginPath();
@@ -136,9 +136,9 @@ export class GameScreen extends React.Component<GameScreenProps, {}> {
 			context.lineTo(this.props.gameWidth, y);
 		}
 		context.stroke();
-	}
+	};
 
-	private _getDesignGuideLineStyle = (): { width: number, height: number, top: number, left: number } => {
+	private _getDesignGuideLineStyle = (): { width: number; height: number; top: number; left: number } => {
 		const aspectRatioForHeight = 9 / 16;
 		const isHorizontal = aspectRatioForHeight * this.props.gameWidth >= this.props.gameHeight;
 		const size = isHorizontal ? this.props.gameWidth : this.props.gameHeight;
@@ -159,5 +159,5 @@ export class GameScreen extends React.Component<GameScreenProps, {}> {
 				left: (this.props.gameWidth - width) / 2
 			};
 		}
-	}
+	};
 }

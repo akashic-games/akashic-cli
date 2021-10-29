@@ -1,13 +1,13 @@
-import * as React from "react";
-import { observer } from "mobx-react";
 import { ServiceType } from "@akashic/akashic-cli-commons/lib/ServiceType";
+import { observer } from "mobx-react";
+import * as React from "react";
 import { ToolIconButton } from "../atom/ToolIconButton";
 import { ToolLabel } from "../atom/ToolLabel";
-import { PlayControl, PlayControlPropsData } from "../molecule/PlayControl";
-import { InstanceControl, InstanceControlPropsData } from "../molecule/InstanceControl";
-import { PlayerControl, PlayerControlPropsData } from "../molecule/PlayerControl";
 import { AudioOptionControl, AudioOptionControlPropsData } from "../molecule/AudioOptionControl";
 import { DisplayOptionControl, DisplayOptionControlPropsData } from "../molecule/DisplayOptionControl";
+import { InstanceControl, InstanceControlPropsData } from "../molecule/InstanceControl";
+import { PlayControl, PlayControlPropsData } from "../molecule/PlayControl";
+import { PlayerControl, PlayerControlPropsData } from "../molecule/PlayerControl";
 import * as styles from "./ToolBar.css";
 
 export interface ToolBarProps {
@@ -31,12 +31,12 @@ export class ToolBar extends React.Component<ToolBarProps, {}> {
 		return <div className={styles["tool-bar"]}>
 			<div className={styles["tool-bar-left"]}>
 				<PlayControl makeProps={props.makePlayControlProps} />
-				<div className={styles["sep"]} />
+				<div className={styles.sep} />
 				<PlayerControl makeProps={props.makePlayerControlProps} />
 				{
 					props.showsInstanceControl ?
 						<>
-							<div className={styles["sep"]} />
+							<div className={styles.sep} />
 							<InstanceControl makeProps={props.makeInstanceControlProps} />
 						</> :
 						null

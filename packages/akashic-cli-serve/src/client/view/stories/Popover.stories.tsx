@@ -1,7 +1,7 @@
-import * as React from "react";
+import { storiesOf } from "@storybook/react";
 import { observable } from "mobx";
 import { observer } from "mobx-react";
-import { storiesOf } from "@storybook/react";
+import * as React from "react";
 import { Popover } from "../atom/Popover";
 
 const store = observable({
@@ -21,7 +21,7 @@ const TestWithBehaviour = observer(() => {
 		>
 			<p style={{ flex: "1 1 auto", padding: 10, border: "1px solid gray" }}>Foo</p>
 		</Popover>
-	</div>
+	</div>;
 });
 
 storiesOf("a-Popover", module)
@@ -30,7 +30,9 @@ storiesOf("a-Popover", module)
 			style={{ position: "absolute", minWidth: 200, padding: 20 }}
 			caption="A Popover"
 			shows={true}
-			onChangeShows={() => {}}
+			onChangeShows={() => {
+				// do nothing
+			}}
 		>
 			<p style={{ flex: "1 1 auto", padding: 10, border: "1px solid gray" }}>Foo</p>
 		</Popover>

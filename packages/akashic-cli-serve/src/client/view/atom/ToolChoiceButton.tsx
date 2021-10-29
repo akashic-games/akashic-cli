@@ -1,5 +1,5 @@
-import * as React from "react";
 import { observer } from "mobx-react";
+import * as React from "react";
 import * as styles from "./ToolChoiceButton.css";
 
 export interface ToolChoiceButtonItem {
@@ -43,14 +43,14 @@ const SingleButton = observer(function SingleButton(props: SingleButtonProps) {
 	const handleClick = React.useCallback(() => onClick(index), [onClick, index]);
 	return (
 		<button
-			className={mixClassName(styles["tool-choice-button-single"], (pushed ? styles["pushed"] : ""), className)}
+			className={mixClassName(styles["tool-choice-button-single"], (pushed ? styles.pushed : ""), className)}
 			disabled={disabled}
 			title={title}
 			onClick={handleClick}
 		>
 			{ children }
 		</button>
-	 );
+	);
 }) ;
 
 export const ToolChoiceButton = observer(function ToolChoiceButton(props: ToolChoiceButtonProps) {

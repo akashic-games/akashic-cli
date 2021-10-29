@@ -1,8 +1,8 @@
-import * as React from "react";
 import { observer } from "mobx-react";
+import * as React from "react";
 import { Operator } from "../../operator/Operator";
-import { StartupScreen } from "../organism/StartupScreen";
 import { StartupScreenUiStore } from "../../store/StartupScreenUiStore";
+import { StartupScreen } from "../organism/StartupScreen";
 
 export interface StartupScreenContainerProps {
 	operator: Operator;
@@ -36,5 +36,5 @@ export class StartupScreenContainer extends React.Component<StartupScreenContain
 			joinsSelf: startupScreenUiStore.joinsAutomatically,
 			instanceArgument: (argText !== "") ? JSON.parse(argText) : undefined
 		});
-	}
+	};
 }

@@ -1,10 +1,10 @@
-import * as React from "react";
-import { observer } from "mobx-react";
 import { ServiceType } from "@akashic/akashic-cli-commons/lib/ServiceType";
+import { observer } from "mobx-react";
+import * as React from "react";
 import { SandboxConfig } from "../../../common/types/SandboxConfig";
-import { PlayEntity } from "../../store/PlayEntity";
-import { DevtoolUiStore } from "../../store/DevtoolUiStore";
 import { Operator } from "../../operator/Operator";
+import { DevtoolUiStore } from "../../store/DevtoolUiStore";
+import { PlayEntity } from "../../store/PlayEntity";
 import { Devtool } from "../organism/Devtool";
 
 export interface DevtoolContainerProps {
