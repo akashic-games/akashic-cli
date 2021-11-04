@@ -125,7 +125,7 @@ export class ServeGameContent {
 	 * isResettable() が偽の場合、何もしない。
 	 * onReset はこれと独立に、内部契機のリセットで fire されることもあるので注意。
 	 *
-	 * @param sp リセットに使うスタートポイント
+	 * @param startPoint リセットに使うスタートポイント
 	 */
 	reset(startPoint: amf.StartPoint): void {
 		this._gameDriver._gameLoop?.reset?.(startPoint);
