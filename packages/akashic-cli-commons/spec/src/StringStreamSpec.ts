@@ -1,4 +1,4 @@
-var StringStream = require("../lib/StringStream").StringStream;
+import { StringStream } from "../../lib/StringStream";
 
 describe("StringStream", function () {
 	it("can be instantiated", function () {

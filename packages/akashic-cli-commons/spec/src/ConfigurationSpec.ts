@@ -1,17 +1,17 @@
-var mockfs = require("mock-fs");
-var Configuration = require("../lib/Configuration").Configuration;
-var ConsoleLogger = require("../lib/ConsoleLogger").ConsoleLogger;
+import * as mockfs from "mock-fs";
+import { Configuration } from "../../lib/Configuration";
+import { ConsoleLogger } from "../../lib/ConsoleLogger";
 
 describe("Configuration", function () {
 	afterEach(function () {
 		mockfs.restore();
 	});
 	it("can be instantiated", function () {
-		var loggedResult = [];
+		var loggedResult: string[] = [];
 		var logger = new ConsoleLogger({ debugLogMethod: loggedResult.push.bind(loggedResult) });
 		var content = {
 			width: 120,
-			heght: 240,
+			height: 240,
 			fps: 30
 		};
 		var self = new Configuration({ content: content, logger: logger });
@@ -22,11 +22,11 @@ describe("Configuration", function () {
 	});
 
 	it("removes filepaths by vacuumGlobalScripts()", function () {
-		var loggedResult = [];
+		var loggedResult: string[] = [];
 		var logger = new ConsoleLogger({ debugLogMethod: loggedResult.push.bind(loggedResult) });
 		var content = {
 			width: 120,
-			heght: 240,
+			height: 240,
 			fps: 30,
 			globalScripts: [
 				"node_modules/foo/some.js",

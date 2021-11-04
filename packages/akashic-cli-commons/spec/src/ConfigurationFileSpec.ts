@@ -1,6 +1,7 @@
-var mockfs = require("mock-fs");
-var ConfigurationFile = require("../lib/ConfigurationFile").ConfigurationFile;
-var ConsoleLogger = require("../lib/ConsoleLogger").ConsoleLogger;
+import * as mockfs from "mock-fs";
+import { ConfigurationFile } from "../../lib/ConfigurationFile";
+import { ConsoleLogger } from "../../lib/ConsoleLogger";
+import { Logger } from "../../lib/Logger";
 
 describe("ConfigurationFile", function () {
 
@@ -16,7 +17,8 @@ describe("ConfigurationFile", function () {
 		"invalid-json.json": "hogehoge"
 	};
 
-	var logger, loggedResult;
+	var logger: Logger;
+	var loggedResult: string[];
 	beforeEach(function () {
 		loggedResult = [];
 		logger = new ConsoleLogger({ debugLogMethod: loggedResult.push.bind(loggedResult) });
@@ -42,7 +44,7 @@ describe("ConfigurationFile", function () {
 		it("rejects directory", function (done) {
 			Promise.resolve()
 				.then(() => ConfigurationFile.read("./dirname", logger))
-				.then(done.fail)
+				.then(() => done.fail())
 				.catch((e) => done());
 		});
 		it("creates empty data unless the file exists", function (done) {
@@ -57,7 +59,7 @@ describe("ConfigurationFile", function () {
 		it("rejects invalid JSON", function (done) {
 			Promise.resolve()
 				.then(() => ConfigurationFile.read("./invalid-json.json", logger))
-				.then(done.fail)
+				.then(() => done.fail())
 				.catch((e) => done());
 		});
 	});
@@ -75,10 +77,9 @@ describe("ConfigurationFile", function () {
 		});
 		it("rejects writing to directory", function (done) {
 			Promise.resolve()
-				.then(() => ConfigurationFile.write({}, "./dirname", logger))
-				.then(done.fail)
+				.then(() => ConfigurationFile.write({} as any, "./dirname", logger))  // 中身は問わないので any
+				.then(() => done.fail())
 				.catch((e) => done());
 		});
 	});
 });
-
