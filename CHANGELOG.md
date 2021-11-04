@@ -1,5 +1,41 @@
 # CHANGELOG
 
+## 2.12.1 (2021-11-04)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#888](https://github.com/akashic-games/akashic-cli/pull/888) feat(serve): akashic-cli-serve起動時にserveが持っているengine-filesのバージョン情報を表示するようにした ([@dera-](https://github.com/dera-))
+* `akashic-cli-export`, `akashic-cli-init`, `akashic-cli-serve`
+  * [#774](https://github.com/akashic-games/akashic-cli/pull/774) add startpoint handler for serve ([@kamakiri01](https://github.com/kamakiri01))
+* `akashic-cli-init`
+  * [#883](https://github.com/akashic-games/akashic-cli/pull/883) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Bug Fix
+* `akashic-cli-export`
+  * [#894](https://github.com/akashic-games/akashic-cli/pull/894) fix(export): fix package.json to able to build ([@dera-](https://github.com/dera-))
+* `akashic-cli-serve`
+  * [#891](https://github.com/akashic-games/akashic-cli/pull/891) fix(serve): akashic-cli-serve で「今までのプレイ情報を保存」を押した時ゲーム進行が止まる不具合の修正 ([@dera-](https://github.com/dera-))
+
+#### Other Change
+* `akashic-cli-serve`
+  * [#892](https://github.com/akashic-games/akashic-cli/pull/892) Support serve tsx eslint ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli`
+  * [#765](https://github.com/akashic-games/akashic-cli/pull/765) Update dependency rxjs to v7 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#880](https://github.com/akashic-games/akashic-cli/pull/880) Update all dependencies (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#879](https://github.com/akashic-games/akashic-cli/pull/879) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-init`
+  * [#754](https://github.com/akashic-games/akashic-cli/pull/754) Update dependency fs-extra to v10 ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-scan`
+  * [#746](https://github.com/akashic-games/akashic-cli/pull/746) Update dependency image-size to v1 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 4
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- [@dera-](https://github.com/dera-)
+- kamakiri_ys ([@kamakiri01](https://github.com/kamakiri01))
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.12.0 (2021-10-19)
 
 #### Enhancement
