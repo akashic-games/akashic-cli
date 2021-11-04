@@ -1,7 +1,5 @@
 import * as mockfs from "mock-fs";
 import { LibConfigurationFile } from "../../lib/LibConfigurationFile";
-import { ConsoleLogger } from "../../lib/ConsoleLogger";
-import { Logger } from "../../lib/Logger";
 
 describe("LibConfigurationFile", () => {
 	const mockFsContent = {
@@ -16,11 +14,7 @@ describe("LibConfigurationFile", () => {
 		"invalid-json.json": "hogehoge"
 	};
 
-	let logger: Logger;
-	let loggedResult: string[];
 	beforeEach(() => {
-		loggedResult = [];
-		logger = new ConsoleLogger({ debugLogMethod: loggedResult.push.bind(loggedResult) });
 		mockfs(mockFsContent);
 	});
 
