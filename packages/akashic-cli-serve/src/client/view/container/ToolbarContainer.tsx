@@ -1,16 +1,16 @@
-import * as React from "react";
-import { observer } from "mobx-react";
 import { ServiceType } from "@akashic/akashic-cli-commons/lib/ServiceType";
-import { PlayEntity } from "../../store/PlayEntity";
-import { LocalInstanceEntity } from "../../store/LocalInstanceEntity";
-import { ToolBarUiStore } from "../../store/ToolBarUiStore";
+import { observer } from "mobx-react";
+import * as React from "react";
 import { Operator } from "../../operator/Operator";
-import { PlayControlPropsData } from "../molecule/PlayControl";
-import { InstanceControlPropsData } from "../molecule/InstanceControl";
-import { PlayerControlPropsData } from "../molecule/PlayerControl";
-import { DisplayOptionControlPropsData } from "../molecule/DisplayOptionControl";
-import { ToolBar } from "../organism/ToolBar";
+import { LocalInstanceEntity } from "../../store/LocalInstanceEntity";
+import { PlayEntity } from "../../store/PlayEntity";
+import { ToolBarUiStore } from "../../store/ToolBarUiStore";
 import { AudioOptionControlPropsData } from "../molecule/AudioOptionControl";
+import { DisplayOptionControlPropsData } from "../molecule/DisplayOptionControl";
+import { InstanceControlPropsData } from "../molecule/InstanceControl";
+import { PlayControlPropsData } from "../molecule/PlayControl";
+import { PlayerControlPropsData } from "../molecule/PlayerControl";
+import { ToolBar } from "../organism/ToolBar";
 
 export interface ToolBarContainerProps {
 	play: PlayEntity;
@@ -50,7 +50,7 @@ export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}>
 			onClickAddInstance: operator.play.openNewClientInstance,
 			onClickStep: operator.play.step
 		};
-	}
+	};
 
 	private _makeInstanceControlProps = (): InstanceControlPropsData => {
 		const { play, localInstance, operator, toolBarUiStore } = this.props;
@@ -69,7 +69,7 @@ export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}>
 			onClickPause: operator.localInstance.togglePause,
 			onClickFastForward: operator.localInstance.switchToRealtime
 		};
-	}
+	};
 
 	private _makePlayerControlProps = (): PlayerControlPropsData => {
 		const { localInstance, operator, targetService } = this.props;
@@ -80,7 +80,7 @@ export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}>
 			isJoinEnabled: (localInstance.executionMode === "passive" && joinEnabled),
 			onClickJoinLeave: operator.play.toggleJoinLeaveSelf
 		};
-	}
+	};
 
 	private _makeAudioOptionControlProps = (): AudioOptionControlPropsData => {
 		const { operator, localInstance, toolBarUiStore } = this.props;
@@ -92,7 +92,7 @@ export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}>
 			onClickSolo: operator.play.muteOthers,
 			onClickMuteNone: operator.play.unmuteAll,
 		};
-	}
+	};
 
 	private _makeDisplayOptionControlProps = (): DisplayOptionControlPropsData => {
 		const { operator, toolBarUiStore } = this.props;
@@ -108,5 +108,5 @@ export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}>
 			onChangeShowProfiler: operator.ui.setShowsProfiler,
 			onChangeShowDesignGuideline: operator.ui.setShowDesignGuideline
 		};
-	}
+	};
 }

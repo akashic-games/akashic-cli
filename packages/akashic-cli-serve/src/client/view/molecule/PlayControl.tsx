@@ -1,7 +1,7 @@
-import * as React from "react";
 import { observer } from "mobx-react";
-import { ToolIconButton } from "../atom/ToolIconButton";
+import * as React from "react";
 import { ToolControlGroup } from "../atom/ToolControlGroup";
+import { ToolIconButton } from "../atom/ToolIconButton";
 
 export interface PlayControlPropsData {
 	playbackRate: number;
@@ -32,7 +32,7 @@ export class PlayControl extends React.Component<PlayControlProps, {}> {
 				icon="pause_circle_filled"
 				disabled={!props.isActiveExists}
 				title={`アクティブインスタンスをポーズ${props.isActivePausing ? "解除" : ""}\r\r`
-				        + `ポーズ中は全インスタンスの進行が停止します。`}
+					+ "ポーズ中は全インスタンスの進行が停止します。"}
 				pushed={props.isActivePausing}
 				pushedIcon="play_circle_filled"
 				onClick={props.onClickActivePause} />
@@ -40,7 +40,7 @@ export class PlayControl extends React.Component<PlayControlProps, {}> {
 				className="external-ref_button_active-step"
 				icon="skip_next"
 				disabled={!props.isActivePausing || !props.isActiveExists}
-				title={`アクティブインスタンスのポーズ中、プレイを1フレーム進めます。`}
+				title={"アクティブインスタンスのポーズ中、プレイを1フレーム進めます。"}
 				onClick={props.onClickStep} />
 			<ToolIconButton
 				className="external-ref_button_add-instance"

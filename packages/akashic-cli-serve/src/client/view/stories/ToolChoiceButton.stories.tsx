@@ -1,8 +1,8 @@
-import * as React from "react";
+import { action } from "@storybook/addon-actions";
+import { storiesOf } from "@storybook/react";
 import { observable } from "mobx";
 import { observer } from "mobx-react";
-import { storiesOf } from "@storybook/react";
-import { action } from "@storybook/addon-actions";
+import * as React from "react";
 import { ToolChoiceButton } from "../atom/ToolChoiceButton";
 
 const store = observable({

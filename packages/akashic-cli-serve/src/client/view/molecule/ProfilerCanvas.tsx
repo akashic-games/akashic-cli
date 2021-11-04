@@ -1,6 +1,6 @@
-import * as React from "react";
 import { autorun } from "mobx";
 import { observer } from "mobx-react";
+import * as React from "react";
 import { ProfilerData, ProfilerStyleSetting } from "../../common/types/Profiler";
 
 export interface ProfilerCanvasProps {
@@ -139,7 +139,7 @@ export class ProfilerCanvas extends React.Component<ProfilerCanvasProps, {}> {
 				maxWidth
 			);
 		}
-	}
+	};
 
 	private drawText = (text: string, x: number, y: number, color: string, maxWidth: number): void => {
 		if (!this.profilerCanvasContext) {
@@ -147,5 +147,5 @@ export class ProfilerCanvas extends React.Component<ProfilerCanvasProps, {}> {
 		}
 		this.profilerCanvasContext.fillStyle = color;
 		this.profilerCanvasContext.fillText(text, x, y, maxWidth);
-	}
+	};
 }

@@ -1,5 +1,5 @@
-import * as React from "react";
 import { observer } from "mobx-react";
+import * as React from "react";
 import * as styles from "./RightResizable.css";
 
 export interface RightResizableProps {
@@ -19,7 +19,7 @@ export class RightResizable extends React.Component<RightResizableProps, {}> {
 
 	render(): React.ReactNode {
 		return <div className={styles["right-resizable"]} style={{ width: this.props.width }} >
-			<div className={styles["content"]} style={{ width: this.props.width }}>
+			<div className={styles.content} style={{ width: this.props.width }}>
 				{ this.props.children }
 			</div>
 			<div className={styles["v-resizer"]} onMouseDown={this._onMouseDownResizer} />
@@ -30,7 +30,7 @@ export class RightResizable extends React.Component<RightResizableProps, {}> {
 		window.addEventListener("mousemove", this._onMouseMoveWindow);
 		window.addEventListener("mouseup", this._onMouseUpWindow);
 		this.lastPageX = ev.nativeEvent.pageX;
-	}
+	};
 
 	private _onMouseMoveWindow = (ev: MouseEvent): void => {
 		const { onResize, width, minWidth } = this.props;
@@ -39,10 +39,10 @@ export class RightResizable extends React.Component<RightResizableProps, {}> {
 			onResize(w);
 			this.lastPageX = ev.pageX;
 		}
-	}
+	};
 
 	private _onMouseUpWindow = (): void => {
 		window.removeEventListener("mousemove", this._onMouseMoveWindow);
 		window.removeEventListener("mouseup", this._onMouseUpWindow);
-	}
+	};
 }

@@ -1,5 +1,5 @@
-import * as React from "react";
 import { observer } from "mobx-react";
+import * as React from "react";
 import * as styles from "./ToolLabel.css";
 
 export interface ToolLabelProps {
@@ -9,7 +9,7 @@ export interface ToolLabelProps {
 
 @observer
 export class ToolLabel extends React.Component<ToolLabelProps, {}> {
-	render() {
+	render(): JSX.Element {
 		const { title, children } = this.props;
 		return <p className={styles["tool-label"]} title={title}>
 			{ children }

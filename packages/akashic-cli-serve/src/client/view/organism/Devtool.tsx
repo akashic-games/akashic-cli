@@ -1,13 +1,13 @@
-import * as React from "react";
 import { observer } from "mobx-react";
-import { TopResizable } from "../atom/TopResizable";
+import * as React from "react";
 import { DevtoolSelectorBar } from "../atom/DevtoolSelectorBar";
+import { TopResizable } from "../atom/TopResizable";
+import { AtsumaruDevtool, AtsumaruDevtoolProps } from "../molecule/AtsumaruDevtool";
+import { EntityTreeDevtool, EntityTreeDevtoolProps } from "../molecule/EntityTreeDevtool";
 import { EventsDevtool, EventsDevtoolProps } from "../molecule/EventsDevtool";
 import { InstancesDevtool, InstancesDevtoolProps } from "../molecule/InstancesDevtool";
-import { EntityTreeDevtool, EntityTreeDevtoolProps } from "../molecule/EntityTreeDevtool";
-import { AtsumaruDevtool, AtsumaruDevtoolProps } from "../molecule/AtsumaruDevtool";
-import { NiconicoDevtool, NiconicoDevtoolProps } from "../molecule/NiconicoDevtool";
 import { MiscDevtool, MiscDevtoolProps } from "../molecule/MiscDevtool";
+import { NiconicoDevtool, NiconicoDevtoolProps } from "../molecule/NiconicoDevtool";
 import { SnapshotDevtool, SnapshotDevtoolProps } from "../molecule/SnapshotDevtool";
 import * as styles from "./Devtool.css";
 
@@ -57,7 +57,7 @@ export class Devtool extends React.Component<DevtoolProps, {}> {
 		const props = this.props;
 		const { activeDevtool } = props;
 		return <TopResizable height={props.height} minHeight={props.minHeight} onResize={props.onResizeHeight}>
-			<div className={styles["devtool"]}>
+			<div className={styles.devtool}>
 				<DevtoolSelectorBar items={
 					["Instances", "Events", "EntityTree", "Atsumaru", "Niconico", "Misc", "Snapshot"].map(t => ({
 						name: t,
@@ -78,29 +78,29 @@ export class Devtool extends React.Component<DevtoolProps, {}> {
 
 	private _onSelectInstancesTool = (): void => {
 		this.props.onSelectDevtool("Instances");
-	}
+	};
 
 	private _onSelectEventsTool = (): void => {
 		this.props.onSelectDevtool("Events");
-	}
+	};
 
 	private _onSelectEntityListTool = (): void => {
 		this.props.onSelectDevtool("EntityTree");
-	}
+	};
 
 	private _onSelectAtsumaruTool = (): void => {
 		this.props.onSelectDevtool("Atsumaru");
-	}
+	};
 
 	private _onSelectNiconicoTool = (): void => {
 		this.props.onSelectDevtool("Niconico");
-	}
+	};
 
 	private _onSelectMiscTool = (): void => {
 		this.props.onSelectDevtool("Misc");
-	}
+	};
 
 	private _onSelectSnapshotTool = (): void => {
 		this.props.onSelectDevtool("Snapshot");
-	}
+	};
 }
