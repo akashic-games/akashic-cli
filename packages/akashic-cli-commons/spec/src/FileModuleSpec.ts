@@ -2,6 +2,10 @@ import * as mockfs from "mock-fs";
 import { FileModule } from "../../lib/FileModule";
 
 describe("FileModuleSpec", () => {
+	afterEach(function () {
+		mockfs.restore();
+	});
+
 	it("read game.json", async () => {
 		mockfs({
 			"game": {

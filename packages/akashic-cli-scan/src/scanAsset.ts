@@ -1,10 +1,10 @@
 import * as fs from "fs";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
+import { FileModule } from "@akashic/akashic-cli-commons/lib/FileModule";
 import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
 import { chdir } from "@akashic/akashic-cli-commons/lib/Util";
 import type { AssetConfiguration, GameConfiguration } from "@akashic/game-configuration";
 import { AssetModule } from "./AssetModule";
-import { FileModule } from "./FileModule";
 import { scanAudioAssets, scanImageAssets, scanScriptAssets, scanTextAssets, scanVectorImageAssets, textAssetFilter } from "./scanUtils";
 import type { AssetExtension, AssetScanDirectoryTable, AssetTargetType, LibConfiguration } from "./types";
 

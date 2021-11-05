@@ -13,6 +13,7 @@ export { CliConfigurationFile } from "./CliConfig/CliConfigurationFile";
 export { Configuration, ConfigurationParameterObject } from "./Configuration";
 export { ConfigurationFile } from "./ConfigurationFile";
 export { ConsoleLogger } from "./ConsoleLogger";
+export { FileModule } from "./FileModule";
 export {
 	AssetConfiguration,
 	AudioSystemConfiguration,
@@ -23,7 +24,6 @@ export {
 	ExportZipInfo
 } from "./GameConfiguration";
 export { LibConfiguration } from "./LibConfiguration";
-export { LibConfigurationFile } from "./LibConfigurationFile";
 export * as LintUtil from "./LintUtil";
 export { Logger } from "./Logger";
 export { NodeModules } from "./NodeModules";
