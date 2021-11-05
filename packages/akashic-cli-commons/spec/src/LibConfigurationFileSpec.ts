@@ -1,6 +1,5 @@
-const mockfs = require("mock-fs");
-const LibConfigurationFile = require("../lib/LibConfigurationFile").LibConfigurationFile;
-const ConsoleLogger = require("../lib/ConsoleLogger").ConsoleLogger;
+import * as mockfs from "mock-fs";
+import { LibConfigurationFile } from "../../lib/LibConfigurationFile";
 
 describe("LibConfigurationFile", () => {
 	const mockFsContent = {
@@ -15,10 +14,7 @@ describe("LibConfigurationFile", () => {
 		"invalid-json.json": "hogehoge"
 	};
 
-	let logger, loggedResult;
 	beforeEach(() => {
-		loggedResult = [];
-		logger = new ConsoleLogger({ debugLogMethod: loggedResult.push.bind(loggedResult) });
 		mockfs(mockFsContent);
 	});
 
@@ -28,7 +24,7 @@ describe("LibConfigurationFile", () => {
 
 	describe(".read()", () => {
 		it("reads lib file", async () => {
-			const content = await LibConfigurationFile.read("./akashic-lib.json", logger);
+			const content = await LibConfigurationFile.read("./akashic-lib.json");
 			expect(content).toEqual({
 				gameConfigurationData: {
 					environment: {
@@ -40,13 +36,13 @@ describe("LibConfigurationFile", () => {
 
 		it("rejects directory", async () => {
 			await expect(
-				LibConfigurationFile.read("./dirname", logger)
+				LibConfigurationFile.read("./dirname")
 			).rejects.toThrow();
 		});
 
 		it("rejects invalid JSON", async () => {
 			await expect(
-				LibConfigurationFile.read("./invalid-json.json", logger)
+				LibConfigurationFile.read("./invalid-json.json")
 			).rejects.toThrow();
 		});
 	});
@@ -56,19 +52,21 @@ describe("LibConfigurationFile", () => {
 			const data = {
 				gameConfigurationData: {
 					environment: {
-						dummy: "2"
+						external: {
+							dummy: "2"
+						}
 					}
 				}
 			};
 
-			await LibConfigurationFile.write(data, "./akashic-lib.json", logger);
-			const content = await LibConfigurationFile.read("./akashic-lib.json", logger);
+			await LibConfigurationFile.write(data, "./akashic-lib.json");
+			const content = await LibConfigurationFile.read("./akashic-lib.json");
 			expect(content).toEqual(data);
 		});
 
 		it("rejects writing to directory", async () => {
 			await expect(
-				LibConfigurationFile.write({}, "./dirname", logger)
+				LibConfigurationFile.write({}, "./dirname")
 			).rejects.toThrow();
 		});
 	});

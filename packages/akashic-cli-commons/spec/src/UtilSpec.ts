@@ -1,9 +1,6 @@
-var path = require("path");
-var mockfs = require("mock-fs");
-var fs = require("fs");
-var Util = require("../lib/Util");
-var ConfigurationFile = require("../lib/ConfigurationFile");
-var GameConfiguration = require("../lib/GameConfiguration");
+import * as mockfs from "mock-fs";
+import * as fs from "fs";
+import * as Util from "../../lib/Util";
 
 describe("Util", function () {
 	afterEach(() => {
@@ -33,7 +30,7 @@ describe("Util", function () {
 		it("reverses key/value pair", function () {
 			var o = {
 				foo: "fooValue",
-				bar: 1,
+				bar: "one",
 				zoo: "tt",
 				dee: "tt",
 			};
@@ -43,7 +40,7 @@ describe("Util", function () {
 			expect("zoo" in reversed).toBe(false);
 			expect("dee" in reversed).toBe(false);
 			expect(reversed.fooValue).toEqual(["foo"]);
-			expect(reversed[1]).toEqual(["bar"]);
+			expect(reversed.one).toEqual(["bar"]);
 			expect(reversed.tt.indexOf("zoo")).not.toBe(-1);
 			expect(reversed.tt.indexOf("dee")).not.toBe(-1);
 		});
