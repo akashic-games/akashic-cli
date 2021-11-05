@@ -1,8 +1,8 @@
-import * as React from "react";
 import { observer } from "mobx-react";
-import { Notification } from "../atom/Notification";
+import * as React from "react";
 import { Operator } from "../../operator/Operator";
 import { NotificationUiStore } from "../../store/NotificationUiStore";
+import { Notification } from "../atom/Notification";
 
 export interface NotificationContainerProps {
 	operator: Operator;
@@ -14,13 +14,13 @@ export interface NotificationContainerProps {
  */
 @observer
 export class NotificationContainer extends React.Component<NotificationContainerProps, {}> {
-	componentDidMount() {
+	componentDidMount(): void {
 		// このコンポーネントの責務とは少し違うが、適当な場所が無いのでここでエラーをハンドルする
 		window.addEventListener("error", this.handleError);
 		window.addEventListener("rejectionhandled", this.handleError);
 	}
 
-	componentWillUnmount() {
+	componentWillUnmount(): void {
 		window.removeEventListener("error", this.handleError);
 		window.removeEventListener("rejectionhandled", this.handleError);
 	}
@@ -33,16 +33,16 @@ export class NotificationContainer extends React.Component<NotificationContainer
 		/>;
 	}
 
-	private handleError = (ev: ErrorEvent) => {
+	private handleError = (ev: ErrorEvent): void => {
 		this.props.operator.ui.showNotification(
 			"error",
 			"エラーが発生しました",
 			ev.error.message,
 			"Developer Tool などでエラー内容を確認の上修正してください。"
 		);
-	}
+	};
 
-	private handleClickNotificationClose = () => {
+	private handleClickNotificationClose = (): void => {
 		this.props.operator.ui.hideNotification();
-	}
+	};
 }

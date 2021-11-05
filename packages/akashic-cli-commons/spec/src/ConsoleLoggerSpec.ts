@@ -1,4 +1,4 @@
-var ConsoleLogger = require("../lib/ConsoleLogger").ConsoleLogger;
+import { ConsoleLogger } from "../../lib/ConsoleLogger";
 
 describe("ConsoleLogger", function () {
 	it("can be instantiated", function () {
@@ -8,7 +8,7 @@ describe("ConsoleLogger", function () {
 	});
 
 	it("logs error, warn and info", function () {
-		var logged = [];
+		var logged: string[] = [];
 		var self = new ConsoleLogger({ debugLogMethod: logged.push.bind(logged) });
 		var errorCause = {}, warnCause = {}, infoCause = {};
 		self.error("error", errorCause);
@@ -31,7 +31,7 @@ describe("ConsoleLogger", function () {
 	});
 
 	it("suppresses info if quiet", function () {
-		var logged = [];
+		var logged: string[] = [];
 		var self = new ConsoleLogger({ quiet: true, debugLogMethod: logged.push.bind(logged) });
 		var errorCause = {}, warnCause = {}, infoCause = {};
 		self.error("error", errorCause);

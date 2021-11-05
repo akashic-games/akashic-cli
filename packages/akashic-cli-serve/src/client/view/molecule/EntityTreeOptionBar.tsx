@@ -1,7 +1,7 @@
-import * as React from "react";
 import { observer } from "mobx-react";
-import { ToolIconButton } from "../atom/ToolIconButton";
+import * as React from "react";
 import { ToolCheckbox } from "../atom/ToolCheckbox";
+import { ToolIconButton } from "../atom/ToolIconButton";
 import * as styles from "./EntityTreeOptionBar.css";
 
 export interface EntityTreeOptionBarProps {
@@ -33,7 +33,7 @@ export const EntityTreeOptionBar = observer(function EntityTreeOptionBar(props: 
 			size={17}
 			onClick={onClickSelectEntity}
 		/>
-		<div className={styles["sep"]} />
+		<div className={styles.sep} />
 		<ToolIconButton
 			className="external-ref_button_refresh-entity-tree"
 			icon="refresh"

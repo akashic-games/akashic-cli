@@ -1,14 +1,14 @@
-import * as React from "react";
+import { action } from "@storybook/addon-actions";
+import { storiesOf } from "@storybook/react";
 import { observable } from "mobx";
 import { observer } from "mobx-react";
-import { storiesOf } from "@storybook/react";
-import { action } from "@storybook/addon-actions";
+import * as React from "react";
 import { EventsDevtool } from "../molecule/EventsDevtool";
 
 const store = observable({
 	shows: true,
 	width: 280,
-	editContent: `{ "foo": 100 }`,
+	editContent: "{ \"foo\": 100 }",
 	events: {
 		"Start (difficulty: 3)": [[32, 0, "test1"]],
 		"Start (difficulty: 10)": [[32, 0, "test2"]],
@@ -44,7 +44,7 @@ storiesOf("m-EventsDevtool", module)
 				"Stop",
 				"foo (a very long long event name example to test, woo hoo!)"
 			]}
-			eventEditContent={`["test"]`}
+			eventEditContent={"[\"test\"]"}
 			onClickShowEventList={action("list")}
 			onEventListResize={action("event-list-resize")}
 			onClickSendEvent={action("send")}
@@ -95,7 +95,7 @@ storiesOf("m-EventsDevtool", module)
 				"Test 31",
 				"Test 32"
 			]}
-			eventEditContent={`["test"]`}
+			eventEditContent={"[\"test\"]"}
 			onClickShowEventList={action("list")}
 			onEventListResize={action("event-list-resize")}
 			onClickSendEvent={action("send")}

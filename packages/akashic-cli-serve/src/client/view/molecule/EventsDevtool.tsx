@@ -1,9 +1,9 @@
-import * as React from "react";
 import { observer } from "mobx-react";
+import * as React from "react";
+import { FlexScrollY } from "../atom/FlexScrollY";
+import { RightResizable } from "../atom/RightResizable";
 import { ToolIconButton } from "../atom/ToolIconButton";
 import { ToolLabelButton } from "../atom/ToolLabelButton";
-import { RightResizable } from "../atom/RightResizable";
-import { FlexScrollY } from "../atom/FlexScrollY";
 import * as styles from "./EventsDevtool.css";
 
 export interface EventsDevtoolProps {
@@ -41,10 +41,16 @@ export class EventsDevtool extends React.Component<EventsDevtoolProps, {}> {
 										<li key={name}>
 											{name}
 											<div className={styles["event-buttons"]}>
-												<ToolLabelButton className="external-ref_button_send-event" title="Send to the play" onClick={() => onClickSendEvent(name)}>
+												<ToolLabelButton
+													className="external-ref_button_send-event"
+													title="Send to the play"
+													onClick={() => onClickSendEvent(name)}>
 													Send
 												</ToolLabelButton>
-												<ToolLabelButton className="external-ref_button_copy-event" title="Copy to the editor" onClick={() => onClickCopyEvent(name)}>
+												<ToolLabelButton
+													className="external-ref_button_copy-event"
+													title="Copy to the editor"
+													onClick={() => onClickCopyEvent(name)}>
 													Copy
 												</ToolLabelButton>
 											</div>
@@ -63,7 +69,7 @@ export class EventsDevtool extends React.Component<EventsDevtoolProps, {}> {
 						title={"イベントリストの表示・非表示を切り替え"}
 						pushed={props.showsEventList}
 						onClick={props.onClickShowEventList} />
-					<div className={styles["sep"]} />
+					<div className={styles.sep} />
 					<ToolLabelButton
 						className="external-ref_button_send-editing-event"
 						title="Send to the play"
@@ -73,7 +79,7 @@ export class EventsDevtool extends React.Component<EventsDevtoolProps, {}> {
 					</ToolLabelButton>
 				</div>
 				<textarea
-					className={styles["editor"]}
+					className={styles.editor}
 					value={props.eventEditContent}
 					placeholder={"an array of playlog events (JSON) to send"}
 					onChange={this._handleTextAreaChange} />
@@ -83,5 +89,5 @@ export class EventsDevtool extends React.Component<EventsDevtoolProps, {}> {
 
 	private _handleTextAreaChange = (ev: React.ChangeEvent<HTMLTextAreaElement>): void => {
 		this.props.onEventEditContentChanged(ev.target.value);
-	}
+	};
 }

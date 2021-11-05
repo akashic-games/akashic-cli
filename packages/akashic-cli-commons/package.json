@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-commons",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "description": "The shared definitions and routines for akashic-cli-xxx",
   "main": "lib/index.js",
   "scripts": {
@@ -8,8 +8,10 @@
     "clean": "shx rm -rf lib && shx rm -rf spec/build",
     "build": "tsc -p ./",
     "lint": "eslint \"src/**/*.ts\" --fix",
-    "test": "npm run test:jest && npm run lint",
-    "test:jest": "jest --runInBand"
+    "test": "npm run test:ts && npm run lint",
+    "test:ts": "npm run test:ts:compile && npm run test:ts:jest",
+    "test:ts:compile": "tsc -p ./spec",
+    "test:ts:jest": "jest --runInBand"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
@@ -21,13 +23,15 @@
   "devDependencies": {
     "@akashic/eslint-config": "^0.1.2",
     "@types/browserify": "12.0.37",
-    "@types/eslint": "7.28.1",
+    "@types/eslint": "7.28.2",
     "@types/fs-extra": "9.0.13",
-    "@types/node": "14.17.21",
+    "@types/jest": "27.0.2",
+    "@types/mock-fs": "4.13.1",
+    "@types/node": "14.17.32",
     "@typescript-eslint/eslint-plugin": "4.33.0",
     "eslint": "7.32.0",
     "eslint-config-prettier": "8.3.0",
-    "eslint-plugin-import": "2.24.2",
+    "eslint-plugin-import": "2.25.2",
     "eslint-plugin-jest": "24.7.0",
     "jest": "26.6.3",
     "mock-fs": "4.14.0",
@@ -37,7 +41,7 @@
   "typings": "lib/index.d.ts",
   "dependencies": {
     "browserify": "17.0.0",
-    "fs-extra": "9.1.0",
+    "fs-extra": "10.0.0",
     "fs-readdir-recursive": "1.1.0",
     "js-sha256": "^0.9.0"
   },

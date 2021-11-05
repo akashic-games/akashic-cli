@@ -1,5 +1,5 @@
-import * as React from "react";
 import { observer } from "mobx-react";
+import * as React from "react";
 import * as styles from "./ToolSnapshotButton.css";
 
 export interface ToolSnapshotButtonProps {
@@ -10,7 +10,7 @@ export interface ToolSnapshotButtonProps {
 
 @observer
 export class ToolSnapshotButton extends React.Component<ToolSnapshotButtonProps, {}> {
-	render() {
+	render(): JSX.Element {
 		const { className, title, onClick, children } = this.props;
 		return <p className={styles["tool-snapshot-button"] + " " + className} title={title} onClick={onClick}>
 			{ children }

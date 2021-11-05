@@ -1,8 +1,6 @@
-import * as React from "react";
-import { observable } from "mobx";
-import { observer } from "mobx-react";
-import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
+import { storiesOf } from "@storybook/react";
+import * as React from "react";
 import { GameScreen } from "../organism/GameScreen";
 
 function createDummyDiv(width: number, height: number): HTMLElement {

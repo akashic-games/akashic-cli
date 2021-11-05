@@ -1,6 +1,6 @@
-var mockfs = require("mock-fs");
-var path = require("path");
-var CliConfigurationFile = require("../../lib/CliConfig/CliConfigurationFile").CliConfigurationFile;
+import * as mockfs from "mock-fs";
+import * as path from "path";
+import { CliConfigurationFile } from "../../../lib/CliConfig/CliConfigurationFile";
 
 describe("ConfigurationFile", function () {
 

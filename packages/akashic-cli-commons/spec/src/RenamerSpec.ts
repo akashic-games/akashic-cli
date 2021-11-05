@@ -1,10 +1,9 @@
-var path = require("path");
-var mockfs = require("mock-fs");
-var fs = require("fs");
-var Util = require("../lib/Util");
-var Renamer = require("../lib/Renamer");
-var ConfigurationFile = require("../lib/ConfigurationFile");
-var GameConfiguration = require("../lib/GameConfiguration");
+import * as path from "path";
+import * as mockfs from "mock-fs";
+import * as fs from "fs";
+import * as Util from "../../lib/Util";
+import * as Renamer from "../../lib/Renamer";
+import { ConfigurationFile } from "../../lib/ConfigurationFile";
 
 describe("Renamer", function () {
 	afterEach(() => {
@@ -13,7 +12,7 @@ describe("Renamer", function () {
 
 	it(".hashFilepath()", function () {
 		var arr = ["script/mainScene.js", "node_modules/foo/bar/index.js", "image/hoge.png"];
-		expect(arr.map((v) => Util.makeUnixPath(Renamer.hashFilepath(v)))).toEqual([
+		expect(arr.map((v) => Util.makeUnixPath(Renamer.hashFilepath(v, 256)))).toEqual([
 			"files/04ef22b752657e08b66fe185c9f9592944afe6ab0ba51380f04d33f42d6a409c.js",
 			"files/825a514c9ba0f7565c0bc4415451ee2350476c9c18abf970a98cdd62113617ce.js",
 			"files/a70844aefe0a5ceb64eb6b4ed23be19ab98eed26a43059802cd6a2b51e066e21.png"
@@ -82,7 +81,7 @@ describe("Renamer", function () {
 
 		it("hash game.json", function (done) {
 			Promise.resolve()
-			.then(() => ConfigurationFile.ConfigurationFile.read(path.join("./srcDir", "game.json"), undefined))
+			.then(() => ConfigurationFile.read(path.join("./srcDir", "game.json"), undefined))
 			.then((gamejson) => {
 				Renamer.renameAssetFilenames(gamejson, "./srcDir");
 
@@ -127,7 +126,7 @@ describe("Renamer", function () {
 		// アセットの path が重複している場合、重複するアセットでハッシュ化後のファイルを共有する
 		it("hash game.json - throw error", function (done) {
 			Promise.resolve()
-			.then(() => ConfigurationFile.ConfigurationFile.read(path.join("./srcDir", "game.json"), undefined))
+			.then(() => ConfigurationFile.read(path.join("./srcDir", "game.json"), undefined))
 			.then((gamejson) => {
 				gamejson.assets = {
 					hoge: {

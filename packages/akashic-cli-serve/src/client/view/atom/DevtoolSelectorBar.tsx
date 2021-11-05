@@ -1,5 +1,5 @@
-import * as React from "react";
 import { observer } from "mobx-react";
+import * as React from "react";
 import * as styles from "./DevtoolSelectorBar.css";
 
 export interface DevtoolSelectorBarItem {
@@ -20,10 +20,10 @@ export class DevtoolSelectorBar extends React.Component<DevtoolSelectorBarProps,
 			{
 				this.props.items.map(item => (
 					<div key={item.name}
-					     className={styles["item"] + (item.active ? " " + styles["active"] : "")}
-					     onClick={item.onClick}>
+						className={styles.item + (item.active ? " " + styles.active : "")}
+						onClick={item.onClick}>
 						{ item.name }
-						{ item.warning ? <span className={"material-icons " + styles["icon"]}>warning</span> : null }
+						{ item.warning ? <span className={"material-icons " + styles.icon}>warning</span> : null }
 					</div>
 				))
 			}

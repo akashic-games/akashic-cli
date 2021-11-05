@@ -1,8 +1,8 @@
-import * as React from "react";
+import { action } from "@storybook/addon-actions";
+import { storiesOf } from "@storybook/react";
 import { observable } from "mobx";
 import { observer } from "mobx-react";
-import { storiesOf } from "@storybook/react";
-import { action } from "@storybook/addon-actions";
+import * as React from "react";
 import { ToolProgressBar } from "../atom/ToolProgressBar";
 
 const store = observable({
@@ -64,7 +64,7 @@ const TestWithBehaviour = observer(() => (
 storiesOf("a-ToolProgressBar", module)
 	.add("basic", () => (
 		<ToolProgressBar width={200} max={100} value={64}
-		                 onChange={action("change")} onCommit={action("commit")} />
+			onChange={action("change")} onCommit={action("commit")} />
 	))
 	.add("active", () => (
 		<ToolProgressBar width={200} max={100} value={64} active />
