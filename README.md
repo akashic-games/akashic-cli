@@ -46,7 +46,19 @@ akashic export html -o ../exported-my-game
 各コマンドの詳細については、 [利用ガイド](http://akashic-games.github.io/guide/akashic-cli.html) を参照してください。
 Akashic Engineの詳細な利用方法については、 [公式ページ](https://akashic-games.github.io/) を参照してください。
 
+## ビルド方法
+
+akashic-cli はTypeScriptで書かれたJSモジュールです。ビルドにはNode.jsが必要です。 リポジトリ直下で次を実行してください。
+
+```
+npm install
+npm run build
+```
+
+これにより packages ディレクトリ以下の各モジュールがリンクされ、互いに利用できるようになります。
+
 ## 開発者向け
+
 * akashic-cli への PullReuest 作成時には、CHANGELOGに変更内容を記録するために以下の作業が必要になります。
   * CHANGELOGにPullRequestのタイトルが記載されるため、PullRequestのタイトルには変更内容が分かるように記載してください。
   * PullRequest の内容にあったラベルを Labels で設定してください。利用できるラベルの種類は以下の通りです。
@@ -57,6 +69,7 @@ Akashic Engineの詳細な利用方法については、 [公式ページ](https
     * other: 上記4つに当てはまらない変更
 
 ## ライセンス
+
 本リポジトリは MIT License の元で公開されています。
 詳しくは [LICENSE](https://github.com/akashic-games/akashic-cli/blob/master/LICENSE) をご覧ください。
 
