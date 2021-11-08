@@ -85,17 +85,6 @@ export const DisplayOptionControl = observer(function (props: DisplayOptionContr
 			</div>
 			<div className={styles.label}>
 				<label>
-					<input
-						className={styles.checkbox + " external-ref_checkbox_shows-profiler"}
-						type="checkbox"
-						checked={showsProfiler}
-						onChange={() => onChangeShowProfiler(!showsProfiler)}
-					/>
-					Show profiler
-				</label>
-			</div>
-			<div className={styles.label}>
-				<label>
 					<span className={styles["design-guideline"]}>
 						<input
 							className={styles.checkbox + " external-ref_checkbox_shows-design-guideline"}
