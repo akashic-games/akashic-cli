@@ -63,7 +63,9 @@ export class App extends React.Component<AppProps, {}> {
 					<div className={styles.devtools}>
 						<DevtoolContainer
 							play={store.currentPlay}
+							localInstance={store.currentLocalInstance}
 							operator={operator}
+							toolBarUiStore={store.toolBarUiStore}
 							devtoolUiStore={store.devtoolUiStore}
 							sandboxConfig={sandboxConfig}
 							targetService={store.targetService}

@@ -4,12 +4,16 @@ import * as React from "react";
 import { SandboxConfig } from "../../../common/types/SandboxConfig";
 import { Operator } from "../../operator/Operator";
 import { DevtoolUiStore } from "../../store/DevtoolUiStore";
+import { LocalInstanceEntity } from "../../store/LocalInstanceEntity";
 import { PlayEntity } from "../../store/PlayEntity";
+import { ToolBarUiStore } from "../../store/ToolBarUiStore";
 import { Devtool } from "../organism/Devtool";
 
 export interface DevtoolContainerProps {
 	play: PlayEntity;
 	operator: Operator;
+	localInstance: LocalInstanceEntity;
+	toolBarUiStore: ToolBarUiStore; // プログレスバーの値を共有してしまっているのでそれの参照に利用
 	devtoolUiStore: DevtoolUiStore;
 	sandboxConfig: SandboxConfig;
 	targetService: ServiceType;
@@ -18,7 +22,7 @@ export interface DevtoolContainerProps {
 @observer
 export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}> {
 	render(): React.ReactNode {
-		const { play, operator, devtoolUiStore, sandboxConfig, targetService } = this.props;
+		const { play, operator, localInstance, toolBarUiStore, devtoolUiStore, sandboxConfig, targetService } = this.props;
 		return <Devtool
 			height={devtoolUiStore.height}
 			minHeight={200}
@@ -98,10 +102,31 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 			miscDevtoolProps={{
 				downloadPlaylog: operator.play.downloadPlaylog
 			}}
-			snapshotDevtoolProps={{
+			playbackDevtoolProps={{
 				startPointHeaders: play.startPointHeaders,
-				downloadSnapshot: operator.play.downloadSnapshot,
-				onClickSeekToSnapshot: operator.localInstance.seekToStartPoint
+				focusedStartPointHeaderIndex: devtoolUiStore.focusedStartPointHeaderIndex,
+				currentTime: (
+					(localInstance.executionMode !== "replay") ? play.duration :
+					(toolBarUiStore.isSeeking) ? toolBarUiStore.currentTimePreview : localInstance.targetTime
+				),
+				duration: play.duration,
+				resetTime: localInstance.resetTime,
+				isPaused: localInstance.isPaused,
+				isProgressActive: toolBarUiStore.isSeeking,
+				isReplay: (localInstance.executionMode === "replay"),
+				isActiveExists: play.status === "running", // NOTE: 現実装に依存した実装。概念的には play.status とは独立な判定が必要
+				isActivePaused: play.isActivePausing,
+				isForceResetOnSeek: devtoolUiStore.isForceResetOnSeek,
+				onClickPauseActive:operator.play.togglePauseActive,
+				onClickSavePlaylog: operator.play.downloadPlaylog,
+				onClickForceResetOnSeek: operator.devtool.toggleForceResetOnSeek,
+				onProgressChange: operator.localInstance.previewSeekTo,
+				onProgressCommit: operator.localInstance.seekTo,
+				onClickPause: operator.localInstance.togglePause,
+				onClickFastForward: operator.localInstance.switchToRealtime,
+				onHoverStartPoint: operator.devtool.setHoveredStartPointIndex,
+				onJumpWithStartPoint: operator.localInstance.jumpToStartPointOfIndex,
+				onDumpStartPoint: operator.devtool.dumpStartPointOfIndex
 			}}
 		/>;
 	}

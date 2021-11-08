@@ -22,11 +22,11 @@ export class LocalInstanceOperator {
 		}
 	};
 
-	seekToStartPoint = (frame: number): void => {
-		this.store.currentLocalInstance.setExecutionMode("replay");
-		this.store.currentLocalInstance.setFrameWithStartPoint(frame, (targetTime) => {
-			this.store.toolBarUiStore.seekTo(targetTime);
-		});
+	jumpToStartPointOfIndex = async (index: number): Promise<void> => {
+		const { amflow, startPointHeaders } = this.store.currentPlay;
+		const sp = await amflow.getStartPointPromise({ frame: startPointHeaders[index].frame });
+		this.store.currentLocalInstance.reset(sp);
+		this.switchToReplay(sp.timestamp - amflow.getStartedAt());
 	};
 
 	resetByAge = async (age: number): Promise<void> => {

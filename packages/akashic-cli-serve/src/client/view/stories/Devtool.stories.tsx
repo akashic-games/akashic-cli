@@ -5,18 +5,31 @@ import { observer } from "mobx-react";
 import * as React from "react";
 import { EDumpItem } from "../../common/types/EDumpItem";
 import { NiconicoDevtoolProps } from "../molecule/NiconicoDevtool";
+import { PlaybackDevtoolProps } from "../molecule/PlaybackDevtool";
 import { Devtool } from "../organism/Devtool";
 
 const store = observable({
 	devtoolsHeight: 300,
-	activeDevtool: "EntityTree",
+	activeDevtool: "Playback",
 	showsEventList: true,
 	eventListWidth: 280,
 	eventEditContent: "[\"test\": true]",
 	entityTreeStateTable: observable.map({}),
 	showsHidden: true,
 	volume: 0,
-	isSeekingVolume: false
+	isSeekingVolume: false,
+
+	// playback
+	currentTime: 20,
+	duration: 100,
+	resetTime: 10,
+	isPaused: false,
+	isProgressActive: false,
+	isReplay: false,
+	isActiveExists: true,
+	isActivePaused: false,
+	isForceResetOnSeek: true,
+	selectedStartPointIndex: null as number | null,
 });
 
 const nicoProps: NiconicoDevtoolProps = {
@@ -37,6 +50,30 @@ const nicoProps: NiconicoDevtoolProps = {
 	onTotalTimeLimitInputValueChanged: action("events:total-time-limit-changed"),
 	onUsePreferredTotalTimeLimitChanged: action("events:use-preferred-total-time-limit-changed"),
 	onUseStopGameChanged: action("events:use-stop-game-changed")
+};
+
+const dummyPlaybackDevtoolProps: PlaybackDevtoolProps = {
+	startPointHeaders: [],
+	focusedStartPointHeaderIndex: null,
+	currentTime: 10,
+	duration: 100,
+	resetTime: 0,
+	isPaused: false,
+	isProgressActive: false,
+	isReplay: false,
+	isActiveExists: true,
+	isActivePaused: false,
+	isForceResetOnSeek: true,
+	onClickPauseActive: action("click-pause-active"),
+	onClickSavePlaylog: action("click-save-playlog"),
+	onClickForceResetOnSeek: action("click-force-jump-on-seek"),
+	onProgressChange: action("progress-change"),
+	onProgressCommit: action("progress-commit"),
+	onClickPause: action("click-pause"),
+	onClickFastForward: action("click-fastforward"),
+	onHoverStartPoint: action("hover-startpoint"),
+	onJumpWithStartPoint: action("jump-startpoint"),
+	onDumpStartPoint: action("doubleclick-startpoint")
 };
 
 function createFilledRectDumpItem(id: number, cssColor: string = "black"): EDumpItem {
@@ -199,14 +236,35 @@ const TestWithBehaviour = observer(() => (
 		miscDevtoolProps={{
 			downloadPlaylog: action("download-playlog")
 		}}
-		snapshotDevtoolProps={{
+		playbackDevtoolProps={{
 			startPointHeaders: [
 				{frame: 150, timestamp: 1627467453814},
 				{frame: 300, timestamp: 1627467458813},
 				{frame: 450, timestamp: 1627467463814}
 			],
-			downloadSnapshot: action("download-snapshot"),
-			onClickSeekToSnapshot: action("seekTo-snapshot")
+			focusedStartPointHeaderIndex: store.selectedStartPointIndex,
+			currentTime: store.currentTime,
+			duration: store.duration,
+			resetTime: store.resetTime,
+			isPaused: store.isPaused,
+			isProgressActive: store.isProgressActive,
+			isReplay: store.isReplay,
+			isActiveExists: true,
+			isActivePaused: store.isActivePaused,
+			isForceResetOnSeek: store.isForceResetOnSeek,
+			onClickPauseActive: (v => store.isActivePaused = v),
+			onClickSavePlaylog: action("click-save-playlog"),
+			onClickForceResetOnSeek: (v => store.isForceResetOnSeek = v),
+			onProgressChange: (v => store.currentTime = v),
+			onProgressCommit: (v => {
+				store.currentTime = v;
+				store.isReplay = true;
+			}),
+			onClickPause: (v => store.isPaused = v),
+			onClickFastForward: (() => store.isReplay = false),
+			onHoverStartPoint: ((v, hovers) => store.selectedStartPointIndex = hovers ? v : null),
+			onJumpWithStartPoint: action("jump-startpoint"),
+			onDumpStartPoint: action("dump-startpoint")
 		}}
 	/>
 ));
@@ -312,11 +370,7 @@ storiesOf("o-Devtool", module)
 			miscDevtoolProps={{
 				downloadPlaylog: action("download-playlog")
 			}}
-			snapshotDevtoolProps={{
-				startPointHeaders: [],
-				downloadSnapshot: action("download-snapshot"),
-				onClickSeekToSnapshot: action("seekTo-snapshot")
-			}}
+			playbackDevtoolProps={dummyPlaybackDevtoolProps}
 		/>
 	))
 	.add("events", () => (
@@ -411,11 +465,7 @@ storiesOf("o-Devtool", module)
 			miscDevtoolProps={{
 				downloadPlaylog: action("download-playlog")
 			}}
-			snapshotDevtoolProps={{
-				startPointHeaders: [],
-				downloadSnapshot: action("download-snapshot"),
-				onClickSeekToSnapshot: action("seekTo-snapshot")
-			}}
+			playbackDevtoolProps={dummyPlaybackDevtoolProps}
 		/>
 	))
 	.add("entity-tree", () => (
@@ -514,11 +564,7 @@ storiesOf("o-Devtool", module)
 			miscDevtoolProps={{
 				downloadPlaylog: action("download-playlog")
 			}}
-			snapshotDevtoolProps={{
-				startPointHeaders: [],
-				downloadSnapshot: action("download-snapshot"),
-				onClickSeekToSnapshot: action("seekTo-snapshot")
-			}}
+			playbackDevtoolProps={dummyPlaybackDevtoolProps}
 		/>
 	))
 	.add("niconico", () => (
@@ -571,19 +617,15 @@ storiesOf("o-Devtool", module)
 			miscDevtoolProps={{
 				downloadPlaylog: action("download-playlog")
 			}}
-			snapshotDevtoolProps={{
-				startPointHeaders: [],
-				downloadSnapshot: action("download-snapshot"),
-				onClickSeekToSnapshot: action("seekTo-snapshot")
-			}}
+			playbackDevtoolProps={dummyPlaybackDevtoolProps}
 		/>
 	))
-	.add("misc", () => (
+	.add("playback", () => (
 		<Devtool
 			height={300}
 			minHeight={200}
 			onResizeHeight={action("resize-height")}
-			activeDevtool={"Misc"}
+			activeDevtool={"Playback"}
 			onSelectDevtool={action("select-tool")}
 			eventsDevtoolProps={{
 				showsEventList: true,
@@ -628,11 +670,7 @@ storiesOf("o-Devtool", module)
 			miscDevtoolProps={{
 				downloadPlaylog: action("download-playlog")
 			}}
-			snapshotDevtoolProps={{
-				startPointHeaders: [],
-				downloadSnapshot: action("download-snapshot"),
-				onClickSeekToSnapshot: action("seekTo-snapshot")
-			}}
+			playbackDevtoolProps={dummyPlaybackDevtoolProps}
 		/>
 	))
 	.add("with-behavior", () => <TestWithBehaviour />);

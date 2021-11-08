@@ -20,6 +20,7 @@ export class DevtoolUiStore {
 	@observable totalTimeLimitInputValue: number;
 
 	// storage に保存しないもの
+	@observable focusedStartPointHeaderIndex: number | null;
 	@observable isSelectingEntity: boolean;
 	@observable selectedEntityId: number | null;
 	@observable entityTrees: EDumpItem[];
@@ -40,6 +41,7 @@ export class DevtoolUiStore {
 		this.eventListWidth = storage.data.eventListWidth;
 		this.eventEditContent = storage.data.eventEditContent;
 		this.showsHiddenEntity = storage.data.showsHiddenEntity;
+		this.focusedStartPointHeaderIndex = null;
 		this.isSelectingEntity = false;
 		this.selectedEntityId = null;
 		this.entityTrees = [];
@@ -87,6 +89,11 @@ export class DevtoolUiStore {
 	setEventEditContent(content: string): void {
 		this.eventEditContent = content;
 		storage.put({ eventEditContent: content });
+	}
+
+	@action
+	setFocusedStartPointHeaderIndex(index: number | null): void {
+		this.focusedStartPointHeaderIndex = index;
 	}
 
 	@action
