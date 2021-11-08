@@ -42,6 +42,32 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 				onClickSendEditingEvent: operator.play.sendEditorEvent,
 				onEventEditContentChanged: operator.ui.setEventEditContent
 			}}
+			playbackDevtoolProps={{
+				startPointHeaders: play.startPointHeaders,
+				focusedStartPointHeaderIndex: devtoolUiStore.focusedStartPointHeaderIndex,
+				currentTime: (
+					(localInstance.executionMode !== "replay") ? play.duration :
+					(toolBarUiStore.isSeeking) ? toolBarUiStore.currentTimePreview : localInstance.targetTime
+				),
+				duration: play.duration,
+				resetTime: localInstance.resetTime,
+				isPaused: localInstance.isPaused,
+				isProgressActive: toolBarUiStore.isSeeking,
+				isReplay: (localInstance.executionMode === "replay"),
+				isActiveExists: play.status === "running", // NOTE: 現実装に依存した実装。概念的には play.status とは独立な判定が必要
+				isActivePaused: play.isActivePausing,
+				isForceResetOnSeek: devtoolUiStore.isForceResetOnSeek,
+				onClickPauseActive:operator.play.togglePauseActive,
+				onClickSavePlaylog: operator.play.downloadPlaylog,
+				onClickForceResetOnSeek: operator.devtool.toggleForceResetOnSeek,
+				onProgressChange: operator.localInstance.previewSeekTo,
+				onProgressCommit: operator.localInstance.seekTo,
+				onClickPause: operator.localInstance.togglePause,
+				onClickFastForward: operator.localInstance.switchToRealtime,
+				onHoverStartPoint: operator.devtool.setHoveredStartPointIndex,
+				onJumpWithStartPoint: operator.localInstance.jumpToStartPointOfIndex,
+				onDumpStartPoint: operator.devtool.dumpStartPointOfIndex
+			}}
 			instancesDevtoolProps={{
 				instances: play.serverInstances.map(desc => ({
 					type: "active" as ("active" | "passive"),
@@ -101,32 +127,6 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 			}}
 			miscDevtoolProps={{
 				downloadPlaylog: operator.play.downloadPlaylog
-			}}
-			playbackDevtoolProps={{
-				startPointHeaders: play.startPointHeaders,
-				focusedStartPointHeaderIndex: devtoolUiStore.focusedStartPointHeaderIndex,
-				currentTime: (
-					(localInstance.executionMode !== "replay") ? play.duration :
-					(toolBarUiStore.isSeeking) ? toolBarUiStore.currentTimePreview : localInstance.targetTime
-				),
-				duration: play.duration,
-				resetTime: localInstance.resetTime,
-				isPaused: localInstance.isPaused,
-				isProgressActive: toolBarUiStore.isSeeking,
-				isReplay: (localInstance.executionMode === "replay"),
-				isActiveExists: play.status === "running", // NOTE: 現実装に依存した実装。概念的には play.status とは独立な判定が必要
-				isActivePaused: play.isActivePausing,
-				isForceResetOnSeek: devtoolUiStore.isForceResetOnSeek,
-				onClickPauseActive:operator.play.togglePauseActive,
-				onClickSavePlaylog: operator.play.downloadPlaylog,
-				onClickForceResetOnSeek: operator.devtool.toggleForceResetOnSeek,
-				onProgressChange: operator.localInstance.previewSeekTo,
-				onProgressCommit: operator.localInstance.seekTo,
-				onClickPause: operator.localInstance.togglePause,
-				onClickFastForward: operator.localInstance.switchToRealtime,
-				onHoverStartPoint: operator.devtool.setHoveredStartPointIndex,
-				onJumpWithStartPoint: operator.localInstance.jumpToStartPointOfIndex,
-				onDumpStartPoint: operator.devtool.dumpStartPointOfIndex
 			}}
 		/>;
 	}

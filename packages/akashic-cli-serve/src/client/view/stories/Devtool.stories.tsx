@@ -20,9 +20,9 @@ const store = observable({
 	isSeekingVolume: false,
 
 	// playback
-	currentTime: 20,
-	duration: 100,
-	resetTime: 10,
+	currentTime: 20000,
+	duration: 30000,
+	resetTime: 8000,
 	isPaused: false,
 	isProgressActive: false,
 	isReplay: false,
@@ -104,6 +104,36 @@ const TestWithBehaviour = observer(() => (
 		onResizeHeight={h => (store.devtoolsHeight = h)}
 		activeDevtool={store.activeDevtool as any}
 		onSelectDevtool={t => (store.activeDevtool = t)}
+		playbackDevtoolProps={{
+			startPointHeaders: [
+				{frame: 150, timestamp: 1627467453814},
+				{frame: 300, timestamp: 1627467458813},
+				{frame: 450, timestamp: 1627467463814}
+			],
+			focusedStartPointHeaderIndex: store.selectedStartPointIndex,
+			currentTime: store.currentTime,
+			duration: store.duration,
+			resetTime: store.resetTime,
+			isPaused: store.isPaused,
+			isProgressActive: store.isProgressActive,
+			isReplay: store.isReplay,
+			isActiveExists: true,
+			isActivePaused: store.isActivePaused,
+			isForceResetOnSeek: store.isForceResetOnSeek,
+			onClickPauseActive: (v => store.isActivePaused = v),
+			onClickSavePlaylog: action("click-save-playlog"),
+			onClickForceResetOnSeek: (v => store.isForceResetOnSeek = v),
+			onProgressChange: (v => store.currentTime = v),
+			onProgressCommit: (v => {
+				store.currentTime = v;
+				store.isReplay = true;
+			}),
+			onClickPause: (v => store.isPaused = v),
+			onClickFastForward: (() => store.isReplay = false),
+			onHoverStartPoint: ((v, hovers) => store.selectedStartPointIndex = hovers ? v : null),
+			onJumpWithStartPoint: action("jump-startpoint"),
+			onDumpStartPoint: action("dump-startpoint")
+		}}
 		eventsDevtoolProps={{
 			showsEventList: store.showsEventList,
 			eventListWidth: store.eventListWidth,
@@ -236,36 +266,6 @@ const TestWithBehaviour = observer(() => (
 		miscDevtoolProps={{
 			downloadPlaylog: action("download-playlog")
 		}}
-		playbackDevtoolProps={{
-			startPointHeaders: [
-				{frame: 150, timestamp: 1627467453814},
-				{frame: 300, timestamp: 1627467458813},
-				{frame: 450, timestamp: 1627467463814}
-			],
-			focusedStartPointHeaderIndex: store.selectedStartPointIndex,
-			currentTime: store.currentTime,
-			duration: store.duration,
-			resetTime: store.resetTime,
-			isPaused: store.isPaused,
-			isProgressActive: store.isProgressActive,
-			isReplay: store.isReplay,
-			isActiveExists: true,
-			isActivePaused: store.isActivePaused,
-			isForceResetOnSeek: store.isForceResetOnSeek,
-			onClickPauseActive: (v => store.isActivePaused = v),
-			onClickSavePlaylog: action("click-save-playlog"),
-			onClickForceResetOnSeek: (v => store.isForceResetOnSeek = v),
-			onProgressChange: (v => store.currentTime = v),
-			onProgressCommit: (v => {
-				store.currentTime = v;
-				store.isReplay = true;
-			}),
-			onClickPause: (v => store.isPaused = v),
-			onClickFastForward: (() => store.isReplay = false),
-			onHoverStartPoint: ((v, hovers) => store.selectedStartPointIndex = hovers ? v : null),
-			onJumpWithStartPoint: action("jump-startpoint"),
-			onDumpStartPoint: action("dump-startpoint")
-		}}
 	/>
 ));
 
@@ -277,6 +277,7 @@ storiesOf("o-Devtool", module)
 			onResizeHeight={action("resize-height")}
 			activeDevtool={"Instances"}
 			onSelectDevtool={action("select-tool")}
+			playbackDevtoolProps={dummyPlaybackDevtoolProps}
 			eventsDevtoolProps={{
 				showsEventList: true,
 				eventListWidth: 250,
@@ -370,7 +371,6 @@ storiesOf("o-Devtool", module)
 			miscDevtoolProps={{
 				downloadPlaylog: action("download-playlog")
 			}}
-			playbackDevtoolProps={dummyPlaybackDevtoolProps}
 		/>
 	))
 	.add("events", () => (
@@ -380,6 +380,7 @@ storiesOf("o-Devtool", module)
 			onResizeHeight={action("resize-height")}
 			activeDevtool={"Events"}
 			onSelectDevtool={action("select-tool")}
+			playbackDevtoolProps={dummyPlaybackDevtoolProps}
 			eventsDevtoolProps={{
 				showsEventList: true,
 				eventListWidth: 250,
@@ -465,7 +466,6 @@ storiesOf("o-Devtool", module)
 			miscDevtoolProps={{
 				downloadPlaylog: action("download-playlog")
 			}}
-			playbackDevtoolProps={dummyPlaybackDevtoolProps}
 		/>
 	))
 	.add("entity-tree", () => (
@@ -475,6 +475,7 @@ storiesOf("o-Devtool", module)
 			onResizeHeight={action("resize-height")}
 			activeDevtool={"EntityTree"}
 			onSelectDevtool={action("select-tool")}
+			playbackDevtoolProps={dummyPlaybackDevtoolProps}
 			eventsDevtoolProps={{
 				showsEventList: true,
 				eventListWidth: 250,
@@ -564,7 +565,6 @@ storiesOf("o-Devtool", module)
 			miscDevtoolProps={{
 				downloadPlaylog: action("download-playlog")
 			}}
-			playbackDevtoolProps={dummyPlaybackDevtoolProps}
 		/>
 	))
 	.add("niconico", () => (
@@ -574,6 +574,7 @@ storiesOf("o-Devtool", module)
 			onResizeHeight={action("resize-height")}
 			activeDevtool={"Niconico"}
 			onSelectDevtool={action("select-tool")}
+			playbackDevtoolProps={dummyPlaybackDevtoolProps}
 			eventsDevtoolProps={{
 				showsEventList: true,
 				eventListWidth: 250,
@@ -617,7 +618,6 @@ storiesOf("o-Devtool", module)
 			miscDevtoolProps={{
 				downloadPlaylog: action("download-playlog")
 			}}
-			playbackDevtoolProps={dummyPlaybackDevtoolProps}
 		/>
 	))
 	.add("playback", () => (
@@ -627,6 +627,7 @@ storiesOf("o-Devtool", module)
 			onResizeHeight={action("resize-height")}
 			activeDevtool={"Playback"}
 			onSelectDevtool={action("select-tool")}
+			playbackDevtoolProps={dummyPlaybackDevtoolProps}
 			eventsDevtoolProps={{
 				showsEventList: true,
 				eventListWidth: 250,
@@ -670,7 +671,6 @@ storiesOf("o-Devtool", module)
 			miscDevtoolProps={{
 				downloadPlaylog: action("download-playlog")
 			}}
-			playbackDevtoolProps={dummyPlaybackDevtoolProps}
 		/>
 	))
 	.add("with-behavior", () => <TestWithBehaviour />);
