@@ -1,11 +1,11 @@
-import * as React from "react";
 import { observer } from "mobx-react";
+import * as React from "react";
 import { StartPointHeader } from "../../../common/types/StartPointHeader";
 import { millisecondsToHms, timeValueToString } from "../../common/DateUtil";
 import { FlexScrollY } from "../atom/FlexScrollY";
 import { ToolIconButton } from "../atom/ToolIconButton";
-import { PlaybackOptionBar, PlaybackOptionBarProps } from "./PlaybackOptionBar";
 import * as styles from "./PlaybackDevtool.css";
+import { PlaybackOptionBar, PlaybackOptionBarProps } from "./PlaybackOptionBar";
 
 export interface PlaybackDevtoolProps extends PlaybackOptionBarProps {
 	startPointHeaders: StartPointHeader[];
@@ -28,11 +28,11 @@ export const PlaybackDevtool = observer(function(props: PlaybackDevtoolProps) {
 			<table className={styles["startpoint-table"]}>
 				<thead>
 					<tr>
-						<th className={styles["shrank"]}></th>
+						<th className={styles.shrank}></th>
 						<th>Age</th>
 						<th>Time (milliseconds)</th>
 						<th>Timestamp (time value)</th>
-						<th className={styles["shrank"]}></th>
+						<th className={styles.shrank}></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -47,7 +47,7 @@ export const PlaybackDevtool = observer(function(props: PlaybackDevtoolProps) {
 								onMouseLeave={() => onHoverStartPoint(i, false)}
 								onDoubleClick={() => onJumpWithStartPoint(i)}
 							>
-								<td className={styles["shrank"]}>
+								<td className={styles.shrank}>
 									<ToolIconButton
 										icon="play_arrow"
 										size={18}
@@ -65,7 +65,7 @@ export const PlaybackDevtool = observer(function(props: PlaybackDevtoolProps) {
 									{ timeValueToString(timestamp) }
 									<span className={styles["raw-value"]}>({ timestamp.toFixed(3) })</span>
 								</td>
-								<td className={styles["shrank"]}>
+								<td className={styles.shrank}>
 									<ToolIconButton
 										className="external-ref_button_dump-snapshot"
 										icon="web_asset"

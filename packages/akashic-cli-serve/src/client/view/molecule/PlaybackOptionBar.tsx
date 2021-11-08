@@ -1,5 +1,5 @@
-import * as React from "react";
 import { observer } from "mobx-react";
+import * as React from "react";
 import { StartPointHeader } from "../../../common/types/StartPointHeader";
 import { millisecondsToHms } from "../../common/DateUtil";
 import { ToolCheckbox } from "../atom/ToolCheckbox";
@@ -55,12 +55,12 @@ export const PlaybackOptionBar = observer(function (props: PlaybackOptionBarProp
 	const startPointTime = (startedAt != null && startPoint != null) ? startPoint.timestamp - startedAt : null;
 
 	return <div className={styles["replay-option-bar"]}>
-		<div className={styles["row"]}>
+		<div className={styles.row}>
 			<ToolIconButton
 				className="external-ref_button_active-pause_devtool"
 				icon="pause_circle_filled"
 				title={`アクティブインスタンスをポーズ${isActivePaused ? "解除" : ""}\r\r`
-								+ `ポーズ中は全インスタンスの進行が停止します。`}
+								+ "ポーズ中は全インスタンスの進行が停止します。"}
 				pushed={isActivePaused}
 				disabled={!isActiveExists}
 				pushedIcon="play_circle_filled"
@@ -78,14 +78,14 @@ export const PlaybackOptionBar = observer(function (props: PlaybackOptionBarProp
 			>
 				Save playlog
 			</ToolIconButton>
-			<div className={styles["sep"]} />
+			<div className={styles.sep} />
 			<ToolCheckbox
 				checked={isForceResetOnSeek}
 				label="Force reset on seek"
 				onChange={onClickForceResetOnSeek} />
 		</div>
 
-		<div className={styles["row"]}>
+		<div className={styles.row}>
 			<ToolIconButton
 				className="external-ref_button_pause_devtool"
 				icon="pause" onClick={onClickPause}
@@ -98,7 +98,7 @@ export const PlaybackOptionBar = observer(function (props: PlaybackOptionBarProp
 				size={20}
 				title={"リアルタイム実行に戻る\r\rリプレイ再生をやめ、リアルタイム実行(他インスタンスと同期)します。"}
 				disabled={!isReplay} />
-			<div className={styles["progress"]}>
+			<div className={styles.progress}>
 				<ToolProgressBar
 					max={duration}
 					value={currentTime}
@@ -108,7 +108,7 @@ export const PlaybackOptionBar = observer(function (props: PlaybackOptionBarProp
 					onChange={onProgressChange}
 					onCommit={onProgressCommit} />
 			</div>
-			<p className={styles["time"]}>
+			<p className={styles.time}>
 				{
 					isReplay ?
 						`${millisecondsToHms(currentTime)} / ${millisecondsToHms(duration)}` :

@@ -81,7 +81,7 @@ export class Devtool extends React.Component<DevtoolProps, {}> {
 
 	private _onSelectPlaybackTool = (): void => {
 		this.props.onSelectDevtool("Playback");
-	}
+	};
 
 	private _onSelectInstancesTool = (): void => {
 		this.props.onSelectDevtool("Instances");
@@ -105,5 +105,5 @@ export class Devtool extends React.Component<DevtoolProps, {}> {
 
 	private _onSelectMiscTool = (): void => {
 		this.props.onSelectDevtool("Misc");
-	}
+	};
 }
