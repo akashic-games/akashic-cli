@@ -58,7 +58,7 @@ export class Storage {
 		this.put({
 			showsDevtools: choose(query.showsDevtools, s.showsDevtools, false),
 			devtoolsHeight: choose(query.devtoolsHeight, s.devtoolsHeight, 200),
-			activeDevtool: choose(query.activeDevtool, s.activeDevtool, "Instances"),
+			activeDevtool: choose(query.activeDevtool, s.activeDevtool, "Playback"),
 			isForceResetOnSeek: choose(query.isForceResetOnSeek, s.isForceResetOnSeek, false),
 			showsEventList: choose(query.showsEventList, s.showsEventList, true),
 			eventListWidth: choose(query.eventListWidth, s.eventListWidth, 150),
