@@ -3,6 +3,7 @@ import * as path from "path";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
 import { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
 import * as config from "@akashic/akashic-cli-extra/lib/config";
+import { initConfigValidator } from "../common/initConfigValidator";
 
 export type GitProtocol = "https" | "ssh";
 
@@ -50,12 +51,6 @@ export interface InitParameterObject {
 	localTemplateDirectory?: string;
 
 	/**
-	 * 利用すべきテンプレートの実体を指すパスを保存している場所。
-	 * この値はコマンド外部から指定できず、指定された場合、その値は破棄される。
-	 */
-	_realTemplateDirectory?: string;
-
-	/**
 	 * コピー先に既にファイルが存在していてもコピーするかどうか
 	 */
 	forceCopy?: boolean;
@@ -68,7 +63,7 @@ export interface InitParameterObject {
 	/**
 	 * git コマンドのパス。
 	 */
-	 gitBinPath?: string;
+	gitBinPath?: string;
 
 	/**
 	 * GitHub のホスト。
@@ -95,22 +90,14 @@ export interface InitParameterObject {
 	gheProtocol?: GitProtocol;
 }
 
-const templateConfigValidator: config.StringMap = {
-	"init.repository": "",
-	"init.localTemplateDirectory": "",
-	"init.defaultTemplateType": "",
-	"init.github.host": "",
-	"init.github.protocol": "",
-	"init.ghe.host": "",
-	"init.ghe.protocol": ""
-};
+export type NormalizedInitParameterObject = Required<InitParameterObject>;
 
 /**
  * 未代入のパラメータを補完する
  */
-export async function completeInitParameterObject(param: InitParameterObject): Promise<void> {
+export async function completeInitParameterObject(param: InitParameterObject): Promise<NormalizedInitParameterObject> {
 	const logger = param.logger || new ConsoleLogger();
-	const configFile = param.configFile || new config.AkashicConfigFile(templateConfigValidator);
+	const configFile = param.configFile || new config.AkashicConfigFile(initConfigValidator);
 	const cwd = param.cwd || process.cwd();
 	const templateListJsonPath = param.templateListJsonPath || "template-list.json";
 	const gitBinPath = param.gitBinPath || process.env.GIT_BIN_PATH || "git";
@@ -122,24 +109,37 @@ export async function completeInitParameterObject(param: InitParameterObject): P
 		configFile.getItem("init.localTemplateDirectory"),
 		path.join(os.homedir(), ".akashic-templates")
 	);
-	const defaultType = await _complete(param.type, configFile.getItem("init.defaultTemplateType"), "javascript");
+	const type = await _complete(param.type, configFile.getItem("init.defaultTemplateType"), "javascript");
 	const githubHost = await _complete(param.githubHost, configFile.getItem("init.github.host"), "github.com");
 	const githubProtocol = await _complete(param.githubProtocol, configFile.getItem("init.github.protocol"), "https");
 	const gheHost = await _complete(param.gheHost, configFile.getItem("init.ghe.host"), undefined);
 	const gheProtocol = await _complete(param.gheProtocol, configFile.getItem("init.ghe.protocol"), "https");
 
-	param.logger = logger;
-	param.configFile = configFile;
-	param.cwd = cwd;
-	param.templateListJsonPath = templateListJsonPath;
-	param.gitBinPath = gitBinPath;
-	param.repository = repository;
-	param.localTemplateDirectory = localTemplateDirectory;
-	param.type = defaultType.toLowerCase();
-	param.githubHost = githubHost;
-	param.githubProtocol = githubProtocol as GitProtocol;
-	param.gheHost = gheHost;
-	param.gheProtocol = gheProtocol as GitProtocol;
+	if (!isGitProtocol(githubProtocol))
+		throw new Error(`invalid option githubProtocol: ${githubProtocol}`);
+	if (!isGitProtocol(gheProtocol))
+		throw new Error(`invalid option gheProtocol: ${gheProtocol}`);
+
+	return {
+		logger,
+		configFile,
+		cwd,
+		templateListJsonPath,
+		gitBinPath,
+		repository,
+		localTemplateDirectory,
+		forceCopy: !!param.forceCopy,
+		skipAsk: !!param.skipAsk,
+		type: type.toLowerCase(),
+		githubHost,
+		githubProtocol,
+		gheHost,
+		gheProtocol
+	};
+}
+
+function isGitProtocol(s: string): s is GitProtocol {
+	return s === "https" || s === "ssh";
 }
 
 async function _complete<T>(val: T | undefined, altVal: Promise<T | undefined>, defaultVal: T): Promise<T> {

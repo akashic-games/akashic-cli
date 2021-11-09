@@ -1,15 +1,20 @@
-import { collectTemplatesNames } from "../list/listTemplates";
+import * as path from "path";
+import { copySync, existsSync } from "fs-extra";
+import { readJSON } from "@akashic/akashic-cli-commons/lib/FileSystem";
+import { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
 import { updateConfigurationFile } from "./BasicParameters";
 import { cloneTemplate } from "./cloneTemplate";
-import * as copyTemplate from "./copyTemplate";
-import { downloadTemplateIfNeeded } from "./downloadTemplate";
-import { extractZipIfNeeded } from "./extractZipIfNeeded";
 import { InitParameterObject, completeInitParameterObject } from "./InitParameterObject";
-import { readTemplateFile } from "./readTemplateFile";
-import { showTemplateMessage } from "./showTemplateMessage";
+import { TemplateConfig, completeTemplateConfig, NormalizedTemplateConfig } from "./TemplateConfig";
+import {
+	collectLocalTemplatesMetadata,
+	digestOfTemplateMetadata,
+	fetchRemoteTemplatesMetadata,
+	fetchTemplate
+} from "../common/TemplateMetadata";
 
-export async function promiseInit(param: InitParameterObject): Promise<void> {
-	await completeInitParameterObject(param);
+export async function promiseInit(p: InitParameterObject): Promise<void> {
+	const param = await completeInitParameterObject(p);
 	const m = param.type.match(/(.+):(.+)\/(.+)/) ?? [];
 
 	if (m[1] === "github") {
@@ -25,6 +30,7 @@ export async function promiseInit(param: InitParameterObject): Promise<void> {
 			},
 			param
 		);
+
 	} else if (m[1] === "ghe") {
 		const owner = m[2];
 		const repo = m[3];
@@ -38,23 +44,64 @@ export async function promiseInit(param: InitParameterObject): Promise<void> {
 			},
 			param
 		);
-	} else {
-		const templates = await collectTemplatesNames(param);
-		if (!templates.has(param.type)) {
-			throw new Error ("unknown template name " + param.type);
-		}
-		await extractZipIfNeeded(param);
-		await downloadTemplateIfNeeded(param);
-		const templateConfig = await readTemplateFile(param);
 
-		const confPath = await copyTemplate.copyTemplate(templateConfig, param);
-		await updateConfigurationFile(confPath, param.logger, param.skipAsk);
-		await showTemplateMessage(templateConfig, param);
+	} else {
+		const { type, cwd, logger, skipAsk, forceCopy, repository, localTemplateDirectory } = param;
+
+		// テンプレート決定
+		const allMetadataList = [
+				...(await fetchRemoteTemplatesMetadata(repository)),
+				...(await collectLocalTemplatesMetadata(localTemplateDirectory))
+		];
+		const metadataList = allMetadataList.filter(metadata => metadata.name === type);
+		if (metadataList.length === 0)
+			throw new Error(`Unknown template name: ${type}`);
+		const metadata = metadataList[0];
+		if (metadataList.length > 1)
+			logger.warn(`Found multiple templates named ${type}. Using ${digestOfTemplateMetadata(metadata)}`);
+
+		// テンプレート取得
+		const template = await fetchTemplate(metadata);
+
+		// tempate.json を元にファイルを抽出
+		const rawConf = await readJSON<TemplateConfig>(path.join(template, "template.json"));
+		const conf = await completeTemplateConfig(rawConf, template);
+		await _extractFromTemplate(conf, template, cwd, { forceCopy, logger });
+
+		// ユーザ入力でゲーム設定を更新
+		const gameJsonPath = path.join(template, conf.gameJson);
+		await updateConfigurationFile(gameJsonPath, logger, skipAsk);
+
+		if (conf.guideMessage)
+			logger.print(conf.guideMessage);
 	}
 
 	param.logger.info("Done!");
 }
 
-export function init(param: InitParameterObject, cb: (err?: any) => void): void {
+export function init(param: InitParameterObject, cb: (err?: any) => void): Promise<void> | void {
 	promiseInit(param).then<void>(cb);
+}
+
+interface ExtractFromTemplateOptions {
+  forceCopy?: boolean;
+  logger?: Logger;
+}
+
+async function _extractFromTemplate(conf: NormalizedTemplateConfig, src: string, dest: string, opts: ExtractFromTemplateOptions): Promise<void> {
+	const { forceCopy, logger } = opts;
+	const copyReqs = conf.files.map(entry => ({
+		srcRelative: entry.src,
+		src: path.join(src, entry.src),
+		dest: path.join(dest, entry.dst, entry.src)
+	}));
+	if (!forceCopy) {
+		const existings = copyReqs.filter(req => existsSync(req.dest)).map(req => req.dest);
+		if (existings.length > 0)
+			throw new Error(`aborted to copy files. [${existings.join(", ")}] already exist.`);
+	}
+	copyReqs.forEach(req => {
+		copySync(req.src, req.dest, { overwrite: forceCopy });
+		logger.info(`copied ${req.srcRelative}.`);
+	});
 }
