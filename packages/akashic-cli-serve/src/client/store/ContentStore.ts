@@ -1,6 +1,6 @@
 import { observable, ObservableMap } from "mobx";
 import { ContentLocatorData } from "../../common/types/ContentLocatorData";
-import * as ApiClient from "../api/ApiClient";
+import { apiClientLocalHost } from "../api/ApiClient";
 import { ClientContentLocator } from "../common/ClientContentLocator";
 import { ContentEntity } from "./ContentEntity";
 
@@ -34,7 +34,7 @@ export class ContentStore {
 	}
 
 	private async _initialize(): Promise<void> {
-		const res = await ApiClient.getContents();
+		const res = await apiClientLocalHost.getContents();
 		res.data.forEach(desc => {
 			const content = new ContentEntity(desc);
 			this.contents.set(content.locator.asAbsoluteUrl(), content);

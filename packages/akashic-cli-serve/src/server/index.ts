@@ -11,6 +11,7 @@ import { Command, OptionValues } from "commander";
 import * as express from "express";
 import * as open from "open";
 import * as socketio from "socket.io";
+import * as cors from "cors";
 import parser from "../common/MsgpackParser";
 import { PutStartPointEvent } from "../common/types/TestbedEvent";
 import { ServerContentLocator } from "./common/ServerContentLocator";
@@ -207,7 +208,14 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 		httpServer = server.createServer(app);
 	}
 
-	const io = new socketio.Server(httpServer, { parser });
+	const io = new socketio.Server(httpServer, {
+		parser,
+		cors: {
+			origin: cliConfigParam.accessibleUrl ?? "",
+			methods: ["GET", "POST"],
+			allowedHeaders: ["x-akashic-serve-authorization-key"]
+		}
+	});
 
 	if (cliConfigParam.watch && cliConfigParam.targetDirs) {
 		console.log("Start watching contents");
@@ -258,6 +266,8 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 
 	app.use("^\/$", (_req, res, _next) => res.redirect("/public/"));
 
+	app.use(cors({ origin: cliConfigParam.accessibleUrl ?? "" }));
+
 	if (process.env.ENGINE_FILES_V3_PATH) {
 		const engineFilesPath = path.resolve(process.cwd(), process.env.ENGINE_FILES_V3_PATH);
 		if (!fs.existsSync(engineFilesPath)) {
@@ -269,6 +279,14 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 		});
 	}
 
+	app.get("/public/external/playlogClientV*.js", (req, res, _next) => {
+		const playlogClientSrc = fs.readFileSync(path.join(__dirname, "..", "..", "www", req.path));
+		const responseBody = `var HOST = "${req.header("host")}";
+${playlogClientSrc}
+		`;
+		res.contentType("text/javascript");
+		res.send(responseBody);
+	});
 	app.use("/public/", express.static(path.join(__dirname, "..", "..", "www", "public")));
 	app.use("/internal/", express.static(path.join(__dirname, "..", "..", "www", "internal")));
 	app.use("/api/", createApiRouter({ playStore, runnerStore, playerIdStore, amflowManager, io }));
@@ -386,6 +404,7 @@ export async function run(argv: any): Promise<void> {
 			"EXPERIMENTAL: Open <num> browser windows at startup. The upper limit of <num> is 10.") // TODO: open-browser と統合
 		.option("--ssl-cert <certificatePath>", "Specify path to an SSL/TLS certificate to use HTTPS")
 		.option("--ssl-key <privatekeyPath>", "Specify path to an SSL/TLS privatekey to use HTTPS")
+		.option("--accessible-url <accessibleUrl>", "Specify Url that can access this server")
 		.parse(argv);
 
 	const options = commander.opts();
@@ -412,7 +431,8 @@ export async function run(argv: any): Promise<void> {
 			watch: options.watch ?? conf.watch,
 			experimentalOpen: options.experimentalOpen ?? conf.experimentalOpen,
 			sslCert: options.sslCert ?? conf.sslCert,
-			sslKey: options.sslKey ?? conf.sslKey
+			sslKey: options.sslKey ?? conf.sslKey,
+			accessibleUrl: options.accessibleUrl ?? conf.accessibleUrl
 		};
 		await cli(cliConfigParam, options);
 	});

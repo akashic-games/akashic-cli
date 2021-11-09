@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "declaration": false,
+    "downlevelIteration": true,
+    "lib": ["es5", "dom"],
+    "noImplicitAny": true,
+    "module": "commonjs" ,
+    "outDir": "../../../build-client-never-used",
+    "noUnusedParameters": true
+  },
+  "include": [
+    "./*.ts"
+  ]
+}
