@@ -20,7 +20,7 @@ describe("InitParameterObject.ts", () => {
 				})
 			};
 			target.completeInitParameterObject(param)
-			.then(() => {
+			.then((param) => {
 				expect(param.cwd).toBe(process.cwd());
 				expect(param.templateListJsonPath).toBe("template-list.json");
 				expect(param.repository).toBe("dummyRepositoryUrl");
@@ -40,7 +40,7 @@ describe("InitParameterObject.ts", () => {
 				configFile: new MockConfigFile({})
 			};
 			target.completeInitParameterObject(param)
-			.then(() => {
+			.then((param) => {
 				expect(param.cwd).toBe(process.cwd());
 				expect(param.templateListJsonPath).toBe("template-list.json");
 				expect(param.repository).toBe("");

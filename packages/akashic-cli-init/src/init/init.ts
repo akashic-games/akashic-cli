@@ -46,11 +46,12 @@ export async function promiseInit(p: InitParameterObject): Promise<void> {
 		);
 
 	} else {
-		const { type, cwd, logger, skipAsk, forceCopy, repository, localTemplateDirectory } = param;
+		const { type, cwd, logger, skipAsk, forceCopy, repository, templateListJsonPath, localTemplateDirectory } = param;
 
 		// テンプレート決定
+		const templateListJsonUri = new URL(templateListJsonPath, repository).toString();
 		const allMetadataList = [
-				...(await fetchRemoteTemplatesMetadata(repository)),
+				...(await fetchRemoteTemplatesMetadata(templateListJsonUri)),
 				...(await collectLocalTemplatesMetadata(localTemplateDirectory))
 		];
 		const metadataList = allMetadataList.filter(metadata => metadata.name === type);
@@ -92,16 +93,21 @@ async function _extractFromTemplate(conf: NormalizedTemplateConfig, src: string,
 	const { forceCopy, logger } = opts;
 	const copyReqs = conf.files.map(entry => ({
 		srcRelative: entry.src,
+		destRelative: path.join(entry.dst, entry.src),
 		src: path.join(src, entry.src),
 		dest: path.join(dest, entry.dst, entry.src)
 	}));
 	if (!forceCopy) {
-		const existings = copyReqs.filter(req => existsSync(req.dest)).map(req => req.dest);
+		const existings = copyReqs.filter(req => existsSync(req.dest)).map(req => req.destRelative);
 		if (existings.length > 0)
-			throw new Error(`aborted to copy files. [${existings.join(", ")}] already exist.`);
+			throw new Error(`aborted to copy files, because followings already exist. [${existings.join(", ")}]`);
 	}
 	copyReqs.forEach(req => {
 		copySync(req.src, req.dest, { overwrite: forceCopy });
 		logger.info(`copied ${req.srcRelative}.`);
 	});
 }
+
+export const internals = {
+	_extractFromTemplate
+};

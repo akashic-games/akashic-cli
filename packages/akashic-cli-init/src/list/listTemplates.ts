@@ -3,9 +3,10 @@ import { ListTemplatesParameterObject, completeListTemplatesParamterObject } fro
 
 export async function listTemplates(p: ListTemplatesParameterObject): Promise<void> {
 	const param = await completeListTemplatesParamterObject(p);
+	const templateListJsonUri = new URL(param.templateListJsonPath, param.repository).toString();
 	const metadataList = [
-		...(await collectLocalTemplatesMetadata(param.localTemplateDirectory)),
-		...(await fetchRemoteTemplatesMetadata(param.templateListJsonPath))
+		...(await fetchRemoteTemplatesMetadata(templateListJsonUri)),
+		...(await collectLocalTemplatesMetadata(param.localTemplateDirectory))
 	];
 	metadataList.forEach(metadata => param.logger.print(metadata.name));
 }

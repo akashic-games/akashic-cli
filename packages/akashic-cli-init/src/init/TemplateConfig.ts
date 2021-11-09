@@ -47,6 +47,7 @@ export async function completeTemplateConfig(templateConfig: TemplateConfig, bas
 				throw new Error("template.json has an invalid file name:");
 			return { src, dst: dst ?? "" };
 		});
+
 	} else {
 		const fileNames = await readdir(baseDir);
 		normalizedFiles = fileNames

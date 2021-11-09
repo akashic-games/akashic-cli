@@ -50,18 +50,21 @@ export async function collectLocalTemplatesMetadata(templateDirectory: string): 
 export async function fetchRemoteTemplatesMetadata(templateListJsonUri: string): Promise<RemoteTemplateMetadata[]> {
   const res = await fetch(templateListJsonUri);
   const templateListJson = (await res.json()) as TemplateList;
-  return Object.keys(templateListJson.templates).map(name => ({
-    sourceType: "remote",  
-    name,
-    url: templateListJson.templates[name]
-  }))
+  return Object.keys(templateListJson.templates).map(name => {
+    const rawUrl = templateListJson.templates[name];
+    return {
+      sourceType: "remote",
+      name,
+      url: new URL(rawUrl, templateListJsonUri).toString()
+    };
+  });
 }
 
 /**
  * テンプレートを取得する。
- * 
+ *
  * remote ならテンポラリディレクトリにダウンロードし、localなら何もしない。
- * 
+ *
  * @param metadata 取得するテンプレート
  * @returns 取得したテンプレート(template.jsonがあるディレクトリ)のパス。テンポラリディレクトリでありうる。
  */
@@ -92,3 +95,4 @@ function _extractZip(buf: Buffer, dest: string): Promise<void> {
 		stream.end(buf, "binary");
 	});
 }
+
