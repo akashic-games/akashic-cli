@@ -13,7 +13,7 @@ export { CliConfigurationFile } from "./CliConfig/CliConfigurationFile";
 export { Configuration, ConfigurationParameterObject } from "./Configuration";
 export { ConfigurationFile } from "./ConfigurationFile";
 export { ConsoleLogger } from "./ConsoleLogger";
-export { FileModule } from "./FileModule";
+export * as FileSystem from "./FileSystem";
 export {
 	AssetConfiguration,
 	AudioSystemConfiguration,

@@ -1,7 +1,7 @@
 import * as mockfs from "mock-fs";
-import { FileModule } from "../../lib/FileModule";
+import { readJSON, writeJSON } from "../../lib/FileSystem";
 
-describe("FileModuleSpec", () => {
+describe("FileSystemSpec", () => {
 	afterEach(function () {
 		mockfs.restore();
 	});
@@ -16,7 +16,7 @@ describe("FileModuleSpec", () => {
 			}
 		});
 		expect(
-			await FileModule.readJSON("./game/game.json")
+			await readJSON("./game/game.json")
 		).toEqual({
 			width: 120,
 			height: 240
@@ -29,9 +29,9 @@ describe("FileModuleSpec", () => {
 				"game.json": JSON.stringify({})
 			}
 		});
-		await FileModule.writeJSON("./game/game.json", { width: 120, height: 240 });
+		await writeJSON("./game/game.json", { width: 120, height: 240 });
 		expect(
-			await FileModule.readJSON("./game/game.json")
+			await readJSON("./game/game.json")
 		).toEqual({
 			width: 120,
 			height: 240

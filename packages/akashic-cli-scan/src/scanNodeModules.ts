@@ -1,6 +1,6 @@
 import * as path from "path";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
-import { FileModule } from "@akashic/akashic-cli-commons/lib/FileModule";
+import { readJSON, writeJSON } from "@akashic/akashic-cli-commons/lib/FileSystem";
 import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
 import { NodeModules } from "@akashic/akashic-cli-commons/lib/NodeModules";
 import { PromisedNpm } from "@akashic/akashic-cli-commons/lib/PromisedNpm";
@@ -81,7 +81,7 @@ export async function scanNodeModules(p: ScanNodeModulesParameterObject): Promis
 		const logger = param.logger;
 		const gamePath = "./game.json";
 		const base = ".";
-		const content = await FileModule.readJSON<GameConfiguration>(gamePath);
+		const content = await readJSON<GameConfiguration>(gamePath);
 
 		let entryPaths: string | string[];
 
@@ -145,7 +145,7 @@ export async function scanNodeModules(p: ScanNodeModulesParameterObject): Promis
 
 		content.globalScripts = modulePaths;
 
-		await FileModule.writeJSON<GameConfiguration>(gamePath, content);
+		await writeJSON<GameConfiguration>(gamePath, content);
 
 		logger.info("Done!");
 	} finally {
