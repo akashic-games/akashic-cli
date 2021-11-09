@@ -1,10 +1,10 @@
+import { collectTemplatesNames } from "../list/listTemplates";
 import { updateConfigurationFile } from "./BasicParameters";
 import { cloneTemplate } from "./cloneTemplate";
 import * as copyTemplate from "./copyTemplate";
 import { downloadTemplateIfNeeded } from "./downloadTemplate";
 import { extractZipIfNeeded } from "./extractZipIfNeeded";
 import { InitParameterObject, completeInitParameterObject } from "./InitParameterObject";
-import { collectTemplatesNames } from "./listTemplates";
 import { readTemplateFile } from "./readTemplateFile";
 import { showTemplateMessage } from "./showTemplateMessage";
 

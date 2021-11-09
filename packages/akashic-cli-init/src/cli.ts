@@ -4,9 +4,9 @@ import { CliConfigInit } from "@akashic/akashic-cli-commons/lib/CliConfig/CliCon
 import { CliConfigurationFile } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigurationFile";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
 import { Command } from "commander";
-import { promiseInit } from "./init";
-import { InitParameterObject } from "./InitParameterObject";
-import { listTemplates } from "./listTemplates";
+import { promiseInit } from "./init/init";
+import { InitParameterObject } from "./init/InitParameterObject";
+import { listTemplates } from "./list/listTemplates";
 
 function cli(param: CliConfigInit): void {
 	var logger = new ConsoleLogger({ quiet: param.quiet });

@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
-import { getTemplateNameList } from "./downloadTemplate";
-import { InitParameterObject, completeInitParameterObject } from "./InitParameterObject";
+import { getTemplateNameList } from "../init/downloadTemplate";
+import { InitParameterObject, completeInitParameterObject } from "../init/InitParameterObject";
 
 /**
  * サーバに存在するテンプレート一覧を表示

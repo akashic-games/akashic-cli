@@ -2,7 +2,7 @@ var fs = require("fs-extra");
 var mockfs = require("mock-fs");
 var path = require("path");
 var ConsoleLogger = require("@akashic/akashic-cli-commons/lib/ConsoleLogger").ConsoleLogger;
-var ct = require("../lib/copyTemplate");
+var ct = require("../lib/init/copyTemplate");
 
 describe("copyTemplate.ts", () => {
 	describe("copyTemplate()", () => {

@@ -4,8 +4,8 @@ var path = require("path");
 var express = require("express");
 var getPort = require("get-port");
 var ConsoleLogger = require("@akashic/akashic-cli-commons/lib/ConsoleLogger").ConsoleLogger;
-var dt = require("../lib/downloadTemplate");
-var lt = require("../lib/listTemplates");
+var dt = require("../lib/init/downloadTemplate");
+var lt = require("../lib/list/listTemplates");
 
 describe("downloadTemplate.ts", () => {
 	let templateServer = null;
@@ -27,11 +27,11 @@ describe("downloadTemplate.ts", () => {
 
 	describe("listTemplates()", () => {
 		it("list templates", done => {
-			var str = "";
+			var printed = [];
 			var param = {
 				logger: {
 					error: s => { done.fail(); },
-					print: s => { str = str + s + "\n"; },
+					print: s => { printed.push(s); },
 					info: s => { }
 				},
 				repository: repositoryUrl,
@@ -42,7 +42,13 @@ describe("downloadTemplate.ts", () => {
 
 			lt.listTemplates(param)
 				.then(() => {
-					expect(str).toBe("javascript-minimal\njavascript-shin-ichiba-ranking\njavascript\ntypescript-minimal\ntypescript-shin-ichiba-ranking\ntypescript\n");
+					expect(printed.length).toBe(6);
+					expect(printed.includes("javascript-minimal")).toBe(true);
+					expect(printed.includes("javascript-shin-ichiba-ranking")).toBe(true);
+					expect(printed.includes("javascript")).toBe(true);
+					expect(printed.includes("typescript-minimal")).toBe(true);
+					expect(printed.includes("typescript-shin-ichiba-ranking")).toBe(true);
+					expect(printed.includes("typescript")).toBe(true);
 				})
 				.then(done, done.fail);
 		});

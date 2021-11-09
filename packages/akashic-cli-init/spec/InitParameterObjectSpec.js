@@ -1,7 +1,7 @@
 var os = require("os");
 var path = require("path");
 var ConsoleLogger = require("@akashic/akashic-cli-commons/lib/ConsoleLogger").ConsoleLogger;
-var target = require("../lib/InitParameterObject");
+var target = require("../lib/init/InitParameterObject");
 var MockConfigFile = require("./support/mockConfigFile");
 
 describe("InitParameterObject.ts", () => {
