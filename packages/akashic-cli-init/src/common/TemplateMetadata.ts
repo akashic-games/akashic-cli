@@ -1,10 +1,10 @@
 import * as fs from "fs";
 import * as os from "os";
+import * as path from "path";
+import { readdir } from "@akashic/akashic-cli-commons/lib/FileSystem";
 import fetch from "node-fetch";
 import * as request from "request";
-import * as path from "path";
 import * as unzipper from "unzipper";
-import { readdir } from "@akashic/akashic-cli-commons/lib/FileSystem";
 
 // TODO: 適切な場所に移動
 interface TemplateList {
@@ -15,13 +15,13 @@ export type LocalTemplateMetadata = {
 	sourceType: "local";
 	name: string;
 	path: string;
-}
+};
 
 export type RemoteTemplateMetadata = {
 	sourceType: "remote";
 	name: string;
 	url: string;
-}
+};
 
 export type TemplateMetadata =
 	LocalTemplateMetadata |
@@ -78,13 +78,12 @@ export async function fetchTemplate(metadata: TemplateMetadata): Promise<string>
 			const { name, url } = metadata;
 			// const zip = await (await fetch(url)).buffer();
 			const zip = await _request({ uri: url, method: "GET", encoding: null });
-			const destDir = fs.mkdtempSync(path.join(os.tmpdir(), name));
+			const destDir = fs.mkdtempSync(path.join(os.tmpdir(), name + "-"));
 			await _extractZip(zip, destDir);
-			return destDir;
+			return _findTemplateRoot(destDir);
 		}
 	}
 }
-
 
 interface RequestParameterObject {
 	/**
@@ -137,3 +136,16 @@ function _extractZip(buf: Buffer, dest: string): Promise<void> {
 	});
 }
 
+async function _findTemplateRoot(dirpath: string): Promise<string> {
+	const fileNames = await readdir(dirpath);
+	if (fileNames.includes("template.json") || fileNames.includes("game.json"))
+		return dirpath;
+
+	// 中身がフォルダ一つならその中も探す (フォルダごと .zip にされていたり、.zip の展開時にフォルダが作られるケース救済)
+	if (fileNames.length === 1) {
+		const childDir = path.join(dirpath, fileNames[0]);
+		if (fs.statSync(childDir).isDirectory()) // TODO commons に promise 版の stat() を作る
+			return _findTemplateRoot(childDir);
+	}
+	return null;
+}

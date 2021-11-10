@@ -1,9 +1,9 @@
 import * as fs from "fs";
 import * as path from "path";
-import { Command } from "commander";
 import { CliConfigInit } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigInit";
 import { CliConfigurationFile } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigurationFile";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
+import { Command } from "commander";
 import { promiseInit } from "./init/init";
 import { listTemplates } from "./list/listTemplates";
 
@@ -11,10 +11,14 @@ async function cli(param: CliConfigInit): Promise<void> {
 	const logger = new ConsoleLogger({ quiet: param.quiet });
 	try {
 		if (param.list) {
-			await listTemplates({ logger });
+			await listTemplates({
+				repository: (param as any).repository,
+				logger
+			});
 		} else {
 			await promiseInit({
 				cwd: param.cwd,
+				repository: (param as any).repository,
 				type: param.type,
 				logger: logger,
 				forceCopy: param.force,
@@ -60,10 +64,11 @@ export function run(argv: string[]): void {
 		cli({
 			cwd: options.cwd ?? conf.cwd,
 			quiet: options.quiet ?? conf.quiet,
+			repository: options.registry,
 			type: options.type ?? conf.type,
 			list: options.list ?? conf.list,
 			yes: options.yes ?? conf.yes,
 			force: options.force ?? conf.force
-		});
+		} as any);
 	});
 }

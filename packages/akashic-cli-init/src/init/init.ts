@@ -1,17 +1,17 @@
 import * as path from "path";
-import { copySync, existsSync } from "fs-extra";
 import { readJSON } from "@akashic/akashic-cli-commons/lib/FileSystem";
 import { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
-import { updateConfigurationFile } from "./BasicParameters";
-import { cloneTemplate } from "./cloneTemplate";
-import { InitParameterObject, completeInitParameterObject } from "./InitParameterObject";
-import { TemplateConfig, completeTemplateConfig, NormalizedTemplateConfig } from "./TemplateConfig";
+import { copySync, existsSync } from "fs-extra";
 import {
 	collectLocalTemplatesMetadata,
 	digestOfTemplateMetadata,
 	fetchRemoteTemplatesMetadata,
 	fetchTemplate
 } from "../common/TemplateMetadata";
+import { updateConfigurationFile } from "./BasicParameters";
+import { cloneTemplate } from "./cloneTemplate";
+import { InitParameterObject, completeInitParameterObject } from "./InitParameterObject";
+import { TemplateConfig, completeTemplateConfig, NormalizedTemplateConfig } from "./TemplateConfig";
 
 export async function promiseInit(p: InitParameterObject): Promise<void> {
 	const param = await completeInitParameterObject(p);
@@ -51,8 +51,8 @@ export async function promiseInit(p: InitParameterObject): Promise<void> {
 		// テンプレート決定
 		const templateListJsonUri = new URL(templateListJsonPath, repository).toString();
 		const allMetadataList = [
-				...(await fetchRemoteTemplatesMetadata(templateListJsonUri)),
-				...(await collectLocalTemplatesMetadata(localTemplateDirectory))
+			...(await fetchRemoteTemplatesMetadata(templateListJsonUri)),
+			...(await collectLocalTemplatesMetadata(localTemplateDirectory))
 		];
 		const metadataList = allMetadataList.filter(metadata => metadata.name === type);
 		if (metadataList.length === 0)
@@ -65,7 +65,7 @@ export async function promiseInit(p: InitParameterObject): Promise<void> {
 		const template = await fetchTemplate(metadata);
 
 		// tempate.json を元にファイルを抽出
-		const rawConf = await readJSON<TemplateConfig>(path.join(template, "template.json"));
+		const rawConf = await _readJSONWithDefault<TemplateConfig>(path.join(template, "template.json"), {});
 		const conf = await completeTemplateConfig(rawConf, template);
 		await _extractFromTemplate(conf, template, cwd, { forceCopy, logger });
 
@@ -85,11 +85,16 @@ export function init(param: InitParameterObject, cb: (err?: any) => void): Promi
 }
 
 interface ExtractFromTemplateOptions {
-  forceCopy?: boolean;
-  logger?: Logger;
+	forceCopy?: boolean;
+	logger?: Logger;
 }
 
-async function _extractFromTemplate(conf: NormalizedTemplateConfig, src: string, dest: string, opts: ExtractFromTemplateOptions): Promise<void> {
+async function _extractFromTemplate(
+	conf: NormalizedTemplateConfig,
+	src: string,
+	dest: string,
+	opts: ExtractFromTemplateOptions
+): Promise<void> {
 	const { forceCopy, logger } = opts;
 	const copyReqs = conf.files.map(entry => ({
 		srcRelative: entry.src,
@@ -106,6 +111,16 @@ async function _extractFromTemplate(conf: NormalizedTemplateConfig, src: string,
 		copySync(req.src, req.dest, { overwrite: forceCopy });
 		logger.info(`copied ${req.srcRelative}.`);
 	});
+}
+
+async function _readJSONWithDefault<T>(filepath: string, defaultValue: T): Promise<T> {
+	try {
+		return await readJSON(filepath);
+	} catch (e) {
+		if (e.code === "ENOENT")
+			return defaultValue;
+		throw e;
+	}
 }
 
 export const internals = {

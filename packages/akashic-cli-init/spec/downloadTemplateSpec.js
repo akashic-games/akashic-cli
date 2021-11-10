@@ -56,21 +56,10 @@ describe("downloadTemplate.ts", () => {
 			).then((metadataList) => {
 				const matched = metadataList.filter(m => m.name === "javascript");
 				expect(matched.length).toBe(1);
-				console.log("MAT", matched[0]);
 				fetchTemplate(matched[0])
 					.then((dir) => {
-				console.log("FETC", dir);
-						expect(fs.statSync(path.join(
-							dir,
-							"javascript",
-							"game.json"
-						)).isFile()).toBe(true);
-						expect(fs.statSync(path.join(
-							dir,
-							"javascript",
-							"script",
-							"main.js"
-						)).isFile()).toBe(true);
+						expect(fs.statSync(path.join(dir, "game.json")).isFile()).toBe(true);
+						expect(fs.statSync(path.join(dir, "script", "main.js")).isFile()).toBe(true);
 					})
 					.then(done, done.fail);
 				});

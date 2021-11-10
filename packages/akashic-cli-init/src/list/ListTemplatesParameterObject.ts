@@ -42,7 +42,9 @@ export type NormalizedListTemplatesParameterObject = Required<ListTemplatesParam
 /**
  * 未代入のパラメータを補完する
  */
-export async function completeListTemplatesParamterObject(param: ListTemplatesParameterObject): Promise<NormalizedListTemplatesParameterObject> {
+export async function completeListTemplatesParamterObject(
+	param: ListTemplatesParameterObject
+): Promise<NormalizedListTemplatesParameterObject> {
 	const logger = param.logger || new ConsoleLogger();
 	const configFile = param.configFile || new config.AkashicConfigFile(initConfigValidator);
 	const templateListJsonPath = param.templateListJsonPath || "template-list.json";
