@@ -39,7 +39,7 @@
     "@types/form-data": "2.2.1",
     "@types/fs-extra": "9.0.13",
     "@types/node": "14.17.32",
-    "@types/request": "2.48.7",
+    "@types/node-fetch": "2.5.12",
     "@types/unzipper": "0.10.4",
     "@typescript-eslint/eslint-plugin": "4.33.0",
     "bestzip": "2.2.0",
@@ -61,8 +61,8 @@
     "@akashic/akashic-cli-extra": "1.4.1",
     "commander": "8.3.0",
     "fs-extra": "10.0.0",
+    "node-fetch": "2.6.6",
     "prompt": "1.2.0",
-    "request": "^2.74.0",
     "unzipper": "^0.10.0"
   },
   "publishConfig": {
