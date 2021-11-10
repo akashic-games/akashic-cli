@@ -5,8 +5,8 @@ var ConsoleLogger = require("@akashic/akashic-cli-commons/lib/ConsoleLogger").Co
 var completeTemplateConfig = require("../lib/init/TemplateConfig").completeTemplateConfig;
 var _extractFromTemplate = require("../lib/init/init").internals._extractFromTemplate;
 
-describe("copyTemplate.ts", () => {
-	describe("copyTemplate()", () => {
+describe("init.ts", () => {
+	describe("_extractFromTemplate()", () => {
 		beforeEach(() => {
 			mockfs({
 				".akashic-templates": {
