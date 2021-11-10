@@ -28,13 +28,3 @@ export async function writeJSON<T>(filepath: string, content: T, formatter?: Wri
 		});
 	});
 }
-
-export async function readdir(dir: string): Promise<string[]> {
-	return new Promise<string[]>((resolve, reject) => {
-		fs.readdir(dir, (err, files) => {
-			if (err) return reject(err);
-			resolve(files);
-		});
-	});
-}
-
