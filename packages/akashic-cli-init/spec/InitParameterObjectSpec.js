@@ -43,7 +43,7 @@ describe("InitParameterObject.ts", () => {
 			.then((param) => {
 				expect(param.cwd).toBe(process.cwd());
 				expect(param.templateListJsonPath).toBe("template-list.json");
-				expect(param.repository).toBe("");
+				expect(param.repository).toBe("https://akashic-contents.github.io/templates/");
 				expect(param.localTemplateDirectory).toBe(path.join(os.homedir(), ".akashic-templates"));
 				expect(param.type).toBe("javascript");
 				expect(param.githubHost).toBe("github.com");

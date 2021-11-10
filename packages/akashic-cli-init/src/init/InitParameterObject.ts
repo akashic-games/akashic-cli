@@ -1,25 +1,8 @@
-import * as os from "os";
-import * as path from "path";
-import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
-import { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
-import * as config from "@akashic/akashic-cli-extra/lib/config";
-import { initConfigValidator } from "../common/initConfigValidator";
+import { InitCommonOptions, completeInitCommonOptions } from "../common/InitCommonOptions";
 
 export type GitProtocol = "https" | "ssh";
 
-export interface InitParameterObject {
-	/**
-	 * コマンドの出力を受け取るロガー。
-	 * 省略された場合、akashic-cli-commons の `new ConsoleLogger()` 。
-	 */
-	logger?: Logger;
-
-	/**
-	 * 利用する設定ファイル
-	 * 省略された場合、`akashic-config` のデフォルトディレクトリから読み込む。
-	 */
-	configFile?: config.AkashicConfigFile;
-
+export interface InitParameterObject extends InitCommonOptions {
 	/**
 	 * 作業ディレクトリ。
 	 * 省略された場合、 `process.cwd()` 。
@@ -31,24 +14,6 @@ export interface InitParameterObject {
 	 * 省略された場合、`akashic-config` の設定値を利用。
 	 */
 	type?: string;
-
-	/**
-	 * テンプレートをダウンロード可能なサーバURL。
-	 * 省略された場合、`akashic-config` の設定値を利用。
-	 */
-	repository?: string;
-
-	/**
-	 * サーバ上でテンプレート一覧を保持するJSONのパス。
-	 * 省略された場合、 "template-list.json" を利用。
-	 */
-	templateListJsonPath?: string;
-
-	/**
-	 * ローカルファイルシステムでテンプレートを保存している場所。
-	 * 省略された場合、`akashic-config` の設定値を利用。
-	 */
-	localTemplateDirectory?: string;
 
 	/**
 	 * コピー先に既にファイルが存在していてもコピーするかどうか
@@ -96,19 +61,17 @@ export type NormalizedInitParameterObject = Required<InitParameterObject>;
  * 未代入のパラメータを補完する
  */
 export async function completeInitParameterObject(param: InitParameterObject): Promise<NormalizedInitParameterObject> {
-	const logger = param.logger || new ConsoleLogger();
-	const configFile = param.configFile || new config.AkashicConfigFile(initConfigValidator);
+	const {
+		logger,
+		configFile,
+		repository,
+		templateListJsonPath,
+		localTemplateDirectory
+	} = await completeInitCommonOptions(param);
+
 	const cwd = param.cwd || process.cwd();
-	const templateListJsonPath = param.templateListJsonPath || "template-list.json";
 	const gitBinPath = param.gitBinPath || process.env.GIT_BIN_PATH || "git";
 
-	await configFile.load();
-	const repository = await _complete(param.repository, configFile.getItem("init.repository"), "");
-	const localTemplateDirectory = await _complete(
-		param.localTemplateDirectory,
-		configFile.getItem("init.localTemplateDirectory"),
-		path.join(os.homedir(), ".akashic-templates")
-	);
 	const type = await _complete(param.type, configFile.getItem("init.defaultTemplateType"), "javascript");
 	const githubHost = await _complete(param.githubHost, configFile.getItem("init.github.host"), "github.com");
 	const githubProtocol = await _complete(param.githubProtocol, configFile.getItem("init.github.protocol"), "https");

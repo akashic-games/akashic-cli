@@ -70,7 +70,7 @@ export async function promiseInit(p: InitParameterObject): Promise<void> {
 		await _extractFromTemplate(conf, template, cwd, { forceCopy, logger });
 
 		// ユーザ入力でゲーム設定を更新
-		const gameJsonPath = path.join(template, conf.gameJson);
+		const gameJsonPath = path.join(cwd, conf.gameJson);
 		await updateConfigurationFile(gameJsonPath, logger, skipAsk);
 
 		if (conf.guideMessage)
