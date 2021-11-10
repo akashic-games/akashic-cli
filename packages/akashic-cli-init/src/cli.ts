@@ -71,6 +71,6 @@ export function run(argv: string[]): void {
 			list: options.list ?? conf.list,
 			yes: options.yes ?? conf.yes,
 			force: options.force ?? conf.force
-		} as any);
+		});
 	});
 }
