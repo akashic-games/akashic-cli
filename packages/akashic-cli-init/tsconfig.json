@@ -7,7 +7,7 @@
     "outDir": "./lib",
     "declaration": true,
     "sourceMap": true,
-    "types" : ["commander", "form-data", "fs-extra", "node", "node-fetch", "request"]
+    "types" : ["commander", "form-data", "fs-extra", "node", "node-fetch"]
   },
   "files": [
     "./node_modules/typescript/lib/lib.es6.d.ts",

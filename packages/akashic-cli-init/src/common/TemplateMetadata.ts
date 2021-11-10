@@ -3,7 +3,6 @@ import * as os from "os";
 import * as path from "path";
 import { readdir } from "@akashic/akashic-cli-commons/lib/FileSystem";
 import fetch from "node-fetch";
-import * as request from "request";
 import * as unzipper from "unzipper";
 
 // TODO: 適切な場所に移動
@@ -76,51 +75,12 @@ export async function fetchTemplate(metadata: TemplateMetadata): Promise<string>
 		}
 		case "remote": {
 			const { name, url } = metadata;
-			// const zip = await (await fetch(url)).buffer();
-			const zip = await _request({ uri: url, method: "GET", encoding: null });
+			const zip = await (await fetch(url)).buffer();
 			const destDir = fs.mkdtempSync(path.join(os.tmpdir(), name + "-"));
 			await _extractZip(zip, destDir);
 			return _findTemplateRoot(destDir);
 		}
 	}
-}
-
-interface RequestParameterObject {
-	/**
-	 * サーバURI
-	 */
-	uri: string;
-
-	/**
-	 * HTTPメソッド (例: "GET")
-	 */
-	method: string;
-
-	/**
-	 * 結果をjsonで返すかどうか
-	 */
-	json?: boolean;
-
-	/**
-	 * 結果のエンコーディング (nullを指定するとBuffer)
-	 */
-	encoding?: string;
-}
-
-function _request(param: RequestParameterObject): Promise<any> {
-	return new Promise<any>((resolve, reject) => {
-		request(param, (err: any, res: any, body: any) => {
-			if (err) {
-				reject(err);
-				return;
-			}
-			if (res.statusCode !== 200) {
-				reject(new Error(`download failed: code = ${res.code}`));
-				return;
-			}
-			resolve(body);
-		});
-	});
 }
 
 function _extractZip(buf: Buffer, dest: string): Promise<void> {
