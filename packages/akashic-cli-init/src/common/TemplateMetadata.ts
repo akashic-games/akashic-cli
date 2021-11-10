@@ -76,9 +76,12 @@ export async function fetchTemplate(metadata: TemplateMetadata): Promise<string>
 		case "remote": {
 			const { name, url } = metadata;
 			const zip = await (await fetch(url)).buffer();
-			const destDir = fs.mkdtempSync(path.join(os.tmpdir(), name + "-"));
-			await _extractZip(zip, destDir);
-			return _findTemplateRoot(destDir);
+			const dest = fs.mkdtempSync(path.join(os.tmpdir(), name + "-"));
+			await _extractZip(zip, dest);
+			const templateRoot = await _findTemplateRoot(dest);
+			if (!templateRoot)
+				throw new Error(`No template root in ${dest} (obtained from ${url})`);
+			return templateRoot;
 		}
 	}
 }
@@ -96,7 +99,7 @@ function _extractZip(buf: Buffer, dest: string): Promise<void> {
 	});
 }
 
-async function _findTemplateRoot(dirpath: string): Promise<string> {
+async function _findTemplateRoot(dirpath: string): Promise<string | null> {
 	const fileNames = await readdir(dirpath);
 	if (fileNames.includes("template.json") || fileNames.includes("game.json"))
 		return dirpath;

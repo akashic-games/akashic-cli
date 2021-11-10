@@ -32,6 +32,12 @@ export async function promiseInit(p: InitParameterObject): Promise<void> {
 		);
 
 	} else if (m[1] === "ghe") {
+		if (!param.gheHost) {
+			throw new Error(
+				`Type '${param.type}' requires GHE host configuraton. ` +
+				"Run akashic config set init.ghe.host <url>"
+			);
+		}
 		const owner = m[2];
 		const repo = m[3];
 		await cloneTemplate(
@@ -109,7 +115,7 @@ async function _extractFromTemplate(
 	}
 	copyReqs.forEach(req => {
 		copySync(req.src, req.dest, { overwrite: forceCopy });
-		logger.info(`copied ${req.srcRelative}.`);
+		logger?.info(`copied ${req.srcRelative}.`);
 	});
 }
 

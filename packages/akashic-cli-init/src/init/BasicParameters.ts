@@ -24,7 +24,7 @@ export interface BasicParameters {
 /**
  * ユーザ入力で `BasicParameters` を取得する。
  */
-function promptGetBasicParameters(current: BasicParameters, skipAsk: boolean): Promise<BasicParameters> {
+function promptGetBasicParameters(current: Partial<BasicParameters>, skipAsk: boolean): Promise<BasicParameters> {
 
 	var schema = {
 		properties: {

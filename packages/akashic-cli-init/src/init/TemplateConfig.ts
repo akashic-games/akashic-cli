@@ -27,15 +27,13 @@ export interface TemplateConfig {
 	guideMessage?: string | null;
 }
 
-// ref. https://stackoverflow.com/questions/41980195/recursive-partialt-in-typescript
-type RecursiveRequired<T> = {
-	[P in keyof T]?:
-		T[P] extends (infer U)[] ? RecursiveRequired<U>[] :
-		T[P] extends object ? RecursiveRequired<T[P]> :
-		T[P];
+// ref. https://off.tokyo/blog/typescript-saiki-utility-types/#DeepRequired
+type IsPrimitive<T> = T extends Array<any> ? never : T extends { [key: string]: any } ? never : T;
+type DeepRequired<T> = {
+	[P in keyof T]-?: T[P] extends IsPrimitive<T[P]> ? T[P] : DeepRequired<T[P]>;
 };
 
-export type NormalizedTemplateConfig = RecursiveRequired<TemplateConfig>;
+export type NormalizedTemplateConfig = DeepRequired<TemplateConfig>;
 
 export async function completeTemplateConfig(templateConfig: TemplateConfig, baseDir: string): Promise<NormalizedTemplateConfig> {
 	const { files, gameJson, guideMessage } = templateConfig;

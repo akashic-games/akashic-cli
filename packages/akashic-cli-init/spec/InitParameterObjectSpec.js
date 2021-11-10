@@ -48,7 +48,7 @@ describe("InitParameterObject.ts", () => {
 				expect(param.type).toBe("javascript");
 				expect(param.githubHost).toBe("github.com");
 				expect(param.githubProtocol).toBe("https");
-				expect(param.gheHost).toBeUndefined();
+				expect(param.gheHost).toBeNull();
 				expect(param.gheProtocol).toBe("https");
 			})
 			.then(done, done.fail);

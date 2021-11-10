@@ -44,9 +44,9 @@ export interface InitParameterObject extends InitCommonOptions {
 
 	/**
 	 * GitHub Enterprise のホスト。
-	 * 省略された場合 `undefined` 。
+	 * 省略された場合 `null` 。
 	 */
-	gheHost?: string;
+	gheHost?: string | null;
 
 	/**
 	 * GitHub Enterprise からクローンする際のプロトコル。
@@ -75,7 +75,7 @@ export async function completeInitParameterObject(param: InitParameterObject): P
 	const type = await _complete(param.type, configFile.getItem("init.defaultTemplateType"), "javascript");
 	const githubHost = await _complete(param.githubHost, configFile.getItem("init.github.host"), "github.com");
 	const githubProtocol = await _complete(param.githubProtocol, configFile.getItem("init.github.protocol"), "https");
-	const gheHost = await _complete(param.gheHost, configFile.getItem("init.ghe.host"), undefined);
+	const gheHost = await _complete(param.gheHost, configFile.getItem("init.ghe.host"), null);
 	const gheProtocol = await _complete(param.gheProtocol, configFile.getItem("init.ghe.protocol"), "https");
 
 	if (!isGitProtocol(githubProtocol))
