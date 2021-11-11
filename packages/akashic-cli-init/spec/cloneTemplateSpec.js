@@ -1,6 +1,6 @@
 var ConsoleLogger = require("@akashic/akashic-cli-commons/lib/ConsoleLogger").ConsoleLogger;
-var ct = require("../lib/cloneTemplate");
-var init = require("../lib/init");
+var ct = require("../lib/init/cloneTemplate");
+var init = require("../lib/init/init");
 
 jest.mock("child_process");
 const mockExec = require("child_process").exec;
