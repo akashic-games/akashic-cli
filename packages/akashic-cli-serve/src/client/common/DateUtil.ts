@@ -20,7 +20,19 @@ const timezoneStr =
 	(timezoneOffset < 0) ? " GMT+" + (-timezoneOffset / 60) :
 	"Z";
 
+/**
+ * Time value (1970/1/1 00:00:00 UTC からの経過時刻のミリ秒) を文字列にする。
+ *
+ * `Date.prototype.toISOString()` (ISO 8601) とは、
+ * "T" ではなく空白文字を使う点、およびタイムゾーンを考慮する点で異なる。
+ * 利用イメージは以下:
+ *
+ * ```
+ * timeValueToString(Date.now()) // ==> "2021-11-11 19:57:52.938 GMT+9"
+ * ```
+ */
 export function timeValueToString(timeValue: number): string {
 	timeValue -= timezoneOffset * 60 * 1000;
 	return new Date(timeValue).toISOString().split("T").join(" ").replace("Z", timezoneStr);
 }
+
