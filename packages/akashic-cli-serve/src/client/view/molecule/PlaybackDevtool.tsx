@@ -42,7 +42,7 @@ export const PlaybackDevtool = observer(function(props: PlaybackDevtoolProps) {
 							const { frame, timestamp } = sp;
 							const time = timestamp - startedAt;
 							return <tr
-								key={frame}
+								key={`${i}-${frame}-${timestamp}`}
 								onMouseEnter={() => onHoverStartPoint(i, true)}
 								onMouseLeave={() => onHoverStartPoint(i, false)}
 								onDoubleClick={() => onJumpWithStartPoint(i)}
