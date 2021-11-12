@@ -1,10 +1,10 @@
 import * as fs from "fs";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
+import { readJSON, writeJSON } from "@akashic/akashic-cli-commons/lib/FileSystem";
 import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
 import { chdir } from "@akashic/akashic-cli-commons/lib/Util";
 import type { AssetConfiguration, GameConfiguration } from "@akashic/game-configuration";
 import { AssetModule } from "./AssetModule";
-import { FileModule } from "./FileModule";
 import { scanAudioAssets, scanImageAssets, scanScriptAssets, scanTextAssets, scanVectorImageAssets, textAssetFilter } from "./scanUtils";
 import type { AssetExtension, AssetScanDirectoryTable, AssetTargetType, LibConfiguration } from "./types";
 
@@ -189,7 +189,7 @@ export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 			let configuration: GameConfiguration;
 
 			try {
-				configuration = await FileModule.readJSON<GameConfiguration>(gamePath);
+				configuration = await readJSON<GameConfiguration>(gamePath);
 			} catch (e) {
 				throw new Error(`Invalid game.json: ${e.message}`);
 			}
@@ -215,14 +215,14 @@ export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 				});
 				configuration.assets = AssetModule.toObject(newAssets, assetIdResolver, param.forceUpdateAssetIds);
 			}
-			await FileModule.writeJSON<GameConfiguration>(gamePath, configuration);
+			await writeJSON<GameConfiguration>(gamePath, configuration);
 		}
 
 		if (fs.existsSync(akashicLibPath)) {
 			let configuration: LibConfiguration;
 
 			try {
-				configuration = await FileModule.readJSON<LibConfiguration>(akashicLibPath);
+				configuration = await readJSON<LibConfiguration>(akashicLibPath);
 			} catch (e) {
 				throw new Error(`Invalid akashic-lib.json: ${e.message}`);
 			}
@@ -240,7 +240,7 @@ export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 
 			// 上書きしてファイル書き込み
 			configuration.assetList = newAssets;
-			await FileModule.writeJSON<LibConfiguration>(akashicLibPath, configuration);
+			await writeJSON<LibConfiguration>(akashicLibPath, configuration);
 		}
 
 		logger.info("Done!");

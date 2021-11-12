@@ -1,7 +1,7 @@
 import * as mockfs from "mock-fs";
-import { ConsoleLogger } from "../lib/ConsoleLogger";
-import { Logger } from "../lib/Logger";
-import { NodeModules } from "../lib/NodeModules";
+import { ConsoleLogger } from "../../lib/ConsoleLogger";
+import { Logger } from "../../lib/Logger";
+import { NodeModules } from "../../lib/NodeModules";
 
 describe("NodeModules", function () {
 
