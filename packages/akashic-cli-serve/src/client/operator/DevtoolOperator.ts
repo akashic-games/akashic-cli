@@ -1,12 +1,48 @@
 import { EDumpItem } from "../common/types/EDumpItem";
 import { Store } from "../store/Store";
 
+function consoleLog(value: any): void {
+	console.log(value);
+
+	// 暫定便利機能: ダンプついでにしれっとグローバル変数に刺しておく (c.f. Chrome/Firefox の $0)
+	// (console からグローバルに格納できる Chrome などでは不要なので暫定)
+	(window as any).__testbed.$0 = value;
+}
+
 export class DevtoolOperator {
 	private store: Store;
 
 	constructor(store: Store) {
 		this.store = store;
 	}
+
+	toggleForceResetOnSeek = (pauses: boolean): void => {
+		this.store.devtoolUiStore.toggleForceResetOnSeek(pauses);
+	};
+
+	setHoveredStartPointIndex = (index: number, hover: boolean): void => {
+		this.store.devtoolUiStore.setFocusedStartPointHeaderIndex(hover ? index : null);
+	};
+
+	dumpStartPointOfIndex = (index: number): Promise<void> => {
+		return new Promise((resolve, reject) => {
+			const currentPlay = this.store.currentPlay;
+			const frame = currentPlay?.startPointHeaders[index]?.frame;
+			if (frame == null) {
+				reject();
+				return;
+			}
+			currentPlay.amflow.getStartPoint({ frame }, (err, startPoint) => {
+				if (err) {
+					console.error(err);
+					reject();
+					return;
+				}
+				consoleLog(startPoint);
+				resolve();
+			});
+		});
+	};
 
 	updateEntityTrees = (): void => {
 		const dumpItems = this.store.currentLocalInstance.gameContent.dumpEntities();
@@ -55,11 +91,7 @@ export class DevtoolOperator {
 	dumpSelectedEntity = (): void => {
 		const gameContent = this.store.currentLocalInstance.gameContent;
 		const e = gameContent.getRawEntity(this.store.devtoolUiStore.selectedEntityId);
-		console.log(e);
-
-		// 暫定便利機能: ダンプついでにしれっとグローバル変数に刺しておく (c.f. Chrome/Firefox の $0)
-		// (console からグローバルに格納できる Chrome などでは不要なので暫定)
-		(window as any).__testbed.$0 = e;
+		consoleLog(e);
 	};
 
 	volumeChangeTo = (vol: number): void => {

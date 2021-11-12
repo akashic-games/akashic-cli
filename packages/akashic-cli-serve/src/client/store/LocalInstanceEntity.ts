@@ -255,22 +255,6 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 		this.targetTime = Math.min(this._timeKeeper.now(), this.play.duration);
 	}
 
-	@action
-	setFrameWithStartPoint(frame: number, callback: (targetTime: number) => void): void {
-		const gameDriver = this._serveGameContent.agvGameContent.getGameDriver();
-		const startedTime = this.play.amflow.getStartedAt();
-
-		// startPoint を取得後、ローカルインスタンスを startPoint を使ってリセットし、その時間までシークする
-		const getStartPointCallback = (error: Error, startPoint: amf.StartPoint): void => {
-			if (error) throw error;
-			const targetTime = startPoint.timestamp - startedTime;
-			gameDriver._gameLoop.reset(startPoint);
-			this.setTargetTime(targetTime);
-			callback(targetTime);
-		};
-		this.play.amflow.getStartPoint({ frame: frame }, action(getStartPointCallback));
-	}
-
 	@action.bound
 	_getReplayTargetTime(): number {
 		const t = Math.min(this._timeKeeper.now(), this.play.duration);
