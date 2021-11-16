@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## 2.13.1 (2021-11-16)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#909](https://github.com/akashic-games/akashic-cli/pull/909) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.1.3, engineFiles@2.1.57, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+* `akashic-cli-init`
+  * [#908](https://github.com/akashic-games/akashic-cli/pull/908) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+  * [#907](https://github.com/akashic-games/akashic-cli/pull/907) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+* `akashic-cli-export`
+  * [#893](https://github.com/akashic-games/akashic-cli/pull/893) 【akashic-cli-export】内部コンポーネントの更新(engineFiles@3.1.2, engineFiles@2.1.57, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.13.0 (2021-11-16)
 
 #### Enhancement
