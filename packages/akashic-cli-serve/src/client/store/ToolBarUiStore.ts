@@ -2,8 +2,10 @@ import {action, observable} from "mobx";
 import {storage} from "./storage";
 
 export class ToolBarUiStore {
+	// TODO: 切り出す。devtool にもプログレスバーを置いたので ToolBarUiStore といいつつ共有してしまっている
 	@observable currentTimePreview: number;
 	@observable isSeeking: boolean;
+
 	@observable showsAppearanceMenu: boolean;
 	@observable showsDevtools: boolean;
 	@observable showsAudioOptionPopover: boolean;

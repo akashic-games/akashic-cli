@@ -1,4 +1,3 @@
-import { StartPoint } from "@akashic/amflow";
 import * as Subscriber from "../api/Subscriber";
 import { Store } from "../store/Store";
 
@@ -87,17 +86,6 @@ export class PlayOperator {
 	downloadPlaylog = (): void => {
 		const playId = this.store.currentPlay.playId;
 		this.downloadFile(`/api/plays/${playId}/playlog`, `playlog_${playId}.json`);
-	};
-
-	downloadSnapshot = (frame: number): void => {
-		this.store.currentPlay?.amflow.getStartPoint({ frame }, (err: Error | null, startPoint: StartPoint) => {
-			if (err) throw err;
-
-			const blob = new Blob([ JSON.stringify(startPoint) ], { "type" : "application/octet-stream" });
-			const url = window.URL.createObjectURL(blob);
-			this.downloadFile(url, `snapshot_${frame}.json`);
-			window.URL.revokeObjectURL(url);
-		});
 	};
 
 	muteAll = (): void => {

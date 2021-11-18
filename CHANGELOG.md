@@ -1,5 +1,44 @@
 # CHANGELOG
 
+## 2.13.1 (2021-11-16)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#909](https://github.com/akashic-games/akashic-cli/pull/909) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.1.3, engineFiles@2.1.57, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+* `akashic-cli-init`
+  * [#908](https://github.com/akashic-games/akashic-cli/pull/908) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+  * [#907](https://github.com/akashic-games/akashic-cli/pull/907) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+* `akashic-cli-export`
+  * [#893](https://github.com/akashic-games/akashic-cli/pull/893) 【akashic-cli-export】内部コンポーネントの更新(engineFiles@3.1.2, engineFiles@2.1.57, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
+## 2.13.0 (2021-11-16)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#899](https://github.com/akashic-games/akashic-cli/pull/899) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.1.2, engineFiles@2.1.57, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+  * [#904](https://github.com/akashic-games/akashic-cli/pull/904) feat(serve): add Playback devtool ([@xnv](https://github.com/xnv))
+* `akashic-cli-init`
+  * [#896](https://github.com/akashic-games/akashic-cli/pull/896) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Other Change
+* `akashic-cli-commons`, `akashic-cli-scan`
+  * [#900](https://github.com/akashic-games/akashic-cli/pull/900) refactor: move FileModule to commons, remove unused functions ([@xnv](https://github.com/xnv))
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-lib-manage`, `akashic-cli-serve`
+  * [#898](https://github.com/akashic-games/akashic-cli/pull/898) fix(test): fix broken coverages ([@xnv](https://github.com/xnv))
+* `akashic-cli-commons`
+  * [#897](https://github.com/akashic-games/akashic-cli/pull/897) test(commons): use TS in tests ([@xnv](https://github.com/xnv))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli`
+  * [#903](https://github.com/akashic-games/akashic-cli/pull/903) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- kamakiri_ys ([@kamakiri01](https://github.com/kamakiri01))
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.12.1 (2021-11-04)
 
 #### Enhancement

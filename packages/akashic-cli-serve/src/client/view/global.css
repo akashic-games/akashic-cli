@@ -17,11 +17,13 @@
 	--color-popover-text: #686868;
 
 	--color-base-text: #555;
+	--color-base-text-active: #fdfdfd;
 	--color-base-border: #bbb;
 	--color-base-grid: #ccc;
 	--color-base-bg: #fdfdfd;
 	--color-base-bg-alt: #f6f6f6;
-	--color-base-bg-active: #e8f0f8;
+	--color-base-bg-hover: #d8e8f9;
+	--color-base-bg-active: #abc6e4;
 	--color-base-button-bg: #68c;
 	--color-base-button-bg-hover: #6080c0;
 	--color-base-button-bg-active: #5070b0;

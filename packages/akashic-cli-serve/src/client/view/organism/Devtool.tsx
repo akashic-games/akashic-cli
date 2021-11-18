@@ -8,18 +8,21 @@ import { EventsDevtool, EventsDevtoolProps } from "../molecule/EventsDevtool";
 import { InstancesDevtool, InstancesDevtoolProps } from "../molecule/InstancesDevtool";
 import { MiscDevtool, MiscDevtoolProps } from "../molecule/MiscDevtool";
 import { NiconicoDevtool, NiconicoDevtoolProps } from "../molecule/NiconicoDevtool";
-import { SnapshotDevtool, SnapshotDevtoolProps } from "../molecule/SnapshotDevtool";
+import { PlaybackDevtool, PlaybackDevtoolProps } from "../molecule/PlaybackDevtool";
 import * as styles from "./Devtool.css";
 
 // TODO 適切な箇所に定義を移す
-export type DevtoolType =
-	"Instances" |
-	"Events" |
-	"EntityTree" |
-	"Atsumaru" |
-	"Niconico" |
-	"Misc" |
-	"Snapshot";
+export const devtoolTypes = [
+	"Playback",
+	"Instances",
+	"Events",
+	"EntityTree",
+	"Atsumaru",
+	"Niconico",
+	"Misc"
+];
+
+export type DevtoolType = typeof devtoolTypes[number];
 
 export interface DevtoolProps {
 	height: number;
@@ -27,13 +30,13 @@ export interface DevtoolProps {
 	onResizeHeight: (height: number) => void;
 	activeDevtool: DevtoolType;
 	onSelectDevtool: (type: DevtoolType) => void;
+	playbackDevtoolProps: PlaybackDevtoolProps;
 	eventsDevtoolProps: EventsDevtoolProps;
 	instancesDevtoolProps: InstancesDevtoolProps;
 	entityTreeDevtoolProps: EntityTreeDevtoolProps;
 	atsumaruDevtoolProps: AtsumaruDevtoolProps;
 	niconicoDevtoolProps: NiconicoDevtoolProps;
 	miscDevtoolProps: MiscDevtoolProps;
-	snapshotDevtoolProps: SnapshotDevtoolProps;
 }
 
 @observer
@@ -43,13 +46,13 @@ export class Devtool extends React.Component<DevtoolProps, {}> {
 	constructor(props: DevtoolProps) {
 		super(props);
 		this._onSelectToolTable = {
+			"Playback": this._onSelectPlaybackTool,
 			"Instances": this._onSelectInstancesTool,
 			"Events": this._onSelectEventsTool,
 			"EntityTree": this._onSelectEntityListTool,
 			"Atsumaru": this._onSelectAtsumaruTool,
 			"Niconico": this._onSelectNiconicoTool,
 			"Misc": this._onSelectMiscTool,
-			"Snapshot": this._onSelectSnapshotTool
 		};
 	}
 
@@ -59,22 +62,26 @@ export class Devtool extends React.Component<DevtoolProps, {}> {
 		return <TopResizable height={props.height} minHeight={props.minHeight} onResize={props.onResizeHeight}>
 			<div className={styles.devtool}>
 				<DevtoolSelectorBar items={
-					["Instances", "Events", "EntityTree", "Atsumaru", "Niconico", "Misc", "Snapshot"].map(t => ({
+					devtoolTypes.map(t => ({
 						name: t,
 						active: (t === activeDevtool),
 						onClick: this._onSelectToolTable[t]
 					}))
 				} />
+				{ (activeDevtool === "Playback") && <PlaybackDevtool {...props.playbackDevtoolProps} /> }
 				{ (activeDevtool === "Instances") && <InstancesDevtool {...props.instancesDevtoolProps} /> }
 				{ (activeDevtool === "Events") && <EventsDevtool {...props.eventsDevtoolProps} /> }
 				{ (activeDevtool === "EntityTree") && <EntityTreeDevtool {...props.entityTreeDevtoolProps} /> }
 				{ (activeDevtool === "Atsumaru") && <AtsumaruDevtool {...props.atsumaruDevtoolProps} /> }
 				{ (activeDevtool === "Niconico") && <NiconicoDevtool {...props.niconicoDevtoolProps} /> }
 				{ (activeDevtool === "Misc") && <MiscDevtool {...props.miscDevtoolProps} /> }
-				{ (activeDevtool === "Snapshot") && <SnapshotDevtool {...props.snapshotDevtoolProps} /> }
 			</div>
 		</TopResizable>;
 	}
+
+	private _onSelectPlaybackTool = (): void => {
+		this.props.onSelectDevtool("Playback");
+	};
 
 	private _onSelectInstancesTool = (): void => {
 		this.props.onSelectDevtool("Instances");
@@ -98,9 +105,5 @@ export class Devtool extends React.Component<DevtoolProps, {}> {
 
 	private _onSelectMiscTool = (): void => {
 		this.props.onSelectDevtool("Misc");
-	};
-
-	private _onSelectSnapshotTool = (): void => {
-		this.props.onSelectDevtool("Snapshot");
 	};
 }

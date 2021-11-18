@@ -5,8 +5,10 @@ import { storage } from "./storage";
 export class DevtoolUiStore {
 	static DEFAULT_TOTAL_TIME_LIMIT = 85;
 
+	// storage に保存するもの
 	@observable height: number;
 	@observable activeDevtool: string;
+	@observable isForceResetOnSeek: boolean;
 	@observable showsEventList: boolean;
 	@observable eventListWidth: number;
 	@observable eventEditContent: string;
@@ -18,6 +20,7 @@ export class DevtoolUiStore {
 	@observable totalTimeLimitInputValue: number;
 
 	// storage に保存しないもの
+	@observable focusedStartPointHeaderIndex: number | null;
 	@observable isSelectingEntity: boolean;
 	@observable selectedEntityId: number | null;
 	@observable entityTrees: EDumpItem[];
@@ -33,10 +36,12 @@ export class DevtoolUiStore {
 	constructor() {
 		this.height = storage.data.devtoolsHeight;
 		this.activeDevtool = storage.data.activeDevtool;
+		this.isForceResetOnSeek = storage.data.isForceResetOnSeek;
 		this.showsEventList = storage.data.showsEventList;
 		this.eventListWidth = storage.data.eventListWidth;
 		this.eventEditContent = storage.data.eventEditContent;
 		this.showsHiddenEntity = storage.data.showsHiddenEntity;
+		this.focusedStartPointHeaderIndex = null;
 		this.isSelectingEntity = false;
 		this.selectedEntityId = null;
 		this.entityTrees = [];
@@ -63,6 +68,12 @@ export class DevtoolUiStore {
 	}
 
 	@action
+	toggleForceResetOnSeek(reset: boolean): void {
+		this.isForceResetOnSeek = reset;
+		storage.put({ isForceResetOnSeek: reset });
+	}
+
+	@action
 	setShowEventList(show: boolean): void {
 		this.showsEventList = show;
 		storage.put({ showsEventList: show });
@@ -78,6 +89,11 @@ export class DevtoolUiStore {
 	setEventEditContent(content: string): void {
 		this.eventEditContent = content;
 		storage.put({ eventEditContent: content });
+	}
+
+	@action
+	setFocusedStartPointHeaderIndex(index: number | null): void {
+		this.focusedStartPointHeaderIndex = index;
 	}
 
 	@action
