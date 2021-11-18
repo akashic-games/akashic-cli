@@ -3,7 +3,7 @@ var mockfs = require("mock-fs");
 var os = require("os");
 var path = require("path");
 var ConsoleLogger = require("@akashic/akashic-cli-commons/lib/ConsoleLogger").ConsoleLogger;
-var bp = require("../lib/BasicParameters");
+var bp = require("../lib/init/BasicParameters");
 var mockPrompt = require("./support/mockPrompt");
 
 describe("BasicParameters", function () {

@@ -4,41 +4,41 @@ import { CliConfigInit } from "@akashic/akashic-cli-commons/lib/CliConfig/CliCon
 import { CliConfigurationFile } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigurationFile";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
 import { Command } from "commander";
-import { promiseInit } from "./init";
-import { InitParameterObject } from "./InitParameterObject";
-import { listTemplates } from "./listTemplates";
+import { promiseInit } from "./init/init";
+import { listTemplates } from "./list/listTemplates";
 
-function cli(param: CliConfigInit): void {
-	var logger = new ConsoleLogger({ quiet: param.quiet });
-	var initParam: InitParameterObject = {
-		cwd: param.cwd,
-		type: param.type,
-		logger: logger,
-		forceCopy: param.force,
-		skipAsk: param.yes
-	};
-
-	{
-		Promise.resolve()
-			.then(() => {
-				if (param.list) {
-					return listTemplates(initParam);
-				}
-				return promiseInit(initParam);
-			})
-			.catch((err: any) => {
-				logger.error(err, err.cause);
-				process.exit(1);
+async function cli(param: CliConfigInit): Promise<void> {
+	const logger = new ConsoleLogger({ quiet: param.quiet });
+	try {
+		if (param.list) {
+			await listTemplates({
+				// TODO: コマンドラインから指定可能にする
+				// repository: param.repository,
+				logger
 			});
+		} else {
+			await promiseInit({
+				cwd: param.cwd,
+				// TODO: コマンドラインから指定可能にする
+				// repository: param.repository,
+				type: param.type,
+				logger: logger,
+				forceCopy: param.force,
+				skipAsk: param.yes
+			});
+		}
+	} catch (err) {
+		logger.error(err, err.cause);
+		process.exit(1);
 	}
 }
 
 var ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "package.json"), "utf8")).version;
 
+// TODO: 未使用の --regsitry オプションを --repository に変えて利用可能にする
 const commander = new Command();
 commander
 	.version(ver);
-
 commander
 	.description("Generate project skeleton and initialize game.json.")
 	.option("-C, --cwd <dir>", "The directory to initialize")
@@ -50,7 +50,7 @@ commander
 		" e.g. github:<owner>/<repo>\n See README file for details."
 	)
 	.option("-l, --list", "Display available template list")
-	.option("-f, --force", "If files to be copied already exist, overwrite them")
+	.option("-f, --force", "Overwrite existing files")
 	.option("-y, --yes", "Initialize without user input");
 
 export function run(argv: string[]): void {

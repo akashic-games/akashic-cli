@@ -2,10 +2,11 @@ var fs = require("fs-extra");
 var mockfs = require("mock-fs");
 var path = require("path");
 var ConsoleLogger = require("@akashic/akashic-cli-commons/lib/ConsoleLogger").ConsoleLogger;
-var ct = require("../lib/copyTemplate");
+var completeTemplateConfig = require("../lib/init/TemplateConfig").completeTemplateConfig;
+var _extractFromTemplate = require("../lib/init/init").internals._extractFromTemplate;
 
-describe("copyTemplate.ts", () => {
-	describe("copyTemplate()", () => {
+describe("init.ts", () => {
+	describe("_extractFromTemplate()", () => {
 		beforeEach(() => {
 			mockfs({
 				".akashic-templates": {
@@ -47,13 +48,11 @@ describe("copyTemplate.ts", () => {
 		});
 
 		it("copy simple template", done => {
-			var param = {
-				logger: new ConsoleLogger({quiet: true}),
-				_realTemplateDirectory: ".akashic-templates",
-				type: "simple",
-				cwd: "home"
-			};
-			ct.copyTemplate({}, param)
+			var logger = new ConsoleLogger({ quiet: true });
+			var src = ".akashic-templates/simple";
+			var dest = "home";
+			completeTemplateConfig({}, src)
+				.then(conf => _extractFromTemplate(conf, src, dest, { logger }))
 				.then(() => {
 					expect(fs.statSync(path.join("home", "a")).isFile()).toBe(true);
 					expect(fs.statSync(path.join("home", "b")).isFile()).toBe(true);
@@ -64,13 +63,11 @@ describe("copyTemplate.ts", () => {
 		});
 
 		it("copy manual template", done => {
-			var param = {
-				logger: new ConsoleLogger({quiet: true}),
-				_realTemplateDirectory: ".akashic-templates",
-				type: "manual",
-				cwd: "home"
-			};
-			ct.copyTemplate({}, param)
+			var logger = new ConsoleLogger({ quiet: true });
+			var src = ".akashic-templates/manual";
+			var dest = "home";
+			completeTemplateConfig({}, src)
+				.then(conf => _extractFromTemplate(conf, src, dest, { logger }))
 				.then(() => {
 					expect(fs.statSync(path.join("home", "a")).isFile()).toBe(true);
 					expect(fs.statSync(path.join("home", "y", "z", "e")).isFile()).toBe(true);
@@ -79,13 +76,11 @@ describe("copyTemplate.ts", () => {
 		});
 
 		it("can not copy when file exists", done => {
-			var param = {
-				logger: new ConsoleLogger({quiet: true}),
-				_realTemplateDirectory: ".akashic-templates",
-				type: "simple",
-				cwd: ".akashic-templates/copyTo"
-			};
-			ct.copyTemplate({}, param)
+			var logger = new ConsoleLogger({ quiet: true });
+			var src = ".akashic-templates/simple";
+			var dest = ".akashic-templates/copyTo";
+			completeTemplateConfig({}, src)
+				.then(conf => _extractFromTemplate(conf, src, dest, { logger }))
 				.then(() => {done.fail();})
 				.catch((err) => {
 					expect(err.message).toBe("aborted to copy files, because followings already exist. [a, c]");
@@ -94,13 +89,11 @@ describe("copyTemplate.ts", () => {
 		});
 
 		it("can not copy when file exists (specify files)", done => {
-			var param = {
-				logger: new ConsoleLogger({quiet: true}),
-				_realTemplateDirectory: ".akashic-templates",
-				type: "simple",
-				cwd: ".akashic-templates/copyTo"
-			};
-			ct.copyTemplate({files:[{src: "a"}, {src: "a", dst: "c"}]}, param)
+			var logger = new ConsoleLogger({ quiet: true });
+			var src = ".akashic-templates/simple";
+			var dest = ".akashic-templates/copyTo";
+			completeTemplateConfig({ files: [{ src: "a" }, { src: "a", dst: "c" }] }, src)
+				.then(conf => _extractFromTemplate(conf, src, dest, { logger }))
 				.then(() => {done.fail();})
 				.catch((err) => {
 					expect(err.message).toBe(`aborted to copy files, because followings already exist. [a, c${path.sep}a]`);
@@ -109,14 +102,11 @@ describe("copyTemplate.ts", () => {
 		});
 
 		it("can copy files with force-option even if file exists", done => {
-			var param = {
-				logger: new ConsoleLogger({quiet: true}),
-				_realTemplateDirectory: ".akashic-templates",
-				type: "simple",
-				cwd: ".akashic-templates/copyTo",
-				forceCopy: true
-			};
-			ct.copyTemplate({}, param)
+			var logger = new ConsoleLogger({ quiet: true });
+			var src = ".akashic-templates/simple";
+			var dest = ".akashic-templates/copyTo";
+			completeTemplateConfig({}, src)
+				.then(conf => _extractFromTemplate(conf, src, dest, { logger, forceCopy: true }))
 				.then(() => {
 					expect(fs.readFileSync(path.join(".akashic-templates", "copyTo", "a")).toString("utf8")).toBe("aaa");
 					expect(fs.readFileSync(path.join(".akashic-templates", "copyTo", "b")).toString("utf8")).toBe("bbb");
@@ -126,14 +116,11 @@ describe("copyTemplate.ts", () => {
 		});
 
 		it("can copy files with force-option even if file exists (specify files)", done => {
-			var param = {
-				logger: new ConsoleLogger({quiet: true}),
-				_realTemplateDirectory: ".akashic-templates",
-				type: "simple",
-				cwd: ".akashic-templates/copyTo",
-				forceCopy: true
-			};
-			ct.copyTemplate({files:[{src: "a"}, {src: "a", dst: "c"}]}, param)
+			var logger = new ConsoleLogger({ quiet: true });
+			var src = ".akashic-templates/simple";
+			var dest = ".akashic-templates/copyTo";
+			completeTemplateConfig({ files: [{ src: "a" }, { src: "a", dst: "c" }] }, src)
+				.then(conf => _extractFromTemplate(conf, src, dest, { logger, forceCopy: true }))
 				.then(() => {
 					expect(fs.readFileSync(path.join(".akashic-templates", "copyTo", "a")).toString("utf8")).toBe("aaa");
 					expect(fs.readFileSync(path.join(".akashic-templates", "copyTo", "c", "a")).toString("utf8")).toBe("aaa");
