@@ -63,7 +63,7 @@ export async function fetchRemoteTemplatesMetadata(templateListJsonUri: string):
 
 	if (formatVersion != null && formatVersion !== "0") {
 		throw new Error(
-			`Unsupported formatVersion: "${formatVersion}". ` +
+			`Unsupported formatVersion "${formatVersion}" found in ${templateListJsonUri}. ` +
 			"The only valid value for this version is \"0\". " +
 			"Newer version of akashic-cli may support this formatVersion."
 		);
