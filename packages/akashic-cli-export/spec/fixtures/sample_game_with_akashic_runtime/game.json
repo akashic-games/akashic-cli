@@ -15,7 +15,7 @@
 		"akashic-runtime": {
 			"version": "~1.0.9-beta"
 		},
-		"niconico": {
+		"nicolive": {
 			"supportedModes": ["single", "ranking"]
 		}
 	}

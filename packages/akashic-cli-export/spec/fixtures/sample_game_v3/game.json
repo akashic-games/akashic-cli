@@ -12,6 +12,9 @@
 	},
 	"renderers": ["canvas"],
 	"environment": {
-		"sandbox-runtime": "3"
+		"sandbox-runtime": "3",
+		"nicolive": {
+			"supportedModes": ["single"]
+		}
 	}
 }

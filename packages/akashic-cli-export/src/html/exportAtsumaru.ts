@@ -39,16 +39,6 @@ export function promiseExportAtsumaru(param: ExportHTMLParameterObject): Promise
 			if (!gameJson.environment) {
 				gameJson.environment = {};
 			}
-			if (!gameJson.environment.niconico || !gameJson.environment.niconico.supportedModes) {
-				// モード指定がなければ、常に指定可能なモードであるsingleモードを追加する。
-				completedParam.logger.warn(
-					"'environment.niconico.supportedModes', a required property for '--atsumaru' mode," +
-					"is not given in game.json. Assumed to be [\"single\"]."
-				);
-				gameJson.environment.niconico = {
-					"supportedModes": ["single"]
-				};
-			}
 			if (!gameJson.environment.external) {
 				gameJson.environment.external = {};
 			}
@@ -68,14 +58,6 @@ export function promiseExportAtsumaru(param: ExportHTMLParameterObject): Promise
 					if (!gameJson.renderers || gameJson.renderers.indexOf("webgl") === -1) {
 						gameJson.environment["akashic-runtime"].flavor = "-canvas";
 					}
-				}
-				if (/\d+\.\d+\.\d+-\w+/.test(gameJson.environment["akashic-runtime"].version)) {
-					const runtimeVersion = gameJson.environment["akashic-runtime"].version.slice(1);
-					const engineVersion = gameJson.environment["sandbox-runtime"] || "1";
-					completedParam.logger.warn(
-						`UNSTABLE: Akashic Engine v${engineVersion} (akashic-runtime@${runtimeVersion})`
-						+ " is in beta. The game exported MAY NOT WORK PROPERLY."
-					);
 				}
 				return gameJson;
 			});
