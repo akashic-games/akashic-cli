@@ -1,0 +1,7 @@
+{
+	"formatVersion": "42",
+	"templates": {
+		"javascript": "javascript.zip",
+		"typescript": "typescript.zip"
+	}
+}
