@@ -1,5 +1,21 @@
 # CHANGELOG
 
+## 2.14.0 (2021-11-19)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#911](https://github.com/akashic-games/akashic-cli/pull/911) feat(init): introduce formatVersion to template.json and template-list.json ([@xnv](https://github.com/xnv))
+  * [#910](https://github.com/akashic-games/akashic-cli/pull/910) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+* `akashic-cli-commons`, `akashic-cli-init`
+  * [#905](https://github.com/akashic-games/akashic-cli/pull/905) feat(init): overhaul init, remove factory templates and use the default template repository on Github ([@xnv](https://github.com/xnv))
+
+#### Bug Fix
+* `akashic-cli-export`
+  * [#912](https://github.com/akashic-games/akashic-cli/pull/912) fix(export): remove obsolete warning messages ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.13.1 (2021-11-16)
 
 #### Enhancement
