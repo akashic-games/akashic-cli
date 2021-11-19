@@ -51,7 +51,7 @@ describe("TemplateMetadata.ts", () => {
 			fetchRemoteTemplatesMetadata(templateListJsonUri).then(
 				() => done.fail("unexpectedly succeed for unsuppoted formatVersion"),
 				(err) => {
-					expect(err?.message).toBe(
+					expect(err.message).toBe(
 						`Unsupported formatVersion "42" found in ${templateListJsonUri.toString()}. ` +
 						`The only valid value for this version is "0". ` +
 						`Newer version of akashic-cli may support this formatVersion.`
