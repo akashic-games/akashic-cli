@@ -12,7 +12,7 @@ export interface SocketIOAMFlowClientOverrideParameterObject {
  * 本来はSocketIOAMFlowClientの継承ではなく委譲にすべきだが、現状書き換えが必要なメソッドが少ないので継承とした。
  * TODO: 書き換えがメソッドが多くなったら委譲に切り替える。
  */
-export class　SocketIOAMFlowClientOverride extends SocketIOAMFlowClient {
+export class SocketIOAMFlowClientOverride extends SocketIOAMFlowClient {
 	private _playId: string;
 	private _token: string;
 
