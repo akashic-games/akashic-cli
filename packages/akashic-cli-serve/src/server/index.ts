@@ -212,8 +212,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 		parser,
 		cors: {
 			origin: cliConfigParam.accessibleUrl ?? "",
-			methods: ["GET", "POST"],
-			allowedHeaders: ["x-akashic-serve-authorization-key"]
+			methods: ["GET", "POST"]
 		}
 	});
 
