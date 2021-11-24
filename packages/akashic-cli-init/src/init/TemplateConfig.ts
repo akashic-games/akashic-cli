@@ -1,8 +1,16 @@
 import { readdir } from "@akashic/akashic-cli-commons/lib/FileSystem";
+import { existsSync } from "fs";
+import path = require("path");
+import { PromptObject } from "prompts";
+import { readPromptConfig } from "./prompt";
 
 export interface TemplateFileEntry {
 	src: string;
 	dst?: string;
+}
+
+export interface NormalizedTemplateFileEntry extends Required<TemplateFileEntry> {
+	// nothing
 }
 
 export interface TemplateConfig {
@@ -10,7 +18,15 @@ export interface TemplateConfig {
 	 * このテンプレートのフォーマット。現在 "0" のみがサポートされている。
 	 * 省略された場合、 `"0"` 。
 	 */
-	formatVersion?: "0";
+	formatVersion?: "0" | "1";
+
+	/**
+	 * このテンプレートでユーザ入力を求める指定。
+	 * formatVersion が "0" の場合、無視される。
+	 * この値が null または省略された時、 template.json と同じディレクトリに template.prompt.js があるなら、
+	 * それを実行して module.exports に代入された値が利用される。
+	 */
+	promptConfig?: PromptObject | PromptObject[] | null;
 
 	/**
 	 * コピーするファイルの指定。
@@ -33,23 +49,25 @@ export interface TemplateConfig {
 	guideMessage?: string | null;
 }
 
-// ref. https://off.tokyo/blog/typescript-saiki-utility-types/#DeepRequired
-type IsPrimitive<T> = T extends Array<any> ? never : T extends { [key: string]: any } ? never : T;
-type DeepRequired<T> = {
-	[P in keyof T]-?: T[P] extends IsPrimitive<T[P]> ? T[P] : DeepRequired<T[P]>;
-};
-
-export type NormalizedTemplateConfig = DeepRequired<TemplateConfig>;
+export interface NormalizedTemplateConfig extends Required<TemplateConfig> {
+	files: NormalizedTemplateFileEntry[];
+}
 
 export async function completeTemplateConfig(templateConfig: TemplateConfig, baseDir: string): Promise<NormalizedTemplateConfig> {
-	const { formatVersion, files, gameJson, guideMessage } = templateConfig;
+	const { formatVersion, promptConfig, files, gameJson, guideMessage } = templateConfig;
 
-	if (formatVersion != null && formatVersion !== "0") {
+	const normalizedFormatVersion = formatVersion ?? "0";
+	if (!/^[01]$/.test(normalizedFormatVersion)) {
 		throw new Error(
 			`Unsupported formatVersion: "${formatVersion}". ` +
-			"The only valid value for this version is \"0\". " +
+			"The valid value for this version is \"0\" or \"1\". " +
 			"Newer version of akashic-cli may support this formatVersion."
 		);
+	}
+
+	let normalizedPromptConfig: PromptObject | PromptObject[] | null = null;
+	if (normalizedFormatVersion !== "0") {
+		normalizedPromptConfig = promptConfig ?? await readPromptConfig(baseDir);
 	}
 
 	let normalizedFiles: Required<TemplateFileEntry>[];
@@ -62,13 +80,18 @@ export async function completeTemplateConfig(templateConfig: TemplateConfig, bas
 
 	} else {
 		const fileNames = await readdir(baseDir);
+		const filterFun =
+			(normalizedFormatVersion === "0") ?
+				((f: string) => f !== "template.json") :
+				((f: string) => !/^template\./.test(f));
 		normalizedFiles = fileNames
-			.filter(fileName => fileName !== "template.json")
-			.map(fileName => ({ src: fileName, dst: "" } as Required<TemplateFileEntry>));
+			.filter(filterFun)
+			.map(fileName => ({ src: fileName, dst: "" } as NormalizedTemplateFileEntry));
 	}
 
 	return {
-		formatVersion,
+		formatVersion: normalizedFormatVersion,
+		promptConfig: normalizedPromptConfig,
 		files: normalizedFiles,
 		gameJson: gameJson ?? "game.json",
 		guideMessage: guideMessage ?? null
