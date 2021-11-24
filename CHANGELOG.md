@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 2.14.4 (2021-11-24)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#920](https://github.com/akashic-games/akashic-cli/pull/920) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-serve`
+  * [#895](https://github.com/akashic-games/akashic-cli/pull/895) Update all dependencies (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.14.3 (2021-11-24)
 
 #### Update Dependencies
