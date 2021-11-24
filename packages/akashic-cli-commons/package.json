@@ -23,7 +23,7 @@
   "devDependencies": {
     "@akashic/eslint-config": "^0.1.2",
     "@types/browserify": "12.0.37",
-    "@types/eslint": "7.28.2",
+    "@types/eslint": "7.29.0",
     "@types/fs-extra": "9.0.13",
     "@types/jest": "27.0.3",
     "@types/mock-fs": "4.13.1",
