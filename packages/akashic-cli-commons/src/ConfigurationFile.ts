@@ -36,10 +36,12 @@ export module ConfigurationFile {
 	 *
 	 * @param confPath game.jsonを保存するディレクトリ。絶対パスであることを期待する。
 	 * @param logger ログ出力に用いるロガー。
+	 * @param option 書き込みの挙動を制御するオプション。
 	 */
-	export function write(content: GameConfiguration, confPath: string, _logger: Logger): Promise<void> {
+	export function write(content: GameConfiguration, confPath: string, _logger: Logger, option?: ConfigurationWriteOption): Promise<void> {
 		return new Promise<void>((resolve: () => void, reject: (err: any) => void) => {
-			var text = JSON.stringify(content, null, "\t");
+			const spacer = option?.minify ? null : "\t";
+			var text = JSON.stringify(content, null, spacer);
 			fs.writeFile(confPath, text, {encoding: "utf8"}, (err: any) => {
 				if (err) {
 					reject(err);
@@ -49,4 +51,8 @@ export module ConfigurationFile {
 			});
 		});
 	}
+}
+
+export interface ConfigurationWriteOption {
+	minify: boolean;
 }
