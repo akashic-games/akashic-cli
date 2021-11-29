@@ -1,6 +1,6 @@
 import * as amflow from "@akashic/amflow";
 import type { Socket } from "socket.io-client";
-import { SocketIOAMFlowClient } from "./SocketIOAMFlowClient";
+import { SocketIOAMFlowClient } from "../../client/akashic/SocketIOAMFlowClient";
 
 export interface SocketIOAMFlowClientOverrideParameterObject {
 	playId: string;

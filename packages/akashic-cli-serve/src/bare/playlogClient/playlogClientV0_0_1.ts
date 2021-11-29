@@ -1,11 +1,11 @@
 import * as amflow from "@akashic/amflow";
-import { SocketIOAMFlowClientOverride } from "../../client/akashic/SocketIOAMFlowClientOverride";
 import { socketInstance } from "../../client/api/socketInstance";
 import { ApiClient } from "../../client/api/ApiClient";
 import { SocketIOAMFlowClient } from "../../client/akashic/SocketIOAMFlowClient";
+import { SocketIOAMFlowClientOverride } from "./SocketIOAMFlowClientOverride";
 
 // このファイルを実行しているホスト名
-// クライアント側で取得できないためサーバー側で取得して埋め込むという使い方をする想定
+// window.location.hostでホスト名が取得できない時、サーバー側で取得して埋め込むという使い方をする想定
 declare var HOST: string;
 
 // playlogClientのplaylogServerUrlとして以下のURLを指定された時だけ動作確認テスト用に書き換えたAmflowを使う
