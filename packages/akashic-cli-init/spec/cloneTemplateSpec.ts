@@ -1,4 +1,3 @@
-
 import * as child_process from "child_process";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
 import * as ct from "../lib/init/cloneTemplate";

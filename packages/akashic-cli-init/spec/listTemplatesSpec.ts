@@ -1,4 +1,3 @@
-// import * as os from "os";
 import * as path from "path";
 import * as express from "express";
 import * as getPort from "get-port";
