@@ -11,27 +11,26 @@ const fetchWithTimeout = (url: string, options?: RequestInit, timeoutMilliSec?: 
 	return Promise.race([fetch(url, options), timeout(timeoutMilliSecond)]);
 };
 
-export const get = async<T>(url: string, params?: {[key: string]: string}, headers?: {[key: string]: string}): Promise<T> => {
+export const get = async<T>(url: string, params?: {[key: string]: string}): Promise<T> => {
 	let urlWithQuery = url;
 	if (params) {
 		urlWithQuery = `${url}?${queryString.stringify(params)}`;
 	}
-	const response = await fetchWithTimeout(urlWithQuery, {headers});
+	const response = await fetchWithTimeout(urlWithQuery);
 	if (400 <= response.status) {
 		throw new Error("Failed to GET " + url + ". Status: " + response.status);
 	}
 	return await response.json();
 };
 
-export const post = async<T>(url: string, params?: {[key: string]: any}, headers?: {[key: string]: string}): Promise<T> => {
+export const post = async<T>(url: string, params?: {[key: string]: any}): Promise<T> => {
 	const method = "POST";
 	const body = JSON.stringify(params);
-	const realHeaders = {
-		...headers,
+	const headers = {
 		"Accept": "application/json",
 		"Content-Type": "application/json; charset=utf-8"
 	};
-	const response = await fetchWithTimeout(url, {method, headers: realHeaders, body});
+	const response = await fetchWithTimeout(url, {method, headers: headers, body});
 	if (400 <= response.status) {
 		throw new Error("Failed to POST " + url + ". Status: " + response.status);
 	}
@@ -39,27 +38,26 @@ export const post = async<T>(url: string, params?: {[key: string]: any}, headers
 };
 
 // deleteは予約語なので代わりにdelを用いる
-export const del = async<T>(url: string, params?: {[key: string]: string}, headers?: {[key: string]: string}): Promise<T> => {
+export const del = async<T>(url: string, params?: {[key: string]: string}): Promise<T> => {
 	let urlWithQuery = url;
 	if (params) {
 		urlWithQuery = `${url}?${queryString.stringify(params)}`;
 	}
-	const response = await fetchWithTimeout(urlWithQuery, {method: "DELETE", headers});
+	const response = await fetchWithTimeout(urlWithQuery, {method: "DELETE"});
 	if (400 <= response.status) {
 		throw new Error("Failed to DELETE " + url + ". Status: " + response.status);
 	}
 	return await response.json();
 };
 
-export const patch = async<T>(url: string, params?: {[key: string]: any}, headers?: {[key: string]: string}): Promise<T> => {
+export const patch = async<T>(url: string, params?: {[key: string]: any}): Promise<T> => {
 	const method = "PATCH";
 	const body = JSON.stringify(params);
-	const realHeaders = {
-		...headers,
+	const headers = {
 		"Accept": "application/json",
 		"Content-Type": "application/json; charset=utf-8"
 	};
-	const response = await fetchWithTimeout(url, {method, headers: realHeaders, body});
+	const response = await fetchWithTimeout(url, {method, headers: headers, body});
 	if (400 <= response.status) {
 		throw new Error("Failed to PATCH " + url + ". Status: " + response.status);
 	}

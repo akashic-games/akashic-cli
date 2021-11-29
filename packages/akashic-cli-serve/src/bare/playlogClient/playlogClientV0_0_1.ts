@@ -1,3 +1,4 @@
+import * as amflow from "@akashic/amflow";
 import { SocketIOAMFlowClientOverride } from "../../client/akashic/SocketIOAMFlowClientOverride";
 import { socketInstance } from "../../client/api/socketInstance";
 import { ApiClient } from "../../client/api/ApiClient";
@@ -13,14 +14,14 @@ const DUMMY_PLAYER_ID = "dummy";
 
 export class Session {
 	private _url: string;
-	constructor(url: string, _option: any) {
+	constructor(url: string) {
 		this._url = url;
 	}
-	open(cb: (err?: Error) => void) {
+	open(cb: (err?: Error) => void): void {
 		cb();
 	}
-	on(_msg: string, _cb: (err?: Error) => void) {}
-	createClient(opt: any, cb: (err: Error, client: any) => void) {
+	on(_msg: string, _cb: (err?: Error) => void): void {}
+	createClient(opt: any, cb?: (err: Error, client?: amflow.AMFlow) => void): void {
 		if (typeof opt === "function") {
 			cb = opt;
 			opt = null;
@@ -33,7 +34,7 @@ export class Session {
 			const playId = "0";
 			apiClient.createPlayToken(playId, DUMMY_PLAYER_ID, false, DUMMY_PLAYER_ID, undefined).then(result => {
 				cb(null, new SocketIOAMFlowClientOverride(socketInstance(host), { playId, token: result.data.playToken }));
-			}).catch(err => console.error(err));
+			}).catch(err => cb(err));
 		}
 		else {
 			cb(null, new SocketIOAMFlowClient(socketInstance()));

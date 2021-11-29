@@ -211,7 +211,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 	const io = new socketio.Server(httpServer, {
 		parser,
 		cors: {
-			origin: cliConfigParam.accessibleUrl ?? "",
+			origin: cliConfigParam.accessibleOrigin ?? "",
 			methods: ["GET", "POST"]
 		}
 	});
@@ -265,7 +265,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 
 	app.use("^\/$", (_req, res, _next) => res.redirect("/public/"));
 
-	app.use(cors({ origin: cliConfigParam.accessibleUrl ?? "" }));
+	app.use(cors({ origin: cliConfigParam.accessibleOrigin ?? "" }));
 
 	if (process.env.ENGINE_FILES_V3_PATH) {
 		const engineFilesPath = path.resolve(process.cwd(), process.env.ENGINE_FILES_V3_PATH);
@@ -403,7 +403,7 @@ export async function run(argv: any): Promise<void> {
 			"EXPERIMENTAL: Open <num> browser windows at startup. The upper limit of <num> is 10.") // TODO: open-browser と統合
 		.option("--ssl-cert <certificatePath>", "Specify path to an SSL/TLS certificate to use HTTPS")
 		.option("--ssl-key <privatekeyPath>", "Specify path to an SSL/TLS privatekey to use HTTPS")
-		.option("--accessible-url <accessibleUrl>", "Specify Url that can access this server")
+		.option("--accessible-origin <accessibleOrigin>", "Specify Url that can access this server")
 		.parse(argv);
 
 	const options = commander.opts();
@@ -431,7 +431,7 @@ export async function run(argv: any): Promise<void> {
 			experimentalOpen: options.experimentalOpen ?? conf.experimentalOpen,
 			sslCert: options.sslCert ?? conf.sslCert,
 			sslKey: options.sslKey ?? conf.sslKey,
-			accessibleUrl: options.accessibleUrl ?? conf.accessibleUrl
+			accessibleOrigin: options.accessibleOrigin ?? conf.accessibleOrigin
 		};
 		await cli(cliConfigParam, options);
 	});
