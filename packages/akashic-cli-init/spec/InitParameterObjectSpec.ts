@@ -1,15 +1,15 @@
-var os = require("os");
-var path = require("path");
-var ConsoleLogger = require("@akashic/akashic-cli-commons/lib/ConsoleLogger").ConsoleLogger;
-var target = require("../lib/init/InitParameterObject");
-var MockConfigFile = require("./support/mockConfigFile");
+import * as os from "os";
+import * as  path from "path";
+import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
+import * as target from "../lib/init/InitParameterObject";
+import { MockTemplateFile } from "./support/mockConfigFile";
 
 describe("InitParameterObject.ts", () => {
 	describe("completeInitParameterObject()", () => {
 		it("complete InitParameterObject", done => {
 			var param = {
 				logger: new ConsoleLogger({quiet: true}),
-				configFile: new MockConfigFile({
+				configFile: new MockTemplateFile({
 					"init.repository": "dummyRepositoryUrl",
 					"init.localTemplateDirectory": "dummyTemplateDirectory",
 					"init.defaultTemplateType": "dummyTemplateType",
@@ -37,7 +37,7 @@ describe("InitParameterObject.ts", () => {
 		it("using default values", done => {
 			var param = {
 				logger: new ConsoleLogger({quiet: true}),
-				configFile: new MockConfigFile({})
+				configFile: new MockTemplateFile({})
 			};
 			target.completeInitParameterObject(param)
 			.then((param) => {
@@ -53,5 +53,6 @@ describe("InitParameterObject.ts", () => {
 			})
 			.then(done, done.fail);
 		});
+
 	});
 });

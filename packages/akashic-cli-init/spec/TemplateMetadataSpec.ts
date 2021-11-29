@@ -1,12 +1,12 @@
-var fs = require("fs");
-var path = require("path");
-var express = require("express");
-var getPort = require("get-port");
-var fetchTemplate = require("../lib/common/TemplateMetadata").fetchTemplate;
-var fetchRemoteTemplatesMetadata = require("../lib/common/TemplateMetadata").fetchRemoteTemplatesMetadata;
+import * as fs from "fs";
+import * as path from "path";
+import * as express from "express";
+import * as getPort from "get-port";
+import { fetchTemplate } from  "../lib/common/TemplateMetadata";
+import { fetchRemoteTemplatesMetadata } from "../lib/common/TemplateMetadata";
 
 describe("TemplateMetadata.ts", () => {
-	let templateServer = null;
+	let templateServer: any = null;
 	let repositoryUrl = "";
 	beforeAll(async () => {
 		const port = await getPort();
@@ -26,7 +26,7 @@ describe("TemplateMetadata.ts", () => {
 	describe("fetchRemoteTemplateMetadata()", () => {
 		it("fetch templates metadata", done => {
 			fetchRemoteTemplatesMetadata(
-				new URL("template-list.json", repositoryUrl)
+				new URL("template-list.json", repositoryUrl).toString()
 			).then((metadataList) => {
 				expect(metadataList).toEqual(
 					expect.arrayContaining([

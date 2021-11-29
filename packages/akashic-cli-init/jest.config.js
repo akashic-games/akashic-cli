@@ -16,6 +16,18 @@ module.exports = {
 		"templates-src"
 	],
 	testMatch: [
-		"**/*[sS]pec.js"
-	]
+		"**/*[sS]pec.ts"
+	],
+	moduleFileExtensions: [
+		"ts",
+		"js"
+	],
+	transform: {
+		"^.+\\.ts$": "ts-jest"
+	},
+	globals: {
+		"ts-jest": {
+			tsconfig: "./spec/tsconfig.json"
+		}
+	}
 };

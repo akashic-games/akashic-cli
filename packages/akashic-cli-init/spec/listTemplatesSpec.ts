@@ -1,11 +1,11 @@
-var os = require("os");
-var path = require("path");
-var express = require("express");
-var getPort = require("get-port");
-var listTemplates = require("../lib/list/listTemplates").listTemplates;
+// import * as os from "os";
+import * as path from "path";
+import * as express from "express";
+import * as getPort from "get-port";
+import { listTemplates } from "../lib/list/listTemplates";
 
 describe("list.ts", () => {
-	let templateServer = null;
+	let templateServer:any = null;
 	let repositoryUrl = "";
 	beforeAll(async () => {
 		const port = await getPort();
@@ -24,12 +24,13 @@ describe("list.ts", () => {
 
 	describe("listTemplates()", () => {
 		it("list templates", done => {
-			var printed = [];
-			var param = {
+			const printed: string[] = [];
+			const param = {
 				logger: {
-					error: s => { done.fail(); },
-					print: s => { printed.push(s); },
-					info: s => { }
+					error: (_s: string) => { done.fail(); },
+					print: (s: string) => { printed.push(s); },
+					info: (_s: string) => {},
+					warn: (_s: string) => {}
 				},
 				repository: repositoryUrl,
 				templateListJsonPath: "template-list.json",

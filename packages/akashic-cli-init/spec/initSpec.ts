@@ -1,9 +1,11 @@
-var fs = require("fs-extra");
-var mockfs = require("mock-fs");
-var path = require("path");
-var ConsoleLogger = require("@akashic/akashic-cli-commons/lib/ConsoleLogger").ConsoleLogger;
-var completeTemplateConfig = require("../lib/init/TemplateConfig").completeTemplateConfig;
-var _extractFromTemplate = require("../lib/init/init").internals._extractFromTemplate;
+import * as fs from "fs-extra";
+import * as mockfs from "mock-fs";
+import * as path from "path";
+import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
+import { completeTemplateConfig } from "../lib/init/TemplateConfig";
+// import * as init from "../lib/init/init";
+import { internals } from "../lib/init/init";
+const _extractFromTemplate =  internals._extractFromTemplate;
 
 describe("init.ts", () => {
 	describe("_extractFromTemplate()", () => {
@@ -48,9 +50,9 @@ describe("init.ts", () => {
 		});
 
 		it("copy simple template", done => {
-			var logger = new ConsoleLogger({ quiet: true });
-			var src = ".akashic-templates/simple";
-			var dest = "home";
+			const logger = new ConsoleLogger({ quiet: true });
+			const src = ".akashic-templates/simple";
+			const dest = "home";
 			completeTemplateConfig({}, src)
 				.then(conf => _extractFromTemplate(conf, src, dest, { logger }))
 				.then(() => {
@@ -63,9 +65,9 @@ describe("init.ts", () => {
 		});
 
 		it("copy manual template", done => {
-			var logger = new ConsoleLogger({ quiet: true });
-			var src = ".akashic-templates/manual";
-			var dest = "home";
+			const logger = new ConsoleLogger({ quiet: true });
+			const src = ".akashic-templates/manual";
+			const dest = "home";
 			completeTemplateConfig({}, src)
 				.then(conf => _extractFromTemplate(conf, src, dest, { logger }))
 				.then(() => {
@@ -76,9 +78,9 @@ describe("init.ts", () => {
 		});
 
 		it("can not copy when file exists", done => {
-			var logger = new ConsoleLogger({ quiet: true });
-			var src = ".akashic-templates/simple";
-			var dest = ".akashic-templates/copyTo";
+			const logger = new ConsoleLogger({ quiet: true });
+			const src = ".akashic-templates/simple";
+			const dest = ".akashic-templates/copyTo";
 			completeTemplateConfig({}, src)
 				.then(conf => _extractFromTemplate(conf, src, dest, { logger }))
 				.then(() => {done.fail();})
@@ -89,9 +91,9 @@ describe("init.ts", () => {
 		});
 
 		it("can not copy when file exists (specify files)", done => {
-			var logger = new ConsoleLogger({ quiet: true });
-			var src = ".akashic-templates/simple";
-			var dest = ".akashic-templates/copyTo";
+			const logger = new ConsoleLogger({ quiet: true });
+			const src = ".akashic-templates/simple";
+			const dest = ".akashic-templates/copyTo";
 			completeTemplateConfig({ files: [{ src: "a" }, { src: "a", dst: "c" }] }, src)
 				.then(conf => _extractFromTemplate(conf, src, dest, { logger }))
 				.then(() => {done.fail();})
@@ -102,9 +104,9 @@ describe("init.ts", () => {
 		});
 
 		it("can copy files with force-option even if file exists", done => {
-			var logger = new ConsoleLogger({ quiet: true });
-			var src = ".akashic-templates/simple";
-			var dest = ".akashic-templates/copyTo";
+			const logger = new ConsoleLogger({ quiet: true });
+			const src = ".akashic-templates/simple";
+			const dest = ".akashic-templates/copyTo";
 			completeTemplateConfig({}, src)
 				.then(conf => _extractFromTemplate(conf, src, dest, { logger, forceCopy: true }))
 				.then(() => {
@@ -116,9 +118,9 @@ describe("init.ts", () => {
 		});
 
 		it("can copy files with force-option even if file exists (specify files)", done => {
-			var logger = new ConsoleLogger({ quiet: true });
-			var src = ".akashic-templates/simple";
-			var dest = ".akashic-templates/copyTo";
+			const logger = new ConsoleLogger({ quiet: true });
+			const src = ".akashic-templates/simple";
+			const dest = ".akashic-templates/copyTo";
 			completeTemplateConfig({ files: [{ src: "a" }, { src: "a", dst: "c" }] }, src)
 				.then(conf => _extractFromTemplate(conf, src, dest, { logger, forceCopy: true }))
 				.then(() => {
