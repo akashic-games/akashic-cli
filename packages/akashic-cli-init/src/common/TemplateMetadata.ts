@@ -7,6 +7,15 @@ import * as unzipper from "unzipper";
 
 // TODO: 適切な場所に移動
 interface TemplateList {
+	/**
+	 * このテンプレートリストのフォーマット。現在 "0" のみがサポートされている。
+	 * 省略された場合、 `"0"` 。
+	 */
+	formatVersion?: "0";
+
+	/**
+	 * テンプレート名と URL (またはパス) のテーブル。
+	 */
 	templates: {[type: string]: string};
 }
 
@@ -50,8 +59,18 @@ export async function collectLocalTemplatesMetadata(templateDirectory: string): 
 export async function fetchRemoteTemplatesMetadata(templateListJsonUri: string): Promise<RemoteTemplateMetadata[]> {
 	const res = await fetch(templateListJsonUri);
 	const templateListJson = (await res.json()) as TemplateList;
-	return Object.keys(templateListJson.templates).map(name => {
-		const rawUrl = templateListJson.templates[name];
+	const { formatVersion, templates } = templateListJson;
+
+	if (formatVersion != null && formatVersion !== "0") {
+		throw new Error(
+			`Unsupported formatVersion "${formatVersion}" found in ${templateListJsonUri}. ` +
+			"The only valid value for this version is \"0\". " +
+			"Newer version of akashic-cli may support this formatVersion."
+		);
+	}
+
+	return Object.keys(templates).map(name => {
+		const rawUrl = templates[name];
 		return {
 			sourceType: "remote",
 			name,

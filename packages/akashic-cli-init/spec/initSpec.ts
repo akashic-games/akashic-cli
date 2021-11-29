@@ -20,6 +20,7 @@ describe("init.ts", () => {
 					},
 					manual: {
 						"template.json": JSON.stringify({
+							formatVersion: "0",
 							files: [
 								{src: "a", dst: "a"},
 								{src: "b", dst: "y/z/e"}
@@ -59,6 +60,20 @@ describe("init.ts", () => {
 			expect(fs.statSync(path.join("home", "b")).isFile()).toBe(true);
 			expect(fs.statSync(path.join("home", "c")).isDirectory()).toBe(true);
 			expect(fs.statSync(path.join("home", "c", "d")).isFile()).toBe(true);
+		});
+
+		it("reject unsupported formatVersion", async () => {
+			const src = ".akashic-templates/never-refered";
+			const mockFn = jest.fn<Promise<any>, [any, string]>(completeTemplateConfig);
+			try {
+				await mockFn({ formatVersion: "101" }, src);
+			} catch (err) {
+				expect(err.message).toBe(
+					"Unsupported formatVersion: \"101\". " +
+					"The only valid value for this version is \"0\". " +
+					"Newer version of akashic-cli may support this formatVersion."
+				);
+			}
 		});
 
 		it("copy manual template", async () => {

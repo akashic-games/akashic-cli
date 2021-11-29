@@ -15,6 +15,7 @@
 
 ```
 {
+  "formatVersion": "0",
   "files": [
     {"src": "mainScene.js", "dst": "script/mainScene.js"},
     {"src": "game.json": "dst": "game.json"}
@@ -22,6 +23,9 @@
   "gameJson": "game.json"
 }
 ```
+
+`formatVersion` キーには `"0"` を指定するか、またはキーごと省略してください。
+これは将来の拡張のために予約されたキーです。
 
 `files` キーにはコピーするファイルを列挙します。
 上の例ではテンプレートディレクトリの `mainScene.js` をカレントディレクトリの
@@ -44,12 +48,16 @@
 
 ```
 {
+  "formatVersion": "0",
   "templates": {
     "javascript": "javascript.zip",
     "typescript": "typescript.zip"
   }
 }
 ```
+
+`formatVersion` キーには `"0"` を指定するか、またはキーごと省略してください。
+これは将来の拡張のために予約されたキーです。
 
 `templates` キーにテンプレート名と対応するzipファイルの対応関係を記述します。
 zipファイルはテンプレートを構成するファイルを圧縮したものです。

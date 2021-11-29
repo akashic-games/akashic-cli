@@ -7,6 +7,12 @@ export interface TemplateFileEntry {
 
 export interface TemplateConfig {
 	/**
+	 * このテンプレートのフォーマット。現在 "0" のみがサポートされている。
+	 * 省略された場合、 `"0"` 。
+	 */
+	formatVersion?: "0";
+
+	/**
 	 * コピーするファイルの指定。
 	 * 省略された場合、直下の全て (ただし template.json を除く) がコピーされる。
 	 * 省略された場合、直下に game.json がなければならない。
@@ -36,7 +42,15 @@ type DeepRequired<T> = {
 export type NormalizedTemplateConfig = DeepRequired<TemplateConfig>;
 
 export async function completeTemplateConfig(templateConfig: TemplateConfig, baseDir: string): Promise<NormalizedTemplateConfig> {
-	const { files, gameJson, guideMessage } = templateConfig;
+	const { formatVersion, files, gameJson, guideMessage } = templateConfig;
+
+	if (formatVersion != null && formatVersion !== "0") {
+		throw new Error(
+			`Unsupported formatVersion: "${formatVersion}". ` +
+			"The only valid value for this version is \"0\". " +
+			"Newer version of akashic-cli may support this formatVersion."
+		);
+	}
 
 	let normalizedFiles: Required<TemplateFileEntry>[];
 	if (files) {
@@ -54,6 +68,7 @@ export async function completeTemplateConfig(templateConfig: TemplateConfig, bas
 	}
 
 	return {
+		formatVersion,
 		files: normalizedFiles,
 		gameJson: gameJson ?? "game.json",
 		guideMessage: guideMessage ?? null

@@ -1,5 +1,83 @@
 # CHANGELOG
 
+## 2.14.6 (2021-11-26)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#925](https://github.com/akashic-games/akashic-cli/pull/925) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.1.3, engineFiles@2.1.57, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
+## 2.14.5 (2021-11-24)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#922](https://github.com/akashic-games/akashic-cli/pull/922) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.1.3, engineFiles@2.1.57, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+* `akashic-cli-init`
+  * [#921](https://github.com/akashic-games/akashic-cli/pull/921) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
+## 2.14.4 (2021-11-24)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#920](https://github.com/akashic-games/akashic-cli/pull/920) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-serve`
+  * [#895](https://github.com/akashic-games/akashic-cli/pull/895) Update all dependencies (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
+## 2.14.3 (2021-11-24)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli`
+  * [#914](https://github.com/akashic-games/akashic-cli/pull/914) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
+## 2.14.2 (2021-11-24)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#919](https://github.com/akashic-games/akashic-cli/pull/919) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.1.3, engineFiles@2.1.57, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
+## 2.14.1 (2021-11-24)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#917](https://github.com/akashic-games/akashic-cli/pull/917) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.1.3, engineFiles@2.1.57, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+* `akashic-cli-init`
+  * [#913](https://github.com/akashic-games/akashic-cli/pull/913) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
+## 2.14.0 (2021-11-19)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#911](https://github.com/akashic-games/akashic-cli/pull/911) feat(init): introduce formatVersion to template.json and template-list.json ([@xnv](https://github.com/xnv))
+  * [#910](https://github.com/akashic-games/akashic-cli/pull/910) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+* `akashic-cli-commons`, `akashic-cli-init`
+  * [#905](https://github.com/akashic-games/akashic-cli/pull/905) feat(init): overhaul init, remove factory templates and use the default template repository on Github ([@xnv](https://github.com/xnv))
+
+#### Bug Fix
+* `akashic-cli-export`
+  * [#912](https://github.com/akashic-games/akashic-cli/pull/912) fix(export): remove obsolete warning messages ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.13.1 (2021-11-16)
 
 #### Enhancement
