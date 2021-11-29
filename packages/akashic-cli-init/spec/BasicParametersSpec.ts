@@ -23,56 +23,49 @@ describe("BasicParameters", function () {
 		});
 
 		// TODO: ファイル読み込み時に処理が止まってしまうため、暫定的処置としてこのテストを無効化する
-		xit("update game.json", done => {
-			var conf = { width: 12, height: 23, fps: 34, assets: {} };
+		xit("update game.json", async () => {
+			const conf = { width: 12, height: 23, fps: 34, assets: {} };
 			fs.writeJsonSync(confPath, conf);
-			bp.updateConfigurationFile(confPath, quietLogger, true)
-				.then(() => {
-					expect(fs.readJsonSync(confPath))
-						.toEqual({width: 42, height: 27, fps: 30, assets: {}});
-				})
-				.then(done, done.fail);
+			await bp.updateConfigurationFile(confPath, quietLogger, true);
+			expect(fs.readJsonSync(confPath))
+				.toEqual({width: 42, height: 27, fps: 30, assets: {}});
 		});
 
 		describe("parameter value is not number", () => {
-			it("value is NaN", done => {
+			it("value is NaN", async () => {
 				mockPrompt.mock({ width: NaN, height: 27, fps: 30 });
-				bp.updateConfigurationFile(confPath, quietLogger, true)
-					.then(() => {done.fail();})
-					.catch((err) => {
-						expect(err).toBe("width must be a number");
-						done();
-					});
+				try {
+					await bp.updateConfigurationFile(confPath, quietLogger, true);
+				} catch (err) {
+					expect(err).toBe("width must be a number");
+				};
 			});
 
-			it("value is null", done => {
+			it("value is null", async () => {
 				mockPrompt.mock({ width: null, height: 27, fps: 30 });
-				bp.updateConfigurationFile(confPath, quietLogger, true)
-					.then(() => {done.fail();})
-					.catch((err) => {
-						expect(err).toBe("width must be a number");
-						done();
-					});
+				try {
+					await bp.updateConfigurationFile(confPath, quietLogger, true);
+				} catch (err) {
+					expect(err).toBe("width must be a number");
+				}
 			});
 
-			it("value is string", done => {
+			it("value is string", async () => {
 				mockPrompt.mock({ width: 111, height: "aaa", fps: 30 });
-				bp.updateConfigurationFile(confPath, quietLogger, false)
-					.then(() => {done.fail();})
-					.catch((err) => {
-						expect(err).toBe("height must be a number");
-						done();
-					});
+				try {
+					await bp.updateConfigurationFile(confPath, quietLogger, false);
+				} catch (err) {
+					expect(err).toBe("height must be a number");
+				}
 			});
 
-			it("value is undefined", done => {
+			it("value is undefined", async () => {
 				mockPrompt.mock({ width: 111, height: 222, fps: undefined });
-				bp.updateConfigurationFile(confPath, quietLogger, false)
-					.then(() => {done.fail();})
-					.catch((err) => {
-						expect(err).toBe("fps must be a number");
-						done();
-					});
+				try {
+					await bp.updateConfigurationFile(confPath, quietLogger, false);
+				} catch (err) {
+					expect(err).toBe("fps must be a number");
+				}
 			});
 		});
 

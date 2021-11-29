@@ -6,8 +6,8 @@ import { MockTemplateFile } from "./support/mockConfigFile";
 
 describe("InitParameterObject.ts", () => {
 	describe("completeInitParameterObject()", () => {
-		it("complete InitParameterObject", done => {
-			var param = {
+		it("complete InitParameterObject", async () => {
+			const param = {
 				logger: new ConsoleLogger({quiet: true}),
 				configFile: new MockTemplateFile({
 					"init.repository": "dummyRepositoryUrl",
@@ -19,39 +19,34 @@ describe("InitParameterObject.ts", () => {
 					"init.ghe.protocol": "https"
 				})
 			};
-			target.completeInitParameterObject(param)
-				.then((param) => {
-					expect(param.cwd).toBe(process.cwd());
-					expect(param.templateListJsonPath).toBe("template-list.json");
-					expect(param.repository).toBe("dummyRepositoryUrl");
-					expect(param.localTemplateDirectory).toBe("dummyTemplateDirectory");
-					expect(param.type).toBe("dummytemplatetype");
-					expect(param.githubHost).toBe("github.com");
-					expect(param.githubProtocol).toBe("ssh");
-					expect(param.gheHost).toBe("your.company.com");
-					expect(param.gheProtocol).toBe("https");
-				})
-				.then(done, done.fail);
+
+			const ret = await target.completeInitParameterObject(param);
+			expect(ret.cwd).toBe(process.cwd());
+			expect(ret.templateListJsonPath).toBe("template-list.json");
+			expect(ret.repository).toBe("dummyRepositoryUrl");
+			expect(ret.localTemplateDirectory).toBe("dummyTemplateDirectory");
+			expect(ret.type).toBe("dummytemplatetype");
+			expect(ret.githubHost).toBe("github.com");
+			expect(ret.githubProtocol).toBe("ssh");
+			expect(ret.gheHost).toBe("your.company.com");
+			expect(ret.gheProtocol).toBe("https");
 		});
 
-		it("using default values", done => {
-			var param = {
+		it("using default values", async () => {
+			const param = {
 				logger: new ConsoleLogger({quiet: true}),
 				configFile: new MockTemplateFile({})
 			};
-			target.completeInitParameterObject(param)
-				.then((param) => {
-					expect(param.cwd).toBe(process.cwd());
-					expect(param.templateListJsonPath).toBe("template-list.json");
-					expect(param.repository).toBe("https://akashic-contents.github.io/templates/");
-					expect(param.localTemplateDirectory).toBe(path.join(os.homedir(), ".akashic-templates"));
-					expect(param.type).toBe("javascript");
-					expect(param.githubHost).toBe("github.com");
-					expect(param.githubProtocol).toBe("https");
-					expect(param.gheHost).toBeNull();
-					expect(param.gheProtocol).toBe("https");
-				})
-				.then(done, done.fail);
+			const ret = await target.completeInitParameterObject(param);
+			expect(ret.cwd).toBe(process.cwd());
+			expect(ret.templateListJsonPath).toBe("template-list.json");
+			expect(ret.repository).toBe("https://akashic-contents.github.io/templates/");
+			expect(ret.localTemplateDirectory).toBe(path.join(os.homedir(), ".akashic-templates"));
+			expect(ret.type).toBe("javascript");
+			expect(ret.githubHost).toBe("github.com");
+			expect(ret.githubProtocol).toBe("https");
+			expect(ret.gheHost).toBeNull();
+			expect(ret.gheProtocol).toBe("https");
 		});
 
 	});

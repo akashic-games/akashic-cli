@@ -23,11 +23,11 @@ describe("list.ts", () => {
 	});
 
 	describe("listTemplates()", () => {
-		it("list templates", done => {
+		it("list templates", async () => {
 			const printed: string[] = [];
 			const param = {
 				logger: {
-					error: (_s: string) => { done.fail(); },
+					error: (_s: string) => { throw new Error("logger error"); },
 					print: (s: string) => { printed.push(s); },
 					info: (_s: string) => {},
 					warn: (_s: string) => {}
@@ -37,17 +37,14 @@ describe("list.ts", () => {
 				localTemplateDirectory: path.join(__dirname, "support", "fixture", "local")
 			};
 
-			listTemplates(param)
-				.then(() => {
-					expect(printed).toEqual(
-						expect.arrayContaining([
-							"javascript",
-							"typescript",
-							"javascript-minimal"
-						])
-					);
-				})
-				.then(done, done.fail);
+			await listTemplates(param);
+			expect(printed).toEqual(
+				expect.arrayContaining([
+					"javascript",
+					"typescript",
+					"javascript-minimal"
+				])
+			);
 		});
 	});
 });
