@@ -1,10 +1,10 @@
-import * as fs from "fs-extra";
-import * as mockfs from "mock-fs";
 import * as path from "path";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
+import * as fs from "fs-extra";
+import * as mockfs from "mock-fs";
+import { internals } from "../lib/init/init";
 import { completeTemplateConfig } from "../lib/init/TemplateConfig";
 // import * as init from "../lib/init/init";
-import { internals } from "../lib/init/init";
 const _extractFromTemplate =  internals._extractFromTemplate;
 
 describe("init.ts", () => {

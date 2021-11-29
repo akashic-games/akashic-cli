@@ -43,7 +43,7 @@ describe("TemplateMetadata.ts", () => {
 					])
 				);
 				done();
-			})
+			});
 		});
 	});
 

@@ -1,8 +1,8 @@
-import * as fs from "fs-extra";
-import * as mockfs from "mock-fs";
 import * as os from "os";
 import * as path from "path";
 import {ConsoleLogger} from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
+import * as fs from "fs-extra";
+import * as mockfs from "mock-fs";
 import * as bp  from "../lib/init/BasicParameters";
 import * as mockPrompt from "./support/mockPrompt";
 

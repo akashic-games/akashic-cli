@@ -7,26 +7,26 @@ export class MockTemplateFile extends AkashicConfigFile {
 		this._obj = obj;
 	};
 
-	load = function () {
+	load(): Promise<void> {
 		return Promise.resolve();
 	};
-	save = function () {
+	save(): Promise<void> {
 		return Promise.resolve();
 	};
-	isValidKey = function (key: string) {
+	isValidKey(key: string): boolean {
 		return !!this._obj[key];
 	};
-	isValidValue = function (key: string, value: string) {
+	isValidValue(_key: string, _value: string): boolean {
 		return true;
 	};
-	getItem = function (key: string) {
+	getItem(key: string): Promise<string> {
 		return Promise.resolve(this._obj[key]);
 	};
-	setItem = function (key: string, value: string) {
+	setItem(key: string, value: string): Promise<void> {
 		this._obj[key] = value;
 		return Promise.resolve();
 	};
-	deleteItem = function (key: string) {
+	deleteItem(key: string): Promise<void> {
 		delete this._obj[key];
 		return Promise.resolve();
 	};

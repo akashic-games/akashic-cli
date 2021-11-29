@@ -5,7 +5,7 @@ import * as getPort from "get-port";
 import { listTemplates } from "../lib/list/listTemplates";
 
 describe("list.ts", () => {
-	let templateServer:any = null;
+	let templateServer: any = null;
 	let repositoryUrl = "";
 	beforeAll(async () => {
 		const port = await getPort();
@@ -35,7 +35,7 @@ describe("list.ts", () => {
 				repository: repositoryUrl,
 				templateListJsonPath: "template-list.json",
 				localTemplateDirectory: path.join(__dirname, "support", "fixture", "local")
-			}
+			};
 
 			listTemplates(param)
 				.then(() => {
