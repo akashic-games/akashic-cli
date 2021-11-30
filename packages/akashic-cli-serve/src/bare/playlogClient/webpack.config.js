@@ -1,14 +1,16 @@
 const webpack = require("webpack");
 const path = require("path");
+const packageJson = require("./package.json");
+const version = packageJson.version.replaceAll(".", "_");
 
 module.exports = {
 	mode: "development",
 	target: "node",
-	entry: "./src/bare/playlogClient/index.ts",
+	entry: path.resolve(__dirname, "index.ts"),
 	output: {
 		path: path.resolve(__dirname, "../../../www/public/external"),
-		filename: "playlogClientV0_0_1.js",
-		library: "playlogClientV0_0_1",
+		filename: `playlogClientV${version}.js`,
+		library: `playlogClientV${version}`,
 		libraryTarget: "umd",
 		globalObject: "window"
 	},

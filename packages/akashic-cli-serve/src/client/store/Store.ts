@@ -2,7 +2,7 @@ import {ServiceType} from "@akashic/akashic-cli-commons/lib/ServiceType";
 import {observable, action} from "mobx";
 import {AppOptions} from "../../common/types/AppOptions";
 import {Player} from "../../common/types/Player";
-import { apiClientLocalHost } from "../api/ApiClient";
+import { apiClient } from "../api/ApiClient";
 import {ClientContentLocator} from "../common/ClientContentLocator";
 import {queryParameters as query} from "../common/queryParameters";
 import {ContentStore} from "./ContentStore";
@@ -48,7 +48,7 @@ export class Store {
 		this.currentPlay = null;
 		this.currentLocalInstance = null;
 
-		this._initializationWaiter = apiClientLocalHost.getOptions().then(result => {
+		this._initializationWaiter = apiClient.getOptions().then(result => {
 			this.appOptions = result.data;
 		});
 	}

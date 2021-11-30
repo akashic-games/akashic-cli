@@ -1,5 +1,5 @@
 import {observable} from "mobx";
-import { apiClientLocalHost } from "../api/ApiClient";
+import { apiClient } from "../api/ApiClient";
 import {GameInstanceEntity} from "./GameInstanceEntity";
 import {PlayEntity} from "./PlayEntity";
 
@@ -18,18 +18,18 @@ export class ServerInstanceEntity implements GameInstanceEntity {
 	}
 
 	async stop(): Promise<void> {
-		await apiClientLocalHost.deleteRunner(this.runnerId);
+		await apiClient.deleteRunner(this.runnerId);
 	}
 
 	async pause(): Promise<void> {
-		await apiClientLocalHost.pauseRunner(this.runnerId);
+		await apiClient.pauseRunner(this.runnerId);
 	}
 
 	async resume(): Promise<void> {
-		await apiClientLocalHost.resumeRunner(this.runnerId);
+		await apiClient.resumeRunner(this.runnerId);
 	}
 
 	async step(): Promise<void> {
-		await apiClientLocalHost.stepRunner(this.runnerId);
+		await apiClient.stepRunner(this.runnerId);
 	}
 }

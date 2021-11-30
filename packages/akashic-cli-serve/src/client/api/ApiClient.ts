@@ -139,4 +139,4 @@ export class ApiClient {
 	};
 }
 
-export const apiClientLocalHost = new ApiClient();
+export const apiClient = new ApiClient();

@@ -1,4 +1,4 @@
-import { apiClientLocalHost } from "../api/ApiClient";
+import { apiClient } from "../api/ApiClient";
 import { queryParameters as query } from "../common/queryParameters";
 
 export interface StorageData {
@@ -81,7 +81,7 @@ export class Storage {
 		});
 
 		const playerId: string = choose(query.playerId, s.playerId, undefined);
-		this._initializationWaiter = apiClientLocalHost.registerPlayerId(playerId).then(response => {
+		this._initializationWaiter = apiClient.registerPlayerId(playerId).then(response => {
 			// プレイヤーID重複の警告等はどのように表示すべきか？
 			const registered = response.data.playerId;
 			const playerName: string = choose(query.playerName, s.playerName, `player-${registered}`);

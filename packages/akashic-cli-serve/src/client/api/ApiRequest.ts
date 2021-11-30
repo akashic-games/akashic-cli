@@ -30,7 +30,7 @@ export const post = async<T>(url: string, params?: {[key: string]: any}): Promis
 		"Accept": "application/json",
 		"Content-Type": "application/json; charset=utf-8"
 	};
-	const response = await fetchWithTimeout(url, {method, headers: headers, body});
+	const response = await fetchWithTimeout(url, {method, headers, body});
 	if (400 <= response.status) {
 		throw new Error("Failed to POST " + url + ". Status: " + response.status);
 	}
@@ -57,7 +57,7 @@ export const patch = async<T>(url: string, params?: {[key: string]: any}): Promi
 		"Accept": "application/json",
 		"Content-Type": "application/json; charset=utf-8"
 	};
-	const response = await fetchWithTimeout(url, {method, headers: headers, body});
+	const response = await fetchWithTimeout(url, {method, headers, body});
 	if (400 <= response.status) {
 		throw new Error("Failed to PATCH " + url + ". Status: " + response.status);
 	}

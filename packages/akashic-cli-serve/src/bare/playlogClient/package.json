@@ -1,0 +1,9 @@
+{
+  "name": "@akashic/akashic-cli-serve-playlog-client",
+  "version": "0.0.1",
+  "description": "Playlog client to connect to akashic-cli-serve",
+  "scripts": {
+    "build": "webpack --config ./webpack.config.js"
+  },
+  "private": true
+}
