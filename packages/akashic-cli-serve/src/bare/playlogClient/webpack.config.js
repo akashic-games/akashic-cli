@@ -1,7 +1,7 @@
 const webpack = require("webpack");
 const path = require("path");
 const packageJson = require("./package.json");
-const version = packageJson.version.replaceAll(".", "_");
+const version = packageJson.version.replace(/[\.-]/g, "_");
 
 module.exports = {
 	mode: "development",
