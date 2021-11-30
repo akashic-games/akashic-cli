@@ -4,7 +4,7 @@ const path = require("path");
 module.exports = {
 	mode: "development",
 	target: "node",
-	entry: "./src/bare/playlogClient/playlogClientV0_0_1.ts",
+	entry: "./src/bare/playlogClient/index.ts",
 	output: {
 		path: path.resolve(__dirname, "../../../www/public/external"),
 		filename: "playlogClientV0_0_1.js",

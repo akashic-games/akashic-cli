@@ -91,7 +91,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./src/bare/playlogClient/playlogClientV0_0_1.ts");
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/bare/playlogClient/index.ts");
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -465,15 +465,15 @@ eval("\nvar __extends = (this && this.__extends) || (function () {\n    var exte
 
 /***/ }),
 
-/***/ "./src/bare/playlogClient/playlogClientV0_0_1.ts":
-/*!*******************************************************!*\
-  !*** ./src/bare/playlogClient/playlogClientV0_0_1.ts ***!
-  \*******************************************************/
+/***/ "./src/bare/playlogClient/index.ts":
+/*!*****************************************!*\
+  !*** ./src/bare/playlogClient/index.ts ***!
+  \*****************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.Socket = exports.Session = void 0;\nvar socketInstance_1 = __webpack_require__(/*! ../../client/api/socketInstance */ \"./src/client/api/socketInstance.ts\");\nvar ApiClient_1 = __webpack_require__(/*! ../../client/api/ApiClient */ \"./src/client/api/ApiClient.ts\");\nvar SocketIOAMFlowClient_1 = __webpack_require__(/*! ../../client/akashic/SocketIOAMFlowClient */ \"./src/client/akashic/SocketIOAMFlowClient.ts\");\nvar SocketIOAMFlowClientOverride_1 = __webpack_require__(/*! ./SocketIOAMFlowClientOverride */ \"./src/bare/playlogClient/SocketIOAMFlowClientOverride.ts\");\n// playlogClientのplaylogServerUrlとして以下のURLを指定された時だけ動作確認テスト用に書き換えたAmflowを使う\nvar DUMMY_URLS = [\"http://dummy.playlog.net\"];\nvar DUMMY_PLAYER_ID = \"dummy\";\nvar Session = /** @class */ (function () {\n    function Session(url) {\n        this._url = url;\n    }\n    Session.prototype.open = function (cb) {\n        cb();\n    };\n    Session.prototype.on = function (_msg, _cb) { };\n    Session.prototype.createClient = function (opt, cb) {\n        if (typeof opt === \"function\") {\n            cb = opt;\n            opt = null;\n        }\n        var host = typeof HOST !== \"undefined\" ? HOST : window.location.host;\n        if (DUMMY_URLS.indexOf(this._url) !== -1) {\n            var protocol = window.location.protocol.includes(\"https\") ? \"https\" : \"http\";\n            var apiClient = new ApiClient_1.ApiClient(protocol + \"://\" + host);\n            // TODO: 外部からplayIdの指定をできるようにすべきだが、現状動作確認テストでは1つのplayしか使用しないので今の所はこのままでも問題ない\n            var playId_1 = \"0\";\n            apiClient.createPlayToken(playId_1, DUMMY_PLAYER_ID, false, DUMMY_PLAYER_ID, undefined).then(function (result) {\n                cb(null, new SocketIOAMFlowClientOverride_1.SocketIOAMFlowClientOverride((0, socketInstance_1.socketInstance)(host), { playId: playId_1, token: result.data.playToken }));\n            }).catch(function (err) { return cb(err); });\n        }\n        else {\n            cb(null, new SocketIOAMFlowClient_1.SocketIOAMFlowClient((0, socketInstance_1.socketInstance)()));\n        }\n    };\n    return Session;\n}());\nexports.Session = Session;\nexports.Socket = {\n    Type: {\n        WebSocket: 1\n    }\n};\n\n\n//# sourceURL=webpack://playlogClientV0_0_1/./src/bare/playlogClient/playlogClientV0_0_1.ts?");
+eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.Socket = exports.Session = void 0;\nvar socketInstance_1 = __webpack_require__(/*! ../../client/api/socketInstance */ \"./src/client/api/socketInstance.ts\");\nvar ApiClient_1 = __webpack_require__(/*! ../../client/api/ApiClient */ \"./src/client/api/ApiClient.ts\");\nvar SocketIOAMFlowClient_1 = __webpack_require__(/*! ../../client/akashic/SocketIOAMFlowClient */ \"./src/client/akashic/SocketIOAMFlowClient.ts\");\nvar SocketIOAMFlowClientOverride_1 = __webpack_require__(/*! ./SocketIOAMFlowClientOverride */ \"./src/bare/playlogClient/SocketIOAMFlowClientOverride.ts\");\n// playlogClientのplaylogServerUrlとして以下のURLを指定された時だけ動作確認テスト用に書き換えたAmflowを使う\nvar DUMMY_URLS = [\"http://dummy.playlog.net\"];\nvar DUMMY_PLAYER_ID = \"dummy\";\nvar Session = /** @class */ (function () {\n    function Session(url) {\n        this._url = url;\n    }\n    Session.prototype.open = function (cb) {\n        cb();\n    };\n    Session.prototype.on = function (_msg, _cb) { };\n    Session.prototype.createClient = function (opt, cb) {\n        if (typeof opt === \"function\") {\n            cb = opt;\n            opt = null;\n        }\n        var host = typeof HOST !== \"undefined\" ? HOST : window.location.host;\n        if (DUMMY_URLS.indexOf(this._url) !== -1) {\n            var protocol = window.location.protocol.includes(\"https\") ? \"https\" : \"http\";\n            var apiClient = new ApiClient_1.ApiClient(protocol + \"://\" + host);\n            // TODO: 外部からplayIdの指定をできるようにすべきだが、現状動作確認テストでは1つのplayしか使用しないので今の所はこのままでも問題ない\n            var playId_1 = \"0\";\n            apiClient.createPlayToken(playId_1, DUMMY_PLAYER_ID, false, DUMMY_PLAYER_ID, undefined).then(function (result) {\n                cb(null, new SocketIOAMFlowClientOverride_1.SocketIOAMFlowClientOverride((0, socketInstance_1.socketInstance)(host), { playId: playId_1, token: result.data.playToken }));\n            }).catch(function (err) { return cb(err); });\n        }\n        else {\n            cb(null, new SocketIOAMFlowClient_1.SocketIOAMFlowClient((0, socketInstance_1.socketInstance)()));\n        }\n    };\n    return Session;\n}());\nexports.Session = Session;\nexports.Socket = {\n    Type: {\n        WebSocket: 1\n    }\n};\n\n\n//# sourceURL=webpack://playlogClientV0_0_1/./src/bare/playlogClient/index.ts?");
 
 /***/ }),
 
