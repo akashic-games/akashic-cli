@@ -15,9 +15,7 @@ async function cli(param: CliConfigInit): Promise<void> {
 		if (/(^(github|ghe):)|(\.git$)/.test(param.repository)) {
 			logger.warn("Misused -r, --repository options. Use -t option for Github repository");
 		}
-		// if (param.repository !== defaultTemplateRepository) {
-		if (param.repository === DEFAULT_TEMPLATE_REPOSITORY) {
-			// 非公式な URL の場合、アクセス許可をユーザ確認させる
+		if (param.repository !== DEFAULT_TEMPLATE_REPOSITORY) {
 			const ret = await confirmAccessToUrl(param.repository);
 			if (!ret) process.exit(1);
 		}
@@ -27,9 +25,7 @@ async function cli(param: CliConfigInit): Promise<void> {
 		const m = param.type.match(/(.+):(.+)\/(.+)/) ?? [];
 		if (m[1] === "github") {
 			const owner = m[2];
-			// if (owner !== "akashic-games") {
-			if (owner === "akashic-games") {
-				// 非公式な URL の場合、アクセス許可をユーザ確認させる
+			if (owner !== "akashic-games") {
 				const ret = await confirmAccessToUrl(param.type);
 				if (!ret) process.exit(1);
 			}
