@@ -1,7 +1,7 @@
 import * as os from "os";
 import * as  path from "path";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
-import * as target from "../lib/init/InitParameterObject";
+import * as target from "../../lib/init/InitParameterObject";
 import { MockTemplateFile } from "./support/mockConfigFile";
 
 describe("InitParameterObject.ts", () => {

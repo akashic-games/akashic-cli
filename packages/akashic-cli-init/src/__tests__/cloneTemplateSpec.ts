@@ -1,7 +1,7 @@
 import * as child_process from "child_process";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
-import * as ct from "../lib/init/cloneTemplate";
-import * as init from "../lib/init/init";
+import * as ct from "../../lib/init/cloneTemplate";
+import * as init from "../../lib/init/init";
 
 jest.mock("child_process");
 const mockExec: any = child_process.exec;

@@ -12,8 +12,6 @@ module.exports = {
 		"**/*.js"
 	],
 	rules: {
-		"@typescript-eslint/no-empty-function": "off",
-		"brace-style": ["error", "1tbs", { "allowSingleLine": true }]
+		"@typescript-eslint/no-empty-function": "off"
 	}
-
 }

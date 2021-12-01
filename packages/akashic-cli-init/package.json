@@ -5,10 +5,10 @@
   "main": "lib/index.js",
   "scripts": {
     "prepublish": "npm run clean && npm run build",
-    "clean": "rimraf ./lib && rimraf ./spec/build",
+    "clean": "rimraf ./lib",
     "start": "npm run build && node bin/run",
     "build": "tsc -p ./",
-    "lint": "eslint \"src/**/*.ts\"  \"spec/**/*.ts\" --fix",
+    "lint": "eslint \"src/**/*.ts\" --fix",
     "zip": "npm run zip:js && npm run zip:ts && npm run zip:js-min && npm run zip:ts-min && npm run zip:js-ranking && npm run zip:ts-ranking",
     "zip:js": "cd ./templates/javascript/ && rimraf ../javascript.zip && bestzip ../../templates/javascript.zip ./ && cd .. && rimraf ./javascript",
     "zip:js-min": "cd ./templates/javascript-minimal/ && rimraf ../javascript-minimal.zip && bestzip ../../templates/javascript-minimal.zip ./ && cd .. && rimraf ./javascript-minimal",

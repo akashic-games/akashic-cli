@@ -1,7 +1,7 @@
 import * as path from "path";
 import * as express from "express";
 import * as getPort from "get-port";
-import { listTemplates } from "../lib/list/listTemplates";
+import { listTemplates } from "../../lib/list/listTemplates";
 
 describe("list.ts", () => {
 	let templateServer: any = null;
@@ -26,8 +26,12 @@ describe("list.ts", () => {
 			const printed: string[] = [];
 			const param = {
 				logger: {
-					error: (_s: string) => { throw new Error("logger error"); },
-					print: (s: string) => { printed.push(s); },
+					error: (_s: string) => {
+						throw new Error("logger error");
+					},
+					print: (s: string) => {
+						printed.push(s);
+					},
 					info: (_s: string) => {},
 					warn: (_s: string) => {}
 				},
