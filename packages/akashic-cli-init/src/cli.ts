@@ -4,13 +4,40 @@ import { CliConfigInit } from "@akashic/akashic-cli-commons/lib/CliConfig/CliCon
 import { CliConfigurationFile } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigurationFile";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
 import { Command } from "commander";
+import * as Prompt from "prompt";
+import { DEFAULT_TEMPLATE_REPOSITORY } from "./common/InitCommonOptions";
 import { promiseInit } from "./init/init";
 import { listTemplates } from "./list/listTemplates";
 
 async function cli(param: CliConfigInit): Promise<void> {
 	const logger = new ConsoleLogger({ quiet: param.quiet });
-	if (param.repository && /(^(github|ghe):)|(\.git$)/.test(param.repository)) {
-		logger.warn("Misused -r, --repository options. Use -t option for Github repository");
+	if (param.repository) {
+		if (/(^(github|ghe):)|(\.git$)/.test(param.repository)) {
+			logger.warn("Misused -r, --repository options. Use -t option for Github repository");
+		}
+		// if (param.repository !== defaultTemplateRepository) {
+		if (param.repository === DEFAULT_TEMPLATE_REPOSITORY) {
+			// 非公式な URL の場合、アクセス許可をユーザ確認させる
+			const ret = await confirmAccessToUrl(param.repository);
+			if (!ret) process.exit(1);
+		}
+	}
+
+	if (param.type) {
+		const m = param.type.match(/(.+):(.+)\/(.+)/) ?? [];
+		if (m[1] === "github") {
+			const owner = m[2];
+			// if (owner !== "akashic-games") {
+			if (owner === "akashic-games") {
+				// 非公式な URL の場合、アクセス許可をユーザ確認させる
+				const ret = await confirmAccessToUrl(param.type);
+				if (!ret) process.exit(1);
+			}
+		}
+
+		if (m[1] === "ghe") {
+			// TODO: 許可した URL を.akashicrc に保存する時に実装する
+		}
 	}
 
 	try {
@@ -73,6 +100,31 @@ export function run(argv: string[]): void {
 			list: options.list ?? conf.list,
 			yes: options.yes ?? conf.yes,
 			force: options.force ?? conf.force
+		});
+	});
+}
+
+function confirmAccessToUrl(url: string): Promise<boolean> {
+	return new Promise<boolean>((resolve: (result: boolean) => void, reject: (err: any) => void) => {
+		const schema = {
+			properties: {
+				confirm: {
+					pattern: /^(yes|no|y|n)$/gi,
+					description: `Allow access to this URL(${url})? y/n`,
+					required: true,
+					default: "y"
+				}
+			}
+		};
+		Prompt.start();
+		Prompt.get(schema, (err: any, result: any) => {
+			const value = result.confirm.toLowerCase();
+			const ret = value === "y" || value === "yes";
+			if (err) {
+				reject(err);
+			} else {
+				resolve(ret);
+			}
 		});
 	});
 }

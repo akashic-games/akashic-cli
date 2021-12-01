@@ -48,7 +48,7 @@ const initConfigValidator: config.StringMap = {
 	"init.ghe.protocol": ""
 };
 
-const defaultTemplateRepository = "https://akashic-contents.github.io/templates/";
+export const DEFAULT_TEMPLATE_REPOSITORY = "https://akashic-contents.github.io/templates/";
 
 /**
  * 未代入のパラメータを補完する。
@@ -60,7 +60,7 @@ export async function completeInitCommonOptions(opts: InitCommonOptions): Promis
 	const templateListJsonPath = opts.templateListJsonPath || "template-list.json";
 
 	await configFile.load();
-	const repository = opts.repository ?? (await configFile.getItem("init.repository")) ?? defaultTemplateRepository;
+	const repository = opts.repository ?? (await configFile.getItem("init.repository")) ?? DEFAULT_TEMPLATE_REPOSITORY;
 	const localTemplateDirectory =
 		opts.localTemplateDirectory ??
 		await configFile.getItem("init.localTemplateDirectory") ??
