@@ -1,6 +1,6 @@
 import { AkashicConfigFile} from "@akashic/akashic-cli-extra/lib/config";
 
-export class MockTemplateFile extends AkashicConfigFile {
+export class MockConfigFile extends AkashicConfigFile {
 	private _obj: any;
 	constructor(obj: any) {
 		super(obj);

@@ -2,14 +2,14 @@ import * as os from "os";
 import * as  path from "path";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
 import * as target from "../../lib/init/InitParameterObject";
-import { MockTemplateFile } from "./support/mockConfigFile";
+import { MockConfigFile } from "./support/mockConfigFile";
 
 describe("InitParameterObject.ts", () => {
 	describe("completeInitParameterObject()", () => {
 		it("complete InitParameterObject", async () => {
 			const param = {
 				logger: new ConsoleLogger({quiet: true}),
-				configFile: new MockTemplateFile({
+				configFile: new MockConfigFile({
 					"init.repository": "dummyRepositoryUrl",
 					"init.localTemplateDirectory": "dummyTemplateDirectory",
 					"init.defaultTemplateType": "dummyTemplateType",
@@ -35,7 +35,7 @@ describe("InitParameterObject.ts", () => {
 		it("using default values", async () => {
 			const param = {
 				logger: new ConsoleLogger({quiet: true}),
-				configFile: new MockTemplateFile({})
+				configFile: new MockConfigFile({})
 			};
 			const ret = await target.completeInitParameterObject(param);
 			expect(ret.cwd).toBe(process.cwd());
