@@ -4,7 +4,7 @@ import * as ct from "../../lib/init/cloneTemplate";
 import * as init from "../../lib/init/init";
 
 jest.mock("child_process");
-const mockExec: any = child_process.exec;
+const mockExec = child_process.exec as unknown as jest.Mock;
 mockExec.mockImplementation((_command: any, _opts: any, callback: Function) => {
 	callback();
 });

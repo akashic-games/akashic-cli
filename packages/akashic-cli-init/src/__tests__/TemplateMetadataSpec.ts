@@ -48,6 +48,7 @@ describe("TemplateMetadata.ts", () => {
 			const mockFn = jest.fn<Promise<any[]>, [any]>(fetchRemoteTemplatesMetadata);
 			try {
 				await mockFn(templateListJsonUri);
+				throw new Error("failed");
 			} catch (err) {
 				expect(err.message).toBe(
 					`Unsupported formatVersion "42" found in ${templateListJsonUri.toString()}. ` +

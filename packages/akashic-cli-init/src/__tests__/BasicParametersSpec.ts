@@ -36,6 +36,7 @@ describe("BasicParameters", function () {
 				mockPrompt.mock({ width: NaN, height: 27, fps: 30 });
 				try {
 					await bp.updateConfigurationFile(confPath, quietLogger, true);
+					throw new Error("failed");
 				} catch (err) {
 					expect(err).toBe("width must be a number");
 				};
@@ -45,6 +46,7 @@ describe("BasicParameters", function () {
 				mockPrompt.mock({ width: null, height: 27, fps: 30 });
 				try {
 					await bp.updateConfigurationFile(confPath, quietLogger, true);
+					throw new Error("failed");
 				} catch (err) {
 					expect(err).toBe("width must be a number");
 				}
@@ -54,6 +56,7 @@ describe("BasicParameters", function () {
 				mockPrompt.mock({ width: 111, height: "aaa", fps: 30 });
 				try {
 					await bp.updateConfigurationFile(confPath, quietLogger, false);
+					throw new Error("failed");
 				} catch (err) {
 					expect(err).toBe("height must be a number");
 				}
@@ -63,6 +66,7 @@ describe("BasicParameters", function () {
 				mockPrompt.mock({ width: 111, height: 222, fps: undefined });
 				try {
 					await bp.updateConfigurationFile(confPath, quietLogger, false);
+					throw new Error("failed");
 				} catch (err) {
 					expect(err).toBe("fps must be a number");
 				}
