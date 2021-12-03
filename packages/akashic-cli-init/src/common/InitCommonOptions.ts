@@ -3,6 +3,7 @@ import * as path from "path";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
 import { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
 import * as config from "@akashic/akashic-cli-extra/lib/config";
+import * as Prompt from "prompt";
 
 export interface InitCommonOptions {
 	/**
@@ -48,13 +49,15 @@ const initConfigValidator: config.StringMap = {
 	"init.ghe.protocol": ""
 };
 
-export const DEFAULT_TEMPLATE_REPOSITORY = "https://akashic-contents.github.io/templates/";
+const DEFAULT_TEMPLATE_REPOSITORY = "https://akashic-contents.github.io/templates/";
 
 /**
  * 未代入のパラメータを補完する。
  * 戻り値の .configFile は .load() が呼ばれた状態で返される点に注意。
  */
 export async function completeInitCommonOptions(opts: InitCommonOptions): Promise<NormalizedInitCommonOptions> {
+	await validateInitCommonOptions(opts);
+
 	const logger = opts.logger || new ConsoleLogger();
 	const configFile = opts.configFile || new config.AkashicConfigFile(initConfigValidator);
 	const templateListJsonPath = opts.templateListJsonPath || "template-list.json";
@@ -75,3 +78,45 @@ export async function completeInitCommonOptions(opts: InitCommonOptions): Promis
 	};
 }
 
+
+async function validateInitCommonOptions(opts: InitCommonOptions): Promise<void> {
+	if (opts.repository) {
+		if (/(^(github|ghe):)|(\.git$)/.test(opts.repository)) {
+			opts.logger.warn("Misused -r, --repository options. Use -t option for Github repository");
+		}
+
+		if (opts.repository !== DEFAULT_TEMPLATE_REPOSITORY) {
+			const ret = await confirmAccessToUrl(opts.repository);
+			if (!ret) process.exit(1);
+		}
+	}
+}
+
+export function confirmAccessToUrl(url: string): Promise<boolean> {
+	return new Promise<boolean>((resolve: (result: boolean) => void, reject: (err: any) => void) => {
+		const schema = {
+			properties: {
+				confirm: {
+					pattern: /^(yes|no|y|n)$/gi,
+					description: `Attempting to connect to ${url}\n`
+						+ "The template obtained here may cause arbitrary command execution"
+						+ "(not by this command but by using the template).\n"
+						+ "You should not use this URL unless you trust its owners and contents.\n"
+						+ "Do you trust the owners and contents of this URL? (y/n)",
+					required: true,
+					default: "n"
+				}
+			}
+		};
+		Prompt.start();
+		Prompt.get(schema, (err: any, result: any) => {
+			const value = result.confirm.toLowerCase();
+			const ret = value === "y" || value === "yes";
+			if (err) {
+				reject(err);
+			} else {
+				resolve(ret);
+			}
+		});
+	});
+}
