@@ -65,16 +65,12 @@ describe("init.ts", () => {
 		it("reject unsupported formatVersion", async () => {
 			const src = ".akashic-templates/never-refered";
 			const mockFn = jest.fn<Promise<any>, [any, string]>(completeTemplateConfig);
-			try {
-				await mockFn({ formatVersion: "101" }, src);
-				throw new Error("failed");
-			} catch (err) {
-				expect(err.message).toBe(
+			await expect(mockFn({ formatVersion: "101" }, src))
+				.rejects.toThrow(
 					"Unsupported formatVersion: \"101\". " +
 					"The only valid value for this version is \"0\". " +
 					"Newer version of akashic-cli may support this formatVersion."
 				);
-			}
 		});
 
 		it("copy manual template", async () => {
@@ -93,12 +89,11 @@ describe("init.ts", () => {
 			const src = ".akashic-templates/simple";
 			const dest = ".akashic-templates/copyTo";
 			const conf = await completeTemplateConfig({}, src);
-			try {
-				await _extractFromTemplate(conf, src, dest, { logger });
-				throw new Error("failed");
-			} catch (err) {
-				expect(err.message).toBe("aborted to copy files, because followings already exist. [a, c]");
-			}
+
+			await expect( _extractFromTemplate(conf, src, dest, { logger }))
+				.rejects.toThrow(
+					"aborted to copy files, because followings already exist. [a, c]"
+				);
 		});
 
 		it("can not copy when file exists (specify files)", async () => {
@@ -106,12 +101,11 @@ describe("init.ts", () => {
 			const src = ".akashic-templates/simple";
 			const dest = ".akashic-templates/copyTo";
 			const conf = await completeTemplateConfig({ files: [{ src: "a" }, { src: "a", dst: "c" }] }, src);
-			try {
-				await _extractFromTemplate(conf, src, dest, { logger });
-				throw new Error("failed");
-			} catch (err) {
-				expect(err.message).toBe(`aborted to copy files, because followings already exist. [a, c${path.sep}a]`);
-			};
+
+			await expect(_extractFromTemplate(conf, src, dest, { logger }))
+				.rejects.toThrow(
+					`aborted to copy files, because followings already exist. [a, c${path.sep}a]`
+				);
 		});
 
 		it("can copy files with force-option even if file exists", async () => {
