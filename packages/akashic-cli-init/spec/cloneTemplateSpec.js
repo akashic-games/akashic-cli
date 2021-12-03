@@ -1,6 +1,7 @@
 var ConsoleLogger = require("@akashic/akashic-cli-commons/lib/ConsoleLogger").ConsoleLogger;
 var ct = require("../lib/init/cloneTemplate");
 var init = require("../lib/init/init");
+var Prompt =  require("prompt");
 
 jest.mock("child_process");
 const mockExec = require("child_process").exec;
@@ -8,9 +9,16 @@ mockExec.mockImplementation((_command, _opts, callback) => {
 	callback();
 });
 
+let mockPromptGet = jest.spyOn(Prompt, "get").mockImplementation((_schema, func) => {
+	func(undefined, { confirm: "y" });
+});
+
 describe("cloneTemplate.js", () => {
 	beforeEach(() => {
 		mockExec.mockClear();
+	});
+	afterAll(() => {
+		mockPromptGet.mockRestore();
 	});
 
 	it("can execute a command to clone repository from github.com via promiseInit()", async () => {
