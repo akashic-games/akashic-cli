@@ -26,7 +26,7 @@
   "dependencies": {
     "@akashic/akashic-cli-commons": "0.12.6",
     "@akashic/akashic-cli-scan": "0.8.0",
-    "@akashic/headless-driver": "1.11.8",
+    "@akashic/headless-driver": "1.11.9",
     "@akashic/trigger": "1.0.0",
     "@msgpack/msgpack": "2.7.1",
     "chalk": "4.1.2",
