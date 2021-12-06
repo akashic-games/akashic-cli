@@ -4,7 +4,7 @@ module.exports = {
 		"@akashic/eslint-config"
 	],
 	parserOptions: {
-		project: "tsconfig.json",
+		project: "./tsconfig.json",
 		sourceType: "module",
 		tsconfigRootDir: __dirname
 	},
