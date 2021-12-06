@@ -1,5 +1,5 @@
 import * as os from "os";
-import * as  path from "path";
+import * as path from "path";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
 import * as target from "../../lib/init/InitParameterObject";
 import { MockConfigFile } from "./support/mockConfigFile";

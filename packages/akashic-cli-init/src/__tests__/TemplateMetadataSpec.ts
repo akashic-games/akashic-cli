@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import * as express from "express";
 import * as getPort from "get-port";
-import { fetchTemplate, fetchRemoteTemplatesMetadata } from  "../../lib/common/TemplateMetadata";
+import { fetchTemplate, fetchRemoteTemplatesMetadata } from "../../lib/common/TemplateMetadata";
 
 describe("TemplateMetadata.ts", () => {
 	let templateServer: any = null;
