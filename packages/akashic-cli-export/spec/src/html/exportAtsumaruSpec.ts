@@ -42,8 +42,8 @@ describe("exportAtsumaru", function () {
 				"3": "3.0.2-3"
 			}
 		};
-		mockApiUtil = jest.spyOn(apiUtil, "getFromHttps").mockReturnValue(
-			Promise.resolve(JSON.stringify(versionTbl))
+		mockApiUtil = jest.spyOn(apiUtil, "getFromHttps").mockResolvedValue(
+			JSON.stringify(versionTbl)
 		);
 	});
 	afterAll(() => {
