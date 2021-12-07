@@ -51,7 +51,7 @@ describe("exportAtsumaru", function () {
 	});
 
 	describe("promiseExportAtsumaru", function () {
-		it("output bundeled file(index.html) and hashed files", function (done: jest.DoneCallback) {
+		it("output bundeled file(index.html) and hashed files", (done) => {
 			Promise.resolve()
 				.then(function () {
 					return atsumaru.promiseExportAtsumaru(cliParam);
@@ -65,7 +65,7 @@ describe("exportAtsumaru", function () {
 				})
 				.then(done, done.fail);
 		});
-		it("add untainted to image assets on game.json", function (done: jest.DoneCallback) {
+		it("add untainted to image assets on game.json", (done) => {
 			Promise.resolve()
 				.then(function () {
 					return atsumaru.promiseExportAtsumaru(cliParam);
@@ -82,7 +82,7 @@ describe("exportAtsumaru", function () {
 				})
 				.then(done, done.fail);
 		});
-		it("add information about environment to game.json (v1)", function (done: jest.DoneCallback) {
+		it("add information about environment to game.json (v1)", (done) => {
 			Promise.resolve()
 				.then(function () {
 					return atsumaru.promiseExportAtsumaru(cliParam);
@@ -96,7 +96,7 @@ describe("exportAtsumaru", function () {
 				})
 				.then(done, done.fail);
 		});
-		it("add information about environment to game.json (v2)", function (done: jest.DoneCallback) {
+		it("add information about environment to game.json (v2)", (done) => {
 			const targetDirPath = path.join(__dirname, "..", "..", "fixtures", "sample_game_v2");
 			const outputDirPath = path.join(targetDirPath, "output");
 			Promise.resolve()
@@ -116,7 +116,7 @@ describe("exportAtsumaru", function () {
 				})
 				.then(done, done.fail);
 		});
-		it("add information about environment to game.json (v3), keep environment.nicolive", function (done: jest.DoneCallback) {
+		it("add information about environment to game.json (v3), keep environment.nicolive", (done) => {
 			const targetDirPath = path.join(__dirname, "..", "..", "fixtures", "sample_game_v3");
 			const outputDirPath = path.join(targetDirPath, "output");
 			Promise.resolve()
@@ -139,7 +139,7 @@ describe("exportAtsumaru", function () {
 				.then(done, done.fail);
 		});
 		// eslint-disable-next-line max-len
-		it("does not add akashic-runtime-information about environment to game.json, if it is already written", (done: jest.DoneCallback) =>{
+		it("does not add akashic-runtime-information about environment to game.json, if it is already written", (done) => {
 			const targetDirPath = path.join(__dirname, "..", "..", "fixtures", "sample_game_with_akashic_runtime");
 			const outputDirPath = path.join(targetDirPath, "output");
 			Promise.resolve()
@@ -162,7 +162,7 @@ describe("exportAtsumaru", function () {
 				})
 				.then(done, done.fail);
 		});
-		it("create zip when output destination includes '.zip'", function (done: jest.DoneCallback) {
+		it("create zip when output destination includes '.zip'", (done) => {
 			cliParam.output = outputDirPath + ".zip";
 			Promise.resolve()
 				.then(function () {
@@ -182,7 +182,7 @@ describe("exportAtsumaru", function () {
 				})
 				.then(done, done.fail);
 		});
-		it("throw error when output destination is not specified", function (done: jest.DoneCallback) {
+		it("throw error when output destination is not specified", (done) => {
 			delete cliParam.output;
 			Promise.resolve()
 				.then(function () {
@@ -196,7 +196,7 @@ describe("exportAtsumaru", function () {
 					done();
 				});
 		});
-		it("If already outputted, force option error will be returned", function (done: jest.DoneCallback) {
+		it("If already outputted, force option error will be returned", (done) => {
 			const targetDirPath = path.join(__dirname, "..", "..", "fixtures", "sample_game_with_akashic_runtime");
 			const outputDirPath = path.join(targetDirPath, "output");
 			Promise.resolve()
