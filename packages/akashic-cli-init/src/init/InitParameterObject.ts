@@ -1,5 +1,5 @@
 import { InitCommonOptions, completeInitCommonOptions, confirmAccessToUrl } from "../common/InitCommonOptions";
-import { createGitUri, parseUriPartsFromType } from "./cloneTemplate";
+import { createGitUri, parseCloneTargetInfo } from "./cloneTemplate";
 
 export type GitProtocol = "https" | "ssh";
 
@@ -84,7 +84,7 @@ export async function completeInitParameterObject(param: InitParameterObject): P
 	if (!isGitProtocol(gheProtocol))
 		throw new Error(`invalid option gheProtocol: ${gheProtocol}`);
 
-	const { gitType, owner, repo } = parseUriPartsFromType(type);
+	const { gitType, owner, repo } = parseCloneTargetInfo(type);
 	if (gitType === "github" && owner !== "akashic-games" ) {
 		const url = createGitUri(githubHost, githubProtocol, owner,  repo);
 		const ret = await confirmAccessToUrl(url);

@@ -9,13 +9,13 @@ import {
 	fetchTemplate
 } from "../common/TemplateMetadata";
 import { updateConfigurationFile } from "./BasicParameters";
-import { cloneTemplate, parseUriPartsFromType } from "./cloneTemplate";
+import { cloneTemplate, parseCloneTargetInfo } from "./cloneTemplate";
 import { InitParameterObject, completeInitParameterObject } from "./InitParameterObject";
 import { TemplateConfig, completeTemplateConfig, NormalizedTemplateConfig } from "./TemplateConfig";
 
 export async function promiseInit(p: InitParameterObject): Promise<void> {
 	const param = await completeInitParameterObject(p);
-	const { gitType, owner, repo } = parseUriPartsFromType(param.type);
+	const { gitType, owner, repo } = parseCloneTargetInfo(param.type);
 
 	if (gitType === "github") {
 		await cloneTemplate(

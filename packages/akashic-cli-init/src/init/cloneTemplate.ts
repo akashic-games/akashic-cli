@@ -13,7 +13,7 @@ interface GitCloneParameterObject {
 	shallow?: boolean;
 }
 
-export interface GitUriPartsParameterObjecct {
+export interface CloneTargetInfo {
 	gitType: string;
 	owner: string;
 	repo: string;
@@ -107,7 +107,7 @@ async function rmPromise(path: string, opts: fs.RmOptions = {}): Promise<void> {
  * type オプションの値をパースします
  * @param type -t オプションの値
  */
-export function parseUriPartsFromType(type: string): GitUriPartsParameterObjecct {
+export function parseCloneTargetInfo(type: string): CloneTargetInfo {
 	const m = type.match(/(.+):(.+)\/(.+)/) ?? [];
 	const gitType = m[1] || null;
 	const owner = m[2] || null;
