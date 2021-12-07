@@ -2,7 +2,7 @@ import * as apiUtil from "../../../lib/html/apiUtil";
 
 describe("apiUtil", function () {
 	describe("getFromHttps", function () {
-		it("can get resource with https-protocol", function (done: DoneFn) {
+		it("can get resource with https-protocol", function (done: jest.DoneCallback) {
 			Promise.resolve()
 				.then(function () {
 					return apiUtil.getFromHttps(
@@ -16,7 +16,7 @@ describe("apiUtil", function () {
 				})
 				.then(done, done.fail);
 		});
-		it("can not get resource with protocol other than https", function (done: DoneFn) {
+		it("can not get resource with protocol other than https", function (done: jest.DoneCallback) {
 			Promise.resolve()
 				.then(function () {
 					return apiUtil.getFromHttps("http://example.com");
@@ -29,7 +29,7 @@ describe("apiUtil", function () {
 					done();
 				});
 		});
-		it("throw error when http-status-code is over 400", function (done: DoneFn) {
+		it("throw error when http-status-code is over 400", function (done: jest.DoneCallback) {
 			Promise.resolve()
 				.then(function () {
 					return apiUtil.getFromHttps("https://example.com/notfound");
