@@ -8,11 +8,11 @@
     "copy:material-icons": "shx mkdir -p www/public/thirdparty && shx cp -r node_modules/material-design-icons/iconfont www/public/thirdparty/material-design-icons",
     "copy:agv": "node build/AkashicGameViewWebBuilder.js && shx mkdir -p www/internal/untrusted_loader",
     "copy:engine-files": "node build/updateEngineFiles.js",
+    "copy:playlog-client": "shx cp node_modules/@akashic/akashic-cli-serve-fake-playlog-client/lib/playlogClientV*.js www/public/external/",
     "watch:client": "webpack --mode development --config ./src/client/webpack.config.js --watch",
-    "build": "npm run build:client && npm run build:server && npm run build:bare:playlog && shx cp ./config/engineFilesVersion.json ./lib/server",
+    "build": "npm run build:client && npm run build:server && shx cp ./config/engineFilesVersion.json ./lib/server",
     "build:client": "webpack --config ./src/client/webpack.config.js",
     "build:server": "tsc -p ./src/server",
-    "build:bare:playlog": "webpack --config ./src/bare/playlogClient/webpack.config.js",
     "test": "jest && npm run lint",
     "lint": "npm run lint:client && npm run lint:server",
     "lint:client": "eslint -c ./src/client/.eslintrc.js \"src/client/**/*.ts\" \"src/common/**/*.ts\" \"src/client/**/*.tsx\" --fix",
@@ -41,7 +41,6 @@
     "open": "8.4.0",
     "rxjs": "7.4.0",
     "socket.io": "4.3.2",
-    "socket.io-client": "3.1.3",
     "socket.io-parser": "4.1.1"
   },
   "devDependencies": {
@@ -80,6 +79,7 @@
     "rimraf": "3.0.2",
     "scroll-into-view-if-needed": "2.2.28",
     "shx": "0.3.3",
+    "socket.io-client": "3.1.3",
     "storybook-addon-jsx": "7.3.14",
     "style-loader": "1.3.0",
     "ts-loader": "8.3.0",
@@ -91,7 +91,8 @@
     "whatwg-fetch": "3.6.2"
   },
   "optionalDependencies": {
-    "@akashic/akashic-gameview-web": "3.0.3"
+    "@akashic/akashic-gameview-web": "3.0.3",
+    "@akashic/akashic-cli-serve-fake-playlog-client": "0.0.1"
   },
   "files": [
     "package.json",
