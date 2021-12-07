@@ -13,7 +13,7 @@ describe("exportAtsumaru", function () {
 	const dirPath = path.join(__dirname, "..", "..", "fixtures", "sample_game");
 	const outputDirPath = path.join(dirPath, "output");
 	let cliParam: ExportHTMLParameterObject;
-	let mockApiUtil: any = null;
+	let mockApiUtil: jest.SpyInstance = null;
 	beforeEach(function() {
 		cliParam = {
 			logger: undefined,
