@@ -21,7 +21,6 @@
     "README.md",
     "bin",
     "lib",
-    "templates",
     "package.json"
   ],
   "devDependencies": {
