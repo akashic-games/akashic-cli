@@ -2,6 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import * as cmn from "@akashic/akashic-cli-commons";
 import * as fsx from "fs-extra";
+import * as apiUtil from "../../../lib/html/apiUtil";
 import * as atsumaru from "../../../lib/html/exportAtsumaru";
 import { ExportHTMLParameterObject } from "../../../lib/html/exportHTML";
 
@@ -12,6 +13,7 @@ describe("exportAtsumaru", function () {
 	const dirPath = path.join(__dirname, "..", "..", "fixtures", "sample_game");
 	const outputDirPath = path.join(dirPath, "output");
 	let cliParam: ExportHTMLParameterObject;
+	let mockApiUtil: jest.SpyInstance = null;
 	beforeEach(function() {
 		cliParam = {
 			logger: undefined,
@@ -32,8 +34,24 @@ describe("exportAtsumaru", function () {
 	afterEach(function() {
 		fsx.removeSync(outputDirPath);
 	});
+	beforeAll(() => {
+		const versionTbl = {
+			"latest": {
+				"1": "1.1.16-1",
+				"2": "2.1.49-2",
+				"3": "3.0.2-3"
+			}
+		};
+		mockApiUtil = jest.spyOn(apiUtil, "getFromHttps").mockResolvedValue(
+			JSON.stringify(versionTbl)
+		);
+	});
+	afterAll(() => {
+		mockApiUtil.mockRestore();
+	});
+
 	describe("promiseExportAtsumaru", function () {
-		it("output bundeled file(index.html) and hashed files", function (done: DoneFn) {
+		it("output bundeled file(index.html) and hashed files", (done) => {
 			Promise.resolve()
 				.then(function () {
 					return atsumaru.promiseExportAtsumaru(cliParam);
@@ -47,7 +65,7 @@ describe("exportAtsumaru", function () {
 				})
 				.then(done, done.fail);
 		});
-		it("add untainted to image assets on game.json", function (done: DoneFn) {
+		it("add untainted to image assets on game.json", (done) => {
 			Promise.resolve()
 				.then(function () {
 					return atsumaru.promiseExportAtsumaru(cliParam);
@@ -64,7 +82,7 @@ describe("exportAtsumaru", function () {
 				})
 				.then(done, done.fail);
 		});
-		it("add information about environment to game.json (v1)", function (done: DoneFn) {
+		it("add information about environment to game.json (v1)", (done) => {
 			Promise.resolve()
 				.then(function () {
 					return atsumaru.promiseExportAtsumaru(cliParam);
@@ -78,7 +96,7 @@ describe("exportAtsumaru", function () {
 				})
 				.then(done, done.fail);
 		});
-		it("add information about environment to game.json (v2)", function (done: DoneFn) {
+		it("add information about environment to game.json (v2)", (done) => {
 			const targetDirPath = path.join(__dirname, "..", "..", "fixtures", "sample_game_v2");
 			const outputDirPath = path.join(targetDirPath, "output");
 			Promise.resolve()
@@ -98,7 +116,7 @@ describe("exportAtsumaru", function () {
 				})
 				.then(done, done.fail);
 		});
-		it("add information about environment to game.json (v3), keep environment.nicolive", function (done: DoneFn) {
+		it("add information about environment to game.json (v3), keep environment.nicolive", (done) => {
 			const targetDirPath = path.join(__dirname, "..", "..", "fixtures", "sample_game_v3");
 			const outputDirPath = path.join(targetDirPath, "output");
 			Promise.resolve()
@@ -120,7 +138,8 @@ describe("exportAtsumaru", function () {
 				})
 				.then(done, done.fail);
 		});
-		it("does not add akashic-runtime-information about environment to game.json, if it is already written", function (done: DoneFn) {
+		// eslint-disable-next-line max-len
+		it("does not add akashic-runtime-information about environment to game.json, if it is already written", (done) => {
 			const targetDirPath = path.join(__dirname, "..", "..", "fixtures", "sample_game_with_akashic_runtime");
 			const outputDirPath = path.join(targetDirPath, "output");
 			Promise.resolve()
@@ -143,7 +162,7 @@ describe("exportAtsumaru", function () {
 				})
 				.then(done, done.fail);
 		});
-		it("create zip when output destination includes '.zip'", function (done: DoneFn) {
+		it("create zip when output destination includes '.zip'", (done) => {
 			cliParam.output = outputDirPath + ".zip";
 			Promise.resolve()
 				.then(function () {
@@ -163,7 +182,7 @@ describe("exportAtsumaru", function () {
 				})
 				.then(done, done.fail);
 		});
-		it("throw error when output destination is not specified", function (done: DoneFn) {
+		it("throw error when output destination is not specified", (done) => {
 			delete cliParam.output;
 			Promise.resolve()
 				.then(function () {
@@ -177,7 +196,7 @@ describe("exportAtsumaru", function () {
 					done();
 				});
 		});
-		it("If already outputted, force option error will be returned", function (done: DoneFn) {
+		it("If already outputted, force option error will be returned", (done) => {
 			const targetDirPath = path.join(__dirname, "..", "..", "fixtures", "sample_game_with_akashic_runtime");
 			const outputDirPath = path.join(targetDirPath, "output");
 			Promise.resolve()
