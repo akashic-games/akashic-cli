@@ -102,7 +102,7 @@ export function confirmAccessToUrl(url: string): Promise<boolean> {
 						+ "The template obtained here may cause arbitrary command execution"
 						+ "(not by this command but by using the template).\n"
 						+ "You should not use this URL unless you trust its owners and contents.\n"
-						+ "Do you trust the owners and contents of this URL? (y/n)",
+						+ "Do you trust the owners and contents of this URL? (y/N)",
 					required: true,
 					default: "n"
 				}

@@ -86,7 +86,7 @@ export async function completeInitParameterObject(param: InitParameterObject): P
 
 	const { gitType, owner, repo } = parseCloneTargetInfo(type);
 	if (gitType === "github" && owner !== "akashic-games" ) {
-		const url = createGitUri(githubHost, githubProtocol, owner,  repo);
+		const url = createGitUri(githubHost, githubProtocol, owner, repo);
 		const ret = await confirmAccessToUrl(url);
 		if (!ret) process.exit(1);
 

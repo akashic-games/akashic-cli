@@ -9,13 +9,15 @@ mockExec.mockImplementation((_command, _opts, callback) => {
 	callback();
 });
 
-let mockPromptGet = jest.spyOn(Prompt, "get").mockImplementation((_schema, func) => {
-	func(undefined, { confirm: "y" });
-});
-
 describe("cloneTemplate.js", () => {
+	let mockPromptGet = null;
 	beforeEach(() => {
 		mockExec.mockClear();
+	});
+	beforeAll(async () => {
+		mockPromptGet = jest.spyOn(Prompt, "get").mockImplementation((_schema, func) => {
+			func(undefined, { confirm: "y" });
+		});
 	});
 	afterAll(() => {
 		mockPromptGet.mockRestore();
