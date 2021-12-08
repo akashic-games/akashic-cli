@@ -15,7 +15,7 @@ Akashic Engineの詳細な利用方法については、 [公式ページ](https
 
 **akashic-cli-init** はTypeScriptで書かれたjsモジュールであるため、ビルドにはNode.jsが必要です。
 
-`npm run build` によりgulpを使ってビルドできます。
+`npm run build` によりビルドできます。
 
 ```sh
 npm install
@@ -29,40 +29,29 @@ npm test
 ```
 
 ## 実行方法
-デフォルトのテンプレートで初期化する。
-```sh
-akashic-cli-init
-```
 
 指定したテンプレートで初期化する。
+
 ```sh
 akashic-cli-init -t typescript
 ```
 
-akashic-cli-init のテンプレートはローカルテンプレートディレクトリに配置されています。
-ローカルテンプレートディレクトリにテンプレートが存在しない場合、
-テンプレートを以下の順番で探し、最初に見つかったものを利用します。
-1. テンプレート配信サーバ (ただしURLが空文字列の場合このステップは省略)
-2. コマンドに付属するファクトリテンプレート
-* javascript
-* javascript-minimal
-* javascript-shin-ichiba-ranking
-* typescript
-* typescript-minimal
-* typescript-shin-ichiba-ranking
-* javascript-v3
-* javascript-minimal-v3
-* javascript-shin-ichiba-ranking-v3
-* typescript-v3
-* typescript-minimal-v3
-* typescript-shin-ichiba-ranking-v3
-テンプレートを再ダウンロードする場合、一度ローカルテンプレートのディレクトリを手動で削除する必要があります。
-ローカルテンプレートのディレクトリは akashic-config で未設定の場合、
-`~/.akashic-templates` になります。
+akashic-cli-init は、以下に置かれているテンプレートを利用できます。
+
+- テンプレート配信サーバ (デフォルトでは `https://github.com/akashic-contents/templates` で提供されているもの)
+- ローカルテンプレートディレクトリ (デフォルトでは `~/.akashic-templates/`)
+
+`-t` オプションに与えらえれる値 (テンプレートタイプ) は `-l` オプションで一覧できます。
+
+```sh
+akashic-cli-init -l
+```
+
+同一のテンプレートタイプがテンプレート配信サーバとローカルテンプレートディレクトリにある場合、テンプレート配信サーバが優先されます。
 
 ### GitHub リポジトリからのテンプレート生成
 
--t に `github:<owner>/<repository>` と指定することで github.com からテンプレートを生成できます。
+-t に `github:<owner>/<repository>` と指定することで GitHub (github.com) からテンプレートを取得できます。
 private repository など認証が必要な場合は `akashic config` で `init.github.protocol` を `ssh` に設定してください。
 
 ```sh
@@ -97,19 +86,6 @@ akashic-cli-init は以下の設定を利用します。設定は `akashic confi
   * GitHub Enterprise のホスト (e.g. `your.company.com`)。デフォルトは `undefined`。
 * `init.ghe.protocol`
   * GitHub Enterprise からプロジェクトを clone する際のプロトコル。`https` または `ssh` が指定可能。デフォルトは `https`。
-
-## 開発者向け
-
-### ファクトリテンプレートの更新
-
-ファクトリテンプレートを更新する場合は、 templates-src/ 以下 と templates-src-v3/ 以下を編集後、 `npm run update:template-zips` を実行して zip ファイルを更新します。
-
-### ファクトリテンプレートの追加
-
-ファクトリテンプレートを追加する場合は、 templates-src/ 以下に game-xxx/ デイレクトリを加えて
- `npm run update:template-zips` を実行後、 templates/template-list.json を編集してください。
-game-xxx/ ディレクトリは、 Akashic ゲームである必要があります。
-(実装上の制限から、現在は package.json を含むゲームを置くことはできないので注意してください。)
 
 ## ライセンス
 本リポジトリは MIT License の元で公開されています。
