@@ -15,10 +15,10 @@
   "author": "",
   "license": "",
   "devDependencies": {
-    "@akashic/akashic-cli-export": "1.6.6",
+    "@akashic/akashic-cli-export": "1.6.7",
     "@akashic/akashic-cli-scan": "0.14.6",
     "@akashic/akashic-engine": "~3.2.2",
-    "@akashic/akashic-sandbox": "~0.17.36",
+    "@akashic/akashic-sandbox": "~0.17.37",
     "@akashic/headless-akashic": "^2.2.0",
     "@types/jest": "26.0.24",
     "@types/node": "14.18.0",

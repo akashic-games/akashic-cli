@@ -1,5 +1,23 @@
 # CHANGELOG
 
+## 2.14.14 (2021-12-08)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#943](https://github.com/akashic-games/akashic-cli/pull/943) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.1.4, engineFiles@2.1.57, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+* `akashic-cli-init`
+  * [#942](https://github.com/akashic-games/akashic-cli/pull/942) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+* `akashic-cli-export`
+  * [#940](https://github.com/akashic-games/akashic-cli/pull/940) 【akashic-cli-export】内部コンポーネントの更新(engineFiles@3.1.4, engineFiles@2.1.57, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+
+#### Other Change
+* `akashic-cli-init`
+  * [#926](https://github.com/akashic-games/akashic-cli/pull/926) Change akashic init test to ts ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 2
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.14.13 (2021-12-05)
 
 #### Enhancement
