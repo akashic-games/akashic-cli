@@ -44,8 +44,8 @@ akashic-cli-init -l
 
 akashic-cli-init は、以下に置かれているテンプレートを利用できます。
 
-- テンプレート配信サーバ (デフォルトでは `https://github.com/akashic-contents/templates` で提供されているもの)
-- ローカルテンプレートディレクトリ (デフォルトでは `~/.akashic-templates/`)
+* テンプレート配信サーバ (デフォルトでは `https://github.com/akashic-contents/templates` で提供されているもの)
+* ローカルテンプレートディレクトリ (デフォルトでは `~/.akashic-templates/`)
 
 同一のテンプレートタイプがテンプレート配信サーバとローカルテンプレートディレクトリにある場合、テンプレート配信サーバが優先されます。
 
