@@ -1,5 +1,21 @@
 # CHANGELOG
 
+## 2.14.15 (2021-12-08)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#945](https://github.com/akashic-games/akashic-cli/pull/945) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.1.4, engineFiles@2.1.57, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+* `akashic-cli-init`
+  * [#944](https://github.com/akashic-games/akashic-cli/pull/944) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Other Change
+* `akashic-cli-export`
+  * [#939](https://github.com/akashic-games/akashic-cli/pull/939) Mock value of akashic-runtime-version-table in export html test ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 2
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.14.14 (2021-12-08)
 
 #### Enhancement
