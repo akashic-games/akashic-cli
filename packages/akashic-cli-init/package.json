@@ -17,8 +17,7 @@
     "zip:ts-min": "cd ./templates/typescript-minimal/ && rimraf ../typescript-minimal.zip && bestzip ../../templates/typescript-minimal.zip ./ && cd .. && rimraf ./typescript-minimal",
     "zip:ts-ranking": "cd ./templates/typescript-shin-ichiba-ranking/ && rimraf ../typescript-shin-ichiba-ranking.zip && bestzip ../../templates/typescript-shin-ichiba-ranking.zip ./ && cd .. && rimraf ./typescript-shin-ichiba-ranking",
     "test": "npm run test:jest && npm run lint",
-    "test:jest": "jest",
-    "update:template-zips": "node ./build/generateTemplateSource.js && npm run zip"
+    "test:jest": "jest"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
@@ -53,7 +52,6 @@
     "jest": "27.3.1",
     "mock-fs": "4.14.0",
     "rimraf": "3.0.2",
-    "shelljs": "0.8.4",
     "ts-jest": "^27.0.7",
     "typescript": "3.9.10"
   },
