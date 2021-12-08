@@ -18,7 +18,6 @@
     "zip:ts-ranking": "cd ./templates/typescript-shin-ichiba-ranking/ && rimraf ../typescript-shin-ichiba-ranking.zip && bestzip ../../templates/typescript-shin-ichiba-ranking.zip ./ && cd .. && rimraf ./typescript-shin-ichiba-ranking",
     "test": "npm run test:jest && npm run lint",
     "test:jest": "jest",
-    "update:template-modules": "node ./build/updateModulesOfTemplates.js",
     "update:template-zips": "node ./build/generateTemplateSource.js && npm run zip"
   },
   "author": "DWANGO Co., Ltd.",
@@ -53,7 +52,6 @@
     "get-port": "5.1.1",
     "jest": "27.3.1",
     "mock-fs": "4.14.0",
-    "npm-check-updates": "7.1.1",
     "rimraf": "3.0.2",
     "shelljs": "0.8.4",
     "ts-jest": "^27.0.7",
