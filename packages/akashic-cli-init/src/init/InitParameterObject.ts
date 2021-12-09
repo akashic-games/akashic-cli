@@ -1,4 +1,5 @@
-import { InitCommonOptions, completeInitCommonOptions } from "../common/InitCommonOptions";
+import { InitCommonOptions, completeInitCommonOptions, confirmAccessToUrl } from "../common/InitCommonOptions";
+import { createGitUri, parseCloneTargetInfo } from "./cloneTemplate";
 
 export type GitProtocol = "https" | "ssh";
 
@@ -82,6 +83,22 @@ export async function completeInitParameterObject(param: InitParameterObject): P
 		throw new Error(`invalid option githubProtocol: ${githubProtocol}`);
 	if (!isGitProtocol(gheProtocol))
 		throw new Error(`invalid option gheProtocol: ${gheProtocol}`);
+
+	const { gitType, owner, repo } = parseCloneTargetInfo(type);
+	if (gitType === "github" && owner !== "akashic-games" ) {
+		const url = createGitUri(githubHost, githubProtocol, owner, repo);
+		const ret = await confirmAccessToUrl(url);
+		if (!ret) process.exit(1);
+
+	} else if (gitType === "ghe") {
+		if (!gheHost) {
+			throw new Error(
+				`Type '${param.type}' requires GHE host configuraton. ` +
+				"Run akashic config set init.ghe.host <url>"
+			);
+		}
+		// TODO: 許可した URL を.akashicrc に保存する時に実装
+	}
 
 	return {
 		logger,

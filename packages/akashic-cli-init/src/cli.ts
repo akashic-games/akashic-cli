@@ -9,10 +9,6 @@ import { listTemplates } from "./list/listTemplates";
 
 async function cli(param: CliConfigInit): Promise<void> {
 	const logger = new ConsoleLogger({ quiet: param.quiet });
-	if (param.repository && /(^(github|ghe):)|(\.git$)/.test(param.repository)) {
-		logger.warn("Misused -r, --repository options. Use -t option for Github repository");
-	}
-
 	try {
 		if (param.list) {
 			await listTemplates({
