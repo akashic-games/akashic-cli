@@ -8,7 +8,6 @@
     "copy:material-icons": "shx mkdir -p www/public/thirdparty && shx cp -r node_modules/material-design-icons/iconfont www/public/thirdparty/material-design-icons",
     "copy:agv": "node build/AkashicGameViewWebBuilder.js && shx mkdir -p www/internal/untrusted_loader",
     "copy:engine-files": "node build/updateEngineFiles.js",
-    "copy:playlog-client": "shx cp node_modules/@akashic/akashic-cli-serve-fake-playlog-client/lib/playlogClientV*.js www/public/external/",
     "watch:client": "webpack --mode development --config ./src/client/webpack.config.js --watch",
     "build": "npm run build:client && npm run build:server && shx cp ./config/engineFilesVersion.json ./lib/server",
     "build:client": "webpack --config ./src/client/webpack.config.js",
@@ -91,8 +90,7 @@
     "whatwg-fetch": "3.6.2"
   },
   "optionalDependencies": {
-    "@akashic/akashic-gameview-web": "3.0.3",
-    "@akashic/akashic-cli-serve-fake-playlog-client": "0.0.1"
+    "@akashic/akashic-gameview-web": "3.0.3"
   },
   "files": [
     "package.json",
