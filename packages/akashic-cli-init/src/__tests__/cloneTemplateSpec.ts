@@ -1,16 +1,17 @@
-var ConsoleLogger = require("@akashic/akashic-cli-commons/lib/ConsoleLogger").ConsoleLogger;
-var ct = require("../lib/init/cloneTemplate");
-var init = require("../lib/init/init");
-var Prompt =  require("prompt");
+import * as child_process from "child_process";
+import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
+import * as Prompt from "prompt";
+import * as ct from "../../lib/init/cloneTemplate";
+import * as init from "../../lib/init/init";
 
 jest.mock("child_process");
-const mockExec = require("child_process").exec;
-mockExec.mockImplementation((_command, _opts, callback) => {
+const mockExec = child_process.exec as unknown as jest.Mock;
+mockExec.mockImplementation((_command: any, _opts: any, callback: Function) => {
 	callback();
 });
 
 describe("cloneTemplate.js", () => {
-	let mockPromptGet = null;
+	let mockPromptGet: jest.SpyInstance = null;
 	beforeEach(() => {
 		mockExec.mockClear();
 	});

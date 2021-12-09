@@ -215,7 +215,9 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 					throw error;
 				}
 			}
-			return cmn.ConfigurationFile.write(gamejson, path.resolve(param.dest, "game.json"), param.logger);
+			return cmn.ConfigurationFile.write(
+				gamejson, path.resolve(param.dest, "game.json"), param.logger, { minify: param.minifyJson }
+			);
 		})
 		.then(() => {
 			if (!param.minify && !param.minifyJs)

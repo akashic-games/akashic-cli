@@ -12,7 +12,7 @@
   "author": "",
   "license": "",
   "devDependencies": {
-    "@akashic/akashic-sandbox": "~0.17.36",
+    "@akashic/akashic-sandbox": "~0.17.37",
     "eslint": "7.32.0"
   }
 }
