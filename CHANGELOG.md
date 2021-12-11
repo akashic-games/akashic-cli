@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.14.17 (2021-12-11)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli`
+  * [#949](https://github.com/akashic-games/akashic-cli/pull/949) Pin dependency @types/mock-fs to 4.13.1 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
 ## 2.14.16 (2021-12-11)
 
 #### Enhancement
