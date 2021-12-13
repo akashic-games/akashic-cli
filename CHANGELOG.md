@@ -1,5 +1,38 @@
 # CHANGELOG
 
+## 2.14.18 (2021-12-11)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli`
+  * [#950](https://github.com/akashic-games/akashic-cli/pull/950) Pin dependency @types/jest to 27.0.3 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
+## 2.14.17 (2021-12-11)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli`
+  * [#949](https://github.com/akashic-games/akashic-cli/pull/949) Pin dependency @types/mock-fs to 4.13.1 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
+## 2.14.16 (2021-12-11)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#947](https://github.com/akashic-games/akashic-cli/pull/947) akashic-cli-initのテンプレート中の内部モジュール更新 ([@xnv](https://github.com/xnv))
+
+#### Update Dependencies
+* `akashic-cli-serve`
+  * [#951](https://github.com/akashic-games/akashic-cli/pull/951) Update dependency typescript to v4.5.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli`
+  * [#952](https://github.com/akashic-games/akashic-cli/pull/952) Update all dependencies (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.14.15 (2021-12-08)
 
 #### Enhancement
