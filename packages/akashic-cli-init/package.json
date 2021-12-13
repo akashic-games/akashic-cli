@@ -9,17 +9,8 @@
     "start": "npm run build && node bin/run",
     "build": "tsc -p ./",
     "lint": "eslint \"src/**/*.ts\" --fix",
-    "zip": "npm run zip:js && npm run zip:ts && npm run zip:js-min && npm run zip:ts-min && npm run zip:js-ranking && npm run zip:ts-ranking",
-    "zip:js": "cd ./templates/javascript/ && rimraf ../javascript.zip && bestzip ../../templates/javascript.zip ./ && cd .. && rimraf ./javascript",
-    "zip:js-min": "cd ./templates/javascript-minimal/ && rimraf ../javascript-minimal.zip && bestzip ../../templates/javascript-minimal.zip ./ && cd .. && rimraf ./javascript-minimal",
-    "zip:js-ranking": "cd ./templates/javascript-shin-ichiba-ranking/ && rimraf ../javascript-shin-ichiba-ranking.zip && bestzip ../../templates/javascript-shin-ichiba-ranking.zip ./ && cd .. && rimraf ./javascript-shin-ichiba-ranking",
-    "zip:ts": "cd ./templates/typescript/ && rimraf ../typescript.zip && bestzip ../../templates/typescript.zip ./ && cd .. && rimraf ./typescript",
-    "zip:ts-min": "cd ./templates/typescript-minimal/ && rimraf ../typescript-minimal.zip && bestzip ../../templates/typescript-minimal.zip ./ && cd .. && rimraf ./typescript-minimal",
-    "zip:ts-ranking": "cd ./templates/typescript-shin-ichiba-ranking/ && rimraf ../typescript-shin-ichiba-ranking.zip && bestzip ../../templates/typescript-shin-ichiba-ranking.zip ./ && cd .. && rimraf ./typescript-shin-ichiba-ranking",
     "test": "npm run test:jest && npm run lint",
-    "test:jest": "jest",
-    "update:template-modules": "node ./build/updateModulesOfTemplates.js",
-    "update:template-zips": "node ./build/generateTemplateSource.js && npm run zip"
+    "test:jest": "jest"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
@@ -30,7 +21,6 @@
     "README.md",
     "bin",
     "lib",
-    "templates",
     "package.json"
   ],
   "devDependencies": {
@@ -45,7 +35,6 @@
     "@types/node-fetch": "2.5.12",
     "@types/unzipper": "0.10.4",
     "@typescript-eslint/eslint-plugin": "4.33.0",
-    "bestzip": "2.2.0",
     "eslint": "7.32.0",
     "eslint-plugin-import": "2.25.3",
     "eslint-plugin-jest": "24.7.0",
@@ -53,9 +42,7 @@
     "get-port": "5.1.1",
     "jest": "27.4.4",
     "mock-fs": "4.14.0",
-    "npm-check-updates": "7.1.1",
     "rimraf": "3.0.2",
-    "shelljs": "0.8.4",
     "ts-jest": "27.1.1",
     "typescript": "3.9.10"
   },
