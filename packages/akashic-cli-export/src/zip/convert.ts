@@ -124,13 +124,21 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			}
 
 			// operation plugin に登録されているスクリプトファイルは bundle されていても残しておく必要がある
-			const operationPluginRoots = (gamejson.operationPlugins ?? []).map(plugin => plugin.script.replace(/^\.\//g, ""));
+			const operationPluginRoots = (gamejson.operationPlugins ?? []).map(plugin => plugin.script);
 			for (let pluginRoot of operationPluginRoots) {
-				const pluginRootOrModuleName = pluginRoot.replace(/\/$/, "");
-				if (gamejson.moduleMainScripts?.[pluginRootOrModuleName]) {
-					pluginRoot = gamejson.moduleMainScripts?.[pluginRootOrModuleName];
+				console.log("trying require.resolve...:");
+				console.log("pluginRoot", pluginRoot, ", from: ", param.source, ", FLAG: " + (pluginRoot.indexOf("./") === 0));
+				let pluginRootPath: string;
+				if (pluginRoot.indexOf("./") === 0) {
+					pluginRootPath = pluginRoot.replace(/^\.\//g, "");
+				} else {
+					const pluginModuleName = pluginRoot.replace(/\/$/, "");
+					const tmpPath = require.resolve(pluginModuleName, { paths: [param.source] });
+					const relativeRootPath = path.relative(param.source, tmpPath);
+					pluginRootPath = relativeRootPath;
 				}
-				const pluginRootAbsPath = cmn.Util.makeUnixPath(path.join(param.source, pluginRoot));
+				const pluginRootAbsPath = cmn.Util.makeUnixPath(path.join(param.source, pluginRootPath));
+				console.log("pluginRootAbsPath", pluginRootAbsPath);
 				const pluginRootDir = path.dirname(pluginRootAbsPath);
 				// TODO: Promise#then() と async/await が混在する状態を改め、 async/await に統一する
 				const pluginScripts = await cmn.NodeModules.listScriptFiles(
