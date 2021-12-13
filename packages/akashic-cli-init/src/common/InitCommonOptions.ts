@@ -92,7 +92,10 @@ async function validateInitCommonOptions(opts: InitCommonOptions): Promise<void>
 	}
 }
 
-export function confirmAccessToUrl(url: string): Promise<boolean> {
+export async function confirmAccessToUrl(url: string): Promise<boolean> {
+	const ret = await existsAllowedUrl(url);
+	if (ret) return true;
+
 	return new Promise<boolean>((resolve: (result: boolean) => void, reject: (err: any) => void) => {
 		const schema = {
 			properties: {
@@ -109,14 +112,58 @@ export function confirmAccessToUrl(url: string): Promise<boolean> {
 			}
 		};
 		Prompt.start();
-		Prompt.get(schema, (err: any, result: any) => {
+		Prompt.get(schema, async (err: any, result: any) => {
 			const value = result.confirm.toLowerCase();
 			const ret = value === "y" || value === "yes";
 			if (err) {
 				reject(err);
 			} else {
+				if (ret) await saveAllowedUrlToAkashicrc(url);
 				resolve(ret);
 			}
 		});
 	});
+}
+
+const MAX_NUM_ALLOWED_URL = 4;
+const ALLOWED_URL_VALIDATOR = {
+	"allowedUrl.values": ""
+};
+
+/**
+ * アクセス対象の URL が .akashicrc に存在するかどうか。
+ * @param url アクセスする URL 文字列
+ */
+function existsAllowedUrl(url: string): Promise<boolean> {
+	const akashicConfigFile = new config.AkashicConfigFile(ALLOWED_URL_VALIDATOR);
+	return akashicConfigFile.load()
+		.then(() => akashicConfigFile.getItem("allowedUrl.values"))
+		.then(itemValue => {
+			const itemArray = itemValue ? itemValue.split(",") : [];
+			return itemArray.includes(url);
+		});
+}
+
+/**
+ * アクセス許可した URL を .akashicrc へ保存する。
+ * @param url アクセスを許可する URL 文字列
+ */
+async function saveAllowedUrlToAkashicrc(url: string): Promise<void> {
+	const akashicConfigFile = new config.AkashicConfigFile(ALLOWED_URL_VALIDATOR);
+	return akashicConfigFile.load()
+		.then(() => akashicConfigFile.getItem("allowedUrl.values"))
+		.then(itemValue => {
+			const itemArray = itemValue ? itemValue.split(",") : [];
+			if (!itemArray.includes(url)) {
+				if (itemArray.length >= MAX_NUM_ALLOWED_URL) itemArray.shift();
+				itemArray.push(url);
+			}
+			return itemArray.toString();
+		})
+		.then(items => {
+			if (items) {
+				akashicConfigFile.setItem("allowedUrl.values", items)
+					.then(() => akashicConfigFile.save());
+			}
+		});
 }

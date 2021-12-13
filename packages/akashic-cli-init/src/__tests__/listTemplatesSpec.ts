@@ -1,13 +1,13 @@
 import * as path from "path";
 import * as express from "express";
 import * as getPort from "get-port";
-import * as Prompt from "prompt";
+import * as InitCommonOptions from "../../lib/common/InitCommonOptions";
 import { listTemplates } from "../../lib/list/listTemplates";
 
 describe("list.ts", () => {
 	let templateServer: any = null;
 	let repositoryUrl = "";
-	let mockPromptGet: jest.SpyInstance = null;
+	let mockConfirm: jest.SpyInstance = null;
 	beforeAll(async () => {
 		const port = await getPort();
 		const app = express();
@@ -15,8 +15,8 @@ describe("list.ts", () => {
 		templateServer = app.listen(port);
 		repositoryUrl = `http://127.0.0.1:${port}/remote/`;
 
-		mockPromptGet = jest.spyOn(Prompt, "get").mockImplementation((_schema, func) => {
-			func(undefined, { confirm: "y" });
+		mockConfirm = jest.spyOn(InitCommonOptions, "confirmAccessToUrl").mockImplementation((_url) => {
+			return Promise.resolve(true);
 		});
 	});
 	afterAll(() => {
@@ -25,7 +25,7 @@ describe("list.ts", () => {
 			templateServer = null;
 			repositoryUrl = "";
 		}
-		mockPromptGet.mockRestore();
+		mockConfirm.mockRestore();
 	});
 
 	describe("listTemplates()", () => {

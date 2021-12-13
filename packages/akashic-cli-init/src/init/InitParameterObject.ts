@@ -97,7 +97,9 @@ export async function completeInitParameterObject(param: InitParameterObject): P
 				"Run akashic config set init.ghe.host <url>"
 			);
 		}
-		// TODO: 許可した URL を.akashicrc に保存する時に実装
+		const url = createGitUri(gheHost, gheProtocol, owner, repo);
+		const ret = await confirmAccessToUrl(url);
+		if (!ret) process.exit(1);
 	}
 
 	return {
