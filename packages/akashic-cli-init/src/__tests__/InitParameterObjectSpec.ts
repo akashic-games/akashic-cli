@@ -80,10 +80,10 @@ describe("InitParameterObject.ts", () => {
 					repository: "https://hoge.com"
 				};
 				await target.completeInitParameterObject(param);
-				const akashicConfigFile = new config.AkashicConfigFile({ "allowedUrl.values": "" });
+				const configFile = new config.AkashicConfigFile({ "allowedUrl.values": "" });
 
-				await akashicConfigFile.load();
-				let items = await akashicConfigFile.getItem(ITEM_KEY);
+				await configFile.load();
+				let items = await configFile.getItem(ITEM_KEY);
 				let itemArray = items ? items.split(",") : [];
 				expect(itemArray.includes(param.repository));
 				expect(mockPromptGet).toHaveBeenCalledTimes(1);
@@ -94,12 +94,12 @@ describe("InitParameterObject.ts", () => {
 				const ret = await target.completeInitParameterObject(param);
 				const targetUrl = `${ret.githubProtocol}://${ret.githubHost}/my-orgs/my-repo.git`;
 
-				await akashicConfigFile.load();
-				items = await akashicConfigFile.getItem(ITEM_KEY);
+				await configFile.load();
+				items = await configFile.getItem(ITEM_KEY);
 				itemArray = items ? items.split(",") : [];
 				expect(itemArray.includes(targetUrl));
 				expect(mockPromptGet).toHaveBeenCalledTimes(2);
-				mockPromptGet.mockClear();
+				mockPromptGet.mockClear(); // 呼ばれた回数をクリア
 			});
 
 			it("save repository URL", async () => {
@@ -187,8 +187,7 @@ describe("InitParameterObject.ts", () => {
 				items = await mockConfigfile.getItem(ITEM_KEY);
 				itemArray = items ? items.split(",") : [];
 				expect(itemArray.length).toBe(4);
-
-				expect(!itemArray.includes(firstUrl)); //
+				expect(!itemArray.includes(firstUrl));
 				expect(itemArray[3]).toBe("https://test.com");
 			});
 		});
