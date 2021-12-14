@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "declaration": false,
+    "declaration": true,
     "downlevelIteration": true,
     "lib": ["es5", "dom", "es2015"],
     "noImplicitAny": true,
@@ -9,7 +9,7 @@
     "esModuleInterop": true,
     "jsx": "react",
     "sourceMap": true,
-    "outDir": "../../build-client-never-used",
+    "outDir": "../../lib",
     "noUnusedParameters": true,
     "experimentalDecorators": true
   },
