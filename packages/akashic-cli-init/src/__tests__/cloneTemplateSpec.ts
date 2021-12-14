@@ -16,9 +16,7 @@ describe("cloneTemplate.js", () => {
 		mockExec.mockClear();
 	});
 	beforeAll(async () => {
-		mockConfirm = jest.spyOn(InitCommonOptions, "confirmAccessToUrl").mockImplementation((_url) => {
-			return Promise.resolve(true);
-		});
+		mockConfirm = jest.spyOn(InitCommonOptions, "confirmAccessToUrl").mockResolvedValue(true);
 	});
 	afterAll(() => {
 		mockConfirm.mockRestore();
