@@ -45,14 +45,21 @@ export async function promiseConvertNoBundle(options: ConvertTemplateParameterOb
 
 	var assetNames = extractAssetDefinitions(conf, "script").concat(extractAssetDefinitions(conf, "text"));
 	var errorMessages: string[] = [];
-	assetPaths = assetPaths.concat(
-		assetNames.map((assetName: string) => {
-			return convertAssetAndOutput(assetName, conf, options.source, options.output, options.minify, options.lint, errorMessages);
-		}));
+	const tempAssetPaths = await Promise.all(assetNames.map(async (assetName: string) => {
+		return await convertAssetAndOutput(assetName, conf, options.source, options.output, options.minify, options.lint, errorMessages);
+	}));
+	assetPaths = assetPaths.concat(tempAssetPaths);
 	if (conf._content.globalScripts) {
-		assetPaths = assetPaths.concat(conf._content.globalScripts.map((scriptName: string) => {
-			return convertGlobalScriptAndOutput(scriptName, options.source, options.output, options.minify, options.lint, errorMessages);
+		const tempScriptPaths = await Promise.all(conf._content.globalScripts.map(async (scriptName: string) => {
+			return await convertGlobalScriptAndOutput(
+				scriptName,
+				options.source,
+				options.output,
+				options.minify,
+				options.lint,
+				errorMessages);
 		}));
+		assetPaths = assetPaths.concat(tempScriptPaths);
 	}
 	if (errorMessages.length > 0) {
 		options.logger.warn("The following ES5 syntax errors exist.\n" + errorMessages.join("\n"));
@@ -61,16 +68,17 @@ export async function promiseConvertNoBundle(options: ConvertTemplateParameterOb
 	writeOptionScript(options.output, options);
 }
 
-function convertAssetAndOutput(
+async function convertAssetAndOutput(
 	assetName: string, conf: cmn.Configuration,
 	inputPath: string, outputPath: string,
-	minify?: boolean, lint?: boolean, errors?: string[]): string {
+	minify?: boolean, lint?: boolean, errors?: string[]): Promise<string> {
 	var assets = conf._content.assets;
 	var isScript = assets[assetName].type === "script";
 	var assetString = fs.readFileSync(path.join(inputPath, assets[assetName].path), "utf8").replace(/\r\n|\r/g, "\n");
 	var assetPath = assets[assetName].path;
 	if (isScript && lint) {
-		errors.push.apply(errors, validateEs5Code(assetPath, assetString)); // ES5構文に反する箇所があるかのチェック
+		const errInfo = await validateEs5Code(assetPath, assetString);
+		errors.push.apply(errors, errInfo); // ES5構文に反する箇所があるかのチェック
 	}
 
 	var code = (isScript ? wrapScript(assetString, assetName, minify) : wrapText(assetString, assetName));
@@ -82,13 +90,14 @@ function convertAssetAndOutput(
 	return relativePath;
 }
 
-function convertGlobalScriptAndOutput(
+async function convertGlobalScriptAndOutput(
 	scriptName: string, inputPath: string, outputPath: string,
-	minify?: boolean, lint?: boolean, errors?: string[]): string {
+	minify?: boolean, lint?: boolean, errors?: string[]): Promise<string> {
 	var scriptString = fs.readFileSync(path.join(inputPath, scriptName), "utf8").replace(/\r\n|\r/g, "\n");
 	var isScript = /\.js$/i.test(scriptName);
 	if (isScript && lint) {
-		errors.push.apply(errors, validateEs5Code(scriptName, scriptString)); // ES5構文に反する箇所があるかのチェック
+		const errInfo = await validateEs5Code(scriptName, scriptString);
+		errors.push.apply(errInfo); // ES5構文に反する箇所があるかのチェック
 	}
 
 	var code = isScript ? wrapScript(scriptString, scriptName, minify) : wrapText(scriptString, scriptName);
