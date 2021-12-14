@@ -8,7 +8,7 @@ import { MockConfigFile } from "./support/mockConfigFile";
 describe("list.ts", () => {
 	let templateServer: any = null;
 	let repositoryUrl = "";
-	let mockConfirm: jest.SpyInstance = null;
+	let mockInitCommonOptions: jest.SpyInstance = null;
 	beforeAll(async () => {
 		const port = await getPort();
 		const app = express();
@@ -16,7 +16,7 @@ describe("list.ts", () => {
 		templateServer = app.listen(port);
 		repositoryUrl = `http://127.0.0.1:${port}/remote/`;
 
-		mockConfirm = jest.spyOn(InitCommonOptions, "completeInitCommonOptions").mockImplementation((opts) => {
+		mockInitCommonOptions = jest.spyOn(InitCommonOptions, "completeInitCommonOptions").mockImplementation((opts) => {
 			const ret = {
 				logger: opts.logger,
 				configFile: new MockConfigFile({}),
@@ -33,7 +33,7 @@ describe("list.ts", () => {
 			templateServer = null;
 			repositoryUrl = "";
 		}
-		mockConfirm.mockRestore();
+		mockInitCommonOptions.mockRestore();
 	});
 
 	describe("listTemplates()", () => {
