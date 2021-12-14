@@ -78,7 +78,6 @@ export async function completeInitCommonOptions(opts: InitCommonOptions): Promis
 	};
 }
 
-
 async function validateInitCommonOptions(opts: InitCommonOptions): Promise<void> {
 	if (opts.repository) {
 		if (/(^(github|ghe):)|(\.git$)/.test(opts.repository)) {
@@ -86,14 +85,15 @@ async function validateInitCommonOptions(opts: InitCommonOptions): Promise<void>
 		}
 
 		if (opts.repository !== DEFAULT_TEMPLATE_REPOSITORY) {
-			const ret = await confirmAccessToUrl(opts.repository);
+			const ret = await confirmAccessToUrl(opts.repository, opts.configFile);
 			if (!ret) process.exit(1);
 		}
 	}
 }
 
-export async function confirmAccessToUrl(url: string): Promise<boolean> {
-	const ret = await existsAllowedUrl(url);
+export async function confirmAccessToUrl(url: string, configFile: config.AkashicConfigFile): Promise<boolean> {
+	const akashicConfigFile = configFile || new config.AkashicConfigFile(ALLOWED_URL_VALIDATOR);
+	const ret = await existsAllowedUrl(url, akashicConfigFile);
 	if (ret) return true;
 
 	return new Promise<boolean>((resolve: (result: boolean) => void, reject: (err: any) => void) => {
@@ -118,7 +118,7 @@ export async function confirmAccessToUrl(url: string): Promise<boolean> {
 			if (err) {
 				reject(err);
 			} else {
-				if (ret) await saveAllowedUrlToAkashicrc(url);
+				if (ret) await saveAllowedUrlToAkashicrc(url, akashicConfigFile);
 				resolve(ret);
 			}
 		});
@@ -133,11 +133,11 @@ const ALLOWED_URL_VALIDATOR = {
 /**
  * アクセス対象の URL が .akashicrc に存在するかどうか。
  * @param url アクセスする URL 文字列
+ * @param configFile config file
  */
-function existsAllowedUrl(url: string): Promise<boolean> {
-	const akashicConfigFile = new config.AkashicConfigFile(ALLOWED_URL_VALIDATOR);
-	return akashicConfigFile.load()
-		.then(() => akashicConfigFile.getItem("allowedUrl.values"))
+function existsAllowedUrl(url: string, configFile: config.AkashicConfigFile): Promise<boolean> {
+	return configFile.load()
+		.then(() => configFile.getItem("allowedUrl.values"))
 		.then(itemValue => {
 			const itemArray = itemValue ? itemValue.split(",") : [];
 			return itemArray.includes(url);
@@ -147,11 +147,11 @@ function existsAllowedUrl(url: string): Promise<boolean> {
 /**
  * アクセス許可した URL を .akashicrc へ保存する。
  * @param url アクセスを許可する URL 文字列
+ * @param configFile config file
  */
-async function saveAllowedUrlToAkashicrc(url: string): Promise<void> {
-	const akashicConfigFile = new config.AkashicConfigFile(ALLOWED_URL_VALIDATOR);
-	return akashicConfigFile.load()
-		.then(() => akashicConfigFile.getItem("allowedUrl.values"))
+async function saveAllowedUrlToAkashicrc(url: string, configFile: config.AkashicConfigFile): Promise<void> {
+	return configFile.load()
+		.then(() => configFile.getItem("allowedUrl.values"))
 		.then(itemValue => {
 			const itemArray = itemValue ? itemValue.split(",") : [];
 			if (!itemArray.includes(url)) {
@@ -162,8 +162,8 @@ async function saveAllowedUrlToAkashicrc(url: string): Promise<void> {
 		})
 		.then(items => {
 			if (items) {
-				akashicConfigFile.setItem("allowedUrl.values", items)
-					.then(() => akashicConfigFile.save());
+				configFile.setItem("allowedUrl.values", items)
+					.then(() => configFile.save());
 			}
 		});
 }

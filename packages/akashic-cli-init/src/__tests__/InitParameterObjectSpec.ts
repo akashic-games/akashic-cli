@@ -1,4 +1,3 @@
-import * as fs from "fs";
 import * as os from "os";
 import * as path from "path";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
@@ -54,7 +53,7 @@ describe("InitParameterObject.ts", () => {
 		});
 
 		describe("save the allowed URL in .akashicrc", () => {
-			let akashicConfigFile: config.AkashicConfigFile = null;
+			let mockConfigfile: MockConfigFile = null;
 			let mockPromptGet: jest.SpyInstance = null;
 			const ITEM_KEY = "allowedUrl.values";
 
@@ -62,29 +61,56 @@ describe("InitParameterObject.ts", () => {
 				mockPromptGet = jest.spyOn(Prompt, "get").mockImplementation((_schema, func) => {
 					func(undefined, { confirm: "y" });
 				});
-				const tempPath = fs.mkdtempSync(path.join(os.tmpdir(), ".akashicrc"));
+
 				mockfs({
-					".akashicrc": mockfs.load(tempPath),
+					".akashicrc": "",
+					"testConfig": ""
 				});
-				const urlValidator = {
-					"allowedUrl.values": ""
-				};
-				akashicConfigFile = new config.AkashicConfigFile(urlValidator);
+				const tempPath = path.join(__dirname, "testConfig");
+				mockConfigfile = new MockConfigFile({}, tempPath);
 			});
-			afterAll(()=> {
-				akashicConfigFile = null;
+			afterAll(() => {
+				mockConfigfile = null;
 				mockPromptGet.mockRestore();
 				mockfs.restore();
 			});
 
-			it("save repository URL", async () => {
-				const param = {
+			it("save repository URL, No configFile", async () => {
+				const param: any = {
 					repository: "https://hoge.com"
 				};
 				await target.completeInitParameterObject(param);
+				const akashicConfigFile = new config.AkashicConfigFile({ "allowedUrl.values": "" });
 
 				await akashicConfigFile.load();
-				const items = await akashicConfigFile.getItem(ITEM_KEY);
+				let items = await akashicConfigFile.getItem(ITEM_KEY);
+				let itemArray = items ? items.split(",") : [];
+				expect(itemArray.includes(param.repository));
+				expect(mockPromptGet).toHaveBeenCalledTimes(1);
+
+				delete param.repository;
+				param.type = "github:my-orgs/my-repo";
+
+				const ret = await target.completeInitParameterObject(param);
+				const targetUrl = `${ret.githubProtocol}://${ret.githubHost}/my-orgs/my-repo.git`;
+
+				await akashicConfigFile.load();
+				items = await akashicConfigFile.getItem(ITEM_KEY);
+				itemArray = items ? items.split(",") : [];
+				expect(itemArray.includes(targetUrl));
+				expect(mockPromptGet).toHaveBeenCalledTimes(2);
+				mockPromptGet.mockClear();
+			});
+
+			it("save repository URL", async () => {
+				const param = {
+					repository: "https://hoge.com",
+					configFile: mockConfigfile
+				};
+				await target.completeInitParameterObject(param);
+
+				await mockConfigfile.load();
+				const items = await mockConfigfile.getItem(ITEM_KEY);
 				const itemArray = items ? items.split(",") : [];
 				expect(itemArray.includes(param.repository));
 				expect(mockPromptGet).toHaveBeenCalledTimes(1);
@@ -92,12 +118,13 @@ describe("InitParameterObject.ts", () => {
 
 			it("Do not save the same URL", async () => {
 				const param = {
-					repository: "https://hoge.com"
+					repository: "https://hoge.com",
+					configFile: mockConfigfile
 				};
 				await target.completeInitParameterObject(param);
 
-				await akashicConfigFile.load();
-				const items = await akashicConfigFile.getItem(ITEM_KEY);
+				await mockConfigfile.load();
+				const items = await mockConfigfile.getItem(ITEM_KEY);
 				const itemArray = items ? items.split(",") : [];
 				expect(itemArray.length).toBe(1);
 				expect(itemArray.includes(param.repository));
@@ -107,56 +134,57 @@ describe("InitParameterObject.ts", () => {
 			it("save github URL", async () => {
 				const param = {
 					type: "github:my-orgs/my-repo",
+					configFile: mockConfigfile
 				};
 				const ret = await target.completeInitParameterObject(param);
 				const targetUrl = `${ret.githubProtocol}://${ret.githubHost}/my-orgs/my-repo.git`;
 
-				await akashicConfigFile.load();
-				const items = await akashicConfigFile.getItem(ITEM_KEY);
+				await mockConfigfile.load();
+				const items = await mockConfigfile.getItem(ITEM_KEY);
 				const itemArray = items ? items.split(",") : [];
 				expect(itemArray.includes(targetUrl));
 				expect(mockPromptGet).toHaveBeenCalledTimes(2);
 			});
 
 			it("save ghe URL", async () => {
+				mockConfigfile.setItem("init.ghe.host", "your.company.com");
+				mockConfigfile.setItem("init.ghe.protocol", "https");
 				const param = {
 					type: "ghe:my-orgs/my-repo",
-					configFile: new MockConfigFile({
-						"init.ghe.host": "your.company.com",
-						"init.ghe.protocol": "https"
-					})
+					configFile: mockConfigfile
 				};
 				const ret = await target.completeInitParameterObject(param);
 				const targetUrl = `${ret.gheProtocol}://${ret.gheHost}/my-orgs/my-repo.git`;
 
-				await akashicConfigFile.load();
-				const items = await akashicConfigFile.getItem(ITEM_KEY);
+				await mockConfigfile.load();
+				const items = await mockConfigfile.getItem(ITEM_KEY);
 				const itemArray = items ? items.split(",") : [];
 				expect(itemArray.includes(targetUrl));
 			});
 
 			it("4 URLs can be saved", async () => {
-				await akashicConfigFile.load();
-				let items = await akashicConfigFile.getItem(ITEM_KEY);
+				await mockConfigfile.load();
+				let items = await mockConfigfile.getItem(ITEM_KEY);
 				let itemArray = items ? items.split(",") : [];
 				expect(itemArray.length).toBe(3); // 上3つのテストで保存した URL が保存されている
 				const firstUrl = itemArray[0];
 
 				// 4個目の URL を保存
 				let param = {
-					repository: "https://foo.com"
+					repository: "https://foo.com",
+					configFile: mockConfigfile
 				};
 				await target.completeInitParameterObject(param);
-				await akashicConfigFile.load();
-				items = await akashicConfigFile.getItem(ITEM_KEY);
+				await mockConfigfile.load();
+				items = await mockConfigfile.getItem(ITEM_KEY);
 				itemArray = items ? items.split(",") : [];
 				expect(itemArray.length).toBe(4);
 
 				// 5 個目の URL を保存。最大保存数:4 のため、超える場合は最初の item をpop する。
 				param.repository = "https://test.com";
 				await target.completeInitParameterObject(param);
-				await akashicConfigFile.load();
-				items = await akashicConfigFile.getItem(ITEM_KEY);
+				await mockConfigfile.load();
+				items = await mockConfigfile.getItem(ITEM_KEY);
 				itemArray = items ? items.split(",") : [];
 				expect(itemArray.length).toBe(4);
 
@@ -164,6 +192,5 @@ describe("InitParameterObject.ts", () => {
 				expect(itemArray[3]).toBe("https://test.com");
 			});
 		});
-
 	});
 });

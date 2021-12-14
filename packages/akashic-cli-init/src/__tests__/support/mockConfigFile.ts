@@ -2,8 +2,8 @@ import { AkashicConfigFile} from "@akashic/akashic-cli-extra/lib/config";
 
 export class MockConfigFile extends AkashicConfigFile {
 	private _obj: any;
-	constructor(obj: any) {
-		super(obj);
+	constructor(obj: any, path?: string) {
+		super(obj, path);
 		this._obj = obj;
 	};
 
