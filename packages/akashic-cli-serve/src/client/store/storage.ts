@@ -1,4 +1,4 @@
-import { apiClient } from "../api/ApiClient";
+import { apiClient } from "../api/apiClientInstance";
 import { queryParameters as query } from "../common/queryParameters";
 
 export interface StorageData {

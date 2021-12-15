@@ -16,7 +16,7 @@ import {
 	PutStartPointEvent,
 	PlayAudioStateChangeTestbedEvent
 } from "../../common/types/TestbedEvent";
-import { apiClient } from "../api/ApiClient";
+import { apiClient } from "../api/apiClientInstance";
 import * as Subscriber from "../api/Subscriber";
 import { ClientContentLocator } from "../common/ClientContentLocator";
 import { ContentStore } from "./ContentStore";

@@ -138,5 +138,3 @@ export class ApiClient {
 		return ApiRequest.get<StartPointHeaderListResponse>(`${this._baseUrl}/api/plays/${playId}/start-point-header-list`);
 	};
 }
-
-export const apiClient = new ApiClient();

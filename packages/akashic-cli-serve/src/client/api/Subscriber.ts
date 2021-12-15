@@ -33,7 +33,7 @@ export const onBroadcast = new Trigger<any>();
 export const onDisconnect = new Trigger<void>();
 export const onPutStartPoint = new Trigger<PutStartPointEvent>();
 
-const socket = socketInstance();
+const socket = socketInstance;
 socket.on("playCreate", (arg: PlayCreateTestbedEvent) => onPlayCreate.fire(arg));
 socket.on("playStatusChange", (arg: PlayStatusChangedTestbedEvent) => onPlayStatusChange.fire(arg));
 socket.on("playDurationStateChange", (arg: PlayDurationStateChangeTestbedEvent) => onPlayDurationStateChange.fire(arg));

@@ -1,5 +1,5 @@
 import {observable} from "mobx";
-import { apiClient } from "../api/ApiClient";
+import { apiClient } from "../api/apiClientInstance";
 import {GameInstanceEntity} from "./GameInstanceEntity";
 import {PlayEntity} from "./PlayEntity";
 

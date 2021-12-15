@@ -2,7 +2,7 @@ import {ServiceType} from "@akashic/akashic-cli-commons/lib/ServiceType";
 import {observable, action} from "mobx";
 import {AppOptions} from "../../common/types/AppOptions";
 import {Player} from "../../common/types/Player";
-import { apiClient } from "../api/ApiClient";
+import { apiClient } from "../api/apiClientInstance";
 import {ClientContentLocator} from "../common/ClientContentLocator";
 import {queryParameters as query} from "../common/queryParameters";
 import {ContentStore} from "./ContentStore";

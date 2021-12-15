@@ -1,7 +1,7 @@
 import { PlayAudioState } from "../../common/types/PlayAudioState";
 import { PlayBroadcastTestbedEvent } from "../../common/types/TestbedEvent";
 import { GameViewManager } from "../akashic/GameViewManager";
-import { apiClient } from "../api/ApiClient";
+import { apiClient } from "../api/apiClientInstance";
 import * as Subscriber from "../api/Subscriber";
 import { RPGAtsumaruApi } from "../atsumaru/RPGAtsumaruApi";
 import { ClientContentLocator } from "../common/ClientContentLocator";

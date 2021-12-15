@@ -10,7 +10,7 @@ import { StartPointHeader } from "../../common/types/StartPointHeader";
 import { RunnerDescription, ClientInstanceDescription } from "../../common/types/TestbedEvent";
 import { GameViewManager } from "../akashic/GameViewManager";
 import { SocketIOAMFlowClient } from "../akashic/SocketIOAMFlowClient";
-import { apiClient } from "../api/ApiClient";
+import { apiClient } from "../api/apiClientInstance";
 import { socketInstance } from "../api/socketInstance";
 import { CreateCoeLocalInstanceParameterObject } from "./CoePluginEntity";
 import { ContentEntity } from "./ContentEntity";
@@ -77,7 +77,7 @@ export class PlayEntity {
 
 	constructor(param: PlayEntityParameterObject) {
 		this.playId = param.playId;
-		this.amflow = new SocketIOAMFlowClient(socketInstance());
+		this.amflow = new SocketIOAMFlowClient(socketInstance);
 		this.activePlaybackRate = 1;
 		this.isActivePausing = !!param.durationState && param.durationState.isPaused;
 		this.duration = param.durationState ? param.durationState.duration : 0;

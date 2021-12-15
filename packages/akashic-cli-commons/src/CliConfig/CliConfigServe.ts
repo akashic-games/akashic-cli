@@ -17,5 +17,5 @@ export interface CliConfigServe {
 	experimentalOpen?: number;
 	sslCert?: string;
 	sslKey?: string;
-	accessibleOrigin?: string;
+	corsAllowOrigin?: string;
 }

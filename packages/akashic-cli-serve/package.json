@@ -10,7 +10,7 @@
     "copy:engine-files": "node build/updateEngineFiles.js",
     "watch:client": "webpack --mode development --config ./src/client/webpack.config.js --watch",
     "build": "npm run build:client && npm run build:server && shx cp ./config/engineFilesVersion.json ./lib/server",
-    "build:client": "webpack --config ./src/client/webpack.config.js && tsc -p ./src/client",
+    "build:client": "webpack --config ./src/client/webpack.config.js && tsc -p ./src/client/tsconfig.module.json",
     "build:server": "tsc -p ./src/server",
     "test": "jest && npm run lint",
     "lint": "npm run lint:client && npm run lint:server",
