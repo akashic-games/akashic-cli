@@ -132,8 +132,6 @@ const ALLOWED_URL_VALIDATOR = {
 
 /**
  * アクセス対象の URL が .akashicrc に存在するかどうか。
- * @param url アクセスする URL 文字列
- * @param configFile config file
  */
 function existsAllowedUrl(url: string, configFile: config.AkashicConfigFile): Promise<boolean> {
 	return configFile.load()
@@ -146,8 +144,6 @@ function existsAllowedUrl(url: string, configFile: config.AkashicConfigFile): Pr
 
 /**
  * アクセス許可した URL を .akashicrc へ保存する。
- * @param url アクセスを許可する URL 文字列
- * @param configFile config file
  */
 async function saveAllowedUrlToAkashicrc(url: string, configFile: config.AkashicConfigFile): Promise<void> {
 	return configFile.load()
