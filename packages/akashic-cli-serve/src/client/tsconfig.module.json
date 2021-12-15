@@ -2,14 +2,12 @@
   "compilerOptions": {
     "target": "es2015",
     "declaration": true,
-    "lib": ["es5", "dom", "es2015"],
+    "lib": ["dom", "es2015"],
     "noImplicitAny": true,
     "module": "commonjs" ,
     "esModuleInterop": true,
     "sourceMap": true,
-    "outDir": "../../lib/module",
-    "noUnusedParameters": true,
-    "experimentalDecorators": true
+    "outDir": "../../lib/module"
   },
   "include": [
     "./akashic/**/*.ts",
