@@ -3,7 +3,6 @@ import * as os from "os";
 import * as path from "path";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
 import * as config from "@akashic/akashic-cli-extra/lib/config";
-import * as mockfs from "mock-fs";
 import * as Prompt from "prompt";
 import * as target from "../../lib/init/InitParameterObject";
 import { MockConfigFile } from "./support/mockConfigFile";
@@ -82,7 +81,6 @@ describe("InitParameterObject.ts", () => {
 		afterAll(() => {
 			mockConfigfile = null;
 			mockPromptGet.mockRestore();
-			mockfs.restore();
 			fs.unlinkSync(tempPath);
 		});
 
