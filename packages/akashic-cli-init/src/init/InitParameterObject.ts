@@ -87,7 +87,7 @@ export async function completeInitParameterObject(param: InitParameterObject): P
 	const { gitType, owner, repo } = parseCloneTargetInfo(type);
 	if (gitType === "github" && owner !== "akashic-games" ) {
 		const url = createGitUri(githubHost, githubProtocol, owner, repo);
-		const ret = await confirmAccessToUrl(url, param.configFile);
+		const ret = await confirmAccessToUrl(url);
 		if (!ret) process.exit(1);
 
 	} else if (gitType === "ghe") {
@@ -98,7 +98,7 @@ export async function completeInitParameterObject(param: InitParameterObject): P
 			);
 		}
 		const url = createGitUri(gheHost, gheProtocol, owner, repo);
-		const ret = await confirmAccessToUrl(url, param.configFile);
+		const ret = await confirmAccessToUrl(url);
 		if (!ret) process.exit(1);
 	}
 

@@ -85,14 +85,14 @@ async function validateInitCommonOptions(opts: InitCommonOptions): Promise<void>
 		}
 
 		if (opts.repository !== DEFAULT_TEMPLATE_REPOSITORY) {
-			const ret = await confirmAccessToUrl(opts.repository, opts.configFile);
+			const ret = await confirmAccessToUrl(opts.repository);
 			if (!ret) process.exit(1);
 		}
 	}
 }
 
-export async function confirmAccessToUrl(url: string, configFile: config.AkashicConfigFile): Promise<boolean> {
-	const akashicConfigFile = configFile || new config.AkashicConfigFile(ALLOWED_URL_VALIDATOR);
+export async function confirmAccessToUrl(url: string): Promise<boolean> {
+	const akashicConfigFile = new config.AkashicConfigFile(ALLOWED_URL_VALIDATOR);
 	const ret = await existsAllowedUrl(url, akashicConfigFile);
 	if (ret) return true;
 

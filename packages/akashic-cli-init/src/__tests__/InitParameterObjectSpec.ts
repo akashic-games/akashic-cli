@@ -1,3 +1,4 @@
+import * as fs from "fs";
 import * as os from "os";
 import * as path from "path";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
@@ -6,6 +7,11 @@ import * as mockfs from "mock-fs";
 import * as Prompt from "prompt";
 import * as target from "../../lib/init/InitParameterObject";
 import { MockConfigFile } from "./support/mockConfigFile";
+
+const raw = jest.requireActual("@akashic/akashic-cli-extra/lib/config");
+const rawConfig = raw.AkashicConfigFile;
+jest.mock("@akashic/akashic-cli-extra/lib/config");
+const mockConfig = config.AkashicConfigFile as jest.Mock;
 
 describe("InitParameterObject.ts", () => {
 	describe("completeInitParameterObject()", () => {
@@ -51,145 +57,119 @@ describe("InitParameterObject.ts", () => {
 			expect(ret.gheHost).toBeNull();
 			expect(ret.gheProtocol).toBe("https");
 		});
+	});
 
-		describe("save the allowed URL in .akashicrc", () => {
-			let mockConfigfile: MockConfigFile = null;
-			let mockPromptGet: jest.SpyInstance = null;
-			const ITEM_KEY = "allowedUrl.values";
+	describe("save the allowed URL in .akashicrc", () => {
+		let mockConfigfile: config.AkashicConfigFile = null;
+		let mockPromptGet: jest.SpyInstance = null;
+		const ITEM_KEY = "allowedUrl.values";
+		const tempPath = path.join(__dirname, "support", "fixture", ".akashicrc");
 
-			beforeAll(() => {
-				mockPromptGet = jest.spyOn(Prompt, "get").mockImplementation((_schema, func) => {
-					func(undefined, { confirm: "y" });
-				});
-
-				mockfs({
-					".akashicrc": "",
-					"testConfig": ""
-				});
-				const tempPath = path.join(__dirname, "testConfig");
-				mockConfigfile = new MockConfigFile({}, tempPath);
-			});
-			afterAll(() => {
-				mockConfigfile = null;
-				mockPromptGet.mockRestore();
-				mockfs.restore();
+		beforeAll(() => {
+			mockConfig.mockImplementation((validator: {[key: string]: string}, _configPath?: string) => {
+				const ret = Object.keys(validator).some((key) => /^init./.test(key));
+				const target = ret ? undefined : tempPath;
+				if (!ret) return new rawConfig(validator, target);
 			});
 
-			it("save repository URL, No configFile", async () => {
-				const param: any = {
-					repository: "https://hoge.com"
-				};
-				await target.completeInitParameterObject(param);
-				const configFile = new config.AkashicConfigFile({ "allowedUrl.values": "" });
-
-				await configFile.load();
-				let items = await configFile.getItem(ITEM_KEY);
-				let itemArray = items ? items.split(",") : [];
-				expect(itemArray.includes(param.repository));
-				expect(mockPromptGet).toHaveBeenCalledTimes(1);
-
-				delete param.repository;
-				param.type = "github:my-orgs/my-repo";
-
-				const ret = await target.completeInitParameterObject(param);
-				const targetUrl = `${ret.githubProtocol}://${ret.githubHost}/my-orgs/my-repo.git`;
-
-				await configFile.load();
-				items = await configFile.getItem(ITEM_KEY);
-				itemArray = items ? items.split(",") : [];
-				expect(itemArray.includes(targetUrl));
-				expect(mockPromptGet).toHaveBeenCalledTimes(2);
-				mockPromptGet.mockClear(); // 呼ばれた回数をクリア
+			mockPromptGet = jest.spyOn(Prompt, "get").mockImplementation((_schema, func) => {
+				func(undefined, { confirm: "y" });
 			});
 
-			it("save repository URL", async () => {
-				const param = {
-					repository: "https://hoge.com",
-					configFile: mockConfigfile
-				};
-				await target.completeInitParameterObject(param);
+			fs.writeFileSync(tempPath, "");
+			mockConfigfile = new config.AkashicConfigFile({ "allowedUrl.values": ""});
+		});
+		afterAll(() => {
+			mockConfigfile = null;
+			mockPromptGet.mockRestore();
+			mockfs.restore();
+			fs.unlinkSync(tempPath);
+		});
 
-				await mockConfigfile.load();
-				const items = await mockConfigfile.getItem(ITEM_KEY);
-				const itemArray = items ? items.split(",") : [];
-				expect(itemArray.includes(param.repository));
-				expect(mockPromptGet).toHaveBeenCalledTimes(1);
-			});
+		it("save repository URL", async () => {
+			const param = {
+				repository: "https://hoge.com"
+			};
+			await target.completeInitParameterObject(param);
 
-			it("Do not save the same URL", async () => {
-				const param = {
-					repository: "https://hoge.com",
-					configFile: mockConfigfile
-				};
-				await target.completeInitParameterObject(param);
+			await mockConfigfile.load();
+			const items = await mockConfigfile.getItem(ITEM_KEY);
+			const itemArray = items ? items.split(",") : [];
+			expect(itemArray.includes(param.repository));
+			expect(mockPromptGet).toHaveBeenCalledTimes(1);
+		});
 
-				await mockConfigfile.load();
-				const items = await mockConfigfile.getItem(ITEM_KEY);
-				const itemArray = items ? items.split(",") : [];
-				expect(itemArray.length).toBe(1);
-				expect(itemArray.includes(param.repository));
-				expect(mockPromptGet).toHaveBeenCalledTimes(1); // 同じ値のため 確認の Prompt は呼ばれず前のテストで呼ばれた 1 回のままとなる。
-			});
+		it("Do not save the same URL", async () => {
+			const param = {
+				repository: "https://hoge.com"
+			};
+			await target.completeInitParameterObject(param);
 
-			it("save github URL", async () => {
-				const param = {
-					type: "github:my-orgs/my-repo",
-					configFile: mockConfigfile
-				};
-				const ret = await target.completeInitParameterObject(param);
-				const targetUrl = `${ret.githubProtocol}://${ret.githubHost}/my-orgs/my-repo.git`;
+			await mockConfigfile.load();
+			const items = await mockConfigfile.getItem(ITEM_KEY);
+			const itemArray = items ? items.split(",") : [];
+			expect(itemArray.length).toBe(1);
+			expect(itemArray.includes(param.repository));
+			expect(mockPromptGet).toHaveBeenCalledTimes(1); // 同じ値のため 確認の Prompt は呼ばれず前のテストで呼ばれた 1 回のままとなる。
+		});
 
-				await mockConfigfile.load();
-				const items = await mockConfigfile.getItem(ITEM_KEY);
-				const itemArray = items ? items.split(",") : [];
-				expect(itemArray.includes(targetUrl));
-				expect(mockPromptGet).toHaveBeenCalledTimes(2);
-			});
+		it("save github URL", async () => {
+			const param = {
+				type: "github:my-orgs/my-repo"
+			};
+			const ret = await target.completeInitParameterObject(param);
+			const targetUrl = `${ret.githubProtocol}://${ret.githubHost}/my-orgs/my-repo.git`;
 
-			it("save ghe URL", async () => {
-				mockConfigfile.setItem("init.ghe.host", "your.company.com");
-				mockConfigfile.setItem("init.ghe.protocol", "https");
-				const param = {
-					type: "ghe:my-orgs/my-repo",
-					configFile: mockConfigfile
-				};
-				const ret = await target.completeInitParameterObject(param);
-				const targetUrl = `${ret.gheProtocol}://${ret.gheHost}/my-orgs/my-repo.git`;
+			await mockConfigfile.load();
+			const items = await mockConfigfile.getItem(ITEM_KEY);
+			const itemArray = items ? items.split(",") : [];
+			expect(itemArray.includes(targetUrl));
+			expect(mockPromptGet).toHaveBeenCalledTimes(2);
+		});
 
-				await mockConfigfile.load();
-				const items = await mockConfigfile.getItem(ITEM_KEY);
-				const itemArray = items ? items.split(",") : [];
-				expect(itemArray.includes(targetUrl));
-			});
+		it("save ghe URL", async () => {
+			const param = {
+				type: "ghe:my-orgs/my-repo",
+				configFile: new MockConfigFile({
+					"init.ghe.host": "your.company.com",
+					"init.ghe.protocol": "https"
+				})
+			};
+			const ret = await target.completeInitParameterObject(param);
+			const targetUrl = `${ret.gheProtocol}://${ret.gheHost}/my-orgs/my-repo.git`;
 
-			it("4 URLs can be saved", async () => {
-				await mockConfigfile.load();
-				let items = await mockConfigfile.getItem(ITEM_KEY);
-				let itemArray = items ? items.split(",") : [];
-				expect(itemArray.length).toBe(3); // 上3つのテストで保存した URL が保存されている
-				const firstUrl = itemArray[0];
+			await mockConfigfile.load();
+			const items = await mockConfigfile.getItem(ITEM_KEY);
+			const itemArray = items ? items.split(",") : [];
+			expect(itemArray.includes(targetUrl));
+		});
 
-				// 4個目の URL を保存
-				let param = {
-					repository: "https://foo.com",
-					configFile: mockConfigfile
-				};
-				await target.completeInitParameterObject(param);
-				await mockConfigfile.load();
-				items = await mockConfigfile.getItem(ITEM_KEY);
-				itemArray = items ? items.split(",") : [];
-				expect(itemArray.length).toBe(4);
+		it("4 URLs can be saved", async () => {
+			await mockConfigfile.load();
+			let items = await mockConfigfile.getItem(ITEM_KEY);
+			let itemArray = items ? items.split(",") : [];
+			expect(itemArray.length).toBe(3); // 上3つのテストで保存した URL が保存されている
+			const firstUrl = itemArray[0];
 
-				// 5 個目の URL を保存。最大保存数:4 のため、超える場合は最初の item をpop する。
-				param.repository = "https://test.com";
-				await target.completeInitParameterObject(param);
-				await mockConfigfile.load();
-				items = await mockConfigfile.getItem(ITEM_KEY);
-				itemArray = items ? items.split(",") : [];
-				expect(itemArray.length).toBe(4);
-				expect(!itemArray.includes(firstUrl));
-				expect(itemArray[3]).toBe("https://test.com");
-			});
+			// 4個目の URL を保存
+			let param = {
+				repository: "https://foo.com"
+			};
+			await target.completeInitParameterObject(param);
+			await mockConfigfile.load();
+			items = await mockConfigfile.getItem(ITEM_KEY);
+			itemArray = items ? items.split(",") : [];
+			expect(itemArray.length).toBe(4);
+
+			// 5 個目の URL を保存。最大保存数:4 のため、超える場合は最初の item をpop する。
+			param.repository = "https://test.com";
+			await target.completeInitParameterObject(param);
+			await mockConfigfile.load();
+			items = await mockConfigfile.getItem(ITEM_KEY);
+			itemArray = items ? items.split(",") : [];
+			expect(itemArray.length).toBe(4);
+			expect(!itemArray.includes(firstUrl));
+			expect(itemArray[3]).toBe("https://test.com");
 		});
 	});
 });
