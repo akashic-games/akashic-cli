@@ -126,16 +126,15 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			// operation plugin に登録されているスクリプトファイルは bundle されていても残しておく必要がある
 			const operationPluginRoots = (gamejson.operationPlugins ?? []).map(plugin => plugin.script);
 			for (let pluginRoot of operationPluginRoots) {
-				let pluginRootPath: string;
-				if (pluginRoot.indexOf("./") === 0) {
-					pluginRootPath = pluginRoot.replace(/^\.\//g, "");
+				let actualPluginRoot: string;
+				if (pluginRoot.startsWith("./")) {
+					actualPluginRoot = pluginRoot;
 				} else {
-					const pluginModuleName = pluginRoot.replace(/\/$/, "");
-					const tmpPath = require.resolve(pluginModuleName, { paths: [param.source] });
-					const relativeRootPath = path.relative(param.source, tmpPath);
-					pluginRootPath = relativeRootPath;
+					const relativeRootPath = path.relative(param.source, require.resolve(pluginRoot, { paths: [param.source] }));
+					if (relativeRootPath.startsWith("../")) throw new Error("Operation plugin path should not start with ../ .");
+					actualPluginRoot = relativeRootPath;
 				}
-				const pluginRootAbsPath = cmn.Util.makeUnixPath(path.join(param.source, pluginRootPath));
+				const pluginRootAbsPath = cmn.Util.makeUnixPath(path.join(param.source, actualPluginRoot));
 				const pluginRootDir = path.dirname(pluginRootAbsPath);
 				// TODO: Promise#then() と async/await が混在する状態を改め、 async/await に統一する
 				const pluginScripts = await cmn.NodeModules.listScriptFiles(
