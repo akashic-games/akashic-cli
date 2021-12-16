@@ -77,8 +77,7 @@ async function convertAssetAndOutput(
 	var assetString = fs.readFileSync(path.join(inputPath, assets[assetName].path), "utf8").replace(/\r\n|\r/g, "\n");
 	var assetPath = assets[assetName].path;
 	if (isScript && lint) {
-		const errInfo = await validateEs5Code(assetPath, assetString);
-		errors.push.apply(errors, errInfo); // ES5構文に反する箇所があるかのチェック
+		errors.push.apply(errors, await validateEs5Code(assetPath, assetString)); // ES5構文に反する箇所があるかのチェック
 	}
 
 	var code = (isScript ? wrapScript(assetString, assetName, minify) : wrapText(assetString, assetName));
@@ -96,8 +95,7 @@ async function convertGlobalScriptAndOutput(
 	var scriptString = fs.readFileSync(path.join(inputPath, scriptName), "utf8").replace(/\r\n|\r/g, "\n");
 	var isScript = /\.js$/i.test(scriptName);
 	if (isScript && lint) {
-		const errInfo = await validateEs5Code(scriptName, scriptString);
-		errors.push.apply(errInfo); // ES5構文に反する箇所があるかのチェック
+		errors.push.apply(await validateEs5Code(scriptName, scriptString)); // ES5構文に反する箇所があるかのチェック
 	}
 
 	var code = isScript ? wrapScript(scriptString, scriptName, minify) : wrapText(scriptString, scriptName);
