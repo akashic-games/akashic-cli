@@ -43,15 +43,15 @@ export async function promiseConvertNoBundle(options: ConvertTemplateParameterOb
 		}
 	}
 
-	var assetNames = extractAssetDefinitions(conf, "script").concat(extractAssetDefinitions(conf, "text"));
+	var nonBinaryAssetNames = extractAssetDefinitions(conf, "script").concat(extractAssetDefinitions(conf, "text"));
 	var errorMessages: string[] = [];
-	const tempAssetPaths = await Promise.all(assetNames.map(async (assetName: string) => {
-		return await convertAssetAndOutput(assetName, conf, options.source, options.output, options.minify, options.lint, errorMessages);
+	const nonBinaryAssetPaths = await Promise.all(nonBinaryAssetNames.map((assetName: string) => {
+		return convertAssetAndOutput(assetName, conf, options.source, options.output, options.minify, options.lint, errorMessages);
 	}));
-	assetPaths = assetPaths.concat(tempAssetPaths);
+	assetPaths = assetPaths.concat(nonBinaryAssetPaths);
 	if (conf._content.globalScripts) {
-		const tempScriptPaths = await Promise.all(conf._content.globalScripts.map(async (scriptName: string) => {
-			return await convertGlobalScriptAndOutput(
+		const nonBinaryScriptPaths = await Promise.all(conf._content.globalScripts.map((scriptName: string) => {
+			return convertGlobalScriptAndOutput(
 				scriptName,
 				options.source,
 				options.output,
@@ -59,7 +59,7 @@ export async function promiseConvertNoBundle(options: ConvertTemplateParameterOb
 				options.lint,
 				errorMessages);
 		}));
-		assetPaths = assetPaths.concat(tempScriptPaths);
+		assetPaths = assetPaths.concat(nonBinaryScriptPaths);
 	}
 	if (errorMessages.length > 0) {
 		options.logger.warn("The following ES5 syntax errors exist.\n" + errorMessages.join("\n"));

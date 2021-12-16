@@ -57,14 +57,14 @@ export async function promiseConvertBundle(options: ConvertTemplateParameterObje
 		innerHTMLAssetNames = innerHTMLAssetNames.concat(extractAssetDefinitions(conf, "text"));
 	}
 
-	const tempAssetData = await Promise.all(innerHTMLAssetNames.map(async (assetName: string) => {
-		return await convertAssetToInnerHTMLObj(assetName, options.source, conf, options.minify, options.lint, errorMessages);
+	const tempAssetData = await Promise.all(innerHTMLAssetNames.map((assetName: string) => {
+		return convertAssetToInnerHTMLObj(assetName, options.source, conf, options.minify, options.lint, errorMessages);
 	}));
 	innerHTMLAssetArray = innerHTMLAssetArray.concat(tempAssetData);
 
 	if (conf._content.globalScripts) {
-		const tempScriptData = await Promise.all(conf._content.globalScripts.map(async (scriptName: string) => {
-			return await convertScriptNameToInnerHTMLObj(scriptName, options.source, options.minify, options.lint, errorMessages);
+		const tempScriptData = await Promise.all(conf._content.globalScripts.map((scriptName: string) => {
+			return convertScriptNameToInnerHTMLObj(scriptName, options.source, options.minify, options.lint, errorMessages);
 		}));
 		innerHTMLAssetArray = innerHTMLAssetArray.concat(tempScriptData);
 	}
@@ -98,8 +98,7 @@ async function convertAssetToInnerHTMLObj(
 	var isScript = assets[assetName].type === "script";
 	var assetString = fs.readFileSync(path.join(inputPath, assets[assetName].path), "utf8").replace(/\r\n|\r/g, "\n");
 	if (isScript && lint) {
-		const errInfo = await validateEs5Code(assets[assetName].path, assetString);
-		errors.push.apply(errors, errInfo);
+		errors.push.apply(errors, await validateEs5Code(assets[assetName].path, assetString));
 	}
 	return {
 		name: assetName,
@@ -119,8 +118,7 @@ async function convertScriptNameToInnerHTMLObj(
 		scriptString = encodeText(scriptString);
 	}
 	if (isScript && lint) {
-		const errInfo = await validateEs5Code(scriptName, scriptString);
-		errors.push.apply(errors, errInfo);
+		errors.push.apply(errors, await validateEs5Code(scriptName, scriptString));
 	}
 	return {
 		name: scriptName,
