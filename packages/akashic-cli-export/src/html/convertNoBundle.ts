@@ -95,7 +95,7 @@ async function convertGlobalScriptAndOutput(
 	var scriptString = fs.readFileSync(path.join(inputPath, scriptName), "utf8").replace(/\r\n|\r/g, "\n");
 	var isScript = /\.js$/i.test(scriptName);
 	if (isScript && lint) {
-		errors.push.apply(await validateEs5Code(scriptName, scriptString)); // ES5構文に反する箇所があるかのチェック
+		errors.push.apply(errors, await validateEs5Code(scriptName, scriptString)); // ES5構文に反する箇所があるかのチェック
 	}
 
 	var code = isScript ? wrapScript(scriptString, scriptName, minify) : wrapText(scriptString, scriptName);
