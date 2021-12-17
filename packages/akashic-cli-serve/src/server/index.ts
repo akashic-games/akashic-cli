@@ -213,8 +213,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 		io = new socketio.Server(httpServer, {
 			parser,
 			cors: {
-				origin: cliConfigParam.corsAllowOrigin,
-				methods: ["GET", "POST"]
+				origin: cliConfigParam.corsAllowOrigin
 			}
 		});
 	} else {
