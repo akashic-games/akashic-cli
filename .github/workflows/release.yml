@@ -7,14 +7,14 @@ on:
         type: choice
         description: |
           A valid semver string to increment the version.
-          "force-package" will update all packages to increment patch version forcefully, then publish.
+          "force-patch-all" will update all packages to increment patch version forcefully, then publish.
           "from-package" will publish packages where the latest version is not present in the registry.
         options:
           - "patch"
           - "minor"
           - "major"
           - "prerelease"
-          - "force-publish"
+          - "force-patch-all"
           - "from-package"
 
 env:
