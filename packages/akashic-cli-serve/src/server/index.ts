@@ -209,11 +209,11 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 	}
 
 	let io: socketio.Server;
-	if (cliConfigParam.origin) {
+	if (cliConfigParam.corsAllowOrigin) {
 		io = new socketio.Server(httpServer, {
 			parser,
 			cors: {
-				origin: cliConfigParam.origin,
+				origin: cliConfigParam.corsAllowOrigin,
 				methods: ["GET", "POST"]
 			}
 		});
@@ -270,8 +270,8 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 
 	app.use("^\/$", (_req, res, _next) => res.redirect("/public/"));
 
-	if (cliConfigParam.origin) {
-		app.use(cors({ origin: cliConfigParam.origin }));
+	if (cliConfigParam.corsAllowOrigin) {
+		app.use(cors({ origin: cliConfigParam.corsAllowOrigin }));
 	}
 
 	if (process.env.ENGINE_FILES_V3_PATH) {
@@ -430,7 +430,7 @@ export async function run(argv: any): Promise<void> {
 			experimentalOpen: options.experimentalOpen ?? conf.experimentalOpen,
 			sslCert: options.sslCert ?? conf.sslCert,
 			sslKey: options.sslKey ?? conf.sslKey,
-			origin: options.origin ?? conf.origin
+			corsAllowOrigin: options.corsAllowOrigin ?? conf.corsAllowOrigin
 		};
 		await cli(cliConfigParam, options);
 	});
