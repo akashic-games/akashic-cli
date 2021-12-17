@@ -50,7 +50,7 @@ export async function promiseConvertNoBundle(options: ConvertTemplateParameterOb
 	}));
 	assetPaths = assetPaths.concat(nonBinaryAssetPaths);
 	if (conf._content.globalScripts) {
-		const nonBinaryScriptPaths = await Promise.all(conf._content.globalScripts.map((scriptName: string) => {
+		const globalScriptPaths = await Promise.all(conf._content.globalScripts.map((scriptName: string) => {
 			return convertGlobalScriptAndOutput(
 				scriptName,
 				options.source,
@@ -59,7 +59,7 @@ export async function promiseConvertNoBundle(options: ConvertTemplateParameterOb
 				options.lint,
 				errorMessages);
 		}));
-		assetPaths = assetPaths.concat(nonBinaryScriptPaths);
+		assetPaths = assetPaths.concat(globalScriptPaths);
 	}
 	if (errorMessages.length > 0) {
 		options.logger.warn("The following ES5 syntax errors exist.\n" + errorMessages.join("\n"));
