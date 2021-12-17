@@ -45,7 +45,6 @@
 		"@hoge/testmodule": "node_modules/@hoge/testmodule/lib/index.js",
 		"@hoge/testmodule2": "node_modules/@hoge/testmodule2/lib/index.js",
 		"@hoge/testmodule3": "node_modules/@hoge/testmodule3/lib/index.js"
-
 	},
 	"globalScripts": [
 		"node_modules/@hoge/testmodule/lib/ModuleA.js",
