@@ -3,7 +3,7 @@
     "target": "es5",
     "declaration": false,
     "downlevelIteration": true,
-    "lib": ["dom", "es2015"],
+    "lib": ["dom", "es5"],
     "noImplicitAny": true,
     "module": "commonjs" ,
     "esModuleInterop": true,

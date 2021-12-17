@@ -1,3 +1,5 @@
 import { createSocketInstance } from "./createSocketInstance";
 
-export const socketInstance = createSocketInstance();
+const wsProtocol = window.location.protocol.includes("https") ? "wss" : "ws";
+
+export const socketInstance = createSocketInstance(`${wsProtocol}://${window.location.host}`);

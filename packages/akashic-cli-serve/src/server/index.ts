@@ -208,13 +208,18 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 		httpServer = server.createServer(app);
 	}
 
-	const io = new socketio.Server(httpServer, {
-		parser,
-		cors: {
-			origin: cliConfigParam.corsAllowOrigin ?? "",
-			methods: ["GET", "POST"]
-		}
-	});
+	let io: socketio.Server;
+	if (cliConfigParam.origin) {
+		io = new socketio.Server(httpServer, {
+			parser,
+			cors: {
+				origin: cliConfigParam.origin,
+				methods: ["GET", "POST"]
+			}
+		});
+	} else {
+		io = new socketio.Server(httpServer, { parser });
+	}
 
 	if (cliConfigParam.watch && cliConfigParam.targetDirs) {
 		console.log("Start watching contents");
@@ -265,7 +270,9 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 
 	app.use("^\/$", (_req, res, _next) => res.redirect("/public/"));
 
-	app.use(cors({ origin: cliConfigParam.corsAllowOrigin ?? "" }));
+	if (cliConfigParam.origin) {
+		app.use(cors({ origin: cliConfigParam.origin }));
+	}
 
 	if (process.env.ENGINE_FILES_V3_PATH) {
 		const engineFilesPath = path.resolve(process.cwd(), process.env.ENGINE_FILES_V3_PATH);
@@ -395,7 +402,7 @@ export async function run(argv: any): Promise<void> {
 			"EXPERIMENTAL: Open <num> browser windows at startup. The upper limit of <num> is 10.") // TODO: open-browser と統合
 		.option("--ssl-cert <certificatePath>", "Specify path to an SSL/TLS certificate to use HTTPS")
 		.option("--ssl-key <privatekeyPath>", "Specify path to an SSL/TLS privatekey to use HTTPS")
-		.option("--cors-allow-origin <corsAllowOrigin>", "Specify Url that can access this server")
+		.option("--cors-allow-origin <origin>", "Specify origin for Access-Control-Allow-Origin")
 		.parse(argv);
 
 	const options = commander.opts();
@@ -423,7 +430,7 @@ export async function run(argv: any): Promise<void> {
 			experimentalOpen: options.experimentalOpen ?? conf.experimentalOpen,
 			sslCert: options.sslCert ?? conf.sslCert,
 			sslKey: options.sslKey ?? conf.sslKey,
-			corsAllowOrigin: options.corsAllowOrigin ?? conf.corsAllowOrigin
+			origin: options.origin ?? conf.origin
 		};
 		await cli(cliConfigParam, options);
 	});
