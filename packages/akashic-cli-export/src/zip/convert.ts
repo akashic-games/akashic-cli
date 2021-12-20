@@ -131,7 +131,8 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 					actualPluginRoot = pluginRoot;
 				} else {
 					actualPluginRoot = path.relative(param.source, require.resolve(pluginRoot, { paths: [param.source] }));
-					if (actualPluginRoot.startsWith("../")) throw new Error(`${pluginRoot} refers outside of the game (${actualPluginRoot})`);
+					if (actualPluginRoot.startsWith("../"))
+						throw new Error(`${pluginRoot} refers outside of the game (${actualPluginRoot})`);
 				}
 				const pluginRootAbsPath = cmn.Util.makeUnixPath(path.join(param.source, actualPluginRoot));
 				const pluginRootDir = path.dirname(pluginRootAbsPath);
