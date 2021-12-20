@@ -124,9 +124,17 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			}
 
 			// operation plugin に登録されているスクリプトファイルは bundle されていても残しておく必要がある
-			const operationPluginRoots = (gamejson.operationPlugins ?? []).map(plugin => plugin.script.replace(/^\.\//g, ""));
+			const operationPluginRoots = (gamejson.operationPlugins ?? []).map(plugin => plugin.script);
 			for (let pluginRoot of operationPluginRoots) {
-				const pluginRootAbsPath = cmn.Util.makeUnixPath(path.join(param.source, pluginRoot));
+				let actualPluginRoot: string;
+				if (pluginRoot.startsWith("./")) {
+					actualPluginRoot = pluginRoot;
+				} else {
+					actualPluginRoot = path.relative(param.source, require.resolve(pluginRoot, { paths: [param.source] }));
+					if (actualPluginRoot.startsWith("../"))
+						throw new Error(`${pluginRoot} refers outside of the game (${actualPluginRoot})`);
+				}
+				const pluginRootAbsPath = cmn.Util.makeUnixPath(path.join(param.source, actualPluginRoot));
 				const pluginRootDir = path.dirname(pluginRootAbsPath);
 				// TODO: Promise#then() と async/await が混在する状態を改め、 async/await に統一する
 				const pluginScripts = await cmn.NodeModules.listScriptFiles(

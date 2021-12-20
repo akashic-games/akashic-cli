@@ -470,6 +470,12 @@ describe("convert", () => {
 					expect(fs.existsSync(path.join(destDir, "script/bar.js"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "node_modules/@hoge/testmodule/lib/ModuleA.js"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "node_modules/@hoge/testmodule/lib/ModuleB.js"))).toBe(true);
+					// モジュール名で game.json の operationPlugins に記述されていても参照できる
+					expect(fs.existsSync(path.join(destDir, "node_modules/@hoge/testmodule2/lib/index.js"))).toBe(true);
+					expect(fs.existsSync(path.join(destDir, "node_modules/@hoge/testmodule2/lib/ModuleA.js"))).toBe(true);
+					// モジュール名/lib 記述されていても参照できる
+					expect(fs.existsSync(path.join(destDir, "node_modules/@hoge/testmodule3/lib/index.js"))).toBe(true);
+					expect(fs.existsSync(path.join(destDir, "node_modules/@hoge/testmodule3/lib/ModuleA.js"))).toBe(true);
 					done();
 				}, done.fail);
 		});
