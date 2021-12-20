@@ -38,11 +38,19 @@ export const getEngineConfig = (param: GetEngineConfigParameterObject): EngineCo
 		versionsJson.v3.fileName = path.basename(process.env.ENGINE_FILES_V3_PATH);
 	}
 
+	const engineUrls = [
+		`${param.baseUrl}/public/external/${versionsJson[`v${version}`].fileName}`
+	];
+
+	if (param.isRaw && process.env.PLAYLOG_CLIENT_PATH) {
+		engineUrls.push(`${param.baseUrl}/public/external/${path.basename(process.env.PLAYLOG_CLIENT_PATH)}`);
+		engineUrls.push(`${param.baseUrl}/socket.io/socket.io.js`); // playlogclientがsocket.ioを利用する想定なので追加しておく
+	} else {
+		engineUrls.push(`${param.baseUrl}/public/external/playlogClientV3_2_1.js`);
+	}
+
 	return {
-		engine_urls: [
-			`${param.baseUrl}/public/external/${versionsJson[`v${version}`].fileName}`,
-			`${param.baseUrl}/public/external/playlogClientV3_2_1.js`
-		],
+		engine_urls: engineUrls,
 		untrusted,
 		external,
 		content_url: `${param.baseUrl}/contents/${param.contentId}/${gameContentDir}/game.json`,
