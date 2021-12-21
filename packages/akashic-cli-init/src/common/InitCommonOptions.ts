@@ -133,33 +133,28 @@ const ALLOWED_URL_VALIDATOR = {
 /**
  * アクセス対象の URL が .akashicrc に存在するかどうか。
  */
-function existsAllowedUrl(url: string, configFile: config.AkashicConfigFile): Promise<boolean> {
-	return configFile.load()
-		.then(() => configFile.getItem("allowedUrl.values"))
-		.then(itemValue => {
-			const itemArray = itemValue ? itemValue.split(",") : [];
-			return itemArray.includes(url);
-		});
+async function existsAllowedUrl(url: string, configFile: config.AkashicConfigFile): Promise<boolean> {
+	await configFile.load();
+	const itemValue = await configFile.getItem("allowedUrl.values");
+	const itemArray = itemValue ? itemValue.split(",") : [];
+	return itemArray.includes(url);
 }
 
 /**
  * アクセス許可した URL を .akashicrc へ保存する。
  */
 async function saveAllowedUrlToAkashicrc(url: string, configFile: config.AkashicConfigFile): Promise<void> {
-	return configFile.load()
-		.then(() => configFile.getItem("allowedUrl.values"))
-		.then(itemValue => {
-			const itemArray = itemValue ? itemValue.split(",") : [];
-			if (!itemArray.includes(url)) {
-				if (itemArray.length >= MAX_NUM_ALLOWED_URL) itemArray.shift();
-				itemArray.push(url);
-			}
-			return itemArray.toString();
-		})
-		.then(items => {
-			if (items) {
-				configFile.setItem("allowedUrl.values", items)
-					.then(() => configFile.save());
-			}
-		});
+	await configFile.load();
+	const itemValue = await configFile.getItem("allowedUrl.values");
+	const itemArray = itemValue ? itemValue.split(",") : [];
+
+	if (!itemArray.includes(url)) {
+		if (itemArray.length >= MAX_NUM_ALLOWED_URL) itemArray.shift();
+		itemArray.push(url);
+	}
+	if (itemArray.length > 0) {
+		const items = itemArray.toString();
+		await configFile.setItem("allowedUrl.values", items);
+		await configFile.save();
+	}
 }
