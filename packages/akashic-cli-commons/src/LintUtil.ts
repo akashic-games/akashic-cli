@@ -1,4 +1,3 @@
-import * as eslint from "eslint";
 
 export interface LintErrorInfo {
 	column: number;
@@ -6,7 +5,8 @@ export interface LintErrorInfo {
 	message: string;
 }
 
-export function validateEs5Code(code: string): LintErrorInfo[] {
+export async function validateEs5Code(code: string): Promise<LintErrorInfo[]> {
+	const eslint = await import("eslint");
 	const errors = (new eslint.Linter()).verify(code, {
 		parserOptions: {
 			ecmaVersion: 5

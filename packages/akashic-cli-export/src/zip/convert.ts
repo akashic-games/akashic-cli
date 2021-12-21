@@ -77,7 +77,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 	cmn.Util.mkdirpSync(path.dirname(path.resolve(param.dest)));
 	return Promise.resolve()
 		.then(() => cmn.ConfigurationFile.read(path.join(param.source, "game.json"), param.logger))
-		.then((result: cmn.GameConfiguration) => {
+		.then(async (result: cmn.GameConfiguration) => {
 			gamejson = result;
 			// export-zip実行時のバージョンとオプションを追記
 			if (param.exportInfo) {
@@ -88,14 +88,16 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			}
 			// 全スクリプトがES5構文になっていることを確認する
 			let errorMessages: string[] = [];
-			gcu.extractScriptAssetFilePaths(gamejson).forEach(filePath => {
+			const filePaths = gcu.extractScriptAssetFilePaths(gamejson);
+			for (const filePath of filePaths) {
 				const code = fs.readFileSync(path.resolve(param.source, filePath)).toString();
 				if (!param.babel) {
+					const errInfo = await cmn.LintUtil.validateEs5Code(code);
 					errorMessages = errorMessages.concat(
-						cmn.LintUtil.validateEs5Code(code).map(info => `${filePath}(${info.line}:${info.column}): ${info.message}`)
+						errInfo.map(info => `${filePath}(${info.line}:${info.column}): ${info.message}`)
 					);
 				}
-			});
+			}
 			if (errorMessages.length > 0) {
 				param.logger.warn("Non-ES5 syntax found.\n" + errorMessages.join("\n"));
 			}
