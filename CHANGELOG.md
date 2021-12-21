@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 2.14.23 (2021-12-21)
+
+#### Bug Fix
+* `akashic-cli-commons`, `akashic-cli-export`
+  * [#954](https://github.com/akashic-games/akashic-cli/pull/954) Fix eslint in devdependencies of commons ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 2
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- kamakiri_ys ([@kamakiri01](https://github.com/kamakiri01))
+
 ## 2.14.22 (2021-12-18)
 
 #### Enhancement
