@@ -208,12 +208,13 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 		httpServer = server.createServer(app);
 	}
 
-	if (cliConfigParam.corsAllowOrigin && cliConfigParam.corsAllowOrigin === "null") {
+	if (cliConfigParam.corsAllowOrigin === "null") {
+		cliConfigParam.corsAllowOrigin = undefined;
 		getSystemLogger().warn(`null is disabled as --cors-allow-origin option parameter.`);
 	}
 
 	let io: socketio.Server;
-	if (cliConfigParam.corsAllowOrigin && cliConfigParam.corsAllowOrigin !== "null") {
+	if (cliConfigParam.corsAllowOrigin) {
 		io = new socketio.Server(httpServer, {
 			parser,
 			cors: {
@@ -273,7 +274,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 
 	app.use("^\/$", (_req, res, _next) => res.redirect("/public/"));
 
-	if (cliConfigParam.corsAllowOrigin && cliConfigParam.corsAllowOrigin !== "null") {
+	if (cliConfigParam.corsAllowOrigin) {
 		app.use(cors({ origin: cliConfigParam.corsAllowOrigin }));
 	}
 
