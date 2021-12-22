@@ -43,7 +43,7 @@ export const getEngineConfig = (param: GetEngineConfigParameterObject): EngineCo
 	];
 
 	if (param.isRaw && process.env.PLAYLOG_CLIENT_PATH) {
-		engineUrls.push(`${param.baseUrl}/public/external/${path.basename(process.env.PLAYLOG_CLIENT_PATH)}`);
+		engineUrls.push(`${param.baseUrl}/dynamic/${path.basename(process.env.PLAYLOG_CLIENT_PATH)}`);
 		engineUrls.push(`${param.baseUrl}/socket.io/socket.io.js`); // playlogclientがsocket.ioを利用する想定なので追加しておく
 	} else {
 		engineUrls.push(`${param.baseUrl}/public/external/playlogClientV3_2_1.js`);

@@ -289,7 +289,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 	}
 
 	if (process.env.PLAYLOG_CLIENT_PATH) {
-		app.get("/public/external/playlogClientV*.js", (req, res, _next) => {
+		app.get("/dynamic/playlogClientV*.js", (req, res, _next) => {
 			const playlogClientSrc = fs.readFileSync(path.resolve(process.cwd(), process.env.PLAYLOG_CLIENT_PATH));
 			const responseBody = `var HOST = "${req.header("host")}";
 ${playlogClientSrc}

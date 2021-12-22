@@ -52,7 +52,7 @@ akashic-cli-serve [<options>] [<path>]
 | 環境変数 | 説明 | 注釈 |
 |--------|-----|-----|
 | `ENGINE_FILES_V3_PATH` | engine-files v3 のビルド成果物のパス。 (e.g. `./engineFilesV3_x_y.js`) <br> この値が指定された場合、 対象の engine-files を akashic-engine v3 コンテンツ実行時に利用します。 | エンジン開発用のオプションです。通常、ゲーム開発時に利用する必要はありません。 |
-| `PLAYLOG_CLIENT_PATH` | playlog-client のビルド成果物のパス。 (e.g. `./playlogClientVx_y_z.js`) <br> この値が指定された場合、 `/public/external/playlogClientVx_y_z.js`というパスが生成され、`content.raw.json`からも参照されるようになります。 | エンジン開発用のオプションです。通常、ゲーム開発時に利用する必要はありません。 |
+| `PLAYLOG_CLIENT_PATH` | playlog-client のビルド成果物のパス。 (e.g. `./playlogClientVx_y_z.js`) <br> この値が指定された場合、 `/contents/:contentId/content.raw.json` からも参照され利用されます。 | エンジン開発用のオプションです。通常、ゲーム開発時に利用する必要はありません。 |
 
 ## 外部参照できる DOM 要素
 
