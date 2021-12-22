@@ -224,14 +224,14 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 				const targetPlayIds: string[] = [];
 				// 対象のコンテンツIDしか分からないので先に対応するコンテンツのrunnerを全て停止させる
 				playStore.getPlayIdsFromContentId(contentId).forEach(playId => {
-					playStore.getRunners(playId).forEach(runner => {
+					playStore.getPlayInfo(playId)?.runners.forEach(runner => {
 						runnerStore.stopRunner(runner.runnerId);
 					});
 					targetPlayIds.push(playId);
 				});
 				if (targetPlayIds.length === 0)
 					return;
-				const audioState = playStore.getPlayAudioState(targetPlayIds[targetPlayIds.length - 1]); // 暫定: どれを持ち越すべきか検討が必要
+				const audioState = playStore.getPlayInfo(targetPlayIds[targetPlayIds.length - 1]).audioState; // 暫定: どれを持ち越すべきか検討が必要
 				const playId = await playStore.createPlay(new ServerContentLocator({ contentId }), audioState, null);
 				const token = amflowManager.createPlayToken(playId, "", "", true, {});
 				const amflow = playStore.createAMFlow(playId);

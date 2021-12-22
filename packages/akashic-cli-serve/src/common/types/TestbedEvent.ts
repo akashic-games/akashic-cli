@@ -7,6 +7,7 @@ import {StartPointHeader} from "./StartPointHeader";
 
 export interface PlayCreateTestbedEvent {
 	playId: string;
+	status: PlayStatus;
 	contentLocatorData: ContentLocatorData;
 	audioState: PlayAudioState;
 }

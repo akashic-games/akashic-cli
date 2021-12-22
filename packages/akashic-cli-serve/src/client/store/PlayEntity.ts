@@ -40,6 +40,7 @@ export interface CreateServerInstanceParameterObject {
 
 export interface PlayEntityParameterObject {
 	playId: string;
+	status: PlayStatus;
 	joinedPlayers?: Player[];
 	content: ContentEntity;
 	runners?: RunnerDescription[];
@@ -84,7 +85,7 @@ export class PlayEntity {
 		this.clientInstances = param.clientInstances ?? [];
 		this.startPointHeaders = param.startPointHeaders ?? [];
 		this.joinedPlayerTable = observable.map((param.joinedPlayers || []).map(p => [p.id, p] as [string, Player]));
-		this.status = "preparing";
+		this.status = param.status;
 		this.audioState = param.audioState ?? { muteType: "none" };
 		this.localInstances = [];
 		this.serverInstances = !param.runners ? [] : param.runners.map(desc => {

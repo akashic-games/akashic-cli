@@ -21,7 +21,10 @@ export const createHandlerToCreateRunner = (
 			}
 
 			const playId = req.body.playId;
-			const contentId = playStore.getContentLocator(playId).contentId;
+			const playInfo = playStore.getPlayInfo(playId);
+			if (!playInfo)
+				throw new BadRequestError({ errorMessage: `Play not found for ${playId}` });
+			const contentId = playInfo.contentLocatorData.contentId;
 			const isActive = Boolean(req.body.isActive);
 			const token = req.body.token;
 			const amflow = playStore.createAMFlow(playId);

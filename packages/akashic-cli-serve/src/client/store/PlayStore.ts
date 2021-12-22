@@ -124,6 +124,7 @@ export class PlayStore {
 
 		const play = new PlayEntity({
 			playId,
+			status: "running", // 暫定。stanadlone プレイは running しかないものとして扱う
 			content: this._contentStore.findOrRegister(param.contentLocator),
 			parent: param.parent
 		});

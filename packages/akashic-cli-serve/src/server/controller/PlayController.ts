@@ -18,18 +18,7 @@ export const createHandlerToCreatePlay = (playStore: PlayStore): express.Request
 			const audioState = req.body.audioState ?? { muteType: "none", soloPlayerId: null };
 			const contentLocator = new ServerContentLocator(req.body.contentLocator);
 			const playId = await playStore.createPlay(contentLocator, audioState, null);
-			responseSuccess<PlayApiResponseData>(res, 200, {
-				playId,
-				contentLocatorData: contentLocator,
-				joinedPlayers: [],
-				runners: [],
-				clientInstances: [],
-				durationState: {
-					duration: 0,
-					isPaused: true
-				},
-				audioState
-			});
+			responseSuccess<PlayApiResponseData>(res, 200, playStore.getPlayInfo(playId));
 		} catch (e) {
 			next(e);
 		}
@@ -40,21 +29,13 @@ export const createHandlerToGetPlay = (playStore: PlayStore): express.RequestHan
 	return (req, res, next) => {
 		try {
 			const playId = req.params.playId;
-			const play = playStore.getPlay(playId);
-			if (!play) {
+			const playInfo = playStore.getPlayInfo(playId);
+			if (!playInfo) {
 				throw new NotFoundError({
 					errorMessage: "Play is not found"
 				});
 			}
-			responseSuccess<PlayApiResponseData>(res, 200, {
-				playId: play.playId,
-				contentLocatorData: playStore.getContentLocator(playId),
-				joinedPlayers: playStore.getJoinedPlayers(playId),
-				runners: playStore.getRunners(playId),
-				clientInstances: playStore.getClientInstances(playId),
-				durationState: playStore.getPlayDurationState(playId),
-				audioState: playStore.getPlayAudioState(playId)
-			});
+			responseSuccess<PlayApiResponseData>(res, 200, playInfo);
 		} catch (e) {
 			next(e);
 		}
@@ -68,15 +49,7 @@ export const createHandlerToGetPlays = (playStore: PlayStore): express.RequestHa
 			responseSuccess<PlayApiResponseData[]>(
 				res,
 				200,
-				plays.map(play => ({
-					playId: play.playId,
-					contentLocatorData: playStore.getContentLocator(play.playId),
-					joinedPlayers: playStore.getJoinedPlayers(play.playId),
-					runners: playStore.getRunners(play.playId),
-					clientInstances: playStore.getClientInstances(play.playId),
-					durationState: playStore.getPlayDurationState(play.playId),
-					audioState: playStore.getPlayAudioState(play.playId)
-				}))
+				plays.map(play => playStore.getPlayInfo(play.playId))
 			);
 		} catch (e) {
 			next(e);
