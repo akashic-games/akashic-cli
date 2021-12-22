@@ -92,8 +92,8 @@ async function validateInitCommonOptions(opts: InitCommonOptions): Promise<void>
 }
 
 export async function confirmAccessToUrl(url: string): Promise<boolean> {
-	const akashicConfigFile = new config.AkashicConfigFile(ALLOWED_URL_VALIDATOR);
-	const ret = await existsAllowedUrl(url, akashicConfigFile);
+	const akashicConfigFile = new config.AkashicConfigFile(KNOWN_URL_URL_VALIDATOR);
+	const ret = await existsKnownUrl(url, akashicConfigFile);
 	if (ret) return true;
 
 	return new Promise<boolean>((resolve: (result: boolean) => void, reject: (err: any) => void) => {
@@ -118,24 +118,24 @@ export async function confirmAccessToUrl(url: string): Promise<boolean> {
 			if (err) {
 				reject(err);
 			} else {
-				if (ret) await saveAllowedUrlToAkashicrc(url, akashicConfigFile);
+				if (ret) await saveKnownUrlToAkashicConfig(url, akashicConfigFile);
 				resolve(ret);
 			}
 		});
 	});
 }
 
-const MAX_NUM_ALLOWED_URL = 4;
-const ALLOWED_URL_VALIDATOR = {
-	"allowedUrl.values": ""
+const MAX_NUM_KNOWN_URL = 4;
+const KNOWN_URL_URL_VALIDATOR = {
+	"cache.initKnownUrl": ""
 };
 
 /**
  * アクセス対象の URL が .akashicrc に存在するかどうか。
  */
-async function existsAllowedUrl(url: string, configFile: config.AkashicConfigFile): Promise<boolean> {
+async function existsKnownUrl(url: string, configFile: config.AkashicConfigFile): Promise<boolean> {
 	await configFile.load();
-	const itemValue = await configFile.getItem("allowedUrl.values");
+	const itemValue = await configFile.getItem("cache.initKnownUrl");
 	const itemArray = itemValue ? itemValue.split(",") : [];
 	return itemArray.includes(url);
 }
@@ -143,18 +143,18 @@ async function existsAllowedUrl(url: string, configFile: config.AkashicConfigFil
 /**
  * アクセス許可した URL を .akashicrc へ保存する。
  */
-async function saveAllowedUrlToAkashicrc(url: string, configFile: config.AkashicConfigFile): Promise<void> {
+async function saveKnownUrlToAkashicConfig(url: string, configFile: config.AkashicConfigFile): Promise<void> {
 	await configFile.load();
-	const itemValue = await configFile.getItem("allowedUrl.values");
+	const itemValue = await configFile.getItem("cache.initKnownUrl");
 	const itemArray = itemValue ? itemValue.split(",") : [];
 
 	if (!itemArray.includes(url)) {
-		if (itemArray.length >= MAX_NUM_ALLOWED_URL) itemArray.shift();
+		if (itemArray.length >= MAX_NUM_KNOWN_URL) itemArray.shift();
 		itemArray.push(url);
 	}
 	if (itemArray.length > 0) {
 		const items = itemArray.toString();
-		await configFile.setItem("allowedUrl.values", items);
+		await configFile.setItem("cache.initKnownUrl", items);
 		await configFile.save();
 	}
 }
