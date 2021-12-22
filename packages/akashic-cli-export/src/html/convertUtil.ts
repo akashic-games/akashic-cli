@@ -167,9 +167,9 @@ export function getInjectedContents(baseDir: string, injects: string[]): string[
 	return injectedContents;
 }
 
-export function validateEs5Code(fileName: string, code: string): string[] {
-	return cmn.LintUtil.validateEs5Code(code)
-		.map(info => `${fileName}(${info.line}:${info.column}): ${info.message}`);
+export async function validateEs5Code(fileName: string, code: string): Promise<string[]> {
+	const errInfo = await cmn.LintUtil.validateEs5Code(code);
+	return errInfo.map(info => `${fileName}(${info.line}:${info.column}): ${info.message}`);
 }
 
 export function readSandboxConfigJs(sourceDir: string): string {

@@ -35,7 +35,7 @@ describe("convertUtil", function () {
 		});
 	});
 	describe("validateEs5Code", function () {
-		it("return empty array if code is written with ES5 syntax", function () {
+		it("return empty array if code is written with ES5 syntax", async function () {
 			const es5Code = `
 				"use strict";
 				var fn = function () {
@@ -45,9 +45,9 @@ describe("convertUtil", function () {
 				var a = array[0];
 				var b = array[1];
 			`;
-			expect(convert.validateEs5Code("es5.js", es5Code).length).toBe(0);
+			expect((await convert.validateEs5Code("es5.js", es5Code)).length).toBe(0);
 		});
-		it("return error messages if code is not written with ES5 syntax", function () {
+		it("return error messages if code is not written with ES5 syntax", async function () {
 			const es6Code = `
 				"use strict";
 				const fn = () => {
@@ -56,7 +56,7 @@ describe("convertUtil", function () {
 				const array = [1, 3];
 				const [a, b] = array;
 			`;
-			const result = convert.validateEs5Code("es6.js", es6Code);
+			const result = await convert.validateEs5Code("es6.js", es6Code);
 			expect(result.length).toBe(1);
 			expect(result[0]).toBe("es6.js(3:5): Parsing error: The keyword \'const\' is reserved");
 		});

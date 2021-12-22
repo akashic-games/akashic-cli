@@ -11,6 +11,7 @@
   "author": "",
   "license": "",
   "devDependencies": {
-    "@akashic/akashic-sandbox": "^0.13.3"
+    "@akashic/akashic-sandbox": "^0.13.3",
+    "@hoge/testmodule2": "0.1.0"
   }
 }

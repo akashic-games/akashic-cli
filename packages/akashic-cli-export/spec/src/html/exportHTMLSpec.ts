@@ -3,7 +3,7 @@ import * as fsx from "fs-extra";
 import * as exp from "../../../lib/html/exportHTML";
 
 describe("exportHTML", function () {
-	it("_completeExportHTMLParameterObject", function (done: DoneFn) {
+	it("_completeExportHTMLParameterObject", (done) => {
 		Promise.resolve()
 			.then(function () {
 				const param: exp.ExportHTMLParameterObject = {
@@ -25,7 +25,7 @@ describe("exportHTML", function () {
 			.then(done, done.fail);
 	});
 
-	it("_completeExportHTMLParameterObject - fullpath", function (done: DoneFn) {
+	it("_completeExportHTMLParameterObject - fullpath", (done) => {
 		Promise.resolve()
 			.then(function () {
 				let param: exp.ExportHTMLParameterObject = {
@@ -62,7 +62,7 @@ describe("exportHTML", function () {
 	});
 
 
-	it("promiseExportHTML", function (done: DoneFn) {
+	it("promiseExportHTML", (done) => {
 		Promise.resolve()
 			.then(function () {
 				const param: exp.ExportHTMLParameterObject = {
@@ -86,7 +86,7 @@ describe("exportHTML", function () {
 			.then(done, done.fail);
 	});
 
-	it("output option has zip extension", function (done: DoneFn) {
+	it("output option has zip extension", (done) => {
 		Promise.resolve()
 			.then(function () {
 				const param: exp.ExportHTMLParameterObject = {
