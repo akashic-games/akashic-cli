@@ -56,14 +56,17 @@ export async function promiseConvertBundle(options: ConvertTemplateParameterObje
 	if (!options.unbundleText) {
 		innerHTMLAssetNames = innerHTMLAssetNames.concat(extractAssetDefinitions(conf, "text"));
 	}
-	innerHTMLAssetArray = innerHTMLAssetArray.concat(innerHTMLAssetNames.map((assetName: string) => {
+
+	const tempAssetData = await Promise.all(innerHTMLAssetNames.map((assetName: string) => {
 		return convertAssetToInnerHTMLObj(assetName, options.source, conf, options.minify, options.lint, errorMessages);
 	}));
+	innerHTMLAssetArray = innerHTMLAssetArray.concat(tempAssetData);
 
 	if (conf._content.globalScripts) {
-		innerHTMLAssetArray = innerHTMLAssetArray.concat(conf._content.globalScripts.map((scriptName: string) => {
+		const tempScriptData = await Promise.all(conf._content.globalScripts.map((scriptName: string) => {
 			return convertScriptNameToInnerHTMLObj(scriptName, options.source, options.minify, options.lint, errorMessages);
 		}));
+		innerHTMLAssetArray = innerHTMLAssetArray.concat(tempScriptData);
 	}
 
 	if (errorMessages.length > 0) {
@@ -88,14 +91,14 @@ export async function promiseConvertBundle(options: ConvertTemplateParameterObje
 	writeCommonFiles(options.source, options.output, conf, options, templatePath);
 }
 
-function convertAssetToInnerHTMLObj(
+async function convertAssetToInnerHTMLObj(
 	assetName: string, inputPath: string, conf: cmn.Configuration,
-	minify?: boolean, lint?: boolean, errors?: string[]): InnerHTMLAssetData {
+	minify?: boolean, lint?: boolean, errors?: string[]): Promise<InnerHTMLAssetData> {
 	var assets = conf._content.assets;
 	var isScript = assets[assetName].type === "script";
 	var assetString = fs.readFileSync(path.join(inputPath, assets[assetName].path), "utf8").replace(/\r\n|\r/g, "\n");
 	if (isScript && lint) {
-		errors.push.apply(errors, validateEs5Code(assets[assetName].path, assetString));
+		errors.push.apply(errors, await validateEs5Code(assets[assetName].path, assetString));
 	}
 	return {
 		name: assetName,
@@ -104,9 +107,9 @@ function convertAssetToInnerHTMLObj(
 	};
 }
 
-function convertScriptNameToInnerHTMLObj(
+async function convertScriptNameToInnerHTMLObj(
 	scriptName: string, inputPath: string,
-	minify?: boolean, lint?: boolean, errors?: string[]): InnerHTMLAssetData {
+	minify?: boolean, lint?: boolean, errors?: string[]): Promise<InnerHTMLAssetData> {
 	var scriptString = fs.readFileSync(path.join(inputPath, scriptName), "utf8").replace(/\r\n|\r/g, "\n");
 	var isScript = /\.js$/i.test(scriptName);
 
@@ -115,7 +118,7 @@ function convertScriptNameToInnerHTMLObj(
 		scriptString = encodeText(scriptString);
 	}
 	if (isScript && lint) {
-		errors.push.apply(errors, validateEs5Code(scriptName, scriptString));
+		errors.push.apply(errors, await validateEs5Code(scriptName, scriptString));
 	}
 	return {
 		name: scriptName,

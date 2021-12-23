@@ -31,12 +31,27 @@
 		{
 			"code": 2,
 			"script": "./node_modules/@hoge/testmodule/lib/ModuleA.js"
+		},
+		{
+			"code": 3,
+			"script": "@hoge/testmodule2/"
+		},
+		{
+			"code": 4,
+			"script": "@hoge/testmodule3/lib/"
 		}
 	],
+	"moduleMainScripts": {
+		"@hoge/testmodule": "node_modules/@hoge/testmodule/lib/index.js",
+		"@hoge/testmodule2": "node_modules/@hoge/testmodule2/lib/index.js",
+		"@hoge/testmodule3": "node_modules/@hoge/testmodule3/lib/index.js"
+	},
 	"globalScripts": [
 		"node_modules/@hoge/testmodule/lib/ModuleA.js",
 		"node_modules/@hoge/testmodule/lib/ModuleB.js",
 		"node_modules/@hoge/testmodule/lib/ModuleC.js",
-		"node_modules/@hoge/testmodule/lib/index.js"
+		"node_modules/@hoge/testmodule/lib/index.js",
+		"node_modules/@hoge/testmodule2/lib/index.js",
+		"node_modules/@hoge/testmodule3/lib/index.js"
 	]
 }
