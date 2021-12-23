@@ -92,7 +92,7 @@ async function validateInitCommonOptions(opts: InitCommonOptions): Promise<void>
 }
 
 export async function confirmAccessToUrl(url: string): Promise<boolean> {
-	const akashicConfigFile = new config.AkashicConfigFile(KNOWN_URL_URL_VALIDATOR);
+	const akashicConfigFile = new config.AkashicConfigFile(KNOWN_URL_VALIDATOR);
 	const exists = await existsKnownUrl(url, akashicConfigFile);
 	if (exists) return true;
 
@@ -126,7 +126,7 @@ export async function confirmAccessToUrl(url: string): Promise<boolean> {
 }
 
 const MAX_NUM_KNOWN_URL = 4;
-const KNOWN_URL_URL_VALIDATOR = {
+const KNOWN_URL_VALIDATOR = {
 	"cache.initKnownUrl": ""
 };
 
