@@ -78,7 +78,6 @@ export async function completeInitCommonOptions(opts: InitCommonOptions): Promis
 	};
 }
 
-
 async function validateInitCommonOptions(opts: InitCommonOptions): Promise<void> {
 	if (opts.repository) {
 		if (/(^(github|ghe):)|(\.git$)/.test(opts.repository)) {
@@ -86,13 +85,17 @@ async function validateInitCommonOptions(opts: InitCommonOptions): Promise<void>
 		}
 
 		if (opts.repository !== DEFAULT_TEMPLATE_REPOSITORY) {
-			const ret = await confirmAccessToUrl(opts.repository);
-			if (!ret) process.exit(1);
+			const accepted = await confirmAccessToUrl(opts.repository);
+			if (!accepted) process.exit(1);
 		}
 	}
 }
 
-export function confirmAccessToUrl(url: string): Promise<boolean> {
+export async function confirmAccessToUrl(url: string): Promise<boolean> {
+	const akashicConfigFile = new config.AkashicConfigFile(KNOWN_URL_VALIDATOR);
+	const exists = await existsKnownUrl(url, akashicConfigFile);
+	if (exists) return true;
+
 	return new Promise<boolean>((resolve: (result: boolean) => void, reject: (err: any) => void) => {
 		const schema = {
 			properties: {
@@ -109,14 +112,48 @@ export function confirmAccessToUrl(url: string): Promise<boolean> {
 			}
 		};
 		Prompt.start();
-		Prompt.get(schema, (err: any, result: any) => {
+		Prompt.get(schema, async (err: any, result: any) => {
 			const value = result.confirm.toLowerCase();
 			const ret = value === "y" || value === "yes";
 			if (err) {
 				reject(err);
 			} else {
+				if (ret) await saveKnownUrlToAkashicConfig(url, akashicConfigFile);
 				resolve(ret);
 			}
 		});
 	});
+}
+
+const MAX_NUM_KNOWN_URL = 4;
+const KNOWN_URL_VALIDATOR = {
+	"cache.initKnownUrl": ""
+};
+
+/**
+ * アクセス対象の URL が .akashicrc に存在するかどうか。
+ */
+async function existsKnownUrl(url: string, configFile: config.AkashicConfigFile): Promise<boolean> {
+	await configFile.load();
+	const itemValue = await configFile.getItem("cache.initKnownUrl");
+	const itemArray = itemValue ? JSON.parse(itemValue) : [];
+	return itemArray.includes(url);
+}
+
+/**
+ * アクセス許可した URL を .akashicrc へ保存する。
+ */
+async function saveKnownUrlToAkashicConfig(url: string, configFile: config.AkashicConfigFile): Promise<void> {
+	await configFile.load();
+	const itemValue = await configFile.getItem("cache.initKnownUrl");
+	const itemArray = itemValue ? JSON.parse(itemValue) : [];
+
+	if (!itemArray.includes(url)) {
+		if (itemArray.length >= MAX_NUM_KNOWN_URL) itemArray.shift();
+		itemArray.push(url);
+
+		const items = JSON.stringify(itemArray);
+		await configFile.setItem("cache.initKnownUrl", items);
+		await configFile.save();
+	}
 }
