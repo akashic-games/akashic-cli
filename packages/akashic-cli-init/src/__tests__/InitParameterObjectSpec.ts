@@ -61,7 +61,7 @@ describe("InitParameterObject.ts", () => {
 	describe("save the allowed URL in .akashicrc", () => {
 		let mockConfigfile: config.AkashicConfigFile = null;
 		let mockPromptGet: jest.SpyInstance = null;
-		const ITEM_KEY = "allowedUrl.values";
+		const ITEM_KEY = "cache.initKnownUrl";
 		const tempPath = path.join(__dirname, "support", "fixture", ".akashicrc");
 
 		beforeAll(() => {
@@ -76,7 +76,7 @@ describe("InitParameterObject.ts", () => {
 			});
 
 			fs.writeFileSync(tempPath, "");
-			mockConfigfile = new config.AkashicConfigFile({ "allowedUrl.values": ""});
+			mockConfigfile = new config.AkashicConfigFile({ "cache.initKnownUrl": ""});
 		});
 		afterAll(() => {
 			mockConfigfile = null;
@@ -92,7 +92,7 @@ describe("InitParameterObject.ts", () => {
 
 			await mockConfigfile.load();
 			const items = await mockConfigfile.getItem(ITEM_KEY);
-			const itemArray = items ? items.split(",") : [];
+			const itemArray = items ? JSON.parse(items) : [];
 			expect(itemArray.includes(param.repository));
 			expect(mockPromptGet).toHaveBeenCalledTimes(1);
 		});
@@ -105,7 +105,7 @@ describe("InitParameterObject.ts", () => {
 
 			await mockConfigfile.load();
 			const items = await mockConfigfile.getItem(ITEM_KEY);
-			const itemArray = items ? items.split(",") : [];
+			const itemArray = items ? JSON.parse(items) : [];
 			expect(itemArray.length).toBe(1);
 			expect(itemArray.includes(param.repository));
 			expect(mockPromptGet).toHaveBeenCalledTimes(1); // 同じ値のため 確認の Prompt は呼ばれず前のテストで呼ばれた 1 回のままとなる。
@@ -120,7 +120,7 @@ describe("InitParameterObject.ts", () => {
 
 			await mockConfigfile.load();
 			const items = await mockConfigfile.getItem(ITEM_KEY);
-			const itemArray = items ? items.split(",") : [];
+			const itemArray = items ? JSON.parse(items) : [];
 			expect(itemArray.includes(targetUrl));
 			expect(mockPromptGet).toHaveBeenCalledTimes(2);
 		});
@@ -138,14 +138,14 @@ describe("InitParameterObject.ts", () => {
 
 			await mockConfigfile.load();
 			const items = await mockConfigfile.getItem(ITEM_KEY);
-			const itemArray = items ? items.split(",") : [];
+			const itemArray = items ? JSON.parse(items) : [];
 			expect(itemArray.includes(targetUrl));
 		});
 
 		it("4 URLs can be saved", async () => {
 			await mockConfigfile.load();
 			let items = await mockConfigfile.getItem(ITEM_KEY);
-			let itemArray = items ? items.split(",") : [];
+			let itemArray = items ? JSON.parse(items) : [];
 			expect(itemArray.length).toBe(3); // 上3つのテストで保存した URL が保存されている
 			const firstUrl = itemArray[0];
 
@@ -156,18 +156,18 @@ describe("InitParameterObject.ts", () => {
 			await target.completeInitParameterObject(param);
 			await mockConfigfile.load();
 			items = await mockConfigfile.getItem(ITEM_KEY);
-			itemArray = items ? items.split(",") : [];
+			itemArray = items ? JSON.parse(items) : [];
 			expect(itemArray.length).toBe(4);
 
 			// 5 個目の URL を保存。最大保存数:4 のため、超える場合は最初の item をpop する。
-			param.repository = "https://test.com";
+			param.repository = "https://test,com";
 			await target.completeInitParameterObject(param);
 			await mockConfigfile.load();
 			items = await mockConfigfile.getItem(ITEM_KEY);
-			itemArray = items ? items.split(",") : [];
+			itemArray = items ? JSON.parse(items) : [];
 			expect(itemArray.length).toBe(4);
 			expect(!itemArray.includes(firstUrl));
-			expect(itemArray[3]).toBe("https://test.com");
+			expect(itemArray[3]).toBe("https://test,com");
 		});
 	});
 });

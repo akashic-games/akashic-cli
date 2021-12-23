@@ -85,16 +85,16 @@ async function validateInitCommonOptions(opts: InitCommonOptions): Promise<void>
 		}
 
 		if (opts.repository !== DEFAULT_TEMPLATE_REPOSITORY) {
-			const ret = await confirmAccessToUrl(opts.repository);
-			if (!ret) process.exit(1);
+			const accepted = await confirmAccessToUrl(opts.repository);
+			if (!accepted) process.exit(1);
 		}
 	}
 }
 
 export async function confirmAccessToUrl(url: string): Promise<boolean> {
 	const akashicConfigFile = new config.AkashicConfigFile(KNOWN_URL_URL_VALIDATOR);
-	const ret = await existsKnownUrl(url, akashicConfigFile);
-	if (ret) return true;
+	const exists = await existsKnownUrl(url, akashicConfigFile);
+	if (exists) return true;
 
 	return new Promise<boolean>((resolve: (result: boolean) => void, reject: (err: any) => void) => {
 		const schema = {
@@ -136,7 +136,7 @@ const KNOWN_URL_URL_VALIDATOR = {
 async function existsKnownUrl(url: string, configFile: config.AkashicConfigFile): Promise<boolean> {
 	await configFile.load();
 	const itemValue = await configFile.getItem("cache.initKnownUrl");
-	const itemArray = itemValue ? itemValue.split(",") : [];
+	const itemArray = itemValue ? JSON.parse(itemValue) : [];
 	return itemArray.includes(url);
 }
 
@@ -146,14 +146,13 @@ async function existsKnownUrl(url: string, configFile: config.AkashicConfigFile)
 async function saveKnownUrlToAkashicConfig(url: string, configFile: config.AkashicConfigFile): Promise<void> {
 	await configFile.load();
 	const itemValue = await configFile.getItem("cache.initKnownUrl");
-	const itemArray = itemValue ? itemValue.split(",") : [];
+	const itemArray = itemValue ? JSON.parse(itemValue) : [];
 
 	if (!itemArray.includes(url)) {
 		if (itemArray.length >= MAX_NUM_KNOWN_URL) itemArray.shift();
 		itemArray.push(url);
-	}
-	if (itemArray.length > 0) {
-		const items = itemArray.toString();
+
+		const items = JSON.stringify(itemArray);
 		await configFile.setItem("cache.initKnownUrl", items);
 		await configFile.save();
 	}
