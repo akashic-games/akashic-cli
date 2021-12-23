@@ -92,19 +92,6 @@ akashic-cli-init は以下の設定を利用します。設定は `akashic confi
 プロンプトにて URL へのアクセスを許可した場合は、`.akashicrc` へ最大 4 件保存します。5 件目を保存する場合は、最初の 1 件目が削除されます。
 また、保存されている値とオプションで指定された値が同じ場合は、確認のプロンプトをスキップします。
 
-## 開発者向け
-
-### ファクトリテンプレートの更新
-
-ファクトリテンプレートを更新する場合は、 templates-src/ 以下 と templates-src-v3/ 以下を編集後、 `npm run update:template-zips` を実行して zip ファイルを更新します。
-
-### ファクトリテンプレートの追加
-
-ファクトリテンプレートを追加する場合は、 templates-src/ 以下に game-xxx/ デイレクトリを加えて
- `npm run update:template-zips` を実行後、 templates/template-list.json を編集してください。
-game-xxx/ ディレクトリは、 Akashic ゲームである必要があります。
-(実装上の制限から、現在は package.json を含むゲームを置くことはできないので注意してください。)
-
 ## ライセンス
 本リポジトリは MIT License の元で公開されています。
 詳しくは [LICENSE](https://github.com/akashic-games/akashic-cli/blob/master/LICENSE) をご覧ください。
