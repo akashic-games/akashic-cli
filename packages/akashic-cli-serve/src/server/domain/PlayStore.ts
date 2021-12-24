@@ -2,8 +2,9 @@ import { AMFlowClient, Play, PlayManager } from "@akashic/headless-driver";
 import { Trigger } from "@akashic/trigger";
 import { TimeKeeper } from "../../common/TimeKeeper";
 import { PlayAudioState } from "../../common/types/PlayAudioState";
-import { PlayDurationState } from "../../common/types/PlayDurationState";
 import { Player } from "../../common/types/Player";
+import { PlayInfo } from "../../common/types/PlayInfo";
+import { PlayStatus } from "../../common/types/PlayStatus";
 import {
 	PlayCreateTestbedEvent,
 	PlayStatusChangedTestbedEvent,
@@ -26,7 +27,18 @@ export interface PlayStoreParameterObject {
 	playManager: PlayManager;
 }
 
+/**
+ * プレイ関連情報。特に headless-driver の Play では賄えない情報を補うデータ。
+ */
+// TODO headless-driver の Play の利用をやめるか、隠蔽してこれと統合する
 export interface PlayEntity {
+	/**
+	 * プレイのステータス。
+	 * headless-driver の Play にも同名のデータがあるが、
+	 * serve ではプッシュ通知のために変更されるタイミングを完全に把握する必要があり、ここに自前で持つ。
+	 */
+	status: PlayStatus;
+
 	contentLocator: ServerContentLocator;
 	timeKeeper: TimeKeeper;
 	clientInstances: ClientInstanceDescription[];
@@ -74,8 +86,10 @@ export class PlayStore {
 		const playId = await this.playManager.createPlay({
 			contentUrl: loc.asAbsoluteUrl()
 		}, playlog);
+		const status = "preparing";
 		this.playEntities[playId] = {
 			contentLocator: loc,
+			status,
 			timeKeeper: new TimeKeeper(),
 			clientInstances: [],
 			runners: [],
@@ -89,8 +103,8 @@ export class PlayStore {
 			const finishedTime = this.calculataFinishedTime(playlog);
 			timeKeeper.setTime(finishedTime);
 		}
-		this.onPlayCreate.fire({playId, contentLocatorData: loc, audioState});
-		this.onPlayStatusChange.fire({playId, playStatus: "running"});
+		this.onPlayCreate.fire({playId, status, contentLocatorData: loc.asContentLocatorData(), audioState});
+		this.setPlayStatus(playId, "running");
 		return playId;
 	}
 
@@ -102,13 +116,41 @@ export class PlayStore {
 		return this.playManager.getAllPlays();
 	}
 
+	// プレイ関連情報を取得する。headless-driver の Play を取得する getPlay() との混同に注意。
+	// TODO getPlay() の方を隠蔽する
+	getPlayInfo(playId: string): PlayInfo | null {
+		const play = this.getPlay(playId);
+		const playEntity = this.playEntities[playId];
+		if (!playEntity || !play)
+			return null;
+		return {
+			playId,
+			status: playEntity.status,
+			createdAt: play.createdAt,
+			lastSuspendedAt: play.lastSuspendedAt,
+			contentLocatorData: playEntity.contentLocator.asContentLocatorData(),
+			joinedPlayers: playEntity.joinedPlayers,
+			runners: playEntity.runners,
+			clientInstances: playEntity.clientInstances,
+			durationState: {
+				duration: playEntity.timeKeeper.now(),
+				isPaused: playEntity.timeKeeper.isPausing()
+			},
+			audioState: playEntity.audioState
+		};
+	}
+
+	getPlaysInfo(): PlayInfo[] {
+		return this.getPlays().map(p => this.getPlayInfo(p.playId));
+	}
+
 	getPlayIdsFromContentId(contentId: string): string[] {
 		return Object.keys(this.playEntities).filter(key => contentId === this.playEntities[key].contentLocator.contentId);
 	}
 
 	async stopPlay(playId: string): Promise<void> {
 		await this.playManager.deletePlay(playId);
-		this.onPlayStatusChange.fire({playId, playStatus: "suspending"});
+		this.setPlayStatus(playId, "suspending");
 	}
 
 	createPlayToken(playId: string, isActive: boolean): string {
@@ -149,6 +191,11 @@ export class PlayStore {
 		this.onPlayerLeave.fire({playId, playerId});
 	}
 
+	setPlayStatus(playId: string, playStatus: PlayStatus): void {
+		this.playEntities[playId].status = playStatus;
+		this.onPlayStatusChange.fire({playId, playStatus});
+	}
+
 	pausePlayDuration(playId: string): void {
 		this.playEntities[playId].timeKeeper.pause();
 		this.onPlayDurationStateChange.fire({playId, isPaused: true});
@@ -168,31 +215,6 @@ export class PlayStore {
 	setPlayAudioState(playId: string, audioState: PlayAudioState): void {
 		this.playEntities[playId].audioState = audioState;
 		this.onPlayAudioStateChange.fire({playId, audioState});
-	}
-
-	getJoinedPlayers(playId: string): Player[] {
-		return this.playEntities[playId].joinedPlayers;
-	}
-
-	getContentLocator(playId: string): ServerContentLocator {
-		return this.playEntities[playId].contentLocator;
-	}
-
-	getRunners(playId: string): RunnerDescription[] {
-		return this.playEntities[playId].runners;
-	}
-
-	getClientInstances(playId: string): ClientInstanceDescription[] {
-		return this.playEntities[playId].clientInstances;
-	}
-
-	getPlayDurationState(playId: string): PlayDurationState {
-		const timeKeeper = this.playEntities[playId].timeKeeper;
-		return { duration: timeKeeper.now(), isPaused: timeKeeper.isPausing() };
-	}
-
-	getPlayAudioState(playId: string): PlayAudioState {
-		return this.playEntities[playId].audioState;
 	}
 
 	// コンテンツの終了時間をplaylogから算出する

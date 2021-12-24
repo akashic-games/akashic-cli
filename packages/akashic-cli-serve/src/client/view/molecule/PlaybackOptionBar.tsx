@@ -67,7 +67,7 @@ export const PlaybackOptionBar = observer(function (props: PlaybackOptionBarProp
 				size={18}
 				onClick={onClickPauseActive}
 			>
-				Pause active
+				{isActivePaused ? "Resume" : "Pause"} active
 			</ToolIconButton>
 			<ToolIconButton
 				className="external-ref_button_download-playlog_devtool"
