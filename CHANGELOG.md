@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.14.26 (2021-12-24)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli`
+  * [#964](https://github.com/akashic-games/akashic-cli/pull/964) Update dependency eslint-plugin-react to v7.28.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.14.25 (2021-12-24)
 
 #### Enhancement
