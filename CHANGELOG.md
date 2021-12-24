@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 2.14.25 (2021-12-24)
+
+#### Enhancement
+* `akashic-cli-commons`, `akashic-cli-init`
+  * [#916](https://github.com/akashic-games/akashic-cli/pull/916) Mod akashic-init --registry option to --repository ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+* `akashic-cli-init`
+  * [#953](https://github.com/akashic-games/akashic-cli/pull/953) Save allowed url to akashicrc ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+  * [#929](https://github.com/akashic-games/akashic-cli/pull/929) Add confirm of access to unofficial URL in akashic-init ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 2.14.24 (2021-12-21)
 
 #### Enhancement
