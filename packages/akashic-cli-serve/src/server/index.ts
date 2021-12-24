@@ -291,8 +291,8 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 	if (process.env.PLAYLOG_CLIENT_PATH) {
 		const playlogClientSrc = fs.readFileSync(path.resolve(process.cwd(), process.env.PLAYLOG_CLIENT_PATH)).toString();
 		app.get("/dynamic/playlogClientV*.js", (req, res, _next) => {
-			const apiEndpointUrl = `${req.protocol}://${req.hostname}`;
-			const socketEndpointUrl = `${req.protocol.includes("https") ? "wss" : "ws"}://${req.hostname}`;
+			const apiEndpointUrl = `${req.protocol}://${req.header("host")}`;
+			const socketEndpointUrl = `${req.protocol.includes("https") ? "wss" : "ws"}://${req.header("host")}`;
 			const responseBody =
 				playlogClientSrc.replace(/:SERVE_API_ENDPOINT_URL_PLACEHOLDER:/, apiEndpointUrl)
 					.replace(/:SERVE_SOCKET_ENDPOINT_URL_PLACEHOLDER:/, socketEndpointUrl);
