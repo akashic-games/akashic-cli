@@ -9,17 +9,15 @@ import {
 	fetchTemplate
 } from "../common/TemplateMetadata";
 import { updateConfigurationFile } from "./BasicParameters";
-import { cloneTemplate } from "./cloneTemplate";
+import { cloneTemplate, parseCloneTargetInfo } from "./cloneTemplate";
 import { InitParameterObject, completeInitParameterObject } from "./InitParameterObject";
 import { TemplateConfig, completeTemplateConfig, NormalizedTemplateConfig } from "./TemplateConfig";
 
 export async function promiseInit(p: InitParameterObject): Promise<void> {
 	const param = await completeInitParameterObject(p);
-	const m = param.type.match(/(.+):(.+)\/(.+)/) ?? [];
+	const { gitType, owner, repo } = parseCloneTargetInfo(param.type);
 
-	if (m[1] === "github") {
-		const owner = m[2];
-		const repo = m[3];
+	if (gitType === "github") {
 		await cloneTemplate(
 			param.githubHost,
 			param.githubProtocol,
@@ -31,15 +29,7 @@ export async function promiseInit(p: InitParameterObject): Promise<void> {
 			param
 		);
 
-	} else if (m[1] === "ghe") {
-		if (!param.gheHost) {
-			throw new Error(
-				`Type '${param.type}' requires GHE host configuraton. ` +
-				"Run akashic config set init.ghe.host <url>"
-			);
-		}
-		const owner = m[2];
-		const repo = m[3];
+	} else if (gitType === "ghe") {
 		await cloneTemplate(
 			param.gheHost,
 			param.gheProtocol,

@@ -12,15 +12,13 @@ async function cli(param: CliConfigInit): Promise<void> {
 	try {
 		if (param.list) {
 			await listTemplates({
-				// TODO: コマンドラインから指定可能にする
-				// repository: param.repository,
+				repository: param.repository,
 				logger
 			});
 		} else {
 			await promiseInit({
 				cwd: param.cwd,
-				// TODO: コマンドラインから指定可能にする
-				// repository: param.repository,
+				repository: param.repository,
 				type: param.type,
 				logger: logger,
 				forceCopy: param.force,
@@ -35,7 +33,6 @@ async function cli(param: CliConfigInit): Promise<void> {
 
 var ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "package.json"), "utf8")).version;
 
-// TODO: 未使用の --regsitry オプションを --repository に変えて利用可能にする
 const commander = new Command();
 commander
 	.version(ver);
@@ -43,7 +40,7 @@ commander
 	.description("Generate project skeleton and initialize game.json.")
 	.option("-C, --cwd <dir>", "The directory to initialize")
 	.option("-q, --quiet", "Suppress output")
-	.option("-r, --registry <regname>", "Template registry to search template")
+	.option("-r, --repository <reponame>", "Template repository to search template")
 	.option(
 		"-t, --type <type>",
 		"Type of template or a Git repository name (on GitHub, requires git command)." +
@@ -67,6 +64,7 @@ export function run(argv: string[]): void {
 		cli({
 			cwd: options.cwd ?? conf.cwd,
 			quiet: options.quiet ?? conf.quiet,
+			repository: options.repository,
 			type: options.type ?? conf.type,
 			list: options.list ?? conf.list,
 			yes: options.yes ?? conf.yes,

@@ -1,17 +1,31 @@
 import * as path from "path";
 import * as express from "express";
 import * as getPort from "get-port";
+import * as InitCommonOptions from "../../lib/common/InitCommonOptions.js";
 import { listTemplates } from "../../lib/list/listTemplates";
+import { MockConfigFile } from "./support/mockConfigFile";
 
 describe("list.ts", () => {
 	let templateServer: any = null;
 	let repositoryUrl = "";
+	let mockInitCommonOptions: jest.SpyInstance = null;
 	beforeAll(async () => {
 		const port = await getPort();
 		const app = express();
 		app.use(express.static(path.resolve(__dirname, "support", "fixture")));
 		templateServer = app.listen(port);
 		repositoryUrl = `http://127.0.0.1:${port}/remote/`;
+
+		mockInitCommonOptions = jest.spyOn(InitCommonOptions, "completeInitCommonOptions").mockImplementation((opts) => {
+			const ret = {
+				logger: opts.logger,
+				configFile: new MockConfigFile({}),
+				templateListJsonPath: opts.templateListJsonPath,
+				repository: opts.repository,
+				localTemplateDirectory: opts.localTemplateDirectory,
+			};
+			return Promise.resolve(ret);
+		});
 	});
 	afterAll(() => {
 		if (templateServer) {
@@ -19,6 +33,7 @@ describe("list.ts", () => {
 			templateServer = null;
 			repositoryUrl = "";
 		}
+		mockInitCommonOptions.mockRestore();
 	});
 
 	describe("listTemplates()", () => {
