@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.14.35 (2022-01-02)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli`
+  * [#973](https://github.com/akashic-games/akashic-cli/pull/973) Update dependency jasmine to v3.99.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
 ## 2.14.34 (2022-01-01)
 
 #### Update Dependencies
