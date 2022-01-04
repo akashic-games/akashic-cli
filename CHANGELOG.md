@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 2.15.0 (2022-01-04)
+
+#### Enhancement
+* `akashic-cli-commons`, `akashic-cli-serve`
+  * [#918](https://github.com/akashic-games/akashic-cli/pull/918) feat(serve): akashic-cli-serveに外部から接続するための機能を追加 ([@dera-](https://github.com/dera-))
+* `akashic-cli-serve`
+  * [#960](https://github.com/akashic-games/akashic-cli/pull/960) feat(serve): playlogClientファイルを外部から指定できるようにする対応 ([@dera-](https://github.com/dera-))
+
+#### Committers: 1
+- [@dera-](https://github.com/dera-)
+
 ## 2.14.38 (2022-01-04)
 
 #### Enhancement
