@@ -36,7 +36,7 @@
     "cross-env": "7.0.3",
     "lerna": "4.0.0",
     "lerna-changelog": "1.0.1",
-    "remark-cli": "8.0.1",
+    "remark-cli": "10.0.1",
     "semver": "7.3.5",
     "shelljs": "0.8.4"
   },
