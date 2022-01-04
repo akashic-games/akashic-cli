@@ -1,13 +1,9 @@
 import * as amf from "@akashic/amflow";
 import { AppOptions } from "./AppOptions";
 import { ContentDesc } from "./ContentDesc";
-import { ContentLocatorData } from "./ContentLocatorData";
-import { PlayAudioState } from "./PlayAudioState";
-import { PlayDurationState } from "./PlayDurationState";
-import { Player } from "./Player";
+import { PlayInfo } from "./PlayInfo";
 import { SandboxConfig } from "./SandboxConfig";
 import { StartPointHeader } from "./StartPointHeader";
-import { ClientInstanceDescription, RunnerDescription } from "./TestbedEvent";
 
 export interface ApiResponse<T> {
 	meta: {
@@ -18,14 +14,8 @@ export interface ApiResponse<T> {
 	data: T;
 }
 
-export interface PlayApiResponseData {
-	playId: string;
-	contentLocatorData: ContentLocatorData;
-	joinedPlayers: Player[];
-	runners: RunnerDescription[];
-	clientInstances: ClientInstanceDescription[];
-	durationState: PlayDurationState;
-	audioState: PlayAudioState;
+export interface PlayApiResponseData extends PlayInfo {
+	// nothing
 }
 
 export interface PlayDeleteApiResponseData {

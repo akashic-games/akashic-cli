@@ -28,4 +28,13 @@ export class ContentLocator {
 			return this.debuggablePath;
 		return null;
 	}
+
+	asContentLocatorData(): ContentLocatorData {
+		return {
+			contentId: this.contentId,
+			host: this.host,
+			path: this.path,
+			debuggablePath: this.debuggablePath
+		};
+	}
 }

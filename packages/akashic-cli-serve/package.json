@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-serve",
-  "version": "1.13.0",
+  "version": "1.13.38",
   "description": "A development server for Akashic Engine",
   "scripts": {
     "prepublish": "npm run setup && npm run build",
@@ -24,9 +24,9 @@
     "akashic-cli-serve": "./bin/run"
   },
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.12.0",
+    "@akashic/akashic-cli-commons": "0.12.20",
     "@akashic/akashic-cli-scan": "0.8.0",
-    "@akashic/headless-driver": "1.11.1",
+    "@akashic/headless-driver": "1.11.20",
     "@akashic/trigger": "1.0.0",
     "@msgpack/msgpack": "2.7.1",
     "chalk": "4.1.2",
@@ -35,12 +35,12 @@
     "component-emitter": "1.3.0",
     "cors": "2.8.5",
     "ejs": "3.1.6",
-    "express": "4.17.1",
+    "express": "4.17.2",
     "lodash": "4.17.21",
     "open": "8.4.0",
     "query-string": "6.14.1",
-    "rxjs": "7.4.0",
-    "socket.io": "4.3.2",
+    "rxjs": "7.5.1",
+    "socket.io": "4.4.0",
     "socket.io-parser": "4.1.1"
   },
   "devDependencies": {
@@ -52,8 +52,8 @@
     "@storybook/addon-knobs": "^6.1.21",
     "@storybook/react": "^6.1.21",
     "@types/express": "4.17.13",
-    "@types/express-serve-static-core": "4.17.25",
-    "@types/node": "14.17.33",
+    "@types/express-serve-static-core": "4.17.27",
+    "@types/node": "14.18.4",
     "@types/query-string": "6.2.0",
     "@types/react": "16.14.21",
     "@types/react-dom": "16.9.14",
@@ -66,7 +66,7 @@
     "eslint": "7.32.0",
     "eslint-plugin-import": "2.25.3",
     "eslint-plugin-jest": "24.7.0",
-    "eslint-plugin-react": "7.26.1",
+    "eslint-plugin-react": "7.28.0",
     "get-port": "5.1.1",
     "jest": "26.6.3",
     "material-design-icons": "3.0.1",
@@ -82,15 +82,15 @@
     "storybook-addon-jsx": "7.3.14",
     "style-loader": "1.3.0",
     "ts-loader": "8.3.0",
-    "typescript": "4.4.4",
-    "uglify-js": "3.14.3",
+    "typescript": "4.5.4",
+    "uglify-js": "3.14.5",
     "uglify-save-license": "0.4.1",
     "webpack": "4.46.0",
     "webpack-cli": "3.3.12",
     "whatwg-fetch": "3.6.2"
   },
   "optionalDependencies": {
-    "@akashic/akashic-gameview-web": "3.0.3"
+    "@akashic/akashic-gameview-web": "3.1.0"
   },
   "files": [
     "package.json",

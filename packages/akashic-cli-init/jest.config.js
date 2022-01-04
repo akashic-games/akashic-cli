@@ -2,8 +2,7 @@ module.exports = {
 	collectCoverage: true,
 	collectCoverageFrom: [
 		"lib/**/*.js",
-		"!**/node_modules/**",
-		"!**/templates-src/**"
+		"!**/node_modules/**"
 	],
 	coverageDirectory: "coverage",
 	coverageReporters: [
@@ -12,10 +11,20 @@ module.exports = {
 	rootDir: "./",
 	setupFiles : [],
 	testEnvironment: "node",
-	testPathIgnorePatterns: [
-		"templates-src"
-	],
+	testPathIgnorePatterns: [],
 	testMatch: [
-		"**/*[sS]pec.js"
-	]
+		"**/*[sS]pec.ts"
+	],
+	moduleFileExtensions: [
+		"ts",
+		"js"
+	],
+	transform: {
+		"^.+\\.ts$": "ts-jest"
+	},
+	globals: {
+		"ts-jest": {
+			tsconfig: "./src/__tests__/tsconfig.json"
+		}
+	}
 };

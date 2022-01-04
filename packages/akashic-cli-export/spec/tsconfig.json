@@ -6,7 +6,7 @@
     "noImplicitAny": true,
     "module": "commonjs",
     "outDir": "./build",
-    "types" : ["archiver", "browserify", "commander", "fs-extra", "fs-readdir-recursive", "jasmine", "mock-fs", "node", "uglify-js"]
+    "types" : ["fs-extra", "jest", "mock-fs", "node"]
   },
   "include": [
     "./src/**/*.ts"

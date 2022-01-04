@@ -13,6 +13,12 @@ interface GitCloneParameterObject {
 	shallow?: boolean;
 }
 
+export interface CloneTargetInfo {
+	gitType: string;
+	owner: string;
+	repo: string;
+}
+
 /**
  * GitHub または GitHub Enterprise から リポジトリを clone する。
  */
@@ -48,7 +54,7 @@ function completeParameter(opts: GitCloneParameterObject): Required<GitClonePara
 	};
 }
 
-function createGitUri(host: string, protocol: GitProtocol, owner: string, repo: string): string {
+export function createGitUri(host: string, protocol: GitProtocol, owner: string, repo: string): string {
 	if (protocol === "https") {
 		return `${protocol}://${host}/${owner}/${repo}.git`;
 	} else if (protocol === "ssh") {
@@ -95,4 +101,20 @@ async function rmPromise(path: string, opts: fs.RmOptions = {}): Promise<void> {
 			}
 		});
 	});
+}
+
+/**
+ * type オプションの値をパースします
+ * @param type -t オプションの値
+ */
+export function parseCloneTargetInfo(type: string): CloneTargetInfo {
+	const m = type.match(/(.+):(.+)\/(.+)/) ?? [];
+	const gitType = m[1] || null;
+	const owner = m[2] || null;
+	const repo = m[3] || null;
+	return {
+		gitType,
+		owner,
+		repo
+	};
 }
