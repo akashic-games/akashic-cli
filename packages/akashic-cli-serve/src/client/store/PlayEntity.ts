@@ -10,7 +10,7 @@ import { StartPointHeader } from "../../common/types/StartPointHeader";
 import { RunnerDescription, ClientInstanceDescription } from "../../common/types/TestbedEvent";
 import { GameViewManager } from "../akashic/GameViewManager";
 import { SocketIOAMFlowClient } from "../akashic/SocketIOAMFlowClient";
-import * as ApiClient from "../api/ApiClient";
+import { apiClient } from "../api/apiClientInstance";
 import { socketInstance } from "../api/socketInstance";
 import { CreateCoeLocalInstanceParameterObject } from "./CoePluginEntity";
 import { ContentEntity } from "./ContentEntity";
@@ -78,7 +78,7 @@ export class PlayEntity {
 
 	constructor(param: PlayEntityParameterObject) {
 		this.playId = param.playId;
-		this.amflow = new SocketIOAMFlowClient(socketInstance());
+		this.amflow = new SocketIOAMFlowClient(socketInstance);
 		this.activePlaybackRate = 1;
 		this.isActivePausing = !!param.durationState && param.durationState.isPaused;
 		this.duration = param.durationState ? param.durationState.duration : 0;
@@ -116,7 +116,7 @@ export class PlayEntity {
 
 	async suspend(): Promise<void> {
 		await this.deleteAllServerInstances();
-		await ApiClient.suspendPlay(this.playId);
+		await apiClient.suspendPlay(this.playId);
 	}
 
 	async createLocalInstance(param: CreateLocalInstanceParameterObject): Promise<LocalInstanceEntity> {
@@ -142,10 +142,10 @@ export class PlayEntity {
 	}
 
 	async createServerInstance(param: CreateServerInstanceParameterObject): Promise<ServerInstanceEntity> {
-		const runnerResult = await ApiClient.createRunner(this.playId, true, param.playToken);
+		const runnerResult = await apiClient.createRunner(this.playId, true, param.playToken);
 		const runnerId = runnerResult.data.runnerId;
 
-		// ApiClient.createRunner() に対する onRunnerCreate 通知が先行していれば、この時点で ServerInstanceEntity が生成済みになっている
+		// apiClient.createRunner() に対する onRunnerCreate 通知が先行していれば、この時点で ServerInstanceEntity が生成済みになっている
 		const rs = this.serverInstances.filter(r => r.runnerId === runnerId);
 		if (rs.length > 0)
 			return rs[0];
@@ -169,32 +169,32 @@ export class PlayEntity {
 	pauseActive(): void {
 		// 手抜き実装: サーバインスタンスは全てアクティブ(つまり一つしかない)前提
 		this.serverInstances.forEach(si => si.pause());
-		ApiClient.pausePlayDuration(this.playId);
+		apiClient.pausePlayDuration(this.playId);
 	}
 
 	resumeActive(): void {
 		// 手抜き実装: サーバインスタンスは全てアクティブ(つまり一つしかない)前提
 		this.serverInstances.forEach(si => si.resume());
-		ApiClient.resumePlayDuration(this.playId);
+		apiClient.resumePlayDuration(this.playId);
 	}
 
 	stepActive(): void {
 		// 手抜き実装: サーバインスタンスは全てアクティブ(つまり一つしかない)前提
 		this.serverInstances.forEach(si => si.step());
-		ApiClient.stepPlayDuration(this.playId);
+		apiClient.stepPlayDuration(this.playId);
 	}
 
 	muteAll(): void {
-		ApiClient.changePlayAudioState(this.playId, { muteType: "all" });
+		apiClient.changePlayAudioState(this.playId, { muteType: "all" });
 	}
 
 	muteOthers(): void {
 		const soloPlayerId = this.localInstances[0]?.player?.id;
-		ApiClient.changePlayAudioState(this.playId, { muteType: "solo", soloPlayerId });
+		apiClient.changePlayAudioState(this.playId, { muteType: "solo", soloPlayerId });
 	}
 
 	unmuteAll(): void {
-		ApiClient.changePlayAudioState(this.playId, { muteType: "none" });
+		apiClient.changePlayAudioState(this.playId, { muteType: "none" });
 	}
 
 	@action

@@ -108,7 +108,7 @@ export class PlayStore {
 		return playId;
 	}
 
-	getPlay(playId: string): Play {
+	getPlay(playId: string): Play | null {
 		return this.playManager.getPlay(playId);
 	}
 

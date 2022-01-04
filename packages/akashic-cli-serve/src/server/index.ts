@@ -11,6 +11,7 @@ import { Command, OptionValues } from "commander";
 import * as express from "express";
 import * as open from "open";
 import * as socketio from "socket.io";
+import * as cors from "cors";
 import parser from "../common/MsgpackParser";
 import { PutStartPointEvent } from "../common/types/TestbedEvent";
 import { ServerContentLocator } from "./common/ServerContentLocator";
@@ -207,7 +208,22 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 		httpServer = server.createServer(app);
 	}
 
-	const io = new socketio.Server(httpServer, { parser });
+	if (cliConfigParam.corsAllowOrigin === "null") {
+		cliConfigParam.corsAllowOrigin = undefined;
+		getSystemLogger().warn(`null is disabled as --cors-allow-origin option parameter.`);
+	}
+
+	let io: socketio.Server;
+	if (cliConfigParam.corsAllowOrigin) {
+		io = new socketio.Server(httpServer, {
+			parser,
+			cors: {
+				origin: cliConfigParam.corsAllowOrigin
+			}
+		});
+	} else {
+		io = new socketio.Server(httpServer, { parser });
+	}
 
 	if (cliConfigParam.watch && cliConfigParam.targetDirs) {
 		console.log("Start watching contents");
@@ -258,6 +274,10 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 
 	app.use("^\/$", (_req, res, _next) => res.redirect("/public/"));
 
+	if (cliConfigParam.corsAllowOrigin) {
+		app.use(cors({ origin: cliConfigParam.corsAllowOrigin }));
+	}
+
 	if (process.env.ENGINE_FILES_V3_PATH) {
 		const engineFilesPath = path.resolve(process.cwd(), process.env.ENGINE_FILES_V3_PATH);
 		if (!fs.existsSync(engineFilesPath)) {
@@ -266,6 +286,19 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 		}
 		app.use("/public/external/engineFilesV3*.js", (_req, res, _next) => {
 			res.send(fs.readFileSync(engineFilesPath));
+		});
+	}
+
+	if (process.env.PLAYLOG_CLIENT_PATH) {
+		const playlogClientSrc = fs.readFileSync(path.resolve(process.cwd(), process.env.PLAYLOG_CLIENT_PATH)).toString();
+		app.get("/dynamic/playlogClientV*.js", (req, res, _next) => {
+			const apiEndpointUrl = `${req.protocol}://${req.header("host")}`;
+			const socketEndpointUrl = `${req.protocol.includes("https") ? "wss" : "ws"}://${req.header("host")}`;
+			const responseBody =
+				playlogClientSrc.replace(/:SERVE_API_ENDPOINT_URL_PLACEHOLDER:/, apiEndpointUrl)
+					.replace(/:SERVE_SOCKET_ENDPOINT_URL_PLACEHOLDER:/, socketEndpointUrl);
+			res.contentType("text/javascript");
+			res.send(responseBody);
 		});
 	}
 
@@ -386,6 +419,7 @@ export async function run(argv: any): Promise<void> {
 			"EXPERIMENTAL: Open <num> browser windows at startup. The upper limit of <num> is 10.") // TODO: open-browser と統合
 		.option("--ssl-cert <certificatePath>", "Specify path to an SSL/TLS certificate to use HTTPS")
 		.option("--ssl-key <privatekeyPath>", "Specify path to an SSL/TLS privatekey to use HTTPS")
+		.option("--cors-allow-origin <origin>", "Specify origin for Access-Control-Allow-Origin")
 		.parse(argv);
 
 	const options = commander.opts();
@@ -412,7 +446,8 @@ export async function run(argv: any): Promise<void> {
 			watch: options.watch ?? conf.watch,
 			experimentalOpen: options.experimentalOpen ?? conf.experimentalOpen,
 			sslCert: options.sslCert ?? conf.sslCert,
-			sslKey: options.sslKey ?? conf.sslKey
+			sslKey: options.sslKey ?? conf.sslKey,
+			corsAllowOrigin: options.corsAllowOrigin ?? conf.corsAllowOrigin
 		};
 		await cli(cliConfigParam, options);
 	});

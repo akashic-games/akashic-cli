@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "es2015",
+    "declaration": true,
+    "lib": ["dom", "es2015"],
+    "noImplicitAny": true,
+    "module": "commonjs" ,
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "outDir": "../../lib/module"
+  },
+  "include": [
+    "./akashic/**/*.ts",
+    "./api/**/*.ts"
+  ]
+}

@@ -1,7 +1,7 @@
 import { PlayAudioState } from "../../common/types/PlayAudioState";
 import { PlayBroadcastTestbedEvent } from "../../common/types/TestbedEvent";
 import { GameViewManager } from "../akashic/GameViewManager";
-import * as ApiClient from "../api/ApiClient";
+import { apiClient } from "../api/apiClientInstance";
 import * as Subscriber from "../api/Subscriber";
 import { RPGAtsumaruApi } from "../atsumaru/RPGAtsumaruApi";
 import { ClientContentLocator } from "../common/ClientContentLocator";
@@ -130,7 +130,7 @@ export class Operator {
 	startContent = async (params?: StartContentParameterObject): Promise<void> => {
 		const store = this.store;
 		const play = store.currentPlay;
-		const tokenResult = await ApiClient.createPlayToken(play.playId, store.player.id, false, store.player.name);
+		const tokenResult = await apiClient.createPlayToken(play.playId, store.player.id, false, store.player.name);
 		const instance = await play.createLocalInstance({
 			gameViewManager: this.gameViewManager,
 			playId: play.playId,
@@ -194,15 +194,15 @@ export class Operator {
 		const audioState = this.store.playStore.getLastPlay()?.audioState;
 		const play = await this._createServerLoop(this.store.currentPlay.content.locator, audioState);
 		await this.store.currentPlay.deleteAllServerInstances();
-		await ApiClient.broadcast(this.store.currentPlay.playId, { type: "switchPlay", nextPlayId: play.playId });
+		await apiClient.broadcast(this.store.currentPlay.playId, { type: "switchPlay", nextPlayId: play.playId });
 		this.ui.hideNotification();
 	};
 
 	private async _createServerLoop(contentLocator: ClientContentLocator, audioState?: PlayAudioState): Promise<PlayEntity> {
 		const play = await this.store.playStore.createPlay({ contentLocator, audioState });
-		const tokenResult = await ApiClient.createPlayToken(play.playId, "", true);  // TODO 空文字列でなくnullを使う
+		const tokenResult = await apiClient.createPlayToken(play.playId, "", true);  // TODO 空文字列でなくnullを使う
 		await play.createServerInstance({ playToken: tokenResult.data.playToken });
-		await ApiClient.resumePlayDuration(play.playId);
+		await apiClient.resumePlayDuration(play.playId);
 
 		// autoSendEvents
 		const content = this.store.contentStore.findOrRegister(contentLocator);

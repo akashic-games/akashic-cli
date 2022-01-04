@@ -16,7 +16,7 @@ import {
 	PutStartPointEvent,
 	PlayAudioStateChangeTestbedEvent
 } from "../../common/types/TestbedEvent";
-import * as ApiClient from "../api/ApiClient";
+import { apiClient } from "../api/apiClientInstance";
 import * as Subscriber from "../api/Subscriber";
 import { ClientContentLocator } from "../common/ClientContentLocator";
 import { ContentStore } from "./ContentStore";
@@ -52,11 +52,11 @@ export class PlayStore {
 		this._lastPlayId = null;
 		this._contentStore = param.contentStore;
 		this._creationWaiters = Object.create(null);
-		this._initializationWaiter = ApiClient.getPlays()
+		this._initializationWaiter = apiClient.getPlays()
 			.then((res) => {
 				const playsInfo = res.data;
 				return Promise.all(playsInfo.map((playInfo) => {
-					return ApiClient.getStartPointHeaderList(playInfo.playId)
+					return apiClient.getStartPointHeaderList(playInfo.playId)
 						.then((res) => {
 							return {
 								playInfo,
@@ -100,10 +100,10 @@ export class PlayStore {
 	}
 
 	async createPlay(param: CreatePlayParameterObject): Promise<PlayEntity> {
-		const playInfo = await ApiClient.createPlay(param.contentLocator, param.audioState);
+		const playInfo = await apiClient.createPlay(param.contentLocator, param.audioState);
 		const playId = playInfo.data.playId;
 
-		// ApiClient.createPlay() に対する onPlayCreate 通知が先行していれば、この時点で PlayEntity が生成済みになっている
+		// apiClient.createPlay() に対する onPlayCreate 通知が先行していれば、この時点で PlayEntity が生成済みになっている
 		if (this.plays[playId])
 			return this.plays[playId];
 
