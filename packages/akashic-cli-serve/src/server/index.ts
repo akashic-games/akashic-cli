@@ -289,6 +289,19 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 		});
 	}
 
+	if (process.env.PLAYLOG_CLIENT_PATH) {
+		const playlogClientSrc = fs.readFileSync(path.resolve(process.cwd(), process.env.PLAYLOG_CLIENT_PATH)).toString();
+		app.get("/dynamic/playlogClientV*.js", (req, res, _next) => {
+			const apiEndpointUrl = `${req.protocol}://${req.header("host")}`;
+			const socketEndpointUrl = `${req.protocol.includes("https") ? "wss" : "ws"}://${req.header("host")}`;
+			const responseBody =
+				playlogClientSrc.replace(/:SERVE_API_ENDPOINT_URL_PLACEHOLDER:/, apiEndpointUrl)
+					.replace(/:SERVE_SOCKET_ENDPOINT_URL_PLACEHOLDER:/, socketEndpointUrl);
+			res.contentType("text/javascript");
+			res.send(responseBody);
+		});
+	}
+
 	app.use("/public/", express.static(path.join(__dirname, "..", "..", "www", "public")));
 	app.use("/internal/", express.static(path.join(__dirname, "..", "..", "www", "internal")));
 	app.use("/api/", createApiRouter({ playStore, runnerStore, playerIdStore, amflowManager, io }));
