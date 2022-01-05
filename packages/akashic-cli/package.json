@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli",
-  "version": "2.15.0",
+  "version": "2.15.1",
   "description": "Command-line utility for akashic game development",
   "bin": {
     "akashic": "./bin/akashic"
@@ -28,7 +28,7 @@
     "@akashic/akashic-cli-init": "1.13.0",
     "@akashic/akashic-cli-lib-manage": "1.7.0",
     "@akashic/akashic-cli-scan": "0.15.0",
-    "@akashic/akashic-cli-serve": "1.14.0",
+    "@akashic/akashic-cli-serve": "1.14.1",
     "commander": "8.3.0"
   },
   "devDependencies": {
