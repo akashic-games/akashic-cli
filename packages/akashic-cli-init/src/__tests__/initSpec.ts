@@ -100,7 +100,7 @@ describe("init.ts", () => {
 			const logger = new ConsoleLogger({ quiet: true });
 			const src = ".akashic-templates/simple";
 			const dest = ".akashic-templates/copyTo";
-			const conf = await completeTemplateConfig({ files: [{ src: "a" }, { src: "a", dst: "c" }] }, src);
+			const conf = await completeTemplateConfig({ files: [{ src: "a" }, { src: "a", dst: "c/a" }] }, src);
 
 			await expect(_extractFromTemplate(conf, src, dest, { logger }))
 				.rejects.toThrow(
@@ -125,7 +125,7 @@ describe("init.ts", () => {
 			const logger = new ConsoleLogger({ quiet: true });
 			const src = ".akashic-templates/simple";
 			const dest = ".akashic-templates/copyTo";
-			const conf = await completeTemplateConfig({ files: [{ src: "a" }, { src: "a", dst: "c" }] }, src);
+			const conf = await completeTemplateConfig({ files: [{ src: "a" }, { src: "a", dst: "c/a" }] }, src);
 			await _extractFromTemplate(conf, src, dest, { logger, forceCopy: true });
 
 			expect(fs.readFileSync(path.join(".akashic-templates", "copyTo", "a")).toString("utf8")).toBe("aaa");
