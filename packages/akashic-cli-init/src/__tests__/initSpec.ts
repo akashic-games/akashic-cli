@@ -104,7 +104,7 @@ describe("init.ts", () => {
 
 			await expect(_extractFromTemplate(conf, src, dest, { logger }))
 				.rejects.toThrow(
-					`aborted to copy files, because followings already exist. [a, c${path.sep}a]`
+					"aborted to copy files, because followings already exist. [a, c/a]"
 				);
 		});
 
