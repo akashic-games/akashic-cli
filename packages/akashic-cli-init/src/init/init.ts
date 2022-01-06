@@ -94,10 +94,9 @@ async function _extractFromTemplate(
 	const { forceCopy, logger } = opts;
 	const copyReqs = conf.files.map(entry => {
 		const destPath = entry.dst ? path.join(dest, entry.dst) : path.join(dest, entry.src);
-		const destRelativePath = entry.dst || entry.src;
 		return {
 			srcRelative: entry.src,
-			destRelative: destRelativePath,
+			destRelative: entry.dst || entry.src,
 			src: path.join(src, entry.src),
 			dest: destPath
 		};
