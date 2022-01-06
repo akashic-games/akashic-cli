@@ -38,14 +38,21 @@ akashic-cli-serve [<options>] [<path>]
 |:----------:|:---:|:---:|:---:|
 |`--hostname <hostname>`|`-H`|起動するサーバのホスト名を指定します。|`localhost`|
 |`--port <port>`|`-p`|起動するサーバのポート番号を指定します。|`3300`|
+|`--verbose`|`-v`|詳細情報をログ出力します。|`false`|
 |`--no-auto-start`|`-A`|ブラウザを開いた時、コンテンツを自動開始しないようにします。|N/A|
-|`--help`|`-h`|ヘルプを表示して終了します。|N/A|
-|`--version`|`-V`|バージョンを表示して終了します。|N/A|
-|`--target-service`|`-s`|ブラウザを開いた時、引数で指定したサービスのモードで開始します。|`none`|
-|`--allow-external`|N/A|`外部アセットを許可します。許可する値は sandbox.config.js から読み込みます。|N/A|
+|`--target-service <name>`|`-s`|ブラウザを開いた時、引数で指定したサービスのモードで開始します。|`none`|
+|`--watch`|`-w`|アセットディレクトリを監視し、変更時にホットリロードを行います。|N/A|
+|`--server-external-script <filepath>`|N/A|指定ファイルの js を評価し、Game#external に代入します。|N/A|
+|`--debug-playlog <path>`|N/A|指定した playlog.json を読み込みます。|N/A|
+|`--allow-external`|N/A|外部アセットを許可します。許可する値は sandbox.config.js から読み込みます。|N/A|
 |`--no-open-browser`|N/A|起動時に自動でブラウザを開かないようにします。|N/A|
 |`--preserve-disconnected`|N/A|サーバ切断時に開いている子ウィンドウを閉じないようにします。|N/A|
 |`--experimental-open <num>`|N/A|起動時に子ウィンドウを指定数開いて起動します。上限は 10 です。試験中の機能です。通常、利用しないでください。|N/A|
+|`--ssl-cert <certificatePath>`|N/A|HTTPS で起動するための SSL 証明書のパスを指定します。|N/A|
+|`--ssl-key <privatekeyPath>`|N/A|HTTPS で起動するための 秘密鍵のパスを指定します。|N/A|
+|`--cors-allow-origin <origin>`|N/A|Access-Control-Allow-Origin レスポンスヘッダーの値を指定します。|N/A|
+|`--help`|`-h`|ヘルプを表示して終了します。|N/A|
+|`--version`|`-V`|バージョンを表示して終了します。|N/A|
 
 ## 環境変数
 
