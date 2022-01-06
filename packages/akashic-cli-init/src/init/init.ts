@@ -92,15 +92,12 @@ async function _extractFromTemplate(
 	opts: ExtractFromTemplateOptions
 ): Promise<void> {
 	const { forceCopy, logger } = opts;
-	const copyReqs = conf.files.map(entry => {
-		const destPath = entry.dst ? path.join(dest, entry.dst) : path.join(dest, entry.src);
-		return {
-			srcRelative: entry.src,
-			destRelative: entry.dst || entry.src,
-			src: path.join(src, entry.src),
-			dest: destPath
-		};
-	});
+	const copyReqs = conf.files.map(entry => ({
+		srcRelative: entry.src,
+		destRelative: entry.dst || entry.src,
+		src: path.join(src, entry.src),
+		dest: path.join(dest, entry.dst || entry.src)
+	}));
 	if (!forceCopy) {
 		const existings = copyReqs.filter(req => existsSync(req.dest)).map(req => req.destRelative);
 		if (existings.length > 0)
