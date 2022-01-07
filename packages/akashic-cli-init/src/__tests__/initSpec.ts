@@ -19,14 +19,6 @@ describe("init.ts", () => {
 						}
 					},
 					manual: {
-						"template.json": JSON.stringify({
-							formatVersion: "0",
-							files: [
-								{src: "a", dst: "a"},
-								{src: "b", dst: "y/z/e"}
-							],
-							gameJson: "a"
-						}),
 						a: "aaa",
 						b: "bbb",
 						"y": {
