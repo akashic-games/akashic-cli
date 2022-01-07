@@ -40,10 +40,10 @@ akashic-cli-serve [<options>] [<path>]
 |`--port <port>`|`-p`|起動するサーバのポート番号を指定します。|`3300`|
 |`--verbose`|`-v`|詳細情報をログ出力します。|`false`|
 |`--no-auto-start`|`-A`|ブラウザを開いた時、コンテンツを自動開始しないようにします。|N/A|
-|`--target-service <name>`|`-s`|ブラウザを開いた時、引数で指定したサービスのモードで開始します。|`none`|
-|`--watch`|`-w`|アセットディレクトリを監視し、変更時にホットリロードを行います。|N/A|
-|`--server-external-script <filepath>`|N/A|指定ファイルの js を評価し、Game#external に代入します。|N/A|
-|`--debug-playlog <path>`|N/A|指定した playlog.json を読み込みます。|N/A|
+|`--target-service <name>`|`-s`|指定されたサービスの挙動を模擬します。(後述)|`none`|
+|`--watch`|`-w`|アセットディレクトリを監視し、変更時に新規プレイを作成します。|N/A|
+|`--server-external-script <filepath>`|N/A|指定ファイルの js を評価し、アクティブインスタンスの g.game.external に代入します。|N/A|
+|`--debug-playlog <path>`|N/A|指定した playlog.json を読み込みます(エンジン開発用、または開発中のオプションです)。|N/A|
 |`--allow-external`|N/A|外部アセットを許可します。許可する値は sandbox.config.js から読み込みます。|N/A|
 |`--no-open-browser`|N/A|起動時に自動でブラウザを開かないようにします。|N/A|
 |`--preserve-disconnected`|N/A|サーバ切断時に開いている子ウィンドウを閉じないようにします。|N/A|
@@ -53,6 +53,14 @@ akashic-cli-serve [<options>] [<path>]
 |`--cors-allow-origin <origin>`|N/A|Access-Control-Allow-Origin レスポンスヘッダーの値を指定します。|N/A|
 |`--help`|`-h`|ヘルプを表示して終了します。|N/A|
 |`--version`|`-V`|バージョンを表示して終了します。|N/A|
+
+オプション `--target-service` には下記の値を指定できます。
+
+- `nicolive`: ニコニコ生放送
+- `atsumaru:single`: ゲームアツマール シングル
+  - (`atsumaru` は非推奨となり `atsumaru:single` のエイリアスとなります。)
+- `atsumaru:multi`: ゲームアツマール マルチ
+- `none`: なし (デフォルト値)
 
 ## 環境変数
 
