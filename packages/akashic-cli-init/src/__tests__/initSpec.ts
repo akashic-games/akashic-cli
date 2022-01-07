@@ -18,15 +18,6 @@ describe("init.ts", () => {
 							d: "ddd"
 						}
 					},
-					manual: {
-						a: "aaa",
-						b: "bbb",
-						"y": {
-							"z": {
-								"e": ""
-							}
-						}
-					},
 					copyTo: {
 						a: "xxxxxxxxxx",
 						c: {
@@ -63,17 +54,6 @@ describe("init.ts", () => {
 					"The only valid value for this version is \"0\". " +
 					"Newer version of akashic-cli may support this formatVersion."
 				);
-		});
-
-		it("copy manual template", async () => {
-			const logger = new ConsoleLogger({ quiet: true });
-			const src = ".akashic-templates/manual";
-			const dest = "home";
-			const conf = await completeTemplateConfig({}, src);
-			await _extractFromTemplate(conf, src, dest, { logger });
-
-			expect(fs.statSync(path.join("home", "a")).isFile()).toBe(true);
-			expect(fs.statSync(path.join("home", "y", "z", "e")).isFile()).toBe(true);
 		});
 
 		it("can not copy when file exists", async () => {
