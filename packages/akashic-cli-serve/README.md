@@ -56,11 +56,11 @@ akashic-cli-serve [<options>] [<path>]
 
 オプション `--target-service` には下記の値を指定できます。
 
-- `nicolive`: ニコニコ生放送
-- `atsumaru:single`: ゲームアツマール シングル
-  - (`atsumaru` は非推奨となり `atsumaru:single` のエイリアスとなります。)
-- `atsumaru:multi`: ゲームアツマール マルチ
-- `none`: なし (デフォルト値)
+* `nicolive`: ニコニコ生放送
+* `atsumaru:single`: ゲームアツマール シングル
+  * (`atsumaru` は非推奨となり `atsumaru:single` のエイリアスとなります。)
+* `atsumaru:multi`: ゲームアツマール マルチ
+* `none`: なし (デフォルト値)
 
 ## 環境変数
 
