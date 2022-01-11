@@ -1,4 +1,5 @@
 import * as path from "path";
+import { ConsoleLogger } from "@akashic/akashic-cli-commons";
 import * as express from "express";
 import * as getPort from "get-port";
 import * as InitCommonOptions from "../../lib/common/InitCommonOptions.js";
@@ -8,7 +9,7 @@ import { MockConfigFile } from "./support/mockConfigFile";
 describe("list.ts", () => {
 	let templateServer: any = null;
 	let repositoryUrl = "";
-	let mockInitCommonOptions: jest.SpyInstance = null;
+	let mockInitCommonOptions: jest.SpyInstance | null = null;
 	beforeAll(async () => {
 		const port = await getPort();
 		const app = express();
@@ -18,11 +19,11 @@ describe("list.ts", () => {
 
 		mockInitCommonOptions = jest.spyOn(InitCommonOptions, "completeInitCommonOptions").mockImplementation((opts) => {
 			const ret = {
-				logger: opts.logger,
+				logger: opts.logger || new ConsoleLogger(),
 				configFile: new MockConfigFile({}),
-				templateListJsonPath: opts.templateListJsonPath,
-				repository: opts.repository,
-				localTemplateDirectory: opts.localTemplateDirectory,
+				templateListJsonPath: opts.templateListJsonPath || "templateListJsonPath",
+				repository: opts.repository || "repo",
+				localTemplateDirectory: opts.localTemplateDirectory || "localTemplateDirectory",
 			};
 			return Promise.resolve(ret);
 		});
@@ -33,7 +34,7 @@ describe("list.ts", () => {
 			templateServer = null;
 			repositoryUrl = "";
 		}
-		mockInitCommonOptions.mockRestore();
+		mockInitCommonOptions!.mockRestore();
 	});
 
 	describe("listTemplates()", () => {

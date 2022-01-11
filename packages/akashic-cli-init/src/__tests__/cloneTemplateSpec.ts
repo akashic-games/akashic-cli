@@ -11,7 +11,7 @@ mockExec.mockImplementation((_command: any, _opts: any, callback: Function) => {
 });
 
 describe("cloneTemplate.js", () => {
-	let mockConfirm: jest.SpyInstance = null;
+	let mockConfirm: jest.SpyInstance | null = null;
 	beforeEach(() => {
 		mockExec.mockClear();
 	});
@@ -19,7 +19,7 @@ describe("cloneTemplate.js", () => {
 		mockConfirm = jest.spyOn(InitCommonOptions, "confirmAccessToUrl").mockResolvedValue(true);
 	});
 	afterAll(() => {
-		mockConfirm.mockRestore();
+		mockConfirm!.mockRestore();
 	});
 
 	it("can execute a command to clone repository from github.com via promiseInit()", async () => {
