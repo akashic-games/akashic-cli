@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.15.4 (2022-01-11)
+
+#### Bug Fix
+* `akashic-cli-init`
+  * [#977](https://github.com/akashic-games/akashic-cli/pull/977) fix behavior of template.json in init ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 2.15.3 (2022-01-10)
 
 #### Enhancement
