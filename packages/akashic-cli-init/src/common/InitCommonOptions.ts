@@ -81,7 +81,7 @@ export async function completeInitCommonOptions(opts: InitCommonOptions): Promis
 async function validateInitCommonOptions(opts: InitCommonOptions): Promise<void> {
 	if (opts.repository) {
 		if (/(^(github|ghe):)|(\.git$)/.test(opts.repository)) {
-			opts.logger.warn("Misused -r, --repository options. Use -t option for Github repository");
+			opts.logger!.warn("Misused -r, --repository options. Use -t option for Github repository");
 		}
 
 		if (opts.repository !== DEFAULT_TEMPLATE_REPOSITORY) {

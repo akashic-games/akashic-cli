@@ -68,7 +68,7 @@ export async function completeTemplateConfig(templateConfig: TemplateConfig, bas
 	}
 
 	return {
-		formatVersion,
+		formatVersion: "0",
 		files: normalizedFiles,
 		gameJson: gameJson ?? "game.json",
 		guideMessage: guideMessage ?? null
