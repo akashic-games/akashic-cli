@@ -38,10 +38,10 @@ export function promiseModifyBasicParameter(param: ModifyBasicParameterParameter
 		return Promise.reject(new Error(param.target + " must be a positive integer but '" + param.value + "' is given."));
 	}
 
-	const restoreDirectory = cmn.Util.chdir(param.cwd);
+	const restoreDirectory = cmn.Util.chdir(param.cwd!);
 	const gameJsonPath = path.join(process.cwd(), "game.json");
 	return Promise.resolve()
-		.then(() => cmn.ConfigurationFile.read(gameJsonPath, param.logger))
+		.then(() => cmn.ConfigurationFile.read(gameJsonPath, param.logger!))
 		.then((content: cmn.GameConfiguration) => {
 			return new Promise<void>((resolve, reject) => {
 				switch (param.target) {
@@ -59,8 +59,8 @@ export function promiseModifyBasicParameter(param: ModifyBasicParameterParameter
 				}
 				resolve();
 			})
-				.then(() => cmn.ConfigurationFile.write(content, gameJsonPath, param.logger))
-				.then(() => param.logger.info("Done!"));
+				.then(() => cmn.ConfigurationFile.write(content, gameJsonPath, param.logger!))
+				.then(() => param.logger!.info("Done!"));
 		})
 		.then(restoreDirectory)
 		.catch((err) => {
