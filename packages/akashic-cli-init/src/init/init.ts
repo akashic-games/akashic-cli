@@ -94,9 +94,9 @@ async function _extractFromTemplate(
 	const { forceCopy, logger } = opts;
 	const copyReqs = conf.files.map(entry => ({
 		srcRelative: entry.src,
-		destRelative: path.join(entry.dst, entry.src),
+		destRelative: entry.dst || entry.src,
 		src: path.join(src, entry.src),
-		dest: path.join(dest, entry.dst, entry.src)
+		dest: path.join(dest, entry.dst || entry.src)
 	}));
 	if (!forceCopy) {
 		const existings = copyReqs.filter(req => existsSync(req.dest)).map(req => req.destRelative);
