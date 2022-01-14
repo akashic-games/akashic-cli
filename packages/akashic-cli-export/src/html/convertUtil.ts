@@ -25,6 +25,7 @@ export interface ConvertTemplateParameterObject {
 	sandboxConfigJsCode?: string;
 	needsUntaintedImageAsset?: boolean;
 	omitUnbundledJs?: boolean;
+	injectEngineFiles?: string;
 }
 
 export function extractAssetDefinitions (conf: cmn.Configuration, type: string): string[] {
@@ -101,12 +102,25 @@ export function wrap(code: string, minify?: boolean): string {
 	return minify ? UglifyJS.minify(ret, { sourceMap: true }).code : ret;
 }
 
-export function getDefaultBundleScripts(templatePath: string, version: string, minify?: boolean, bundleText: boolean = true): any {
+export function getDefaultBundleScripts(
+	templatePath: string,
+	version: string,
+	minify?: boolean,
+	bundleText: boolean = true,
+	injectEngineFilesPath?: string
+): any {
 	// eslint-disable-next-line @typescript-eslint/no-var-requires
-	var versionsJson = require("../engineFilesVersion.json");
-	var engineFilesVariable = versionsJson[`v${version}`].variable;
-	var preloadScriptNames = [`${engineFilesVariable}.js`];
-	var preloadScript = `
+	const versionsJson = require("../engineFilesVersion.json");
+	let engineFilesVariable = versionsJson[`v${version}`].variable;
+
+	if (injectEngineFilesPath) {
+		const matches = injectEngineFilesPath.match(/\d_\d_\d/);
+		if (matches) version = matches[0].slice(0, 1);
+		engineFilesVariable = path.basename(injectEngineFilesPath, ".js");
+	}
+
+	const preloadScriptNames = [`${engineFilesVariable}.js`];
+	const preloadScript = `
 		window.engineFiles = ${engineFilesVariable};
 		window.g = engineFiles.akashicEngine;
 		(function() {
@@ -121,7 +135,7 @@ export function getDefaultBundleScripts(templatePath: string, version: string, m
 			};
 		})();
 	`;
-	var postloadScriptNames =
+	let postloadScriptNames =
 		["sandbox.js", "initGlobals.js"];
 	if (version === "3") {
 		postloadScriptNames.push("pdi/LocalScriptAssetV3.js");
@@ -136,9 +150,9 @@ export function getDefaultBundleScripts(templatePath: string, version: string, m
 	}
 	if (version === "1") postloadScriptNames.push("logger.js");
 
-	var preloadScripts = preloadScriptNames.map((fileName) => loadScriptFile(fileName, templatePath));
+	let preloadScripts = preloadScriptNames.map((fileName) => loadScriptFile(fileName, templatePath));
 	preloadScripts.push(preloadScript);
-	var postloadScripts = postloadScriptNames.map((fileName) => loadScriptFile(fileName, templatePath));
+	let postloadScripts = postloadScriptNames.map((fileName) => loadScriptFile(fileName, templatePath));
 	if (minify) {
 		preloadScripts = preloadScripts.map(script => UglifyJS.minify(script, { sourceMap: true }).code);
 		postloadScripts = postloadScripts.map(script => UglifyJS.minify(script, { sourceMap: true }).code);

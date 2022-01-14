@@ -15,4 +15,5 @@ export interface CliConfigExportHtml {
 	autoSendEvents?: string | boolean;
 	autoSendEventName?: string | boolean;
 	omitUnbundledJs?: boolean;
+	injectEngineFiles?: string;
 }

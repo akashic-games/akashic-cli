@@ -81,7 +81,8 @@ export function promiseExportHtmlRaw(param: ExportHTMLParameterObject): Promise<
 				lint: param.lint,
 				exportInfo: param.exportInfo,
 				autoSendEventName: param.autoSendEventName,
-				needsUntaintedImageAsset: param.needsUntaintedImageAsset
+				needsUntaintedImageAsset: param.needsUntaintedImageAsset,
+				injectEngineFiles: param.injectEngineFiles
 			};
 			if (param.bundle) {
 				return promiseConvertBundle(convertParam);
