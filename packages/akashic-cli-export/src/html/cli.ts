@@ -100,7 +100,7 @@ export function run(argv: string[]): void {
 		}
 
 		if (options.injectEngineFiles) {
-			if (!/^engineFilesV\d_\d_\d+.*.js/.test(options.injectEngineFiles)) {
+			if (!/^engineFilesV\d_\d_\d+.*.js/.test(path.basename(options.injectEngineFiles))) {
 				console.error(`Invalid --inject-engine-files option argument:${options.injectEngineFiles},`
 					+ "File name should be in engineFilesVx_x_x format");
 				process.exit(1);

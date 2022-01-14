@@ -150,7 +150,7 @@ export function getDefaultBundleScripts(
 	}
 	if (version === "1") postloadScriptNames.push("logger.js");
 
-	let preloadScripts = preloadScriptNames.map((fileName) => loadScriptFile(fileName, templatePath));
+	let preloadScripts = preloadScriptNames.map((fileName) => loadScriptFile(fileName, templatePath, injectEngineFilesPath));
 	preloadScripts.push(preloadScript);
 	let postloadScripts = postloadScriptNames.map((fileName) => loadScriptFile(fileName, templatePath));
 	if (minify) {
@@ -210,9 +210,10 @@ function getFileContentsFromDirectory(inputDirPath: string): string[] {
 		.map(fileName => fs.readFileSync(path.join(inputDirPath, fileName), "utf8").replace(/\r\n|\r/g, "\n"));
 }
 
-function loadScriptFile(fileName: string, templatePath: string): string {
+function loadScriptFile(fileName: string, templatePath: string, injectEngineFilesPath?: string): string {
 	try {
-		const filepath = path.resolve(__dirname, "..", templatePath, "js", fileName);
+		const filepath = injectEngineFilesPath ?
+			path.resolve(injectEngineFilesPath) : path.resolve(__dirname, "..", templatePath, "js", fileName);
 		return fs.readFileSync(filepath, "utf8").replace(/\r\n|\r/g, "\n");
 	} catch (e) {
 		if (e.code === "ENOENT") {
