@@ -118,10 +118,10 @@ async function writeHtmlFile(
 	let engineFilesVariable = versionsJson[`v${version}`].variable;
 	const filePath = path.resolve(__dirname + "/../template/no-bundle-index.ejs");
 
-	if (options.injectEngineFiles) {
-		const matches = options.injectEngineFiles.match(/\d_\d_\d/);
+	if (options.debugOverrideEngineFiles) {
+		const matches = options.debugOverrideEngineFiles.match(/\d_\d_\d/);
 		if (matches) version = matches[0].slice(0, 1);
-		engineFilesVariable = path.basename(options.injectEngineFiles, ".js");
+		engineFilesVariable = path.basename(options.debugOverrideEngineFiles, ".js");
 	}
 
 	const html = await ejs.renderFile(filePath, {
@@ -166,13 +166,13 @@ function writeCommonFiles(
 		path.resolve(__dirname, "..", templatePath),
 		outputPath);
 
-	if (options.injectEngineFiles) {
+	if (options.debugOverrideEngineFiles) {
 		const jsDir = path.join(outputPath, "js");
 		fsx.readdirSync(jsDir).filter(f => /^engineFilesV*/.test(f))
 			.map(f => fsx.removeSync(path.join(jsDir, f)));
 		fsx.copySync(
-			path.resolve(options.injectEngineFiles),
-			path.join(jsDir, options.injectEngineFiles)
+			path.resolve(options.debugOverrideEngineFiles),
+			path.join(jsDir, options.debugOverrideEngineFiles)
 		);
 	}
 }

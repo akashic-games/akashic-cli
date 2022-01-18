@@ -25,7 +25,7 @@ export interface ConvertTemplateParameterObject {
 	sandboxConfigJsCode?: string;
 	needsUntaintedImageAsset?: boolean;
 	omitUnbundledJs?: boolean;
-	injectEngineFiles?: string;
+	debugOverrideEngineFiles?: string;
 }
 
 export function extractAssetDefinitions (conf: cmn.Configuration, type: string): string[] {
@@ -107,16 +107,16 @@ export function getDefaultBundleScripts(
 	version: string,
 	minify?: boolean,
 	bundleText: boolean = true,
-	injectEngineFilesPath?: string
+	debugOverrideEngineFilesPath?: string
 ): any {
 	// eslint-disable-next-line @typescript-eslint/no-var-requires
 	const versionsJson = require("../engineFilesVersion.json");
 	let engineFilesVariable = versionsJson[`v${version}`].variable;
 
-	if (injectEngineFilesPath) {
-		const matches = injectEngineFilesPath.match(/\d_\d_\d/);
+	if (debugOverrideEngineFilesPath) {
+		const matches = debugOverrideEngineFilesPath.match(/\d_\d_\d/);
 		if (matches) version = matches[0].slice(0, 1);
-		engineFilesVariable = path.basename(injectEngineFilesPath, ".js");
+		engineFilesVariable = path.basename(debugOverrideEngineFilesPath, ".js");
 	}
 
 	const preloadScriptNames = [`${engineFilesVariable}.js`];
@@ -150,7 +150,7 @@ export function getDefaultBundleScripts(
 	}
 	if (version === "1") postloadScriptNames.push("logger.js");
 
-	let preloadScripts = preloadScriptNames.map((fileName) => loadScriptFile(fileName, templatePath, injectEngineFilesPath));
+	let preloadScripts = preloadScriptNames.map((fileName) => loadScriptFile(fileName, templatePath, debugOverrideEngineFilesPath));
 	preloadScripts.push(preloadScript);
 	let postloadScripts = postloadScriptNames.map((fileName) => loadScriptFile(fileName, templatePath));
 	if (minify) {
@@ -210,10 +210,10 @@ function getFileContentsFromDirectory(inputDirPath: string): string[] {
 		.map(fileName => fs.readFileSync(path.join(inputDirPath, fileName), "utf8").replace(/\r\n|\r/g, "\n"));
 }
 
-function loadScriptFile(fileName: string, templatePath: string, injectEngineFilesPath?: string): string {
+function loadScriptFile(fileName: string, templatePath: string, debugOverrideEngineFilesPath?: string): string {
 	try {
-		const filepath = injectEngineFilesPath ?
-			path.resolve(injectEngineFilesPath) : path.resolve(__dirname, "..", templatePath, "js", fileName);
+		const filepath = debugOverrideEngineFilesPath ?
+			path.resolve(debugOverrideEngineFilesPath) : path.resolve(__dirname, "..", templatePath, "js", fileName);
 		return fs.readFileSync(filepath, "utf8").replace(/\r\n|\r/g, "\n");
 	} catch (e) {
 		if (e.code === "ENOENT") {
