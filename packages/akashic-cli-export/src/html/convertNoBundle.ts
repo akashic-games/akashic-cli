@@ -13,7 +13,8 @@ import {
 	getInjectedContents,
 	validateEs5Code,
 	readSandboxConfigJs,
-	addUntaintedToImageAssets
+	addUntaintedToImageAssets,
+	substrEngineFilesVersion
 } from "./convertUtil";
 
 export async function promiseConvertNoBundle(options: ConvertTemplateParameterObject): Promise<void> {
@@ -112,15 +113,18 @@ async function writeHtmlFile(
 	conf: cmn.Configuration,
 	options: ConvertTemplateParameterObject): Promise<void> {
 	const injects = options.injects ? options.injects : [];
-	let version = conf._content.environment["sandbox-runtime"];
+	const version = conf._content.environment["sandbox-runtime"];
 	// eslint-disable-next-line @typescript-eslint/no-var-requires
 	const versionsJson = require("../engineFilesVersion.json");
 	let engineFilesVariable = versionsJson[`v${version}`].variable;
 	const filePath = path.resolve(__dirname + "/../template/no-bundle-index.ejs");
 
 	if (options.debugOverrideEngineFiles) {
-		const matches = options.debugOverrideEngineFiles.match(/\d_\d_\d/);
-		if (matches) version = matches[0].slice(0, 1);
+		const engineFilesVersion = substrEngineFilesVersion(options.debugOverrideEngineFiles);
+		if (engineFilesVersion && version !== engineFilesVersion) {
+			throw "Versions of environment[\"sandbox-runtime\"] in game.json and the version of engineFiles do not match."
+				+ ` environment[\"sandbox-runtime\"]:${version}, engineFiles:${engineFilesVersion}`;
+		}
 		engineFilesVariable = path.basename(options.debugOverrideEngineFiles, ".js");
 	}
 
@@ -159,7 +163,7 @@ function writeCommonFiles(
 			templatePath = "template/v3";
 			break;
 		default:
-			throw Error("Unknown engine version: `environment[\"sandbox-runtime\"]` field in game.json should be \"1\", \"2\", or \"3\".");
+			throw "Unknown engine version: `environment[\"sandbox-runtime\"]` field in game.json should be \"1\", \"2\", or \"3\".";
 	}
 
 	fsx.copySync(
