@@ -114,11 +114,7 @@ export function getDefaultBundleScripts(
 	let engineFilesVariable = versionsJson[`v${version}`].variable;
 
 	if (overrideEngineFilesPath) {
-		const engineFilesVersion = substrEngineFilesVersion(overrideEngineFilesPath);
-		if (engineFilesVersion && version !== engineFilesVersion) {
-			throw "Versions of environment[\"sandbox-runtime\"] in game.json and the version of engineFiles do not match."
-				+ ` environment[\"sandbox-runtime\"]:${version}, engineFiles:${engineFilesVersion}`;
-		}
+		validateEngineFileAndGameJsonVersion(overrideEngineFilesPath, version);
 		engineFilesVariable = path.basename(overrideEngineFilesPath, ".js");
 	}
 
@@ -214,9 +210,17 @@ export function addUntaintedToImageAssets(gameJson: cmn.GameConfiguration): void
 	});
 }
 
-export function substrEngineFilesVersion(overrideEngineFilesPath: string): string | null {
+export function validateEngineFileAndGameJsonVersion(overrideEngineFilesPath: string, gameJsonVersion: string): void {
 	const matches = overrideEngineFilesPath.match(/(\d+)_\d+_\d+/);
-	return matches ? matches[1] : null;
+	const engineFilesVersion = matches ? matches[1] : null;
+
+	if (!engineFilesVersion) {
+		// 実行途中でファイル名を変更されない限りこのパスに入ることはないが念の為。
+		throw "Invalid File name should be in engineFilesVx_x_x format";
+	} else if (gameJsonVersion !== engineFilesVersion) {
+		throw "Versions of environment[\"sandbox-runtime\"] in game.json and the version of engineFiles do not match."
+		+ ` environment[\"sandbox-runtime\"]:${gameJsonVersion}, engineFiles:${engineFilesVersion}`;
+	}
 }
 
 function getFileContentsFromDirectory(inputDirPath: string): string[] {

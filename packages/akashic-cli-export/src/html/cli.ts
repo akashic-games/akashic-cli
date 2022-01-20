@@ -98,7 +98,6 @@ export function run(argv: string[]): void {
 			console.error(error);
 			process.exit(1);
 		}
-		console.log("***val:", options.debugOverrideEngineFiles);
 		if (options.debugOverrideEngineFiles) {
 			if (!/^engineFilesV\d+_\d+_\d+.*\.js$/.test(path.basename(options.debugOverrideEngineFiles))) {
 				console.error(`Invalid ---debug-override-engine-files option argument:${options.debugOverrideEngineFiles},`

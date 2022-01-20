@@ -14,7 +14,7 @@ import {
 	validateEs5Code,
 	readSandboxConfigJs,
 	addUntaintedToImageAssets,
-	substrEngineFilesVersion
+	validateEngineFileAndGameJsonVersion
 } from "./convertUtil";
 
 export async function promiseConvertNoBundle(options: ConvertTemplateParameterObject): Promise<void> {
@@ -120,11 +120,7 @@ async function writeHtmlFile(
 	const filePath = path.resolve(__dirname + "/../template/no-bundle-index.ejs");
 
 	if (options.debugOverrideEngineFiles) {
-		const engineFilesVersion = substrEngineFilesVersion(options.debugOverrideEngineFiles);
-		if (engineFilesVersion && version !== engineFilesVersion) {
-			throw "Versions of environment[\"sandbox-runtime\"] in game.json and the version of engineFiles do not match."
-				+ ` environment[\"sandbox-runtime\"]:${version}, engineFiles:${engineFilesVersion}`;
-		}
+		validateEngineFileAndGameJsonVersion(options.debugOverrideEngineFiles, version);
 		engineFilesVariable = path.basename(options.debugOverrideEngineFiles, ".js");
 	}
 
