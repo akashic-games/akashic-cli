@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-lib-manage",
-  "version": "1.7.3",
+  "version": "1.7.4",
   "description": "npm command wrapper module for Akashic games",
   "scripts": {
     "prepublish": "npm run clean && npm run build",
@@ -44,7 +44,7 @@
     "typescript": "3.9.10"
   },
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.13.3",
+    "@akashic/akashic-cli-commons": "0.13.4",
     "commander": "8.3.0",
     "tar": "6.1.11"
   },
