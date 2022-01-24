@@ -216,10 +216,10 @@ export function validateEngineFileAndGameJsonVersion(overrideEngineFilesPath: st
 
 	if (!engineFilesVersion) {
 		// 実行途中でファイル名を変更されない限りこのパスに入ることはないが念の為。
-		throw "Invalid File name should be in engineFilesVx_x_x format";
+		throw new Error("Invalid File name should be in engineFilesVx_x_x format");
 	} else if (gameJsonVersion !== engineFilesVersion) {
-		throw "Versions of environment[\"sandbox-runtime\"] in game.json and the version of engineFiles do not match."
-		+ ` environment[\"sandbox-runtime\"]:${gameJsonVersion}, engineFiles:${engineFilesVersion}`;
+		throw new Error("Versions of environment[\"sandbox-runtime\"] in game.json and the version of engineFiles do not match."
+		+ ` environment[\"sandbox-runtime\"]:${gameJsonVersion}, engineFiles:${engineFilesVersion}`);
 	}
 }
 
@@ -233,7 +233,7 @@ function loadScriptFile(filePath: string): string {
 		return fs.readFileSync(filePath, "utf8").replace(/\r\n|\r/g, "\n");
 	} catch (e) {
 		if (e.code === "ENOENT") {
-			throw path.basename(filePath) + " is not found. Try re-install akashic-cli" + filePath;
+			throw new Error(path.basename(filePath) + " is not found. Try re-install akashic-cli" + filePath);
 		} else {
 			throw e;
 		}

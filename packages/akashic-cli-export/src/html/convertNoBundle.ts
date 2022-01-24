@@ -159,7 +159,7 @@ function writeCommonFiles(
 			templatePath = "template/v3";
 			break;
 		default:
-			throw "Unknown engine version: `environment[\"sandbox-runtime\"]` field in game.json should be \"1\", \"2\", or \"3\".";
+			throw Error("Unknown engine version: `environment[\"sandbox-runtime\"]` field in game.json should be \"1\", \"2\", or \"3\".");
 	}
 
 	fsx.copySync(
