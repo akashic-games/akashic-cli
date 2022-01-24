@@ -14,7 +14,7 @@ import {
 	validateEs5Code,
 	readSandboxConfigJs,
 	addUntaintedToImageAssets,
-	validateEngineFileAndGameJsonVersion
+	validateEngineFilesName
 } from "./convertUtil";
 
 export async function promiseConvertNoBundle(options: ConvertTemplateParameterObject): Promise<void> {
@@ -120,7 +120,7 @@ async function writeHtmlFile(
 	const filePath = path.resolve(__dirname + "/../template/no-bundle-index.ejs");
 
 	if (options.debugOverrideEngineFiles) {
-		validateEngineFileAndGameJsonVersion(options.debugOverrideEngineFiles, version);
+		validateEngineFilesName(options.debugOverrideEngineFiles, version);
 		engineFilesVariable = path.basename(options.debugOverrideEngineFiles, ".js");
 	}
 
@@ -172,7 +172,7 @@ function writeCommonFiles(
 			.map(f => fsx.removeSync(path.join(jsDir, f)));
 		fsx.copySync(
 			path.resolve(options.debugOverrideEngineFiles),
-			path.join(jsDir, options.debugOverrideEngineFiles)
+			path.join(jsDir, path.basename(options.debugOverrideEngineFiles))
 		);
 	}
 }
