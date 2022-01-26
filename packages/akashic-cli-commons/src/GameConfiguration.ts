@@ -31,7 +31,7 @@ export interface AudioSystemConfiguration {
  * game.json の "assets" の値の型。
  */
 export interface Assets {
-	[key: string]: AssetConfiguration;
+	[key: string]: AssetConfiguration | undefined;
 	mainScene?: AssetConfiguration;
 }
 
