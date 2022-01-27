@@ -37,7 +37,7 @@ export class App extends React.Component<AppProps, {}> {
 			</div>;
 		}
 
-		const MainArea = (0 < 2) ? Fitter : FlexScrollY;
+		const MainArea = store.toolBarUiStore.fitsToScreen ? Fitter : FlexScrollY;
 		const sandboxConfig = store.currentLocalInstance.content.sandboxConfig || {};
 		return <div id="whole" className={styles.whole}>
 			<ToolBarContainer

@@ -11,6 +11,7 @@ export class ToolBarUiStore {
 	@observable showsAudioOptionPopover: boolean;
 
 	@observable showsDisplayOptionPopover: boolean;
+	@observable fitsToScreen: boolean
 	@observable showsBackgroundImage: boolean;
 	@observable showsGrid: boolean;
 	@observable showsProfiler: boolean;
@@ -23,6 +24,7 @@ export class ToolBarUiStore {
 		this.showsDevtools = storage.data.showsDevtools;
 		this.showsAudioOptionPopover = false;
 		this.showsDisplayOptionPopover = false;
+		this.fitsToScreen = storage.data.fitsToScreen;
 		this.showsBackgroundImage = storage.data.showsBackgroundImage;
 		this.showsGrid = storage.data.showsGrid;
 		this.showsProfiler = storage.data.showsProfiler;
@@ -64,6 +66,12 @@ export class ToolBarUiStore {
 	@action
 	setShowDisplayOptionPopover(show: boolean): void {
 		this.showsDisplayOptionPopover = show;
+	}
+
+	@action
+	setFitsToScreen(fits: boolean): void {
+		this.fitsToScreen = fits;
+		storage.put({ fitsToScreen: fits });
 	}
 
 	@action
