@@ -5,6 +5,7 @@ import { Operator } from "../operator/Operator";
 import { Store } from "../store/Store";
 import * as styles from "./App.css";
 import { FlexScrollY } from "./atom/FlexScrollY";
+import { Fitter } from "./atom/Fitter";
 import { DevtoolContainer } from "./container/DevtoolContainer";
 import { GameScreenContainer } from "./container/GameScreenContainer";
 import { NotificationContainer } from "./container/NotificationContainer";
@@ -36,6 +37,7 @@ export class App extends React.Component<AppProps, {}> {
 			</div>;
 		}
 
+		const MainArea = (0 < 2) ? Fitter : FlexScrollY;
 		const sandboxConfig = store.currentLocalInstance.content.sandboxConfig || {};
 		return <div id="whole" className={styles.whole}>
 			<ToolBarContainer
@@ -45,8 +47,8 @@ export class App extends React.Component<AppProps, {}> {
 				toolBarUiStore={store.toolBarUiStore}
 				targetService={store.targetService}
 			/>
-			<FlexScrollY>
-				<div id="agvcontainer" className={styles.main + " " + styles.centering }>
+			<MainArea>
+				<div id="agvcontainer" className={styles.main + " " + styles.centering}>
 					<GameScreenContainer
 						sandboxConfig={sandboxConfig}
 						toolBarUiStore={store.toolBarUiStore}
@@ -57,7 +59,7 @@ export class App extends React.Component<AppProps, {}> {
 						operator={this.props.operator}
 					/>
 				</div>
-			</FlexScrollY>
+			</MainArea>
 			{
 				store.toolBarUiStore.showsDevtools ?
 					<div className={styles.devtools}>
