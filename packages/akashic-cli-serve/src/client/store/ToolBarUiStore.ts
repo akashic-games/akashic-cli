@@ -11,7 +11,7 @@ export class ToolBarUiStore {
 	@observable showsAudioOptionPopover: boolean;
 
 	@observable showsDisplayOptionPopover: boolean;
-	@observable fitsToScreen: boolean
+	@observable fitsToScreen: boolean;
 	@observable showsBackgroundImage: boolean;
 	@observable showsGrid: boolean;
 	@observable showsProfiler: boolean;
