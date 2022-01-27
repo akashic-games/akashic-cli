@@ -1,5 +1,7 @@
+import { raw } from "express";
 import * as React from "react";
 import Measure, { ContentRect } from "react-measure";
+import { deflateSync } from "zlib";
 import * as styles from "./Fitter.css";
 
 export interface FitterProps {
@@ -7,32 +9,24 @@ export interface FitterProps {
 }
 
 export function Fitter(props: FitterProps): React.ReactElement<FitterProps> {
-  const [outerWidth, setOuterWidth] = React.useState(0);
-  const [outerHeight, setOuterHeight] = React.useState(0);
-  const [innerWidth, setInnerWidth] = React.useState(0);
-  const [innerHeight, setInnerHeight] = React.useState(0);
+  const [outerRect, setOuterRect] = React.useState({ width: 0, height: 0 });
+  const [innerRect, setInnerRect] = React.useState({ width: 0, height: 0 });
 
   const onResizeOuter = React.useCallback((rect: ContentRect) => {
-    console.log("RESIZE-OUTER", rect.client);
-    setOuterWidth(rect.client?.width!);
-    setOuterHeight(rect.client?.height!);
+    setOuterRect({ width: rect.client?.width!, height: rect.client?.height! });
   }, []);
   const onResizeInner = React.useCallback((rect: ContentRect) => {
-    console.log("RESIZE-INNER", rect.scroll);
-    setInnerWidth(rect.scroll?.width!);
-    setInnerHeight(rect.scroll?.height!);
+    setInnerRect({ width: rect.scroll?.width!, height: rect.scroll?.height! });
   }, []);
 
-  const ratio = Math.min(outerWidth / innerWidth, outerHeight / innerHeight) || 1;
-  console.log({
-    ow: outerWidth,
-    iw: innerWidth,
-    oh: outerHeight,
-    ih: innerHeight,
-    ratioW: outerWidth / innerWidth,
-    ratioH: outerHeight / innerHeight,
-    ratio
-  });
+  const ratio = Math.min(
+    outerRect.width / innerRect.width,
+    outerRect.height / innerRect.height
+  ) || 1;
+
+  const needsScale = true; // (ratio >= 1) を使いたいが振動する時があるので一旦決め打ち
+  const innerClassName = needsScale ? "inner-shrank" : "inner-normal";
+  const innerStyle = needsScale ? { transform: `scale(${ratio})` } : null;
 
   return (
     <Measure client onResize={onResizeOuter}>
@@ -43,8 +37,8 @@ export function Fitter(props: FitterProps): React.ReactElement<FitterProps> {
               {({ measureRef }) => (
                 <div
                   ref={measureRef}
-                  className={`${styles.inner} ${styles[ratio >= 1 ? "inner-normal" : "inner-shrank"]}`}
-                  style={ratio >= 1 ? null : { transform: `scale(${ratio})` }}
+                  className={`${styles.inner} ${styles[innerClassName]}`}
+                  style={innerStyle}
                 >
                   { props.children }
                 </div>

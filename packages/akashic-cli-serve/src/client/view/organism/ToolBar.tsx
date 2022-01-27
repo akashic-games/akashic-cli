@@ -49,7 +49,7 @@ export class ToolBar extends React.Component<ToolBarProps, {}> {
 				</ToolToggleLabel>
 				*/}
 				<ToolLabel>
-					TargetService: <b>{props.targetService}</b>
+					service: <b>{props.targetService}</b>
 				</ToolLabel>
 				<AudioOptionControl makeProps={props.makeAudioOptionControlProps} />
 				<DisplayOptionControl makeProps={props.makeDisplayOptionControlProps} />
