@@ -2,7 +2,7 @@
 .fitter {
 	flex: 1 1 auto;
 	display: flex;
-  overflow: hidden;
+	overflow: hidden;
 }
 
 .outer {
@@ -25,6 +25,6 @@
 }
 
 .inner-shrank {
-  transform-origin: top left;
+	transform-origin: top left;
 	/* transform: scale(); を JS で与える */
 }
