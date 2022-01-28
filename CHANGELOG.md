@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.15.12 (2022-01-28)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli`
+  * [#993](https://github.com/akashic-games/akashic-cli/pull/993) Update dependency uglify-js to v3.15.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
 ## 2.15.11 (2022-01-28)
 
 #### Enhancement
