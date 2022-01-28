@@ -25,6 +25,7 @@ export interface ConvertTemplateParameterObject {
 	sandboxConfigJsCode?: string;
 	needsUntaintedImageAsset?: boolean;
 	omitUnbundledJs?: boolean;
+	debugOverrideEngineFiles?: string;
 }
 
 export function extractAssetDefinitions (conf: cmn.Configuration, type: string): string[] {
@@ -101,12 +102,23 @@ export function wrap(code: string, minify?: boolean): string {
 	return minify ? UglifyJS.minify(ret, { sourceMap: true }).code : ret;
 }
 
-export function getDefaultBundleScripts(templatePath: string, version: string, minify?: boolean, bundleText: boolean = true): any {
+export function getDefaultBundleScripts(
+	templatePath: string,
+	version: string,
+	minify?: boolean,
+	bundleText: boolean = true,
+	overrideEngineFilesPath?: string
+): any {
 	// eslint-disable-next-line @typescript-eslint/no-var-requires
-	var versionsJson = require("../engineFilesVersion.json");
-	var engineFilesVariable = versionsJson[`v${version}`].variable;
-	var preloadScriptNames = [`${engineFilesVariable}.js`];
-	var preloadScript = `
+	const versionsJson = require("../engineFilesVersion.json");
+	let engineFilesVariable = versionsJson[`v${version}`].variable;
+
+	if (overrideEngineFilesPath) {
+		validateEngineFilesName(overrideEngineFilesPath, version);
+		engineFilesVariable = path.basename(overrideEngineFilesPath, ".js");
+	}
+
+	const preloadScript = `
 		window.engineFiles = ${engineFilesVariable};
 		window.g = engineFiles.akashicEngine;
 		(function() {
@@ -121,7 +133,7 @@ export function getDefaultBundleScripts(templatePath: string, version: string, m
 			};
 		})();
 	`;
-	var postloadScriptNames =
+	let postloadScriptNames =
 		["sandbox.js", "initGlobals.js"];
 	if (version === "3") {
 		postloadScriptNames.push("pdi/LocalScriptAssetV3.js");
@@ -136,9 +148,16 @@ export function getDefaultBundleScripts(templatePath: string, version: string, m
 	}
 	if (version === "1") postloadScriptNames.push("logger.js");
 
-	var preloadScripts = preloadScriptNames.map((fileName) => loadScriptFile(fileName, templatePath));
+	const engineFilePath = overrideEngineFilesPath ?
+		path.resolve(overrideEngineFilesPath) : path.resolve(__dirname, "..", templatePath, "js", `${ engineFilesVariable }.js`);
+	let preloadScripts = [loadScriptFile(engineFilePath)];
 	preloadScripts.push(preloadScript);
-	var postloadScripts = postloadScriptNames.map((fileName) => loadScriptFile(fileName, templatePath));
+
+	let postloadScripts = postloadScriptNames.map((fileName) => {
+		const filePath = path.resolve(__dirname, "..", templatePath, "js", fileName);
+		return loadScriptFile(filePath);
+	});
+
 	if (minify) {
 		preloadScripts = preloadScripts.map(script => UglifyJS.minify(script, { sourceMap: true }).code);
 		postloadScripts = postloadScripts.map(script => UglifyJS.minify(script, { sourceMap: true }).code);
@@ -191,20 +210,26 @@ export function addUntaintedToImageAssets(gameJson: cmn.GameConfiguration): void
 	});
 }
 
+export function validateEngineFilesName(filename: string, expectedMajorVersion: string): void {
+	const matches = filename.match(/(\d+)_\d+_\d+/);
+	const engineFilesVersion = matches ? matches[1] : null;
+	if (expectedMajorVersion !== engineFilesVersion) {
+		throw new Error("Versions of environment[\"sandbox-runtime\"] in game.json and the version of engineFiles do not match."
+			+ ` environment[\"sandbox-runtime\"]:${expectedMajorVersion}, engineFiles:${engineFilesVersion}`);
+	}
+}
+
 function getFileContentsFromDirectory(inputDirPath: string): string[] {
 	return fs.readdirSync(inputDirPath)
 		.map(fileName => fs.readFileSync(path.join(inputDirPath, fileName), "utf8").replace(/\r\n|\r/g, "\n"));
 }
 
-function loadScriptFile(fileName: string, templatePath: string): string {
+function loadScriptFile(filePath: string): string {
 	try {
-		const filepath = path.resolve(__dirname, "..", templatePath, "js", fileName);
-		return fs.readFileSync(filepath, "utf8").replace(/\r\n|\r/g, "\n");
+		return fs.readFileSync(filePath, "utf8").replace(/\r\n|\r/g, "\n");
 	} catch (e) {
 		if (e.code === "ENOENT") {
-			throw new Error(
-				fileName + " is not found. Try re-install akashic-cli" + path.resolve(__dirname, "..", templatePath, "js", fileName)
-			);
+			throw new Error(path.basename(filePath) + " is not found. Try re-install akashic-cli" + filePath);
 		} else {
 			throw e;
 		}
