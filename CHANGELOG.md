@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.15.11 (2022-01-28)
+
+#### Enhancement
+* `akashic-cli-commons`, `akashic-cli-export`
+  * [#983](https://github.com/akashic-games/akashic-cli/pull/983) Add --debug-override-engine-files option to export html ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 2.15.10 (2022-01-22)
 
 #### Update Dependencies
