@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.15.14 (2022-01-29)
+
+#### Update Dependencies
+* `akashic-cli-serve`
+  * [#992](https://github.com/akashic-games/akashic-cli/pull/992) Update dependency @types/react to v16.14.22 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
 ## 2.15.13 (2022-01-28)
 
 #### Enhancement
