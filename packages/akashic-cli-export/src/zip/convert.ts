@@ -8,6 +8,7 @@ import * as fsx from "fs-extra";
 import readdir = require("fs-readdir-recursive");
 import * as UglifyJS from "uglify-js";
 import * as gcu from "./GameConfigurationUtil";
+import { packSmallImages } from "./packImages";
 
 export interface ConvertGameParameterObject {
 	bundle?: boolean;
@@ -15,6 +16,7 @@ export interface ConvertGameParameterObject {
 	minify?: boolean;
 	minifyJs?: boolean;
 	minifyJson?: boolean;
+	packImage?: boolean;
 	strip?: boolean;
 	source?: string;
 	hashLength?: number;
@@ -212,6 +214,10 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			fs.writeFileSync(entryPointAbsPath, code);
 		})
 		.then(() => {
+			if (!param.packImage) return;
+			return packSmallImages(gamejson, param.dest);
+		})
+		.then(() => {
 			if (param.hashLength > 0) {
 				const hashLength = Math.ceil(param.hashLength);
 				try {
@@ -239,7 +245,6 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			});
 		});
 }
-
 
 /**
  * 指定のgameJson中の全てのImageAssetに untainted:true を付与する

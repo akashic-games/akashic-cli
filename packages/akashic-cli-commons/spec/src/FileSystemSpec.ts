@@ -1,12 +1,30 @@
 import * as mockfs from "mock-fs";
-import { readJSON, writeJSON, readdir } from "../../lib/FileSystem";
+import { readFile, writeFile, readJSON, writeJSON, readdir } from "../../lib/FileSystem";
 
 describe("FileSystemSpec", () => {
 	afterEach(function () {
 		mockfs.restore();
 	});
 
-	it("read game.json", async () => {
+	it("read text", async () => {
+		mockfs({
+			"someText.txt": "text content!"
+		});
+		expect(
+			await readFile("./someText.txt", "utf8")
+		).toBe("text content!");
+	});
+
+	it("read binary", async () => {
+		mockfs({
+			"someBinary": Buffer.from([12, 34, 56])
+		});
+		expect(
+			await readFile("./someBinary")
+		).toEqual(Buffer.from([12, 34, 56]));
+	});
+
+	it("read json", async () => {
 		mockfs({
 			"game": {
 				"game.json": JSON.stringify({
@@ -23,7 +41,25 @@ describe("FileSystemSpec", () => {
 		});
 	});
 
-	it("read game.json", async () => {
+	it("write text", async () => {
+		mockfs({
+			"some": {}
+		});
+		await writeFile("./some/foo.txt", "string content!!");
+		expect(
+			await readFile("./some/foo.txt", "utf8")
+		).toBe("string content!!");
+	});
+
+	it("write binary", async () => {
+		mockfs({});
+		await writeFile("./someBinary", Buffer.from([12, 34]));
+		expect(
+			await readFile("./someBinary")
+		).toEqual(Buffer.from([12, 34]));
+	});
+
+	it("write json", async () => {
 		mockfs({
 			"game": {
 				"game.json": JSON.stringify({})

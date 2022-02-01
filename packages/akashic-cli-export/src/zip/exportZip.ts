@@ -12,6 +12,7 @@ export interface ExportZipParameterObject {
 	minify?: boolean;
 	minifyJs?: boolean;
 	minifyJson?: boolean;
+	packImage?: boolean;
 	strip?: boolean;
 	source?: string;
 	dest?: string;
@@ -32,6 +33,7 @@ function _createExportInfo(param: ExportZipParameterObject): cmn.ExportZipInfo {
 			minify: !!param.minify,
 			minifyJs: !!param.minifyJs,
 			minifyJson: !!param.minifyJson,
+			// packImage: !!param.packImage,
 			bundle: !!param.bundle,
 			babel: !!param.babel,
 			targetService: param.targetService || "none"
@@ -46,6 +48,7 @@ export function _completeExportZipParameterObject(param: ExportZipParameterObjec
 		minify: !!param.minify,
 		minifyJs: !!param.minifyJs,
 		minifyJson: !!param.minifyJson,
+		packImage: !!param.packImage,
 		strip: !!param.strip,
 		source: param.source || process.cwd(),
 		dest: param.dest || "./game.zip",
@@ -91,6 +94,7 @@ export function promiseExportZip(param: ExportZipParameterObject): Promise<void>
 				minify: param.minify,
 				minifyJs: param.minifyJs,
 				minifyJson: param.minifyJson,
+				packImage: param.packImage,
 				strip: param.strip,
 				source: param.source,
 				dest: destDir,
