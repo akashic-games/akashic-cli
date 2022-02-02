@@ -2,14 +2,11 @@ import * as fs from "fs";
 
 export type WriteDataFormatter<T> = (content: T) => string;
 
-export function readFile(path: string, options: { encoding?: null | undefined } | undefined | null): Promise<Buffer>;
-export function readFile(path: string, options: { encoding: BufferEncoding } | BufferEncoding): Promise<string>;
-export function readFile(path: string, options: fs.BaseEncodingOptions | BufferEncoding | undefined | null): Promise<string | Buffer>;
+export function readFile(path: string, options: undefined | null): Promise<Buffer>;
+export function readFile(path: string, options: BufferEncoding): Promise<string>;
+export function readFile(path: string, options: BufferEncoding | undefined | null): Promise<string | Buffer>;
 export function readFile(path: string): Promise<Buffer>;
-export function readFile(
-	filepath: string,
-	options: fs.BaseEncodingOptions | BufferEncoding | undefined | null = null
-): Promise<string | Buffer> {
+export function readFile(filepath: string, options: BufferEncoding | undefined | null = null): Promise<string | Buffer> {
 	return new Promise<string | Buffer>((resolve, reject) => {
 		fs.readFile(filepath, options, (err, data) => {
 			return void (err ? reject(err) : resolve(data));
