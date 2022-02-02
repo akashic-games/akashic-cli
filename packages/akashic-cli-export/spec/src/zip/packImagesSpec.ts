@@ -174,6 +174,7 @@ describe("packImages", () => {
 		});
 
 		it("does nothing for game_unpackable_images", async () => {
+			// game_unpackable_images: 1000x1000 の画像を二つ含むコンテンツ。 1024x1024 上限ではパッキングできない (してもファイルが減らない)。
 			const fixtureDir = path.resolve(__dirname, "..", "..", "fixtures", "game_unpackable_images");
 			const gamejson = JSON.parse(fs.readFileSync(path.join(fixtureDir, "game.json"), "utf8"));
 			const { outputs, discardables } = await packSmallImagesImpl(gamejson, fixtureDir);
@@ -182,6 +183,7 @@ describe("packImages", () => {
 		});
 
 		it("does nothing for game_too_large_images", async () => {
+			// game_too_large_images: 1400x100, 100x1400 の画像を含むコンテンツ。 1024x1024 上限ではパッキングできない (一つも入らない)。
 			const fixtureDir = path.resolve(__dirname, "..", "..", "fixtures", "game_too_large_images");
 			const gamejson = JSON.parse(fs.readFileSync(path.join(fixtureDir, "game.json"), "utf8"));
 			const { outputs, discardables } = await packSmallImagesImpl(gamejson, fixtureDir);
@@ -190,6 +192,7 @@ describe("packImages", () => {
 		});
 
 		it("does nothing for v2 game", async () => {
+			// v3 の slice 指定を使うので v2 以前は非サポート。
 			const fixtureDir = path.resolve(__dirname, "..", "..", "fixtures", "sample_game_v2");
 			const gamejson = JSON.parse(fs.readFileSync(path.join(fixtureDir, "game.json"), "utf8"));
 			const { outputs, discardables } = await packSmallImagesImpl(gamejson, fixtureDir);
