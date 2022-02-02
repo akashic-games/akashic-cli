@@ -150,7 +150,7 @@ function checkLimit(param: StatSizeParameterObject, sizeResult: SizeResult): Pro
 		return Promise.resolve();
 	}
 	const limitSize = parseSize(param.limit);
-	if (limitSize < 0) {
+	if (limitSize == null) {
 		return Promise.reject("cannot parse limit size value");
 	}
 
@@ -289,10 +289,10 @@ function fileSize(fullPath: string): Promise<number> {
  * サイズを表す文字列をバイト数に変換
  * 例: "100KB" -> 102400
  */
-function parseSize(str: string): number {
+function parseSize(str: string): number | null{
 	const result = /^(\d+)([KMG]?)B?$/i.exec(str);
 	if (result == null) {
-		return -1;
+		return null;
 	}
 	if (result[2]) {
 		return parseInt(result[1], 10) * siUnitPrefix(result[2]);
