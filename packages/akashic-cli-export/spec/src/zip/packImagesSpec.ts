@@ -18,7 +18,8 @@ describe("packImages", () => {
 				"assets/112x69.png"
 			]));
 
-			// expect: 全ての pack 元画像には、それを virtualPath に持つアセット定義が存在し、slice 指定を持つ
+			// 全ての pack 元画像 (discardables) には、それを virtualPath に持つアセット定義が存在し、slice 指定を持つ。
+			// (一つの pack 元画像を参照する全てのアセット定義に最初から virtualPath が指定されていた場合成り立たないが、このコンテンツは該当しない)
 			expect(outputs.length).toBe(1);
 			const output = outputs[0];
 			const relOutputPath = makeUnixPath(path.relative(fixtureDir, output.path));
@@ -117,7 +118,8 @@ describe("packImages", () => {
 				"image/MainGameScene/UI/main_map_feed.png"
 			]));
 
-			// expect: 全ての pack 元画像には、それを virtualPath に持つアセット定義が存在し、slice 指定を持つ
+			// 全ての pack 元画像 (discardables) には、それを virtualPath に持つアセット定義が存在し、slice 指定を持つ。
+			// (一つの pack 元画像を参照する全てのアセット定義に最初から virtualPath が指定されていた場合成り立たないが、このコンテンツは該当しない)
 			expect(outputs.length).toBe(1);
 			const output = outputs[0];
 			const relOutputPath = makeUnixPath(path.relative(fixtureDir, output.path));
@@ -137,9 +139,59 @@ describe("packImages", () => {
 			expect(output.content).toEqual(fs.readFileSync(path.join(fixtureDir, "_expected_packed", "aez_packed_image.png")));
 		});
 
+		it("can pack for game_shared_image", async () => {
+			const fixtureDir = path.resolve(__dirname, "..", "..", "fixtures", "game_shared_image");
+			const gamejson = JSON.parse(fs.readFileSync(path.join(fixtureDir, "game.json"), "utf8")); // 破壊されるのでrequire()は利用できない
+			const { outputs, discardables } = await packSmallImagesImpl(gamejson, fixtureDir);
+
+			const relDiscardables = discardables.map(p => makeUnixPath(path.relative(fixtureDir, p)));
+			expect(relDiscardables.length).toBe(2);
+			expect(relDiscardables).toEqual(expect.arrayContaining([
+				"image/94x73.png",
+				"assets/112x69.png"
+			]));
+
+			// 全ての pack 元画像 (discardables) には、それを virtualPath に持つアセット定義が存在し、slice 指定を持つ。
+			// (一つの pack 元画像を参照する全てのアセット定義に最初から virtualPath が指定されていた場合成り立たないが、このコンテンツは該当しない)
+			expect(outputs.length).toBe(1);
+			const output = outputs[0];
+			const relOutputPath = makeUnixPath(path.relative(fixtureDir, output.path));
+			relDiscardables.forEach(p => {
+				const aid = Object.keys(gamejson.assets).find(aid => gamejson.assets[aid].virtualPath === p);
+				expect(aid).toBeTruthy();
+				const decl = gamejson.assets[aid];
+				expect(decl.type).toBe("image");
+				expect(decl.path).toBe(relOutputPath);
+				expect(decl.width).toBe(output.width);
+				expect(decl.height).toBe(output.height);
+				expect(Array.isArray(decl.slice)).toBe(true);
+				expect(decl.slice.length).toBe(4);
+			});
+
+			// このコンテンツには「path を共有する複数の画像アセット」があり、それがパッキング対象になっている。
+			// ここでは「パッキング結果に同じ画像が複数入り込んでいない」ことを確認済みの画像ファイルとの一致をテストしている。
+			expect(output.content).toEqual(fs.readFileSync(path.join(fixtureDir, "_expected_packed", "aez_packed_image.png")));
+		});
+
+		it("does nothing for game_unpackable_images", async () => {
+			const fixtureDir = path.resolve(__dirname, "..", "..", "fixtures", "game_unpackable_images");
+			const gamejson = JSON.parse(fs.readFileSync(path.join(fixtureDir, "game.json"), "utf8"));
+			const { outputs, discardables } = await packSmallImagesImpl(gamejson, fixtureDir);
+			expect(outputs.length).toBe(0);
+			expect(discardables.length).toBe(0);
+		});
+
+		it("does nothing for game_too_large_images", async () => {
+			const fixtureDir = path.resolve(__dirname, "..", "..", "fixtures", "game_too_large_images");
+			const gamejson = JSON.parse(fs.readFileSync(path.join(fixtureDir, "game.json"), "utf8"));
+			const { outputs, discardables } = await packSmallImagesImpl(gamejson, fixtureDir);
+			expect(outputs.length).toBe(0);
+			expect(discardables.length).toBe(0);
+		});
+
 		it("does nothing for v2 game", async () => {
 			const fixtureDir = path.resolve(__dirname, "..", "..", "fixtures", "sample_game_v2");
-			const gamejson = JSON.parse(fs.readFileSync(path.join(fixtureDir, "game.json"), { encoding: "utf8" }));
+			const gamejson = JSON.parse(fs.readFileSync(path.join(fixtureDir, "game.json"), "utf8"));
 			const { outputs, discardables } = await packSmallImagesImpl(gamejson, fixtureDir);
 			expect(outputs.length).toBe(0);
 			expect(discardables.length).toBe(0);
