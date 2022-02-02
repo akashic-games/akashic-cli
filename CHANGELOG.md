@@ -1,5 +1,43 @@
 # CHANGELOG
 
+## 2.15.15 (2022-02-01)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#997](https://github.com/akashic-games/akashic-cli/pull/997) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.1.6, engineFiles@2.1.57, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+* `akashic-cli-export`
+  * [#996](https://github.com/akashic-games/akashic-cli/pull/996) 【akashic-cli-export】内部コンポーネントの更新(engineFiles@3.1.6, engineFiles@2.1.57, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
+## 2.15.14 (2022-01-29)
+
+#### Update Dependencies
+* `akashic-cli-serve`
+  * [#992](https://github.com/akashic-games/akashic-cli/pull/992) Update dependency @types/react to v16.14.22 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
+## 2.15.13 (2022-01-28)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#994](https://github.com/akashic-games/akashic-cli/pull/994) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.1.5, engineFiles@2.1.57, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
+## 2.15.12 (2022-01-28)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli`
+  * [#993](https://github.com/akashic-games/akashic-cli/pull/993) Update dependency uglify-js to v3.15.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
 ## 2.15.11 (2022-01-28)
 
 #### Enhancement
