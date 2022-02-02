@@ -20,18 +20,21 @@ describe("packImages", () => {
 
 			// expect: 全ての pack 元画像には、それを virtualPath に持つアセット定義が存在し、slice 指定を持つ
 			expect(outputs.length).toBe(1);
-			const relOutputPath = makeUnixPath(path.relative(fixtureDir, outputs[0].path));
+			const output = outputs[0];
+			const relOutputPath = makeUnixPath(path.relative(fixtureDir, output.path));
 			relDiscardables.forEach(p => {
 				const aid = Object.keys(gamejson.assets).find(aid => gamejson.assets[aid].virtualPath === p);
 				expect(aid).toBeTruthy();
 				const decl = gamejson.assets[aid];
 				expect(decl.type).toBe("image");
 				expect(decl.path).toBe(relOutputPath);
+				expect(decl.width).toBe(output.width);
+				expect(decl.height).toBe(output.height);
 				expect(Array.isArray(decl.slice)).toBe(true);
 				expect(decl.slice.length).toBe(4);
 			});
 
-			expect(outputs[0].content).toEqual(fs.readFileSync(path.join(fixtureDir, "_expected_packed", "aez_packed_image.png")));
+			expect(output.content).toEqual(fs.readFileSync(path.join(fixtureDir, "_expected_packed", "aez_packed_image.png")));
 		});
 
 		it("can pack images of niconicoSnake", async () => {
@@ -116,7 +119,8 @@ describe("packImages", () => {
 
 			// expect: 全ての pack 元画像には、それを virtualPath に持つアセット定義が存在し、slice 指定を持つ
 			expect(outputs.length).toBe(1);
-			const relOutputPath = makeUnixPath(path.relative(fixtureDir, outputs[0].path));
+			const output = outputs[0];
+			const relOutputPath = makeUnixPath(path.relative(fixtureDir, output.path));
 			const assetKeys = Object.keys(gamejson.assets);
 			relDiscardables.forEach(p => {
 				const aid = assetKeys.find(aid => gamejson.assets[aid].virtualPath === p);
@@ -124,11 +128,13 @@ describe("packImages", () => {
 				const decl = gamejson.assets[aid];
 				expect(decl.type).toBe("image");
 				expect(decl.path).toBe(relOutputPath);
+				expect(decl.width).toBe(output.width);
+				expect(decl.height).toBe(output.height);
 				expect(Array.isArray(decl.slice)).toBe(true);
 				expect(decl.slice.length).toBe(4);
 			});
 
-			expect(outputs[0].content).toEqual(fs.readFileSync(path.join(fixtureDir, "_expected_packed", "aez_packed_image.png")));
+			expect(output.content).toEqual(fs.readFileSync(path.join(fixtureDir, "_expected_packed", "aez_packed_image.png")));
 		});
 
 		it("does nothing for v2 game", async () => {

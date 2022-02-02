@@ -23,6 +23,8 @@ function createImageAssetRectangle(id: string, width: number, height: number, pa
 
 export interface PackImageResultOutput {
 	path: string;
+	width: number;
+	height: number;
 	content: Buffer | string;
 }
 
@@ -93,15 +95,20 @@ export async function packSmallImagesImpl(gamejson: GameConfiguration, basepath:
 		gamejson.assets[rect.id] = {
 			...orig,
 			path: packedPath,
-			width: rect.width,
-			height: rect.height,
+			width: bin.width,
+			height: bin.height,
 			virtualPath: orig.virtualPath ?? orig.path,
 			slice: [rect.x, rect.y, rect.width, rect.height]
 		};
 	});
 
 	return {
-		outputs: [{ path: absPackedPath, content: packedPNG }],
+		outputs: [{
+			path: absPackedPath,
+			width: bin.width,
+			height: bin.height,
+			content: packedPNG
+		}],
 		discardables
 	};
 }
