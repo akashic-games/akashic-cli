@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
-import { writeFile } from "@akashic/akashic-cli-commons/lib/FileSystem";
+import { writeFile, unlink } from "@akashic/akashic-cli-commons/lib/FileSystem";
 import { GameConfiguration, AssetConfiguration } from "@akashic/akashic-cli-commons/lib/GameConfiguration";
 import { mkdirpSync } from "@akashic/akashic-cli-commons/lib/Util";
 import type { Bin, IRectangle } from "maxrects-packer";
@@ -108,11 +108,11 @@ export async function packSmallImagesImpl(gamejson: GameConfiguration, basepath:
 
 export async function flushPackResult(packResult: PackImageResult): Promise<void> {
 	for (let output of packResult.outputs) {
-		mkdirpSync(path.dirname(output.path));
+		mkdirpSync(path.dirname(output.path)); // TODO ほかの利用箇所と合わせて非同期版を作って移行する
 		await writeFile(output.path, output.content);
 	}
 	for (let discardable of packResult.discardables) {
-		fs.unlinkSync(discardable);
+		await unlink(discardable);
 	}
 }
 

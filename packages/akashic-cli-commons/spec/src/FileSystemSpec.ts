@@ -1,5 +1,5 @@
 import * as mockfs from "mock-fs";
-import { readFile, writeFile, readJSON, writeJSON, readdir } from "../../lib/FileSystem";
+import { readFile, writeFile, readJSON, writeJSON, readdir, unlink } from "../../lib/FileSystem";
 
 describe("FileSystemSpec", () => {
 	afterEach(function () {
@@ -91,5 +91,19 @@ describe("FileSystemSpec", () => {
 		expect(dirnames.includes("foo")).toBe(true);
 		expect(dirnames.includes("bar")).toBe(true);
 		expect(dirnames.includes("tee")).toBe(true);
+	});
+
+	it("unlink file", async () => {
+		mockfs({
+			"foo": {
+				"test.json": JSON.stringify({ val: 42 })
+			},
+		})
+
+		const content = await readJSON("./foo/test.json");
+		expect(content).toEqual({ val: 42 });
+
+		await unlink("./foo/test.json");
+		expect(readJSON("./foo/test.json")).rejects.toMatchObject({ code: "ENOENT" });
 	});
 });
