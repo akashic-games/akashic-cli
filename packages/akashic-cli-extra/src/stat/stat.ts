@@ -186,48 +186,50 @@ function sizeOfGameJson(param: StatSizeParameterObject, sizeResult: SizeResult):
  */
 function sizeOfAssets(param: StatSizeParameterObject, sizeResult: SizeResult): Promise<void>[] {
 	if (param.game.assets == null) return [];
-	return Object.keys(param.game.assets).map(key => {
-		const asset = param.game.assets![key];
-		switch (asset!.type) {
+	const assets = param.game.assets;
+	const keys = Object.keys(assets) as (keyof typeof assets)[];
+	return keys.map(key => {
+		const asset = assets[key]!;
+		switch (asset.type) {
 			case "image":
-				return fileSize(path.join(param.basepath, asset!.path))
+				return fileSize(path.join(param.basepath, asset.path))
 					.then(size => {
 						sizeResult.imageSize += size;
 					});
 			case "text":
-				return fileSize(path.join(param.basepath, asset!.path))
+				return fileSize(path.join(param.basepath, asset.path))
 					.then(size => {
 						sizeResult.textSize += size;
 					});
 			case "script":
-				return fileSize(path.join(param.basepath, asset!.path))
+				return fileSize(path.join(param.basepath, asset.path))
 					.then(size => {
 						sizeResult.scriptSize += size;
 					});
 			case "audio":
-				return fileSize(path.join(param.basepath, asset!.path + ".ogg"))
+				return fileSize(path.join(param.basepath, asset.path + ".ogg"))
 					.then(
 						size => {
 							sizeResult.oggAudioSize += size;
 						},
 						() => {
-							if (!param.raw) param.logger.warn(asset!.path + ".ogg, No such file.");
+							if (!param.raw) param.logger.warn(asset.path + ".ogg, No such file.");
 						})
 
-					.then(() => fileSize(path.join(param.basepath, asset!.path + ".mp4")))
+					.then(() => fileSize(path.join(param.basepath, asset.path + ".mp4")))
 					.then(
 						size => {
 							sizeResult.mp4AudioSize += size;
 						},
 						() => {/* .mp4ファイルは存在すれば対応するが、deprecatedなのでファイルが存在しない場合でも警告を表示しない */ })
 
-					.then(() => fileSize(path.join(param.basepath, asset!.path + ".aac")))
+					.then(() => fileSize(path.join(param.basepath, asset.path + ".aac")))
 					.then(
 						size => {
 							sizeResult.aacAudioSize += size;
 						},
 						() => {
-							if (!param.raw) param.logger.warn(asset!.path + ".aac, No such file.");
+							if (!param.raw) param.logger.warn(asset.path + ".aac, No such file.");
 						});
 			default:
 				throw new Error(`${asset!.type} is not a valid asset type name`);
