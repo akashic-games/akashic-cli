@@ -23,7 +23,7 @@ export interface CloneTargetInfo {
  * GitHub または GitHub Enterprise から リポジトリを clone する。
  */
 export async function cloneTemplate(
-	host: string | null,
+	host: string,
 	protocol: GitProtocol,
 	o: GitCloneParameterObject,
 	param: InitParameterObject
@@ -54,7 +54,7 @@ function completeParameter(opts: GitCloneParameterObject): Required<GitClonePara
 	};
 }
 
-export function createGitUri(host: string | null, protocol: GitProtocol, owner: string, repo: string): string {
+export function createGitUri(host: string, protocol: GitProtocol, owner: string, repo: string): string {
 	if (protocol === "https") {
 		return `${protocol}://${host}/${owner}/${repo}.git`;
 	} else if (protocol === "ssh") {

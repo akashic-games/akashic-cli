@@ -53,7 +53,7 @@ describe("InitParameterObject.ts", () => {
 			expect(ret.type).toBe("javascript");
 			expect(ret.githubHost).toBe("github.com");
 			expect(ret.githubProtocol).toBe("https");
-			expect(ret.gheHost).toBeNull();
+			expect(ret.gheHost).toBe("");
 			expect(ret.gheProtocol).toBe("https");
 		});
 	});
