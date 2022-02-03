@@ -187,8 +187,7 @@ function sizeOfGameJson(param: StatSizeParameterObject, sizeResult: SizeResult):
 function sizeOfAssets(param: StatSizeParameterObject, sizeResult: SizeResult): Promise<void>[] {
 	if (param.game.assets == null) return [];
 	const assets = param.game.assets;
-	const keys = Object.keys(assets) as (keyof typeof assets)[];
-	return keys.map(key => {
+	return Object.keys(assets).map(key => {
 		const asset = assets[key]!;
 		switch (asset.type) {
 			case "image":
@@ -232,7 +231,7 @@ function sizeOfAssets(param: StatSizeParameterObject, sizeResult: SizeResult): P
 							if (!param.raw) param.logger.warn(asset.path + ".aac, No such file.");
 						});
 			default:
-				throw new Error(`${asset!.type} is not a valid asset type name`);
+				throw new Error(`${asset.type} is not a valid asset type name`);
 		}
 	});
 }

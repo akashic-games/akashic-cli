@@ -38,7 +38,7 @@ commander
 
 function cli(param: CliConfigStat): void {
 	const logger = new ConsoleLogger({ quiet: param.quiet });
-	const target = param.args!.length > 0 ? param.args![0] : "(empty)";
+	const target = param.args.length > 0 ? param.args[0] : "(empty)";
 	switch (target) {
 		case "size":
 			statSize(logger, param);

@@ -26,41 +26,49 @@ export interface ModifyBasicParameterParameterObject {
 	logger?: cmn.Logger;
 }
 
-export function _completeModifyBasicParameterParameterObject(param: ModifyBasicParameterParameterObject): void {
-	param.cwd = param.cwd || process.cwd();
-	param.logger = param.logger || new cmn.ConsoleLogger();
+type NormalizedModifyBasicParameterParameterObject = Required<ModifyBasicParameterParameterObject>;
+
+function _completeModifyBasicParameterParameterObject(
+	param: ModifyBasicParameterParameterObject
+): NormalizedModifyBasicParameterParameterObject {
+	return {
+		target: param.target,
+		value: param.value,
+		cwd: param.cwd || process.cwd(),
+		logger: param.logger || new cmn.ConsoleLogger()
+	};
 }
 
 export function promiseModifyBasicParameter(param: ModifyBasicParameterParameterObject): Promise<void> {
-	_completeModifyBasicParameterParameterObject(param);
+	const { target, value, cwd, logger } = _completeModifyBasicParameterParameterObject(param);
 
-	if (typeof param.value !== "number" || isNaN(param.value) || param.value <= 0 || Math.round(param.value) !== param.value) {
-		return Promise.reject(new Error(param.target + " must be a positive integer but '" + param.value + "' is given."));
+	if (typeof value !== "number" || isNaN(value) || value <= 0 || Math.round(value) !== value) {
+		return Promise.reject(new Error(target + " must be a positive integer but '" + value + "' is given."));
 	}
 
-	const restoreDirectory = cmn.Util.chdir(param.cwd!);
+	const restoreDirectory = cmn.Util.chdir(cwd);
 	const gameJsonPath = path.join(process.cwd(), "game.json");
 	return Promise.resolve()
-		.then(() => cmn.ConfigurationFile.read(gameJsonPath, param.logger!))
+		.then(() => cmn.ConfigurationFile.read(gameJsonPath, logger))
 		.then((content: cmn.GameConfiguration) => {
 			return new Promise<void>((resolve, reject) => {
-				switch (param.target) {
+				switch (target) {
 					case "width":
-						content.width = param.value;
+						content.width = value;
 						break;
 					case "height":
-						content.height = param.value;
+						content.height = value;
 						break;
 					case "fps":
-						content.fps = param.value;
+						content.fps = value;
 						break;
 					default:
-						return reject("unknown target: " + param.target);
+						return reject("unknown target: " + target);
 				}
 				resolve();
 			})
-				.then(() => cmn.ConfigurationFile.write(content, gameJsonPath, param.logger!))
-				.then(() => param.logger!.info("Done!"));
+				.then(() => cmn.ConfigurationFile.write(content, gameJsonPath, logger))
+				.then(() => logger.info("Done!"));
 		})
 		.then(restoreDirectory)
 		.catch((err) => {
