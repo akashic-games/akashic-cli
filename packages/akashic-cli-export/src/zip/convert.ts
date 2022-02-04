@@ -8,7 +8,7 @@ import * as fsx from "fs-extra";
 import readdir = require("fs-readdir-recursive");
 import * as UglifyJS from "uglify-js";
 import * as gcu from "./GameConfigurationUtil";
-import { packSmallImages } from "./packImages";
+import { transformPackSmallImages } from "./packImage/transformPackImages";
 
 export interface ConvertGameParameterObject {
 	bundle?: boolean;
@@ -215,7 +215,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 		})
 		.then(() => {
 			if (!param.packImage) return;
-			return packSmallImages(gamejson, param.dest);
+			return transformPackSmallImages(gamejson, param.dest);
 		})
 		.then(() => {
 			if (param.hashLength > 0) {
