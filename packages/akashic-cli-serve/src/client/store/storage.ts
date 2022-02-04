@@ -17,6 +17,7 @@ export interface StorageData {
 	instanceArgumentEditContent: string;
 	showsHiddenEntity: boolean;
 	joinsAutomatically: boolean;
+	fitsToScreen: boolean;
 	showsBackgroundImage: boolean;
 	showsGrid: boolean;
 	isAutoSendEvents: boolean;
@@ -68,6 +69,7 @@ export class Storage {
 			instanceArgumentEditContent: choose(query.instanceArgumentEditContent, s.instanceArgumentEditContent, ""),
 			showsHiddenEntity: choose(query.showsHiddenEntity, s.showsHiddenEntity, true),
 			joinsAutomatically: choose(query.joinsAutomatically, s.joinsAutomatically, false),
+			fitsToScreen: choose(query.fitsToScreen, s.fitsToScreen, false),
 			showsBackgroundImage: choose(query.showsBackgroundImage, s.showsBackgroundImage, false),
 			showsGrid: choose(query.showsGrid, s.showsGrid, false),
 			isAutoSendEvents: choose(query.isAutoSendEvents, s.isAutoSendEvents, false),

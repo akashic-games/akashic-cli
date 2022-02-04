@@ -174,6 +174,11 @@ export interface ServeQueryParameters {
 	totalTimeLimitInputValue: number | null;
 
 	/**
+	 * ゲーム画面をブラウザサイズに合わせて拡縮するか。
+	 */
+	fitsToScreen: boolean | null;
+
+	/**
 	 * 背景画像を表示するか。
 	 */
 	showsBackgroundImage: boolean | null;
@@ -265,6 +270,7 @@ export function makeServeQueryParameters(query: RawParsedQuery): ServeQueryParam
 		instanceArgumentEditContent: asString(query.instanceArgumentEditContent),
 		showsHiddenEntity: asBool(query.showsHiddenEntity),
 		joinsAutomatically: asBool(query.joinsAutomatically),
+		fitsToScreen: asBool(query.fitsToScreen),
 		showsBackgroundImage: asBool(query.showsBackgroundImage),
 		showsGrid: asBool(query.showsGrid),
 		isAutoSendEvents: asBool(query.isAutoSendEvents),

@@ -17,6 +17,7 @@ const store = observable({
 	showsDevtools: false,
 	showsAudioOptionPopover: true,
 	showsDisplayOptionPopover: false,
+	fitsToScreen: false,
 	showsBackgroundImage: false,
 	showsGrid: false,
 	showsProfiler: false,
@@ -71,11 +72,13 @@ const TestWithBehaviour = observer(() => (
 		})}
 		makeDisplayOptionControlProps={() => ({
 			showsDisplayOptionPopover: store.showsDisplayOptionPopover,
+			fitsToScreen: store.fitsToScreen,
 			showsBackgroundImage: store.showsBackgroundImage,
 			showsGrid: store.showsGrid,
 			showsProfiler: store.showsProfiler,
 			showsDesignGuideline: store.showsDesignGuideline,
 			onClickDisplayOptionPopover: (show => store.showsDisplayOptionPopover = show),
+			onChangeFitsToScreen: (fits => store.fitsToScreen = fits),
 			onChangeShowBackgroundImage: (show => store.showsBackgroundImage = show),
 			onChangeShowGrid: (show => store.showsGrid = show),
 			onChangeShowProfiler: (show => store.showsProfiler = show),
@@ -135,11 +138,13 @@ storiesOf("o-ToolBar", module)
 			})}
 			makeDisplayOptionControlProps={() => ({
 				showsDisplayOptionPopover: true,
+				fitsToScreen: false,
 				showsBackgroundImage: false,
 				showsGrid: true,
 				showsProfiler: true,
 				showsDesignGuideline: false,
 				onClickDisplayOptionPopover: action("display-option"),
+				onChangeFitsToScreen: action("fits"),
 				onChangeShowBackgroundImage: action("bgimage"),
 				onChangeShowGrid: action("grid"),
 				onChangeShowProfiler: action("profiler"),
