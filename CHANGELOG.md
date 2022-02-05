@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.15.19 (2022-02-05)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli`
+  * [#1006](https://github.com/akashic-games/akashic-cli/pull/1006) Update dependency jest to v27.5.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
 ## 2.15.18 (2022-02-05)
 
 #### Update Dependencies
