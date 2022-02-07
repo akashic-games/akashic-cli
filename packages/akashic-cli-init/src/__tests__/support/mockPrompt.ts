@@ -2,7 +2,7 @@ import * as Prompt from "prompt";
 
 let originalPromptGet: any = null;
 
-export function mock(config: {width: number | null; height: number | string; fps?: number}): void {
+export function mock(config: {width: number | null; height: number | string | null; fps?: number | null}): void {
 	originalPromptGet = Prompt.get;
 	(Prompt as any).get = function(_schema: any, func: Function) {
 		func(undefined, config);
