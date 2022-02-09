@@ -74,7 +74,7 @@ export async function transformPackSmallImagesImpl(gamejson: GameConfiguration, 
 	const sandboxRuntimeVer = gamejson.environment["sandbox-runtime"] ?? "1";
 	if (/^[12]$/.test(sandboxRuntimeVer)) return { outputs: [], discardables: [] };
 
-	const rects = extractPackTargets(gamejson, basepath, binWidth, binHeight);
+	const rects = extractPackTargets(gamejson, binWidth, binHeight);
 	const packResult = await packSmallRects(rects, binWidth, binHeight);
 	if (!packResult)
 		return { outputs: [], discardables: [] };
@@ -83,7 +83,6 @@ export async function transformPackSmallImagesImpl(gamejson: GameConfiguration, 
 
 export function extractPackTargets(
 	gamejson: GameConfiguration,
-	basepath: string,
 	widthLimit: number,
 	heightLimit: number
 ): PackTarget<ImageAssetPackData>[] {
@@ -104,7 +103,7 @@ export function extractPackTargets(
 			name: decl.path,
 			width: decl.width!,
 			height: decl.height!,
-			data: { assetIds, path: path.join(basepath, decl.path) }
+			data: { assetIds, path: decl.path }
 		};
 	});
 }
@@ -137,11 +136,11 @@ export async function applyPackResults(
 		const { width, height, rects } = packResult;
 
 		const absPackedPath = path.join(basepath, packedPath);
-		const rendered = await renderPNG(packResult);
+		const rendered = await renderPNG(packResult, basepath);
 		outputs.push({ path: absPackedPath, width, height, content: rendered });
 
 		rects.forEach(rect => {
-			discardables.push(rect.data.path);
+			discardables.push(path.join(basepath, rect.data.path));
 			rect.data.assetIds.forEach(aid => {
 				const orig = gamejson.assets[aid];
 				gamejson.assets[aid] = {
@@ -167,13 +166,13 @@ async function readPNG(input: string): Promise<PNG> {
 	});
 }
 
-async function renderPNG(packResult: PackResult<ImageAssetPackData>): Promise<Buffer> {
+async function renderPNG(packResult: PackResult<ImageAssetPackData>, basepath: string): Promise<Buffer> {
 	const { PNG } = await import("pngjs");
 	const { width, height, rects } = packResult;
 	const png = new PNG({ width, height });
 	for (let i = 0; i < rects.length; i++) {
 		const rect = rects[i];
-		const src = await readPNG(rect.data.path);
+		const src = await readPNG(path.join(basepath, rect.data.path));
 		src.bitblt(png, 0, 0, src.width, src.height, rect.x, rect.y);
 	}
 	return PNG.sync.write(png);

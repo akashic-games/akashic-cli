@@ -18,7 +18,6 @@ describe("transformPackImages", () => {
 						"main": { type: "script", path: "script/main.js", global: true },
 					}
 				},
-				"/foo/",
 				100,
 				200,
 			);
@@ -28,13 +27,13 @@ describe("transformPackImages", () => {
 					name: "image/imageA.png",
 					width: 10,
 					height: 20,
-					data: { assetIds: ["imageA"], path: "/foo/image/imageA.png" }
+					data: { assetIds: ["imageA"], path: "image/imageA.png" }
 				},
 				{
 					name: "assets/imageB.png",
 					width: 30,
 					height: 50,
-					data: { assetIds: ["imageB"], path: "/foo/assets/imageB.png" }
+					data: { assetIds: ["imageB"], path: "assets/imageB.png" }
 				}
 			]));
 		});
@@ -50,7 +49,6 @@ describe("transformPackImages", () => {
 						"main": { type: "script", path: "script/main.js", global: true },
 					}
 				},
-				"/foo/",
 				100,
 				200,
 			);
@@ -60,7 +58,7 @@ describe("transformPackImages", () => {
 					name: "image/imageA.png",
 					width: 10,
 					height: 20,
-					data: { assetIds: ["imageA", "imageA2"], path: "/foo/image/imageA.png" }
+					data: { assetIds: ["imageA", "imageA2"], path: "image/imageA.png" }
 				}
 			]));
 		});
