@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.15.22 (2022-02-09)
+
+#### Update Dependencies
+* `akashic-cli-serve`
+  * [#1011](https://github.com/akashic-games/akashic-cli/pull/1011) Update dependency ssri to 7.1.1 [SECURITY] ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
 ## 2.15.21 (2022-02-09)
 
 #### Update Dependencies
