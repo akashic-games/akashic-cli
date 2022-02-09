@@ -8,10 +8,10 @@ import { PlayManager, RunnerManager, setSystemLogger, getSystemLogger } from "@a
 import * as bodyParser from "body-parser";
 import * as chalk from "chalk";
 import { Command, OptionValues } from "commander";
+import * as cors from "cors";
 import * as express from "express";
 import * as open from "open";
 import * as socketio from "socket.io";
-import * as cors from "cors";
 import parser from "../common/MsgpackParser";
 import { PutStartPointEvent } from "../common/types/TestbedEvent";
 import { ServerContentLocator } from "./common/ServerContentLocator";
@@ -210,7 +210,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 
 	if (cliConfigParam.corsAllowOrigin === "null") {
 		cliConfigParam.corsAllowOrigin = undefined;
-		getSystemLogger().warn(`null is disabled as --cors-allow-origin option parameter.`);
+		getSystemLogger().warn("null is disabled as --cors-allow-origin option parameter.");
 	}
 
 	let io: socketio.Server;

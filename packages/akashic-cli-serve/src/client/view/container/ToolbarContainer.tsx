@@ -98,11 +98,13 @@ export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}>
 		const { operator, toolBarUiStore } = this.props;
 		return {
 			showsDisplayOptionPopover: toolBarUiStore.showsDisplayOptionPopover,
+			fitsToScreen: toolBarUiStore.fitsToScreen,
 			showsBackgroundImage: toolBarUiStore.showsBackgroundImage,
 			showsGrid: toolBarUiStore.showsGrid,
 			showsProfiler: toolBarUiStore.showsProfiler,
 			showsDesignGuideline: toolBarUiStore.showsDesignGuideline,
 			onClickDisplayOptionPopover: operator.ui.setShowDisplayOptionPopover,
+			onChangeFitsToScreen: operator.ui.setFitsToScreen,
 			onChangeShowBackgroundImage: operator.ui.setShowBackgroundImage,
 			onChangeShowGrid: operator.ui.setShowGrid,
 			onChangeShowProfiler: operator.ui.setShowsProfiler,

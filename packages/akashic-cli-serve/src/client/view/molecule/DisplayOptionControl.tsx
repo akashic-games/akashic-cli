@@ -6,11 +6,13 @@ import * as styles from "./DisplayOptionControl.css";
 
 export interface DisplayOptionControlPropsData {
 	showsDisplayOptionPopover: boolean;
+	fitsToScreen: boolean;
 	showsBackgroundImage: boolean;
 	showsGrid: boolean;
 	showsProfiler: boolean;
 	showsDesignGuideline: boolean;
 	onClickDisplayOptionPopover: (show: boolean) => void;
+	onChangeFitsToScreen: (fits: boolean) => void;
 	onChangeShowBackgroundImage: (show: boolean) => void;
 	onChangeShowGrid: (show: boolean) => void;
 	onChangeShowProfiler: (show: boolean) => void;
@@ -24,11 +26,13 @@ export interface DisplayOptionControlProps {
 export const DisplayOptionControl = observer(function (props: DisplayOptionControlProps) {
 	const {
 		showsDisplayOptionPopover,
+		fitsToScreen,
 		showsBackgroundImage,
 		showsGrid,
 		showsProfiler,
 		showsDesignGuideline,
 		onClickDisplayOptionPopover,
+		onChangeFitsToScreen,
 		onChangeShowBackgroundImage,
 		onChangeShowGrid,
 		onChangeShowProfiler,
@@ -50,6 +54,17 @@ export const DisplayOptionControl = observer(function (props: DisplayOptionContr
 			onChangeShows={onClickDisplayOptionPopover}
 			outsideRef={ref}
 		>
+			<div className={styles.label}>
+				<label>
+					<input
+						className={styles.checkbox + " external-ref_checkbox_fits-to-screen"}
+						type="checkbox"
+						checked={fitsToScreen}
+						onChange={() => onChangeFitsToScreen(!fitsToScreen)}
+					/>
+					Fit to screen
+				</label>
+			</div>
 			<div className={styles.label}>
 				<label>
 					<input

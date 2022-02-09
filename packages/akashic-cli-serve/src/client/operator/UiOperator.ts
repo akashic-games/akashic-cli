@@ -29,6 +29,10 @@ export class UiOperator {
 		this.store.toolBarUiStore.setShowDisplayOptionPopover(show);
 	};
 
+	setFitsToScreen = (fits: boolean): void => {
+		this.store.toolBarUiStore.setFitsToScreen(fits);
+	};
+
 	setShowBackgroundImage = (show: boolean): void => {
 		this.store.toolBarUiStore.setShowBackgroundImage(show);
 	};
