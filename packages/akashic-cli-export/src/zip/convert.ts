@@ -8,7 +8,7 @@ import * as fsx from "fs-extra";
 import readdir = require("fs-readdir-recursive");
 import * as UglifyJS from "uglify-js";
 import * as gcu from "./GameConfigurationUtil";
-import { transformPackSmallImages } from "./packImage/transformPackImages";
+import { transformPackSmallImages } from "./transformPackImages";
 
 export interface ConvertGameParameterObject {
 	bundle?: boolean;

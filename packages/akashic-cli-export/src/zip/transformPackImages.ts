@@ -4,7 +4,7 @@ import { writeFile, unlink } from "@akashic/akashic-cli-commons/lib/FileSystem";
 import { GameConfiguration, AssetConfiguration } from "@akashic/akashic-cli-commons/lib/GameConfiguration";
 import { mkdirpSync } from "@akashic/akashic-cli-commons/lib/Util";
 import type { PNG } from "pngjs";
-import { makeUniqueAssetPath } from "../GameConfigurationUtil";
+import { makeUniqueAssetPath } from "./GameConfigurationUtil";
 import { packSmallRects, PackResult, PackTarget } from "./packRects";
 
 /**
