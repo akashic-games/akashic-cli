@@ -1,5 +1,50 @@
 # CHANGELOG
 
+## 2.15.24 (2022-02-10)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-lib-manage`, `akashic-cli-serve`
+  * [#1009](https://github.com/akashic-games/akashic-cli/pull/1009) Update dependency hosted-git-info to 3.0.8 [SECURITY] ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
+## 2.15.23 (2022-02-10)
+
+#### Update Dependencies
+* `akashic-cli-serve`
+  * [#1010](https://github.com/akashic-games/akashic-cli/pull/1010) Update dependency simple-get to 3.1.1 [SECURITY] ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
+## 2.15.22 (2022-02-09)
+
+#### Update Dependencies
+* `akashic-cli-serve`
+  * [#1011](https://github.com/akashic-games/akashic-cli/pull/1011) Update dependency ssri to 7.1.1 [SECURITY] ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
+## 2.15.21 (2022-02-09)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli`
+  * [#1012](https://github.com/akashic-games/akashic-cli/pull/1012) Update dependency trim to 0.0.3 [SECURITY] ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
+## 2.15.20 (2022-02-09)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli`
+  * [#1013](https://github.com/akashic-games/akashic-cli/pull/1013) Update dependency trim-off-newlines to 1.0.3 [SECURITY] ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
 ## 2.15.19 (2022-02-05)
 
 #### Update Dependencies
