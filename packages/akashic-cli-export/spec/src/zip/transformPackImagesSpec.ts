@@ -1,7 +1,7 @@
 import * as path from "path";
 import { makeUnixPath } from "@akashic/akashic-cli-commons/lib/Util";
 import * as fs from "fs-extra";
-import { extractPackTargets, transformPackSmallImagesImpl } from "../../../lib/zip/packImage/transformPackImages";
+import { extractPackTargets, transformPackSmallImagesImpl } from "../../../lib/zip/transformPackImages";
 
 describe("transformPackImages", () => {
 	describe("extractPackTargets()", () => {
