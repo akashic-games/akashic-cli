@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.15.26 (2022-02-10)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli`
+  * [#1007](https://github.com/akashic-games/akashic-cli/pull/1007) Update dependency ansi-regex to 5.0.1 [SECURITY] ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
 ## 2.15.25 (2022-02-10)
 
 #### Update Dependencies
