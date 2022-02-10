@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.15.25 (2022-02-10)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-serve`
+  * [#1008](https://github.com/akashic-games/akashic-cli/pull/1008) Update dependency cached-path-relative to 1.1.0 [SECURITY] ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
 ## 2.15.24 (2022-02-10)
 
 #### Update Dependencies
