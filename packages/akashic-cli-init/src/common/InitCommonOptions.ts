@@ -78,7 +78,7 @@ export async function completeInitCommonOptions(opts: InitCommonOptions): Promis
 	};
 }
 
-async function validateRepositoryValue(logger: Logger, repository?: string ): Promise<void> {
+async function validateRepositoryValue(logger: Logger, repository: string | undefined): Promise<void> {
 	if (repository) {
 		if (/(^(github|ghe):)|(\.git$)/.test(repository)) {
 			logger.warn("Misused -r, --repository options. Use -t option for Github repository");

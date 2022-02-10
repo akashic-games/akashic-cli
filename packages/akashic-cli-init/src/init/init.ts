@@ -31,7 +31,7 @@ export async function promiseInit(p: InitParameterObject): Promise<void> {
 
 	} else if (gitType === "ghe") {
 		await cloneTemplate(
-			param.gheHost,
+			param.gheHost!,
 			param.gheProtocol,
 			{
 				owner,
