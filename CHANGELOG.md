@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.15.23 (2022-02-10)
+
+#### Update Dependencies
+* `akashic-cli-serve`
+  * [#1010](https://github.com/akashic-games/akashic-cli/pull/1010) Update dependency simple-get to 3.1.1 [SECURITY] ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
 ## 2.15.22 (2022-02-09)
 
 #### Update Dependencies
