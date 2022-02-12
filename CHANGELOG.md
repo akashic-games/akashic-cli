@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.15.32 (2022-02-12)
+
+#### Update Dependencies
+* `akashic-cli-serve`
+  * [#1017](https://github.com/akashic-games/akashic-cli/pull/1017) Update dependency webpack-cli to v4.9.2 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
 ## 2.15.31 (2022-02-12)
 
 #### Enhancement
