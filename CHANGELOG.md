@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.15.34 (2022-02-12)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli`
+  * [#1020](https://github.com/akashic-games/akashic-cli/pull/1020) Update dependency tar to 6.1.9 [SECURITY] ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
 ## 2.15.33 (2022-02-12)
 
 #### Update Dependencies
