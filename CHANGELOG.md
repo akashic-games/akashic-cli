@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.15.33 (2022-02-12)
+
+#### Update Dependencies
+* `akashic-cli-serve`
+  * [#901](https://github.com/akashic-games/akashic-cli/pull/901) Update dependency tar [SECURITY] ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
 ## 2.15.32 (2022-02-12)
 
 #### Update Dependencies
