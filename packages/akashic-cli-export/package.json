@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-export",
-  "version": "1.7.18",
+  "version": "1.7.19",
   "description": "A module to convert your Akashic game to a runnable standalone.",
   "scripts": {
     "prepublish": "npm run clean && npm run build",
@@ -70,7 +70,7 @@
     "zip": "1.2.0"
   },
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.13.16",
+    "@akashic/akashic-cli-commons": "0.13.17",
     "@babel/core": "7.17.2",
     "@babel/preset-env": "7.16.11",
     "archiver": "5.3.0",
