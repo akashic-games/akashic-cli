@@ -8,7 +8,7 @@ import { MockConfigFile } from "./support/mockConfigFile";
 describe("list.ts", () => {
 	let templateServer: any = null;
 	let repositoryUrl = "";
-	let mockPromptGet: jest.SpyInstance | null = null;
+	let mockPromptGet: jest.SpyInstance = null!; // beforeAll() で必ず代入するので非 null 型とする
 	beforeAll(async () => {
 		const port = await getPort();
 		const app = express();
@@ -26,7 +26,7 @@ describe("list.ts", () => {
 			templateServer = null;
 			repositoryUrl = "";
 		}
-		mockPromptGet!.mockRestore();
+		mockPromptGet.mockRestore();
 	});
 
 	describe("listTemplates()", () => {
