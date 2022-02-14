@@ -33,7 +33,7 @@ function _createExportInfo(param: ExportZipParameterObject): cmn.ExportZipInfo {
 			minify: !!param.minify,
 			minifyJs: !!param.minifyJs,
 			minifyJson: !!param.minifyJson,
-			// packImage: !!param.packImage,
+			packImage: !!param.packImage,
 			bundle: !!param.bundle,
 			babel: !!param.babel,
 			targetService: param.targetService || "none"

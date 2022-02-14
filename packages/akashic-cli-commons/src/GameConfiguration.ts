@@ -89,6 +89,7 @@ export interface ExportZipInfo {
 		minify?: boolean;
 		minifyJs?: boolean;
 		minifyJson?: boolean;
+		packImage?: boolean;
 		bundle?: boolean;
 		babel?: boolean;
 		hashFilename?: number | boolean;
