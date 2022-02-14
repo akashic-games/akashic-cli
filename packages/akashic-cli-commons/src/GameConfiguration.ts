@@ -16,6 +16,14 @@ export interface AssetConfiguration {
 	hint?: {
 		untainted?: boolean;
 	};
+
+	// TODO AssetConfiguration, GameConfiguration 含め game-configuration の定義を使うようにする
+	slice?: [number, number, number, number] | {
+		x: number;
+		y: number;
+		width: number;
+		height: number;
+	};
 }
 
 /**
@@ -81,6 +89,7 @@ export interface ExportZipInfo {
 		minify?: boolean;
 		minifyJs?: boolean;
 		minifyJson?: boolean;
+		packImage?: boolean;
 		bundle?: boolean;
 		babel?: boolean;
 		hashFilename?: number | boolean;

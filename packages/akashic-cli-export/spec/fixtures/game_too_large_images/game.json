@@ -1,0 +1,29 @@
+{
+	"width": 1280,
+	"height": 720,
+	"fps": 30,
+	"main": "./script/main.js",
+	"assets": {
+		"main": {
+			"type": "script",
+			"path": "script/main.js",
+			"global": true
+		},
+		"assets/100x1400.png": {
+			"type": "image",
+			"path": "assets/100x1400.png",
+			"width": 100,
+			"height": 1400
+		},
+		"assets/1400x100.png": {
+			"type": "image",
+			"path": "assets/1400x100.png",
+			"width": 1400,
+			"height": 100
+		}
+	},
+	"moduleMainScripts": {},
+	"environment": {
+		"sandbox-runtime": "3"
+	}
+}

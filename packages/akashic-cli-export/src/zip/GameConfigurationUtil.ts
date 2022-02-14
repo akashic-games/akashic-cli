@@ -2,23 +2,6 @@ import * as fs from "fs";
 import * as path from "path";
 import * as cmn from "@akashic/akashic-cli-commons";
 
-export function removeScriptFromFilePaths(gamejson: cmn.GameConfiguration, filePaths: string[]): void {
-	let table: { [key: string]: boolean } = {};
-	filePaths.forEach(p => table[p] = true);
-
-	let assets: { [key: string]: cmn.AssetConfiguration } = {};
-	Object.keys(gamejson.assets).forEach(aid => {
-		const a = gamejson.assets[aid];
-		if (a.type === "script" && table.hasOwnProperty(a.path))
-			return;
-		assets[aid] = gamejson.assets[aid];
-	});
-	gamejson.assets = assets;
-
-	if (gamejson.globalScripts)
-		gamejson.globalScripts = gamejson.globalScripts.filter(p => !table.hasOwnProperty(p));
-}
-
 export function removeScriptAssets(gamejson: cmn.GameConfiguration, filter: (filepath: string) => boolean): void {
 	Object.keys(gamejson.assets).forEach(key => {
 		const asset = gamejson.assets[key];

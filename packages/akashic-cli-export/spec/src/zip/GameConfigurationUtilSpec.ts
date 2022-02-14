@@ -51,43 +51,6 @@ describe("GameConfigurationUtil", () => {
 		mockfs.restore();
 	});
 
-	describe("removeScriptFromFilePaths", () => {
-		it("removes scripts", () => {
-			gcu.removeScriptFromFilePaths(gamejsonNoGlobalScripts, ["node_modules/foobar/lib/x.js", "script/sub.js"]);
-			expect(gamejsonNoGlobalScripts).toEqual({
-				width: 120,
-				height: 120,
-				fps: 40,
-				assets: {
-					"main": {
-						type: "script",
-						global: true,
-						path: "script/main.js"
-					}
-				}
-			});
-		});
-
-		it("removes scripts from globalScripts", () => {
-			gcu.removeScriptFromFilePaths(gamejson, ["node_modules/foobar/lib/x.js", "script/sub.js"]);
-			expect(gamejson).toEqual({
-				width: 120,
-				height: 120,
-				fps: 40,
-				assets: {
-					"main": {
-						type: "script",
-						global: true,
-						path: "script/main.js"
-					}
-				},
-				globalScripts: [
-					"node_modules/foobar/package.json"
-				]
-			});
-		});
-	});
-
 	describe("removeScriptAssets", () => {
 		const filter = (filePath: string): boolean => {
 			return ["node_modules/foobar/package.json", "script/main.js"].indexOf(filePath) !== -1;

@@ -1,0 +1,48 @@
+{
+	"width": 1280,
+	"height": 720,
+	"fps": 30,
+	"main": "./script/main.js",
+	"assets": {
+		"main": {
+			"type": "script",
+			"path": "script/main.js",
+			"global": true
+		},
+		"1000x1000": {
+			"type": "image",
+			"path": "image/1000x1000.png",
+			"width": 1000,
+			"height": 1000
+		},
+		"94x73": {
+			"type": "image",
+			"path": "image/94x73.png",
+			"width": 94,
+			"height": 73
+		},
+		"94x73_clone1": {
+			"type": "image",
+			"path": "image/94x73.png",
+			"width": 94,
+			"height": 73
+		},
+		"94x73_clone2": {
+			"type": "image",
+			"path": "image/94x73.png",
+			"width": 94,
+			"height": 73,
+			"virtualPath": "assets/virtual.png"
+		},
+		"assets/112x69.png": {
+			"type": "image",
+			"path": "assets/112x69.png",
+			"width": 112,
+			"height": 69
+		}
+	},
+	"moduleMainScripts": {},
+	"environment": {
+		"sandbox-runtime": "3"
+	}
+}

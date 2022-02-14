@@ -1,0 +1,993 @@
+{
+	"width": 1280,
+	"height": 720,
+	"fps": 30,
+	"main": "./script/_bootstrap.js",
+	"assets": {
+		"main": {
+			"type": "script",
+			"path": "script/main.js",
+			"global": true
+		},
+		"GameConfig": {
+			"type": "script",
+			"path": "script/config/GameConfig.js",
+			"global": true
+		},
+		"ParameterObject": {
+			"type": "script",
+			"path": "script/config/ParameterObject.js",
+			"global": true
+		},
+		"_bootstrap": {
+			"type": "script",
+			"path": "script/_bootstrap.js",
+			"global": true
+		},
+		"defaultParameter": {
+			"type": "script",
+			"path": "script/config/defaultParameter.js",
+			"global": true
+		},
+		"StateManager": {
+			"type": "script",
+			"path": "script/StateManager.js",
+			"global": true
+		},
+		"Behavior": {
+			"type": "script",
+			"path": "script/scene/Behavior.js",
+			"global": true
+		},
+		"SceneBase": {
+			"type": "script",
+			"path": "script/scene/SceneBase.js",
+			"global": true
+		},
+		"TitleScene": {
+			"type": "script",
+			"path": "script/scene/TitleScene/TitleScene.js",
+			"global": true
+		},
+		"TitleBehavior": {
+			"type": "script",
+			"path": "script/scene/TitleScene/TitleBehavior.js",
+			"global": true
+		},
+		"MessageEventType": {
+			"type": "script",
+			"path": "script/types/MessageEventType.js",
+			"global": true
+		},
+		"joinSequence": {
+			"type": "script",
+			"path": "script/utils/joinSequence.js",
+			"global": true
+		},
+		"MainGameBehavior": {
+			"type": "script",
+			"path": "script/scene/MainGameScene/MainGameBehavior.js",
+			"global": true
+		},
+		"MainGameScene": {
+			"type": "script",
+			"path": "script/scene/MainGameScene/MainGameScene.js",
+			"global": true
+		},
+		"UserTouchState": {
+			"type": "script",
+			"path": "script/types/UserTouchState.js",
+			"global": true
+		},
+		"field_base": {
+			"type": "image",
+			"width": 300,
+			"height": 300,
+			"path": "image/MainGameScene/field_base.png"
+		},
+		"field_tiles": {
+			"type": "image",
+			"width": 1600,
+			"height": 320,
+			"path": "image/MainGameScene/field_tiles.png"
+		},
+		"PlayerList": {
+			"type": "script",
+			"path": "script/types/PlayerList.js",
+			"global": true
+		},
+		"Field": {
+			"type": "script",
+			"path": "script/entity/Field.js",
+			"global": true
+		},
+		"OffsetGroup": {
+			"type": "script",
+			"path": "script/entity/OffsetGroup.js",
+			"global": true
+		},
+		"Snake": {
+			"type": "script",
+			"path": "script/entity/Snake.js",
+			"global": true
+		},
+		"snakeA_head_alive": {
+			"type": "image",
+			"width": 116,
+			"height": 112,
+			"path": "image/MainGameScene/Snake/snakeA_head_alive.png"
+		},
+		"snakeA_body": {
+			"type": "image",
+			"width": 76,
+			"height": 76,
+			"path": "image/MainGameScene/Snake/snakeA_body.png"
+		},
+		"main_feed": {
+			"type": "image",
+			"width": 80,
+			"height": 54,
+			"path": "image/MainGameScene/main_feed.png"
+		},
+		"Food": {
+			"type": "script",
+			"path": "script/entity/Food.js",
+			"global": true
+		},
+		"foodAvailableChars": {
+			"type": "text",
+			"path": "text/foodAvailableChars.json",
+			"global": true
+		},
+		"main_jewel_body": {
+			"type": "image",
+			"width": 96,
+			"height": 96,
+			"path": "image/MainGameScene/main_jewel_body.png"
+		},
+		"Jewel": {
+			"type": "script",
+			"path": "script/entity/Jewel.js",
+			"global": true
+		},
+		"snakeA_head_death": {
+			"type": "image",
+			"width": 116,
+			"height": 112,
+			"path": "image/MainGameScene/Snake/snakeA_head_death.png"
+		},
+		"snakeA_head_gold": {
+			"type": "image",
+			"width": 116,
+			"height": 112,
+			"path": "image/MainGameScene/Snake/snakeA_head_gold.png"
+		},
+		"snakeB_body": {
+			"type": "image",
+			"width": 76,
+			"height": 76,
+			"path": "image/MainGameScene/Snake/snakeB_body.png"
+		},
+		"snakeB_head_alive": {
+			"type": "image",
+			"width": 116,
+			"height": 112,
+			"path": "image/MainGameScene/Snake/snakeB_head_alive.png"
+		},
+		"snakeB_head_death": {
+			"type": "image",
+			"width": 116,
+			"height": 112,
+			"path": "image/MainGameScene/Snake/snakeB_head_death.png"
+		},
+		"snakeB_head_gold": {
+			"type": "image",
+			"width": 116,
+			"height": 112,
+			"path": "image/MainGameScene/Snake/snakeB_head_gold.png"
+		},
+		"snakeC_body": {
+			"type": "image",
+			"width": 76,
+			"height": 76,
+			"path": "image/MainGameScene/Snake/snakeC_body.png"
+		},
+		"snakeC_head_alive": {
+			"type": "image",
+			"width": 116,
+			"height": 112,
+			"path": "image/MainGameScene/Snake/snakeC_head_alive.png"
+		},
+		"snakeC_head_death": {
+			"type": "image",
+			"width": 116,
+			"height": 112,
+			"path": "image/MainGameScene/Snake/snakeC_head_death.png"
+		},
+		"snakeC_head_gold": {
+			"type": "image",
+			"width": 116,
+			"height": 112,
+			"path": "image/MainGameScene/Snake/snakeC_head_gold.png"
+		},
+		"snakeD_body": {
+			"type": "image",
+			"width": 76,
+			"height": 76,
+			"path": "image/MainGameScene/Snake/snakeD_body.png"
+		},
+		"snakeD_head_alive": {
+			"type": "image",
+			"width": 116,
+			"height": 112,
+			"path": "image/MainGameScene/Snake/snakeD_head_alive.png"
+		},
+		"snakeD_head_death": {
+			"type": "image",
+			"width": 116,
+			"height": 112,
+			"path": "image/MainGameScene/Snake/snakeD_head_death.png"
+		},
+		"snakeD_head_gold": {
+			"type": "image",
+			"width": 116,
+			"height": 112,
+			"path": "image/MainGameScene/Snake/snakeD_head_gold.png"
+		},
+		"snakeE_body": {
+			"type": "image",
+			"width": 76,
+			"height": 76,
+			"path": "image/MainGameScene/Snake/snakeE_body.png"
+		},
+		"snakeE_head_alive": {
+			"type": "image",
+			"width": 116,
+			"height": 112,
+			"path": "image/MainGameScene/Snake/snakeE_head_alive.png"
+		},
+		"snakeE_head_death": {
+			"type": "image",
+			"width": 116,
+			"height": 112,
+			"path": "image/MainGameScene/Snake/snakeE_head_death.png"
+		},
+		"snakeE_head_gold": {
+			"type": "image",
+			"width": 116,
+			"height": 112,
+			"path": "image/MainGameScene/Snake/snakeE_head_gold.png"
+		},
+		"snakeF_body": {
+			"type": "image",
+			"width": 76,
+			"height": 76,
+			"path": "image/MainGameScene/Snake/snakeF_body.png"
+		},
+		"snakeF_head_alive": {
+			"type": "image",
+			"width": 116,
+			"height": 112,
+			"path": "image/MainGameScene/Snake/snakeF_head_alive.png"
+		},
+		"snakeF_head_death": {
+			"type": "image",
+			"width": 116,
+			"height": 112,
+			"path": "image/MainGameScene/Snake/snakeF_head_death.png"
+		},
+		"snakeF_head_gold": {
+			"type": "image",
+			"width": 116,
+			"height": 112,
+			"path": "image/MainGameScene/Snake/snakeF_head_gold.png"
+		},
+		"snakeG_body": {
+			"type": "image",
+			"width": 76,
+			"height": 76,
+			"path": "image/MainGameScene/Snake/snakeG_body.png"
+		},
+		"snakeG_head_alive": {
+			"type": "image",
+			"width": 116,
+			"height": 112,
+			"path": "image/MainGameScene/Snake/snakeG_head_alive.png"
+		},
+		"snakeG_head_death": {
+			"type": "image",
+			"width": 116,
+			"height": 112,
+			"path": "image/MainGameScene/Snake/snakeG_head_death.png"
+		},
+		"snakeG_head_gold": {
+			"type": "image",
+			"width": 116,
+			"height": 112,
+			"path": "image/MainGameScene/Snake/snakeG_head_gold.png"
+		},
+		"snakeH_body": {
+			"type": "image",
+			"width": 76,
+			"height": 76,
+			"path": "image/MainGameScene/Snake/snakeH_body.png"
+		},
+		"snakeH_head_alive": {
+			"type": "image",
+			"width": 116,
+			"height": 112,
+			"path": "image/MainGameScene/Snake/snakeH_head_alive.png"
+		},
+		"snakeH_head_death": {
+			"type": "image",
+			"width": 116,
+			"height": 112,
+			"path": "image/MainGameScene/Snake/snakeH_head_death.png"
+		},
+		"snakeH_head_gold": {
+			"type": "image",
+			"width": 116,
+			"height": 112,
+			"path": "image/MainGameScene/Snake/snakeH_head_gold.png"
+		},
+		"snakeI_body": {
+			"type": "image",
+			"width": 76,
+			"height": 76,
+			"path": "image/MainGameScene/Snake/snakeI_body.png"
+		},
+		"snakeI_head_alive": {
+			"type": "image",
+			"width": 116,
+			"height": 112,
+			"path": "image/MainGameScene/Snake/snakeI_head_alive.png"
+		},
+		"snakeI_head_death": {
+			"type": "image",
+			"width": 116,
+			"height": 112,
+			"path": "image/MainGameScene/Snake/snakeI_head_death.png"
+		},
+		"snakeI_head_gold": {
+			"type": "image",
+			"width": 116,
+			"height": 112,
+			"path": "image/MainGameScene/Snake/snakeI_head_gold.png"
+		},
+		"snake_body_death": {
+			"type": "image",
+			"width": 76,
+			"height": 76,
+			"path": "image/MainGameScene/Snake/snake_body_death.png"
+		},
+		"snake_body_gold": {
+			"type": "image",
+			"width": 76,
+			"height": 76,
+			"path": "image/MainGameScene/Snake/snake_body_gold.png"
+		},
+		"assetIds": {
+			"type": "script",
+			"path": "script/assetIds.js",
+			"global": true
+		},
+		"PopupNotice": {
+			"type": "script",
+			"path": "script/entity/PopupNotice.js",
+			"global": true
+		},
+		"main_num_score": {
+			"type": "image",
+			"width": 160,
+			"height": 28,
+			"path": "image/MainGameScene/Font/main_num_score.png"
+		},
+		"main_num_score_glyph": {
+			"type": "text",
+			"path": "text/glyph/main_num_score_glyph.json"
+		},
+		"ScorePanel": {
+			"type": "script",
+			"path": "script/entity/ScorePanel.js",
+			"global": true
+		},
+		"main_base_kill": {
+			"type": "image",
+			"width": 240,
+			"height": 70,
+			"path": "image/MainGameScene/UI/main_base_kill.png"
+		},
+		"main_rpop_body": {
+			"type": "image",
+			"width": 40,
+			"height": 40,
+			"path": "image/MainGameScene/UI/main_rpop_body.png"
+		},
+		"main_rpop_head_jewel": {
+			"type": "image",
+			"width": 206,
+			"height": 40,
+			"path": "image/MainGameScene/UI/main_rpop_head_jewel.png"
+		},
+		"main_rpop_head_kill": {
+			"type": "image",
+			"width": 128,
+			"height": 40,
+			"path": "image/MainGameScene/UI/main_rpop_head_kill.png"
+		},
+		"main_rpop_tail": {
+			"type": "image",
+			"width": 22,
+			"height": 40,
+			"path": "image/MainGameScene/UI/main_rpop_tail.png"
+		},
+		"main_base_length": {
+			"type": "image",
+			"width": 240,
+			"height": 70,
+			"path": "image/MainGameScene/UI/main_base_length.png"
+		},
+		"main_rank_1": {
+			"type": "image",
+			"width": 62,
+			"height": 40,
+			"path": "image/MainGameScene/UI/main_rank_1.png"
+		},
+		"main_rank_2": {
+			"type": "image",
+			"width": 62,
+			"height": 40,
+			"path": "image/MainGameScene/UI/main_rank_2.png"
+		},
+		"main_rank_3": {
+			"type": "image",
+			"width": 62,
+			"height": 40,
+			"path": "image/MainGameScene/UI/main_rank_3.png"
+		},
+		"main_rank_4": {
+			"type": "image",
+			"width": 62,
+			"height": 40,
+			"path": "image/MainGameScene/UI/main_rank_4.png"
+		},
+		"main_rank_5": {
+			"type": "image",
+			"width": 62,
+			"height": 40,
+			"path": "image/MainGameScene/UI/main_rank_5.png"
+		},
+		"main_rank_base": {
+			"type": "image",
+			"width": 1280,
+			"height": 130,
+			"path": "image/MainGameScene/UI/main_rank_base.png"
+		},
+		"main_rank_host": {
+			"type": "image",
+			"width": 188,
+			"height": 40,
+			"path": "image/MainGameScene/UI/main_rank_host.png"
+		},
+		"main_rank_you": {
+			"type": "image",
+			"width": 170,
+			"height": 40,
+			"path": "image/MainGameScene/UI/main_rank_you.png"
+		},
+		"main_btn_rank_off": {
+			"type": "image",
+			"width": 144,
+			"height": 136,
+			"path": "image/MainGameScene/UI/main_btn_rank_off.png"
+		},
+		"main_btn_rank_off_diff": {
+			"type": "image",
+			"width": 144,
+			"height": 136,
+			"path": "image/MainGameScene/UI/main_btn_rank_off_diff.png"
+		},
+		"main_btn_rank_on": {
+			"type": "image",
+			"width": 144,
+			"height": 136,
+			"path": "image/MainGameScene/UI/main_btn_rank_on.png"
+		},
+		"main_btn_rank_on_diff": {
+			"type": "image",
+			"width": 144,
+			"height": 136,
+			"path": "image/MainGameScene/UI/main_btn_rank_on_diff.png"
+		},
+		"main_base_time": {
+			"type": "image",
+			"width": 192,
+			"height": 152,
+			"path": "image/MainGameScene/UI/main_base_time.png"
+		},
+		"main_num_time_glyph": {
+			"type": "text",
+			"path": "text/glyph/main_num_time_glyph.json"
+		},
+		"TimePanel": {
+			"type": "script",
+			"path": "script/entity/TimePanel.js",
+			"global": true
+		},
+		"main_num_time_c": {
+			"type": "image",
+			"width": 340,
+			"height": 58,
+			"path": "image/MainGameScene/Font/main_num_time_c.png"
+		},
+		"main_num_time_r": {
+			"type": "image",
+			"width": 340,
+			"height": 58,
+			"path": "image/MainGameScene/Font/main_num_time_r.png"
+		},
+		"main_btn_spawn_off": {
+			"type": "image",
+			"width": 124,
+			"height": 108,
+			"path": "image/MainGameScene/UI/main_btn_spawn_off.png"
+		},
+		"main_btn_spawn_on": {
+			"type": "image",
+			"width": 124,
+			"height": 108,
+			"path": "image/MainGameScene/UI/main_btn_spawn_on.png"
+		},
+		"main_btn_spawn_off_angel": {
+			"type": "image",
+			"width": 124,
+			"height": 108,
+			"path": "image/MainGameScene/UI/main_btn_spawn_off_angel.png"
+		},
+		"main_btn_spawn_on_angel": {
+			"type": "image",
+			"width": 124,
+			"height": 108,
+			"path": "image/MainGameScene/UI/main_btn_spawn_on_angel.png"
+		},
+		"main_map_base": {
+			"type": "image",
+			"width": 212,
+			"height": 212,
+			"path": "image/MainGameScene/UI/main_map_base.png"
+		},
+		"main_map_feed": {
+			"type": "image",
+			"width": 2,
+			"height": 2,
+			"path": "image/MainGameScene/UI/main_map_feed.png"
+		},
+		"main_map_jewel": {
+			"type": "image",
+			"width": 8,
+			"height": 8,
+			"path": "image/MainGameScene/UI/main_map_jewel.png"
+		},
+		"main_map_you": {
+			"type": "image",
+			"width": 8,
+			"height": 8,
+			"path": "image/MainGameScene/UI/main_map_you.png"
+		},
+		"MiniMap": {
+			"type": "script",
+			"path": "script/entity/MiniMap.js",
+			"global": true
+		},
+		"main_jewel_pop": {
+			"type": "image",
+			"width": 160,
+			"height": 94,
+			"path": "image/MainGameScene/UI/main_jewel_pop.png"
+		},
+		"main_count_1": {
+			"type": "image",
+			"width": 404,
+			"height": 324,
+			"path": "image/MainGameScene/main_count_1.png"
+		},
+		"main_count_2": {
+			"type": "image",
+			"width": 404,
+			"height": 324,
+			"path": "image/MainGameScene/main_count_2.png"
+		},
+		"main_count_3": {
+			"type": "image",
+			"width": 404,
+			"height": 324,
+			"path": "image/MainGameScene/main_count_3.png"
+		},
+		"main_count_start": {
+			"type": "image",
+			"width": 600,
+			"height": 400,
+			"path": "image/MainGameScene/main_count_start.png"
+		},
+		"DashingGauge": {
+			"type": "script",
+			"path": "script/entity/DashingGauge.js",
+			"global": true
+		},
+		"main_dash_base": {
+			"type": "image",
+			"width": 126,
+			"height": 20,
+			"path": "image/MainGameScene/UI/main_dash_base.png"
+		},
+		"main_dash_gauge1": {
+			"type": "image",
+			"width": 12,
+			"height": 12,
+			"path": "image/MainGameScene/UI/main_dash_gauge1.png"
+		},
+		"snake_bgm": {
+			"type": "audio",
+			"path": "audio/snake_bgm",
+			"systemId": "music",
+			"duration": 30000
+		},
+		"SE_collision": {
+			"type": "audio",
+			"path": "audio/SE/SE_collision",
+			"systemId": "sound",
+			"duration": 2572
+		},
+		"SE_count": {
+			"type": "audio",
+			"path": "audio/SE/SE_count",
+			"systemId": "sound",
+			"duration": 429
+		},
+		"SE_dash": {
+			"type": "audio",
+			"path": "audio/SE/SE_dash",
+			"systemId": "sound",
+			"duration": 4286
+		},
+		"SE_finish": {
+			"type": "audio",
+			"path": "audio/SE/SE_finish",
+			"systemId": "sound",
+			"duration": 2572
+		},
+		"SE_jewel": {
+			"type": "audio",
+			"path": "audio/SE/SE_jewel",
+			"systemId": "sound",
+			"duration": 858
+		},
+		"SE_select": {
+			"type": "audio",
+			"path": "audio/SE/SE_select",
+			"systemId": "sound",
+			"duration": 858
+		},
+		"SE_start": {
+			"type": "audio",
+			"path": "audio/SE/SE_start",
+			"systemId": "sound",
+			"duration": 1286
+		},
+		"btn_frame_join": {
+			"type": "image",
+			"width": 138,
+			"height": 120,
+			"path": "image/TitleScene/btn_frame_join.png"
+		},
+		"btn_frame_join_disable": {
+			"type": "image",
+			"width": 138,
+			"height": 120,
+			"path": "image/TitleScene/btn_frame_join_disable.png"
+		},
+		"frame_howto": {
+			"type": "image",
+			"width": 50,
+			"height": 50,
+			"path": "image/TitleScene/frame_howto.png"
+		},
+		"main_count_finish": {
+			"type": "image",
+			"width": 600,
+			"height": 400,
+			"path": "image/MainGameScene/main_count_finish.png"
+		},
+		"BigButton": {
+			"type": "script",
+			"path": "script/entity/TitleScene/BigButton.js",
+			"global": true
+		},
+		"snake_result": {
+			"type": "audio",
+			"path": "audio/snake_result",
+			"systemId": "music",
+			"duration": 16696
+		},
+		"snake_result_intro": {
+			"type": "audio",
+			"path": "audio/snake_result_intro",
+			"systemId": "sound",
+			"duration": 2556
+		},
+		"main_dash_eff": {
+			"type": "image",
+			"width": 150,
+			"height": 90,
+			"path": "image/MainGameScene/main_dash_eff.png"
+		},
+		"HowtoText": {
+			"type": "script",
+			"path": "script/entity/TitleScene/HowtoText.js",
+			"global": true
+		},
+		"RecruitmentCountDown": {
+			"type": "script",
+			"path": "script/entity/TitleScene/RecruitmentCountDown.js",
+			"global": true
+		},
+		"WaitingText": {
+			"type": "script",
+			"path": "script/entity/TitleScene/WaitingText.js",
+			"global": true
+		},
+		"ResultBehavior": {
+			"type": "script",
+			"path": "script/scene/ResultScene/ResultBehavior.js",
+			"global": true
+		},
+		"ResultScene": {
+			"type": "script",
+			"path": "script/scene/ResultScene/ResultScene.js",
+			"global": true
+		},
+		"audioUtils": {
+			"type": "script",
+			"path": "script/utils/audioUtils.js",
+			"global": true
+		},
+		"main_btn_close_off": {
+			"type": "image",
+			"width": 76,
+			"height": 76,
+			"path": "image/MainGameScene/UI/main_btn_close_off.png"
+		},
+		"main_btn_close_on": {
+			"type": "image",
+			"width": 76,
+			"height": 76,
+			"path": "image/MainGameScene/UI/main_btn_close_on.png"
+		},
+		"snake_reborn": {
+			"type": "image",
+			"width": 1404,
+			"height": 2220,
+			"path": "image/MainGameScene/snake_reborn.png"
+		},
+		"snake_reborn_text": {
+			"type": "image",
+			"width": 120,
+			"height": 63,
+			"path": "image/MainGameScene/snake_reborn_text.png"
+		},
+		"main_deathpop": {
+			"type": "image",
+			"width": 600,
+			"height": 400,
+			"path": "image/MainGameScene/UI/main_deathpop.png"
+		},
+		"result_base_ranking": {
+			"type": "image",
+			"width": 978,
+			"height": 470,
+			"path": "image/ResultScene/result_base_ranking.png"
+		},
+		"result_base_treasure": {
+			"type": "image",
+			"width": 718,
+			"height": 140,
+			"path": "image/ResultScene/result_base_treasure.png"
+		},
+		"result_btn_back_off": {
+			"type": "image",
+			"width": 120,
+			"height": 94,
+			"path": "image/ResultScene/result_btn_back_off.png"
+		},
+		"result_btn_back_on": {
+			"type": "image",
+			"width": 120,
+			"height": 94,
+			"path": "image/ResultScene/result_btn_back_on.png"
+		},
+		"result_btn_next_off": {
+			"type": "image",
+			"width": 120,
+			"height": 94,
+			"path": "image/ResultScene/result_btn_next_off.png"
+		},
+		"result_btn_next_on": {
+			"type": "image",
+			"width": 120,
+			"height": 94,
+			"path": "image/ResultScene/result_btn_next_on.png"
+		},
+		"result_num_b": {
+			"type": "image",
+			"width": 240,
+			"height": 36,
+			"path": "image/ResultScene/result_num_b.png"
+		},
+		"result_num_r": {
+			"type": "image",
+			"width": 240,
+			"height": 36,
+			"path": "image/ResultScene/result_num_r.png"
+		},
+		"result_title_kill": {
+			"type": "image",
+			"width": 840,
+			"height": 122,
+			"path": "image/ResultScene/result_title_kill.png"
+		},
+		"result_title_length": {
+			"type": "image",
+			"width": 840,
+			"height": 122,
+			"path": "image/ResultScene/result_title_length.png"
+		},
+		"result_unit_i_b": {
+			"type": "image",
+			"width": 36,
+			"height": 30,
+			"path": "image/ResultScene/result_unit_i_b.png"
+		},
+		"result_unit_i_r": {
+			"type": "image",
+			"width": 36,
+			"height": 30,
+			"path": "image/ResultScene/result_unit_i_r.png"
+		},
+		"result_unit_ji_b": {
+			"type": "image",
+			"width": 36,
+			"height": 30,
+			"path": "image/ResultScene/result_unit_ji_b.png"
+		},
+		"result_unit_ji_r": {
+			"type": "image",
+			"width": 36,
+			"height": 30,
+			"path": "image/ResultScene/result_unit_ji_r.png"
+		},
+		"result_glyph": {
+			"type": "text",
+			"path": "text/glyph/result_glyph.json"
+		},
+		"RankingLabel": {
+			"type": "script",
+			"path": "script/entity/ResultScene/RankingLabel.js",
+			"global": true
+		},
+		"StateRoleChecker": {
+			"type": "script",
+			"path": "script/utils/StateRoleChecker.js",
+			"global": true
+		},
+		"main_btn_spawn_unable": {
+			"type": "image",
+			"width": 124,
+			"height": 108,
+			"path": "image/MainGameScene/UI/main_btn_spawn_unable.png"
+		},
+		"explosion_effect": {
+			"type": "image",
+			"width": 560,
+			"height": 280,
+			"path": "image/MainGameScene/explosion_effect.png"
+		},
+		"result_btn_back_off_unable": {
+			"type": "image",
+			"width": 120,
+			"height": 94,
+			"path": "image/ResultScene/result_btn_back_off_unable.png"
+		},
+		"result_btn_next_off_unable": {
+			"type": "image",
+			"width": 120,
+			"height": 94,
+			"path": "image/ResultScene/result_btn_next_off_unable.png"
+		},
+		"ResultLogData": {
+			"type": "script",
+			"path": "script/types/ResultLogData.js",
+			"global": true
+		},
+		"red_rpop_body": {
+			"type": "image",
+			"width": 40,
+			"height": 40,
+			"path": "image/MainGameScene/UI/red_rpop_body.png"
+		},
+		"red_rpop_head_chance": {
+			"type": "image",
+			"width": 128,
+			"height": 40,
+			"path": "image/MainGameScene/UI/red_rpop_head_chance.png"
+		},
+		"red_rpop_tail": {
+			"type": "image",
+			"width": 22,
+			"height": 40,
+			"path": "image/MainGameScene/UI/red_rpop_tail.png"
+		},
+		"entityUtils": {
+			"type": "script",
+			"path": "script/utils/entityUtils.js",
+			"global": true
+		},
+		"lottery": {
+			"type": "script",
+			"path": "script/commonUtils/lottery.js",
+			"global": true
+		},
+		"utils": {
+			"type": "script",
+			"path": "script/commonUtils/utils.js",
+			"global": true
+		}
+	},
+	"moduleMainScripts": {
+		"@akashic-extension/akashic-label": "node_modules/@akashic-extension/akashic-label/lib/index.js",
+		"grapheme-splitter": "node_modules/grapheme-splitter/index.js",
+		"@akashic-extension/akashic-tile": "node_modules/@akashic-extension/akashic-tile/lib/index.js",
+		"@akashic-extension/akashic-timeline": "node_modules/@akashic-extension/akashic-timeline/lib/index.js",
+		"@akashic-extension/akashic-hover-plugin": "node_modules/@akashic-extension/akashic-hover-plugin/lib/index.js",
+		"@akashic-extension/resolve-player-info": "node_modules/@akashic-extension/resolve-player-info/lib/index.js"
+	},
+	"environment": {
+		"sandbox-runtime": "3",
+		"niconico": {
+			"supportedModes": [
+				"multi"
+			]
+		},
+		"external": {
+			"coeLimited": "0"
+		}
+	},
+	"globalScripts": [
+		"node_modules/@akashic-extension/akashic-label/lib/DefaultRubyParser.js",
+		"node_modules/@akashic-extension/akashic-label/lib/FragmentDrawInfo.js",
+		"node_modules/@akashic-extension/akashic-label/lib/Label.js",
+		"node_modules/@akashic-extension/akashic-label/lib/RubyParser.js",
+		"node_modules/@akashic-extension/akashic-label/lib/index.js",
+		"node_modules/@akashic-extension/akashic-tile/lib/Tile.js",
+		"node_modules/@akashic-extension/akashic-tile/lib/index.js",
+		"node_modules/@akashic-extension/akashic-timeline/lib/ActionType.js",
+		"node_modules/@akashic-extension/akashic-timeline/lib/Easing.js",
+		"node_modules/@akashic-extension/akashic-timeline/lib/Timeline.js",
+		"node_modules/@akashic-extension/akashic-timeline/lib/Tween.js",
+		"node_modules/@akashic-extension/akashic-timeline/lib/index.js",
+		"node_modules/grapheme-splitter/index.js",
+		"node_modules/@akashic-extension/akashic-hover-plugin/lib/Converter.js",
+		"node_modules/@akashic-extension/akashic-hover-plugin/lib/HoverPlugin.js",
+		"node_modules/@akashic-extension/akashic-hover-plugin/lib/index.js",
+		"node_modules/@akashic-extension/resolve-player-info/lib/FallbackDialog.js",
+		"node_modules/@akashic-extension/resolve-player-info/lib/index.js"
+	],
+	"operationPlugins": [],
+	"exportZipInfo": {
+		"version": "1.6.3",
+		"option": {
+			"strip": true,
+			"babel": true,
+			"targetService": "none"
+		}
+	}
+}
