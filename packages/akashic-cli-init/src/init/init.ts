@@ -31,7 +31,7 @@ export async function promiseInit(p: InitParameterObject): Promise<void> {
 
 	} else if (gitType === "ghe") {
 		await cloneTemplate(
-			param.gheHost!,
+			param.gheHost!, // completeInitParameterObject() で gitType が "ghe" で gheHost が null の場合はエラーとなるため非nullアサーションとしている。
 			param.gheProtocol,
 			{
 				owner,
