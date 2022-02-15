@@ -13,6 +13,7 @@ export interface ExportZipParameterObject {
 	minifyJs?: boolean;
 	minifyJson?: boolean;
 	packImage?: boolean;
+	completeEnvironment?: boolean;
 	strip?: boolean;
 	source?: string;
 	dest?: string;
