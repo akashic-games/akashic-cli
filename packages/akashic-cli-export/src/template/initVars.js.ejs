@@ -1,0 +1,37 @@
+<%# require() をラップし、 require("@akashic/akashic-engine") を利用できるようにする %>
+window.require = (function() {
+	var originalRequire = window.require;
+	var engineFiles = <%= engineFilesVariable %>;
+	return function require(moduleName) {
+		switch(moduleName) {
+			case "@akashic/akashic-engine":
+				return engineFiles.akashicEngine;
+			default:
+				return originalRequire.call(this, moduleName);
+		}
+	};
+})();
+
+<%# スクリプトアセットから g が参照できるようにする %>
+window.g = <%= engineFilesVariable %>.akashicEngine;
+
+<%# スクリプト・テキストアセットの内容を保持する変数 %>
+window.gLocalAssetContainer = {};
+
+<%# 主に sandbox.js から参照される変数 %>
+window.optionProps = {
+	magnify: <%- magnify %>
+};
+
+window.__akashic__ = {};
+<% if (autoSendEventName) { %>
+window.__akashic__.autoSendEventName = <%- JSON.stringify(autoSendEventName) %>;
+window.__akashic__.sandboxConfigFunc = function () {
+	var module = { exports: {} };
+	var exports = module.exports;
+	(function () {
+		<%- sandboxConfigJsCode %>
+	})();
+	return module.exports;
+}
+<% } %>
