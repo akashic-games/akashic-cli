@@ -1,5 +1,23 @@
 # CHANGELOG
 
+## 2.15.35 (2022-02-15)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#1023](https://github.com/akashic-games/akashic-cli/pull/1023) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.1.6, engineFiles@2.1.57, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+* `akashic-cli-commons`, `akashic-cli-export`
+  * [#998](https://github.com/akashic-games/akashic-cli/pull/998) feat(export): add --pack-image option for export-zip ([@xnv](https://github.com/xnv))
+
+#### Bug Fix
+* `akashic-cli-commons`
+  * [#1002](https://github.com/akashic-games/akashic-cli/pull/1002) fix(common): fix overwritten virtualPath on Renamer ([@xnv](https://github.com/xnv))
+
+#### Update Dependencies
+* [#1021](https://github.com/akashic-games/akashic-cli/pull/1021) Update dependency tar [SECURITY] ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.15.34 (2022-02-12)
 
 #### Update Dependencies
