@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.15.38 (2022-02-16)
+
+#### Other Change
+* `akashic-cli-init`
+  * [#999](https://github.com/akashic-games/akashic-cli/pull/999) Enable strict for init ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 2.15.37 (2022-02-16)
 
 #### Other Change
