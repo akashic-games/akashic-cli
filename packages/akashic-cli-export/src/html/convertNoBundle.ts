@@ -13,7 +13,8 @@ import {
 	getInjectedContents,
 	validateEs5Code,
 	readSandboxConfigJs,
-	addUntaintedToImageAssets
+	addUntaintedToImageAssets,
+	validateEngineFilesName
 } from "./convertUtil";
 
 export async function promiseConvertNoBundle(options: ConvertTemplateParameterObject): Promise<void> {
@@ -112,16 +113,23 @@ async function writeHtmlFile(
 	conf: cmn.Configuration,
 	options: ConvertTemplateParameterObject): Promise<void> {
 	const injects = options.injects ? options.injects : [];
-	var version = conf._content.environment["sandbox-runtime"];
+	const version = conf._content.environment["sandbox-runtime"];
 	// eslint-disable-next-line @typescript-eslint/no-var-requires
-	var versionsJson = require("../engineFilesVersion.json");
+	const versionsJson = require("../engineFilesVersion.json");
+	let engineFilesVariable = versionsJson[`v${version}`].variable;
 	const filePath = path.resolve(__dirname + "/../template/no-bundle-index.ejs");
+
+	if (options.debugOverrideEngineFiles) {
+		validateEngineFilesName(options.debugOverrideEngineFiles, version);
+		engineFilesVariable = path.basename(options.debugOverrideEngineFiles, ".js");
+	}
+
 	const html = await ejs.renderFile(filePath, {
 		assets: assetPaths,
 		magnify: !!options.magnify,
 		injectedContents: getInjectedContents(options.cwd, injects),
 		version: version,
-		engineFilesVariable: versionsJson[`v${version}`].variable,
+		engineFilesVariable: engineFilesVariable,
 		exportVersion: options.exportInfo !== undefined ? options.exportInfo.version : "",
 		exportOption: options.exportInfo !== undefined ? options.exportInfo.option : "",
 		autoSendEventName: options.autoSendEventName,
@@ -157,6 +165,16 @@ function writeCommonFiles(
 	fsx.copySync(
 		path.resolve(__dirname, "..", templatePath),
 		outputPath);
+
+	if (options.debugOverrideEngineFiles) {
+		const jsDir = path.join(outputPath, "js");
+		fsx.readdirSync(jsDir).filter(f => /^engineFilesV*/.test(f))
+			.map(f => fsx.removeSync(path.join(jsDir, f)));
+		fsx.copySync(
+			path.resolve(options.debugOverrideEngineFiles),
+			path.join(jsDir, path.basename(options.debugOverrideEngineFiles))
+		);
+	}
 }
 
 function writeOptionScript(outputPath: string, options: ConvertTemplateParameterObject): void {

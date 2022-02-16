@@ -21,6 +21,7 @@ export function cli(param: CliConfigExportZip): void {
 			minify: param.minify,
 			minifyJs: param.minifyJs,
 			minifyJson: param.minifyJson,
+			packImage: param.packImage,
 			strip: (param.strip != null) ? param.strip : true,
 			source: param.cwd,
 			dest: param.output,
@@ -71,6 +72,7 @@ commander
 	.option("--no-omit-unbundled-js", "Preserve unbundled .js files (not required from root). Works with --bundle only")
 	.option("--minify-js", "Minify JavaScript files")
 	.option("--minify-json", "Minify JSON files")
+	.option("--pack-image", "Pack small images")
 	.option("--target-service <service>", `Specify the target service of the exported content:${availableServices}`);
 
 export function run(argv: string[]): void {
@@ -100,6 +102,7 @@ export function run(argv: string[]): void {
 			minify: options.minify ?? conf.minify,
 			minifyJs: options.minifyJs ?? conf.minifyJs,
 			minifyJson: options.minifyJson ?? conf.minifyJson,
+			packImage: options.packImage ?? conf.packImage,
 			hashFilename: options.hashFilename ?? conf.hashFilename,
 			bundle: options.bundle ?? conf.bundle,
 			babel: options.es5Downpile ?? conf.babel,

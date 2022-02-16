@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-scan",
-  "version": "0.15.1",
+  "version": "0.15.20",
   "description": "Command line tool for updating assets and globalScripts.",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -38,17 +38,17 @@
     "jasmine-reporters": "2.5.0",
     "jasmine-terminal-reporter": "1.0.3",
     "mock-fs": "4.14.0",
-    "shx": "0.3.3",
+    "shx": "0.3.4",
     "typescript": "3.9.10"
   },
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.13.1",
+    "@akashic/akashic-cli-commons": "0.13.20",
     "aac-duration": "0.0.1",
     "chokidar": "^3.5.1",
     "commander": "^8.0.0",
     "fs-readdir-recursive": "1.1.0",
     "image-size": "~1.0.0",
-    "music-metadata": "7.11.4",
+    "music-metadata": "7.11.8",
     "svgson": "^5.2.1",
     "thumbcoil": "~1.2.0"
   },
