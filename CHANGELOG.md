@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.15.37 (2022-02-16)
+
+#### Other Change
+* `akashic-cli-extra`
+  * [#1000](https://github.com/akashic-games/akashic-cli/pull/1000) Enable strict for extra ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 2.15.36 (2022-02-16)
 
 #### Other Change
