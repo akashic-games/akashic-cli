@@ -40,7 +40,6 @@ export interface AudioSystemConfiguration {
  */
 export interface Assets {
 	[key: string]: AssetConfiguration;
-	mainScene?: AssetConfiguration;
 }
 
 /**
