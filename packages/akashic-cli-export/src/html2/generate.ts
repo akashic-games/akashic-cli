@@ -201,7 +201,7 @@ async function resolveEntry(entry: Entry): Promise<ResolvedEntry> {
 	return { content, dest, discardable };
 }
 
-const RUNTIME_VER_TABLE = path.resolve(__dirname, "..", "engineFilesVersion.json");
+const RUNTIME_VER_TABLE = path.resolve(__dirname, "..", "template", "engineFilesVersion.json");
 const TEMPLATE_DIR = path.resolve(__dirname, "..", "template");
 const PDI_DIR = path.resolve(__dirname, "..", "pdi");
 

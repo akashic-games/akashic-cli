@@ -52,7 +52,7 @@ var promises = Object.keys(versions).filter(v => versions[v].version !== current
 		return new Promise((resolve, reject) => {
 			var majorVersion = `v${version.substring(0, 1)}`;
 			var fileStream = fs.createWriteStream(
-				path.join(__dirname, "..", "src", "template", `template-export-html-${majorVersion}`, "js", fileName)
+				path.join(__dirname, "..", "src", "template", "runtime", majorVersion, fileName)
 			);
 			res.body.pipe(fileStream);
 			res.body.on("error", (err) => {
