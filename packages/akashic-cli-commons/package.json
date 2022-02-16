@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-commons",
-  "version": "0.13.1",
+  "version": "0.13.20",
   "description": "The shared definitions and routines for akashic-cli-xxx",
   "main": "lib/index.js",
   "scripts": {
@@ -27,14 +27,14 @@
     "@types/fs-extra": "9.0.13",
     "@types/jest": "27.4.0",
     "@types/mock-fs": "4.13.1",
-    "@types/node": "14.18.5",
+    "@types/node": "14.18.11",
     "@typescript-eslint/eslint-plugin": "4.33.0",
     "eslint-config-prettier": "8.3.0",
     "eslint-plugin-import": "2.25.4",
     "eslint-plugin-jest": "24.7.0",
     "jest": "26.6.3",
     "mock-fs": "4.14.0",
-    "shx": "0.3.3",
+    "shx": "0.3.4",
     "typescript": "3.9.10"
   },
   "typings": "lib/index.d.ts",

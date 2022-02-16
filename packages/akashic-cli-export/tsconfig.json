@@ -6,7 +6,7 @@
     "module": "commonjs",
     "outDir": "./lib",
     "declaration": true,
-    "types" : ["archiver", "browserify", "commander", "fs-extra", "fs-readdir-recursive", "node", "uglify-js"]
+    "types" : ["archiver", "browserify", "commander", "fs-extra", "fs-readdir-recursive", "node", "uglify-js", "pngjs"]
   },
   "files": [
     "./typings/babel.d.ts",

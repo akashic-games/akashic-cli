@@ -135,7 +135,8 @@ async function writeHtmlFile(
 		templatePath,
 		conf._content.environment["sandbox-runtime"],
 		options.minify,
-		!options.unbundleText
+		!options.unbundleText,
+		options.debugOverrideEngineFiles
 	);
 	const filePath = path.resolve(__dirname + "/../template/bundle-index.ejs");
 	const html = await ejs.renderFile(filePath, {

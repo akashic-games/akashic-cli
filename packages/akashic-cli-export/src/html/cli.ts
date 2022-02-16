@@ -29,6 +29,7 @@ function cli(param: CliConfigExportHtml): void {
 		needsUntaintedImageAsset: param.atsumaru,
 		omitUnbundledJs: param.atsumaru && param.omitUnbundledJs,
 		compress: param.output && !param.atsumaru ? path.extname(param.output) === ".zip" : false,
+		debugOverrideEngineFiles: param.debugOverrideEngineFiles,
 		// index.htmlに書き込むためのexport実行時の情報
 		exportInfo: {
 			version: ver, // export実行時のバージョン
@@ -83,7 +84,8 @@ commander
 	.option("--autoSendEvents [eventName]", "(deprecated)event name that send automatically when game start")
 	.option("-A, --auto-send-event-name [eventName]", "event name that send automatically when game start")
 	.option("-a, --atsumaru", "generate files that can be posted to GAME-atsumaru")
-	.option("--no-omit-unbundled-js", "Unnecessary script files are included even when the `--atsumaru` option is specified.");
+	.option("--no-omit-unbundled-js", "Unnecessary script files are included even when the `--atsumaru` option is specified.")
+	.option("--debug-override-engine-files <filePath>", "Use the specified engineFiles");
 
 export function run(argv: string[]): void {
 	// Commander の制約により --strip と --no-strip 引数を両立できないため、暫定対応として Commander 前に argv を処理する
@@ -95,6 +97,13 @@ export function run(argv: string[]): void {
 		if (error) {
 			console.error(error);
 			process.exit(1);
+		}
+		if (options.debugOverrideEngineFiles) {
+			if (!/^engineFilesV\d+_\d+_\d+.*\.js$/.test(path.basename(options.debugOverrideEngineFiles))) {
+				console.error(`Invalid ---debug-override-engine-files option argument:${options.debugOverrideEngineFiles},`
+					+ "File name should be in engineFilesVx_x_x format");
+				process.exit(1);
+			}
 		}
 
 		const conf = configuration.commandOptions.export ? (configuration.commandOptions.export.html || {}) : {};
@@ -112,7 +121,8 @@ export function run(argv: string[]): void {
 			injects: options.inject ?? conf.injects,
 			atsumaru: options.atsumaru ?? conf.atsumaru,
 			autoSendEventName: options.autoSendEventName ?? options.autoSendEvents ?? conf.autoSendEventName ?? conf.autoSendEvents,
-			omitUnbundledJs: options.omitUnbundledJs ?? conf.omitUnbundledJs
+			omitUnbundledJs: options.omitUnbundledJs ?? conf.omitUnbundledJs,
+			debugOverrideEngineFiles: options.debugOverrideEngineFiles ?? conf.debugOverrideEngineFiles
 		});
 	});
 }

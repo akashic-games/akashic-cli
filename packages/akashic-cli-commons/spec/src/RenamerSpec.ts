@@ -36,6 +36,12 @@ describe("Renamer", function () {
 								path: "script/mainScene.js",
 								global: true
 							},
+							sub: {
+								type: "script",
+								path: "script/sub.js",
+								virtualPath: "script/virtualSub.js",
+								global: true
+							},
 							hoge: {
 								type: "image",
 								path: "image/hoge.png",
@@ -55,7 +61,8 @@ describe("Renamer", function () {
 						}
 					}),
 					script: {
-						"mainScene.js": "console.log('main');"
+						"mainScene.js": "require('./sub');",
+						"sub.js": "console.log('sub');"
 					},
 					image: {
 						"hoge.png": ""
@@ -90,6 +97,12 @@ describe("Renamer", function () {
 					type: "script",
 					path: "files/04ef22b752657e08b66f.js",
 					virtualPath: "script/mainScene.js",
+					global: true
+				});
+				expect(gamejson.assets["sub"]).toEqual({
+					type: "script",
+					path: "files/ec09c6fef46489affb10.js",
+					virtualPath: "script/virtualSub.js", // 最初から指定されていた virtualPath は保存される。
 					global: true
 				});
 				expect(gamejson.assets["hoge"]).toEqual({

@@ -34,7 +34,7 @@ export function promiseExportHtmlRaw(param: ExportHTMLParameterObject): Promise<
 		param.logger.warn("The output path overlaps with the game directory: files will be exported into the game directory.");
 		param.logger.warn("NOTE that after this, exporting this game with --no-strip option may include the files.");
 	}
-	return new Promise((resolve, reject) => {
+	return new Promise<void>((resolve, reject) => {
 		if (!param.output) {
 			param.output = fs.mkdtempSync(path.join(os.tmpdir(), "akashic-export-html-tmp-"));
 			return resolve();
@@ -81,7 +81,8 @@ export function promiseExportHtmlRaw(param: ExportHTMLParameterObject): Promise<
 				lint: param.lint,
 				exportInfo: param.exportInfo,
 				autoSendEventName: param.autoSendEventName,
-				needsUntaintedImageAsset: param.needsUntaintedImageAsset
+				needsUntaintedImageAsset: param.needsUntaintedImageAsset,
+				debugOverrideEngineFiles: param.debugOverrideEngineFiles
 			};
 			if (param.bundle) {
 				return promiseConvertBundle(convertParam);
