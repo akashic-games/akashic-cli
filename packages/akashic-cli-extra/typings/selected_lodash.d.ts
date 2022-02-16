@@ -1,5 +1,5 @@
 declare module "lodash.get" {
-	const get: (object: {}, path: string, defaultValue: {}) => any;
+	const get: (object: {}, path: string, defaultValue: {} | null) => any;
 	export = get;
 }
 
