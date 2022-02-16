@@ -73,7 +73,7 @@ function _renameAssets(content: GameConfiguration, basedir: string, maxHashLengt
 		const isRenamedAsset = processedAssetPaths.has(hashedFilePath);
 
 		content.assets[name].path = hashedFilePath;
-		content.assets[name].virtualPath = filePath;
+		content.assets[name].virtualPath = content.assets[name].virtualPath ?? filePath;
 		processedAssetPaths.add(hashedFilePath);
 		if (isRenamedAsset) return; // 同じパスのアセットを既にハッシュ化済みの場合、ファイルはリネーム済み
 		if (content.assets[name].type !== "audio") {
