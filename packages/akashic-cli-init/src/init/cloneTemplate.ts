@@ -6,17 +6,17 @@ import { GitProtocol, InitParameterObject } from "./InitParameterObject";
 const exec = util.promisify(childProcess.exec);
 
 interface GitCloneParameterObject {
-	owner: string;
-	repo: string;
+	owner: string | null;
+	repo: string | null;
 	targetPath: string;
 	preserveGitDirectory?: boolean;
 	shallow?: boolean;
 }
 
 export interface CloneTargetInfo {
-	gitType: string;
-	owner: string;
-	repo: string;
+	gitType: string | null;
+	owner: string | null;
+	repo: string | null;
 }
 
 /**
@@ -54,7 +54,7 @@ function completeParameter(opts: GitCloneParameterObject): Required<GitClonePara
 	};
 }
 
-export function createGitUri(host: string, protocol: GitProtocol, owner: string, repo: string): string {
+export function createGitUri(host: string, protocol: GitProtocol, owner: string | null, repo: string | null): string {
 	if (protocol === "https") {
 		return `${protocol}://${host}/${owner}/${repo}.git`;
 	} else if (protocol === "ssh") {

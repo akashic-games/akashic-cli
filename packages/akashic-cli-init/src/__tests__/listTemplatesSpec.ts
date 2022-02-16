@@ -1,14 +1,14 @@
 import * as path from "path";
 import * as express from "express";
 import * as getPort from "get-port";
-import * as InitCommonOptions from "../../lib/common/InitCommonOptions.js";
+import * as Prompt from "prompt";
 import { listTemplates } from "../../lib/list/listTemplates";
 import { MockConfigFile } from "./support/mockConfigFile";
 
 describe("list.ts", () => {
 	let templateServer: any = null;
 	let repositoryUrl = "";
-	let mockInitCommonOptions: jest.SpyInstance = null;
+	let mockPromptGet: jest.SpyInstance = null!; // beforeAll() で必ず代入するので非 null 型とする
 	beforeAll(async () => {
 		const port = await getPort();
 		const app = express();
@@ -16,15 +16,8 @@ describe("list.ts", () => {
 		templateServer = app.listen(port);
 		repositoryUrl = `http://127.0.0.1:${port}/remote/`;
 
-		mockInitCommonOptions = jest.spyOn(InitCommonOptions, "completeInitCommonOptions").mockImplementation((opts) => {
-			const ret = {
-				logger: opts.logger,
-				configFile: new MockConfigFile({}),
-				templateListJsonPath: opts.templateListJsonPath,
-				repository: opts.repository,
-				localTemplateDirectory: opts.localTemplateDirectory,
-			};
-			return Promise.resolve(ret);
+		mockPromptGet = jest.spyOn(Prompt, "get").mockImplementation((_schema, func) => {
+			func(undefined, { confirm: "y" });
 		});
 	});
 	afterAll(() => {
@@ -33,7 +26,7 @@ describe("list.ts", () => {
 			templateServer = null;
 			repositoryUrl = "";
 		}
-		mockInitCommonOptions.mockRestore();
+		mockPromptGet.mockRestore();
 	});
 
 	describe("listTemplates()", () => {
@@ -50,6 +43,7 @@ describe("list.ts", () => {
 					info: (_s: string) => {},
 					warn: (_s: string) => {}
 				},
+				configFile: new MockConfigFile({}),
 				repository: repositoryUrl,
 				templateListJsonPath: "template-list.json",
 				localTemplateDirectory: path.join(__dirname, "support", "fixture", "local")

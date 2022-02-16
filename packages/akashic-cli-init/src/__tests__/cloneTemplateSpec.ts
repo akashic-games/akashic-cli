@@ -11,7 +11,7 @@ mockExec.mockImplementation((_command: any, _opts: any, callback: Function) => {
 });
 
 describe("cloneTemplate.js", () => {
-	let mockConfirm: jest.SpyInstance = null;
+	let mockConfirm: jest.SpyInstance = null!; // beforeAll() で必ず代入するので非 null 型とする
 	beforeEach(() => {
 		mockExec.mockClear();
 	});
