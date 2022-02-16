@@ -92,7 +92,7 @@ interface Entry {
 	 * 内容の読み込み元ファイルパス。
 	 * content がある場合、この値は無視される。
 	 * どのように取り込まれるかは拡張子によって変化する。
-	 * 拡張子が ".ejs" である場合、 args を渡して EJS で render した内容が書き込まれる。
+	 * 拡張子が ".ejs" である場合、 args を渡して EJS で render したものを内容とする。
 	 */
 	src?: string | null;
 
@@ -118,6 +118,8 @@ interface Entry {
 	 * - `"raw"`: 加工しない
 	 * - `"script"`: function() 式でラップする
 	 * - `"text"`: 文字列リテラルとしてエスケープする
+	 * 
+	 * 省略されたまたは null の場合、 `"raw"` として扱われる。
 	 */
 	wrapType?: "script" | "text" | "raw" | null;
 
@@ -273,7 +275,7 @@ async function makeRuntimeEntries(
 				null
 		),
 		{
-			src: path.join(TEMPLATE_DIR, "sandbox.js"),
+			src: path.join(TEMPLATE_DIR, `v${sandboxRuntimeVersion}`, "sandbox.js"),
 			dest: path.join(runtimeDir, "sandbox.js")
 		}
 	];
