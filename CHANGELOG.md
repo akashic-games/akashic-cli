@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 2.15.36 (2022-02-16)
+
+#### Other Change
+* `akashic-cli-serve`
+  * [#1022](https://github.com/akashic-games/akashic-cli/pull/1022) Use material icons with serve ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+* `akashic-cli-commons`
+  * [#1001](https://github.com/akashic-games/akashic-cli/pull/1001) Fix by akashic-init strict ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 2.15.35 (2022-02-15)
 
 #### Enhancement
