@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.15.42 (2022-02-19)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli`
+  * [#1027](https://github.com/akashic-games/akashic-cli/pull/1027) Update dependency eslint-config-prettier to v8.4.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
 ## 2.15.41 (2022-02-19)
 
 #### Update Dependencies
