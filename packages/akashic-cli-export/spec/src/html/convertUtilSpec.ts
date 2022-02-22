@@ -1,4 +1,5 @@
 import { GameConfiguration } from "@akashic/akashic-cli-commons";
+import { ImageAssetConfigurationBase } from "@akashic/game-configuration";
 import * as convert from "../../../lib/html/convertUtil";
 
 describe("convertUtil", function () {
@@ -108,11 +109,13 @@ describe("convertUtil", function () {
 			};
 			convert.addUntaintedToImageAssets(gamejson);
 			// ImageAssetには "untainted: true" が付与される
-			expect(gamejson.assets.sample_image1.hint.untainted).toBeTruthy();
-			expect(gamejson.assets.sample_image2.hint.untainted).toBeTruthy();
+			const sampleImage1 = gamejson.assets.sample_image1 as ImageAssetConfigurationBase;
+			const sampleImage2 = gamejson.assets.sample_image2 as ImageAssetConfigurationBase;
+			expect(sampleImage1.hint.untainted).toBeTruthy();
+			expect(sampleImage2.hint.untainted).toBeTruthy();
 			// ImageAsset以外には "untainted: true" が付与されない
-			expect(gamejson.assets.main.hint).toBeUndefined();
-			expect(gamejson.assets.sample_text1.hint).toBeUndefined();
+			expect(gamejson.assets.main.hasOwnProperty("hint")).toBeFalsy();
+			expect(gamejson.assets.sample_text1.hasOwnProperty("hint")).toBeFalsy();
 		});
 	});
 });
