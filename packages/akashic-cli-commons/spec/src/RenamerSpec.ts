@@ -4,6 +4,7 @@ import * as fs from "fs";
 import * as Util from "../../lib/Util";
 import * as Renamer from "../../lib/Renamer";
 import { ConfigurationFile } from "../../lib/ConfigurationFile";
+import { AssetConfigurationMap } from "@akashic/game-configuration";
 
 describe("Renamer", function () {
 	afterEach(() => {
@@ -93,32 +94,33 @@ describe("Renamer", function () {
 				Renamer.renameAssetFilenames(gamejson, "./srcDir");
 
 				expect(gamejson.main).toBe("./script/mainScene");
-				expect(gamejson.assets["mainScene"]).toEqual({
+				const assets = gamejson.assets as AssetConfigurationMap;
+				expect(assets["mainScene"]).toEqual({
 					type: "script",
 					path: "files/04ef22b752657e08b66f.js",
 					virtualPath: "script/mainScene.js",
 					global: true
 				});
-				expect(gamejson.assets["sub"]).toEqual({
+				expect(assets["sub"]).toEqual({
 					type: "script",
 					path: "files/ec09c6fef46489affb10.js",
 					virtualPath: "script/virtualSub.js", // 最初から指定されていた virtualPath は保存される。
 					global: true
 				});
-				expect(gamejson.assets["hoge"]).toEqual({
+				expect(assets["hoge"]).toEqual({
 					type: "image",
 					path: "files/a70844aefe0a5ceb64eb.png",
 					virtualPath: "image/hoge.png",
 					global: true
 				});
-				expect(gamejson.assets["foo"]).toEqual({
+				expect(assets["foo"]).toEqual({
 					type: "audio",
 					path: "files/47acba638f0bcfc681d7",
 					virtualPath: "audio/foo",
 					global: true
 				});
 				// globalScripts は scriptAsset に変換される
-				expect(gamejson.assets["a_e_z_0"]).toEqual({
+				expect(assets["a_e_z_0"]).toEqual({
 					type: "script",
 					path: "files/825a514c9ba0f7565c0b.js",
 					virtualPath: "node_modules/foo/bar/index.js",
@@ -145,11 +147,15 @@ describe("Renamer", function () {
 					hoge: {
 						type: "image",
 						path: "image/hoge.png",
+						width: 100,
+						height: 111,
 						global: true
 					},
 					hoge2: {
 						type: "image",
 						path: "image/hoge.png",
+						width: 50,
+						height: 55,
 						global: true
 					}
 				};
@@ -157,16 +163,21 @@ describe("Renamer", function () {
 				expect(() => {
 					Renamer.renameAssetFilenames(gamejson, "./srcDir");
 					expect(fs.statSync(path.join("srcDir", "files/04ef22b752657e08b66f.js")).isFile()).toBe(true);
-					expect(gamejson.assets["hoge"]).toEqual({
+					const assets = gamejson.assets as AssetConfigurationMap;
+					expect(assets["hoge"]).toEqual({
 						type: "image",
 						path: "files/a70844aefe0a5ceb64eb.png",
 						virtualPath: "image/hoge.png",
+						width: 100,
+						height: 111,
 						global: true
 					});
-					expect(gamejson.assets["hoge2"]).toEqual({
+					expect(assets["hoge2"]).toEqual({
 						type: "image",
 						path: "files/a70844aefe0a5ceb64eb.png",
 						virtualPath: "image/hoge.png",
+						width: 50,
+						height: 55,
 						global: true
 					});
 

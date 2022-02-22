@@ -66,7 +66,7 @@ describe("ConfigurationFile", function () {
 
 	describe(".write()", function () {
 		it("writes to the file", function (done) {
-			var data = { width: 10, height: 5, fps: 30 };
+			var data = { width: 10, height: 5, fps: 30, main: "main.js", assets: {} };
 			Promise.resolve()
 				.then(() => ConfigurationFile.write(data, "./game1.json", logger))
 				.then(() => ConfigurationFile.read("./game1.json", logger))
