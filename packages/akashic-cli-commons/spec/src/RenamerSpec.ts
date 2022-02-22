@@ -94,33 +94,32 @@ describe("Renamer", function () {
 				Renamer.renameAssetFilenames(gamejson, "./srcDir");
 
 				expect(gamejson.main).toBe("./script/mainScene");
-				const assets = gamejson.assets as AssetConfigurationMap;
-				expect(assets["mainScene"]).toEqual({
+				expect(gamejson.assets["mainScene"]).toEqual({
 					type: "script",
 					path: "files/04ef22b752657e08b66f.js",
 					virtualPath: "script/mainScene.js",
 					global: true
 				});
-				expect(assets["sub"]).toEqual({
+				expect(gamejson.assets["sub"]).toEqual({
 					type: "script",
 					path: "files/ec09c6fef46489affb10.js",
 					virtualPath: "script/virtualSub.js", // 最初から指定されていた virtualPath は保存される。
 					global: true
 				});
-				expect(assets["hoge"]).toEqual({
+				expect(gamejson.assets["hoge"]).toEqual({
 					type: "image",
 					path: "files/a70844aefe0a5ceb64eb.png",
 					virtualPath: "image/hoge.png",
 					global: true
 				});
-				expect(assets["foo"]).toEqual({
+				expect(gamejson.assets["foo"]).toEqual({
 					type: "audio",
 					path: "files/47acba638f0bcfc681d7",
 					virtualPath: "audio/foo",
 					global: true
 				});
 				// globalScripts は scriptAsset に変換される
-				expect(assets["a_e_z_0"]).toEqual({
+				expect(gamejson.assets["a_e_z_0"]).toEqual({
 					type: "script",
 					path: "files/825a514c9ba0f7565c0b.js",
 					virtualPath: "node_modules/foo/bar/index.js",
@@ -163,8 +162,7 @@ describe("Renamer", function () {
 				expect(() => {
 					Renamer.renameAssetFilenames(gamejson, "./srcDir");
 					expect(fs.statSync(path.join("srcDir", "files/04ef22b752657e08b66f.js")).isFile()).toBe(true);
-					const assets = gamejson.assets as AssetConfigurationMap;
-					expect(assets["hoge"]).toEqual({
+					expect(gamejson.assets["hoge"]).toEqual({
 						type: "image",
 						path: "files/a70844aefe0a5ceb64eb.png",
 						virtualPath: "image/hoge.png",
@@ -172,7 +170,7 @@ describe("Renamer", function () {
 						height: 111,
 						global: true
 					});
-					expect(assets["hoge2"]).toEqual({
+					expect(gamejson.assets["hoge2"]).toEqual({
 						type: "image",
 						path: "files/a70844aefe0a5ceb64eb.png",
 						virtualPath: "image/hoge.png",
