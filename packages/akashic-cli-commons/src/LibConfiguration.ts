@@ -1,4 +1,4 @@
-import type { AssetConfiguration } from "@akashic/game-configuration";
+import { AssetConfiguration } from "@akashic/game-configuration";
 
 /**
  * akashic-lib.json の型。
