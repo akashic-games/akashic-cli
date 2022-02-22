@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
-import { ModuleMainScriptsMap } from "@akashic/game-configuration";
+import type { ModuleMainScriptsMap } from "@akashic/game-configuration";
 import * as browserify from "browserify";
 import { ConsoleLogger } from "./ConsoleLogger";
 import { Logger } from "./Logger";
