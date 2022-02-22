@@ -1,10 +1,10 @@
-import type {AssetConfigurationMap, GameConfiguration as gameConfiguration} from "@akashic/game-configuration";
+import type {AssetConfigurationMap, GameConfiguration as Configuration} from "@akashic/game-configuration";
 import type { ServiceType } from "./ServiceType";
 
 /**
  * game.json の型。
  */
-export interface GameConfiguration extends gameConfiguration{
+export interface GameConfiguration extends Configuration{
 	assets: AssetConfigurationMap;
 	environment?: ModuleEnvironment;
 	exportZipInfo?: ExportZipInfo;
