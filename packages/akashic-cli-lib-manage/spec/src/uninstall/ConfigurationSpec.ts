@@ -9,6 +9,8 @@ describe("Configuration", function () {
 				width: 120,
 				height: 120,
 				fps: 30,
+				main: "main.js",
+				assets: {},
 				operationPlugins: [
 					{ code: 10, script: "foo" },
 					{ code: 12, script: "bar" },
@@ -27,7 +29,7 @@ describe("Configuration", function () {
 
 		it("nothing removed for module not declared in operationPlugins", function () {
 			var logger = new cmn.ConsoleLogger({ debugLogMethod: () => {/* do nothing*/} });
-			var content = { width: 120, height: 120, fps: 30 };
+			var content = { width: 120, height: 120, fps: 30, main: "", assets: {}};
 			var self = new Configuration({ content, logger });
 			self.removeOperationPlugin("foo");
 			expect(self.getContent().operationPlugins).toEqual([]);
