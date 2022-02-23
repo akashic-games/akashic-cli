@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.15.43 (2022-02-23)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#1029](https://github.com/akashic-games/akashic-cli/pull/1029) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.1.6, engineFiles@2.1.57, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.15.42 (2022-02-19)
 
 #### Update Dependencies
