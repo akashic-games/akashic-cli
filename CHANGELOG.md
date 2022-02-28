@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.15.47 (2022-02-28)
+
+#### Other Change
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-lib-manage`, `akashic-cli-scan`
+  * [#1028](https://github.com/akashic-games/akashic-cli/pull/1028) Use game configration ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 2.15.46 (2022-02-26)
 
 #### Update Dependencies
