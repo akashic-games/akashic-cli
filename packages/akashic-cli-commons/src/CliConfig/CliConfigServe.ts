@@ -1,4 +1,4 @@
-import { ServiceType } from "../ServiceType";
+import type { ServiceType } from "../ServiceType";
 
 export interface CliConfigServe {
 	hostname?: string;
