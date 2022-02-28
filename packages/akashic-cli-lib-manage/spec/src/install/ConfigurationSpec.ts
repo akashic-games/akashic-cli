@@ -13,7 +13,7 @@ describe("Configuration", function () {
 
 	describe("#addOperationPlugin()", function () {
 		it("adds a declaration to operationPlugins", function () {
-			const self = createConfiguration({ width: 320, height: 320 });
+			const self = createConfiguration({ width: 320, height: 320, main: "main.js", assets: {} });
 			self.addOperationPlugin(10, "@example/foo@1.2");
 			expect(self.getContent().operationPlugins.sort((a, b) => a.code - b.code)).toEqual([
 				{ code: 10, script: "@example/foo" }
@@ -28,6 +28,8 @@ describe("Configuration", function () {
 			const content = {
 				width: 320,
 				height: 320,
+				main: "main.js",
+				assets: {},
 				operationPlugins: [{ code: 10, script: "@example/foo" }]
 			};
 			const self = createConfiguration(content);
@@ -37,7 +39,7 @@ describe("Configuration", function () {
 
 	describe("#addToGlobalScripts()", function () {
 		it("creates globalScripts unless exists", function () {
-			const self = createConfiguration({ width: 320, height: 320 });
+			const self = createConfiguration({ width: 320, height: 320, main: "", assets: {}  });
 			self.addToGlobalScripts([ "node_modules/foo/index.js", "node_modules/foo/package.json" ]);
 			expect(sortStringArray(self.getContent().globalScripts)).toEqual([
 				"node_modules/foo/index.js",
@@ -48,6 +50,8 @@ describe("Configuration", function () {
 			const self = createConfiguration({
 				width: 320,
 				height: 320,
+				main: "main.js",
+				assets: {},
 				globalScripts: [
 					"node_modules/foo/package.json",
 					"node_modules/@bar/zoo/lib/main.js",

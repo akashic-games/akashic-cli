@@ -1,11 +1,11 @@
 import * as fs from "fs";
 import * as path from "path";
+import { ModuleMainScriptsMap } from "@akashic/game-configuration";
 import * as browserify from "browserify";
 import { ConsoleLogger } from "./ConsoleLogger";
 import { Logger } from "./Logger";
 import { StringStream } from "./StringStream";
 import * as Util from "./Util";
-import { ModuleMainScripts } from "./index";
 
 export module NodeModules {
 	export function listModuleFiles(basepath: string, modules: string|string[], logger: Logger = new ConsoleLogger()): Promise<string[]> {
@@ -36,9 +36,9 @@ export module NodeModules {
 		return packageJsonPaths;
 	}
 
-	export function listModuleMainScripts(packageJsonFiles: string[]): ModuleMainScripts {
+	export function listModuleMainScripts(packageJsonFiles: string[]): ModuleMainScriptsMap {
 		if (packageJsonFiles.length === 0) return {};
-		var moduleMainScripts: ModuleMainScripts = {};
+		var moduleMainScripts: ModuleMainScriptsMap = {};
 
 		for (var i = 0; i < packageJsonFiles.length; i++) {
 			var packageJsonFile = packageJsonFiles[i];
