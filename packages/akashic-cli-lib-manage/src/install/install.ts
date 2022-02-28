@@ -59,13 +59,13 @@ export function _completeInstallParameterObject(param: InstallParameterObject): 
 
 export function promiseInstall(param: InstallParameterObject): Promise<void> {
 	_completeInstallParameterObject(param);
-	var npm = param.debugNpm || new cmn.PromisedNpm({ logger: param.logger });
+	const npm = param.debugNpm || new cmn.PromisedNpm({ logger: param.logger });
 
 	if (param.plugin != null && param.moduleNames.length > 1) {
 		return Promise.reject(new Error("--plugin option cannot used with multiple module installing/linking."));
 	}
 
-	var restoreDirectory = cmn.Util.chdir(param.cwd);
+	const restoreDirectory = cmn.Util.chdir(param.cwd);
 	if (!param.link && param.moduleNames.length === 0) {
 		return Promise.resolve()
 			.then(() => npm.install())
@@ -78,7 +78,7 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 	return Promise.resolve()
 		.then(() => cmn.ConfigurationFile.read(gameJsonPath, param.logger))
 		.then((content: cmn.GameConfiguration) => {
-			var conf = new Configuration({ content: content, logger: param.logger });
+			const conf = new Configuration({ content: content, logger: param.logger });
 			if ((param.plugin != null) && conf.findExistingOperationPluginIndex(param.plugin) !== -1)
 				throw new Error("Conflicted code for operation plugins: " + param.plugin + ".");
 
@@ -164,7 +164,7 @@ function _getPackageNameFromTgzFile(fileName: string): string {
 		const splitPath = entry.header.path.split("/");
 		// splitPath[0] は解凍後のディレクトリ名が入る。そのディレクトリ直下のpackage.jsonのみを対象とする。
 		if (splitPath[1] === "package.json") {
-			let chunks: Uint8Array[]  = [];
+			const chunks: Uint8Array[]  = [];
 			entry.on("data", c => chunks.push(c));
 			entry.on("finish", () => buf = Buffer.concat(chunks));
 		}
