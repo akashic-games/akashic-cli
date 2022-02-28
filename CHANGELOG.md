@@ -1,5 +1,43 @@
 # CHANGELOG
 
+## 2.15.46 (2022-02-26)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli`
+  * [#1034](https://github.com/akashic-games/akashic-cli/pull/1034) Update dependency uglify-js to v3.15.2 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
+## 2.15.45 (2022-02-26)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#1033](https://github.com/akashic-games/akashic-cli/pull/1033) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.1.6, engineFiles@2.1.57, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
+## 2.15.44 (2022-02-26)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli`
+  * [#1030](https://github.com/akashic-games/akashic-cli/pull/1030) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#1032](https://github.com/akashic-games/akashic-cli/pull/1032) Update actions/setup-node action to v3 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
+## 2.15.43 (2022-02-23)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#1029](https://github.com/akashic-games/akashic-cli/pull/1029) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.1.6, engineFiles@2.1.57, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.15.42 (2022-02-19)
 
 #### Update Dependencies
