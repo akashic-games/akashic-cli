@@ -5,6 +5,7 @@ import * as styles from "./TopResizable.css";
 export interface TopResizableProps {
 	height: number;
 	minHeight: number;
+	children?: React.ReactNode;
 	onResize: (height: number) => void;
 }
 
