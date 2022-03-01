@@ -1,20 +1,21 @@
-import * as amf from "@akashic/amflow";
+import type * as amf from "@akashic/amflow";
 import {Trigger} from "@akashic/trigger";
 import {action, observable, computed} from "mobx";
 import {TimeKeeper} from "../../common/TimeKeeper";
-import {PlayAudioStateSummary} from "../../common/types/PlayAudioState";
-import {Player} from "../../common/types/Player";
-import {GameViewManager} from "../akashic/GameViewManager";
-import {ServeGameContent} from "../akashic/ServeGameContent";
+import type {PlayAudioStateSummary} from "../../common/types/PlayAudioState";
+import type {Player} from "../../common/types/Player";
+import type {GameViewManager} from "../akashic/GameViewManager";
+import type {ServeGameContent} from "../akashic/ServeGameContent";
 import * as ApiRequest from "../api/ApiRequest";
-import {ProfilerValue} from "../common/types/Profiler";
+import type {ProfilerValue} from "../common/types/Profiler";
 import {CoeLimitedPluginEntity} from "./CoeLimitedPluginEntity";
-import {CoePluginEntity, CreateCoeLocalInstanceParameterObject} from "./CoePluginEntity";
-import {ContentEntity} from "./ContentEntity";
-import {ExecutionMode} from "./ExecutionMode";
-import {GameInstanceEntity} from "./GameInstanceEntity";
+import type { CreateCoeLocalInstanceParameterObject} from "./CoePluginEntity";
+import {CoePluginEntity} from "./CoePluginEntity";
+import type {ContentEntity} from "./ContentEntity";
+import type {ExecutionMode} from "./ExecutionMode";
+import type {GameInstanceEntity} from "./GameInstanceEntity";
 import {NicoPluginEntity} from "./NicoPluginEntity";
-import {PlayEntity} from "./PlayEntity";
+import type {PlayEntity} from "./PlayEntity";
 
 const toAgvExecutionMode = (() => {
 	const executionModeTable = {
@@ -84,7 +85,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 			executionMode: toAgvExecutionMode(this.executionMode),
 			replayTargetTimeFunc: this._getReplayTargetTime
 		};
-		let gameLoaderCustomizer: agv.GameLoaderCustomizer = {};
+		const gameLoaderCustomizer: agv.GameLoaderCustomizer = {};
 		if (params.playlogServerUrl != null) {
 			playConfig.playlogServerUrl = params.playlogServerUrl;
 			gameLoaderCustomizer.createCustomAmflowClient = () => this.play.amflow;

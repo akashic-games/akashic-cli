@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import { Operator } from "../../operator/Operator";
-import { NotificationUiStore } from "../../store/NotificationUiStore";
+import type { Operator } from "../../operator/Operator";
+import type { NotificationUiStore } from "../../store/NotificationUiStore";
 import { Notification } from "../atom/Notification";
 
 export interface NotificationContainerProps {

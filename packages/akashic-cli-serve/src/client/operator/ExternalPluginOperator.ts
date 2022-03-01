@@ -1,4 +1,4 @@
-import { GameViewManager } from "../akashic/GameViewManager";
+import type { GameViewManager } from "../akashic/GameViewManager";
 
 export class ExternalPluginOperator {
 	constructor(gameViewManager: GameViewManager) {

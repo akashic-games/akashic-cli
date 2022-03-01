@@ -1,14 +1,14 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import { SandboxConfig } from "../../../common/types/SandboxConfig";
-import { GameViewManager } from "../../akashic/GameViewManager";
-import { Operator } from "../../operator/Operator";
-import { DevtoolUiStore } from "../../store/DevtoolUiStore";
-import { LocalInstanceEntity } from "../../store/LocalInstanceEntity";
-import { ProfilerStore } from "../../store/ProfilerStore";
-import { ToolBarUiStore } from "../../store/ToolBarUiStore";
-import { PlayerInfoResolverDialogProps } from "../molecule/PlayerInfoResolverDialog";
-import { ProfilerCanvasProps } from "../molecule/ProfilerCanvas";
+import type { SandboxConfig } from "../../../common/types/SandboxConfig";
+import type { GameViewManager } from "../../akashic/GameViewManager";
+import type { Operator } from "../../operator/Operator";
+import type { DevtoolUiStore } from "../../store/DevtoolUiStore";
+import type { LocalInstanceEntity } from "../../store/LocalInstanceEntity";
+import type { ProfilerStore } from "../../store/ProfilerStore";
+import type { ToolBarUiStore } from "../../store/ToolBarUiStore";
+import type { PlayerInfoResolverDialogProps } from "../molecule/PlayerInfoResolverDialog";
+import type { ProfilerCanvasProps } from "../molecule/ProfilerCanvas";
 import { GameScreen } from "../organism/GameScreen";
 
 export interface GameScreenContainerProps {

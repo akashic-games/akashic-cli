@@ -1,5 +1,5 @@
-import { StartPoint } from "@akashic/amflow";
-import { TickList } from "@akashic/playlog";
+import type { StartPoint } from "@akashic/amflow";
+import type { TickList } from "@akashic/playlog";
 
 export interface DumpedPlaylog {
 	tickList: TickList;

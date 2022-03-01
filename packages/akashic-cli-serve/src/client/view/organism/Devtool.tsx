@@ -2,13 +2,20 @@ import { observer } from "mobx-react";
 import * as React from "react";
 import { DevtoolSelectorBar } from "../atom/DevtoolSelectorBar";
 import { TopResizable } from "../atom/TopResizable";
-import { AtsumaruDevtool, AtsumaruDevtoolProps } from "../molecule/AtsumaruDevtool";
-import { EntityTreeDevtool, EntityTreeDevtoolProps } from "../molecule/EntityTreeDevtool";
-import { EventsDevtool, EventsDevtoolProps } from "../molecule/EventsDevtool";
-import { InstancesDevtool, InstancesDevtoolProps } from "../molecule/InstancesDevtool";
-import { MiscDevtool, MiscDevtoolProps } from "../molecule/MiscDevtool";
-import { NiconicoDevtool, NiconicoDevtoolProps } from "../molecule/NiconicoDevtool";
-import { PlaybackDevtool, PlaybackDevtoolProps } from "../molecule/PlaybackDevtool";
+import type { AtsumaruDevtoolProps } from "../molecule/AtsumaruDevtool";
+import { AtsumaruDevtool } from "../molecule/AtsumaruDevtool";
+import type { EntityTreeDevtoolProps } from "../molecule/EntityTreeDevtool";
+import { EntityTreeDevtool } from "../molecule/EntityTreeDevtool";
+import type { EventsDevtoolProps } from "../molecule/EventsDevtool";
+import { EventsDevtool } from "../molecule/EventsDevtool";
+import type { InstancesDevtoolProps } from "../molecule/InstancesDevtool";
+import { InstancesDevtool } from "../molecule/InstancesDevtool";
+import type { MiscDevtoolProps } from "../molecule/MiscDevtool";
+import { MiscDevtool } from "../molecule/MiscDevtool";
+import type { NiconicoDevtoolProps } from "../molecule/NiconicoDevtool";
+import { NiconicoDevtool } from "../molecule/NiconicoDevtool";
+import type { PlaybackDevtoolProps } from "../molecule/PlaybackDevtool";
+import { PlaybackDevtool } from "../molecule/PlaybackDevtool";
 import * as styles from "./Devtool.css";
 
 // TODO 適切な箇所に定義を移す

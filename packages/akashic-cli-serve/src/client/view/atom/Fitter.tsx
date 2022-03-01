@@ -1,5 +1,6 @@
 import * as React from "react";
-import Measure, { ContentRect } from "react-measure";
+import type { ContentRect } from "react-measure";
+import Measure from "react-measure";
 import * as styles from "./Fitter.css";
 
 export interface FitterProps {

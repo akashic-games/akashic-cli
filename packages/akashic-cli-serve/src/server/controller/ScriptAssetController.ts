@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
-import * as express from "express";
+import type * as express from "express";
 import * as gameConfigs from "../domain/GameConfigs";
 
 export const createScriptAssetController = (baseDir: string, index: number): express.RequestHandler => {
@@ -16,7 +16,7 @@ export const createScriptAssetController = (baseDir: string, index: number): exp
 			return;
 		}
 		const gameJson = gameConfigs.get(index.toString());
-		let id = Object.keys(gameJson.assets).find((id) => gameJson.assets[id].path === req.params.scriptName);
+		const id = Object.keys(gameJson.assets).find((id) => gameJson.assets[id].path === req.params.scriptName);
 
 		const content = fs.readFileSync(scriptPath);
 		const responseBody = `"use strict";

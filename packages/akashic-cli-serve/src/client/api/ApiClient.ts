@@ -1,4 +1,4 @@
-import {
+import type {
 	PlayDeleteApiResponse,
 	PlayGetAllApiResponse,
 	PlayPostApiResponse,
@@ -14,9 +14,9 @@ import {
 	PlayerPostApiResponse,
 	StartPointHeaderListResponse
 } from "../../common/types/ApiResponse";
-import {ContentLocatorData} from "../../common/types/ContentLocatorData";
-import {GameConfiguration} from "../../common/types/GameConfiguration";
-import { PlayAudioState } from "../../common/types/PlayAudioState";
+import type {ContentLocatorData} from "../../common/types/ContentLocatorData";
+import type {GameConfiguration} from "../../common/types/GameConfiguration";
+import type { PlayAudioState } from "../../common/types/PlayAudioState";
 import * as ApiRequest from "./ApiRequest";
 
 export class ApiClient {

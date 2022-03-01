@@ -1,14 +1,14 @@
-import * as express from "express";
-import { StartPointHeaderListResponseData } from "../../common/types/ApiResponse";
-import { StartPointHeader } from "../../common/types/StartPointHeader";
+import type * as express from "express";
+import type { StartPointHeaderListResponseData } from "../../common/types/ApiResponse";
+import type { StartPointHeader } from "../../common/types/StartPointHeader";
 import { BadRequestError, NotFoundError } from "../common/ApiError";
 import { responseSuccess } from "../common/ApiResponse";
-import { PlayStore } from "../domain/PlayStore";
+import type { PlayStore } from "../domain/PlayStore";
 
 export const createHandlerToGetStartPointHeaderList = (playStore: PlayStore): express.RequestHandler => {
 	return (req, res, next) => {
 		try {
-			let playId = req.params.playId;
+			const playId = req.params.playId;
 			if (!req.params.playId) {
 				throw new BadRequestError({ errorMessage: "PlayId is not given" });
 			}

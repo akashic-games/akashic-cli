@@ -1,7 +1,7 @@
-import * as amf from "@akashic/amflow";
+import type * as amf from "@akashic/amflow";
 import { Trigger } from "@akashic/trigger";
-import { EDumpItem } from "../common/types/EDumpItem";
-import { ProfilerValue } from "../common/types/Profiler";
+import type { EDumpItem } from "../common/types/EDumpItem";
+import type { ProfilerValue } from "../common/types/Profiler";
 
 function getMatrixFromRoot(e: ae.ELike | null, camera: ae.CameraLike | null): ae.MatrixLike | null {
 	if (!e || !e.getMatrix)
