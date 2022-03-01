@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
-import { CliConfigInit } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigInit";
+import type { CliConfigInit } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigInit";
 import { CliConfigurationFile } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigurationFile";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
 import { Command } from "commander";
@@ -31,7 +31,7 @@ async function cli(param: CliConfigInit): Promise<void> {
 	}
 }
 
-var ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "package.json"), "utf8")).version;
+const ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "package.json"), "utf8")).version;
 
 const commander = new Command();
 commander

@@ -1,6 +1,6 @@
 import * as path from "path";
 import { readJSON } from "@akashic/akashic-cli-commons/lib/FileSystem";
-import { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
+import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
 import { copySync, existsSync } from "fs-extra";
 import {
 	collectLocalTemplatesMetadata,
@@ -10,8 +10,10 @@ import {
 } from "../common/TemplateMetadata";
 import { updateConfigurationFile } from "./BasicParameters";
 import { cloneTemplate, parseCloneTargetInfo } from "./cloneTemplate";
-import { InitParameterObject, completeInitParameterObject } from "./InitParameterObject";
-import { TemplateConfig, completeTemplateConfig, NormalizedTemplateConfig } from "./TemplateConfig";
+import type { InitParameterObject} from "./InitParameterObject";
+import { completeInitParameterObject } from "./InitParameterObject";
+import type { TemplateConfig, NormalizedTemplateConfig } from "./TemplateConfig";
+import { completeTemplateConfig } from "./TemplateConfig";
 
 export async function promiseInit(p: InitParameterObject): Promise<void> {
 	const param = await completeInitParameterObject(p);
