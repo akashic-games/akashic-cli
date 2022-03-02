@@ -1,6 +1,7 @@
 import * as path from "path";
 import * as chokidar from "chokidar";
-import { scanAsset, ScanAssetParameterObject, _completeScanAssetParameterObject } from "./scanAsset";
+import type { ScanAssetParameterObject} from "./scanAsset";
+import { scanAsset, _completeScanAssetParameterObject } from "./scanAsset";
 
 function isImageFilePath(p: string): boolean {
 	return /.*\.(png|gif|jpg|jpeg)$/i.test(p);
