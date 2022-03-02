@@ -1,13 +1,13 @@
-import { CliConfigExportHtml } from "./CliConfigExportHtml";
-import { CliConfigExportZip } from "./CliConfigExportZip";
-import { CliConfigInit } from "./CliConfigInit";
-import { CliConfigInstall } from "./CliConfigInstall";
-import { CliConfigModify } from "./CliConfigModify";
-import { CliConfigScanAsset, CliConfigScanGlobalScripts } from "./CliConfigScan";
-import { CliConfigServe } from "./CliConfigServe";
-import { CliConfigStat } from "./CliConfigStat";
-import { CliConfigUninstall } from "./CliConfigUninstall";
-import { CliConfigUpdate } from "./CliConfigUpdate";
+import type { CliConfigExportHtml } from "./CliConfigExportHtml";
+import type { CliConfigExportZip } from "./CliConfigExportZip";
+import type { CliConfigInit } from "./CliConfigInit";
+import type { CliConfigInstall } from "./CliConfigInstall";
+import type { CliConfigModify } from "./CliConfigModify";
+import type { CliConfigScanAsset, CliConfigScanGlobalScripts } from "./CliConfigScan";
+import type { CliConfigServe } from "./CliConfigServe";
+import type { CliConfigStat } from "./CliConfigStat";
+import type { CliConfigUninstall } from "./CliConfigUninstall";
+import type { CliConfigUpdate } from "./CliConfigUpdate";
 
 /**
  * akashic.config.js の型。

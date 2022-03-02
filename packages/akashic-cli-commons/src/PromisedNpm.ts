@@ -1,6 +1,6 @@
 import { exec } from "child_process";
 import { ConsoleLogger } from "./ConsoleLogger";
-import { Logger } from "./Logger";
+import type { Logger } from "./Logger";
 
 export interface PromisedNpmParameterObject {
 	logger?: Logger;

@@ -1,5 +1,5 @@
-import { AssetConfigurationMap, GameConfiguration as Configuration } from "@akashic/game-configuration";
-import { ServiceType } from "./ServiceType";
+import type { AssetConfigurationMap, GameConfiguration as Configuration } from "@akashic/game-configuration";
+import type { ServiceType } from "./ServiceType";
 
 /**
  * game.json の型。

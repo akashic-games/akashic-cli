@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import * as fsx from "fs-extra";
 import { sha256 } from "js-sha256";
-import { GameConfiguration } from "./GameConfiguration";
+import type { GameConfiguration } from "./GameConfiguration";
 
 export const ERROR_FILENAME_CONFLICT = "ERROR_FILENAME_CONFLICT";
 export const ERROR_PATH_INCLUDE_ANCESTOR = "ERROR_PATH_INCLUDE_ANCESTOR";
