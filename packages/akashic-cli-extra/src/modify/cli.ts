@@ -1,13 +1,14 @@
 import * as fs from "fs";
 import * as path from "path";
-import { ConsoleLogger, CliConfigurationFile, CliConfigModify } from "@akashic/akashic-cli-commons";
+import type { CliConfigModify } from "@akashic/akashic-cli-commons";
+import { ConsoleLogger, CliConfigurationFile } from "@akashic/akashic-cli-commons";
 import { Command } from "commander";
 import { promiseModifyBasicParameter } from "./modify";
 
 const commander = new Command();
 
 function cliBasicParameter(target: string, value: string, opts: CliConfigModify): void {
-	var logger = new ConsoleLogger({ quiet: opts.quiet });
+	const logger = new ConsoleLogger({ quiet: opts.quiet });
 
 	promiseModifyBasicParameter({ target: target, value: Number(value), cwd: opts.cwd, logger: logger })
 		.catch((err: any) => {

@@ -46,7 +46,7 @@ describe("modify", function () {
 					expect(!!err).toBe(false);
 					modifyBasicParameter({ cwd: fixtureDirPath, target: "fps", value: 60, logger: nullLogger }, (err: any) => {
 						expect(!!err).toBe(false);
-						var gamejson = JSON.parse(fs.readFileSync(path.join(fixtureDirPath, "game.json")).toString());
+						const gamejson = JSON.parse(fs.readFileSync(path.join(fixtureDirPath, "game.json")).toString());
 						expect(gamejson.width).toBe(160);
 						expect(gamejson.height).toBe(80);
 						expect(gamejson.fps).toBe(60);

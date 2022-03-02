@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
-import { Logger, GameConfiguration } from "@akashic/akashic-cli-commons";
+import type { Logger, GameConfiguration } from "@akashic/akashic-cli-commons";
 
 enum FileType {
 	Ogg,
