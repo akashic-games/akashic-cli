@@ -1,7 +1,7 @@
 import { observable } from "mobx";
-import { ContentLocatorData } from "../../common/types/ContentLocatorData";
-import { PlayAudioState } from "../../common/types/PlayAudioState";
-import {
+import type { ContentLocatorData } from "../../common/types/ContentLocatorData";
+import type { PlayAudioState } from "../../common/types/PlayAudioState";
+import type {
 	PlayCreateTestbedEvent,
 	PlayStatusChangedTestbedEvent,
 	PlayDurationStateChangeTestbedEvent,
@@ -18,8 +18,8 @@ import {
 } from "../../common/types/TestbedEvent";
 import { apiClient } from "../api/apiClientInstance";
 import * as Subscriber from "../api/Subscriber";
-import { ClientContentLocator } from "../common/ClientContentLocator";
-import { ContentStore } from "./ContentStore";
+import type { ClientContentLocator } from "../common/ClientContentLocator";
+import type { ContentStore } from "./ContentStore";
 import { PlayEntity } from "./PlayEntity";
 
 export interface PlayStoreParameterObject {

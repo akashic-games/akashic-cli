@@ -1,6 +1,6 @@
-import { ContentLocatorData } from "./ContentLocatorData";
-import { GameConfiguration } from "./GameConfiguration";
-import { SandboxConfig } from "./SandboxConfig";
+import type { ContentLocatorData } from "./ContentLocatorData";
+import type { GameConfiguration } from "./GameConfiguration";
+import type { SandboxConfig } from "./SandboxConfig";
 
 export interface ContentDesc {
 	contentLocatorData: ContentLocatorData;

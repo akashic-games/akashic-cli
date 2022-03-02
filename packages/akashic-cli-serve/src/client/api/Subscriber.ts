@@ -1,5 +1,5 @@
 import { Trigger } from "@akashic/trigger";
-import {
+import type {
 	PlayCreateTestbedEvent,
 	PlayStatusChangedTestbedEvent,
 	PlayDurationStateChangeTestbedEvent,

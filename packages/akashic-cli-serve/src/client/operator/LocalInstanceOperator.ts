@@ -1,4 +1,4 @@
-import { Store } from "../store/Store";
+import type { Store } from "../store/Store";
 
 export class LocalInstanceOperator {
 	private store: Store;

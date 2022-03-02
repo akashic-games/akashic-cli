@@ -1,6 +1,7 @@
 import { encode, decode } from "@msgpack/msgpack";
 import Emitter = require("component-emitter");
-import { Packet, PacketType } from "socket.io-parser";
+import type { Packet} from "socket.io-parser";
+import { PacketType } from "socket.io-parser";
 
 class Encoder {
 	encode(packet: Packet): any[] {

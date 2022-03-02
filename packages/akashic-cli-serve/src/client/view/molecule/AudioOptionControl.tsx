@@ -1,8 +1,9 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import { PlayAudioStateSummary } from "../../../common/types/PlayAudioState";
+import type { PlayAudioStateSummary } from "../../../common/types/PlayAudioState";
 import { Popover } from "../atom/Popover";
-import { ToolChoiceButton, ToolChoiceButtonItem } from "../atom/ToolChoiceButton";
+import type { ToolChoiceButtonItem } from "../atom/ToolChoiceButton";
+import { ToolChoiceButton } from "../atom/ToolChoiceButton";
 import { ToolIconButton } from "../atom/ToolIconButton";
 import * as styles from "./AudioOptionControl.css";
 

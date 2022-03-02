@@ -163,7 +163,7 @@ export class NiconicoDevtool extends React.Component<NiconicoDevtoolProps, {}> {
 	};
 
 	private _onTotalTimeLimitInputValueChanged = (e: React.ChangeEvent<HTMLInputElement> ): void => {
-		let value = parseInt(e.target.value, 10);
+		const value = parseInt(e.target.value, 10);
 		this.props.onTotalTimeLimitInputValueChanged(value);
 	};
 }

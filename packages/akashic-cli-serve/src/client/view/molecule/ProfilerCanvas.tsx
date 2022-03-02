@@ -1,7 +1,7 @@
 import { autorun } from "mobx";
 import { observer } from "mobx-react";
 import * as React from "react";
-import { ProfilerData, ProfilerStyleSetting } from "../../common/types/Profiler";
+import type { ProfilerData, ProfilerStyleSetting } from "../../common/types/Profiler";
 
 export interface ProfilerCanvasProps {
 	profilerDataArray: ProfilerData[];

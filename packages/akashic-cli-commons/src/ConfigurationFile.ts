@@ -1,6 +1,6 @@
 import * as fs from "fs";
-import { GameConfiguration } from "./GameConfiguration";
-import { Logger } from "./Logger";
+import type { GameConfiguration } from "./GameConfiguration";
+import type { Logger } from "./Logger";
 
 /**
  * game.json をファイルとして取り扱うモジュール。

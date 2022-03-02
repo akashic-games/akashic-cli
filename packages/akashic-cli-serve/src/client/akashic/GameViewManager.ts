@@ -1,5 +1,5 @@
 import { Trigger } from "@akashic/trigger";
-import { ClientContentLocator } from "../common/ClientContentLocator";
+import type { ClientContentLocator } from "../common/ClientContentLocator";
 import { NullScriptAssetV3 } from "./AssetV3";
 import { ServeGameContent } from "./ServeGameContent";
 import { generateTestbedScriptAsset } from "./TestbedScriptAsset";

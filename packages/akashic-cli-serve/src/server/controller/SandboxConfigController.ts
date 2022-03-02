@@ -1,6 +1,6 @@
 import * as path from "path";
-import * as express from "express";
-import { SandboxConfigApiResponseData } from "../../common/types/ApiResponse";
+import type * as express from "express";
+import type { SandboxConfigApiResponseData } from "../../common/types/ApiResponse";
 import { NotFoundError } from "../common/ApiError";
 import { responseSuccess } from "../common/ApiResponse";
 import { dynamicRequire } from "../domain/dynamicRequire";

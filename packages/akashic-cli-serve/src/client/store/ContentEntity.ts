@@ -1,7 +1,7 @@
 import { action, observable } from "mobx";
-import { ContentDesc } from "../../common/types/ContentDesc";
-import { GameConfiguration, PreferredSessionParameters } from "../../common/types/GameConfiguration";
-import { SandboxConfig } from "../../common/types/SandboxConfig";
+import type { ContentDesc } from "../../common/types/ContentDesc";
+import type { GameConfiguration, PreferredSessionParameters } from "../../common/types/GameConfiguration";
+import type { SandboxConfig } from "../../common/types/SandboxConfig";
 import { apiClient } from "../api/apiClientInstance";
 import { ClientContentLocator } from "../common/ClientContentLocator";
 import { DevtoolUiStore } from "./DevtoolUiStore";

@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as chokidar from "chokidar";
-import { GameConfiguration } from "../../common/types/GameConfiguration";
+import type { GameConfiguration } from "../../common/types/GameConfiguration";
 
 const configs: { [key: string]: GameConfiguration } = {};
 

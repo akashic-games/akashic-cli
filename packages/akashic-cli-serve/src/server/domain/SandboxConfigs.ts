@@ -1,6 +1,6 @@
 import * as path from "path";
 import * as chokidar from "chokidar";
-import { SandboxConfig } from "../../common/types/SandboxConfig";
+import type { SandboxConfig } from "../../common/types/SandboxConfig";
 import { BadRequestError } from "../common/ApiError";
 import { dynamicRequire } from "./dynamicRequire";
 
