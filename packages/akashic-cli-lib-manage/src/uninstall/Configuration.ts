@@ -1,5 +1,5 @@
 import * as cmn from "@akashic/akashic-cli-commons";
-import { OperationPluginInfo } from "@akashic/game-configuration";
+import type { OperationPluginInfo } from "@akashic/game-configuration";
 
 export class Configuration extends cmn.Configuration {
 	removeOperationPlugin(moduleName: string): void {

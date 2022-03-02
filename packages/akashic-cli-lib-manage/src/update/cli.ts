@@ -1,10 +1,11 @@
 import * as fs from "fs";
 import * as path from "path";
-import { ConsoleLogger, CliConfigurationFile, CliConfigUpdate } from "@akashic/akashic-cli-commons";
+import type { CliConfigUpdate } from "@akashic/akashic-cli-commons";
+import { ConsoleLogger, CliConfigurationFile } from "@akashic/akashic-cli-commons";
 import { Command } from "commander";
 import { promiseUpdate } from "./update";
 
-var ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "..", "package.json"), "utf8")).version;
+const ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "..", "package.json"), "utf8")).version;
 
 const commander = new Command();
 commander
@@ -13,7 +14,7 @@ commander
 	.version(ver);
 
 function cli(param: CliConfigUpdate): void {
-	var logger = new ConsoleLogger({ quiet: param.quiet });
+	const logger = new ConsoleLogger({ quiet: param.quiet });
 	promiseUpdate({ cwd: param.cwd, moduleNames: param.args, logger: logger })
 		.catch((err: any) => {
 			logger.error(err);
