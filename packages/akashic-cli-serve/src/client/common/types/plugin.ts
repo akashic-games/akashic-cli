@@ -1,4 +1,4 @@
-import { Event } from "@akashic/playlog";
+import type { Event } from "@akashic/playlog";
 
 export interface CoePlugin {
 	startSession: (parameters: CoeStartSessionParameterObject) => void;

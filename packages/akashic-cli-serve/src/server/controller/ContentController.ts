@@ -1,6 +1,6 @@
 import path = require("path");
-import * as express from "express";
-import { ContentGetApiResponseData } from "../../common/types/ApiResponse";
+import type * as express from "express";
+import type { ContentGetApiResponseData } from "../../common/types/ApiResponse";
 import { NotFoundError, BadRequestError } from "../common/ApiError";
 import { responseSuccess } from "../common/ApiResponse";
 import { serverGlobalConfig } from "../common/ServerGlobalConfig";

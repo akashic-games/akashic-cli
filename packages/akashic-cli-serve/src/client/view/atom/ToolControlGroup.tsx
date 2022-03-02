@@ -4,6 +4,7 @@ import * as styles from "./ToolControlGroup.css";
 
 export interface ToolControlGroupProps {
 	label: string;
+	children?: React.ReactNode;
 }
 
 @observer

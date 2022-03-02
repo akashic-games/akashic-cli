@@ -1,5 +1,5 @@
-import { EDumpItem } from "../common/types/EDumpItem";
-import { Store } from "../store/Store";
+import type { EDumpItem } from "../common/types/EDumpItem";
+import type { Store } from "../store/Store";
 
 function consoleLog(value: any): void {
 	console.log(value);

@@ -1,5 +1,5 @@
 import * as Subscriber from "../api/Subscriber";
-import { Store } from "../store/Store";
+import type { Store } from "../store/Store";
 
 export class PlayOperator {
 	private store: Store;

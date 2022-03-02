@@ -1,4 +1,4 @@
-import { ContentLocatorData } from "./types/ContentLocatorData";
+import type { ContentLocatorData } from "./types/ContentLocatorData";
 
 export class ContentLocator {
 	contentId: string | null;

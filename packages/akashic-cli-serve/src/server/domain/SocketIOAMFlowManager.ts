@@ -1,9 +1,9 @@
-import * as amf from "@akashic/amflow";
+import type * as amf from "@akashic/amflow";
 import { getSystemLogger } from "@akashic/headless-driver";
 import * as pl from "@akashic/playlog";
-import { Socket } from "socket.io";
-import { ClientInstanceDescription } from "../../common/types/TestbedEvent";
-import { PlayStore } from "../domain/PlayStore";
+import type { Socket } from "socket.io";
+import type { ClientInstanceDescription } from "../../common/types/TestbedEvent";
+import type { PlayStore } from "../domain/PlayStore";
 
 export interface SocketIOAMFlowManagerParameterObject {
 	playStore: PlayStore;

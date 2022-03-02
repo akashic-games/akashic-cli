@@ -1,5 +1,6 @@
-import { action, observable, ObservableMap } from "mobx";
-import { EDumpItem } from "../common/types/EDumpItem";
+import type { ObservableMap } from "mobx";
+import { action, observable } from "mobx";
+import type { EDumpItem } from "../common/types/EDumpItem";
 import { storage } from "./storage";
 
 export class DevtoolUiStore {
@@ -112,6 +113,8 @@ export class DevtoolUiStore {
 		storage.put({ showsHiddenEntity: show });
 	}
 
+	/* eslint-disable @typescript-eslint/indent */
+	// annotation の次行の関数式でインデントエラーとなるため disable とする。
 	@action
 	toggleIsSelectingEntity = (select: boolean): void => {
 		this.isSelectingEntity = select;
@@ -121,6 +124,7 @@ export class DevtoolUiStore {
 	setSelectedEntityId = (eid: number | null): void => {
 		this.selectedEntityId = eid;
 	};
+	/* eslint-enable @typescript-eslint/indent */
 
 	@action
 	volumeSeekTo(volume: number): void {

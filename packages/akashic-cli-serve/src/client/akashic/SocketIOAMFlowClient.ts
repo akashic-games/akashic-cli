@@ -1,5 +1,5 @@
-import * as amflow from "@akashic/amflow";
-import * as playlog from "@akashic/playlog";
+import type * as amflow from "@akashic/amflow";
+import type * as playlog from "@akashic/playlog";
 import { Trigger } from "@akashic/trigger";
 import type { Socket } from "socket.io-client";
 
