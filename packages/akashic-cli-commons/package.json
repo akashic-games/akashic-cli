@@ -22,7 +22,6 @@
   ],
   "devDependencies": {
     "@akashic/eslint-config": "^1.1.0",
-    "@akashic/game-configuration": "1.2.0",
     "@types/browserify": "12.0.37",
     "@types/eslint": "8.4.1",
     "@types/fs-extra": "9.0.13",
@@ -40,6 +39,7 @@
   },
   "typings": "lib/index.d.ts",
   "dependencies": {
+    "@akashic/game-configuration": "1.2.0",
     "browserify": "17.0.0",
     "eslint": "8.10.0",
     "fs-extra": "10.0.1",
