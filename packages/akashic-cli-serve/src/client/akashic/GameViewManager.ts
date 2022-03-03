@@ -181,9 +181,7 @@ export class GameViewManager {
 			);
 		};
 		// 一部のエッジケースでSafariのみ描画されないという問題が発生するので、ゲーム開発者が開発中に気づけるようにg.Renderer#drawImage()でエラーを投げる処理を差し込む
-		function createMeddlingWrappedSurfaceFactory <T extends ((...args: any[]) => SurfaceLike)> (
-			func: T
-		) {
+		function createMeddlingWrappedSurfaceFactory <T extends ((...args: any[]) => SurfaceLike)> (func: T) {
 			return function() {
 				const surface = func.apply(this, arguments);
 				const originalRenderer = surface.renderer;
