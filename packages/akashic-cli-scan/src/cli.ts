@@ -1,9 +1,10 @@
 import * as path from "path";
-import { CliConfigScanAsset, CliConfigScanGlobalScripts } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigScan";
+import type { CliConfigScanAsset, CliConfigScanGlobalScripts } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigScan";
 import { CliConfigurationFile } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigurationFile";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
 import { Command } from "commander";
-import { scanAsset, ScanAssetParameterObject } from "./scanAsset";
+import type { ScanAssetParameterObject } from "./scanAsset";
+import { scanAsset } from "./scanAsset";
 import { scanNodeModules } from "./scanNodeModules";
 import type { AssetTargetType } from "./types";
 import { watchAsset } from "./watchAsset";
