@@ -1,6 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
-import { Logger, ConsoleLogger, ConfigurationFile, CliConfigurationFile, CliConfigStat } from "@akashic/akashic-cli-commons";
+import type { Logger, CliConfigStat } from "@akashic/akashic-cli-commons";
+import { ConsoleLogger, ConfigurationFile, CliConfigurationFile } from "@akashic/akashic-cli-commons";
 import { Command } from "commander";
 import * as stat from "./stat";
 

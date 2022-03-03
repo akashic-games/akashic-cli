@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as os from "os";
 import * as path from "path";
-import { Logger } from "@akashic/akashic-cli-commons";
+import type { Logger } from "@akashic/akashic-cli-commons";
 import * as ini from "ini";
 import * as lodashGet from "lodash.get";
 import * as lodashSet from "lodash.set";
