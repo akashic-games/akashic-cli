@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 2.15.51 (2022-03-03)
+
+#### Other Change
+* `akashic-cli-extra`
+  * [#1041](https://github.com/akashic-games/akashic-cli/pull/1041) Update eslint-config of extra ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+* `akashic-cli-scan`
+  * [#1042](https://github.com/akashic-games/akashic-cli/pull/1042) Update eslint-config of scan ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+* `akashic-cli-commons`, `akashic-cli-init`
+  * [#1040](https://github.com/akashic-games/akashic-cli/pull/1040) Update eslint-config of init ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 2.15.50 (2022-03-02)
 
 #### Other Change
