@@ -1,7 +1,7 @@
 import * as os from "os";
 import * as path from "path";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
-import { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
+import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
 import * as config from "@akashic/akashic-cli-extra/lib/config";
 import * as Prompt from "prompt";
 

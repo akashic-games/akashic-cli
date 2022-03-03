@@ -150,7 +150,7 @@ describe("InitParameterObject.ts", () => {
 			const firstUrl = itemArray[0];
 
 			// 4個目の URL を保存
-			let param = {
+			const param = {
 				repository: "https://foo.com"
 			};
 			await target.completeInitParameterObject(param);
