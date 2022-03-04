@@ -4,9 +4,9 @@ import { NullScriptAssetV3 } from "./AssetV3";
 import { ServeGameContent } from "./ServeGameContent";
 import { generateTestbedScriptAsset } from "./TestbedScriptAsset";
 
-export interface RendererLike {
+interface Renderer {
 	drawImage(
-		surface: SurfaceLike,
+		surface: Surface,
 		offsetX: number,
 		offsetY: number,
 		width: number,
@@ -16,17 +16,17 @@ export interface RendererLike {
 	): void;
 }
 
-export interface SurfaceLike {
+interface Surface {
 	width: number;
 	height: number;
-	renderer(): RendererLike;
+	renderer(): Renderer;
 }
 
-export interface Platform {
-	getPrimarySurface: () => SurfaceLike;
+interface Platform {
+	getPrimarySurface: () => Surface;
 	_resourceFactory: {
 		createScriptAsset: (id: string, path: string) => any;  // 戻り値は `g.ScriptAsset` (コンパイル時に g がないので any で妥協)
-		createSurface: (width: number, height: number) => SurfaceLike;
+		createSurface: (width: number, height: number) => Surface;
 	};
 }
 
@@ -181,11 +181,11 @@ export class GameViewManager {
 			);
 		};
 		// 一部のエッジケースでSafariのみ描画されないという問題が発生するので、ゲーム開発者が開発中に気づけるようにg.Renderer#drawImage()でエラーを投げる処理を差し込む
-		function createMeddlingWrappedSurfaceFactory <T extends ((...args: any[]) => SurfaceLike)> (func: T) {
+		function createMeddlingWrappedSurfaceFactory <T extends ((...args: any[]) => Surface)> (func: T) {
 			return function() {
 				const surface = func.apply(this, arguments);
 				const originalRenderer = surface.renderer;
-				let renderer: RendererLike = null;
+				let renderer: Renderer = null;
 				surface.renderer = function () {
 					// surface.renderer() はコンテンツから描画のたびに呼び出されるが戻り値は現実的に固定なので、ここでの surface.renderer() の上書きは一度しか適用しない
 					if (renderer) {
@@ -194,7 +194,7 @@ export class GameViewManager {
 					renderer = originalRenderer.apply(this);
 					const originalDrawImage = renderer.drawImage;
 					renderer.drawImage = function (
-						surface: SurfaceLike,
+						surface: Surface,
 						offsetX: number,
 						offsetY: number,
 						width: number,
