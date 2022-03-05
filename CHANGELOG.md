@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 2.15.53 (2022-03-05)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli`
+  * [#1045](https://github.com/akashic-games/akashic-cli/pull/1045) Update dependency eslint-plugin-react to v7.29.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#1046](https://github.com/akashic-games/akashic-cli/pull/1046) Update actions/checkout action to v3 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
 ## 2.15.52 (2022-03-03)
 
 #### Enhancement
