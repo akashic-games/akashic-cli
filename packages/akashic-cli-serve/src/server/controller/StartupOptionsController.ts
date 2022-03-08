@@ -1,5 +1,5 @@
-import * as express from "express";
-import {OptionsApiResponseData} from "../../common/types/ApiResponse";
+import type * as express from "express";
+import type {OptionsApiResponseData} from "../../common/types/ApiResponse";
 import {responseSuccess} from "../common/ApiResponse";
 import {serverGlobalConfig} from "../common/ServerGlobalConfig";
 

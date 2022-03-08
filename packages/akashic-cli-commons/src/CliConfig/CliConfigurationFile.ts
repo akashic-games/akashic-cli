@@ -1,4 +1,4 @@
-import { CliConfiguration } from "./CliConfiguration";
+import type { CliConfiguration } from "./CliConfiguration";
 
 /**
  * akashic.config.js をファイルとして取り扱うモジュール。

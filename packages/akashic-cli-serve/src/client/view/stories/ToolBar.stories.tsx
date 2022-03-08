@@ -3,7 +3,7 @@ import { storiesOf } from "@storybook/react";
 import { observable } from "mobx";
 import { observer } from "mobx-react";
 import * as React from "react";
-import { PlayAudioStateSummary } from "../../../common/types/PlayAudioState";
+import type { PlayAudioStateSummary } from "../../../common/types/PlayAudioState";
 import { ToolBar } from "../organism/ToolBar";
 
 const store = observable({

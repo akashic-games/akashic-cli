@@ -38,6 +38,8 @@ export class CoeLimitedPluginEntity {
 		this.name = storage.data.playerName;
 		this.guestName = "ゲスト" + ((Math.random() * 100) | 0);
 	}
+	/* eslint-disable @typescript-eslint/indent */
+	// annotation の次行の関数式でインデントエラーとなるため disable とする。
 
 	// 名前表示確認ダイアログを表示する。この関数はコンテンツ側から呼ばれる想定
 	@action
@@ -105,4 +107,5 @@ export class CoeLimitedPluginEntity {
 			this.remainingMilliSeconds = 0;
 		}
 	};
+	/* eslint-enable @typescript-eslint/indent */
 }

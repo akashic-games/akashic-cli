@@ -1,11 +1,12 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import { StartPointHeader } from "../../../common/types/StartPointHeader";
+import type { StartPointHeader } from "../../../common/types/StartPointHeader";
 import { millisecondsToHms, timeValueToString } from "../../common/DateUtil";
 import { FlexScrollY } from "../atom/FlexScrollY";
 import { ToolIconButton } from "../atom/ToolIconButton";
 import * as styles from "./PlaybackDevtool.css";
-import { PlaybackOptionBar, PlaybackOptionBarProps } from "./PlaybackOptionBar";
+import type { PlaybackOptionBarProps } from "./PlaybackOptionBar";
+import { PlaybackOptionBar } from "./PlaybackOptionBar";
 
 export interface PlaybackDevtoolProps extends PlaybackOptionBarProps {
 	startPointHeaders: StartPointHeader[];

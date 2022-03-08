@@ -1,12 +1,13 @@
 import * as fs from "fs";
 import * as path from "path";
-import { ConsoleLogger, CliConfigurationFile, CliConfigInstall } from "@akashic/akashic-cli-commons";
+import type { CliConfigInstall } from "@akashic/akashic-cli-commons";
+import { ConsoleLogger, CliConfigurationFile } from "@akashic/akashic-cli-commons";
 import { Command } from "commander";
 import { promiseInstall } from "./install";
 
 function cli(param: CliConfigInstall): void {
-	var logger = new ConsoleLogger({ quiet: param.quiet });
-	var installParam = {
+	const logger = new ConsoleLogger({ quiet: param.quiet });
+	const installParam = {
 		moduleNames: param.args,
 		cwd: param.cwd,
 		plugin: param.plugin,
@@ -22,7 +23,7 @@ function cli(param: CliConfigInstall): void {
 		});
 }
 
-var ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "..", "package.json"), "utf8")).version;
+const ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "..", "package.json"), "utf8")).version;
 
 const commander = new Command();
 commander

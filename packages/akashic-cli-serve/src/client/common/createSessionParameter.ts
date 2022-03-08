@@ -1,4 +1,4 @@
-import { ServiceType } from "@akashic/akashic-cli-commons/lib/ServiceType";
+import type { ServiceType } from "@akashic/akashic-cli-commons/lib/ServiceType";
 import * as playlog from "@akashic/playlog";
 
 export function createSessionParameter(service: ServiceType): playlog.Event {

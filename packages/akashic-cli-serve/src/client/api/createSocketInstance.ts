@@ -1,7 +1,7 @@
 import type * as ioc from "socket.io-client";
 import parser from "../../common/MsgpackParser";
 
-declare var io: typeof ioc.io;
+declare const io: typeof ioc.io;
 
 export function createSocketInstance(uri: string): ioc.Socket {
 	return io(uri, {

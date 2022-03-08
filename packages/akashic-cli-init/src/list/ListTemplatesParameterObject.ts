@@ -1,4 +1,5 @@
-import { completeInitCommonOptions, InitCommonOptions } from "../common/InitCommonOptions";
+import type { InitCommonOptions } from "../common/InitCommonOptions";
+import { completeInitCommonOptions } from "../common/InitCommonOptions";
 
 export interface ListTemplatesParameterObject extends InitCommonOptions {
 	// add nothing.

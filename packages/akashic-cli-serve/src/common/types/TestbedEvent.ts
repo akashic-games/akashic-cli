@@ -1,9 +1,9 @@
-import * as amf from "@akashic/amflow";
-import {ContentLocatorData} from "./ContentLocatorData";
-import {PlayAudioState} from "./PlayAudioState";
-import {Player} from "./Player";
-import {PlayStatus} from "./PlayStatus";
-import {StartPointHeader} from "./StartPointHeader";
+import type * as amf from "@akashic/amflow";
+import type {ContentLocatorData} from "./ContentLocatorData";
+import type {PlayAudioState} from "./PlayAudioState";
+import type {Player} from "./Player";
+import type {PlayStatus} from "./PlayStatus";
+import type {StartPointHeader} from "./StartPointHeader";
 
 export interface PlayCreateTestbedEvent {
 	playId: string;

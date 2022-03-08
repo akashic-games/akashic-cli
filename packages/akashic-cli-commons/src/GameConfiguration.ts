@@ -1,72 +1,12 @@
-import { ServiceType } from "./ServiceType";
-
-/**
- * 各アセット定義。
- * game.json の "assets" の各要素の型。
- */
-export interface AssetConfiguration {
-	type: string;
-	path: string;
-	virtualPath?: string;
-	width?: number;
-	height?: number;
-	systemId?: string;
-	global?: boolean;
-	duration?: number;
-	hint?: {
-		untainted?: boolean;
-	};
-
-	// TODO AssetConfiguration, GameConfiguration 含め game-configuration の定義を使うようにする
-	slice?: [number, number, number, number] | {
-		x: number;
-		y: number;
-		width: number;
-		height: number;
-	};
-}
-
-/**
- * AudioSystem 定義。
- * game.json の "audio" の各要素の型。
- */
-export interface AudioSystemConfiguration {
-	music?: boolean;
-}
-
-/**
- * アセット定義。
- * game.json の "assets" の値の型。
- */
-export interface Assets {
-	[key: string]: AssetConfiguration;
-}
-
-/**
- * 操作プラグイン定義。
- */
-export interface OperationPluginDeclaration {
-	code: number;
-	script: string;
-	option?: any;
-}
-
-export type ModuleMainScripts = { [path: string]: string };
+import type { AssetConfigurationMap, GameConfiguration as Configuration } from "@akashic/game-configuration";
+import type { ServiceType } from "./ServiceType";
 
 /**
  * game.json の型。
  */
-export interface GameConfiguration {
-	width: number;
-	height: number;
-	fps?: number;
-	main?: string;
-	audio?: {[key: string]: AudioSystemConfiguration};
-	assets?: Assets;
-	globalScripts?: string[];
-	operationPlugins?: OperationPluginDeclaration[];
+export interface GameConfiguration extends Configuration{
+	assets: AssetConfigurationMap;
 	environment?: ModuleEnvironment;
-	moduleMainScripts?: ModuleMainScripts;
 	exportZipInfo?: ExportZipInfo;
 }
 

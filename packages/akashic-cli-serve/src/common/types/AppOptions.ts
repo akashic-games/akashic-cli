@@ -1,4 +1,4 @@
-import { ServiceType } from "@akashic/akashic-cli-commons/lib/ServiceType";
+import type { ServiceType } from "@akashic/akashic-cli-commons/lib/ServiceType";
 
 export interface AppOptions {
 	autoStart: boolean;

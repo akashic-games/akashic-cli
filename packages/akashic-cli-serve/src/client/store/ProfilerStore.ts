@@ -1,5 +1,6 @@
-import { action, observable, IObservableArray } from "mobx";
-import { ProfilerData, ProfilerName, ProfilerStyleSetting, ProfilerValueResult } from "../common/types/Profiler";
+import type { IObservableArray } from "mobx";
+import { action, observable } from "mobx";
+import type { ProfilerData, ProfilerName, ProfilerStyleSetting, ProfilerValueResult } from "../common/types/Profiler";
 
 const PROFILER_DATA_LIMIT = 100; // １つのプロファイラが保持できるデータの個数。
 

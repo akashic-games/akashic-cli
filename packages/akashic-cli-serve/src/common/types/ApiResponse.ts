@@ -1,9 +1,9 @@
-import * as amf from "@akashic/amflow";
-import { AppOptions } from "./AppOptions";
-import { ContentDesc } from "./ContentDesc";
-import { PlayInfo } from "./PlayInfo";
-import { SandboxConfig } from "./SandboxConfig";
-import { StartPointHeader } from "./StartPointHeader";
+import type * as amf from "@akashic/amflow";
+import type { AppOptions } from "./AppOptions";
+import type { ContentDesc } from "./ContentDesc";
+import type { PlayInfo } from "./PlayInfo";
+import type { SandboxConfig } from "./SandboxConfig";
+import type { StartPointHeader } from "./StartPointHeader";
 
 export interface ApiResponse<T> {
 	meta: {

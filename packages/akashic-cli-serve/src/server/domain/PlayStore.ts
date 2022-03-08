@@ -1,11 +1,11 @@
-import { AMFlowClient, Play, PlayManager } from "@akashic/headless-driver";
+import type { AMFlowClient, Play, PlayManager } from "@akashic/headless-driver";
 import { Trigger } from "@akashic/trigger";
 import { TimeKeeper } from "../../common/TimeKeeper";
-import { PlayAudioState } from "../../common/types/PlayAudioState";
-import { Player } from "../../common/types/Player";
-import { PlayInfo } from "../../common/types/PlayInfo";
-import { PlayStatus } from "../../common/types/PlayStatus";
-import {
+import type { PlayAudioState } from "../../common/types/PlayAudioState";
+import type { Player } from "../../common/types/Player";
+import type { PlayInfo } from "../../common/types/PlayInfo";
+import type { PlayStatus } from "../../common/types/PlayStatus";
+import type {
 	PlayCreateTestbedEvent,
 	PlayStatusChangedTestbedEvent,
 	PlayDurationStateChangeTestbedEvent,
@@ -19,8 +19,8 @@ import {
 	ClientInstanceDescription,
 	PlayAudioStateChangeTestbedEvent
 } from "../../common/types/TestbedEvent";
-import { ServerContentLocator } from "../common/ServerContentLocator";
-import { DumpedPlaylog } from "../common/types/DumpedPlaylog";
+import type { ServerContentLocator } from "../common/ServerContentLocator";
+import type { DumpedPlaylog } from "../common/types/DumpedPlaylog";
 import { activePermission, passivePermission } from "./AMFlowPermisson";
 
 export interface PlayStoreParameterObject {

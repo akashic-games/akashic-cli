@@ -1,5 +1,5 @@
-import * as express from "express";
-import { PlayStore } from "../domain/PlayStore";
+import type * as express from "express";
+import type { PlayStore } from "../domain/PlayStore";
 
 export const createHandleToGetStatus = (playStore: PlayStore): express.RequestHandler => {
 	return async (_req, res, next) => {

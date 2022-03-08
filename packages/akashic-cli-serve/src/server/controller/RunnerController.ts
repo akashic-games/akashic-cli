@@ -1,13 +1,13 @@
-import * as express from "express";
-import {
+import type * as express from "express";
+import type {
 	RunnerDeleteApiResponseData,
 	RunnerPostApiResponseData,
 	RunnerPatchApiResponseData
 } from "../../common/types/ApiResponse";
 import { BadRequestError } from "../common/ApiError";
 import { responseSuccess } from "../common/ApiResponse";
-import { PlayStore } from "../domain/PlayStore";
-import { RunnerStore } from "../domain/RunnerStore";
+import type { PlayStore } from "../domain/PlayStore";
+import type { RunnerStore } from "../domain/RunnerStore";
 
 export const createHandlerToCreateRunner = (
 	playStore: PlayStore,

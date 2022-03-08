@@ -39,6 +39,10 @@ export interface ToolIconButtonProps {
 	 * ボタンのサイズ。
 	 */
 	size?: number;
+	/**
+	 * ReactNode
+	 */
+	children?: React.ReactNode;
 }
 
 @observer

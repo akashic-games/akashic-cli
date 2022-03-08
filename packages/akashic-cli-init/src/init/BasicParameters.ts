@@ -1,6 +1,6 @@
 import { ConfigurationFile } from "@akashic/akashic-cli-commons/lib/ConfigurationFile";
-import { GameConfiguration } from "@akashic/akashic-cli-commons/lib/GameConfiguration";
-import { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
+import type { GameConfiguration } from "@akashic/akashic-cli-commons/lib/GameConfiguration";
+import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
 import * as Prompt from "prompt";
 
 /**
@@ -26,7 +26,7 @@ export interface BasicParameters {
  */
 function promptGetBasicParameters(current: Partial<BasicParameters>, skipAsk: boolean): Promise<BasicParameters> {
 
-	var schema = {
+	const schema = {
 		properties: {
 			width: {
 				type: "number",

@@ -1,5 +1,5 @@
-import * as express from "express";
-import * as socketio from "socket.io";
+import type * as express from "express";
+import type * as socketio from "socket.io";
 import { BadRequestError } from "../common/ApiError";
 import { responseSuccess } from "../common/ApiResponse";
 

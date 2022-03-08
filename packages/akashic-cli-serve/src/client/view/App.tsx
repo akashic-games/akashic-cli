@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import { GameViewManager } from "../akashic/GameViewManager";
-import { Operator } from "../operator/Operator";
-import { Store } from "../store/Store";
+import type { GameViewManager } from "../akashic/GameViewManager";
+import type { Operator } from "../operator/Operator";
+import type { Store } from "../store/Store";
 import * as styles from "./App.css";
 import { Fitter } from "./atom/Fitter";
 import { FlexScrollY } from "./atom/FlexScrollY";

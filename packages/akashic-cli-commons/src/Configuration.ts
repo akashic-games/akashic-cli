@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import { ConsoleLogger } from "./ConsoleLogger";
-import { GameConfiguration } from "./GameConfiguration";
-import { Logger } from "./Logger";
+import type { GameConfiguration } from "./GameConfiguration";
+import type { Logger } from "./Logger";
 
 export interface ConfigurationParameterObject {
 	content: GameConfiguration;

@@ -1,11 +1,11 @@
 import * as fs from "fs";
 import * as path from "path";
+import type { ModuleMainScriptsMap } from "@akashic/game-configuration";
 import * as browserify from "browserify";
 import { ConsoleLogger } from "./ConsoleLogger";
-import { Logger } from "./Logger";
+import type { Logger } from "./Logger";
 import { StringStream } from "./StringStream";
 import * as Util from "./Util";
-import { ModuleMainScripts } from "./index";
 
 export module NodeModules {
 	export function listModuleFiles(basepath: string, modules: string|string[], logger: Logger = new ConsoleLogger()): Promise<string[]> {
@@ -16,18 +16,18 @@ export module NodeModules {
 	}
 
 	export function listPackageJsonsFromScriptsPath(basepath: string, filepaths: string[]): string[] {
-		var packageJsonPaths: string[] = [];
-		var alreadyProcessed: { [path: string]: boolean } = {};
+		const packageJsonPaths: string[] = [];
+		const alreadyProcessed: { [path: string]: boolean } = {};
 		filepaths.forEach((filepath: string) => {
-			var m = /(.*node_modules\/(?:@.*?\/)?(?:.*?)\/)/.exec(filepath);
+			const m = /(.*node_modules\/(?:@.*?\/)?(?:.*?)\/)/.exec(filepath);
 			if (!m)
 				return;
-			var dirPath = m[1];
+			const dirPath = m[1];
 			if (alreadyProcessed[dirPath])
 				return;
 			alreadyProcessed[dirPath] = true;
 
-			var packageJsonPath = Util.makeUnixPath(path.join(basepath, dirPath, "package.json"));
+			const packageJsonPath = Util.makeUnixPath(path.join(basepath, dirPath, "package.json"));
 			try {
 				if (!fs.lstatSync(packageJsonPath).isFile()) return;
 				packageJsonPaths.push(Util.makeUnixPath(path.relative(basepath, packageJsonPath)));
@@ -36,17 +36,17 @@ export module NodeModules {
 		return packageJsonPaths;
 	}
 
-	export function listModuleMainScripts(packageJsonFiles: string[]): ModuleMainScripts {
+	export function listModuleMainScripts(packageJsonFiles: string[]): ModuleMainScriptsMap {
 		if (packageJsonFiles.length === 0) return {};
-		var moduleMainScripts: ModuleMainScripts = {};
+		const moduleMainScripts: ModuleMainScriptsMap = {};
 
-		for (var i = 0; i < packageJsonFiles.length; i++) {
-			var packageJsonFile = packageJsonFiles[i];
-			var packageJsonData = fs.readFileSync(packageJsonFile, "utf-8");
-			var mainScript: string;
-			var moduleName: string;
+		for (let i = 0; i < packageJsonFiles.length; i++) {
+			const packageJsonFile = packageJsonFiles[i];
+			const packageJsonData = fs.readFileSync(packageJsonFile, "utf-8");
+			let mainScript: string;
+			let moduleName: string;
 			try {
-				var d = JSON.parse(packageJsonData);
+				const d = JSON.parse(packageJsonData);
 				mainScript = path.join(path.dirname(packageJsonFile), d.main);
 				moduleName = d.name;
 			} catch (e) {
@@ -68,14 +68,14 @@ export module NodeModules {
 		checkAllModules: boolean = false
 	): Promise<string[]> {
 		if (modules.length === 0) return Promise.resolve([]);
-		var moduleNames = (typeof modules === "string") ? [modules] : modules;
+		const moduleNames = (typeof modules === "string") ? [modules] : modules;
 
 		// moduleNamesをrequireするだけのソースコード文字列を作って依存性解析の基点にする
 		// (moduleNamesを直接b.require()してもよいはずだが、そうするとモジュールのエントリポイントの代わりに
 		// モジュールの名前(ディレクトリ名であることが多い)が出力されてしまうので避ける)
-		var dummyRootName = "__akashic-cli_dummy_require_root.js";
-		var dummyRootPath = path.join(basepath, dummyRootName);
-		var rootRequirer = moduleNames.map((name: string) => {
+		const dummyRootName = "__akashic-cli_dummy_require_root.js";
+		const dummyRootPath = path.join(basepath, dummyRootName);
+		const rootRequirer = moduleNames.map((name: string) => {
 			return "require(\"" + Util.makeModuleNameNoVer(name) + "\");";
 		}).join("\n");
 
@@ -84,7 +84,7 @@ export module NodeModules {
 		// これを検知した場合、そのモジュールへの依存はgame.jsonに追記せず、akashicコマンドユーザには警告を表示する。
 		const ignoreModulePaths = ["/akashic-cli-commons/node_modules/"];
 
-		var b = browserify({
+		const b = browserify({
 			entries: new StringStream(rootRequirer, dummyRootPath),
 			basedir: basepath,
 			preserveSymlinks: true, // npm link で node_modules 以下に置かれたモジュールを symlink パスのまま扱う
@@ -93,9 +93,9 @@ export module NodeModules {
 		b.external("g");
 
 		return new Promise<string[]>((resolve, reject) => {
-			var filePaths: string[] = [];
+			const filePaths: string[] = [];
 			b.on("dep", (row: any) => {
-				var filePath = Util.makeUnixPath(path.relative(basepath, row.file));
+				const filePath = Util.makeUnixPath(path.relative(basepath, row.file));
 				if (filePath === dummyRootName || (!checkAllModules && !(/^(?:\.\/)?node_modules/.test(filePath)))) {
 					return;
 				}
@@ -110,7 +110,7 @@ export module NodeModules {
 						logger.warn(msg);
 						return;
 					}
-					var msg = "Unsupported module found in " + JSON.stringify(modules)
+					const msg = "Unsupported module found in " + JSON.stringify(modules)
 												+ ". Skipped listing '" + filePath
 												+ "' that cannot be dealt with. (This may be a core module of Node.js)";
 					reject(new Error(msg));

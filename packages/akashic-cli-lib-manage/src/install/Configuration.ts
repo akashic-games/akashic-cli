@@ -4,7 +4,7 @@ export class Configuration extends cmn.Configuration {
 	addOperationPlugin(code: number, moduleName: string): void {
 		if (! this._content.operationPlugins)
 			this._content.operationPlugins = [];
-		var existingIndex = this.findExistingOperationPluginIndex(code);
+		const existingIndex = this.findExistingOperationPluginIndex(code);
 		if (existingIndex !== -1) {
 			throw new Error("Conflicted code for operation plugins. Code " + code + " is already used");
 		}
@@ -32,7 +32,7 @@ export class Configuration extends cmn.Configuration {
 
 	addToModuleMainScripts(packageJsonFiles: string[], sandboxRuntime: string): void {
 		this._logger.info("Adding file paths to moduleMainScripts...");
-		var moduleMainScripts = cmn.NodeModules.listModuleMainScripts(packageJsonFiles);
+		const moduleMainScripts = cmn.NodeModules.listModuleMainScripts(packageJsonFiles);
 		if (moduleMainScripts && Object.keys(moduleMainScripts).length > 0) {
 			if (! this._content.moduleMainScripts && (sandboxRuntime === "1" || sandboxRuntime === "2")) {
 				this._logger.warn(

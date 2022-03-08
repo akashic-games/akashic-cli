@@ -1,6 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as cmn from "@akashic/akashic-cli-commons";
+import { AssetConfigurationMap, ImageAssetConfigurationBase } from "@akashic/game-configuration";
 import * as fsx from "fs-extra";
 import readdir = require("fs-readdir-recursive");
 import * as UglifyJS from "uglify-js";
@@ -36,7 +37,7 @@ export function extractAssetDefinitions (conf: cmn.Configuration, type: string):
 
 export function copyAssetFilesStrip(
 	inputPath: string, outputPath: string,
-	assets: cmn.Assets, options: ConvertTemplateParameterObject): void {
+	assets: AssetConfigurationMap, options: ConvertTemplateParameterObject): void {
 	options.logger.info("copying stripped fileset...");
 	var assetNames = Object.keys(assets);
 	assetNames.filter((assetName) => {
@@ -202,10 +203,11 @@ export function readSandboxConfigJs(sourceDir: string): string {
 export function addUntaintedToImageAssets(gameJson: cmn.GameConfiguration): void {
 	Object.keys(gameJson.assets).forEach(key => {
 		if (gameJson.assets[key].type === "image") {
-			if (!gameJson.assets[key].hint) {
-				gameJson.assets[key].hint = {};
+			const asset = gameJson.assets[key] as ImageAssetConfigurationBase;
+			if (!asset.hint) {
+				asset.hint = {};
 			}
-			gameJson.assets[key].hint.untainted = true;
+			asset.hint.untainted = true;
 		}
 	});
 }

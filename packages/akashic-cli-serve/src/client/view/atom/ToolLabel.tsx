@@ -5,6 +5,7 @@ import * as styles from "./ToolLabel.css";
 export interface ToolLabelProps {
 	title?: string;
 	emphasizeBorder?: boolean;
+	children?: React.ReactNode;
 }
 
 @observer

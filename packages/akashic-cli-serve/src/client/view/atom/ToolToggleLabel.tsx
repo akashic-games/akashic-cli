@@ -4,6 +4,7 @@ import * as styles from "./ToolToggleLabel.css";
 
 export interface ToolToggleLabelProps {
 	isPushed: boolean;
+	children?: React.ReactNode;
 	onToggle: (nextValue: boolean) => void;
 }
 

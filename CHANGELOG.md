@@ -1,5 +1,107 @@
 # CHANGELOG
 
+## 2.15.53 (2022-03-05)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli`
+  * [#1045](https://github.com/akashic-games/akashic-cli/pull/1045) Update dependency eslint-plugin-react to v7.29.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#1046](https://github.com/akashic-games/akashic-cli/pull/1046) Update actions/checkout action to v3 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
+## 2.15.52 (2022-03-03)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#1044](https://github.com/akashic-games/akashic-cli/pull/1044) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.1.6, engineFiles@2.1.57, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
+## 2.15.51 (2022-03-03)
+
+#### Other Change
+* `akashic-cli-extra`
+  * [#1041](https://github.com/akashic-games/akashic-cli/pull/1041) Update eslint-config of extra ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+* `akashic-cli-scan`
+  * [#1042](https://github.com/akashic-games/akashic-cli/pull/1042) Update eslint-config of scan ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+* `akashic-cli-commons`, `akashic-cli-init`
+  * [#1040](https://github.com/akashic-games/akashic-cli/pull/1040) Update eslint-config of init ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+## 2.15.50 (2022-03-02)
+
+#### Other Change
+* `akashic-cli-serve`
+  * [#1039](https://github.com/akashic-games/akashic-cli/pull/1039) Update eslint-config of serve ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+* `akashic-cli-lib-manage`
+  * [#1038](https://github.com/akashic-games/akashic-cli/pull/1038) Update eslint-config of lib-manage ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+* `akashic-cli-commons`
+  * [#1035](https://github.com/akashic-games/akashic-cli/pull/1035) Update akashic/eslint-config ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+## 2.15.49 (2022-02-28)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#1037](https://github.com/akashic-games/akashic-cli/pull/1037) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.1.6, engineFiles@2.1.57, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
+## 2.15.48 (2022-02-28)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#1036](https://github.com/akashic-games/akashic-cli/pull/1036) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.1.6, engineFiles@2.1.57, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
+## 2.15.47 (2022-02-28)
+
+#### Other Change
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-lib-manage`, `akashic-cli-scan`
+  * [#1028](https://github.com/akashic-games/akashic-cli/pull/1028) Use game configration ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+## 2.15.46 (2022-02-26)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli`
+  * [#1034](https://github.com/akashic-games/akashic-cli/pull/1034) Update dependency uglify-js to v3.15.2 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
+## 2.15.45 (2022-02-26)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#1033](https://github.com/akashic-games/akashic-cli/pull/1033) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.1.6, engineFiles@2.1.57, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
+## 2.15.44 (2022-02-26)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli`
+  * [#1030](https://github.com/akashic-games/akashic-cli/pull/1030) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#1032](https://github.com/akashic-games/akashic-cli/pull/1032) Update actions/setup-node action to v3 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
 ## 2.15.43 (2022-02-23)
 
 #### Enhancement

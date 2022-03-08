@@ -4,6 +4,7 @@ import * as fs from "fs";
 import * as Util from "../../lib/Util";
 import * as Renamer from "../../lib/Renamer";
 import { ConfigurationFile } from "../../lib/ConfigurationFile";
+import { AssetConfigurationMap } from "@akashic/game-configuration";
 
 describe("Renamer", function () {
 	afterEach(() => {
@@ -145,11 +146,15 @@ describe("Renamer", function () {
 					hoge: {
 						type: "image",
 						path: "image/hoge.png",
+						width: 100,
+						height: 111,
 						global: true
 					},
 					hoge2: {
 						type: "image",
 						path: "image/hoge.png",
+						width: 50,
+						height: 55,
 						global: true
 					}
 				};
@@ -161,12 +166,16 @@ describe("Renamer", function () {
 						type: "image",
 						path: "files/a70844aefe0a5ceb64eb.png",
 						virtualPath: "image/hoge.png",
+						width: 100,
+						height: 111,
 						global: true
 					});
 					expect(gamejson.assets["hoge2"]).toEqual({
 						type: "image",
 						path: "files/a70844aefe0a5ceb64eb.png",
 						virtualPath: "image/hoge.png",
+						width: 50,
+						height: 55,
 						global: true
 					});
 

@@ -1,20 +1,21 @@
 import * as playlog from "@akashic/playlog";
 import { Trigger } from "@akashic/trigger";
-import { observable, action, ObservableMap } from "mobx";
+import type { ObservableMap } from "mobx";
+import { observable, action } from "mobx";
 import { TimeKeeper } from "../../common/TimeKeeper";
-import { PlayAudioState } from "../../common/types/PlayAudioState";
-import { PlayDurationState } from "../../common/types/PlayDurationState";
-import { Player } from "../../common/types/Player";
-import { PlayStatus } from "../../common/types/PlayStatus";
-import { StartPointHeader } from "../../common/types/StartPointHeader";
-import { RunnerDescription, ClientInstanceDescription } from "../../common/types/TestbedEvent";
-import { GameViewManager } from "../akashic/GameViewManager";
+import type { PlayAudioState } from "../../common/types/PlayAudioState";
+import type { PlayDurationState } from "../../common/types/PlayDurationState";
+import type { Player } from "../../common/types/Player";
+import type { PlayStatus } from "../../common/types/PlayStatus";
+import type { StartPointHeader } from "../../common/types/StartPointHeader";
+import type { RunnerDescription, ClientInstanceDescription } from "../../common/types/TestbedEvent";
+import type { GameViewManager } from "../akashic/GameViewManager";
 import { SocketIOAMFlowClient } from "../akashic/SocketIOAMFlowClient";
 import { apiClient } from "../api/apiClientInstance";
 import { socketInstance } from "../api/socketInstance";
-import { CreateCoeLocalInstanceParameterObject } from "./CoePluginEntity";
-import { ContentEntity } from "./ContentEntity";
-import { ExecutionMode } from "./ExecutionMode";
+import type { CreateCoeLocalInstanceParameterObject } from "./CoePluginEntity";
+import type { ContentEntity } from "./ContentEntity";
+import type { ExecutionMode } from "./ExecutionMode";
 import { LocalInstanceEntity } from "./LocalInstanceEntity";
 import { ServerInstanceEntity } from "./ServerInstanceEntity";
 
@@ -300,9 +301,12 @@ export class PlayEntity {
 		this.teardown();
 	};
 
+	/* eslint-disable @typescript-eslint/indent */
+	// annotation の次行の関数式でインデントエラーとなるため disable とする。
 	@action
 	private _handleFrame = (): void => {
 		this.duration = this._timeKeeper.now();
 		// this._timerId = setTimeout(this._handleFrame, 200);
 	};
+	/* eslint-enable @typescript-eslint/indent */
 }

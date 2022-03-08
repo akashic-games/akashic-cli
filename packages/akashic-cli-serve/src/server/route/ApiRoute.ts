@@ -1,5 +1,5 @@
 import * as express from "express";
-import * as socketio from "socket.io";
+import type * as socketio from "socket.io";
 import { createHandlerToBroadcast } from "../controller/BroadcastController";
 import {
 	createHandlerToCreatePlay,
@@ -19,10 +19,10 @@ import {
 } from "../controller/RunnerController";
 import { createHandlerToGetStartPointHeaderList } from "../controller/StartPointHeaderListController";
 import { handleToGetStartupOptions } from "../controller/StartupOptionsController";
-import { PlayerIdStore } from "../domain/PlayerIdStore";
-import { PlayStore } from "../domain/PlayStore";
-import { RunnerStore } from "../domain/RunnerStore";
-import { SocketIOAMFlowManager } from "../domain/SocketIOAMFlowManager";
+import type { PlayerIdStore } from "../domain/PlayerIdStore";
+import type { PlayStore } from "../domain/PlayStore";
+import type { RunnerStore } from "../domain/RunnerStore";
+import type { SocketIOAMFlowManager } from "../domain/SocketIOAMFlowManager";
 
 export interface ApiRouterParameterObject {
 	playStore: PlayStore;

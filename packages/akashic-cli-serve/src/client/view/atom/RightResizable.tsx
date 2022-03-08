@@ -5,6 +5,7 @@ import * as styles from "./RightResizable.css";
 export interface RightResizableProps {
 	width: number;
 	minWidth: number;
+	children?: React.ReactNode;
 	onResize: (width: number) => void;
 }
 
