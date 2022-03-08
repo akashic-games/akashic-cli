@@ -4,9 +4,29 @@ import { NullScriptAssetV3 } from "./AssetV3";
 import { ServeGameContent } from "./ServeGameContent";
 import { generateTestbedScriptAsset } from "./TestbedScriptAsset";
 
-export interface Platform {
+interface Renderer {
+	drawImage(
+		surface: Surface,
+		offsetX: number,
+		offsetY: number,
+		width: number,
+		height: number,
+		destOffsetX: number,
+		destOffsetY: number
+	): void;
+}
+
+interface Surface {
+	width: number;
+	height: number;
+	renderer(): Renderer;
+}
+
+interface Platform {
+	getPrimarySurface: () => Surface;
 	_resourceFactory: {
 		createScriptAsset: (id: string, path: string) => any;  // 戻り値は `g.ScriptAsset` (コンパイル時に g がないので any で妥協)
+		createSurface: (width: number, height: number) => Surface;
 	};
 }
 
@@ -160,6 +180,52 @@ export class GameViewManager {
 				() => options.g.ExceptionFactory.createAssetLoadError("can not load script: " + assetPath)
 			);
 		};
+		// 一部のエッジケースでSafariのみ描画されないという問題が発生するので、ゲーム開発者が開発中に気づけるようにg.Renderer#drawImage()でエラーを投げる処理を差し込む
+		function createMeddlingWrappedSurfaceFactory <T extends ((...args: any[]) => Surface)> (func: T) {
+			return function() {
+				const surface = func.apply(this, arguments);
+				const originalRenderer = surface.renderer;
+				let renderer: Renderer = null;
+				surface.renderer = function () {
+					// surface.renderer() はコンテンツから描画のたびに呼び出されるが戻り値は現実的に固定なので、ここでの surface.renderer() の上書きは一度しか適用しない
+					if (renderer) {
+						return renderer;
+					}
+					renderer = originalRenderer.apply(this);
+					const originalDrawImage = renderer.drawImage;
+					renderer.drawImage = function (
+						surface: Surface,
+						offsetX: number,
+						offsetY: number,
+						width: number,
+						height: number,
+						_destOffsetX: number,
+						_destOffsetY: number
+					) {
+						if (offsetX < 0 || offsetX + width > surface.width || offsetY < 0 || offsetY + height > surface.height) {
+							// ref. https://github.com/akashic-games/akashic-engine/issues/349
+							throw new Error(`drawImage(): out of bounds.`
+								+ `The source rectangle bleeds out the source surface (${surface.width}x${surface.height}). `
+								+ `This is not a bug but intentionally prohibited by akashic serve`
+								+ `to prevent platform-specific rendering trouble.`
+							);
+						}
+						if (width <= 0 || height <= 0) {
+							throw new Error(`drawImage(): nothing to draw.`
+								+ `Either width or height is less than or equal to zero.`
+								+ `This is not a bug but intentionally prohibited by akashic serve`
+								+ `to prevent platform-specific rendering trouble.`
+							);
+						}
+						originalDrawImage.apply(this, arguments);
+					}
+					return renderer;
+				}
+				return surface;
+			};
+		}
+		platform.getPrimarySurface = createMeddlingWrappedSurfaceFactory(platform.getPrimarySurface);
+		platform._resourceFactory.createSurface = createMeddlingWrappedSurfaceFactory(platform._resourceFactory.createSurface);
 	}
 
 	private getDefaultUntrustedFrameUrl(): string {
