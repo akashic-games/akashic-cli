@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.15.54 (2022-03-08)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#1043](https://github.com/akashic-games/akashic-cli/pull/1043) エンティティの範囲外が描画されている時エラーを投げる処理を追加 ([@dera-](https://github.com/dera-))
+
+#### Committers: 1
+- [@dera-](https://github.com/dera-)
+
 ## 2.15.53 (2022-03-05)
 
 #### Update Dependencies
