@@ -26,6 +26,7 @@ export function promiseExportAtsumaru(param: ExportHTMLParameterObject): Promise
 				bundle: completedParam.bundle,
 				dest: completedParam.output,
 				hashLength: completedParam.hashLength,
+				minify: completedParam.minify,
 				strip: true,
 				force: true,
 				babel: true,
