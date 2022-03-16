@@ -8,6 +8,7 @@
     "copy:material-icons": "shx mkdir -p www/public/thirdparty && shx cp -r node_modules/material-icons/iconfont www/public/thirdparty/material-icons",
     "copy:agv": "node build/AkashicGameViewWebBuilder.js && shx mkdir -p www/internal/untrusted_loader",
     "copy:engine-files": "node build/updateEngineFiles.js",
+    "debug:copy:agv-plugin": "shx mkdir -p www/internal && browserify node_modules/@akashic/akashic-gameview-web/lib/plugin/index.js -s agvplugin > www/internal/agvplugin.js",
     "watch:client": "webpack --mode development --config ./src/client/webpack.config.js --watch",
     "build": "npm run build:client && npm run build:server && shx cp ./config/engineFilesVersion.json ./lib/server",
     "build:client": "webpack --config ./src/client/webpack.config.js && tsc -p ./src/client/tsconfig.module.json",

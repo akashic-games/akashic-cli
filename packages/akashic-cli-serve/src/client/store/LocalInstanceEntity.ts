@@ -1,4 +1,5 @@
 import type * as amf from "@akashic/amflow";
+import type * as pl from "@akashic/playlog";
 import {Trigger} from "@akashic/trigger";
 import {action, observable, computed} from "mobx";
 import {TimeKeeper} from "../../common/TimeKeeper";
@@ -8,13 +9,9 @@ import type {GameViewManager} from "../akashic/GameViewManager";
 import type {ServeGameContent} from "../akashic/ServeGameContent";
 import * as ApiRequest from "../api/ApiRequest";
 import type {ProfilerValue} from "../common/types/Profiler";
-import {CoeLimitedPluginEntity} from "./CoeLimitedPluginEntity";
-import type { CreateCoeLocalInstanceParameterObject} from "./CoePluginEntity";
-import {CoePluginEntity} from "./CoePluginEntity";
 import type {ContentEntity} from "./ContentEntity";
 import type {ExecutionMode} from "./ExecutionMode";
 import type {GameInstanceEntity} from "./GameInstanceEntity";
-import {NicoPluginEntity} from "./NicoPluginEntity";
 import type {PlayEntity} from "./PlayEntity";
 
 const toAgvExecutionMode = (() => {
@@ -37,13 +34,11 @@ export interface LocalInstanceEntityParameterObject {
 	player: Player;
 	resizeGameView?: boolean;
 	argument?: any;
+	initialEvents?: pl.Event[];
 	playToken?: string;
 	playlogServerUrl?: string;
 	proxyAudio?: boolean;
-	coeHandler?: {
-		onLocalInstanceCreate: (params: CreateCoeLocalInstanceParameterObject) => Promise<LocalInstanceEntity>;
-		onLocalInstanceDelete: (playId: string) => Promise<void>;
-	};
+	useNonDebuggableScript?: boolean;
 }
 
 export class LocalInstanceEntity implements GameInstanceEntity {
@@ -56,10 +51,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 	@observable isPaused: boolean;
 
 	readonly play: PlayEntity;
-	readonly coePlugin: CoePluginEntity;
-	readonly nicoPlugin: NicoPluginEntity;
 	readonly content: ContentEntity;
-	readonly coeLimitedPlugin: CoeLimitedPluginEntity;
 
 	private _timeKeeper: TimeKeeper;
 	private _gameViewManager: GameViewManager;
@@ -103,34 +95,11 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 			playConfig,
 			gameLoaderCustomizer,
 			argument: params.argument,
-			proxyAudio: params.proxyAudio
+			initialEvents: params.initialEvents,
+			proxyAudio: params.proxyAudio,
+			useNonDebuggableScript: params.useNonDebuggableScript
 		});
 		this._serveGameContent.onReset.add(this._handleReset, this);
-
-		if (params.coeHandler != null) {
-			this.coePlugin = new CoePluginEntity({
-				gameViewManager: this._gameViewManager,
-				onLocalInstanceCreate: params.coeHandler.onLocalInstanceCreate,
-				onLocalInstanceDelete: params.coeHandler.onLocalInstanceDelete,
-				instanceArgument: params.argument
-			});
-			this.coeLimitedPlugin = new CoeLimitedPluginEntity();
-			const agvGameContent = this._serveGameContent.agvGameContent;
-			agvGameContent.onExternalPluginRegister.add((name: string) => {
-				const game = agvGameContent.getGame();
-				if (name === "coe") {
-					this.coePlugin.bootstrap(game, agvGameContent);
-				} else if (name === "nico") {
-					game.external.nico = new NicoPluginEntity();
-				} else if (name === "send") {
-					game.external.send = (message: any) => {
-						console.log("game.external.send: ", message);
-					};
-				} else if (name === "coeLimited") {
-					game.external.coeLimited = this.coeLimitedPlugin;
-				}
-			});
-		}
 		this._initializationWaiter = this._initialize();
 	}
 
@@ -182,9 +151,6 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 	}
 
 	stop(): Promise<void> {
-		if (this.coeLimitedPlugin) {
-			this.coeLimitedPlugin.stopToDisplayResolver();
-		}
 		this._gameViewManager.removeGameContent(this._serveGameContent);
 		this.onStop.fire(this);
 		return Promise.resolve();
