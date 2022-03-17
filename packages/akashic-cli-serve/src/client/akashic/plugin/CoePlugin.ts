@@ -42,7 +42,7 @@ const DEFAULT_INSTANCE_ARGUMENT = {
 	}
 };
 
-export class CoePlugin {
+export class CoePlugin implements agv.ExternalPlugin {
 	readonly name: string = "coe";
 	private _localSessionTable: { [sessionId: string]: LocalSessionState } = {};
 	private _argument: any;
@@ -78,10 +78,10 @@ export class CoePlugin {
 				if (!parameters.application == null) {
 					throw new Error("Cannot start session");
 				}
-				const contentUrl = resolveContentUrl(parameters.application, parameters.cascadeApplications);
 				if (!parameters.local) {
 					throw new Error("Not implemented");
 				}
+				const contentUrl = resolveContentUrl(parameters.application, parameters.cascadeApplications);
 				startLocalSession(contentUrl, parameters);
 			} catch (e) {
 				// TODO: エラーハンドリング

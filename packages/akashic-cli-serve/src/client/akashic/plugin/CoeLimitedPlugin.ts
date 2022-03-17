@@ -24,7 +24,7 @@ export interface CoeLimitedPluginParameterObject {
 	endPlayerInfoResolver: () => void;
 }
 
-export class CoeLimitedPlugin {
+export class CoeLimitedPlugin implements agv.ExternalPlugin {
 	readonly name: string = "coeLimited";
 	private startPlayerInfoResolver: (limitSeconds: number | undefined, cb: (result: PlayerInfoResolverResultMessage) => void) => void;
 	private endPlayerInfoResolver: () => void;
