@@ -73,7 +73,7 @@
   },
   "dependencies": {
     "@akashic/akashic-cli-commons": "0.13.32",
-    "@babel/core": "7.17.7",
+    "@babel/core": "7.17.8",
     "@babel/preset-env": "7.16.11",
     "archiver": "5.3.0",
     "browserify": "17.0.0",
