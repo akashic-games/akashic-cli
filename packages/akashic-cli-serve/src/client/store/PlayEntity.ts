@@ -13,7 +13,6 @@ import type { GameViewManager } from "../akashic/GameViewManager";
 import { SocketIOAMFlowClient } from "../akashic/SocketIOAMFlowClient";
 import { apiClient } from "../api/apiClientInstance";
 import { socketInstance } from "../api/socketInstance";
-import type { CreateCoeLocalInstanceParameterObject } from "./CoePluginEntity";
 import type { ContentEntity } from "./ContentEntity";
 import type { ExecutionMode } from "./ExecutionMode";
 import { LocalInstanceEntity } from "./LocalInstanceEntity";
@@ -29,10 +28,8 @@ export interface CreateLocalInstanceParameterObject {
 	argument?: any;
 	initialEvents?: playlog.Event[];
 	proxyAudio?: boolean;
-	coeHandler?: {
-		onLocalInstanceCreate: (params: CreateCoeLocalInstanceParameterObject) => Promise<LocalInstanceEntity>;
-		onLocalInstanceDelete: (playId: string) => Promise<void>;
-	};
+	useNonDebuggableScript?: boolean;
+	resizeGameView?: boolean;
 }
 
 export interface CreateServerInstanceParameterObject {
@@ -123,9 +120,7 @@ export class PlayEntity {
 	async createLocalInstance(param: CreateLocalInstanceParameterObject): Promise<LocalInstanceEntity> {
 		const i = new LocalInstanceEntity({
 			play: this,
-			resizeGameView: !this._parent,
 			content: this.content,
-			coeHandler: param.coeHandler,
 			...param
 		});
 		i.onStop.add(this._handleLocalInstanceStopped);

@@ -87,7 +87,6 @@ declare module agv {
 	}
 
 	class GameContent {
-		onExternalPluginRegister: TriggerLike; // NOTE: 拡張
 		constructor(...args: any[]);
 		pause(): void;
 		resume(): void;
@@ -128,6 +127,7 @@ declare module agv {
 		playConfig: PlaylogConfig;
 		gameLoaderCustomizer: GameLoaderCustomizer;
 		argument?: any;
+		initialEvents?: any[];
 	}
 
 	interface ErrorListener {
@@ -136,7 +136,7 @@ declare module agv {
 
 	interface ExternalPlugin {
 		name: string;
-		onload: (game: agv.GameLike, dataBus: any, gameContent: GameContent) => void;
+		onload: (game: agv.GameLike, dataBus: unknown, gameContent: GameContent) => void;
 	}
 
 	interface TriggerLike {
@@ -183,5 +183,18 @@ declare module agv {
 			// startPoint は @akashic/amflow の StartPoint だがここでは import できないため any
 			reset?(startPoint: any): void;
 		};
+	}
+}
+
+declare module agvplugin {
+	class CoeLimitedPlugin implements agv.ExternalPlugin {
+		name: string;
+		onload(game: agv.GameLike, dataBus: unknown, gameContent: agv.GameContent): void;
+		registerAllowedContent(name: string, application: { url: string }): void;
+	}
+
+	class AgvSupplementPlugin implements agv.ExternalPlugin {
+		name: string;
+		onload(game: agv.GameLike, dataBus: unknown, gameContent: agv.GameContent): void;
 	}
 }
