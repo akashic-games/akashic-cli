@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.15.59 (2022-03-19)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli`
+  * [#1052](https://github.com/akashic-games/akashic-cli/pull/1052) Update dependency @babel/core to v7.17.8 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
 ## 2.15.58 (2022-03-18)
 
 #### Update Dependencies
