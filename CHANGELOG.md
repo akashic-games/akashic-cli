@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.15.60 (2022-03-20)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli`
+  * [#1053](https://github.com/akashic-games/akashic-cli/pull/1053) Update dependency eslint-plugin-jest to v26.1.2 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
 ## 2.15.59 (2022-03-19)
 
 #### Update Dependencies
