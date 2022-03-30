@@ -96,9 +96,9 @@ storiesOf("o-GameScreen", module)
 	))
 	.add("confirmDialog", () => (
 		<GameScreen
-		showsBackgroundImage={false}
-		showsBackgroundColor={false}
-		showsGrid={false}
+			showsBackgroundImage={false}
+			showsBackgroundColor={false}
+			showsGrid={false}
 			showsDesignGuideline={false}
 			backgroundImage={null}
 			backgroundColor={null}
