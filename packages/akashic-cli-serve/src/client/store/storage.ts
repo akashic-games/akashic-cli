@@ -19,6 +19,7 @@ export interface StorageData {
 	joinsAutomatically: boolean;
 	fitsToScreen: boolean;
 	showsBackgroundImage: boolean;
+	showsBackgroundColor: boolean;
 	showsGrid: boolean;
 	isAutoSendEvents: boolean;
 	emulatingShinichibaMode: string;

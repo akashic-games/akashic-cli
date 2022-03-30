@@ -6,6 +6,7 @@ export interface SandboxConfig {
 	autoSendEvents?: string;
 	autoSendEventName?: string;
 	backgroundImage?: string;
+	backgroundColor?: string;
 	showMenu?: boolean;
 	events?: { [name: string]: any };
 	arguments?: { [name: string]: any };
