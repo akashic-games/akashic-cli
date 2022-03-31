@@ -33,7 +33,6 @@ export class GameScreenContainer extends React.Component<GameScreenContainerProp
 			showsGrid={this.props.toolBarUiStore.showsGrid}
 			showsBackgroundImage={this.props.toolBarUiStore.showsBackgroundImage}
 			showsBackgroundColor={this.props.toolBarUiStore.showsBackgroundColor}
-
 			showsDesignGuideline={this.props.toolBarUiStore.showsDesignGuideline}
 			gameWidth={gameViewSize.width}
 			gameHeight={gameViewSize.height}

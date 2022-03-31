@@ -77,7 +77,7 @@ export const DisplayOptionControl = observer(function (props: DisplayOptionContr
 						checked={showsBackgroundImage}
 						onChange={() => onChangeShowBackgroundImage(!showsBackgroundImage)}
 					/>
-					Show backgorund image
+					Show background image
 				</label>
 			</div>
 			<div className={styles.label}>
@@ -88,7 +88,7 @@ export const DisplayOptionControl = observer(function (props: DisplayOptionContr
 						checked={showsBackgroundColor}
 						onChange={() => onChangeShowBackgroundColor(!showsBackgroundColor)}
 					/>
-					Show backgorund color
+					Show background color
 				</label>
 			</div>
 			<div className={styles.label}>

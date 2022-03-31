@@ -42,7 +42,7 @@ export class GameScreen extends React.Component<GameScreenProps, {}> {
 		return <div className={styles["game-screen"]} style={{ width: gameWidth, height: gameHeight }}>
 			{
 				(showsBgColor) ?
-				<div className={styles["bg-image"]} style={{ width: gameWidth, height: gameHeight, backgroundColor: bgColor }}/> :
+					<div className={styles["bg-image"]} style={{ width: gameWidth, height: gameHeight, backgroundColor: bgColor }}/> :
 					null
 			}
 			{
