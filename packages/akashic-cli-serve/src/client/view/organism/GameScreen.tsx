@@ -40,7 +40,9 @@ export class GameScreen extends React.Component<GameScreenProps, {}> {
 		} = this.props;
 		const bgImageStyle = (showsBgImage && !bgImage) ?  (" " + styles["pseudo-transparent-bg"]) : "";
 		return <div className={styles["game-screen"]} style={{ width: gameWidth, height: gameHeight }}>
+			// TODO: .bg-image の恐らく不要な z-index をなくせば .game-screen の backgroundColor を利用でき、この div は削除できる
 			{
+				// TODO: .bg-image の恐らく不要な z-index をなくせば背景色の描画に .game-screen の backgroundColor を利用でき、この div は削除できる
 				(showsBgColor) ?
 					<div className={styles["bg-image"]} style={{ width: gameWidth, height: gameHeight, backgroundColor: bgColor }}/> :
 					null
