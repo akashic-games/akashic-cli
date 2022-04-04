@@ -184,6 +184,11 @@ export interface ServeQueryParameters {
 	showsBackgroundImage: boolean | null;
 
 	/**
+	 * 背景色を表示するか。
+	 */
+	 showsBackgroundColor: boolean | null;
+
+	/**
 	 * グリッドを表示するか。
 	 */
 	showsGrid: boolean | null;
@@ -272,6 +277,7 @@ export function makeServeQueryParameters(query: RawParsedQuery): ServeQueryParam
 		joinsAutomatically: asBool(query.joinsAutomatically),
 		fitsToScreen: asBool(query.fitsToScreen),
 		showsBackgroundImage: asBool(query.showsBackgroundImage),
+		showsBackgroundColor: asBool(query.showsBackgroundColor),
 		showsGrid: asBool(query.showsGrid),
 		isAutoSendEvents: asBool(query.isAutoSendEvents),
 		emulatingShinichibaMode: asString(query.emulatingShinichibaMode),

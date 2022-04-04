@@ -19,6 +19,7 @@ export interface StorageData {
 	joinsAutomatically: boolean;
 	fitsToScreen: boolean;
 	showsBackgroundImage: boolean;
+	showsBackgroundColor: boolean;
 	showsGrid: boolean;
 	isAutoSendEvents: boolean;
 	emulatingShinichibaMode: string;
@@ -71,6 +72,7 @@ export class Storage {
 			joinsAutomatically: choose(query.joinsAutomatically, s.joinsAutomatically, false),
 			fitsToScreen: choose(query.fitsToScreen, s.fitsToScreen, false),
 			showsBackgroundImage: choose(query.showsBackgroundImage, s.showsBackgroundImage, false),
+			showsBackgroundColor: choose(query.showsBackgroundColor, s.showsBackgroundColor, false),
 			showsGrid: choose(query.showsGrid, s.showsGrid, false),
 			isAutoSendEvents: choose(query.isAutoSendEvents, s.isAutoSendEvents, false),
 			emulatingShinichibaMode: choose(query.emulatingShinichibaMode, s.emulatingShinichibaMode, "single"),

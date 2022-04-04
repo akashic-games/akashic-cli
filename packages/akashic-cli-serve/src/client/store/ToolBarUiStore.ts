@@ -13,6 +13,7 @@ export class ToolBarUiStore {
 	@observable showsDisplayOptionPopover: boolean;
 	@observable fitsToScreen: boolean;
 	@observable showsBackgroundImage: boolean;
+	@observable showsBackgroundColor: boolean;
 	@observable showsGrid: boolean;
 	@observable showsProfiler: boolean;
 	@observable showsDesignGuideline: boolean;
@@ -26,6 +27,7 @@ export class ToolBarUiStore {
 		this.showsDisplayOptionPopover = false;
 		this.fitsToScreen = storage.data.fitsToScreen;
 		this.showsBackgroundImage = storage.data.showsBackgroundImage;
+		this.showsBackgroundColor = storage.data.showsBackgroundColor;
 		this.showsGrid = storage.data.showsGrid;
 		this.showsProfiler = storage.data.showsProfiler;
 		this.showsDesignGuideline = storage.data.showsDesignGuideline;
@@ -78,6 +80,12 @@ export class ToolBarUiStore {
 	setShowBackgroundImage(show: boolean): void {
 		this.showsBackgroundImage = show;
 		storage.put({ showsBackgroundImage: show });
+	}
+
+	@action
+	setShowBackgroundColor(show: boolean): void {
+		this.showsBackgroundColor = show;
+		storage.put({ showsBackgroundColor: show });
 	}
 
 	@action

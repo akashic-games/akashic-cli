@@ -29,8 +29,10 @@ export class GameScreenContainer extends React.Component<GameScreenContainerProp
 		const gameViewSize = this.props.localInstance.gameViewSize;
 		return <GameScreen
 			backgroundImage={this.props.sandboxConfig.backgroundImage}
+			backgroundColor={this.props.sandboxConfig.backgroundColor}
 			showsGrid={this.props.toolBarUiStore.showsGrid}
 			showsBackgroundImage={this.props.toolBarUiStore.showsBackgroundImage}
+			showsBackgroundColor={this.props.toolBarUiStore.showsBackgroundColor}
 			showsDesignGuideline={this.props.toolBarUiStore.showsDesignGuideline}
 			gameWidth={gameViewSize.width}
 			gameHeight={gameViewSize.height}

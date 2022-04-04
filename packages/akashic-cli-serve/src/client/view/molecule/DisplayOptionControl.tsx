@@ -8,12 +8,14 @@ export interface DisplayOptionControlPropsData {
 	showsDisplayOptionPopover: boolean;
 	fitsToScreen: boolean;
 	showsBackgroundImage: boolean;
+	showsBackgroundColor: boolean;
 	showsGrid: boolean;
 	showsProfiler: boolean;
 	showsDesignGuideline: boolean;
 	onClickDisplayOptionPopover: (show: boolean) => void;
 	onChangeFitsToScreen: (fits: boolean) => void;
 	onChangeShowBackgroundImage: (show: boolean) => void;
+	onChangeShowBackgroundColor: (show: boolean) => void;
 	onChangeShowGrid: (show: boolean) => void;
 	onChangeShowProfiler: (show: boolean) => void;
 	onChangeShowDesignGuideline: (show: boolean) => void;
@@ -28,12 +30,14 @@ export const DisplayOptionControl = observer(function (props: DisplayOptionContr
 		showsDisplayOptionPopover,
 		fitsToScreen,
 		showsBackgroundImage,
+		showsBackgroundColor,
 		showsGrid,
 		showsProfiler,
 		showsDesignGuideline,
 		onClickDisplayOptionPopover,
 		onChangeFitsToScreen,
 		onChangeShowBackgroundImage,
+		onChangeShowBackgroundColor,
 		onChangeShowGrid,
 		onChangeShowProfiler,
 		onChangeShowDesignGuideline
@@ -73,7 +77,18 @@ export const DisplayOptionControl = observer(function (props: DisplayOptionContr
 						checked={showsBackgroundImage}
 						onChange={() => onChangeShowBackgroundImage(!showsBackgroundImage)}
 					/>
-					Show backgorund image
+					Show background image
+				</label>
+			</div>
+			<div className={styles.label}>
+				<label>
+					<input
+						className={styles.checkbox + " external-ref_checkbox_shows-background-color"}
+						type="checkbox"
+						checked={showsBackgroundColor}
+						onChange={() => onChangeShowBackgroundColor(!showsBackgroundColor)}
+					/>
+					Show background color
 				</label>
 			</div>
 			<div className={styles.label}>
