@@ -267,7 +267,7 @@ export class Operator {
 		const content = this.store.contentStore.findOrRegister(contentLocator);
 		const sandboxConfig = content.sandboxConfig || {};
 		const client = sandboxConfig?.client;
-		if (client?.external?.nicoservice) {
+		if (client?.external?.scriptPath) {
 			const pluginInfo = await apiClient.getSandboxPluginInfo(contentLocator.contentId);
 			const pluginNames = pluginInfo.data.pluginNames;
 

@@ -13,7 +13,7 @@ export interface SandboxConfig {
 	externalAssets?: (string | RegExp)[] | null;
 	client?: {
 		external?: {
-			nicoservice?: string;
+			scriptPath?: string;
 			plugins?: { [key: string]: any }; // 内部情報保持用
 		};
 	};

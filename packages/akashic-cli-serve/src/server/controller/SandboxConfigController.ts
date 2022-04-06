@@ -34,10 +34,10 @@ export const createHandlerToGetSandboxConfigPluginInfo = (): express.RequestHand
 			const contentId = req.params.contentId;
 			const config = sandboxConfigs.get(contentId);
 			let response;
-			if (config.client.external.nicoservice) {
-				const pluginPath = path.resolve(config.client.external.nicoservice);
+			if (config.client.external.scriptPath) {
+				const pluginPath = path.resolve(config.client.external.scriptPath);
 				if (!fs.existsSync(pluginPath)) {
-					throw new NotFoundError({ errorMessage: `plugin is not found. path:${config.client.external.nicoservice}` });
+					throw new NotFoundError({ errorMessage: `plugin is not found. path:${config.client.external.scriptPath}` });
 				}
 
 				const plugin: () => any = require(pluginPath); // eslint-disable-line @typescript-eslint/no-var-requires
