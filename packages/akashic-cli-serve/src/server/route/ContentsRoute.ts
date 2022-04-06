@@ -1,6 +1,10 @@
 import * as express from "express";
 import { createHandlerToGetContent, createHandlerToGetContents, createHandlerToGetEngineConfig } from "../controller/ContentController";
-import { createHandlerToGetSandboxConfig } from "../controller/SandboxConfigController";
+import {
+	createHandlerToGetSandboxConfig,
+	createHandlerToGetSandboxConfigPluginCode,
+	createHandlerToGetSandboxConfigPluginInfo
+} from "../controller/SandboxConfigController";
 import { createScriptAssetController } from "../controller/ScriptAssetController";
 
 export interface ContentsRouterParameterObject {
@@ -34,6 +38,9 @@ export const createContentsRouter = (params: ContentsRouterParameterObject): exp
 	// content.json, content.raw.json はそれぞれ /contents/:contentId:/content/ と /contents/:contendId/raw/ に対応する。
 	contentsRouter.get("/:contentId/content.json", createHandlerToGetEngineConfig(targetDirs, false));
 	contentsRouter.get("/:contentId/content.raw.json", createHandlerToGetEngineConfig(targetDirs, true));
+
+	contentsRouter.get("/:contentId/sandboxConfig/externals", createHandlerToGetSandboxConfigPluginInfo());
+	contentsRouter.get("/:contentId/sandboxConfig/:pluginName", createHandlerToGetSandboxConfigPluginCode());
 
 	return contentsRouter;
 };

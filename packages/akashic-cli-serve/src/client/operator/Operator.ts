@@ -49,7 +49,6 @@ export class Operator {
 		this.devtool = new DevtoolOperator(store);
 		this.store = param.store;
 		this.gameViewManager = param.gameViewManager;
-		this._initializePlugins();
 
 		Subscriber.onBroadcast.add(this._handleBroadcast);
 	}
@@ -59,6 +58,7 @@ export class Operator {
 	}
 
 	async bootstrap(contentLocator?: ClientContentLocator): Promise<void> {
+		this._initializePlugins(contentLocator || this.store.contentStore.defaultContent().locator);
 		const store = this.store;
 		let play: PlayEntity = null;
 		if (query.playId != null) {
@@ -245,7 +245,8 @@ export class Operator {
 		};
 	};
 
-	private _initializePlugins(): void {
+	//  TODO: 複数のコンテンツ対応。引数の contentLocator は複数コンテンツに対応していないが暫定とする
+	private async _initializePlugins(contentLocator: ClientContentLocator): Promise<void> {
 		this.gameViewManager.registerExternalPlugin(new NicoPlugin());
 		this.gameViewManager.registerExternalPlugin(new SendPlugin());
 		this.gameViewManager.registerExternalPlugin(new CoePlugin({
@@ -261,6 +262,24 @@ export class Operator {
 				startPlayerInfoResolver: this._startPlayerInfoResolver,
 				endPlayerInfoResolver: this._endPlayerInfoResolver
 			}));
+		}
+
+		const content = this.store.contentStore.findOrRegister(contentLocator);
+		const sandboxConfig = content.sandboxConfig || {};
+		const client = sandboxConfig?.client;
+		if (client?.external?.nicoservice) {
+			const pluginInfo = await apiClient.getSandboxPluginInfo(contentLocator.contentId);
+			const pluginNames = pluginInfo.data.pluginNames;
+
+			for (const pluginName of pluginNames ) {
+				const pluginCode = await apiClient.getSandboxPluginCode(contentLocator.contentId, pluginName);
+				const pluginObj = {
+					name: pluginName,
+					onload: new Function("game, _dataBus, _gameContent", `game.external.${pluginName} = ${pluginCode.data}`)
+				};
+				const customPlugin = Object.create(pluginObj);
+				this.gameViewManager.registerExternalPlugin(customPlugin);
+			}
 		}
 	}
 

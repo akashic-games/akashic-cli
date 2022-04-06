@@ -11,4 +11,11 @@ export interface SandboxConfig {
 	events?: { [name: string]: any };
 	arguments?: { [name: string]: any };
 	externalAssets?: (string | RegExp)[] | null;
+	client?: {
+		external?: {
+			nicoservice?: string;
+			plugins?: { [key: string]: any }; // 内部情報保持用
+		};
+	};
+
 }
