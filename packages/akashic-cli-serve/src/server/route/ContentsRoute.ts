@@ -36,6 +36,5 @@ export const createContentsRouter = (params: ContentsRouterParameterObject): exp
 	contentsRouter.get("/:contentId/content.raw.json", createHandlerToGetEngineConfig(targetDirs, true));
 
 	contentsRouter.get("/:contentId/sandboxConfig/plugins/:pluginName", createHandlerToGetSandboxConfigPluginCode());
-
 	return contentsRouter;
 };

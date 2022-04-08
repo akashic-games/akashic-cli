@@ -25,7 +25,6 @@ export const get = async<T>(url: string, params?: {[key: string]: string}, isTex
 		// text 形式の response データを返す
 		return await response.text() as any;
 	}
-
 	return await response.json();
 };
 
