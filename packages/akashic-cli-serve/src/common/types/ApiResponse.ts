@@ -58,11 +58,6 @@ export type ContentGetApiResponseData = ContentDesc;
 export interface SandboxConfigApiResponseData extends SandboxConfig {
 }
 
-export interface SandboxConfigPluginInfoApiResponseData {
-	path: string;
-	pluginNames: string[];
-}
-
 export type OptionsApiResponseData = AppOptions;
 
 export type StartPointHeaderListResponseData = {
@@ -87,5 +82,3 @@ export type ContentGetApiResponse = ApiResponse<ContentGetApiResponseData>;
 export type SandboxConfigApiResponse = ApiResponse<SandboxConfigApiResponseData>;
 export type OptionsApiResponse = ApiResponse<OptionsApiResponseData>;
 export type StartPointHeaderListResponse = ApiResponse<StartPointHeaderListResponseData>;
-export type SandboxConfigPluginInfoApiResponse = ApiResponse<SandboxConfigPluginInfoApiResponseData>;
-export type SandboxConfigPluginCodeApiResponse = ApiResponse<string>;

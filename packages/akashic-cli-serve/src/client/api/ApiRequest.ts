@@ -11,7 +11,7 @@ const fetchWithTimeout = (url: string, options?: RequestInit, timeoutMilliSec?: 
 	return Promise.race([fetch(url, options), timeout(timeoutMilliSecond)]);
 };
 
-export const get = async<T>(url: string, params?: {[key: string]: string}): Promise<T> => {
+export const get = async<T>(url: string, params?: {[key: string]: string}, isTextData?: boolean ): Promise<T> => {
 	let urlWithQuery = url;
 	if (params) {
 		urlWithQuery = `${url}?${queryString.stringify(params)}`;
@@ -20,6 +20,12 @@ export const get = async<T>(url: string, params?: {[key: string]: string}): Prom
 	if (400 <= response.status) {
 		throw new Error("Failed to GET " + url + ". Status: " + response.status);
 	}
+
+	if (isTextData) {
+		// text 形式の response データを返す
+		return await response.text() as any;
+	}
+
 	return await response.json();
 };
 

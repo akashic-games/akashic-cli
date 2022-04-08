@@ -12,9 +12,7 @@ import type {
 	SandboxConfigApiResponse,
 	OptionsApiResponse,
 	PlayerPostApiResponse,
-	StartPointHeaderListResponse,
-	SandboxConfigPluginCodeApiResponse,
-	SandboxConfigPluginInfoApiResponse,
+	StartPointHeaderListResponse
 } from "../../common/types/ApiResponse";
 import type {ContentLocatorData} from "../../common/types/ContentLocatorData";
 import type {GameConfiguration} from "../../common/types/GameConfiguration";
@@ -140,11 +138,7 @@ export class ApiClient {
 		return ApiRequest.get<StartPointHeaderListResponse>(`${this._baseUrl}/api/plays/${playId}/start-point-header-list`);
 	};
 
-	async getSandboxPluginInfo(contentId: string): Promise<SandboxConfigPluginInfoApiResponse> {
-		return await ApiRequest.get<SandboxConfigPluginInfoApiResponse>(`${this._baseUrl}/contents/${contentId}/sandboxConfig/externals`);
-	}
-
-	async getSandboxPluginCode(contentId: string, pluginName: string): Promise<SandboxConfigPluginCodeApiResponse> {
-		return await ApiRequest.get(`${this._baseUrl}/contents/${contentId}/sandboxConfig/${pluginName}`);
+	async getSandboxPluginCode(contentId: string, pluginName: string): Promise<string> {
+		return await ApiRequest.get(`${this._baseUrl}/contents/${contentId}/sandboxConfig/plugins/${pluginName}`, null, true);
 	}
 }

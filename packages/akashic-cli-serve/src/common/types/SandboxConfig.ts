@@ -13,8 +13,7 @@ export interface SandboxConfig {
 	externalAssets?: (string | RegExp)[] | null;
 	client?: {
 		external?: {
-			scriptPath?: string;
-			plugins?: { [key: string]: any }; // 内部情報保持用
+			[key: string]: string;  // 値は各プラグインの scriptPath
 		};
 	};
 

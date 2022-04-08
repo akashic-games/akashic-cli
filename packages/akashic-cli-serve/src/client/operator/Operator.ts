@@ -267,18 +267,18 @@ export class Operator {
 		const content = this.store.contentStore.findOrRegister(contentLocator);
 		const sandboxConfig = content.sandboxConfig || {};
 		const client = sandboxConfig?.client;
-		if (client?.external?.scriptPath) {
-			const pluginInfo = await apiClient.getSandboxPluginInfo(contentLocator.contentId);
-			const pluginNames = pluginInfo.data.pluginNames;
+		if (client?.external) {
+			for (const pluginName of Object.keys(client.external)) {
+				await apiClient.getSandboxPluginCode(contentLocator.contentId, pluginName);
+				await this._loadScript(`/contents/${contentLocator.contentId}/sandboxConfig/plugins/${pluginName}`);
 
-			for (const pluginName of pluginNames ) {
-				const pluginCode = await apiClient.getSandboxPluginCode(contentLocator.contentId, pluginName);
 				const pluginObj = {
 					name: pluginName,
-					onload: new Function("game, _dataBus, _gameContent", `game.external.${pluginName} = ${pluginCode.data}`)
+					onload: function (game: any, _dataBus: unknown, _gameContent: agv.GameContent) {
+						game.external[pluginName] = (window as any).__testbed.pluginFuncs[pluginName]()();
+					}
 				};
-				const customPlugin = Object.create(pluginObj);
-				this.gameViewManager.registerExternalPlugin(customPlugin);
+				this.gameViewManager.registerExternalPlugin(pluginObj);
 			}
 		}
 	}
@@ -321,4 +321,18 @@ export class Operator {
 	private _endPlayerInfoResolver = (): void => {
 		this.store.playerInfoResolverUiStore.hideDialog();
 	};
+
+	private _loadScript(scriptPath: string): Promise<void> {
+		return new Promise((resolve, reject) => {
+			const script = document.createElement("script");
+			script.src = scriptPath;
+			script.onload = () => {
+				resolve();
+			};
+			script.onerror = function (e) {
+				reject(e);
+			};
+			document.body.append(script);
+		});
+	}
 }
