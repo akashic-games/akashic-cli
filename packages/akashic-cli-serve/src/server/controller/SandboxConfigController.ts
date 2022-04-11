@@ -37,7 +37,7 @@ export const createHandlerToGetSandboxConfigPluginCode = (): express.RequestHand
 
 			const pluginPath = path.resolve(config.client.external[pluginName]);
 			if (!fs.existsSync(pluginPath)) {
-				throw new NotFoundError({ errorMessage: `plugin is not found. path:${config.client.external.scriptPath}` });
+				throw new NotFoundError({ errorMessage: `${pluginName} is not found. path:${config.client.external[pluginName]}` });
 			}
 
 			const content = fs.readFileSync(pluginPath);
