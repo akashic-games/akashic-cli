@@ -269,7 +269,6 @@ export class Operator {
 		const client = sandboxConfig?.client;
 		if (client?.external) {
 			for (const pluginName of Object.keys(client.external)) {
-				await apiClient.getSandboxPluginCode(contentLocator.contentId, pluginName);
 				await this._loadScript(`/contents/${contentLocator.contentId}/sandboxConfig/plugins/${pluginName}`);
 
 				const pluginObj = {

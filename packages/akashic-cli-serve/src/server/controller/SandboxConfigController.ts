@@ -52,7 +52,7 @@ export const createHandlerToGetSandboxConfigPluginCode = (): express.RequestHand
 			};`;
 
 			res.contentType("text/javascript");
-			res.end(responseBody);
+			res.send(responseBody);
 		} catch (e) {
 			next(e);
 		}

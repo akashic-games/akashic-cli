@@ -137,8 +137,4 @@ export class ApiClient {
 	async getStartPointHeaderList(playId: string): Promise<StartPointHeaderListResponse> {
 		return ApiRequest.get<StartPointHeaderListResponse>(`${this._baseUrl}/api/plays/${playId}/start-point-header-list`);
 	};
-
-	async getSandboxPluginCode(contentId: string, pluginName: string): Promise<string> {
-		return await ApiRequest.get(`${this._baseUrl}/contents/${contentId}/sandboxConfig/plugins/${pluginName}`, null, true);
-	}
 }
