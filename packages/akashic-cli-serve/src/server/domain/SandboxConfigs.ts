@@ -43,6 +43,7 @@ function watchRequire(configPath: string, callback: (content: SandboxConfig) => 
 	};
 	const watcher = chokidar.watch(configPath, { persistent: true });
 	watcher.on("all", eventListener);
+	validateConfig(config);
 
 	return config;
 }
@@ -62,6 +63,21 @@ function validateConfig(config: SandboxConfig): void {
 					{errorMessage: `Invalid externalAssets, The value is neither a string or regexp. value:${ found }` }
 				);
 			}
+		}
+	}
+
+	const bgImage = config ? config.backgroundImage : undefined;
+	if (bgImage) {
+		if (/^(http|\/https\/)/.test(bgImage)) {
+			throw new BadRequestError({ errorMessage: "Invalid backgroundImage, http/https is not allowed. Please use the local path." });
+		}
+
+		if (!/\.(jpg|jpeg|png)$/.test(bgImage)) {
+			throw new BadRequestError({ errorMessage: "Invalid backgroundImage, Please specify a png/jpg file." });
+		}
+
+		if (/^\/contents\//.test(bgImage)) {
+			console.warn("Please use the local path for the value of sandboxConfig.backgroundImage");
 		}
 	}
 }

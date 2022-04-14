@@ -1,9 +1,12 @@
+import * as fs from "fs";
 import * as path from "path";
 import type * as express from "express";
+import mime = require("mime");
 import type { SandboxConfigApiResponseData } from "../../common/types/ApiResponse";
 import { NotFoundError } from "../common/ApiError";
 import { responseSuccess } from "../common/ApiResponse";
 import { dynamicRequire } from "../domain/dynamicRequire";
+import * as sandboxConfigs from "../domain/SandboxConfigs";
 
 export const createHandlerToGetSandboxConfig = (dirPaths: string[]): express.RequestHandler => {
 	return async (req, res, next) => {
@@ -16,6 +19,27 @@ export const createHandlerToGetSandboxConfig = (dirPaths: string[]): express.Req
 			// TODO ファイル監視。内容に変化がなければ直前の値を返せばよい
 			const config = dynamicRequire(configPath);
 			responseSuccess<SandboxConfigApiResponseData>(res, 200, config);
+		} catch (e) {
+			next(e);
+		}
+	};
+};
+
+export const createHandlerToGetSandboxConfigBgImage = (): express.RequestHandler => {
+	return async (req, res, next) => {
+		try {
+			const contentId = req.params.contentId;
+			const config = sandboxConfigs.get(contentId);
+			if (config.backgroundImage) {
+				const imgPath = path.resolve(config.backgroundImage);
+				if (!fs.existsSync(imgPath)) {
+					throw new NotFoundError({ errorMessage: `backgroundImage is not found. path:${config.backgroundImage}` });
+				}
+
+				const type = mime.lookup(imgPath);
+				res.contentType(type);
+				res.sendFile(imgPath);
+			}
 		} catch (e) {
 			next(e);
 		}
