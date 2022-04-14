@@ -31,7 +31,7 @@ function watchRequire(configPath: string, callback: (content: SandboxConfig) => 
 	let config = dynamicRequire<SandboxConfig>(configPath, true);
 
 	const eventListener = (event: string, path: string): void => {
-		if ((event === "add" && !Object.keys(config).length) || event === "change") {
+		if (event === "add" || event === "change") {
 			config = dynamicRequire<SandboxConfig>(path, true);
 			validateConfig(config);
 		} else if (event === "unlink") {
@@ -43,7 +43,6 @@ function watchRequire(configPath: string, callback: (content: SandboxConfig) => 
 	};
 	const watcher = chokidar.watch(configPath, { persistent: true });
 	watcher.on("all", eventListener);
-	validateConfig(config);
 
 	return config;
 }
