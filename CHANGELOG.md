@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## 2.15.62 (2022-04-14)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#1059](https://github.com/akashic-games/akashic-cli/pull/1059) Support for client external plugin with serve ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli`
+  * [#1031](https://github.com/akashic-games/akashic-cli/pull/1031) Update all dependencies (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#1054](https://github.com/akashic-games/akashic-cli/pull/1054) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 2.15.61 (2022-04-05)
 
 #### Enhancement
