@@ -15,6 +15,7 @@ const gameViewManager = new GameViewManager({
 });
 const store = new Store();
 const operator = new Operator({ store, gameViewManager });
+const pluginFuncs = {};
 
 window.addEventListener("load", async () => {
 	try {
@@ -58,4 +59,4 @@ window.addEventListener("unload", () => {
 	}
 });
 
-(window as any).__testbed = { gameViewManager, store, operator };
+(window as any).__testbed = { gameViewManager, store, operator, pluginFuncs };

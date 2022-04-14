@@ -25,6 +25,41 @@ export const createHandlerToGetSandboxConfig = (dirPaths: string[]): express.Req
 	};
 };
 
+export const createHandlerToGetSandboxConfigPluginCode = (): express.RequestHandler => {
+	return async (req, res, next) => {
+		try {
+			const contentId = req.params.contentId;
+			const pluginName = req.params.pluginName;
+			const config = sandboxConfigs.get(contentId);
+
+			if (!config.client.external[pluginName]) {
+				throw new NotFoundError({ errorMessage: `pluginName:${pluginName} is not found.` });
+			}
+
+			const pluginPath = path.resolve(config.client.external[pluginName]);
+			if (!fs.existsSync(pluginPath)) {
+				throw new NotFoundError({ errorMessage: `${pluginName} is not found. path:${config.client.external[pluginName]}` });
+			}
+
+			const content = fs.readFileSync(pluginPath);
+			// `/contents/${contentId}/sandboxConfig/plugins/${pluginName}` にアクセスで plugin を取得できるようにする
+			const responseBody = `window.__testbed.pluginFuncs["${pluginName}"] = function () {
+				var module = { exports: {} };
+				var exports = module.exports;
+				(function () {
+    				${ content };
+				})();
+				return module.exports;
+			};`;
+
+			res.contentType("text/javascript");
+			res.send(responseBody);
+		} catch (e) {
+			next(e);
+		}
+	};
+};
+
 export const createHandlerToGetSandboxConfigBgImage = (): express.RequestHandler => {
 	return async (req, res, next) => {
 		try {

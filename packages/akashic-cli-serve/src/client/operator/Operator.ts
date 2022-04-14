@@ -49,7 +49,6 @@ export class Operator {
 		this.devtool = new DevtoolOperator(store);
 		this.store = param.store;
 		this.gameViewManager = param.gameViewManager;
-		this._initializePlugins();
 
 		Subscriber.onBroadcast.add(this._handleBroadcast);
 	}
@@ -59,6 +58,7 @@ export class Operator {
 	}
 
 	async bootstrap(contentLocator?: ClientContentLocator): Promise<void> {
+		this._initializePlugins(contentLocator || this.store.contentStore.defaultContent().locator);
 		const store = this.store;
 		let play: PlayEntity = null;
 		if (query.playId != null) {
@@ -245,7 +245,8 @@ export class Operator {
 		};
 	};
 
-	private _initializePlugins(): void {
+	//  TODO: 複数のコンテンツ対応。引数の contentLocator は複数コンテンツに対応していないが暫定とする
+	private async _initializePlugins(contentLocator: ClientContentLocator): Promise<void> {
 		this.gameViewManager.registerExternalPlugin(new NicoPlugin());
 		this.gameViewManager.registerExternalPlugin(new SendPlugin());
 		this.gameViewManager.registerExternalPlugin(new CoePlugin({
@@ -261,6 +262,23 @@ export class Operator {
 				startPlayerInfoResolver: this._startPlayerInfoResolver,
 				endPlayerInfoResolver: this._endPlayerInfoResolver
 			}));
+		}
+
+		const content = this.store.contentStore.findOrRegister(contentLocator);
+		const sandboxConfig = content.sandboxConfig || {};
+		const client = sandboxConfig?.client;
+		if (client?.external) {
+			for (const pluginName of Object.keys(client.external)) {
+				await this._loadScript(`/contents/${contentLocator.contentId}/sandboxConfig/plugins/${pluginName}`);
+
+				const pluginObj = {
+					name: pluginName,
+					onload: function (game: any, _dataBus: unknown, _gameContent: agv.GameContent) {
+						game.external[pluginName] = (window as any).__testbed.pluginFuncs[pluginName]()();
+					}
+				};
+				this.gameViewManager.registerExternalPlugin(pluginObj);
+			}
 		}
 	}
 
@@ -302,4 +320,18 @@ export class Operator {
 	private _endPlayerInfoResolver = (): void => {
 		this.store.playerInfoResolverUiStore.hideDialog();
 	};
+
+	private _loadScript(scriptPath: string): Promise<void> {
+		return new Promise((resolve, reject) => {
+			const script = document.createElement("script");
+			script.src = scriptPath;
+			script.onload = () => {
+				resolve();
+			};
+			script.onerror = function (e) {
+				reject(e);
+			};
+			document.body.append(script);
+		});
+	}
 }
