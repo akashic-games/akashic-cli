@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import type * as express from "express";
-import mime = require("mime");
+import * as mime from "mime";
 import type { SandboxConfigApiResponseData } from "../../common/types/ApiResponse";
 import { NotFoundError } from "../common/ApiError";
 import { responseSuccess } from "../common/ApiResponse";
