@@ -27,12 +27,8 @@ export interface GameScreenContainerProps {
 export class GameScreenContainer extends React.Component<GameScreenContainerProps, {}> {
 	render(): React.ReactNode {
 		const gameViewSize = this.props.localInstance.gameViewSize;
-		let bgImage = this.props.sandboxConfig.backgroundImage;
-		if (bgImage && !/^\/contents\//.test(bgImage)) {
-			bgImage = `/contents/${this.props.localInstance.content.locator.contentId}/sandboxConfig/backgroundImage`;
-		}
 		return <GameScreen
-			backgroundImage={bgImage}
+			backgroundImage={this.props.sandboxConfig.backgroundImageUrl}
 			backgroundColor={this.props.sandboxConfig.backgroundColor}
 			showsGrid={this.props.toolBarUiStore.showsGrid}
 			showsBackgroundImage={this.props.toolBarUiStore.showsBackgroundImage}

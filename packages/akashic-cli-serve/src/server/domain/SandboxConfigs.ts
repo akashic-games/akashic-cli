@@ -15,7 +15,7 @@ const configs: { [key: string]: SandboxConfig } = {};
 export function register(contentId: string, targetDir: string): void {
 	const configPath = path.resolve(targetDir, "sandbox.config.js");
 	if (configs[contentId]) return;
-	configs[contentId] = watchRequire(configPath, config => configs[contentId] = config);
+	configs[contentId] = watchRequire(configPath, contentId, config => configs[contentId] = config);
 }
 
 /**
@@ -27,13 +27,13 @@ export function get(contentId: string): SandboxConfig {
 	return configs[contentId];
 }
 
-function watchRequire(configPath: string, callback: (content: SandboxConfig) => void): SandboxConfig {
+function watchRequire(configPath: string, contentId: string, callback: (content: SandboxConfig) => void): SandboxConfig {
 	let config = dynamicRequire<SandboxConfig>(configPath, true);
 
 	const eventListener = (event: string, path: string): void => {
 		if (event === "add" || event === "change") {
 			config = dynamicRequire<SandboxConfig>(path, true);
-			validateConfig(config);
+			normalizeConfig(config, contentId);
 		} else if (event === "unlink") {
 			config = {};
 		} else {
@@ -47,7 +47,7 @@ function watchRequire(configPath: string, callback: (content: SandboxConfig) => 
 	return config;
 }
 
-function validateConfig(config: SandboxConfig): void {
+function normalizeConfig(config: SandboxConfig, contentId: string): void {
 	const externalAssets = (config ? config.externalAssets : undefined) === undefined ? [] : config.externalAssets;
 	if (externalAssets) {
 		// sandbox.config.js の externalAssets に値がある場合は (string|regexp)[] でなければエラーとする
@@ -67,16 +67,17 @@ function validateConfig(config: SandboxConfig): void {
 
 	const bgImage = config ? config.backgroundImage : undefined;
 	if (bgImage) {
-		if (/^(http|\/https\/)/.test(bgImage)) {
-			throw new BadRequestError({ errorMessage: "Invalid backgroundImage, http/https is not allowed. Please use the local path." });
-		}
-
 		if (!/\.(jpg|jpeg|png)$/.test(bgImage)) {
 			throw new BadRequestError({ errorMessage: "Invalid backgroundImage, Please specify a png/jpg file." });
 		}
 
 		if (/^\/contents\//.test(bgImage)) {
 			console.warn("Please use the local path for the value of sandboxConfig.backgroundImage");
+			config.backgroundImageUrl = bgImage;
+		} else if (/^https?:\/\//.test(bgImage)) {
+			config.backgroundImageUrl = bgImage;
+		} else {
+			config.backgroundImageUrl = `/contents/${contentId}/sandboxConfig/backgroundImage`;
 		}
 	}
 }
