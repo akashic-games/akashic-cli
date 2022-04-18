@@ -1,7 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
 import type * as express from "express";
-import * as mime from "mime";
 import type { SandboxConfigApiResponseData } from "../../common/types/ApiResponse";
 import { NotFoundError } from "../common/ApiError";
 import { responseSuccess } from "../common/ApiResponse";
@@ -71,7 +70,7 @@ export const createHandlerToGetSandboxConfigBgImage = (): express.RequestHandler
 					throw new NotFoundError({ errorMessage: `backgroundImage is not found. path:${config.backgroundImage}` });
 				}
 
-				const type = mime.lookup(imgPath);
+				const type = path.extname(imgPath) === ".png" ? "image/png" : "image/jpeg";
 				res.contentType(type);
 				res.sendFile(imgPath);
 			}
