@@ -5,6 +5,7 @@ import type { GameViewManager } from "../../akashic/GameViewManager";
 import type { Operator } from "../../operator/Operator";
 import type { DevtoolUiStore } from "../../store/DevtoolUiStore";
 import type { LocalInstanceEntity } from "../../store/LocalInstanceEntity";
+import type { PlayerInfoResolverUiStore } from "../../store/PlayerInfoResolverUiStore";
 import type { ProfilerStore } from "../../store/ProfilerStore";
 import type { ToolBarUiStore } from "../../store/ToolBarUiStore";
 import type { PlayerInfoResolverDialogProps } from "../molecule/PlayerInfoResolverDialog";
@@ -15,6 +16,7 @@ export interface GameScreenContainerProps {
 	sandboxConfig: SandboxConfig;
 	toolBarUiStore: ToolBarUiStore;
 	devtoolUiStore: DevtoolUiStore;
+	playerInfoResolverUiStore: PlayerInfoResolverUiStore;
 	profilerStore: ProfilerStore;
 	localInstance: LocalInstanceEntity;
 	gameViewManager: GameViewManager;
@@ -27,8 +29,10 @@ export class GameScreenContainer extends React.Component<GameScreenContainerProp
 		const gameViewSize = this.props.localInstance.gameViewSize;
 		return <GameScreen
 			backgroundImage={this.props.sandboxConfig.backgroundImage}
+			backgroundColor={this.props.sandboxConfig.backgroundColor}
 			showsGrid={this.props.toolBarUiStore.showsGrid}
 			showsBackgroundImage={this.props.toolBarUiStore.showsBackgroundImage}
+			showsBackgroundColor={this.props.toolBarUiStore.showsBackgroundColor}
 			showsDesignGuideline={this.props.toolBarUiStore.showsDesignGuideline}
 			gameWidth={gameViewSize.width}
 			gameHeight={gameViewSize.height}
@@ -58,12 +62,12 @@ export class GameScreenContainer extends React.Component<GameScreenContainerProp
 	};
 
 	private _makePlayerInfoResolverDialogProps = (): PlayerInfoResolverDialogProps | undefined => {
-		const coeLimitedPlugin = this.props.localInstance.coeLimitedPlugin;
-		return coeLimitedPlugin.isDisplayingResolver ? {
-			remainingSeconds: coeLimitedPlugin.remainingSeconds,
-			name: coeLimitedPlugin.name,
-			guestName: coeLimitedPlugin.guestName,
-			onClick: coeLimitedPlugin.sendName
+		const resolverUiStore = this.props.playerInfoResolverUiStore;
+		return resolverUiStore.isDisplayingResolver ? {
+			remainingSeconds: resolverUiStore.remainingSeconds,
+			name: resolverUiStore.name,
+			guestName: resolverUiStore.guestName,
+			onClick: resolverUiStore.finishDialog
 		} : undefined;
 	};
 

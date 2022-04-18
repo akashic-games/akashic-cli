@@ -1,4 +1,4 @@
-import { Trigger } from "@akashic/trigger";
+import type * as pl from "@akashic/playlog";
 import type { ClientContentLocator } from "../common/ClientContentLocator";
 import { NullScriptAssetV3 } from "./AssetV3";
 import { ServeGameContent } from "./ServeGameContent";
@@ -37,6 +37,7 @@ export interface GameViewManagerParameterObject {
 	untrustedFrameUrl?: string;
 	trustedChildOrigin?: RegExp;
 }
+
 export interface CreateGameContentParameterObject {
 	contentLocator: ClientContentLocator;
 	player: {
@@ -46,7 +47,16 @@ export interface CreateGameContentParameterObject {
 	playConfig: agv.PlaylogConfig;
 	gameLoaderCustomizer: agv.GameLoaderCustomizer;
 	argument?: any;
+	initialEvents?: pl.Event[];
 	proxyAudio?: boolean;
+
+	/**
+	 * Webブラウザの開発者ツールのソースコード欄に現れる (debuggable) スクリプトを "使わない" か。
+	 * 実装の制限から、同時に実行されるコンテンツでは一つしか debuggable にできない。
+	 * (TestbedScriptAsset.ts が使う this.id がコンテンツ間で衝突しうる)
+	 * TODO: この制限をなくして、このオプションごと廃止する。
+	 */
+	useNonDebuggableScript?: boolean;
 }
 
 // --debug-proxy-audio用の暫定実装。デバッグ用なのでログに出すのみ。
@@ -101,12 +111,17 @@ export class GameViewManager {
 
 	createGameContent(param: CreateGameContentParameterObject): ServeGameContent {
 		const loc = param.contentLocator;
+		const contentUrl =
+			param.useNonDebuggableScript ?
+				loc.asAbsoluteUrl() :
+				(loc.asDebuggableRootRelativeUrl() || loc.asAbsoluteUrl());
 		const gameConfig = {
-			contentUrl: loc.asDebuggableRootRelativeUrl() || loc.asAbsoluteUrl(),
+			contentUrl,
 			player: param.player,
 			playConfig: param.playConfig,
 			gameLoaderCustomizer: param.gameLoaderCustomizer,
 			argument: param.argument,
+			initialEvents: param.initialEvents,
 			audioPdiHandlers: param.proxyAudio ? new LogAudioPdiHandler() : null
 		};
 		// TODO: 複数コンテンツのホスティングに対応されれば削除
@@ -114,7 +129,6 @@ export class GameViewManager {
 			gameConfig.gameLoaderCustomizer.platformCustomizer = this.customizePlatform;
 		}
 		const agvGameContent = new agv.GameContent(gameConfig);
-		agvGameContent.onExternalPluginRegister = new Trigger();
 		return new ServeGameContent(agvGameContent);
 	}
 
@@ -161,14 +175,6 @@ export class GameViewManager {
 		this.gameView.registerExternalPlugin(plugin);
 	}
 
-	getGameVars<T>(content: ServeGameContent, propertyName: string): Promise<T> {
-		return new Promise(resolve => {
-			content.agvGameContent.getGameVars(propertyName, value => {
-				resolve(value);
-			});
-		});
-	}
-
 	private customizePlatform(platform: Platform, options: any): void {
 		const scriptAssetClass = options.g.ScriptAsset || NullScriptAssetV3;
 		// eslint-disable-next-line @typescript-eslint/naming-convention
@@ -204,23 +210,23 @@ export class GameViewManager {
 					) {
 						if (offsetX < 0 || offsetX + width > surface.width || offsetY < 0 || offsetY + height > surface.height) {
 							// ref. https://github.com/akashic-games/akashic-engine/issues/349
-							throw new Error(`drawImage(): out of bounds.`
+							throw new Error("drawImage(): out of bounds."
 								+ `The source rectangle bleeds out the source surface (${surface.width}x${surface.height}). `
-								+ `This is not a bug but intentionally prohibited by akashic serve`
-								+ `to prevent platform-specific rendering trouble.`
+								+ "This is not a bug but intentionally prohibited by akashic serve"
+								+ "to prevent platform-specific rendering trouble."
 							);
 						}
 						if (width <= 0 || height <= 0) {
-							throw new Error(`drawImage(): nothing to draw.`
-								+ `Either width or height is less than or equal to zero.`
-								+ `This is not a bug but intentionally prohibited by akashic serve`
-								+ `to prevent platform-specific rendering trouble.`
+							throw new Error("drawImage(): nothing to draw."
+								+ "Either width or height is less than or equal to zero."
+								+ "This is not a bug but intentionally prohibited by akashic serve"
+								+ "to prevent platform-specific rendering trouble."
 							);
 						}
 						originalDrawImage.apply(this, arguments);
-					}
+					};
 					return renderer;
-				}
+				};
 				return surface;
 			};
 		}

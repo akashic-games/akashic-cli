@@ -1,5 +1,68 @@
 # CHANGELOG
 
+## 2.15.62 (2022-04-14)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#1059](https://github.com/akashic-games/akashic-cli/pull/1059) Support for client external plugin with serve ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli`
+  * [#1031](https://github.com/akashic-games/akashic-cli/pull/1031) Update all dependencies (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#1054](https://github.com/akashic-games/akashic-cli/pull/1054) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+## 2.15.61 (2022-04-05)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#1058](https://github.com/akashic-games/akashic-cli/pull/1058) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.1.8, engineFiles@2.1.57, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+* `akashic-cli-export`
+  * [#1057](https://github.com/akashic-games/akashic-cli/pull/1057) 【akashic-cli-export】内部コンポーネントの更新(engineFiles@3.1.8, engineFiles@2.1.57, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+  * [#1056](https://github.com/akashic-games/akashic-cli/pull/1056) 【akashic-cli-export】内部コンポーネントの更新(engineFiles@3.1.7, engineFiles@2.1.57, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+
+#### Committers: 2
+- kamakiri_ys ([@kamakiri01](https://github.com/kamakiri01))
+- xnv ([@xnv](https://github.com/xnv))
+
+## 2.15.60 (2022-03-20)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli`
+  * [#1053](https://github.com/akashic-games/akashic-cli/pull/1053) Update dependency eslint-plugin-jest to v26.1.2 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
+## 2.15.59 (2022-03-19)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli`
+  * [#1052](https://github.com/akashic-games/akashic-cli/pull/1052) Update dependency @babel/core to v7.17.8 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
+## 2.15.58 (2022-03-18)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli`
+  * [#1051](https://github.com/akashic-games/akashic-cli/pull/1051) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
+## 2.15.57 (2022-03-11)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli`
+  * [#1049](https://github.com/akashic-games/akashic-cli/pull/1049) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 0
+
+
 
 ## 2.15.55 (2022-03-08)
 

@@ -303,6 +303,14 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 		});
 	}
 
+	// agvplugin.js は内部デバッグ用のファイルで通常存在しない。その場合でも script 要素で読み込めるようにしておく
+	if (!fs.existsSync(path.join(__dirname, "..", "..", "www", "internal", "agvplugin.js"))) {
+		app.get("/internal/agvplugin.js", (_req, res, _next) => {
+			res.contentType("text/javascript");
+			res.send("");
+		});
+	}
+
 	app.use("/public/", express.static(path.join(__dirname, "..", "..", "www", "public")));
 	app.use("/internal/", express.static(path.join(__dirname, "..", "..", "www", "internal")));
 	app.use("/api/", createApiRouter({ playStore, runnerStore, playerIdStore, amflowManager, io }));

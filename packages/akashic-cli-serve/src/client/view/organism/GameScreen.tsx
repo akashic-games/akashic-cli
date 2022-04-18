@@ -8,9 +8,11 @@ import * as styles from "./GameScreen.css";
 
 export interface GameScreenProps {
 	showsBackgroundImage: boolean;
+	showsBackgroundColor: boolean;
 	showsGrid: boolean;
 	showsDesignGuideline: boolean;
 	backgroundImage: string | null;
+	backgroundColor: string | null;
 	gameWidth: number;
 	gameHeight: number;
 	screenElement: HTMLElement;
@@ -27,6 +29,8 @@ export class GameScreen extends React.Component<GameScreenProps, {}> {
 		const {
 			showsBackgroundImage: showsBgImage,
 			backgroundImage: bgImage,
+			showsBackgroundColor: showsBgColor,
+			backgroundColor: bgColor,
 			showsGrid,
 			showsDesignGuideline,
 			gameWidth,
@@ -36,6 +40,12 @@ export class GameScreen extends React.Component<GameScreenProps, {}> {
 		} = this.props;
 		const bgImageStyle = (showsBgImage && !bgImage) ?  (" " + styles["pseudo-transparent-bg"]) : "";
 		return <div className={styles["game-screen"]} style={{ width: gameWidth, height: gameHeight }}>
+			{
+				// TODO: .bg-image の恐らく不要な z-index をなくせば背景色の描画に .game-screen の backgroundColor を利用でき、この div は削除できる
+				(showsBgColor) ?
+					<div className={styles["bg-image"]} style={{ width: gameWidth, height: gameHeight, backgroundColor: bgColor }}/> :
+					null
+			}
 			{
 				(showsBgImage && bgImage) ?
 					<img src={bgImage} className={styles["bg-image"] + " external-ref_img_background"}/> :

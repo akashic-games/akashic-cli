@@ -37,6 +37,10 @@ export class UiOperator {
 		this.store.toolBarUiStore.setShowBackgroundImage(show);
 	};
 
+	setShowBackgroundColor = (show: boolean): void => {
+		this.store.toolBarUiStore.setShowBackgroundColor(show);
+	};
+
 	setShowGrid = (show: boolean): void => {
 		this.store.toolBarUiStore.setShowGrid(show);
 	};

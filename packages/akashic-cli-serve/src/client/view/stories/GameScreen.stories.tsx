@@ -13,9 +13,11 @@ storiesOf("o-GameScreen", module)
 	.add("basic", () => (
 		<GameScreen
 			showsBackgroundImage={false}
+			showsBackgroundColor={false}
 			showsGrid={false}
 			showsDesignGuideline={false}
 			backgroundImage={null}
+			backgroundColor={null}
 			gameWidth={320}
 			gameHeight={240}
 			screenElement={createDummyDiv(320, 240)}
@@ -32,9 +34,11 @@ storiesOf("o-GameScreen", module)
 	.add("background", () => (
 		<GameScreen
 			showsBackgroundImage={true}
+			showsBackgroundColor={true}
 			showsGrid={false}
 			showsDesignGuideline={false}
 			backgroundImage={null}
+			backgroundColor={null}
 			gameWidth={320}
 			gameHeight={240}
 			screenElement={createDummyDiv(320, 240)}
@@ -51,9 +55,11 @@ storiesOf("o-GameScreen", module)
 	.add("background&grid", () => (
 		<GameScreen
 			showsBackgroundImage={true}
+			showsBackgroundColor={true}
 			showsGrid={true}
 			showsDesignGuideline={false}
 			backgroundImage={null}
+			backgroundColor={null}
 			gameWidth={320}
 			gameHeight={240}
 			screenElement={createDummyDiv(320, 240)}
@@ -70,9 +76,11 @@ storiesOf("o-GameScreen", module)
 	.add("designGuideline", () => (
 		<GameScreen
 			showsBackgroundImage={false}
+			showsBackgroundColor={false}
 			showsGrid={false}
 			showsDesignGuideline={true}
 			backgroundImage={null}
+			backgroundColor={null}
 			gameWidth={320}
 			gameHeight={240}
 			screenElement={createDummyDiv(320, 240)}
@@ -89,9 +97,11 @@ storiesOf("o-GameScreen", module)
 	.add("confirmDialog", () => (
 		<GameScreen
 			showsBackgroundImage={false}
+			showsBackgroundColor={false}
 			showsGrid={false}
 			showsDesignGuideline={false}
 			backgroundImage={null}
+			backgroundColor={null}
 			gameWidth={320}
 			gameHeight={240}
 			screenElement={createDummyDiv(320, 240)}
@@ -113,9 +123,11 @@ storiesOf("o-GameScreen", module)
 	.add("profiler", () => (
 		<GameScreen
 			showsBackgroundImage={false}
+			showsBackgroundColor={false}
 			showsGrid={false}
 			showsDesignGuideline={false}
 			backgroundImage={null}
+			backgroundColor={null}
 			gameWidth={320}
 			gameHeight={240}
 			screenElement={createDummyDiv(320, 240)}

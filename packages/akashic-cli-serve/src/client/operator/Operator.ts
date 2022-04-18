@@ -1,6 +1,12 @@
 import type { PlayAudioState } from "../../common/types/PlayAudioState";
 import type { PlayBroadcastTestbedEvent } from "../../common/types/TestbedEvent";
 import type { GameViewManager } from "../akashic/GameViewManager";
+import type { PlayerInfoResolverResultMessage } from "../akashic/plugin/CoeLimitedPlugin";
+import { CoeLimitedPlugin } from "../akashic/plugin/CoeLimitedPlugin";
+import type { CreateCoeLocalInstanceParameterObject } from "../akashic/plugin/CoePlugin";
+import { CoePlugin } from "../akashic/plugin/CoePlugin";
+import { NicoPlugin } from "../akashic/plugin/NicoPlugin";
+import { SendPlugin } from "../akashic/plugin/SendPlugin";
 import { apiClient } from "../api/apiClientInstance";
 import * as Subscriber from "../api/Subscriber";
 import { RPGAtsumaruApi } from "../atsumaru/RPGAtsumaruApi";
@@ -8,10 +14,10 @@ import { ClientContentLocator } from "../common/ClientContentLocator";
 import { createSessionParameter } from "../common/createSessionParameter";
 import { queryParameters as query } from "../common/queryParameters";
 import type {ProfilerValue} from "../common/types/Profiler";
+import type { LocalInstanceEntity } from "../store/LocalInstanceEntity";
 import type { PlayEntity } from "../store/PlayEntity";
 import type { Store } from "../store/Store";
 import { DevtoolOperator } from "./DevtoolOperator";
-import { ExternalPluginOperator } from "./ExternalPluginOperator";
 import { LocalInstanceOperator } from "./LocalInstanceOperator";
 import { PlayOperator } from "./PlayOperator";
 import { UiOperator } from "./UiOperator";
@@ -32,7 +38,6 @@ export class Operator {
 	localInstance: LocalInstanceOperator;
 	ui: UiOperator;
 	devtool: DevtoolOperator;
-	externalPlugin: ExternalPluginOperator;
 	private store: Store;
 	private gameViewManager: GameViewManager;
 
@@ -42,7 +47,6 @@ export class Operator {
 		this.localInstance = new LocalInstanceOperator(store);
 		this.ui = new UiOperator(store);
 		this.devtool = new DevtoolOperator(store);
-		this.externalPlugin = new ExternalPluginOperator(param.gameViewManager);
 		this.store = param.store;
 		this.gameViewManager = param.gameViewManager;
 
@@ -54,6 +58,7 @@ export class Operator {
 	}
 
 	async bootstrap(contentLocator?: ClientContentLocator): Promise<void> {
+		this._initializePlugins(contentLocator || this.store.contentStore.defaultContent().locator);
 		const store = this.store;
 		let play: PlayEntity = null;
 		if (query.playId != null) {
@@ -140,35 +145,9 @@ export class Operator {
 			player: store.player,
 			argument: params != null ? params.instanceArgument : undefined,
 			proxyAudio: store.appOptions.proxyAudio,
-			coeHandler: {
-				onLocalInstanceCreate: async params => {
-					// TODO: local === true のみ対応
-					if (!params.local) {
-						// TODO: エラーハンドリング
-						throw new Error("Not supported");
-					}
-					const childPlay = await this._createClientLoop(params.contentUrl, params.playId);
-					const localInstance = await childPlay.createLocalInstance({
-						gameViewManager: this.gameViewManager,
-						player: this.store.player,
-						playId: params.playId,
-						executionMode: "active",
-						argument: params.argument,
-						initialEvents: params.initialEvents,
-						proxyAudio: store.appOptions.proxyAudio
-					});
-					await localInstance.start();
-					return localInstance;
-				},
-				onLocalInstanceDelete: async playId => {
-					const play = this.store.playStore.plays[playId];
-					if (play == null) {
-						throw new Error("Play not found" + playId);
-					}
-					await play.teardown();
-				}
-			}
+			resizeGameView: true
 		});
+		instance.onStop.addOnce(this._endPlayerInfoResolver);
 		store.setCurrentLocalInstance(instance);
 		await instance.start();
 		instance.setProfilerValueTrigger((value: ProfilerValue) => {
@@ -230,7 +209,7 @@ export class Operator {
 
 	private async _createClientLoop(contentUrl: string, playId: string): Promise<PlayEntity> {
 		const play = await this.store.playStore.createStandalonePlay({
-			contentLocator: new ClientContentLocator({ path: contentUrl }),  // TODO xnv 多分動かない。COEプラグインからまともに ContentLocator を組み立てる必要がある
+			contentLocator: new ClientContentLocator({ path: contentUrl }),
 			playId
 		});
 		return play;
@@ -264,5 +243,95 @@ export class Operator {
 				debugMode: true
 			}
 		};
+	};
+
+	//  TODO: 複数のコンテンツ対応。引数の contentLocator は複数コンテンツに対応していないが暫定とする
+	private async _initializePlugins(contentLocator: ClientContentLocator): Promise<void> {
+		this.gameViewManager.registerExternalPlugin(new NicoPlugin());
+		this.gameViewManager.registerExternalPlugin(new SendPlugin());
+		this.gameViewManager.registerExternalPlugin(new CoePlugin({
+			onLocalInstanceCreate: this._createLocalSessionInstance,
+			onLocalInstanceDelete: this._deleteLocalSessionInstance
+		}));
+
+		if (typeof agvplugin !== "undefined") {
+			this.gameViewManager.registerExternalPlugin(new agvplugin.CoeLimitedPlugin());
+			this.gameViewManager.registerExternalPlugin(new agvplugin.AgvSupplementPlugin());
+		} else {
+			this.gameViewManager.registerExternalPlugin(new CoeLimitedPlugin({
+				startPlayerInfoResolver: this._startPlayerInfoResolver,
+				endPlayerInfoResolver: this._endPlayerInfoResolver
+			}));
+		}
+
+		const content = this.store.contentStore.findOrRegister(contentLocator);
+		const sandboxConfig = content.sandboxConfig || {};
+		const client = sandboxConfig?.client;
+		if (client?.external) {
+			for (const pluginName of Object.keys(client.external)) {
+				await this._loadScript(`/contents/${contentLocator.contentId}/sandboxConfig/plugins/${pluginName}`);
+
+				const pluginObj = {
+					name: pluginName,
+					onload: function (game: any, _dataBus: unknown, _gameContent: agv.GameContent) {
+						game.external[pluginName] = (window as any).__testbed.pluginFuncs[pluginName]()();
+					}
+				};
+				this.gameViewManager.registerExternalPlugin(pluginObj);
+			}
+		}
+	}
+
+	private _createLocalSessionInstance = async (params: CreateCoeLocalInstanceParameterObject): Promise<LocalInstanceEntity> => {
+		// TODO: local === true のみ対応
+		if (!params.local) {
+			// TODO: エラーハンドリング
+			throw new Error("Not supported");
+		}
+		const childPlay = await this._createClientLoop(params.contentUrl, params.playId);
+		const localInstance = await childPlay.createLocalInstance({
+			gameViewManager: this.gameViewManager,
+			player: this.store.player,
+			playId: params.playId,
+			executionMode: "active",
+			argument: params.argument,
+			initialEvents: params.initialEvents,
+			proxyAudio: this.store.appOptions.proxyAudio,
+			useNonDebuggableScript: true,
+			resizeGameView: false
+		});
+		await localInstance.start();
+		return localInstance;
+	};
+
+	private _deleteLocalSessionInstance = async (playId: string): Promise<void> => {
+		const play = this.store.playStore.plays[playId];
+		if (play == null) {
+			throw new Error("Play not found" + playId);
+		}
+		await play.teardown();
+	};
+
+	private _startPlayerInfoResolver = (limitSeconds: number, cb: (res: PlayerInfoResolverResultMessage) => void): void => {
+		this.store.playerInfoResolverUiStore.showDialog(limitSeconds);
+		this.store.playerInfoResolverUiStore.onResolve.addOnce(cb);
+	};
+
+	private _endPlayerInfoResolver = (): void => {
+		this.store.playerInfoResolverUiStore.hideDialog();
+	};
+
+	private _loadScript(scriptPath: string): Promise<void> {
+		return new Promise((resolve, reject) => {
+			const script = document.createElement("script");
+			script.src = scriptPath;
+			script.onload = () => {
+				resolve();
+			};
+			script.onerror = function (e) {
+				reject(e);
+			};
+			document.body.append(script);
+		});
 	}
 }

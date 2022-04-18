@@ -10,6 +10,7 @@ import {DevtoolUiStore} from "./DevtoolUiStore";
 import type {LocalInstanceEntity} from "./LocalInstanceEntity";
 import {NotificationUiStore} from "./NotificationUiStore";
 import type {PlayEntity} from "./PlayEntity";
+import {PlayerInfoResolverUiStore} from "./PlayerInfoResolverUiStore";
 import {PlayStore} from "./PlayStore";
 import {ProfilerStore} from "./ProfilerStore";
 import {StartupScreenUiStore} from "./StartupScreenUiStore";
@@ -23,6 +24,7 @@ export class Store {
 	@observable devtoolUiStore: DevtoolUiStore;
 	@observable notificationUiStore: NotificationUiStore;
 	@observable startupScreenUiStore: StartupScreenUiStore;
+	@observable playerInfoResolverUiStore: PlayerInfoResolverUiStore;
 	@observable profilerStore: ProfilerStore;
 	@observable appOptions: AppOptions;
 	@observable player: Player | null;
@@ -42,6 +44,7 @@ export class Store {
 		this.devtoolUiStore = new DevtoolUiStore();
 		this.notificationUiStore = new NotificationUiStore();
 		this.startupScreenUiStore = new StartupScreenUiStore();
+		this.playerInfoResolverUiStore = new PlayerInfoResolverUiStore();
 		this.profilerStore = new ProfilerStore();
 		this.appOptions = null!;
 		this.player = null;
@@ -57,6 +60,7 @@ export class Store {
 		return Promise.all([
 			this.playStore.assertInitialized(),
 			this.contentStore.assertInitialized(),
+			this.playerInfoResolverUiStore.assertInitialized(),
 			storage.assertInitialized(),
 			this._initializationWaiter
 		]).then(() => {

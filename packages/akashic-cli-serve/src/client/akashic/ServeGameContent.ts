@@ -131,6 +131,14 @@ export class ServeGameContent {
 		this._gameDriver._gameLoop?.reset?.(startPoint);
 	}
 
+	getGameVars<T>(propertyName: string): Promise<T> {
+		return new Promise(resolve => {
+			this.agvGameContent.getGameVars(propertyName, value => {
+				resolve(value);
+			});
+		});
+	}
+
 	dumpEntities(): EDumpItem[] {
 		if (!this._game || !this._game.scene())
 			return [];
