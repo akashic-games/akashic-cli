@@ -3,9 +3,9 @@ import { storiesOf } from "@storybook/react";
 import { observable } from "mobx";
 import { observer } from "mobx-react";
 import * as React from "react";
-import { EDumpItem } from "../../common/types/EDumpItem";
-import { NiconicoDevtoolProps } from "../molecule/NiconicoDevtool";
-import { PlaybackDevtoolProps } from "../molecule/PlaybackDevtool";
+import type { EDumpItem } from "../../common/types/EDumpItem";
+import type { NiconicoDevtoolProps } from "../molecule/NiconicoDevtool";
+import type { PlaybackDevtoolProps } from "../molecule/PlaybackDevtool";
 import { Devtool } from "../organism/Devtool";
 
 const store = observable({

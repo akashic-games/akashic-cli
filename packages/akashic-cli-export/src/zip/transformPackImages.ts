@@ -1,8 +1,9 @@
 import * as fs from "fs";
 import * as path from "path";
 import { writeFile, unlink } from "@akashic/akashic-cli-commons/lib/FileSystem";
-import { GameConfiguration, AssetConfiguration } from "@akashic/akashic-cli-commons/lib/GameConfiguration";
+import { GameConfiguration } from "@akashic/akashic-cli-commons/lib/GameConfiguration";
 import { mkdirpSync } from "@akashic/akashic-cli-commons/lib/Util";
+import { AssetConfiguration, ImageAssetConfigurationBase } from "@akashic/game-configuration";
 import type { PNG } from "pngjs";
 import { makeUniqueAssetPath } from "./GameConfigurationUtil";
 import { packSmallRects, PackResult, PackTarget } from "./packRects";
@@ -91,14 +92,14 @@ export function extractPackTargets(
 	// ImageAssetPackData の定義や applyPackResults() の実装まで含めて見直す必要がある。
 	const pathToIdsTable = Object.keys(gamejson.assets).reduce((acc, aid) => {
 		const decl = gamejson.assets[aid];
-		if (isPackableImage(decl, widthLimit, heightLimit) && !decl.slice) // 既に slice があるものは単純化のため除外
+		if (isPackableImage(decl, widthLimit, heightLimit) && !decl.hasOwnProperty("slice")) // 既に slice があるものは単純化のため除外
 			(acc[decl.path] ?? (acc[decl.path] = [])).push(aid);
 		return acc;
 	}, Object.create(null) as { [path: string]: string[] });
 
 	return Object.keys(pathToIdsTable).map(p => {
 		const assetIds = pathToIdsTable[p]!;
-		const decl = gamejson.assets[assetIds[0]!]!;
+		const decl = gamejson.assets[assetIds[0]!]! as ImageAssetConfigurationBase;
 		return {
 			name: decl.path,
 			width: decl.width!,
@@ -150,7 +151,7 @@ export async function applyPackResults(
 					height,
 					virtualPath: orig.virtualPath ?? orig.path,
 					slice: [rect.x, rect.y, rect.width, rect.height]
-				};
+				} as ImageAssetConfigurationBase;
 			});
 		});
 	}

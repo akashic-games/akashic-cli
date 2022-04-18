@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import { StartPointHeader } from "../../../common/types/StartPointHeader";
+import type { StartPointHeader } from "../../../common/types/StartPointHeader";
 import { millisecondsToHms } from "../../common/DateUtil";
 import { ToolCheckbox } from "../atom/ToolCheckbox";
 import { ToolIconButton } from "../atom/ToolIconButton";

@@ -1,5 +1,5 @@
 export interface CliConfigStat {
-	args?: string[];
+	args: string[];
 	cwd?: string;
 	quiet?: boolean;
 	limit?: string;

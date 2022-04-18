@@ -15,12 +15,7 @@ export { ConfigurationFile } from "./ConfigurationFile";
 export { ConsoleLogger } from "./ConsoleLogger";
 export * as FileSystem from "./FileSystem";
 export {
-	AssetConfiguration,
-	AudioSystemConfiguration,
-	Assets,
-	OperationPluginDeclaration,
 	GameConfiguration,
-	ModuleMainScripts,
 	ExportZipInfo
 } from "./GameConfiguration";
 export { LibConfiguration } from "./LibConfiguration";

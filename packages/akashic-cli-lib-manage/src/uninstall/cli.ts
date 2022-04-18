@@ -1,12 +1,13 @@
 import * as fs from "fs";
 import * as path from "path";
-import { ConsoleLogger, CliConfigurationFile, CliConfigUninstall } from "@akashic/akashic-cli-commons";
+import type { CliConfigUninstall } from "@akashic/akashic-cli-commons";
+import { ConsoleLogger, CliConfigurationFile } from "@akashic/akashic-cli-commons";
 import { Command } from "commander";
 import { promiseUninstall } from "./uninstall";
 
 function cli(param: CliConfigUninstall): void {
-	var logger = new ConsoleLogger({ quiet: param.quiet });
-	var uninstallParam = { moduleNames: param.args, cwd: param.cwd, plugin: param.plugin, logger: logger, unlink: param.unlink };
+	const logger = new ConsoleLogger({ quiet: param.quiet });
+	const uninstallParam = { moduleNames: param.args, cwd: param.cwd, plugin: param.plugin, logger: logger, unlink: param.unlink };
 	Promise.resolve()
 		.then(() => promiseUninstall(uninstallParam))
 		.catch((err: any) => {
@@ -15,7 +16,7 @@ function cli(param: CliConfigUninstall): void {
 		});
 }
 
-var ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "..", "package.json"), "utf8")).version;
+const ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "..", "package.json"), "utf8")).version;
 
 const commander = new Command();
 commander

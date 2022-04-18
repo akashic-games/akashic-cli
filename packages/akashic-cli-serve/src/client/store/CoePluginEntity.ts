@@ -1,9 +1,9 @@
-import { Event } from "@akashic/playlog";
-import { GameViewManager } from "../akashic/GameViewManager";
-import {
+import type { Event } from "@akashic/playlog";
+import type { GameViewManager } from "../akashic/GameViewManager";
+import type {
 	CoeStartSessionParameterObject, CoeExitSessionParameterObject, CoeApplicationIdentifier, CoeExternalMessage
 } from "../common/types/plugin";
-import { LocalInstanceEntity } from "./LocalInstanceEntity";
+import type { LocalInstanceEntity } from "./LocalInstanceEntity";
 
 export interface GameState {
 	score?: number;

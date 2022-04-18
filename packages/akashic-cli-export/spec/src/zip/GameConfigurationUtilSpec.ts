@@ -11,6 +11,7 @@ describe("GameConfigurationUtil", () => {
 			width: 120,
 			height: 120,
 			fps: 40,
+			main: "main.js",
 			assets: {
 				"main": {
 					type: "script",
@@ -32,6 +33,7 @@ describe("GameConfigurationUtil", () => {
 			width: 120,
 			height: 120,
 			fps: 40,
+			main: "main.js",
 			assets: {
 				"main": {
 					type: "script",
@@ -61,6 +63,7 @@ describe("GameConfigurationUtil", () => {
 				width: 120,
 				height: 120,
 				fps: 40,
+				main: "main.js",
 				assets: {
 					"main": {
 						type: "script",
@@ -86,6 +89,7 @@ describe("GameConfigurationUtil", () => {
 				width: 120,
 				height: 120,
 				fps: 40,
+				main: "main.js",
 				assets: {
 					"main": {
 						type: "script",
@@ -115,6 +119,7 @@ describe("GameConfigurationUtil", () => {
 				width: 120,
 				height: 120,
 				fps: 40,
+				main: "main.js",
 				assets: {
 					"main": {
 						type: "script",
@@ -145,6 +150,7 @@ describe("GameConfigurationUtil", () => {
 				width: 120,
 				height: 120,
 				fps: 40,
+				main: "main.js",
 				assets: {
 					"main": {
 						type: "script",
@@ -168,6 +174,7 @@ describe("GameConfigurationUtil", () => {
 				width: 120,
 				height: 120,
 				fps: 40,
+				main: "main.js",
 				assets: {
 					"main": {
 						type: "script",
@@ -207,7 +214,8 @@ describe("GameConfigurationUtil", () => {
 			gamejson.assets.sound = {
 				type: "audio",
 				systemId: "sound",
-				path: "audio/foo"
+				path: "audio/foo",
+				duration: 100
 			};
 			mockfs({
 				gamejson: "",

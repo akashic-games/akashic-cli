@@ -10,11 +10,12 @@ describe("transformPackImages", () => {
 				{
 					width: 32,
 					height: 32,
+					main: "main.js",
 					assets: {
 						"imageA": { type: "image", path: "image/imageA.png", width: 10, height: 20, global: true },
 						"imageB": { type: "image", path: "assets/imageB.png", width: 30, height: 50, },
 						"large": { type: "image", path: "image/large.png", width: 1000, height: 1000, },
-						"se": { type: "audio", path: "audio/se", duration: 100 },
+						"se": { type: "audio", path: "audio/se", duration: 100, systemId: "sound"},
 						"main": { type: "script", path: "script/main.js", global: true },
 					}
 				},
@@ -43,6 +44,7 @@ describe("transformPackImages", () => {
 				{
 					width: 32,
 					height: 32,
+					main: "main.js",
 					assets: {
 						"imageA": { type: "image", path: "image/imageA.png", width: 10, height: 20, global: true },
 						"imageA2": { type: "image", path: "image/imageA.png", width: 10, height: 20 },

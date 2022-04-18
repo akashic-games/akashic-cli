@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-commons",
-  "version": "0.13.18",
+  "version": "0.13.30",
   "description": "The shared definitions and routines for akashic-cli-xxx",
   "main": "lib/index.js",
   "scripts": {
@@ -21,17 +21,17 @@
     "package.json"
   ],
   "devDependencies": {
-    "@akashic/eslint-config": "^0.1.2",
+    "@akashic/eslint-config": "^1.1.0",
     "@types/browserify": "12.0.37",
-    "@types/eslint": "7.29.0",
+    "@types/eslint": "8.4.1",
     "@types/fs-extra": "9.0.13",
-    "@types/jest": "27.4.0",
+    "@types/jest": "27.4.1",
     "@types/mock-fs": "4.13.1",
-    "@types/node": "14.18.11",
-    "@typescript-eslint/eslint-plugin": "4.33.0",
-    "eslint-config-prettier": "8.3.0",
+    "@types/node": "14.18.12",
+    "@typescript-eslint/eslint-plugin": "5.12.1",
+    "eslint-config-prettier": "8.4.0",
     "eslint-plugin-import": "2.25.4",
-    "eslint-plugin-jest": "24.7.0",
+    "eslint-plugin-jest": "26.1.1",
     "jest": "26.6.3",
     "mock-fs": "4.14.0",
     "shx": "0.3.4",
@@ -39,9 +39,10 @@
   },
   "typings": "lib/index.d.ts",
   "dependencies": {
+    "@akashic/game-configuration": "1.2.0",
     "browserify": "17.0.0",
-    "eslint": "7.32.0",
-    "fs-extra": "10.0.0",
+    "eslint": "8.10.0",
+    "fs-extra": "10.0.1",
     "fs-readdir-recursive": "1.1.0",
     "js-sha256": "^0.9.0"
   },

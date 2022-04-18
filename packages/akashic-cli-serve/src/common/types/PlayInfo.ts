@@ -1,9 +1,9 @@
-import { ContentLocatorData } from "./ContentLocatorData";
-import { PlayAudioState } from "./PlayAudioState";
-import { PlayDurationState } from "./PlayDurationState";
-import { Player } from "./Player";
-import { PlayStatus } from "./PlayStatus";
-import { ClientInstanceDescription, RunnerDescription } from "./TestbedEvent";
+import type { ContentLocatorData } from "./ContentLocatorData";
+import type { PlayAudioState } from "./PlayAudioState";
+import type { PlayDurationState } from "./PlayDurationState";
+import type { Player } from "./Player";
+import type { PlayStatus } from "./PlayStatus";
+import type { ClientInstanceDescription, RunnerDescription } from "./TestbedEvent";
 
 export interface PlayInfo {
 	playId: string;

@@ -1,11 +1,14 @@
 import { Trigger } from "@akashic/trigger";
-import { Observer } from "rxjs";
-import { ScoreboardData } from "./ScoreboardData";
-import { ScreenshotModalResults } from "./ScreenshotModalResults";
-import { SelfInformation, dummySelfInfomation } from "./SelfInformation";
-import { TweetSettings } from "./TweetSettings";
-import { UserIdName, dummyUserIdName } from "./UserIdName";
-import { UserInformation, dummyUserInformation } from "./UserInformation";
+import type { Observer } from "rxjs";
+import type { ScoreboardData } from "./ScoreboardData";
+import type { ScreenshotModalResults } from "./ScreenshotModalResults";
+import type { SelfInformation} from "./SelfInformation";
+import { dummySelfInfomation } from "./SelfInformation";
+import type { TweetSettings } from "./TweetSettings";
+import type { UserIdName} from "./UserIdName";
+import { dummyUserIdName } from "./UserIdName";
+import type { UserInformation} from "./UserInformation";
+import { dummyUserInformation } from "./UserInformation";
 
 interface SubscriptionMock {
 	unsubscribe(): void;

@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
-import { Logger, GameConfiguration } from "@akashic/akashic-cli-commons";
+import type { Logger, GameConfiguration } from "@akashic/akashic-cli-commons";
 
 enum FileType {
 	Ogg,
@@ -186,8 +186,9 @@ function sizeOfGameJson(param: StatSizeParameterObject, sizeResult: SizeResult):
  */
 function sizeOfAssets(param: StatSizeParameterObject, sizeResult: SizeResult): Promise<void>[] {
 	if (param.game.assets == null) return [];
-	return Object.keys(param.game.assets).map(key => {
-		const asset = param.game.assets[key];
+	const assets = param.game.assets;
+	return Object.keys(assets).map(key => {
+		const asset = assets[key]!;
 		switch (asset.type) {
 			case "image":
 				return fileSize(path.join(param.basepath, asset.path))
@@ -289,7 +290,7 @@ function fileSize(fullPath: string): Promise<number> {
  * サイズを表す文字列をバイト数に変換
  * 例: "100KB" -> 102400
  */
-function parseSize(str: string): number {
+function parseSize(str: string): number | null{
 	const result = /^(\d+)([KMG]?)B?$/i.exec(str);
 	if (result == null) {
 		return null;

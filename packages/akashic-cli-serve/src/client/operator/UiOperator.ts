@@ -1,5 +1,5 @@
-import { NotificationType } from "../store/NotificationType";
-import { Store } from "../store/Store";
+import type { NotificationType } from "../store/NotificationType";
+import type { Store } from "../store/Store";
 
 export class UiOperator {
 	private store: Store;

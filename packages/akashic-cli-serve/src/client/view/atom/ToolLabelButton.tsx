@@ -5,6 +5,7 @@ import * as styles from "./ToolLabelButton.css";
 export interface ToolLabelButtonProps {
 	className?: string;
 	title?: string;
+	children?: React.ReactNode;
 	onClick?: () => void;
 }
 

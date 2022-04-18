@@ -12,7 +12,9 @@ describe("Configuration", function () {
 		var content = {
 			width: 120,
 			height: 240,
-			fps: 30
+			fps: 30,
+			main: "main.js",
+			assets: {}
 		};
 		var self = new Configuration({ content: content, logger: logger });
 
@@ -28,6 +30,8 @@ describe("Configuration", function () {
 			width: 120,
 			height: 240,
 			fps: 30,
+			main: "main.js",
+			assets: {},
 			globalScripts: [
 				"node_modules/foo/some.js",
 				"node_modules/foo/some.js.foo.js",

@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as os from "os";
 import * as path from "path";
-import { Logger } from "@akashic/akashic-cli-commons";
+import type { Logger } from "@akashic/akashic-cli-commons";
 import * as ini from "ini";
 import * as lodashGet from "lodash.get";
 import * as lodashSet from "lodash.set";
@@ -11,10 +11,10 @@ export type StringMap = {[key: string]: string};
 
 export class AkashicConfigFile {
 	data: StringMap;
-	private _validator: StringMap;
+	private _validator: StringMap | null;
 	private _path: string;
 
-	constructor(validator: StringMap, configPath: string = path.join(os.homedir(), ".akashicrc")) {
+	constructor(validator: StringMap | null, configPath: string = path.join(os.homedir(), ".akashicrc")) {
 		this._validator = validator;
 		this.data = {};
 		this._path = configPath;
@@ -56,7 +56,7 @@ export class AkashicConfigFile {
 	isValidValue(key: string, value: string): boolean {
 		if (!this._validator) return true;
 		const reStr: string = lodashGet(this._validator, key, null);
-		if (reStr == null) return null;
+		if (reStr == null) return false;
 		return (new RegExp(reStr)).test(value);
 	}
 
@@ -87,17 +87,17 @@ export class AkashicConfigFile {
 	}
 }
 
-export function getConfigItem(validator: StringMap, key: string, confPath?: string): Promise<string> {
+export function getConfigItem(validator: StringMap | null, key: string, confPath?: string): Promise<string> {
 	const config = new AkashicConfigFile(validator, confPath);
 	return config.load().then(() => config.getItem(key));
 }
 
-export function setConfigItem(validator: StringMap, key: string, value: string, confPath?: string): Promise<void> {
+export function setConfigItem(validator: StringMap | null, key: string, value: string, confPath?: string): Promise<void> {
 	const config = new AkashicConfigFile(validator, confPath);
 	return config.load().then(() => config.setItem(key, value)).then(() => config.save());
 }
 
-export function deleteConfigItem(validator: StringMap, key: string, confPath?: string): Promise<void> {
+export function deleteConfigItem(validator: StringMap | null, key: string, confPath?: string): Promise<void> {
 	const config = new AkashicConfigFile(validator, confPath);
 	return config.load().then(() => config.deleteItem(key)).then(() => config.save());
 }

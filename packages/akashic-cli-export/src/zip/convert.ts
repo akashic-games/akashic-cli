@@ -1,6 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as cmn from "@akashic/akashic-cli-commons";
+import { ImageAssetConfigurationBase } from "@akashic/game-configuration";
 import * as babel from "@babel/core";
 import * as presetEnv from "@babel/preset-env";
 import * as browserify from "browserify";
@@ -250,4 +251,19 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 				fs.writeFileSync(p, UglifyJS.minify(code).code);
 			});
 		});
+}
+
+/**
+ * 指定のgameJson中の全てのImageAssetに untainted:true を付与する
+ */
+function addUntaintedToImageAssets(gameJson: cmn.GameConfiguration): void {
+	Object.keys(gameJson.assets).forEach(key => {
+		if (gameJson.assets[key].type === "image") {
+			const asset = gameJson.assets[key] as ImageAssetConfigurationBase;
+			if (!asset.hint) {
+				asset.hint = {};
+			}
+			asset.hint.untainted = true;
+		}
+	});
 }

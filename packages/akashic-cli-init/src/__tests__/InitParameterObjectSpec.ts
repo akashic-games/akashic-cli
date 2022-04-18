@@ -59,8 +59,9 @@ describe("InitParameterObject.ts", () => {
 	});
 
 	describe("save the allowed URL in .akashicrc", () => {
-		let mockConfigfile: config.AkashicConfigFile = null;
-		let mockPromptGet: jest.SpyInstance = null;
+		// beforeAll() で必ず代入するので非 null 型とする
+		let mockConfigfile: config.AkashicConfigFile = null!;
+		let mockPromptGet: jest.SpyInstance = null!;
 		const ITEM_KEY = "cache.initKnownUrl";
 		const tempPath = path.join(__dirname, "support", "fixture", ".akashicrc");
 
@@ -79,7 +80,6 @@ describe("InitParameterObject.ts", () => {
 			mockConfigfile = new config.AkashicConfigFile({ "cache.initKnownUrl": ""});
 		});
 		afterAll(() => {
-			mockConfigfile = null;
 			mockPromptGet.mockRestore();
 			fs.unlinkSync(tempPath);
 		});
@@ -150,7 +150,7 @@ describe("InitParameterObject.ts", () => {
 			const firstUrl = itemArray[0];
 
 			// 4個目の URL を保存
-			let param = {
+			const param = {
 				repository: "https://foo.com"
 			};
 			await target.completeInitParameterObject(param);

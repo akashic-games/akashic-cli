@@ -1,5 +1,5 @@
-import * as express from "express";
-import {
+import type * as express from "express";
+import type {
 	PlayApiResponseData,
 	PlayDeleteApiResponseData,
 	PlayPatchApiResponseData
@@ -7,7 +7,7 @@ import {
 import { BadRequestError, NotFoundError } from "../common/ApiError";
 import { responseSuccess } from "../common/ApiResponse";
 import { ServerContentLocator } from "../common/ServerContentLocator";
-import { PlayStore } from "../domain/PlayStore";
+import type { PlayStore } from "../domain/PlayStore";
 
 export const createHandlerToCreatePlay = (playStore: PlayStore): express.RequestHandler => {
 	return async (req, res, next) => {

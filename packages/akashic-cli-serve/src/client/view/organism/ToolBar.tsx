@@ -1,13 +1,18 @@
-import { ServiceType } from "@akashic/akashic-cli-commons/lib/ServiceType";
+import type { ServiceType } from "@akashic/akashic-cli-commons/lib/ServiceType";
 import { observer } from "mobx-react";
 import * as React from "react";
 import { ToolIconButton } from "../atom/ToolIconButton";
 import { ToolLabel } from "../atom/ToolLabel";
-import { AudioOptionControl, AudioOptionControlPropsData } from "../molecule/AudioOptionControl";
-import { DisplayOptionControl, DisplayOptionControlPropsData } from "../molecule/DisplayOptionControl";
-import { InstanceControl, InstanceControlPropsData } from "../molecule/InstanceControl";
-import { PlayControl, PlayControlPropsData } from "../molecule/PlayControl";
-import { PlayerControl, PlayerControlPropsData } from "../molecule/PlayerControl";
+import type { AudioOptionControlPropsData } from "../molecule/AudioOptionControl";
+import { AudioOptionControl } from "../molecule/AudioOptionControl";
+import type { DisplayOptionControlPropsData } from "../molecule/DisplayOptionControl";
+import { DisplayOptionControl } from "../molecule/DisplayOptionControl";
+import type { InstanceControlPropsData } from "../molecule/InstanceControl";
+import { InstanceControl } from "../molecule/InstanceControl";
+import type { PlayControlPropsData } from "../molecule/PlayControl";
+import { PlayControl } from "../molecule/PlayControl";
+import type { PlayerControlPropsData } from "../molecule/PlayerControl";
+import { PlayerControl } from "../molecule/PlayerControl";
 import * as styles from "./ToolBar.css";
 
 export interface ToolBarProps {

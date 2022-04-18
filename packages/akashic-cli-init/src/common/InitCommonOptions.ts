@@ -1,7 +1,7 @@
 import * as os from "os";
 import * as path from "path";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
-import { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
+import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
 import * as config from "@akashic/akashic-cli-extra/lib/config";
 import * as Prompt from "prompt";
 
@@ -56,9 +56,9 @@ const DEFAULT_TEMPLATE_REPOSITORY = "https://akashic-contents.github.io/template
  * 戻り値の .configFile は .load() が呼ばれた状態で返される点に注意。
  */
 export async function completeInitCommonOptions(opts: InitCommonOptions): Promise<NormalizedInitCommonOptions> {
-	await validateInitCommonOptions(opts);
-
 	const logger = opts.logger || new ConsoleLogger();
+	await validateRepositoryValue(logger, opts.repository);
+
 	const configFile = opts.configFile || new config.AkashicConfigFile(initConfigValidator);
 	const templateListJsonPath = opts.templateListJsonPath || "template-list.json";
 
@@ -78,14 +78,14 @@ export async function completeInitCommonOptions(opts: InitCommonOptions): Promis
 	};
 }
 
-async function validateInitCommonOptions(opts: InitCommonOptions): Promise<void> {
-	if (opts.repository) {
-		if (/(^(github|ghe):)|(\.git$)/.test(opts.repository)) {
-			opts.logger.warn("Misused -r, --repository options. Use -t option for Github repository");
+async function validateRepositoryValue(logger: Logger, repository: string | undefined): Promise<void> {
+	if (repository) {
+		if (/(^(github|ghe):)|(\.git$)/.test(repository)) {
+			logger.warn("Misused -r, --repository options. Use -t option for Github repository");
 		}
 
-		if (opts.repository !== DEFAULT_TEMPLATE_REPOSITORY) {
-			const accepted = await confirmAccessToUrl(opts.repository);
+		if (repository !== DEFAULT_TEMPLATE_REPOSITORY) {
+			const accepted = await confirmAccessToUrl(repository);
 			if (!accepted) process.exit(1);
 		}
 	}
