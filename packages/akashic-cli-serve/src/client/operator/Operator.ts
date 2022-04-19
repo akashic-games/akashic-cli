@@ -123,6 +123,13 @@ export class Operator {
 			}
 			argument = this._createInstanceArgumentForNicolive(isJoin);
 		}
+
+		if (query.argumentsValue) {
+			argument = JSON.parse(query.argumentsValue);
+		} else if (query.argumentsName && store.currentPlay.content.argumentsTable[query.argumentsName]) {
+			argument = JSON.parse(store.currentPlay.content.argumentsTable[query.argumentsName]);
+		}
+
 		if (store.appOptions.autoStart) {
 			await this.startContent({
 				joinsSelf: isJoin,
