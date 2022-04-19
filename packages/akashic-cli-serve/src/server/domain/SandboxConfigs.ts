@@ -4,6 +4,10 @@ import type { SandboxConfig } from "../../common/types/SandboxConfig";
 import { BadRequestError } from "../common/ApiError";
 import { dynamicRequire } from "./dynamicRequire";
 
+interface ResolvedSandboxConfig extends SandboxConfig {
+	resolvedBackgroundImagePath?: string;
+}
+
 const configs: { [key: string]: SandboxConfig } = {};
 
 /**
@@ -23,7 +27,7 @@ export function register(contentId: string, targetDir: string): void {
  *
  * @param contentId コンテンツID
  */
-export function get(contentId: string): SandboxConfig {
+export function get(contentId: string): ResolvedSandboxConfig {
 	return configs[contentId];
 }
 
@@ -47,7 +51,7 @@ function watchRequire(configPath: string, contentId: string, callback: (content:
 	return config;
 }
 
-function normalizeConfig(config: SandboxConfig, contentId: string): void {
+function normalizeConfig(config: ResolvedSandboxConfig, contentId: string): void {
 	const externalAssets = (config ? config.externalAssets : undefined) === undefined ? [] : config.externalAssets;
 	if (externalAssets) {
 		// sandbox.config.js の externalAssets に値がある場合は (string|regexp)[] でなければエラーとする
@@ -74,7 +78,8 @@ function normalizeConfig(config: SandboxConfig, contentId: string): void {
 		if (/^\/contents\//.test(bgImage)) {
 			console.warn("Please use the local path for the value of sandboxConfig.backgroundImage");
 		} else if (!/^https?:\/\//.test(bgImage)) {
-			config.backgroundImage = `/contents/${contentId}/sandboxConfig/backgroundImage?path=${bgImage}` ;
+			config.backgroundImage = `/contents/${contentId}/sandboxConfig/backgroundImage` ;
+			config.resolvedBackgroundImagePath = bgImage;
 		}
 	}
 }
