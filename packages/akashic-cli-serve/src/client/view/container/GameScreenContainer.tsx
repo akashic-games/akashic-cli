@@ -28,7 +28,7 @@ export class GameScreenContainer extends React.Component<GameScreenContainerProp
 	render(): React.ReactNode {
 		const gameViewSize = this.props.localInstance.gameViewSize;
 		return <GameScreen
-			backgroundImage={this.props.sandboxConfig.backgroundImageUrl}
+			backgroundImage={this.props.sandboxConfig.backgroundImage}
 			backgroundColor={this.props.sandboxConfig.backgroundColor}
 			showsGrid={this.props.toolBarUiStore.showsGrid}
 			showsBackgroundImage={this.props.toolBarUiStore.showsBackgroundImage}

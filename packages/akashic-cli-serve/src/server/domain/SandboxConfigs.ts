@@ -73,11 +73,8 @@ function normalizeConfig(config: SandboxConfig, contentId: string): void {
 
 		if (/^\/contents\//.test(bgImage)) {
 			console.warn("Please use the local path for the value of sandboxConfig.backgroundImage");
-			config.backgroundImageUrl = bgImage;
-		} else if (/^https?:\/\//.test(bgImage)) {
-			config.backgroundImageUrl = bgImage;
-		} else {
-			config.backgroundImageUrl = `/contents/${contentId}/sandboxConfig/backgroundImage`;
+		} else if (!/^https?:\/\//.test(bgImage)) {
+			config.backgroundImage = `/contents/${contentId}/sandboxConfig/backgroundImage?path=${bgImage}` ;
 		}
 	}
 }

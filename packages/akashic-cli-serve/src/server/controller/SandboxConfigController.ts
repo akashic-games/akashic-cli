@@ -65,9 +65,11 @@ export const createHandlerToGetSandboxConfigBgImage = (): express.RequestHandler
 			const contentId = req.params.contentId;
 			const config = sandboxConfigs.get(contentId);
 			if (config.backgroundImage) {
-				const imgPath = path.resolve(config.backgroundImage);
+				const pathValue = req.query.path as string;
+				const imgPath = path.resolve(pathValue);
+
 				if (!fs.existsSync(imgPath)) {
-					throw new NotFoundError({ errorMessage: `backgroundImage is not found. path:${config.backgroundImage}` });
+					throw new NotFoundError({ errorMessage: `backgroundImage is not found. path:${pathValue}` });
 				}
 
 				const type = path.extname(imgPath) === ".png" ? "image/png" : "image/jpeg";
