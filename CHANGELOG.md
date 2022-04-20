@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 2.15.63 (2022-04-20)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#1066](https://github.com/akashic-games/akashic-cli/pull/1066) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.1.9, engineFiles@2.1.57, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+* `akashic-cli-export`
+  * [#1064](https://github.com/akashic-games/akashic-cli/pull/1064) 【akashic-cli-export】内部コンポーネントの更新(engineFiles@3.1.9, engineFiles@2.1.57, engineFiles@1.1.16) ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.15.62 (2022-04-14)
 
 #### Enhancement
