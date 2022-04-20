@@ -80,12 +80,12 @@ export class UiOperator {
 		this.store.startupScreenUiStore.setInstanceArgumentListWidth(w);
 	};
 
-	selectInstanceArguments = (name: string | null): void => {
+	selectInstanceArguments = (name: string | null, noPutStrage: boolean = false): void => {
 		const argumentsTable = this.store.currentPlay.content.argumentsTable;
 		const argStr = (name != null) ? argumentsTable[name] : "";
 		const { startupScreenUiStore } = this.store;
-		startupScreenUiStore.setSelectedArgumentName(name);
-		startupScreenUiStore.setInstanceArgumentEditContent(argStr);
+		startupScreenUiStore.setSelectedArgumentName(name, noPutStrage);
+		startupScreenUiStore.setInstanceArgumentEditContent(argStr, noPutStrage);
 	};
 
 	setInstanceArgumentEditContent = (argStr: string): void => {

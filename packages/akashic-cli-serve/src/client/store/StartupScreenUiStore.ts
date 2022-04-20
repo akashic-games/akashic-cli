@@ -15,8 +15,9 @@ export class StartupScreenUiStore {
 	}
 
 	@action
-	setSelectedArgumentName(name: string | null): void {
+	setSelectedArgumentName(name: string | null, noPutStrage: boolean = false): void {
 		this.selectedArgumentName = name;
+		if (noPutStrage) return;
 		storage.put({ selectedArgumentName: name });
 	}
 
@@ -27,8 +28,9 @@ export class StartupScreenUiStore {
 	}
 
 	@action
-	setInstanceArgumentEditContent(content: string): void {
+	setInstanceArgumentEditContent(content: string, noPutStrage: boolean = false): void {
 		this.instanceArgumentEditContent = content;
+		if (noPutStrage) return;
 		storage.put({ instanceArgumentEditContent: content });
 	}
 
