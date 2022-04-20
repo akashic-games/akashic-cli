@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import type * as express from "express";
 import type { SandboxConfigApiResponseData } from "../../common/types/ApiResponse";
-import { NotFoundError } from "../common/ApiError";
+import { BadRequestError, NotFoundError } from "../common/ApiError";
 import { responseSuccess } from "../common/ApiResponse";
 import { dynamicRequire } from "../domain/dynamicRequire";
 import * as sandboxConfigs from "../domain/SandboxConfigs";
@@ -71,9 +71,12 @@ export const createHandlerToGetSandboxConfigBgImage = (): express.RequestHandler
 					throw new NotFoundError({ errorMessage: `backgroundImage is not found. path:${config.resolvedBackgroundImagePath}` });
 				}
 
+				// SandboxConfigs#normalizeConfig() で PNG/JPEG 以外のファイルはエラーとしている
 				const type = path.extname(imgPath) === ".png" ? "image/png" : "image/jpeg";
 				res.contentType(type);
 				res.sendFile(imgPath);
+			} else {
+				throw new BadRequestError({ errorMessage: `Invalid backgroundImage, The value is not local path. value:${config.backgroundImage}` });
 			}
 		} catch (e) {
 			next(e);

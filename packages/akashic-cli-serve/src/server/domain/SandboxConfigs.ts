@@ -5,6 +5,8 @@ import { BadRequestError } from "../common/ApiError";
 import { dynamicRequire } from "./dynamicRequire";
 
 interface ResolvedSandboxConfig extends SandboxConfig {
+	// backgroundImage がローカルファイルの場合、クライアントからは GET /contents/:contentId/sandboxConfig/backgroundImage で取得される。
+	// その場合のローカルファイルのパスをここに保持する。
 	resolvedBackgroundImagePath?: string;
 }
 
