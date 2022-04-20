@@ -26,7 +26,7 @@
     "@akashic/eslint-config": "1.1.0",
     "@akashic/game-configuration": "1.2.0",
     "@types/image-size": "0.7.0",
-    "@types/jasmine": "3.10.5",
+    "@types/jasmine": "3.10.6",
     "@types/mock-fs": "4.13.1",
     "@types/node": "6.14.13",
     "@typescript-eslint/eslint-plugin": "5.19.0",
