@@ -1,6 +1,10 @@
 import * as express from "express";
 import { createHandlerToGetContent, createHandlerToGetContents, createHandlerToGetEngineConfig } from "../controller/ContentController";
-import { createHandlerToGetSandboxConfig, createHandlerToGetSandboxConfigPluginCode } from "../controller/SandboxConfigController";
+import {
+	createHandlerToGetSandboxConfig,
+	createHandlerToGetSandboxConfigPluginCode,
+	createHandlerToGetSandboxConfigBgImage
+} from "../controller/SandboxConfigController";
 import { createScriptAssetController } from "../controller/ScriptAssetController";
 
 export interface ContentsRouterParameterObject {
@@ -36,5 +40,6 @@ export const createContentsRouter = (params: ContentsRouterParameterObject): exp
 	contentsRouter.get("/:contentId/content.raw.json", createHandlerToGetEngineConfig(targetDirs, true));
 
 	contentsRouter.get("/:contentId/sandboxConfig/plugins/:pluginName", createHandlerToGetSandboxConfigPluginCode());
+	contentsRouter.get("/:contentId/sandboxConfig/backgroundImage", createHandlerToGetSandboxConfigBgImage());
 	return contentsRouter;
 };

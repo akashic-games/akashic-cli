@@ -4,6 +4,11 @@ import type { SandboxConfig } from "../../common/types/SandboxConfig";
 import { BadRequestError } from "../common/ApiError";
 import { dynamicRequire } from "./dynamicRequire";
 
+interface ResolvedSandboxConfig extends SandboxConfig {
+	// backgroundImage がローカルファイルの場合、クライアントからは GET /contents/:contentId/sandboxConfig/backgroundImage で取得される。その場合のローカルファイルのパスをここに保持する。
+	resolvedBackgroundImagePath?: string;
+}
+
 const configs: { [key: string]: SandboxConfig } = {};
 
 /**
@@ -15,7 +20,7 @@ const configs: { [key: string]: SandboxConfig } = {};
 export function register(contentId: string, targetDir: string): void {
 	const configPath = path.resolve(targetDir, "sandbox.config.js");
 	if (configs[contentId]) return;
-	configs[contentId] = watchRequire(configPath, config => configs[contentId] = config);
+	configs[contentId] = watchRequire(configPath, contentId, config => configs[contentId] = config);
 }
 
 /**
@@ -23,17 +28,17 @@ export function register(contentId: string, targetDir: string): void {
  *
  * @param contentId コンテンツID
  */
-export function get(contentId: string): SandboxConfig {
+export function get(contentId: string): ResolvedSandboxConfig {
 	return configs[contentId];
 }
 
-function watchRequire(configPath: string, callback: (content: SandboxConfig) => void): SandboxConfig {
+function watchRequire(configPath: string, contentId: string, callback: (content: SandboxConfig) => void): SandboxConfig {
 	let config = dynamicRequire<SandboxConfig>(configPath, true);
 
 	const eventListener = (event: string, path: string): void => {
-		if ((event === "add" && !Object.keys(config).length) || event === "change") {
+		if (event === "add" || event === "change") {
 			config = dynamicRequire<SandboxConfig>(path, true);
-			validateConfig(config);
+			normalizeConfig(config, contentId);
 		} else if (event === "unlink") {
 			config = {};
 		} else {
@@ -47,7 +52,7 @@ function watchRequire(configPath: string, callback: (content: SandboxConfig) => 
 	return config;
 }
 
-function validateConfig(config: SandboxConfig): void {
+function normalizeConfig(config: ResolvedSandboxConfig, contentId: string): void {
 	const externalAssets = (config ? config.externalAssets : undefined) === undefined ? [] : config.externalAssets;
 	if (externalAssets) {
 		// sandbox.config.js の externalAssets に値がある場合は (string|regexp)[] でなければエラーとする
@@ -62,6 +67,20 @@ function validateConfig(config: SandboxConfig): void {
 					{errorMessage: `Invalid externalAssets, The value is neither a string or regexp. value:${ found }` }
 				);
 			}
+		}
+	}
+
+	const bgImage = config ? config.backgroundImage : undefined;
+	if (bgImage) {
+		if (!/\.(jpg|jpeg|png)$/.test(bgImage)) {
+			throw new BadRequestError({ errorMessage: "Invalid backgroundImage, Please specify a png/jpg file." });
+		}
+
+		if (/^\/contents\//.test(bgImage)) {
+			console.warn("Please use the local path for the value of sandboxConfig.backgroundImage");
+		} else if (!/^https?:\/\//.test(bgImage)) {
+			config.backgroundImage = `/contents/${contentId}/sandboxConfig/backgroundImage` ;
+			config.resolvedBackgroundImagePath = bgImage;
 		}
 	}
 }
