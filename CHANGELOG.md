@@ -1,5 +1,20 @@
 # CHANGELOG
 
+## 2.15.64 (2022-04-21)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#1061](https://github.com/akashic-games/akashic-cli/pull/1061) Support local filepath for bgimage in serve ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+  * [#1070](https://github.com/akashic-games/akashic-cli/pull/1070) 【akashic-cli-serve】内部コンポーネントの更新(engineFiles@3.2.0, engineFiles@2.2.0, engineFiles@1.2.0) ([@xnv](https://github.com/xnv))
+* `akashic-cli-export`
+  * [#1069](https://github.com/akashic-games/akashic-cli/pull/1069) 【akashic-cli-export】内部コンポーネントの更新(engineFiles@3.2.0, engineFiles@2.2.0, engineFiles@1.2.0) ([@xnv](https://github.com/xnv))
+  * [#1068](https://github.com/akashic-games/akashic-cli/pull/1068) 【akashic-cli-export】内部コンポーネントの更新(engineFiles@3.1.9, engineFiles@2.2.0, engineFiles@1.2.0) ([@xnv](https://github.com/xnv))
+  * [#1067](https://github.com/akashic-games/akashic-cli/pull/1067) 【akashic-cli-export】内部コンポーネントの更新(engineFiles@3.1.9, engineFiles@2.1.57, engineFiles@1.2.0) ([@xnv](https://github.com/xnv))
+
+#### Committers: 2
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.15.63 (2022-04-20)
 
 #### Enhancement
