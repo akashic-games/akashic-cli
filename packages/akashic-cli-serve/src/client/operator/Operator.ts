@@ -129,7 +129,7 @@ export class Operator {
 			store.startupScreenUiStore.setInstanceArgumentEditContent(query.argumentsValue, false);
 		} else if (query.argumentsName) {
 			argument = JSON.parse(store.currentPlay.content.argumentsTable[query.argumentsName]);
-			this.ui.selectInstanceArguments(query.argumentsName);
+			this.ui.selectInstanceArguments(query.argumentsName, false);
 		}
 
 		if (store.appOptions.autoStart) {

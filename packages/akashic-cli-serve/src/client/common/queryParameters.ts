@@ -230,6 +230,7 @@ export interface ServeQueryParameters {
 
 	/**
 	 * このインスタンスに適用する arguments の実装を指定する。
+	 * argumentsName と両方指定した場合の動作は不定である。
 	 */
 	argumentsValue: string | null;
 }
