@@ -126,10 +126,10 @@ export class Operator {
 
 		if (query.argumentsValue) {
 			argument = JSON.parse(query.argumentsValue);
-			store.startupScreenUiStore.setInstanceArgumentEditContent(query.argumentsValue, false);
-		} else if (query.argumentsName) {
+			store.startupScreenUiStore.setInstanceArgumentEditContent(query.argumentsValue, true);
+		} else if (query.argumentsName && !!store.currentPlay.content.argumentsTable[query.argumentsName]) {
 			argument = JSON.parse(store.currentPlay.content.argumentsTable[query.argumentsName]);
-			this.ui.selectInstanceArguments(query.argumentsName, false);
+			this.ui.selectInstanceArguments(query.argumentsName, true);
 		}
 
 		if (store.appOptions.autoStart) {
