@@ -83,9 +83,7 @@ export const generateTestbedScriptAsset = <T extends Constructor<{}>>(Class: T):
 		}
 
 		execute(execEnv: ScriptAssetExecuteEnvironment): any {
-			// キーは "/conetnts/:contentId/content/script/main.js" のような相対 URL となる
-			const key = this.path.replace(window.location.origin, "");
-			window.gScriptContainer[key](execEnv);
+			window.gScriptContainer[this.path](execEnv);
 			return execEnv.module.exports;
 		}
 	};

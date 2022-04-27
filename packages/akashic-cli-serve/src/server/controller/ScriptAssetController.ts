@@ -17,7 +17,7 @@ export const createScriptAssetController = (baseDir: string, index: number): exp
 		}
 
 		const content = fs.readFileSync(scriptPath);
-		const key = `/contents/${index.toString()}/content/${req.params.scriptName}`;
+		const key = `${req.protocol}://${req.get("host") + req.originalUrl}`;
 
 		const responseBody = `"use strict";
 			if (! ("gScriptContainer" in window)) {
