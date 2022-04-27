@@ -83,9 +83,9 @@ export const generateTestbedScriptAsset = <T extends Constructor<{}>>(Class: T):
 		}
 
 		execute(execEnv: ScriptAssetExecuteEnvironment): any {
-			// クライアント側でゲームコンテンツを一つしか実行しない前提なのでscriptIDをキーにしている
-			// TODO: ゲームコンテンツを複数起動する場合のキーを考える
-			window.gScriptContainer[this.id](execEnv);
+			// キーは "/conetnts/:contentId/content/script/main.js" のような相対 URL となる
+			const key = this.path.replace(window.location.origin, "");
+			window.gScriptContainer[key](execEnv);
 			return execEnv.module.exports;
 		}
 	};
