@@ -83,9 +83,7 @@ export const generateTestbedScriptAsset = <T extends Constructor<{}>>(Class: T):
 		}
 
 		execute(execEnv: ScriptAssetExecuteEnvironment): any {
-			// クライアント側でゲームコンテンツを一つしか実行しない前提なのでscriptIDをキーにしている
-			// TODO: ゲームコンテンツを複数起動する場合のキーを考える
-			window.gScriptContainer[this.id](execEnv);
+			window.gScriptContainer[this.path](execEnv);
 			return execEnv.module.exports;
 		}
 	};
