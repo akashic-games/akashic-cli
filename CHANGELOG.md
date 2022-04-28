@@ -1,5 +1,20 @@
 # CHANGELOG
 
+## 2.15.65 (2022-04-28)
+
+#### Bug Fix
+* `akashic-cli-serve`
+  * [#1073](https://github.com/akashic-games/akashic-cli/pull/1073) Fix duplicate scriptAssets for serve ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli`
+  * [#1063](https://github.com/akashic-games/akashic-cli/pull/1063) Update all dependencies (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#1062](https://github.com/akashic-games/akashic-cli/pull/1062) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- kamakiri_ys ([@kamakiri01](https://github.com/kamakiri01))
+
 ## 2.15.64 (2022-04-21)
 
 #### Enhancement
