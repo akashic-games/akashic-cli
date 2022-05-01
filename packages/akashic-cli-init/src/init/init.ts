@@ -1,5 +1,5 @@
 import * as path from "path";
-import { readJSON } from "@akashic/akashic-cli-commons/lib/FileSystem";
+import { readJSONWithDefault } from "@akashic/akashic-cli-commons/lib/FileSystem";
 import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
 import { copySync, existsSync } from "fs-extra";
 import {
@@ -63,7 +63,7 @@ export async function promiseInit(p: InitParameterObject): Promise<void> {
 		const template = await fetchTemplate(metadata);
 
 		// tempate.json を元にファイルを抽出
-		const rawConf = await _readJSONWithDefault<TemplateConfig>(path.join(template, "template.json"), {});
+		const rawConf = await readJSONWithDefault<TemplateConfig>(path.join(template, "template.json"), {});
 		const conf = await completeTemplateConfig(rawConf, template);
 		await _extractFromTemplate(conf, template, cwd, { forceCopy, logger });
 
@@ -109,16 +109,6 @@ async function _extractFromTemplate(
 		copySync(req.src, req.dest, { overwrite: forceCopy });
 		logger?.info(`copied ${req.srcRelative}.`);
 	});
-}
-
-async function _readJSONWithDefault<T>(filepath: string, defaultValue: T): Promise<T> {
-	try {
-		return await readJSON(filepath);
-	} catch (e) {
-		if (e.code === "ENOENT")
-			return defaultValue;
-		throw e;
-	}
 }
 
 export const internals = {

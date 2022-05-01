@@ -1,11 +1,11 @@
-import * as apiUtil from "../../../lib/html/apiUtil";
+import { getFromHttps } from "../../../lib/zip/transformCompleteEnvironment";
 
-describe("apiUtil", function () {
+describe("transformCompleteEnvironment", function () {
 	describe("getFromHttps", function () {
 		it("can get resource with https-protocol", (done) => {
 			Promise.resolve()
 				.then(function () {
-					return apiUtil.getFromHttps(
+					return getFromHttps(
 						"https://raw.githubusercontent.com/akashic-games/akashic-cli-export-html/master/package.json"
 					);
 				})
@@ -19,7 +19,7 @@ describe("apiUtil", function () {
 		it("can not get resource with protocol other than https", (done) => {
 			Promise.resolve()
 				.then(function () {
-					return apiUtil.getFromHttps("http://example.com");
+					return getFromHttps("http://test.example");
 				})
 				.then(function () {
 					return done.fail();
@@ -30,15 +30,16 @@ describe("apiUtil", function () {
 				});
 		});
 		it("throw error when http-status-code is over 400", (done) => {
+			const url = "https://raw.githubusercontent.com/akashic-games/akashic-cli-export-html/master/not-exists.json";
 			Promise.resolve()
 				.then(function () {
-					return apiUtil.getFromHttps("https://example.com/notfound");
+					return getFromHttps(url);
 				})
 				.then(function () {
 					return done.fail();
 				})
 				.catch(function (err: any) {
-					expect(err.message).toBe("Failed to get resource. url: https://example.com/notfound. status code: 404.");
+					expect(err.message).toBe(`Failed to get resource. url: ${url}. status code: 404.`);
 					done();
 				});
 		});

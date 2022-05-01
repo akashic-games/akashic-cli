@@ -1,153 +1,97 @@
-
 import * as fs from "fs";
 import * as os from "os";
 import * as path from "path";
-import * as cmn from "@akashic/akashic-cli-commons";
-import archiver = require("archiver");
+import * as assert from "assert";
 import * as fsx from "fs-extra";
-import readdir = require("fs-readdir-recursive");
-import { promiseConvertBundle } from "./convertBundle";
-import { promiseConvertNoBundle } from "./convertNoBundle";
-import { ConvertTemplateParameterObject } from "./convertUtil";
+import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
+import type { ServiceType } from "@akashic/akashic-cli-commons/lib/ServiceType";
+import type { CliConfigExportHtmlDumpableOptions } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigExportHtml";
+import { convertGame } from "../zip/convert";
+import { compress as compressToZip } from "../zip/compress";
+import { generateHTML } from "./generate";
+import { exists } from "@akashic/akashic-cli-commons/lib/FileSystem";
+import { CliConfigExportZipDumpableOption } from "@akashic/akashic-cli-commons";
 
-export interface ExportHTMLParameterObject extends ConvertTemplateParameterObject {
-	quiet?: boolean;
-	bundle?: boolean;
-	hashLength?: number;
-	compress?: boolean;
+export interface ExportHTMLConvertOption {
+	strip: boolean;
+	minifyJs: boolean;
+	minifyJson: boolean;
+	babel: boolean;
+	bundle: boolean;
+	omitUnbundledJs: boolean;
+	completeEnvironment: boolean;
+	packImage: boolean;
+	needUntaintedImage: boolean;
+	hashLength: number | null;
+	targetService: ServiceType;
+	optionInfo: CliConfigExportZipDumpableOption | null;
 }
 
-export function _completeExportHTMLParameterObject(p: ExportHTMLParameterObject): ExportHTMLParameterObject {
-	const param = {...p};
-	const source = param.source ? param.source : "./";
-	param.source = path.resolve(param.cwd, source);
-	param.output = param.output ? path.resolve(param.cwd, param.output) : undefined;
-	param.logger = param.logger || new cmn.ConsoleLogger();
-	return param;
+export interface ExportHTMLGenerateOption {
+	magnify: boolean;
+	injects: string[];
+	autoSendEventName: string | boolean;
+	engineFiles: string | null;
+	embed: boolean;
+	destructive: boolean;
+	useRawText: boolean;
+	optionInfo: CliConfigExportHtmlDumpableOptions | null;
 }
 
-export function promiseExportHtmlRaw(param: ExportHTMLParameterObject): Promise<string> {
-	let gamepath: string;
+export interface ExportHTMLParameterObject {
+	cwd?: string | null;
+	source?: string | null;
+	output: string;
+	compress?: boolean | null;
+	force?: boolean;
+	logger: Logger;
+	convertOption: ExportHTMLConvertOption;
+	generateOption: ExportHTMLGenerateOption;
+}
 
-	param.logger.info("exporting content into html...");
-	if (!param.strip && param.output != null && !/^\.\./.test(path.relative(param.source, param.output))) {
-		param.logger.warn("The output path overlaps with the game directory: files will be exported into the game directory.");
-		param.logger.warn("NOTE that after this, exporting this game with --no-strip option may include the files.");
+export async function exportHTML(param: ExportHTMLParameterObject): Promise<void> {
+	const {
+		cwd: givenCwd,
+		source: givenSource,
+		output: givenOutput,
+		compress,
+		logger,
+		force,
+		convertOption,
+		generateOption
+	} = param;
+
+	const cwd = givenCwd ? path.resolve(givenCwd) : process.cwd();
+	const source = path.resolve(cwd, givenSource ?? ".");
+	const output = path.resolve(cwd, givenOutput);
+
+	if (path.relative(source, output) === "")
+		throw new Error("the output directory is identical to source game directory.");
+	if (!force && await exists(output))
+		throw new Error(output + " already exists. Use --force option to overwrite.");
+
+	logger.info("exporting content into html...");
+	if (!convertOption.strip && !/^\.\./.test(path.relative(source, output))) {
+		logger.warn("The output path overlaps with the game directory: files will be exported into the game directory.");
+		logger.warn("NOTE that after this, exporting this game with --no-strip option may include the files.");
 	}
-	return new Promise<void>((resolve, reject) => {
-		if (!param.output) {
-			param.output = fs.mkdtempSync(path.join(os.tmpdir(), "akashic-export-html-tmp-"));
-			return resolve();
-		}
-		fs.stat(path.resolve(param.output), (error: any, stat: any) => {
-			if (error) {
-				if (error.code !== "ENOENT") {
-					return reject("Output directory has bad status. Error code " + error.code);
-				}
-				fs.mkdir(path.resolve(param.output), (err: any) => {
-					if (err) {
-						return reject("Create " + param.output + " directory failed.");
-					}
-					resolve();
-				});
-			} else if (stat) {
-				if (!stat.isDirectory()) {
-					return reject(param.output + " is not directory.");
-				}
-				if (!param.force) {
-					return reject("The output directory " + param.output + " already exists. Cannot overwrite without force option.");
-				}
-				resolve();
-			}
-		});
-	})
-		.then(() => {
-			if (param.hashLength === 0) return param.source;
-			return createRenamedGame(param.source, param.hashLength, param.logger);
-		})
-		.then((currentGamepath: string) => {
-			gamepath = currentGamepath;
-			const convertParam: ConvertTemplateParameterObject = {
-				output: param.output,
-				logger: param.logger,
-				strip: param.strip,
-				minify: param.minify,
-				magnify: param.magnify,
-				force: param.force,
-				source: gamepath,
-				cwd: param.cwd,
-				injects: param.injects,
-				unbundleText: param.unbundleText,
-				lint: param.lint,
-				exportInfo: param.exportInfo,
-				autoSendEventName: param.autoSendEventName,
-				needsUntaintedImageAsset: param.needsUntaintedImageAsset,
-				debugOverrideEngineFiles: param.debugOverrideEngineFiles
-			};
-			if (param.bundle) {
-				return promiseConvertBundle(convertParam);
-			} else {
-				return promiseConvertNoBundle(convertParam);
-			}
-		})
-		.then(() => {
-			// ハッシュ化した場合一時ファイルが生成されるため削除する
-			if (param.hashLength > 0) {
-				param.logger.info("removing temp files...");
-				fsx.removeSync(gamepath);
-			}
-		})
-		.catch((error) => {
-			throw error;
-		})
-		.then(() => {
-			return param.output;
-		});
-}
 
-export function promiseExportHTML(p: ExportHTMLParameterObject): Promise<string> {
-	const param = _completeExportHTMLParameterObject(p);
-	const output = param.output;
-	if (param.compress) {
-		// promiseExportHtmlRaw() で一時ディレクトリを作成させるため、param.output に null を代入
-		param.output = null;
+	const exportDest = compress ? fs.mkdtempSync(path.join(os.tmpdir(), "akashic-export-html-")) : output;
+
+	await convertGame({
+		source: source,
+		dest: exportDest,
+		logger,
+		...convertOption,
+	});
+	await generateHTML({
+		gameDir: exportDest,
+		...generateOption
+	});
+
+	if (compress) {
+		assert(exportDest !== output);
+		await compressToZip(exportDest, output);
+		fsx.removeSync(exportDest);
 	}
-	return promiseExportHtmlRaw(param)
-		.then((dest: string) => {
-			if (param.compress) {
-				return new Promise<void>((resolve, reject) => {
-					const files = readdir(dest).map(p => ({
-						src: path.resolve(dest, p),
-						entryName: p
-					}));
-					const ostream = fs.createWriteStream(output);
-					const archive = archiver("zip");
-					ostream.on("close", () => resolve());
-					archive.on("error", (err) => reject(err));
-					archive.pipe(ostream);
-					files.forEach((f) => archive.file(f.src, { name: f.entryName }));
-					archive.finalize();
-				}).finally(() => {
-					fsx.removeSync(dest);
-				});
-			}
-		})
-		.then(() => {
-			return param.compress ? output : param.output;
-		});
-}
-
-export function exportHTML(param: ExportHTMLParameterObject, cb: (err?: any) => void): void {
-	promiseExportHTML(param).then<void>(cb).catch(cb);
-}
-
-function createRenamedGame(sourcePath: string, hashLength: number, logger: cmn.Logger): Promise<string> {
-	const destDirPath = path.resolve(fs.mkdtempSync(path.join(os.tmpdir(), "akashic-export-html-")));
-	fsx.copySync(sourcePath, destDirPath);
-	return Promise.resolve()
-		.then(() => cmn.ConfigurationFile.read(path.join(destDirPath, "game.json"), logger))
-		.then((gamejson: cmn.GameConfiguration) => {
-			cmn.Renamer.renameAssetFilenames(gamejson, destDirPath, hashLength);
-			return cmn.ConfigurationFile.write(gamejson, path.resolve(path.join(destDirPath, "game.json")), logger);
-		}).then(() => destDirPath);
 }

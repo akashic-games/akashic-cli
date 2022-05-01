@@ -1,5 +1,5 @@
-export { CliConfigExportHtml } from "./CliConfig/CliConfigExportHtml";
-export { CliConfigExportZip } from "./CliConfig/CliConfigExportZip";
+export { CliConfigExportHtml, CliConfigExportHtmlDumpableOptions } from "./CliConfig/CliConfigExportHtml";
+export { CliConfigExportZip, CliConfigExportZipDumpableOption } from "./CliConfig/CliConfigExportZip";
 export { CliConfigInit } from "./CliConfig/CliConfigInit";
 export { CliConfigInstall } from "./CliConfig/CliConfigInstall";
 export { CliConfigModify } from "./CliConfig/CliConfigModify";
@@ -14,10 +14,7 @@ export { Configuration, ConfigurationParameterObject } from "./Configuration";
 export { ConfigurationFile } from "./ConfigurationFile";
 export { ConsoleLogger } from "./ConsoleLogger";
 export * as FileSystem from "./FileSystem";
-export {
-	GameConfiguration,
-	ExportZipInfo
-} from "./GameConfiguration";
+export { GameConfiguration, ExportZipInfo } from "./GameConfiguration";
 export { LibConfiguration } from "./LibConfiguration";
 export * as LintUtil from "./LintUtil";
 export { Logger } from "./Logger";

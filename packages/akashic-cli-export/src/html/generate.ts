@@ -1,38 +1,33 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as ejs from "ejs";
-import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
-import { readFile, readJSON, unlink, writeFile, writeJSON } from "@akashic/akashic-cli-commons/lib/FileSystem";
-import { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
+import { readFile, readJSON, unlink, writeFile, findUniqueDir, readdir } from "@akashic/akashic-cli-commons/lib/FileSystem";
 import { GameConfiguration } from "@akashic/akashic-cli-commons/lib/GameConfiguration";
+import type { CliConfigExportHtmlDumpableOptions } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigExportHtml";
 
 export interface GenerateHTMLParameterObject {
 	/**
 	 * HTML を生成する対象のコンテンツのディレクトリ。
 	 * このディレクトリ以下に、index.html とその他必要なファイルが生成される。
 	 */
-	gameDir?: string;
+	gameDir: string;
 
 	/**
-	 * 生成された HTML が利用しない元ファイルを削除するか。
+	 * 生成された HTML から利用されない元ファイルを削除するか。
 	 *
 	 * ゲームの一部ファイルは、生成された HTML からは利用されない。
-	 * (加工して HTML に取り込まれる (こともある) スクリプトアセットなど)
-	 * この値を真にした場合、そのようなファイルを削除する。
+	 * (加工して HTML (index.html) に取り込まれた場合のスクリプトアセットなど)
+	 * この値が真である場合、そのようなファイルを削除する。
 	 *
-	 * 省略した場合、偽。
+	 * gameDir を破壊的に変更するオプションである点に注意。
+	 * 通常、(export zip の) convert() で一時ディレクトリに生成されたゲームなど、破壊してよい場合にのみ真を与えるべきである。
 	 */
-	destructive?: boolean;
-
-	/**
-	 * ログ出力に利用するロガー。
-	 */
-	logger?: Logger;
+	destructive: boolean;
 
 	/**
 	 * スクリプトなどの内容を index.html に取り込むか。
 	 */
-	bundle?: boolean;
+	embed: boolean;
 
 	/**
 	 * テキストアセットを加工せずそのまま維持するか。
@@ -40,28 +35,22 @@ export interface GenerateHTMLParameterObject {
 	 * --atsumaru (export html と export zip を両方行い、ファイルを共有する) 向けのオプション。
 	 * (export zip の結果とテキストアセットを共有するのでトータルのファイルサイズを小さくできる)
 	 * ただし真の場合、生成される HTML は file スキーマでは利用できなくなる。
-	 *
-	 * 省略した場合、偽。
 	 */
-	useRawText?: boolean;
+	useRawText: boolean;
 
 	/**
 	 * 組み込むエンジン。
 	 *
-	 * 指定した場合、同梱のものが利用される。
-	 * デバッグのためのオプション。通常、指定する必要はない。
-	 * 省略した場合、 `null` 。
+	 * null を指定した場合、同梱のものが利用される。
+	 * デバッグのためのオプション。
 	 */
-	engineFiles?: string | null;
+	engineFiles: string | null;
 
-	magnify?: boolean;
-	injects?: string[];
-	autoSendEventName?: string | boolean;
+	magnify: boolean;
+	injects: string[];
+	autoSendEventName: string | boolean;
 
-	exportInfo?: {
-		version: string;
-		option: string;
-	};
+	optionInfo: CliConfigExportHtmlDumpableOptions;
 }
 
 export interface NormalizedGenerateHTMLParameterObject extends Readonly<Required<GenerateHTMLParameterObject>> {
@@ -72,14 +61,13 @@ export function normalizeGenerateHTMLParameterObject(param: GenerateHTMLParamete
 	const ret: NormalizedGenerateHTMLParameterObject = {
 		gameDir: ".",
 		destructive: false,
-		logger: param.logger ?? new ConsoleLogger(),
-		bundle: false,
+		embed: false,
 		useRawText: false,
 		engineFiles: null,
 		magnify: !!param.magnify,
 		injects: param.injects ?? [],
 		autoSendEventName: null,
-		exportInfo: { version: "unknown", option: "unknown" },
+		optionInfo: {},
 		...param
 	};
 
@@ -100,8 +88,8 @@ interface Entry {
 	 * 出力先。
 	 *
 	 * コンテンツルート (＝gameDir) からの相対パス。
-	 * bundle される (HTML に書き込まれる) 場合は利用されない。
-	 * null の場合は必ず bundle される。
+	 * embed される (HTML に書き込まれる) 場合は利用されない。
+	 * null の場合は必ず embed される。
 	 *
 	 * 省略された場合、 `null` 。
 	 */
@@ -118,7 +106,7 @@ interface Entry {
 	 * - `"raw"`: 加工しない
 	 * - `"script"`: function() 式でラップする
 	 * - `"text"`: 文字列リテラルとしてエスケープする
-	 * 
+	 *
 	 * 省略されたまたは null の場合、 `"raw"` として扱われる。
 	 */
 	wrapType?: "script" | "text" | "raw" | null;
@@ -159,7 +147,7 @@ interface ResolvedEntry {
 	 */
 	content: string;
 	/**
-	 * content の出力先 (bundle しない場合)
+	 * content の出力先 (embed しない場合)
 	 * null の場合必ず HTML に書き込まれる。
 	 */
 	dest: string | null;
@@ -203,6 +191,7 @@ async function resolveEntry(entry: Entry): Promise<ResolvedEntry> {
 
 const RUNTIME_VER_TABLE = path.resolve(__dirname, "..", "template", "engineFilesVersion.json");
 const TEMPLATE_DIR = path.resolve(__dirname, "..", "template");
+const TEMPLATE_RUNTIME_DIR = path.join(TEMPLATE_DIR, "runtime");
 const PDI_DIR = path.resolve(__dirname, "..", "pdi");
 
 interface EngineFilesVersionJson {
@@ -227,8 +216,8 @@ async function makeRuntimeEntries(
 	if (engineFilesPath) {
 		engineFilesVariable = path.basename(engineFilesPath, ".js");
 	} else {
-		const { version, variable } = (await readJSON<EngineFilesVersionJson>(RUNTIME_VER_TABLE))[`v${sandboxRuntimeVersion}`]!;
-		engineFilesPath = path.join(TEMPLATE_DIR, `v${sandboxRuntimeVersion}`, `engineFile${version}.js`);
+		const { variable } = (await readJSON<EngineFilesVersionJson>(RUNTIME_VER_TABLE))[`v${sandboxRuntimeVersion}`]!;
+		engineFilesPath = path.join(TEMPLATE_RUNTIME_DIR, `v${sandboxRuntimeVersion}`, `${variable}.js`);
 		engineFilesVariable = variable;
 	}
 
@@ -237,7 +226,7 @@ async function makeRuntimeEntries(
 
 	return [
 		{
-			src: path.join(TEMPLATE_DIR, "css", "style.css"),
+			src: path.join(TEMPLATE_RUNTIME_DIR, "style.css"),
 			dest: path.join(runtimeDir, "style.css")
 		},
 		{
@@ -269,13 +258,13 @@ async function makeRuntimeEntries(
 		(
 			(sandboxRuntimeVersion === "1") ?
 				{
-					src: path.join(TEMPLATE_DIR, "logger.js"),
+					src: path.join(TEMPLATE_RUNTIME_DIR, `v${sandboxRuntimeVersion}`, "logger.js"),
 					dest: path.join(runtimeDir, "logger.js")
 				} :
 				null
 		),
 		{
-			src: path.join(TEMPLATE_DIR, `v${sandboxRuntimeVersion}`, "sandbox.js"),
+			src: path.join(TEMPLATE_RUNTIME_DIR, `v${sandboxRuntimeVersion}`, "sandbox.js"),
 			dest: path.join(runtimeDir, "sandbox.js")
 		}
 	];
@@ -330,30 +319,48 @@ async function makeContentEntries(
 	];
 }
 
+async function makeInjectionEntries(injects: string[]): Promise<Entry[]> {
+	async function read(filepath: string): Promise<string> {
+		return (await readFile(filepath, "utf-8")).replace(/\r\n|\r/g, "\n");
+	}
+	const ret: Entry[] = [];
+	for (const inject of injects) {
+		if (fs.statSync(inject).isDirectory()) { // TODO commons の FileSystem に移して async を使う
+			const filenames = await readdir(inject);
+			for (const filename of filenames)
+				ret.push({ content: await read(path.join(inject, filename)) });
+		} else {
+			ret.push({ content: await read(inject) });
+		}
+	}
+	return ret;
+}
+
 export async function generateHTMLImpl(param: NormalizedGenerateHTMLParameterObject): Promise<void> {
 	const {
 		gameDir,
 		destructive,
-		logger,
-		bundle,
+		embed,
 		useRawText,
 		engineFiles,
 		magnify,
 		injects,
 		autoSendEventName,
-		exportInfo
+		optionInfo
 	} = param;
 
 	const gamejson = await readJSON<GameConfiguration>(path.join(gameDir, "game.json"));
 	const entries = [
 		...(await makeRuntimeEntries(gamejson, gameDir, engineFiles, useRawText, autoSendEventName, magnify)),
 		...(await makeContentEntries(gamejson, gameDir, useRawText, destructive)),
-		...injects.map(injection => ({ content: injection }))
+		...(await makeInjectionEntries(injects))
 	];
 
 	const discardables: string[] = [];
 	const fragments: string[] = [];
 	for (let entry of entries) {
+		if (!entry)
+			continue;
 		const { dest, content, discardable } = await resolveEntry(entry);
 
 		if (discardable)
@@ -361,7 +368,7 @@ export async function generateHTMLImpl(param: NormalizedGenerateHTMLParameterObj
 
 		switch (dest ? path.extname(dest) : null) {
 			case ".js": {
-				if (bundle) {
+				if (embed) {
 					fragments.push(`<script>\n${content}\n</script>`);
 				} else {
 					await writeFile(path.join(gameDir, dest), content);
@@ -370,7 +377,7 @@ export async function generateHTMLImpl(param: NormalizedGenerateHTMLParameterObj
 				break;
 			}
 			case ".css": {
-				if (bundle) {
+				if (embed) {
 					fragments.push(`<style type="text/css">\n${content}\n</style>`);
 				} else {
 					await writeFile(path.join(gameDir, dest), content);
@@ -385,9 +392,10 @@ export async function generateHTMLImpl(param: NormalizedGenerateHTMLParameterObj
 		}
 	}
 
+	const version = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "..", "package.json"), "utf8")).version;
 	const html = await ejs.renderFile(path.join(__dirname, "..", "template", "index.html.ejs"), {
 		fragments,
-		exportInfo
+		exportInfo: { version, option: optionInfo }
 	});
 	await writeFile(path.join(gameDir, "index.html"), html);
 
@@ -396,26 +404,13 @@ export async function generateHTMLImpl(param: NormalizedGenerateHTMLParameterObj
 		await unlink(d);
 }
 
-export async function genereteHTML(param: GenerateHTMLParameterObject): Promise<void> {
+export async function generateHTML(param: GenerateHTMLParameterObject): Promise<void> {
 	return generateHTMLImpl(normalizeGenerateHTMLParameterObject(param));
 }
 
-function exists(filepath: string): Promise<boolean> {
-	return new Promise<boolean>((resolve, reject) => {
-		fs.stat(path.resolve(filepath), (err: any, _stat: any) => {
-			if (err) {
-				return void (err.code === "ENOENT" ? resolve(true) : reject(err));
-			}
-			resolve(false);
-		});
-	});
-}
-
-async function findUniqueDir(baseDir: string, prefix: string): Promise<string> {
-	if (!await exists(path.join(baseDir, prefix)))
-		return prefix;
-	let postfix = 0;
-	while (await exists(path.join(baseDir, `${prefix}${postfix}`)))
-		++postfix;
-	return `${prefix}${postfix}`;
+export namespace GenerateHTML {
+	export const internal = {
+		encodeText,
+		makeInjectionEntries
+	};
 }

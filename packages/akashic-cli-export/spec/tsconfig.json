@@ -4,6 +4,7 @@
     "lib": ["ES6"],
     "declaration": true,
     "noImplicitAny": true,
+    "strict": true,
     "module": "commonjs",
     "outDir": "./build",
     "types" : ["fs-extra", "jest", "mock-fs", "node"]

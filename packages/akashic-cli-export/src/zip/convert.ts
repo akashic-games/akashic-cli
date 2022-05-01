@@ -1,7 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
-import * as cmn from "@akashic/akashic-cli-commons";
-import { ImageAssetConfigurationBase } from "@akashic/game-configuration";
+import * as cmn from "@akashic/akashic-cli-commons"; // TODO 必要なものだけ個別に import する
 import * as babel from "@babel/core";
 import * as presetEnv from "@babel/preset-env";
 import * as browserify from "browserify";
@@ -14,40 +13,25 @@ import { transformPackSmallImages } from "./transformPackImages";
 import { transformUntaint } from "./transformUntaint";
 
 export interface ConvertGameParameterObject {
-	bundle?: boolean;
-	babel?: boolean;
-	minify?: boolean;
-	minifyJs?: boolean;
-	minifyJson?: boolean;
-	packImage?: boolean;
-	completeEnvironment?: boolean;
-	strip?: boolean;
-	source?: string;
-	hashLength?: number;
-	dest: string;
+	bundle: boolean;
 	/**
-	 * コマンドの出力を受け取るロガー。
-	 * 省略された場合、akashic-cli-commons の `new ConsoleLogger()` 。
+	 * bundle されなかった JS を出力結果から除くか否か。
+	 * bundle: true の時のみ有効。
 	 */
-	logger?: cmn.Logger;
-	exportInfo?: cmn.ExportZipInfo | null;
-	omitUnbundledJs?: boolean;
-	targetService?: cmn.ServiceType;
-}
-
-export function _completeConvertGameParameterObject(param: ConvertGameParameterObject): void {
-	param.bundle = !!param.bundle;
-	param.babel = !!param.babel;
-	param.minify = !!param.minify;
-	param.minifyJs = !!param.minifyJs;
-	param.minifyJson = !!param.minifyJson;
-	param.strip = !!param.strip;
-	param.source = param.source || process.cwd();
-	param.hashLength = param.hashLength || 0;
-	param.logger = param.logger || new cmn.ConsoleLogger();
-	param.exportInfo = param.exportInfo;
-	param.omitUnbundledJs = !!param.omitUnbundledJs;
-	param.targetService = param.targetService || "none";
+	omitUnbundledJs: boolean;
+	babel: boolean;
+	minifyJs: boolean;
+	minifyJson: boolean;
+	packImage: boolean;
+	needUntaintedImage: boolean;
+	completeEnvironment: boolean;
+	strip: boolean;
+	source: string;
+	hashLength: number;
+	dest: string;
+	logger: cmn.Logger;
+	optionInfo: cmn.CliConfigExportZipDumpableOption | null;
+	targetService: cmn.ServiceType;
 }
 
 export interface BundleResult {
@@ -77,7 +61,6 @@ export function bundleScripts(entryPoint: string, basedir: string): Promise<Bund
 }
 
 export function convertGame(param: ConvertGameParameterObject): Promise<void> {
-	_completeConvertGameParameterObject(param);
 	let gamejson: cmn.GameConfiguration;
 
 	cmn.Util.mkdirpSync(path.dirname(path.resolve(param.dest)));
@@ -86,10 +69,10 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 		.then(async (result: cmn.GameConfiguration) => {
 			gamejson = result;
 			// export-zip実行時のバージョンとオプションを追記
-			if (param.exportInfo) {
+			if (param.optionInfo) {
 				gamejson.exportZipInfo = {
-					version: param.exportInfo.version,
-					option: param.exportInfo.option
+					version: JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "..", "package.json"), "utf8")).version,
+					option: param.optionInfo
 				};
 			}
 			// 全スクリプトがES5構文になっていることを確認する
@@ -220,7 +203,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			if (param.completeEnvironment) {
 				await transformCompleteEnvrironment(gamejson);
 			}
-			if (param.targetService === "nicolive") {
+			if (param.needUntaintedImage || param.targetService === "nicolive") {
 				await transformUntaint(gamejson);
 			}
 		})
@@ -243,7 +226,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			);
 		})
 		.then(() => {
-			if (!param.minify && !param.minifyJs)
+			if (!param.minifyJs)
 				return;
 			const scriptAssetPaths = gcu.extractScriptAssetFilePaths(gamejson).map(p => path.resolve(param.dest, p));
 			scriptAssetPaths.forEach(p => {
@@ -251,19 +234,4 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 				fs.writeFileSync(p, UglifyJS.minify(code).code);
 			});
 		});
-}
-
-/**
- * 指定のgameJson中の全てのImageAssetに untainted:true を付与する
- */
-function addUntaintedToImageAssets(gameJson: cmn.GameConfiguration): void {
-	Object.keys(gameJson.assets).forEach(key => {
-		if (gameJson.assets[key].type === "image") {
-			const asset = gameJson.assets[key] as ImageAssetConfigurationBase;
-			if (!asset.hint) {
-				asset.hint = {};
-			}
-			asset.hint.untainted = true;
-		}
-	});
 }

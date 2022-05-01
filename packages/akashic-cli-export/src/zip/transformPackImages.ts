@@ -72,7 +72,7 @@ export async function transformPackSmallImagesImpl(gamejson: GameConfiguration, 
 	const binHeight = 1024;
 
 	// Akashic Engine が slice 指定をサポートしていないバージョンのコンテンツなら何もしない。
-	const sandboxRuntimeVer = gamejson.environment["sandbox-runtime"] ?? "1";
+	const sandboxRuntimeVer = gamejson.environment?.["sandbox-runtime"] ?? "1";
 	if (/^[12]$/.test(sandboxRuntimeVer)) return { outputs: [], discardables: [] };
 
 	const rects = extractPackTargets(gamejson, binWidth, binHeight);

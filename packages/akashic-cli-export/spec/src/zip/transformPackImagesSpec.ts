@@ -88,7 +88,7 @@ describe("transformPackImages", () => {
 			relDiscardables.forEach(p => {
 				const aid = Object.keys(gamejson.assets).find(aid => gamejson.assets[aid].virtualPath === p);
 				expect(aid).toBeTruthy();
-				const decl = gamejson.assets[aid];
+				const decl = gamejson.assets[aid!];
 				expect(decl.type).toBe("image");
 				expect(decl.path).toBe(relOutputPath);
 				expect(decl.width).toBe(output.width);
@@ -189,7 +189,7 @@ describe("transformPackImages", () => {
 			relDiscardables.forEach(p => {
 				const aid = assetKeys.find(aid => gamejson.assets[aid].virtualPath === p);
 				expect(aid).toBeTruthy();
-				const decl = gamejson.assets[aid];
+				const decl = gamejson.assets[aid!];
 				expect(decl.type).toBe("image");
 				expect(decl.path).toBe(relOutputPath);
 				expect(decl.width).toBe(output.width);
@@ -221,7 +221,7 @@ describe("transformPackImages", () => {
 			relDiscardables.forEach(p => {
 				const aid = Object.keys(gamejson.assets).find(aid => gamejson.assets[aid].virtualPath === p);
 				expect(aid).toBeTruthy();
-				const decl = gamejson.assets[aid];
+				const decl = gamejson.assets[aid!];
 				expect(decl.type).toBe("image");
 				expect(decl.path).toBe(relOutputPath);
 				expect(decl.width).toBe(output.width);

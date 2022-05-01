@@ -14,6 +14,21 @@ export function cli(param: CliConfigExportZip): void {
 		logger.info("deprecated: --no-omit-empty-js is now always enabled since output may be broken without this option.");
 	}
 
+	const exportInfoOption = {
+		quiet: param.quiet,
+		force: param.force,
+		strip: param.strip,
+		minify: param.minify,
+		minifyJs: param.minifyJs,
+		minifyJson: param.minifyJson,
+		packImage: param.packImage,
+		bundle: param.bundle,
+		babel: param.babel,
+		hashFilename: param.hashFilename,
+		omitUnbundledJs: param.omitUnbundledJs,
+		targetService: param.targetService
+	};
+
 	Promise.resolve()
 		.then(() => promiseExportZip({
 			bundle: param.bundle,
@@ -30,21 +45,7 @@ export function cli(param: CliConfigExportZip): void {
 			logger,
 			omitUnbundledJs: param.bundle && param.omitUnbundledJs,
 			targetService: param.targetService,
-			exportInfo: {
-				version: ver,
-				option: {
-					quiet: param.quiet,
-					force: param.force,
-					strip: param.strip,
-					minify: param.minify,
-					minifyJs: param.minifyJs,
-					minifyJson: param.minifyJson,
-					bundle: param.bundle,
-					babel: param.babel,
-					hashFilename: param.hashFilename,
-					targetService: param.targetService || "none"
-				}
-			}
+			optionInfo: exportInfoOption
 		}))
 		.then(() => logger.info("Done!"))
 		.catch((err: any) => {

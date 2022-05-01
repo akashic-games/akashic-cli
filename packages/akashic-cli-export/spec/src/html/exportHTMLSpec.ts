@@ -1,136 +1,89 @@
 import * as path from "path";
 import * as fsx from "fs-extra";
 import * as exp from "../../../lib/html/exportHTML";
+import { ConsoleLogger, Logger } from "@akashic/akashic-cli-commons";
 
-describe("exportHTML", function () {
-	it("_completeExportHTMLParameterObject", (done) => {
+function normalizeExportHTMLConvertOption(param: Partial<exp.ExportHTMLConvertOption>): exp.ExportHTMLConvertOption {
+	return {
+		strip: false,
+		minifyJs: false,
+		minifyJson: false,
+		babel: false,
+		bundle: false,
+		omitUnbundledJs: false,
+		completeEnvironment: false,
+		packImage: false,
+		needUntaintedImage: false,
+		hashLength: null,
+		targetService: "none",
+		optionInfo: null,
+		...param
+	};
+}
+
+function normalizeExportHTMLGenerateOption(param: Partial<exp.ExportHTMLGenerateOption>): exp.ExportHTMLGenerateOption {
+	return {
+		magnify: false,
+		injects: [],
+		autoSendEventName: false,
+		engineFiles: null,
+		embed: false,
+		destructive: false,
+		useRawText: false,
+		optionInfo: null,
+		...param
+	};
+}
+
+describe("exportHTML", async function () {
+	it("create a zip file for compress option", (done) => {
+		const dest = path.join(__dirname, "..", "..", "fixtures", "sample_game_output.zip");
+		expect(fsx.existsSync(dest)).toBe(false);
 		Promise.resolve()
 			.then(function () {
 				const param: exp.ExportHTMLParameterObject = {
-					logger: undefined,
-					cwd: process.cwd(),
-					source: path.join(process.cwd(), "content"),
-					output: process.cwd(),
-					force: true,
-					strip: true,
-					minify: false,
-					magnify: false,
-					unbundleText: false,
-					lint: false
-				};
-				const result = exp._completeExportHTMLParameterObject(param);
-				expect(param.logger).toBe(undefined);
-				expect(result.logger).not.toBe(undefined);
-			})
-			.then(done, done.fail);
-	});
-
-	it("_completeExportHTMLParameterObject - fullpath", (done) => {
-		Promise.resolve()
-			.then(function () {
-				let param: exp.ExportHTMLParameterObject = {
-					logger: undefined,
-					cwd: path.join(process.cwd(), ""),
-					source: path.join(process.cwd(), "content"),
-					output: path.join(process.cwd(), "output"),
-					force: true,
-					strip: true,
-					minify: false,
-					magnify: false,
-					unbundleText: false,
-					lint: false
-				};
-				let result = exp._completeExportHTMLParameterObject(param);
-				expect(result.output).toBe(path.join(process.cwd(), "output"));
-
-				param = {
-					logger: undefined,
-					cwd: path.join(process.cwd(), "content"),
-					source: ".",
-					output:  "../output",
-					force: true,
-					strip: true,
-					minify: false,
-					magnify: false,
-					unbundleText: false,
-					lint: false
-				};
-				result = exp._completeExportHTMLParameterObject(param);
-				expect(result.output).toBe(path.join(process.cwd(), "output"));
-			})
-			.then(done, done.fail);
-	});
-
-
-	it("promiseExportHTML", (done) => {
-		Promise.resolve()
-			.then(function () {
-				const param: exp.ExportHTMLParameterObject = {
-					logger: undefined,
+					logger: new ConsoleLogger(),
 					cwd: path.join(__dirname, "..", "..", "fixtures", "sample_game"),
 					source: ".",
-					output: undefined,
+					output: "../sample_game_output.zip",
 					force: true,
-					strip: true,
-					minify: false,
-					magnify: false,
-					unbundleText: false,
-					lint: false
+					compress: true,
+					convertOption: normalizeExportHTMLConvertOption({ strip: true }),
+					generateOption: normalizeExportHTMLGenerateOption({})
 				};
-				return exp.promiseExportHTML(param);
+				return exp.exportHTML(param);
 			})
-			.then((dest) => {
-				expect(dest).toMatch(/^.*akashic-export-html-tmp-.+$/);
+			.then(() => {
+				expect(fsx.existsSync(dest)).toBe(true);
+				expect(fsx.readFileSync(dest).readInt32LE(0)).toBe(0x04034b50); // PK\3\4
 				fsx.removeSync(dest);
 			})
 			.then(done, done.fail);
 	});
 
-	it("output option has zip extension", (done) => {
-		Promise.resolve()
-			.then(function () {
-				const param: exp.ExportHTMLParameterObject = {
-					logger: undefined,
-					cwd: path.join(__dirname, "..", "..", "fixtures", "sample_game"),
-					source: ".",
-					output: "../output.zip",
-					force: true,
-					strip: true,
-					minify: false,
-					magnify: false,
-					unbundleText: false,
-					lint: false,
-					compress: true
-				};
-				return exp.promiseExportHTML(param);
-			})
-			.then((dest) => {
-				expect(dest).toBe(path.join(__dirname, "..", "..", "fixtures", "output.zip"));
-				fsx.removeSync(dest);
-			})
-			.then(done, done.fail);
-	});
-
-	it("promiseExportHTML with debugOverrideEngineFiles option", (done) => {
+	it("uses given engineFiles", (done) => {
+		const dest = path.join(__dirname, "..", "..", "fixtures", "sample_game_v3_output");
+		expect(fsx.existsSync(dest)).toBe(false);
 		Promise.resolve()
 			.then(() => {
 				const param: exp.ExportHTMLParameterObject = {
-					logger: undefined,
+					logger: new ConsoleLogger(),
 					cwd: path.join(__dirname, "..", "..", "fixtures", "sample_game_v3"),
 					source: ".",
-					output: undefined,
+					output: "../sample_game_v3_output",
 					force: true,
-					strip: false,
-					minify: false,
-					magnify: false,
-					unbundleText: false,
-					lint: false,
-					debugOverrideEngineFiles: path.join(__dirname, "..", "..", "fixtures", "engineFilesV3_1_99.js")
+					convertOption: normalizeExportHTMLConvertOption({
+						strip: true
+					}),
+					generateOption: normalizeExportHTMLGenerateOption({
+						engineFiles: path.join(__dirname, "..", "..", "fixtures", "engineFilesV3_1_99.js")
+					})
 				};
-				return exp.promiseExportHTML(param);
+				return exp.exportHTML(param);
 			})
-			.then((dest) => {
-				expect(dest).toMatch(/^.*akashic-export-html-tmp-.+$/);
+			.then(() => {
+				expect(fsx.existsSync(dest)).toBe(true);
+				expect(fsx.readFileSync(dest).readInt32LE(0)).toBe(0x04034b50); // PK\3\4
 				expect(fsx.statSync(path.join(dest, "js", "engineFilesV3_1_99.js"))).toBeTruthy();
 				const buff = fsx.readFileSync(path.join(dest, "index.html"));
 				// index.html で指定したengineFiles が読み込まれている
@@ -140,27 +93,28 @@ describe("exportHTML", function () {
 			.then(done, done.fail);
 	});
 
-	it("promiseExportHTML with bundole and debugOverrideEngineFiles option", (done) => {
+	it("embeds given engineFiles when speficied with embed option", (done) => {
+		const dest = path.join(__dirname, "..", "..", "fixtures", "sample_game_v3_output2");
+		expect(fsx.existsSync(dest)).toBe(false);
 		Promise.resolve()
 			.then(() => {
 				const param: exp.ExportHTMLParameterObject = {
-					logger: undefined,
+					logger: new ConsoleLogger(),
 					cwd: path.join(__dirname, "..", "..", "fixtures", "sample_game_v3"),
 					source: ".",
-					output: undefined,
+					output: "../sample_game_v3_output2",
 					force: true,
-					strip: false,
-					minify: false,
-					magnify: false,
-					unbundleText: false,
-					lint: false,
-					bundle: true,
-					debugOverrideEngineFiles: path.join(__dirname, "..", "..", "fixtures", "engineFilesV3_1_99.js")
+					convertOption: normalizeExportHTMLConvertOption({
+						strip: true
+					}),
+					generateOption: normalizeExportHTMLGenerateOption({
+						embed: true,
+						engineFiles: path.join(__dirname, "..", "..", "fixtures", "engineFilesV3_1_99.js")
+					})
 				};
-				return exp.promiseExportHTML(param);
+				return exp.exportHTML(param);
 			})
-			.then((dest) => {
-				expect(dest).toMatch(/^.*akashic-export-html-tmp-.+$/);
+			.then(() => {
 				expect(fsx.existsSync(path.join(dest, "js"))).toBeFalsy();
 				const buff = fsx.readFileSync(path.join(dest, "index.html"));
 				expect(buff.toString().includes("dummy-engineFilesV3_1_99")).toBeTruthy(); // engineFiles の中身が index.html に存在する
