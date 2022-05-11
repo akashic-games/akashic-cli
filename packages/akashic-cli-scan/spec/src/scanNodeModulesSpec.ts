@@ -734,6 +734,99 @@ describe("scanNodeModules", () => {
 		});
 	});
 
+	it("doesn't delete registered globalScripts when scan globalScripts again", async () => {
+		mockfs({
+			"game.json": JSON.stringify({
+				main: "./script/main.js",
+				assets: {
+					main: {
+						type: "script",
+						path: "script/main.js",
+						global: true
+					},
+					anAsset: {
+						type: "script",
+						path: "script/subdir/anAsset.js",
+						global: true
+					}
+				},
+				globalScripts: [
+					"node_modules/dummy/main.js",
+					"node_modules/dummy/bar.js"
+				],
+				moduleMainScripts: {
+					"dummy": "node_modules/dummy/main.js"
+				}
+			}),
+			"script": {
+				"main.js": [
+					"require('dummy2/sub');",
+				].join("\n")
+			},
+			"node_modules": {
+				"dummy": {
+					"package.json": JSON.stringify({
+						name: "dummy",
+						version: "0.0.0",
+						main: "main.js",
+						dependencies: { "dummyChild": "1.0.0" }
+					}),
+					"main.js": [
+						"require('./foo');",
+						"require('dummyChild');",
+					].join("\n"),
+					"foo.js": "module.exports = 1;",
+					"bar.js": "module.exports = 2;",
+					"node_modules": {
+						"dummyChild": {
+							"package.json": JSON.stringify({
+								name: "dummyChild",
+								version: "1.0.0",
+								main: "index.js",
+							}),
+							"index.js": "module.exports = 'dummyChild';"
+						}
+					}
+				},
+				"dummy2": {
+					"index.js": "require('./sub')",
+					"sub.js": "",
+				}
+			}
+		});
+
+		await scanNodeModules({
+			logger: nullLogger,
+			debugNpm: new MockPromisedNpm({
+				expectDependencies: {
+					"dummy": {
+						dependencies: { "dummyChild": {} }
+					},
+					"dummy2": {}
+				}
+			})
+		});
+
+		const conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		const globalScripts = conf.globalScripts;
+		const moduleMainScripts = conf.moduleMainScripts;
+
+		const expectedPaths = [
+			"node_modules/dummy/bar.js",
+			"node_modules/dummy/foo.js",
+			"node_modules/dummy/main.js",
+			"node_modules/dummy/node_modules/dummyChild/index.js",
+			"node_modules/dummy2/index.js",
+			"node_modules/dummy2/sub.js",
+		];
+		expect(globalScripts).toEqual(expectedPaths);
+
+		expect(moduleMainScripts).toEqual({
+			"dummy": "node_modules/dummy/main.js",
+			"dummyChild": "node_modules/dummy/node_modules/dummyChild/index.js",
+		});
+	});
+
 	it("doesn't output warning message when moduleMainScript exist in game.json", async () => {
 		mockfs({
 			"game.json": JSON.stringify({
