@@ -125,10 +125,12 @@ export async function scanNodeModules(p: ScanNodeModulesParameterObject): Promis
 			entryPaths = dependencyPackageNames;
 		}
 
-		let globalScripts = (content.globalScripts ?? []).filter(f => fs.existsSync(path.resolve(base, f)));
 		const listFiles = param.noOmitPackagejson ? NodeModules.listModuleFiles : NodeModules.listScriptFiles;
 		const modulePaths = await listFiles(base, entryPaths, logger) ?? [];
-		globalScripts = Array.from(new Set(globalScripts.concat(modulePaths))).sort();
+		const globalScripts = Array.from(new Set([
+			...(content.globalScripts ?? []).filter(f => fs.existsSync(path.resolve(base, f))),
+			...modulePaths
+		  ])).sort();
 
 		if (globalScripts.length) {
 			const packageJsonFiles = NodeModules.listPackageJsonsFromScriptsPath(base, globalScripts);

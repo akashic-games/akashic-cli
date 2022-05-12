@@ -734,7 +734,7 @@ describe("scanNodeModules", () => {
 		});
 	});
 
-	it("doesn't delete registered globalScripts when scan globalScripts again", async () => {
+	it("doesn't delete registered and existing globalScripts when scan globalScripts again", async () => {
 		mockfs({
 			"game.json": JSON.stringify({
 				main: "./script/main.js",
@@ -752,7 +752,8 @@ describe("scanNodeModules", () => {
 				},
 				globalScripts: [
 					"node_modules/dummy/main.js",
-					"node_modules/dummy/bar.js"
+					"node_modules/dummy/non-required-from-module-root.js",
+					"node_modules/dummy/non-exist.js"
 				],
 				moduleMainScripts: {
 					"dummy": "node_modules/dummy/main.js"
@@ -776,7 +777,7 @@ describe("scanNodeModules", () => {
 						"require('dummyChild');",
 					].join("\n"),
 					"foo.js": "module.exports = 1;",
-					"bar.js": "module.exports = 2;",
+					"non-required-from-module-root.js": "module.exports = 2;",
 					"node_modules": {
 						"dummyChild": {
 							"package.json": JSON.stringify({
@@ -812,7 +813,7 @@ describe("scanNodeModules", () => {
 		const moduleMainScripts = conf.moduleMainScripts;
 
 		const expectedPaths = [
-			"node_modules/dummy/bar.js",
+			"node_modules/dummy/non-required-from-module-root.js",
 			"node_modules/dummy/foo.js",
 			"node_modules/dummy/main.js",
 			"node_modules/dummy/node_modules/dummyChild/index.js",
