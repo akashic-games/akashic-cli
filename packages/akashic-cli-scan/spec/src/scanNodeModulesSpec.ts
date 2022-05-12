@@ -813,10 +813,10 @@ describe("scanNodeModules", () => {
 		const moduleMainScripts = conf.moduleMainScripts;
 
 		const expectedPaths = [
-			"node_modules/dummy/non-required-from-module-root.js",
 			"node_modules/dummy/foo.js",
 			"node_modules/dummy/main.js",
 			"node_modules/dummy/node_modules/dummyChild/index.js",
+			"node_modules/dummy/non-required-from-module-root.js",
 			"node_modules/dummy2/index.js",
 			"node_modules/dummy2/sub.js",
 		];
