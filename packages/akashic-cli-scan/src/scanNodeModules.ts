@@ -127,10 +127,11 @@ export async function scanNodeModules(p: ScanNodeModulesParameterObject): Promis
 
 		const listFiles = param.noOmitPackagejson ? NodeModules.listModuleFiles : NodeModules.listScriptFiles;
 		const modulePaths = await listFiles(base, entryPaths, logger) ?? [];
+		// 既に登録されている globalScripts のうち存在しているものを残した後、新規で追加されたスクリプトのみを追加している。この追加時に重複を防ぐためにSetを用いている。
 		const globalScripts = Array.from(new Set([
 			...(content.globalScripts ?? []).filter(f => fs.existsSync(path.resolve(base, f))),
 			...modulePaths
-		  ])).sort();
+		])).sort();
 
 		if (globalScripts.length) {
 			const packageJsonFiles = NodeModules.listPackageJsonsFromScriptsPath(base, globalScripts);
