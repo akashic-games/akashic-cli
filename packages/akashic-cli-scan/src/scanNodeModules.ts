@@ -1,3 +1,4 @@
+import * as fs from "fs";
 import * as path from "path";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
 import { readJSON, writeJSON } from "@akashic/akashic-cli-commons/lib/FileSystem";
@@ -126,9 +127,14 @@ export async function scanNodeModules(p: ScanNodeModulesParameterObject): Promis
 
 		const listFiles = param.noOmitPackagejson ? NodeModules.listModuleFiles : NodeModules.listScriptFiles;
 		const modulePaths = await listFiles(base, entryPaths, logger) ?? [];
+		// 既に登録されている globalScripts のうち存在しているものを残した後、新規で追加されたスクリプトのみを追加している。この追加時に重複を防ぐためにSetを用いている。
+		const globalScripts = Array.from(new Set([
+			...(content.globalScripts ?? []).filter(f => fs.existsSync(path.resolve(base, f))),
+			...modulePaths
+		])).sort();
 
-		if (modulePaths.length) {
-			const packageJsonFiles = NodeModules.listPackageJsonsFromScriptsPath(base, modulePaths);
+		if (globalScripts.length) {
+			const packageJsonFiles = NodeModules.listPackageJsonsFromScriptsPath(base, globalScripts);
 			const moduleMainScripts = NodeModules.listModuleMainScripts(packageJsonFiles);
 
 			if (moduleMainScripts && 0 < Object.keys(moduleMainScripts).length) {
@@ -139,11 +145,12 @@ export async function scanNodeModules(p: ScanNodeModulesParameterObject): Promis
 						"Please ensure that you are using akashic-engine@>=2.0.2, >=1.12.7."
 					);
 				}
+				// TODO: 現状globalScriptsがすべて削除された時にmoduleMainScriptsは反映されずに残ってしまうので、同時に消えるように修正すべき(残っていても実害は無い)
 				content.moduleMainScripts = Object.assign(content.moduleMainScripts || {}, moduleMainScripts);
 			}
 		}
 
-		content.globalScripts = modulePaths;
+		content.globalScripts = globalScripts;
 
 		await writeJSON<GameConfiguration>(gamePath, content);
 
