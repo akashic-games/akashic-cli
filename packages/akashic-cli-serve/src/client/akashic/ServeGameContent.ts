@@ -58,6 +58,10 @@ export class ServeGameContent {
 		this.onReset = new Trigger<amf.StartPoint>();
 	}
 
+	get id() {
+		return this.agvGameContent.id;
+	}
+
 	setup(): void {
 		this._game = this.agvGameContent.getGame();
 		this._gameDriver = this.agvGameContent.getGameDriver();
@@ -109,6 +113,10 @@ export class ServeGameContent {
 				return resetOriginal.apply(this, arguments);
 			};
 		}
+	}
+
+	setContentArea(area: agv.ContentArea): void {
+		this.agvGameContent.setContentArea(area);
 	}
 
 	/**

@@ -16,6 +16,7 @@ import type {
 	PutStartPointEvent,
 	PlayAudioStateChangeTestbedEvent
 } from "../../common/types/TestbedEvent";
+import type { GameViewManager } from "../akashic/GameViewManager";
 import { apiClient } from "../api/apiClientInstance";
 import * as Subscriber from "../api/Subscriber";
 import type { ClientContentLocator } from "../common/ClientContentLocator";
@@ -24,6 +25,7 @@ import { PlayEntity } from "./PlayEntity";
 
 export interface PlayStoreParameterObject {
 	contentStore: ContentStore;
+	gameViewManager: GameViewManager;
 }
 
 export interface CreatePlayParameterObject {
@@ -42,6 +44,7 @@ export interface CreateStandalonePlayParameterObject {
 
 export class PlayStore {
 	@observable plays: {[key: string]: PlayEntity};
+	private _gameViewManager: GameViewManager;
 	private _lastPlayId: string | null;
 	private _contentStore: ContentStore;
 	private _creationWaiters: {[key: string]: (p: PlayEntity) => void };
@@ -49,6 +52,7 @@ export class PlayStore {
 
 	constructor(param: PlayStoreParameterObject) {
 		this.plays = Object.create(null);
+		this._gameViewManager = param.gameViewManager;
 		this._lastPlayId = null;
 		this._contentStore = param.contentStore;
 		this._creationWaiters = Object.create(null);
@@ -69,6 +73,7 @@ export class PlayStore {
 				res.forEach(o => {
 					this.plays[o.playInfo.playId] = new PlayEntity({
 						...o.playInfo,
+						gameViewManager: this._gameViewManager,
 						content: this._contentStore.findOrRegister(o.playInfo.contentLocatorData),
 						startPointHeaders: o.startPointHeaders
 					});
@@ -123,6 +128,7 @@ export class PlayStore {
 			return this.plays[playId];
 
 		const play = new PlayEntity({
+			gameViewManager: this._gameViewManager,
 			playId,
 			status: "running", // 暫定。stanadlone プレイは running しかないものとして扱う
 			content: this._contentStore.findOrRegister(param.contentLocator),
@@ -136,6 +142,7 @@ export class PlayStore {
 	private handlePlayCreate = (e: PlayCreateTestbedEvent): void => {
 		const play = new PlayEntity({
 			...e,
+			gameViewManager: this._gameViewManager,
 			content: this._contentStore.findOrRegister(e.contentLocatorData)
 		});
 		this.plays[e.playId] = play;

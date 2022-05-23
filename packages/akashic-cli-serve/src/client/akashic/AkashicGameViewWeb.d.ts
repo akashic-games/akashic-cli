@@ -87,6 +87,7 @@ declare module agv {
 	}
 
 	class GameContent {
+		readonly id: number;
 		constructor(...args: any[]);
 		pause(): void;
 		resume(): void;
@@ -99,6 +100,14 @@ declare module agv {
 		getGameDriver(): agv.GameDriverLike;
 		setMasterVolume(vol: number): void;
 		getMasterVolume(): number;
+		setContentArea(area: ContentArea): void;
+	}
+
+	interface ContentArea {
+		x: number;
+		y: number;
+		width: number;
+		height: number;
 	}
 
 	interface PlaylogConfig {

@@ -13,6 +13,7 @@ import type {ContentEntity} from "./ContentEntity";
 import type {ExecutionMode} from "./ExecutionMode";
 import type {GameInstanceEntity} from "./GameInstanceEntity";
 import type {PlayEntity} from "./PlayEntity";
+import { ScreenSize } from "../common/types/ScreenSize";
 
 const toAgvExecutionMode = (() => {
 	const executionModeTable = {
@@ -49,6 +50,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 	@observable targetTime: number;
 	@observable resetTime: number;
 	@observable isPaused: boolean;
+	@observable intrinsicSize: ScreenSize;
 
 	readonly play: PlayEntity;
 	readonly content: ContentEntity;
@@ -67,6 +69,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 		this.resetTime = 0;
 		this.play = params.play;
 		this.isPaused = false;
+		this.intrinsicSize = { width: 0, height: 0 };
 		this.content = params.content;
 		this._timeKeeper = new TimeKeeper();
 		this._gameViewManager = params.gameViewManager;
@@ -128,11 +131,6 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 	@computed
 	get isJoined(): boolean {
 		return this.play.joinedPlayerTable.has(this.player.id);
-	}
-
-	@computed
-	get gameViewSize(): {width: number; height: number} {
-		return this._gameViewManager.getViewSize();
 	}
 
 	@computed
@@ -248,7 +246,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 		const url = this.content.locator.asAbsoluteUrl();
 		const contentJson = await ApiRequest.get<{ content_url: string }>(url);
 		const gameJson = await ApiRequest.get<{ width: number; height: number }>(contentJson.content_url);
-		this._gameViewManager.setViewSize(gameJson.width, gameJson.height);
+		this.intrinsicSize = { width: gameJson.width, height: gameJson.height };
 	}
 
 	@action

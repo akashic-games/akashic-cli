@@ -2,9 +2,11 @@ import type {ServiceType} from "@akashic/akashic-cli-commons/lib/ServiceType";
 import {observable, action} from "mobx";
 import type {AppOptions} from "../../common/types/AppOptions";
 import type {Player} from "../../common/types/Player";
+import type { GameViewManager } from "../akashic/GameViewManager";
 import { apiClient } from "../api/apiClientInstance";
 import {ClientContentLocator} from "../common/ClientContentLocator";
 import {queryParameters as query} from "../common/queryParameters";
+import { ScreenSize } from "../common/types/ScreenSize";
 import {ContentStore} from "./ContentStore";
 import {DevtoolUiStore} from "./DevtoolUiStore";
 import type {LocalInstanceEntity} from "./LocalInstanceEntity";
@@ -16,6 +18,10 @@ import {ProfilerStore} from "./ProfilerStore";
 import {StartupScreenUiStore} from "./StartupScreenUiStore";
 import {storage} from "./storage";
 import {ToolBarUiStore} from "./ToolBarUiStore";
+
+export interface StoreParameterObject {
+	gameViewManager: GameViewManager;
+}
 
 export class Store {
 	@observable contentStore: ContentStore;
@@ -32,14 +38,16 @@ export class Store {
 
 	@observable currentPlay: PlayEntity | null;
 	@observable currentLocalInstance: LocalInstanceEntity | null;
+	@observable gameViewSize: ScreenSize;
 
+	private _gameViewManager: GameViewManager;
 	private _initializationWaiter: Promise<void>;
 
-	constructor() {
+	constructor(param: StoreParameterObject) {
 		// TODO xnv bootstrapから渡す方が自然では？
 		this.contentLocator = new ClientContentLocator({ contentId: (query.id != null) ? query.id : "0" });
 		this.contentStore = new ContentStore();
-		this.playStore = new PlayStore({ contentStore: this.contentStore });
+		this.playStore = new PlayStore({ contentStore: this.contentStore, gameViewManager: param.gameViewManager });
 		this.toolBarUiStore = new ToolBarUiStore();
 		this.devtoolUiStore = new DevtoolUiStore();
 		this.notificationUiStore = new NotificationUiStore();
@@ -50,7 +58,9 @@ export class Store {
 		this.player = null;
 		this.currentPlay = null;
 		this.currentLocalInstance = null;
+		this.gameViewSize = { width: 10, height: 10 };
 
+		this._gameViewManager = param.gameViewManager;
 		this._initializationWaiter = apiClient.getOptions().then(result => {
 			this.appOptions = result.data;
 		});
@@ -79,6 +89,12 @@ export class Store {
 	@action
 	setCurrentPlay(play: PlayEntity): void {
 		this.currentPlay = play;
+	}
+
+	@action
+	setCurrentGameViewSize(size: ScreenSize): void {
+		this.gameViewSize = size;
+		this._gameViewManager.setViewSize(size.width, size.height);
 	}
 
 	get targetService(): ServiceType {

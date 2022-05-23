@@ -1,0 +1,9 @@
+.game-view-fitter {
+  flex: 1 1 auto;
+	display: block;
+	position: relative;
+}
+
+.offsetter {
+	position: absolute;
+}

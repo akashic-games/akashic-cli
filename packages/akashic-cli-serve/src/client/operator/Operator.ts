@@ -146,7 +146,6 @@ export class Operator {
 		const play = store.currentPlay;
 		const tokenResult = await apiClient.createPlayToken(play.playId, store.player.id, false, store.player.name);
 		const instance = await play.createLocalInstance({
-			gameViewManager: this.gameViewManager,
 			playId: play.playId,
 			playToken: tokenResult.data.playToken,
 			playlogServerUrl: "dummy-playlog-server-url",
@@ -299,7 +298,6 @@ export class Operator {
 		}
 		const childPlay = await this._createClientLoop(params.contentUrl, params.playId);
 		const localInstance = await childPlay.createLocalInstance({
-			gameViewManager: this.gameViewManager,
 			player: this.store.player,
 			playId: params.playId,
 			executionMode: "active",

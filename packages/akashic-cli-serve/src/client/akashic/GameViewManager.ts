@@ -92,6 +92,7 @@ export class LogAudioPdiHandler {
 export class GameViewManager {
 	private rootElement: HTMLElement;
 	private gameView: agv.AkashicGameView;
+	private contents: { [key: string]: ServeGameContent };
 
 	constructor(params: GameViewManagerParameterObject) {
 		this.rootElement = document.createElement("div");
@@ -103,6 +104,7 @@ export class GameViewManager {
 			untrustedFrameUrl: params.untrustedFrameUrl || this.getDefaultUntrustedFrameUrl(),
 			trustedChildOrigin: params.trustedChildOrigin || /.*/
 		});
+		this.contents = Object.create(null);
 	}
 
 	getRootElement(): HTMLElement {
@@ -129,7 +131,9 @@ export class GameViewManager {
 			gameConfig.gameLoaderCustomizer.platformCustomizer = this.customizePlatform;
 		}
 		const agvGameContent = new agv.GameContent(gameConfig);
-		return new ServeGameContent(agvGameContent);
+		const ret = new ServeGameContent(agvGameContent);
+		this.contents[ret.id] = ret;
+		return ret;
 	}
 
 	startGameContent(content: ServeGameContent): Promise<void> {
@@ -160,12 +164,17 @@ export class GameViewManager {
 	}
 
 	removeGameContent(content: ServeGameContent): void {
+		delete this.contents[content.id];
 		this.gameView.removeContent(content.agvGameContent);
 	}
 
 	setViewSize(width: number, height: number): void {
 		this.gameView.setViewSize(width, height);
+		Object.keys(this.contents).forEach(id => {
+			this.contents[id].setContentArea({ x: 0, y: 0, width, height });
+		});
 	}
+	
 
 	getViewSize(): {width: number; height: number} {
 		return this.gameView.getViewSize();
