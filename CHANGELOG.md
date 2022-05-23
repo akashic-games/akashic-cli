@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 2.15.66 (2022-05-23)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`
+  * [#1071](https://github.com/akashic-games/akashic-cli/pull/1071) Update all dependencies (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli`
+  * [#1072](https://github.com/akashic-games/akashic-cli/pull/1072) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- [@dera-](https://github.com/dera-)
+
 ## 2.15.65 (2022-04-28)
 
 #### Bug Fix
