@@ -58,7 +58,7 @@ export class ServeGameContent {
 		this.onReset = new Trigger<amf.StartPoint>();
 	}
 
-	get id() {
+	get id(): number {
 		return this.agvGameContent.id;
 	}
 

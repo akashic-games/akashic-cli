@@ -1,18 +1,18 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import { GameViewManager } from "../akashic/GameViewManager";
+import type { GameViewManager } from "../akashic/GameViewManager";
+import type { ScreenSize } from "../common/types/ScreenSize";
 import type { Operator } from "../operator/Operator";
 import type { Store } from "../store/Store";
 import * as styles from "./App.css";
-import { GameViewFitter } from "./atom/GameViewFitter";
 import { FlexScrollY } from "./atom/FlexScrollY";
+import { GameViewFitter } from "./atom/GameViewFitter";
 import { DevtoolContainer } from "./container/DevtoolContainer";
 import { GameScreenContainer } from "./container/GameScreenContainer";
 import { NotificationContainer } from "./container/NotificationContainer";
 import { StartupScreenContainer } from "./container/StartupScreenContainer";
 import { ToolBarContainer } from "./container/ToolbarContainer";
 import "./global.css";
-import { ScreenSize } from "../common/types/ScreenSize";
 
 export interface AppProps {
 	store: Store;
@@ -70,7 +70,9 @@ export const App = observer(function App(props: AppProps): React.ReactElement<Ap
 		/>
 		{
 			store.toolBarUiStore.fitsToScreen ?
-				<GameViewFitter intrinsicSize={store.currentLocalInstance.intrinsicSize} setSize={setGameViewSize}>{ agvContainer }</GameViewFitter> :
+				<GameViewFitter intrinsicSize={store.currentLocalInstance.intrinsicSize} setSize={setGameViewSize}>
+					{ agvContainer }
+				</GameViewFitter> :
 				<FlexScrollY>{ agvContainer }</FlexScrollY>
 		}
 		{

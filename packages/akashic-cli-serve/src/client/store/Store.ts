@@ -6,7 +6,7 @@ import type { GameViewManager } from "../akashic/GameViewManager";
 import { apiClient } from "../api/apiClientInstance";
 import {ClientContentLocator} from "../common/ClientContentLocator";
 import {queryParameters as query} from "../common/queryParameters";
-import { ScreenSize } from "../common/types/ScreenSize";
+import type { ScreenSize } from "../common/types/ScreenSize";
 import {ContentStore} from "./ContentStore";
 import {DevtoolUiStore} from "./DevtoolUiStore";
 import type {LocalInstanceEntity} from "./LocalInstanceEntity";

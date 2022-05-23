@@ -9,11 +9,11 @@ import type {GameViewManager} from "../akashic/GameViewManager";
 import type {ServeGameContent} from "../akashic/ServeGameContent";
 import * as ApiRequest from "../api/ApiRequest";
 import type {ProfilerValue} from "../common/types/Profiler";
+import type { ScreenSize } from "../common/types/ScreenSize";
 import type {ContentEntity} from "./ContentEntity";
 import type {ExecutionMode} from "./ExecutionMode";
 import type {GameInstanceEntity} from "./GameInstanceEntity";
 import type {PlayEntity} from "./PlayEntity";
-import { ScreenSize } from "../common/types/ScreenSize";
 
 const toAgvExecutionMode = (() => {
 	const executionModeTable = {

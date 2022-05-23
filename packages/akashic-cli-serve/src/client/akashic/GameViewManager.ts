@@ -174,7 +174,7 @@ export class GameViewManager {
 			this.contents[id].setContentArea({ x: 0, y: 0, width, height });
 		});
 	}
-	
+
 
 	getViewSize(): {width: number; height: number} {
 		return this.gameView.getViewSize();
