@@ -58,7 +58,7 @@ export class Store {
 		this.player = null;
 		this.currentPlay = null;
 		this.currentLocalInstance = null;
-		this.gameViewSize = { width: 10, height: 10 };
+		this.gameViewSize = { width: 10, height: 10 }; // ゲーム表示時に更新されるが不具合の際に現象が分かりやすいようサイズをつけておく
 
 		this._gameViewManager = param.gameViewManager;
 		this._initializationWaiter = apiClient.getOptions().then(result => {
