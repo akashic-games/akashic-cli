@@ -24,12 +24,12 @@ export const App = observer(function App(props: AppProps): React.ReactElement<Ap
 	const { store, operator, gameViewManager } = props;
 
 	const setGameViewSize = React.useCallback((size: ScreenSize) => {
-		store.setCurrentGameViewSize(size);
+		store.setGameViewSize(size);
 	}, [store]);
 
 	React.useEffect(() => {
 		if (!store.toolBarUiStore.fitsToScreen && store.currentLocalInstance?.intrinsicSize) {
-			store.setCurrentGameViewSize(store.currentLocalInstance.intrinsicSize);
+			store.setGameViewSize(store.currentLocalInstance.intrinsicSize);
 		}
 	}, [store.toolBarUiStore.fitsToScreen, store.currentLocalInstance?.intrinsicSize]);
 

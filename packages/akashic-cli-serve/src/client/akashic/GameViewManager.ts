@@ -175,7 +175,6 @@ export class GameViewManager {
 		});
 	}
 
-
 	getViewSize(): {width: number; height: number} {
 		return this.gameView.getViewSize();
 	}

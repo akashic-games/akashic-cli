@@ -2,8 +2,8 @@ import type {ServiceType} from "@akashic/akashic-cli-commons/lib/ServiceType";
 import {observable, action} from "mobx";
 import type {AppOptions} from "../../common/types/AppOptions";
 import type {Player} from "../../common/types/Player";
-import type { GameViewManager } from "../akashic/GameViewManager";
-import { apiClient } from "../api/apiClientInstance";
+import type {GameViewManager} from "../akashic/GameViewManager";
+import {apiClient} from "../api/apiClientInstance";
 import {ClientContentLocator} from "../common/ClientContentLocator";
 import {queryParameters as query} from "../common/queryParameters";
 import type { ScreenSize } from "../common/types/ScreenSize";
@@ -92,7 +92,7 @@ export class Store {
 	}
 
 	@action
-	setCurrentGameViewSize(size: ScreenSize): void {
+	setGameViewSize(size: ScreenSize): void {
 		this.gameViewSize = size;
 		this._gameViewManager.setViewSize(size.width, size.height);
 	}
