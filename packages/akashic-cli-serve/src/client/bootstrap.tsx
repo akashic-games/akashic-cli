@@ -13,7 +13,7 @@ const gameViewManager = new GameViewManager({
 	width: 0,
 	height: 0
 });
-const store = new Store();
+const store = new Store({ gameViewManager });
 const operator = new Operator({ store, gameViewManager });
 const pluginFuncs = {};
 

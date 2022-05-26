@@ -14,6 +14,7 @@ import { ClientContentLocator } from "../common/ClientContentLocator";
 import { createSessionParameter } from "../common/createSessionParameter";
 import { queryParameters as query } from "../common/queryParameters";
 import type {ProfilerValue} from "../common/types/Profiler";
+import type { ScreenSize } from "../common/types/ScreenSize";
 import type { LocalInstanceEntity } from "../store/LocalInstanceEntity";
 import type { PlayEntity } from "../store/PlayEntity";
 import type { Store } from "../store/Store";
@@ -146,7 +147,6 @@ export class Operator {
 		const play = store.currentPlay;
 		const tokenResult = await apiClient.createPlayToken(play.playId, store.player.id, false, store.player.name);
 		const instance = await play.createLocalInstance({
-			gameViewManager: this.gameViewManager,
 			playId: play.playId,
 			playToken: tokenResult.data.playToken,
 			playlogServerUrl: "dummy-playlog-server-url",
@@ -184,6 +184,10 @@ export class Operator {
 		await this.store.currentPlay.deleteAllServerInstances();
 		await apiClient.broadcast(this.store.currentPlay.playId, { type: "switchPlay", nextPlayId: play.playId });
 		this.ui.hideNotification();
+	};
+
+	setGameViewSize = (size: ScreenSize): void => {
+		this.store.setGameViewSize(size);
 	};
 
 	private async _createServerLoop(contentLocator: ClientContentLocator, audioState?: PlayAudioState): Promise<PlayEntity> {
@@ -299,7 +303,6 @@ export class Operator {
 		}
 		const childPlay = await this._createClientLoop(params.contentUrl, params.playId);
 		const localInstance = await childPlay.createLocalInstance({
-			gameViewManager: this.gameViewManager,
 			player: this.store.player,
 			playId: params.playId,
 			executionMode: "active",
