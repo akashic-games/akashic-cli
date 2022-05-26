@@ -1,7 +1,6 @@
 import { observer } from "mobx-react";
 import * as React from "react";
 import type { GameViewManager } from "../akashic/GameViewManager";
-import type { ScreenSize } from "../common/types/ScreenSize";
 import type { Operator } from "../operator/Operator";
 import type { Store } from "../store/Store";
 import * as styles from "./App.css";
@@ -22,16 +21,6 @@ export interface AppProps {
 
 export const App = observer(function App(props: AppProps): React.ReactElement<AppProps> {
 	const { store, operator, gameViewManager } = props;
-
-	const setGameViewSize = React.useCallback((size: ScreenSize) => {
-		store.setGameViewSize(size);
-	}, [store]);
-
-	React.useEffect(() => {
-		if (!store.toolBarUiStore.fitsToScreen && store.currentLocalInstance?.intrinsicSize) {
-			store.setGameViewSize(store.currentLocalInstance.intrinsicSize);
-		}
-	}, [store.toolBarUiStore.fitsToScreen, store.currentLocalInstance?.intrinsicSize]);
 
 	if (!store.currentLocalInstance) {
 		return <div id="whole" className={styles["whole-dialog"]}>
@@ -70,7 +59,7 @@ export const App = observer(function App(props: AppProps): React.ReactElement<Ap
 		/>
 		{
 			store.toolBarUiStore.fitsToScreen ?
-				<GameViewFitter intrinsicSize={store.currentLocalInstance.intrinsicSize} setSize={setGameViewSize}>
+				<GameViewFitter intrinsicSize={store.currentLocalInstance.intrinsicSize} setSize={operator.setGameViewSize}>
 					{ agvContainer }
 				</GameViewFitter> :
 				<FlexScrollY>{ agvContainer }</FlexScrollY>

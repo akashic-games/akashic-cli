@@ -1,5 +1,5 @@
 import type {ServiceType} from "@akashic/akashic-cli-commons/lib/ServiceType";
-import {observable, action} from "mobx";
+import {observable, action, autorun} from "mobx";
 import type {AppOptions} from "../../common/types/AppOptions";
 import type {Player} from "../../common/types/Player";
 import type {GameViewManager} from "../akashic/GameViewManager";
@@ -63,6 +63,12 @@ export class Store {
 		this._gameViewManager = param.gameViewManager;
 		this._initializationWaiter = apiClient.getOptions().then(result => {
 			this.appOptions = result.data;
+		});
+
+		autorun(() => {
+			if (!this.toolBarUiStore.fitsToScreen && this.currentLocalInstance?.intrinsicSize) {
+				this.setGameViewSize(this.currentLocalInstance.intrinsicSize);
+			}
 		});
 	}
 

@@ -14,6 +14,7 @@ import { ClientContentLocator } from "../common/ClientContentLocator";
 import { createSessionParameter } from "../common/createSessionParameter";
 import { queryParameters as query } from "../common/queryParameters";
 import type {ProfilerValue} from "../common/types/Profiler";
+import type { ScreenSize } from "../common/types/ScreenSize";
 import type { LocalInstanceEntity } from "../store/LocalInstanceEntity";
 import type { PlayEntity } from "../store/PlayEntity";
 import type { Store } from "../store/Store";
@@ -183,6 +184,10 @@ export class Operator {
 		await this.store.currentPlay.deleteAllServerInstances();
 		await apiClient.broadcast(this.store.currentPlay.playId, { type: "switchPlay", nextPlayId: play.playId });
 		this.ui.hideNotification();
+	};
+
+	setGameViewSize = (size: ScreenSize): void => {
+		this.store.setGameViewSize(size);
 	};
 
 	private async _createServerLoop(contentLocator: ClientContentLocator, audioState?: PlayAudioState): Promise<PlayEntity> {
