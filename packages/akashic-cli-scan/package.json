@@ -37,7 +37,7 @@
     "jasmine": "3.99.0",
     "jasmine-reporters": "2.5.0",
     "jasmine-terminal-reporter": "1.0.3",
-    "mock-fs": "^5.1.2",
+    "mock-fs": "5.1.2",
     "shx": "0.3.4",
     "typescript": "3.9.10"
   },
