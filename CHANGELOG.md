@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 2.15.67 (2022-05-30)
+
+#### Other Change
+* `akashic-cli-scan`
+  * [#1077](https://github.com/akashic-games/akashic-cli/pull/1077) akashic-cli-scanのテストが手元で落ちていたので通るように修正 ([@dera-](https://github.com/dera-))
+
+#### Committers: 2
+- [@dera-](https://github.com/dera-)
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.15.66 (2022-05-23)
 
 #### Update Dependencies
