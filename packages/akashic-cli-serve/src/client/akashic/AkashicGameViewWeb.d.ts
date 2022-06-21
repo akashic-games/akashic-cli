@@ -160,6 +160,7 @@ declare module agv {
 		send?: any;
 		nico?: any;
 		coeLimited?: any;
+		instanceStorage?: any;
 	}
 
 	enum ExecutionMode {
@@ -205,5 +206,11 @@ declare module agvplugin {
 	class AgvSupplementPlugin implements agv.ExternalPlugin {
 		name: string;
 		onload(game: agv.GameLike, dataBus: unknown, gameContent: agv.GameContent): void;
+	}
+
+	class InstanceStoragePlugin implements agv.ExternalPlugin {
+		name: string;
+		constructor(...args: any[]);
+		onload(game: agv.GameLike): void;
 	}
 }
