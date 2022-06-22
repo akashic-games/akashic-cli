@@ -270,6 +270,9 @@ export class Operator {
 		if (typeof agvplugin !== "undefined") {
 			this.gameViewManager.registerExternalPlugin(new agvplugin.CoeLimitedPlugin());
 			this.gameViewManager.registerExternalPlugin(new agvplugin.AgvSupplementPlugin());
+			this.gameViewManager.registerExternalPlugin(new agvplugin.InstanceStoragePlugin({
+				storage: window.sessionStorage
+			}));
 		} else {
 			this.gameViewManager.registerExternalPlugin(new CoeLimitedPlugin({
 				startPlayerInfoResolver: this._startPlayerInfoResolver,
