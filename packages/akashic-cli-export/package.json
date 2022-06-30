@@ -42,7 +42,7 @@
     "package.json"
   ],
   "devDependencies": {
-    "@akashic/akashic-engine": "~2.6.6",
+    "@akashic/akashic-engine": "~2.6.7",
     "@akashic/eslint-config": "0.1.2",
     "@akashic/game-configuration": "1.2.0",
     "@types/archiver": "3.1.1",
