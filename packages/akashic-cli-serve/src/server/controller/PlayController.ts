@@ -1,3 +1,4 @@
+import type { Event } from "@akashic/playlog";
 import type * as express from "express";
 import type {
 	PlayApiResponseData,
@@ -129,6 +130,30 @@ export const createHandlerToPatchPlay = (playStore: PlayStore): express.RequestH
 	};
 };
 
+export const createHandlerToSendEvent = (playStore: PlayStore): express.RequestHandler => {
+	return async (req, res, next) => {
+		try {
+			if (!req.params.playId) {
+				throw new BadRequestError({ errorMessage: "PlayId is not given" });
+			}
+			if (!Array.isArray(req.body.events)) {
+				throw new BadRequestError({ errorMessage: "events is not an array" });
+			}
+			const playId = req.params.playId;
+			const events: Event[] = req.body.events; // TODO 厳密なバリデーション
+
+			const amflow = await playStore.getDebugAMFlow(playId);
+			if (!amflow) {
+				throw new NotFoundError({ errorMessage: `PlayLog is not found. playId:${playId}` });
+			}
+			events.forEach(ev => amflow.sendEvent(ev));
+			responseSuccess<void>(res, 200, null);
+		} catch (e) {
+			next(e);
+		}
+	};
+};
+
 export const createHandlerToGetPlaylog = (playStore: PlayStore): express.RequestHandler => {
 	return (req, res, next) => {
 		try {
@@ -136,7 +161,7 @@ export const createHandlerToGetPlaylog = (playStore: PlayStore): express.Request
 				throw new BadRequestError({ errorMessage: "PlayId is not given" });
 			}
 			const playId = req.params.playId;
-			const amflow = playStore.createAMFlow(playId);
+			const amflow = playStore.createAMFlow(playId); // TODO より無駄のない getDebugAMFlow() を使う。要動作確認。
 			if (!amflow) {
 				throw new NotFoundError({ errorMessage: `PlayLog is not found. playId:${playId}` });
 			}

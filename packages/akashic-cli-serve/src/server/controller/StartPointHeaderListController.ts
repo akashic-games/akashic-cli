@@ -13,7 +13,7 @@ export const createHandlerToGetStartPointHeaderList = (playStore: PlayStore): ex
 				throw new BadRequestError({ errorMessage: "PlayId is not given" });
 			}
 
-			const amflow = playStore.createAMFlow(playId);
+			const amflow = playStore.createAMFlow(playId); // TODO より無駄のない getDebugAMFlow() に移行する。要動作確認。
 			if (!amflow) {
 				throw new NotFoundError({ errorMessage: `Play is not found. playId:${playId}` });
 			}
