@@ -19,6 +19,7 @@ import { ServerContentLocator } from "./common/ServerContentLocator";
 import { serverGlobalConfig } from "./common/ServerGlobalConfig";
 import type { DumpedPlaylog } from "./common/types/DumpedPlaylog";
 import * as gameConfigs from "./domain/GameConfigs";
+import * as sandboxConfigs from "./domain/SandboxConfigs";
 import { PlayerIdStore } from "./domain/PlayerIdStore";
 import { PlayStore } from "./domain/PlayStore";
 import { RunnerStore } from "./domain/RunnerStore";
@@ -160,6 +161,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 
 	targetDirs.forEach((dir, i) => {
 		gameConfigs.register(i.toString(), dir);
+		sandboxConfigs.register(i.toString(), dir);
 	});
 
 	const playManager = new PlayManager();
@@ -252,7 +254,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 				await runnerStore.createAndStartRunner({ playId, isActive: true, token, amflow, contentId });
 				await playStore.resumePlayDuration(playId);
 				targetPlayIds.forEach(id => {
-					io.emit("playBroadcast", { playId: id, message: { type: "switchPlay", nextPlayId: playId } });
+					io.emit("playBroadcast", { playId: id, message: { type: "reload" } });
 				});
 			});
 		}

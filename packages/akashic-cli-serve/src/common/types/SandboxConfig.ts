@@ -17,4 +17,10 @@ export interface SandboxConfig {
 		};
 	};
 
+	watch?: {
+		[name: string]: {
+			target: string;
+			command: string;
+		}
+	};
 }

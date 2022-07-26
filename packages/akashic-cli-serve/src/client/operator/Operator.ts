@@ -236,6 +236,11 @@ export class Operator {
 						this.setCurrentPlay(this.store.playStore.plays[arg.message.nextPlayId]);
 					}
 					break;
+				case "reload":
+					if (this.store.currentPlay.playId === arg.playId) {
+						window.location.reload();
+					}
+					break;
 				default:
 					throw new Error("invalid type: " + arg.message.type);
 			}

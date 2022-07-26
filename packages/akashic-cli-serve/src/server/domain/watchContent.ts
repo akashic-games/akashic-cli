@@ -1,6 +1,13 @@
+import { promisify } from "util";
 import * as path from "path";
+import * as minimatch from "minimatch";
 import { getSystemLogger } from "@akashic/headless-driver";
 import * as chokidar from "chokidar";
+import { SandboxConfig } from "../../common/types/SandboxConfig";
+import { exec as execRaw } from "child_process";
+import { dynamicRequire } from "./dynamicRequire";
+
+const exec = promisify(execRaw);
 
 export const enum ModTargetFlags {
 	None = 0x0,
@@ -60,6 +67,10 @@ export async function watchContent(
 		modFlags = ModTargetFlags.None;
 	});
 
+	// TODO SandboxConfigs との共存？
+	// TODO sandbox.config.js の watch フィールドが変化したら再起動要求警告
+	const sandboxConfig: SandboxConfig = dynamicRequire(path.resolve(targetDir, "sandbox.config.js")) ?? {};
+
 	function watcherHandler(filePath: string): void {
 		// 簡易除外。
 		// TODO 通知条件を「game.json か、game.json から参照されているファイルが変化した時」に限定する。
@@ -72,17 +83,33 @@ export async function watchContent(
 		const relPath = path.relative(targetDir, filePath);
 		if (assetsDirRe.test(relPath)) {
 			foundAssetsChange = true;
+			fireCallback();
 		} else if (relPath === "game.json") {
 			foundGameJsonChange = true;
-		} else {
-			return;
+			fireCallback();
 		}
-		fireCallback();
+
+		const promises = Object.keys(sandboxConfig.watch ?? {}).map(key => {
+			const entry = sandboxConfig.watch[key]!;
+			const entryTarget = path.join(targetDir, entry.target);
+			if (minimatch(filePath, entryTarget)) {
+				getSystemLogger().info(`Running '${entry.command}' caused by ${filePath}`);
+				return exec(entry.command).then(res => {
+					console.log(res.stdout);
+					console.error(res.stderr);
+				});
+			}
+			return Promise.resolve();
+		});
+		Promise.race(promises).catch(e => {
+			getSystemLogger().error(`Error in watch command execution ignored: ${e}`);
+		});
 	}
 
 	watcher.on("add", watcherHandler);
 	watcher.on("unlink", watcherHandler);
 	watcher.on("change", watcherHandler);
+
 }
 
 /**

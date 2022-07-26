@@ -9,9 +9,6 @@ import * as gameConfigs from "../domain/GameConfigs";
 import * as sandboxConfigs from "../domain/SandboxConfigs";
 
 export const createHandlerToGetContents = (targetDirs: string[]): express.RequestHandler => {
-	// サーバ開始後、sandbox.config.js はここで初めて読み込まれる。この処理以前に sandbox.config.js が必要な場合は、その部分で `register()` を行うこと。
-	targetDirs.forEach((targetDir, idx) => sandboxConfigs.register(idx.toString(), targetDir));
-
 	return (_req, res, next) => {
 		try {
 			const contents = targetDirs.map((targetDir, i) => ({
