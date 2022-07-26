@@ -119,6 +119,11 @@ export class PlayStore {
 		return this.playManager.getAllPlays();
 	}
 
+	getLatestPlay(): Play | null {
+		const plays = this.getPlays();
+		return (plays.length > 0) ? plays[plays.length - 1] : null;
+	}
+
 	// プレイ関連情報を取得する。headless-driver の Play を取得する getPlay() との混同に注意。
 	// TODO getPlay() の方を隠蔽する
 	getPlayInfo(playId: string): PlayInfo | null {

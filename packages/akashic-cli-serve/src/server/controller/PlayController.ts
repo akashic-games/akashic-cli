@@ -130,16 +130,16 @@ export const createHandlerToPatchPlay = (playStore: PlayStore): express.RequestH
 	};
 };
 
-export const createHandlerToSendEvent = (playStore: PlayStore): express.RequestHandler => {
+export const createHandlerToSendEvent = (playStore: PlayStore, toLatestPlay: boolean = false): express.RequestHandler => {
 	return async (req, res, next) => {
 		try {
-			if (!req.params.playId) {
+			if (!toLatestPlay && !req.params.playId) {
 				throw new BadRequestError({ errorMessage: "PlayId is not given" });
 			}
 			if (!Array.isArray(req.body.events)) {
 				throw new BadRequestError({ errorMessage: "events is not an array" });
 			}
-			const playId = req.params.playId;
+			const playId = toLatestPlay ? playStore.getLatestPlay()?.playId : req.params.playId;
 			const events: Event[] = req.body.events; // TODO 厳密なバリデーション
 
 			const amflow = await playStore.getDebugAMFlow(playId);
@@ -196,4 +196,3 @@ export const createHandlerToPatchAudioState = (playStore: PlayStore): express.Re
 		}
 	};
 };
-
