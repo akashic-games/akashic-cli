@@ -1,12 +1,8 @@
 import * as fs from "fs";
 import * as path from "path";
 import type * as express from "express";
-import * as gameConfigs from "../domain/GameConfigs";
 
-export const createScriptAssetController = (baseDir: string, index: number): express.RequestHandler => {
-	// TODO: require() のキャッシュするモジュールのインターフェース (index でアクセスする点) と register() 箇所を見直す
-	gameConfigs.register(index.toString(), baseDir);
-
+export const createScriptAssetController = (baseDir: string): express.RequestHandler => {
 	return (req: express.Request, res: express.Response, next: Function): void => {
 		const scriptPath = path.join(baseDir, req.params.scriptName);
 		if (!fs.existsSync(scriptPath) || !fs.existsSync(scriptPath)) {

@@ -4,7 +4,7 @@ import * as util from "util";
 import type { CliConfigServe } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigServe";
 import { CliConfigurationFile } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigurationFile";
 import { SERVICE_TYPES } from "@akashic/akashic-cli-commons/lib/ServiceType";
-import { PlayManager, RunnerManager, setSystemLogger, getSystemLogger } from "@akashic/headless-driver";
+import { getSystemLogger, PlayManager, RunnerManager, setSystemLogger } from "@akashic/headless-driver";
 import * as bodyParser from "body-parser";
 import * as chalk from "chalk";
 import type { OptionValues } from "commander";
@@ -18,11 +18,13 @@ import type { PutStartPointEvent } from "../common/types/TestbedEvent";
 import { ServerContentLocator } from "./common/ServerContentLocator";
 import { serverGlobalConfig } from "./common/ServerGlobalConfig";
 import type { DumpedPlaylog } from "./common/types/DumpedPlaylog";
-import { ModTargetFlags, watchContent } from "./domain/GameConfigs";
+import * as gameConfigs from "./domain/GameConfigs";
 import { PlayerIdStore } from "./domain/PlayerIdStore";
 import { PlayStore } from "./domain/PlayStore";
 import { RunnerStore } from "./domain/RunnerStore";
 import { SocketIOAMFlowManager } from "./domain/SocketIOAMFlowManager";
+import type { ModTargetFlags } from "./domain/watchContent";
+import { watchContent } from "./domain/watchContent";
 import { createApiRouter } from "./route/ApiRoute";
 import { createContentsRouter } from "./route/ContentsRoute";
 import { createHealthCheckRouter } from "./route/HealthCheckRoute";
@@ -155,12 +157,9 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 	const versionsJson = require("./engineFilesVersion.json");
 	const engineFilesVersions = Object.keys(versionsJson).map(key => `v${versionsJson[key].version}`);
 	console.log(`Included engine-files: ${engineFilesVersions.join(", ")}`);
-	targetDirs.forEach(dir => {
-		const contentPath = path.join(dir, "game.json");
-		if (!fs.existsSync(contentPath)) {
-			getSystemLogger().error(`Not found :${contentPath}`);
-			process.exit(1);
-		}
+
+	targetDirs.forEach((dir, i) => {
+		gameConfigs.register(i.toString(), dir);
 	});
 
 	const playManager = new PlayManager();
@@ -229,12 +228,9 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 	if (cliConfigParam.watch && cliConfigParam.targetDirs) {
 		console.log("Start watching contents");
 		for (let i = 0; i < cliConfigParam.targetDirs.length; i++) {
-			await watchContent(cliConfigParam.targetDirs[i], async (err: any, modTargetFlag: ModTargetFlags) => {
+			await watchContent(cliConfigParam.targetDirs[i], async (err: any, _modTargetFlags: ModTargetFlags) => {
 				if (err) {
 					getSystemLogger().error(err.message);
-				}
-				if (modTargetFlag === ModTargetFlags.GameJson) {
-					console.log("Reflect changes of game.json");
 				}
 				// コンテンツに変更があったらplayを新規に作り直して再起動
 				const contentId = `${i}`;
@@ -248,6 +244,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 				});
 				if (targetPlayIds.length === 0)
 					return;
+				getSystemLogger().info("Requesting reload by watch...");
 				const audioState = playStore.getPlayInfo(targetPlayIds[targetPlayIds.length - 1]).audioState; // 暫定: どれを持ち越すべきか検討が必要
 				const playId = await playStore.createPlay(new ServerContentLocator({ contentId }), audioState, null);
 				const token = amflowManager.createPlayToken(playId, "", "", true, {});
@@ -422,7 +419,7 @@ export async function run(argv: any): Promise<void> {
 		.option("--debug-untrusted", "An internal debug option")
 		.option("--debug-proxy-audio", "An internal debug option")
 		.option("--allow-external", "Read the URL allowing external access from sandbox.config.js")
-		.option("--no-open-browser", "Disable to open a browser window at startup")
+		.option("-B, --no-open-browser", "Disable to open a browser window at startup")
 		.option("--preserve-disconnected", "Disable auto closing for disconnected windows.")
 		.option("--experimental-open <num>",
 			"EXPERIMENTAL: Open <num> browser windows at startup. The upper limit of <num> is 10.") // TODO: open-browser と統合
@@ -458,6 +455,11 @@ export async function run(argv: any): Promise<void> {
 			sslKey: options.sslKey ?? conf.sslKey,
 			corsAllowOrigin: options.corsAllowOrigin ?? conf.corsAllowOrigin
 		};
-		await cli(cliConfigParam, options);
+		try {
+			await cli(cliConfigParam, options);
+		} catch (e) {
+			console.error(e);
+			process.exit(1);
+		}
 	});
 }

@@ -2,7 +2,7 @@ const os = require("os");
 const fs = require("fs");
 const path = require("path");
 const rimraf = require("rimraf");
-const { watchContent } = require("../../lib/server/domain/GameConfigs");
+const { watchContent } = require("../../lib/server/domain/watchContent");
 
 describe("GameConfigs", () => {
 	describe("watchContent", () => {
@@ -67,7 +67,7 @@ describe("GameConfigs", () => {
 				(err, modTargetFlag) => {
 					count++;
 					expect(err).toBeNull();
-					expect(modTargetFlag).toBe(0x2);
+					expect(modTargetFlag).toBe(0x3);
 				},
 				watcher 
 			).then(() => {

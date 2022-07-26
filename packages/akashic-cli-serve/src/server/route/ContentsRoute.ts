@@ -26,7 +26,7 @@ export const createContentsRouter = (params: ContentsRouterParameterObject): exp
 	});
 
 	for (let i = 0; i < targetDirs.length; i++) {
-		contentsRouter.get(`/${i}/content/:scriptName(*.js$)`, createScriptAssetController(targetDirs[i], i));
+		contentsRouter.get(`/${i}/content/:scriptName(*.js$)`, createScriptAssetController(targetDirs[i]));
 		contentsRouter.use(`/${i}/content`, express.static(targetDirs[i]));
 		contentsRouter.use(`/${i}/raw`, express.static(targetDirs[i]));
 	}
