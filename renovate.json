@@ -1,41 +1,76 @@
 {
   "extends": [
-    "config:base"
+    "github>akashic-games/renovate-config",
+    "github>akashic-games/renovate-config:groupPatchMinor"
   ],
-  "timezone": "Asia/Tokyo",
-  "schedule": ["every weekend"],
-  "labels": ["dependencies"],
-  "assignees": [""],
-  "reviewers": [""],
-  "prConcurrentLimit": 0,
-  "prHourlyLimit": 0,
-  "separateMinorPatch": true,
+  "automerge": true,
   "packageRules": [
     {
       "packagePatterns": ["^@akashic/"],
       "enabled": false
     },
     {
-      "updateTypes": ["minor"],
-      "groupName": "all dependencies"
+      "matchUpdateTypes": ["major"],
+      "matchDepTypes": ["devDependencies"],
+      "groupName": "dev dependencies",
+      "automerge": false
     },
     {
-      "updateTypes": ["patch"],
-      "groupName": "all dependencies"
-    },
-    {
-      "updateTypes": ["major"],
-      "depTypeList": ["devDependencies"],
-      "groupName": "dev dependencies"
-    },
-    {
-      "updateTypes": ["major"],
-      "depTypeList": ["dependencies"],
+      "matchUpdateTypes": ["major"],
+      "matchDepTypes": ["dependencies"],
       "draftPR": true
     },
     {
       "packagePatterns": ["^@storybook/"],
       "enabled": false
+    },
+    {
+        "matchPackageNames": ["aev1"],
+        "allowedVersions": "<2.0",
+        "groupName": "engine-files@1",
+        "schedule": "at any time"
+    },
+    {
+        "matchPackageNames": ["aev1"],
+        "matchUpdateTypes": ["patch"],
+        "bumpVersion": "patch"
+    },
+    {
+        "matchPackageNames": ["aev1"],
+        "matchUpdateTypes": ["minor"],
+        "bumpVersion": "minor"
+    },
+    {
+        "matchPackageNames": ["aev2"],
+        "allowedVersions": "<3.0",
+        "groupName": "engine-files@2",
+        "schedule": "at any time"
+    },
+    {
+        "matchPackageNames": ["aev2"],
+        "matchUpdateTypes": ["patch"],
+        "bumpVersion": "patch"
+    },
+    {
+        "matchPackageNames": ["aev2"],
+        "matchUpdateTypes": ["minor"],
+        "bumpVersion": "minor"
+    },
+    {
+        "matchPackageNames": ["aev3"],
+        "allowedVersions": "<4.0",
+        "groupName": "engine-files@3",
+        "schedule": "at any time"
+    },
+    {
+        "matchPackageNames": ["aev3"],
+        "matchUpdateTypes": ["patch"],
+        "bumpVersion": "patch"
+    },
+    {
+        "matchPackageNames": ["aev3"],
+        "matchUpdateTypes": ["minor"],
+        "bumpVersion": "minor"
     }
   ],
   "ignorePaths": [
