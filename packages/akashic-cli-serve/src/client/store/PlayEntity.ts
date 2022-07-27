@@ -19,7 +19,6 @@ import { LocalInstanceEntity } from "./LocalInstanceEntity";
 import { ServerInstanceEntity } from "./ServerInstanceEntity";
 
 export interface CreateLocalInstanceParameterObject {
-	gameViewManager: GameViewManager;
 	executionMode: ExecutionMode;
 	player: Player;
 	playId: string;
@@ -37,6 +36,7 @@ export interface CreateServerInstanceParameterObject {
 }
 
 export interface PlayEntityParameterObject {
+	gameViewManager: GameViewManager;
 	playId: string;
 	status: PlayStatus;
 	joinedPlayers?: Player[];
@@ -69,6 +69,7 @@ export class PlayEntity {
 	@observable localInstances: LocalInstanceEntity[];
 	@observable serverInstances: ServerInstanceEntity[];
 
+	private readonly _gameViewManager: GameViewManager;
 	private readonly _timeKeeper: TimeKeeper;
 	private _serverInstanceWaiters: {[key: string]: (p: ServerInstanceEntity) => void };
 	private _timerId: number | null;
@@ -91,6 +92,7 @@ export class PlayEntity {
 		});
 		this.onTeardown = new Trigger();
 		this.content = param.content;
+		this._gameViewManager = param.gameViewManager;
 		this._timeKeeper = new TimeKeeper();
 		this._serverInstanceWaiters = {};
 		this._timerId = null;
@@ -121,6 +123,7 @@ export class PlayEntity {
 		const i = new LocalInstanceEntity({
 			play: this,
 			content: this.content,
+			gameViewManager: this._gameViewManager,
 			...param
 		});
 		i.onStop.add(this._handleLocalInstanceStopped);

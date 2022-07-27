@@ -15,18 +15,20 @@ export const createScriptAssetController = (baseDir: string, index: number): exp
 			next(err);
 			return;
 		}
-		const gameJson = gameConfigs.get(index.toString());
-		const id = Object.keys(gameJson.assets).find((id) => gameJson.assets[id].path === req.params.scriptName);
 
 		const content = fs.readFileSync(scriptPath);
+		const key = `${req.protocol}://${req.get("host") + req.originalUrl}`;
+
 		const responseBody = `"use strict";
 			if (! ("gScriptContainer" in window)) {
 				window.gScriptContainer = {};
 			}
-			gScriptContainer["${id === undefined ? req.params.scriptName : id}"] = function(g) {
-				(function(exports, require, module, __filename, __dirname) {
-					${content}
-				})(g.module.exports, g.module.require, g.module, g.filename, g.dirname);
+			if (! gScriptContainer["${key}"]) {
+ 				gScriptContainer["${key}"] = function(g) {
+					(function(exports, require, module, __filename, __dirname) {
+						${content}
+					})(g.module.exports, g.module.require, g.module, g.filename, g.dirname);
+				}
 			}
 		`;
 		res.contentType("text/javascript");

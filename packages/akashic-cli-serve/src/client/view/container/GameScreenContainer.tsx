@@ -3,21 +3,15 @@ import * as React from "react";
 import type { SandboxConfig } from "../../../common/types/SandboxConfig";
 import type { GameViewManager } from "../../akashic/GameViewManager";
 import type { Operator } from "../../operator/Operator";
-import type { DevtoolUiStore } from "../../store/DevtoolUiStore";
 import type { LocalInstanceEntity } from "../../store/LocalInstanceEntity";
-import type { PlayerInfoResolverUiStore } from "../../store/PlayerInfoResolverUiStore";
-import type { ProfilerStore } from "../../store/ProfilerStore";
-import type { ToolBarUiStore } from "../../store/ToolBarUiStore";
+import type { Store } from "../../store/Store";
 import type { PlayerInfoResolverDialogProps } from "../molecule/PlayerInfoResolverDialog";
 import type { ProfilerCanvasProps } from "../molecule/ProfilerCanvas";
 import { GameScreen } from "../organism/GameScreen";
 
 export interface GameScreenContainerProps {
 	sandboxConfig: SandboxConfig;
-	toolBarUiStore: ToolBarUiStore;
-	devtoolUiStore: DevtoolUiStore;
-	playerInfoResolverUiStore: PlayerInfoResolverUiStore;
-	profilerStore: ProfilerStore;
+	store: Store;
 	localInstance: LocalInstanceEntity;
 	gameViewManager: GameViewManager;
 	operator: Operator;
@@ -26,16 +20,16 @@ export interface GameScreenContainerProps {
 @observer
 export class GameScreenContainer extends React.Component<GameScreenContainerProps, {}> {
 	render(): React.ReactNode {
-		const gameViewSize = this.props.localInstance.gameViewSize;
+		const { toolBarUiStore } = this.props.store;
 		return <GameScreen
 			backgroundImage={this.props.sandboxConfig.backgroundImage}
 			backgroundColor={this.props.sandboxConfig.backgroundColor}
-			showsGrid={this.props.toolBarUiStore.showsGrid}
-			showsBackgroundImage={this.props.toolBarUiStore.showsBackgroundImage}
-			showsBackgroundColor={this.props.toolBarUiStore.showsBackgroundColor}
-			showsDesignGuideline={this.props.toolBarUiStore.showsDesignGuideline}
-			gameWidth={gameViewSize.width}
-			gameHeight={gameViewSize.height}
+			showsGrid={toolBarUiStore.showsGrid}
+			showsBackgroundImage={toolBarUiStore.showsBackgroundImage}
+			showsBackgroundColor={toolBarUiStore.showsBackgroundColor}
+			showsDesignGuideline={toolBarUiStore.showsDesignGuideline}
+			gameWidth={this.props.store.gameViewSize.width}
+			gameHeight={this.props.store.gameViewSize.height}
 			screenElement={this.props.gameViewManager.getRootElement()}
 			playerInfoResolverDialogProps={this._makePlayerInfoResolverDialogProps()}
 			profilerCanvasProps={this._makeProfilerCanvasProps()}
@@ -46,23 +40,23 @@ export class GameScreenContainer extends React.Component<GameScreenContainerProp
 	}
 
 	private _handleShouldStopPropgation = (): boolean => {
-		return this.props.devtoolUiStore.isSelectingEntity;
+		return this.props.store.devtoolUiStore.isSelectingEntity;
 	};
 
 	private _handleMouseMoveCapture = (p: { x: number; y: number}): void => {
-		if (!this.props.devtoolUiStore.isSelectingEntity)
+		if (!this.props.store.devtoolUiStore.isSelectingEntity)
 			return;
 		this.props.operator.devtool.selectEntityByPoint(p.x, p.y);
 	};
 
 	private _handleClickCapture = (p: { x: number; y: number}): void => {
-		if (!this.props.devtoolUiStore.isSelectingEntity)
+		if (!this.props.store.devtoolUiStore.isSelectingEntity)
 			return;
 		this.props.operator.devtool.finishEntitySelection(p.x, p.y);
 	};
 
 	private _makePlayerInfoResolverDialogProps = (): PlayerInfoResolverDialogProps | undefined => {
-		const resolverUiStore = this.props.playerInfoResolverUiStore;
+		const resolverUiStore = this.props.store.playerInfoResolverUiStore;
 		return resolverUiStore.isDisplayingResolver ? {
 			remainingSeconds: resolverUiStore.remainingSeconds,
 			name: resolverUiStore.name,
@@ -72,11 +66,12 @@ export class GameScreenContainer extends React.Component<GameScreenContainerProp
 	};
 
 	private _makeProfilerCanvasProps = (): ProfilerCanvasProps | undefined => {
-		return this.props.toolBarUiStore.showsProfiler ? {
-			profilerDataArray: this.props.profilerStore.profilerDataArray,
-			profilerStyleSetting: this.props.profilerStore.profilerStyleSetting,
-			profilerWidth: this.props.profilerStore.profilerWidth,
-			profilerHeight: this.props.profilerStore.profilerHeight
+		const { toolBarUiStore, profilerStore } = this.props.store;
+		return toolBarUiStore.showsProfiler ? {
+			profilerDataArray: profilerStore.profilerDataArray,
+			profilerStyleSetting: profilerStore.profilerStyleSetting,
+			profilerWidth: profilerStore.profilerWidth,
+			profilerHeight: profilerStore.profilerHeight
 		} : undefined;
 	};
 }

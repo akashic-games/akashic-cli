@@ -221,6 +221,18 @@ export interface ServeQueryParameters {
 	ignoreSession: boolean | null;
 
 	experimentalIsChildWindow: boolean | null;
+
+	/**
+	 * このインスタンスに適用する arguments 名を指定する。
+	 * arguments の実装は sandbox.config.js から読み込まれる。
+	 */
+	argumentsName: string | null;
+
+	/**
+	 * このインスタンスに適用する arguments の実装を指定する。
+	 * argumentsName と両方指定した場合の動作は不定である。
+	 */
+	argumentsValue: string | null;
 }
 
 function asString(v: string | string[] | null): string | null {
@@ -288,7 +300,9 @@ export function makeServeQueryParameters(query: RawParsedQuery): ServeQueryParam
 		showsDesignGuideline: asBool(query.showsDesignGuideline),
 		id: asString(query.id),
 		ignoreSession: asBool(query.ignoreSession),
-		experimentalIsChildWindow: asBool(query.experimentalIsChildWindow)
+		experimentalIsChildWindow: asBool(query.experimentalIsChildWindow),
+		argumentsName: asString(query.argumentsName),
+		argumentsValue: asString(query.argumentsValue)
 	};
 }
 

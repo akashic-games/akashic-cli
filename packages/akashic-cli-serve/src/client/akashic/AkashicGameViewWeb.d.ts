@@ -87,6 +87,7 @@ declare module agv {
 	}
 
 	class GameContent {
+		readonly id: number;
 		constructor(...args: any[]);
 		pause(): void;
 		resume(): void;
@@ -99,6 +100,14 @@ declare module agv {
 		getGameDriver(): agv.GameDriverLike;
 		setMasterVolume(vol: number): void;
 		getMasterVolume(): number;
+		setContentArea(area: ContentArea): void;
+	}
+
+	interface ContentArea {
+		x: number;
+		y: number;
+		width: number;
+		height: number;
 	}
 
 	interface PlaylogConfig {
@@ -151,6 +160,7 @@ declare module agv {
 		send?: any;
 		nico?: any;
 		coeLimited?: any;
+		instanceStorage?: any;
 	}
 
 	enum ExecutionMode {
@@ -196,5 +206,11 @@ declare module agvplugin {
 	class AgvSupplementPlugin implements agv.ExternalPlugin {
 		name: string;
 		onload(game: agv.GameLike, dataBus: unknown, gameContent: agv.GameContent): void;
+	}
+
+	class InstanceStoragePlugin implements agv.ExternalPlugin {
+		name: string;
+		constructor(...args: any[]);
+		onload(game: agv.GameLike): void;
 	}
 }

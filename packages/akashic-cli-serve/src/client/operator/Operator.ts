@@ -14,6 +14,7 @@ import { ClientContentLocator } from "../common/ClientContentLocator";
 import { createSessionParameter } from "../common/createSessionParameter";
 import { queryParameters as query } from "../common/queryParameters";
 import type {ProfilerValue} from "../common/types/Profiler";
+import type { ScreenSize } from "../common/types/ScreenSize";
 import type { LocalInstanceEntity } from "../store/LocalInstanceEntity";
 import type { PlayEntity } from "../store/PlayEntity";
 import type { Store } from "../store/Store";
@@ -123,6 +124,15 @@ export class Operator {
 			}
 			argument = this._createInstanceArgumentForNicolive(isJoin);
 		}
+
+		if (query.argumentsValue) {
+			argument = JSON.parse(query.argumentsValue);
+			store.startupScreenUiStore.setInstanceArgumentEditContent(query.argumentsValue, true);
+		} else if (query.argumentsName && !!store.currentPlay.content.argumentsTable[query.argumentsName]) {
+			argument = JSON.parse(store.currentPlay.content.argumentsTable[query.argumentsName]);
+			this.ui.selectInstanceArguments(query.argumentsName, true);
+		}
+
 		if (store.appOptions.autoStart) {
 			await this.startContent({
 				joinsSelf: isJoin,
@@ -137,7 +147,6 @@ export class Operator {
 		const play = store.currentPlay;
 		const tokenResult = await apiClient.createPlayToken(play.playId, store.player.id, false, store.player.name);
 		const instance = await play.createLocalInstance({
-			gameViewManager: this.gameViewManager,
 			playId: play.playId,
 			playToken: tokenResult.data.playToken,
 			playlogServerUrl: "dummy-playlog-server-url",
@@ -175,6 +184,10 @@ export class Operator {
 		await this.store.currentPlay.deleteAllServerInstances();
 		await apiClient.broadcast(this.store.currentPlay.playId, { type: "switchPlay", nextPlayId: play.playId });
 		this.ui.hideNotification();
+	};
+
+	setGameViewSize = (size: ScreenSize): void => {
+		this.store.setGameViewSize(size);
 	};
 
 	private async _createServerLoop(contentLocator: ClientContentLocator, audioState?: PlayAudioState): Promise<PlayEntity> {
@@ -257,6 +270,9 @@ export class Operator {
 		if (typeof agvplugin !== "undefined") {
 			this.gameViewManager.registerExternalPlugin(new agvplugin.CoeLimitedPlugin());
 			this.gameViewManager.registerExternalPlugin(new agvplugin.AgvSupplementPlugin());
+			this.gameViewManager.registerExternalPlugin(new agvplugin.InstanceStoragePlugin({
+				storage: window.sessionStorage
+			}));
 		} else {
 			this.gameViewManager.registerExternalPlugin(new CoeLimitedPlugin({
 				startPlayerInfoResolver: this._startPlayerInfoResolver,
@@ -290,7 +306,6 @@ export class Operator {
 		}
 		const childPlay = await this._createClientLoop(params.contentUrl, params.playId);
 		const localInstance = await childPlay.createLocalInstance({
-			gameViewManager: this.gameViewManager,
 			player: this.store.player,
 			playId: params.playId,
 			executionMode: "active",
