@@ -1,15 +1,13 @@
 const path = require("path");
 const fs = require("fs");
-const { cat } = require("shelljs");
 const execSync = require("child_process").execSync;
 
 console.log("start to generate engineFilesVersion.json");
 execSync('rm -f ./www/public/external/engineFilesV*.js');
-const stdout = execSync('npm list --depth=0 --json');
-const json = JSON.parse(stdout.toString());
-const v1Version = json.dependencies.aev1.version;
-const v2Version = json.dependencies.aev2.version;
-const v3Version = json.dependencies.aev3.version;
+const json = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "package.json"), "utf8"));
+const v1Version = json.devDependencies.aev1.split("@")[2];
+const v2Version = json.devDependencies.aev2.split("@")[2];
+const v3Version = json.devDependencies.aev3.split("@")[2];
 
 const versions = {
 	v1: {
@@ -35,7 +33,6 @@ try {
 	for (let key of Object.keys(versions)) {
 		const version = versions[key];
 		const dest = path.resolve(__dirname, "..", "www", "public", "external", version.fileName);
-		if (fs.existsSync(dest)) continue;
 
 		const engineFilePath = path.resolve(`./node_modules/ae${key}/dist/raw/release/full/${version.fileName}`);
 		fs.copyFileSync(engineFilePath, dest);
@@ -44,4 +41,3 @@ try {
 } catch(e) {
 	console.error(e);
 }
-
