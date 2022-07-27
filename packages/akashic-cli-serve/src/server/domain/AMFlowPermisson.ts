@@ -17,3 +17,12 @@ export const passivePermission: Permission = {
 	subscribeTick: true,
 	maxEventPriority: 2
 };
+
+export const debugPermission: Permission = {
+	readTick: true,
+	writeTick: true,
+	sendEvent: true,
+	subscribeEvent: true,
+	subscribeTick: true,
+	maxEventPriority: 3
+};
