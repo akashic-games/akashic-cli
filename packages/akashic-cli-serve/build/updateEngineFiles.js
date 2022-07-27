@@ -1,13 +1,24 @@
 const path = require("path");
 const fs = require("fs");
-const execSync = require("child_process").execSync;
 
 console.log("start to generate engineFilesVersion.json");
-execSync('rm -f ./www/public/external/engineFilesV*.js');
 const json = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "package.json"), "utf8"));
-const v1Version = json.devDependencies.aev1.split("@")[2];
-const v2Version = json.devDependencies.aev2.split("@")[2];
-const v3Version = json.devDependencies.aev3.split("@")[2];
+let v1Version = "";
+let v2Version = "";
+let v3Version = "";
+
+for (let key of Object.keys(json.devDependencies)) {
+	const value = json.devDependencies[key];
+	if (/^npm:@akashic\/engine\-files@1\.\d+\.\d+/.test(value)) {
+		v1Version = value.split("@")[2];
+	}
+	if (/^npm:@akashic\/engine\-files@2\.\d+\.\d+/.test(value)) {
+		v2Version = value.split("@")[2];
+	}
+	if (/^npm:@akashic\/engine\-files@3\.\d+\.\d+/.test(value)) {
+		v3Version = value.split("@")[2];
+	}
+};
 
 const versions = {
 	v1: {
@@ -33,6 +44,8 @@ try {
 	for (let key of Object.keys(versions)) {
 		const version = versions[key];
 		const dest = path.resolve(__dirname, "..", "www", "public", "external", version.fileName);
+		if (fs.existsSync(dest)) continue;
+
 		const engineFilePath = path.resolve(`./node_modules/ae${key}/dist/raw/release/full/${version.fileName}`);
 		fs.copyFileSync(engineFilePath, dest);
 	}
