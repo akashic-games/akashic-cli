@@ -1,31 +1,17 @@
-var path = require("path");
-var fs = require("fs");
-var fetch = require("node-fetch");
-var execSync = require("child_process").execSync;
+const path = require("path");
+const fs = require("fs");
+const { cat } = require("shelljs");
+const execSync = require("child_process").execSync;
 
-console.log("start to generate files");
-var jsonPath = path.join(__dirname, "..", "config", "engineFilesVersion.json");
-var currentVersions = {
-	v1: {
-		version: "",
-		fileName: ""
-	},
-	v2: {
-		version: "",
-		fileName: ""
-	},
-	v3: {
-		version: "",
-		fileName: ""
-	}
-};
-if (fs.existsSync(jsonPath)) {
-	currentVersions = require(jsonPath);
-}
-var v1Version = execSync(`npm info @akashic/engine-files@for_ae1x version`).toString().replace("\n", "");
-var v2Version = execSync(`npm info @akashic/engine-files@for_ae2x version`).toString().replace("\n", "");
-var v3Version = execSync(`npm info @akashic/engine-files@latest version`).toString().replace("\n", "");
-var versions = {
+console.log("start to generate engineFilesVersion.json");
+execSync('rm -f ./www/public/external/engineFilesV*.js');
+const stdout = execSync('npm list --depth=0 --json');
+const json = JSON.parse(stdout.toString());
+const v1Version = json.dependencies.aev1.version;
+const v2Version = json.dependencies.aev2.version;
+const v3Version = json.dependencies.aev3.version;
+
+const versions = {
 	v1: {
 		version: v1Version,
 		fileName: `engineFilesV${v1Version.replace(/[\.-]/g, "_")}.js`
@@ -40,35 +26,22 @@ var versions = {
 	}
 };
 
-// v1,v2, v3のうち、バージョンが更新されたもののjsファイルのみをダウンロード
-var promises = Object.keys(versions).filter(v => versions[v].version !== currentVersions[v].version).map(v  => {
-	var version = versions[v].version;
-	var fileName = versions[v].fileName;
-	console.log(`start to download engineFiles (v${version})`);
-	return fetch(`https://github.com/akashic-games/engine-files/releases/download/v${version}/${fileName}`).then(res => {
-		if (res.status >= 400) {
-			throw new Error(`failed to get engine-files. status:${res.status}.`);
-		}
-		return new Promise((resolve, reject) => {
-			var fileStream = fs.createWriteStream(path.join(__dirname, "..", "www", "public", "external", fileName));
-			res.body.pipe(fileStream);
-			res.body.on("error", (err) => {
-				reject(err);
-			});
-			fileStream.on("finish", () => {
-				resolve();
-			});
-		});
-	}).then(() => console.log(`end to download engineFiles (v${version})`));
-});
-Promise.all(promises)
-	.then(() => {
-		console.log("start to generate engineFilesVersion.json");
-		fs.writeFileSync(jsonPath, JSON.stringify(versions, null, 2));
-		console.log("end to generate engineFilesVersion.json");
-	})
-	.then(() => console.log("end to generate files"))
-	.catch(err => {
-		console.error(err);
-		process.exit(1);
-	});
+const versionFIlePath = path.resolve(__dirname, "..", "config", "engineFilesVersion.json");
+fs.writeFileSync(versionFIlePath, JSON.stringify(versions, null, 2));
+console.log("end to generate files")
+
+try {
+	console.log("start to copy engineFiles.js");
+	for (let key of Object.keys(versions)) {
+		const version = versions[key];
+		const dest = path.resolve(__dirname, "..", "www", "public", "external", version.fileName);
+		if (fs.existsSync(dest)) continue;
+
+		const engineFilePath = path.resolve(`./node_modules/ae${key}/dist/raw/release/full/${version.fileName}`);
+		fs.copyFileSync(engineFilePath, dest);
+	}
+	console.log("end to copy engineFiles.js");
+} catch(e) {
+	console.error(e);
+}
+

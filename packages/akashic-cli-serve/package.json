@@ -3,7 +3,7 @@
   "version": "1.14.66",
   "description": "A development server for Akashic Engine",
   "scripts": {
-    "prepublish": "npm run setup && npm run build",
+    "prepublish": "npm run setup && npm run build && npm run copy:engine-files",
     "setup": "npm run copy:material-icons",
     "copy:material-icons": "shx mkdir -p www/public/thirdparty && shx cp -r node_modules/material-icons/iconfont www/public/thirdparty/material-icons",
     "copy:agv": "node build/AkashicGameViewWebBuilder.js && shx mkdir -p www/internal/untrusted_loader",
@@ -62,6 +62,9 @@
     "@types/storybook__addon-actions": "3.4.3",
     "@types/storybook__react": "4.0.2",
     "@typescript-eslint/eslint-plugin": "5.25.0",
+    "aev1": "npm:@akashic/engine-files@1.2.1",
+    "aev2": "npm:@akashic/engine-files@2.2.1",
+    "aev3": "npm:@akashic/engine-files@3.2.3",
     "browserify": "16.5.2",
     "css-loader": "4.3.0",
     "es6-promise": "4.2.8",
