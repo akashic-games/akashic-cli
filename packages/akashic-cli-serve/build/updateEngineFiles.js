@@ -33,7 +33,6 @@ try {
 	for (let key of Object.keys(versions)) {
 		const version = versions[key];
 		const dest = path.resolve(__dirname, "..", "www", "public", "external", version.fileName);
-
 		const engineFilePath = path.resolve(`./node_modules/ae${key}/dist/raw/release/full/${version.fileName}`);
 		fs.copyFileSync(engineFilePath, dest);
 	}
