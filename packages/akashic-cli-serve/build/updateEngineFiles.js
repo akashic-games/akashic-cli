@@ -17,7 +17,7 @@ const versions = {
 };
 
 try {
-	console.log("start to copy engineFiles.js");
+	console.log("start to copy engineFiles");
 	for (let key of Object.keys(versions)) {
 		const entryPath = require.resolve(`ae${key}`);
 		const rootPath = path.dirname(entryPath); // index.js と package.json が同層にあることが前提
@@ -29,15 +29,15 @@ try {
 		versions[key].fileName = fileName;
 
 		const destPath = path.resolve(__dirname, "..", "www", "public", "external", fileName);
-		if (fs.existsSync(destPath)) continue;
 		fs.copyFileSync(engineFilesPath, destPath);
 	}
-	console.log("end to copy engineFiles.js");
+	console.log("end to copy engineFiles");
 
 	console.log("start to generate engineFilesVersion.json");
-	const versionFIlePath = path.resolve(__dirname, "..", "config", "engineFilesVersion.json");
-	fs.writeFileSync(versionFIlePath, JSON.stringify(versions, null, 2));
+	const versionFilePath = path.resolve(__dirname, "..", "config", "engineFilesVersion.json");
+	fs.writeFileSync(versionFilePath, JSON.stringify(versions, null, 2));
 	console.log("end to generate files");
 } catch (e) {
 	console.error(e);
+	process.exit(1);
 }
