@@ -1,4 +1,4 @@
-import type { NotificationType } from "../store/NotificationType";
+import type { NotificationType } from "../common/types/Notification";
 import type { Store } from "../store/Store";
 
 export class UiOperator {

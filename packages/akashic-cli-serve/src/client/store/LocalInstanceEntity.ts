@@ -1,19 +1,20 @@
 import type * as amf from "@akashic/amflow";
 import type * as pl from "@akashic/playlog";
-import {Trigger} from "@akashic/trigger";
-import {action, observable, computed} from "mobx";
-import {TimeKeeper} from "../../common/TimeKeeper";
-import type {PlayAudioStateSummary} from "../../common/types/PlayAudioState";
-import type {Player} from "../../common/types/Player";
-import type {GameViewManager} from "../akashic/GameViewManager";
-import type {ServeGameContent} from "../akashic/ServeGameContent";
+import { Trigger } from "@akashic/trigger";
+import { action, observable, computed } from "mobx";
+import { TimeKeeper } from "../../common/TimeKeeper";
+import type { PlayAudioStateSummary } from "../../common/types/PlayAudioState";
+import type { Player } from "../../common/types/Player";
+import type { GameViewManager } from "../akashic/GameViewManager";
+import type { ServeGameContent } from "../akashic/ServeGameContent";
 import * as ApiRequest from "../api/ApiRequest";
-import type {ProfilerValue} from "../common/types/Profiler";
+import type { Notification } from "../common/types/Notification";
+import type { ProfilerValue } from "../common/types/Profiler";
 import type { ScreenSize } from "../common/types/ScreenSize";
-import type {ContentEntity} from "./ContentEntity";
-import type {ExecutionMode} from "./ExecutionMode";
-import type {GameInstanceEntity} from "./GameInstanceEntity";
-import type {PlayEntity} from "./PlayEntity";
+import type { ContentEntity } from "./ContentEntity";
+import type { ExecutionMode } from "./ExecutionMode";
+import type { GameInstanceEntity } from "./GameInstanceEntity";
+import type { PlayEntity } from "./PlayEntity";
 
 const toAgvExecutionMode = (() => {
 	const executionModeTable = {
@@ -44,6 +45,7 @@ export interface LocalInstanceEntityParameterObject {
 
 export class LocalInstanceEntity implements GameInstanceEntity {
 	onStop: Trigger<LocalInstanceEntity>;
+	onNotification: Trigger<Notification>;
 
 	@observable player: Player;
 	@observable executionMode: ExecutionMode;
@@ -63,6 +65,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 
 	constructor(params: LocalInstanceEntityParameterObject) {
 		this.onStop = new Trigger<LocalInstanceEntity>();
+		this.onNotification = new Trigger<Notification>();
 		this.player = params.player;
 		this.executionMode = params.executionMode;
 		this.targetTime = 0; // 値は _timeKeeper を元に更新される
@@ -103,6 +106,12 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 			useNonDebuggableScript: params.useNonDebuggableScript
 		});
 		this._serveGameContent.onReset.add(this._handleReset, this);
+		this._serveGameContent.onNotification.add(n => {
+			const warn = this.content.sandboxConfig.warn;
+			if (!warn || warn.drawOutOfCanvas !== false) {
+				this.onNotification.fire(n);
+			}
+		});
 		this._initializationWaiter = this._initialize();
 	}
 

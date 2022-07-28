@@ -1,5 +1,5 @@
-import {action, observable} from "mobx";
-import type {NotificationType} from "./NotificationType";
+import { action, observable } from "mobx";
+import type { NotificationType } from "../common/types/Notification";
 
 export class NotificationUiStore {
 	@observable isActive: boolean;

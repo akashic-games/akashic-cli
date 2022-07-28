@@ -16,5 +16,7 @@ export interface SandboxConfig {
 			[key: string]: string;  // 値は各プラグインの scriptPath
 		};
 	};
-
+	warn?: {
+		drawOutOfCanvas?: boolean;
+	};
 }

@@ -19,6 +19,7 @@ interface Renderer {
 interface Surface {
 	width: number;
 	height: number;
+	_drawable: any;
 	renderer(): Renderer;
 }
 
@@ -101,7 +102,7 @@ export class GameViewManager {
 			width: params.width || 0,
 			height: params.height || 0,
 			sharedObject: params.sharedObject,
-			untrustedFrameUrl: params.untrustedFrameUrl || this.getDefaultUntrustedFrameUrl(),
+			untrustedFrameUrl: params.untrustedFrameUrl || getDefaultUntrustedFrameUrl(),
 			trustedChildOrigin: params.trustedChildOrigin || /.*/
 		});
 		this.contents = Object.create(null);
@@ -126,13 +127,13 @@ export class GameViewManager {
 			initialEvents: param.initialEvents,
 			audioPdiHandlers: param.proxyAudio ? new LogAudioPdiHandler() : null
 		};
-		// TODO: 複数コンテンツのホスティングに対応されれば削除
-		if (param.gameLoaderCustomizer.createCustomAmflowClient) {
-			gameConfig.gameLoaderCustomizer.platformCustomizer = this.customizePlatform;
-		}
 		const agvGameContent = new agv.GameContent(gameConfig);
 		const ret = new ServeGameContent(agvGameContent);
 		this.contents[ret.id] = ret;
+		// TODO: 複数コンテンツのホスティングに対応されれば削除
+		if (param.gameLoaderCustomizer.createCustomAmflowClient) {
+			gameConfig.gameLoaderCustomizer.platformCustomizer = createCustomizePlatform(ret);
+		}
 		return ret;
 	}
 
@@ -182,8 +183,10 @@ export class GameViewManager {
 	registerExternalPlugin(plugin: agv.ExternalPlugin): void {
 		this.gameView.registerExternalPlugin(plugin);
 	}
+}
 
-	private customizePlatform(platform: Platform, options: any): void {
+function createCustomizePlatform(content: ServeGameContent): (platform: Platform, options: any) => void {
+	return (platform: Platform, options: any): void => {
 		const scriptAssetClass = options.g.ScriptAsset || NullScriptAssetV3;
 		// eslint-disable-next-line @typescript-eslint/naming-convention
 		const TestbedScriptAsset = generateTestbedScriptAsset(scriptAssetClass);
@@ -197,7 +200,11 @@ export class GameViewManager {
 		// 一部のエッジケースでSafariのみ描画されないという問題が発生するので、ゲーム開発者が開発中に気づけるようにg.Renderer#drawImage()でエラーを投げる処理を差し込む
 		function createMeddlingWrappedSurfaceFactory <T extends ((...args: any[]) => Surface)> (func: T) {
 			return function() {
-				const surface = func.apply(this, arguments);
+				const surface: Surface = func.apply(this, arguments);
+				// Safariで範囲外描画時に問題が発生するのはCanvas要素なので、surfaceがCanvasでなければ範囲外描画の警告は行わない
+				if (surface._drawable.constructor.name !== "HTMLCanvasElement") {
+					return surface;
+				}
 				const originalRenderer = surface.renderer;
 				let renderer: Renderer = null;
 				surface.renderer = function () {
@@ -216,20 +223,22 @@ export class GameViewManager {
 						_destOffsetX: number,
 						_destOffsetY: number
 					) {
+						const title = "Akashic非推奨機能が使用されました";
+						const message = "この機能は一部ブラウザで動作しない可能性があります。";
 						if (offsetX < 0 || offsetX + width > surface.width || offsetY < 0 || offsetY + height > surface.height) {
 							// ref. https://github.com/akashic-games/akashic-engine/issues/349
-							throw new Error("drawImage(): out of bounds."
+							const detail = "drawImage(): out of bounds."
 								+ `The source rectangle bleeds out the source surface (${surface.width}x${surface.height}). `
 								+ "This is not a bug but intentionally prohibited by akashic serve"
-								+ "to prevent platform-specific rendering trouble."
-							);
+								+ "to prevent platform-specific rendering trouble.";
+							content.onNotification.fire({ type: "error", title, detail, message });
 						}
 						if (width <= 0 || height <= 0) {
-							throw new Error("drawImage(): nothing to draw."
+							const detail = "drawImage(): nothing to draw."
 								+ "Either width or height is less than or equal to zero."
 								+ "This is not a bug but intentionally prohibited by akashic serve"
-								+ "to prevent platform-specific rendering trouble."
-							);
+								+ "to prevent platform-specific rendering trouble.";
+							content.onNotification.fire({ type: "error", title, detail, message });
 						}
 						originalDrawImage.apply(this, arguments);
 					};
@@ -240,19 +249,19 @@ export class GameViewManager {
 		}
 		platform.getPrimarySurface = createMeddlingWrappedSurfaceFactory(platform.getPrimarySurface);
 		platform._resourceFactory.createSurface = createMeddlingWrappedSurfaceFactory(platform._resourceFactory.createSurface);
+	};
+}
+
+function getDefaultUntrustedFrameUrl(): string {
+	// untrustedFrameUrl の制約上、別ホストでアクセスさせる必要があるのでそれを求める
+	const { hostname, protocol, port } = window.location;
+	const altHost = (hostname === "localhost") ? "127.0.0.1" : "localhost";
+	const altOrigin = `${protocol}//${altHost}:${port}`;
+
+	if (hostname !== "localhost" && hostname !== "127.0.0.1") {
+		// 上述の制約上、今の --debug-untrusted はローカルマシンでしか動作しないのてその旨警告しておく
+		console.warn("Hosted on neither localhost nor 127.0.0.1. --debug-untrusted will not work.");
 	}
 
-	private getDefaultUntrustedFrameUrl(): string {
-		// untrustedFrameUrl の制約上、別ホストでアクセスさせる必要があるのでそれを求める
-		const { hostname, protocol, port } = window.location;
-		const altHost = (hostname === "localhost") ? "127.0.0.1" : "localhost";
-		const altOrigin = `${protocol}//${altHost}:${port}`;
-
-		if (hostname !== "localhost" && hostname !== "127.0.0.1") {
-			// 上述の制約上、今の --debug-untrusted はローカルマシンでしか動作しないのてその旨警告しておく
-			console.warn("Hosted on neither localhost nor 127.0.0.1. --debug-untrusted will not work.");
-		}
-
-		return `${altOrigin}/internal/untrusted_loader/loader_local.html`;
-	}
+	return `${altOrigin}/internal/untrusted_loader/loader_local.html`;
 }

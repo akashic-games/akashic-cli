@@ -89,6 +89,12 @@ export class Store {
 		if (this.currentLocalInstance === instance)
 			return;
 		this.currentLocalInstance = instance;
+		if (this.currentLocalInstance) {
+			this.currentLocalInstance.onNotification.add(n => {
+				console.warn(n.detail);
+				this.notificationUiStore.setActive( n.type, n.title, n.detail, n.message);
+			});
+		}
 		this.devtoolUiStore.setEntityTrees([]);
 	}
 
