@@ -2,8 +2,14 @@ import * as fs from "fs";
 import * as path from "path";
 import * as ejs from "ejs";
 import { readFile, readJSON, unlink, writeFile, findUniqueDir, readdir } from "@akashic/akashic-cli-commons/lib/FileSystem";
+import { mkdirpSync } from "@akashic/akashic-cli-commons/lib/Util";
 import { GameConfiguration } from "@akashic/akashic-cli-commons/lib/GameConfiguration";
 import type { CliConfigExportHtmlDumpableOptions } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigExportHtml";
+
+function writeFileWithMkdirp(filepath: string, content: string | Buffer): Promise<void> {
+	mkdirpSync(path.dirname(filepath));
+	return writeFile(filepath, content);
+}
 
 export interface GenerateHTMLParameterObject {
 	/**
@@ -50,29 +56,11 @@ export interface GenerateHTMLParameterObject {
 	injects: string[];
 	autoSendEventName: string | boolean;
 
-	optionInfo: CliConfigExportHtmlDumpableOptions;
+	optionInfo: CliConfigExportHtmlDumpableOptions | null;
 }
 
 export interface NormalizedGenerateHTMLParameterObject extends Readonly<Required<GenerateHTMLParameterObject>> {
 	// nothing
-}
-
-export function normalizeGenerateHTMLParameterObject(param: GenerateHTMLParameterObject): NormalizedGenerateHTMLParameterObject {
-	const ret: NormalizedGenerateHTMLParameterObject = {
-		gameDir: ".",
-		destructive: false,
-		embed: false,
-		useRawText: false,
-		engineFiles: null,
-		magnify: !!param.magnify,
-		injects: param.injects ?? [],
-		autoSendEventName: null,
-		optionInfo: {},
-		...param
-	};
-
-	// 複数箇所に持って回られやすいこの値は、破壊するとすぐグローバル変数のようになってしまうので、絶対に破壊を許さないことにする
-	return Object.freeze(ret);
 }
 
 interface Entry {
@@ -160,18 +148,16 @@ interface ResolvedEntry {
 async function resolveEntry(entry: Entry): Promise<ResolvedEntry> {
 	const {
 		src = null,
-		dest,
+		dest = null,
 		content: givenContent = null,
 		wrapType = "raw",
 		assetId = null,
-		args = null,
+		args = {},
 		destructive = false
 	} = entry;
 
-	const readContent = givenContent ?? (
-		(path.extname(src) === ".ejs") ?
-			await ejs.renderFile(src, args) :
-			await readFile(src, "utf8")
+	const readContent = (givenContent != null) ? givenContent : (
+		await ((path.extname(src!) === ".ejs") ? ejs.renderFile(src!, args) : readFile(src!, "utf8"))
 	);
 
 	let content: string;
@@ -368,19 +354,19 @@ export async function generateHTMLImpl(param: NormalizedGenerateHTMLParameterObj
 
 		switch (dest ? path.extname(dest) : null) {
 			case ".js": {
-				if (embed) {
+				if (!dest || embed) {
 					fragments.push(`<script>\n${content}\n</script>`);
 				} else {
-					await writeFile(path.join(gameDir, dest), content);
+					await writeFileWithMkdirp(path.join(gameDir, dest), content);
 					fragments.push(`<script src="${dest}"></script>`)
 				}
 				break;
 			}
 			case ".css": {
-				if (embed) {
+				if (!dest || embed) {
 					fragments.push(`<style type="text/css">\n${content}\n</style>`);
 				} else {
-					await writeFile(path.join(gameDir, dest), content);
+					await writeFileWithMkdirp(path.join(gameDir, dest), content);
 					fragments.push(`<link rel="stylesheet" type="text/css" href="${dest}">`);
 				}
 				break;
@@ -405,7 +391,10 @@ export async function generateHTMLImpl(param: NormalizedGenerateHTMLParameterObj
 }
 
 export async function generateHTML(param: GenerateHTMLParameterObject): Promise<void> {
-	return generateHTMLImpl(normalizeGenerateHTMLParameterObject(param));
+	// 不要だが意図的な措置: 複数箇所に持って回られやすいこの値は、破壊を許すとすぐにグローバル変数のようになってしまうので、絶対に破壊を許さないことにする
+	const frozenParam = Object.freeze(param);
+
+	return generateHTMLImpl(frozenParam);
 }
 
 export namespace GenerateHTML {

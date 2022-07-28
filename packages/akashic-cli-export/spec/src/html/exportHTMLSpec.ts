@@ -14,7 +14,7 @@ function normalizeExportHTMLConvertOption(param: Partial<exp.ExportHTMLConvertOp
 		completeEnvironment: false,
 		packImage: false,
 		needUntaintedImage: false,
-		hashLength: null,
+		hashLength: 0,
 		targetService: "none",
 		optionInfo: null,
 		...param
@@ -35,7 +35,7 @@ function normalizeExportHTMLGenerateOption(param: Partial<exp.ExportHTMLGenerate
 	};
 }
 
-describe("exportHTML", async function () {
+describe("exportHTML", function () {
 	it("create a zip file for compress option", (done) => {
 		const dest = path.join(__dirname, "..", "..", "fixtures", "sample_game_output.zip");
 		expect(fsx.existsSync(dest)).toBe(false);
@@ -83,11 +83,10 @@ describe("exportHTML", async function () {
 			})
 			.then(() => {
 				expect(fsx.existsSync(dest)).toBe(true);
-				expect(fsx.readFileSync(dest).readInt32LE(0)).toBe(0x04034b50); // PK\3\4
-				expect(fsx.statSync(path.join(dest, "js", "engineFilesV3_1_99.js"))).toBeTruthy();
+				expect(fsx.statSync(path.join(dest, "runtime", "engineFilesV3_1_99.js"))).toBeTruthy();
 				const buff = fsx.readFileSync(path.join(dest, "index.html"));
 				// index.html で指定したengineFiles が読み込まれている
-				expect(buff.toString().includes("<script src=\"./js/engineFilesV3_1_99.js\"")).toBeTruthy();
+				expect(buff.toString().includes("<script src=\"runtime/engineFilesV3_1_99.js\"")).toBeTruthy();
 				fsx.removeSync(dest);
 			})
 			.then(done, done.fail);

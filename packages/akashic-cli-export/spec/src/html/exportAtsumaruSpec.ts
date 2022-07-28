@@ -93,7 +93,7 @@ describe("exportAtsumaru", function () {
 				.then(function () {
 					const gameJson = require(path.join(outputDirPath, "game.json"));
 					expect(gameJson.environment.external.send).toBe("0");
-					expect(gameJson.environment["akashic-runtime"].version).toMatch(/^~1\.1\.\d+(-.*)?$/);
+					expect(gameJson.environment["akashic-runtime"].version).toMatch(/^~1\.\d+\.\d+(-.*)?$/);
 					expect(gameJson.environment["akashic-runtime"].flavor).toBe(undefined);
 				})
 				.then(done, done.fail);
@@ -110,7 +110,7 @@ describe("exportAtsumaru", function () {
 				.then(function () {
 					const gameJson = require(path.join(outputDirPath, "game.json"));
 					expect(gameJson.environment.external.send).toBe("0");
-					expect(gameJson.environment["akashic-runtime"].version).toMatch(/^~2\.1\.\d+(-.*)?$/);
+					expect(gameJson.environment["akashic-runtime"].version).toMatch(/^~2\.\d+\.\d+(-.*)?$/);
 					expect(gameJson.environment["akashic-runtime"].flavor).toBe("-canvas");
 				})
 				.then(function() {
@@ -212,7 +212,7 @@ describe("exportAtsumaru", function () {
 					return cli(cliParam);
 				})
 				.catch(function (err: any) {
-					expect(err.indexOf("Cannot overwrite without force option.") !== -1).toBeTruthy();
+					expect(err.message.indexOf("already exists. Use --force option to overwrite.") !== -1).toBeTruthy();
 					fsx.removeSync(outputDirPath);
 					done();
 				});

@@ -22,7 +22,7 @@ export interface ExportHTMLConvertOption {
 	completeEnvironment: boolean;
 	packImage: boolean;
 	needUntaintedImage: boolean;
-	hashLength: number | null;
+	hashLength: number;
 	targetService: ServiceType;
 	optionInfo: CliConfigExportZipDumpableOption | null;
 }
@@ -84,6 +84,7 @@ export async function exportHTML(param: ExportHTMLParameterObject): Promise<void
 		logger,
 		...convertOption,
 	});
+
 	await generateHTML({
 		gameDir: exportDest,
 		...generateOption

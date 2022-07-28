@@ -49,7 +49,7 @@ export function makeExportHTMLParameter(param: CliConfigExportHtml, logger: Logg
 		throw new Error("--output option must be specified.");
 
 	const cwd = !param.cwd ? process.cwd() : path.resolve(param.cwd);
-	const injects = param.injects ? param.injects.map(p => path.resolve(cwd, p)) : null;
+	const injects = (param.injects ?? []).map(p => path.resolve(cwd, p));
 	const compress = path.extname(param.output) === ".zip";
 	const hashLength =
 		(typeof param.hashFilename === "number") ? param.hashFilename :
@@ -60,7 +60,7 @@ export function makeExportHTMLParameter(param: CliConfigExportHtml, logger: Logg
 	// bundle を embed に読み替える。
 	// bundle は「スクリプトを index.js にまとめる」 convert() のオプション。
 	// embed は「テキスト系アセットを index.html に埋め込む」 generate() のオプション。
-	// 実質後者は後者を包含している (bundle してもしなくてもどうせ index.html に入る)。
+	// 実質的には後者は前者を包含している (bundle してもしなくてもどうせ embed すればすべて index.html に入る)。
 	// 歴史的経緯のため、export html の --bundle オプションは embed として動作する。
 	const embed = param.bundle;
 
@@ -91,8 +91,8 @@ export function makeExportHTMLParameter(param: CliConfigExportHtml, logger: Logg
 				magnify: param.magnify ?? true,
 				injects,
 				optionInfo: makeGenerateOptionInfo(param),
-				autoSendEventName: param.autoSendEventName,
-				engineFiles: param.debugOverrideEngineFiles,
+				autoSendEventName: param.autoSendEventName ?? false,
+				engineFiles: param.debugOverrideEngineFiles ?? null,
 				embed: embed ?? true,
 				// ニコ生ゲーム用に embed したものとは別にファイルはそのまま残す
 				destructive: false,
@@ -113,9 +113,9 @@ export function makeExportHTMLParameter(param: CliConfigExportHtml, logger: Logg
 			convertOption: {
 				babel: true,
 				strip: param.strip ?? true,
-				minifyJs: param.minifyJs,
-				minifyJson: param.minifyJson,
-				packImage: param.packImage,
+				minifyJs: !!param.minifyJs,
+				minifyJson: !!param.minifyJson,
+				packImage: !!param.packImage,
 				hashLength: hashLength ?? 0,
 				optionInfo: makeConvertOptionInfo(param),
 				bundle: false,
@@ -125,12 +125,12 @@ export function makeExportHTMLParameter(param: CliConfigExportHtml, logger: Logg
 				targetService: "none"
 			},
 			generateOption: {
-				magnify: param.magnify,
+				magnify: !!param.magnify,
 				injects,
 				optionInfo: makeGenerateOptionInfo(param),
-				autoSendEventName: param.autoSendEventName,
-				engineFiles: param.debugOverrideEngineFiles,
-				embed,
+				autoSendEventName: param.autoSendEventName ?? false,
+				engineFiles: param.debugOverrideEngineFiles ?? null,
+				embed: !!embed,
 				destructive: true,
 				useRawText: false,
 			}
@@ -140,13 +140,8 @@ export function makeExportHTMLParameter(param: CliConfigExportHtml, logger: Logg
 
 export async function cli(param: CliConfigExportHtml): Promise<void> {
 	const logger = new ConsoleLogger({ quiet: param.quiet });
-	try {
-		await exportHTML(makeExportHTMLParameter(param, logger));
-		logger.info("Done!");
-	} catch (err) {
-		logger.error(err);
-		process.exit(1);
-	}
+	await exportHTML(makeExportHTMLParameter(param, logger));
+	logger.info("Done!");
 }
 
 const commander = new Command();
@@ -165,7 +160,7 @@ commander
 	.option("-M, --minify", "minify JavaScript files (DEPRECATED: use --minify-js")
 	.option("-b, --bundle", "bundle assets and scripts in index.html (to reduce the number of files)")
 	.option("-m, --magnify", "fit game area to outer element size")
-	.option("-i, --inject [fileName]", "specify injected file content into index.html", ((val, acc) => acc.concat(val)), [])
+	.option("-i, --inject [fileName]", "specify injected file content into index.html", ((val, acc) => acc.concat(val)), [] as string[])
 	.option("--autoSendEvents [eventName]", "(deprecated)event name that send automatically when game start")
 	.option("-A, --auto-send-event-name [eventName]", "event name that send automatically when game start")
 	.option("-a, --atsumaru", "generate files that can be posted to GAME-atsumaru")
