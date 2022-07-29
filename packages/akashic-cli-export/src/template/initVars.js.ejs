@@ -1,3 +1,5 @@
+window.engineFiles = <%= engineFilesVariable %>;
+
 <%# require() をラップし、 require("@akashic/akashic-engine") を利用できるようにする %>
 window.require = (function() {
 	var originalRequire = window.require;
