@@ -2,12 +2,10 @@ import * as fs from "fs";
 import * as os from "os";
 import * as path from "path";
 import * as cmn from "@akashic/akashic-cli-commons";
-import archiver = require("archiver");
-import readdir = require("fs-readdir-recursive");
-import { convertGame } from "./convert";
-import { compress } from "./compress";
-import { exists } from "@akashic/akashic-cli-commons/lib/FileSystem";
 import type { CliConfigExportZipDumpableOption } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigExportZip";
+import { exists } from "@akashic/akashic-cli-commons/lib/FileSystem";
+import { compress } from "./compress";
+import { convertGame } from "./convert";
 
 export interface ExportZipParameterObject {
 	bundle?: boolean;

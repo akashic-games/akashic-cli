@@ -1,10 +1,10 @@
 import * as fs from "fs";
 import * as path from "path";
-import * as fsx from "fs-extra";
-import * as Renamer from "@akashic/akashic-cli-commons/lib/Renamer";
-import * as transformCompleteEnvironment from "../../../lib/zip/transformCompleteEnvironment";
-import { cli } from "../../../lib/html/cli";
 import { CliConfigExportHtml } from "@akashic/akashic-cli-commons";
+import * as Renamer from "@akashic/akashic-cli-commons/lib/Renamer";
+import * as fsx from "fs-extra";
+import { cli } from "../../../lib/html/cli";
+import * as transformCompleteEnvironment from "../../../lib/zip/transformCompleteEnvironment";
 
 // zipの型定義ファイルが存在しないのでimportではなくrequireする
 const zip = require("zip");
@@ -19,17 +19,13 @@ describe("exportAtsumaru", function () {
 		source: ".",
 		output: "output",
 		force: true,
-		// exclude?: string[];
-		// injects?: string[];
-		// autoSendEventName?: string | boolean;
-		// debugOverrideEngineFiles?: string;
-		// hashFilename?: number | boolean;
 		packImage: true,
 		magnify: true,
 		atsumaru: true,
-	}
+	};
 
 	beforeEach(function() {
+		// do nothing.
 	});
 	afterEach(function() {
 		fsx.removeSync(outputDirPath);
@@ -175,10 +171,10 @@ describe("exportAtsumaru", function () {
 				.then(function () {
 					const files = zip.Reader(fs.readFileSync(output)).toObject("utf8");
 					const fileNames = Object.keys(files);
-					expect(fileNames).toContain("output/game.json");
-					expect(fileNames).toContain("output/index.html");
+					expect(fileNames).toContain("game.json");
+					expect(fileNames).toContain("index.html");
 					const expectedFilePath = Renamer.hashFilepath("script/aez_bundle_main.js", 20);
-					expect(fileNames).toContain("output/" + expectedFilePath);
+					expect(fileNames).toContain(expectedFilePath);
 				})
 				.then(function() {
 					fsx.removeSync(outputDirPath + ".zip");

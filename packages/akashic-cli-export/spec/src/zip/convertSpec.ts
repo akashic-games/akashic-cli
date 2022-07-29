@@ -1,9 +1,9 @@
 import * as fs from "fs";
 import * as path from "path";
+import { ConsoleLogger } from "@akashic/akashic-cli-commons";
 import * as fsx from "fs-extra";
 import * as mockfs from "mock-fs";
 import { bundleScripts, convertGame, ConvertGameParameterObject } from "../../../lib/zip/convert";
-import { ConsoleLogger } from "@akashic/akashic-cli-commons";
 
 class WarnRecordLogger {
 	warningMessage: string | null = null;
@@ -22,7 +22,7 @@ class WarnRecordLogger {
 }
 
 function normalizeConvertGameParameterObject(
-	param: Partial<ConvertGameParameterObject> & { source: string, dest: string }
+	param: Partial<ConvertGameParameterObject> & { source: string; dest: string }
 ): ConvertGameParameterObject {
 	return {
 		bundle: false,
@@ -39,7 +39,7 @@ function normalizeConvertGameParameterObject(
 		omitUnbundledJs: false,
 		targetService: "none",
 		...param
-	}
+	};
 }
 
 describe("convert", () => {

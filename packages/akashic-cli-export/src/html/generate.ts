@@ -1,10 +1,10 @@
 import * as fs from "fs";
 import * as path from "path";
-import * as ejs from "ejs";
-import { readFile, readJSON, unlink, writeFile, findUniqueDir, readdir } from "@akashic/akashic-cli-commons/lib/FileSystem";
-import { mkdirpSync } from "@akashic/akashic-cli-commons/lib/Util";
-import { GameConfiguration } from "@akashic/akashic-cli-commons/lib/GameConfiguration";
 import type { CliConfigExportHtmlDumpableOptions } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigExportHtml";
+import { readFile, readJSON, unlink, writeFile, findUniqueDir, readdir } from "@akashic/akashic-cli-commons/lib/FileSystem";
+import { GameConfiguration } from "@akashic/akashic-cli-commons/lib/GameConfiguration";
+import { mkdirpSync } from "@akashic/akashic-cli-commons/lib/Util";
+import * as ejs from "ejs";
 
 function writeFileWithMkdirp(filepath: string, content: string | Buffer): Promise<void> {
 	mkdirpSync(path.dirname(filepath));
@@ -162,13 +162,19 @@ async function resolveEntry(entry: Entry): Promise<ResolvedEntry> {
 
 	let content: string;
 	switch (wrapType) {
-		case "script":
+		case "script": {
 			content = `window.gLocalAssetContainer["${assetId}"] = ${wrapInFunction(readContent)};`;
-		case "text":
+			break;
+		}
+		case "text": {
 			content = `window.gLocalAssetContainer["${assetId}"] = "${encodeText(readContent)}";`;
+			break;
+		}
 		case "raw":
-		default:
+		default: {
 			content = readContent;
+			break;
+		}
 	}
 
 	const discardable = (destructive && src) ? src : null;
@@ -184,7 +190,7 @@ interface EngineFilesVersionJson {
 	[ver: string]: {
 		version: string;
 		variable: string;
-	}
+	};
 }
 
 // template/ に存在する具体的なファイルを意識しているのはこの関数だけ
@@ -358,7 +364,7 @@ export async function generateHTMLImpl(param: NormalizedGenerateHTMLParameterObj
 					fragments.push(`<script>\n${content}\n</script>`);
 				} else {
 					await writeFileWithMkdirp(path.join(gameDir, dest), content);
-					fragments.push(`<script src="${dest}"></script>`)
+					fragments.push(`<script src="${dest}"></script>`);
 				}
 				break;
 			}

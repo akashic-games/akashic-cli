@@ -1,6 +1,12 @@
 import * as fs from "fs";
 import * as path from "path";
-import { ConsoleLogger, CliConfigExportHtml, CliConfigExportHtmlDumpableOptions, CliConfigExportZipDumpableOption, Logger } from "@akashic/akashic-cli-commons";
+import {
+	ConsoleLogger,
+	CliConfigExportHtml,
+	CliConfigExportHtmlDumpableOptions,
+	CliConfigExportZipDumpableOption,
+	Logger
+} from "@akashic/akashic-cli-commons";
 import type { CliConfiguration } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfiguration";
 import { readJSONWithDefault } from "@akashic/akashic-cli-commons/lib/FileSystem";
 import { Command } from "commander";
@@ -12,16 +18,16 @@ function makeConvertOptionInfo(param: CliConfigExportHtml): CliConfigExportZipDu
 	return {
 		// ...param,
 		// ↑は禁止。ダンプ情報にローカルのファイルパスが入り込まないよう、paramとは別のオブジェクトに必要な値だけ持たせる
-    force: param.force,
-    quiet: param.quiet,
-    strip: param.strip,
-    hashFilename: param.hashFilename,
-    minify: param.minify,
-    minifyJs: param.minifyJs,
-    minifyJson: param.minifyJson,
-    packImage: param.packImage,
-    bundle: param.bundle,
-    omitUnbundledJs: param.omitUnbundledJs
+		force: param.force,
+		quiet: param.quiet,
+		strip: param.strip,
+		hashFilename: param.hashFilename,
+		minify: param.minify,
+		minifyJs: param.minifyJs,
+		minifyJson: param.minifyJson,
+		packImage: param.packImage,
+		bundle: param.bundle,
+		omitUnbundledJs: param.omitUnbundledJs
 	};
 }
 
@@ -29,18 +35,18 @@ function makeGenerateOptionInfo(param: CliConfigExportHtml): CliConfigExportHtml
  	return {
 		// ...param,
 		// ↑は禁止。ダンプ情報にローカルのファイルパスが入り込まないよう、paramとは別のオブジェクトに必要な値だけ持たせる
-    force: param.force,
-    quiet: param.quiet,
-    strip: param.strip,
-    hashFilename: param.hashFilename,
-    minify: param.minify,
-    minifyJs: param.minifyJs,
-    minifyJson: param.minifyJson,
-    packImage: param.packImage,
-    bundle: param.bundle,
-    magnify: param.magnify,
-    atsumaru: param.atsumaru,
-    omitUnbundledJs: param.atsumaru
+		force: param.force,
+		quiet: param.quiet,
+		strip: param.strip,
+		hashFilename: param.hashFilename,
+		minify: param.minify,
+		minifyJs: param.minifyJs,
+		minifyJson: param.minifyJson,
+		packImage: param.packImage,
+		bundle: param.bundle,
+		magnify: param.magnify,
+		atsumaru: param.atsumaru,
+		omitUnbundledJs: param.atsumaru
 	};
 }
 

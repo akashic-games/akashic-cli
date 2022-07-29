@@ -1,7 +1,7 @@
 import * as path from "path";
+import { ConsoleLogger } from "@akashic/akashic-cli-commons";
 import * as fsx from "fs-extra";
 import * as exp from "../../../lib/html/exportHTML";
-import { ConsoleLogger, Logger } from "@akashic/akashic-cli-commons";
 
 function normalizeExportHTMLConvertOption(param: Partial<exp.ExportHTMLConvertOption>): exp.ExportHTMLConvertOption {
 	return {
