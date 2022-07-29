@@ -229,14 +229,14 @@ function createCustomizePlatform(content: ServeGameContent): (platform: Platform
 							// ref. https://github.com/akashic-games/akashic-engine/issues/349
 							const detail = "drawImage(): out of bounds."
 								+ `The source rectangle bleeds out the source surface (${surface.width}x${surface.height}). `
-								+ "This is not a bug but intentionally prohibited by akashic serve"
+								+ "This is not a bug but warned by akashic serve"
 								+ "to prevent platform-specific rendering trouble.";
 							content.onNotification.fire({ type: "error", title, detail, message });
 						}
 						if (width <= 0 || height <= 0) {
 							const detail = "drawImage(): nothing to draw."
 								+ "Either width or height is less than or equal to zero."
-								+ "This is not a bug but intentionally prohibited by akashic serve"
+								+ "This is not a bug but warned by akashic serve"
 								+ "to prevent platform-specific rendering trouble.";
 							content.onNotification.fire({ type: "error", title, detail, message });
 						}
