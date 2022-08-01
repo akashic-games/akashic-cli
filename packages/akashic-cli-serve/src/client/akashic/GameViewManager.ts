@@ -132,7 +132,7 @@ export class GameViewManager {
 		this.contents[ret.id] = ret;
 		// TODO: 複数コンテンツのホスティングに対応されれば削除
 		if (param.gameLoaderCustomizer.createCustomAmflowClient) {
-			gameConfig.gameLoaderCustomizer.platformCustomizer = createCustomizePlatform(ret);
+			gameConfig.gameLoaderCustomizer.platformCustomizer = createPlatformCustomizer(ret);
 		}
 		return ret;
 	}
@@ -185,7 +185,7 @@ export class GameViewManager {
 	}
 }
 
-function createCustomizePlatform(content: ServeGameContent): (platform: Platform, options: any) => void {
+function createPlatformCustomizer(content: ServeGameContent): (platform: Platform, options: any) => void {
 	return (platform: Platform, options: any): void => {
 		const scriptAssetClass = options.g.ScriptAsset || NullScriptAssetV3;
 		// eslint-disable-next-line @typescript-eslint/naming-convention
@@ -223,20 +223,22 @@ function createCustomizePlatform(content: ServeGameContent): (platform: Platform
 						_destOffsetX: number,
 						_destOffsetY: number
 					) {
+						const type = "drawOutOfCanvas";
+						const message = "It may not render in Safari.";
 						if (offsetX < 0 || offsetX + width > surface.width || offsetY < 0 || offsetY + height > surface.height) {
 							// ref. https://github.com/akashic-games/akashic-engine/issues/349
-							const warning = "drawImage(): out of bounds."
-								+ `The source rectangle bleeds out the source surface (${surface.width}x${surface.height}). `
+							const title = "drawImage(): out of bounds.";
+							const detail = `The source rectangle bleeds out the source surface (${surface.width}x${surface.height}). `
 								+ "This is not a bug but warned by akashic serve"
 								+ "to prevent platform-specific rendering trouble.";
-							content.onWarning.fire(warning);
+							content.onWarn.fire({ type, title, detail, message });
 						}
 						if (width <= 0 || height <= 0) {
-							const warning = "drawImage(): nothing to draw."
-								+ "Either width or height is less than or equal to zero."
+							const title = "drawImage(): nothing to draw.";
+							const detail = "Either width or height is less than or equal to zero."
 								+ "This is not a bug but warned by akashic serve"
 								+ "to prevent platform-specific rendering trouble.";
-							content.onWarning.fire(warning);
+							content.onWarn.fire({ type, title, detail, message });
 						}
 						originalDrawImage.apply(this, arguments);
 					};

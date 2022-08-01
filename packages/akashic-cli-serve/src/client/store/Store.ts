@@ -3,6 +3,7 @@ import {observable, action, autorun} from "mobx";
 import type {AppOptions} from "../../common/types/AppOptions";
 import type {Player} from "../../common/types/Player";
 import type {GameViewManager} from "../akashic/GameViewManager";
+import type {RuntimeWarning} from "../akashic/RuntimeWarning";
 import {apiClient} from "../api/apiClientInstance";
 import {ClientContentLocator} from "../common/ClientContentLocator";
 import {queryParameters as query} from "../common/queryParameters";
@@ -88,15 +89,14 @@ export class Store {
 	setCurrentLocalInstance(instance: LocalInstanceEntity): void {
 		if (this.currentLocalInstance === instance)
 			return;
-		this.currentLocalInstance?.onWarning.removeAll();
+		const warn = (warning: RuntimeWarning): void => {
+			console.warn(`${warning.title}\n${warning.detail}\n${warning.message}`);
+			this.notificationUiStore.setActive("error", warning.title, warning.detail, warning.message);
+		};
+		this.currentLocalInstance?.onWarn.remove(warn);
 		this.currentLocalInstance = instance;
 		if (this.currentLocalInstance) {
-			this.currentLocalInstance.onWarning.add(warning => {
-				console.warn(warning);
-				const title = "Akashic非推奨機能が使用されました";
-				const message = "この機能は一部ブラウザで動作しない可能性があります。";
-				this.notificationUiStore.setActive("error", title, warning, message);
-			});
+			this.currentLocalInstance.onWarn.add(warn);
 		}
 		this.devtoolUiStore.setEntityTrees([]);
 	}

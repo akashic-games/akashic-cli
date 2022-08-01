@@ -6,6 +6,7 @@ import { TimeKeeper } from "../../common/TimeKeeper";
 import type { PlayAudioStateSummary } from "../../common/types/PlayAudioState";
 import type { Player } from "../../common/types/Player";
 import type { GameViewManager } from "../akashic/GameViewManager";
+import type { RuntimeWarning } from "../akashic/RuntimeWarning";
 import type { ServeGameContent } from "../akashic/ServeGameContent";
 import * as ApiRequest from "../api/ApiRequest";
 import type { ProfilerValue } from "../common/types/Profiler";
@@ -44,7 +45,7 @@ export interface LocalInstanceEntityParameterObject {
 
 export class LocalInstanceEntity implements GameInstanceEntity {
 	onStop: Trigger<LocalInstanceEntity>;
-	onWarning: Trigger<string>;
+	onWarn: Trigger<RuntimeWarning>;
 
 	@observable player: Player;
 	@observable executionMode: ExecutionMode;
@@ -64,7 +65,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 
 	constructor(params: LocalInstanceEntityParameterObject) {
 		this.onStop = new Trigger<LocalInstanceEntity>();
-		this.onWarning = new Trigger<string>();
+		this.onWarn = new Trigger<RuntimeWarning>();
 		this.player = params.player;
 		this.executionMode = params.executionMode;
 		this.targetTime = 0; // 値は _timeKeeper を元に更新される
@@ -105,10 +106,14 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 			useNonDebuggableScript: params.useNonDebuggableScript
 		});
 		this._serveGameContent.onReset.add(this._handleReset, this);
-		this._serveGameContent.onWarning.add(w => {
+		this._serveGameContent.onWarn.add(w => {
 			const warn = this.content.sandboxConfig.warn;
-			if (!warn || warn.drawOutOfCanvas !== false) {
-				this.onWarning.fire(w);
+			switch (w.type) {
+				case "drawOutOfCanvas":
+					if (!warn || warn.drawOutOfCanvas !== false) {
+						this.onWarn.fire(w);
+					}
+					break;
 			}
 		});
 		this._initializationWaiter = this._initialize();
