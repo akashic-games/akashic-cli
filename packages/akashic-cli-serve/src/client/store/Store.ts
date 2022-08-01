@@ -88,11 +88,14 @@ export class Store {
 	setCurrentLocalInstance(instance: LocalInstanceEntity): void {
 		if (this.currentLocalInstance === instance)
 			return;
+		this.currentLocalInstance?.onWarning.removeAll();
 		this.currentLocalInstance = instance;
 		if (this.currentLocalInstance) {
-			this.currentLocalInstance.onNotification.add(n => {
-				console.warn(n.detail);
-				this.notificationUiStore.setActive( n.type, n.title, n.detail, n.message);
+			this.currentLocalInstance.onWarning.add(warning => {
+				console.warn(warning);
+				const title = "Akashic非推奨機能が使用されました";
+				const message = "この機能は一部ブラウザで動作しない可能性があります。";
+				this.notificationUiStore.setActive("error", title, warning, message);
 			});
 		}
 		this.devtoolUiStore.setEntityTrees([]);

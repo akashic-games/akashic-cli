@@ -223,22 +223,20 @@ function createCustomizePlatform(content: ServeGameContent): (platform: Platform
 						_destOffsetX: number,
 						_destOffsetY: number
 					) {
-						const title = "Akashic非推奨機能が使用されました";
-						const message = "この機能は一部ブラウザで動作しない可能性があります。";
 						if (offsetX < 0 || offsetX + width > surface.width || offsetY < 0 || offsetY + height > surface.height) {
 							// ref. https://github.com/akashic-games/akashic-engine/issues/349
-							const detail = "drawImage(): out of bounds."
+							const warning = "drawImage(): out of bounds."
 								+ `The source rectangle bleeds out the source surface (${surface.width}x${surface.height}). `
 								+ "This is not a bug but warned by akashic serve"
 								+ "to prevent platform-specific rendering trouble.";
-							content.onNotification.fire({ type: "error", title, detail, message });
+							content.onWarning.fire(warning);
 						}
 						if (width <= 0 || height <= 0) {
-							const detail = "drawImage(): nothing to draw."
+							const warning = "drawImage(): nothing to draw."
 								+ "Either width or height is less than or equal to zero."
 								+ "This is not a bug but warned by akashic serve"
 								+ "to prevent platform-specific rendering trouble.";
-							content.onNotification.fire({ type: "error", title, detail, message });
+							content.onWarning.fire(warning);
 						}
 						originalDrawImage.apply(this, arguments);
 					};

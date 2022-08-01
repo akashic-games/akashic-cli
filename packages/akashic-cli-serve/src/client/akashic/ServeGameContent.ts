@@ -1,7 +1,6 @@
 import type * as amf from "@akashic/amflow";
 import { Trigger } from "@akashic/trigger";
 import type { EDumpItem } from "../common/types/EDumpItem";
-import type { Notification } from "../common/types/Notification";
 import type { ProfilerValue } from "../common/types/Profiler";
 
 function getMatrixFromRoot(e: ae.ELike | null, camera: ae.CameraLike | null): ae.MatrixLike | null {
@@ -46,7 +45,7 @@ export class ServeGameContent {
 	readonly agvGameContent: agv.GameContent;
 	onTick: Trigger<agv.GameLike>;
 	onReset: Trigger<amf.StartPoint>;
-	onNotification: Trigger<Notification>;
+	onWarning: Trigger<string>;
 	private _game: agv.GameLike;
 	private _gameDriver: agv.GameDriverLike;
 	private _highlightedEntityId: number | null;
@@ -58,7 +57,7 @@ export class ServeGameContent {
 		this._highlightedEntityId = null;
 		this.onTick = new Trigger<agv.GameLike>();
 		this.onReset = new Trigger<amf.StartPoint>();
-		this.onNotification = new Trigger<Notification>();
+		this.onWarning = new Trigger<string>();
 	}
 
 	get id(): number {

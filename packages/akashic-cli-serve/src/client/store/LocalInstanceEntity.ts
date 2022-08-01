@@ -8,7 +8,6 @@ import type { Player } from "../../common/types/Player";
 import type { GameViewManager } from "../akashic/GameViewManager";
 import type { ServeGameContent } from "../akashic/ServeGameContent";
 import * as ApiRequest from "../api/ApiRequest";
-import type { Notification } from "../common/types/Notification";
 import type { ProfilerValue } from "../common/types/Profiler";
 import type { ScreenSize } from "../common/types/ScreenSize";
 import type { ContentEntity } from "./ContentEntity";
@@ -45,7 +44,7 @@ export interface LocalInstanceEntityParameterObject {
 
 export class LocalInstanceEntity implements GameInstanceEntity {
 	onStop: Trigger<LocalInstanceEntity>;
-	onNotification: Trigger<Notification>;
+	onWarning: Trigger<string>;
 
 	@observable player: Player;
 	@observable executionMode: ExecutionMode;
@@ -65,7 +64,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 
 	constructor(params: LocalInstanceEntityParameterObject) {
 		this.onStop = new Trigger<LocalInstanceEntity>();
-		this.onNotification = new Trigger<Notification>();
+		this.onWarning = new Trigger<string>();
 		this.player = params.player;
 		this.executionMode = params.executionMode;
 		this.targetTime = 0; // 値は _timeKeeper を元に更新される
@@ -106,10 +105,10 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 			useNonDebuggableScript: params.useNonDebuggableScript
 		});
 		this._serveGameContent.onReset.add(this._handleReset, this);
-		this._serveGameContent.onNotification.add(n => {
+		this._serveGameContent.onWarning.add(w => {
 			const warn = this.content.sandboxConfig.warn;
 			if (!warn || warn.drawOutOfCanvas !== false) {
-				this.onNotification.fire(n);
+				this.onWarning.fire(w);
 			}
 		});
 		this._initializationWaiter = this._initialize();

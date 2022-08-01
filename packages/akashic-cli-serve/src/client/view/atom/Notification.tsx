@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import type { NotificationType } from "../../common/types/Notification";
+import type { NotificationType } from "../../store/NotificationType";
 import * as styles from "./Notification.css";
 import { ToolIconButton } from "./ToolIconButton";
 
