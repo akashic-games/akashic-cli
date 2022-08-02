@@ -107,14 +107,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 		});
 		this._serveGameContent.onReset.add(this._handleReset, this);
 		this._serveGameContent.onWarn.add(w => {
-			const warn = this.content.sandboxConfig.warn;
-			switch (w.type) {
-				case "drawOutOfCanvas":
-					if (!warn || warn.drawOutOfCanvas !== false) {
-						this.onWarn.fire(w);
-					}
-					break;
-			}
+			this.onWarn.fire(w);
 		});
 		this._initializationWaiter = this._initialize();
 	}

@@ -90,8 +90,15 @@ export class Store {
 		if (this.currentLocalInstance === instance)
 			return;
 		const warn = (warning: RuntimeWarning): void => {
-			console.warn(`${warning.title}\n${warning.detail}\n${warning.message}`);
-			this.notificationUiStore.setActive("error", warning.title, warning.detail, warning.message);
+			const sandboxConfigWarn = this.currentLocalInstance.content.sandboxConfig.warn;
+			switch (warning.type) {
+				case "drawOutOfCanvas":
+					if (!sandboxConfigWarn || sandboxConfigWarn.drawOutOfCanvas !== false) {
+						console.warn(`${warning.title}\n${warning.detail}\n${warning.message}`);
+						this.notificationUiStore.setActive("error", warning.title, warning.detail, warning.message);
+					}
+					break;
+			}
 		};
 		this.currentLocalInstance?.onWarn.remove(warn);
 		this.currentLocalInstance = instance;
