@@ -5,19 +5,34 @@
   ],
   "automerge": true,
   "packageRules": [
+      {
+        "matchUpdateTypes": ["major"],
+        "matchPackagePatterns": ["^@akashic/"],
+        "groupName": "akashic major dependencies",
+        "automerge": false
+    },
     {
-      "packagePatterns": ["^@akashic/"],
-      "enabled": false
+        "matchUpdateTypes": ["minor"],
+        "matchPackagePatterns": ["^@akashic/"],
+        "groupName": "akashic minor dependencies",
+        "automerge": false
+    },
+    {
+        "matchUpdateTypes": ["patch"],
+        "matchPackagePatterns": ["^@akashic/"],
+        "groupName": "akashic patch dependencies"
     },
     {
       "matchUpdateTypes": ["major"],
       "matchDepTypes": ["devDependencies"],
+      "excludePackagePatterns": ["^@akashic/"],
       "groupName": "dev dependencies",
       "automerge": false
     },
     {
       "matchUpdateTypes": ["major"],
       "matchDepTypes": ["dependencies"],
+      "excludePackagePatterns": ["^@akashic/"],
       "draftPR": true
     },
     {
