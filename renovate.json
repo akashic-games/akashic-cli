@@ -5,7 +5,7 @@
   ],
   "automerge": true,
   "packageRules": [
-      {
+    {
         "matchUpdateTypes": ["minor","major"],
         "matchPackagePatterns": ["^@akashic/"],
         "schedule": "at any time",
