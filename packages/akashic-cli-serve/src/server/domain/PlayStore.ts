@@ -1,3 +1,4 @@
+import { PromisifiedAMFlowProxy } from "@akashic/amflow-util/lib/PromisifiedAMFlowProxy";
 import type { AMFlowClient, Play, PlayManager } from "@akashic/headless-driver";
 import { Trigger } from "@akashic/trigger";
 import { TimeKeeper } from "../../common/TimeKeeper";
@@ -21,7 +22,7 @@ import type {
 } from "../../common/types/TestbedEvent";
 import type { ServerContentLocator } from "../common/ServerContentLocator";
 import type { DumpedPlaylog } from "../common/types/DumpedPlaylog";
-import { activePermission, passivePermission } from "./AMFlowPermisson";
+import { activePermission, passivePermission, debugPermission } from "./AMFlowPermisson";
 
 export interface PlayStoreParameterObject {
 	playManager: PlayManager;
@@ -45,6 +46,7 @@ export interface PlayEntity {
 	runners: RunnerDescription[];
 	joinedPlayers: Player[];
 	audioState: PlayAudioState;
+	debugAMFlow: AMFlowClient | null;
 }
 
 export class PlayStore {
@@ -94,7 +96,8 @@ export class PlayStore {
 			clientInstances: [],
 			runners: [],
 			joinedPlayers: [],
-			audioState
+			audioState,
+			debugAMFlow: null
 		};
 
 		if (playlog) {
@@ -114,6 +117,11 @@ export class PlayStore {
 
 	getPlays(): Play[] {
 		return this.playManager.getAllPlays();
+	}
+
+	getLatestPlay(): Play | null {
+		const plays = this.getPlays();
+		return (plays.length > 0) ? plays[plays.length - 1] : null;
 	}
 
 	// プレイ関連情報を取得する。headless-driver の Play を取得する getPlay() との混同に注意。
@@ -159,6 +167,25 @@ export class PlayStore {
 
 	createAMFlow(playId: string): AMFlowClient {
 		return this.playManager.createAMFlow(playId);
+	}
+
+	/**
+	 * 指定されたプレイに干渉するためのデバッグ用 AMFlow インスタンスを取得する。
+	 * この AMFlow は open() され、全権限で authenticate() された状態で返される。
+	 */
+	async getDebugAMFlow(playId: string): Promise<AMFlowClient | null> {
+		const e = this.playEntities[playId];
+		if (!e)
+			return null;
+		if (!e.debugAMFlow) {
+			const amflow = this.playManager.createAMFlow(playId);
+			const token = this.playManager.createPlayToken(playId, debugPermission);
+			e.debugAMFlow = amflow;
+			const pamflow = new PromisifiedAMFlowProxy(amflow);
+			await pamflow.open(playId);
+			await pamflow.authenticate(token);
+		}
+		return e.debugAMFlow;
 	}
 
 	registerClientInstance(playId: string, desc: ClientInstanceDescription): void {

@@ -8,7 +8,8 @@ import {
 	createHandlerToDeletePlay,
 	createHandlerToPatchPlay,
 	createHandlerToGetPlaylog,
-	createHandlerToPatchAudioState
+	createHandlerToPatchAudioState,
+	createHandlerToSendEvent
 } from "../controller/PlayController";
 import { createHandlerToRegisterPlayerId } from "../controller/PlayerIdController";
 import { createHandlerToCreatePlayToken } from "../controller/PlayTokenController";
@@ -56,5 +57,8 @@ export const createApiRouter = (params: ApiRouterParameterObject): express.Route
 	apiRouter.post("/playerids", createHandlerToRegisterPlayerId(params.playerIdStore));
 	apiRouter.get("/plays/:playId(\\d+)/start-point-header-list", createHandlerToGetStartPointHeaderList(params.playStore));
 
+	// /public/ 以下はゲーム開発者による利用を想定する: 破壊的な仕様変更は semver の major 更新にせねばならない。
+	apiRouter.post("/public/v1/plays/latest/playlog", createHandlerToSendEvent(params.playStore, true));
+	apiRouter.post("/public/v1/plays/:playId(\\d+)/playlog", createHandlerToSendEvent(params.playStore));
 	return apiRouter;
 };
