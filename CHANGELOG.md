@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.15.71 (2022-07-27)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#1087](https://github.com/akashic-games/akashic-cli/pull/1087) feat(serve): イベント送信用のAPIを加える ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.15.70 (2022-07-15)
 
 #### Enhancement
