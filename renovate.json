@@ -6,17 +6,17 @@
   "automerge": true,
   "packageRules": [
     {
-        "matchUpdateTypes": ["minor","major"],
-        "matchPackagePatterns": ["^@akashic/"],
-        "schedule": "at any time",
-        "groupName": "akashic major dependencies",
-        "automerge": false
+      "matchUpdateTypes": ["minor","major"],
+      "matchPackagePatterns": ["^@akashic/"],
+      "schedule": "at any time",
+      "groupName": "akashic major/minor  dependencies",
+      "automerge": false
     },
     {
-        "matchUpdateTypes": ["patch"],
-        "matchPackagePatterns": ["^@akashic/"],
-        "schedule": "at any time",
-        "groupName": "akashic patch dependencies"
+      "matchUpdateTypes": ["patch"],
+      "matchPackagePatterns": ["^@akashic/"],
+      "schedule": "at any time",
+      "groupName": "akashic patch dependencies"
     },
     {
       "matchUpdateTypes": ["major"],
