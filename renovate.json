@@ -6,10 +6,10 @@
   "automerge": true,
   "packageRules": [
     {
-      "matchUpdateTypes": ["minor","major"],
+      "matchUpdateTypes": ["minor", "major"],
       "matchPackagePatterns": ["^@akashic/"],
       "schedule": "at any time",
-      "groupName": "akashic major/minor  dependencies",
+      "groupName": "akashic major/minor dependencies",
       "automerge": false
     },
     {
