@@ -202,7 +202,7 @@ function createPlatformCustomizer(content: ServeGameContent): (platform: Platfor
 			return function() {
 				const surface: Surface = func.apply(this, arguments);
 				// Safariで範囲外描画時に問題が発生するのはCanvas要素なので、surfaceがCanvasでなければ範囲外描画の警告は行わない
-				if (surface._drawable.constructor.name !== "HTMLCanvasElement") {
+				if (!(surface._drawable instanceof HTMLCanvasElement)) {
 					return surface;
 				}
 				const originalRenderer = surface.renderer;
@@ -224,21 +224,20 @@ function createPlatformCustomizer(content: ServeGameContent): (platform: Platfor
 						_destOffsetY: number
 					) {
 						const type = "drawOutOfCanvas";
-						const message = "It may not render in Safari.";
 						if (offsetX < 0 || offsetX + width > surface.width || offsetY < 0 || offsetY + height > surface.height) {
 							// ref. https://github.com/akashic-games/akashic-engine/issues/349
-							const title = "drawImage(): out of bounds.";
-							const detail = `The source rectangle bleeds out the source surface (${surface.width}x${surface.height}). `
+							const message = "drawImage(): out of bounds."
+								+ `The source rectangle bleeds out the source surface (${surface.width}x${surface.height}). `
 								+ "This is not a bug but warned by akashic serve"
 								+ "to prevent platform-specific rendering trouble.";
-							content.onWarn.fire({ type, title, detail, message });
+							content.onWarn.fire({ type, message });
 						}
 						if (width <= 0 || height <= 0) {
-							const title = "drawImage(): nothing to draw.";
-							const detail = "Either width or height is less than or equal to zero."
+							const message = "drawImage(): nothing to draw."
+								+ "Either width or height is less than or equal to zero."
 								+ "This is not a bug but warned by akashic serve"
 								+ "to prevent platform-specific rendering trouble.";
-							content.onWarn.fire({ type, title, detail, message });
+							content.onWarn.fire({ type, message });
 						}
 						originalDrawImage.apply(this, arguments);
 					};

@@ -2,7 +2,5 @@ export type RuntimeWarningType = "drawOutOfCanvas";  // 将来的に | で増え
 
 export interface RuntimeWarning {
 	type: RuntimeWarningType;
-	title: string;
-	detail: string;
 	message: string;
 }

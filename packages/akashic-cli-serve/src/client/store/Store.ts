@@ -94,8 +94,8 @@ export class Store {
 			switch (warning.type) {
 				case "drawOutOfCanvas":
 					if (!sandboxConfigWarn || sandboxConfigWarn.drawOutOfCanvas !== false) {
-						console.warn(`${warning.title}\n${warning.detail}\n${warning.message}`);
-						this.notificationUiStore.setActive("error", warning.title, warning.detail, warning.message);
+						console.warn(`${warning.message}`);
+						this.notificationUiStore.setActive("error", "Runtime Warning", warning.message, "");
 					}
 					break;
 			}
