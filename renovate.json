@@ -6,18 +6,29 @@
   "automerge": true,
   "packageRules": [
     {
-      "packagePatterns": ["^@akashic/"],
-      "enabled": false
+      "matchUpdateTypes": ["minor", "major"],
+      "matchPackagePatterns": ["^@akashic/"],
+      "schedule": "at any time",
+      "groupName": "akashic major/minor dependencies",
+      "automerge": false
+    },
+    {
+      "matchUpdateTypes": ["patch"],
+      "matchPackagePatterns": ["^@akashic/"],
+      "schedule": "at any time",
+      "groupName": "akashic patch dependencies"
     },
     {
       "matchUpdateTypes": ["major"],
       "matchDepTypes": ["devDependencies"],
+      "excludePackagePatterns": ["^@akashic/"],
       "groupName": "dev dependencies",
       "automerge": false
     },
     {
       "matchUpdateTypes": ["major"],
       "matchDepTypes": ["dependencies"],
+      "excludePackagePatterns": ["^@akashic/"],
       "draftPR": true
     },
     {
