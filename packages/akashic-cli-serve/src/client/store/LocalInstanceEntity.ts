@@ -106,9 +106,6 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 			useNonDebuggableScript: params.useNonDebuggableScript
 		});
 		this._serveGameContent.onReset.add(this._handleReset, this);
-		this._serveGameContent.onWarn.add(w => {
-			this.onWarn.fire(w);
-		});
 		this._initializationWaiter = this._initialize();
 	}
 
@@ -149,6 +146,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 	}
 
 	async start(): Promise<void> {
+		this._serveGameContent.onWarn.add(this._fireOnWarn, this);
 		await this._gameViewManager.startGameContent(this._serveGameContent);
 		this.followPlayAudioStateChange(); // 生成時にすでに指定されていた play.audioState を反映する
 		this._timeKeeper.start();
@@ -156,6 +154,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 
 	stop(): Promise<void> {
 		this._gameViewManager.removeGameContent(this._serveGameContent);
+		this._serveGameContent.onWarn.remove(this._fireOnWarn, this);
 		this.onStop.fire(this);
 		return Promise.resolve();
 	}
@@ -258,5 +257,9 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 	@action
 	private _handleReset(sp: amf.StartPoint): void {
 		this.resetTime = sp.timestamp - this.play.amflow.getStartedAt();
+	}
+
+	private _fireOnWarn(w: RuntimeWarning): void {
+		this.onWarn.fire(w);
 	}
 }

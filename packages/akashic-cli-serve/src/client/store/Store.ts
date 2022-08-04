@@ -91,11 +91,18 @@ export class Store {
 			return;
 		const warn = (warning: RuntimeWarning): void => {
 			const sandboxConfigWarn = this.currentLocalInstance.content.sandboxConfig.warn;
+			const warningTitle = "Runtime Warning";
 			switch (warning.type) {
 				case "drawOutOfCanvas":
 					if (!sandboxConfigWarn || sandboxConfigWarn.drawOutOfCanvas !== false) {
 						console.warn(`${warning.message}`);
-						this.notificationUiStore.setActive("error", "Runtime Warning", warning.message, "");
+						this.notificationUiStore.setActive("error", warningTitle, warning.message, "");
+					}
+					break;
+				case "drawDestinationEmpty":
+					if (!sandboxConfigWarn || sandboxConfigWarn.drawDestinationEmpty !== false) {
+						console.warn(`${warning.message}`);
+						this.notificationUiStore.setActive("error", warningTitle, warning.message, "");
 					}
 					break;
 			}

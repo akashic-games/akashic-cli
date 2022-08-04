@@ -18,5 +18,6 @@ export interface SandboxConfig {
 	};
 	warn?: {
 		drawOutOfCanvas?: boolean;
+		drawDestinationEmpty?: boolean;
 	};
 }

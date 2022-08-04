@@ -223,9 +223,9 @@ function createPlatformCustomizer(content: ServeGameContent): (platform: Platfor
 						_destOffsetX: number,
 						_destOffsetY: number
 					) {
-						const type = "drawOutOfCanvas";
 						if (offsetX < 0 || offsetX + width > surface.width || offsetY < 0 || offsetY + height > surface.height) {
 							// ref. https://github.com/akashic-games/akashic-engine/issues/349
+							const type = "drawOutOfCanvas";
 							const message = "drawImage(): out of bounds."
 								+ `The source rectangle bleeds out the source surface (${surface.width}x${surface.height}). `
 								+ "This is not a bug but warned by akashic serve"
@@ -233,6 +233,7 @@ function createPlatformCustomizer(content: ServeGameContent): (platform: Platfor
 							content.onWarn.fire({ type, message });
 						}
 						if (width <= 0 || height <= 0) {
+							const type = "drawDestinationEmpty";
 							const message = "drawImage(): nothing to draw."
 								+ "Either width or height is less than or equal to zero."
 								+ "This is not a bug but warned by akashic serve"

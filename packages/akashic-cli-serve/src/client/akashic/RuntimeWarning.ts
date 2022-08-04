@@ -1,4 +1,4 @@
-export type RuntimeWarningType = "drawOutOfCanvas";  // 将来的に | で増える可能性がある
+export type RuntimeWarningType = "drawOutOfCanvas" | "drawDestinationEmpty";
 
 export interface RuntimeWarning {
 	type: RuntimeWarningType;
