@@ -89,28 +89,10 @@ export class Store {
 	setCurrentLocalInstance(instance: LocalInstanceEntity): void {
 		if (this.currentLocalInstance === instance)
 			return;
-		const warn = (warning: RuntimeWarning): void => {
-			const sandboxConfigWarn = this.currentLocalInstance.content.sandboxConfig.warn;
-			const warningTitle = "Runtime Warning";
-			switch (warning.type) {
-				case "drawOutOfCanvas":
-					if (!sandboxConfigWarn || sandboxConfigWarn.drawOutOfCanvas !== false) {
-						console.warn(`${warning.message}`);
-						this.notificationUiStore.setActive("error", warningTitle, warning.message, "");
-					}
-					break;
-				case "drawDestinationEmpty":
-					if (!sandboxConfigWarn || sandboxConfigWarn.drawDestinationEmpty !== false) {
-						console.warn(`${warning.message}`);
-						this.notificationUiStore.setActive("error", warningTitle, warning.message, "");
-					}
-					break;
-			}
-		};
-		this.currentLocalInstance?.onWarn.remove(warn);
+		this.currentLocalInstance?.onWarn.remove(this._warn, this);
 		this.currentLocalInstance = instance;
 		if (this.currentLocalInstance) {
-			this.currentLocalInstance.onWarn.add(warn);
+			this.currentLocalInstance.onWarn.add(this._warn, this);
 		}
 		this.devtoolUiStore.setEntityTrees([]);
 	}
@@ -128,5 +110,24 @@ export class Store {
 
 	get targetService(): ServiceType {
 		return this.appOptions.targetService;
+	}
+
+	private _warn(warning: RuntimeWarning): void {
+		const sandboxConfigWarn = this.currentLocalInstance.content.sandboxConfig.warn;
+		const warningTitle = "Runtime Warning";
+		switch (warning.type) {
+			case "drawOutOfCanvas":
+				if (!sandboxConfigWarn || sandboxConfigWarn.drawOutOfCanvas !== false) {
+					console.warn(`${warning.message}`);
+					this.notificationUiStore.setActive("error", warningTitle, warning.message, "");
+				}
+				break;
+			case "drawDestinationEmpty":
+				if (!sandboxConfigWarn || sandboxConfigWarn.drawDestinationEmpty !== false) {
+					console.warn(`${warning.message}`);
+					this.notificationUiStore.setActive("error", warningTitle, warning.message, "");
+				}
+				break;
+		}
 	}
 }
