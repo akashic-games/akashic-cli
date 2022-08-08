@@ -1,5 +1,31 @@
 # CHANGELOG
 
+## 2.15.72 (2022-08-08)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#1090](https://github.com/akashic-games/akashic-cli/pull/1090) fix false positive and add warn.drawOutOfCanvas on sandboxConfig ([@dera-](https://github.com/dera-))
+
+#### Bug Fix
+* `akashic-cli-serve`
+  * [#1090](https://github.com/akashic-games/akashic-cli/pull/1090) fix false positive and add warn.drawOutOfCanvas on sandboxConfig ([@dera-](https://github.com/dera-))
+
+#### Other Change
+* `akashic-cli-serve`
+  * [#1089](https://github.com/akashic-games/akashic-cli/pull/1089) Use engine files alias for serve ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+* Other
+  * [#1091](https://github.com/akashic-games/akashic-cli/pull/1091) Mod renovate rule ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Update Dependencies
+* `akashic-cli-scan`
+  * [#1088](https://github.com/akashic-games/akashic-cli/pull/1088) Update dependency file-type to 16.5.4 [SECURITY] ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli`
+  * [#1094](https://github.com/akashic-games/akashic-cli/pull/1094) Update dependency @akashic/game-configuration to v1.4.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- [@dera-](https://github.com/dera-)
+
 ## 2.15.71 (2022-07-27)
 
 #### Enhancement
