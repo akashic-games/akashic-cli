@@ -132,6 +132,7 @@ export class GameViewManager {
 		this.contents[ret.id] = ret;
 		// TODO: 複数コンテンツのホスティングに対応されれば削除
 		if (param.gameLoaderCustomizer.createCustomAmflowClient) {
+			// 簡易実装。gameConfig を書き換えるのは new agv.GameContent() に渡す前にすべき
 			gameConfig.gameLoaderCustomizer.platformCustomizer = createPlatformCustomizer(ret);
 		}
 		return ret;

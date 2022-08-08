@@ -91,9 +91,7 @@ export class Store {
 			return;
 		this.currentLocalInstance?.onWarn.remove(this._warn, this);
 		this.currentLocalInstance = instance;
-		if (this.currentLocalInstance) {
-			this.currentLocalInstance.onWarn.add(this._warn, this);
-		}
+		this.currentLocalInstance?.onWarn.add(this._warn, this);
 		this.devtoolUiStore.setEntityTrees([]);
 	}
 
