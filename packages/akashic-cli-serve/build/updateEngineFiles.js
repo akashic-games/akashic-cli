@@ -1,11 +1,7 @@
-var path = require("path");
-var fs = require("fs");
-var fetch = require("node-fetch");
-var execSync = require("child_process").execSync;
+const path = require("path");
+const fs = require("fs");
 
-console.log("start to generate files");
-var jsonPath = path.join(__dirname, "..", "config", "engineFilesVersion.json");
-var currentVersions = {
+const versions = {
 	v1: {
 		version: "",
 		fileName: ""
@@ -19,56 +15,29 @@ var currentVersions = {
 		fileName: ""
 	}
 };
-if (fs.existsSync(jsonPath)) {
-	currentVersions = require(jsonPath);
+
+try {
+	console.log("start to copy engineFiles");
+	for (let key of Object.keys(versions)) {
+		const entryPath = require.resolve(`ae${key}`);
+		const rootPath = path.dirname(entryPath); // index.js と package.json が同層にあることが前提
+		const version = require(path.join(rootPath, "package.json")).version;
+		const fileName = `engineFilesV${version.replace(/[\.-]/g, "_")}.js`;
+		const engineFilesPath = path.join(rootPath, `dist/raw/release/full/${fileName}`);
+
+		versions[key].version = version;
+		versions[key].fileName = fileName;
+
+		const destPath = path.resolve(__dirname, "..", "www", "public", "external", fileName);
+		fs.copyFileSync(engineFilesPath, destPath);
+	}
+	console.log("end to copy engineFiles");
+
+	console.log("start to generate engineFilesVersion.json");
+	const versionFilePath = path.resolve(__dirname, "..", "config", "engineFilesVersion.json");
+	fs.writeFileSync(versionFilePath, JSON.stringify(versions, null, 2));
+	console.log("end to generate files");
+} catch (e) {
+	console.error(e);
+	process.exit(1);
 }
-var v1Version = execSync(`npm info @akashic/engine-files@for_ae1x version`).toString().replace("\n", "");
-var v2Version = execSync(`npm info @akashic/engine-files@for_ae2x version`).toString().replace("\n", "");
-var v3Version = execSync(`npm info @akashic/engine-files@latest version`).toString().replace("\n", "");
-var versions = {
-	v1: {
-		version: v1Version,
-		fileName: `engineFilesV${v1Version.replace(/[\.-]/g, "_")}.js`
-	},
-	v2: {
-		version: v2Version,
-		fileName: `engineFilesV${v2Version.replace(/[\.-]/g, "_")}.js`
-	},
-	v3: {
-		version: v3Version,
-		fileName: `engineFilesV${v3Version.replace(/[\.-]/g, "_")}.js`
-	}
-};
-
-// v1,v2, v3のうち、バージョンが更新されたもののjsファイルのみをダウンロード
-var promises = Object.keys(versions).filter(v => versions[v].version !== currentVersions[v].version).map(v  => {
-	var version = versions[v].version;
-	var fileName = versions[v].fileName;
-	console.log(`start to download engineFiles (v${version})`);
-	return fetch(`https://github.com/akashic-games/engine-files/releases/download/v${version}/${fileName}`).then(res => {
-		if (res.status >= 400) {
-			throw new Error(`failed to get engine-files. status:${res.status}.`);
-		}
-		return new Promise((resolve, reject) => {
-			var fileStream = fs.createWriteStream(path.join(__dirname, "..", "www", "public", "external", fileName));
-			res.body.pipe(fileStream);
-			res.body.on("error", (err) => {
-				reject(err);
-			});
-			fileStream.on("finish", () => {
-				resolve();
-			});
-		});
-	}).then(() => console.log(`end to download engineFiles (v${version})`));
-});
-Promise.all(promises)
-	.then(() => {
-		console.log("start to generate engineFilesVersion.json");
-		fs.writeFileSync(jsonPath, JSON.stringify(versions, null, 2));
-		console.log("end to generate engineFilesVersion.json");
-	})
-	.then(() => console.log("end to generate files"))
-	.catch(err => {
-		console.error(err);
-		process.exit(1);
-	});
