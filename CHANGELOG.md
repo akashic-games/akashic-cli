@@ -1,5 +1,22 @@
 # CHANGELOG
 
+## 2.15.73 (2022-08-09)
+
+#### Enhancement
+* `akashic-cli-export`
+  * [#1097](https://github.com/akashic-games/akashic-cli/pull/1097) 【akashic-cli-export】内部コンポーネントの更新(engineFiles@3.2.4, engineFiles@2.2.1, engineFiles@1.2.1) ([@xnv](https://github.com/xnv))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`
+  * [#1079](https://github.com/akashic-games/akashic-cli/pull/1079) Update all dependencies (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-serve`
+  * [#1096](https://github.com/akashic-games/akashic-cli/pull/1096) Update dependency @akashic/headless-driver to v2.1.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli`
+  * [#1086](https://github.com/akashic-games/akashic-cli/pull/1086) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.15.72 (2022-08-08)
 
 #### Enhancement
