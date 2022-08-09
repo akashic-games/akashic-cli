@@ -32,7 +32,7 @@
     "@typescript-eslint/eslint-plugin": "5.33.0",
     "eslint": "8.21.0",
     "eslint-plugin-import": "2.26.0",
-    "eslint-plugin-jest": "26.8.1",
+    "eslint-plugin-jest": "26.8.2",
     "istanbul": "0.4.5",
     "jasmine": "3.99.0",
     "jasmine-reporters": "2.5.0",
