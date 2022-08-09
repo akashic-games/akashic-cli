@@ -50,12 +50,12 @@
     "@types/commander": "2.12.0",
     "@types/ejs": "3.1.1",
     "@types/fs-extra": "9.0.13",
-    "@types/fs-readdir-recursive": "1.0.0",
+    "@types/fs-readdir-recursive": "1.1.0",
     "@types/jest": "26.0.24",
     "@types/mock-fs": "4.13.1",
     "@types/node": "14.18.23",
     "@types/pngjs": "6.0.1",
-    "@types/uglify-js": "3.13.3",
+    "@types/uglify-js": "3.16.0",
     "@typescript-eslint/eslint-plugin": "4.33.0",
     "browserify": "17.0.0",
     "eslint": "7.32.0",
@@ -84,7 +84,7 @@
     "https": "1.0.0",
     "maxrects-packer": "2.7.3",
     "pngjs": "6.0.0",
-    "uglify-js": "3.15.5"
+    "uglify-js": "3.16.3"
   },
   "publishConfig": {
     "access": "public",
