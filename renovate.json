@@ -1,36 +1,34 @@
 {
   "extends": [
-    "config:base"
+    "github>akashic-games/renovate-config",
+    "github>akashic-games/renovate-config:groupPatchMinor"
   ],
-  "timezone": "Asia/Tokyo",
-  "schedule": ["every weekend"],
-  "labels": ["dependencies"],
-  "assignees": [""],
-  "reviewers": [""],
-  "prConcurrentLimit": 0,
-  "prHourlyLimit": 0,
-  "separateMinorPatch": true,
+  "automerge": true,
   "packageRules": [
     {
-      "packagePatterns": ["^@akashic/"],
-      "enabled": false
+      "matchUpdateTypes": ["minor", "major"],
+      "matchPackagePatterns": ["^@akashic/"],
+      "schedule": "at any time",
+      "groupName": "akashic major/minor dependencies",
+      "automerge": false
     },
     {
-      "updateTypes": ["minor"],
-      "groupName": "all dependencies"
+      "matchUpdateTypes": ["patch"],
+      "matchPackagePatterns": ["^@akashic/"],
+      "schedule": "at any time",
+      "groupName": "akashic patch dependencies"
     },
     {
-      "updateTypes": ["patch"],
-      "groupName": "all dependencies"
+      "matchUpdateTypes": ["major"],
+      "matchDepTypes": ["devDependencies"],
+      "excludePackagePatterns": ["^@akashic/"],
+      "groupName": "dev dependencies",
+      "automerge": false
     },
     {
-      "updateTypes": ["major"],
-      "depTypeList": ["devDependencies"],
-      "groupName": "dev dependencies"
-    },
-    {
-      "updateTypes": ["major"],
-      "depTypeList": ["dependencies"],
+      "matchUpdateTypes": ["major"],
+      "matchDepTypes": ["dependencies"],
+      "excludePackagePatterns": ["^@akashic/"],
       "draftPR": true
     },
     {

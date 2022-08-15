@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-export",
-  "version": "1.7.45",
+  "version": "1.7.47",
   "description": "A module to convert your Akashic game to a runnable standalone.",
   "scripts": {
     "prepublish": "npm run clean && npm run build",
@@ -36,18 +36,18 @@
   "devDependencies": {
     "@akashic/akashic-engine": "~2.6.7",
     "@akashic/eslint-config": "0.1.2",
-    "@akashic/game-configuration": "1.2.0",
+    "@akashic/game-configuration": "1.4.0",
     "@types/archiver": "3.1.1",
     "@types/browserify": "12.0.37",
     "@types/commander": "2.12.0",
     "@types/ejs": "3.1.1",
     "@types/fs-extra": "9.0.13",
-    "@types/fs-readdir-recursive": "1.0.0",
+    "@types/fs-readdir-recursive": "1.1.0",
     "@types/jest": "26.0.24",
     "@types/mock-fs": "4.13.1",
-    "@types/node": "14.18.21",
+    "@types/node": "14.18.23",
     "@types/pngjs": "6.0.1",
-    "@types/uglify-js": "3.13.3",
+    "@types/uglify-js": "3.16.0",
     "@typescript-eslint/eslint-plugin": "4.33.0",
     "browserify": "17.0.0",
     "eslint": "7.32.0",
@@ -64,9 +64,9 @@
     "zip": "1.2.0"
   },
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.13.39",
-    "@babel/core": "7.18.6",
-    "@babel/preset-env": "7.18.6",
+    "@akashic/akashic-cli-commons": "0.13.41",
+    "@babel/core": "7.18.10",
+    "@babel/preset-env": "7.18.10",
     "archiver": "5.3.1",
     "browserify": "17.0.0",
     "commander": "8.3.0",
@@ -76,7 +76,7 @@
     "https": "1.0.0",
     "maxrects-packer": "2.7.3",
     "pngjs": "6.0.0",
-    "uglify-js": "3.15.5"
+    "uglify-js": "3.16.3"
   },
   "publishConfig": {
     "access": "public",

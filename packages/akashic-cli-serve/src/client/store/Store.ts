@@ -3,6 +3,7 @@ import {observable, action, autorun} from "mobx";
 import type {AppOptions} from "../../common/types/AppOptions";
 import type {Player} from "../../common/types/Player";
 import type {GameViewManager} from "../akashic/GameViewManager";
+import type {RuntimeWarning} from "../akashic/RuntimeWarning";
 import {apiClient} from "../api/apiClientInstance";
 import {ClientContentLocator} from "../common/ClientContentLocator";
 import {queryParameters as query} from "../common/queryParameters";
@@ -88,7 +89,9 @@ export class Store {
 	setCurrentLocalInstance(instance: LocalInstanceEntity): void {
 		if (this.currentLocalInstance === instance)
 			return;
+		this.currentLocalInstance?.onWarn.remove(this._warn, this);
 		this.currentLocalInstance = instance;
+		this.currentLocalInstance?.onWarn.add(this._warn, this);
 		this.devtoolUiStore.setEntityTrees([]);
 	}
 
@@ -105,5 +108,24 @@ export class Store {
 
 	get targetService(): ServiceType {
 		return this.appOptions.targetService;
+	}
+
+	private _warn(warning: RuntimeWarning): void {
+		const sandboxConfigWarn = this.currentLocalInstance.content.sandboxConfig.warn;
+		const warningTitle = "Runtime Warning";
+		switch (warning.type) {
+			case "drawOutOfCanvas":
+				if (!sandboxConfigWarn || sandboxConfigWarn.drawOutOfCanvas !== false) {
+					console.warn(`${warning.message}`);
+					this.notificationUiStore.setActive("error", warningTitle, warning.message, "");
+				}
+				break;
+			case "drawDestinationEmpty":
+				if (!sandboxConfigWarn || sandboxConfigWarn.drawDestinationEmpty !== false) {
+					console.warn(`${warning.message}`);
+					this.notificationUiStore.setActive("error", warningTitle, warning.message, "");
+				}
+				break;
+		}
 	}
 }
