@@ -1,5 +1,26 @@
 # CHANGELOG
 
+## 2.15.74 (2022-08-17)
+
+#### Other Change
+* `akashic-cli-serve`
+  * [#1105](https://github.com/akashic-games/akashic-cli/pull/1105) Use sandbox configration ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli`
+  * [#1104](https://github.com/akashic-games/akashic-cli/pull/1104) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#1098](https://github.com/akashic-games/akashic-cli/pull/1098) Update dependency eslint-plugin-jest to v26.8.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`
+  * [#1103](https://github.com/akashic-games/akashic-cli/pull/1103) Update dependency eslint-plugin-jest to v26.8.3 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#1102](https://github.com/akashic-games/akashic-cli/pull/1102) Update dependency eslint to v8.22.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-serve`
+  * [#1101](https://github.com/akashic-games/akashic-cli/pull/1101) Update dependency material-icons to v1.11.10 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#1100](https://github.com/akashic-games/akashic-cli/pull/1100) Update dependency @types/node to v16.11.48 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#1099](https://github.com/akashic-games/akashic-cli/pull/1099) Update dependency material-icons to v1.11.9 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 2.15.73 (2022-08-09)
 
 #### Enhancement
