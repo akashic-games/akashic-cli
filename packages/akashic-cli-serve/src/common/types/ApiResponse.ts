@@ -1,8 +1,8 @@
 import type * as amf from "@akashic/amflow";
+import type { SandboxConfiguration } from "@akashic/sandbox-configuration";
 import type { AppOptions } from "./AppOptions";
 import type { ContentDesc } from "./ContentDesc";
 import type { PlayInfo } from "./PlayInfo";
-import type { SandboxConfig } from "./SandboxConfig";
 import type { StartPointHeader } from "./StartPointHeader";
 
 export interface ApiResponse<T> {
@@ -55,7 +55,7 @@ export interface RunnerPatchApiResponseData {
 
 export type ContentGetApiResponseData = ContentDesc;
 
-export interface SandboxConfigApiResponseData extends SandboxConfig {
+export interface SandboxConfigApiResponseData extends SandboxConfiguration {
 }
 
 export type OptionsApiResponseData = AppOptions;

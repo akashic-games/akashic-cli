@@ -1,10 +1,10 @@
+import type { SandboxConfiguration } from "@akashic/sandbox-configuration";
 import type { ContentLocatorData } from "./ContentLocatorData";
 import type { GameConfiguration } from "./GameConfiguration";
-import type { SandboxConfig } from "./SandboxConfig";
 
 export interface ContentDesc {
 	contentLocatorData: ContentLocatorData;
-	sandboxConfig?: SandboxConfig;
+	sandboxConfig?: SandboxConfiguration;
 	gameJson?: GameConfiguration;
 	gameLocationKey?: string;
 }

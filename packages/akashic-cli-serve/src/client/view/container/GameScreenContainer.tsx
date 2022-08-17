@@ -1,6 +1,6 @@
+import type { SandboxConfiguration } from "@akashic/sandbox-configuration";
 import { observer } from "mobx-react";
 import * as React from "react";
-import type { SandboxConfig } from "../../../common/types/SandboxConfig";
 import type { GameViewManager } from "../../akashic/GameViewManager";
 import type { Operator } from "../../operator/Operator";
 import type { LocalInstanceEntity } from "../../store/LocalInstanceEntity";
@@ -10,7 +10,7 @@ import type { ProfilerCanvasProps } from "../molecule/ProfilerCanvas";
 import { GameScreen } from "../organism/GameScreen";
 
 export interface GameScreenContainerProps {
-	sandboxConfig: SandboxConfig;
+	sandboxConfig: SandboxConfiguration;
 	store: Store;
 	localInstance: LocalInstanceEntity;
 	gameViewManager: GameViewManager;
