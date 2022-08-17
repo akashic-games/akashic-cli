@@ -1,4 +1,5 @@
 import * as fs from "fs";
+import * as path from "path";
 
 export type WriteDataFormatter<T> = (content: T) => string;
 
@@ -16,6 +17,16 @@ export function readFile(filepath: string, options: BufferEncoding | undefined |
 
 export async function readJSON<T>(filepath: string): Promise<T> {
 	return JSON.parse(await readFile(filepath, "utf8"));
+}
+
+export async function readJSONWithDefault<T>(filepath: string, defaultValue: T): Promise<T> {
+	try {
+		return await readJSON(filepath);
+	} catch (e) {
+		if (e.code === "ENOENT")
+			return defaultValue;
+		throw e;
+	}
 }
 
 export function writeFile(filepath: string, content: string | Buffer): Promise<void> {
@@ -45,4 +56,24 @@ export function unlink(filepath: string): Promise<void> {
 			return void (err ? reject(err) : resolve());
 		});
 	});
+}
+
+export function exists(filepath: string): Promise<boolean> {
+	return new Promise<boolean>((resolve, reject) => {
+		fs.stat(path.resolve(filepath), (err: any, _stat: any) => {
+			if (err) {
+				return void (err.code === "ENOENT" ? resolve(false) : reject(err));
+			}
+			resolve(true);
+		});
+	});
+}
+
+export async function findUniqueDir(baseDir: string, prefix: string): Promise<string> {
+	if (!await exists(path.join(baseDir, prefix)))
+		return prefix;
+	let postfix = 0;
+	while (await exists(path.join(baseDir, `${prefix}${postfix}`)))
+		++postfix;
+	return `${prefix}${postfix}`;
 }
