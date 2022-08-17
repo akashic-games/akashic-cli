@@ -1,7 +1,7 @@
 import type { ServiceType } from "@akashic/akashic-cli-commons/lib/ServiceType";
+import type { SandboxConfiguration } from "@akashic/sandbox-configuration";
 import { observer } from "mobx-react";
 import * as React from "react";
-import type { SandboxConfig } from "../../../common/types/SandboxConfig";
 import type { Operator } from "../../operator/Operator";
 import type { DevtoolUiStore } from "../../store/DevtoolUiStore";
 import type { LocalInstanceEntity } from "../../store/LocalInstanceEntity";
@@ -15,7 +15,7 @@ export interface DevtoolContainerProps {
 	localInstance: LocalInstanceEntity;
 	toolBarUiStore: ToolBarUiStore; // プログレスバーの値を共有してしまっているのでそれの参照に利用
 	devtoolUiStore: DevtoolUiStore;
-	sandboxConfig: SandboxConfig;
+	sandboxConfig: SandboxConfiguration;
 	targetService: ServiceType;
 }
 

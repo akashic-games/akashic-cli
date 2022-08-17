@@ -1,7 +1,7 @@
+import type { SandboxConfiguration } from "@akashic/sandbox-configuration";
 import { action, observable } from "mobx";
 import type { ContentDesc } from "../../common/types/ContentDesc";
 import type { GameConfiguration, PreferredSessionParameters } from "../../common/types/GameConfiguration";
-import type { SandboxConfig } from "../../common/types/SandboxConfig";
 import { apiClient } from "../api/apiClientInstance";
 import { ClientContentLocator } from "../common/ClientContentLocator";
 import { DevtoolUiStore } from "./DevtoolUiStore";
@@ -11,7 +11,7 @@ export class ContentEntity {
 	gameJson: GameConfiguration; // 現状では view に反映しないので observable はつけない
 	preferredSessionParameters: PreferredSessionParameters; // 現状では view に反映しないので observable はつけない
 	gameLocationKey: string; // 仕様未定のため --experimental-open オプション以外で使用してはいけない
-	@observable sandboxConfig: SandboxConfig;
+	@observable sandboxConfig: SandboxConfiguration;
 	@observable argumentsTable: { [name: string]: string };
 
 	constructor(desc: ContentDesc) {
@@ -28,7 +28,7 @@ export class ContentEntity {
 	}
 
 	@action
-	setSandboxConfig(config: SandboxConfig): void {
+	setSandboxConfig(config: SandboxConfiguration): void {
 		this.sandboxConfig = config;
 	}
 

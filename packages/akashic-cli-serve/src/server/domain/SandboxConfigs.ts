@@ -1,15 +1,15 @@
 import * as path from "path";
+import type { SandboxConfiguration } from "@akashic/sandbox-configuration";
 import * as chokidar from "chokidar";
-import type { SandboxConfig } from "../../common/types/SandboxConfig";
 import { BadRequestError } from "../common/ApiError";
 import { dynamicRequire } from "./dynamicRequire";
 
-interface ResolvedSandboxConfig extends SandboxConfig {
+interface ResolvedSandboxConfig extends SandboxConfiguration {
 	// backgroundImage がローカルファイルの場合、クライアントからは GET /contents/:contentId/sandboxConfig/backgroundImage で取得される。その場合のローカルファイルのパスをここに保持する。
 	resolvedBackgroundImagePath?: string;
 }
 
-const configs: { [key: string]: SandboxConfig } = {};
+const configs: { [key: string]: SandboxConfiguration } = {};
 
 /**
  * コンテンツの sandbox.config.js  ファイルの読み込み/監視を登録。
@@ -32,12 +32,12 @@ export function get(contentId: string): ResolvedSandboxConfig {
 	return configs[contentId];
 }
 
-function watchRequire(configPath: string, contentId: string, callback: (content: SandboxConfig) => void): SandboxConfig {
-	let config = dynamicRequire<SandboxConfig>(configPath, true);
+function watchRequire(configPath: string, contentId: string, callback: (content: SandboxConfiguration) => void): SandboxConfiguration {
+	let config = dynamicRequire<SandboxConfiguration>(configPath, true);
 
 	const eventListener = (event: string, path: string): void => {
 		if (event === "add" || event === "change") {
-			config = dynamicRequire<SandboxConfig>(path, true);
+			config = dynamicRequire<SandboxConfiguration>(path, true);
 			normalizeConfig(config, contentId);
 		} else if (event === "unlink") {
 			config = {};
