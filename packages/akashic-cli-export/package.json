@@ -55,7 +55,7 @@
     "@types/mock-fs": "4.13.1",
     "@types/node": "14.18.24",
     "@types/pngjs": "6.0.1",
-    "@types/uglify-js": "3.16.0",
+    "@types/uglify-js": "3.17.0",
     "@typescript-eslint/eslint-plugin": "4.33.0",
     "browserify": "17.0.0",
     "eslint": "7.32.0",
@@ -84,7 +84,7 @@
     "https": "1.0.0",
     "maxrects-packer": "2.7.3",
     "pngjs": "6.0.0",
-    "uglify-js": "3.16.3"
+    "uglify-js": "3.17.0"
   },
   "publishConfig": {
     "access": "public",
