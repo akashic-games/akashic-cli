@@ -1,7 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as cmn from "@akashic/akashic-cli-commons";
-import { ImageAssetConfigurationBase } from "@akashic/game-configuration";
 import * as babel from "@babel/core";
 import * as presetEnv from "@babel/preset-env";
 import * as browserify from "browserify";
@@ -10,6 +9,7 @@ import readdir = require("fs-readdir-recursive");
 import * as UglifyJS from "uglify-js";
 import * as gcu from "./GameConfigurationUtil";
 import { transformPackSmallImages } from "./transformPackImages";
+import { transformUntaint } from "./transformUntaint";
 
 export interface ConvertGameParameterObject {
 	bundle?: boolean;
@@ -18,6 +18,7 @@ export interface ConvertGameParameterObject {
 	minifyJs?: boolean;
 	minifyJson?: boolean;
 	packImage?: boolean;
+	needUntaintedImage?: boolean;
 	strip?: boolean;
 	source?: string;
 	hashLength?: number;
@@ -38,6 +39,8 @@ export function _completeConvertGameParameterObject(param: ConvertGameParameterO
 	param.minify = !!param.minify;
 	param.minifyJs = !!param.minifyJs;
 	param.minifyJson = !!param.minifyJson;
+	param.packImage = !!param.packImage;
+	param.needUntaintedImage = !!param.needUntaintedImage;
 	param.strip = !!param.strip;
 	param.source = param.source || process.cwd();
 	param.hashLength = param.hashLength || 0;
@@ -190,10 +193,6 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			gcu.removeScriptAssets(gamejson, (filePath: string) => preservingFilePathSet.has(filePath));
 			gcu.removeGlobalScripts(gamejson, (filePath: string) => preservingFilePathSet.has(filePath));
 
-			if (param.targetService === "nicolive") {
-				addUntaintedToImageAssets(gamejson);
-			}
-
 			if (bundleResult === null) {
 				return;
 			}
@@ -214,9 +213,13 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			const code = param.babel ? babel.transform(bundleResult.bundle, babelOption).code : bundleResult.bundle;
 			fs.writeFileSync(entryPointAbsPath, code);
 		})
-		.then(() => {
-			if (!param.packImage) return;
-			return transformPackSmallImages(gamejson, param.dest);
+		.then(async () => {
+			if (param.packImage) {
+				await transformPackSmallImages(gamejson, param.dest);
+			}
+			if (param.needUntaintedImage || param.targetService === "nicolive") {
+				await transformUntaint(gamejson);
+			}
 		})
 		.then(() => {
 			if (param.hashLength > 0) {
@@ -245,19 +248,4 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 				fs.writeFileSync(p, UglifyJS.minify(code).code);
 			});
 		});
-}
-
-/**
- * 指定のgameJson中の全てのImageAssetに untainted:true を付与する
- */
-function addUntaintedToImageAssets(gameJson: cmn.GameConfiguration): void {
-	Object.keys(gameJson.assets).forEach(key => {
-		if (gameJson.assets[key].type === "image") {
-			const asset = gameJson.assets[key] as ImageAssetConfigurationBase;
-			if (!asset.hint) {
-				asset.hint = {};
-			}
-			asset.hint.untainted = true;
-		}
-	});
 }
