@@ -8,6 +8,7 @@ import * as fsx from "fs-extra";
 import readdir = require("fs-readdir-recursive");
 import * as UglifyJS from "uglify-js";
 import * as gcu from "./GameConfigurationUtil";
+import { transformCompleteEnvrironment } from "./transformCompleteEnvironment";
 import { transformPackSmallImages } from "./transformPackImages";
 import { transformUntaint } from "./transformUntaint";
 
@@ -19,6 +20,7 @@ export interface ConvertGameParameterObject {
 	minifyJson?: boolean;
 	packImage?: boolean;
 	needUntaintedImage?: boolean;
+	completeEnvironment?: boolean;
 	strip?: boolean;
 	source?: string;
 	hashLength?: number;
@@ -41,6 +43,7 @@ export function _completeConvertGameParameterObject(param: ConvertGameParameterO
 	param.minifyJson = !!param.minifyJson;
 	param.packImage = !!param.packImage;
 	param.needUntaintedImage = !!param.needUntaintedImage;
+	param.completeEnvironment = !!param.completeEnvironment;
 	param.strip = !!param.strip;
 	param.source = param.source || process.cwd();
 	param.hashLength = param.hashLength || 0;
@@ -216,6 +219,9 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 		.then(async () => {
 			if (param.packImage) {
 				await transformPackSmallImages(gamejson, param.dest);
+			}
+			if (param.completeEnvironment) {
+				await transformCompleteEnvrironment(gamejson);
 			}
 			if (param.needUntaintedImage || param.targetService === "nicolive") {
 				await transformUntaint(gamejson);

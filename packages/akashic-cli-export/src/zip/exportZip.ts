@@ -14,6 +14,7 @@ export interface ExportZipParameterObject {
 	minifyJson?: boolean;
 	packImage?: boolean;
 	needUntaintedImage?: boolean;
+	completeEnvironment?: boolean;
 	strip?: boolean;
 	source?: string;
 	dest?: string;
@@ -78,6 +79,7 @@ export async function promiseExportZip(param: ExportZipParameterObject): Promise
 		minifyJson: param.minifyJson,
 		packImage: param.packImage,
 		needUntaintedImage: param.needUntaintedImage,
+		completeEnvironment: param.completeEnvironment,
 		strip: param.strip,
 		source: param.source,
 		dest: destDir,
