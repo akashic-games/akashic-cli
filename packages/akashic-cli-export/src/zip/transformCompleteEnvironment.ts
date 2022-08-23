@@ -1,16 +1,6 @@
 import { GameConfiguration } from "@akashic/akashic-cli-commons/lib/GameConfiguration";
 import { getFromHttps } from "./getFromHttps";
 
-// TODO game-configuration への移行後、削除する
-interface GameConfigurationEnvrironment {
-	"sandbox-runtime"?: string;
-	"akashic-runtime"?: string | {
-		version: string;
-		flavor?: string;
-	};
-	external?: { [key: string]: string };
-}
-
 const VERSION_INFO_URL = "https://raw.githubusercontent.com/akashic-games/akashic-runtime-version-table/master/versions.json";
 
 /**
@@ -24,7 +14,7 @@ export async function transformCompleteEnvrironment(gamejson: GameConfiguration)
 
 	// TODO game-configuration 以降後、 as を削除する
 	const renderers = (gamejson as any).renderers as (string[] | undefined);
-	const environment = gamejson.environment as GameConfigurationEnvrironment;
+	const environment = gamejson.environment;
 
 	if (!environment.external) {
 		environment.external = {};
