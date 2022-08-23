@@ -54,8 +54,9 @@ export class RunnerStore {
 		if (serverExternal) {
 			for (const pluginName of Object.keys(serverExternal)) {
 				// eslint-disable-next-line @typescript-eslint/no-var-requires
-				const externalFactory = require(path.resolve(serverExternal[pluginName]));
-				this.gameExternalFactory = Object.assign(this.gameExternalFactory, externalFactory());
+				const externalSource = require(path.resolve(serverExternal[pluginName]));
+				const externalFactory = { [pluginName]: externalSource() };
+				this.gameExternalFactory = Object.assign(this.gameExternalFactory, externalFactory);
 			}
 		}
 
