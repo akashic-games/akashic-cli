@@ -6,13 +6,7 @@ import type { ServiceType } from "./ServiceType";
  */
 export interface GameConfiguration extends Configuration{
 	assets: AssetConfigurationMap;
-	environment?: ModuleEnvironment;
 	exportZipInfo?: ExportZipInfo;
-}
-
-export interface ModuleEnvironment {
-	"sandbox-runtime"?: string;
-	external?: {[key: string]: string};
 }
 
 /**

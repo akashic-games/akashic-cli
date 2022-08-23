@@ -1,5 +1,5 @@
 import * as mockfs from "mock-fs";
-import { readFile, writeFile, readJSON, writeJSON, readdir, unlink } from "../../lib/FileSystem";
+import { readFile, writeFile, readJSON, writeJSON, readdir, unlink, readJSONWithDefault, exists, findUniqueDir } from "../../lib/FileSystem";
 
 describe("FileSystemSpec", () => {
 	afterEach(function () {
@@ -39,6 +39,16 @@ describe("FileSystemSpec", () => {
 			width: 120,
 			height: 240
 		});
+	});
+
+	it("read json with default", async () => {
+		mockfs({
+			"game": {
+				"game.json": JSON.stringify({ width: 120, })
+			}
+		});
+		expect(await readJSONWithDefault("./game/game.json", { defaultValue: 42 })).toEqual({ width: 120 });
+		expect(await readJSONWithDefault("./not-exist.json", { defaultValue: 42 })).toEqual({ defaultValue: 42 });
 	});
 
 	it("write text", async () => {
@@ -105,5 +115,30 @@ describe("FileSystemSpec", () => {
 
 		await unlink("./foo/test.json");
 		expect(readJSON("./foo/test.json")).rejects.toMatchObject({ code: "ENOENT" });
+	});
+
+	it("check file existence", async () => {
+		mockfs({
+			"foo": {
+				"test.json": JSON.stringify({ val: 42 })
+			},
+		})
+
+		expect(await exists("./foo/test.json")).toBe(true);
+		expect(await exists("./foo/test-not-found.json")).toBe(false);
+	});
+
+	it("find unique dir", async () => {
+		mockfs({
+			"foo": {},
+			"bar": {
+				"zoo": {},
+				"zoo0": {},
+				"zoo1": {},
+			},
+		})
+
+		expect(await findUniqueDir("./foo/", "prefix")).toBe("prefix");
+		expect(await findUniqueDir("./bar/", "zoo")).toBe("zoo2");
 	});
 });
