@@ -1,3 +1,4 @@
+import * as path from "path";
 import type { AMFlowClient, RunnerManager, RunnerV1, RunnerV2, RunnerV3 } from "@akashic/headless-driver";
 import { Trigger } from "@akashic/trigger";
 import type {
@@ -40,7 +41,7 @@ export class RunnerStore {
 		this.onRunnerResume = new Trigger<RunnerResumeTestbedEvent>();
 		this.onRunnerPutStartPoint = new Trigger<RunnerPutStartPointTestbedEvent>();
 		this.runnerManager = params.runnerManager;
-		this.gameExternalFactory = params.gameExternalFactory;
+		this.gameExternalFactory = params.gameExternalFactory() || {};
 		this.playIdTable = {};
 	}
 
@@ -49,13 +50,22 @@ export class RunnerStore {
 		const externalAssets = (sandboxConfig ? sandboxConfig.externalAssets : undefined) === undefined ? [] : sandboxConfig.externalAssets;
 		const allowedUrls = this.createAllowedUrls(params.contentId, externalAssets);
 
+		const serverExternal = sandboxConfig?.server?.external;
+		if (serverExternal) {
+			for (const pluginName of Object.keys(serverExternal)) {
+				// eslint-disable-next-line @typescript-eslint/no-var-requires
+				const externalFactory = require(path.resolve(serverExternal[pluginName]));
+				this.gameExternalFactory = Object.assign(this.gameExternalFactory, externalFactory());
+			}
+		}
+
 		const runnerId = await this.runnerManager.createRunner({
 			playId: params.playId,
 			amflow: params.amflow,
 			executionMode: params.isActive ? "active" : "passive",
 			playToken: params.token,
 			allowedUrls,
-			externalValue: this.gameExternalFactory(),
+			externalValue: this.gameExternalFactory,
 			trusted: !serverGlobalConfig.untrusted
 		});
 		if (params.isActive) {
