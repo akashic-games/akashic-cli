@@ -69,6 +69,13 @@ export function exists(filepath: string): Promise<boolean> {
 	});
 }
 
+/**
+ * 与えられたディレクトリパスの直下のユニークな(使われていない)ディレクトリ名を探して返す。
+ *
+ * @param baseDir ディレクトリのパス。
+ * @param prefix 接頭辞。この文字列で始まる名前を探す
+ * @returns 見つかったユニークな名前。 `baseDir` 部分は含まれない
+ */
 export async function findUniqueDir(baseDir: string, prefix: string): Promise<string> {
 	if (!await exists(path.join(baseDir, prefix)))
 		return prefix;
