@@ -31,7 +31,7 @@ export class RunnerStore {
 	onRunnerResume: Trigger<RunnerResumeTestbedEvent>;
 	onRunnerPutStartPoint: Trigger<RunnerPutStartPointTestbedEvent>;
 	private runnerManager: RunnerManager;
-	private gameExternalFactory: () => any;
+	private gameExternalFactory: { [key: string]: any };
 	private playIdTable: { [runnerId: string]: string };
 
 	constructor(params: RunnerStoreParameterObject) {
