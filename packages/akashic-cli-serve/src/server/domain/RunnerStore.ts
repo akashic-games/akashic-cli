@@ -31,7 +31,7 @@ export class RunnerStore {
 	onRunnerResume: Trigger<RunnerResumeTestbedEvent>;
 	onRunnerPutStartPoint: Trigger<RunnerPutStartPointTestbedEvent>;
 	private runnerManager: RunnerManager;
-	private gameExternalFactory: { [key: string]: any };
+	private gameExternalFactory: () => any;
 	private playIdTable: { [runnerId: string]: string };
 
 	constructor(params: RunnerStoreParameterObject) {
@@ -41,7 +41,7 @@ export class RunnerStore {
 		this.onRunnerResume = new Trigger<RunnerResumeTestbedEvent>();
 		this.onRunnerPutStartPoint = new Trigger<RunnerPutStartPointTestbedEvent>();
 		this.runnerManager = params.runnerManager;
-		this.gameExternalFactory = params.gameExternalFactory() || {};
+		this.gameExternalFactory = params.gameExternalFactory;
 		this.playIdTable = {};
 	}
 
@@ -50,13 +50,13 @@ export class RunnerStore {
 		const externalAssets = (sandboxConfig ? sandboxConfig.externalAssets : undefined) === undefined ? [] : sandboxConfig.externalAssets;
 		const allowedUrls = this.createAllowedUrls(params.contentId, externalAssets);
 
+		const externalValue = { ...this.gameExternalFactory() ?? {} };
 		const serverExternal = sandboxConfig?.server?.external;
 		if (serverExternal) {
 			for (const pluginName of Object.keys(serverExternal)) {
 				// eslint-disable-next-line @typescript-eslint/no-var-requires
 				const externalSource = require(path.resolve(serverExternal[pluginName]));
-				const externalFactory = { [pluginName]: externalSource() };
-				this.gameExternalFactory = Object.assign(this.gameExternalFactory, externalFactory);
+				externalValue[pluginName] = externalSource();
 			}
 		}
 
@@ -66,7 +66,7 @@ export class RunnerStore {
 			executionMode: params.isActive ? "active" : "passive",
 			playToken: params.token,
 			allowedUrls,
-			externalValue: this.gameExternalFactory,
+			externalValue: externalValue,
 			trusted: !serverGlobalConfig.untrusted
 		});
 		if (params.isActive) {
