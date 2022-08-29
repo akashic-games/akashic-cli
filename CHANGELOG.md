@@ -1,5 +1,31 @@
 # CHANGELOG
 
+## 2.15.75 (2022-08-29)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#1114](https://github.com/akashic-games/akashic-cli/pull/1114) Support server.external in akashic-cli-serve ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`
+  * [#1118](https://github.com/akashic-games/akashic-cli/pull/1118) Update all dependencies (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#1116](https://github.com/akashic-games/akashic-cli/pull/1116) Update dependency @typescript-eslint/eslint-plugin to v5.34.0 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#1111](https://github.com/akashic-games/akashic-cli/pull/1111) Update dependency eslint-plugin-jest to v26.8.5 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#1110](https://github.com/akashic-games/akashic-cli/pull/1110) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-serve`
+  * [#1117](https://github.com/akashic-games/akashic-cli/pull/1117) Update dependency @types/node to v16.11.56 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#1109](https://github.com/akashic-games/akashic-cli/pull/1109) Update dependency @types/node to v16.11.50 ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-serve`, `akashic-cli`
+  * [#1115](https://github.com/akashic-games/akashic-cli/pull/1115) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli`
+  * [#1113](https://github.com/akashic-games/akashic-cli/pull/1113) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#1106](https://github.com/akashic-games/akashic-cli/pull/1106) Update all dependencies to v3.17.0 (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`
+  * [#1108](https://github.com/akashic-games/akashic-cli/pull/1108) Update dependency @types/eslint to v8.4.6 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 2.15.74 (2022-08-17)
 
 #### Other Change
