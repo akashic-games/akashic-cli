@@ -13,7 +13,7 @@ import type { CliConfigUpdate } from "./CliConfigUpdate";
  * akashic.config.js の型。
  */
 export interface CliConfiguration {
-	commandOptions?: {
+	commandOptions: {
 		export?: {
 			html?: Partial<CliConfigExportHtml>;
 			zip?: Partial<CliConfigExportZip>;
