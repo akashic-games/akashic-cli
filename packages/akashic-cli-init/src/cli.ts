@@ -60,7 +60,7 @@ export function run(argv: string[]): void {
 			process.exit(1);
 		}
 
-		const conf = configuration.commandOptions.init || {};
+		const conf = configuration.commandOptions?.init || {};
 		cli({
 			cwd: options.cwd ?? conf.cwd,
 			quiet: options.quiet ?? conf.quiet,
