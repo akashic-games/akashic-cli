@@ -59,7 +59,7 @@ export function run(argv: string[]): void {
 			process.exit(1);
 		}
 
-		const conf = configuration.commandOptions.stat || {};
+		const conf = configuration.commandOptions?.stat || {};
 		cli({
 			args: commander.args ?? conf.args,
 			cwd: options.cwd ?? conf.cwd,
