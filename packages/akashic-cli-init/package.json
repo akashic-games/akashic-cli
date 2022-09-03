@@ -34,7 +34,7 @@
     "@types/node": "14.18.26",
     "@types/node-fetch": "2.6.2",
     "@types/unzipper": "0.10.5",
-    "@typescript-eslint/eslint-plugin": "5.36.0",
+    "@typescript-eslint/eslint-plugin": "5.36.1",
     "eslint": "8.23.0",
     "eslint-plugin-import": "2.26.0",
     "eslint-plugin-jest": "26.9.0",
