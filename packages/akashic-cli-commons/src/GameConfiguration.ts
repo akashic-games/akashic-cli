@@ -1,11 +1,12 @@
-import type { AssetConfigurationMap, GameConfiguration as Configuration } from "@akashic/game-configuration";
-import type { ServiceType } from "./ServiceType";
+import type { AssetConfigurationMap, Environment, GameConfiguration as Configuration } from "@akashic/game-configuration";
+import type { CliConfigExportZipDumpableOption } from "./CliConfig/CliConfigExportZip";
 
 /**
  * game.json の型。
  */
-export interface GameConfiguration extends Configuration{
+export interface GameConfiguration extends Configuration {
 	assets: AssetConfigurationMap;
+	environment?: Environment;
 	exportZipInfo?: ExportZipInfo;
 }
 
@@ -15,18 +16,5 @@ export interface GameConfiguration extends Configuration{
  */
 export interface ExportZipInfo {
 	version: string;
-	option: {
-		quiet?: boolean;
-		force?: boolean;
-		strip?: boolean;
-		minify?: boolean;
-		minifyJs?: boolean;
-		minifyJson?: boolean;
-		packImage?: boolean;
-		bundle?: boolean;
-		babel?: boolean;
-		hashFilename?: number | boolean;
-		omitEmptyJs?: boolean;
-		targetService?: ServiceType;
-	};
+	option: CliConfigExportZipDumpableOption;
 }
