@@ -250,6 +250,23 @@ function createPlatformCustomizer(content: ServeGameContent): (platform: Platfor
 		}
 		platform.getPrimarySurface = createMeddlingWrappedSurfaceFactory(platform.getPrimarySurface);
 		platform._resourceFactory.createSurface = createMeddlingWrappedSurfaceFactory(platform._resourceFactory.createSurface);
+
+		function createMeddlingWrapperMathRandomFactory(): Math  {
+			const MeddlingMath = new Proxy(Math, {
+				get: (target, prop, _receiver) => {
+					if (prop === "random") {
+						const type = "useMathRandom";
+						const message = "Math.random()が実行されました。g.game.localRandom を使用してください。";
+						const referenceUrl = "https://akashic-games.github.io/guide/sandbox-config.html#warn";
+						const referenceMessage = "各種警告表示の設定や対応方法はこちらを参照してください。";
+						content.onWarn.fire({ type, message, referenceUrl, referenceMessage });
+					}
+					return (target as any)[prop];
+				}
+			});
+			return MeddlingMath;
+		}
+		window.Math = createMeddlingWrapperMathRandomFactory();
 	};
 }
 
