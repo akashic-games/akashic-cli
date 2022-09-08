@@ -9,6 +9,7 @@ export interface NotificationActiveParameterObject {
 	referenceUrl?: string;
 	referenceMessage?: string;
 }
+
 export class NotificationUiStore {
 	@observable isActive: boolean;
 	@observable type: NotificationType;
