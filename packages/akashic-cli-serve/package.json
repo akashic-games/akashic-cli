@@ -63,7 +63,7 @@
     "@types/react-measure": "2.0.8",
     "@types/storybook__addon-actions": "3.4.3",
     "@types/storybook__react": "4.0.2",
-    "@typescript-eslint/eslint-plugin": "5.36.2",
+    "@typescript-eslint/eslint-plugin": "5.37.0",
     "browserify": "16.5.2",
     "css-loader": "4.3.0",
     "es6-promise": "4.2.8",
