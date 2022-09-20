@@ -60,5 +60,4 @@ window.addEventListener("unload", () => {
 	}
 });
 
-(window as any).__testbed = { gameViewManager, store, operator, pluginFuncs };
-(window as any).akashicServe = scriptHelper;
+(window as any).__testbed = (window as any).akashicServe = { gameViewManager, store, operator, pluginFuncs, scriptHelper };
