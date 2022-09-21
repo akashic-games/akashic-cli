@@ -52,7 +52,7 @@ export module NodeModules {
 			} catch (e) {
 				// do nothing
 			}
-			if (moduleName !== "" && mainScript !== "") {
+			if (moduleName && moduleName !== "" && mainScript && mainScript !== "") {
 				moduleMainScripts[moduleName] = Util.makeUnixPath(mainScript);
 			}
 		}
