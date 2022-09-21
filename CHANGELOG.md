@@ -1,5 +1,44 @@
 # CHANGELOG
 
+## 2.15.76 (2022-09-21)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#1127](https://github.com/akashic-games/akashic-cli/pull/1127) Support math random warning ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Other Change
+* `akashic-cli-serve`
+  * [#1129](https://github.com/akashic-games/akashic-cli/pull/1129) Remove engineFilesVx_x_x.js and engineFilesVersion.json ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Update Dependencies
+* Other
+  * [#1139](https://github.com/akashic-games/akashic-cli/pull/1139) Update dependency parse-url to 8.1.0 [SECURITY] ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-export`, `akashic-cli-serve`
+  * [#1138](https://github.com/akashic-games/akashic-cli/pull/1138) Update dependency uglify-js to v3.17.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`
+  * [#1137](https://github.com/akashic-games/akashic-cli/pull/1137) Update dependency @typescript-eslint/eslint-plugin to v5.38.0 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#1134](https://github.com/akashic-games/akashic-cli/pull/1134) Update dependency @typescript-eslint/eslint-plugin to v5.37.0 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#1133](https://github.com/akashic-games/akashic-cli/pull/1133) Update dependency eslint to v8.23.1 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#1120](https://github.com/akashic-games/akashic-cli/pull/1120) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-scan`
+  * [#1136](https://github.com/akashic-games/akashic-cli/pull/1136) Update dependency music-metadata to v7.13.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-serve`, `akashic-cli`
+  * [#1135](https://github.com/akashic-games/akashic-cli/pull/1135) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#1130](https://github.com/akashic-games/akashic-cli/pull/1130) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-serve`
+  * [#1131](https://github.com/akashic-games/akashic-cli/pull/1131) Update dependency eslint-plugin-react to v7.31.8 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#1125](https://github.com/akashic-games/akashic-cli/pull/1125) Update dependency eslint-plugin-react to v7.31.6 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#1124](https://github.com/akashic-games/akashic-cli/pull/1124) Update dependency eslint-plugin-react to v7.31.5 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#1123](https://github.com/akashic-games/akashic-cli/pull/1123) Update dependency @msgpack/msgpack to v2.8.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-export`
+  * [#1128](https://github.com/akashic-games/akashic-cli/pull/1128) Update all dependencies to v7.19.0 (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli`
+  * [#1126](https://github.com/akashic-games/akashic-cli/pull/1126) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#1119](https://github.com/akashic-games/akashic-cli/pull/1119) Update all dependencies (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 2.15.75 (2022-08-29)
 
 #### Enhancement
