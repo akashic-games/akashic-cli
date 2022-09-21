@@ -97,7 +97,7 @@ export class UiOperator {
 	};
 
 	showNotification = (type: NotificationType, title: string, name: string, message: string): void => {
-		this.store.notificationUiStore.setActive(type, title, name, message);
+		this.store.notificationUiStore.setActive({type, title, name, message});
 	};
 
 	hideNotification = (): void => {
