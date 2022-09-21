@@ -35,6 +35,10 @@ try {
 
 	console.log("start to generate engineFilesVersion.json");
 	const versionFilePath = path.resolve(__dirname, "..", "config", "engineFilesVersion.json");
+	const versionFileDir = path.dirname(versionFilePath);
+	if (!fs.existsSync(versionFileDir)) {
+		fs.mkdirSync(versionFileDir);
+	}
 	fs.writeFileSync(versionFilePath, JSON.stringify(versions, null, 2));
 	console.log("end to generate files");
 } catch (e) {
