@@ -6,7 +6,7 @@ export interface ScriptHelper {
 	overrides: { MeddlingMath: Math };
 }
 
-function createMeddlingWrapperMathRandomFactory(): Math {
+function createMeddlingMath(): Math {
 	const MeddlingMath = new Proxy(Math, {
 		get: (target, prop, _receiver) => {
 			if (prop === "random") {
@@ -25,6 +25,6 @@ function createMeddlingWrapperMathRandomFactory(): Math {
 export const scriptHelper: ScriptHelper = {
 	onScriptWarn: new Trigger<RuntimeWarning>(),
 	overrides: {
-		MeddlingMath: createMeddlingWrapperMathRandomFactory()
+		MeddlingMath: createMeddlingMath()
 	}
 };
