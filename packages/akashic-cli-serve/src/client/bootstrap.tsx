@@ -7,6 +7,7 @@ import { Operator } from "./operator/Operator";
 import { storage } from "./store/storage";
 import { Store } from "./store/Store";
 import { App } from "./view/App";
+import "./AkashicServeWindow";
 
 mobxConfigure({ enforceActions: "observed" });
 
@@ -60,4 +61,5 @@ window.addEventListener("unload", () => {
 	}
 });
 
-(window as any).__testbed = (window as any).akashicServe = { gameViewManager, store, operator, pluginFuncs, scriptHelper };
+window.akashicServe = { gameViewManager, store, operator, pluginFuncs, scriptHelper };
+(window as any).__testbed = window.akashicServe; // 互換性のためにのこしている。
