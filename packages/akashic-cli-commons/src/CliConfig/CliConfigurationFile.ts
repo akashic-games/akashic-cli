@@ -10,13 +10,13 @@ export module CliConfigurationFile {
 	 * @param confPath akashic.config.js があるディレクトリ。絶対パスであることを期待する。
 	 * @param callback コールバック。
 	 */
-	export function read(confPath: string, callback: (error: Error, conf: CliConfiguration) => void): void {
+	export function read(confPath: string, callback: (error: Error | undefined, conf: CliConfiguration | undefined) => void): void {
 		let cliConfig: CliConfiguration = { commandOptions: {} };
 		try {
 			cliConfig = require(confPath);
 			delete require.cache[require.resolve(confPath)];
 			setImmediate(() => callback(undefined, cliConfig));
-		} catch (error) {
+		} catch (error: any) {
 			if (error.code === "MODULE_NOT_FOUND") {
 				setImmediate(() => callback(undefined, cliConfig));
 			} else {

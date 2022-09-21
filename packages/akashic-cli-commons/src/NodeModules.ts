@@ -43,8 +43,8 @@ export module NodeModules {
 		for (let i = 0; i < packageJsonFiles.length; i++) {
 			const packageJsonFile = packageJsonFiles[i];
 			const packageJsonData = fs.readFileSync(packageJsonFile, "utf-8");
-			let mainScript: string;
-			let moduleName: string;
+			let mainScript: string = "";
+			let moduleName: string = "";
 			try {
 				const d = JSON.parse(packageJsonData);
 				mainScript = path.join(path.dirname(packageJsonFile), d.main);
@@ -52,7 +52,7 @@ export module NodeModules {
 			} catch (e) {
 				// do nothing
 			}
-			if (moduleName && moduleName !== "" && mainScript && mainScript !== "") {
+			if (moduleName !== "" && mainScript !== "") {
 				moduleMainScripts[moduleName] = Util.makeUnixPath(mainScript);
 			}
 		}
