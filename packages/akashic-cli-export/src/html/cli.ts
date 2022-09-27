@@ -106,7 +106,7 @@ export function run(argv: string[]): void {
 			}
 		}
 
-		const conf = configuration.commandOptions.export ? (configuration.commandOptions.export.html || {}) : {};
+		const conf = configuration?.commandOptions.export ? (configuration.commandOptions.export.html || {}) : {};
 		cli({
 			cwd: options.cwd ?? conf.cwd,
 			force: options.force ?? conf.force,

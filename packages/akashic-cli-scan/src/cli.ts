@@ -39,7 +39,7 @@ commander
 				process.exit(1);
 			}
 
-			const conf = configuration.commandOptions.scan ? (configuration.commandOptions.scan.asset ?? {}) : {};
+			const conf = configuration?.commandOptions.scan ? (configuration.commandOptions.scan.asset ?? {}) : {};
 			const logger = new ConsoleLogger({ quiet: opts.quiet ?? conf.quiet });
 			const assetScanDirectoryTable = {
 				audio: opts.audioAssetDir ?? conf.audioAssetDir,
