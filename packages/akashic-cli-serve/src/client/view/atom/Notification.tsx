@@ -10,8 +10,6 @@ export interface NotificationProps {
 	title: string;
 	name: string;
 	message: string;
-	referenceUrl?: string;
-	referenceMessage?: string;
 	onClickClose: () => void;
 }
 
@@ -39,10 +37,6 @@ export class Notification extends React.Component<NotificationProps, {}> {
 				</div>
 				<div className={[styles["notification-message-main"], styles[`notification-message-${this.props.type}`]].join(" ")}>
 					{this.props.message}
-				</div>
-				<div className={[styles["notification-message-referenceUrl"], styles[`notification-message-${this.props.type}`]].join(" ")}
-					style={{ display: !!this.props.referenceUrl ? "block" : "none" }}>
-					<a href={this.props.referenceUrl} target="_blank" rel="noreferrer">{this.props.referenceMessage ?? "参考リンク"}</a>
 				</div>
 				<div className={styles["notification-close-btn"]}>
 					<ToolIconButton

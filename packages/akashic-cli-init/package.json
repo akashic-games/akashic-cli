@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-init",
-  "version": "1.13.47",
+  "version": "1.13.46",
   "description": "A module to get your Akashic game started.",
   "main": "lib/index.js",
   "scripts": {
@@ -31,11 +31,11 @@
     "@types/fs-extra": "9.0.13",
     "@types/jest": "27.5.2",
     "@types/mock-fs": "4.13.1",
-    "@types/node": "14.18.30",
+    "@types/node": "14.18.29",
     "@types/node-fetch": "2.6.2",
     "@types/unzipper": "0.10.5",
     "@typescript-eslint/eslint-plugin": "5.38.0",
-    "eslint": "8.24.0",
+    "eslint": "8.23.1",
     "eslint-plugin-import": "2.26.0",
     "eslint-plugin-jest": "26.9.0",
     "express": "4.18.1",
@@ -48,8 +48,8 @@
   },
   "typings": "lib/index.d.ts",
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.13.44",
-    "@akashic/akashic-cli-extra": "1.5.58",
+    "@akashic/akashic-cli-commons": "0.13.43",
+    "@akashic/akashic-cli-extra": "1.5.57",
     "commander": "8.3.0",
     "fs-extra": "10.1.0",
     "node-fetch": "2.6.7",
