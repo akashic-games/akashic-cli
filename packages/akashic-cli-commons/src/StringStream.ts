@@ -2,7 +2,7 @@ import * as stream from "stream";
 
 export class StringStream extends stream.Readable {
 	content: string;
-	file: string;
+	file: string | undefined;;
 
 	constructor (content: string, fileName?: string) {
 		super();

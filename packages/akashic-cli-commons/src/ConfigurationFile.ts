@@ -40,7 +40,7 @@ export module ConfigurationFile {
 	 */
 	export function write(content: GameConfiguration, confPath: string, _logger: Logger, option?: ConfigurationWriteOption): Promise<void> {
 		return new Promise<void>((resolve: () => void, reject: (err: any) => void) => {
-			const spacer = option?.minify ? null : "\t";
+			const spacer = option?.minify ? "" : "\t";
 			const text = JSON.stringify(content, null, spacer);
 			fs.writeFile(confPath, text, {encoding: "utf8"}, (err: any) => {
 				if (err) {
