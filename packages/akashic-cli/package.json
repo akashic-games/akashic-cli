@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli",
-  "version": "2.15.75",
+  "version": "2.15.76",
   "description": "Command-line utility for akashic game development",
   "bin": {
     "akashic": "./bin/akashic"
@@ -22,19 +22,19 @@
     "lib"
   ],
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.13.43",
-    "@akashic/akashic-cli-export": "1.7.49",
-    "@akashic/akashic-cli-extra": "1.5.57",
-    "@akashic/akashic-cli-init": "1.13.46",
-    "@akashic/akashic-cli-lib-manage": "1.7.44",
-    "@akashic/akashic-cli-scan": "0.15.44",
-    "@akashic/akashic-cli-serve": "1.14.71",
+    "@akashic/akashic-cli-commons": "0.13.44",
+    "@akashic/akashic-cli-export": "1.7.50",
+    "@akashic/akashic-cli-extra": "1.5.58",
+    "@akashic/akashic-cli-init": "1.13.47",
+    "@akashic/akashic-cli-lib-manage": "1.7.45",
+    "@akashic/akashic-cli-scan": "0.15.45",
+    "@akashic/akashic-cli-serve": "1.14.72",
     "commander": "8.3.0"
   },
   "devDependencies": {
     "@akashic/eslint-config": "0.1.2",
     "@types/commander": "2.12.0",
-    "@types/node": "14.18.29",
+    "@types/node": "14.18.30",
     "@typescript-eslint/eslint-plugin": "4.33.0",
     "eslint": "7.32.0",
     "eslint-config-prettier": "8.5.0",

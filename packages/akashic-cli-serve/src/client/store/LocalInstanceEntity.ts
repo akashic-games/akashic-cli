@@ -15,6 +15,7 @@ import type { ContentEntity } from "./ContentEntity";
 import type { ExecutionMode } from "./ExecutionMode";
 import type { GameInstanceEntity } from "./GameInstanceEntity";
 import type { PlayEntity } from "./PlayEntity";
+import "../AkashicServeWindow";
 
 const toAgvExecutionMode = (() => {
 	const executionModeTable = {
@@ -147,6 +148,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 
 	async start(): Promise<void> {
 		this._serveGameContent.onWarn.add(this.onWarn.fire, this.onWarn);
+		window.akashicServe.scriptHelper.onScriptWarn.add(this.onWarn.fire, this.onWarn);
 		await this._gameViewManager.startGameContent(this._serveGameContent);
 		this.followPlayAudioStateChange(); // 生成時にすでに指定されていた play.audioState を反映する
 		this._timeKeeper.start();
@@ -155,6 +157,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 	stop(): Promise<void> {
 		this._gameViewManager.removeGameContent(this._serveGameContent);
 		this._serveGameContent.onWarn.remove(this.onWarn.fire, this.onWarn);
+		window.akashicServe.scriptHelper.onScriptWarn.remove(this.onWarn.fire, this.onWarn);
 		this.onStop.fire(this);
 		return Promise.resolve();
 	}

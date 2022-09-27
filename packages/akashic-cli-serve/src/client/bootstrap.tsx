@@ -2,10 +2,12 @@ import { configure as mobxConfigure } from "mobx";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { GameViewManager } from "./akashic/GameViewManager";
+import { scriptHelper } from "./akashic/scriptHelper";
 import { Operator } from "./operator/Operator";
 import { storage } from "./store/storage";
 import { Store } from "./store/Store";
 import { App } from "./view/App";
+import "./AkashicServeWindow";
 
 mobxConfigure({ enforceActions: "observed" });
 
@@ -59,4 +61,5 @@ window.addEventListener("unload", () => {
 	}
 });
 
-(window as any).__testbed = { gameViewManager, store, operator, pluginFuncs };
+window.akashicServe = { gameViewManager, store, operator, pluginFuncs, scriptHelper };
+(window as any).__testbed = window.akashicServe; // 互換性のためにのこしている。
