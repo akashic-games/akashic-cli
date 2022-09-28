@@ -438,7 +438,7 @@ export async function run(argv: any): Promise<void> {
 			process.exit(1);
 		}
 
-		const conf = configuration?.commandOptions.serve || {};
+		const conf = configuration!.commandOptions.serve || {};
 		const cliConfigParam: CliConfigServe = {
 			port: options.port ?? conf.port,
 			hostname: options.hostname ?? conf.hostname,
