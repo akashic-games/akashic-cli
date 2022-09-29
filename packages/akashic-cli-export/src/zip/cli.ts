@@ -92,7 +92,7 @@ export function run(argv: string[]): void {
 			process.exit(1);
 		}
 
-		const conf = configuration.commandOptions.export ? (configuration.commandOptions.export.zip || {}) : {};
+		const conf = configuration!.commandOptions.export ? (configuration.commandOptions.export.zip || {}) : {};
 		cli({
 			cwd: options.cwd ?? conf.cwd,
 			quiet: options.quiet ?? conf.quiet,
