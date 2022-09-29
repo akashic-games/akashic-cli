@@ -71,7 +71,21 @@ function normalizeConfig(config: ResolvedSandboxConfig, contentId: string): void
 		}
 	}
 
-	const bgImage = config ? config.backgroundImage : undefined;
+	if (!config.displayOption)
+		config.displayOption = {};
+
+	if (config.backgroundImage) {
+		console.warn("[deprecated] `backgroundImage` in sandbox.config.js is deprecated. Please use `displayOption.backgroundImage`.");
+		if (!config.displayOption.backgroundImage)
+			config.displayOption.backgroundImage = config.backgroundImage;
+	}
+	if (config.backgroundColor) {
+		console.warn("[deprecated] `backgroundColor` in sandbox.config.js is deprecated. Please use `displayOption.backgroundColor`.");
+		if (!config.displayOption.backgroundColor)
+			config.displayOption.backgroundColor = config.backgroundColor;
+	}
+
+	const bgImage = config ? config.displayOption.backgroundImage : undefined;
 	if (bgImage) {
 		if (!/\.(jpg|jpeg|png)$/.test(bgImage)) {
 			throw new BadRequestError({ errorMessage: "Invalid backgroundImage, Please specify a png/jpg file." });
@@ -80,7 +94,7 @@ function normalizeConfig(config: ResolvedSandboxConfig, contentId: string): void
 		if (/^\/contents\//.test(bgImage)) {
 			console.warn("Please use the local path for the value of sandboxConfig.backgroundImage");
 		} else if (!/^https?:\/\//.test(bgImage)) {
-			config.backgroundImage = `/contents/${contentId}/sandboxConfig/backgroundImage` ;
+			config.displayOption.backgroundImage = `/contents/${contentId}/sandboxConfig/backgroundImage` ;
 			config.resolvedBackgroundImagePath = bgImage;
 		}
 	}

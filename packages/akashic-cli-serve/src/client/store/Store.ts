@@ -93,6 +93,7 @@ export class Store {
 		this.currentLocalInstance = instance;
 		this.currentLocalInstance?.onWarn.add(this._warn, this);
 		this.devtoolUiStore.setEntityTrees([]);
+		this.toolBarUiStore.setSandboxConfigValues(this.currentLocalInstance.content.sandboxConfig);
 	}
 
 	@action

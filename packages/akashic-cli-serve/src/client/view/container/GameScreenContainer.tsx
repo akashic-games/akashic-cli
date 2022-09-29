@@ -22,8 +22,8 @@ export class GameScreenContainer extends React.Component<GameScreenContainerProp
 	render(): React.ReactNode {
 		const { toolBarUiStore } = this.props.store;
 		return <GameScreen
-			backgroundImage={this.props.sandboxConfig.backgroundImage}
-			backgroundColor={this.props.sandboxConfig.backgroundColor}
+			backgroundImage={this.props.sandboxConfig.displayOption.backgroundImage}
+			backgroundColor={this.props.sandboxConfig.displayOption.backgroundColor}
 			showsGrid={toolBarUiStore.showsGrid}
 			showsBackgroundImage={toolBarUiStore.showsBackgroundImage}
 			showsBackgroundColor={toolBarUiStore.showsBackgroundColor}

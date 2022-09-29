@@ -70,17 +70,18 @@ export class Storage {
 			instanceArgumentEditContent: choose(query.instanceArgumentEditContent, s.instanceArgumentEditContent, ""),
 			showsHiddenEntity: choose(query.showsHiddenEntity, s.showsHiddenEntity, true),
 			joinsAutomatically: choose(query.joinsAutomatically, s.joinsAutomatically, false),
-			fitsToScreen: choose(query.fitsToScreen, s.fitsToScreen, false),
-			showsBackgroundImage: choose(query.showsBackgroundImage, s.showsBackgroundImage, false),
-			showsBackgroundColor: choose(query.showsBackgroundColor, s.showsBackgroundColor, false),
-			showsGrid: choose(query.showsGrid, s.showsGrid, false),
+			// displayOptions の初期値は sandbox.config.js の値を反映するため undefined に設定し、ToolBarUiStore で設定
+			fitsToScreen: choose(query.fitsToScreen, s.fitsToScreen, undefined),
+			showsBackgroundImage: choose(query.showsBackgroundImage, s.showsBackgroundImage, undefined),
+			showsBackgroundColor: choose(query.showsBackgroundColor, s.showsBackgroundColor, undefined),
+			showsGrid: choose(query.showsGrid, s.showsGrid, undefined),
+			showsProfiler: choose(query.showsProfiler, s.showsProfiler, undefined),
+			showsDesignGuideline: choose(query.showsDesignGuideline, s.showsDesignGuideline, undefined),
 			isAutoSendEvents: choose(query.isAutoSendEvents, s.isAutoSendEvents, false),
 			emulatingShinichibaMode: choose(query.emulatingShinichibaMode, s.emulatingShinichibaMode, "single"),
 			usePreferredTotalTimeLimit: choose(query.usePreferredTotalTimeLimit, s.usePreferredTotalTimeLimit, false),
 			stopsGameOnTimeout: choose(query.stopsGameOnTimeout, s.stopsGameOnTimeout, false),
 			totalTimeLimitInputValue: choose(query.totalTimeLimitInputValue, s.totalTimeLimitInputValue, 85),
-			showsProfiler: choose(query.showsProfiler, s.showsProfiler, false),
-			showsDesignGuideline: choose(query.showsDesignGuideline, s.showsDesignGuideline, false),
 			premium: choose(query.premium, s.premium, false)
 		});
 

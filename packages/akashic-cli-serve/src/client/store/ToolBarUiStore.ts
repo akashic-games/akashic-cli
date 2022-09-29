@@ -1,3 +1,4 @@
+import type { SandboxConfiguration } from "@akashic/sandbox-configuration";
 import {action, observable} from "mobx";
 import {storage} from "./storage";
 
@@ -104,5 +105,42 @@ export class ToolBarUiStore {
 	setShowDesignGuideline(show: boolean): void {
 		this.showsDesignGuideline = show;
 		storage.put({ showsDesignGuideline: show });
+	}
+
+	setSandboxConfigValues(sandboxConfg: SandboxConfiguration): void {
+		const displayOption = sandboxConfg.displayOption;
+		let fitsToScreen = storage.data.fitsToScreen;
+		let showsBackgroundImage = storage.data.showsBackgroundImage;
+		let showsBackgroundColor = storage.data.showsBackgroundColor;
+		let showsGrid = storage.data.showsGrid;
+		let showsProfiler = storage.data.showsProfiler;
+		let showsDesignGuideline = storage.data.showsDesignGuideline;
+
+		if (displayOption) {
+			if (typeof fitsToScreen === "undefined" && displayOption.fitsToScreen) {
+				fitsToScreen = displayOption.fitsToScreen;
+			}
+			if (typeof showsBackgroundImage === "undefined" && displayOption.backgroundImage) {
+				showsBackgroundImage = !!displayOption.backgroundImage;
+			}
+			if (typeof showsBackgroundColor === "undefined" && displayOption.backgroundColor) {
+				showsBackgroundColor = !!displayOption.backgroundColor;
+			}
+			if (typeof showsGrid === "undefined" && displayOption.showsGrid) {
+				showsGrid = displayOption.showsGrid;
+			}
+			if (typeof showsProfiler === "undefined" && displayOption.showsProfiler) {
+				showsProfiler = displayOption.showsProfiler;
+			}
+			if (typeof showsDesignGuideline === "undefined" && displayOption.showsDesignGuideline) {
+				showsDesignGuideline = displayOption.showsDesignGuideline;
+			}
+		}
+		this.setFitsToScreen(fitsToScreen ?? false);
+		this.setShowBackgroundImage(showsBackgroundImage ?? false);
+		this.setShowBackgroundColor(showsBackgroundColor ?? false);
+		this.setShowGrid(showsGrid ?? false);
+		this.setShowsProfiler(showsProfiler ?? false);
+		this.setShowDesignGuideline(showsDesignGuideline ?? false);
 	}
 }
