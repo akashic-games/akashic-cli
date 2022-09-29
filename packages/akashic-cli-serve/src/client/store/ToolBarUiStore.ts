@@ -109,38 +109,25 @@ export class ToolBarUiStore {
 
 	setSandboxConfigValues(sandboxConfg: SandboxConfiguration): void {
 		const displayOption = sandboxConfg.displayOption;
-		let fitsToScreen = storage.data.fitsToScreen;
-		let showsBackgroundImage = storage.data.showsBackgroundImage;
-		let showsBackgroundColor = storage.data.showsBackgroundColor;
-		let showsGrid = storage.data.showsGrid;
-		let showsProfiler = storage.data.showsProfiler;
-		let showsDesignGuideline = storage.data.showsDesignGuideline;
-
 		if (displayOption) {
-			if (typeof fitsToScreen === "undefined" && displayOption.fitsToScreen) {
-				fitsToScreen = displayOption.fitsToScreen;
+			if (typeof this.fitsToScreen === "undefined" && displayOption.fitsToScreen) {
+				this.setFitsToScreen(displayOption.fitsToScreen);
 			}
-			if (typeof showsBackgroundImage === "undefined" && displayOption.backgroundImage) {
-				showsBackgroundImage = !!displayOption.backgroundImage;
+			if (typeof this.showsBackgroundImage === "undefined" && displayOption.backgroundImage) {
+				this.setShowBackgroundImage(!!displayOption.backgroundImage);
 			}
-			if (typeof showsBackgroundColor === "undefined" && displayOption.backgroundColor) {
-				showsBackgroundColor = !!displayOption.backgroundColor;
+			if (typeof this.showsBackgroundColor === "undefined" && displayOption.backgroundColor) {
+				this.setShowBackgroundColor(!!displayOption.backgroundColor);
 			}
-			if (typeof showsGrid === "undefined" && displayOption.showsGrid) {
-				showsGrid = displayOption.showsGrid;
+			if (typeof this.showsGrid === "undefined" && displayOption.showsGrid) {
+				this.setShowGrid(displayOption.showsGrid);
 			}
-			if (typeof showsProfiler === "undefined" && displayOption.showsProfiler) {
-				showsProfiler = displayOption.showsProfiler;
+			if (typeof this.showsProfiler === "undefined" && displayOption.showsProfiler) {
+				this.setShowsProfiler(displayOption.showsProfiler);
 			}
-			if (typeof showsDesignGuideline === "undefined" && displayOption.showsDesignGuideline) {
-				showsDesignGuideline = displayOption.showsDesignGuideline;
+			if (typeof this.showsDesignGuideline === "undefined" && displayOption.showsDesignGuideline) {
+				this.setShowDesignGuideline(this.showsDesignGuideline);
 			}
 		}
-		this.setFitsToScreen(fitsToScreen ?? false);
-		this.setShowBackgroundImage(showsBackgroundImage ?? false);
-		this.setShowBackgroundColor(showsBackgroundColor ?? false);
-		this.setShowGrid(showsGrid ?? false);
-		this.setShowsProfiler(showsProfiler ?? false);
-		this.setShowDesignGuideline(showsDesignGuideline ?? false);
 	}
 }

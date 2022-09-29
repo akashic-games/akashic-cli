@@ -63,7 +63,7 @@ export const DisplayOptionControl = observer(function (props: DisplayOptionContr
 					<input
 						className={styles.checkbox + " external-ref_checkbox_fits-to-screen"}
 						type="checkbox"
-						checked={fitsToScreen}
+						checked={fitsToScreen ?? false}
 						onChange={() => onChangeFitsToScreen(!fitsToScreen)}
 					/>
 					Fit to screen
@@ -74,7 +74,7 @@ export const DisplayOptionControl = observer(function (props: DisplayOptionContr
 					<input
 						className={styles.checkbox + " external-ref_checkbox_shows-background-image"}
 						type="checkbox"
-						checked={showsBackgroundImage}
+						checked={showsBackgroundImage ?? false}
 						onChange={() => onChangeShowBackgroundImage(!showsBackgroundImage)}
 					/>
 					Show background image
@@ -85,7 +85,7 @@ export const DisplayOptionControl = observer(function (props: DisplayOptionContr
 					<input
 						className={styles.checkbox + " external-ref_checkbox_shows-background-color"}
 						type="checkbox"
-						checked={showsBackgroundColor}
+						checked={showsBackgroundColor ?? false}
 						onChange={() => onChangeShowBackgroundColor(!showsBackgroundColor)}
 					/>
 					Show background color
@@ -96,7 +96,7 @@ export const DisplayOptionControl = observer(function (props: DisplayOptionContr
 					<input
 						className={styles.checkbox + " external-ref_checkbox_shows-grid"}
 						type="checkbox"
-						checked={showsGrid}
+						checked={showsGrid ?? false}
 						onChange={() => onChangeShowGrid(!showsGrid)}
 					/>
 					Show grid
@@ -107,7 +107,7 @@ export const DisplayOptionControl = observer(function (props: DisplayOptionContr
 					<input
 						className={styles.checkbox + " external-ref_checkbox_shows-profiler"}
 						type="checkbox"
-						checked={showsProfiler}
+						checked={showsProfiler ?? false}
 						onChange={() => onChangeShowProfiler(!showsProfiler)}
 					/>
 					Show profiler
@@ -119,7 +119,7 @@ export const DisplayOptionControl = observer(function (props: DisplayOptionContr
 						<input
 							className={styles.checkbox + " external-ref_checkbox_shows-design-guideline"}
 							type="checkbox"
-							checked={showsDesignGuideline}
+							checked={showsDesignGuideline ?? false}
 							onChange={() => onChangeShowDesignGuideline(!showsDesignGuideline)}
 						/>
 						Show Design Guidelines
