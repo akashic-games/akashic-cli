@@ -1,5 +1,23 @@
 # CHANGELOG
 
+## 2.15.77 (2022-09-29)
+
+#### Other Change
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`
+  * [#1144](https://github.com/akashic-games/akashic-cli/pull/1144) Enable strict for cli commons ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Update Dependencies
+* `akashic-cli-serve`
+  * [#1146](https://github.com/akashic-games/akashic-cli/pull/1146) Update dependency @akashic/headless-driver to v2.2.2 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#1145](https://github.com/akashic-games/akashic-cli/pull/1145) Update dependency vm2 to 3.9.11 [SECURITY] ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`
+  * [#1142](https://github.com/akashic-games/akashic-cli/pull/1142) Update dependency eslint to v8.24.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`, `akashic-cli`
+  * [#1141](https://github.com/akashic-games/akashic-cli/pull/1141) Update all dependencies (patch) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 2.15.76 (2022-09-21)
 
 #### Enhancement
