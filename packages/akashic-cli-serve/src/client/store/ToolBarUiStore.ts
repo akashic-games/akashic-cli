@@ -110,7 +110,7 @@ export class ToolBarUiStore {
 	setSandboxConfigValues(sandboxConfg: SandboxConfiguration): void {
 		const displayOption = sandboxConfg.displayOption;
 		if (displayOption) {
-			if (typeof this.fitsToScreen === "undefined" && displayOption.fitsToScreen) {
+			if (typeof this.fitsToScreen === "undefined" && displayOption.hasOwnProperty("fitsToScreen")) {
 				this.setFitsToScreen(displayOption.fitsToScreen);
 			}
 			if (typeof this.showsBackgroundImage === "undefined" && displayOption.backgroundImage) {
@@ -119,14 +119,14 @@ export class ToolBarUiStore {
 			if (typeof this.showsBackgroundColor === "undefined" && displayOption.backgroundColor) {
 				this.setShowBackgroundColor(!!displayOption.backgroundColor);
 			}
-			if (typeof this.showsGrid === "undefined" && displayOption.showsGrid) {
+			if (typeof this.showsGrid === "undefined" && displayOption.hasOwnProperty("showsGrid")) {
 				this.setShowGrid(displayOption.showsGrid);
 			}
-			if (typeof this.showsProfiler === "undefined" && displayOption.showsProfiler) {
+			if (typeof this.showsProfiler === "undefined" && displayOption.hasOwnProperty("showsProfiler")) {
 				this.setShowsProfiler(displayOption.showsProfiler);
 			}
-			if (typeof this.showsDesignGuideline === "undefined" && displayOption.showsDesignGuideline) {
-				this.setShowDesignGuideline(this.showsDesignGuideline);
+			if (typeof this.showsDesignGuideline === "undefined" && displayOption.hasOwnProperty("showsDesignGuideline")) {
+				this.setShowDesignGuideline(displayOption.showsDesignGuideline);
 			}
 		}
 	}
