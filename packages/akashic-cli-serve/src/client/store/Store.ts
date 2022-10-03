@@ -79,6 +79,7 @@ export class Store {
 			this.contentStore.assertInitialized(),
 			this.playerInfoResolverUiStore.assertInitialized(),
 			storage.assertInitialized(),
+			storage.assertInitializedForSandboxConfig(),
 			this._initializationWaiter
 		]).then(() => {
 			this.player = { id: storage.data.playerId, name: storage.data.playerName };
@@ -93,7 +94,7 @@ export class Store {
 		this.currentLocalInstance = instance;
 		this.currentLocalInstance?.onWarn.add(this._warn, this);
 		this.devtoolUiStore.setEntityTrees([]);
-		this.toolBarUiStore.setSandboxConfigValues(this.currentLocalInstance.content.sandboxConfig);
+		this.toolBarUiStore.initializeDisplayOptions();
 	}
 
 	@action

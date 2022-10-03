@@ -41,6 +41,7 @@ export class Storage {
 	experimentalIsChildWindow: boolean = false;
 
 	private _initializationWaiter: Promise<void>;
+	private _initializationWaiterForSandoboxConfig: Promise<void>;
 
 	constructor() {
 		let s: any;
@@ -70,13 +71,6 @@ export class Storage {
 			instanceArgumentEditContent: choose(query.instanceArgumentEditContent, s.instanceArgumentEditContent, ""),
 			showsHiddenEntity: choose(query.showsHiddenEntity, s.showsHiddenEntity, true),
 			joinsAutomatically: choose(query.joinsAutomatically, s.joinsAutomatically, false),
-			// displayOptions の初期値は sandbox.config.js の値を反映するため undefined に設定し、ToolBarUiStore で設定
-			fitsToScreen: choose(query.fitsToScreen, s.fitsToScreen, undefined),
-			showsBackgroundImage: choose(query.showsBackgroundImage, s.showsBackgroundImage, undefined),
-			showsBackgroundColor: choose(query.showsBackgroundColor, s.showsBackgroundColor, undefined),
-			showsGrid: choose(query.showsGrid, s.showsGrid, undefined),
-			showsProfiler: choose(query.showsProfiler, s.showsProfiler, undefined),
-			showsDesignGuideline: choose(query.showsDesignGuideline, s.showsDesignGuideline, undefined),
 			isAutoSendEvents: choose(query.isAutoSendEvents, s.isAutoSendEvents, false),
 			emulatingShinichibaMode: choose(query.emulatingShinichibaMode, s.emulatingShinichibaMode, "single"),
 			usePreferredTotalTimeLimit: choose(query.usePreferredTotalTimeLimit, s.usePreferredTotalTimeLimit, false),
@@ -92,10 +86,26 @@ export class Storage {
 			const playerName: string = choose(query.playerName, s.playerName, `player-${registered}`);
 			this.put({ playerId: registered, playerName });
 		});
+
+		this._initializationWaiterForSandoboxConfig = apiClient.getSandboxConfig(0).then(res => {
+			const displayOptions = res?.data?.displayOptions || {};
+			this.put({
+				fitsToScreen: choose(query.fitsToScreen, s.fitsToScreen, displayOptions.fitsToScreen ?? false),
+				showsBackgroundImage: choose(query.showsBackgroundImage, s.showsBackgroundImage, !!displayOptions.backgroundImage),
+				showsBackgroundColor: choose(query.showsBackgroundColor, s.showsBackgroundColor, !!displayOptions.backgroundColor),
+				showsGrid: choose(query.showsGrid, s.showsGrid, displayOptions.showsGrid ?? false),
+				showsProfiler: choose(query.showsProfiler, s.showsProfiler, displayOptions.showsProfiler ?? false),
+				showsDesignGuideline: choose(query.showsDesignGuideline, s.showsDesignGuideline, displayOptions.showsProfiler ?? false),
+			});
+		});
 	}
 
 	assertInitialized(): Promise<void> {
 		return this._initializationWaiter;
+	}
+
+	assertInitializedForSandboxConfig(): Promise<void> {
+		return this._initializationWaiterForSandoboxConfig;
 	}
 
 	put(data: Partial<StorageData>): void {
