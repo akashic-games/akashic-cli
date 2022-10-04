@@ -18,7 +18,7 @@ on:
           - "from-package"
 
 env:
-  NODE_VERSION: 14
+  NODE_VERSION: 16
 
 jobs:
   release:
@@ -30,7 +30,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: ${{ env.NODE_VERSION }}
           cache: npm
       - name: Prepare
         run: |
