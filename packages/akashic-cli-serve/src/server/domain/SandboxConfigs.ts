@@ -85,7 +85,7 @@ function normalizeConfig(config: ResolvedSandboxConfig, contentId: string): void
 			config.displayOptions.backgroundColor = config.backgroundColor;
 	}
 
-	const bgImage = config ? config.displayOptions.backgroundImage : undefined;
+	const bgImage = config.displayOptions.backgroundImage;
 	if (bgImage) {
 		if (!/\.(jpg|jpeg|png)$/.test(bgImage)) {
 			throw new BadRequestError({ errorMessage: "Invalid backgroundImage, Please specify a png/jpg file." });
