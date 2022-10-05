@@ -95,7 +95,9 @@ export class Storage {
 				showsBackgroundColor: choose(query.showsBackgroundColor, s.showsBackgroundColor, !!displayOptions.backgroundColor),
 				showsGrid: choose(query.showsGrid, s.showsGrid, displayOptions.showsGrid ?? false),
 				showsProfiler: choose(query.showsProfiler, s.showsProfiler, displayOptions.showsProfiler ?? false),
-				showsDesignGuideline: choose(query.showsDesignGuideline, s.showsDesignGuideline, displayOptions.showsDesignGuideline ?? false),
+				showsDesignGuideline: choose(
+					query.showsDesignGuideline, s.showsDesignGuideline, displayOptions.showsDesignGuideline ?? false
+				),
 			});
 		});
 	}
