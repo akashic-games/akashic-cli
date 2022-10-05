@@ -28,7 +28,7 @@
     "@types/jest": "27.5.2",
     "@types/mock-fs": "4.13.1",
     "@types/node": "14.18.30",
-    "@typescript-eslint/eslint-plugin": "5.38.0",
+    "@typescript-eslint/eslint-plugin": "5.39.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-import": "2.26.0",
     "eslint-plugin-jest": "26.9.0",
