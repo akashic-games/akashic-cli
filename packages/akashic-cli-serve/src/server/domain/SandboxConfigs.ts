@@ -1,8 +1,9 @@
+import * as fs from "fs";
 import * as path from "path";
 import type { SandboxConfiguration } from "@akashic/sandbox-configuration";
 import * as  sandboxConfigUtils  from "@akashic/sandbox-configuration/lib/utils";
 import * as chokidar from "chokidar";
-import { BadRequestError } from "../common/ApiError";
+import { BadRequestError, NotFoundError } from "../common/ApiError";
 import { dynamicRequire } from "./dynamicRequire";
 
 interface ResolvedSandboxConfig extends SandboxConfiguration {
@@ -86,7 +87,17 @@ function normalizeConfig(sandboxConfig: ResolvedSandboxConfig, contentId: string
 		}
 	}
 
-	sandboxConfigUtils.getServerExternalFactory(config);
+	const serverExternal = config.server?.external;
+	if (serverExternal) {
+		for (const pluginName of Object.keys(serverExternal)) {
+			const pluginPath = path.resolve(serverExternal[pluginName]);
+			if (!fs.existsSync(pluginPath)) {
+				throw new NotFoundError({
+					errorMessage: `${pluginName} in sandboxConfig.server.external not found. path:${serverExternal[pluginName]}`
+				});
+			}
+		}
+	}
 
 	return config;
 }
