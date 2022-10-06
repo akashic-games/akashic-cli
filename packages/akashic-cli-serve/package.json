@@ -28,7 +28,7 @@
     "@akashic/akashic-cli-commons": "0.13.45",
     "@akashic/akashic-cli-scan": "0.8.0",
     "@akashic/amflow-util": "1.1.0",
-    "@akashic/headless-driver": "2.2.2",
+    "@akashic/headless-driver": "2.2.3",
     "@akashic/trigger": "1.0.1",
     "@msgpack/msgpack": "2.8.0",
     "chalk": "4.1.2",
