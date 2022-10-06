@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-serve",
-  "version": "1.14.72",
+  "version": "1.14.73",
   "description": "A development server for Akashic Engine",
   "scripts": {
     "prepare": "npm run setup && npm run build",
@@ -25,10 +25,10 @@
     "akashic-cli-serve": "./bin/run"
   },
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.13.44",
+    "@akashic/akashic-cli-commons": "0.13.45",
     "@akashic/akashic-cli-scan": "0.8.0",
     "@akashic/amflow-util": "1.1.0",
-    "@akashic/headless-driver": "2.1.3",
+    "@akashic/headless-driver": "2.2.2",
     "@akashic/trigger": "1.0.1",
     "@msgpack/msgpack": "2.8.0",
     "chalk": "4.1.2",
@@ -63,7 +63,7 @@
     "@types/react-measure": "2.0.8",
     "@types/storybook__addon-actions": "3.4.3",
     "@types/storybook__react": "4.0.2",
-    "@typescript-eslint/eslint-plugin": "5.38.0",
+    "@typescript-eslint/eslint-plugin": "5.39.0",
     "browserify": "16.5.2",
     "css-loader": "4.3.0",
     "es6-promise": "4.2.8",
@@ -73,7 +73,7 @@
     "eslint-plugin-react": "7.31.8",
     "get-port": "5.1.1",
     "jest": "26.6.3",
-    "material-icons": "1.11.11",
+    "material-icons": "1.12.0",
     "mobx": "5.15.7",
     "mobx-react": "6.3.1",
     "node-fetch": "2.6.7",
