@@ -78,8 +78,8 @@ export class Store {
 			this.playStore.assertInitialized(),
 			this.contentStore.assertInitialized(),
 			this.playerInfoResolverUiStore.assertInitialized(),
+			this.toolBarUiStore.assertInitialized(),
 			storage.assertInitialized(),
-			storage.assertInitializedForSandboxConfig(),
 			this._initializationWaiter
 		]).then(() => {
 			this.player = { id: storage.data.playerId, name: storage.data.playerName };
@@ -94,7 +94,6 @@ export class Store {
 		this.currentLocalInstance = instance;
 		this.currentLocalInstance?.onWarn.add(this._warn, this);
 		this.devtoolUiStore.setEntityTrees([]);
-		this.toolBarUiStore.initializeDisplayOptions();
 	}
 
 	@action

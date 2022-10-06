@@ -1,8 +1,8 @@
-import * as fs from "fs";
 import * as path from "path";
 import type { SandboxConfiguration } from "@akashic/sandbox-configuration";
+import * as  sandboxConfigUtils  from "@akashic/sandbox-configuration/lib/utils";
 import * as chokidar from "chokidar";
-import { BadRequestError, NotFoundError } from "../common/ApiError";
+import { BadRequestError } from "../common/ApiError";
 import { dynamicRequire } from "./dynamicRequire";
 
 interface ResolvedSandboxConfig extends SandboxConfiguration {
@@ -39,7 +39,7 @@ function watchRequire(configPath: string, contentId: string, callback: (content:
 	const eventListener = (event: string, path: string): void => {
 		if (event === "add" || event === "change") {
 			config = dynamicRequire<SandboxConfiguration>(path, true);
-			normalizeConfig(config, contentId);
+			config = normalizeConfig(config, contentId);
 		} else if (event === "unlink") {
 			config = {};
 		} else {
@@ -53,8 +53,9 @@ function watchRequire(configPath: string, contentId: string, callback: (content:
 	return config;
 }
 
-function normalizeConfig(config: ResolvedSandboxConfig, contentId: string): void {
-	const externalAssets = (config ? config.externalAssets : undefined) === undefined ? [] : config.externalAssets;
+function normalizeConfig(sandboxConfig: ResolvedSandboxConfig, contentId: string): ResolvedSandboxConfig {
+	const config = sandboxConfigUtils.normalize(sandboxConfig) as ResolvedSandboxConfig;
+	const externalAssets = config.externalAssets === undefined ? [] : config.externalAssets;
 	if (externalAssets) {
 		// sandbox.config.js の externalAssets に値がある場合は (string|regexp)[] でなければエラーとする
 		if (!(externalAssets instanceof Array)) {
@@ -71,20 +72,6 @@ function normalizeConfig(config: ResolvedSandboxConfig, contentId: string): void
 		}
 	}
 
-	if (!config.displayOptions)
-		config.displayOptions = {};
-
-	if (config.backgroundImage) {
-		console.warn("[deprecated] `backgroundImage` in sandbox.config.js is deprecated. Please use `displayOption.backgroundImage`.");
-		if (!config.displayOptions.backgroundImage)
-			config.displayOptions.backgroundImage = config.backgroundImage;
-	}
-	if (config.backgroundColor) {
-		console.warn("[deprecated] `backgroundColor` in sandbox.config.js is deprecated. Please use `displayOption.backgroundColor`.");
-		if (!config.displayOptions.backgroundColor)
-			config.displayOptions.backgroundColor = config.backgroundColor;
-	}
-
 	const bgImage = config.displayOptions.backgroundImage;
 	if (bgImage) {
 		if (!/\.(jpg|jpeg|png)$/.test(bgImage)) {
@@ -99,15 +86,7 @@ function normalizeConfig(config: ResolvedSandboxConfig, contentId: string): void
 		}
 	}
 
-	const serverExternal = config.server?.external;
-	if (serverExternal) {
-		for (const pluginName of Object.keys(serverExternal)) {
-			const pluginPath = path.resolve(serverExternal[pluginName]);
-			if (!fs.existsSync(pluginPath)) {
-				throw new NotFoundError({
-					 errorMessage: `${pluginName} in sandboxConfig.server.external not found. path:${serverExternal[pluginName]}`
-				});
-			}
-		}
-	}
+	sandboxConfigUtils.getServerExternalFactory(config);
+
+	return config;
 }

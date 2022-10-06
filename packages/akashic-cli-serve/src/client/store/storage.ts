@@ -40,8 +40,7 @@ export class Storage {
 	data: StorageData;
 	experimentalIsChildWindow: boolean = false;
 
-	private _initializationWaiter: Promise<void>;
-	private _initializationWaiterForSandoboxConfig: Promise<void>;
+	private _initializationWaiter: Promise<[void, void]>;
 
 	constructor() {
 		let s: any;
@@ -80,34 +79,32 @@ export class Storage {
 		});
 
 		const playerId: string = choose(query.playerId, s.playerId, undefined);
-		this._initializationWaiter = apiClient.registerPlayerId(playerId).then(response => {
-			// プレイヤーID重複の警告等はどのように表示すべきか？
-			const registered = response.data.playerId;
-			const playerName: string = choose(query.playerName, s.playerName, `player-${registered}`);
-			this.put({ playerId: registered, playerName });
-		});
-
-		this._initializationWaiterForSandoboxConfig = apiClient.getSandboxConfig(0).then(res => {
-			const displayOptions = res?.data?.displayOptions || {};
-			this.put({
-				fitsToScreen: choose(query.fitsToScreen, s.fitsToScreen, displayOptions.fitsToScreen ?? false),
-				showsBackgroundImage: choose(query.showsBackgroundImage, s.showsBackgroundImage, !!displayOptions.backgroundImage),
-				showsBackgroundColor: choose(query.showsBackgroundColor, s.showsBackgroundColor, !!displayOptions.backgroundColor),
-				showsGrid: choose(query.showsGrid, s.showsGrid, displayOptions.showsGrid ?? false),
-				showsProfiler: choose(query.showsProfiler, s.showsProfiler, displayOptions.showsProfiler ?? false),
-				showsDesignGuideline: choose(
-					query.showsDesignGuideline, s.showsDesignGuideline, displayOptions.showsDesignGuideline ?? false
-				),
-			});
-		});
+		this._initializationWaiter = Promise.all([
+			apiClient.registerPlayerId(playerId).then(response => {
+				// プレイヤーID重複の警告等はどのように表示すべきか？
+				const registered = response.data.playerId;
+				const playerName: string = choose(query.playerName, s.playerName, `player-${registered}`);
+				this.put({ playerId: registered, playerName });
+			}),
+			// TODO: 暫定で 0 番目のコンテンツの sandboxConfig を取得する。ルートセッションのコンテンツの値を使うべき
+			apiClient.getSandboxConfig(0).then(res => {
+				const displayOptions = res?.data?.displayOptions || {};
+				this.put({
+					fitsToScreen: choose(query.fitsToScreen, s.fitsToScreen, displayOptions.fitsToScreen ?? false),
+					showsBackgroundImage: choose(query.showsBackgroundImage, s.showsBackgroundImage, !!displayOptions.backgroundImage),
+					showsBackgroundColor: choose(query.showsBackgroundColor, s.showsBackgroundColor, !!displayOptions.backgroundColor),
+					showsGrid: choose(query.showsGrid, s.showsGrid, displayOptions.showsGrid ?? false),
+					showsProfiler: choose(query.showsProfiler, s.showsProfiler, displayOptions.showsProfiler ?? false),
+					showsDesignGuideline: choose(
+						query.showsDesignGuideline, s.showsDesignGuideline, displayOptions.showsDesignGuideline ?? false
+					),
+				});
+			})
+		]);
 	}
 
-	assertInitialized(): Promise<void> {
+	assertInitialized(): Promise<[void, void]> {
 		return this._initializationWaiter;
-	}
-
-	assertInitializedForSandboxConfig(): Promise<void> {
-		return this._initializationWaiterForSandoboxConfig;
 	}
 
 	put(data: Partial<StorageData>): void {
