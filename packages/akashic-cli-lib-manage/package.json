@@ -35,7 +35,7 @@
     "@types/mock-fs": "4.13.1",
     "@types/node": "14.18.30",
     "@types/tar": "6.1.2",
-    "@typescript-eslint/eslint-plugin": "5.39.0",
+    "@typescript-eslint/eslint-plugin": "5.40.0",
     "eslint": "8.25.0",
     "eslint-plugin-import": "2.26.0",
     "eslint-plugin-jest": "26.9.0",
