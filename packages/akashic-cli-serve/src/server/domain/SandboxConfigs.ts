@@ -1,17 +1,17 @@
 import * as fs from "fs";
 import * as path from "path";
-import type { SandboxConfiguration } from "@akashic/sandbox-configuration";
+import type { NormalizedSandboxConfiguration } from "@akashic/sandbox-configuration";
 import * as  sandboxConfigUtils  from "@akashic/sandbox-configuration/lib/utils";
 import * as chokidar from "chokidar";
 import { BadRequestError, NotFoundError } from "../common/ApiError";
 import { dynamicRequire } from "./dynamicRequire";
 
-interface ResolvedSandboxConfig extends SandboxConfiguration {
+interface ResolvedSandboxConfig extends NormalizedSandboxConfiguration {
 	// backgroundImage がローカルファイルの場合、クライアントからは GET /contents/:contentId/sandboxConfig/backgroundImage で取得される。その場合のローカルファイルのパスをここに保持する。
 	resolvedBackgroundImagePath?: string;
 }
 
-const configs: { [key: string]: SandboxConfiguration } = {};
+const configs: { [key: string]: ResolvedSandboxConfig } = {};
 
 /**
  * コンテンツの sandbox.config.js  ファイルの読み込み/監視を登録。
@@ -34,15 +34,16 @@ export function get(contentId: string): ResolvedSandboxConfig {
 	return configs[contentId];
 }
 
-function watchRequire(configPath: string, contentId: string, callback: (content: SandboxConfiguration) => void): SandboxConfiguration {
-	let config = dynamicRequire<SandboxConfiguration>(configPath, true);
+function watchRequire(configPath: string, contentId: string, callback: (content: ResolvedSandboxConfig) => void): ResolvedSandboxConfig {
+	let config = dynamicRequire<ResolvedSandboxConfig>(configPath, true);
+	config = sandboxConfigUtils.normalize(config || {});
 
 	const eventListener = (event: string, path: string): void => {
 		if (event === "add" || event === "change") {
-			config = dynamicRequire<SandboxConfiguration>(path, true);
-			config = normalizeConfig(config, contentId);
+			config = dynamicRequire<ResolvedSandboxConfig>(path, true);
+			config = normalizeConfig(sandboxConfigUtils.normalize(config), contentId);
 		} else if (event === "unlink") {
-			config = {};
+			config = sandboxConfigUtils.normalize({});
 		} else {
 			return;
 		}
@@ -54,8 +55,7 @@ function watchRequire(configPath: string, contentId: string, callback: (content:
 	return config;
 }
 
-function normalizeConfig(sandboxConfig: ResolvedSandboxConfig, contentId: string): ResolvedSandboxConfig {
-	const config = sandboxConfigUtils.normalize(sandboxConfig) as ResolvedSandboxConfig;
+function normalizeConfig(config: ResolvedSandboxConfig, contentId: string): ResolvedSandboxConfig {
 	const externalAssets = config.externalAssets === undefined ? [] : config.externalAssets;
 	if (externalAssets) {
 		// sandbox.config.js の externalAssets に値がある場合は (string|regexp)[] でなければエラーとする

@@ -77,7 +77,7 @@ export const createHandlerToGetSandboxConfigBgImage = (): express.RequestHandler
 				res.sendFile(imgPath);
 			} else {
 				throw new BadRequestError({
-					errorMessage: `Invalid backgroundImage, The value is not local path. value:${config.backgroundImage}`
+					errorMessage: `Invalid backgroundImage, The value is not local path. value:${config.displayOptions.backgroundImage}`
 				});
 			}
 		} catch (e) {
