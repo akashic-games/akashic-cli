@@ -35,8 +35,8 @@ export function get(contentId: string): ResolvedSandboxConfig {
 }
 
 function watchRequire(configPath: string, contentId: string, callback: (content: ResolvedSandboxConfig) => void): ResolvedSandboxConfig {
-	let config = dynamicRequire<SandboxConfiguration>(configPath, true);
-	let resolvedConfig = normalizeConfig(config ?? {}, contentId);
+	let config = dynamicRequire<SandboxConfiguration>(configPath, true) ?? {};
+	let resolvedConfig = normalizeConfig(config, contentId);
 
 	const eventListener = (event: string, path: string): void => {
 		if (event === "add" || event === "change") {
