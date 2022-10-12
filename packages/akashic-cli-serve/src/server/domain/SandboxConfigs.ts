@@ -40,7 +40,7 @@ function watchRequire(configPath: string, contentId: string, callback: (content:
 
 	const eventListener = (event: string, path: string): void => {
 		if (event === "add" || event === "change") {
-			config = dynamicRequire<SandboxConfiguration>(path, true);
+			config = dynamicRequire<SandboxConfiguration>(path, true) ?? {};
 			resolvedConfig = normalizeConfig(config, contentId);
 		} else if (event === "unlink") {
 			resolvedConfig = normalizeConfig({}, contentId);
