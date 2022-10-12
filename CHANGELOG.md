@@ -1,5 +1,23 @@
 # CHANGELOG
 
+## 2.15.79 (2022-10-12)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#1147](https://github.com/akashic-games/akashic-cli/pull/1147) Use displayOption of sandbox.config.js with serve ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Bug Fix
+* `akashic-cli-serve`
+  * [#1154](https://github.com/akashic-games/akashic-cli/pull/1154) Fix serve display bug ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`
+  * [#1155](https://github.com/akashic-games/akashic-cli/pull/1155) Update dependency @typescript-eslint/eslint-plugin to v5.40.0 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#1153](https://github.com/akashic-games/akashic-cli/pull/1153) Update dependency eslint to v8.25.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 2.15.78 (2022-10-06)
 
 #### Enhancement
