@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.15.81 (2022-10-12)
+
+#### Bug Fix
+* `akashic-cli-serve`
+  * [#1158](https://github.com/akashic-games/akashic-cli/pull/1158) Bug fix for SandboxConfigs in serve ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 2.15.80 (2022-10-12)
 
 #### Bug Fix
