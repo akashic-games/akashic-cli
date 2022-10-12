@@ -78,6 +78,7 @@ export class Store {
 			this.playStore.assertInitialized(),
 			this.contentStore.assertInitialized(),
 			this.playerInfoResolverUiStore.assertInitialized(),
+			this.toolBarUiStore.assertInitialized(),
 			storage.assertInitialized(),
 			this._initializationWaiter
 		]).then(() => {

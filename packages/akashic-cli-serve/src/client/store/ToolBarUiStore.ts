@@ -1,4 +1,4 @@
-import {action, observable} from "mobx";
+import {action, observable, runInAction} from "mobx";
 import {storage} from "./storage";
 
 export class ToolBarUiStore {
@@ -25,12 +25,18 @@ export class ToolBarUiStore {
 		this.showsDevtools = storage.data.showsDevtools;
 		this.showsAudioOptionPopover = false;
 		this.showsDisplayOptionPopover = false;
-		this.fitsToScreen = storage.data.fitsToScreen;
-		this.showsBackgroundImage = storage.data.showsBackgroundImage;
-		this.showsBackgroundColor = storage.data.showsBackgroundColor;
-		this.showsGrid = storage.data.showsGrid;
-		this.showsProfiler = storage.data.showsProfiler;
-		this.showsDesignGuideline = storage.data.showsDesignGuideline;
+	}
+
+	async assertInitialized(): Promise<void> {
+		await storage.assertInitialized();
+		runInAction(() => {
+			this.fitsToScreen = storage.data.fitsToScreen;
+			this.showsBackgroundImage = storage.data.showsBackgroundImage;
+			this.showsBackgroundColor = storage.data.showsBackgroundColor;
+			this.showsGrid = storage.data.showsGrid;
+			this.showsProfiler = storage.data.showsProfiler;
+			this.showsDesignGuideline = storage.data.showsDesignGuideline;
+		});
 	}
 
 	@action

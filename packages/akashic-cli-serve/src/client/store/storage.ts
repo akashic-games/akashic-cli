@@ -40,7 +40,7 @@ export class Storage {
 	data: StorageData;
 	experimentalIsChildWindow: boolean = false;
 
-	private _initializationWaiter: Promise<void>;
+	private _initializationWaiter: Promise<[void, void]>;
 
 	constructor() {
 		let s: any;
@@ -70,30 +70,40 @@ export class Storage {
 			instanceArgumentEditContent: choose(query.instanceArgumentEditContent, s.instanceArgumentEditContent, ""),
 			showsHiddenEntity: choose(query.showsHiddenEntity, s.showsHiddenEntity, true),
 			joinsAutomatically: choose(query.joinsAutomatically, s.joinsAutomatically, false),
-			fitsToScreen: choose(query.fitsToScreen, s.fitsToScreen, false),
-			showsBackgroundImage: choose(query.showsBackgroundImage, s.showsBackgroundImage, false),
-			showsBackgroundColor: choose(query.showsBackgroundColor, s.showsBackgroundColor, false),
-			showsGrid: choose(query.showsGrid, s.showsGrid, false),
 			isAutoSendEvents: choose(query.isAutoSendEvents, s.isAutoSendEvents, false),
 			emulatingShinichibaMode: choose(query.emulatingShinichibaMode, s.emulatingShinichibaMode, "single"),
 			usePreferredTotalTimeLimit: choose(query.usePreferredTotalTimeLimit, s.usePreferredTotalTimeLimit, false),
 			stopsGameOnTimeout: choose(query.stopsGameOnTimeout, s.stopsGameOnTimeout, false),
 			totalTimeLimitInputValue: choose(query.totalTimeLimitInputValue, s.totalTimeLimitInputValue, 85),
-			showsProfiler: choose(query.showsProfiler, s.showsProfiler, false),
-			showsDesignGuideline: choose(query.showsDesignGuideline, s.showsDesignGuideline, false),
 			premium: choose(query.premium, s.premium, false)
 		});
 
 		const playerId: string = choose(query.playerId, s.playerId, undefined);
-		this._initializationWaiter = apiClient.registerPlayerId(playerId).then(response => {
-			// プレイヤーID重複の警告等はどのように表示すべきか？
-			const registered = response.data.playerId;
-			const playerName: string = choose(query.playerName, s.playerName, `player-${registered}`);
-			this.put({ playerId: registered, playerName });
-		});
+		this._initializationWaiter = Promise.all([
+			apiClient.registerPlayerId(playerId).then(response => {
+				// プレイヤーID重複の警告等はどのように表示すべきか？
+				const registered = response.data.playerId;
+				const playerName: string = choose(query.playerName, s.playerName, `player-${registered}`);
+				this.put({ playerId: registered, playerName });
+			}),
+			// TODO: 暫定で 0 番目のコンテンツの sandboxConfig を取得する。ルートセッションのコンテンツの値を使うべき
+			apiClient.getSandboxConfig(0).then(res => {
+				const displayOptions = res?.data?.displayOptions || {};
+				this.put({
+					fitsToScreen: choose(query.fitsToScreen, s.fitsToScreen, displayOptions.fitsToScreen ?? false),
+					showsBackgroundImage: choose(query.showsBackgroundImage, s.showsBackgroundImage, !!displayOptions.backgroundImage),
+					showsBackgroundColor: choose(query.showsBackgroundColor, s.showsBackgroundColor, !!displayOptions.backgroundColor),
+					showsGrid: choose(query.showsGrid, s.showsGrid, displayOptions.showsGrid ?? false),
+					showsProfiler: choose(query.showsProfiler, s.showsProfiler, displayOptions.showsProfiler ?? false),
+					showsDesignGuideline: choose(
+						query.showsDesignGuideline, s.showsDesignGuideline, displayOptions.showsDesignGuideline ?? false
+					),
+				});
+			})
+		]);
 	}
 
-	assertInitialized(): Promise<void> {
+	assertInitialized(): Promise<[void, void]> {
 		return this._initializationWaiter;
 	}
 
