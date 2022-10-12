@@ -93,6 +93,8 @@ export class Store {
 		this.currentLocalInstance = instance;
 		this.currentLocalInstance?.onWarn.add(this._warn, this);
 		this.devtoolUiStore.setEntityTrees([]);
+		if (this.currentLocalInstance?.intrinsicSize)
+			this.setGameViewSize(this.currentLocalInstance.intrinsicSize);
 	}
 
 	@action
