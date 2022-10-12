@@ -1,6 +1,10 @@
 import * as Subscriber from "../api/Subscriber";
 import type { Store } from "../store/Store";
 
+const WINDOW_HEIGHT_MARGIN = 100;
+const WINDOW_WIDTH_MARGIN = 40;
+const TOOL_BAR_HEIGHT = 33;  // toolbar が 1 行の場合は 33px
+
 export class PlayOperator {
 	private store: Store;
 
@@ -42,10 +46,12 @@ export class PlayOperator {
 			localStorage.setItem(name, JSON.stringify(saveDataAry));
 		}
 
-		const width = typeof restoreData?.width === "number" ? restoreData?.width : window.innerWidth;
-		const height = typeof restoreData?.height === "number" ? restoreData?.height : window.innerHeight;
 		const top = typeof restoreData?.y === "number" ? restoreData?.y : 0;
 		const left = typeof restoreData?.y === "number" ? restoreData?.x : 0;
+		const winSize = this.calcWindowSize(restoreData);
+		const width = winSize.width;
+		const height = winSize.height;
+
 		// Mac Chrome で正しく動作しないのと、親ウィンドウかどうかの判別をしたいことがあるので noopener は付けない。
 		// 代わりに ignoreSession を指定して自前でセッションストレージをウィンドウごとに使い分ける (ref. ../store/storage.ts)
 		window.open(
@@ -109,4 +115,25 @@ export class PlayOperator {
 		a.click();
 		document.body.removeChild(a);
 	};
+
+	private calcWindowSize(restoreData: any): {width: number; height: number} {
+		const sandboxConfig = this.store.currentLocalInstance.content.sandboxConfig || {};
+		const windowSize = sandboxConfig.windowSize;
+		let width;
+		let height;
+
+		if (windowSize === "auto") {
+			const gameJson = this.store.contentStore.defaultContent().gameJson;
+			width = gameJson.width + WINDOW_WIDTH_MARGIN;
+			height = gameJson.height + TOOL_BAR_HEIGHT + WINDOW_HEIGHT_MARGIN;
+		} else if (typeof windowSize === "object") {
+			width = windowSize.width;
+			height = windowSize.height;
+		} else {
+			width = typeof restoreData?.width === "number" ? restoreData?.width : window.innerWidth;
+			height = typeof restoreData?.height === "number" ? restoreData?.height : window.innerHeight;
+		}
+
+		return {width, height};
+	}
 }
