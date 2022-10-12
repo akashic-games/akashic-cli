@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.15.80 (2022-10-12)
+
+#### Bug Fix
+* `akashic-cli-serve`
+  * [#1156](https://github.com/akashic-games/akashic-cli/pull/1156) Mod serve package.json ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 2.15.79 (2022-10-12)
 
 #### Enhancement
