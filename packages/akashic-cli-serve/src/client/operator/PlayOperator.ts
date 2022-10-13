@@ -122,13 +122,21 @@ export class PlayOperator {
 		let width;
 		let height;
 
-		if (windowSize === "auto") {
+		const calcAutoSize = (): { width: number; height: number } => {
 			const gameJson = this.store.contentStore.defaultContent().gameJson;
-			width = gameJson.width + WINDOW_WIDTH_MARGIN;
-			height = gameJson.height + TOOL_BAR_HEIGHT + WINDOW_HEIGHT_MARGIN;
+			const width = gameJson.width + WINDOW_WIDTH_MARGIN;
+			const height = gameJson.height + TOOL_BAR_HEIGHT + WINDOW_HEIGHT_MARGIN;
+			return {width, height};
+		};
+
+		if (windowSize === "auto") {
+			const autoSize = calcAutoSize();
+			width = autoSize.width;
+			height = autoSize.height;
 		} else if (typeof windowSize === "object") {
-			width = windowSize.width;
-			height = windowSize.height;
+			const autoSize = calcAutoSize();
+			width = windowSize.width ?? autoSize.width;
+			height = windowSize.height ?? autoSize.height;
 		} else {
 			width = typeof restoreData?.width === "number" ? restoreData?.width : window.innerWidth;
 			height = typeof restoreData?.height === "number" ? restoreData?.height : window.innerHeight;
