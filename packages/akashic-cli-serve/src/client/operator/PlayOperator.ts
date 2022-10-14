@@ -35,22 +35,11 @@ export class PlayOperator {
 	};
 
 	openNewClientInstance = (): void => {
-		let restoreData;
-		if (this.store.appOptions.experimentalOpen) {
-			// localStorage から保存した window 情報を取得し、window の位置/サイズを復元して表示。
-			// 取得した情報は localStorage から除去する。
-			const name = "win_" + this.store.contentStore.defaultContent().gameLocationKey;
-			const saveDataStr = localStorage.getItem(name);
-			const saveDataAry = saveDataStr ? JSON.parse(saveDataStr) : [];
-			restoreData = saveDataAry.shift();
-			localStorage.setItem(name, JSON.stringify(saveDataAry));
-		}
-
-		const top = typeof restoreData?.y === "number" ? restoreData?.y : 0;
-		const left = typeof restoreData?.y === "number" ? restoreData?.x : 0;
-		const winSize = this.calcWindowSize(restoreData);
-		const width = winSize.width;
-		const height = winSize.height;
+		const windowLayout = this.calcWindowLayout();
+		const top = windowLayout.top;;
+		const left = windowLayout.left;
+		const width = windowLayout.width;
+		const height = windowLayout.height;
 
 		// Mac Chrome で正しく動作しないのと、親ウィンドウかどうかの判別をしたいことがあるので noopener は付けない。
 		// 代わりに ignoreSession を指定して自前でセッションストレージをウィンドウごとに使い分ける (ref. ../store/storage.ts)
@@ -116,11 +105,25 @@ export class PlayOperator {
 		document.body.removeChild(a);
 	};
 
-	private calcWindowSize(restoreData: any): {width: number; height: number} {
-		const sandboxConfig = this.store.currentLocalInstance.content.sandboxConfig || {};
-		const windowSize = sandboxConfig.windowSize;
+	private calcWindowLayout(): { top: number; left: number; width: number; height: number } {
+		let restoreData;
+		if (this.store.appOptions.experimentalOpen) {
+			// localStorage から保存した window 情報を取得し、window の位置/サイズを復元して表示。
+			// 取得した情報は localStorage から除去する。
+			const name = "win_" + this.store.contentStore.defaultContent().gameLocationKey;
+			const saveDataStr = localStorage.getItem(name);
+			const saveDataAry = saveDataStr ? JSON.parse(saveDataStr) : [];
+			restoreData = saveDataAry.shift();
+			localStorage.setItem(name, JSON.stringify(saveDataAry));
+		}
+
+		const top = typeof restoreData?.y === "number" ? restoreData?.y : 0;
+		const left = typeof restoreData?.y === "number" ? restoreData?.x : 0;
 		let width;
 		let height;
+
+		const sandboxConfig = this.store.currentLocalInstance.content.sandboxConfig || {};
+		const windowSize = sandboxConfig.windowSize;
 
 		const calcAutoSize = (): { width: number; height: number } => {
 			const gameJson = this.store.contentStore.defaultContent().gameJson;
@@ -142,6 +145,6 @@ export class PlayOperator {
 			height = typeof restoreData?.height === "number" ? restoreData?.height : window.innerHeight;
 		}
 
-		return {width, height};
+		return {top, left, width, height};
 	}
 }
