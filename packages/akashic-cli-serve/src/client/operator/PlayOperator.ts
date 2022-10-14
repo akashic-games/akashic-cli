@@ -140,6 +140,6 @@ export class PlayOperator {
 			height = typeof restoreData?.height === "number" ? restoreData?.height : window.innerHeight;
 		}
 
-		return {top, left, width, height};
+		return { top, left, width, height };
 	}
 }
