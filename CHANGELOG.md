@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.15.82 (2022-10-14)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#1157](https://github.com/akashic-games/akashic-cli/pull/1157) Use sandboxConfig windowSize in Serve ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 2.15.81 (2022-10-12)
 
 #### Bug Fix
