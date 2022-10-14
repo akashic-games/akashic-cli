@@ -3,7 +3,7 @@ import type { Store } from "../store/Store";
 
 const WINDOW_HEIGHT_MARGIN = 100;
 const WINDOW_WIDTH_MARGIN = 40;
-const TOOL_BAR_HEIGHT = 33;  // toolbar が 1 行の場合は 33px
+const TOOL_BAR_HEIGHT = 33;  // 厳密なツールバーの高さはフォントやウィンドウ幅に依存するが、ツールバーが 1 行の場合の概ねのサイズで決め打ちとする。
 
 export class PlayOperator {
 	private store: Store;
@@ -35,12 +35,7 @@ export class PlayOperator {
 	};
 
 	openNewClientInstance = (): void => {
-		const windowLayout = this.calcWindowLayout();
-		const top = windowLayout.top;;
-		const left = windowLayout.left;
-		const width = windowLayout.width;
-		const height = windowLayout.height;
-
+		const { top, left, width, height } = this.calcWindowLayout();
 		// Mac Chrome で正しく動作しないのと、親ウィンドウかどうかの判別をしたいことがあるので noopener は付けない。
 		// 代わりに ignoreSession を指定して自前でセッションストレージをウィンドウごとに使い分ける (ref. ../store/storage.ts)
 		window.open(
