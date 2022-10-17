@@ -47,7 +47,7 @@ export function run(argv: string[]): void {
 			process.exit(1);
 		}
 
-		const conf = configuration!.commandOptions?.install || {};
+		const conf = configuration!.commandOptions?.install ?? {};
 		cli({
 			args: commander.args ?? conf.args,
 			cwd: options.cwd ?? conf.cwd,
