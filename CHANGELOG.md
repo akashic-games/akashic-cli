@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.15.83 (2022-10-17)
+
+#### Bug Fix
+* `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`
+  * [#1159](https://github.com/akashic-games/akashic-cli/pull/1159) Fix error when akashic.config.js has no commandOptions ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 2.15.82 (2022-10-14)
 
 #### Enhancement
