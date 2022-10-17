@@ -34,7 +34,7 @@ export function run(argv: string[]): void {
 			process.exit(1);
 		}
 
-		const conf = configuration!.commandOptions.update || {};
+		const conf = configuration!.commandOptions?.update || {};
 		cli({
 			cwd: options.cwd ?? conf.cwd,
 			quiet: options.quiet ?? conf.quiet,
