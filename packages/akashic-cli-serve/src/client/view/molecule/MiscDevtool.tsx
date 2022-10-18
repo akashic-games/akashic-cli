@@ -4,6 +4,8 @@ import { ToolLabelButton } from "../atom/ToolLabelButton";
 
 export interface MiscDevtoolProps {
 	downloadPlaylog: () => void;
+	sendScreenshotEvent: () => void;
+	sendFinishEvent: () => void;
 }
 
 @observer
@@ -17,6 +19,20 @@ export class MiscDevtool extends React.Component<MiscDevtoolProps, {}> {
 				onClick={this.props.downloadPlaylog}
 			>
 				今までのリプレイ情報を保存
+			</ToolLabelButton>
+			<ToolLabelButton
+				className="external-ref_button_send-screenshot-event"
+				title="Playlogにtype:screenshotのEvent追加(テスト用)"
+				onClick={this.props.sendScreenshotEvent}
+			>
+				Playlogにtype:screenshotのEvent追加(テスト用)
+			</ToolLabelButton>
+			<ToolLabelButton
+				className="external-ref_button_send-finish-event"
+				title="Playlogにtype:finishのEvent追加(テスト用)"
+				onClick={this.props.sendFinishEvent}
+			>
+				Playlogにtype:finishのEvent追加(テスト用)
 			</ToolLabelButton>
 		</div>;
 	}

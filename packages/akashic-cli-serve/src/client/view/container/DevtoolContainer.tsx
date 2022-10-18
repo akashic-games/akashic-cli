@@ -126,7 +126,9 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 				onTotalTimeLimitInputValueChanged: operator.devtool.setTotalTimeLimitInputValue
 			}}
 			miscDevtoolProps={{
-				downloadPlaylog: operator.play.downloadPlaylog
+				downloadPlaylog: operator.play.downloadPlaylog,
+				sendScreenshotEvent: operator.play.sendScreenshotEvent,
+				sendFinishEvent: operator.play.sendFinishEvent
 			}}
 		/>;
 	}

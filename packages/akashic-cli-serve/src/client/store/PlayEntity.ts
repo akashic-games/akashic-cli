@@ -13,6 +13,7 @@ import type { GameViewManager } from "../akashic/GameViewManager";
 import { SocketIOAMFlowClient } from "../akashic/SocketIOAMFlowClient";
 import { apiClient } from "../api/apiClientInstance";
 import { socketInstance } from "../api/socketInstance";
+import type { ScenarioEventData } from "../common/types/ScenarioEventData";
 import type { ContentEntity } from "./ContentEntity";
 import type { ExecutionMode } from "./ExecutionMode";
 import { LocalInstanceEntity } from "./LocalInstanceEntity";
@@ -163,6 +164,10 @@ export class PlayEntity {
 	leave(playerId: string): void {
 		const highestPriority = 3;
 		this.amflow.enqueueEvent([playlog.EventCode.Leave, highestPriority, playerId]);
+	}
+
+	sendScenarioEvent(playerId: string, data: ScenarioEventData): void {
+		this.amflow.sendEvent([playlog.EventCode.Message, 0, playerId, data]);
 	}
 
 	pauseActive(): void {

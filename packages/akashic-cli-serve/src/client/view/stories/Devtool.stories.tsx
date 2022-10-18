@@ -264,7 +264,9 @@ const TestWithBehaviour = observer(() => (
 		}}
 		niconicoDevtoolProps={nicoProps}
 		miscDevtoolProps={{
-			downloadPlaylog: action("download-playlog")
+			downloadPlaylog: action("download-playlog"),
+			sendScreenshotEvent: action("send-screenshot-event"),
+			sendFinishEvent: action("send-finish-event")
 		}}
 	/>
 ));
@@ -369,7 +371,9 @@ storiesOf("o-Devtool", module)
 			}}
 			niconicoDevtoolProps={nicoProps}
 			miscDevtoolProps={{
-				downloadPlaylog: action("download-playlog")
+				downloadPlaylog: action("download-playlog"),
+				sendScreenshotEvent: action("send-screenshot-event"),
+				sendFinishEvent: action("send-finish-event")
 			}}
 		/>
 	))
@@ -464,7 +468,9 @@ storiesOf("o-Devtool", module)
 			}}
 			niconicoDevtoolProps={nicoProps}
 			miscDevtoolProps={{
-				downloadPlaylog: action("download-playlog")
+				downloadPlaylog: action("download-playlog"),
+				sendScreenshotEvent: action("send-screenshot-event"),
+				sendFinishEvent: action("send-finish-event")
 			}}
 		/>
 	))
@@ -563,7 +569,9 @@ storiesOf("o-Devtool", module)
 			}}
 			niconicoDevtoolProps={nicoProps}
 			miscDevtoolProps={{
-				downloadPlaylog: action("download-playlog")
+				downloadPlaylog: action("download-playlog"),
+				sendScreenshotEvent: action("send-screenshot-event"),
+				sendFinishEvent: action("send-finish-event")
 			}}
 		/>
 	))
@@ -616,7 +624,9 @@ storiesOf("o-Devtool", module)
 			}}
 			niconicoDevtoolProps={nicoProps}
 			miscDevtoolProps={{
-				downloadPlaylog: action("download-playlog")
+				downloadPlaylog: action("download-playlog"),
+				sendScreenshotEvent: action("send-screenshot-event"),
+				sendFinishEvent: action("send-finish-event")
 			}}
 		/>
 	))
@@ -669,7 +679,9 @@ storiesOf("o-Devtool", module)
 			}}
 			niconicoDevtoolProps={nicoProps}
 			miscDevtoolProps={{
-				downloadPlaylog: action("download-playlog")
+				downloadPlaylog: action("download-playlog"),
+				sendScreenshotEvent: action("send-screenshot-event"),
+				sendFinishEvent: action("send-finish-event")
 			}}
 		/>
 	))
