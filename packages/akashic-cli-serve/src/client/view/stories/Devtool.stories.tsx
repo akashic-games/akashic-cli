@@ -263,8 +263,7 @@ const TestWithBehaviour = observer(() => (
 			dicideVolume: (v => (store.isSeekingVolume = false, store.volume = v))
 		}}
 		niconicoDevtoolProps={nicoProps}
-		miscDevtoolProps={{
-			downloadPlaylog: action("download-playlog"),
+		internalDevtoolProps={{
 			sendScreenshotEvent: action("send-screenshot-event"),
 			sendFinishEvent: action("send-finish-event")
 		}}
@@ -370,8 +369,7 @@ storiesOf("o-Devtool", module)
 				dicideVolume: (v => (store.isSeekingVolume = false, store.volume = v))
 			}}
 			niconicoDevtoolProps={nicoProps}
-			miscDevtoolProps={{
-				downloadPlaylog: action("download-playlog"),
+			internalDevtoolProps={{
 				sendScreenshotEvent: action("send-screenshot-event"),
 				sendFinishEvent: action("send-finish-event")
 			}}
@@ -467,8 +465,7 @@ storiesOf("o-Devtool", module)
 				dicideVolume: (v => (store.isSeekingVolume = false, store.volume = v))
 			}}
 			niconicoDevtoolProps={nicoProps}
-			miscDevtoolProps={{
-				downloadPlaylog: action("download-playlog"),
+			internalDevtoolProps={{
 				sendScreenshotEvent: action("send-screenshot-event"),
 				sendFinishEvent: action("send-finish-event")
 			}}
@@ -568,8 +565,7 @@ storiesOf("o-Devtool", module)
 				dicideVolume: (v => (store.isSeekingVolume = false, store.volume = v))
 			}}
 			niconicoDevtoolProps={nicoProps}
-			miscDevtoolProps={{
-				downloadPlaylog: action("download-playlog"),
+			internalDevtoolProps={{
 				sendScreenshotEvent: action("send-screenshot-event"),
 				sendFinishEvent: action("send-finish-event")
 			}}
@@ -623,8 +619,7 @@ storiesOf("o-Devtool", module)
 				dicideVolume: (v => (store.isSeekingVolume = false, store.volume = v))
 			}}
 			niconicoDevtoolProps={nicoProps}
-			miscDevtoolProps={{
-				downloadPlaylog: action("download-playlog"),
+			internalDevtoolProps={{
 				sendScreenshotEvent: action("send-screenshot-event"),
 				sendFinishEvent: action("send-finish-event")
 			}}
@@ -678,8 +673,7 @@ storiesOf("o-Devtool", module)
 				dicideVolume: (v => (store.isSeekingVolume = false, store.volume = v))
 			}}
 			niconicoDevtoolProps={nicoProps}
-			miscDevtoolProps={{
-				downloadPlaylog: action("download-playlog"),
+			internalDevtoolProps={{
 				sendScreenshotEvent: action("send-screenshot-event"),
 				sendFinishEvent: action("send-finish-event")
 			}}
