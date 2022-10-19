@@ -189,4 +189,9 @@ export class ServeGameContent {
 		// 特に _gameLoop は実際に存在しない場合がある (--debug-untrusted) 。
 		gameDriver._gameLoop?._clock?._profiler?._calculateProfilerValueTrigger?.add(cb);
 	}
+
+	sendEvent(event: playlog.EventLike): void {
+		const gameDriver = this.agvGameContent.getGameDriver();
+		gameDriver._eventBuffer.onEvent(event);
+	}
 }

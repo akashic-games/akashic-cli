@@ -182,6 +182,10 @@ declare module agv {
 		tick(advanceAge: boolean, omittedTickCount?: number): boolean;
 	}
 
+	interface EventBuffer {
+		onEvent(pev: playlog.EventLike): void;
+	}
+
 	interface GameDriverLike {
 		_gameLoop: {
 			_clock: {
@@ -193,6 +197,27 @@ declare module agv {
 			// startPoint は @akashic/amflow の StartPoint だがここでは import できないため any
 			reset?(startPoint: any): void;
 		};
+		_eventBuffer: EventBuffer | null;
+	}
+}
+
+declare module playlog {
+	const enum EventCodeLike {
+		Join = 0,
+		Leave = 1,
+		Timestamp = 2,
+		PlayerInfo = 3,
+		Message = 32,
+		PointDown = 33,
+		PointMove = 34,
+		PointUp = 35,
+		Operation = 64
+	}
+	interface EventLike extends Array<any> {
+		[index: number]: any;
+		0: EventCodeLike;
+		1: number;
+		2: string | null;
 	}
 }
 
