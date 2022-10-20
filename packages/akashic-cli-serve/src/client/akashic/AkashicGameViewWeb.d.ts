@@ -197,10 +197,11 @@ declare module agv {
 			// startPoint は @akashic/amflow の StartPoint だがここでは import できないため any
 			reset?(startPoint: any): void;
 		};
-		_eventBuffer: EventBuffer | null;
+		_eventBuffer: EventBuffer;
 	}
 }
 
+// 本来は @akashic/playlog の型を参照すべきだが、参照出来ないため定義している
 declare module playlog {
 	const enum EventCodeLike {
 		Join = 0,
