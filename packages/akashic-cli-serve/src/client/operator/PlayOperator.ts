@@ -7,6 +7,7 @@ const TOOL_BAR_HEIGHT = 33;  // 厳密なツールバーの高さはフォント
 
 export class PlayOperator {
 	private store: Store;
+	private screenshotCount = 0;
 
 	constructor(store: Store) {
 		this.store = store;
@@ -32,6 +33,32 @@ export class PlayOperator {
 		} else {
 			this.store.currentPlay.leave(this.store.player.id);
 		}
+	};
+
+	sendScreenshotEvent = (): void => {
+		this.store.currentPlay.sendScenarioEvent(
+			this.store.player.id,
+			{
+				type: "scenario",
+				command: {
+					name: "screenshot",
+					options: { fileName: `screenshot_${this.screenshotCount}.png` }
+				}
+			}
+		);
+		this.screenshotCount++;
+	};
+
+	sendFinishEvent = (): void => {
+		this.store.currentPlay.sendScenarioEvent(
+			this.store.player.id,
+			{
+				type: "scenario",
+				command: {
+					name: "finish"
+				}
+			}
+		);
 	};
 
 	openNewClientInstance = (): void => {
