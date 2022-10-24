@@ -1,5 +1,22 @@
 # CHANGELOG
 
+## 2.15.85 (2022-10-24)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#1161](https://github.com/akashic-games/akashic-cli/pull/1161) Add send local events ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Other Change
+* `akashic-cli-serve`
+  * [#1162](https://github.com/akashic-games/akashic-cli/pull/1162) Mod engine-files alias ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`
+  * [#1163](https://github.com/akashic-games/akashic-cli/pull/1163) Update dependency eslint to v8.26.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 2.15.84 (2022-10-21)
 
 #### Enhancement
