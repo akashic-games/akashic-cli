@@ -10,8 +10,8 @@ import type { EventsDevtoolProps } from "../molecule/EventsDevtool";
 import { EventsDevtool } from "../molecule/EventsDevtool";
 import type { InstancesDevtoolProps } from "../molecule/InstancesDevtool";
 import { InstancesDevtool } from "../molecule/InstancesDevtool";
-import type { MiscDevtoolProps } from "../molecule/MiscDevtool";
-import { MiscDevtool } from "../molecule/MiscDevtool";
+import type { InternalDevtoolProps } from "../molecule/InternalDevtool";
+import { InternalDevtool } from "../molecule/InternalDevtool";
 import type { NiconicoDevtoolProps } from "../molecule/NiconicoDevtool";
 import { NiconicoDevtool } from "../molecule/NiconicoDevtool";
 import type { PlaybackDevtoolProps } from "../molecule/PlaybackDevtool";
@@ -26,7 +26,7 @@ export const devtoolTypes = [
 	"EntityTree",
 	"Atsumaru",
 	"Niconico",
-	"Misc"
+	"Internal"
 ];
 
 export type DevtoolType = typeof devtoolTypes[number];
@@ -43,7 +43,7 @@ export interface DevtoolProps {
 	entityTreeDevtoolProps: EntityTreeDevtoolProps;
 	atsumaruDevtoolProps: AtsumaruDevtoolProps;
 	niconicoDevtoolProps: NiconicoDevtoolProps;
-	miscDevtoolProps: MiscDevtoolProps;
+	internalDevtoolProps: InternalDevtoolProps;
 }
 
 @observer
@@ -59,7 +59,7 @@ export class Devtool extends React.Component<DevtoolProps, {}> {
 			"EntityTree": this._onSelectEntityListTool,
 			"Atsumaru": this._onSelectAtsumaruTool,
 			"Niconico": this._onSelectNiconicoTool,
-			"Misc": this._onSelectMiscTool,
+			"Internal": this._onSelectInternalTool,
 		};
 	}
 
@@ -81,7 +81,7 @@ export class Devtool extends React.Component<DevtoolProps, {}> {
 				{ (activeDevtool === "EntityTree") && <EntityTreeDevtool {...props.entityTreeDevtoolProps} /> }
 				{ (activeDevtool === "Atsumaru") && <AtsumaruDevtool {...props.atsumaruDevtoolProps} /> }
 				{ (activeDevtool === "Niconico") && <NiconicoDevtool {...props.niconicoDevtoolProps} /> }
-				{ (activeDevtool === "Misc") && <MiscDevtool {...props.miscDevtoolProps} /> }
+				{ (activeDevtool === "Internal") && <InternalDevtool {...props.internalDevtoolProps} /> }
 			</div>
 		</TopResizable>;
 	}
@@ -110,7 +110,7 @@ export class Devtool extends React.Component<DevtoolProps, {}> {
 		this.props.onSelectDevtool("Niconico");
 	};
 
-	private _onSelectMiscTool = (): void => {
-		this.props.onSelectDevtool("Misc");
+	private _onSelectInternalTool = (): void => {
+		this.props.onSelectDevtool("Internal");
 	};
 }

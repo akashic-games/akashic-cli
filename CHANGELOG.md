@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.15.84 (2022-10-21)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#1160](https://github.com/akashic-games/akashic-cli/pull/1160) add button to send event for test in akashic-cli-serve ([@dera-](https://github.com/dera-))
+
+#### Committers: 1
+- [@dera-](https://github.com/dera-)
+
 ## 2.15.83 (2022-10-17)
 
 #### Bug Fix

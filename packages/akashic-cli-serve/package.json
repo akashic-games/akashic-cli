@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-serve",
-  "version": "1.14.79",
+  "version": "1.14.80",
   "description": "A development server for Akashic Engine",
   "scripts": {
     "prepare": "npm run setup && npm run build",
@@ -67,7 +67,7 @@
     "browserify": "16.5.2",
     "css-loader": "4.3.0",
     "es6-promise": "4.2.8",
-    "eslint": "8.25.0",
+    "eslint": "8.26.0",
     "eslint-plugin-import": "2.26.0",
     "eslint-plugin-jest": "26.9.0",
     "eslint-plugin-react": "7.31.8",
