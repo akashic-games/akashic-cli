@@ -83,8 +83,7 @@ export class PlayOperator {
 	sendRegisteredEvent = (eventName: string): void => {
 		const sandboxConfig = this.store.currentLocalInstance.content.sandboxConfig || {};
 		const pevs = sandboxConfig.events[eventName];
-		const amflow = this.store.currentPlay.amflow;
-		pevs.forEach((pev: any) => amflow.enqueueEvent(pev));
+		pevs.forEach((pev: any) => this.store.currentLocalInstance.gameContent.sendEvent(pev));
 	};
 
 	sendEditorEvent = (): void => {
@@ -96,8 +95,7 @@ export class PlayOperator {
 		} catch (e) {
 			throw new Error(e);
 		}
-		const amflow = this.store.currentPlay.amflow;
-		pevs.forEach((pev: any) => amflow.enqueueEvent(pev));
+		pevs.forEach((pev: any) => this.store.currentLocalInstance.gameContent.sendEvent(pev));
 	};
 
 	downloadPlaylog = (): void => {
