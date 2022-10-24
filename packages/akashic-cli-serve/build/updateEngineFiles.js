@@ -19,7 +19,7 @@ const versions = {
 try {
 	console.log("start to copy engineFiles");
 	for (let key of Object.keys(versions)) {
-		const entryPath = require.resolve(`ae${key}`);
+		const entryPath = require.resolve(`engine-files-${key}`);
 		const rootPath = path.dirname(entryPath); // index.js と package.json が同層にあることが前提
 		const version = require(path.join(rootPath, "package.json")).version;
 		const fileName = `engineFilesV${version.replace(/[\.-]/g, "_")}.js`;
