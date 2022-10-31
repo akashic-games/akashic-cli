@@ -19,8 +19,8 @@ export interface GameScreenProps {
 	playerInfoResolverDialogProps?: PlayerInfoResolverDialogProps;
 	profilerCanvasProps?: ProfilerCanvasProps;
 	shouldStopPropagationFunc: () => boolean;
-	onMouseMoveCapture: (p: { x: number; y: number }) => void;
-	onClickCapture: (p: { x: number; y: number }) => void;
+	onMouseMoveCapture?: (p: { x: number; y: number }) => void;
+	onClickCapture?: (p: { x: number; y: number }) => void;
 }
 
 @observer
@@ -93,12 +93,14 @@ export class GameScreen extends React.Component<GameScreenProps, {}> {
 
 	private _onMouseMoveCapture = (ev: MouseEvent): void => {
 		this._stopPropagationIfNeeded(ev);
-		this.props.onMouseMoveCapture({ x: ev.offsetX, y: ev.offsetY });
+		if (this.props.onMouseMoveCapture)
+			this.props.onMouseMoveCapture({ x: ev.offsetX, y: ev.offsetY });
 	};
 
 	private _onClickCapture = (ev: MouseEvent): void => {
 		this._stopPropagationIfNeeded(ev);
-		this.props.onClickCapture({ x: ev.offsetX, y: ev.offsetY });
+		if (this.props.onClickCapture)
+			this.props.onClickCapture({ x: ev.offsetX, y: ev.offsetY });
 	};
 
 	private _onRef = (elem: HTMLDivElement): void => {

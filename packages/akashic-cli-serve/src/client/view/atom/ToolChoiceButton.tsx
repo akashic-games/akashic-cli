@@ -14,7 +14,7 @@ export interface ToolChoiceButtonProps {
 	pushedIndex?: number | null;
 	disabled?: boolean;
 	className?: string;
-	onClick: (index: number) => void;
+	onClick?: (index: number) => void;
 }
 
 interface SingleButtonProps {
@@ -24,7 +24,7 @@ interface SingleButtonProps {
 	pushed?: boolean;
 	disabled?: boolean;
 	children?: React.ReactNode;
-	onClick: (index: number) => void;
+	onClick?: (index: number) => void;
 }
 
 // TODO: まじめに clsx とか使う？
@@ -40,7 +40,7 @@ function mixClassName(...names: (string | undefined)[]): string {
 
 const SingleButton = observer(function SingleButton(props: SingleButtonProps) {
 	const { index, className, title, pushed, disabled, onClick, children } = props;
-	const handleClick = React.useCallback(() => onClick(index), [onClick, index]);
+	const handleClick = onClick != null ? React.useCallback(() => onClick(index), [onClick, index]) : undefined;
 	return (
 		<button
 			className={mixClassName(styles["tool-choice-button-single"], (pushed ? styles.pushed : ""), className)}
@@ -66,7 +66,7 @@ export const ToolChoiceButton = observer(function ToolChoiceButton(props: ToolCh
 						pushed={i === pushedIndex}
 						disabled={disabled || item.disabled}
 						title={item.title}
-						onClick={onClick}
+						onClick={onClick != null ? onClick : undefined}
 					>
 						{ item.label }
 					</SingleButton>

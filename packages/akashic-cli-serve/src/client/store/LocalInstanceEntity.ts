@@ -181,7 +181,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 
 	@action
 	pause(): Promise<void> {
-		if (!this.isPaused)
+		if (this.isPaused)
 			return Promise.resolve();
 		this._serveGameContent.agvGameContent.pause();
 		this._timeKeeper.pause();
