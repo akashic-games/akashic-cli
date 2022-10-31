@@ -17,7 +17,7 @@ export class LocalInstanceOperator {
 
 		if (this.store.devtoolUiStore.isForceResetOnSeek) {
 			const amflow = this.store.currentPlay!.amflow;
-			const sp = await amflow.getStartPointPromise({ timestamp: time + amflow.getStartedAt()! });
+			const sp = await amflow.getStartPointPromise({ timestamp: time + (amflow.getStartedAt() ?? 0)});
 			this.store.currentLocalInstance!.reset(sp);
 		}
 	};
@@ -26,7 +26,7 @@ export class LocalInstanceOperator {
 		const { amflow, startPointHeaders } = this.store.currentPlay!;
 		const sp = await amflow.getStartPointPromise({ frame: startPointHeaders[index].frame });
 		this.store.currentLocalInstance!.reset(sp);
-		this.switchToReplay(sp.timestamp - amflow.getStartedAt()!);
+		this.switchToReplay(sp.timestamp - (amflow.getStartedAt() ?? 0));
 	};
 
 	resetByAge = async (age: number): Promise<void> => {

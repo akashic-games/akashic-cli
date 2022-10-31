@@ -241,7 +241,6 @@ function createPlatformCustomizer(content: ServeGameContent): (platform: Platfor
 								+ "to prevent platform-specific rendering trouble.";
 							content.onWarn.fire({ type, message });
 						}
-						// originalDrawImage.apply(this, arguments);
 						originalDrawImage.apply(this, [
 							surface, offsetX, offsetY, width, height, _destOffsetX, _destOffsetY
 						]);

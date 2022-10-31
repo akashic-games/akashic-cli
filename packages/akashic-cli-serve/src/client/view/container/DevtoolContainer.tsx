@@ -111,7 +111,7 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 				isAutoSendEvent: devtoolUiStore.isAutoSendEvent,
 				emulatingShinichibaMode: devtoolUiStore.emulatingShinichibaMode,
 				totalTimeLimitInputValue: devtoolUiStore.totalTimeLimitInputValue,
-				totalTimeLimit: devtoolUiStore.totalTimeLimit,
+				totalTimeLimit: devtoolUiStore.totalTimeLimit!,
 				playDuration: play.duration,
 				usePreferredTimeLimit: devtoolUiStore.usePreferredTotalTimeLimit,
 				stopsGameOnTimeout: devtoolUiStore.stopsGameOnTimeout,

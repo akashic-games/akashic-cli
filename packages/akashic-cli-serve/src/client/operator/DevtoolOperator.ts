@@ -170,7 +170,7 @@ export class DevtoolOperator {
 
 		const dur = this.store.currentPlay!.duration / 1000;
 		const totalTimeLimit = this.store.devtoolUiStore.totalTimeLimit;
-		if (dur >= totalTimeLimit && !this.store.currentPlay!.isActivePausing) {
+		if (dur >= totalTimeLimit! && !this.store.currentPlay!.isActivePausing) {
 			this.store.currentPlay!.pauseActive();
 		}
 	}

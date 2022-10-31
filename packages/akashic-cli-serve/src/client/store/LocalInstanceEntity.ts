@@ -259,6 +259,8 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 
 	@action
 	private _handleReset(sp: amf.StartPoint): void {
-		this.resetTime = sp.timestamp - this.play.amflow.getStartedAt()!;
+		const startedAt = this.play.amflow.getStartedAt();
+		if (startedAt != null)
+			this.resetTime = sp.timestamp - startedAt;
 	}
 }
