@@ -44,7 +44,7 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 			}}
 			playbackDevtoolProps={{
 				startPointHeaders: play.startPointHeaders,
-				focusedStartPointHeaderIndex: devtoolUiStore.focusedStartPointHeaderIndex,
+				focusedStartPointHeaderIndex: devtoolUiStore.focusedStartPointHeaderIndex!,
 				currentTime: (
 					(localInstance.executionMode !== "replay") ? play.duration :
 					(toolBarUiStore.isSeeking) ? toolBarUiStore.currentTimePreview : localInstance.targetTime
@@ -72,12 +72,12 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 				instances: play.serverInstances.map(desc => ({
 					type: "active" as ("active" | "passive"),
 					env: `server (runnerId: ${desc.runnerId})`,
-					playerId: null,
-					name: null,
+					playerId: "",
+					name: "",
 					isJoined: false
-				})).concat(play.clientInstances.map(desc => ({
+				})).concat(play.clientInstances!.map(desc => ({
 					type: (desc.isActive ? "active" : "passive") as ("active" | "passive"),
-					env: desc.envInfo ? JSON.stringify(desc.envInfo) : null,
+					env: desc.envInfo ? JSON.stringify(desc.envInfo) : "",
 					playerId: desc.playerId,
 					name: desc.name,
 					isJoined: play.joinedPlayerTable.has(desc.playerId)

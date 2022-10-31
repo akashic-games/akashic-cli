@@ -12,10 +12,10 @@ export interface NotificationActiveParameterObject {
 
 export class NotificationUiStore {
 	@observable isActive: boolean;
-	@observable type: NotificationType;
-	@observable title: string;
-	@observable name: string;
-	@observable message: string;
+	@observable type!: NotificationType;
+	@observable title!: string;
+	@observable name!: string;
+	@observable message!: string;
 	@observable referenceUrl?: string;
 	@observable referenceMessage?: string;
 

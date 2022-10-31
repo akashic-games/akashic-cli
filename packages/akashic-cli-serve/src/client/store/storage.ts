@@ -37,8 +37,8 @@ function choose<T>(a: T | null | undefined, b: T | null | undefined, c: T): T {
 export class Storage {
 	static SESSION_STORAGE_KEY: string = "aktb:config";
 
-	data: StorageData;
-	experimentalIsChildWindow: boolean = false;
+	data!: StorageData;
+	experimentalIsChildWindow: boolean | null = false;
 
 	private _initializationWaiter: Promise<[void, void]>;
 

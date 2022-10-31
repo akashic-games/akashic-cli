@@ -4,7 +4,7 @@ import { Trigger } from "@akashic/trigger";
 import type { Socket } from "socket.io-client";
 
 export class SocketIOAMFlowClient implements amflow.AMFlow {
-	onGotStartedAt: Trigger<number>;
+	onGotStartedAt: Trigger<number | null>;
 
 	_permission: amflow.Permission | null;  // デバッグ用に保持。
 	private _socket: Socket;
@@ -15,7 +15,7 @@ export class SocketIOAMFlowClient implements amflow.AMFlow {
 	private _connectionId: string | null;
 
 	constructor(socket: Socket) {
-		this.onGotStartedAt = new Trigger<number>();
+		this.onGotStartedAt = new Trigger<number | null>();
 		this._socket = socket;
 		this._tickHandlers = [];
 		this._eventHandlers = [];
@@ -65,20 +65,20 @@ export class SocketIOAMFlowClient implements amflow.AMFlow {
 		});
 	}
 
-	open(playId: string, callback?: (error?: Error) => void): void {
+	open(playId: string, callback?: (error: Error | null) => void): void {
 		this._socket.on("amflow:[tick]", this._onTick);
 		this._socket.on("amflow:[event]", this._onEvent);
 		this._socket.emit("amflow:open", playId, (err: Error, connectionId?: string) => {
 			if (err) {
-				callback(err);
+				if (callback) callback(err);
 				return;
 			}
-			this._connectionId = connectionId;
-			callback();
+			this._connectionId = connectionId ?? null;
+			if (callback) callback(null);
 		});
 	}
 
-	close(callback?: (error?: Error) => void): void {
+	close(callback?: (error: Error | null) => void): void {
 		this._socket.off("amflow:[tick]", this._onTick);
 		this._socket.off("amflow:[event]", this._onEvent);
 		this._socket.emit("amflow:close", this._connectionId, callback);
@@ -145,7 +145,7 @@ export class SocketIOAMFlowClient implements amflow.AMFlow {
 				begin: optsOrBegin,
 				end: endOrCallback as number
 			};
-			callback = callbackOrUndefined;
+			callback = callbackOrUndefined as (error: Error | null, tickList?: playlog.TickList) => void;;
 		} else {
 			// NOTE: optsOrBegin !== "number" であれば必ず amflow@3 以降の引数だとみなしてキャストする
 			opts = optsOrBegin;
@@ -174,8 +174,8 @@ export class SocketIOAMFlowClient implements amflow.AMFlow {
 	}
 
 	// 継承元のinterfaceに合わせるためのメソッド定義。noUnusedParametersを無視するために利用されていない引数のprefixに_を付けた
-	getStorageData(_keys: playlog.StorageReadKey[], callback: (error: Error, values: playlog.StorageData[]) => void): void {
-		callback(new Error("not supported"), null);
+	getStorageData(_keys: playlog.StorageReadKey[], callback: (error: Error, values?: playlog.StorageData[]) => void): void {
+		callback(new Error("not supported"));
 	}
 
 	private _onTick = (connectionId: string, tick: playlog.Tick): void => {

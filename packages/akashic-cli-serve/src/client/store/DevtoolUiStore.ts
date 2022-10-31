@@ -28,11 +28,11 @@ export class DevtoolUiStore {
 	@observable entityTreeStateTable: ObservableMap<number, boolean>;
 	@observable isSeekingVolume: boolean;
 	@observable volume: number;
-	@observable score: number;
-	@observable playThreshold: number;
-	@observable clearThreshold: number;
-	@observable totalTimeLimit: number;
-	@observable preferredTotalTimeLimit: number;
+	@observable score!: number;
+	@observable playThreshold!: number;
+	@observable clearThreshold!: number;
+	@observable totalTimeLimit!: number;
+	@observable preferredTotalTimeLimit!: number;
 
 	constructor() {
 		this.height = storage.data.devtoolsHeight;

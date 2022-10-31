@@ -6,7 +6,7 @@ import { ContentEntity } from "./ContentEntity";
 
 export class ContentStore {
 	@observable contents: ObservableMap<string, ContentEntity>;
-	private _defaultContent: ContentEntity;
+	private _defaultContent: ContentEntity | null;
 	private _initializationWaiter: Promise<void>;
 
 	constructor() {
@@ -20,14 +20,14 @@ export class ContentStore {
 	}
 
 	defaultContent(): ContentEntity {
-		return this._defaultContent;
+		return this._defaultContent!;
 	}
 
 	findOrRegister(locData: ContentLocatorData): ContentEntity {
 		const loc = ClientContentLocator.instantiate(locData);
 		const url = loc.asAbsoluteUrl();
 		if (this.contents.get(url))
-			return this.contents.get(url);
+			return this.contents.get(url)!;
 		const content = new ContentEntity({ contentLocatorData: loc });
 		this.contents.set(url, content);
 		return content;

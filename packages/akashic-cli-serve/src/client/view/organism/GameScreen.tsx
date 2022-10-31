@@ -19,8 +19,8 @@ export interface GameScreenProps {
 	playerInfoResolverDialogProps?: PlayerInfoResolverDialogProps;
 	profilerCanvasProps?: ProfilerCanvasProps;
 	shouldStopPropagationFunc: () => boolean;
-	onMouseMoveCapture?: (p: { x: number; y: number }) => void;
-	onClickCapture?: (p: { x: number; y: number }) => void;
+	onMouseMoveCapture: (p: { x: number; y: number }) => void;
+	onClickCapture: (p: { x: number; y: number }) => void;
 }
 
 @observer
@@ -43,7 +43,8 @@ export class GameScreen extends React.Component<GameScreenProps, {}> {
 			{
 				// TODO: .bg-image の恐らく不要な z-index をなくせば背景色の描画に .game-screen の backgroundColor を利用でき、この div は削除できる
 				(showsBgColor) ?
-					<div className={styles["bg-image"]} style={{ width: gameWidth, height: gameHeight, backgroundColor: bgColor }}/> :
+					<div className={styles["bg-image"]} style={{ width: gameWidth, height: gameHeight,
+						backgroundColor: bgColor ?? undefined}}/> :
 					null
 			}
 			{
@@ -120,7 +121,7 @@ export class GameScreen extends React.Component<GameScreenProps, {}> {
 
 		gridCanvas.width = this.props.gameWidth;
 		gridCanvas.height = this.props.gameHeight;
-		const context = gridCanvas.getContext("2d");
+		const context = gridCanvas.getContext("2d")!;
 		context.save();
 		context.strokeStyle = "#CCC";
 		context.setLineDash([3, 3]);

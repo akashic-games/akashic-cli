@@ -110,7 +110,7 @@ function renderEDumpItem(e: EDumpItem, props: EntityTreeDevtoolProps): React.Rea
 		</div>
 		{
 			hasChildren && showsChildren
-				? <div style={{ marginLeft: 10 }}>{ e.children.map(c => renderEDumpItem(c, props)) }</div>
+				? <div style={{ marginLeft: 10 }}>{ e.children!.map(c => renderEDumpItem(c, props)) }</div>
 				: null
 		}
 	</div>;

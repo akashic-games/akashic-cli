@@ -11,7 +11,7 @@ export class PlayerInfoResolverUiStore {
 	@observable remainingMilliSeconds: number = DEFAULT_LIMIT_MILLISECONDS;
 	@observable name: string = "";
 	@observable guestName: string = "ゲスト" + ((Math.random() * 100) | 0);
-	private timerId: number | null;
+	private timerId!: number | null;
 
 	async assertInitialized(): Promise<void> {
 		await storage.assertInitialized();

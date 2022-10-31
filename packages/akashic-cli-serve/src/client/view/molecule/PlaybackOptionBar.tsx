@@ -52,7 +52,7 @@ export const PlaybackOptionBar = observer(function (props: PlaybackOptionBarProp
 
 	const startedAt = startPointHeaders[0]?.timestamp;
 	const startPoint = startPointHeaders[focusedStartPointHeaderIndex];
-	const startPointTime = (startedAt != null && startPoint != null) ? startPoint.timestamp - startedAt : null;
+	const startPointTime = (startedAt != null && startPoint != null) ? startPoint.timestamp - startedAt : undefined;
 
 	return <div className={styles["replay-option-bar"]}>
 		<div className={styles.row}>

@@ -35,9 +35,9 @@ type Constructor<T> = new(...args: any[]) => T;
 export const generateTestbedScriptAsset = <T extends Constructor<{}>>(Class: T): any => {
 	return class TestbedScriptAsset extends Class {
 		loading: boolean;
-		script: string;
-		path: string;
-		id: string;
+		script: string | undefined;
+		path!: string;
+		id!: string;
 		_createAssetLoadError: () => any;
 
 		/**

@@ -61,7 +61,7 @@ export class Operator {
 	async bootstrap(contentLocator?: ClientContentLocator): Promise<void> {
 		this._initializePlugins(contentLocator || this.store.contentStore.defaultContent().locator);
 		const store = this.store;
-		let play: PlayEntity = null;
+		let play: PlayEntity | null = null;
 		if (query.playId != null) {
 			play = store.playStore.plays[query.playId];
 			if (!play) {
@@ -73,7 +73,7 @@ export class Operator {
 			play = store.playStore.getLastPlay();
 			if (!play) {
 				const loc = store.contentStore.defaultContent().locator;
-				play = await this._createServerLoop(loc, null); // TODO: (起動時の最初のプレイで) audioState を指定する方法
+				play = await this._createServerLoop(loc, undefined); // TODO: (起動時の最初のプレイで) audioState を指定する方法
 			}
 		}
 		if (store.targetService === "atsumaru:single") {
@@ -89,12 +89,12 @@ export class Operator {
 				await this.localInstance.resetByAge(query.replayResetAge);
 			}
 			if (query.replayTargetTime != null) {
-				this.store.currentLocalInstance.setTargetTime(query.replayTargetTime);
+				this.store.currentLocalInstance!.setTargetTime(query.replayTargetTime);
 			}
 		}
 
 		if (query.paused) {
-			store.currentLocalInstance.targetTimePause();
+			store.currentLocalInstance!.targetTimePause();
 		}
 	}
 
@@ -118,7 +118,7 @@ export class Operator {
 		let argument = undefined;
 		if (/^nicolive.*/.test(store.targetService) || store.targetService === "atsumaru:multi") {
 			if (previousPlay) {
-				isJoin = previousPlay.joinedPlayerTable.has(store.player.id);
+				isJoin = previousPlay.joinedPlayerTable.has(store.player!.id);
 			} else {
 				isJoin = play.joinedPlayerTable.size === 0;
 			}
@@ -128,8 +128,8 @@ export class Operator {
 		if (query.argumentsValue) {
 			argument = JSON.parse(query.argumentsValue);
 			store.startupScreenUiStore.setInstanceArgumentEditContent(query.argumentsValue, true);
-		} else if (query.argumentsName && !!store.currentPlay.content.argumentsTable[query.argumentsName]) {
-			argument = JSON.parse(store.currentPlay.content.argumentsTable[query.argumentsName]);
+		} else if (query.argumentsName && !!store.currentPlay!.content.argumentsTable[query.argumentsName]) {
+			argument = JSON.parse(store.currentPlay!.content.argumentsTable[query.argumentsName]);
 			this.ui.selectInstanceArguments(query.argumentsName, true);
 		}
 
@@ -145,13 +145,13 @@ export class Operator {
 	startContent = async (params?: StartContentParameterObject): Promise<void> => {
 		const store = this.store;
 		const play = store.currentPlay;
-		const tokenResult = await apiClient.createPlayToken(play.playId, store.player.id, false, store.player.name);
-		const instance = await play.createLocalInstance({
-			playId: play.playId,
+		const tokenResult = await apiClient.createPlayToken(play!.playId, store.player!.id, false, store.player!.name);
+		const instance = await play!.createLocalInstance({
+			playId: play!.playId,
 			playToken: tokenResult.data.playToken,
 			playlogServerUrl: "dummy-playlog-server-url",
 			executionMode: params != null && params.isReplay ? "replay" : "passive",
-			player: store.player,
+			player: store.player!,
 			argument: params != null ? params.instanceArgument : undefined,
 			proxyAudio: store.appOptions.proxyAudio,
 			resizeGameView: true
@@ -167,22 +167,22 @@ export class Operator {
 			this.store.profilerStore.pushProfilerValueResult("rendering", value.renderingTime);
 		});
 		if (store.targetService !== "atsumaru:single") {
-			this.store.devtoolUiStore.initTotalTimeLimit(play.content.preferredSessionParameters.totalTimeLimit);
+			this.store.devtoolUiStore.initTotalTimeLimit(play!.content.preferredSessionParameters.totalTimeLimit!);
 			this.devtool.setupNiconicoDevtoolValueWatcher();
 		}
 
 		if (params != null && params.joinsSelf) {
-			store.currentPlay.join(store.player.id, store.player.name);
+			store.currentPlay!.join(store.player!.id, store.player!.name);
 		}
 	};
 
 	// TODO: このメソッドの処理は本来サーバー側で行うべき
 	restartWithNewPlay = async (): Promise<void> => {
-		await this.store.currentPlay.content.updateSandboxConfig();
+		await this.store!.currentPlay!.content.updateSandboxConfig();
 		const audioState = this.store.playStore.getLastPlay()?.audioState;
-		const play = await this._createServerLoop(this.store.currentPlay.content.locator, audioState);
-		await this.store.currentPlay.deleteAllServerInstances();
-		await apiClient.broadcast(this.store.currentPlay.playId, { type: "switchPlay", nextPlayId: play.playId });
+		const play = await this._createServerLoop(this.store!.currentPlay!.content.locator, audioState);
+		await this.store.currentPlay!.deleteAllServerInstances();
+		await apiClient.broadcast(this.store.currentPlay!.playId, { type: "switchPlay", nextPlayId: play.playId });
 		this.ui.hideNotification();
 	};
 
@@ -212,7 +212,7 @@ export class Operator {
 		}
 
 		if (this.store.devtoolUiStore.isAutoSendEvent) {
-			this.store.devtoolUiStore.initTotalTimeLimit(play.content.preferredSessionParameters.totalTimeLimit);
+			this.store.devtoolUiStore.initTotalTimeLimit(play.content.preferredSessionParameters.totalTimeLimit!);
 			const nicoEvent = this.devtool.createNicoEvent();
 			nicoEvent.forEach((pev: any) => play.amflow.enqueueEvent(pev));
 		}
@@ -232,7 +232,7 @@ export class Operator {
 		try {
 			switch (arg.message.type) {
 				case "switchPlay":  // TODO typeを型づける
-					if (this.store.currentPlay.playId === arg.playId) {
+					if (this.store.currentPlay!.playId === arg.playId) {
 						this.setCurrentPlay(this.store.playStore.plays[arg.message.nextPlayId]);
 					}
 					break;
@@ -304,9 +304,9 @@ export class Operator {
 			// TODO: エラーハンドリング
 			throw new Error("Not supported");
 		}
-		const childPlay = await this._createClientLoop(params.contentUrl, params.playId);
+		const childPlay = await this._createClientLoop(params.contentUrl!, params.playId);
 		const localInstance = await childPlay.createLocalInstance({
-			player: this.store.player,
+			player: this.store.player!,
 			playId: params.playId,
 			executionMode: "active",
 			argument: params.argument,
@@ -327,7 +327,7 @@ export class Operator {
 		await play.teardown();
 	};
 
-	private _startPlayerInfoResolver = (limitSeconds: number, cb: (res: PlayerInfoResolverResultMessage) => void): void => {
+	private _startPlayerInfoResolver = (limitSeconds: number | undefined, cb: (res: PlayerInfoResolverResultMessage) => void): void => {
 		this.store.playerInfoResolverUiStore.showDialog(limitSeconds);
 		this.store.playerInfoResolverUiStore.onResolve.addOnce(cb);
 	};

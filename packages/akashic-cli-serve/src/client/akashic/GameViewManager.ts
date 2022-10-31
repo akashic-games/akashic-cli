@@ -200,14 +200,14 @@ function createPlatformCustomizer(content: ServeGameContent): (platform: Platfor
 		};
 		// 一部のエッジケースでSafariのみ描画されないという問題が発生するので、ゲーム開発者が開発中に気づけるようにg.Renderer#drawImage()でエラーを投げる処理を差し込む
 		function createMeddlingWrappedSurfaceFactory <T extends ((...args: any[]) => Surface)> (func: T) {
-			return function() {
-				const surface: Surface = func.apply(this, arguments);
+			return function (this: Surface) {
+				const surface: Surface = func.apply(this, [...arguments]);
 				// Safariで範囲外描画時に問題が発生するのはCanvas要素なので、surfaceがCanvasでなければ範囲外描画の警告は行わない
 				if (!(surface._drawable instanceof HTMLCanvasElement)) {
 					return surface;
 				}
 				const originalRenderer = surface.renderer;
-				let renderer: Renderer = null;
+				let renderer: Renderer | null = null;
 				surface.renderer = function () {
 					// surface.renderer() はコンテンツから描画のたびに呼び出されるが戻り値は現実的に固定なので、ここでの surface.renderer() の上書きは一度しか適用しない
 					if (renderer) {
@@ -241,7 +241,10 @@ function createPlatformCustomizer(content: ServeGameContent): (platform: Platfor
 								+ "to prevent platform-specific rendering trouble.";
 							content.onWarn.fire({ type, message });
 						}
-						originalDrawImage.apply(this, arguments);
+						// originalDrawImage.apply(this, arguments);
+						originalDrawImage.apply(this, [
+							surface, offsetX, offsetY, width, height, _destOffsetX, _destOffsetY
+						]);
 					};
 					return renderer;
 				};

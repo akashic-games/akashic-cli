@@ -14,7 +14,7 @@ export interface ToolChoiceButtonProps {
 	pushedIndex?: number | null;
 	disabled?: boolean;
 	className?: string;
-	onClick?: (index: number) => void;
+	onClick: (index: number) => void;
 }
 
 interface SingleButtonProps {
@@ -24,11 +24,11 @@ interface SingleButtonProps {
 	pushed?: boolean;
 	disabled?: boolean;
 	children?: React.ReactNode;
-	onClick?: (index: number) => void;
+	onClick: (index: number) => void;
 }
 
 // TODO: まじめに clsx とか使う？
-function mixClassName(...names: (string | null)[]): string {
+function mixClassName(...names: (string | undefined)[]): string {
 	let ret = "";
 	for (let i = 0; i < names.length; ++i) {
 		const name = names[i];

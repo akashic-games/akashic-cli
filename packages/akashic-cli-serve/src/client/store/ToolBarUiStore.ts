@@ -11,12 +11,12 @@ export class ToolBarUiStore {
 	@observable showsAudioOptionPopover: boolean;
 
 	@observable showsDisplayOptionPopover: boolean;
-	@observable fitsToScreen: boolean;
-	@observable showsBackgroundImage: boolean;
-	@observable showsBackgroundColor: boolean;
-	@observable showsGrid: boolean;
-	@observable showsProfiler: boolean;
-	@observable showsDesignGuideline: boolean;
+	@observable fitsToScreen!: boolean;
+	@observable showsBackgroundImage!: boolean;
+	@observable showsBackgroundColor!: boolean;
+	@observable showsGrid!: boolean;
+	@observable showsProfiler!: boolean;
+	@observable showsDesignGuideline!: boolean;
 
 	constructor() {
 		this.currentTimePreview = 0;

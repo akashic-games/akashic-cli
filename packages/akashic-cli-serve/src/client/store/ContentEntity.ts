@@ -8,9 +8,9 @@ import { DevtoolUiStore } from "./DevtoolUiStore";
 
 export class ContentEntity {
 	readonly locator: ClientContentLocator;
-	gameJson: GameConfiguration; // 現状では view に反映しないので observable はつけない
+	gameJson: GameConfiguration | undefined; // 現状では view に反映しないので observable はつけない
 	preferredSessionParameters: PreferredSessionParameters; // 現状では view に反映しないので observable はつけない
-	gameLocationKey: string; // 仕様未定のため --experimental-open オプション以外で使用してはいけない
+	gameLocationKey: string | undefined; // 仕様未定のため --experimental-open オプション以外で使用してはいけない
 	@observable sandboxConfig: SandboxConfiguration;
 	@observable argumentsTable: { [name: string]: string };
 
@@ -21,6 +21,7 @@ export class ContentEntity {
 		const args = this.sandboxConfig.arguments || {};
 		this.gameJson = desc.gameJson;
 		this.gameLocationKey = desc.gameLocationKey;
+		this.preferredSessionParameters = {};
 		this.calculatePreferredSessionParameters();
 		Object.keys(args).forEach(key => {
 			this.argumentsTable[key] = JSON.stringify(args[key], null, 2);
@@ -33,7 +34,7 @@ export class ContentEntity {
 	}
 
 	async updateSandboxConfig(): Promise<void> {
-		const res = await apiClient.getContent(this.locator.contentId);
+		const res = await apiClient.getContent(this.locator.contentId!);
 		this.setSandboxConfig(res.data.sandboxConfig || {});
 	}
 

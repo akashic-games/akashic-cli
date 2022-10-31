@@ -63,7 +63,7 @@ declare module ae {
 
 	interface SceneLike {
 		children: ELike[];
-		findPointSourceByPoint(p: PointLike, force: boolean, camera: CameraLike): PointSourceLike;
+		findPointSourceByPoint(p: PointLike, force: boolean, camera?: CameraLike): PointSourceLike;
 	}
 
 	interface RendererLike {
