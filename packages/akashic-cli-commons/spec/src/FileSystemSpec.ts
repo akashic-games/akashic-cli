@@ -1,5 +1,6 @@
 import * as mockfs from "mock-fs";
 import { readFile, writeFile, readJSON, writeJSON, readdir, unlink } from "../../lib/FileSystem";
+import { buildEditorconfig } from "./helpers/buildEditorconfig";
 
 describe("FileSystemSpec", () => {
 	afterEach(function () {
@@ -59,19 +60,91 @@ describe("FileSystemSpec", () => {
 		).toEqual(Buffer.from([12, 34]));
 	});
 
-	it("write json", async () => {
-		mockfs({
-			"game": {
-				"game.json": JSON.stringify({})
-			}
+	describe("#writeJson", () => {
+		it("write game.json", async () => {
+			mockfs({
+				"game": {
+					"game.json": JSON.stringify({})
+				}
+			});
+			await writeJSON("./game/game.json", { width: 120, height: 240 });
+			expect(
+				await readJSON("./game/game.json")
+			).toEqual({
+				width: 120,
+				height: 240
+			})
 		});
-		await writeJSON("./game/game.json", { width: 120, height: 240 });
-		expect(
-			await readJSON("./game/game.json")
-		).toEqual({
-			width: 120,
-			height: 240
-		})
+
+		it("write json without .editorconfig", async () => {
+			mockfs({
+				"test.json": JSON.stringify({})
+			});
+			await writeJSON("test.json", { width: 120, height: 240 });
+			expect(
+				(await readFile("test.json")).toString()
+			).toBe(
+				`{\n` +
+				`	"width": 120,\n` +
+				`	"height": 240\n` +
+				`}`
+			);
+		});
+
+		it("write json with .editorconfig", async () => {
+			mockfs({
+				"test1/.editorconfig": buildEditorconfig({ indentSize: 4, indentStyle: "tab", insertFinalNewline: true }),
+				"test1/test.json": JSON.stringify({}),
+				"test2/.editorconfig": buildEditorconfig({ indentSize: 2, indentStyle: "space", insertFinalNewline: true }),
+				"test2/test.json": JSON.stringify({}),
+				"test3/.editorconfig": buildEditorconfig({ indentSize: 4, indentStyle: "space", insertFinalNewline: false }),
+				"test3/test.json": JSON.stringify({}),
+			});
+
+			await writeJSON("test1/test.json", { width: 120, height: 240 });
+			await writeJSON("test2/test.json", { width: 120, height: 240 });
+			await writeJSON("test3/test.json", { width: 120, height: 240 });
+
+			expect(
+				(await readFile("test1/test.json")).toString()
+			).toBe(
+				`{\n` +
+				`	"width": 120,\n` +
+				`	"height": 240\n` +
+				`}\n`
+			);
+			expect(
+				(await readFile("test2/test.json")).toString()
+			).toBe(
+				`{\n` +
+				`  "width": 120,\n` +
+				`  "height": 240\n` +
+				`}\n`
+			);
+			expect(
+				(await readFile("test3/test.json")).toString()
+			).toBe(
+				`{\n` +
+				`    "width": 120,\n` +
+				`    "height": 240\n` +
+				`}`
+			);
+		});
+
+		it("write json with formatter", async () => {
+			mockfs({
+				"test.json": JSON.stringify({})
+			});
+			await writeJSON("test.json", { width: 120, height: 240 }, (content) => JSON.stringify(content, undefined, " "));
+			expect(
+				(await readFile("test.json")).toString()
+			).toBe(
+				`{\n` +
+				` "width": 120,\n` +
+				` "height": 240\n` +
+				`}`
+			);
+		});
 	});
 
 	it("read directories", async () => {
