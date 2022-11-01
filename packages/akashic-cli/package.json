@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli",
-  "version": "2.15.85",
+  "version": "2.16.0",
   "description": "Command-line utility for akashic game development",
   "bin": {
     "akashic": "./bin/akashic"
@@ -22,13 +22,13 @@
     "lib"
   ],
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.13.48",
-    "@akashic/akashic-cli-export": "1.7.55",
-    "@akashic/akashic-cli-extra": "1.5.63",
-    "@akashic/akashic-cli-init": "1.13.52",
-    "@akashic/akashic-cli-lib-manage": "1.7.50",
-    "@akashic/akashic-cli-scan": "0.15.50",
-    "@akashic/akashic-cli-serve": "1.14.81",
+    "@akashic/akashic-cli-commons": "0.14.0",
+    "@akashic/akashic-cli-export": "1.8.0",
+    "@akashic/akashic-cli-extra": "1.6.0",
+    "@akashic/akashic-cli-init": "1.14.0",
+    "@akashic/akashic-cli-lib-manage": "1.8.0",
+    "@akashic/akashic-cli-scan": "0.16.0",
+    "@akashic/akashic-cli-serve": "1.15.0",
     "commander": "^8.3.0"
   },
   "devDependencies": {
