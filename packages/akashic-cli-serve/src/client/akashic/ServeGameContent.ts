@@ -105,9 +105,9 @@ export class ServeGameContent {
 		};
 
 		const tickOriginal = game.tick;
-		game.tick = function (_advanceAge: boolean, _omittedTickCount?: number) {
+		game.tick = function (_advanceAge: boolean, _omittedTickCount?: number, _events?: playlog.EventLike[]) {
 			self.onTick.fire(game);
-			return tickOriginal.apply(this, [_advanceAge, _omittedTickCount]);
+			return tickOriginal.apply(this, [_advanceAge, _omittedTickCount, _events]);
 		};
 
 		const gameDriver = this._gameDriver;
