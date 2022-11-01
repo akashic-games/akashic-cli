@@ -12,15 +12,21 @@ export interface NotificationActiveParameterObject {
 
 export class NotificationUiStore {
 	@observable isActive: boolean;
-	@observable type!: NotificationType;
-	@observable title!: string;
-	@observable name!: string;
-	@observable message!: string;
-	@observable referenceUrl?: string;
-	@observable referenceMessage?: string;
+	@observable type: NotificationType;
+	@observable title: string;
+	@observable name: string;
+	@observable message: string;
+	@observable referenceUrl: string | undefined;
+	@observable referenceMessage: string | undefined;
 
 	constructor() {
 		this.isActive = false;
+		this.type = "error";
+		this.title = "";
+		this.name = "";
+		this.message = "";
+		this.referenceUrl = "";
+		this.referenceMessage = "";
 	}
 
 	@action

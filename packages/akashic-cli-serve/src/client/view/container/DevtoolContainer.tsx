@@ -118,7 +118,7 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 				score: devtoolUiStore.score,
 				playThreshold: devtoolUiStore.playThreshold,
 				clearThreshold: devtoolUiStore.clearThreshold,
-				preferredTotalTimeLimit: devtoolUiStore.preferredTotalTimeLimit,
+				preferredTotalTimeLimit: devtoolUiStore.preferredTotalTimeLimit!,
 				onAutoSendEventsChanged: operator.devtool.toggleAutoSendEvents,
 				onModeSelectChanged: operator.devtool.setSupportedMode,
 				onUsePreferredTotalTimeLimitChanged: operator.devtool.toggleUsePreferredTotalTimeLimit,

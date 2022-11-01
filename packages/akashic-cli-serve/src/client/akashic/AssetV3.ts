@@ -2,7 +2,7 @@ import type * as pdi from "@akashic/pdi-types";
 import { Trigger } from "@akashic/trigger";
 
 export abstract class AssetV3 implements pdi.Asset {
-	type!: string;
+	abstract type: string;
 	id: string;
 	path: string;
 	originalPath: string;

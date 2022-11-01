@@ -60,7 +60,6 @@ export class ToolIconButton extends React.Component<ToolIconButtonProps, {}> {
 	}
 
 	private _onClick = (): void => {
-		if (this.props.onClick)
-			this.props.onClick(!this.props.pushed);
+		this.props.onClick?.(!this.props.pushed);
 	};
 }

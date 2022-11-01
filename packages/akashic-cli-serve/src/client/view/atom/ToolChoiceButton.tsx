@@ -66,7 +66,7 @@ export const ToolChoiceButton = observer(function ToolChoiceButton(props: ToolCh
 						pushed={i === pushedIndex}
 						disabled={disabled || item.disabled}
 						title={item.title}
-						onClick={onClick != null ? onClick : undefined}
+						onClick={onClick ?? undefined}
 					>
 						{ item.label }
 					</SingleButton>

@@ -6,12 +6,12 @@ import { ContentEntity } from "./ContentEntity";
 
 export class ContentStore {
 	@observable contents: ObservableMap<string, ContentEntity>;
-	private _defaultContent: ContentEntity | null;
+	private _defaultContent: ContentEntity;
 	private _initializationWaiter: Promise<void>;
 
 	constructor() {
 		this.contents = new ObservableMap<string, ContentEntity>();
-		this._defaultContent = null;
+		this._defaultContent = null!; // assertInitialize() がresolve されるまでの値は保証されない
 		this._initializationWaiter = this._initialize();
 	}
 
@@ -26,10 +26,10 @@ export class ContentStore {
 	findOrRegister(locData: ContentLocatorData): ContentEntity {
 		const loc = ClientContentLocator.instantiate(locData);
 		const url = loc.asAbsoluteUrl();
-		let content = this.contents.get(url);
-		if (content)
-			return content;
-		content = new ContentEntity({ contentLocatorData: loc });
+		const registered = this.contents.get(url);
+		if (registered)
+			return registered;
+		const content = new ContentEntity({ contentLocatorData: loc });
 		this.contents.set(url, content);
 		return content;
 	}
