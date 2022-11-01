@@ -145,7 +145,7 @@ export class SocketIOAMFlowClient implements amflow.AMFlow {
 				begin: optsOrBegin,
 				end: endOrCallback as number
 			};
-			callback = callbackOrUndefined as (error: Error | null, tickList?: playlog.TickList) => void;;
+			callback = callbackOrUndefined as (error: Error | null, tickList?: playlog.TickList) => void;
 		} else {
 			// NOTE: optsOrBegin !== "number" であれば必ず amflow@3 以降の引数だとみなしてキャストする
 			opts = optsOrBegin;
