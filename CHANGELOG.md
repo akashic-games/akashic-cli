@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 2.16.0 (2022-11-01)
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`
+  * [#1166](https://github.com/akashic-games/akashic-cli/pull/1166) Update dependency mock-fs to v5.2.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`
+  * [#1165](https://github.com/akashic-games/akashic-cli/pull/1165) Update dependency @akashic/eslint-config to v1.1.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`
+  * [#1164](https://github.com/akashic-games/akashic-cli/pull/1164) Update all dependencies (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- [@yu-ogi](https://github.com/yu-ogi)
+
 ## 2.15.85 (2022-10-24)
 
 #### Enhancement
