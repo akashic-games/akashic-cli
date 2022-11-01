@@ -1,4 +1,5 @@
 import * as fs from "fs";
+import * as editorconfig from "editorconfig";
 
 export type WriteDataFormatter<T> = (content: T) => string;
 
@@ -26,8 +27,19 @@ export function writeFile(filepath: string, content: string | Buffer): Promise<v
 	});
 }
 
-export function writeJSON<T>(filepath: string, content: T, formatter?: WriteDataFormatter<T>): Promise<void> {
-	const text = formatter ? formatter(content) : JSON.stringify(content, null, "\t");
+export async function writeJSON<T>(filepath: string, content: T, formatter?: WriteDataFormatter<T>): Promise<void> {
+	let text: string;
+	if (formatter) {
+		text = formatter(content);
+	} else {
+		const parsed = await editorconfig.parse(filepath);
+		const indentSize: number = typeof parsed.indent_size === "number" ? parsed.indent_size : 4;
+		const indentStyle: string = parsed.indent_style === "space" ? " ".repeat(indentSize) : "\t";
+		text = JSON.stringify(content, null, indentStyle);
+		if (parsed.insert_final_newline === true) {
+			text += "\n";
+		}
+	}
 	return writeFile(filepath, text);
 }
 
