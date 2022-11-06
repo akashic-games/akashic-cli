@@ -30,7 +30,7 @@
     "@types/mock-fs": "4.13.1",
     "@types/node": "6.14.13",
     "@typescript-eslint/eslint-plugin": "5.42.0",
-    "eslint": "8.26.0",
+    "eslint": "8.27.0",
     "eslint-plugin-import": "2.26.0",
     "eslint-plugin-jest": "26.9.0",
     "istanbul": "0.4.5",
