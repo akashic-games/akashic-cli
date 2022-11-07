@@ -6,12 +6,12 @@ import { ContentEntity } from "./ContentEntity";
 
 export class ContentStore {
 	@observable contents: ObservableMap<string, ContentEntity>;
-	private _defaultContent: ContentEntity;
+	private _defaultContent: ContentEntity; // assertInitialize() がresolve されるまでの値は保証されない
 	private _initializationWaiter: Promise<void>;
 
 	constructor() {
 		this.contents = new ObservableMap<string, ContentEntity>();
-		this._defaultContent = null!; // assertInitialize() がresolve されるまでの値は保証されない
+		this._defaultContent = null!;
 		this._initializationWaiter = this._initialize();
 	}
 
