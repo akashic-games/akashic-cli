@@ -81,7 +81,7 @@ export class PlayOperator {
 	};
 
 	sendRegisteredEvent = (eventName: string): void => {
-		const sandboxConfig = this.store.currentLocalInstance!.content.sandboxConfig || {};
+		const sandboxConfig = this.store.currentLocalInstance!.content.sandboxConfig;
 		const pevs = sandboxConfig.events ? sandboxConfig.events[eventName] : [];
 		pevs.forEach((pev: any) => this.store.currentLocalInstance!.gameContent.sendEvent(pev));
 	};
@@ -142,7 +142,7 @@ export class PlayOperator {
 		let width;
 		let height;
 
-		const sandboxConfig = this.store.currentLocalInstance!.content.sandboxConfig || {};
+		const sandboxConfig = this.store.currentLocalInstance!.content.sandboxConfig;
 		const windowSize = sandboxConfig.windowSize;
 
 		const calcAutoSize = (): { width: number; height: number } => {

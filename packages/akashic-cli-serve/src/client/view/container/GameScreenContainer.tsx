@@ -1,4 +1,4 @@
-import type { SandboxConfiguration } from "@akashic/sandbox-configuration";
+import type { NormalizedSandboxConfiguration } from "@akashic/sandbox-configuration";
 import { observer } from "mobx-react";
 import * as React from "react";
 import type { GameViewManager } from "../../akashic/GameViewManager";
@@ -10,7 +10,7 @@ import type { ProfilerCanvasProps } from "../molecule/ProfilerCanvas";
 import { GameScreen } from "../organism/GameScreen";
 
 export interface GameScreenContainerProps {
-	sandboxConfig: SandboxConfiguration;
+	sandboxConfig: NormalizedSandboxConfiguration;
 	store: Store;
 	localInstance: LocalInstanceEntity;
 	gameViewManager: GameViewManager;
@@ -22,11 +22,8 @@ export class GameScreenContainer extends React.Component<GameScreenContainerProp
 	render(): React.ReactNode {
 		const { toolBarUiStore } = this.props.store;
 		return <GameScreen
-			// TODO: sandboxConfig は server 側で normalize されており、client 側の型を normalizedConfig に変え、interface で必須としたいが
-			// client 側で sandboxConfigUtils#normalize()を利用すると、sandboxConfigUtils.js 内で require() を使用しているため webpack でエラーとなる。
-			// そのため、型は SandboxConfiguration のままとして `!` を利用している。
-			backgroundImage={this.props.sandboxConfig.displayOptions!.backgroundImage ?? null}
-			backgroundColor={this.props.sandboxConfig.displayOptions!.backgroundColor ?? null}
+			backgroundImage={this.props.sandboxConfig.displayOptions.backgroundImage ?? null}
+			backgroundColor={this.props.sandboxConfig.displayOptions.backgroundColor ?? null}
 			showsGrid={toolBarUiStore.showsGrid}
 			showsBackgroundImage={toolBarUiStore.showsBackgroundImage}
 			showsBackgroundColor={toolBarUiStore.showsBackgroundColor}

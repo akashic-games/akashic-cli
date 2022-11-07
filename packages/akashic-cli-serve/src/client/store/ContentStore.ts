@@ -23,13 +23,14 @@ export class ContentStore {
 		return this._defaultContent!;
 	}
 
-	findOrRegister(locData: ContentLocatorData): ContentEntity {
+	async findOrRegister(locData: ContentLocatorData): Promise<ContentEntity> {
 		const loc = ClientContentLocator.instantiate(locData);
 		const url = loc.asAbsoluteUrl();
 		const registered = this.contents.get(url);
 		if (registered)
 			return registered;
 		const content = new ContentEntity({ contentLocatorData: loc });
+		await content.assertInitialized();
 		this.contents.set(url, content);
 		return content;
 	}

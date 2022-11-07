@@ -69,15 +69,15 @@ export class PlayStore {
 						});
 				}));
 			})
-			.then(res => {
-				res.forEach(o => {
+			.then(async res => {
+				for (const o of res) {
 					this.plays[o.playInfo.playId] = new PlayEntity({
 						...o.playInfo,
 						gameViewManager: this._gameViewManager,
-						content: this._contentStore.findOrRegister(o.playInfo.contentLocatorData),
+						content: await this._contentStore.findOrRegister(o.playInfo.contentLocatorData),
 						startPointHeaders: o.startPointHeaders
 					});
-				});
+				}
 				if (res.length > 0)
 					this._lastPlayId = res[res.length - 1].playInfo.playId;
 				Subscriber.onPlayCreate.add(this.handlePlayCreate);
@@ -131,7 +131,7 @@ export class PlayStore {
 			gameViewManager: this._gameViewManager,
 			playId,
 			status: "running", // 暫定。stanadlone プレイは running しかないものとして扱う
-			content: this._contentStore.findOrRegister(param.contentLocator),
+			content: await this._contentStore.findOrRegister(param.contentLocator),
 			parent: param.parent
 		});
 		this.plays[playId] = play;
@@ -140,10 +140,14 @@ export class PlayStore {
 	}
 
 	private handlePlayCreate = (e: PlayCreateTestbedEvent): void => {
+		this.playCreate(e);
+	};
+
+	private playCreate = async (e: PlayCreateTestbedEvent): Promise<void> => {
 		const play = new PlayEntity({
 			...e,
 			gameViewManager: this._gameViewManager,
-			content: this._contentStore.findOrRegister(e.contentLocatorData)
+			content: await this._contentStore.findOrRegister(e.contentLocatorData)
 		});
 		this.plays[e.playId] = play;
 		this._lastPlayId = e.playId;

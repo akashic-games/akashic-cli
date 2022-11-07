@@ -191,22 +191,18 @@ export class Operator {
 	};
 
 	private async _createServerLoop(contentLocator: ClientContentLocator, audioState?: PlayAudioState): Promise<PlayEntity> {
+		const content = await this.store.contentStore.findOrRegister(contentLocator);
 		const play = await this.store.playStore.createPlay({ contentLocator, audioState });
 		const tokenResult = await apiClient.createPlayToken(play.playId, "", true);  // TODO 空文字列でなくnullを使う
 		await play.createServerInstance({ playToken: tokenResult.data.playToken });
 		await apiClient.resumePlayDuration(play.playId);
 
 		// autoSendEvents
-		const content = this.store.contentStore.findOrRegister(contentLocator);
-		const sandboxConfig = content.sandboxConfig || {};
+		const sandboxConfig = content.sandboxConfig;
 
-		const { events, autoSendEvents, autoSendEventName } = sandboxConfig;
+		const { events, autoSendEventName } = sandboxConfig;
 		if (events && autoSendEventName && events[autoSendEventName] instanceof Array) {
 			events[autoSendEventName].forEach((pev: any) => play.amflow.enqueueEvent(pev));
-		} else if (events && autoSendEvents && events[autoSendEvents] instanceof Array) {
-			// TODO: `autoSendEvents` は非推奨。互換性のためこのパスを残しているが、`autoSendEvents` の削除時にこのパスも削除する。
-			console.warn("[deprecated] `autoSendEvents` in sandbox.config.js is deprecated. Please use `autoSendEventName`.");
-			events[autoSendEvents].forEach((pev: any) => play.amflow.enqueueEvent(pev));
 		} else if (!autoSendEventName && (/^nicolive.*/.test(this.store.targetService) || this.store.targetService === "atsumaru:multi")) {
 			play.amflow.enqueueEvent(createSessionParameter(this.store.targetService)); // セッションパラメータを送る
 		}
@@ -280,8 +276,8 @@ export class Operator {
 			}));
 		}
 
-		const content = this.store.contentStore.findOrRegister(contentLocator);
-		const sandboxConfig = content.sandboxConfig || {};
+		const content = await this.store.contentStore.findOrRegister(contentLocator);
+		const sandboxConfig = content.sandboxConfig;
 		const client = sandboxConfig?.client;
 		if (client?.external) {
 			for (const pluginName of Object.keys(client.external)) {

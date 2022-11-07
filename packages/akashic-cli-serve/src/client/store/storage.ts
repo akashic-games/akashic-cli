@@ -88,15 +88,15 @@ export class Storage {
 			}),
 			// TODO: 暫定で 0 番目のコンテンツの sandboxConfig を取得する。ルートセッションのコンテンツの値を使うべき
 			apiClient.getSandboxConfig(0).then(res => {
-				const displayOptions = res?.data?.displayOptions || {};
+				const displayOptions = res?.data?.displayOptions;
 				this.put({
-					fitsToScreen: choose(query.fitsToScreen, s.fitsToScreen, displayOptions.fitsToScreen ?? false),
+					fitsToScreen: choose(query.fitsToScreen, s.fitsToScreen, displayOptions.fitsToScreen),
 					showsBackgroundImage: choose(query.showsBackgroundImage, s.showsBackgroundImage, !!displayOptions.backgroundImage),
 					showsBackgroundColor: choose(query.showsBackgroundColor, s.showsBackgroundColor, !!displayOptions.backgroundColor),
-					showsGrid: choose(query.showsGrid, s.showsGrid, displayOptions.showsGrid ?? false),
-					showsProfiler: choose(query.showsProfiler, s.showsProfiler, displayOptions.showsProfiler ?? false),
+					showsGrid: choose(query.showsGrid, s.showsGrid, displayOptions.showsGrid),
+					showsProfiler: choose(query.showsProfiler, s.showsProfiler, displayOptions.showsProfiler),
 					showsDesignGuideline: choose(
-						query.showsDesignGuideline, s.showsDesignGuideline, displayOptions.showsDesignGuideline ?? false
+						query.showsDesignGuideline, s.showsDesignGuideline, displayOptions.showsDesignGuideline
 					),
 				});
 			})

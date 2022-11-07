@@ -36,7 +36,7 @@ export const App = observer(function App(props: AppProps): React.ReactElement<Ap
 		</div>;
 	}
 
-	const sandboxConfig = store.currentLocalInstance.content.sandboxConfig || {};
+	const sandboxConfig = store.currentLocalInstance.content.sandboxConfig;
 	const agvContainer = (
 		<div id="agvcontainer" className={styles.main + " " + styles.centering}>
 			<GameScreenContainer
