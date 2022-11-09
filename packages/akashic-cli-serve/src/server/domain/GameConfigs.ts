@@ -57,10 +57,10 @@ export async function watchContent(
 					await scan.scanAsset({ target: "all", cwd: targetDir });
 					// scanAssets の過程でGameJsonのフラグが立ってしまい、落とさないとcb()が二重で呼ばれてしまうのでここで落としておく。
 					mods &= ~ModTargetFlags.GameJson;
+					cb(null, ModTargetFlags.Assets);
 				} catch (err: any) {
 					cb(err, ModTargetFlags.Assets);
 				} finally {
-					cb(null, ModTargetFlags.Assets);
 					if (mods === ModTargetFlags.None) {
 						clearInterval(timer);
 						timer = undefined;
