@@ -12,7 +12,7 @@ export interface NiconicoDevtoolProps {
 	emulatingShinichibaMode: string;
 	playDuration: number;
 	totalTimeLimit: number;
-	preferredTotalTimeLimit: number;
+	preferredTotalTimeLimit: number | null;
 	score?: number;
 	playThreshold?: number;
 	clearThreshold?: number;

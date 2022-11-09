@@ -33,11 +33,12 @@ export class NotificationContainer extends React.Component<NotificationContainer
 		/>;
 	}
 
-	private handleError = (ev: ErrorEvent): void => {
+	private handleError = (ev: ErrorEvent | PromiseRejectionEvent): void => {
+		const errMessage = ev instanceof ErrorEvent ? ev.error.message : ev.reason;
 		this.props.operator.ui.showNotification(
 			"error",
 			"エラーが発生しました",
-			ev.error.message,
+			errMessage,
 			"Developer Tool などでエラー内容を確認の上修正してください。"
 		);
 	};

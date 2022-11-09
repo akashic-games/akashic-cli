@@ -87,7 +87,7 @@ export class Store {
 	}
 
 	@action
-	setCurrentLocalInstance(instance: LocalInstanceEntity): void {
+	setCurrentLocalInstance(instance: LocalInstanceEntity | null): void {
 		if (this.currentLocalInstance === instance)
 			return;
 		this.currentLocalInstance?.onWarn.remove(this._warn, this);
@@ -114,7 +114,7 @@ export class Store {
 	}
 
 	private _warn(warning: RuntimeWarning): void {
-		const sandboxConfigWarn = this.currentLocalInstance.content.sandboxConfig.warn;
+		const sandboxConfigWarn = this.currentLocalInstance!.content.sandboxConfig.warn;
 		const warningTitle = "Runtime Warning";
 		switch (warning.type) {
 			case "useMathRandom":

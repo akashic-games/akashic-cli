@@ -28,7 +28,7 @@ interface SingleButtonProps {
 }
 
 // TODO: まじめに clsx とか使う？
-function mixClassName(...names: (string | null)[]): string {
+function mixClassName(...names: (string | undefined)[]): string {
 	let ret = "";
 	for (let i = 0; i < names.length; ++i) {
 		const name = names[i];
@@ -40,7 +40,7 @@ function mixClassName(...names: (string | null)[]): string {
 
 const SingleButton = observer(function SingleButton(props: SingleButtonProps) {
 	const { index, className, title, pushed, disabled, onClick, children } = props;
-	const handleClick = React.useCallback(() => onClick(index), [onClick, index]);
+	const handleClick = onClick != null ? React.useCallback(() => onClick(index), [onClick, index]) : undefined;
 	return (
 		<button
 			className={mixClassName(styles["tool-choice-button-single"], (pushed ? styles.pushed : ""), className)}
@@ -66,7 +66,7 @@ export const ToolChoiceButton = observer(function ToolChoiceButton(props: ToolCh
 						pushed={i === pushedIndex}
 						disabled={disabled || item.disabled}
 						title={item.title}
-						onClick={onClick}
+						onClick={onClick ?? undefined}
 					>
 						{ item.label }
 					</SingleButton>

@@ -42,7 +42,7 @@ export const DisplayOptionControl = observer(function (props: DisplayOptionContr
 		onChangeShowProfiler,
 		onChangeShowDesignGuideline
 	} = props.makeProps();
-	const ref = React.useRef();
+	const ref = React.useRef() as React.MutableRefObject<HTMLInputElement>;
 
 	return <div ref={ref} style={{position: "relative"}}>
 		<ToolIconButton

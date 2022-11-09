@@ -53,7 +53,7 @@ function clamp(v: number, min: number, max: number): number {
 
 @observer
 export class ToolProgressBar extends React.Component<ToolProgressBarProps, {}> {
-	private _ref: HTMLDivElement;
+	private _ref: HTMLDivElement | null;
 
 	constructor(props: ToolProgressBarProps) {
 		super(props);

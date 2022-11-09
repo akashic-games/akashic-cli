@@ -9,7 +9,7 @@ const store = observable({
 });
 
 const TestWithBehaviour = observer(() => {
-	const ref = React.useRef();
+	const ref = React.useRef() as React.MutableRefObject<HTMLInputElement>;
 	return <div style={{ display: "inline-block" }} ref={ref}>
 		<button onClick={() => (store.shows = !store.shows)}>toggle me</button>
 		<Popover

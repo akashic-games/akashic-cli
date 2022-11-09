@@ -34,7 +34,7 @@ export interface ToolIconButtonProps {
 	 * クリックされた時のハンドラ。
 	 * 引数は `!pushed` の値。
 	 */
-	onClick?: (nextVal?: boolean) => void;
+	onClick?: (nextVal: boolean) => void;
 	/**
 	 * ボタンのサイズ。
 	 */
@@ -52,7 +52,7 @@ export class ToolIconButton extends React.Component<ToolIconButtonProps, {}> {
 		const pushedClass = (pushed && !pushedIcon) ? " " + styles.pushed : "";
 		return <button className={styles["tool-icon-button"] + pushedClass + " " + className}
 			disabled={disabled} title={title} onClick={this._onClick}>
-			<i className="material-icons" style={(size != null) ? { fontSize: size } : null}>
+			<i className="material-icons" style={(size != null) ? { fontSize: size } : undefined}>
 				{(pushed && pushedIcon) ? pushedIcon : icon}
 			</i>
 			{ children ? <p>{children}</p> : null }
@@ -60,6 +60,6 @@ export class ToolIconButton extends React.Component<ToolIconButtonProps, {}> {
 	}
 
 	private _onClick = (): void => {
-		this.props.onClick(!this.props.pushed);
+		this.props.onClick?.(!this.props.pushed);
 	};
 }

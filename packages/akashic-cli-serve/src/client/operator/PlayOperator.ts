@@ -16,28 +16,28 @@ export class PlayOperator {
 
 	togglePauseActive = (pauses: boolean): void => {
 		if (pauses) {
-			this.store.currentPlay.pauseActive();
+			this.store.currentPlay!.pauseActive();
 		} else {
-			this.store.currentPlay.resumeActive();
+			this.store.currentPlay!.resumeActive();
 		}
 	};
 
 	step = (): void => {
-		this.store.currentPlay.stepActive();
+		this.store.currentPlay!.stepActive();
 	};
 
 	toggleJoinLeaveSelf = (toJoin: boolean): void => {
-		const player = this.store.player;
+		const player = this.store.player!;
 		if (toJoin) {
-			this.store.currentPlay.join(player.id, player.name);
+			this.store.currentPlay!.join(player.id, player.name);
 		} else {
-			this.store.currentPlay.leave(this.store.player.id);
+			this.store.currentPlay!.leave(player.id);
 		}
 	};
 
 	sendScreenshotEvent = (): void => {
-		this.store.currentPlay.sendScenarioEvent(
-			this.store.player.id,
+		this.store.currentPlay!.sendScenarioEvent(
+			this.store.player!.id,
 			{
 				type: "scenario",
 				command: {
@@ -50,8 +50,8 @@ export class PlayOperator {
 	};
 
 	sendFinishEvent = (): void => {
-		this.store.currentPlay.sendScenarioEvent(
-			this.store.player.id,
+		this.store.currentPlay!.sendScenarioEvent(
+			this.store.player!.id,
 			{
 				type: "scenario",
 				command: {
@@ -81,9 +81,9 @@ export class PlayOperator {
 	};
 
 	sendRegisteredEvent = (eventName: string): void => {
-		const sandboxConfig = this.store.currentLocalInstance.content.sandboxConfig || {};
-		const pevs = sandboxConfig.events[eventName];
-		pevs.forEach((pev: any) => this.store.currentLocalInstance.gameContent.sendEvent(pev));
+		const sandboxConfig = this.store.currentLocalInstance!.content.sandboxConfig;
+		const pevs = sandboxConfig.events ? sandboxConfig.events[eventName] : [];
+		pevs.forEach((pev: any) => this.store.currentLocalInstance!.gameContent.sendEvent(pev));
 	};
 
 	sendEditorEvent = (): void => {
@@ -95,24 +95,24 @@ export class PlayOperator {
 		} catch (e) {
 			throw new Error(e);
 		}
-		pevs.forEach((pev: any) => this.store.currentLocalInstance.gameContent.sendEvent(pev));
+		pevs.forEach((pev: any) => this.store.currentLocalInstance!.gameContent.sendEvent(pev));
 	};
 
 	downloadPlaylog = (): void => {
-		const playId = this.store.currentPlay.playId;
+		const playId = this.store.currentPlay!.playId;
 		this.downloadFile(`/api/plays/${playId}/playlog`, `playlog_${playId}.json`);
 	};
 
 	muteAll = (): void => {
-		this.store.currentPlay.muteAll();
+		this.store.currentPlay!.muteAll();
 	};
 
 	muteOthers = (): void => {
-		this.store.currentPlay.muteOthers();
+		this.store.currentPlay!.muteOthers();
 	};
 
 	unmuteAll = (): void => {
-		this.store.currentPlay.unmuteAll();
+		this.store.currentPlay!.unmuteAll();
 	};
 
 	// 指定したURLからファイルをダウンロードする
@@ -142,11 +142,11 @@ export class PlayOperator {
 		let width;
 		let height;
 
-		const sandboxConfig = this.store.currentLocalInstance.content.sandboxConfig || {};
+		const sandboxConfig = this.store.currentLocalInstance!.content.sandboxConfig;
 		const windowSize = sandboxConfig.windowSize;
 
 		const calcAutoSize = (): { width: number; height: number } => {
-			const gameJson = this.store.contentStore.defaultContent().gameJson;
+			const gameJson = this.store.contentStore.defaultContent().gameJson!;
 			const width = gameJson.width + WINDOW_WIDTH_MARGIN;
 			const height = gameJson.height + TOOL_BAR_HEIGHT + WINDOW_HEIGHT_MARGIN;
 			return {width, height};
