@@ -139,11 +139,12 @@ export class PlayStore {
 		return play;
 	}
 
+	// このメソッドは onPlayCreate の通知を受けた時の処理なので完了を待たない
 	private handlePlayCreate = (e: PlayCreateTestbedEvent): void => {
-		this.playCreate(e);
+		this.handlePlayCreateImpl(e);
 	};
 
-	private playCreate = async (e: PlayCreateTestbedEvent): Promise<void> => {
+	private handlePlayCreateImpl = async (e: PlayCreateTestbedEvent): Promise<void> => {
 		const play = new PlayEntity({
 			...e,
 			gameViewManager: this._gameViewManager,
