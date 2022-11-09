@@ -27,7 +27,7 @@ export interface CoePluginParameterObject {
 export interface LocalSessionState {
 	sessionId: string;
 	localInstance: LocalInstanceEntity;
-	messageHandler: ((message: CoeExternalMessage) => void) | null;
+	messageHandler: ((message: CoeExternalMessage) => void) | undefined;
 }
 
 const DEFAULT_INSTANCE_ARGUMENT = {
@@ -81,7 +81,7 @@ export class CoePlugin implements agv.ExternalPlugin {
 				if (!parameters.local) {
 					throw new Error("Not implemented");
 				}
-				const contentUrl = resolveContentUrl(parameters.application, parameters.cascadeApplications);
+				const contentUrl = resolveContentUrl(parameters.application!, parameters.cascadeApplications);
 				startLocalSession(contentUrl, parameters);
 			} catch (e) {
 				// TODO: エラーハンドリング
@@ -102,7 +102,7 @@ export class CoePlugin implements agv.ExternalPlugin {
 						throw new Error("Invalid operation");
 					}
 					const gameState = await instance.gameContent.getGameVars<GameState>("gameState");
-					sessionState.messageHandler({
+					sessionState.messageHandler!({
 						type: "end",
 						result: gameState ? gameState.score : null,
 						sessionId

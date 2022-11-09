@@ -1,5 +1,5 @@
 import type { ServiceType } from "@akashic/akashic-cli-commons/lib/ServiceType";
-import type { SandboxConfiguration } from "@akashic/sandbox-configuration";
+import type { NormalizedSandboxConfiguration } from "@akashic/sandbox-configuration";
 import { observer } from "mobx-react";
 import * as React from "react";
 import type { Operator } from "../../operator/Operator";
@@ -15,7 +15,7 @@ export interface DevtoolContainerProps {
 	localInstance: LocalInstanceEntity;
 	toolBarUiStore: ToolBarUiStore; // プログレスバーの値を共有してしまっているのでそれの参照に利用
 	devtoolUiStore: DevtoolUiStore;
-	sandboxConfig: SandboxConfiguration;
+	sandboxConfig: NormalizedSandboxConfiguration;
 	targetService: ServiceType;
 }
 
@@ -44,7 +44,7 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 			}}
 			playbackDevtoolProps={{
 				startPointHeaders: play.startPointHeaders,
-				focusedStartPointHeaderIndex: devtoolUiStore.focusedStartPointHeaderIndex,
+				focusedStartPointHeaderIndex: devtoolUiStore.focusedStartPointHeaderIndex!,
 				currentTime: (
 					(localInstance.executionMode !== "replay") ? play.duration :
 					(toolBarUiStore.isSeeking) ? toolBarUiStore.currentTimePreview : localInstance.targetTime
@@ -72,12 +72,12 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 				instances: play.serverInstances.map(desc => ({
 					type: "active" as ("active" | "passive"),
 					env: `server (runnerId: ${desc.runnerId})`,
-					playerId: null,
-					name: null,
+					playerId: "",
+					name: "",
 					isJoined: false
-				})).concat(play.clientInstances.map(desc => ({
+				})).concat(play.clientInstances!.map(desc => ({
 					type: (desc.isActive ? "active" : "passive") as ("active" | "passive"),
-					env: desc.envInfo ? JSON.stringify(desc.envInfo) : null,
+					env: desc.envInfo ? JSON.stringify(desc.envInfo) : "",
 					playerId: desc.playerId,
 					name: desc.name,
 					isJoined: play.joinedPlayerTable.has(desc.playerId)
@@ -111,7 +111,7 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 				isAutoSendEvent: devtoolUiStore.isAutoSendEvent,
 				emulatingShinichibaMode: devtoolUiStore.emulatingShinichibaMode,
 				totalTimeLimitInputValue: devtoolUiStore.totalTimeLimitInputValue,
-				totalTimeLimit: devtoolUiStore.totalTimeLimit,
+				totalTimeLimit: devtoolUiStore.totalTimeLimit!,
 				playDuration: play.duration,
 				usePreferredTimeLimit: devtoolUiStore.usePreferredTotalTimeLimit,
 				stopsGameOnTimeout: devtoolUiStore.stopsGameOnTimeout,

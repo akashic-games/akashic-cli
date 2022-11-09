@@ -44,7 +44,7 @@ export const AudioOptionControl = observer(function AudioOptionControl(props: Au
 		onClickSolo,
 		onClickMuteNone
 	} = props.makeProps();
-	const ref = React.useRef();
+	const ref = React.useRef() as React.MutableRefObject<HTMLInputElement>;
 
 	const handleClickMuteChoice = React.useCallback((index: number) => {
 		const handlers = [onClickMuteAll, onClickSolo, onClickMuteNone]; // muteButtonItems に対応

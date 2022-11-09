@@ -2,7 +2,7 @@ import type * as pdi from "@akashic/pdi-types";
 import { Trigger } from "@akashic/trigger";
 
 export abstract class AssetV3 implements pdi.Asset {
-	type: string;
+	abstract type: string;
 	id: string;
 	path: string;
 	originalPath: string;
@@ -17,11 +17,11 @@ export abstract class AssetV3 implements pdi.Asset {
 
 	destroy(): void {
 		this.onDestroyed.fire(this);
-		this.id = undefined;
-		this.originalPath = undefined;
-		this.path = undefined;
+		this.id = undefined!;
+		this.originalPath = undefined!;
+		this.path = undefined!;
 		this.onDestroyed.destroy();
-		this.onDestroyed = undefined;
+		this.onDestroyed = undefined!;
 	}
 
 	destroyed(): boolean {
@@ -42,7 +42,7 @@ export abstract class AssetV3 implements pdi.Asset {
 
 export class NullScriptAssetV3 extends AssetV3 implements pdi.ScriptAsset {
 	type: "script" = "script";
-	script: string;
+	script!: string;
 	execute(_execEnv: pdi.ScriptAssetRuntimeValue): any {
 		//
 	}

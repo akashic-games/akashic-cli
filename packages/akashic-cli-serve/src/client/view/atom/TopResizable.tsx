@@ -35,7 +35,7 @@ export class TopResizable extends React.Component<TopResizableProps, {}> {
 
 	private _onMouseMoveWindow = (ev: MouseEvent): void => {
 		const { onResize, height, minHeight } = this.props;
-		const h = Math.max(height - (ev.pageY - this.lastPageY), minHeight);
+		const h = Math.max(height - (ev.pageY - this.lastPageY!), minHeight);
 		if (h !== height) {
 			onResize(h);
 			this.lastPageY = ev.pageY;

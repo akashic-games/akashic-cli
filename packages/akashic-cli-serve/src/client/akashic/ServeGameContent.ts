@@ -4,7 +4,7 @@ import type { EDumpItem } from "../common/types/EDumpItem";
 import type { ProfilerValue } from "../common/types/Profiler";
 import type { RuntimeWarning } from "./RuntimeWarning";
 
-function getMatrixFromRoot(e: ae.ELike | null, camera: ae.CameraLike | null): ae.MatrixLike | null {
+function getMatrixFromRoot(e: ae.ELike | undefined, camera: ae.CameraLike | undefined): ae.MatrixLike | null {
 	if (!e || !e.getMatrix)
 		return camera ? camera.getMatrix() : null;
 
@@ -74,7 +74,7 @@ export class ServeGameContent {
 		const renderOriginal = game.render;
 		game.render = function (camera?: ae.CameraLike) {
 			const gameModified = game._modified;
-			const ret = renderOriginal.apply(this, arguments);
+			const ret = renderOriginal.apply(this, [camera]);
 			if ("_modified" in game && !gameModified) return ret; // AEv3 は画面更新が不要ならなにもしない。
 
 			// エンティティハイライト描画
@@ -89,23 +89,25 @@ export class ServeGameContent {
 			renderer.begin();
 			renderer.save();
 			const mat = getMatrixFromRoot(e, camera || game.focusingCamera);
-			renderer.transform(mat._matrix);
-			renderer.fillRect(0, 0, e.width, e.height, "rgba(255, 0, 0, 0.3)");
-			const anchorSize = 4;
-			const anchorX = e.anchorX == null ? 0 : e.anchorX;
-			const anchorY = e.anchorY == null ? 0 : e.anchorY;
-			renderer.restore();
-			const anchor = mat.multiplyPoint({x: e.width * anchorX, y: e.height * anchorY});
-			const color = (e.anchorX == null || e.anchorY == null) ? "rgba(0, 0, 255, 1)" : "rgba(0, 255, 255, 1)";
-			renderer.fillRect(anchor.x - anchorSize / 2, anchor.y - anchorSize / 2, anchorSize, anchorSize, color);
+			if (mat != null) {
+				renderer.transform(mat._matrix);
+				renderer.fillRect(0, 0, e.width, e.height, "rgba(255, 0, 0, 0.3)");
+				const anchorSize = 4;
+				const anchorX = e.anchorX == null ? 0 : e.anchorX;
+				const anchorY = e.anchorY == null ? 0 : e.anchorY;
+				renderer.restore();
+				const anchor = mat.multiplyPoint({ x: e.width * anchorX, y: e.height * anchorY });
+				const color = (e.anchorX == null || e.anchorY == null) ? "rgba(0, 0, 255, 1)" : "rgba(0, 255, 255, 1)";
+				renderer.fillRect(anchor.x - anchorSize / 2, anchor.y - anchorSize / 2, anchorSize, anchorSize, color);
+			}
 			renderer.end();
 			return ret;
 		};
 
 		const tickOriginal = game.tick;
-		game.tick = function (_advanceAge: boolean, _omittedTickCount?: number) {
+		game.tick = function (_advanceAge: boolean, _omittedTickCount?: number, _events?: playlog.EventLike[]) {
 			self.onTick.fire(game);
-			return tickOriginal.apply(this, arguments);
+			return tickOriginal.apply(this, [_advanceAge, _omittedTickCount, _events]);
 		};
 
 		const gameDriver = this._gameDriver;
@@ -113,7 +115,7 @@ export class ServeGameContent {
 		if (resetOriginal) {
 			gameDriver._gameLoop.reset = function (startPoint: amf.StartPoint) {
 				self.onReset.fire(startPoint);
-				return resetOriginal.apply(this, arguments);
+				return resetOriginal.apply(this, [startPoint]);
 			};
 		}
 	}
