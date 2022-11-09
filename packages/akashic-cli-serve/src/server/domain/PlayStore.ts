@@ -83,7 +83,7 @@ export class PlayStore {
 	async createPlay(
 		loc: ServerContentLocator,
 		audioState: PlayAudioState = { muteType: "none" },
-		playlog?: DumpedPlaylog | null
+		playlog?: DumpedPlaylog
 	): Promise<string> {
 		const playId = await this.playManager.createPlay({
 			contentUrl: loc.asAbsoluteUrl()
@@ -148,7 +148,7 @@ export class PlayStore {
 		};
 	}
 
-	getPlaysInfo(): PlayInfo[] {
+	getPlaysInfo(): (PlayInfo | null)[] {
 		return this.getPlays().map(p => this.getPlayInfo(p.playId));
 	}
 
@@ -173,7 +173,9 @@ export class PlayStore {
 	 * 指定されたプレイに干渉するためのデバッグ用 AMFlow インスタンスを取得する。
 	 * この AMFlow は open() され、全権限で authenticate() された状態で返される。
 	 */
-	async getDebugAMFlow(playId: string): Promise<AMFlowClient | null> {
+	async getDebugAMFlow(playId: string | undefined): Promise<AMFlowClient | null> {
+		if (playId == null ) return null;
+
 		const e = this.playEntities[playId];
 		if (!e)
 			return null;
@@ -249,7 +251,7 @@ export class PlayStore {
 		const fps = playlog.startPoints[0].data.fps;
 		const replayStartTime = playlog.startPoints[0].timestamp;
 		const replayLastAge = playlog.tickList[1];
-		const ticksWithEvents = playlog.tickList[2];
+		const ticksWithEvents = playlog.tickList[2] ?? [];
 		let replayLastTime = null;
 		loop: for (let i = ticksWithEvents.length - 1; i >= 0; --i) {
 			const tick = ticksWithEvents[i];
