@@ -148,8 +148,8 @@ export class PlayStore {
 		};
 	}
 
-	getPlaysInfo(): (PlayInfo | null)[] {
-		return this.getPlays().map(p => this.getPlayInfo(p.playId));
+	getPlaysInfo(): PlayInfo[] {
+		return this.getPlays().map(p => this.getPlayInfo(p.playId)!);
 	}
 
 	getPlayIdsFromContentId(contentId: string): string[] {
@@ -173,9 +173,7 @@ export class PlayStore {
 	 * 指定されたプレイに干渉するためのデバッグ用 AMFlow インスタンスを取得する。
 	 * この AMFlow は open() され、全権限で authenticate() された状態で返される。
 	 */
-	async getDebugAMFlow(playId: string | undefined): Promise<AMFlowClient | null> {
-		if (playId == null ) return null;
-
+	async getDebugAMFlow(playId: string): Promise<AMFlowClient | null> {
 		const e = this.playEntities[playId];
 		if (!e)
 			return null;

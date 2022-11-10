@@ -176,18 +176,9 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 
 	const app = express();
 	let httpServer;
-	if (cliConfigParam.sslCert || cliConfigParam.sslKey) {
-		if (cliConfigParam.sslCert && !cliConfigParam.sslKey) {
-			getSystemLogger().error("Please specify the --ssl-key option.");
-			process.exit(1);
-		}
-		if (!cliConfigParam.sslCert && cliConfigParam.sslKey) {
-			getSystemLogger().error("Please specify the --ssl-cert option.");
-			process.exit(1);
-		}
-
-		const keyPath = path.resolve(process.cwd(), cliConfigParam.sslKey ?? "");
-		const certPath = path.resolve(process.cwd(), cliConfigParam.sslCert ?? "");
+	if (cliConfigParam.sslCert && cliConfigParam.sslKey) {
+		const keyPath = path.resolve(process.cwd(), cliConfigParam.sslKey);
+		const certPath = path.resolve(process.cwd(), cliConfigParam.sslCert);
 		if (!fs.existsSync(keyPath)) {
 			getSystemLogger().error(`--ssl-key option parameter ${cliConfigParam.sslKey} not found.`);
 			process.exit(1);
@@ -204,6 +195,14 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 			cert: fs.readFileSync(certPath)
 		};
 		httpServer = https.createServer(options, app);
+	} else if (cliConfigParam.sslCert || cliConfigParam.sslKey) {
+		if (cliConfigParam.sslCert && !cliConfigParam.sslKey) {
+			getSystemLogger().error("Please specify the --ssl-key option.");
+		}
+		if (!cliConfigParam.sslCert && cliConfigParam.sslKey) {
+			getSystemLogger().error("Please specify the --ssl-cert option.");
+		}
+		process.exit(1);
 	} else {
 		const server = await import("http");
 		httpServer = server.createServer(app);
