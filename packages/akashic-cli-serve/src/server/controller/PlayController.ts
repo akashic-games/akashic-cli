@@ -139,10 +139,10 @@ export const createHandlerToSendEvent = (playStore: PlayStore, toLatestPlay: boo
 			if (!Array.isArray(req.body.events)) {
 				throw new BadRequestError({ errorMessage: "events is not an array" });
 			}
-			const playId = toLatestPlay ? playStore.getLatestPlay()?.playId! : req.params.playId;
+			const playId = toLatestPlay ? playStore.getLatestPlay()?.playId : req.params.playId;
 			const events: Event[] = req.body.events; // TODO 厳密なバリデーション
 
-			const amflow = await playStore.getDebugAMFlow(playId);
+			const amflow = playId != null ? await playStore.getDebugAMFlow(playId) : null;
 			if (!amflow) {
 				throw new NotFoundError({ errorMessage: `PlayLog is not found. playId:${playId}` });
 			}
