@@ -75,7 +75,7 @@ export class RunnerStore {
 			});
 		}
 
-		const runner = this.runnerManager.getRunner(runnerId)!;
+		const runner = this.runnerManager.getRunner(runnerId);
 		await this.runnerManager.startRunner(runner.runnerId);
 		this.onRunnerCreate.fire({ playId: params.playId, runnerId, isActive: params.isActive });
 		this.playIdTable[runnerId] = params.playId;

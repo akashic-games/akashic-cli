@@ -11,7 +11,7 @@ export class ErrorInterface extends Error {
 	public readonly code: string;
 	public readonly data: any;
 	public readonly debug: any;
-	public readonly raw: Error | undefined;
+	public readonly raw: Error;
 
 	constructor(
 		status: number,

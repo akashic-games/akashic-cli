@@ -15,9 +15,7 @@
     "removeComments": true,
     "downlevelIteration": true,
     "noImplicitAny": true,
-    "alwaysStrict": true,
-    "useUnknownInCatchVariables": false,
-    "strict": true
+    "alwaysStrict": true
   },
   "include": [
     "./**/*.ts",

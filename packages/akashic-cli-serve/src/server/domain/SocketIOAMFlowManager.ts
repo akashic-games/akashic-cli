@@ -13,7 +13,7 @@ export interface Connection {
 	playId: string;
 	amflow: amf.AMFlow;
 	socket: Socket;
-	lastToken: string | null;
+	lastToken: string;
 	emitTick: (tick: pl.Tick) => void;
 	emitEvent: (ev: pl.Event) => void;
 }
@@ -50,7 +50,7 @@ export class SocketIOAMFlowManager {
 	}
 
 	setupSocketIOAMFlow(socket: Socket): void {
-		socket.on("amflow:open", (playId: string, callback?: (e: Error | null, connectionId?: string) => void) => {
+		socket.on("amflow:open", (playId: string, callback?: (e?: Error, connectionId?: string) => void) => {
 			getSystemLogger().info("a user connected. playId: " + playId);
 			const amflow = this.playStore.createAMFlow(playId);
 			const connId = "con" + (++this.connectionIdCounter);
@@ -66,20 +66,20 @@ export class SocketIOAMFlowManager {
 					socket.emit("amflow:[event]", connId, event);
 				}
 			};
-			amflow.open(playId, callback ? (e => callback(e, connId)) : undefined);
+			amflow.open(playId, callback ? (e => callback(e, connId)) : null);
 		});
 
 		socket.on(
 			"amflow:authenticate",
-			(connectionId: string, token: string, callback: (error: Error | null, permission: amf.Permission | undefined) => void) => {
+			(connectionId: string, token: string, callback: (error: Error, permission: amf.Permission) => void) => {
 				const conn = this.getConncetion(connectionId);
 				if (!conn) {
-					callback(this.makeConnectionError(connectionId), undefined);
+					callback(this.makeConnectionError(connectionId), null);
 					return;
 				}
 				conn.amflow.authenticate(token, (err, permission) => {
 					if (err) {
-						callback(err, undefined);
+						callback(err, null);
 						return;
 					}
 					this.playStore.registerClientInstance(conn.playId, this.descMap[token]);
@@ -128,25 +128,25 @@ export class SocketIOAMFlowManager {
 			if (!conn)
 				return;
 			if (event[pl.EventIndex.Code] === pl.EventCode.Join) {
-				const player = { id: event[pl.JoinEventIndex.PlayerId]!, name: event[pl.JoinEventIndex.PlayerName] };
+				const player = { id: event[pl.JoinEventIndex.PlayerId], name: event[pl.JoinEventIndex.PlayerName] };
 				this.playStore.join(conn.playId, player);
 			} else if (event[pl.EventIndex.Code] === pl.EventCode.Leave) {
-				this.playStore.leave(conn.playId, event[pl.EventIndex.PlayerId]!);
+				this.playStore.leave(conn.playId, event[pl.EventIndex.PlayerId]);
 			}
 			conn.amflow.sendEvent(event);
 		});
 
 		socket.on(
 			"amflow:getTickList",
-			(connectionId: string, opts: amf.GetTickListOptions, callback: (error: Error | null, tickList?: pl.TickList) => void) => {
+			(connectionId: string, opts: amf.GetTickListOptions, callback: (error: Error, tickList: pl.TickList) => void) => {
 				const conn = this.getConncetion(connectionId);
 				if (!conn)
-					return callback(this.makeConnectionError(connectionId));
+					return callback(this.makeConnectionError(connectionId), null);
 				conn.amflow.getTickList(opts, callback);
 			}
 		);
 
-		socket.on("amflow:putStartPoint", (connectionId: string, startPoint: amf.StartPoint, callback: (error: Error | null) => void) => {
+		socket.on("amflow:putStartPoint", (connectionId: string, startPoint: amf.StartPoint, callback: (error: Error) => void) => {
 			const conn = this.getConncetion(connectionId);
 			if (!conn)
 				return callback(this.makeConnectionError(connectionId));
@@ -155,21 +155,17 @@ export class SocketIOAMFlowManager {
 
 		socket.on(
 			"amflow:getStartPoint",
-			(
-				connectionId: string,
-				opts: amf.GetStartPointOptions,
-				callback: (error: Error | null, startPoint?: amf.StartPoint) => void
-			) => {
+			(connectionId: string, opts: amf.GetStartPointOptions, callback: (error: Error, startPoint: amf.StartPoint) => void) => {
 				const conn = this.getConncetion(connectionId);
 				if (!conn)
-					return callback(this.makeConnectionError(connectionId));
+					return callback(this.makeConnectionError(connectionId), null);
 				conn.amflow.getStartPoint(opts, callback);
 			}
 		);
 
 		socket.on(
 			"amflow:putStorageData",
-			(connectionId: string, key: pl.StorageKey, value: pl.StorageValue, options: any, callback: (err: Error | null) => void) => {
+			(connectionId: string, key: pl.StorageKey, value: pl.StorageValue, options: any, callback: (err: Error) => void) => {
 				const conn = this.getConncetion(connectionId);
 				if (!conn)
 					return callback(this.makeConnectionError(connectionId));
@@ -179,10 +175,10 @@ export class SocketIOAMFlowManager {
 
 		socket.on(
 			"amflow:getStorageData",
-			(connectionId: string, keys: pl.StorageReadKey[], callback: (error: Error | null, values?: pl.StorageData[]) => void) => {
+			(connectionId: string, keys: pl.StorageReadKey[], callback: (error: Error, values: pl.StorageData[]) => void) => {
 				const conn = this.getConncetion(connectionId);
 				if (!conn)
-					return callback(this.makeConnectionError(connectionId));
+					return callback(this.makeConnectionError(connectionId), null);
 				conn.amflow.getStorageData(keys, callback);
 			}
 		);
@@ -202,7 +198,7 @@ export class SocketIOAMFlowManager {
 			Object.keys(this.connectionMap).forEach(connId => {
 				const conn = this.connectionMap[connId];
 				if (conn.socket === socket) {
-					this.deletePlayToken(conn.lastToken!);
+					this.deletePlayToken(conn.lastToken);
 					conn.amflow.close(doNothing);
 					delete this.connectionMap[connId];
 				}

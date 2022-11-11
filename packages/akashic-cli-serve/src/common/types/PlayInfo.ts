@@ -9,7 +9,7 @@ export interface PlayInfo {
 	playId: string;
 	status: PlayStatus;
 	createdAt: number;
-	lastSuspendedAt: number | null;
+	lastSuspendedAt: number;
 	contentLocatorData: ContentLocatorData;
 	joinedPlayers: Player[];
 	runners: RunnerDescription[];

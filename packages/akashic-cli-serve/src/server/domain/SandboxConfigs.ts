@@ -8,7 +8,7 @@ import { dynamicRequire } from "./dynamicRequire";
 
 interface ResolvedSandboxConfig extends NormalizedSandboxConfiguration {
 	// backgroundImage がローカルファイルの場合、クライアントからは GET /contents/:contentId/sandboxConfig/backgroundImage で取得される。その場合のローカルファイルのパスをここに保持する。
-	resolvedBackgroundImagePath: string | null;
+	resolvedBackgroundImagePath: string;
 }
 
 const configs: { [key: string]: ResolvedSandboxConfig } = {};

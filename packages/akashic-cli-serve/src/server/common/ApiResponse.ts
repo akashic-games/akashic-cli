@@ -1,7 +1,7 @@
 import type * as express from "express";
 import type { ErrorInterface } from "./ApiError";
 
-export const responseSuccess = <T>(res: express.Response, status: number, data: T | null): void => {
+export const responseSuccess = <T>(res: express.Response, status: number, data: T): void => {
 	const response = {
 		meta: {
 			status

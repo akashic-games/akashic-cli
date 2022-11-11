@@ -32,7 +32,7 @@ export const createHandlerToGetSandboxConfigPluginCode = (): express.RequestHand
 			const pluginName = req.params.pluginName;
 			const config = sandboxConfigs.get(contentId);
 
-			if (!config.client.external?.[pluginName]) {
+			if (!config.client.external[pluginName]) {
 				throw new NotFoundError({ errorMessage: `pluginName:${pluginName} is not found.` });
 			}
 
