@@ -1,5 +1,24 @@
 # CHANGELOG
 
+## 2.16.1 (2022-11-11)
+
+#### Other Change
+* `akashic-cli-serve`
+  * [#1172](https://github.com/akashic-games/akashic-cli/pull/1172) Enable strict for server side ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+  * [#1167](https://github.com/akashic-games/akashic-cli/pull/1167) Enable strict for akashic-cli-serve ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`
+  * [#1107](https://github.com/akashic-games/akashic-cli/pull/1107) Update akashic major/minor dependencies (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`
+  * [#1171](https://github.com/akashic-games/akashic-cli/pull/1171) Update dependency eslint to v8.27.0 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#1169](https://github.com/akashic-games/akashic-cli/pull/1169) Update dependency @typescript-eslint/eslint-plugin to v5.42.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-export`
+  * [#1170](https://github.com/akashic-games/akashic-cli/pull/1170) Update all dependencies to v7.20.2 (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 2.16.0 (2022-11-01)
 
 #### Update Dependencies
