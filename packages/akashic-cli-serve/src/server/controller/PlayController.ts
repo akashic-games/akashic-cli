@@ -18,7 +18,7 @@ export const createHandlerToCreatePlay = (playStore: PlayStore): express.Request
 			}
 			const audioState = req.body.audioState ?? { muteType: "none", soloPlayerId: null };
 			const contentLocator = new ServerContentLocator(req.body.contentLocator);
-			const playId = await playStore.createPlay(contentLocator, audioState, null);
+			const playId = await playStore.createPlay(contentLocator, audioState);
 			responseSuccess<PlayApiResponseData>(res, 200, playStore.getPlayInfo(playId));
 		} catch (e) {
 			next(e);
@@ -50,7 +50,7 @@ export const createHandlerToGetPlays = (playStore: PlayStore): express.RequestHa
 			responseSuccess<PlayApiResponseData[]>(
 				res,
 				200,
-				plays.map(play => playStore.getPlayInfo(play.playId))
+				plays.map(play => playStore.getPlayInfo(play.playId)!)
 			);
 		} catch (e) {
 			next(e);
@@ -142,7 +142,7 @@ export const createHandlerToSendEvent = (playStore: PlayStore, toLatestPlay: boo
 			const playId = toLatestPlay ? playStore.getLatestPlay()?.playId : req.params.playId;
 			const events: Event[] = req.body.events; // TODO 厳密なバリデーション
 
-			const amflow = await playStore.getDebugAMFlow(playId);
+			const amflow = playId != null ? await playStore.getDebugAMFlow(playId) : null;
 			if (!amflow) {
 				throw new NotFoundError({ errorMessage: `PlayLog is not found. playId:${playId}` });
 			}
