@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.16.2 (2022-11-11)
+
+#### Other Change
+* `akashic-cli-serve`
+  * [#1173](https://github.com/akashic-games/akashic-cli/pull/1173) Revert serve ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 2.16.1 (2022-11-11)
 
 #### Other Change
