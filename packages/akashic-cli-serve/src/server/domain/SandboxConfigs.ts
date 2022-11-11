@@ -55,7 +55,7 @@ function watchRequire(configPath: string, contentId: string, callback: (content:
 	return resolvedConfig;
 }
 
-export function normalizeConfig(sandboxConfig: SandboxConfiguration, contentId: string): ResolvedSandboxConfig {
+function normalizeConfig(sandboxConfig: SandboxConfiguration, contentId: string): ResolvedSandboxConfig {
 	const config = sandboxConfigUtils.normalize(sandboxConfig);
 
 	const externalAssets = config.externalAssets === undefined ? [] : config.externalAssets;

@@ -19,7 +19,7 @@ export interface EDumpItem {
 	// TODO 内部実装への依存の扱い検討。エンジン側にデバッグ用インターフェースが必要？
 
 	// FilledRect
-	cssColor?: string | null;
+	cssColor?: string;
 	// Label
-	text?: string | null;
+	text?: string;
 }

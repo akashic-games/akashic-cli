@@ -1,4 +1,4 @@
-import type { NormalizedSandboxConfiguration } from "@akashic/sandbox-configuration";
+import type { SandboxConfiguration } from "@akashic/sandbox-configuration";
 import { observer } from "mobx-react";
 import * as React from "react";
 import type { GameViewManager } from "../../akashic/GameViewManager";
@@ -10,7 +10,7 @@ import type { ProfilerCanvasProps } from "../molecule/ProfilerCanvas";
 import { GameScreen } from "../organism/GameScreen";
 
 export interface GameScreenContainerProps {
-	sandboxConfig: NormalizedSandboxConfiguration;
+	sandboxConfig: SandboxConfiguration;
 	store: Store;
 	localInstance: LocalInstanceEntity;
 	gameViewManager: GameViewManager;
@@ -22,8 +22,8 @@ export class GameScreenContainer extends React.Component<GameScreenContainerProp
 	render(): React.ReactNode {
 		const { toolBarUiStore } = this.props.store;
 		return <GameScreen
-			backgroundImage={this.props.sandboxConfig.displayOptions.backgroundImage ?? null}
-			backgroundColor={this.props.sandboxConfig.displayOptions.backgroundColor ?? null}
+			backgroundImage={this.props.sandboxConfig.displayOptions.backgroundImage}
+			backgroundColor={this.props.sandboxConfig.displayOptions.backgroundColor}
 			showsGrid={toolBarUiStore.showsGrid}
 			showsBackgroundImage={toolBarUiStore.showsBackgroundImage}
 			showsBackgroundColor={toolBarUiStore.showsBackgroundColor}

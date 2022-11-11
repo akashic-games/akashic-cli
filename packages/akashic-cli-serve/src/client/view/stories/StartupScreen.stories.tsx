@@ -15,7 +15,7 @@ const store = observable({
 		"Stop": JSON.stringify([[32, 0, "stop"]], null, 2),
 		"foo (a very long long argument name example to test, woo hoo!)": JSON.stringify([[32, 0, "Long"]], null, 2)
 	} as ({ [name: string]: string }),
-	selectedArgumentName: ""
+	selectedArgumentName: null
 });
 
 const Box = (props: any): JSX.Element => {
@@ -39,9 +39,7 @@ const TestWithBehaviour = observer(() => (
 			selectedArgumentName={store.selectedArgumentName}
 			argumentEditContent={store.editContent}
 			joinsAutomatically={store.joinsAutomatically}
-			onSelectArgument={name => (
-				(store.selectedArgumentName = name!),
-				(store.editContent = (store.argumentsTable[name!] || "")))}
+			onSelectArgument={name => ((store.selectedArgumentName = name), (store.editContent = (store.argumentsTable[name] || "")))}
 			onArgumentsEditContentChanged={v => (store.editContent = v)}
 			onChangeJoinsAutomatically={v => (store.joinsAutomatically = v)}
 			onClickStart={action("start-content")} />

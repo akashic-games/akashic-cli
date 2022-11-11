@@ -63,7 +63,7 @@ declare module ae {
 
 	interface SceneLike {
 		children: ELike[];
-		findPointSourceByPoint(p: PointLike, force: boolean, camera?: CameraLike): PointSourceLike;
+		findPointSourceByPoint(p: PointLike, force: boolean, camera: CameraLike): PointSourceLike;
 	}
 
 	interface RendererLike {
@@ -179,7 +179,7 @@ declare module agv {
 		_modified?: boolean; // AEv3 でのみ存在
 		scene(): ae.SceneLike;
 		render(camera?: ae.CameraLike): void;
-		tick(advanceAge: boolean, omittedTickCount?: number, events?: playlog.EventLike[]): boolean;
+		tick(advanceAge: boolean, omittedTickCount?: number): boolean;
 	}
 
 	interface EventBuffer {

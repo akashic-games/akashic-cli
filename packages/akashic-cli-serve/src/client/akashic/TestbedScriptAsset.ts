@@ -1,5 +1,3 @@
-import type * as pdi from "@akashic/pdi-types";
-
 interface WindowForTestbedScriptAsset extends Window {
 	gScriptContainer: {[key: string]: Function};
 }
@@ -34,9 +32,12 @@ type Constructor<T> = new(...args: any[]) => T;
  * ・agvがakashic-engineのgをengineFilesから参照しているため、コンパイル時にgを参照できない
  * ・@akashic/akashic-engineをinstallしてコンパイルできても、実行時に利用されるgが異なるのでTestbedScriptAssetはg.ScriptAssetの派生クラスとして認識されない
  */
-export const generateTestbedScriptAsset = <T extends Constructor<pdi.ScriptAsset>>(Class: T): any => {
+export const generateTestbedScriptAsset = <T extends Constructor<{}>>(Class: T): any => {
 	return class TestbedScriptAsset extends Class {
 		loading: boolean;
+		script: string;
+		path: string;
+		id: string;
 		_createAssetLoadError: () => any;
 
 		/**
@@ -59,7 +60,7 @@ export const generateTestbedScriptAsset = <T extends Constructor<pdi.ScriptAsset
 			script.onerror = () => {
 				this.loading = false;
 			};
-			this.script = undefined!;
+			this.script = undefined;
 			this.loading = true;
 			this._createAssetLoadError = args[2];
 			script.src = this.path;

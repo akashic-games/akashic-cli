@@ -182,7 +182,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 	@action
 	pause(): Promise<void> {
 		if (this.isPaused)
-			return Promise.resolve();
+			return;
 		this._serveGameContent.agvGameContent.pause();
 		this._timeKeeper.pause();
 		this.isPaused = true;
@@ -192,7 +192,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 	@action
 	resume(): Promise<void> {
 		if (!this.isPaused)
-			return Promise.resolve();
+			return;
 		this._serveGameContent.agvGameContent.resume();
 		this._timeKeeper.start();
 		this.isPaused = false;
@@ -223,7 +223,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 	}
 
 	@action
-	setTargetTime(targetTime: number): void {
+	setTargetTime(targetTime?: number): void {
 		this._timeKeeper.setTime(targetTime);
 		this.targetTime = Math.min(this._timeKeeper.now(), this.play.duration);
 	}
@@ -259,8 +259,6 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 
 	@action
 	private _handleReset(sp: amf.StartPoint): void {
-		const startedAt = this.play.amflow.getStartedAt();
-		if (startedAt != null)
-			this.resetTime = sp.timestamp - startedAt;
+		this.resetTime = sp.timestamp - this.play.amflow.getStartedAt();
 	}
 }
