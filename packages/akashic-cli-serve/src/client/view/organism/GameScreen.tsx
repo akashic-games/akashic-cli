@@ -43,14 +43,7 @@ export class GameScreen extends React.Component<GameScreenProps, {}> {
 			{
 				// TODO: .bg-image の恐らく不要な z-index をなくせば背景色の描画に .game-screen の backgroundColor を利用でき、この div は削除できる
 				(showsBgColor) ?
-					<div
-						className={styles["bg-image"]}
-						style={{
-							width: gameWidth,
-							height: gameHeight,
-							backgroundColor: bgColor ?? undefined
-						}}
-					/> :
+					<div className={styles["bg-image"]} style={{ width: gameWidth, height: gameHeight, backgroundColor: bgColor }}/> :
 					null
 			}
 			{
@@ -99,12 +92,12 @@ export class GameScreen extends React.Component<GameScreenProps, {}> {
 
 	private _onMouseMoveCapture = (ev: MouseEvent): void => {
 		this._stopPropagationIfNeeded(ev);
-		this.props.onMouseMoveCapture?.({ x: ev.offsetX, y: ev.offsetY });
+		this.props.onMouseMoveCapture({ x: ev.offsetX, y: ev.offsetY });
 	};
 
 	private _onClickCapture = (ev: MouseEvent): void => {
 		this._stopPropagationIfNeeded(ev);
-		this.props.onClickCapture?.({ x: ev.offsetX, y: ev.offsetY });
+		this.props.onClickCapture({ x: ev.offsetX, y: ev.offsetY });
 	};
 
 	private _onRef = (elem: HTMLDivElement): void => {
@@ -127,7 +120,7 @@ export class GameScreen extends React.Component<GameScreenProps, {}> {
 
 		gridCanvas.width = this.props.gameWidth;
 		gridCanvas.height = this.props.gameHeight;
-		const context = gridCanvas.getContext("2d")!;
+		const context = gridCanvas.getContext("2d");
 		context.save();
 		context.strokeStyle = "#CCC";
 		context.setLineDash([3, 3]);

@@ -6,12 +6,12 @@ import { ContentEntity } from "./ContentEntity";
 
 export class ContentStore {
 	@observable contents: ObservableMap<string, ContentEntity>;
-	private _defaultContent: ContentEntity; // assertInitialize() がresolve されるまでの値は保証されない
+	private _defaultContent: ContentEntity;
 	private _initializationWaiter: Promise<void>;
 
 	constructor() {
 		this.contents = new ObservableMap<string, ContentEntity>();
-		this._defaultContent = null!;
+		this._defaultContent = null;
 		this._initializationWaiter = this._initialize();
 	}
 
@@ -20,17 +20,15 @@ export class ContentStore {
 	}
 
 	defaultContent(): ContentEntity {
-		return this._defaultContent!;
+		return this._defaultContent;
 	}
 
-	async findOrRegister(locData: ContentLocatorData): Promise<ContentEntity> {
+	findOrRegister(locData: ContentLocatorData): ContentEntity {
 		const loc = ClientContentLocator.instantiate(locData);
 		const url = loc.asAbsoluteUrl();
-		const registered = this.contents.get(url);
-		if (registered)
-			return registered;
+		if (this.contents.get(url))
+			return this.contents.get(url);
 		const content = new ContentEntity({ contentLocatorData: loc });
-		await content.assertInitialized();
 		this.contents.set(url, content);
 		return content;
 	}

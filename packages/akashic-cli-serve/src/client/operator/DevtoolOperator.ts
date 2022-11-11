@@ -26,7 +26,7 @@ export class DevtoolOperator {
 
 	dumpStartPointOfIndex = (index: number): Promise<void> => {
 		return new Promise((resolve, reject) => {
-			const currentPlay = this.store.currentPlay!;
+			const currentPlay = this.store.currentPlay;
 			const frame = currentPlay?.startPointHeaders[index]?.frame;
 			if (frame == null) {
 				reject();
@@ -45,7 +45,7 @@ export class DevtoolOperator {
 	};
 
 	updateEntityTrees = (): void => {
-		const dumpItems = this.store.currentLocalInstance!.gameContent.dumpEntities();
+		const dumpItems = this.store.currentLocalInstance.gameContent.dumpEntities();
 		this.store.devtoolUiStore.setEntityTrees(dumpItems);
 	};
 
@@ -54,11 +54,11 @@ export class DevtoolOperator {
 	};
 
 	setHighlightedEntity = (e: EDumpItem): void => {
-		this.store.currentLocalInstance!.gameContent.changeHighlightedEntity(e.id);
+		this.store.currentLocalInstance.gameContent.changeHighlightedEntity(e.id);
 	};
 
 	clearHighlightedEntity = (): void => {
-		this.store.currentLocalInstance!.gameContent.changeHighlightedEntity(null);
+		this.store.currentLocalInstance.gameContent.changeHighlightedEntity(null);
 	};
 
 	toggleShowHiddenEntity = (shows: boolean): void => {
@@ -70,7 +70,7 @@ export class DevtoolOperator {
 	};
 
 	selectEntityByPoint = (x: number, y: number): void => {
-		const gameContent = this.store.currentLocalInstance!.gameContent;
+		const gameContent = this.store.currentLocalInstance.gameContent;
 		const eid = gameContent.getEntityIdByPoint(x, y);
 		this.store.devtoolUiStore.setSelectedEntityId(eid);
 		gameContent.changeHighlightedEntity(eid);
@@ -81,7 +81,7 @@ export class DevtoolOperator {
 	};
 
 	finishEntitySelection = (x: number, y: number): void => {
-		const gameContent = this.store.currentLocalInstance!.gameContent;
+		const gameContent = this.store.currentLocalInstance.gameContent;
 		this.updateEntityTrees();
 		this.store.devtoolUiStore.toggleIsSelectingEntity(false);
 		this.store.devtoolUiStore.setSelectedEntityId(gameContent.getEntityIdByPoint(x, y));
@@ -89,8 +89,8 @@ export class DevtoolOperator {
 	};
 
 	dumpSelectedEntity = (): void => {
-		const gameContent = this.store.currentLocalInstance!.gameContent;
-		const e = gameContent.getRawEntity(this.store.devtoolUiStore.selectedEntityId!);
+		const gameContent = this.store.currentLocalInstance.gameContent;
+		const e = gameContent.getRawEntity(this.store.devtoolUiStore.selectedEntityId);
 		consoleLog(e);
 	};
 
@@ -146,7 +146,7 @@ export class DevtoolOperator {
 	};
 
 	setupNiconicoDevtoolValueWatcher = (): void => {
-		const gameContent = this.store.currentLocalInstance!.gameContent;
+		const gameContent = this.store.currentLocalInstance.gameContent;
 		if (!gameContent.onTick.contains(this.tickHandler, this))
 			gameContent.onTick.add(this.tickHandler, this);
 	};
@@ -165,13 +165,13 @@ export class DevtoolOperator {
 	private updateRemainingTime(): void {
 		if (!this.store.devtoolUiStore.isAutoSendEvent
 			|| this.store.devtoolUiStore.emulatingShinichibaMode !== "ranking"
-			|| this.store.currentLocalInstance!.executionMode === "replay"
+			|| this.store.currentLocalInstance.executionMode === "replay"
 		) return;
 
-		const dur = this.store.currentPlay!.duration / 1000;
+		const dur = this.store.currentPlay.duration / 1000;
 		const totalTimeLimit = this.store.devtoolUiStore.totalTimeLimit;
-		if (dur >= totalTimeLimit! && !this.store.currentPlay!.isActivePausing) {
-			this.store.currentPlay!.pauseActive();
+		if (dur >= totalTimeLimit && !this.store.currentPlay.isActivePausing) {
+			this.store.currentPlay.pauseActive();
 		}
 	}
 }

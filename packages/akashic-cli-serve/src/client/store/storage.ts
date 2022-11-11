@@ -37,8 +37,8 @@ function choose<T>(a: T | null | undefined, b: T | null | undefined, c: T): T {
 export class Storage {
 	static SESSION_STORAGE_KEY: string = "aktb:config";
 
-	data!: StorageData;
-	experimentalIsChildWindow: boolean | null = false;
+	data: StorageData;
+	experimentalIsChildWindow: boolean = false;
 
 	private _initializationWaiter: Promise<[void, void]>;
 
@@ -88,15 +88,15 @@ export class Storage {
 			}),
 			// TODO: 暫定で 0 番目のコンテンツの sandboxConfig を取得する。ルートセッションのコンテンツの値を使うべき
 			apiClient.getSandboxConfig(0).then(res => {
-				const displayOptions = res?.data?.displayOptions;
+				const displayOptions = res?.data?.displayOptions || {};
 				this.put({
-					fitsToScreen: choose(query.fitsToScreen, s.fitsToScreen, displayOptions.fitsToScreen),
+					fitsToScreen: choose(query.fitsToScreen, s.fitsToScreen, displayOptions.fitsToScreen ?? false),
 					showsBackgroundImage: choose(query.showsBackgroundImage, s.showsBackgroundImage, !!displayOptions.backgroundImage),
 					showsBackgroundColor: choose(query.showsBackgroundColor, s.showsBackgroundColor, !!displayOptions.backgroundColor),
-					showsGrid: choose(query.showsGrid, s.showsGrid, displayOptions.showsGrid),
-					showsProfiler: choose(query.showsProfiler, s.showsProfiler, displayOptions.showsProfiler),
+					showsGrid: choose(query.showsGrid, s.showsGrid, displayOptions.showsGrid ?? false),
+					showsProfiler: choose(query.showsProfiler, s.showsProfiler, displayOptions.showsProfiler ?? false),
 					showsDesignGuideline: choose(
-						query.showsDesignGuideline, s.showsDesignGuideline, displayOptions.showsDesignGuideline
+						query.showsDesignGuideline, s.showsDesignGuideline, displayOptions.showsDesignGuideline ?? false
 					),
 				});
 			})

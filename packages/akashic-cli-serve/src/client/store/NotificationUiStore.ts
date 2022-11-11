@@ -16,17 +16,11 @@ export class NotificationUiStore {
 	@observable title: string;
 	@observable name: string;
 	@observable message: string;
-	@observable referenceUrl: string | undefined;
-	@observable referenceMessage: string | undefined;
+	@observable referenceUrl?: string;
+	@observable referenceMessage?: string;
 
 	constructor() {
 		this.isActive = false;
-		this.type = "error";
-		this.title = "";
-		this.name = "";
-		this.message = "";
-		this.referenceUrl = "";
-		this.referenceMessage = "";
 	}
 
 	@action

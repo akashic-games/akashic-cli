@@ -35,7 +35,7 @@ export class RightResizable extends React.Component<RightResizableProps, {}> {
 
 	private _onMouseMoveWindow = (ev: MouseEvent): void => {
 		const { onResize, width, minWidth } = this.props;
-		const w = Math.max(width + (ev.pageX - this.lastPageX!), minWidth);
+		const w = Math.max(width + (ev.pageX - this.lastPageX), minWidth);
 		if (w !== width) {
 			onResize(w);
 			this.lastPageX = ev.pageX;

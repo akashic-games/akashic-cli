@@ -11,8 +11,7 @@ export class ToolBarUiStore {
 	@observable showsAudioOptionPopover: boolean;
 
 	@observable showsDisplayOptionPopover: boolean;
-	@observable fitsToScreen!: boolean;
-	// 以下のプロパティは assertInitialize() が resolve されるまでの値は保証されない
+	@observable fitsToScreen: boolean;
 	@observable showsBackgroundImage: boolean;
 	@observable showsBackgroundColor: boolean;
 	@observable showsGrid: boolean;
@@ -26,11 +25,6 @@ export class ToolBarUiStore {
 		this.showsDevtools = storage.data.showsDevtools;
 		this.showsAudioOptionPopover = false;
 		this.showsDisplayOptionPopover = false;
-		this.showsBackgroundImage = null!;
-		this.showsBackgroundColor = null!;
-		this.showsGrid = null!;
-		this.showsProfiler = null!;
-		this.showsDesignGuideline = null!;
 	}
 
 	async assertInitialized(): Promise<void> {

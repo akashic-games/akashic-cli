@@ -16,9 +16,8 @@ export const createHandlerToGetSandboxConfig = (dirPaths: string[]): express.Req
 			}
 			const configPath = path.resolve(dirPaths[contentId], "sandbox.config.js");
 			// TODO ファイル監視。内容に変化がなければ直前の値を返せばよい
-			const config = dynamicRequire(configPath) ?? {};
-			const normalizedConfig = sandboxConfigs.normalizeConfig(config, req.params.contentId);
-			responseSuccess<SandboxConfigApiResponseData>(res, 200, normalizedConfig);
+			const config = dynamicRequire(configPath);
+			responseSuccess<SandboxConfigApiResponseData>(res, 200, config);
 		} catch (e) {
 			next(e);
 		}
@@ -32,7 +31,7 @@ export const createHandlerToGetSandboxConfigPluginCode = (): express.RequestHand
 			const pluginName = req.params.pluginName;
 			const config = sandboxConfigs.get(contentId);
 
-			if (!config.client.external?.[pluginName]) {
+			if (!config.client.external[pluginName]) {
 				throw new NotFoundError({ errorMessage: `pluginName:${pluginName} is not found.` });
 			}
 

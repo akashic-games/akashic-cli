@@ -38,7 +38,7 @@ export async function watchContent(
 	watcher?: chokidar.FSWatcher
 ): Promise<void> {
 	// akashic-cli-scanはwatchオプション指定時しか使われないので動的importする
-	const scan = await import("@akashic/akashic-cli-scan/lib/scanAsset");
+	const scan = await import("@akashic/akashic-cli-scan/lib/scan");
 	if (!watcher) {
 		watcher = chokidar.watch(targetDir, {
 			persistent: true,
@@ -46,33 +46,32 @@ export async function watchContent(
 			ignored: "**/node_modules/**/*"
 		});
 	}
-	let timer: NodeJS.Timer | undefined;
+	let timer: NodeJS.Timer = null;
 	let mods: ModTargetFlags = ModTargetFlags.None;
 	const watcherHandler = (filePath: string): void => {
-		const handler = async (): Promise<void> => {
+		const handler = (): void => {
 			const lastMods = mods;
 			mods = ModTargetFlags.None;
 			if (lastMods & ModTargetFlags.Assets) {
-				try {
-					await scan.scanAsset({ target: "all", cwd: targetDir });
+				scan.scanAsset({ target: "all", cwd: targetDir }, (err) => {
 					// scanAssets の過程でGameJsonのフラグが立ってしまい、落とさないとcb()が二重で呼ばれてしまうのでここで落としておく。
 					mods &= ~ModTargetFlags.GameJson;
-					cb(null, ModTargetFlags.Assets);
-				} catch (err: any) {
-					cb(err, ModTargetFlags.Assets);
-				} finally {
-					if (mods === ModTargetFlags.None) {
-						clearInterval(timer);
-						timer = undefined;
+					try {
+						cb(err ?? null, ModTargetFlags.Assets);
+					} finally {
+						if (mods === ModTargetFlags.None) {
+							clearInterval(timer);
+							timer = null;
+						}
 					}
-				}
+				});
 			} else if (lastMods & ModTargetFlags.GameJson) {
 				try {
 					cb(null, ModTargetFlags.GameJson);
 				} finally {
 					if (mods === ModTargetFlags.None) {
 						clearInterval(timer);
-						timer = undefined;
+						timer = null;
 					}
 				}
 			}

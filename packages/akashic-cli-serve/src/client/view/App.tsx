@@ -36,7 +36,7 @@ export const App = observer(function App(props: AppProps): React.ReactElement<Ap
 		</div>;
 	}
 
-	const sandboxConfig = store.currentLocalInstance.content.sandboxConfig;
+	const sandboxConfig = store.currentLocalInstance.content.sandboxConfig || {};
 	const agvContainer = (
 		<div id="agvcontainer" className={styles.main + " " + styles.centering}>
 			<GameScreenContainer
@@ -51,7 +51,7 @@ export const App = observer(function App(props: AppProps): React.ReactElement<Ap
 
 	return <div id="whole" className={styles.whole}>
 		<ToolBarContainer
-			play={store.currentPlay!}
+			play={store.currentPlay}
 			localInstance={store.currentLocalInstance}
 			operator={operator}
 			toolBarUiStore={store.toolBarUiStore}
@@ -68,7 +68,7 @@ export const App = observer(function App(props: AppProps): React.ReactElement<Ap
 			store.toolBarUiStore.showsDevtools ?
 				<div className={styles.devtools}>
 					<DevtoolContainer
-						play={store.currentPlay!}
+						play={store.currentPlay}
 						localInstance={store.currentLocalInstance}
 						operator={operator}
 						toolBarUiStore={store.toolBarUiStore}

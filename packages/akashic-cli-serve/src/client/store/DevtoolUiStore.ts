@@ -28,11 +28,11 @@ export class DevtoolUiStore {
 	@observable entityTreeStateTable: ObservableMap<number, boolean>;
 	@observable isSeekingVolume: boolean;
 	@observable volume: number;
-	@observable score: number | undefined;
-	@observable playThreshold: number | undefined;
-	@observable clearThreshold: number | undefined;
-	@observable totalTimeLimit: number | null;
-	@observable preferredTotalTimeLimit: number | null;
+	@observable score: number;
+	@observable playThreshold: number;
+	@observable clearThreshold: number;
+	@observable totalTimeLimit: number;
+	@observable preferredTotalTimeLimit: number;
 
 	constructor() {
 		this.height = storage.data.devtoolsHeight;
@@ -54,11 +54,6 @@ export class DevtoolUiStore {
 		this.usePreferredTotalTimeLimit = storage.data.usePreferredTotalTimeLimit;
 		this.stopsGameOnTimeout = storage.data.stopsGameOnTimeout;
 		this.totalTimeLimitInputValue = storage.data.totalTimeLimitInputValue;
-		this.score = undefined;
-		this.playThreshold = undefined;
-		this.clearThreshold = undefined;
-		this.totalTimeLimit = null;
-		this.preferredTotalTimeLimit = null;
 	}
 
 	@action
