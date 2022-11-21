@@ -34,10 +34,10 @@ export function _completeUpdateParameterObject(param: UpdateParameterObject): vo
 
 export function promiseUpdate(param: UpdateParameterObject): Promise<void> {
 	_completeUpdateParameterObject(param);
-	const restoreDirectory = cmn.Util.chdir(param.cwd);
+	const restoreDirectory = cmn.Util.chdir(param.cwd!);
 	return Promise.resolve()
-		.then(() => param.debugNpm.update(param.moduleNames))
-		.then(() => param.logger.info("Done!"))
+		.then(() => param.debugNpm!.update(param.moduleNames))
+		.then(() => param.logger!.info("Done!"))
 		.then(restoreDirectory)
 		.catch((err) => {
 			restoreDirectory();

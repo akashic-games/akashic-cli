@@ -61,22 +61,22 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 	_completeInstallParameterObject(param);
 	const npm = param.debugNpm || new cmn.PromisedNpm({ logger: param.logger });
 
-	if (param.plugin != null && param.moduleNames.length > 1) {
+	if (param.plugin != null && param.moduleNames!.length > 1) {
 		return Promise.reject(new Error("--plugin option cannot used with multiple module installing/linking."));
 	}
 
-	const restoreDirectory = cmn.Util.chdir(param.cwd);
-	if (!param.link && param.moduleNames.length === 0) {
+	const restoreDirectory = cmn.Util.chdir(param.cwd!);
+	if (!param.link && param.moduleNames!.length === 0) {
 		return Promise.resolve()
 			.then(() => npm.install())
-			.then(() => param.logger.info("Done!"))
+			.then(() => param.logger!.info("Done!"))
 			.then(restoreDirectory, restoreDirectory);
 	}
 
 	let installedModuleNames: string[] = [];
 	const gameJsonPath = path.join(process.cwd(), "game.json");
 	return Promise.resolve()
-		.then(() => cmn.ConfigurationFile.read(gameJsonPath, param.logger))
+		.then(() => cmn.ConfigurationFile.read(gameJsonPath, param.logger!))
 		.then((content: cmn.GameConfiguration) => {
 			const conf = new Configuration({ content: content, logger: param.logger });
 			if ((param.plugin != null) && conf.findExistingOperationPluginIndex(param.plugin) !== -1)
@@ -94,13 +94,13 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 				.then(() => {
 					// param.moduleNames は npm pack された tgz ファイルのパスを含む場合がある。しかし NodeModules#listScriptFiles() はこれを扱えない。
 					// そのため tgz ファイルを解凍し package.json からモジュール名を取得し後続処理に渡す。
-					installedModuleNames = param.moduleNames.map(name => {
+					installedModuleNames = param.moduleNames!.map(name => {
 						return /\.t(ar\.)?gz$/.test(name) ? _getPackageNameFromTgzFile(name) : name;
 					});
 				})
 				.then(() => {
 					const listFiles = param.noOmitPackagejson ? cmn.NodeModules.listModuleFiles : cmn.NodeModules.listScriptFiles;
-					return listFiles(".", installedModuleNames, param.logger);
+					return listFiles(".", installedModuleNames, param.logger!);
 				})
 				.then((filePaths: string[]) => {
 					conf.addToGlobalScripts(filePaths);
@@ -128,7 +128,7 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 							const environment = libJsonData.gameConfigurationData.environment;
 							if (environment && environment.external) {
 								Object.keys(environment.external).forEach(name => {
-									conf.addExternal(name, environment.external[name]);
+									conf.addExternal(name, environment.external![name]);
 								});
 							}
 						}
@@ -147,10 +147,10 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 						}
 					});
 				})
-				.then(() => cmn.ConfigurationFile.write(conf.getContent(), gameJsonPath, param.logger));
+				.then(() => cmn.ConfigurationFile.write(conf.getContent(), gameJsonPath, param.logger!));
 		})
 		.then(restoreDirectory, restoreDirectory)
-		.then(() => param.logger.info("Done!"));
+		.then(() => param.logger!.info("Done!"));
 }
 
 export function install(param: InstallParameterObject, cb: (err: any) => void): void {
@@ -175,6 +175,6 @@ function _getPackageNameFromTgzFile(fileName: string): string {
 		sync: true
 	});
 
-	const json = JSON.parse(buf.toString());
+	const json = JSON.parse(buf!.toString());
 	return json.name;
 }

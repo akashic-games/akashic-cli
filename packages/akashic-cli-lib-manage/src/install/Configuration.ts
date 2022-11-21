@@ -24,7 +24,7 @@ export class Configuration extends cmn.Configuration {
 			this._content.globalScripts = filepaths;
 		} else {
 			filepaths = filepaths.filter((filePath: string) => {
-				return (this._content.globalScripts.indexOf(filePath) === -1);
+				return (this._content.globalScripts!.indexOf(filePath) === -1);
 			});
 			this._content.globalScripts = this._content.globalScripts.concat(filepaths);
 		}
