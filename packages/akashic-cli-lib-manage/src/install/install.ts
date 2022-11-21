@@ -49,58 +49,65 @@ export interface InstallParameterObject {
 	noOmitPackagejson?: boolean;
 }
 
-export function _completeInstallParameterObject(param: InstallParameterObject): void {
-	param.moduleNames = param.moduleNames || [];
-	param.link = !!param.link;
-	param.cwd = param.cwd || process.cwd();
-	param.logger = param.logger || new cmn.ConsoleLogger();
-	param.noOmitPackagejson = !!param.noOmitPackagejson;
+interface NormalizedInstallParameterObject extends Required<Omit<InstallParameterObject, "plugin">> {
+	plugin: number | null;
+}
+
+function _normalizeInstallParameterObject(param: InstallParameterObject): NormalizedInstallParameterObject {
+	return {
+		moduleNames: param.moduleNames ?? [],
+		link: !!param.link,
+		cwd: param.cwd ?? process.cwd(),
+		plugin: param.plugin ?? null,
+		logger: param.logger ?? new cmn.ConsoleLogger(),
+		noOmitPackagejson: !!param.noOmitPackagejson,
+		debugNpm: param.debugNpm ?? new cmn.PromisedNpm({ logger: param.logger })
+	};
 }
 
 export function promiseInstall(param: InstallParameterObject): Promise<void> {
-	_completeInstallParameterObject(param);
-	const npm = param.debugNpm || new cmn.PromisedNpm({ logger: param.logger });
+	const normalizedParam = _normalizeInstallParameterObject(param);
 
-	if (param.plugin != null && param.moduleNames!.length > 1) {
+	if (param.plugin != null && normalizedParam.moduleNames.length > 1) {
 		return Promise.reject(new Error("--plugin option cannot used with multiple module installing/linking."));
 	}
 
-	const restoreDirectory = cmn.Util.chdir(param.cwd!);
-	if (!param.link && param.moduleNames!.length === 0) {
+	const restoreDirectory = cmn.Util.chdir(normalizedParam.cwd);
+	if (!normalizedParam.link && normalizedParam.moduleNames.length === 0) {
 		return Promise.resolve()
-			.then(() => npm.install())
-			.then(() => param.logger!.info("Done!"))
+			.then(() => normalizedParam.debugNpm.install())
+			.then(() => normalizedParam.logger.info("Done!"))
 			.then(restoreDirectory, restoreDirectory);
 	}
 
 	let installedModuleNames: string[] = [];
 	const gameJsonPath = path.join(process.cwd(), "game.json");
 	return Promise.resolve()
-		.then(() => cmn.ConfigurationFile.read(gameJsonPath, param.logger!))
+		.then(() => cmn.ConfigurationFile.read(gameJsonPath, normalizedParam.logger))
 		.then((content: cmn.GameConfiguration) => {
-			const conf = new Configuration({ content: content, logger: param.logger });
-			if ((param.plugin != null) && conf.findExistingOperationPluginIndex(param.plugin) !== -1)
-				throw new Error("Conflicted code for operation plugins: " + param.plugin + ".");
+			const conf = new Configuration({ content: content, logger: normalizedParam.logger });
+			if ((normalizedParam.plugin != null) && conf.findExistingOperationPluginIndex(normalizedParam.plugin) !== -1)
+				throw new Error("Conflicted code for operation plugins: " + normalizedParam.plugin + ".");
 
 			return Promise.resolve()
 				.then(() => {
-					if (param.link) {
-						return npm.link(param.moduleNames);
+					if (normalizedParam.link) {
+						return normalizedParam.debugNpm.link(normalizedParam.moduleNames);
 					} else {
 						return Promise.resolve()
-							.then(() => npm.install(param.moduleNames));
+							.then(() => normalizedParam.debugNpm.install(normalizedParam.moduleNames));
 					}
 				})
 				.then(() => {
 					// param.moduleNames は npm pack された tgz ファイルのパスを含む場合がある。しかし NodeModules#listScriptFiles() はこれを扱えない。
 					// そのため tgz ファイルを解凍し package.json からモジュール名を取得し後続処理に渡す。
-					installedModuleNames = param.moduleNames!.map(name => {
+					installedModuleNames = normalizedParam.moduleNames.map(name => {
 						return /\.t(ar\.)?gz$/.test(name) ? _getPackageNameFromTgzFile(name) : name;
 					});
 				})
 				.then(() => {
-					const listFiles = param.noOmitPackagejson ? cmn.NodeModules.listModuleFiles : cmn.NodeModules.listScriptFiles;
-					return listFiles(".", installedModuleNames, param.logger!);
+					const listFiles = normalizedParam.noOmitPackagejson ? cmn.NodeModules.listModuleFiles : cmn.NodeModules.listScriptFiles;
+					return listFiles(".", installedModuleNames, normalizedParam.logger);
 				})
 				.then((filePaths: string[]) => {
 					conf.addToGlobalScripts(filePaths);
@@ -113,8 +120,8 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 					}
 				})
 				.then(() => {
-					if (param.plugin != null)
-						conf.addOperationPlugin(param.plugin, installedModuleNames[0]);
+					if (normalizedParam.plugin != null)
+						conf.addOperationPlugin(normalizedParam.plugin, installedModuleNames[0]);
 				})
 				.then(() => conf.vacuumGlobalScripts())
 				.then(() => {
@@ -147,10 +154,10 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 						}
 					});
 				})
-				.then(() => cmn.ConfigurationFile.write(conf.getContent(), gameJsonPath, param.logger!));
+				.then(() => cmn.ConfigurationFile.write(conf.getContent(), gameJsonPath, normalizedParam.logger));
 		})
 		.then(restoreDirectory, restoreDirectory)
-		.then(() => param.logger!.info("Done!"));
+		.then(() => normalizedParam.logger.info("Done!"));
 }
 
 export function install(param: InstallParameterObject, cb: (err: any) => void): void {
