@@ -41,7 +41,9 @@ export interface UninstallParameterObject {
 	debugNpm?: cmn.PromisedNpm;
 }
 
-interface NormalizedUninstallParameterObject extends Required<UninstallParameterObject> {}
+interface NormalizedUninstallParameterObject extends Required<Omit<UninstallParameterObject, "debugNpm">> {
+	debugNpm: cmn.PromisedNpm | null;
+}
 
 function _normalizeUninstallParameterObject(param: UninstallParameterObject): NormalizedUninstallParameterObject {
 	return {
@@ -50,12 +52,13 @@ function _normalizeUninstallParameterObject(param: UninstallParameterObject): No
 		plugin: !!param.plugin,
 		cwd: param.cwd ?? process.cwd(),
 		logger: param.logger ?? new cmn.ConsoleLogger(),
-		debugNpm: param.debugNpm ?? new cmn.PromisedNpm({ logger: param.logger })
+		debugNpm: param.debugNpm ?? null
 	};
 }
 
 export function promiseUninstall(param: UninstallParameterObject): Promise<void> {
 	const normalizedParam = _normalizeUninstallParameterObject(param);
+	const npm = normalizedParam.debugNpm ?? new cmn.PromisedNpm({ logger: param.logger });
 
 	if (normalizedParam.plugin && normalizedParam.moduleNames.length > 1) {
 		return Promise.reject(new Error("'plugin' option cannot be used with multiple module uninstalling/unlinking."));
@@ -79,10 +82,10 @@ export function promiseUninstall(param: UninstallParameterObject): Promise<void>
 				})
 				.then(() => {
 					if (normalizedParam.unlink) {
-						return normalizedParam.debugNpm.unlink(normalizedParam.moduleNames);
+						return npm.unlink(normalizedParam.moduleNames);
 					} else {
 						return Promise.resolve()
-							.then(() => normalizedParam.debugNpm.uninstall(normalizedParam.moduleNames));
+							.then(() => npm.uninstall(normalizedParam.moduleNames));
 					}
 				})
 				.then(() => {

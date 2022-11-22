@@ -49,8 +49,9 @@ export interface InstallParameterObject {
 	noOmitPackagejson?: boolean;
 }
 
-interface NormalizedInstallParameterObject extends Required<Omit<InstallParameterObject, "plugin">> {
+interface NormalizedInstallParameterObject extends Required<Omit<InstallParameterObject, "plugin" | "debugNpm">> {
 	plugin: number | null;
+	debugNpm: cmn.PromisedNpm | null;
 }
 
 function _normalizeInstallParameterObject(param: InstallParameterObject): NormalizedInstallParameterObject {
@@ -61,12 +62,13 @@ function _normalizeInstallParameterObject(param: InstallParameterObject): Normal
 		plugin: param.plugin ?? null,
 		logger: param.logger ?? new cmn.ConsoleLogger(),
 		noOmitPackagejson: !!param.noOmitPackagejson,
-		debugNpm: param.debugNpm ?? new cmn.PromisedNpm({ logger: param.logger })
+		debugNpm: param.debugNpm ?? null
 	};
 }
 
 export function promiseInstall(param: InstallParameterObject): Promise<void> {
 	const normalizedParam = _normalizeInstallParameterObject(param);
+	const npm = normalizedParam.debugNpm ?? new cmn.PromisedNpm({ logger: param.logger });
 
 	if (param.plugin != null && normalizedParam.moduleNames.length > 1) {
 		return Promise.reject(new Error("--plugin option cannot used with multiple module installing/linking."));
@@ -75,7 +77,7 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 	const restoreDirectory = cmn.Util.chdir(normalizedParam.cwd);
 	if (!normalizedParam.link && normalizedParam.moduleNames.length === 0) {
 		return Promise.resolve()
-			.then(() => normalizedParam.debugNpm.install())
+			.then(() => npm.install())
 			.then(() => normalizedParam.logger.info("Done!"))
 			.then(restoreDirectory, restoreDirectory);
 	}
@@ -92,10 +94,10 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 			return Promise.resolve()
 				.then(() => {
 					if (normalizedParam.link) {
-						return normalizedParam.debugNpm.link(normalizedParam.moduleNames);
+						return npm.link(normalizedParam.moduleNames);
 					} else {
 						return Promise.resolve()
-							.then(() => normalizedParam.debugNpm.install(normalizedParam.moduleNames));
+							.then(() => npm.install(normalizedParam.moduleNames));
 					}
 				})
 				.then(() => {
