@@ -41,51 +41,58 @@ export interface UninstallParameterObject {
 	debugNpm?: cmn.PromisedNpm;
 }
 
-export function _completeUninstallParameterObject(param: UninstallParameterObject): void {
-	param.moduleNames = param.moduleNames || [];
-	param.unlink = !!param.unlink;
-	param.plugin = !!param.plugin;
-	param.cwd = param.cwd || process.cwd();
-	param.logger = param.logger || new cmn.ConsoleLogger();
+interface NormalizedUninstallParameterObject extends Required<Omit<UninstallParameterObject, "debugNpm">> {
+	debugNpm: cmn.PromisedNpm | null;
+}
+
+function _normalizeUninstallParameterObject(param: UninstallParameterObject): NormalizedUninstallParameterObject {
+	return {
+		moduleNames: param.moduleNames ?? [],
+		unlink: !!param.unlink,
+		plugin: !!param.plugin,
+		cwd: param.cwd ?? process.cwd(),
+		logger: param.logger ?? new cmn.ConsoleLogger(),
+		debugNpm: param.debugNpm ?? null
+	};
 }
 
 export function promiseUninstall(param: UninstallParameterObject): Promise<void> {
-	_completeUninstallParameterObject(param);
-	const npm = param.debugNpm || new cmn.PromisedNpm({ logger: param.logger });
+	const normalizedParam = _normalizeUninstallParameterObject(param);
+	const npm = normalizedParam.debugNpm ?? new cmn.PromisedNpm({ logger: param.logger });
 
-	if (param.plugin && param.moduleNames.length > 1) {
+	if (normalizedParam.plugin && normalizedParam.moduleNames.length > 1) {
 		return Promise.reject(new Error("'plugin' option cannot be used with multiple module uninstalling/unlinking."));
 	}
 
-	const restoreDirectory = cmn.Util.chdir(param.cwd);
+	const restoreDirectory = cmn.Util.chdir(normalizedParam.cwd);
 	const gameJsonPath = path.join(process.cwd(), "game.json");
 	return Promise.resolve()
-		.then(() => cmn.ConfigurationFile.read(gameJsonPath, param.logger))
+		.then(() => cmn.ConfigurationFile.read(gameJsonPath, normalizedParam.logger))
 		.then((content: cmn.GameConfiguration) => {
-			const conf = new Configuration({ content: content, logger: param.logger });
+			const conf = new Configuration({ content: content, logger: normalizedParam.logger });
 			const uninstallExternals: {[key: string]: string} = {}; // uninstall前にexternalを保持する
 
 			return Promise.resolve()
 				.then(() => {
-					param.moduleNames.forEach((name) => {
+					normalizedParam.moduleNames.forEach((name) => {
 						const libPath = path.resolve(process.cwd(), "node_modules", name, "akashic-lib.json");
 						extractExternalsFromLibJson(libPath, uninstallExternals);
 						removeAssetListFromLibJson(name, libPath, conf._content);
 					});
 				})
 				.then(() => {
-					if (param.unlink) {
-						return npm.unlink(param.moduleNames);
+					if (normalizedParam.unlink) {
+						return npm.unlink(normalizedParam.moduleNames);
 					} else {
 						return Promise.resolve()
-							.then(() => npm.uninstall(param.moduleNames));
+							.then(() => npm.uninstall(normalizedParam.moduleNames));
 					}
 				})
 				.then(() => {
-					if (param.plugin)
-						conf.removeOperationPlugin(param.moduleNames[0]);
+					if (normalizedParam.plugin)
+						conf.removeOperationPlugin(normalizedParam.moduleNames[0]);
 					conf.vacuumGlobalScripts();
-					const globalScripts = conf._content.globalScripts;
+					const globalScripts = conf._content.globalScripts ?? [];
 					const packageJsons = cmn.NodeModules.listPackageJsonsFromScriptsPath(".", globalScripts);
 					const moduleMainScripts = cmn.NodeModules.listModuleMainScripts(packageJsons);
 					if (moduleMainScripts && Object.keys(moduleMainScripts).length > 0) {
@@ -96,7 +103,7 @@ export function promiseUninstall(param: UninstallParameterObject): Promise<void>
 				})
 				.then(() => {
 					// 依存しなくなったexternalをgame.jsonから削除する
-					const globalScripts = conf._content.globalScripts;
+					const globalScripts = conf._content.globalScripts ?? [];
 					const libPaths = cmn.NodeModules.listPackageJsonsFromScriptsPath(".", globalScripts).map((filepath) => {
 						return path.join(path.dirname(filepath), "akashic-lib.json");
 					});
@@ -109,11 +116,11 @@ export function promiseUninstall(param: UninstallParameterObject): Promise<void>
 					});
 				})
 				.then(() => {
-					return cmn.ConfigurationFile.write(conf.getContent(), gameJsonPath, param.logger);
+					return cmn.ConfigurationFile.write(conf.getContent(), gameJsonPath, normalizedParam.logger);
 				});
 		})
 		.then(restoreDirectory, restoreDirectory)
-		.then(() => param.logger.info("Done!"));
+		.then(() => normalizedParam.logger.info("Done!"));
 }
 
 export function uninstall(param: UninstallParameterObject, cb: (err: any) => void): void {
@@ -129,7 +136,7 @@ function extractExternalsFromLibJson(libPath: string, externals: {[key: string]:
 		if (!environment || !environment.external) return;
 
 		Object.keys(environment.external).forEach(externalName => {
-			externals[externalName] = environment.external[externalName];
+			externals[externalName] = environment.external![externalName];
 		});
 	} catch (error) {
 		if (error.code === "ENOENT") return; // akashic-lib.jsonを持っていないケース

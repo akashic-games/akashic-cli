@@ -6,7 +6,9 @@
     "module": "commonjs",
     "outDir": "./lib",
     "declaration": true,
-    "types" : ["commander", "form-data", "fs-extra", "jasmine", "mock-fs", "node"]
+    "types" : ["commander", "form-data", "fs-extra", "jasmine", "mock-fs", "node"],
+    "useUnknownInCatchVariables": false,
+    "strict": true
   },
   "include": [
     "./src/**/*.ts"

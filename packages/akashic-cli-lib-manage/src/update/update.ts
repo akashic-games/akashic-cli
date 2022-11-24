@@ -26,18 +26,26 @@ export interface UpdateParameterObject {
 	moduleNames?: string[];
 }
 
-export function _completeUpdateParameterObject(param: UpdateParameterObject): void {
-	param.cwd = param.cwd || process.cwd();
-	param.logger = param.logger || new cmn.ConsoleLogger();
-	param.debugNpm = param.debugNpm || new cmn.PromisedNpm({ logger: param.logger });
+interface NormalizedUpdateParameterObject extends Required<Omit<UpdateParameterObject, "debugNpm">> {
+	debugNpm: cmn.PromisedNpm | null;
+}
+
+function _normalizeUpdateParameterObject(param: UpdateParameterObject): NormalizedUpdateParameterObject {
+	return {
+		cwd: param.cwd ?? process.cwd(),
+		logger: param.logger ?? new cmn.ConsoleLogger(),
+		debugNpm: param.debugNpm ?? null,
+		moduleNames: param.moduleNames ?? []
+	};
 }
 
 export function promiseUpdate(param: UpdateParameterObject): Promise<void> {
-	_completeUpdateParameterObject(param);
-	const restoreDirectory = cmn.Util.chdir(param.cwd);
+	const normalizedParam = _normalizeUpdateParameterObject(param);
+	const npm = normalizedParam.debugNpm ?? new cmn.PromisedNpm({ logger: param.logger });
+	const restoreDirectory = cmn.Util.chdir(normalizedParam.cwd);
 	return Promise.resolve()
-		.then(() => param.debugNpm.update(param.moduleNames))
-		.then(() => param.logger.info("Done!"))
+		.then(() => npm.update(normalizedParam.moduleNames))
+		.then(() => normalizedParam.logger.info("Done!"))
 		.then(restoreDirectory)
 		.catch((err) => {
 			restoreDirectory();
