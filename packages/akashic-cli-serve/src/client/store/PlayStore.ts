@@ -74,7 +74,7 @@ export class PlayStore {
 					this.plays[o.playInfo.playId] = new PlayEntity({
 						...o.playInfo,
 						gameViewManager: this._gameViewManager,
-						content: await this._contentStore.findOrRegister(o.playInfo.contentLocatorData),
+						content: this._contentStore.find(o.playInfo.contentLocatorData),
 						startPointHeaders: o.startPointHeaders
 					});
 				}
@@ -131,7 +131,7 @@ export class PlayStore {
 			gameViewManager: this._gameViewManager,
 			playId,
 			status: "running", // 暫定。stanadlone プレイは running しかないものとして扱う
-			content: await this._contentStore.findOrRegister(param.contentLocator),
+			content: this._contentStore.find(param.contentLocator),
 			parent: param.parent
 		});
 		this.plays[playId] = play;
@@ -148,7 +148,7 @@ export class PlayStore {
 		const play = new PlayEntity({
 			...e,
 			gameViewManager: this._gameViewManager,
-			content: await this._contentStore.findOrRegister(e.contentLocatorData)
+			content: this._contentStore.find(e.contentLocatorData)
 		});
 		this.plays[e.playId] = play;
 		this._lastPlayId = e.playId;

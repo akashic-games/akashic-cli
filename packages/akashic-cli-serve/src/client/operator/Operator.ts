@@ -191,7 +191,7 @@ export class Operator {
 	};
 
 	private async _createServerLoop(contentLocator: ClientContentLocator, audioState?: PlayAudioState): Promise<PlayEntity> {
-		const content = await this.store.contentStore.findOrRegister(contentLocator);
+		const content = this.store.contentStore.find(contentLocator);
 		const play = await this.store.playStore.createPlay({ contentLocator, audioState });
 		const tokenResult = await apiClient.createPlayToken(play.playId, "", true);  // TODO 空文字列でなくnullを使う
 		await play.createServerInstance({ playToken: tokenResult.data.playToken });
@@ -276,7 +276,7 @@ export class Operator {
 			}));
 		}
 
-		const content = await this.store.contentStore.findOrRegister(contentLocator);
+		const content = this.store.contentStore.find(contentLocator);
 		const sandboxConfig = content.sandboxConfig;
 		const client = sandboxConfig?.client;
 		if (client?.external) {

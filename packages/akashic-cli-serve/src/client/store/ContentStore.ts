@@ -23,16 +23,25 @@ export class ContentStore {
 		return this._defaultContent!;
 	}
 
-	async findOrRegister(locData: ContentLocatorData): Promise<ContentEntity> {
+	// TODO: serve 起動後にコンテンツを登録。現状未使用のため不要なら削除。
+	async register(locData: ContentLocatorData): Promise<ContentEntity> {
 		const loc = ClientContentLocator.instantiate(locData);
 		const url = loc.asAbsoluteUrl();
-		const registered = this.contents.get(url);
-		if (registered)
-			return registered;
+
 		const content = new ContentEntity({ contentLocatorData: loc });
 		await content.assertInitialized();
 		this.contents.set(url, content);
 		return content;
+	}
+
+	find(locData: ContentLocatorData): ContentEntity {
+		const loc = ClientContentLocator.instantiate(locData);
+		const url = loc.asAbsoluteUrl();
+		const registered = this.contents.get(url);
+		if (!registered)
+			throw new Error("content is not found.");
+
+		return registered;
 	}
 
 	private async _initialize(): Promise<void> {
