@@ -5,7 +5,7 @@ import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
 import { chdir } from "@akashic/akashic-cli-commons/lib/Util";
 import type { AssetConfiguration, GameConfiguration } from "@akashic/game-configuration";
 import { AssetModule } from "./AssetModule";
-import { scanAudioAssets, scanImageAssets, scanScriptAssets, scanTextAssets, scanVectorImageAssets, textAssetFilter } from "./scanUtils";
+import { scanAudioAssets, scanImageAssets, scanScriptAssets, scanTextAssets, scanVectorImageAssets, storeExistingAsset, textAssetFilter } from "./scanUtils";
 import type { AssetExtension, AssetScanDirectoryTable, AssetTargetType, LibConfiguration } from "./types";
 
 export interface ScanAssetParameterObject {
@@ -147,6 +147,7 @@ export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 
 		// スキャン結果のアセット定義の配列
 		const scannedAssets: AssetConfiguration[] = [];
+		const scannedAudioAssets: AssetConfiguration[] = [];
 
 		const textAssetFilterRe =
 			param.assetExtension.text && param.assetExtension.text
@@ -156,7 +157,7 @@ export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 		// 1. 対象のフォルダをスキャンし、各ファイルの情報をアセット定義
 		for (const dir of scanTargetDirsTable.audio) {
 			const assets = await scanAudioAssets(base, dir, logger);
-			scannedAssets.push(...assets);
+			scannedAudioAssets.push(...assets);
 		}
 		for (const dir of scanTargetDirsTable.image) {
 			const assets = [
@@ -195,6 +196,8 @@ export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 			}
 
 			const definedAssets = (Array.isArray(configuration.assets) ? configuration.assets : AssetModule.toArray(configuration.assets));
+
+			scannedAssets.push(...storeExistingAsset(scannedAudioAssets, definedAssets));
 
 			// 既存のアセット情報と新規追加のアセット情報をマージ
 			const newAssets = AssetModule.merge(

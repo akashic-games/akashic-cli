@@ -183,3 +183,24 @@ export async function scanAudioAssets(
 
 	return audioAssets;
 }
+
+/**
+ * scannedAudioAssets 要素のうち、 definedAssets に既に記述されており、
+ * かつ、記述済みアセットが offset プロパティを持つ場合、
+ * definedAssets の要素で上書きする
+ */
+export function storeExistingAsset (scannedAudioAssets: AssetConfiguration[], definedAssets: AssetConfiguration[]) {
+	const filteredAssets: AssetConfiguration[] = [];
+	const assetInvMap: {[key: string]: AssetConfiguration} = {};
+	definedAssets.forEach(asset => assetInvMap[asset.path] = asset);
+
+	scannedAudioAssets.forEach(scannedAsset => {
+		const definedAsset = assetInvMap[scannedAsset.path];
+		if (definedAsset && definedAsset.type === "audio" && definedAsset.offset){
+			filteredAssets.push(definedAsset);
+		} else {
+			filteredAssets.push(scannedAsset);
+		}
+	})
+	return filteredAssets;
+}
