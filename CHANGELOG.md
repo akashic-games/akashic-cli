@@ -1,5 +1,25 @@
 # CHANGELOG
 
+## 2.16.3 (2022-12-05)
+
+#### Enhancement
+* `akashic-cli-export`
+  * [#1182](https://github.com/akashic-games/akashic-cli/pull/1182) 【akashic-cli-export】内部コンポーネントの更新(engineFiles@3.4.0, engineFiles@2.2.1, engineFiles@1.2.1) ([@xnv](https://github.com/xnv))
+
+#### Other Change
+* `akashic-cli-lib-manage`
+  * [#1177](https://github.com/akashic-games/akashic-cli/pull/1177) enable strict for akashic-lib-manage ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Update Dependencies
+* `akashic-cli-export`, `akashic-cli-init`, `akashic-cli-serve`
+  * [#1176](https://github.com/akashic-games/akashic-cli/pull/1176) Update akashic major/minor dependencies (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`, `akashic-cli-extra`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`
+  * [#1174](https://github.com/akashic-games/akashic-cli/pull/1174) Update dependency @typescript-eslint/eslint-plugin to v5.43.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.16.2 (2022-11-11)
 
 #### Other Change
