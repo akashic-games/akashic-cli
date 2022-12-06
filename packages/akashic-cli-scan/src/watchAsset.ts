@@ -2,12 +2,10 @@ import * as path from "path";
 import * as chokidar from "chokidar";
 import type { ScanAssetParameterObject} from "./scanAsset";
 import { scanAsset, _completeScanAssetParameterObject } from "./scanAsset";
+import { audioAssetFilter } from "./scanUtils";
 
 function isImageFilePath(p: string): boolean {
 	return /.*\.(png|gif|jpg|jpeg)$/i.test(p);
-}
-function isAudioFilePath(p: string): boolean {
-	return /.*\.(ogg|aac|mp4)$/i.test(p);
 }
 
 function scanAssetWithCallback(param: ScanAssetParameterObject, cb: (error: Error | null) => void): void {
@@ -35,7 +33,7 @@ export function watchAsset(p: ScanAssetParameterObject, cb: (err: Error | null) 
 		if (
 			param.assetScanDirectoryTable.image.some(dir => filePath.indexOf(path.join(param.cwd, dir)) !== -1)
 			|| param.assetScanDirectoryTable.audio.some(dir => filePath.indexOf(path.join(param.cwd, dir)) !== -1)
-			|| (filePath.indexOf(path.join(param.cwd, "assets")) !== -1 && (isAudioFilePath(filePath) || isImageFilePath(filePath)))
+			|| (filePath.indexOf(path.join(param.cwd, "assets")) !== -1 && (audioAssetFilter(filePath) || isImageFilePath(filePath)))
 		) {
 			scanAssetWithCallback(param, cb);
 		}
