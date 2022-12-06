@@ -46,11 +46,12 @@ export class ContentStore {
 
 	private async _initialize(): Promise<void> {
 		const res = await apiClient.getContents();
-		res.data.forEach(desc => {
+		await Promise.all(res.data.map(async (desc) => {
 			const content = new ContentEntity(desc);
+			await content.assertInitialized();
 			this.contents.set(content.locator.asAbsoluteUrl(), content);
 			if (!this._defaultContent)
 				this._defaultContent = content;
-		});
+		}));
 	}
 }
