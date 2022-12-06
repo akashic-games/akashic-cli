@@ -12,7 +12,7 @@ export async function getAudioDuration(filepath: string, logger?: Logger): Promi
 	} else if (ext === ".ogg") {
 		const metaData = await musicMetaData.parseFile(filepath, {duration: true});
 		return metaData.format.duration;
-	} else if (ext === ".ogg" || ext === ".mp4") {
+	} else if (ext === ".mp4" || ext === ".m4a") {
 		logger?.warn("[deprecated] " + path.basename(filepath) + " uses deprecated format. Use AAC instead of MP4(AAC).");
 		const data = fs.readFileSync(filepath);
 		const moov = mp4Inspector.inspect(data).filter((o: any) => o.type === "moov")[0]; // 必須BOXなので必ず1つある
