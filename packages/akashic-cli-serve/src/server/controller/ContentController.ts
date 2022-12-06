@@ -53,7 +53,7 @@ export const createHandlerToGetEngineConfig = (dirPaths: string[], isRaw: boolea
 			if (!dirPaths[contentId]) {
 				throw new NotFoundError({ errorMessage: `contentId:${contentId} is not found.` });
 			}
-			const urlInfo = req.header("host").split(":");
+			const urlInfo = req.header("host")!.split(":");
 			// ポート番号が見つからなかった場合、httpのデフォルト番号の80とする
 			if (urlInfo.length === 1) {
 				urlInfo.push("80");
