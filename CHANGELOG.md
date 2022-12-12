@@ -1,5 +1,21 @@
 # CHANGELOG
 
+## 2.16.5 (2022-12-12)
+
+#### Bug Fix
+* `akashic-cli-serve`
+  * [#1180](https://github.com/akashic-games/akashic-cli/pull/1180) Fix strict for serve client ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Other Change
+* `akashic-cli-serve`
+  * [#1181](https://github.com/akashic-games/akashic-cli/pull/1181) Merge pull request #1172 from akashic-games/enable-strict-for-server-… ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+  * [#1172](https://github.com/akashic-games/akashic-cli/pull/1172) Enable strict for server side ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+  * [#1167](https://github.com/akashic-games/akashic-cli/pull/1167) Enable strict for akashic-cli-serve ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 2
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.16.4 (2022-12-09)
 
 #### Enhancement
