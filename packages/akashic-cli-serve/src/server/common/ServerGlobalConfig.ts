@@ -12,7 +12,7 @@ export interface ServerGlobalConfig {
 	targetService: ServiceType;
 	allowExternal: boolean;
 	preserveDisconnected: boolean;
-	experimentalOpen: number;
+	experimentalOpen: number | null;
 	protocol: string;
 }
 

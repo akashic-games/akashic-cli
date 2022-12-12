@@ -8,7 +8,7 @@ import { dynamicRequire } from "./dynamicRequire";
 
 interface ResolvedSandboxConfig extends NormalizedSandboxConfiguration {
 	// backgroundImage がローカルファイルの場合、クライアントからは GET /contents/:contentId/sandboxConfig/backgroundImage で取得される。その場合のローカルファイルのパスをここに保持する。
-	resolvedBackgroundImagePath: string;
+	resolvedBackgroundImagePath: string | null;
 }
 
 const configs: { [key: string]: ResolvedSandboxConfig } = {};
@@ -55,7 +55,7 @@ function watchRequire(configPath: string, contentId: string, callback: (content:
 	return resolvedConfig;
 }
 
-function normalizeConfig(sandboxConfig: SandboxConfiguration, contentId: string): ResolvedSandboxConfig {
+export function normalizeConfig(sandboxConfig: SandboxConfiguration, contentId: string): ResolvedSandboxConfig {
 	const config = sandboxConfigUtils.normalize(sandboxConfig);
 
 	const externalAssets = config.externalAssets === undefined ? [] : config.externalAssets;

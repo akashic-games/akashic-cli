@@ -67,8 +67,9 @@ export class UiOperator {
 
 	copyRegisteredEventToEditor = (eventName: string): void => {
 		// assert(this.store.currentLocalInstance.content.sandboxConfig.events);
-		const sandboxConfig = this.store.currentLocalInstance.content.sandboxConfig;
-		const eventsStr = JSON.stringify(sandboxConfig.events[eventName], null, 2);
+		const sandboxConfig = this.store.currentLocalInstance!.content.sandboxConfig;
+		const pevs = sandboxConfig.events ? sandboxConfig.events[eventName] : [];
+		const eventsStr = JSON.stringify(pevs, null, 2);
 		this.store.devtoolUiStore.setEventEditContent(eventsStr);
 	};
 
@@ -81,7 +82,7 @@ export class UiOperator {
 	};
 
 	selectInstanceArguments = (name: string | null, noPutStrage: boolean = false): void => {
-		const argumentsTable = this.store.currentPlay.content.argumentsTable;
+		const argumentsTable = this.store.currentPlay!.content.argumentsTable;
 		const argStr = (name != null) ? argumentsTable[name] : "";
 		const { startupScreenUiStore } = this.store;
 		startupScreenUiStore.setSelectedArgumentName(name, noPutStrage);

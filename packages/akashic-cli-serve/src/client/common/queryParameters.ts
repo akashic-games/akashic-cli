@@ -313,7 +313,7 @@ export const queryParameters: ServeQueryParameters = (function () {
 	if (ret.ignoreSession) {
 		// ブラウザ不具合に対応するための内部利用用途なので、URLから消す。
 		delete query.ignoreSession;
-		history.replaceState(null, null, location.pathname + "?" + queryString.stringify(query));
+		history.replaceState(null, "", location.pathname + "?" + queryString.stringify(query));
 	}
 
 	return ret;

@@ -14,14 +14,15 @@ export class ContentLocator {
 		this.debuggablePath = locData.debuggablePath || null;
 	}
 
-	asRootRelativeUrl(): string {
+	asRootRelativeUrl(): string | null {
 		if (this.contentId)
 			return `/contents/${this.contentId}/content.raw.json`;
 		if (this.path)
 			return this.path;
+		return null;
 	}
 
-	asDebuggableRootRelativeUrl(): string {
+	asDebuggableRootRelativeUrl(): string | null {
 		if (this.contentId)
 			return `/contents/${this.contentId}/content.json`;
 		if (this.debuggablePath)

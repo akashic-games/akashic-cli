@@ -11,7 +11,9 @@
     "sourceMap": true,
     "outDir": "../../build-client-never-used",
     "noUnusedParameters": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "useUnknownInCatchVariables": false,
+    "strict": true
   },
   "include": [
     "./view/stories/**/*.tsx",

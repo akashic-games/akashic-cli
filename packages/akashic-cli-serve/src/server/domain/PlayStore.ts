@@ -83,7 +83,7 @@ export class PlayStore {
 	async createPlay(
 		loc: ServerContentLocator,
 		audioState: PlayAudioState = { muteType: "none" },
-		playlog?: DumpedPlaylog | null
+		playlog?: DumpedPlaylog
 	): Promise<string> {
 		const playId = await this.playManager.createPlay({
 			contentUrl: loc.asAbsoluteUrl()
@@ -149,7 +149,7 @@ export class PlayStore {
 	}
 
 	getPlaysInfo(): PlayInfo[] {
-		return this.getPlays().map(p => this.getPlayInfo(p.playId));
+		return this.getPlays().map(p => this.getPlayInfo(p.playId)!);
 	}
 
 	getPlayIdsFromContentId(contentId: string): string[] {
@@ -249,7 +249,7 @@ export class PlayStore {
 		const fps = playlog.startPoints[0].data.fps;
 		const replayStartTime = playlog.startPoints[0].timestamp;
 		const replayLastAge = playlog.tickList[1];
-		const ticksWithEvents = playlog.tickList[2];
+		const ticksWithEvents = playlog.tickList[2] ?? [];
 		let replayLastTime = null;
 		loop: for (let i = ticksWithEvents.length - 1; i >= 0; --i) {
 			const tick = ticksWithEvents[i];

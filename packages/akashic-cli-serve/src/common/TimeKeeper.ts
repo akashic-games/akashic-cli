@@ -1,6 +1,6 @@
 export class TimeKeeper {
-	origin: number | null;
-	pausedTime: number;
+	origin: number;
+	pausedTime: number | null;
 	rate: number;
 	offset: number;
 
@@ -16,7 +16,7 @@ export class TimeKeeper {
 	}
 
 	now(): number {
-		return (this.isPausing()) ? this.pausedTime : ((Date.now() - this.origin) * this.rate + this.offset);
+		return (this.isPausing()) ? this.pausedTime! : ((Date.now() - this.origin) * this.rate + this.offset);
 	}
 
 	setTime(time: number): void {
@@ -33,7 +33,7 @@ export class TimeKeeper {
 			return;
 		}
 		this.origin = origin;
-		this.offset = this.pausedTime;
+		this.offset = this.pausedTime!;
 		this.pausedTime = null;
 	}
 
