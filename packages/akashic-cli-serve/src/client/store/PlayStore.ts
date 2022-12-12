@@ -56,7 +56,8 @@ export class PlayStore {
 		this._lastPlayId = null;
 		this._contentStore = param.contentStore;
 		this._creationWaiters = Object.create(null);
-		this._initializationWaiter = apiClient.getPlays()
+		this._initializationWaiter = this._contentStore.assertInitialized()
+			.then(() => apiClient.getPlays())
 			.then((res) => {
 				const playsInfo = res.data;
 				return Promise.all(playsInfo.map((playInfo) => {
