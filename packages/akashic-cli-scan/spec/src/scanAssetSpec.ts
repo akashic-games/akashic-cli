@@ -206,32 +206,35 @@ describe("scanAsset()", () => {
 			});
 			conf = JSON.parse(fs.readFileSync("./dir/akashic-lib.json").toString());
 
+			/*
+
+			*/
 			expect(conf.assetList[0]).toEqual({
-				type: "audio",
-				path: "audio/foo/_",
-				systemId: "sound",
-				duration: 8000
-			});
-			expect(conf.assetList[1]).toEqual({
 				type: "vector-image",
 				path: "assets/image/$$$.svg",
 				width: 300,
 				height: 200
 			});
-			expect(conf.assetList[2]).toEqual({
+			expect(conf.assetList[1]).toEqual({
 				type: "vector-image",
 				path: "assets/image/@__.svg",
 				width: 300,
 				height: 200
 			});
-			expect(conf.assetList[3]).toEqual({
+			expect(conf.assetList[2]).toEqual({
 				type: "script",
 				path: "assets/script/foo/_1.js",
 				global: true
 			});
-			expect(conf.assetList[4]).toEqual({
+			expect(conf.assetList[3]).toEqual({
 				type: "text",
 				path: "assets/text/foo/$.txt"
+			});
+			expect(conf.assetList[5]).toEqual({
+				type: "audio",
+				path: "audio/foo/_",
+				systemId: "sound",
+				duration: 8000
 			});
 		});
 	});
