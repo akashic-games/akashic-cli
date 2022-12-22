@@ -206,9 +206,6 @@ describe("scanAsset()", () => {
 			});
 			conf = JSON.parse(fs.readFileSync("./dir/akashic-lib.json").toString());
 
-			/*
-
-			*/
 			expect(conf.assetList[0]).toEqual({
 				type: "vector-image",
 				path: "assets/image/$$$.svg",
