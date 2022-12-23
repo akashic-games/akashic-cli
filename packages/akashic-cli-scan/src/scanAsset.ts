@@ -233,6 +233,8 @@ export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 
 			const definedAssets = (configuration.assetList || []);
 
+			scannedAssets.push(...storeExistingAsset(scannedAudioAssets, definedAssets));
+
 			// 既存のアセット情報と新規追加のアセット情報をマージ
 			const newAssets = AssetModule.merge(
 				definedAssets,

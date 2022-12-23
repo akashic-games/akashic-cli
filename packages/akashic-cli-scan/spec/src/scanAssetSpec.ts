@@ -138,7 +138,6 @@ describe("scanAsset()", () => {
 
 		it("scan assets", async () => {
 			mockfs(mockFsContent);
-
 			await scanAsset({
 				cwd: "./dir",
 				target: "all",
@@ -152,46 +151,45 @@ describe("scanAsset()", () => {
 
 			// NOTE: アセットのスキャン順は仕様としては明記されていない。
 			expect(conf.assetList[0]).toEqual({
-				type: "audio",
-				path: "audio/foo/_",
-				systemId: "sound",
-				duration: 8000
-			});
-			expect(conf.assetList[1]).toEqual({
 				type: "image",
 				path: "image/foo/_$.png",
 				width: 1,
 				height: 1
 			});
-			expect(conf.assetList[2]).toEqual({
+			expect(conf.assetList[1]).toEqual({
 				type: "vector-image",
 				path: "image/bar/_$_.svg",
 				width: 300,
 				height: 200
 			});
 			// NOTE: target = "all" であるので assets ディレクトリの他アセットもスキャン対象
-			expect(conf.assetList[3]).toEqual({
+			expect(conf.assetList[2]).toEqual({
 				type: "vector-image",
 				path: "assets/image/$$$.svg",
 				width: 300,
 				height: 200
 			});
-			expect(conf.assetList[4]).toEqual({
+			expect(conf.assetList[3]).toEqual({
 				type: "vector-image",
 				path: "assets/image/@__.svg",
 				width: 300,
 				height: 200
 			});
-			expect(conf.assetList[5]).toEqual({
+			expect(conf.assetList[4]).toEqual({
 				type: "script",
 				path: "assets/script/foo/_1.js",
 				global: true
 			});
-			expect(conf.assetList[6]).toEqual({
+			expect(conf.assetList[5]).toEqual({
 				type: "text",
 				path: "assets/text/foo/$.txt"
 			});
-
+			expect(conf.assetList[6]).toEqual({
+				type: "audio",
+				path: "audio/foo/_",
+				systemId: "sound",
+				duration: 8000
+			});
 			// remove image asset
 			fs.unlinkSync("./dir/image/foo/_$.png");
 			fs.unlinkSync("./dir/image/bar/_$_.svg");
@@ -227,7 +225,7 @@ describe("scanAsset()", () => {
 				type: "text",
 				path: "assets/text/foo/$.txt"
 			});
-			expect(conf.assetList[5]).toEqual({
+			expect(conf.assetList[4]).toEqual({
 				type: "audio",
 				path: "audio/foo/_",
 				systemId: "sound",
@@ -392,18 +390,6 @@ describe("scanAsset()", () => {
 		// NOTE: 要素の順番は実装に依存する
 		expect(assets).toEqual([
 			{
-				"type": "audio",
-				"path": "audio/foo/_",
-				"systemId": "sound",
-				"duration": 1250
-			},
-			{
-				"type": "audio",
-				"path": "assets/assets_",
-				"systemId": "sound",
-				"duration": 1250
-			},
-			{
 				"type": "image",
 				"path": "image/foo/d.png",
 				"width": 1,
@@ -437,6 +423,18 @@ describe("scanAsset()", () => {
 				"type": "text",
 				"path": "assets/assets_$.conf"
 			},
+			{
+				"type": "audio",
+				"path": "audio/foo/_",
+				"systemId": "sound",
+				"duration": 1250
+			},
+			{
+				"type": "audio",
+				"path": "assets/assets_",
+				"systemId": "sound",
+				"duration": 1250
+			},
 		]);
 
 		await scanAsset({
@@ -457,18 +455,6 @@ describe("scanAsset()", () => {
 
 		// NOTE: 要素の順番は実装に依存する
 		expect(assets).toEqual([
-			{
-				"type": "audio",
-				"path": "audio/foo/_",
-				"systemId": "sound",
-				"duration": 1250
-			},
-			{
-				"type": "audio",
-				"path": "assets/assets_",
-				"systemId": "sound",
-				"duration": 1250
-			},
 			{
 				"type": "image",
 				"path": "image/foo/d.png",
@@ -499,7 +485,18 @@ describe("scanAsset()", () => {
 				"type": "text",
 				"path": "assets/assets_#.yml"
 			},
-		]);
+			{
+				"type": "audio",
+				"path": "audio/foo/_",
+				"systemId": "sound",
+				"duration": 1250
+			},
+			{
+				"type": "audio",
+				"path": "assets/assets_",
+				"systemId": "sound",
+				"duration": 1250
+			},		]);
 	});
 
 	it("scan image assets info", async () => {
