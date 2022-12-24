@@ -1,7 +1,7 @@
+import { calculateFinishedTime } from "@akashic/amflow-util/lib/calculateFinishedTime";
 import { PromisifiedAMFlowProxy } from "@akashic/amflow-util/lib/PromisifiedAMFlowProxy";
 import type { AMFlowClient, Play, PlayManager } from "@akashic/headless-driver";
 import { Trigger } from "@akashic/trigger";
-import { calculateFinishedTime } from "@akashic/amflow-util/lib/calculateFinishedTime";
 import { TimeKeeper } from "../../common/TimeKeeper";
 import type { PlayAudioState } from "../../common/types/PlayAudioState";
 import type { Player } from "../../common/types/Player";
@@ -104,7 +104,11 @@ export class PlayStore {
 		if (playlog) {
 			// クライアント側にdurationとしてplaylogに記録されている終了時間を渡す必要があるので、そのための設定を行う
 			const timeKeeper = this.playEntities[playId].timeKeeper;
-			const finishedTime = calculateFinishedTime(playlog);
+			const finishedTime = calculateFinishedTime(
+				playlog.tickList,
+				playlog.startPoints[0].data.fps,
+				playlog.startPoints[0].timestamp
+			);
 			timeKeeper.setTime(finishedTime);
 		}
 		this.onPlayCreate.fire({playId, status, contentLocatorData: loc.asContentLocatorData(), audioState});
