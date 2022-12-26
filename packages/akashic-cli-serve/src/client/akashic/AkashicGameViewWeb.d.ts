@@ -101,6 +101,7 @@ declare module agv {
 		setMasterVolume(vol: number): void;
 		getMasterVolume(): number;
 		setContentArea(area: ContentArea): void;
+		sendEvents(events: any[]): void;
 	}
 
 	interface ContentArea {

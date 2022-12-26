@@ -83,7 +83,7 @@ export class PlayOperator {
 	sendRegisteredEvent = (eventName: string): void => {
 		const sandboxConfig = this.store.currentLocalInstance!.content.sandboxConfig;
 		const pevs = sandboxConfig.events ? sandboxConfig.events[eventName] : [];
-		pevs.forEach((pev: any) => this.store.currentLocalInstance!.gameContent.sendEvent(pev));
+		this.store.currentLocalInstance!.gameContent.sendEvents(pevs);
 	};
 
 	sendEditorEvent = (): void => {
@@ -95,7 +95,7 @@ export class PlayOperator {
 		} catch (e) {
 			throw new Error(e);
 		}
-		pevs.forEach((pev: any) => this.store.currentLocalInstance!.gameContent.sendEvent(pev));
+		this.store.currentLocalInstance!.gameContent.sendEvents(pevs);
 	};
 
 	downloadPlaylog = (): void => {
