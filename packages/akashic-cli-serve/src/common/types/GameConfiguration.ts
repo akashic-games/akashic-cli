@@ -7,14 +7,16 @@ export interface GameConfiguration {
 	assets?: any;
 	environment?: {
 		"sandbox-runtime"?: string;
-		niconico?: NiconicoConfig;
+		nicolive?: NicoLiveConfig;
+		// niconico は非推奨だが、互換性を保つために nicolive と並列に定義
+		niconico?: NicoLiveConfig;
 		external: any;
 	};
 	globalScripts?: string[];
 	moduleMainScripts?: {[key: string]: string};
 }
 
-export interface NiconicoConfig {
+export interface NicoLiveConfig {
 	supportedModes?: Array<"single" | "ranking" | "multi">;
 	preferredSessionParameters?: PreferredSessionParameters;
 }

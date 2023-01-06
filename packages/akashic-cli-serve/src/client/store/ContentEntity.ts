@@ -1,7 +1,7 @@
 import type { NormalizedSandboxConfiguration } from "@akashic/sandbox-configuration";
 import { action, observable } from "mobx";
 import type { ContentDesc } from "../../common/types/ContentDesc";
-import type { GameConfiguration, PreferredSessionParameters } from "../../common/types/GameConfiguration";
+import type { GameConfiguration, NicoLiveConfig, PreferredSessionParameters } from "../../common/types/GameConfiguration";
 import { apiClient } from "../api/apiClientInstance";
 import { ClientContentLocator } from "../common/ClientContentLocator";
 import { DevtoolUiStore } from "./DevtoolUiStore";
@@ -46,13 +46,22 @@ export class ContentEntity {
 
 	@action
 	calculatePreferredSessionParameters(): void {
-		const niconicoConfig = this.gameJson && this.gameJson.environment && this.gameJson.environment.niconico;
-		this.preferredSessionParameters = niconicoConfig && niconicoConfig.preferredSessionParameters || {};
+		const nicoliveConfig = this._getNicoLiveConfig();
+		this.preferredSessionParameters = nicoliveConfig && nicoliveConfig.preferredSessionParameters || {};
 
 		this.preferredSessionParameters.totalTimeLimit =
 			!this.preferredSessionParameters || !this.preferredSessionParameters.totalTimeLimit
 				? DevtoolUiStore.DEFAULT_TOTAL_TIME_LIMIT
 				: this.preferredSessionParameters.totalTimeLimit;
+	}
+
+	private _getNicoLiveConfig(): NicoLiveConfig | null {
+		const environment = this.gameJson?.environment;
+		if (environment === undefined) {
+			return null;
+		}
+		// niconico は非推奨なので、nicolive の方を優先的に利用する
+		return environment.nicolive ?? (environment.niconico ?? null);
 	}
 
 	private async _initialize(): Promise<void> {
