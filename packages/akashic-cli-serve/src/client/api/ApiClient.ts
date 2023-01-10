@@ -1,3 +1,4 @@
+import type { GameConfiguration } from "@akashic/game-configuration";
 import type {
 	PlayDeleteApiResponse,
 	PlayGetAllApiResponse,
@@ -14,8 +15,7 @@ import type {
 	PlayerPostApiResponse,
 	StartPointHeaderListResponse
 } from "../../common/types/ApiResponse";
-import type {ContentLocatorData} from "../../common/types/ContentLocatorData";
-import type {GameConfiguration} from "../../common/types/GameConfiguration";
+import type { ContentLocatorData } from "../../common/types/ContentLocatorData";
 import type { PlayAudioState } from "../../common/types/PlayAudioState";
 import * as ApiRequest from "./ApiRequest";
 

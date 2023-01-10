@@ -1,7 +1,7 @@
+import type { GameConfiguration, NicoliveEnvironment, PreferredSessionParameters } from "@akashic/game-configuration";
 import type { NormalizedSandboxConfiguration } from "@akashic/sandbox-configuration";
 import { action, observable } from "mobx";
 import type { ContentDesc } from "../../common/types/ContentDesc";
-import type { GameConfiguration, NicoLiveConfig, PreferredSessionParameters } from "../../common/types/GameConfiguration";
 import { apiClient } from "../api/apiClientInstance";
 import { ClientContentLocator } from "../common/ClientContentLocator";
 import { DevtoolUiStore } from "./DevtoolUiStore";
@@ -55,7 +55,7 @@ export class ContentEntity {
 				: this.preferredSessionParameters.totalTimeLimit;
 	}
 
-	private _getNicoLiveConfig(): NicoLiveConfig | null {
+	private _getNicoLiveConfig(): NicoliveEnvironment | null {
 		const environment = this.gameJson?.environment;
 		if (environment === undefined) {
 			return null;
