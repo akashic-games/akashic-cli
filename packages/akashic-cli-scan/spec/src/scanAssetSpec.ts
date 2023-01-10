@@ -10,6 +10,7 @@ describe("scanAsset()", () => {
 	const DUMMY_OGG_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy.ogg"));
 	const DUMMY_AAC_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy.aac"));
 	const DUMMY_MP4_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy.mp4"));
+	const DUMMY_M4A_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy.m4a"));
 	const DUMMY_OGG_DATA2 = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy2.ogg"));
 	const DUMMY_1x1_PNG_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy1x1.png"));
 	const DUMMY_300x200_SVG_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy_300x200.svg"));
@@ -773,6 +774,7 @@ describe("scanAsset()", () => {
 			"audio": {
 				"dummy.ogg": DUMMY_OGG_DATA,
 				"dummy.mp4": DUMMY_MP4_DATA,
+				"dummy.m4a": DUMMY_M4A_DATA,
 				"dummy.aac": DUMMY_AAC_DATA
 			}
 		});
@@ -787,8 +789,8 @@ describe("scanAsset()", () => {
 			}
 		});
 
-		// AAC利用のwarnが1つ + duration差のwarnが1つ + アセット追加のログが1つ + Done!のログが1つ
-		expect(loggedCount).toBe(4);
+		// M4A/AAC利用のwarnが2つ + duration差のwarnが1つ + アセット追加のログが1つ + Done!のログが1つ
+		expect(loggedCount).toBe(5);
 	});
 
 	it("scan audio assets info with not supported ext", async () => {
