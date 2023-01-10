@@ -141,22 +141,22 @@ export class GameViewManager {
 	startGameContent(content: ServeGameContent): Promise<void> {
 		const agvGameContent = content.agvGameContent;
 		return new Promise<void>((resolve, reject) => {
-			// agvにGameContenをt読み込み時にのみ使用するエラーハンドリング
+			// GameContentの読み込み時にのみ使用するエラーハンドリング
 			const initializeErrorListener: agv.ErrorListener = {
 				onError: (e) => {
 					return reject(e);
 				}
 			};
+			agvGameContent.addErrorListener({
+				onError: (e) => {
+					console.error(e);
+				}
+			});
 			agvGameContent.addErrorListener(initializeErrorListener);
 			agvGameContent.addContentLoadListener({
 				onLoad: () => {
-					// 読み込みが完了したら、この処理用のエラーハンドリングは削除して代わりにゲーム動作中のエラーハンドリングを追加する
+					// 読み込みが完了したらエラー処理用のハンドリングを削除
 					agvGameContent.removeErrorListener(initializeErrorListener);
-					agvGameContent.addErrorListener({
-						onError: (e) => {
-							console.error(e);
-						}
-					});
 					content.setup();
 					resolve();
 				}
