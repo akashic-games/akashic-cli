@@ -791,8 +791,8 @@ describe("scanAsset()", () => {
 			}
 		});
 
-		// M4A/AAC利用のwarnが2つ + duration差のwarnが1つ + アセット追加のログが1つ + Done!のログが1つ
-		expect(loggedCount).toBe(5);
+		// AAC利用のwarnが2つ + duration差のwarnが1つ + アセット追加のログが1つ + Done!のログが1つ
+		expect(loggedCount).toBe(4);
 	});
 
 	it("scan audio assets info with not supported ext", async () => {
