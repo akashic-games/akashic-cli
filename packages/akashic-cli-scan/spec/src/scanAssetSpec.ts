@@ -1685,7 +1685,7 @@ describe("scanAsset()", () => {
 					"path": "audio/dummy",
 					"systemId": "sound",
 					"offset": 300,
-					"duration": 1250
+					"duration": 1
 				},
 			]
 		};
@@ -1703,6 +1703,7 @@ describe("scanAsset()", () => {
 
 		let conf: GameConfiguration = JSON.parse(fs.readFileSync("./game.json").toString());
 		let assets = conf.assets as AssetConfiguration[];
-		expect((assets[0] as AudioAssetConfigurationBase).offset).toBe(300);
+		expect((assets[0] as AudioAssetConfigurationBase).duration).toBe(1250); // duration が更新されている
+		expect((assets[0] as AudioAssetConfigurationBase).offset).toBe(300); // offset が維持されている
 	});
 });
