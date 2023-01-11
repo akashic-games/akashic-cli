@@ -5,8 +5,7 @@ import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
 import { chdir } from "@akashic/akashic-cli-commons/lib/Util";
 import type { AssetConfiguration, GameConfiguration } from "@akashic/game-configuration";
 import { AssetModule } from "./AssetModule";
-import { scanAudioAssets, scanImageAssets, scanScriptAssets, scanTextAssets, scanVectorImageAssets,
-	textAssetFilter } from "./scanUtils";
+import {scanAudioAssets, scanImageAssets, scanScriptAssets, scanTextAssets, scanVectorImageAssets,　textAssetFilter} from "./scanUtils";
 import type { AssetExtension, AssetScanDirectoryTable, AssetTargetType, LibConfiguration } from "./types";
 
 export interface ScanAssetParameterObject {
