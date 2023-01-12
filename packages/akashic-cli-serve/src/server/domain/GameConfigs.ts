@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
+import type { GameConfiguration } from "@akashic/game-configuration";
 import * as chokidar from "chokidar";
-import type { GameConfiguration } from "../../common/types/GameConfiguration";
 
 const configs: { [key: string]: GameConfiguration } = {};
 
