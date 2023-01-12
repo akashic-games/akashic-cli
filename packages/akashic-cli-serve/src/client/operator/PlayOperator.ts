@@ -1,3 +1,4 @@
+import { toJS as mobxToJS,} from "mobx";
 import * as Subscriber from "../api/Subscriber";
 import type { Store } from "../store/Store";
 
@@ -83,7 +84,8 @@ export class PlayOperator {
 	sendRegisteredEvent = (eventName: string): void => {
 		const sandboxConfig = this.store.currentLocalInstance!.content.sandboxConfig;
 		const pevs = sandboxConfig.events ? sandboxConfig.events[eventName] : [];
-		this.store.currentLocalInstance!.gameContent.sendEvents(pevs);
+		const events = mobxToJS(pevs); // untrusted の場合 proxy オブジェクト送信でエラーとなるため js オブジェクトへ変換して送信
+		this.store.currentLocalInstance!.gameContent.sendEvents(events);
 	};
 
 	sendEditorEvent = (): void => {
