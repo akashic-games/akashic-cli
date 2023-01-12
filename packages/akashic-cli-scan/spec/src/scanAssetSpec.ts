@@ -791,7 +791,7 @@ describe("scanAsset()", () => {
 			}
 		});
 
-		// AAC利用のwarnが2つ + duration差のwarnが1つ + アセット追加のログが1つ + Done!のログが1つ
+		// AAC利用のwarnが1つ + duration差のwarnが1つ + アセット追加のログが1つ + Done!のログが1つ
 		expect(loggedCount).toBe(4);
 	});
 
