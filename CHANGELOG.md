@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## 2.16.7 (2023-01-12)
+
+#### Bug Fix
+* `akashic-cli-serve`
+  * [#1191](https://github.com/akashic-games/akashic-cli/pull/1191) chore(serve): ゲームコンテンツ読み込み時のエラーを表示 ([@yu-ogi](https://github.com/yu-ogi))
+
+#### Update Dependencies
+* `akashic-cli-serve`
+  * [#1192](https://github.com/akashic-games/akashic-cli/pull/1192) fix(deps): update dependency @akashic/headless-driver to v2.4.2 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- [@dera-](https://github.com/dera-)
+- [@yu-ogi](https://github.com/yu-ogi)
+
 
 ## 2.16.5 (2022-12-12)
 
