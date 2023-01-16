@@ -1,4 +1,4 @@
-import { toJS as mobxToJS,} from "mobx";
+import { toJS as mobxToJS } from "mobx";
 import * as Subscriber from "../api/Subscriber";
 import type { Store } from "../store/Store";
 
