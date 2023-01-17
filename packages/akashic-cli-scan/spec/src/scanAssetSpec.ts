@@ -1,7 +1,7 @@
 import * as path from "path";
 import * as fs from "fs";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
-import type { AssetConfiguration, AssetConfigurationMap, GameConfiguration } from "@akashic/game-configuration";
+import type { AssetConfiguration, AssetConfigurationMap, AudioAssetConfigurationBase, GameConfiguration } from "@akashic/game-configuration";
 import * as mockfs from "mock-fs";
 import { scanAsset } from "../../lib/scanAsset";
 
@@ -10,6 +10,7 @@ describe("scanAsset()", () => {
 	const DUMMY_OGG_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy.ogg"));
 	const DUMMY_AAC_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy.aac"));
 	const DUMMY_MP4_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy.mp4"));
+	const DUMMY_M4A_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy.m4a"));
 	const DUMMY_OGG_DATA2 = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy2.ogg"));
 	const DUMMY_1x1_PNG_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy1x1.png"));
 	const DUMMY_300x200_SVG_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy_300x200.svg"));
@@ -775,6 +776,7 @@ describe("scanAsset()", () => {
 			"audio": {
 				"dummy.ogg": DUMMY_OGG_DATA,
 				"dummy.mp4": DUMMY_MP4_DATA,
+				"dummy.m4a": DUMMY_M4A_DATA,
 				"dummy.aac": DUMMY_AAC_DATA
 			}
 		});
@@ -1669,5 +1671,39 @@ describe("scanAsset()", () => {
 		expect(conf.assets["assets/audio/some/se"]).toBeDefined();
 		expect(conf.assets["assets/script/foo/script.js"]).toBeDefined();
 		expect(conf.assets["assets/text/foo/textdata.txt"]).toBeDefined();
+	});
+
+	it("keep offset if already has", async () => {
+		const gamejson: GameConfiguration = {
+			width: 320,
+			height: 34,
+			fps: 30,
+			main: "",
+			assets: [
+				{
+					"type": "audio",
+					"path": "audio/dummy",
+					"systemId": "sound",
+					"offset": 300,
+					"duration": 1
+				},
+			]
+		};
+		mockfs({
+			"game.json": JSON.stringify(gamejson),
+			"audio": {
+				"dummy.ogg": DUMMY_OGG_DATA,
+				"dummy.aac": DUMMY_AAC_DATA
+			}
+		});
+
+		await scanAsset({
+			assetScanDirectoryTable: { audio: ["audio"] }
+		});
+
+		let conf: GameConfiguration = JSON.parse(fs.readFileSync("./game.json").toString());
+		let assets = conf.assets as AssetConfiguration[];
+		expect((assets[0] as AudioAssetConfigurationBase).duration).toBe(1250); // duration が更新されている
+		expect((assets[0] as AudioAssetConfigurationBase).offset).toBe(300); // offset が維持されている
 	});
 });

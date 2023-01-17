@@ -31,7 +31,7 @@ export function vectorImageAssetFilter(p: string): boolean {
 }
 
 export function audioAssetFilter(p: string): boolean {
-	return /.*\.(ogg|aac|mp4)$/i.test(p);
+	return /.*\.(ogg|aac|mp4|m4a)$/i.test(p);
 }
 
 export interface AudioDurationInfo {
