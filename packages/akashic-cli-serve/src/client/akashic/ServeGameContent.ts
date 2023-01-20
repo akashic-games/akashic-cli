@@ -192,8 +192,7 @@ export class ServeGameContent {
 		gameDriver._gameLoop?._clock?._profiler?._calculateProfilerValueTrigger?.add(cb);
 	}
 
-	sendEvent(event: playlog.EventLike): void {
-		const gameDriver = this.agvGameContent.getGameDriver();
-		gameDriver._eventBuffer.onEvent(event);
+	sendEvents(events: playlog.EventLike[]): void {
+		this.agvGameContent.sendEvents(events);
 	}
 }
