@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## 2.16.9 (2023-01-20)
+
+#### Other Change
+* `akashic-cli-serve`
+  * [#1189](https://github.com/akashic-games/akashic-cli/pull/1189) Mod local sendEvent in serve ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Update Dependencies
+* `akashic-cli-serve`
+  * [#1196](https://github.com/akashic-games/akashic-cli/pull/1196) fix(deps): update dependency @akashic/headless-driver to v2.5.1 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- kamakiri_ys ([@kamakiri01](https://github.com/kamakiri01))
+
 ## 2.16.8 (2023-01-16)
 
 #### Enhancement
