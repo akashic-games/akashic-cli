@@ -446,7 +446,7 @@ export async function run(argv: any): Promise<void> {
 			targetService: options.targetService ?? conf.targetService,
 			debugPlaylog: options.debugPlaylog ?? conf.debugPlaylog,
 			debugUntrusted: options.debugUntrusted ?? conf.debugUntrusted,
-			debugProxyAudio: options.proxyAudio ?? conf.debugProxyAudio,
+			debugProxyAudio: options.debugProxyAudio ?? conf.debugProxyAudio,
 			allowExternal: options.allowExternal ?? conf.allowExternal,
 			targetDirs: commander.args.length > 0 ? commander.args : (conf.targetDirs ?? [process.cwd()]),
 			openBrowser: options.openBrowser ?? conf.openBrowser,
