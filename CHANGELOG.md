@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.16.11 (2023-01-31)
+
+#### Bug Fix
+* `akashic-cli-serve`
+  * [#1202](https://github.com/akashic-games/akashic-cli/pull/1202) Fix bug in experimental-open option ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 2.16.10 (2023-01-27)
 
 #### Enhancement
