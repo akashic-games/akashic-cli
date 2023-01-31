@@ -144,7 +144,7 @@ export class PlayOperator {
 		let width;
 		let height;
 
-		const sandboxConfig = this.store.currentLocalInstance!.content.sandboxConfig;
+		const sandboxConfig = this.store.contentStore.defaultContent().sandboxConfig;
 		const windowSize = sandboxConfig.windowSize;
 
 		const calcAutoSize = (): { width: number; height: number } => {
