@@ -9,6 +9,7 @@ export interface CliConfigServe {
 	debugPlaylog?: string;
 	debugUntrusted?: boolean;
 	debugProxyAudio?: boolean;
+	debugPauseActive?: boolean;
 	allowExternal?: boolean;
 	targetDirs?: string[];
 	openBrowser?: boolean;

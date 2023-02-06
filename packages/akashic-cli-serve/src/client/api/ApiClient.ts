@@ -81,10 +81,10 @@ export class ApiClient {
 		);
 	};
 
-	async createRunner(playId: string, isActive: boolean, token: string): Promise<RunnerPostApiResponse> {
+	async createRunner(playId: string, isActive: boolean, token: string, isPaused: boolean = false): Promise<RunnerPostApiResponse> {
 		return ApiRequest.post<RunnerPostApiResponse>(
 			`${this._baseUrl}/api/runners`,
-			{playId, isActive: isActive.toString(), token}
+			{playId, isActive: isActive.toString(), token, isPaused: isPaused.toString() }
 		);
 	};
 

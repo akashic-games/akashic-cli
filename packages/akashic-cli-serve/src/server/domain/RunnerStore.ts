@@ -22,6 +22,7 @@ export interface CreateAndStartRunnerParameterObject {
 	token: string;
 	amflow: AMFlowClient;
 	contentId: string;
+	isPaused: boolean;
 }
 
 export class RunnerStore {
@@ -79,6 +80,9 @@ export class RunnerStore {
 		await this.runnerManager.startRunner(runner.runnerId);
 		this.onRunnerCreate.fire({ playId: params.playId, runnerId, isActive: params.isActive });
 		this.playIdTable[runnerId] = params.playId;
+
+		if (params.isPaused)
+			this.pauseRunner(runnerId);
 		return runner;
 	}
 

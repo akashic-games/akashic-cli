@@ -44,6 +44,7 @@ akashic-cli-serve [<options>] [<path>]
 |`--watch`|`-w`|アセットディレクトリを監視し、変更時に新規プレイを作成します。|N/A|
 |`--server-external-script <filepath>`|N/A|指定ファイルの js を評価し、アクティブインスタンスの g.game.external に代入します。|N/A|
 |`--debug-playlog <path>`|N/A|指定した playlog.json を読み込みます(エンジン開発用、または開発中のオプションです)。|N/A|
+|`--debug-pause-active`|N/A|アクティブインスタンスをポーズした状態でプレイを開始します。(エンジン開発用のオプションです)|N/A|
 |`--allow-external`|N/A|外部アセットを許可します。許可する値は sandbox.config.js から読み込みます。|N/A|
 |`--no-open-browser`|N/A|起動時に自動でブラウザを開かないようにします。|N/A|
 |`--preserve-disconnected`|N/A|サーバ切断時に開いている子ウィンドウを閉じないようにします。|N/A|

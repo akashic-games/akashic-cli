@@ -25,10 +25,11 @@ export const createHandlerToCreateRunner = (
 			if (!playInfo)
 				throw new BadRequestError({ errorMessage: `Play not found for ${playId}` });
 			const contentId = playInfo.contentLocatorData.contentId!;
-			const isActive = Boolean(req.body.isActive);
+			const isActive = (req.body.isActive === "true");
+			const isPaused = (req.body.isPaused === "true");
 			const token = req.body.token;
 			const amflow = playStore.createAMFlow(playId);
-			const runner = await runnerStore.createAndStartRunner({ playId, isActive, token, amflow, contentId });
+			const runner = await runnerStore.createAndStartRunner({ playId, isActive, token, amflow, contentId, isPaused });
 			responseSuccess<RunnerPostApiResponseData>(res, 200, { playId: runner.playId, runnerId: runner.runnerId });
 		} catch (e) {
 			next(e);

@@ -9,6 +9,7 @@ export interface ServerGlobalConfig {
 	verbose: boolean;
 	untrusted: boolean; // 簡易対応。究極的にはコンテンツごとに指定されるべき値
 	proxyAudio: boolean;
+	pauseActive: boolean;
 	targetService: ServiceType;
 	allowExternal: boolean;
 	preserveDisconnected: boolean;
@@ -28,6 +29,7 @@ export const serverGlobalConfig: ServerGlobalConfig = {
 	verbose: false,
 	untrusted: false,
 	proxyAudio: false,
+	pauseActive: false,
 	targetService: "none",
 	allowExternal: false,
 	preserveDisconnected: false,
