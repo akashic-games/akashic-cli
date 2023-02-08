@@ -194,8 +194,10 @@ export class Operator {
 		const content = this.store.contentStore.find(contentLocator);
 		const play = await this.store.playStore.createPlay({ contentLocator, audioState });
 		const tokenResult = await apiClient.createPlayToken(play.playId, "", true);  // TODO 空文字列でなくnullを使う
-		await play.createServerInstance({ playToken: tokenResult.data.playToken });
-		await apiClient.resumePlayDuration(play.playId);
+		const { pauseActive } = this.store.appOptions;
+		await play.createServerInstance({ playToken: tokenResult.data.playToken, isPaused: pauseActive });
+		if (!pauseActive)
+			await apiClient.resumePlayDuration(play.playId);
 
 		// autoSendEvents
 		const sandboxConfig = content.sandboxConfig;

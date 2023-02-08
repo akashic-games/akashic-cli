@@ -47,6 +47,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 
 	serverGlobalConfig.untrusted = !!cliConfigParam.debugUntrusted;
 	serverGlobalConfig.proxyAudio = !!cliConfigParam.debugProxyAudio;
+	serverGlobalConfig.pauseActive = !!cliConfigParam.debugPauseActive;
 	serverGlobalConfig.preserveDisconnected = !!cliConfigParam.preserveDisconnected;
 
 	if (cliConfigParam.hostname) {
@@ -251,7 +252,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 				const playId = await playStore.createPlay(new ServerContentLocator({ contentId }), audioState, undefined);
 				const token = amflowManager.createPlayToken(playId, "", "", true, {});
 				const amflow = playStore.createAMFlow(playId);
-				await runnerStore.createAndStartRunner({ playId, isActive: true, token, amflow, contentId });
+				await runnerStore.createAndStartRunner({ playId, isActive: true, token, amflow, contentId, isPaused: false });
 				await playStore.resumePlayDuration(playId);
 				targetPlayIds.forEach(id => {
 					io.emit("playBroadcast", { playId: id, message: { type: "switchPlay", nextPlayId: playId } });
@@ -420,6 +421,7 @@ export async function run(argv: any): Promise<void> {
 		.option("--debug-playlog <path>", "Specify path of playlog-json.")
 		.option("--debug-untrusted", "An internal debug option")
 		.option("--debug-proxy-audio", "An internal debug option")
+		.option("--debug-pause-active", "An internal debug options: start with paused the active instance")
 		.option("--allow-external", "Read the URL allowing external access from sandbox.config.js")
 		.option("--no-open-browser", "Disable to open a browser window at startup")
 		.option("--preserve-disconnected", "Disable auto closing for disconnected windows.")
@@ -447,6 +449,7 @@ export async function run(argv: any): Promise<void> {
 			debugPlaylog: options.debugPlaylog ?? conf.debugPlaylog,
 			debugUntrusted: options.debugUntrusted ?? conf.debugUntrusted,
 			debugProxyAudio: options.debugProxyAudio ?? conf.debugProxyAudio,
+			debugPauseActive: options.debugPauseActive ?? conf.debugPauseActive,
 			allowExternal: options.allowExternal ?? conf.allowExternal,
 			targetDirs: commander.args.length > 0 ? commander.args : (conf.targetDirs ?? [process.cwd()]),
 			openBrowser: options.openBrowser ?? conf.openBrowser,

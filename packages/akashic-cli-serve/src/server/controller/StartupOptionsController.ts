@@ -10,6 +10,7 @@ export const handleToGetStartupOptions = (_req: express.Request, res: express.Re
 			verbose: serverGlobalConfig.verbose,
 			targetService: serverGlobalConfig.targetService,
 			proxyAudio: serverGlobalConfig.proxyAudio,
+			pauseActive: serverGlobalConfig.pauseActive,
 			preserveDisconnected: serverGlobalConfig.preserveDisconnected,
 			experimentalOpen: serverGlobalConfig.experimentalOpen
 		});

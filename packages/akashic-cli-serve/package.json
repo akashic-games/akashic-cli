@@ -25,11 +25,11 @@
     "akashic-cli-serve": "./bin/run"
   },
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.14.0",
+    "@akashic/akashic-cli-commons": "0.14.3",
     "@akashic/akashic-cli-scan": "0.16.0",
     "@akashic/amflow-util": "^1.2.0",
     "@akashic/game-configuration": "^1.8.0",
-    "@akashic/headless-driver": "2.5.2",
+    "@akashic/headless-driver": "2.6.0",
     "@akashic/sandbox-configuration": "^2.3.0",
     "@akashic/trigger": "1.0.1",
     "@msgpack/msgpack": "2.8.0",

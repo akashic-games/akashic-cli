@@ -4,6 +4,7 @@ export interface AppOptions {
 	autoStart: boolean;
 	verbose: boolean;
 	proxyAudio: boolean;
+	pauseActive: boolean;
 	targetService: ServiceType;
 	preserveDisconnected: boolean;
 	experimentalOpen: number | null;
