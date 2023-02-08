@@ -77,12 +77,11 @@ export class RunnerStore {
 		}
 
 		const runner = this.runnerManager.getRunner(runnerId)!;
-		await this.runnerManager.startRunner(runner.runnerId);
+		await this.runnerManager.startRunner(runner.runnerId, { paused: params.isPaused });
 		this.onRunnerCreate.fire({ playId: params.playId, runnerId, isActive: params.isActive });
-		this.playIdTable[runnerId] = params.playId;
-
 		if (params.isPaused)
-			this.pauseRunner(runnerId);
+			this.onRunnerPause.fire({ playId: params.playId, runnerId });
+		this.playIdTable[runnerId] = params.playId;
 		return runner;
 	}
 
