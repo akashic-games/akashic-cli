@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 2.16.12 (2023-02-09)
+
+#### Enhancement
+* `akashic-cli-commons`, `akashic-cli-serve`
+  * [#1203](https://github.com/akashic-games/akashic-cli/pull/1203) faet(serve): add --debug-pause-active ([@xnv](https://github.com/xnv))
+
+#### Update Dependencies
+* `akashic-cli-serve`
+  * [#1204](https://github.com/akashic-games/akashic-cli/pull/1204) fix(deps): update dependency @akashic/headless-driver to v2.6.1 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.16.11 (2023-01-31)
 
 #### Bug Fix
