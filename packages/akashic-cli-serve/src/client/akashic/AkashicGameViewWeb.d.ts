@@ -154,6 +154,7 @@ declare module agv {
 		addOnce: (...args: any[]) => void;
 		remove: (...args: any[]) => void;
 		fire: (arg: any) => void;
+		handle: (...args: any[]) => void; // deprecatedだが、v1コンテンツとの互換性のために定義
 	}
 
 	interface GameExternalPluginsLike {
