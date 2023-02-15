@@ -189,7 +189,17 @@ export class ServeGameContent {
 
 		// 全体的に内部プロパティなので、存在しない場合に備えて ?. をつけておく。
 		// 特に _gameLoop は実際に存在しない場合がある (--debug-untrusted) 。
-		gameDriver._gameLoop?._clock?._profiler?._calculateProfilerValueTrigger?.handle(cb);
+		if (gameDriver._gameLoop?._clock?._profiler?._calculateProfilerValueTrigger) {
+			const trigger = gameDriver._gameLoop._clock._profiler._calculateProfilerValueTrigger;
+			if (typeof trigger.add !== "undefined") {
+				trigger.add(cb);
+			} else {
+				// addメソッドが無いケースはv1コンテンツの場合のみの想定で、この時handleメソッドは必ず存在する
+				trigger.handle(cb);
+			}
+		} else {
+			console.warn("`gameDriver._gameLoop._clock._profiler._calculateProfilerValueTrigger` is undefined");
+		}
 	}
 
 	sendEvents(events: playlog.EventLike[]): void {
