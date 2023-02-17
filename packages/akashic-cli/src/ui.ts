@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import { Command } from "commander";
-var ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "package.json"), "utf8")).version;
+const ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "package.json"), "utf8")).version;
 
 const commander = new Command();
 commander
@@ -18,4 +18,5 @@ commander
 	.command("export", "Export a directory as a specified format")
 	.command("stat", "Show statistics information")
 	.command("serve", "Start a server that hosts a game to test multiplaying")
+	.passThroughOptions()
 	.parse(process.argv);
