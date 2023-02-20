@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.16.13 (2023-02-20)
+
+#### Bug Fix
+* `akashic-cli`
+  * [#1207](https://github.com/akashic-games/akashic-cli/pull/1207) Fix subcommand version for akashic-cli ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 2.16.12 (2023-02-09)
 
 #### Enhancement
