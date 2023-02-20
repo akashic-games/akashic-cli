@@ -198,7 +198,7 @@ export class ServeGameContent {
 				trigger.handle(cb);
 			}
 		} else {
-			console.warn("`gameDriver._gameLoop._clock._profiler._calculateProfilerValueTrigger` is undefined");
+			console.warn("_callculateProfilerValueTriger is not defined. It's not supported in --debug-untrusted");
 		}
 	}
 
