@@ -1,7 +1,7 @@
 import * as path from "path";
 import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
 import { invertMap, makeUnixPath } from "@akashic/akashic-cli-commons/lib/Util";
-import type { AssetConfiguration } from "@akashic/game-configuration";
+import type { AssetConfiguration, AudioAssetConfigurationBase } from "@akashic/game-configuration";
 import * as readdirRecursive from "fs-readdir-recursive";
 import { getAudioDuration } from "./getAudioDuration";
 import { getImageSize } from "./getImageSize";
@@ -164,7 +164,10 @@ export async function scanAudioAssets(
 	}
 
 	const durationMap: AudioDurationInfoMap = {};
+	const extMap: {[key: string]: Set<string>} = {};
 	for (const durationInfo of durationInfos) {
+		if (!extMap[durationInfo.path]) extMap[durationInfo.path] = new Set<string>();
+		extMap[durationInfo.path].add(durationInfo.ext);
 		if (durationInfo.ext === ".ogg" || !durationMap[durationInfo.basename]) {
 			durationMap[durationInfo.path] = durationInfo;
 		}
@@ -173,12 +176,14 @@ export async function scanAudioAssets(
 	const audioAssets: AssetConfiguration[] = [];
 	for (const filePath in durationMap) {
 		if (!durationMap.hasOwnProperty(filePath)) continue;
-		audioAssets.push({
+		const asset: AudioAssetConfigurationBase = {
 			type: "audio",
 			path: filePath,
 			systemId: "sound",
 			duration: durationMap[filePath].duration
-		});
+		};
+		if (extMap[filePath].size > 0) asset.hint = { extensions: Array.from(extMap[filePath]) };
+		audioAssets.push(asset);
 	}
 
 	return audioAssets;
