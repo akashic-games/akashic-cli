@@ -61,7 +61,7 @@ describe("scanAsset()", () => {
 			const conf: GameConfiguration = JSON.parse(fs.readFileSync("./game/game.json").toString());
 			const assets = conf.assets as AssetConfigurationMap;
 			expect(assets["$"]).toEqual({ type: "text", path: "text/foo/$.txt" });
-			expect(assets["_"]).toEqual({ type: "audio", path: "audio/foo/_", systemId: "sound", duration: 8000 });
+			expect(assets["_"]).toEqual({ type: "audio", path: "audio/foo/_", systemId: "sound", duration: 8000, hint: { extensions: [".ogg"] } });
 			expect(assets["_1"]).toBeUndefined();
 			expect(fs.existsSync("./game/akashic-lib.json")).toBe(false)
 		});
@@ -73,7 +73,7 @@ describe("scanAsset()", () => {
 			const conf = JSON.parse(fs.readFileSync("./game/game.json").toString());
 			const assets = conf.assets as AssetConfigurationMap;
 			expect(assets["$"]).toEqual({ type: "text", path: "text/foo/$.txt" });
-			expect(assets["_"]).toEqual({ type: "audio", path: "audio/foo/_", systemId: "sound", duration: 8000 });
+			expect(assets["_"]).toEqual({ type: "audio", path: "audio/foo/_", systemId: "sound", duration: 8000, hint: { "extensions": [".ogg"] } });
 			expect(assets["_1"]).toEqual({ type: "script", path: "script/foo/_1.js", global: true });
 		});
 
@@ -84,7 +84,7 @@ describe("scanAsset()", () => {
 			const conf: GameConfiguration = JSON.parse(fs.readFileSync("./game/game.json").toString());
 			const assets = conf.assets as AssetConfigurationMap;
 			expect(assets["text/foo/$"]).toEqual({ type: "text", path: "text/foo/$.txt" });
-			expect(assets["audio/foo/_"]).toEqual({ type: "audio", path: "audio/foo/_", systemId: "sound", duration: 8000 });
+			expect(assets["audio/foo/_"]).toEqual({ type: "audio", path: "audio/foo/_", systemId: "sound", duration: 8000, hint: { "extensions": [".ogg"] }  });
 			expect(assets["script/foo/_1"]).toEqual({ type: "script", path: "script/foo/_1.js", global: true });
 		});
 
@@ -156,7 +156,8 @@ describe("scanAsset()", () => {
 				type: "audio",
 				path: "audio/foo/_",
 				systemId: "sound",
-				duration: 8000
+				duration: 8000,
+				hint: { extensions: [".ogg"] }
 			});
 			expect(conf.assetList[1]).toEqual({
 				type: "image",
@@ -211,7 +212,8 @@ describe("scanAsset()", () => {
 				type: "audio",
 				path: "audio/foo/_",
 				systemId: "sound",
-				duration: 8000
+				duration: 8000,
+				hint: { "extensions": [".ogg"] }
 			});
 			expect(conf.assetList[1]).toEqual({
 				type: "vector-image",
@@ -396,13 +398,15 @@ describe("scanAsset()", () => {
 				"type": "audio",
 				"path": "audio/foo/_",
 				"systemId": "sound",
-				"duration": 1250
+				"duration": 1250,
+				"hint": { extensions: [ ".ogg" ] }
 			},
 			{
 				"type": "audio",
 				"path": "assets/assets_",
 				"systemId": "sound",
-				"duration": 1250
+				"duration": 1250,
+				"hint": { extensions: [ ".ogg" ] }
 			},
 			{
 				"type": "image",
@@ -462,13 +466,15 @@ describe("scanAsset()", () => {
 				"type": "audio",
 				"path": "audio/foo/_",
 				"systemId": "sound",
-				"duration": 1250
+				"duration": 1250,
+				"hint": { extensions: [ ".ogg" ] }
 			},
 			{
 				"type": "audio",
 				"path": "assets/assets_",
 				"systemId": "sound",
-				"duration": 1250
+				"duration": 1250,
+				"hint": { extensions: [ ".ogg" ] }
 			},
 			{
 				"type": "image",
