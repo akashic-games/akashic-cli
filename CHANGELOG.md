@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.16.15 (2023-03-03)
+
+#### Update Dependencies
+* `akashic-cli-serve`
+  * [#1211](https://github.com/akashic-games/akashic-cli/pull/1211) chore(deps): update & follow headless-driver@2.6.3 ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 
 ## 2.16.13 (2023-02-20)
 
