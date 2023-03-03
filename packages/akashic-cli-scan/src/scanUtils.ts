@@ -1,7 +1,7 @@
 import * as path from "path";
 import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
 import { invertMap, makeUnixPath } from "@akashic/akashic-cli-commons/lib/Util";
-import type { AssetConfiguration } from "@akashic/game-configuration";
+import type { AssetConfiguration, AudioAssetConfigurationBase } from "@akashic/game-configuration";
 import * as readdirRecursive from "fs-readdir-recursive";
 import { getAudioDuration } from "./getAudioDuration";
 import { getImageSize } from "./getImageSize";
@@ -136,18 +136,22 @@ export async function scanAudioAssets(
 	const relativeFilePaths: string[] = readdirRecursive(path.join(baseDir, dir)).filter(filter);
 
 	const durationInfos: AudioDurationInfo[] = [];
+	const extMap: {[key: string]: Set<string>} = {};
 	for (const relativeFilePath of relativeFilePaths) {
 		const absolutePath = path.join(baseDir, dir, relativeFilePath);
 		const ext = path.extname(absolutePath);
 		const basename = path.basename(absolutePath, ext);
 		const nonExtRelativeFilePath = path.join(dir, path.dirname(relativeFilePath), basename);
 		const duration = await getAudioDuration(absolutePath, logger);
+		const unixPath = makeUnixPath(nonExtRelativeFilePath);
 		durationInfos.push({
 			basename,
 			ext: ext,
 			duration: Math.ceil(duration * 1000),
-			path: makeUnixPath(nonExtRelativeFilePath)
+			path: unixPath
 		});
+		if (!extMap[unixPath]) extMap[unixPath] = new Set<string>();
+		extMap[unixPath].add(ext);
 	}
 
 	const durationRevMap = invertMap(durationInfos as any, "path");
@@ -173,12 +177,14 @@ export async function scanAudioAssets(
 	const audioAssets: AssetConfiguration[] = [];
 	for (const filePath in durationMap) {
 		if (!durationMap.hasOwnProperty(filePath)) continue;
-		audioAssets.push({
+		const asset: AudioAssetConfigurationBase = {
 			type: "audio",
 			path: filePath,
 			systemId: "sound",
 			duration: durationMap[filePath].duration
-		});
+		};
+		if (extMap[filePath].size > 0) asset.hint = { extensions: Array.from(extMap[filePath]) };
+		audioAssets.push(asset);
 	}
 
 	return audioAssets;

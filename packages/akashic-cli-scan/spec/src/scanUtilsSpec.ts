@@ -160,7 +160,10 @@ describe("scanUtils", () => {
 				type: "audio",
 				path: "audio/foo/_0",
 				systemId: "sound",
-				duration: 1250
+				duration: 1250,
+				hint: {
+					extensions: [".aac", ".mp4", ".ogg"] // NOTE: extensions 要素の順番は実装に依存する
+				}
 			}
 		]);
 
@@ -179,7 +182,8 @@ describe("scanUtils", () => {
 				type: "audio",
 				path: "assets/_",
 				systemId: "sound",
-				duration: 8000
+				duration: 8000,
+				hint: { extensions: [".ogg"] }
 			}
 		]);
 	});
