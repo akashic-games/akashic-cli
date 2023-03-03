@@ -136,18 +136,22 @@ export async function scanAudioAssets(
 	const relativeFilePaths: string[] = readdirRecursive(path.join(baseDir, dir)).filter(filter);
 
 	const durationInfos: AudioDurationInfo[] = [];
+	const extMap: {[key: string]: Set<string>} = {};
 	for (const relativeFilePath of relativeFilePaths) {
 		const absolutePath = path.join(baseDir, dir, relativeFilePath);
 		const ext = path.extname(absolutePath);
 		const basename = path.basename(absolutePath, ext);
 		const nonExtRelativeFilePath = path.join(dir, path.dirname(relativeFilePath), basename);
 		const duration = await getAudioDuration(absolutePath, logger);
+		const unixPath = makeUnixPath(nonExtRelativeFilePath);
 		durationInfos.push({
 			basename,
 			ext: ext,
 			duration: Math.ceil(duration * 1000),
-			path: makeUnixPath(nonExtRelativeFilePath)
+			path: unixPath
 		});
+		if (!extMap[unixPath]) extMap[unixPath] = new Set<string>();
+		extMap[unixPath].add(ext);
 	}
 
 	const durationRevMap = invertMap(durationInfos as any, "path");
@@ -164,10 +168,7 @@ export async function scanAudioAssets(
 	}
 
 	const durationMap: AudioDurationInfoMap = {};
-	const extMap: {[key: string]: Set<string>} = {};
 	for (const durationInfo of durationInfos) {
-		if (!extMap[durationInfo.path]) extMap[durationInfo.path] = new Set<string>();
-		extMap[durationInfo.path].add(durationInfo.ext);
 		if (durationInfo.ext === ".ogg" || !durationMap[durationInfo.basename]) {
 			durationMap[durationInfo.path] = durationInfo;
 		}
