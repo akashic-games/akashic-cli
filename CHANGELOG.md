@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 2.16.16 (2023-03-08)
+
+#### Bug Fix
+* `akashic-cli-serve`
+  * [#1212](https://github.com/akashic-games/akashic-cli/pull/1212) Fix scriptAsset update for watch option in serve ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 2
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- kamakiri_ys ([@kamakiri01](https://github.com/kamakiri01))
+
 ## 2.16.15 (2023-03-03)
 
 #### Update Dependencies
