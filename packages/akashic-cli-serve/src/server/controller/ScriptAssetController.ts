@@ -23,14 +23,12 @@ export const createScriptAssetController = (baseDir: string, index: number): exp
 			if (! ("gScriptContainer" in window)) {
 				window.gScriptContainer = {};
 			}
-			if (! gScriptContainer["${key}"]) {
- 				gScriptContainer["${key}"] = function(g) {
-					var Math = window.akashicServe.scriptHelper.overrides.MeddlingMath;
+			gScriptContainer["${key}"] = function(g) {
+				var Math = window.akashicServe.scriptHelper.overrides.MeddlingMath;
 
-					(function(exports, require, module, __filename, __dirname) {
-						${content}
-					})(g.module.exports, g.module.require, g.module, g.filename, g.dirname);
-				}
+				(function(exports, require, module, __filename, __dirname) {
+					${content}
+				})(g.module.exports, g.module.require, g.module, g.filename, g.dirname);
 			}
 		`;
 		res.contentType("text/javascript");
