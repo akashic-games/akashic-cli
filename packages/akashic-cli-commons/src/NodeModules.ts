@@ -47,7 +47,8 @@ export module NodeModules {
 			let moduleName: string = "";
 			try {
 				const d = JSON.parse(packageJsonData);
-				mainScript = path.join(path.dirname(packageJsonFile), d.main);
+				const mainScriptName = d.main.split(".").pop() === "js" ? d.main : d.main + ".js";
+				mainScript = path.join(path.dirname(packageJsonFile), mainScriptName);
 				moduleName = d.name;
 			} catch (e) {
 				// do nothing
