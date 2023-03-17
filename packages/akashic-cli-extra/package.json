@@ -28,7 +28,7 @@
   "dependencies": {
     "@akashic/akashic-cli-commons": "0.14.5",
     "commander": "8.3.0",
-    "ini": "2.0.0",
+    "ini": "3.0.1",
     "lodash.get": "4.4.2",
     "lodash.set": "4.3.2",
     "lodash.unset": "4.5.2"
