@@ -9,6 +9,7 @@ export interface PlayCreateTestbedEvent {
 	playId: string;
 	status: PlayStatus;
 	contentLocatorData: ContentLocatorData;
+	joinedPlayers: Player[];
 	audioState: PlayAudioState;
 }
 

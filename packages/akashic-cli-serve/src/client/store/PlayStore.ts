@@ -1,6 +1,6 @@
 import { observable } from "mobx";
 import type { ContentLocatorData } from "../../common/types/ContentLocatorData";
-import type { PlayAudioState } from "../../common/types/PlayAudioState";
+import type { Player } from "../../common/types/Player";
 import type {
 	PlayCreateTestbedEvent,
 	PlayStatusChangedTestbedEvent,
@@ -30,8 +30,10 @@ export interface PlayStoreParameterObject {
 
 export interface CreatePlayParameterObject {
 	contentLocator: ContentLocatorData;
-	audioState?: PlayAudioState;
 	parent?: PlayEntity;
+	initialJoinPlayer?: Player;
+	inheritsJoinedFromLatest?: boolean;
+	inheritsAudioFromLatest?: boolean;
 }
 
 export interface CreateStandalonePlayParameterObject {
@@ -106,7 +108,7 @@ export class PlayStore {
 	}
 
 	async createPlay(param: CreatePlayParameterObject): Promise<PlayEntity> {
-		const playInfo = await apiClient.createPlay(param.contentLocator, param.audioState);
+		const playInfo = await apiClient.createPlay(param.contentLocator, param.initialJoinPlayer, param.inheritsJoinedFromLatest, param.inheritsAudioFromLatest);
 		const playId = playInfo.data.playId;
 
 		// apiClient.createPlay() に対する onPlayCreate 通知が先行していれば、この時点で PlayEntity が生成済みになっている

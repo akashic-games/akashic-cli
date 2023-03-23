@@ -26,6 +26,7 @@ import { SocketIOAMFlowManager } from "./domain/SocketIOAMFlowManager";
 import { createApiRouter } from "./route/ApiRoute";
 import { createContentsRouter } from "./route/ContentsRoute";
 import { createHealthCheckRouter } from "./route/HealthCheckRoute";
+import { isServiceTypeNicoliveLike } from "../common/targetServiceUtil";
 
 // 渡されたパラメータを全てstringに変換する
 // chalkを使用する場合、ログ出力時objectの中身を展開してくれないためstringに変換する必要がある
@@ -95,14 +96,12 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 	}
 
 	if (cliConfigParam.targetService) {
-		if (!cliConfigParam.autoStart &&
-			(/^nicolive.*/.test(cliConfigParam.targetService) || cliConfigParam.targetService === "atsumaru:multi")
-		) {
+		if (!cliConfigParam.autoStart && isServiceTypeNicoliveLike(cliConfigParam.targetService)) {
 			getSystemLogger().error("--no-auto-start and --target-service nicolive or atsumaru:multi can not be set at the same time.");
 			process.exit(1);
 		}
 
-		if (!SERVICE_TYPES.includes(cliConfigParam.targetService )) {
+		if (!SERVICE_TYPES.includes(cliConfigParam.targetService)) {
 			const serviceName: string = cliConfigParam.targetService;
 			if (serviceName === "nicolive:ranking" || serviceName === "nicolive:single") {
 				// モードとしてあるがサポートしてないものは未実装のエラーとする
@@ -248,8 +247,11 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 				});
 				if (targetPlayIds.length === 0)
 					return;
-				const audioState = playStore.getPlayInfo(targetPlayIds[targetPlayIds.length - 1])?.audioState; // 暫定: どれを持ち越すべきか検討が必要
-				const playId = await playStore.createPlay(new ServerContentLocator({ contentId }), audioState, undefined);
+				const playId = await playStore.createPlay({
+					contentLocator: new ServerContentLocator({ contentId }),
+					inheritsJoinedFromLatest: isServiceTypeNicoliveLike(serverGlobalConfig.targetService),
+					inheritsAudioFromLatest: true
+				});
 				const token = amflowManager.createPlayToken(playId, "", "", true, {});
 				const amflow = playStore.createAMFlow(playId);
 				await runnerStore.createAndStartRunner({ playId, isActive: true, token, amflow, contentId, isPaused: false });
@@ -375,7 +377,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 		try {
 			// eslint-disable-next-line @typescript-eslint/no-var-requires
 			const playlog = require(absolutePath) as DumpedPlaylog;
-			loadedPlaylogPlayId = await playStore.createPlay(contentLocator, { muteType: "none" }, playlog);
+			loadedPlaylogPlayId = await playStore.createPlay({ contentLocator, playlog });
 		} catch (e) {
 			getSystemLogger().error(e.message);
 			process.exit(1);
@@ -423,7 +425,7 @@ export async function run(argv: any): Promise<void> {
 		.option("--debug-proxy-audio", "An internal debug option")
 		.option("--debug-pause-active", "An internal debug options: start with paused the active instance")
 		.option("--allow-external", "Read the URL allowing external access from sandbox.config.js")
-		.option("--no-open-browser", "Disable to open a browser window at startup")
+		.option("-B, --no-open-browser", "Disable to open a browser window at startup")
 		.option("--preserve-disconnected", "Disable auto closing for disconnected windows.")
 		.option("--experimental-open <num>",
 			"EXPERIMENTAL: Open <num> browser windows at startup. The upper limit of <num> is 10.") // TODO: open-browser と統合
