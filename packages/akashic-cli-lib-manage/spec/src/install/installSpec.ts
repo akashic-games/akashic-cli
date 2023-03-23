@@ -1,6 +1,10 @@
 import * as mockfs from "mock-fs";
 import * as cmn from "@akashic/akashic-cli-commons";
 import { promiseInstall } from "../../../lib/install/install";
+import { MockListModuleMainScripts } from "../uninstall/helpers/MockNodeModules";
+
+// listModuleMainScripts 内で使用している require.resolve() が mock できないため、拡張子をつけて返すロジックに差し替え
+cmn.NodeModules.listModuleMainScripts = MockListModuleMainScripts;
 
 describe("install()", function () {
 	afterEach(function () {

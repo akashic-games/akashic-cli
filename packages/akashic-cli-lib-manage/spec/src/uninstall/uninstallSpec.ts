@@ -2,7 +2,10 @@ import * as mockfs from "mock-fs";
 import * as cmn from "@akashic/akashic-cli-commons";
 import { uninstall, promiseUninstall } from "../../../lib/uninstall/uninstall";
 import path = require("path");
+import { MockListModuleMainScripts } from "./helpers/MockNodeModules";
 
+// NodeModules.listModuleMainScripts() 内で使用している require.resolve() が mock できないため、拡張子をつけて返すロジックに差し替え
+cmn.NodeModules.listModuleMainScripts = MockListModuleMainScripts;
 
 describe("uninstall()", function () {
 	afterEach(function () {
