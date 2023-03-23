@@ -2,6 +2,10 @@ import * as mockfs from "mock-fs";
 import { ConsoleLogger } from "../../lib/ConsoleLogger";
 import { Logger } from "../../lib/Logger";
 import { NodeModules } from "../../lib/NodeModules";
+import { MockListModuleMainScripts } from "./helpers/MockNodeModules";
+
+// listModuleMainScripts 内で使用している require.resolve() が mock できないため、拡張子をつけて返すロジックに差し替え
+NodeModules.listModuleMainScripts = MockListModuleMainScripts;
 
 describe("NodeModules", function () {
 
