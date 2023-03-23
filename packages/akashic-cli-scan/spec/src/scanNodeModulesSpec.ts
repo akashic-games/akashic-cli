@@ -2,7 +2,12 @@ import * as fs from "fs";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
 import * as mockfs from "mock-fs";
 import { scanNodeModules } from "../../lib/scanNodeModules";
+import { NodeModules } from "@akashic/akashic-cli-commons";
 import { MockPromisedNpm } from "./helpers/MockPromisedNpm";
+import { MockListModuleMainScripts } from "./helpers/MockNodeModules";
+
+// NodeModules.listModuleMainScripts() 内で使用している require.resolve() が mock できないため、拡張子をつけて返すロジックに差し替え
+NodeModules.listModuleMainScripts = MockListModuleMainScripts;
 
 describe("scanNodeModules", () => {
 	const nullLogger = new ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
