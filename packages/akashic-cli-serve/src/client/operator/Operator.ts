@@ -181,7 +181,8 @@ export class Operator {
 	// TODO: このメソッドの処理は本来サーバー側で行うべき
 	restartWithNewPlay = async (): Promise<void> => {
 		await this.store!.currentPlay!.content.updateSandboxConfig();
-		const play = await this._createServerLoop(this.store.currentPlay!.content.locator, undefined, isServiceTypeNicoliveLike(this.store.targetService), true);
+		const inheritsJoined = isServiceTypeNicoliveLike(this.store.targetService);
+		const play = await this._createServerLoop(this.store.currentPlay!.content.locator, undefined, inheritsJoined, true);
 		await this.store.currentPlay!.deleteAllServerInstances();
 		await apiClient.broadcast(this.store.currentPlay!.playId, { type: "switchPlay", nextPlayId: play.playId });
 		this.ui.hideNotification();
@@ -198,7 +199,12 @@ export class Operator {
 		inheritsAudioFromLatest: boolean
 	): Promise<PlayEntity> {
 		const content = this.store.contentStore.find(contentLocator);
-		const play = await this.store.playStore.createPlay({ contentLocator, initialJoinPlayer, inheritsJoinedFromLatest, inheritsAudioFromLatest });
+		const play = await this.store.playStore.createPlay({
+			contentLocator,
+			initialJoinPlayer,
+			inheritsJoinedFromLatest,
+			inheritsAudioFromLatest
+		});
 		const tokenResult = await apiClient.createPlayToken(play.playId, "", true);  // TODO 空文字列でなくnullを使う
 		const { pauseActive } = this.store.appOptions;
 		await play.createServerInstance({ playToken: tokenResult.data.playToken, isPaused: pauseActive });

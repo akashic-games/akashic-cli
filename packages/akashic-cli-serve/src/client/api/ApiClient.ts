@@ -17,7 +17,7 @@ import type {
 } from "../../common/types/ApiResponse";
 import type { ContentLocatorData } from "../../common/types/ContentLocatorData";
 import type { PlayAudioState } from "../../common/types/PlayAudioState";
-import { Player } from "../../common/types/Player";
+import type { Player } from "../../common/types/Player";
 import * as ApiRequest from "./ApiRequest";
 
 export class ApiClient {

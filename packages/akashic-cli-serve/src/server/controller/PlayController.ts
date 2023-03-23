@@ -22,7 +22,12 @@ export const createHandlerToCreatePlay = (playStore: PlayStore): express.Request
 			const initialJoinPlayer = initialJoinPlayerId ? { id: initialJoinPlayerId, name: initialJoinPlayerName } : undefined;
 			const inheritsJoinedFromLatest = req.body.inheritsJoinedFromLatest;
 			const inheritsAudioFromLatest = req.body.inheritsAudioFromLatest;
-			const playId = await playStore.createPlay({ contentLocator, initialJoinPlayer, inheritsJoinedFromLatest, inheritsAudioFromLatest });
+			const playId = await playStore.createPlay({
+				contentLocator,
+				initialJoinPlayer,
+				inheritsJoinedFromLatest,
+				inheritsAudioFromLatest
+			});
 			responseSuccess<PlayApiResponseData>(res, 200, playStore.getPlayInfo(playId));
 		} catch (e) {
 			next(e);

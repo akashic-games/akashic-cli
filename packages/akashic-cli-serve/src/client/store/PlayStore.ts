@@ -108,7 +108,12 @@ export class PlayStore {
 	}
 
 	async createPlay(param: CreatePlayParameterObject): Promise<PlayEntity> {
-		const playInfo = await apiClient.createPlay(param.contentLocator, param.initialJoinPlayer, param.inheritsJoinedFromLatest, param.inheritsAudioFromLatest);
+		const playInfo = await apiClient.createPlay(
+			param.contentLocator,
+			param.initialJoinPlayer,
+			param.inheritsJoinedFromLatest,
+			param.inheritsAudioFromLatest
+		);
 		const playId = playInfo.data.playId;
 
 		// apiClient.createPlay() に対する onPlayCreate 通知が先行していれば、この時点で PlayEntity が生成済みになっている

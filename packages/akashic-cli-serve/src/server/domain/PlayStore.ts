@@ -1,8 +1,8 @@
 import { calculateFinishedTime } from "@akashic/amflow-util/lib/calculateFinishedTime";
 import { PromisifiedAMFlowProxy } from "@akashic/amflow-util/lib/PromisifiedAMFlowProxy";
 import type { AMFlowClient, Play, PlayManager } from "@akashic/headless-driver";
-import { Trigger } from "@akashic/trigger";
 import * as pl from "@akashic/playlog";
+import { Trigger } from "@akashic/trigger";
 import { TimeKeeper } from "../../common/TimeKeeper";
 import type { PlayAudioState } from "../../common/types/PlayAudioState";
 import type { Player } from "../../common/types/Player";
@@ -148,7 +148,9 @@ export class PlayStore {
 		// TODO: Join/Leave の特殊な sendEvent() をこのクラスに集約する (現状は SocketIOAMFlowManager で Join/Leave の送信をハンドリングしている)
 		if (joinedPlayers.length > 0) {
 			const amflow = (await this.getDebugAMFlow(playId))!;
-			joinedPlayers.forEach(player => { amflow.sendEvent([pl.EventCode.Join, 3, player.id, player.name]); });
+			joinedPlayers.forEach(player => {
+				amflow.sendEvent([pl.EventCode.Join, 3, player.id, player.name]);
+			});
 		}
 		return playId;
 	}
