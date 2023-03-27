@@ -1,16 +1,28 @@
 import * as fs from "fs";
+import * as path from "path";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
 import * as mockfs from "mock-fs";
 import { scanNodeModules } from "../../lib/scanNodeModules";
 import { NodeModules } from "@akashic/akashic-cli-commons";
 import { MockPromisedNpm } from "./helpers/MockPromisedNpm";
-import { MockListModuleMainScripts } from "./helpers/MockNodeModules";
-
-// NodeModules.listModuleMainScripts() 内で使用している require.resolve() が mock できないため、拡張子をつけて返すロジックに差し替え
-NodeModules.listModuleMainScripts = MockListModuleMainScripts;
 
 describe("scanNodeModules", () => {
 	const nullLogger = new ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
+	let spy:jasmine.Spy;
+	beforeAll(() => {
+		spy = spyOn(NodeModules, "requireResolve").and.callFake((scriptName: string, packageJsonFile: string | undefined) => {
+			if (packageJsonFile) {
+				const pkgData =  JSON.parse(fs.readFileSync(packageJsonFile, "utf-8"));
+				const mainScriptName = pkgData.main.split(".").pop() === "js" ? pkgData.main : pkgData.main + ".js";
+				const mainScript = path.join(path.dirname(packageJsonFile), mainScriptName);
+				return mainScript
+			}
+			return scriptName;
+		});		   
+	});
+	afterAll(() => {
+		spy.calls.reset();
+	});
 
 	it("scan globalScripts field based on node_modules/", async () => {
 		mockfs({
