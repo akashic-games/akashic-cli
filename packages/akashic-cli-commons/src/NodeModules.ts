@@ -47,8 +47,7 @@ export module NodeModules {
 			let moduleName: string = "";
 			try {
 				const d = JSON.parse(packageJsonData);
-				const mainScriptPath = require.resolve(d.name, {paths: ["."]});
-				mainScript = mainScriptPath.replace(path.resolve(".") + "/", "");
+				mainScript = NodeModules.requireResolve(d.name, packageJsonFile);
 				moduleName = d.name;
 			} catch (e) {
 				// do nothing
@@ -58,6 +57,12 @@ export module NodeModules {
 			}
 		}
 		return moduleMainScripts;
+	}
+	
+	// 第二引数の _packageJsonFile はテストのモック用に利用している
+	export function requireResolve(scriptName: string, _packageJsonFile?: string): string { 
+		const mainScriptPath = require.resolve(scriptName, {paths: ["."]});
+		return mainScriptPath.replace(path.resolve(".") + "/", "");
 	}
 
 	// TODO: node_modules/ 以下以外でも利用するメソッドのため、NodeModules ではなく別の適切な場所に移動する

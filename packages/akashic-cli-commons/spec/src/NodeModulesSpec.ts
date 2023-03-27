@@ -1,11 +1,9 @@
+import * as fs from "fs";
+import * as path from "path";
 import * as mockfs from "mock-fs";
 import { ConsoleLogger } from "../../lib/ConsoleLogger";
 import { Logger } from "../../lib/Logger";
 import { NodeModules } from "../../lib/NodeModules";
-import { MockListModuleMainScripts } from "./helpers/MockNodeModules";
-
-// listModuleMainScripts 内で使用している require.resolve() が mock できないため、拡張子をつけて返すロジックに差し替え
-NodeModules.listModuleMainScripts = MockListModuleMainScripts;
 
 describe("NodeModules", function () {
 
@@ -148,6 +146,13 @@ describe("NodeModules", function () {
 
 	describe(".listModuleMainScripts()", function () {
 		it("list the files named package.json", function (done) {
+			jest.spyOn(NodeModules, "requireResolve").mockImplementation((scriptName, packageJsonFile: string) => {
+				const pkgData =  JSON.parse(fs.readFileSync(packageJsonFile, "utf-8"));
+				const mainScriptName = pkgData.main.split(".").pop() === "js" ? pkgData.main : pkgData.main + ".js";
+				const mainScript = path.join(path.dirname(packageJsonFile), mainScriptName);
+				return mainScript
+			});
+
 			mockfs(mockFsContent);
 			Promise.resolve()
 				.then(() => NodeModules.listScriptFiles(".", ["dummy", "dummy2", "dummy3"], logger))
