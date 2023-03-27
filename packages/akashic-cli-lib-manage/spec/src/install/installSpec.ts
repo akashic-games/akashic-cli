@@ -1,10 +1,8 @@
+import * as fs from "fs";
+import * as path from "path";
 import * as mockfs from "mock-fs";
 import * as cmn from "@akashic/akashic-cli-commons";
 import { promiseInstall } from "../../../lib/install/install";
-import { MockListModuleMainScripts } from "../uninstall/helpers/MockNodeModules";
-
-// listModuleMainScripts 内で使用している require.resolve() が mock できないため、拡張子をつけて返すロジックに差し替え
-cmn.NodeModules.listModuleMainScripts = MockListModuleMainScripts;
 
 describe("install()", function () {
 	afterEach(function () {
@@ -106,6 +104,13 @@ describe("install()", function () {
 				"node_modules": {}
 			}
 		};
+
+		jest.spyOn(cmn.NodeModules, "requireResolve").mockImplementation((_scriptName, packageJsonFile: string) => {
+			const pkgData =  JSON.parse(fs.readFileSync(packageJsonFile, "utf-8"));
+			const mainScriptName = pkgData.main.split(".").pop() === "js" ? pkgData.main : pkgData.main + ".js";
+			const mainScript = path.join(path.dirname(packageJsonFile), mainScriptName);
+			return mainScript
+		});
 
 		mockfs(mockFsContent);
 		const dummyNpm = new cmn.PromisedNpm({});

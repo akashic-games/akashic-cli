@@ -1,11 +1,8 @@
+import * as fs from "fs";
+import * as path from "path";
 import * as mockfs from "mock-fs";
 import * as cmn from "@akashic/akashic-cli-commons";
 import { uninstall, promiseUninstall } from "../../../lib/uninstall/uninstall";
-import path = require("path");
-import { MockListModuleMainScripts } from "./helpers/MockNodeModules";
-
-// NodeModules.listModuleMainScripts() 内で使用している require.resolve() が mock できないため、拡張子をつけて返すロジックに差し替え
-cmn.NodeModules.listModuleMainScripts = MockListModuleMainScripts;
 
 describe("uninstall()", function () {
 	afterEach(function () {
@@ -117,6 +114,13 @@ describe("uninstall()", function () {
 			}
 		}
 		var dummyNpm = new DummyNpm();
+
+		jest.spyOn(cmn.NodeModules, "requireResolve").mockImplementation((_scriptName, packageJsonFile: string) => {
+			const pkgData =  JSON.parse(fs.readFileSync(packageJsonFile, "utf-8"));
+			const mainScriptName = pkgData.main.split(".").pop() === "js" ? pkgData.main : pkgData.main + ".js";
+			const mainScript = path.join(path.dirname(packageJsonFile), mainScriptName);
+			return mainScript
+		});
 
 		Promise.resolve()
 			.then(() => promiseUninstall({
