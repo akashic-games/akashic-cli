@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 2.16.17 (2023-03-17)
+
+#### Enhancement
+* `akashic-cli-export`
+  * [#1214](https://github.com/akashic-games/akashic-cli/pull/1214) 【akashic-cli-export】内部コンポーネントの更新(engineFiles@3.6.7, engineFiles@2.2.2, engineFiles@1.2.1) ([@xnv](https://github.com/xnv))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`
+  * [#1198](https://github.com/akashic-games/akashic-cli/pull/1198) chore(deps): update akashic major/minor dependencies (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.16.16 (2023-03-08)
 
 #### Bug Fix
