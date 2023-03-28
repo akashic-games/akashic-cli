@@ -146,10 +146,10 @@ describe("NodeModules", function () {
 
 	describe(".listModuleMainScripts()", function () {
 		it("list the files named package.json", function (done) {
-			jest.spyOn(NodeModules, "requireResolve").mockImplementation((scriptName, packageJsonFile: string) => {
-				const pkgData =  JSON.parse(fs.readFileSync(packageJsonFile, "utf-8"));
+			jest.spyOn(NodeModules, "requireResolve").mockImplementation((scriptName, packageJsonPath: string) => {
+				const pkgData =  JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
 				const mainScriptName = pkgData.main.split(".").pop() === "js" ? pkgData.main : pkgData.main + ".js";
-				const mainScript = path.join(path.dirname(packageJsonFile), mainScriptName);
+				const mainScript = path.join(path.dirname(packageJsonPath), mainScriptName);
 				return mainScript
 			});
 

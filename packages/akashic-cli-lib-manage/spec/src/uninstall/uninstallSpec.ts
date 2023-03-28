@@ -115,10 +115,10 @@ describe("uninstall()", function () {
 		}
 		var dummyNpm = new DummyNpm();
 
-		jest.spyOn(cmn.NodeModules, "requireResolve").mockImplementation((_scriptName, packageJsonFile: string) => {
-			const pkgData =  JSON.parse(fs.readFileSync(packageJsonFile, "utf-8"));
+		jest.spyOn(cmn.NodeModules, "requireResolve").mockImplementation((_scriptName, packageJsonPath: string) => {
+			const pkgData =  JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
 			const mainScriptName = pkgData.main.split(".").pop() === "js" ? pkgData.main : pkgData.main + ".js";
-			const mainScript = path.join(path.dirname(packageJsonFile), mainScriptName);
+			const mainScript = path.join(path.dirname(packageJsonPath), mainScriptName);
 			return mainScript
 		});
 

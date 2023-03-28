@@ -10,11 +10,11 @@ describe("scanNodeModules", () => {
 	const nullLogger = new ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
 	let spy:jasmine.Spy;
 	beforeAll(() => {
-		spy = spyOn(NodeModules, "requireResolve").and.callFake((scriptName: string, packageJsonFile: string | undefined) => {
-			if (packageJsonFile) {
-				const pkgData =  JSON.parse(fs.readFileSync(packageJsonFile, "utf-8"));
+		spy = spyOn(NodeModules, "requireResolve").and.callFake((scriptName: string, packageJsonPath: string | undefined) => {
+			if (packageJsonPath) {
+				const pkgData =  JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
 				const mainScriptName = pkgData.main.split(".").pop() === "js" ? pkgData.main : pkgData.main + ".js";
-				const mainScript = path.join(path.dirname(packageJsonFile), mainScriptName);
+				const mainScript = path.join(path.dirname(packageJsonPath), mainScriptName);
 				return mainScript
 			}
 			return scriptName;
