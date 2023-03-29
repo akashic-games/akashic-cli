@@ -105,11 +105,11 @@ describe("install()", function () {
 			}
 		};
 
-		jest.spyOn(cmn.NodeModules, "requireResolve").mockImplementation((_scriptName, packageJsonPath: string) => {
+		jest.spyOn(cmn.NodeModules, "makeModuleMainScriptsObject").mockImplementation((packageJsonPath: string) => {
 			const pkgData =  JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
 			const mainScriptName = pkgData.main.split(".").pop() === "js" ? pkgData.main : pkgData.main + ".js";
 			const mainScript = path.join(path.dirname(packageJsonPath), mainScriptName);
-			return mainScript
+			return {moduleName: pkgData.name, mainScript };
 		});
 
 		mockfs(mockFsContent);
