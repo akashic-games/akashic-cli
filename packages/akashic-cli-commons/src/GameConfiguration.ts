@@ -1,4 +1,4 @@
-import type { AssetConfigurationMap, GameConfiguration as Configuration } from "@akashic/game-configuration";
+import type { AkashicRuntime, AssetConfigurationMap, GameConfiguration as Configuration } from "@akashic/game-configuration";
 import type { ServiceType } from "./ServiceType";
 
 /**
@@ -12,6 +12,7 @@ export interface GameConfiguration extends Configuration{
 
 export interface ModuleEnvironment {
 	"sandbox-runtime"?: string;
+	"akashic-runtime"?: AkashicRuntime;
 	external?: {[key: string]: string};
 }
 
@@ -34,5 +35,6 @@ export interface ExportZipInfo {
 		hashFilename?: number | boolean;
 		omitEmptyJs?: boolean;
 		targetService?: ServiceType;
+		nicolive?: boolean;
 	};
 }
