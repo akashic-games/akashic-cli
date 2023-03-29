@@ -285,10 +285,10 @@ async function addGameJsonValuesForNicoLive(gameJson: cmn.GameConfiguration): Pr
 	if (gameJson.environment["akashic-runtime"]) {
 		return;
 	}
-	gameJson.environment["akashic-runtime"] = { version: "" };
 	gameJson = await getFromHttps(
 		"https://raw.githubusercontent.com/akashic-games/akashic-runtime-version-table/master/versions.json").then((data) => {
 		const versionInfo = JSON.parse(data);
+		gameJson.environment["akashic-runtime"] = { version: "" };
 		if (!gameJson.environment["sandbox-runtime"] || gameJson.environment["sandbox-runtime"] === "1") {
 			gameJson.environment["akashic-runtime"].version = "~" + versionInfo.latest["1"];
 		} else {
