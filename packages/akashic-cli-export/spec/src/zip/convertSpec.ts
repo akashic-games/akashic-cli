@@ -479,5 +479,49 @@ describe("convert", () => {
 					done();
 				}, done.fail);
 		});
+
+		it("nicolive option, can add akashic-runtime to gamejson.", (done) => {
+			const param = {
+				source: path.resolve(__dirname, "..", "..", "fixtures", "sample_game_v3"),
+				dest: destDir,
+				bundle: true,
+				nicolive: true
+			};
+			convertGame(param)
+				.then(() => {
+					expect(fs.existsSync(path.join(destDir, "script/aez_bundle_main.js"))).toBe(true);
+					expect(fs.existsSync(path.join(destDir, "game.json"))).toBe(true);
+					expect(fs.existsSync(path.join(destDir, "package.json"))).toBe(true);
+					const gameJson = JSON.parse(fs.readFileSync(path.join(destDir, "game.json")).toString());
+					expect(gameJson.assets.aez_bundle_main.path).toBe("script/aez_bundle_main.js");
+					expect(gameJson.assets.aez_bundle_main.type).toBe("script");
+					expect(gameJson.assets.aez_bundle_main.global).toBe(true);
+					expect(gameJson.environment["sandbox-runtime"]).toBe("3");
+					expect(gameJson.environment.external).toEqual({ send: "0" });
+					expect(gameJson.environment["akashic-runtime"].version).toMatch(/^~3\.\d\.\d+(-.*)?$/);
+					expect(gameJson.environment["akashic-runtime"].flavor).toBe("-canvas");
+					done();
+				}, done.fail);
+		});
+
+		it("nicolive option, Do not add akashic-runtime if it already exists in game.json.", (done) => {
+			const param = {
+				source: path.resolve(__dirname, "..", "..", "fixtures", "sample_game_with_akashic_runtime"),
+				dest: destDir,
+				bundle: true,
+				nicolive: true
+			};
+			convertGame(param)
+				.then(() => {
+					const gameJson = JSON.parse(fs.readFileSync(path.join(destDir, "game.json")).toString());
+					expect(gameJson.environment.external.send).toBe("0");
+					expect(gameJson.environment["akashic-runtime"].version).toBe("~1.0.9-beta");
+					expect(gameJson.environment["akashic-runtime"].flavor).toBe(undefined);
+					expect(gameJson.environment.nicolive.supportedModes.length).toBe(2);
+					expect(gameJson.environment.nicolive.supportedModes).toContain("single");
+					expect(gameJson.environment.nicolive.supportedModes).toContain("ranking");
+					done();
+				}, done.fail);
+		});
 	});
 });
