@@ -1,6 +1,7 @@
 import { calculateFinishedTime } from "@akashic/amflow-util/lib/calculateFinishedTime";
 import { PromisifiedAMFlowProxy } from "@akashic/amflow-util/lib/PromisifiedAMFlowProxy";
 import type { AMFlowClient, Play, PlayManager } from "@akashic/headless-driver";
+import * as pl from "@akashic/playlog";
 import { Trigger } from "@akashic/trigger";
 import { TimeKeeper } from "../../common/TimeKeeper";
 import type { PlayAudioState } from "../../common/types/PlayAudioState";
@@ -27,6 +28,34 @@ import { activePermission, passivePermission, debugPermission } from "./AMFlowPe
 
 export interface PlayStoreParameterObject {
 	playManager: PlayManager;
+}
+
+export interface CreatePlayParameterObject {
+	/**
+	 * 実行するコンテンツ。
+	 */
+	contentLocator: ServerContentLocator;
+
+	/**
+	 * 流し込むプレイログ。
+	 * 指定した場合、このプレイに active instance を生成してはならない。
+	 */
+	playlog?: DumpedPlaylog;
+
+	/**
+	 * 初期 join プレイヤー。
+	 */
+	initialJoinPlayer?: Player;
+
+	/**
+	 * 直前のプレイから join 済みプレイヤー情報を引き継ぐか。
+	 */
+	inheritsJoinedFromLatest?: boolean;
+
+	/**
+	 * 直前のプレイから PlayAudioState を引き継ぐか。
+	 */
+	inheritsAudioFromLatest?: boolean;
 }
 
 /**
@@ -81,14 +110,15 @@ export class PlayStore {
 	/**
 	 * Playを生成するが、返すものはPlayId
 	 */
-	async createPlay(
-		loc: ServerContentLocator,
-		audioState: PlayAudioState = { muteType: "none" },
-		playlog?: DumpedPlaylog
-	): Promise<string> {
-		const playId = await this.playManager.createPlay({
-			contentUrl: loc.asAbsoluteUrl()
-		}, playlog);
+	async createPlay(params: CreatePlayParameterObject): Promise<string> {
+		const { contentLocator: loc, playlog, initialJoinPlayer, inheritsJoinedFromLatest, inheritsAudioFromLatest } = params;
+		const latestPlay = this.getLatestPlayInfo();
+		const audioState: PlayAudioState = (latestPlay && inheritsAudioFromLatest) ? { ...latestPlay.audioState } : { muteType: "none" };
+		const joinedPlayers = (latestPlay && inheritsJoinedFromLatest) ? latestPlay.joinedPlayers.concat() : [];
+		if (initialJoinPlayer)
+			joinedPlayers.push(initialJoinPlayer);
+
+		const playId = await this.playManager.createPlay({ contentUrl: loc.asAbsoluteUrl() }, playlog, { preservesUnhandledEvents: true });
 		const status = "preparing";
 		this.playEntities[playId] = {
 			contentLocator: loc,
@@ -96,7 +126,7 @@ export class PlayStore {
 			timeKeeper: new TimeKeeper(),
 			clientInstances: [],
 			runners: [],
-			joinedPlayers: [],
+			joinedPlayers,
 			audioState,
 			debugAMFlow: null
 		};
@@ -111,8 +141,17 @@ export class PlayStore {
 			);
 			timeKeeper.setTime(finishedTime);
 		}
-		this.onPlayCreate.fire({playId, status, contentLocatorData: loc.asContentLocatorData(), audioState});
+
+		this.onPlayCreate.fire({playId, status, contentLocatorData: loc.asContentLocatorData(), joinedPlayers, audioState });
 		this.setPlayStatus(playId, "running");
+
+		// TODO: Join/Leave の特殊な sendEvent() をこのクラスに集約する (現状は SocketIOAMFlowManager で Join/Leave の送信をハンドリングしている)
+		if (joinedPlayers.length > 0) {
+			const amflow = (await this.getDebugAMFlow(playId))!;
+			joinedPlayers.forEach(player => {
+				amflow.sendEvent([pl.EventCode.Join, 3, player.id, player.name]);
+			});
+		}
 		return playId;
 	}
 
@@ -155,6 +194,11 @@ export class PlayStore {
 
 	getPlaysInfo(): PlayInfo[] {
 		return this.getPlays().map(p => this.getPlayInfo(p.playId)!);
+	}
+
+	getLatestPlayInfo(): PlayInfo | null {
+		const play = this.getLatestPlay();
+		return play ? this.getPlayInfo(play.playId) : null;
 	}
 
 	getPlayIdsFromContentId(contentId: string): string[] {

@@ -51,7 +51,7 @@ describe("SocketIOAMFlowManager", () => {
 				socket = io("http://localhost:" + testServerPort);
 				const contentLocator = new ServerContentLocator({ path: "dummycontenturl" });
 
-				const playId1 = await playStore.createPlay(contentLocator);
+				const playId1 = await playStore.createPlay({ contentLocator });
 				const serverAMFlow = playStore.createAMFlow(playId1);
 				const serverToken = playStore.createPlayToken(playId1, true);
 				const token = amflowManager.createPlayToken(playId1, "playerId0", "john", false, null);
@@ -133,8 +133,8 @@ describe("SocketIOAMFlowManager", () => {
 				socketB = io("http://localhost:" + testServerPort);
 				const contentLocator = new ServerContentLocator({ path: "dummycontenturl" });
 
-				const playId1 = await playStore.createPlay(contentLocator);
-				const playId2 = await playStore.createPlay(contentLocator);
+				const playId1 = await playStore.createPlay({ contentLocator });
+				const playId2 = await playStore.createPlay({ contentLocator });
 				const token1a = amflowManager.createPlayToken(playId1, "playerId0", "john", true, null);
 				const token1p1 = amflowManager.createPlayToken(playId1, "playerId1", "bob", false, null);
 				const token1p2 = amflowManager.createPlayToken(playId1, "playerId2", "jack", false, null);
