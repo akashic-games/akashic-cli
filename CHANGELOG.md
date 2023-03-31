@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.16.18 (2023-03-31)
+
+#### Bug Fix
+* `akashic-cli-serve`
+  * [#1217](https://github.com/akashic-games/akashic-cli/pull/1217) fix(serve): fix lost join in -s nicolive mode ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.16.17 (2023-03-17)
 
 #### Enhancement
