@@ -94,7 +94,6 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 			playConfig.playToken = params.playToken;
 		}
 
-		console.log("params", params);
 		this._serveGameContent = this._gameViewManager.createGameContent({
 			contentLocator: this.content.locator,
 			player: {
