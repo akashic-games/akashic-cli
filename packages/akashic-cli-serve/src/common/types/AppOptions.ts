@@ -7,5 +7,6 @@ export interface AppOptions {
 	pauseActive: boolean;
 	targetService: ServiceType;
 	preserveDisconnected: boolean;
+	runInIframe: boolean;
 	experimentalOpen: number | null;
 }

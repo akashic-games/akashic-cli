@@ -8,6 +8,7 @@ export interface CliConfigServe {
 	targetService?: ServiceType;
 	debugPlaylog?: string;
 	debugUntrusted?: boolean;
+	debugTrustedIframe?: boolean;
 	debugProxyAudio?: boolean;
 	debugPauseActive?: boolean;
 	allowExternal?: boolean;

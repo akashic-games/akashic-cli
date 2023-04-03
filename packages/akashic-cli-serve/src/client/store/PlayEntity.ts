@@ -28,6 +28,7 @@ export interface CreateLocalInstanceParameterObject {
 	argument?: any;
 	initialEvents?: playlog.Event[];
 	proxyAudio?: boolean;
+	runInIframe?: boolean;
 	useNonDebuggableScript?: boolean;
 	resizeGameView?: boolean;
 }
