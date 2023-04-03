@@ -285,21 +285,20 @@ async function addGameJsonValuesForNicoLive(gameJson: cmn.GameConfiguration): Pr
 	if (gameJson.environment["akashic-runtime"]) {
 		return;
 	}
-	gameJson = await getFromHttps(
-		"https://raw.githubusercontent.com/akashic-games/akashic-runtime-version-table/master/versions.json").then((data) => {
-		const versionInfo = JSON.parse(data);
-		gameJson.environment["akashic-runtime"] = { version: "" };
-		if (!gameJson.environment["sandbox-runtime"] || gameJson.environment["sandbox-runtime"] === "1") {
-			gameJson.environment["akashic-runtime"].version = "~" + versionInfo.latest["1"];
-		} else {
-			gameJson.environment["akashic-runtime"].version =
-				"~" + versionInfo.latest[gameJson.environment["sandbox-runtime"]];
-			if (!gameJson.renderers || gameJson.renderers.indexOf("webgl") === -1) {
-				gameJson.environment["akashic-runtime"].flavor = "-canvas";
-			}
-		}
-		return gameJson;
-	});
 
+	const versionInfo = JSON.parse(await getFromHttps(
+		"https://raw.githubusercontent.com/akashic-games/akashic-runtime-version-table/master/versions.json"
+	));
+
+	gameJson.environment["akashic-runtime"] = { version: "" };
+	if (!gameJson.environment["sandbox-runtime"] || gameJson.environment["sandbox-runtime"] === "1") {
+		gameJson.environment["akashic-runtime"].version = "~" + versionInfo.latest["1"];
+	} else {
+		gameJson.environment["akashic-runtime"].version =
+			"~" + versionInfo.latest[gameJson.environment["sandbox-runtime"]];
+		if (!gameJson.renderers || gameJson.renderers.indexOf("webgl") === -1) {
+			gameJson.environment["akashic-runtime"].flavor = "-canvas";
+		}
+	}
 }
 
