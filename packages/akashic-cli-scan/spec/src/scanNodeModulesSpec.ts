@@ -10,11 +10,11 @@ describe("scanNodeModules", () => {
 	const nullLogger = new ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
 	let spy:jasmine.Spy;
 	beforeAll(() => {
-		spy = spyOn(NodeModules, "makeModuleMainScriptsObject").and.callFake((packageJsonPath: string) => {
-			const pkgData =  JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
+		spy = spyOn(NodeModules, "extractModuleMainInfo").and.callFake((packageJsonPath: string) => {
+			const pkgData = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
 			const mainScriptName = pkgData.main.split(".").pop() === "js" ? pkgData.main : pkgData.main + ".js";
-			const mainScript = path.join(path.dirname(packageJsonPath), mainScriptName);
-			return {moduleName: pkgData.name, mainScript };
+			const mainScriptPath = path.join(path.dirname(packageJsonPath), mainScriptName);
+			return {moduleName: pkgData.name, mainScriptPath };
 		});		   
 	});
 	afterAll(() => {
