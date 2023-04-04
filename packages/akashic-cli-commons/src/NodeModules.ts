@@ -7,6 +7,11 @@ import type { Logger } from "./Logger";
 import { StringStream } from "./StringStream";
 import * as Util from "./Util";
 
+interface ModuleMainInfo {
+	moduleName: string;
+	mainScriptPath: string;
+}
+
 export module NodeModules {
 	export function listModuleFiles(basepath: string, modules: string|string[], logger: Logger = new ConsoleLogger()): Promise<string[]> {
 		if (modules.length === 0) return Promise.resolve([]);
@@ -42,21 +47,25 @@ export module NodeModules {
 
 		for (let i = 0; i < packageJsonFiles.length; i++) {
 			const packageJsonFile = packageJsonFiles[i];
-			const packageJsonData = fs.readFileSync(packageJsonFile, "utf-8");
-			let mainScript: string = "";
-			let moduleName: string = "";
 			try {
-				const d = JSON.parse(packageJsonData);
-				mainScript = path.join(path.dirname(packageJsonFile), d.main);
-				moduleName = d.name;
+				const { mainScriptPath, moduleName } = NodeModules.extractModuleMainInfo(packageJsonFile);
+				moduleMainScripts[moduleName] = Util.makeUnixPath(mainScriptPath);
 			} catch (e) {
 				// do nothing
 			}
-			if (moduleName && moduleName !== "" && mainScript && mainScript !== "") {
-				moduleMainScripts[moduleName] = Util.makeUnixPath(mainScript);
-			}
 		}
 		return moduleMainScripts;
+	}
+
+	export function extractModuleMainInfo(packageJsonPath: string): ModuleMainInfo {
+		const packageJsonData = fs.readFileSync(packageJsonPath, "utf-8");
+		const d = JSON.parse(packageJsonData);
+		let mainScriptPath = require.resolve(d.name, {paths: [path.join(path.dirname(packageJsonPath))]});
+		if (!mainScriptPath) {
+			throw new Error(`No ${d.name} in node_modules`);
+		}
+		mainScriptPath = mainScriptPath.replace(path.resolve(".") + "/", "");
+		return { moduleName: d.name, mainScriptPath };
 	}
 
 	// TODO: node_modules/ 以下以外でも利用するメソッドのため、NodeModules ではなく別の適切な場所に移動する

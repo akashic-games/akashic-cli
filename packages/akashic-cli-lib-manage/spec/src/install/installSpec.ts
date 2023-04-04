@@ -1,3 +1,5 @@
+import * as fs from "fs";
+import * as path from "path";
 import * as mockfs from "mock-fs";
 import * as cmn from "@akashic/akashic-cli-commons";
 import { promiseInstall } from "../../../lib/install/install";
@@ -102,6 +104,13 @@ describe("install()", function () {
 				"node_modules": {}
 			}
 		};
+
+		jest.spyOn(cmn.NodeModules, "extractModuleMainInfo").mockImplementation((packageJsonPath: string) => {
+			const pkgData = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
+			const mainScriptName = pkgData.main.split(".").pop() === "js" ? pkgData.main : pkgData.main + ".js";
+			const mainScriptPath = path.join(path.dirname(packageJsonPath), mainScriptName);
+			return {moduleName: pkgData.name, mainScriptPath };
+		});
 
 		mockfs(mockFsContent);
 		const dummyNpm = new cmn.PromisedNpm({});
