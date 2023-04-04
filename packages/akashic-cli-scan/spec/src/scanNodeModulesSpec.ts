@@ -14,6 +14,9 @@ describe("scanNodeModules", () => {
 			const pkgData = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
 			const mainScriptName = pkgData.main.split(".").pop() === "js" ? pkgData.main : pkgData.main + ".js";
 			const mainScriptPath = path.join(path.dirname(packageJsonPath), mainScriptName);
+			if (!pkgData.name) {
+				throw new Error(`No ${pkgData.name} in node_modules`);
+			}	
 			return {moduleName: pkgData.name, mainScriptPath };
 		});		   
 	});

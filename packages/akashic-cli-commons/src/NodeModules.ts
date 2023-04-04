@@ -48,12 +48,8 @@ export module NodeModules {
 		for (let i = 0; i < packageJsonFiles.length; i++) {
 			const packageJsonFile = packageJsonFiles[i];
 			try {
-				const moduleMainInfo = NodeModules.extractModuleMainInfo(packageJsonFile);
-				const mainScriptPath = moduleMainInfo.mainScriptPath;
-				const moduleName = moduleMainInfo.moduleName;
-				if (moduleName && moduleName !== "" && mainScriptPath && mainScriptPath !== "") {
-					moduleMainScripts[moduleName] = Util.makeUnixPath(mainScriptPath);
-				}
+				const { mainScriptPath, moduleName } = NodeModules.extractModuleMainInfo(packageJsonFile);
+				moduleMainScripts[moduleName] = Util.makeUnixPath(mainScriptPath);
 			} catch (e) {
 				// do nothing
 			}
@@ -65,8 +61,11 @@ export module NodeModules {
 		const packageJsonData = fs.readFileSync(packageJsonPath, "utf-8");
 		const d = JSON.parse(packageJsonData);
 		let mainScriptPath = require.resolve(d.name, {paths: [path.join(path.dirname(packageJsonPath))]});
+		if (!mainScriptPath) {
+			throw new Error(`No ${d.name} in node_modules`);
+		}
 		mainScriptPath = mainScriptPath.replace(path.resolve(".") + "/", "");
-		return {moduleName: d.name, mainScriptPath};
+		return { moduleName: d.name, mainScriptPath };
 	}
 
 	// TODO: node_modules/ 以下以外でも利用するメソッドのため、NodeModules ではなく別の適切な場所に移動する
