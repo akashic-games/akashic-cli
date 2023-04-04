@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 2.16.19 (2023-04-04)
+
+#### Bug Fix
+* `akashic-cli-commons`, `akashic-cli-lib-manage`, `akashic-cli-scan`
+  * [#1213](https://github.com/akashic-games/akashic-cli/pull/1213) Fix to add extension to moduleMainScripts in akashic-cli-scan ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Update Dependencies
+* `akashic-cli-serve`
+  * [#1222](https://github.com/akashic-games/akashic-cli/pull/1222) fix(deps): update dependency @akashic/headless-driver to v2.7.3 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 2.16.18 (2023-03-31)
 
 #### Bug Fix
