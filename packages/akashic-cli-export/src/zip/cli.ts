@@ -76,7 +76,7 @@ commander
 	.option("--minify-js", "Minify JavaScript files")
 	.option("--minify-json", "Minify JSON files")
 	.option("--pack-image", "Pack small images")
-	.option("--target-service <service>", `Specify the target service of the exported content:${availableServices}`)
+	.option("--target-service <service>", `(Deprecated) Specify the target service of the exported content:${availableServices}`)
 	.option("--nicolive", "Export zip file for nicolive");
 
 export function run(argv: string[]): void {
