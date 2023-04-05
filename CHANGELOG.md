@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.16.20 (2023-04-05)
+
+#### Enhancement
+* `akashic-cli-commons`, `akashic-cli-serve`
+  * [#1221](https://github.com/akashic-games/akashic-cli/pull/1221) feat(serve): add --debug-trusted-iframe option ([@yu-ogi](https://github.com/yu-ogi))
+
+#### Committers: 1
+- [@yu-ogi](https://github.com/yu-ogi)
+
 ## 2.16.19 (2023-04-04)
 
 #### Bug Fix
