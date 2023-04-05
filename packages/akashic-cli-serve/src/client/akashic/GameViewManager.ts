@@ -50,6 +50,7 @@ export interface CreateGameContentParameterObject {
 	argument?: any;
 	initialEvents?: pl.Event[];
 	proxyAudio?: boolean;
+	runInIframe?: boolean;
 
 	/**
 	 * Webブラウザの開発者ツールのソースコード欄に現れる (debuggable) スクリプトを "使わない" か。
@@ -125,7 +126,8 @@ export class GameViewManager {
 			gameLoaderCustomizer: param.gameLoaderCustomizer,
 			argument: param.argument,
 			initialEvents: param.initialEvents,
-			audioPdiHandlers: param.proxyAudio ? new LogAudioPdiHandler() : null
+			audioPdiHandlers: param.proxyAudio ? new LogAudioPdiHandler() : null,
+			runInIframe: param.runInIframe
 		};
 		const agvGameContent = new agv.GameContent(gameConfig);
 		const ret = new ServeGameContent(agvGameContent);

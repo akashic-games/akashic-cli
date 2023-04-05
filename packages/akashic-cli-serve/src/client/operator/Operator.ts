@@ -156,6 +156,7 @@ export class Operator {
 			player: store.player!,
 			argument: params != null ? params.instanceArgument : undefined,
 			proxyAudio: store.appOptions.proxyAudio,
+			runInIframe: store.appOptions.runInIframe,
 			resizeGameView: true
 		});
 		instance.onStop.addOnce(this._endPlayerInfoResolver);
@@ -322,6 +323,7 @@ export class Operator {
 			argument: params.argument,
 			initialEvents: params.initialEvents,
 			proxyAudio: this.store.appOptions.proxyAudio,
+			runInIframe: this.store.appOptions.runInIframe,
 			useNonDebuggableScript: true,
 			resizeGameView: false
 		});

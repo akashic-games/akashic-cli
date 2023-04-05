@@ -47,6 +47,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 	}
 
 	serverGlobalConfig.untrusted = !!cliConfigParam.debugUntrusted;
+	serverGlobalConfig.runInIframe = !!cliConfigParam.debugTrustedIframe;
 	serverGlobalConfig.proxyAudio = !!cliConfigParam.debugProxyAudio;
 	serverGlobalConfig.pauseActive = !!cliConfigParam.debugPauseActive;
 	serverGlobalConfig.preserveDisconnected = !!cliConfigParam.preserveDisconnected;
@@ -422,6 +423,7 @@ export async function run(argv: any): Promise<void> {
 			"Evaluate the given JS and assign it to Game#external of the server instances")
 		.option("--debug-playlog <path>", "Specify path of playlog-json.")
 		.option("--debug-untrusted", "An internal debug option")
+		.option("--debug-trusted-iframe", "An internal debug option")
 		.option("--debug-proxy-audio", "An internal debug option")
 		.option("--debug-pause-active", "An internal debug options: start with paused the active instance")
 		.option("--allow-external", "Read the URL allowing external access from sandbox.config.js")
@@ -450,6 +452,7 @@ export async function run(argv: any): Promise<void> {
 			targetService: options.targetService ?? conf.targetService,
 			debugPlaylog: options.debugPlaylog ?? conf.debugPlaylog,
 			debugUntrusted: options.debugUntrusted ?? conf.debugUntrusted,
+			debugTrustedIframe: options.debugTrustedIframe ?? conf.debugTrustedIframe,
 			debugProxyAudio: options.debugProxyAudio ?? conf.debugProxyAudio,
 			debugPauseActive: options.debugPauseActive ?? conf.debugPauseActive,
 			allowExternal: options.allowExternal ?? conf.allowExternal,
