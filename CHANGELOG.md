@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.16.21 (2023-04-06)
+
+#### Enhancement
+* `akashic-cli-commons`
+  * [#1219](https://github.com/akashic-games/akashic-cli/pull/1219) Add parameters for Nicolive to commons ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 2.16.20 (2023-04-05)
 
 #### Enhancement
