@@ -16,4 +16,5 @@ export interface CliConfigExportZip {
 	omitEmptyJs?: boolean;
 	omitUnbundledJs?: boolean;
 	targetService?: ServiceType;
+	nicolive?: boolean;
 }
