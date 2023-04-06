@@ -1,4 +1,5 @@
-import type { PlayAudioState } from "../../common/types/PlayAudioState";
+import { isServiceTypeNicoliveLike } from "../../common/targetServiceUtil";
+import type { Player } from "../../common/types/Player";
 import type { PlayBroadcastTestbedEvent } from "../../common/types/TestbedEvent";
 import type { GameViewManager } from "../akashic/GameViewManager";
 import type { PlayerInfoResolverResultMessage } from "../akashic/plugin/CoeLimitedPlugin";
@@ -13,7 +14,7 @@ import { RPGAtsumaruApi } from "../atsumaru/RPGAtsumaruApi";
 import { ClientContentLocator } from "../common/ClientContentLocator";
 import { createSessionParameter } from "../common/createSessionParameter";
 import { queryParameters as query } from "../common/queryParameters";
-import type {ProfilerValue} from "../common/types/Profiler";
+import type { ProfilerValue } from "../common/types/Profiler";
 import type { ScreenSize } from "../common/types/ScreenSize";
 import type { LocalInstanceEntity } from "../store/LocalInstanceEntity";
 import type { PlayEntity } from "../store/PlayEntity";
@@ -61,6 +62,7 @@ export class Operator {
 	async bootstrap(contentLocator?: ClientContentLocator): Promise<void> {
 		this._initializePlugins(contentLocator || this.store.contentStore.defaultContent().locator);
 		const store = this.store;
+		const initialJoinPlayer = (isServiceTypeNicoliveLike(store.targetService) && store.player) || undefined;
 		let play: PlayEntity | null = null;
 		if (query.playId != null) {
 			play = store.playStore.plays[query.playId];
@@ -68,12 +70,12 @@ export class Operator {
 				throw new Error(`play(id: ${query.playId}) is not found.`);
 			}
 		} else if (contentLocator) {
-			play = await this._createServerLoop(contentLocator);
+			play = await this._createServerLoop(contentLocator, initialJoinPlayer, false, false);
 		} else {
 			play = store.playStore.getLastPlay();
 			if (!play) {
 				const loc = store.contentStore.defaultContent().locator;
-				play = await this._createServerLoop(loc, undefined); // TODO: (起動時の最初のプレイで) audioState を指定する方法
+				play = await this._createServerLoop(loc, initialJoinPlayer, false, false); // TODO: (起動時の最初のプレイで) audioState を指定する方法
 			}
 		}
 		if (store.targetService === "atsumaru:single") {
@@ -114,15 +116,15 @@ export class Operator {
 
 		store.setCurrentPlay(play);
 
-		let isJoin = false;
 		let argument = undefined;
-		if (/^nicolive.*/.test(store.targetService) || store.targetService === "atsumaru:multi") {
+		if (isServiceTypeNicoliveLike(store.targetService)) {
+			let isBroadcaster = false;
 			if (previousPlay) {
-				isJoin = previousPlay.joinedPlayerTable.has(store.player!.id);
+				isBroadcaster = previousPlay.joinedPlayerTable.has(store.player!.id);
 			} else {
-				isJoin = play.joinedPlayerTable.size === 0;
+				isBroadcaster = play.joinedPlayerTable.size === 0;
 			}
-			argument = this._createInstanceArgumentForNicolive(isJoin);
+			argument = this._createInstanceArgumentForNicolive(isBroadcaster);
 		}
 
 		if (query.argumentsValue) {
@@ -135,7 +137,7 @@ export class Operator {
 
 		if (store.appOptions.autoStart) {
 			await this.startContent({
-				joinsSelf: isJoin,
+				joinsSelf: false,
 				instanceArgument: argument,
 				isReplay
 			});
@@ -154,6 +156,7 @@ export class Operator {
 			player: store.player!,
 			argument: params != null ? params.instanceArgument : undefined,
 			proxyAudio: store.appOptions.proxyAudio,
+			runInIframe: store.appOptions.runInIframe,
 			resizeGameView: true
 		});
 		instance.onStop.addOnce(this._endPlayerInfoResolver);
@@ -179,8 +182,8 @@ export class Operator {
 	// TODO: このメソッドの処理は本来サーバー側で行うべき
 	restartWithNewPlay = async (): Promise<void> => {
 		await this.store!.currentPlay!.content.updateSandboxConfig();
-		const audioState = this.store.playStore.getLastPlay()?.audioState;
-		const play = await this._createServerLoop(this.store!.currentPlay!.content.locator, audioState);
+		const inheritsJoined = isServiceTypeNicoliveLike(this.store.targetService);
+		const play = await this._createServerLoop(this.store.currentPlay!.content.locator, undefined, inheritsJoined, true);
 		await this.store.currentPlay!.deleteAllServerInstances();
 		await apiClient.broadcast(this.store.currentPlay!.playId, { type: "switchPlay", nextPlayId: play.playId });
 		this.ui.hideNotification();
@@ -190,9 +193,19 @@ export class Operator {
 		this.store.setGameViewSize(size);
 	};
 
-	private async _createServerLoop(contentLocator: ClientContentLocator, audioState?: PlayAudioState): Promise<PlayEntity> {
+	private async _createServerLoop(
+		contentLocator: ClientContentLocator,
+		initialJoinPlayer: Player | undefined,
+		inheritsJoinedFromLatest: boolean,
+		inheritsAudioFromLatest: boolean
+	): Promise<PlayEntity> {
 		const content = this.store.contentStore.find(contentLocator);
-		const play = await this.store.playStore.createPlay({ contentLocator, audioState });
+		const play = await this.store.playStore.createPlay({
+			contentLocator,
+			initialJoinPlayer,
+			inheritsJoinedFromLatest,
+			inheritsAudioFromLatest
+		});
 		const tokenResult = await apiClient.createPlayToken(play.playId, "", true);  // TODO 空文字列でなくnullを使う
 		const { pauseActive } = this.store.appOptions;
 		await play.createServerInstance({ playToken: tokenResult.data.playToken, isPaused: pauseActive });
@@ -205,7 +218,7 @@ export class Operator {
 		const { events, autoSendEventName } = sandboxConfig;
 		if (events && autoSendEventName && events[autoSendEventName] instanceof Array) {
 			events[autoSendEventName].forEach((pev: any) => play.amflow.enqueueEvent(pev));
-		} else if (!autoSendEventName && (/^nicolive.*/.test(this.store.targetService) || this.store.targetService === "atsumaru:multi")) {
+		} else if (!autoSendEventName && isServiceTypeNicoliveLike(this.store.targetService)) {
 			play.amflow.enqueueEvent(createSessionParameter(this.store.targetService)); // セッションパラメータを送る
 		}
 
@@ -310,6 +323,7 @@ export class Operator {
 			argument: params.argument,
 			initialEvents: params.initialEvents,
 			proxyAudio: this.store.appOptions.proxyAudio,
+			runInIframe: this.store.appOptions.runInIframe,
 			useNonDebuggableScript: true,
 			resizeGameView: false
 		});

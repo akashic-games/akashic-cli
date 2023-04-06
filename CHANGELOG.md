@@ -1,5 +1,36 @@
 # CHANGELOG
 
+## 2.16.20 (2023-04-05)
+
+#### Enhancement
+* `akashic-cli-commons`, `akashic-cli-serve`
+  * [#1221](https://github.com/akashic-games/akashic-cli/pull/1221) feat(serve): add --debug-trusted-iframe option ([@yu-ogi](https://github.com/yu-ogi))
+
+#### Committers: 1
+- [@yu-ogi](https://github.com/yu-ogi)
+
+## 2.16.19 (2023-04-04)
+
+#### Bug Fix
+* `akashic-cli-commons`, `akashic-cli-lib-manage`, `akashic-cli-scan`
+  * [#1213](https://github.com/akashic-games/akashic-cli/pull/1213) Fix to add extension to moduleMainScripts in akashic-cli-scan ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Update Dependencies
+* `akashic-cli-serve`
+  * [#1222](https://github.com/akashic-games/akashic-cli/pull/1222) fix(deps): update dependency @akashic/headless-driver to v2.7.3 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+## 2.16.18 (2023-03-31)
+
+#### Bug Fix
+* `akashic-cli-serve`
+  * [#1217](https://github.com/akashic-games/akashic-cli/pull/1217) fix(serve): fix lost join in -s nicolive mode ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.16.17 (2023-03-17)
 
 #### Enhancement

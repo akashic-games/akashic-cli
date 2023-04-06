@@ -1,11 +1,28 @@
 import * as fs from "fs";
+import * as path from "path";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
 import * as mockfs from "mock-fs";
 import { scanNodeModules } from "../../lib/scanNodeModules";
+import { NodeModules } from "@akashic/akashic-cli-commons";
 import { MockPromisedNpm } from "./helpers/MockPromisedNpm";
 
 describe("scanNodeModules", () => {
 	const nullLogger = new ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
+	let spy:jasmine.Spy;
+	beforeAll(() => {
+		spy = spyOn(NodeModules, "extractModuleMainInfo").and.callFake((packageJsonPath: string) => {
+			const pkgData = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
+			const mainScriptName = pkgData.main.split(".").pop() === "js" ? pkgData.main : pkgData.main + ".js";
+			const mainScriptPath = path.join(path.dirname(packageJsonPath), mainScriptName);
+			if (!pkgData.name) {
+				throw new Error(`No ${pkgData.name} in node_modules`);
+			}	
+			return {moduleName: pkgData.name, mainScriptPath };
+		});		   
+	});
+	afterAll(() => {
+		spy.calls.reset();
+	});
 
 	it("scan globalScripts field based on node_modules/", async () => {
 		mockfs({
@@ -204,6 +221,58 @@ describe("scanNodeModules", () => {
 
 		expect(moduleMainScripts).toEqual({
 			"dummy": "node_modules/dummy/main.js"
+		});
+	});
+
+	it("scan globalScripts If main in package.json has no extension", async () => {
+		mockfs({
+			"game.json": "{}",
+			"node_modules": {
+				"dummy": {
+					"package.json": JSON.stringify({
+						name: "dummy",
+						version: "0.0.0",
+						main: "noExtension",
+						dependencies: { "dummyChild": "*" }
+					}),
+					"noExtension.js": [
+						"require('./foo');",
+						"require('dummyChild');",
+					].join("\n"),
+					"foo.js": "module.exports = 1;",
+					"node_modules": {
+						"dummyChild": {
+							"index.js": "module.exports = 'dummyChild';"
+						}
+					}
+				}
+			}
+		});
+
+		await scanNodeModules({
+			logger: nullLogger,
+			debugNpm: new MockPromisedNpm({
+				expectDependencies: {
+					"dummy": {
+						dependencies: { "dummyChild": {} }
+					}
+				}
+			})
+		});
+
+		let conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		const globalScripts = conf.globalScripts;
+		const moduleMainScripts = conf.moduleMainScripts;
+
+		const expectedPaths = [
+			"node_modules/dummy/noExtension.js",
+			"node_modules/dummy/foo.js",
+			"node_modules/dummy/node_modules/dummyChild/index.js",
+		];
+		expect(globalScripts.length).toBe(expectedPaths.length);
+
+		expect(moduleMainScripts).toEqual({
+			"dummy": "node_modules/dummy/noExtension.js"
 		});
 	});
 

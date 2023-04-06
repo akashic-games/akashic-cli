@@ -1,8 +1,8 @@
+import * as fs from "fs";
+import * as path from "path";
 import * as mockfs from "mock-fs";
 import * as cmn from "@akashic/akashic-cli-commons";
 import { uninstall, promiseUninstall } from "../../../lib/uninstall/uninstall";
-import path = require("path");
-
 
 describe("uninstall()", function () {
 	afterEach(function () {
@@ -114,6 +114,13 @@ describe("uninstall()", function () {
 			}
 		}
 		var dummyNpm = new DummyNpm();
+
+		jest.spyOn(cmn.NodeModules, "extractModuleMainInfo").mockImplementation((packageJsonPath: string) => {
+			const pkgData = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
+			const mainScriptName = pkgData.main.split(".").pop() === "js" ? pkgData.main : pkgData.main + ".js";
+			const mainScriptPath = path.join(path.dirname(packageJsonPath), mainScriptName);
+			return {moduleName: pkgData.name, mainScriptPath };
+		});
 
 		Promise.resolve()
 			.then(() => promiseUninstall({

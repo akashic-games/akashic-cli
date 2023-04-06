@@ -41,6 +41,7 @@ export interface LocalInstanceEntityParameterObject {
 	playToken?: string;
 	playlogServerUrl?: string;
 	proxyAudio?: boolean;
+	runInIframe?: boolean;
 	useNonDebuggableScript?: boolean;
 }
 
@@ -104,6 +105,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 			argument: params.argument,
 			initialEvents: params.initialEvents,
 			proxyAudio: params.proxyAudio,
+			runInIframe: params.runInIframe,
 			useNonDebuggableScript: params.useNonDebuggableScript
 		});
 		this._serveGameContent.onReset.add(this._handleReset, this);

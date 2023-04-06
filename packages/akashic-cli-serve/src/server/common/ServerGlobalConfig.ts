@@ -8,6 +8,7 @@ export interface ServerGlobalConfig {
 	autoStart: boolean;
 	verbose: boolean;
 	untrusted: boolean; // 簡易対応。究極的にはコンテンツごとに指定されるべき値
+	runInIframe: boolean;
 	proxyAudio: boolean;
 	pauseActive: boolean;
 	targetService: ServiceType;
@@ -28,6 +29,7 @@ export const serverGlobalConfig: ServerGlobalConfig = {
 	autoStart: true,
 	verbose: false,
 	untrusted: false,
+	runInIframe: false,
 	proxyAudio: false,
 	pauseActive: false,
 	targetService: "none",
