@@ -6,6 +6,7 @@ import type { ServiceType } from "./ServiceType";
  */
 export interface GameConfiguration extends Configuration{
 	assets: AssetConfigurationMap;
+	renderers?: ("canvas" | "webgl")[];
 	exportZipInfo?: ExportZipInfo;
 }
 

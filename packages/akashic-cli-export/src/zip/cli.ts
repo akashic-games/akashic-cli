@@ -16,7 +16,7 @@ export function cli(param: CliConfigExportZip): void {
 
 	Promise.resolve()
 		.then(() => promiseExportZip({
-			bundle: param.bundle,
+			bundle: param.bundle || param.nicolive,
 			babel: (param.babel != null) ? param.babel : true,
 			minify: param.minify,
 			minifyJs: param.minifyJs,
@@ -26,10 +26,12 @@ export function cli(param: CliConfigExportZip): void {
 			source: param.cwd,
 			dest: param.output,
 			force: param.force,
-			hashLength: !param.hashFilename ? 0 : (param.hashFilename === true) ? 20 : Number(param.hashFilename),
+			hashLength: !param.hashFilename && !param.nicolive ? 0 :
+				(param.hashFilename === true) ? 20 : Number(param.hashFilename),
 			logger,
-			omitUnbundledJs: param.bundle && param.omitUnbundledJs,
-			targetService: param.targetService,
+			omitUnbundledJs: (param.bundle || param.nicolive) && param.omitUnbundledJs,
+			targetService: param.nicolive ? "nicolive" : param.targetService,
+			nicolive: param.nicolive,
 			exportInfo: {
 				version: ver,
 				option: {
@@ -42,7 +44,8 @@ export function cli(param: CliConfigExportZip): void {
 					bundle: param.bundle,
 					babel: param.babel,
 					hashFilename: param.hashFilename,
-					targetService: param.targetService || "none"
+					targetService: param.nicolive ? "nicolive" : param.targetService || "none",
+					nicolive: param.nicolive
 				}
 			}
 		}))
@@ -73,7 +76,8 @@ commander
 	.option("--minify-js", "Minify JavaScript files")
 	.option("--minify-json", "Minify JSON files")
 	.option("--pack-image", "Pack small images")
-	.option("--target-service <service>", `Specify the target service of the exported content:${availableServices}`);
+	.option("--target-service <service>", `(Deprecated) Specify the target service of the exported content:${availableServices}`)
+	.option("--nicolive", "Export zip file for nicolive");
 
 export function run(argv: string[]): void {
 	// Commander の制約により --strip と --no-strip 引数を両立できないため、暫定対応として Commander 前に argv を処理する
@@ -108,7 +112,8 @@ export function run(argv: string[]): void {
 			babel: options.es5Downpile ?? conf.babel,
 			omitEmptyJs: options.omitEmptyJs ?? conf.omitEmptyJs,
 			omitUnbundledJs: options.omitUnbundledJs ?? conf.omitUnbundledJs,
-			targetService: options.targetService ?? conf.targetService
+			targetService: options.targetService ?? conf.targetService,
+			nicolive: options.nicolive ?? conf.nicolive
 		});
 	});
 }

@@ -8,6 +8,7 @@ import * as browserify from "browserify";
 import * as fsx from "fs-extra";
 import readdir = require("fs-readdir-recursive");
 import * as UglifyJS from "uglify-js";
+import { getFromHttps } from "./apiUtil";
 import * as gcu from "./GameConfigurationUtil";
 import { transformPackSmallImages } from "./transformPackImages";
 
@@ -30,6 +31,7 @@ export interface ConvertGameParameterObject {
 	exportInfo?: cmn.ExportZipInfo;
 	omitUnbundledJs?: boolean;
 	targetService?: cmn.ServiceType;
+	nicolive?: boolean;
 }
 
 export function _completeConvertGameParameterObject(param: ConvertGameParameterObject): void {
@@ -45,6 +47,7 @@ export function _completeConvertGameParameterObject(param: ConvertGameParameterO
 	param.exportInfo = param.exportInfo;
 	param.omitUnbundledJs = !!param.omitUnbundledJs;
 	param.targetService = param.targetService || "none";
+	param.nicolive = !!param.nicolive;
 }
 
 export interface BundleResult {
@@ -82,6 +85,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 		.then(() => cmn.ConfigurationFile.read(path.join(param.source, "game.json"), param.logger))
 		.then(async (result: cmn.GameConfiguration) => {
 			gamejson = result;
+
 			// export-zip実行時のバージョンとオプションを追記
 			if (param.exportInfo) {
 				gamejson.exportZipInfo = {
@@ -194,6 +198,10 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 				addUntaintedToImageAssets(gamejson);
 			}
 
+			if (param.nicolive) {
+				await addGameJsonValuesForNicoLive(gamejson);
+			}
+
 			if (bundleResult === null) {
 				return;
 			}
@@ -261,3 +269,36 @@ function addUntaintedToImageAssets(gameJson: cmn.GameConfiguration): void {
 		}
 	});
 }
+
+/**
+ * nicolive 用に game.json に値を追加する。
+ */
+async function addGameJsonValuesForNicoLive(gameJson: cmn.GameConfiguration): Promise<void> {
+	// game.jsonへの追記
+	if (!gameJson.environment) {
+		gameJson.environment = {};
+	}
+	if (!gameJson.environment.external) {
+		gameJson.environment.external = {};
+	}
+	gameJson.environment.external.send = "0";
+	if (gameJson.environment["akashic-runtime"]) {
+		return;
+	}
+
+	const versionInfo = JSON.parse(await getFromHttps(
+		"https://raw.githubusercontent.com/akashic-games/akashic-runtime-version-table/master/versions.json"
+	));
+
+	gameJson.environment["akashic-runtime"] = { version: "" };
+	if (!gameJson.environment["sandbox-runtime"] || gameJson.environment["sandbox-runtime"] === "1") {
+		gameJson.environment["akashic-runtime"].version = "~" + versionInfo.latest["1"];
+	} else {
+		gameJson.environment["akashic-runtime"].version =
+			"~" + versionInfo.latest[gameJson.environment["sandbox-runtime"]];
+		if (!gameJson.renderers || gameJson.renderers.indexOf("webgl") === -1) {
+			gameJson.environment["akashic-runtime"].flavor = "-canvas";
+		}
+	}
+}
+
