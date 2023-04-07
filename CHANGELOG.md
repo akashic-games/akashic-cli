@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.16.22 (2023-04-07)
+
+#### Enhancement
+* `akashic-cli-commons`, `akashic-cli-export`
+  * [#1220](https://github.com/akashic-games/akashic-cli/pull/1220) Add --nicolive option to akashic-cli-export-zip ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 2.16.21 (2023-04-06)
 
 #### Enhancement
