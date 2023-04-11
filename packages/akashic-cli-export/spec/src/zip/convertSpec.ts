@@ -1,4 +1,5 @@
 import * as fs from "fs";
+import { EOL } from "os";
 import * as path from "path";
 import * as fsx from "fs-extra";
 import * as mockfs from "mock-fs";
@@ -270,14 +271,14 @@ describe("convert", () => {
 						"	};",
 						"}",
 						""
-					].join("\n"));
+					].join(EOL));
 					const foo = fs.readFileSync(path.join(destDir, "script/foo.js"), { encoding: "utf-8" }).toString();
 					expect(foo).toBe([
 						"module.exports = function () {",
 						"	return \"このスクリプトファイルは Shift-JIS です。\";",
 						"};",
 						""
-					].join("\n"));
+					].join(EOL));
 					const sjis = fs.readFileSync(path.join(destDir, "text/sjis.txt"), { encoding: "utf-8" }).toString();
 					expect(sjis).toBe("このテキストファイルは Shift-JIS です");
 					const eucjp = fs.readFileSync(path.join(destDir, "text/euc-jp.txt"), { encoding: "utf-8" }).toString();
