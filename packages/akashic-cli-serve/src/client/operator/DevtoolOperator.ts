@@ -96,18 +96,10 @@ export class DevtoolOperator {
 
 	volumeChangeTo = (vol: number): void => {
 		this.store.devtoolUiStore.volumeSeekTo(vol);
-		const atsumaruApi = (window as any).RPGAtsumaru;
-		if (atsumaruApi) {
-			atsumaruApi.volumeTrigger.fire(vol / 100);
-		}
 	};
 
 	volumeSeekTo = (vol: number): void => {
 		this.store.devtoolUiStore.endVolumeSeek(vol);
-		const atsumaruApi = (window as any).RPGAtsumaru;
-		if (atsumaruApi) {
-			atsumaruApi.volumeTrigger.fire(vol / 100);
-		}
 	};
 
 	toggleAutoSendEvents = (isSend: boolean): void => {

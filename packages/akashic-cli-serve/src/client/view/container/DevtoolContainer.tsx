@@ -1,4 +1,3 @@
-import type { ServiceType } from "@akashic/akashic-cli-commons/lib/ServiceType";
 import type { NormalizedSandboxConfiguration } from "@akashic/sandbox-configuration";
 import { observer } from "mobx-react";
 import * as React from "react";
@@ -16,13 +15,12 @@ export interface DevtoolContainerProps {
 	toolBarUiStore: ToolBarUiStore; // プログレスバーの値を共有してしまっているのでそれの参照に利用
 	devtoolUiStore: DevtoolUiStore;
 	sandboxConfig: NormalizedSandboxConfiguration;
-	targetService: ServiceType;
 }
 
 @observer
 export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}> {
 	render(): React.ReactNode {
-		const { play, operator, localInstance, toolBarUiStore, devtoolUiStore, sandboxConfig, targetService } = this.props;
+		const { play, operator, localInstance, toolBarUiStore, devtoolUiStore, sandboxConfig } = this.props;
 		return <Devtool
 			height={devtoolUiStore.height}
 			minHeight={200}
@@ -99,15 +97,7 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 				onMouseOverEntityItem: operator.devtool.setHighlightedEntity,
 				onMouseLeaveEntityItem: operator.devtool.clearHighlightedEntity
 			}}
-			atsumaruDevtoolProps={{
-				disabled: targetService !== "atsumaru:single",
-				volume: devtoolUiStore.volume,
-				isSeekingVolume: devtoolUiStore.isSeekingVolume,
-				changeVolume: operator.devtool.volumeChangeTo,
-				dicideVolume: operator.devtool.volumeSeekTo
-			}}
 			niconicoDevtoolProps={{
-				disabled: targetService === "atsumaru:single",
 				isAutoSendEvent: devtoolUiStore.isAutoSendEvent,
 				emulatingShinichibaMode: devtoolUiStore.emulatingShinichibaMode,
 				totalTimeLimitInputValue: devtoolUiStore.totalTimeLimitInputValue,

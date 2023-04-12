@@ -98,7 +98,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 
 	if (cliConfigParam.targetService) {
 		if (!cliConfigParam.autoStart && isServiceTypeNicoliveLike(cliConfigParam.targetService)) {
-			getSystemLogger().error("--no-auto-start and --target-service nicolive or atsumaru:multi can not be set at the same time.");
+			getSystemLogger().error("--no-auto-start and --target-service nicolive can not be set at the same time.");
 			process.exit(1);
 		}
 
@@ -111,10 +111,6 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 				getSystemLogger().error("Invalid --target-service option argument: " + cliConfigParam.targetService);
 			}
 			process.exit(1);
-		}
-
-		if (cliConfigParam.targetService === "atsumaru") {
-			cliConfigParam.targetService = "atsumaru:single"; // "atsumaru" は "atsumaru:single" のエイリアスとする
 		}
 
 		if (cliConfigParam.targetService === "nicolive") {
