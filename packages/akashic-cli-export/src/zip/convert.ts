@@ -316,7 +316,7 @@ function isScriptOrTextAsset(gameJson: cmn.GameConfiguration, filepath: string):
 function encodeToUnicode(buf: Buffer): string {
 	const array = new Uint8Array(buf);
 	if (detect(array, "UTF8")) {
-		// NOTE: UTF8 であれば無変換
+		// NOTE: UTF8 であれば Buffer#toString() を利用 (build in メソッドのため encoding-japanese による変換よりも早いだろうと仮定している)
 		return buf.toString();
 	}
 	return convert(array, { from: "AUTO", to: "UNICODE", type: "string" });
