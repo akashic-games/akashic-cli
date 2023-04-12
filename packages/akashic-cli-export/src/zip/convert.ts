@@ -72,7 +72,7 @@ export function bundleScripts(entryPoint: string, basedir: string): Promise<Bund
 		b.bundle((err: any, buf: Buffer) => {
 			if (err)
 				return reject(err);
-			resolve({ bundle: encodeToUnicode(buf), filePaths });
+			resolve({ bundle: encodeToString(buf), filePaths });
 		});
 	});
 }
@@ -186,9 +186,9 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 				const buff = fs.readFileSync(path.resolve(param.source, p));
 				cmn.Util.mkdirpSync(path.dirname(path.resolve(param.dest, p)));
 				const value: string | Buffer =
-					(param.babel && gcu.isScriptJsFile(p)) ? babel.transform(encodeToUnicode(buff).trim(), babelOption).code :
-					(param.minifyJson && gcu.isTextJsonFile(p)) ? JSON.stringify(JSON.parse(encodeToUnicode(buff))) :
-					isScriptOrTextAsset(gamejson, p) ? encodeToUnicode(buff) : buff;
+					(param.babel && gcu.isScriptJsFile(p)) ? babel.transform(encodeToString(buff).trim(), babelOption).code :
+					(param.minifyJson && gcu.isTextJsonFile(p)) ? JSON.stringify(JSON.parse(encodeToString(buff))) :
+					isScriptOrTextAsset(gamejson, p) ? encodeToString(buff) : buff;
 				fs.writeFileSync(path.resolve(param.dest, p), value);
 			});
 			// コピーしなかったアセットやファイルをgame.jsonから削除する
@@ -312,8 +312,8 @@ function isScriptOrTextAsset(gameJson: cmn.GameConfiguration, filepath: string):
 	return false;
 }
 
-// Buffer をユニコードに変換
-function encodeToUnicode(buf: Buffer): string {
+// Buffer を文字列に変換
+function encodeToString(buf: Buffer): string {
 	const array = new Uint8Array(buf);
 	if (detect(array, "UTF8")) {
 		// NOTE: UTF8 であれば Buffer#toString() を利用 (build in メソッドのため encoding-japanese による変換よりも早いだろうと仮定している)
