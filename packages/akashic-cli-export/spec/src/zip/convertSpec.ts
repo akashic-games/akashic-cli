@@ -254,8 +254,8 @@ describe("convert", () => {
 				.then(() => {
 					expect(fs.existsSync(path.join(destDir, "script/main.js"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "script/foo.js"))).toBe(true);
+					expect(fs.existsSync(path.join(destDir, "assets/euc-jp.txt"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "text/sjis.txt"))).toBe(true);
-					expect(fs.existsSync(path.join(destDir, "text/euc-jp.txt"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "text/utf8.txt"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "game.json"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "package.json"))).toBe(true);
@@ -279,10 +279,10 @@ describe("convert", () => {
 						"};",
 						""
 					].join(EOL));
+					const eucjp = fs.readFileSync(path.join(destDir, "assets/euc-jp.txt"), { encoding: "utf-8" }).toString();
+					expect(eucjp).toBe("このテキストファイルは EUC-JP です");
 					const sjis = fs.readFileSync(path.join(destDir, "text/sjis.txt"), { encoding: "utf-8" }).toString();
 					expect(sjis).toBe("このテキストファイルは Shift-JIS です");
-					const eucjp = fs.readFileSync(path.join(destDir, "text/euc-jp.txt"), { encoding: "utf-8" }).toString();
-					expect(eucjp).toBe("このテキストファイルは EUC-JP です");
 					const utf8 = fs.readFileSync(path.join(destDir, "text/utf8.txt"), { encoding: "utf-8" }).toString();
 					expect(utf8).toBe("このテキストファイルは UTF8 です");
 					done();

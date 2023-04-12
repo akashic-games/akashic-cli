@@ -21,7 +21,7 @@
 		},
 		"euc": {
 			"type": "text",
-			"path": "text/euc-jp.txt",
+			"path": "assets/euc-jp.txt",
 			"global": true
 		},
 		"utf8": {

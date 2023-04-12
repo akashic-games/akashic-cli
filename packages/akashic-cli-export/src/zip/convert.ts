@@ -188,7 +188,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 				const value: string | Buffer =
 					(param.babel && gcu.isScriptJsFile(p)) ? babel.transform(encodeToString(buff).trim(), babelOption).code :
 					(param.minifyJson && gcu.isTextJsonFile(p)) ? JSON.stringify(JSON.parse(encodeToString(buff))) :
-					isScriptOrTextAsset(gamejson, p) ? encodeToString(buff) : buff;
+					gcu.isMaybeTextFile(p) ? encodeToString(buff) : buff;
 				fs.writeFileSync(path.resolve(param.dest, p), value);
 			});
 			// コピーしなかったアセットやファイルをgame.jsonから削除する
@@ -301,15 +301,6 @@ async function addGameJsonValuesForNicoLive(gameJson: cmn.GameConfiguration): Pr
 			gameJson.environment["akashic-runtime"].flavor = "-canvas";
 		}
 	}
-}
-
-function isScriptOrTextAsset(gameJson: cmn.GameConfiguration, filepath: string): boolean {
-	for (const [, asset] of Object.entries(gameJson.assets)) {
-		if (filepath === asset.path) {
-			return asset.type === "script" || asset.type === "text";
-		}
-	}
-	return false;
 }
 
 // Buffer を文字列に変換
