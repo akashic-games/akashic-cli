@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.16.23 (2023-04-13)
+
+#### Enhancement
+* `akashic-cli-export`
+  * [#1224](https://github.com/akashic-games/akashic-cli/pull/1224) feat(export): convert character encoding to UTF-8 ([@yu-ogi](https://github.com/yu-ogi))
+
+#### Committers: 1
+- [@yu-ogi](https://github.com/yu-ogi)
+
 ## 2.16.22 (2023-04-07)
 
 #### Enhancement
