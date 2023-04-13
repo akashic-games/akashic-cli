@@ -96,3 +96,17 @@ export function isScriptJsFile(filePath: string): boolean {
 export function isTextJsonFile(filePath: string): boolean {
 	return /^(text|assets)\/.+(\.json$)/.test(filePath);
 }
+
+// (おそらく)テキストファイルであるかどうか。以下であれば真を返す。
+// * script ディレクトリ以下にある拡張子が .js のファイル
+// * text ディレクトリ以下にあるすべてのファイル
+// * assets ディレクトリ以下にある拡張子が .txt と .json のファイル
+export function isMaybeTextFile(filePath: string): boolean {
+	if (isScriptJsFile(filePath)) {
+		return true;
+	}
+	if (isTextJsonFile(filePath)) {
+		return true;
+	}
+	return /^((text\/.+)|(assets\/.+\.(txt|json)))$/.test(filePath);
+}

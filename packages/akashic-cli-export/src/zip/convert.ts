@@ -5,6 +5,7 @@ import { ImageAssetConfigurationBase } from "@akashic/game-configuration";
 import * as babel from "@babel/core";
 import * as presetEnv from "@babel/preset-env";
 import * as browserify from "browserify";
+import { convert, detect } from "encoding-japanese";
 import * as fsx from "fs-extra";
 import readdir = require("fs-readdir-recursive");
 import * as UglifyJS from "uglify-js";
@@ -71,7 +72,7 @@ export function bundleScripts(entryPoint: string, basedir: string): Promise<Bund
 		b.bundle((err: any, buf: Buffer) => {
 			if (err)
 				return reject(err);
-			resolve({ bundle: buf.toString(), filePaths });
+			resolve({ bundle: encodeToString(buf), filePaths });
 		});
 	});
 }
@@ -185,12 +186,12 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 				const buff = fs.readFileSync(path.resolve(param.source, p));
 				cmn.Util.mkdirpSync(path.dirname(path.resolve(param.dest, p)));
 				const value: string | Buffer =
-					(param.babel && gcu.isScriptJsFile(p)) ? babel.transform(buff.toString().trim(), babelOption).code :
-					(param.minifyJson && gcu.isTextJsonFile(p)) ? JSON.stringify(JSON.parse(buff.toString())) :
-					buff;
+					(param.babel && gcu.isScriptJsFile(p)) ? babel.transform(encodeToString(buff).trim(), babelOption).code :
+					(param.minifyJson && gcu.isTextJsonFile(p)) ? JSON.stringify(JSON.parse(encodeToString(buff))) :
+					gcu.isMaybeTextFile(p) ? encodeToString(buff) : buff;
 				fs.writeFileSync(path.resolve(param.dest, p), value);
 			});
-			// コピーしなかったアセットやファイルをgmae.jsonから削除する
+			// コピーしなかったアセットやファイルをgame.jsonから削除する
 			gcu.removeScriptAssets(gamejson, (filePath: string) => preservingFilePathSet.has(filePath));
 			gcu.removeGlobalScripts(gamejson, (filePath: string) => preservingFilePathSet.has(filePath));
 
@@ -302,3 +303,12 @@ async function addGameJsonValuesForNicoLive(gameJson: cmn.GameConfiguration): Pr
 	}
 }
 
+// Buffer を文字列に変換
+function encodeToString(buf: Buffer): string {
+	const array = new Uint8Array(buf);
+	if (detect(array, "UTF8")) {
+		// NOTE: UTF8 であれば Buffer#toString() を利用 (build in メソッドのため encoding-japanese による変換よりも早いだろうと仮定している)
+		return buf.toString();
+	}
+	return convert(array, { from: "AUTO", to: "UNICODE", type: "string" });
+}

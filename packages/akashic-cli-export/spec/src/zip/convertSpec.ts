@@ -1,4 +1,5 @@
 import * as fs from "fs";
+import { EOL } from "os";
 import * as path from "path";
 import * as fsx from "fs-extra";
 import * as mockfs from "mock-fs";
@@ -240,6 +241,50 @@ describe("convert", () => {
 					const gameJson = fs.readFileSync(path.join(destDir, "game.json")).toString();
 					const gameJsonObj = JSON.parse(gameJson);
 					expect(gameJsonObj.assets.ignore2.global).toBeTruthy();
+					done();
+				}, done.fail);
+		});
+
+		it("convert non UTF-8 content", (done) => {
+			const param = {
+				source: path.resolve(__dirname, "..", "..", "fixtures", "simple_game_using_non_utf8"),
+				dest: destDir
+			};
+			convertGame(param)
+				.then(() => {
+					expect(fs.existsSync(path.join(destDir, "script/main.js"))).toBe(true);
+					expect(fs.existsSync(path.join(destDir, "script/foo.js"))).toBe(true);
+					expect(fs.existsSync(path.join(destDir, "assets/euc-jp.txt"))).toBe(true);
+					expect(fs.existsSync(path.join(destDir, "text/sjis.txt"))).toBe(true);
+					expect(fs.existsSync(path.join(destDir, "text/utf8.txt"))).toBe(true);
+					expect(fs.existsSync(path.join(destDir, "game.json"))).toBe(true);
+					expect(fs.existsSync(path.join(destDir, "package.json"))).toBe(true);
+
+					// UTF8 として読み込めることを確認
+					const main = fs.readFileSync(path.join(destDir, "script/main.js"), { encoding: "utf-8" }).toString();
+					expect(main).toBe([
+						"var foo = require(\"./foo\");",
+						"",
+						"module.exports = function () {",
+						"	return {",
+						"		y: foo()",
+						"	};",
+						"}",
+						""
+					].join(EOL));
+					const foo = fs.readFileSync(path.join(destDir, "script/foo.js"), { encoding: "utf-8" }).toString();
+					expect(foo).toBe([
+						"module.exports = function () {",
+						"	return \"このスクリプトファイルは Shift-JIS です。\";",
+						"};",
+						""
+					].join(EOL));
+					const eucjp = fs.readFileSync(path.join(destDir, "assets/euc-jp.txt"), { encoding: "utf-8" }).toString();
+					expect(eucjp).toBe("このテキストファイルは EUC-JP です");
+					const sjis = fs.readFileSync(path.join(destDir, "text/sjis.txt"), { encoding: "utf-8" }).toString();
+					expect(sjis).toBe("このテキストファイルは Shift-JIS です");
+					const utf8 = fs.readFileSync(path.join(destDir, "text/utf8.txt"), { encoding: "utf-8" }).toString();
+					expect(utf8).toBe("このテキストファイルは UTF8 です");
 					done();
 				}, done.fail);
 		});
