@@ -24,7 +24,6 @@ describe("scanNodeModules", () => {
 	afterEach(() => {
 		mockfs.restore();
 	});
-
 	afterAll(() => {
 		spy.mockClear();
 	});
