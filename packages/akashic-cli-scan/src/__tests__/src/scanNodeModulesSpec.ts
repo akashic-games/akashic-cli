@@ -8,8 +8,9 @@ import { MockPromisedNpm } from "./helpers/MockPromisedNpm";
 
 describe("scanNodeModules", () => {
 	const nullLogger = new ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
+	let spy: jest.SpyInstance;
 	beforeAll(() => {
-		jest.spyOn(NodeModules, "extractModuleMainInfo").mockImplementation((packageJsonPath: string) => {
+		spy = jest.spyOn(NodeModules, "extractModuleMainInfo").mockImplementation((packageJsonPath: string) => {
 			const pkgData = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
 			const mainScriptName = pkgData.main.split(".").pop() === "js" ? pkgData.main : pkgData.main + ".js";
 			const mainScriptPath = path.join(path.dirname(packageJsonPath), mainScriptName);
@@ -19,8 +20,13 @@ describe("scanNodeModules", () => {
 			return {moduleName: pkgData.name, mainScriptPath };
 		});		   
 	});
+
+	afterEach(() => {
+		mockfs.restore();
+	});
+
 	afterAll(() => {
-		jest.clearAllMocks()
+		spy.mockClear();
 	});
 
 	it("scan globalScripts field based on node_modules/", async () => {
