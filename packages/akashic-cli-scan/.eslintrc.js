@@ -10,6 +10,6 @@ module.exports = {
 	},
 	ignorePatterns: [
 		"**/*.js",
-		"spec/**/*"
+		"src/__tests__/**/*"
 	]
 }
