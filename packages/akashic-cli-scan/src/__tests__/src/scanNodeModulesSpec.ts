@@ -23,10 +23,6 @@ describe("scanNodeModules", () => {
 		jest.clearAllMocks()
 	});
 
-	it ("test", () => { 
-		expect("aa").toBeDefined();
-	});
-
 	it("scan globalScripts field based on node_modules/", async () => {
 		mockfs({
 			"game.json": "{}",
