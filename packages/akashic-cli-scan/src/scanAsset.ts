@@ -97,7 +97,7 @@ export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 		const includeExtensionToAssetId = param.includeExtensionToAssetId;
 		const gamePath = path.join(param.cwd, "game.json");
 		const akashicLibPath = path.join(param.cwd, "./akashic-lib.json");
-		const base =  param.cwd || ".";
+		const base =  param.cwd;
 
 		if (!fs.existsSync(gamePath) && !fs.existsSync(akashicLibPath)) {
 			throw new Error("game.json or akashic-lib.json does not exists");
