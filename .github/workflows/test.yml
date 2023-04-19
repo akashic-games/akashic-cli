@@ -10,7 +10,7 @@ jobs:
       max-parallel: 4
       matrix:
         os: [ubuntu-latest, windows-latest]
-        node: [14.x, 16.x]
+        node: [16.x, 18.x]
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
