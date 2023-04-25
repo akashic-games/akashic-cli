@@ -74,7 +74,6 @@ export const App = observer(function App(props: AppProps): React.ReactElement<Ap
 						toolBarUiStore={store.toolBarUiStore}
 						devtoolUiStore={store.devtoolUiStore}
 						sandboxConfig={sandboxConfig}
-						targetService={store.targetService}
 					/>
 				</div> :
 				null

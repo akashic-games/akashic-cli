@@ -4,7 +4,6 @@ import { FlexScrollY } from "../atom/FlexScrollY";
 import * as styles from "./NiconicoDevtool.css";
 
 export interface NiconicoDevtoolProps {
-	disabled: boolean;
 	isAutoSendEvent: boolean;
 	usePreferredTimeLimit: boolean;
 	stopsGameOnTimeout: boolean;
@@ -38,12 +37,8 @@ export class NiconicoDevtool extends React.Component<NiconicoDevtoolProps, {}> {
 		remainingTime = Math.max(remainingTime, 0);
 
 		return <div className={styles["niconico-devtool"]}>
-			<div className={this.props.disabled ? "" : styles.hidden}>
-				<b>起動オプションの --target-service atsumaru:single が指定されている場合、このタブは無効になります。</b>
-			</div>
-
 			<FlexScrollY>
-				<div className={this.props.disabled ? styles.hidden : ""}>
+				<div>
 					<div>
 						<label><b>ニコニコ新市場対応テスト</b></label>
 						<div>

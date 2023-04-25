@@ -33,7 +33,6 @@ const store = observable({
 });
 
 const nicoProps: NiconicoDevtoolProps = {
-	disabled: false,
 	isAutoSendEvent: true,
 	usePreferredTimeLimit: true,
 	stopsGameOnTimeout: true,
@@ -255,13 +254,6 @@ const TestWithBehaviour = observer(() => (
 			onMouseOverEntityItem: action("mouseover"),
 			onMouseLeaveEntityItem: action("mouseleave")
 		}}
-		atsumaruDevtoolProps={{
-			disabled: false,
-			volume: store.volume,
-			isSeekingVolume: store.isSeekingVolume,
-			changeVolume: (v => (store.isSeekingVolume = true, store.volume = v)),
-			dicideVolume: (v => (store.isSeekingVolume = false, store.volume = v))
-		}}
 		niconicoDevtoolProps={nicoProps}
 		internalDevtoolProps={{
 			sendScreenshotEvent: action("send-screenshot-event"),
@@ -361,13 +353,6 @@ storiesOf("o-Devtool", module)
 				onMouseOverEntityItem: action("mouseover"),
 				onMouseLeaveEntityItem: action("mouseleave")
 			}}
-			atsumaruDevtoolProps={{
-				disabled: false,
-				volume: store.volume,
-				isSeekingVolume: store.isSeekingVolume,
-				changeVolume: (v => (store.isSeekingVolume = true, store.volume = v)),
-				dicideVolume: (v => (store.isSeekingVolume = false, store.volume = v))
-			}}
 			niconicoDevtoolProps={nicoProps}
 			internalDevtoolProps={{
 				sendScreenshotEvent: action("send-screenshot-event"),
@@ -456,13 +441,6 @@ storiesOf("o-Devtool", module)
 				onClickEntityItem: action("click-entity"),
 				onMouseOverEntityItem: action("mouseover"),
 				onMouseLeaveEntityItem: action("mouseleave")
-			}}
-			atsumaruDevtoolProps={{
-				disabled: false,
-				volume: store.volume,
-				isSeekingVolume: store.isSeekingVolume,
-				changeVolume: (v => (store.isSeekingVolume = true, store.volume = v)),
-				dicideVolume: (v => (store.isSeekingVolume = false, store.volume = v))
 			}}
 			niconicoDevtoolProps={nicoProps}
 			internalDevtoolProps={{
@@ -557,13 +535,6 @@ storiesOf("o-Devtool", module)
 				onMouseOverEntityItem: action("mouseover"),
 				onMouseLeaveEntityItem: action("mouseleave")
 			}}
-			atsumaruDevtoolProps={{
-				disabled: false,
-				volume: store.volume,
-				isSeekingVolume: store.isSeekingVolume,
-				changeVolume: (v => (store.isSeekingVolume = true, store.volume = v)),
-				dicideVolume: (v => (store.isSeekingVolume = false, store.volume = v))
-			}}
 			niconicoDevtoolProps={nicoProps}
 			internalDevtoolProps={{
 				sendScreenshotEvent: action("send-screenshot-event"),
@@ -611,13 +582,6 @@ storiesOf("o-Devtool", module)
 				onMouseOverEntityItem: action("mouseover"),
 				onMouseLeaveEntityItem: action("mouseleave")
 			}}
-			atsumaruDevtoolProps={{
-				disabled: false,
-				volume: store.volume,
-				isSeekingVolume: store.isSeekingVolume,
-				changeVolume: (v => (store.isSeekingVolume = true, store.volume = v)),
-				dicideVolume: (v => (store.isSeekingVolume = false, store.volume = v))
-			}}
 			niconicoDevtoolProps={nicoProps}
 			internalDevtoolProps={{
 				sendScreenshotEvent: action("send-screenshot-event"),
@@ -664,13 +628,6 @@ storiesOf("o-Devtool", module)
 				onClickEntityItem: action("click-entity"),
 				onMouseOverEntityItem: action("mouseover"),
 				onMouseLeaveEntityItem: action("mouseleave")
-			}}
-			atsumaruDevtoolProps={{
-				disabled: false,
-				volume: store.volume,
-				isSeekingVolume: store.isSeekingVolume,
-				changeVolume: (v => (store.isSeekingVolume = true, store.volume = v)),
-				dicideVolume: (v => (store.isSeekingVolume = false, store.volume = v))
 			}}
 			niconicoDevtoolProps={nicoProps}
 			internalDevtoolProps={{

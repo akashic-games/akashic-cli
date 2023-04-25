@@ -14,9 +14,8 @@ export function createSessionParameter(service: ServiceType): playlog.Event {
 		}
 	];
 
-	if (service !== "none" && service !== "atsumaru:single") {
-		const targetService = /^nicolive.*/.test(service) ? "nicolive" : "atsumaru";
-		ret[playlog.MessageEventIndex.Data].parameters.service = targetService;
+	if (service !== "none") {
+		ret[playlog.MessageEventIndex.Data].parameters.service = "nicolive";
 	}
 
 	return ret;

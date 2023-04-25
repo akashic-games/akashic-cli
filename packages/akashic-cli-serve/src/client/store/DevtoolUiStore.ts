@@ -132,12 +132,14 @@ export class DevtoolUiStore {
 	/* eslint-enable @typescript-eslint/indent */
 
 	@action
+	// 現在は利用していないが、将来音量調節機能をつける時に使う
 	volumeSeekTo(volume: number): void {
 		this.volume = volume;
 		this.isSeekingVolume = true;
 	}
 
 	@action
+	// 現在は利用していないが、将来音量調節機能をつける時に使う
 	endVolumeSeek(volume: number): void {
 		this.volume = volume;
 		this.isSeekingVolume = false;

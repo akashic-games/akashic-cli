@@ -2,8 +2,6 @@ import { observer } from "mobx-react";
 import * as React from "react";
 import { DevtoolSelectorBar } from "../atom/DevtoolSelectorBar";
 import { TopResizable } from "../atom/TopResizable";
-import type { AtsumaruDevtoolProps } from "../molecule/AtsumaruDevtool";
-import { AtsumaruDevtool } from "../molecule/AtsumaruDevtool";
 import type { EntityTreeDevtoolProps } from "../molecule/EntityTreeDevtool";
 import { EntityTreeDevtool } from "../molecule/EntityTreeDevtool";
 import type { EventsDevtoolProps } from "../molecule/EventsDevtool";
@@ -24,7 +22,6 @@ export const devtoolTypes = [
 	"Instances",
 	"Events",
 	"EntityTree",
-	"Atsumaru",
 	"Niconico",
 	"Internal"
 ];
@@ -41,7 +38,6 @@ export interface DevtoolProps {
 	eventsDevtoolProps: EventsDevtoolProps;
 	instancesDevtoolProps: InstancesDevtoolProps;
 	entityTreeDevtoolProps: EntityTreeDevtoolProps;
-	atsumaruDevtoolProps: AtsumaruDevtoolProps;
 	niconicoDevtoolProps: NiconicoDevtoolProps;
 	internalDevtoolProps: InternalDevtoolProps;
 }
@@ -57,7 +53,6 @@ export class Devtool extends React.Component<DevtoolProps, {}> {
 			"Instances": this._onSelectInstancesTool,
 			"Events": this._onSelectEventsTool,
 			"EntityTree": this._onSelectEntityListTool,
-			"Atsumaru": this._onSelectAtsumaruTool,
 			"Niconico": this._onSelectNiconicoTool,
 			"Internal": this._onSelectInternalTool,
 		};
@@ -79,7 +74,6 @@ export class Devtool extends React.Component<DevtoolProps, {}> {
 				{ (activeDevtool === "Instances") && <InstancesDevtool {...props.instancesDevtoolProps} /> }
 				{ (activeDevtool === "Events") && <EventsDevtool {...props.eventsDevtoolProps} /> }
 				{ (activeDevtool === "EntityTree") && <EntityTreeDevtool {...props.entityTreeDevtoolProps} /> }
-				{ (activeDevtool === "Atsumaru") && <AtsumaruDevtool {...props.atsumaruDevtoolProps} /> }
 				{ (activeDevtool === "Niconico") && <NiconicoDevtool {...props.niconicoDevtoolProps} /> }
 				{ (activeDevtool === "Internal") && <InternalDevtool {...props.internalDevtoolProps} /> }
 			</div>
@@ -100,10 +94,6 @@ export class Devtool extends React.Component<DevtoolProps, {}> {
 
 	private _onSelectEntityListTool = (): void => {
 		this.props.onSelectDevtool("EntityTree");
-	};
-
-	private _onSelectAtsumaruTool = (): void => {
-		this.props.onSelectDevtool("Atsumaru");
 	};
 
 	private _onSelectNiconicoTool = (): void => {
