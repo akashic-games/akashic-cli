@@ -1,8 +1,8 @@
 import * as fs from "fs";
+import * as path from "path";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
 import { readJSON, writeJSON } from "@akashic/akashic-cli-commons/lib/FileSystem";
 import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
-import { chdir } from "@akashic/akashic-cli-commons/lib/Util";
 import type { AssetConfiguration, GameConfiguration } from "@akashic/game-configuration";
 import { AssetModule } from "./AssetModule";
 import {scanAudioAssets, scanImageAssets, scanScriptAssets, scanTextAssets, scanVectorImageAssets, textAssetFilter} from "./scanUtils";
@@ -89,16 +89,15 @@ export function _completeScanAssetParameterObject(param: ScanAssetParameterObjec
 
 export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 	const param = _completeScanAssetParameterObject(p);
-	const restoreDirectory = chdir(param.cwd);
 
 	try {
 		const logger = param.logger;
 		const target = param.target;
 		const resolveAssetIdsFromPath = param.resolveAssetIdsFromPath;
 		const includeExtensionToAssetId = param.includeExtensionToAssetId;
-		const gamePath = "./game.json";
-		const akashicLibPath = "./akashic-lib.json";
-		const base = ".";
+		const gamePath = path.join(param.cwd, "game.json");
+		const akashicLibPath = path.join(param.cwd, "./akashic-lib.json");
+		const base =  param.cwd;
 
 		if (!fs.existsSync(gamePath) && !fs.existsSync(akashicLibPath)) {
 			throw new Error("game.json or akashic-lib.json does not exists");
@@ -244,7 +243,7 @@ export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 		}
 
 		logger.info("Done!");
-	} finally {
-		restoreDirectory();
+	} catch (e) {
+		throw e;
 	}
 }

@@ -3,7 +3,7 @@ import * as fs from "fs";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
 import type { AssetConfiguration, AssetConfigurationMap, AudioAssetConfigurationBase, GameConfiguration } from "@akashic/game-configuration";
 import * as mockfs from "mock-fs";
-import { scanAsset } from "../../lib/scanAsset";
+import { scanAsset } from "../../../lib/scanAsset";
 
 describe("scanAsset()", () => {
 	const nullLogger = new ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });

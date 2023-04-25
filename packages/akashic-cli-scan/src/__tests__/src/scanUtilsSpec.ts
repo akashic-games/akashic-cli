@@ -2,7 +2,7 @@ import * as path from "path";
 import * as fs from "fs";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
 import * as mockfs from "mock-fs";
-import { scanAudioAssets, scanImageAssets, scanScriptAssets, scanTextAssets } from "../../lib/scanUtils";
+import { scanAudioAssets, scanImageAssets, scanScriptAssets, scanTextAssets } from "../../../lib/scanUtils";
 
 describe("scanUtils", () => {
 	const nullLogger = new ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });

@@ -15,7 +15,7 @@ Akashic Engineの詳細な利用方法については、 [公式ページ](https
 
 **akashic-cli-scan** はTypeScriptで書かれたjsモジュールであるため、ビルドにはNode.jsが必要です。
 
-`npm run build` によりgulpを使ってビルドできます。
+`npm run build` によりビルドできます。
 
 ```sh
 npm install
@@ -24,8 +24,8 @@ npm run build
 
 ## テスト方法
 
-1. [TSLint](https://github.com/palantir/tslint "TSLint")を使ったLint
-2. [Jasmine](http://jasmine.github.io "Jasmine")を使ったテスト
+1. [eslint](https://eslint.org/ "eslint")を使ったLint
+2. [jest](https://jestjs.io/ "jest")を使ったテスト
 
 がそれぞれ実行されます。
 

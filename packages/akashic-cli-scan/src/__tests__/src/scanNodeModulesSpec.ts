@@ -2,15 +2,15 @@ import * as fs from "fs";
 import * as path from "path";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
 import * as mockfs from "mock-fs";
-import { scanNodeModules } from "../../lib/scanNodeModules";
+import { scanNodeModules } from "../../../lib/scanNodeModules";
 import { NodeModules } from "@akashic/akashic-cli-commons";
 import { MockPromisedNpm } from "./helpers/MockPromisedNpm";
 
 describe("scanNodeModules", () => {
 	const nullLogger = new ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
-	let spy:jasmine.Spy;
+	let spy: jest.SpyInstance;
 	beforeAll(() => {
-		spy = spyOn(NodeModules, "extractModuleMainInfo").and.callFake((packageJsonPath: string) => {
+		spy = jest.spyOn(NodeModules, "extractModuleMainInfo").mockImplementation((packageJsonPath: string) => {
 			const pkgData = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
 			const mainScriptName = pkgData.main.split(".").pop() === "js" ? pkgData.main : pkgData.main + ".js";
 			const mainScriptPath = path.join(path.dirname(packageJsonPath), mainScriptName);
@@ -20,8 +20,12 @@ describe("scanNodeModules", () => {
 			return {moduleName: pkgData.name, mainScriptPath };
 		});		   
 	});
+
+	afterEach(() => {
+		mockfs.restore();
+	});
 	afterAll(() => {
-		spy.calls.reset();
+		spy.mockClear();
 	});
 
 	it("scan globalScripts field based on node_modules/", async () => {
