@@ -1,5 +1,20 @@
 # CHANGELOG
 
+## 2.16.24 (2023-04-27)
+
+#### Bug Fix
+* `akashic-cli-commons`, `akashic-cli-export`
+  * [#1229](https://github.com/akashic-games/akashic-cli/pull/1229) Fix scan bug on windows ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Other Change
+* `akashic-cli-serve`
+  * [#1225](https://github.com/akashic-games/akashic-cli/pull/1225) Remove atsumaru from serve ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+* `akashic-cli-scan`
+  * [#1226](https://github.com/akashic-games/akashic-cli/pull/1226) Change scan test to jest ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 2.16.23 (2023-04-13)
 
 #### Enhancement
