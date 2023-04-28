@@ -26,3 +26,4 @@ export { PromisedNpm, PromisedNpmParameterObject, NpmLsResultObject } from "./Pr
 export * as Renamer from "./Renamer";
 export { ServiceType, SERVICE_TYPES } from "./ServiceType";
 export * as Util from "./Util";
+export { asHumanReadable } from "./asHumanReadable";
