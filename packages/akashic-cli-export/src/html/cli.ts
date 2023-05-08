@@ -2,7 +2,6 @@ import * as fs from "fs";
 import * as path from "path";
 import { ConsoleLogger, CliConfigExportHtml, CliConfigurationFile } from "@akashic/akashic-cli-commons";
 import { Command } from "commander";
-import { promiseExportAtsumaru } from "./exportAtsumaru";
 import { promiseExportHTML, ExportHTMLParameterObject } from "./exportHTML";
 
 const ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "..", "package.json"), "utf8")).version;
@@ -17,18 +16,16 @@ function cli(param: CliConfigExportHtml): void {
 		output: param.output,
 		logger: logger,
 		strip: (param.strip != null) ? param.strip : true,
-		hashLength: !param.hashFilename && !param.atsumaru ? 0 :
+		hashLength: !param.hashFilename ? 0 :
 			(param.hashFilename === true || param.hashFilename === undefined) ? 20 : Number(param.hashFilename),
 		minify: param.minify,
-		bundle: param.bundle || param.atsumaru,
-		magnify: param.magnify || param.atsumaru,
+		bundle: param.bundle,
+		magnify: param.magnify,
 		injects: param.injects,
-		unbundleText: !param.bundle || param.atsumaru,
-		lint: !param.atsumaru,
+		unbundleText: !param.bundle,
 		autoSendEventName: param.autoSendEventName || param.autoSendEvents,
-		needsUntaintedImageAsset: param.atsumaru,
-		omitUnbundledJs: param.atsumaru && param.omitUnbundledJs,
-		compress: param.output && !param.atsumaru ? path.extname(param.output) === ".zip" : false,
+		omitUnbundledJs: param.omitUnbundledJs,
+		compress: param.output ? path.extname(param.output) === ".zip" : false,
 		debugOverrideEngineFiles: param.debugOverrideEngineFiles,
 		// index.htmlに書き込むためのexport実行時の情報
 		exportInfo: {
@@ -41,8 +38,7 @@ function cli(param: CliConfigExportHtml): void {
 				hashFilename: param.hashFilename,
 				minify: param.minify,
 				bundle: param.bundle,
-				magnify: param.magnify,
-				atsumaru: param.atsumaru
+				magnify: param.magnify
 			})
 		}
 	};
@@ -51,11 +47,7 @@ function cli(param: CliConfigExportHtml): void {
 			if (param.output === undefined) {
 				throw new Error("--output option must be specified.");
 			}
-			if (param.atsumaru) {
-				return promiseExportAtsumaru(exportParam);
-			} else {
-				return promiseExportHTML(exportParam);
-			}
+			return promiseExportHTML(exportParam);
 		})
 		.then(() => logger.info("Done!"))
 		.catch((err: any) => {
@@ -83,7 +75,6 @@ commander
 	.option("-i, --inject [fileName]", "specify injected file content into index.html", inject, [])
 	.option("--autoSendEvents [eventName]", "(deprecated)event name that send automatically when game start")
 	.option("-A, --auto-send-event-name [eventName]", "event name that send automatically when game start")
-	.option("-a, --atsumaru", "generate files that can be posted to GAME-atsumaru")
 	.option("--no-omit-unbundled-js", "Unnecessary script files are included even when the `--atsumaru` option is specified.")
 	.option("--debug-override-engine-files <filePath>", "Use the specified engineFiles");
 
@@ -119,7 +110,6 @@ export function run(argv: string[]): void {
 			magnify: options.magnify ?? conf.magnify,
 			hashFilename: options.hashFilename ?? conf.hashFilename,
 			injects: options.inject ?? conf.injects,
-			atsumaru: options.atsumaru ?? conf.atsumaru,
 			autoSendEventName: options.autoSendEventName ?? options.autoSendEvents ?? conf.autoSendEventName ?? conf.autoSendEvents,
 			omitUnbundledJs: options.omitUnbundledJs ?? conf.omitUnbundledJs,
 			debugOverrideEngineFiles: options.debugOverrideEngineFiles ?? conf.debugOverrideEngineFiles

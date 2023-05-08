@@ -15,8 +15,7 @@ describe("exportHTML", function () {
 					strip: true,
 					minify: false,
 					magnify: false,
-					unbundleText: false,
-					lint: false
+					unbundleText: false
 				};
 				const result = exp._completeExportHTMLParameterObject(param);
 				expect(param.logger).toBe(undefined);
@@ -37,8 +36,7 @@ describe("exportHTML", function () {
 					strip: true,
 					minify: false,
 					magnify: false,
-					unbundleText: false,
-					lint: false
+					unbundleText: false
 				};
 				let result = exp._completeExportHTMLParameterObject(param);
 				expect(result.output).toBe(path.join(process.cwd(), "output"));
@@ -52,8 +50,7 @@ describe("exportHTML", function () {
 					strip: true,
 					minify: false,
 					magnify: false,
-					unbundleText: false,
-					lint: false
+					unbundleText: false
 				};
 				result = exp._completeExportHTMLParameterObject(param);
 				expect(result.output).toBe(path.join(process.cwd(), "output"));
@@ -74,8 +71,7 @@ describe("exportHTML", function () {
 					strip: true,
 					minify: false,
 					magnify: false,
-					unbundleText: false,
-					lint: false
+					unbundleText: false
 				};
 				return exp.promiseExportHTML(param);
 			})
@@ -99,7 +95,6 @@ describe("exportHTML", function () {
 					minify: false,
 					magnify: false,
 					unbundleText: false,
-					lint: false,
 					compress: true
 				};
 				return exp.promiseExportHTML(param);
@@ -124,7 +119,6 @@ describe("exportHTML", function () {
 					minify: false,
 					magnify: false,
 					unbundleText: false,
-					lint: false,
 					debugOverrideEngineFiles: path.join(__dirname, "..", "..", "fixtures", "engineFilesV3_1_99.js")
 				};
 				return exp.promiseExportHTML(param);
@@ -153,7 +147,6 @@ describe("exportHTML", function () {
 					minify: false,
 					magnify: false,
 					unbundleText: false,
-					lint: false,
 					bundle: true,
 					debugOverrideEngineFiles: path.join(__dirname, "..", "..", "fixtures", "engineFilesV3_1_99.js")
 				};

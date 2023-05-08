@@ -5,7 +5,6 @@ import { Command } from "commander";
 import { promiseExportZip } from "./exportZip";
 
 var ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "..", "package.json"), "utf8")).version;
-const availableServices = SERVICE_TYPES.filter(v => v !== "atsumaru");
 
 export function cli(param: CliConfigExportZip): void {
 	var logger = new ConsoleLogger({ quiet: param.quiet });
@@ -76,7 +75,7 @@ commander
 	.option("--minify-js", "Minify JavaScript files")
 	.option("--minify-json", "Minify JSON files")
 	.option("--pack-image", "Pack small images")
-	.option("--target-service <service>", `(Deprecated) Specify the target service of the exported content:${availableServices}`)
+	.option("--target-service <service>", `(Deprecated) Specify the target service of the exported content:${SERVICE_TYPES}`)
 	.option("--nicolive", "Export zip file for nicolive");
 
 export function run(argv: string[]): void {
@@ -91,7 +90,7 @@ export function run(argv: string[]): void {
 			process.exit(1);
 		}
 
-		if (options.targetService && !availableServices.includes(options.targetService)) {
+		if (options.targetService && !SERVICE_TYPES.includes(options.targetService)) {
 			console.error("Invalid --target-service option argument: " + options.targetService);
 			process.exit(1);
 		}
