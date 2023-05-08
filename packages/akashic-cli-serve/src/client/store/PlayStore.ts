@@ -1,3 +1,4 @@
+import { asHumanReadable } from "@akashic/akashic-cli-commons/lib/asHumanReadable";
 import { observable } from "mobx";
 import type { ContentLocatorData } from "../../common/types/ContentLocatorData";
 import type { Player } from "../../common/types/Player";
@@ -14,7 +15,8 @@ import type {
 	ClientInstanceAppearTestbedEvent,
 	ClientInstanceDisappearTestbedEvent,
 	PutStartPointEvent,
-	PlayAudioStateChangeTestbedEvent
+	PlayAudioStateChangeTestbedEvent,
+	MessageEncodeTestbedEvent
 } from "../../common/types/TestbedEvent";
 import type { GameViewManager } from "../akashic/GameViewManager";
 import { apiClient } from "../api/apiClientInstance";
@@ -96,6 +98,7 @@ export class PlayStore {
 				Subscriber.onRunnerPause.add(this.handleRunnerPause);
 				Subscriber.onRunnerResume.add(this.handleRunnerResume);
 				Subscriber.onPutStartPoint.add(this.handlePutStartPoint);
+				Subscriber.onMessageEncode.add(this.handleMessageEncode);
 			});
 	}
 
@@ -138,7 +141,7 @@ export class PlayStore {
 		const play = new PlayEntity({
 			gameViewManager: this._gameViewManager,
 			playId,
-			status: "running", // 暫定。stanadlone プレイは running しかないものとして扱う
+			status: "running", // 暫定。standalone プレイは running しかないものとして扱う
 			content: this._contentStore.find(param.contentLocator),
 			parent: param.parent
 		});
@@ -219,5 +222,27 @@ export class PlayStore {
 
 	private handlePutStartPoint = (e: PutStartPointEvent): void => {
 		this.plays[e.playId].handleStartPointHeader(e.startPointHeader);
+	};
+
+	private handleMessageEncode = ({ packet, encoded }: MessageEncodeTestbedEvent): void => {
+		// TODO: 型をつける
+		const data = packet.data;
+		if (!data) return;
+
+		// MessageEvent 以外は無視
+		if (data[0] !== "amflow:sendEvent") return;
+
+		// エンコード後のサイズが 100 KiB 以下であれば無視
+		const MESSAGE_EVENT_LIMIT_SIZE_BYTES = 102400; // TODO: sandbox-config などから参照できるように
+		if (encoded.byteLength < MESSAGE_EVENT_LIMIT_SIZE_BYTES) return;
+
+		// TODO: Store で処理をすべきかもしれない
+		console.warn(
+			`Message event size exceeds ${asHumanReadable(MESSAGE_EVENT_LIMIT_SIZE_BYTES)} ` +
+			`(encoded size: ${asHumanReadable(encoded.byteLength, 1)}). ` +
+			"Large message events may potentially degrade performance or cause fatal error in nicolive environment.\n",
+			"We recommend reducing the size of the following message event:",
+			packet.data[2] // TODO: 人が見やすい形式に整形した方が良いかもしれない
+		);
 	};
 }

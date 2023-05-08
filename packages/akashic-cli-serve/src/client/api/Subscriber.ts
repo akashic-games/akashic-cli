@@ -1,4 +1,5 @@
 import { Trigger } from "@akashic/trigger";
+import type Emitter from "component-emitter";
 import type {
 	PlayCreateTestbedEvent,
 	PlayStatusChangedTestbedEvent,
@@ -13,7 +14,8 @@ import type {
 	ClientInstanceAppearTestbedEvent,
 	ClientInstanceDisappearTestbedEvent,
 	PlayBroadcastTestbedEvent,
-	PutStartPointEvent
+	PutStartPointEvent,
+	MessageEncodeTestbedEvent
 } from "../../common/types/TestbedEvent";
 import { socketInstance } from "./socketInstance";
 
@@ -49,3 +51,12 @@ socket.on("clientInstanceDisappear", (arg: ClientInstanceDisappearTestbedEvent) 
 socket.on("playBroadcast", (arg: PlayBroadcastTestbedEvent) => onBroadcast.fire(arg));
 socket.on("disconnect", () => onDisconnect.fire());
 socket.on("putStartPoint", (arg: PutStartPointEvent) => onPutStartPoint.fire(arg));
+
+export const onMessageEncode = new Trigger<MessageEncodeTestbedEvent>();
+
+// FIXME: socket.io で利用している Encoder のインスタンスが private なため無理やり取得している
+// @see https://github.com/socketio/socket.io-client/blob/d0c0557/lib/manager.ts#L184-L185
+const socketManager: any = socketInstance.io;
+if (socketManager.encoder) {
+	(socketManager.encoder as Emitter).on("encoded", (args: MessageEncodeTestbedEvent) => onMessageEncode.fire(args));
+}
