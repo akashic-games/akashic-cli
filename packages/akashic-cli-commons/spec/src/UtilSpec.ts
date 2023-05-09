@@ -109,4 +109,26 @@ describe("Util", function () {
 			expect(() => Util.mkdirpSync("./test/some/dir")).toThrow();
 		});
 	});
+
+	describe("getTotalFileSize", () => {
+		it("can obtain the total file size in the specified path", async () => {
+			mockfs({
+				test1: Buffer.from(new Uint8Array(1024)),
+				dir: {
+					test2: Buffer.from(new Uint8Array(2000)),
+					dir: {
+						test3: Buffer.from(new Uint8Array(4000))
+					}
+				}
+			});
+
+			expect(await Util.getTotalFileSize("./test1")).toBe(1024);
+			expect(await Util.getTotalFileSize("./dir/test2")).toBe(2000);
+			expect(await Util.getTotalFileSize("./dir/dir/test3")).toBe(4000);
+
+			expect(await Util.getTotalFileSize(".")).toBe(7024); // 1024 + 2000 + 4000
+			expect(await Util.getTotalFileSize("./dir")).toBe(6000); // 2000 + 4000
+			expect(await Util.getTotalFileSize("./dir/dir")).toBe(4000);
+		});
+	});
 });
