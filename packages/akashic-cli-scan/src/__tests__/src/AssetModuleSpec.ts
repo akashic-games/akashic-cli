@@ -601,5 +601,83 @@ describe("AssetManagerSpec", () => {
 				}
 			]);
 		});
+
+		it("merge audio assets with update hint", () => {
+			const definedAssets: AssetConfiguration[] = [
+				{
+					type: "audio",
+					path: "path/to/music1",
+					duration: 340,
+					systemId: "music",
+					hint: {
+						extensions: [".ogg", ".m4a"]
+					}
+				},
+				{
+					type: "audio",
+					path: "path/to/music2",
+					duration: 340,
+					systemId: "music",
+					hint: {
+						extensions: [".ogg", ".m4a"],
+						streaming: true
+					}
+				}
+			];
+			const scannedAssets: AssetConfiguration[] = [
+				{
+					type: "audio",
+					path: "path/to/music1",
+					duration: 340,
+					systemId: "music",
+					hint: {
+						extensions: [".ogg"]
+					}
+				},
+				{
+					type: "audio",
+					path: "path/to/music2",
+					duration: 340,
+					systemId: "music",
+					hint: {
+						extensions: [".m4a"],
+					}
+				}
+			];
+			expect(
+				AssetModule.merge(
+					definedAssets,
+					scannedAssets,
+					{
+						audio: ["path/to"],
+						image: [],
+						script: [],
+						text: []
+					},
+					AssetModule.createDefaultMergeCustomizer()
+				)
+			).toEqual([
+				{
+					type: "audio",
+					path: "path/to/music1",
+					duration: 340,
+					systemId: "music",
+					hint: {
+						extensions: [".ogg"]
+					}
+				},
+				{
+					type: "audio",
+					path: "path/to/music2",
+					duration: 340,
+					systemId: "music",
+					hint: {
+						extensions: [".m4a"],
+						streaming: true
+					}
+				}
+			]);
+		});
+
 	});
 });

@@ -111,7 +111,8 @@ export namespace AssetModule {
 				}
 				return {
 					...old,
-					duration: fresh.duration
+					duration: fresh.duration,
+					hint: fresh.hint? { ...old.hint, extensions: fresh.hint.extensions } : old.hint
 				};
 			}
 			if (
