@@ -163,11 +163,11 @@ export class Store {
 		if (data[0] !== "amflow:sendEvent") return;
 
 		// エンコード後のサイズが閾値以下であれば無視
-		const MESSAGE_EVENT_LIMIT_SIZE_BYTES = 102400; // TODO: sandbox-config などから参照できるように
-		if (encoded.byteLength < MESSAGE_EVENT_LIMIT_SIZE_BYTES) return;
+		const EVENT_LIMIT_SIZE_BYTES = 102400; // TODO: sandbox-config などから参照できるように
+		if (encoded.byteLength < EVENT_LIMIT_SIZE_BYTES) return;
 
 		console.warn(
-			`Message event size exceeds ${asHumanReadable(MESSAGE_EVENT_LIMIT_SIZE_BYTES)} ` +
+			`Message event size exceeds ${asHumanReadable(EVENT_LIMIT_SIZE_BYTES)} ` +
 			`(encoded size: ${asHumanReadable(encoded.byteLength, 1)}). ` +
 			"Large message events may potentially degrade performance or cause fatal error in nicolive environment.\n",
 			"We recommend reducing the size of the following message event:",
