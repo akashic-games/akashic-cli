@@ -1,6 +1,6 @@
 /**
  * バイト数をヒューマンリーダブルな文字列に変換する。
- * Ki, Mi, Gi のSI接頭語に対応。
+ * Ki, Mi, Gi の2進接頭語に対応。
  * @param byteLength バイト数
  * @param fractionDigits 小数点以下の桁数
  */
