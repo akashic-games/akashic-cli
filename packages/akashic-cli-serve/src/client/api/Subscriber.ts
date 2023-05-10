@@ -55,6 +55,7 @@ socket.on("putStartPoint", (arg: PutStartPointEvent) => onPutStartPoint.fire(arg
 export const onMessageEncode = new Trigger<MessageEncodeTestbedEvent>();
 
 // FIXME: socket.io で利用している Encoder のインスタンスが private なため無理やり取得している
+// インスタンスを区別せず static メンバの Encoder.onEncode: Trigger を作るという方法でも良いかもしれない。
 // @see https://github.com/socketio/socket.io-client/blob/d0c0557/lib/manager.ts#L184-L185
 const socketManager: any = socketInstance.io;
 if (socketManager.encoder) {
