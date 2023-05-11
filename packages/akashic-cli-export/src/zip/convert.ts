@@ -261,7 +261,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 
 			// 1. game.json のサイズ確認
 			const gamejsonSize = await cmn.Util.getTotalFileSize(path.resolve(param.dest, "game.json"));
-			if (NICOLIVE_SIZE_LIMIT_GAME_JSON <= gamejsonSize) {
+			if (NICOLIVE_SIZE_LIMIT_GAME_JSON < gamejsonSize) {
 				param.logger.warn(
 					`The size of game.json is larger than ${cmn.asHumanReadable(NICOLIVE_SIZE_LIMIT_GAME_JSON)} ` +
 					`(${cmn.asHumanReadable(gamejsonSize)}). Too large game.json may be rejected as nicolive game.`
