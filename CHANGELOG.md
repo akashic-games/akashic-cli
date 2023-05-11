@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.16.27 (2023-05-11)
+
+#### Bug Fix
+* `akashic-cli-export`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`
+  * [#1236](https://github.com/akashic-games/akashic-cli/pull/1236) Revert "Update dependency engine.io to 6.4.2 [SECURITY]" ([@yu-ogi](https://github.com/yu-ogi))
+
+#### Committers: 1
+- [@yu-ogi](https://github.com/yu-ogi)
+
 ## 2.16.26 (2023-05-11)
 
 #### Enhancement
