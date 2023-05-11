@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-serve",
-  "version": "1.15.21",
+  "version": "1.15.23",
   "description": "A development server for Akashic Engine",
   "scripts": {
     "prepare": "npm run setup && npm run build",
@@ -25,7 +25,7 @@
     "akashic-cli-serve": "./bin/run"
   },
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.14.9",
+    "@akashic/akashic-cli-commons": "0.14.10",
     "@akashic/akashic-cli-scan": "0.16.0",
     "@akashic/amflow-util": "^1.2.0",
     "@akashic/game-configuration": "^1.8.0",
@@ -44,7 +44,7 @@
     "open": "8.4.0",
     "query-string": "6.14.1",
     "rxjs": "7.5.6",
-    "socket.io": "4.5.2",
+    "socket.io": "4.6.0",
     "socket.io-parser": "4.2.1"
   },
   "devDependencies": {

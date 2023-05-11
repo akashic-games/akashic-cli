@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-export",
-  "version": "1.8.12",
+  "version": "1.8.14",
   "description": "A module to convert your Akashic game to a runnable standalone.",
   "scripts": {
     "prepublish": "npm run clean && npm run build",
@@ -45,7 +45,7 @@
     "@akashic/akashic-engine": "~2.6.7",
     "@akashic/eslint-config": "0.1.2",
     "@akashic/game-configuration": "1.10.0",
-    "@types/archiver": "3.1.1",
+    "@types/archiver": "5.3.2",
     "@types/browserify": "12.0.37",
     "@types/commander": "2.12.0",
     "@types/ejs": "3.1.1",
@@ -73,7 +73,7 @@
     "zip": "1.2.0"
   },
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.14.9",
+    "@akashic/akashic-cli-commons": "0.14.10",
     "@babel/core": "7.20.2",
     "@babel/preset-env": "7.20.2",
     "archiver": "5.3.1",
