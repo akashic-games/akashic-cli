@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 2.16.25 (2023-05-11)
+
+#### Bug Fix
+* `akashic-cli-init`
+  * [#1234](https://github.com/akashic-games/akashic-cli/pull/1234) chore(init): use unzipper@0.10.11 ([@yu-ogi](https://github.com/yu-ogi))
+
+#### Update Dependencies
+* `akashic-cli-export`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`
+  * [#1230](https://github.com/akashic-games/akashic-cli/pull/1230) Update dependency engine.io to 6.4.2 [SECURITY] ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- [@yu-ogi](https://github.com/yu-ogi)
+
 ## 2.16.24 (2023-04-27)
 
 #### Bug Fix
