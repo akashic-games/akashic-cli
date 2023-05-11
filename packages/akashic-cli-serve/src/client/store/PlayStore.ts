@@ -138,7 +138,7 @@ export class PlayStore {
 		const play = new PlayEntity({
 			gameViewManager: this._gameViewManager,
 			playId,
-			status: "running", // 暫定。stanadlone プレイは running しかないものとして扱う
+			status: "running", // 暫定。standalone プレイは running しかないものとして扱う
 			content: this._contentStore.find(param.contentLocator),
 			parent: param.parent
 		});

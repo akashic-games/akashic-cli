@@ -1,4 +1,5 @@
 import type * as amf from "@akashic/amflow";
+import type { Packet } from "socket.io-parser";
 import type {ContentLocatorData} from "./ContentLocatorData";
 import type {PlayAudioState} from "./PlayAudioState";
 import type {Player} from "./Player";
@@ -91,4 +92,9 @@ export interface PutStartPointEvent {
 export interface PlayAudioStateChangeTestbedEvent {
 	playId: string;
 	audioState: PlayAudioState;
+}
+
+export interface MessageEncodeTestbedEvent {
+	packet: Packet;
+	encoded: Uint8Array;
 }
