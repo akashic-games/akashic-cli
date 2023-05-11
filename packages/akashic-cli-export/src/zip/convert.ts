@@ -263,9 +263,8 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			const gamejsonSize = await cmn.Util.getTotalFileSize(path.resolve(param.dest, "game.json"));
 			if (NICOLIVE_SIZE_LIMIT_GAME_JSON <= gamejsonSize) {
 				param.logger.warn(
-					`The size of game.json (${cmn.asHumanReadable(gamejsonSize)}) exceeds ` +
-					`the recommended limit for nicolive environment (>= ${cmn.asHumanReadable(NICOLIVE_SIZE_LIMIT_GAME_JSON)}).\n` +
-					"This may result in the rejection of the post as nicolive game."
+					`The size of game.json is larger than ${cmn.asHumanReadable(NICOLIVE_SIZE_LIMIT_GAME_JSON)} ` +
+					`(${cmn.asHumanReadable(gamejsonSize)}). Too large game.json may be rejected as nicolive game.`
 				);
 			}
 
@@ -273,9 +272,8 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			const totalFileSize = await cmn.Util.getTotalFileSize(path.resolve(param.dest));
 			if (NICOLIVE_SIZE_LIMIT_TOTAL_FILE < totalFileSize) {
 				param.logger.warn(
-					`The total size of the files (${cmn.asHumanReadable(totalFileSize)}) exceeds ` +
-					`the recommended limit for nicolive environment (>= ${cmn.asHumanReadable(NICOLIVE_SIZE_LIMIT_TOTAL_FILE)}).\n` +
-					"This may result in the rejection of the post as nicolive game."
+					`The total size of the files is larger than ${cmn.asHumanReadable(NICOLIVE_SIZE_LIMIT_TOTAL_FILE)} ` +
+					`(${cmn.asHumanReadable(totalFileSize)}). Too large file may be rejected as nicolive game.`
 				);
 			}
 		});
