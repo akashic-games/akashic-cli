@@ -1,5 +1,33 @@
 # CHANGELOG
 
+## 2.16.25 (2023-05-11)
+
+#### Bug Fix
+* `akashic-cli-init`
+  * [#1234](https://github.com/akashic-games/akashic-cli/pull/1234) chore(init): use unzipper@0.10.11 ([@yu-ogi](https://github.com/yu-ogi))
+
+#### Update Dependencies
+* `akashic-cli-export`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`
+  * [#1230](https://github.com/akashic-games/akashic-cli/pull/1230) Update dependency engine.io to 6.4.2 [SECURITY] ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- [@yu-ogi](https://github.com/yu-ogi)
+
+## 2.16.24 (2023-04-27)
+
+#### Bug Fix
+* `akashic-cli-commons`, `akashic-cli-export`
+  * [#1229](https://github.com/akashic-games/akashic-cli/pull/1229) Fix scan bug on windows ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Other Change
+* `akashic-cli-serve`
+  * [#1225](https://github.com/akashic-games/akashic-cli/pull/1225) Remove atsumaru from serve ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+* `akashic-cli-scan`
+  * [#1226](https://github.com/akashic-games/akashic-cli/pull/1226) Change scan test to jest ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 2.16.23 (2023-04-13)
 
 #### Enhancement
