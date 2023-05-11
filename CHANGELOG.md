@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 2.16.26 (2023-05-11)
+
+#### Enhancement
+* `akashic-cli-commons`, `akashic-cli-export`
+  * [#1233](https://github.com/akashic-games/akashic-cli/pull/1233) feat(export): output warning when exporting too large size ([@yu-ogi](https://github.com/yu-ogi))
+* `akashic-cli-commons`, `akashic-cli-serve`
+  * [#1231](https://github.com/akashic-games/akashic-cli/pull/1231) feat(serve): warn if message event size is too large ([@yu-ogi](https://github.com/yu-ogi))
+
+#### Committers: 1
+- [@yu-ogi](https://github.com/yu-ogi)
+
 ## 2.16.25 (2023-05-11)
 
 #### Bug Fix
