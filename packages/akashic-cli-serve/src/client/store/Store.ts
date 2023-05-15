@@ -1,10 +1,14 @@
+import { asHumanReadable } from "@akashic/akashic-cli-commons/lib/asHumanReadable";
 import type {ServiceType} from "@akashic/akashic-cli-commons/lib/ServiceType";
 import {observable, action, autorun} from "mobx";
+import { isServiceTypeNicoliveLike } from "../../common/targetServiceUtil";
 import type {AppOptions} from "../../common/types/AppOptions";
 import type {Player} from "../../common/types/Player";
+import type { MessageEncodeTestbedEvent } from "../../common/types/TestbedEvent";
 import type {GameViewManager} from "../akashic/GameViewManager";
 import type {RuntimeWarning} from "../akashic/RuntimeWarning";
 import {apiClient} from "../api/apiClientInstance";
+import * as Subscriber from "../api/Subscriber";
 import {ClientContentLocator} from "../common/ClientContentLocator";
 import {queryParameters as query} from "../common/queryParameters";
 import type { ScreenSize } from "../common/types/ScreenSize";
@@ -64,6 +68,7 @@ export class Store {
 		this._gameViewManager = param.gameViewManager;
 		this._initializationWaiter = apiClient.getOptions().then(result => {
 			this.appOptions = result.data;
+			Subscriber.onMessageEncode.add(this.handleMessageEncode);
 		});
 
 		autorun(() => {
@@ -144,4 +149,29 @@ export class Store {
 				break;
 		}
 	}
+
+	private handleMessageEncode = ({ packet, encoded }: MessageEncodeTestbedEvent): void => {
+		if (!isServiceTypeNicoliveLike(this.targetService)) {
+			return;
+		}
+
+		// TODO: 型をつけた方が良いかもしれない
+		const data = packet.data;
+		if (!data) return;
+
+		// MessageEvent 以外は無視
+		if (data[0] !== "amflow:sendEvent") return;
+
+		// エンコード後のサイズが閾値以下であれば無視
+		const EVENT_LIMIT_SIZE_BYTES = 102400; // TODO: sandbox-config などから参照できるように
+		if (encoded.byteLength < EVENT_LIMIT_SIZE_BYTES) return;
+
+		console.warn(
+			`Message event size exceeds ${asHumanReadable(EVENT_LIMIT_SIZE_BYTES)} ` +
+			`(encoded size: ${asHumanReadable(encoded.byteLength, 1)}). ` +
+			"Large message events may potentially degrade performance or cause fatal error in nicolive environment.\n",
+			"We recommend reducing the size of the following message event:",
+			packet.data[2] // TODO: 人が見やすい形式に整形した方が良いかもしれない
+		);
+	};
 }
