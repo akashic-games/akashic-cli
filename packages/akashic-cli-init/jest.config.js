@@ -20,11 +20,11 @@ module.exports = {
 		"js"
 	],
 	transform: {
-		"^.+\\.ts$": "ts-jest"
-	},
-	globals: {
-		"ts-jest": {
-			tsconfig: "./src/__tests__/tsconfig.json"
-		}
+		"^.+\\.ts$": [
+			"ts-jest",
+			{
+				tsconfig: "./src/__tests__/tsconfig.json"
+			}
+		]
 	}
 };

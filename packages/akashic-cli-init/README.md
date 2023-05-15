@@ -54,9 +54,11 @@ akashic-cli-init は、以下に置かれているテンプレートを利用で
 -t に `github:<owner>/<repository>` と指定することで GitHub (github.com) からテンプレートを取得できます。
 private repository など認証が必要な場合は `akashic config` で `init.github.protocol` を `ssh` に設定してください。
 
+以下は `akashic` コマンドを利用した実行例です。
+
 ```sh
 akashic config set init.github.protocol ssh # 初回のみ。認証を必要としない場合は不要。
-akashic-cli-init -t github:your-orgs/your-repo
+akashic init -t github:your-orgs/your-repo
 ```
 
 また `ghe:<owner>/<repository>` と指定することで GitHub Enterprise からテンプレートを生成できます。
@@ -69,6 +71,19 @@ akashic init -t ghe:your-orgs/your-repo
 
 これらの実行には `git` コマンドが必要です。
 `git` コマンドのパスを直接指定する場合は環境変数 `GIT_BIN_PATH` に値を設定してください。
+
+#### 一部ファイルのフィルタリング
+
+対象リポジトリに `.akashicinitignore` ファイルを配置することで一部のファイルを無視してテンプレートを取得することができます。
+[`.gitignore` の仕様に則った](https://git-scm.com/docs/gitignore) 記述が使用できます
+(内部的には [node-ignore](https://github.com/kaelzhang/node-ignore) を利用しています)。
+
+以下は `.akashicinitignore` および `.github` ディレクトリ以下のファイルを除いてテンプレートを取得する例です。
+
+```
+.akashicinitignore
+.github/**
+```
 
 ## 設定項目
 akashic-cli-init は以下の設定を利用します。設定は `akashic config` コマンドを利用して行います。

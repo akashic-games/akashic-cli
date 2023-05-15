@@ -1,5 +1,5 @@
 import * as childProcess from "child_process";
-import * as fs from "fs";
+import * as fs from "fs/promises";
 import * as path from "path";
 import * as util from "util";
 import type { GitProtocol, InitParameterObject } from "./InitParameterObject";
@@ -42,7 +42,7 @@ export async function cloneTemplate(
 	}
 
 	if (!opts.preserveGitDirectory) {
-		await rmPromise(path.join(targetPath, ".git"), { recursive: true });
+		await fs.rm(path.join(targetPath, ".git"), { recursive: true, force: true });
 	}
 }
 
@@ -70,37 +70,6 @@ function createGitCloneCommand(gitBinPath: string, uri: string, targetPath: stri
 	}
 
 	return `${gitBinPath} clone ${args.join(" ")} ${uri} ${targetPath}`;
-}
-
-// for Node 12
-async function rmPromise(path: string, opts: fs.RmOptions = {}): Promise<void> {
-	return new Promise((resolve, reject) => {
-		fs.stat(path, (err, stat) => {
-			if (err) {
-				if (err.code === "ENOENT") {
-					// NOTE: 存在しない場合は何もせず終了
-					return void resolve();
-				}
-				return void reject(err);
-			}
-			if (stat.isDirectory()) {
-				// TODO: fs.rm() に移行
-				fs.rmdir(path, opts, err => {
-					if (err) {
-						return void reject(err);
-					}
-					resolve();
-				});
-			} else {
-				fs.unlink(path, err => {
-					if (err) {
-						return void reject(err);
-					}
-					resolve();
-				});
-			}
-		});
-	});
 }
 
 /**

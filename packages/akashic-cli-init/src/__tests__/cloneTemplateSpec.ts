@@ -1,8 +1,7 @@
 import * as child_process from "child_process";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
-import * as InitCommonOptions from "../../lib/common/InitCommonOptions";
-import * as ct from "../../lib/init/cloneTemplate";
-import * as init from "../../lib/init/init";
+import * as InitCommonOptions from "../common/InitCommonOptions";
+import * as ct from "../init/cloneTemplate";
 
 jest.mock("child_process");
 const mockExec = child_process.exec as unknown as jest.Mock;
@@ -20,18 +19,6 @@ describe("cloneTemplate.js", () => {
 	});
 	afterAll(() => {
 		mockConfirm.mockRestore();
-	});
-
-	it("can execute a command to clone repository from github.com via promiseInit()", async () => {
-		await init.promiseInit({
-			logger: new ConsoleLogger({quiet: true}),
-			type: "github:akashic-games/akashic-template",
-			cwd: "/path/to/dummy/dir"
-		});
-
-		expect(mockExec.mock.calls[0][0]).toEqual(
-			"git clone --depth 1 https://github.com/akashic-games/akashic-template.git /path/to/dummy/dir"
-		);
 	});
 
 	it("can execute a command to clone repository from github.com via cloneTemplate()", async () => {
@@ -54,20 +41,6 @@ describe("cloneTemplate.js", () => {
 		// NOTE: clone の後の半角スペース2つは実装上の都合
 		expect(mockExec.mock.calls[0][0]).toEqual(
 			"git clone  git@github.com:akashic-games/akashic-template.git /path/to/dummy/dir"
-		);
-	});
-
-	it("can execute a command to clone repository from GitHub Enterprise via promiseInit()", async () => {
-		await init.promiseInit({
-			logger: new ConsoleLogger({quiet: true}),
-			type: "ghe:my-orgs/my-repo",
-			gheHost: "my.company.com",
-			gheProtocol: "ssh",
-			cwd: "/path/to/local/dir"
-		});
-
-		expect(mockExec.mock.calls[0][0]).toEqual(
-			"git clone --depth 1 git@my.company.com:my-orgs/my-repo.git /path/to/local/dir"
 		);
 	});
 
@@ -99,11 +72,21 @@ describe("cloneTemplate.js", () => {
 	it("should reference env.GIT_BIN_PATH", async () => {
 		process.env.GIT_BIN_PATH = "/path/to/git/bin/git";
 
-		await init.promiseInit({
-			logger: new ConsoleLogger({quiet: true}),
-			type: "github:akashic-games/akashic-template",
-			cwd: "/path/to/dummy/dir"
-		});
+		await ct.cloneTemplate(
+			"github.com",
+			"https",
+			{
+				owner: "akashic-games",
+				repo: "akashic-template",
+				targetPath: "/path/to/dummy/dir",
+				shallow: true
+			},
+			{
+				logger: new ConsoleLogger({quiet: true}),
+				type: "github:akashic-games/akashic-template",
+				cwd: "/path/to/dummy/dir"
+			}
+		);
 
 		expect(mockExec.mock.calls[0][0]).toEqual(
 			"/path/to/git/bin/git clone --depth 1 https://github.com/akashic-games/akashic-template.git " +

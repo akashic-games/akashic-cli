@@ -1,3 +1,4 @@
+import * as fs from "fs/promises";
 import * as path from "path";
 import { readJSON } from "@akashic/akashic-cli-commons/lib/FileSystem";
 import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
@@ -10,6 +11,7 @@ import {
 } from "../common/TemplateMetadata";
 import { updateConfigurationFile } from "./BasicParameters";
 import { cloneTemplate, parseCloneTargetInfo } from "./cloneTemplate";
+import { copyTemplate } from "./copyTemplate";
 import type { InitParameterObject} from "./InitParameterObject";
 import { completeInitParameterObject } from "./InitParameterObject";
 import type { TemplateConfig, NormalizedTemplateConfig } from "./TemplateConfig";
@@ -19,30 +21,28 @@ export async function promiseInit(p: InitParameterObject): Promise<void> {
 	const param = await completeInitParameterObject(p);
 	const { gitType, owner, repo } = parseCloneTargetInfo(param.type);
 
-	if (gitType === "github") {
-		await cloneTemplate(
-			param.githubHost,
-			param.githubProtocol,
-			{
-				owner,
-				repo,
-				targetPath: param.cwd
-			},
-			param
-		);
-
-	} else if (gitType === "ghe") {
-		await cloneTemplate(
-			param.gheHost!, // completeInitParameterObject() で gitType が "ghe" で gheHost が null の場合はエラーとなるため非nullアサーションとしている。
-			param.gheProtocol,
-			{
-				owner,
-				repo,
-				targetPath: param.cwd
-			},
-			param
-		);
-
+	if (gitType === "github" || gitType === "ghe") {
+		const targetPath = await fs.mkdtemp("init-");
+		// completeInitParameterObject() で gitType が "ghe" の場合は gheHost が非 null であることは保証されている。
+		const host = gitType === "github" ? param.githubHost : param.gheHost!;
+		const protocol = gitType === "github" ? param.githubProtocol : param.gheProtocol;
+		try {
+			await cloneTemplate(
+				host,
+				protocol,
+				{
+					owner,
+					repo,
+					targetPath
+				},
+				param
+			);
+			await copyTemplate(targetPath, ".", param);
+		} finally {
+			if (existsSync(targetPath)) {
+				await fs.rm(targetPath, { recursive: true });
+			}
+		}
 	} else {
 		const { type, cwd, logger, skipAsk, forceCopy, repository, templateListJsonPath, localTemplateDirectory } = param;
 
@@ -62,7 +62,7 @@ export async function promiseInit(p: InitParameterObject): Promise<void> {
 		// テンプレート取得
 		const template = await fetchTemplate(metadata);
 
-		// tempate.json を元にファイルを抽出
+		// template.json を元にファイルを抽出
 		const rawConf = await _readJSONWithDefault<TemplateConfig>(path.join(template, "template.json"), {});
 		const conf = await completeTemplateConfig(rawConf, template);
 		await _extractFromTemplate(conf, template, cwd, { forceCopy, logger });
