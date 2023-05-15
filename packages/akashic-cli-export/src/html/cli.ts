@@ -75,6 +75,7 @@ commander
 	.option("-i, --inject [fileName]", "specify injected file content into index.html", inject, [])
 	.option("--autoSendEvents [eventName]", "(deprecated)event name that send automatically when game start")
 	.option("-A, --auto-send-event-name [eventName]", "event name that send automatically when game start")
+	.option("-a, --atsumaru", "obsolete  option. Use 'akashic export zip --nicolive' instead")
 	.option("--no-omit-unbundled-js", "Unnecessary script files are included even when the `--atsumaru` option is specified.")
 	.option("--debug-override-engine-files <filePath>", "Use the specified engineFiles");
 
@@ -95,6 +96,10 @@ export function run(argv: string[]): void {
 					+ "File name should be in engineFilesVx_x_x format");
 				process.exit(1);
 			}
+		}
+		if (options.atsumaru) {
+			console.error("--atsumaru is an obsolete option. Use \"akashic import zip --nicolive\" instead.");
+			process.exit(1);
 		}
 
 		const conf = configuration!.commandOptions?.export?.html ?? {};
