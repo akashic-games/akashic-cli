@@ -16,6 +16,7 @@ describe("copyTemplate", () => {
 	it("can copy template files", async () => {
 		mockfs({
 			"source": {
+				".akashicinitignore": "",
 				".hidden": "",
 				".ignore": {
 					"file": "this is ignored file."
@@ -37,6 +38,7 @@ describe("copyTemplate", () => {
 			}
 		);
 
+		expect(fs.existsSync(path.join("destination", ".akashicinitignore"))).toBe(false);
 		expect(fs.readFileSync(path.join("destination", ".hidden"), { encoding: "utf-8" })).toBe("");
 		expect(fs.readFileSync(path.join("destination", "package.json"), { encoding: "utf-8" })).toBe("{}");
 		expect(fs.readFileSync(path.join("destination", ".ignore", "file"), { encoding: "utf-8" })).toBe("this is ignored file.");

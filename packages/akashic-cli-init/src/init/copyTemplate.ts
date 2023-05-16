@@ -11,7 +11,7 @@ import type { InitParameterObject } from "./InitParameterObject";
 export async function copyTemplate(source: string, destination: string, param: InitParameterObject): Promise<void> {
 	try {
 		const akashicInitIgnorePath = path.join(source, ".akashicinitignore");
-		const pattern = "**";
+		const pattern = "**/!(*.akashicinitignore)"; // .akashicignore 以外のすべてのファイル
 		let files: string[];
 		if (existsSync(akashicInitIgnorePath)) {
 			const ignoreFileContent = await fs.readFile(akashicInitIgnorePath, { encoding: "utf-8" });
