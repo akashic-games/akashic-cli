@@ -16,7 +16,6 @@ export interface ConvertTemplateParameterObject {
 	source: string;
 	cwd: string;
 	unbundleText: boolean;
-	lint: boolean;
 	injects?: string[];
 	exportInfo?: {
 		version: string;
@@ -24,7 +23,6 @@ export interface ConvertTemplateParameterObject {
 	};
 	autoSendEventName?: string | boolean;
 	sandboxConfigJsCode?: string;
-	needsUntaintedImageAsset?: boolean;
 	omitUnbundledJs?: boolean;
 	debugOverrideEngineFiles?: string;
 }

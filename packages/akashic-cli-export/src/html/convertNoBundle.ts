@@ -13,15 +13,11 @@ import {
 	getInjectedContents,
 	validateEs5Code,
 	readSandboxConfigJs,
-	addUntaintedToImageAssets,
 	validateEngineFilesName
 } from "./convertUtil";
 
 export async function promiseConvertNoBundle(options: ConvertTemplateParameterObject): Promise<void> {
 	var content = await cmn.ConfigurationFile.read(path.join(options.source, "game.json"), options.logger);
-	if (options.needsUntaintedImageAsset) {
-		addUntaintedToImageAssets(content);
-	}
 	if (!content.environment) content.environment = {};
 	content.environment["sandbox-runtime"] = content.environment["sandbox-runtime"] ? content.environment["sandbox-runtime"] : "1";
 	var conf = new cmn.Configuration({
@@ -47,7 +43,7 @@ export async function promiseConvertNoBundle(options: ConvertTemplateParameterOb
 	var nonBinaryAssetNames = extractAssetDefinitions(conf, "script").concat(extractAssetDefinitions(conf, "text"));
 	var errorMessages: string[] = [];
 	const nonBinaryAssetPaths = await Promise.all(nonBinaryAssetNames.map((assetName: string) => {
-		return convertAssetAndOutput(assetName, conf, options.source, options.output, options.minify, options.lint, errorMessages);
+		return convertAssetAndOutput(assetName, conf, options.source, options.output, options.minify, errorMessages);
 	}));
 	assetPaths = assetPaths.concat(nonBinaryAssetPaths);
 	if (conf._content.globalScripts) {
@@ -57,7 +53,6 @@ export async function promiseConvertNoBundle(options: ConvertTemplateParameterOb
 				options.source,
 				options.output,
 				options.minify,
-				options.lint,
 				errorMessages);
 		}));
 		assetPaths = assetPaths.concat(globalScriptPaths);
@@ -72,12 +67,12 @@ export async function promiseConvertNoBundle(options: ConvertTemplateParameterOb
 async function convertAssetAndOutput(
 	assetName: string, conf: cmn.Configuration,
 	inputPath: string, outputPath: string,
-	minify?: boolean, lint?: boolean, errors?: string[]): Promise<string> {
+	minify?: boolean, errors?: string[]): Promise<string> {
 	var assets = conf._content.assets;
 	var isScript = assets[assetName].type === "script";
 	var assetString = fs.readFileSync(path.join(inputPath, assets[assetName].path), "utf8").replace(/\r\n|\r/g, "\n");
 	var assetPath = assets[assetName].path;
-	if (isScript && lint) {
+	if (isScript) {
 		errors.push.apply(errors, await validateEs5Code(assetPath, assetString)); // ES5構文に反する箇所があるかのチェック
 	}
 
@@ -92,10 +87,10 @@ async function convertAssetAndOutput(
 
 async function convertGlobalScriptAndOutput(
 	scriptName: string, inputPath: string, outputPath: string,
-	minify?: boolean, lint?: boolean, errors?: string[]): Promise<string> {
+	minify?: boolean, errors?: string[]): Promise<string> {
 	var scriptString = fs.readFileSync(path.join(inputPath, scriptName), "utf8").replace(/\r\n|\r/g, "\n");
 	var isScript = /\.js$/i.test(scriptName);
-	if (isScript && lint) {
+	if (isScript) {
 		errors.push.apply(errors, await validateEs5Code(scriptName, scriptString)); // ES5構文に反する箇所があるかのチェック
 	}
 

@@ -11,7 +11,6 @@ export interface CliConfigExportHtml {
 	bundle?: boolean;
 	magnify?: boolean;
 	injects?: string[];
-	atsumaru?: boolean;
 	autoSendEvents?: string | boolean;
 	autoSendEventName?: string | boolean;
 	omitUnbundledJs?: boolean;
