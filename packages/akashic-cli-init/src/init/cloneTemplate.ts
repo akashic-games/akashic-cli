@@ -8,6 +8,7 @@ const exec = util.promisify(childProcess.exec);
 interface GitCloneParameterObject {
 	owner: string | null;
 	repo: string | null;
+	branch: string | null;
 	targetPath: string;
 	preserveGitDirectory?: boolean;
 	shallow?: boolean;
@@ -17,6 +18,7 @@ export interface CloneTargetInfo {
 	gitType: string | null;
 	owner: string | null;
 	repo: string | null;
+	branch: string | null;
 }
 
 /**
@@ -64,26 +66,31 @@ export function createGitUri(host: string, protocol: GitProtocol, owner: string 
 }
 
 function createGitCloneCommand(gitBinPath: string, uri: string, targetPath: string, opts: GitCloneParameterObject): string {
-	const args = [];
+	const args: string[] = [];
 	if (opts.shallow) {
 		args.push("--depth 1");
+	}
+	if (opts.branch) {
+		args.push(`--branch ${opts.branch}`);
 	}
 
 	return `${gitBinPath} clone ${args.join(" ")} ${uri} ${targetPath}`;
 }
 
 /**
- * type オプションの値をパースします
+ * type オプションの値をパースする。
  * @param type -t オプションの値
  */
 export function parseCloneTargetInfo(type: string): CloneTargetInfo {
-	const m = type.match(/(.+):(.+)\/(.+)/) ?? [];
-	const gitType = m[1] || null;
-	const owner = m[2] || null;
-	const repo = m[3] || null;
+	const m = type.match(/(.+):(.+)\/([^@]+)(?:@(.*))?/) ?? [];
+	const gitType = m[1] ?? null;
+	const owner = m[2] ?? null;
+	const repo = m[3] ?? null;
+	const branch = m[4] ?? null;
 	return {
 		gitType,
 		owner,
-		repo
+		repo,
+		branch
 	};
 }

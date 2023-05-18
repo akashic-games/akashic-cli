@@ -29,6 +29,7 @@ describe("cloneTemplate.js", () => {
 				owner: "akashic-games",
 				repo: "akashic-template",
 				targetPath: "/path/to/dummy/dir",
+				branch: null,
 				shallow: false
 			},
 			{
@@ -52,6 +53,7 @@ describe("cloneTemplate.js", () => {
 				owner: "my-another-orgs",
 				repo: "my-another-repo",
 				targetPath: "/path/to/another/local/dir",
+				branch: "beta",
 				shallow: false
 			},
 			{
@@ -62,9 +64,8 @@ describe("cloneTemplate.js", () => {
 			}
 		);
 
-		// NOTE: clone の後の半角スペース2つは実装上の都合
 		expect(mockExec.mock.calls[0][0]).toEqual(
-			"git clone  https://my.another.company.com/my-another-orgs/my-another-repo.git " +
+			"git clone --branch beta https://my.another.company.com/my-another-orgs/my-another-repo.git " +
 			"/path/to/another/local/dir"
 		);
 	});
@@ -79,6 +80,7 @@ describe("cloneTemplate.js", () => {
 				owner: "akashic-games",
 				repo: "akashic-template",
 				targetPath: "/path/to/dummy/dir",
+				branch: "next",
 				shallow: true
 			},
 			{
@@ -88,8 +90,9 @@ describe("cloneTemplate.js", () => {
 			}
 		);
 
+		// NOTE: --depth と --branch の順は実装上の都合
 		expect(mockExec.mock.calls[0][0]).toEqual(
-			"/path/to/git/bin/git clone --depth 1 https://github.com/akashic-games/akashic-template.git " +
+			"/path/to/git/bin/git clone --depth 1 --branch next https://github.com/akashic-games/akashic-template.git " +
 			"/path/to/dummy/dir"
 		);
 

@@ -19,7 +19,7 @@ import { completeTemplateConfig } from "./TemplateConfig";
 
 export async function promiseInit(p: InitParameterObject): Promise<void> {
 	const param = await completeInitParameterObject(p);
-	const { gitType, owner, repo } = parseCloneTargetInfo(param.type);
+	const { gitType, owner, repo, branch } = parseCloneTargetInfo(param.type);
 
 	if (gitType === "github" || gitType === "ghe") {
 		const targetPath = await fs.mkdtemp("init-");
@@ -33,6 +33,7 @@ export async function promiseInit(p: InitParameterObject): Promise<void> {
 				{
 					owner,
 					repo,
+					branch,
 					targetPath
 				},
 				param

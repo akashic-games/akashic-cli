@@ -69,6 +69,13 @@ akashic config set init.ghe.host your.company.com # 初回のみ
 akashic init -t ghe:your-orgs/your-repo
 ```
 
+末尾に `@` をつけることで指定のブランチを参照することができます。
+省略した場合はデフォルトブランチが参照されます。
+
+```sh
+akashic init -t ghe:your-orgs/your-repo@next
+```
+
 これらの実行には `git` コマンドが必要です。
 `git` コマンドのパスを直接指定する場合は環境変数 `GIT_BIN_PATH` に値を設定してください。
 
