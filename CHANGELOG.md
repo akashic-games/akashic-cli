@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.16.28 (2023-05-18)
+
+#### Other Change
+* `akashic-cli-commons`, `akashic-cli-export`
+  * [#1232](https://github.com/akashic-games/akashic-cli/pull/1232) Remove atsumaru option in export html ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 2.16.27 (2023-05-11)
 
 #### Bug Fix
