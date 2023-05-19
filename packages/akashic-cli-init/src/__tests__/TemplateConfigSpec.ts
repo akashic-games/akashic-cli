@@ -1,4 +1,3 @@
-import { sep } from "path";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
 import * as mockfs from "mock-fs";
 import { completeTemplateConfig } from "../init/TemplateConfig";
@@ -86,7 +85,7 @@ describe("completeTemplateConfig", () => {
 			files: [
 				{ src: "package.json", dst: "" },
 				{ src: ".hidden", dst: "" },
-				{ src: ["path", "to", "file.txt"].join(sep), dst: "" } // FIXME: 常に `/` を返すべき?
+				{ src: "path/to/file.txt", dst: "" }
 			],
 			exclude: [
 				".akashicinitignore",
