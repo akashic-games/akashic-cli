@@ -81,7 +81,7 @@ export async function completeTemplateConfig(
 		});
 	} else if (exclude && exclude.length > 0) {
 		const filter = ignore().add(exclude).createFilter();
-		const filepaths = (await glob("**", { cwd: baseDir, nodir: true, dot: true, windowsPathsNoEscape: true })).filter(filter);
+		const filepaths = (await glob("**", { cwd: baseDir, nodir: true, dot: true, posix: true })).filter(filter);
 		normalizedFiles = filepaths
 			.filter(filepath => path.basename(filepath) !== "template.json")
 			.map(filepath => ({ src: filepath, dst: "" } as Required<TemplateFileEntry>));
