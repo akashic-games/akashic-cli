@@ -49,7 +49,7 @@ type DeepRequired<T> = {
 	[P in keyof T]-?: T[P] extends IsPrimitive<T[P]> ? T[P] : DeepRequired<T[P]>;
 };
 
-export type NormalizedTemplateConfig = DeepRequired<TemplateConfig>;
+export type NormalizedTemplateConfig = DeepRequired<Omit<TemplateConfig, "exclude">>;
 
 export async function completeTemplateConfig(
 	templateConfig: TemplateConfig,
@@ -94,7 +94,6 @@ export async function completeTemplateConfig(
 	return {
 		formatVersion: formatVersion ?? "0",
 		files: normalizedFiles,
-		exclude: exclude ?? [], // files にすべてのファイルパスが列挙されるためこの時点では不要な情報となる
 		gameJson: gameJson ?? "game.json",
 		guideMessage: guideMessage ?? null
 	};

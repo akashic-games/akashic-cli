@@ -39,9 +39,6 @@ describe("completeTemplateConfig", () => {
 				{ src: "package.json", dst: "" },
 				{ src: "path/to/file.txt", dst: "file.txt" }
 			],
-			exclude: [
-				".hidden"
-			],
 			gameJson: "game.json",
 			guideMessage: null
 		});
@@ -86,10 +83,6 @@ describe("completeTemplateConfig", () => {
 				{ src: "package.json", dst: "" },
 				{ src: ".hidden", dst: "" },
 				{ src: "path/to/file.txt", dst: "" }
-			],
-			exclude: [
-				".akashicinitignore",
-				".ignore"
 			],
 			gameJson: "game.json",
 			guideMessage: null
