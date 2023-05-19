@@ -79,19 +79,6 @@ akashic init -t ghe:your-orgs/your-repo@next
 これらの実行には `git` コマンドが必要です。
 `git` コマンドのパスを直接指定する場合は環境変数 `GIT_BIN_PATH` に値を設定してください。
 
-#### 一部ファイルのフィルタリング
-
-対象リポジトリに `.akashicinitignore` ファイルを配置することで一部のファイルを無視してテンプレートを取得することができます。
-[`.gitignore` の仕様に則った](https://git-scm.com/docs/gitignore) 記述が使用できます
-(内部的には [node-ignore](https://github.com/kaelzhang/node-ignore) を利用しています)。
-
-以下は `.akashicinitignore` および `.github` ディレクトリ以下のファイルを除いてテンプレートを取得する例です。
-
-```
-.akashicinitignore
-.github/**
-```
-
 ## 設定項目
 akashic-cli-init は以下の設定を利用します。設定は `akashic config` コマンドを利用して行います。
 * `init.repository`
@@ -110,7 +97,7 @@ akashic-cli-init は以下の設定を利用します。設定は `akashic confi
   * GitHub Enterprise からプロジェクトを clone する際のプロトコル。`https` または `ssh` が指定可能。デフォルトは `https`。
 
 ## 非公式な URL へのアクセス確認と保存
-`-t gihtub:` や `ghe:`、 `-r` オプションで非公式な URL へアクセスする場合はプロンプトにて確認を行います。
+`-t github:` や `ghe:`、 `-r` オプションで非公式な URL へアクセスする場合はプロンプトにて確認を行います。
 プロンプトにて URL へのアクセスを許可した場合は、`.akashicrc` へ最大 4 件保存します。5 件目を保存する場合は、最初の 1 件目が削除されます。
 また、保存されている値とオプションで指定された値が同じ場合は、確認のプロンプトをスキップします。
 

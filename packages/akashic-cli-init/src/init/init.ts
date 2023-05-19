@@ -11,7 +11,6 @@ import {
 } from "../common/TemplateMetadata";
 import { updateConfigurationFile } from "./BasicParameters";
 import { cloneTemplate, parseCloneTargetInfo } from "./cloneTemplate";
-import { copyTemplate } from "./copyTemplate";
 import type { InitParameterObject} from "./InitParameterObject";
 import { completeInitParameterObject } from "./InitParameterObject";
 import type { TemplateConfig, NormalizedTemplateConfig } from "./TemplateConfig";
@@ -19,14 +18,16 @@ import { completeTemplateConfig } from "./TemplateConfig";
 
 export async function promiseInit(p: InitParameterObject): Promise<void> {
 	const param = await completeInitParameterObject(p);
-	const { gitType, owner, repo, branch } = parseCloneTargetInfo(param.type);
+	const { type, cwd, logger, skipAsk, forceCopy, repository, templateListJsonPath, localTemplateDirectory } = param;
+	const { gitType, owner, repo, branch } = parseCloneTargetInfo(type);
+	let templatePath: string | null = null;
 
-	if (gitType === "github" || gitType === "ghe") {
-		const targetPath = await fs.mkdtemp("init-");
-		// completeInitParameterObject() で gitType が "ghe" の場合は gheHost が非 null であることは保証されている。
-		const host = gitType === "github" ? param.githubHost : param.gheHost!;
-		const protocol = gitType === "github" ? param.githubProtocol : param.gheProtocol;
-		try {
+	try {
+		if (gitType === "github" || gitType === "ghe") {
+			// completeInitParameterObject() で gitType が "ghe" の場合は gheHost が非 null であることは保証されている。
+			const host = gitType === "github" ? param.githubHost : param.gheHost!;
+			const protocol = gitType === "github" ? param.githubProtocol : param.gheProtocol;
+			templatePath = await fs.mkdtemp("init-");
 			await cloneTemplate(
 				host,
 				protocol,
@@ -34,46 +35,45 @@ export async function promiseInit(p: InitParameterObject): Promise<void> {
 					owner,
 					repo,
 					branch,
-					targetPath
+					targetPath: templatePath
 				},
 				param
 			);
-			await copyTemplate(targetPath, ".", param);
-		} finally {
-			if (existsSync(targetPath)) {
-				await fs.rm(targetPath, { recursive: true });
-			}
+		} else {
+			// テンプレート決定
+			const templateListJsonUri = new URL(templateListJsonPath, repository).toString();
+			const allMetadataList = [
+				...(await fetchRemoteTemplatesMetadata(templateListJsonUri)),
+				...(await collectLocalTemplatesMetadata(localTemplateDirectory))
+			];
+			const metadataList = allMetadataList.filter(metadata => metadata.name === type);
+			if (metadataList.length === 0)
+				throw new Error(`Unknown template name: ${type}`);
+			const metadata = metadataList[0];
+			if (metadataList.length > 1)
+				logger.warn(`Found multiple templates named ${type}. Using ${digestOfTemplateMetadata(metadata)}`);
+
+			// テンプレート取得
+			templatePath = await fetchTemplate(metadata);
 		}
-	} else {
-		const { type, cwd, logger, skipAsk, forceCopy, repository, templateListJsonPath, localTemplateDirectory } = param;
-
-		// テンプレート決定
-		const templateListJsonUri = new URL(templateListJsonPath, repository).toString();
-		const allMetadataList = [
-			...(await fetchRemoteTemplatesMetadata(templateListJsonUri)),
-			...(await collectLocalTemplatesMetadata(localTemplateDirectory))
-		];
-		const metadataList = allMetadataList.filter(metadata => metadata.name === type);
-		if (metadataList.length === 0)
-			throw new Error(`Unknown template name: ${type}`);
-		const metadata = metadataList[0];
-		if (metadataList.length > 1)
-			logger.warn(`Found multiple templates named ${type}. Using ${digestOfTemplateMetadata(metadata)}`);
-
-		// テンプレート取得
-		const template = await fetchTemplate(metadata);
 
 		// template.json を元にファイルを抽出
-		const rawConf = await _readJSONWithDefault<TemplateConfig>(path.join(template, "template.json"), {});
-		const conf = await completeTemplateConfig(rawConf, template);
-		await _extractFromTemplate(conf, template, cwd, { forceCopy, logger });
+		const rawConf = await _readJSONWithDefault<TemplateConfig>(path.join(templatePath, "template.json"), {});
+		const conf = await completeTemplateConfig(rawConf, templatePath, logger);
+		await _extractFromTemplate(conf, templatePath, cwd, { forceCopy, logger });
 
-		// ユーザ入力でゲーム設定を更新
-		const gameJsonPath = path.join(cwd, conf.gameJson);
-		await updateConfigurationFile(gameJsonPath, logger, skipAsk);
+		// GitHub 経由以外の場合はユーザ入力でゲーム設定を更新
+		if (!(gitType === "github" || gitType === "ghe")) {
+			const gameJsonPath = path.join(cwd, conf.gameJson);
+			await updateConfigurationFile(gameJsonPath, logger, skipAsk);
+		}
 
 		if (conf.guideMessage)
 			logger.print(conf.guideMessage);
+	} finally {
+		if (templatePath && existsSync(templatePath)) {
+			await fs.rm(templatePath, { recursive: true });
+		}
 	}
 
 	param.logger.info("Done!");

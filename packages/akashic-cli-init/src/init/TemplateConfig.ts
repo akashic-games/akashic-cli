@@ -1,4 +1,8 @@
+import * as path from "path";
 import { readdir } from "@akashic/akashic-cli-commons/lib/FileSystem";
+import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
+import { glob } from "glob";
+import ignore from "ignore";
 
 export interface TemplateFileEntry {
 	src: string;
@@ -18,6 +22,12 @@ export interface TemplateConfig {
 	 * 省略された場合、直下に game.json がなければならない。
 	 */
 	files?: TemplateFileEntry[];
+
+	/**
+	 * コピーから除外するファイルの指定。glob 形式のワイルドカードがサポートされる。
+	 * 省略した場合は files で指定されたすべてのファイルがコピーさせる。
+	 */
+	exclude?: string[];
 
 	/**
 	 * 中に含まれる game.json のパス。
@@ -41,14 +51,24 @@ type DeepRequired<T> = {
 
 export type NormalizedTemplateConfig = DeepRequired<TemplateConfig>;
 
-export async function completeTemplateConfig(templateConfig: TemplateConfig, baseDir: string): Promise<NormalizedTemplateConfig> {
-	const { formatVersion, files, gameJson, guideMessage } = templateConfig;
+export async function completeTemplateConfig(
+	templateConfig: TemplateConfig,
+	baseDir: string,
+	logger?: Logger
+): Promise<NormalizedTemplateConfig> {
+	const { formatVersion, files, exclude, gameJson, guideMessage } = templateConfig;
 
 	if (formatVersion != null && formatVersion !== "0") {
 		throw new Error(
 			`Unsupported formatVersion: "${formatVersion}". ` +
 			"The only valid value for this version is \"0\". " +
 			"Newer version of akashic-cli may support this formatVersion."
+		);
+	}
+
+	if (logger && (files && files.length > 0) && (exclude && exclude.length > 0)) {
+		logger.warn(
+			"When both \"files\" and \"exclude\" are specified in the template.json, \"files\" takes precedence."
 		);
 	}
 
@@ -59,8 +79,14 @@ export async function completeTemplateConfig(templateConfig: TemplateConfig, bas
 				throw new Error("template.json has an invalid file name:");
 			return { src, dst: dst ?? "" };
 		});
-
+	} else if (exclude && exclude.length > 0) {
+		const filter = ignore().add(exclude).createFilter();
+		const filepaths = (await glob("**", { cwd: baseDir, nodir: true, dot: true })).filter(filter);
+		normalizedFiles = filepaths
+			.filter(filepath => path.basename(filepath) !== "template.json")
+			.map(filepath => ({ src: filepath, dst: "" } as Required<TemplateFileEntry>));
 	} else {
+		// files を省略した際の既存挙動
 		const fileNames = await readdir(baseDir);
 		normalizedFiles = fileNames
 			.filter(fileName => fileName !== "template.json")
@@ -70,6 +96,7 @@ export async function completeTemplateConfig(templateConfig: TemplateConfig, bas
 	return {
 		formatVersion: formatVersion ?? "0",
 		files: normalizedFiles,
+		exclude: exclude ?? [], // files にすべてのファイルパスが列挙されるためこの時点では不要な情報となる
 		gameJson: gameJson ?? "game.json",
 		guideMessage: guideMessage ?? null
 	};
