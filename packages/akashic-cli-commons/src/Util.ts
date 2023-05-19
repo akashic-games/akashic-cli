@@ -69,3 +69,30 @@ export function mkdirpSync(p: string): void {
 		}
 	}
 }
+
+/**
+ * 指定ディレクトリ以下のすべてのファイルを合計したサイズをバイトで返す。
+ * @param directoryPath 指定のディレクトリ
+ */
+export async function getTotalFileSize(directoryPath: string): Promise<number> {
+	let totalSize = 0;
+
+	const traverseDirectory = async function (currentPath: string): Promise<void> {
+		const stat = await fs.promises.stat(currentPath);
+
+		if (stat.isDirectory()) {
+			const files = await fs.promises.readdir(currentPath);
+
+			for (const file of files) {
+				const filePath = path.join(currentPath, file);
+				await traverseDirectory(filePath); // サブディレクトリの場合、再帰的に処理を行う
+			}
+		} else if (stat.isFile()) {
+			totalSize += stat.size;
+		}
+	};
+
+	await traverseDirectory(directoryPath);
+
+	return totalSize;
+}

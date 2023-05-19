@@ -2,12 +2,13 @@ import { encode, decode } from "@msgpack/msgpack";
 import Emitter = require("component-emitter");
 import type { Packet} from "socket.io-parser";
 import { PacketType } from "socket.io-parser";
+import type { MessageEncodeTestbedEvent } from "./types/TestbedEvent";
 
-class Encoder {
+class Encoder extends Emitter {
 	encode(packet: Packet): any[] {
 		const encoded = encode(packet);
-		const buffer = new Uint8Array(encoded);
-		return [buffer];
+		this.emit("encoded", { packet, encoded } as MessageEncodeTestbedEvent);
+		return [encoded];
 	}
 }
 

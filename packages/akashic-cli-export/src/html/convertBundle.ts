@@ -14,8 +14,7 @@ import {
 	extractAssetDefinitions,
 	getInjectedContents,
 	validateEs5Code,
-	readSandboxConfigJs,
-	addUntaintedToImageAssets
+	readSandboxConfigJs
 } from "./convertUtil";
 
 interface InnerHTMLAssetData {
@@ -26,9 +25,6 @@ interface InnerHTMLAssetData {
 
 export async function promiseConvertBundle(options: ConvertTemplateParameterObject): Promise<void> {
 	var content = await cmn.ConfigurationFile.read(path.join(options.source, "game.json"), options.logger);
-	if (options.needsUntaintedImageAsset) {
-		addUntaintedToImageAssets(content);
-	}
 	if (!content.environment) content.environment = {};
 	content.environment["sandbox-runtime"] = content.environment["sandbox-runtime"] ? content.environment["sandbox-runtime"] : "1";
 	var conf = new cmn.Configuration({
@@ -58,13 +54,13 @@ export async function promiseConvertBundle(options: ConvertTemplateParameterObje
 	}
 
 	const tempAssetData = await Promise.all(innerHTMLAssetNames.map((assetName: string) => {
-		return convertAssetToInnerHTMLObj(assetName, options.source, conf, options.minify, options.lint, errorMessages);
+		return convertAssetToInnerHTMLObj(assetName, options.source, conf, options.minify, errorMessages);
 	}));
 	innerHTMLAssetArray = innerHTMLAssetArray.concat(tempAssetData);
 
 	if (conf._content.globalScripts) {
 		const tempScriptData = await Promise.all(conf._content.globalScripts.map((scriptName: string) => {
-			return convertScriptNameToInnerHTMLObj(scriptName, options.source, options.minify, options.lint, errorMessages);
+			return convertScriptNameToInnerHTMLObj(scriptName, options.source, options.minify, errorMessages);
 		}));
 		innerHTMLAssetArray = innerHTMLAssetArray.concat(tempScriptData);
 	}
@@ -93,11 +89,11 @@ export async function promiseConvertBundle(options: ConvertTemplateParameterObje
 
 async function convertAssetToInnerHTMLObj(
 	assetName: string, inputPath: string, conf: cmn.Configuration,
-	minify?: boolean, lint?: boolean, errors?: string[]): Promise<InnerHTMLAssetData> {
+	minify?: boolean, errors?: string[]): Promise<InnerHTMLAssetData> {
 	var assets = conf._content.assets;
 	var isScript = assets[assetName].type === "script";
 	var assetString = fs.readFileSync(path.join(inputPath, assets[assetName].path), "utf8").replace(/\r\n|\r/g, "\n");
-	if (isScript && lint) {
+	if (isScript) {
 		errors.push.apply(errors, await validateEs5Code(assets[assetName].path, assetString));
 	}
 	return {
@@ -109,7 +105,7 @@ async function convertAssetToInnerHTMLObj(
 
 async function convertScriptNameToInnerHTMLObj(
 	scriptName: string, inputPath: string,
-	minify?: boolean, lint?: boolean, errors?: string[]): Promise<InnerHTMLAssetData> {
+	minify?: boolean, errors?: string[]): Promise<InnerHTMLAssetData> {
 	var scriptString = fs.readFileSync(path.join(inputPath, scriptName), "utf8").replace(/\r\n|\r/g, "\n");
 	var isScript = /\.js$/i.test(scriptName);
 
@@ -117,7 +113,7 @@ async function convertScriptNameToInnerHTMLObj(
 	if (path.extname(scriptPath) === ".json") {
 		scriptString = encodeText(scriptString);
 	}
-	if (isScript && lint) {
+	if (isScript) {
 		errors.push.apply(errors, await validateEs5Code(scriptName, scriptString));
 	}
 	return {

@@ -10,6 +10,7 @@ import * as fsx from "fs-extra";
 import readdir = require("fs-readdir-recursive");
 import * as UglifyJS from "uglify-js";
 import { getFromHttps } from "./apiUtil";
+import { NICOLIVE_SIZE_LIMIT_GAME_JSON, NICOLIVE_SIZE_LIMIT_TOTAL_FILE } from "./constants";
 import * as gcu from "./GameConfigurationUtil";
 import { transformPackSmallImages } from "./transformPackImages";
 
@@ -253,6 +254,28 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 				const code = fs.readFileSync(p).toString();
 				fs.writeFileSync(p, UglifyJS.minify(code).code);
 			});
+		})
+		.then(async () => {
+			// ニコ生環境向けの簡易ファイルサイズチェック
+			if (!param.nicolive) return;
+
+			// 1. game.json のサイズ確認
+			const gamejsonSize = await cmn.Util.getTotalFileSize(path.resolve(param.dest, "game.json"));
+			if (NICOLIVE_SIZE_LIMIT_GAME_JSON < gamejsonSize) {
+				param.logger.warn(
+					`The size of game.json is larger than ${cmn.asHumanReadable(NICOLIVE_SIZE_LIMIT_GAME_JSON)} ` +
+					`(${cmn.asHumanReadable(gamejsonSize)}). Too large game.json may be rejected as nicolive game.`
+				);
+			}
+
+			// 2. 展開後のファイルサイズ確認
+			const totalFileSize = await cmn.Util.getTotalFileSize(path.resolve(param.dest));
+			if (NICOLIVE_SIZE_LIMIT_TOTAL_FILE < totalFileSize) {
+				param.logger.warn(
+					`The total size of the files is larger than ${cmn.asHumanReadable(NICOLIVE_SIZE_LIMIT_TOTAL_FILE)} ` +
+					`(${cmn.asHumanReadable(totalFileSize)}). Too large file may be rejected as nicolive game.`
+				);
+			}
 		});
 }
 
