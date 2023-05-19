@@ -48,7 +48,7 @@ describe("completeTemplateConfig", () => {
 		expect(warn.mock.calls.length).toBe(1);
 		expect(
 			warn.mock.calls[0][0]
-		).toBe("When both \"files\" and \"exclude\" are specified in the template.json, \"files\" takes precedence.");
+		).toBe("Both \"files\" and \"exclude\" are found in template.json, \"exclude\" is ignored.");
 	});
 
 	it("can complete TemplateConfig respecting 'exclude' filed", async () => {

@@ -67,9 +67,7 @@ export async function completeTemplateConfig(
 	}
 
 	if (logger && (files && files.length > 0) && (exclude && exclude.length > 0)) {
-		logger.warn(
-			"When both \"files\" and \"exclude\" are specified in the template.json, \"files\" takes precedence."
-		);
+		logger.warn("Both \"files\" and \"exclude\" are found in template.json, \"exclude\" is ignored.");
 	}
 
 	let normalizedFiles: Required<TemplateFileEntry>[];
