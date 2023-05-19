@@ -82,7 +82,7 @@ function createGitCloneCommand(gitBinPath: string, uri: string, targetPath: stri
  * @param type -t オプションの値
  */
 export function parseCloneTargetInfo(type: string): CloneTargetInfo {
-	const m = type.match(/(.+):(.+)\/([^@]+)(?:@(.*))?/) ?? [];
+	const m = type.match(/(.+):(.+)\/([^#]+)(?:#(.*))?/) ?? [];
 	const gitType = m[1] ?? null;
 	const owner = m[2] ?? null;
 	const repo = m[3] ?? null;

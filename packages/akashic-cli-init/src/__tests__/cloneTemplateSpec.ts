@@ -9,7 +9,7 @@ mockExec.mockImplementation((_command: any, _opts: any, callback: Function) => {
 	callback();
 });
 
-describe("cloneTemplate.js", () => {
+describe("cloneTemplate()", () => {
 	let mockConfirm: jest.SpyInstance = null!; // beforeAll() で必ず代入するので非 null 型とする
 	beforeEach(() => {
 		mockExec.mockClear();
@@ -97,5 +97,28 @@ describe("cloneTemplate.js", () => {
 		);
 
 		process.env.GIT_BIN_PATH = undefined;
+	});
+});
+
+describe("parseCloneTargetInfo()", () => {
+	it("can parse CloneTargetInfo", () => {
+		expect(ct.parseCloneTargetInfo("github:your-orgs/your-repo")).toEqual({
+			gitType: "github",
+			owner: "your-orgs",
+			repo: "your-repo",
+			branch: null
+		});
+		expect(ct.parseCloneTargetInfo("ghe:my-orgs/my-repo#foo")).toEqual({
+			gitType: "ghe",
+			owner: "my-orgs",
+			repo: "my-repo",
+			branch: "foo"
+		});
+		expect(ct.parseCloneTargetInfo("invalid-pattern")).toEqual({
+			gitType: null,
+			owner: null,
+			repo: null,
+			branch: null
+		});
 	});
 });
