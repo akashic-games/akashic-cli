@@ -34,6 +34,20 @@
 `files` が存在しない場合は、`template.json` 以外のすべてのファイルを
 そのままコピーします。
 
+`files` を省略した場合、`exclude` キーでコピーさせないファイルを個別に指定できます。
+`exclude` はファイル名または glob のワイルドカードのパターンの配列をサポートします。
+現バージョンにおいて `files` と `exclude` は同時に指定した場合、 `files` が優先されます。
+
+```json
+{
+  "formatVersion": "0",
+  "exclude": [
+    "package-lock.json"
+  ],
+  "gameJson": "game.json"
+}
+```
+
 `gameJson` キーにはコピー先における `game.json` のパスを指定します。
 `gameJson` が存在しない場合はカレントディレクトリに `game.json` が存在する必要が
 あります。

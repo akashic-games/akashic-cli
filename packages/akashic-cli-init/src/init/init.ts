@@ -1,3 +1,4 @@
+import * as fs from "fs/promises";
 import * as path from "path";
 import { readJSON } from "@akashic/akashic-cli-commons/lib/FileSystem";
 import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
@@ -17,62 +18,62 @@ import { completeTemplateConfig } from "./TemplateConfig";
 
 export async function promiseInit(p: InitParameterObject): Promise<void> {
 	const param = await completeInitParameterObject(p);
-	const { gitType, owner, repo } = parseCloneTargetInfo(param.type);
+	const { type, cwd, logger, skipAsk, forceCopy, repository, templateListJsonPath, localTemplateDirectory } = param;
+	const { gitType, owner, repo, branch } = parseCloneTargetInfo(type);
+	let templatePath: string | null = null;
 
-	if (gitType === "github") {
-		await cloneTemplate(
-			param.githubHost,
-			param.githubProtocol,
-			{
-				owner,
-				repo,
-				targetPath: param.cwd
-			},
-			param
-		);
+	try {
+		if (gitType === "github" || gitType === "ghe") {
+			// completeInitParameterObject() で gitType が "ghe" の場合は gheHost が非 null であることは保証されている。
+			const host = gitType === "github" ? param.githubHost : param.gheHost!;
+			const protocol = gitType === "github" ? param.githubProtocol : param.gheProtocol;
+			templatePath = await fs.mkdtemp("init-");
+			await cloneTemplate(
+				host,
+				protocol,
+				{
+					owner,
+					repo,
+					branch,
+					targetPath: templatePath
+				},
+				param
+			);
+		} else {
+			// テンプレート決定
+			const templateListJsonUri = new URL(templateListJsonPath, repository).toString();
+			const allMetadataList = [
+				...(await fetchRemoteTemplatesMetadata(templateListJsonUri)),
+				...(await collectLocalTemplatesMetadata(localTemplateDirectory))
+			];
+			const metadataList = allMetadataList.filter(metadata => metadata.name === type);
+			if (metadataList.length === 0)
+				throw new Error(`Unknown template name: ${type}`);
+			const metadata = metadataList[0];
+			if (metadataList.length > 1)
+				logger.warn(`Found multiple templates named ${type}. Using ${digestOfTemplateMetadata(metadata)}`);
 
-	} else if (gitType === "ghe") {
-		await cloneTemplate(
-			param.gheHost!, // completeInitParameterObject() で gitType が "ghe" で gheHost が null の場合はエラーとなるため非nullアサーションとしている。
-			param.gheProtocol,
-			{
-				owner,
-				repo,
-				targetPath: param.cwd
-			},
-			param
-		);
+			// テンプレート取得
+			templatePath = await fetchTemplate(metadata);
+		}
 
-	} else {
-		const { type, cwd, logger, skipAsk, forceCopy, repository, templateListJsonPath, localTemplateDirectory } = param;
+		// template.json を元にファイルを抽出
+		const rawConf = await _readJSONWithDefault<TemplateConfig>(path.join(templatePath, "template.json"), {});
+		const conf = await completeTemplateConfig(rawConf, templatePath, logger);
+		await _extractFromTemplate(conf, templatePath, cwd, { forceCopy, logger });
 
-		// テンプレート決定
-		const templateListJsonUri = new URL(templateListJsonPath, repository).toString();
-		const allMetadataList = [
-			...(await fetchRemoteTemplatesMetadata(templateListJsonUri)),
-			...(await collectLocalTemplatesMetadata(localTemplateDirectory))
-		];
-		const metadataList = allMetadataList.filter(metadata => metadata.name === type);
-		if (metadataList.length === 0)
-			throw new Error(`Unknown template name: ${type}`);
-		const metadata = metadataList[0];
-		if (metadataList.length > 1)
-			logger.warn(`Found multiple templates named ${type}. Using ${digestOfTemplateMetadata(metadata)}`);
-
-		// テンプレート取得
-		const template = await fetchTemplate(metadata);
-
-		// tempate.json を元にファイルを抽出
-		const rawConf = await _readJSONWithDefault<TemplateConfig>(path.join(template, "template.json"), {});
-		const conf = await completeTemplateConfig(rawConf, template);
-		await _extractFromTemplate(conf, template, cwd, { forceCopy, logger });
-
-		// ユーザ入力でゲーム設定を更新
-		const gameJsonPath = path.join(cwd, conf.gameJson);
-		await updateConfigurationFile(gameJsonPath, logger, skipAsk);
+		// GitHub 経由以外の場合はユーザ入力でゲーム設定を更新
+		if (!(gitType === "github" || gitType === "ghe")) {
+			const gameJsonPath = path.join(cwd, conf.gameJson);
+			await updateConfigurationFile(gameJsonPath, logger, skipAsk);
+		}
 
 		if (conf.guideMessage)
 			logger.print(conf.guideMessage);
+	} finally {
+		if (templatePath && existsSync(templatePath)) {
+			await fs.rm(templatePath, { recursive: true });
+		}
 	}
 
 	param.logger.info("Done!");
