@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.16.29 (2023-05-22)
+
+#### Enhancement
+* `akashic-cli-init`
+  * [#1238](https://github.com/akashic-games/akashic-cli/pull/1238) feat(init): template.json の exclude をサポート ([@yu-ogi](https://github.com/yu-ogi))
+
+#### Committers: 1
+- [@yu-ogi](https://github.com/yu-ogi)
+
 ## 2.16.28 (2023-05-18)
 
 #### Other Change
