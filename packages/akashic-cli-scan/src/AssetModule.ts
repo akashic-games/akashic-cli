@@ -109,10 +109,10 @@ export namespace AssetModule {
 				if (fresh.duration !== old.duration) {
 					logger?.info(`Detected change of the audio duration for ${fresh.path} from ${old.duration} to ${fresh.duration}`);
 				}
-				const oldExt = JSON.stringify(old.hint?.extensions);
-				const freshExt = JSON.stringify(fresh.hint?.extensions);
-				if (oldExt !== freshExt) {
-					logger?.info(`Detected change of the audio extensions for ${fresh.path} from ${oldExt} to ${freshExt}`);
+				const oldExtStr = JSON.stringify(old.hint?.extensions);
+				const freshExtStr = JSON.stringify(fresh.hint?.extensions);
+				if (oldExtStr !== freshExtStr) {
+					logger?.info(`Detected change of the audio extensions for ${fresh.path} from ${oldExtStr} to ${freshExtStr}`);
 				}
 				return {
 					...old,
