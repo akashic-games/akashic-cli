@@ -602,7 +602,7 @@ describe("AssetManagerSpec", () => {
 			]);
 		});
 
-		it("merge audio assets with update hint", () => {
+		it("merge audio assets with update hint.extensions", () => {
 			const definedAssets: AssetConfiguration[] = [
 				{
 					type: "audio",
@@ -640,7 +640,7 @@ describe("AssetManagerSpec", () => {
 					duration: 340,
 					systemId: "music",
 					hint: {
-						extensions: [".m4a"],
+						extensions: [".m4a"]
 					}
 				}
 			];
