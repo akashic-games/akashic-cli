@@ -64,7 +64,7 @@ export module NodeModules {
 		if (!mainScriptPath) {
 			throw new Error(`No ${d.name} in node_modules`);
 		}
-		mainScriptPath = mainScriptPath.replace(path.resolve(".") + path.sep, "");
+		mainScriptPath = mainScriptPath.replace(path.resolve(".") + "/", "");
 		return { moduleName: d.name, mainScriptPath };
 	}
 
