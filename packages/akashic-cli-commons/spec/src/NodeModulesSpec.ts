@@ -4,6 +4,7 @@ import * as mockfs from "mock-fs";
 import { ConsoleLogger } from "../../lib/ConsoleLogger";
 import { Logger } from "../../lib/Logger";
 import { NodeModules } from "../../lib/NodeModules";
+import { Util } from "../../lib";
 
 describe("NodeModules", function () {
 
@@ -146,11 +147,11 @@ describe("NodeModules", function () {
 
 	describe(".listModuleMainScripts()", function () {
 		it("list the files named package.json", function (done) {
-			jest.spyOn(NodeModules, "extractModuleMainInfo").mockImplementation((packageJsonPath: string) => {
-				const pkgData =  JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
+			jest.spyOn(Util, "requireResolve").mockImplementation((id: string, opts: { paths?: string[] | undefined }): string => {
+				const pkgJsonPath = path.join(opts.paths[0], "package.json");
+				const pkgData =  JSON.parse(fs.readFileSync(pkgJsonPath, "utf-8"));
 				const mainScriptName = pkgData.main.split(".").pop() === "js" ? pkgData.main : pkgData.main + ".js";
-				const mainScriptPath = path.join(path.dirname(packageJsonPath), mainScriptName);
-				return {moduleName: pkgData.name, mainScriptPath };
+				return path.join(path.resolve("."), path.dirname(pkgJsonPath), mainScriptName);
 			});
 
 			mockfs(mockFsContent);
