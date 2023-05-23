@@ -999,5 +999,4 @@ describe("scanNodeModules", () => {
 			"Please ensure that you are using akashic-engine@>=2.0.2, >=1.12.7."
 		);
 	});
-
 });
