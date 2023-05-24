@@ -98,7 +98,7 @@ export function run(argv: string[]): void {
 			}
 		}
 		if (options.atsumaru) {
-			console.error("--atsumaru is an obsolete option. Use \"akashic import zip --nicolive\" instead.");
+			console.error("--atsumaru is an obsolete option. Use \"akashic export zip --nicolive\" instead.");
 			process.exit(1);
 		}
 
