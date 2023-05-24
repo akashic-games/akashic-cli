@@ -109,10 +109,12 @@ export namespace AssetModule {
 				if (fresh.duration !== old.duration) {
 					logger?.info(`Detected change of the audio duration for ${fresh.path} from ${old.duration} to ${fresh.duration}`);
 				}
-				const oldExtStr = JSON.stringify(old.hint?.extensions);
-				const freshExtStr = JSON.stringify(fresh.hint?.extensions);
-				if (oldExtStr !== freshExtStr) {
-					logger?.info(`Detected change of the audio extensions for ${fresh.path} from ${oldExtStr} to ${freshExtStr}`);
+				if (isChanged(old.hint?.extensions, fresh.hint?.extensions)) {
+					logger?.info(`Detected change of the audio extensions for ${fresh.path} from ${
+						JSON.stringify(old.hint?.extensions)
+					} to ${
+						JSON.stringify(fresh.hint?.extensions)
+					}`);
 				}
 				return {
 					...old,
@@ -165,5 +167,10 @@ export namespace AssetModule {
 			}
 			return id;
 		};
+	}
+
+	// NOTE: akashic-cli-commons で定義して汎用化を検討する
+	function isChanged(extensions1: string[], extensions2: string[]): boolean {
+		return JSON.stringify(extensions1) !== JSON.stringify(extensions2);
 	}
 }
