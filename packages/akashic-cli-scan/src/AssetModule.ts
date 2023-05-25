@@ -109,7 +109,7 @@ export namespace AssetModule {
 				if (fresh.duration !== old.duration) {
 					logger?.info(`Detected change of the audio duration for ${fresh.path} from ${old.duration} to ${fresh.duration}`);
 				}
-				if (isChanged(old.hint?.extensions, fresh.hint?.extensions)) {
+				if (!isSameExtensions(old.hint?.extensions, fresh.hint?.extensions)) {
 					logger?.info(`Detected change of the audio extensions for ${fresh.path} from ${
 						JSON.stringify(old.hint?.extensions)
 					} to ${
@@ -170,7 +170,7 @@ export namespace AssetModule {
 	}
 
 	// NOTE: akashic-cli-commons で定義して汎用化を検討する
-	function isChanged(extensions1: string[], extensions2: string[]): boolean {
-		return JSON.stringify(extensions1) !== JSON.stringify(extensions2);
+	function isSameExtensions(extensions1: string[] | undefined, extensions2: string[] | undefined): boolean {
+		return JSON.stringify(extensions1) === JSON.stringify(extensions2);
 	}
 }
