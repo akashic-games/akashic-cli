@@ -3,22 +3,20 @@ import * as path from "path";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
 import * as mockfs from "mock-fs";
 import { scanNodeModules } from "../../../lib/scanNodeModules";
-import { NodeModules } from "@akashic/akashic-cli-commons";
+import { Util } from "@akashic/akashic-cli-commons";
 import { MockPromisedNpm } from "./helpers/MockPromisedNpm";
 
 describe("scanNodeModules", () => {
 	const nullLogger = new ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
 	let spy: jest.SpyInstance;
 	beforeAll(() => {
-		spy = jest.spyOn(NodeModules, "extractModuleMainInfo").mockImplementation((packageJsonPath: string) => {
-			const pkgData = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
+		spy = jest.spyOn(Util, "requireResolve").mockImplementation((id: string, opts: { paths?: string[] | undefined }): string => {
+			const pkgJsonPath = path.join(opts.paths[0], "package.json");
+			const pkgData =  JSON.parse(fs.readFileSync(pkgJsonPath, "utf-8"));
+			if (!pkgData.name) return "";
 			const mainScriptName = pkgData.main.split(".").pop() === "js" ? pkgData.main : pkgData.main + ".js";
-			const mainScriptPath = path.join(path.dirname(packageJsonPath), mainScriptName);
-			if (!pkgData.name) {
-				throw new Error(`No ${pkgData.name} in node_modules`);
-			}	
-			return {moduleName: pkgData.name, mainScriptPath };
-		});		   
+			return path.join(path.resolve("."), path.dirname(pkgJsonPath), mainScriptName);
+		});
 	});
 
 	afterEach(() => {

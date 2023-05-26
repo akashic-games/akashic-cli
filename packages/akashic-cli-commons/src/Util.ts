@@ -96,3 +96,8 @@ export async function getTotalFileSize(directoryPath: string): Promise<number> {
 
 	return totalSize;
 }
+
+// require.resolve() がモックできないので関数をモックするため require.resolve() するだけの関数を切り出している
+export function requireResolve(id: string, opts?: { paths?: string[] | undefined }): string {
+	return require.resolve(id, opts);
+}
