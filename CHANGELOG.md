@@ -1,5 +1,20 @@
 # CHANGELOG
 
+## 2.16.30 (2023-05-26)
+
+#### Bug Fix
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-lib-manage`, `akashic-cli-scan`
+  * [#1240](https://github.com/akashic-games/akashic-cli/pull/1240) Fix tests involving NodeModules#extractModuleMainInfo ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Update Dependencies
+* `akashic-cli-extra`
+  * [#1216](https://github.com/akashic-games/akashic-cli/pull/1216) fix(deps): update dependency ini to v4 ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-export`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`
+  * [#1241](https://github.com/akashic-games/akashic-cli/pull/1241) chore(deps): update dependency socket.io-parser to 4.2.3 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 2.16.29 (2023-05-22)
 
 #### Enhancement
