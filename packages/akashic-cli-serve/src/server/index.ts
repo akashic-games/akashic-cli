@@ -229,9 +229,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 				if (err) {
 					getSystemLogger().error(err.message);
 				}
-				if (modTargetFlag === ModTargetFlags.GameJson) {
-					console.log("Reflect changes of game.json");
-				}
+				console.log("Reflect changes of ", (modTargetFlag === ModTargetFlags.GameJson) ? "game.json" : "assets");
 				// コンテンツに変更があったらplayを新規に作り直して再起動
 				const contentId = `${i}`;
 				const targetPlayIds: string[] = [];
