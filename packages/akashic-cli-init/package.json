@@ -50,7 +50,7 @@
   "dependencies": {
     "@akashic/akashic-cli-commons": "0.14.13",
     "@akashic/akashic-cli-extra": "1.6.13",
-    "commander": "8.3.0",
+    "commander": "10.0.1",
     "fs-extra": "10.1.0",
     "glob": "10.2.3",
     "ignore": "5.2.4",
