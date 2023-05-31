@@ -15,6 +15,16 @@ class Encoder extends Emitter {
 class Decoder extends Emitter {
 	add(chunk: any): void {
 		const packet = decode(chunk) as Packet;
+		// 指定の namespace への初回接続時 (PacketType === CONNECT) に `packet.data` の値が `authPayload` として利用されるが、
+		// その際に `authPayload === null` だと msgpack のエンコード時にエラーとなるため暫定対応で `undefined` で上書きする。
+		// @see https://github.com/socketio/socket.io-protocol#exchange-protocol
+		// @see https://github.com/socketio/socket.io/blob/15af22f/lib/client.ts#L277
+		//
+		// FIXME: 以下の PullRequest のマージにより本暫定対応を削除できる可能性がある
+		// https://github.com/socketio/socket.io/pull/4675
+		if (packet.data === null) {
+			packet.data = undefined;
+		}
 		if (this.isPacketValid(packet)) {
 			this.emit("decoded", packet);
 		} else {
