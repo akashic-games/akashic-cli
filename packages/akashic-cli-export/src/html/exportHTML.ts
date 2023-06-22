@@ -9,6 +9,7 @@ import readdir = require("fs-readdir-recursive");
 import { promiseConvertBundle } from "./convertBundle";
 import { promiseConvertNoBundle } from "./convertNoBundle";
 import { ConvertTemplateParameterObject } from "./convertUtil";
+import * as Utils from "./Utils";
 
 export interface ExportHTMLParameterObject extends ConvertTemplateParameterObject {
 	quiet?: boolean;
@@ -141,7 +142,7 @@ export function exportHTML(param: ExportHTMLParameterObject, cb: (err?: any) => 
 
 function createRenamedGame(sourcePath: string, hashLength: number, logger: cmn.Logger): Promise<string> {
 	const destDirPath = path.resolve(fs.mkdtempSync(path.join(os.tmpdir(), "akashic-export-html-")));
-	fsx.copySync(sourcePath, destDirPath);
+	Utils.copyContentFiles(sourcePath, destDirPath);
 	return Promise.resolve()
 		.then(() => cmn.ConfigurationFile.read(path.join(destDirPath, "game.json"), logger))
 		.then((gamejson: cmn.GameConfiguration) => {
