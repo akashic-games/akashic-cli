@@ -29,7 +29,7 @@
     "@akashic/akashic-cli-scan": "0.16.0",
     "@akashic/amflow-util": "^1.2.0",
     "@akashic/game-configuration": "^1.8.0",
-    "@akashic/headless-driver": "2.7.3",
+    "@akashic/headless-driver": "2.8.4",
     "@akashic/sandbox-configuration": "^2.3.0",
     "@akashic/trigger": "1.0.1",
     "@msgpack/msgpack": "2.8.0",
@@ -48,10 +48,10 @@
     "socket.io-parser": "4.2.3"
   },
   "devDependencies": {
-    "@akashic/amflow": "~3.1.0",
+    "@akashic/amflow": "~3.2.0",
     "@akashic/eslint-config": "1.1.1",
-    "@akashic/pdi-types": "~1.7.0",
-    "@akashic/playlog": "~3.1.0",
+    "@akashic/pdi-types": "~1.11.0",
+    "@akashic/playlog": "~3.2.0",
     "@storybook/addon-actions": "^6.1.21",
     "@storybook/addon-knobs": "^6.1.21",
     "@storybook/react": "^6.1.21",
