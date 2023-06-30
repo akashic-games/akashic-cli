@@ -161,4 +161,37 @@ describe("exportHTML", function () {
 			})
 			.then(done, done.fail);
 	});
+
+	it("promiseExportHTML - copy appropriate audio files", (done) => {
+		Promise.resolve()
+			.then(function () {
+				const param: exp.ExportHTMLParameterObject = {
+					logger: undefined,
+					cwd: path.join(__dirname, "..", "..", "fixtures", "sample_game"),
+					source: ".",
+					output: undefined,
+					force: true,
+					strip: true,
+					minify: false,
+					magnify: false,
+					unbundleText: false,
+					hashLength: 0 // ファイル名ハッシュ化なし: 改名先が (HTML に埋め込まれた game.json をパースしないと) わからないので
+				};
+				return exp.promiseExportHTML(param);
+			})
+			.then((dest) => {
+				expect(dest).toMatch(/^.*akashic-export-html-tmp-.+$/);
+				expect(fsx.statSync(path.join(dest, "audio", "dummyse.ogg"))).toBeTruthy();
+				expect(fsx.statSync(path.join(dest, "audio", "dummyse.aac"))).toBeTruthy();
+				expect(fsx.statSync(path.join(dest, "audio", "dummyse.m4a"))).toBeTruthy();
+				try {
+					fsx.statSync(path.join(dest, "audio", "dummyse.invalidext"));
+					done.fail();
+				} catch (e) {
+					expect(e.code).toBe("ENOENT");
+				}
+				fsx.removeSync(dest);
+			})
+			.then(done, done.fail);
+	});
 });

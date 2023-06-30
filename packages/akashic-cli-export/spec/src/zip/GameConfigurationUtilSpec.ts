@@ -222,6 +222,7 @@ describe("GameConfigurationUtil", () => {
 				audio: {
 					"foo.ogg": "",
 					"foo.aac": "",
+					"foo.m4a": "",
 					"foo.invalid": "",
 					"foo.mp4": {  // ファイルでなければ無視されねばならない
 						"foo.mustbeignored.aac": ""
@@ -246,6 +247,7 @@ describe("GameConfigurationUtil", () => {
 				"script/sub.js",
 				"audio/foo.ogg",
 				"audio/foo.aac",
+				"audio/foo.m4a",
 				"node_modules/foobar/lib/x.js",
 				"node_modules/foobar/package.json"
 			]);

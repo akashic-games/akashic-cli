@@ -69,7 +69,7 @@ export function extractFilePaths(gamejson: cmn.GameConfiguration, basedir: strin
 		}
 
 		// audio のみ拡張子を補完する特殊対応: 補完して存在するファイルのみ扱う
-		[".ogg", ".aac", ".mp4"].forEach(ext => {
+		cmn.KNOWN_AUDIO_EXTENSIONS.forEach(ext => {
 			try {
 				if (fs.statSync(path.resolve(basedir, a.path + ext)).isFile())
 					result.push(a.path + ext);
