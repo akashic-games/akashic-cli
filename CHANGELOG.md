@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.16.33 (2023-06-30)
+
+#### Enhancement
+* `akashic-cli-commons`, `akashic-cli-export`
+  * [#1250](https://github.com/akashic-games/akashic-cli/pull/1250) feat(export): include .m4a files ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.16.32 (2023-06-26)
 
 #### Enhancement
