@@ -9,6 +9,11 @@
 			"path": "script/main.js",
 			"global": true
 		},
+		"dummyse": {
+			"type": "audio",
+			"duration": 0,
+			"path": "audio/dummyse"
+		},
 		"sample": {
 			"type": "image",
 			"width": 150,

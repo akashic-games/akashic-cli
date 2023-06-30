@@ -46,12 +46,11 @@ export function copyAssetFilesStrip(
 		fsx.mkdirsSync(path.resolve(outputPath, assetDir));
 		var dst = path.join(outputPath, assetPath);
 		if (assets[assetName].type === "audio") {
-			var audioTypes = ["ogg", "mp4", "aac"];
-			audioTypes.forEach((type) => {
+			cmn.KNOWN_AUDIO_EXTENSIONS.forEach((ext) => {
 				try {
 					fsx.copySync(
-						path.resolve(inputPath, assetPath) + "." + type,
-						dst + "." + type,
+						path.resolve(inputPath, assetPath) + ext,
+						dst + ext,
 						{overwrite: options.force}
 					);
 				} catch (e) {

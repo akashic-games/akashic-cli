@@ -3,6 +3,7 @@ import * as path from "path";
 import * as fsx from "fs-extra";
 import { sha256 } from "js-sha256";
 import type { GameConfiguration } from "./GameConfiguration";
+import { KNOWN_AUDIO_EXTENSIONS } from "./knownAudioExtensions";
 
 export const ERROR_FILENAME_CONFLICT = "ERROR_FILENAME_CONFLICT";
 export const ERROR_PATH_INCLUDE_ANCESTOR = "ERROR_PATH_INCLUDE_ANCESTOR";
@@ -51,8 +52,7 @@ function _renameFilename(basedir: string, filePath: string, newFilePath: string,
 }
 
 function _renameAudioFilename(basedir: string, filePath: string, newFilePath: string, processedAssetPaths: Set<string>): void {
-	const extTypes = [".ogg", ".aac", ".mp4"];
-	extTypes.forEach((ext) => {
+	KNOWN_AUDIO_EXTENSIONS.forEach((ext) => {
 		try {
 			fs.accessSync(path.resolve(basedir, filePath + ext));
 			_renameFilename(basedir, filePath + ext, newFilePath + ext, processedAssetPaths);
