@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.16.34 (2023-07-04)
+
+#### Bug Fix
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`
+  * [#1251](https://github.com/akashic-games/akashic-cli/pull/1251) fix(export): fix crash on --hash-filename and hint.extensions ([@xnv](https://github.com/xnv))
+
+#### Committers: 1
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.16.33 (2023-06-30)
 
 #### Enhancement
