@@ -34,7 +34,7 @@ describe("Util", () => {
 			fs.mkdirSync(outPath);
 			Utils.copyContentFiles(contentPath, outPath);
 
-			// 念のたえ hint.extensions が意図通りであることを確認
+			// 念のため hint.extensions が意図通りであることを確認
 			const gameJson: GameConfiguration = require(path.resolve(contentPath, "game.json"));
 			const dummySeDecl = gameJson.assets.dummyse;
 			expect(dummySeDecl.type === "audio" && dummySeDecl.hint?.extensions).toEqual([".ogg", ".m4a"]);
@@ -50,7 +50,7 @@ describe("Util", () => {
 			fs.mkdirSync(outPath);
 			Utils.copyContentFiles(contentPath, outPath);
 
-			// 念のたえ hint.extensions が意図通りであることを確認
+			// 念のため hint.extensions が意図通りであることを確認
 			const gameJson: GameConfiguration = require(path.resolve(contentPath, "game.json"));
 			const dummySeDecl = gameJson.assets.dummyse;
 			expect(dummySeDecl.type === "audio" && dummySeDecl.hint?.extensions).toBeUndefined();
