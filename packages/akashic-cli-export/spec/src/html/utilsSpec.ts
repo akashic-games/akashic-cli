@@ -11,7 +11,7 @@ describe("Util", () => {
 			fs.rmSync(outPath, { recursive: true, force: true });
 		});
 
-		it("Copy only the files described in game.json", async () => {
+		it("Copies only the files described in game.json", async () => {
 			const contentPath = path.join(__dirname, "..", "..", "fixtures", "game_exclude_files");
 			fs.mkdirSync(outPath);
 			Utils.copyContentFiles(contentPath, outPath);
@@ -27,6 +27,38 @@ describe("Util", () => {
 				const targetPath = path.join(outPath, gameJson.assets[v].path + extension);
 				expect(fs.existsSync(targetPath)).toBeTruthy();
 			});
+		});
+
+		it("Copies audio files as per hint.extensions, if given", async () => {
+			const contentPath = path.join(__dirname, "..", "..", "fixtures", "game_hint_exts");
+			fs.mkdirSync(outPath);
+			Utils.copyContentFiles(contentPath, outPath);
+
+			// 念のため hint.extensions が意図通りであることを確認
+			const gameJson: GameConfiguration = require(path.resolve(contentPath, "game.json"));
+			const dummySeDecl = gameJson.assets.dummyse;
+			expect(dummySeDecl.type === "audio" && dummySeDecl.hint?.extensions).toEqual([".ogg", ".m4a"]);
+
+			expect(fs.existsSync(path.join(outPath, "audio", "dummyse.ogg"))).toBeTruthy();
+			expect(fs.existsSync(path.join(outPath, "audio", "dummyse.m4a"))).toBeTruthy();
+			expect(fs.existsSync(path.join(outPath, "audio", "dummyse.aac"))).toBeFalsy();
+			expect(fs.existsSync(path.join(outPath, "audio", "dummyse.invalidext"))).toBeFalsy();
+		});
+
+		it("Copies existing audio files, unless hint.extensions given", async () => {
+			const contentPath = path.join(__dirname, "..", "..", "fixtures", "sample_game");
+			fs.mkdirSync(outPath);
+			Utils.copyContentFiles(contentPath, outPath);
+
+			// 念のため hint.extensions が意図通りであることを確認
+			const gameJson: GameConfiguration = require(path.resolve(contentPath, "game.json"));
+			const dummySeDecl = gameJson.assets.dummyse;
+			expect(dummySeDecl.type === "audio" && dummySeDecl.hint?.extensions).toBeUndefined();
+
+			expect(fs.existsSync(path.join(outPath, "audio", "dummyse.ogg"))).toBeTruthy();
+			expect(fs.existsSync(path.join(outPath, "audio", "dummyse.m4a"))).toBeTruthy();
+			expect(fs.existsSync(path.join(outPath, "audio", "dummyse.aac"))).toBeTruthy();
+			expect(fs.existsSync(path.join(outPath, "audio", "dummyse.invalidext"))).toBeTruthy();
 		});
 	});
 });

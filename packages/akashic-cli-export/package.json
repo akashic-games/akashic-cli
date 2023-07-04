@@ -44,7 +44,6 @@
   "devDependencies": {
     "@akashic/akashic-engine": "~2.6.7",
     "@akashic/eslint-config": "0.1.2",
-    "@akashic/game-configuration": "1.11.1",
     "@types/archiver": "5.3.2",
     "@types/browserify": "12.0.37",
     "@types/commander": "2.12.0",
@@ -75,6 +74,7 @@
   },
   "dependencies": {
     "@akashic/akashic-cli-commons": "0.14.15",
+    "@akashic/game-configuration": "2.0.0",
     "@babel/core": "7.20.2",
     "@babel/preset-env": "7.20.2",
     "archiver": "5.3.1",
