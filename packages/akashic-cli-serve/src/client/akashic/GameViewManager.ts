@@ -193,10 +193,11 @@ function createPlatformCustomizer(content: ServeGameContent): (platform: Platfor
 		const scriptAssetClass = options.g.ScriptAsset || NullScriptAssetV3;
 		// eslint-disable-next-line @typescript-eslint/naming-convention
 		const TestbedScriptAsset = generateTestbedScriptAsset(scriptAssetClass);
-		platform._resourceFactory.createScriptAsset = (id: string, assetPath: string) => {
+		platform._resourceFactory.createScriptAsset = (id: string, assetPath: string, exports?: string[]) => {
 			return new TestbedScriptAsset(
 				id,
 				assetPath,
+				exports,
 				() => options.g.ExceptionFactory.createAssetLoadError("can not load script: " + assetPath)
 			);
 		};
