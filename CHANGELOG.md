@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.16.35 (2023-07-11)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#1253](https://github.com/akashic-games/akashic-cli/pull/1253) feat(serve): support ScriptAsset#exports ([@yu-ogi](https://github.com/yu-ogi))
+
+#### Committers: 1
+- [@yu-ogi](https://github.com/yu-ogi)
+
 ## 2.16.34 (2023-07-04)
 
 #### Bug Fix
