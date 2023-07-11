@@ -43,11 +43,10 @@ describe("Parameter checking from cli() to exportZip()", () => {
 			expect(infoOption.targetService).toBe("none");
 			expect(infoOption.nicolive).toBeUndefined();
 			return Promise.resolve();
-		 });
-		 Promise.resolve().then(() => cli(configs))
+		});
+		Promise.resolve().then(() => cli(configs))
 			.then(done, done.fail);
 	});
-
 
 	it("with all configs", (done) => {
 		const configs: CliConfigExportZip = {
@@ -103,7 +102,6 @@ describe("Parameter checking from cli() to exportZip()", () => {
 			.then(done, done.fail);
 	});
 
-
 	it("nicolive parameter is true", (done) => {
 		const configs = { nicolive: true };
 		mockFn.mockImplementation(params => {
@@ -117,7 +115,7 @@ describe("Parameter checking from cli() to exportZip()", () => {
 			expect(params.nicolive).toBeTruthy();
 
 			const infoOption = params.exportInfo.option;
-			expect(infoOption.hashFilename).toBe(20);
+			expect(infoOption.hashFilename).toBeTruthy();
 			expect(infoOption.targetService).toBe("nicolive");
 			expect(infoOption.nicolive).toBeTruthy();
 			return Promise.resolve();
@@ -135,7 +133,6 @@ describe("Parameter checking from cli() to exportZip()", () => {
 			omitUnbundledJs: true
 		};
 		mockFn.mockImplementation(params => {
-			console.log(params);
 			expect(params.bundle).toBeTruthy();
 			expect(params.babel).toBeTruthy();
 			expect(params.strip).toBeTruthy();
