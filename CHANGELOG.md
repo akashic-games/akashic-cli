@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.16.36 (2023-07-18)
+
+#### Bug Fix
+* `akashic-cli-export`
+  * [#1255](https://github.com/akashic-games/akashic-cli/pull/1255) Fix to enable hash-length in nicolive option of export-zip ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 2.16.35 (2023-07-11)
 
 #### Enhancement
