@@ -5,6 +5,7 @@ import type { AssetConfiguration, AudioAssetConfigurationBase } from "@akashic/g
 import * as readdirRecursive from "fs-readdir-recursive";
 import { getAudioDuration } from "./getAudioDuration";
 import { getImageSize } from "./getImageSize";
+import { isBinaryFile } from "./isBinary";
 
 export type AssetFilter = (path: string) => boolean;
 
@@ -12,7 +13,7 @@ export function scriptAssetFilter(p: string): boolean {
 	return /.*\.js$/i.test(p);
 }
 
-export function textAssetFilter(p: string): boolean {
+export function textOrBinaryAssetFilter(p: string): boolean {
 	// NOTE: その他ファイルはすべてテキストアセットとして扱う
 	return !(
 		scriptAssetFilter(p) ||
@@ -60,13 +61,33 @@ export async function scanScriptAssets(
 		.filter(asset => asset != null);
 }
 
+export async function scanBinaryAssets(
+	baseDir: string,
+	dir: string,
+	_logger?: Logger,
+	filter: AssetFilter = textOrBinaryAssetFilter
+): Promise<AssetConfiguration[]> {
+	const relativeFilePaths: string[] = readdirRecursive(path.join(baseDir, dir));
+
+	const paths = relativeFilePaths.filter(filter)
+		.filter((relativeFilePath) => isBinaryFile(path.join(baseDir, dir, relativeFilePath)));
+	return paths.map<AssetConfiguration>(relativeFilePath => {
+		return {
+			type: "binary",
+			path: makeUnixPath(path.join(dir, relativeFilePath))
+		};
+	})
+		.filter(asset => asset != null);
+}
+
 export async function scanTextAssets(
 	baseDir: string,
 	dir: string,
 	_logger?: Logger,
-	filter: AssetFilter = textAssetFilter
+	filter: AssetFilter = textOrBinaryAssetFilter
 ): Promise<AssetConfiguration[]> {
-	const relativeFilePaths: string[] = readdirRecursive(path.join(baseDir, dir)).filter(filter);
+	const relativeFilePaths: string[] = readdirRecursive(path.join(baseDir, dir)).filter(filter)
+		.filter((filePath) => !isBinaryFile(path.join(baseDir, dir, filePath)));
 	return relativeFilePaths.map<AssetConfiguration>(relativeFilePath => {
 		return {
 			type: "text",

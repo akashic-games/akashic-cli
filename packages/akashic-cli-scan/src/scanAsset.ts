@@ -5,13 +5,14 @@ import { readJSON, writeJSON } from "@akashic/akashic-cli-commons/lib/FileSystem
 import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
 import type { AssetConfiguration, GameConfiguration } from "@akashic/game-configuration";
 import { AssetModule } from "./AssetModule";
-import {scanAudioAssets, scanImageAssets, scanScriptAssets, scanTextAssets, scanVectorImageAssets, textAssetFilter} from "./scanUtils";
+import { scanAudioAssets, scanBinaryAssets, scanImageAssets, scanScriptAssets,
+	scanTextAssets, scanVectorImageAssets, textOrBinaryAssetFilter } from "./scanUtils";
 import type { AssetExtension, AssetScanDirectoryTable, AssetTargetType, LibConfiguration } from "./types";
 
 export interface ScanAssetParameterObject {
 	/**
 	 * 更新する対象。
-	 * `"image"`, `"audio"`, `"script"`, `"text"`, `"all"` のいずれか。
+	 * `"image"`, `"audio"`, `"script"`, `"binary"`, `"text"`, `"all"` のいずれか。
 	 * 省略された場合、 `"all"` 。
 	 */
 	target?: AssetTargetType;
@@ -63,6 +64,12 @@ export interface ScanAssetParameterObject {
 	 * 省略された場合、 `[]` 。
 	 */
 	assetExtension?: AssetExtension;
+
+	/**
+	 * アセットとして利用しない拡張子。
+	 * 省略された場合 `[]` 。
+	 */
+	ignoreAssetExtension?: string[];
 }
 
 export function _completeScanAssetParameterObject(param: ScanAssetParameterObject): Required<ScanAssetParameterObject> {
@@ -83,7 +90,8 @@ export function _completeScanAssetParameterObject(param: ScanAssetParameterObjec
 		includeExtensionToAssetId: !!param.includeExtensionToAssetId,
 		noOmitPackagejson: !!param.noOmitPackagejson,
 		assetScanDirectoryTable,
-		assetExtension
+		assetExtension,
+		ignoreAssetExtension: param.ignoreAssetExtension ?? []
 	};
 }
 
@@ -112,6 +120,7 @@ export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 			audio: [],
 			image: [],
 			script: [],
+			binary: [],
 			text: []
 		};
 
@@ -121,12 +130,14 @@ export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 			scanTargetDirsTable.audio.push(...audioDirs, ...assetsDirs);
 			scanTargetDirsTable.image.push(...imageDirs, ...assetsDirs);
 			scanTargetDirsTable.script.push(...scriptDirs, ...assetsDirs);
+			scanTargetDirsTable.binary.push(...assetsDirs);
 			scanTargetDirsTable.text.push(...textDirs, ...assetsDirs);
 
 			// NOTE: 重複するディレクトリを削除
 			scanTargetDirsTable.audio = scanTargetDirsTable.audio.filter((dir, i, self) => self.indexOf(dir) === i);
 			scanTargetDirsTable.image = scanTargetDirsTable.image.filter((dir, i, self) => self.indexOf(dir) === i);
 			scanTargetDirsTable.script = scanTargetDirsTable.script.filter((dir, i, self) => self.indexOf(dir) === i);
+			scanTargetDirsTable.binary = scanTargetDirsTable.binary.filter((dir, i, self) => self.indexOf(dir) === i);
 			scanTargetDirsTable.text = scanTargetDirsTable.text.filter((dir, i, self) => self.indexOf(dir) === i);
 		} else if (target === "audio") {
 			scanTargetDirsTable.audio.push(...audioDirs);
@@ -137,6 +148,8 @@ export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 		} else if (target === "script") {
 			scanTargetDirsTable.script.push(...scriptDirs);
 			scanTargetDirsTable.script = scanTargetDirsTable.script.filter((dir, i, self) => self.indexOf(dir) === i);
+		} else if (target === "binary") {
+			scanTargetDirsTable.binary = scanTargetDirsTable.binary.filter((dir, i, self) => self.indexOf(dir) === i);
 		} else if (target === "text") {
 			scanTargetDirsTable.text.push(...textDirs);
 			scanTargetDirsTable.text = scanTargetDirsTable.text.filter((dir, i, self) => self.indexOf(dir) === i);
@@ -168,13 +181,17 @@ export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 			const assets = await scanScriptAssets(base, dir, logger);
 			scannedAssets.push(...assets);
 		}
+		for (const dir of scanTargetDirsTable.binary) {
+			const assets = await scanBinaryAssets(base, dir, logger);
+			scannedAssets.push(...assets);
+		}
 		for (const dir of scanTargetDirsTable.text) {
 			const assets = await scanTextAssets(
 				base,
 				dir,
 				logger,
 				p => {
-					if (!textAssetFilter(p)) {
+					if (!textOrBinaryAssetFilter(p)) {
 						// 他の種別 (例えば ".png" など) の拡張子であってはならない
 						return false;
 					}

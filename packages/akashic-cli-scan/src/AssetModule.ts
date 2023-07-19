@@ -67,7 +67,8 @@ export namespace AssetModule {
 
 		// スキャン対象のディレクトリの定義済みアセットの中からすでに存在しないものを削除
 		for (const definedAsset of definedAssets) {
-			const key = definedAsset.type === "vector-image" ? "image" : definedAsset.type as "audio" | "image" | "script" | "text";
+			const key =
+				definedAsset.type === "vector-image" ? "image" : definedAsset.type as "audio" | "image" | "script" | "text" | "binary";
 			let dirs = assetDirTable[key];
 			if (dirs && dirs.length) {
 				dirs = dirs.map(dir => dir.endsWith("/") ? dir : dir + "/");
@@ -102,9 +103,6 @@ export namespace AssetModule {
 
 	export function createDefaultMergeCustomizer(logger?: Logger): MergeCustomizer {
 		return (old, fresh) => {
-			if (old.type !== fresh.type) {
-				throw new Error(`Conflicted Asset Type. ${fresh.path} must be ${old.type} but not ${fresh.type}.`);
-			}
 			if (fresh.type === "audio" && old.type === "audio") {
 				if (fresh.duration !== old.duration) {
 					logger?.info(`Detected change of the audio duration for ${fresh.path} from ${old.duration} to ${fresh.duration}`);
