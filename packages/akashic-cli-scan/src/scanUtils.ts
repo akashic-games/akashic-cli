@@ -68,7 +68,6 @@ export async function scanBinaryAssets(
 	filter: AssetFilter = textOrBinaryAssetFilter
 ): Promise<AssetConfiguration[]> {
 	const relativeFilePaths: string[] = readdirRecursive(path.join(baseDir, dir));
-
 	const paths = relativeFilePaths.filter(filter)
 		.filter((relativeFilePath) => isBinaryFile(path.join(baseDir, dir, relativeFilePath)));
 	return paths.map<AssetConfiguration>(relativeFilePath => {
