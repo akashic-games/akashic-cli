@@ -2,7 +2,7 @@ import type { AssetConfiguration } from "@akashic/game-configuration";
 
 export type AssetConfigurationWithID = AssetConfiguration & { id: string };
 
-export type AssetTargetType = "image" | "audio" | "script" | "text" | "all";
+export type AssetTargetType = "image" | "audio" | "script" | "binary" | "text" | "all";
 
 export interface AssetScanDirectoryTable {
 	/**
@@ -23,6 +23,12 @@ export interface AssetScanDirectoryTable {
 	 * 省略された場合、 `["script"]` 。
 	 */
 	script?: string[];
+
+	/**
+	 * BinaryAssetを取得するパス。
+	 * 省略された場合、 `[]` 。
+	 */
+	binary?: string[];
 
 	/**
 	 * TextAssetを取得するパス。
