@@ -64,12 +64,6 @@ export interface ScanAssetParameterObject {
 	 * 省略された場合、 `[]` 。
 	 */
 	assetExtension?: AssetExtension;
-
-	/**
-	 * アセットとして利用しない拡張子。
-	 * 省略された場合 `[]` 。
-	 */
-	ignoreAssetExtension?: string[];
 }
 
 export function _completeScanAssetParameterObject(param: ScanAssetParameterObject): Required<ScanAssetParameterObject> {
@@ -90,8 +84,7 @@ export function _completeScanAssetParameterObject(param: ScanAssetParameterObjec
 		includeExtensionToAssetId: !!param.includeExtensionToAssetId,
 		noOmitPackagejson: !!param.noOmitPackagejson,
 		assetScanDirectoryTable,
-		assetExtension,
-		ignoreAssetExtension: param.ignoreAssetExtension ?? []
+		assetExtension
 	};
 }
 
