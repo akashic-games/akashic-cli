@@ -43,7 +43,7 @@ describe("scanUtils", () => {
 					"_.ogg": DUMMY_OGG_DATA2,
 					"_.js": "var x = 1;",
 					"_.png": DUMMY_1x1_PNG_DATA,
-					"_.wasm": DUMMY_BINARY_DATA
+					"_.bin": DUMMY_BINARY_DATA
 				}
 			}
 		});
@@ -121,7 +121,7 @@ describe("scanUtils", () => {
 		).toEqual([
 			{
 				type: "binary",
-				path: "assets/_.wasm"
+				path: "assets/_.bin"
 			}
 		]);
 	});

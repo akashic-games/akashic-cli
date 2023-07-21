@@ -123,7 +123,7 @@ describe("scanAsset()", () => {
 					},
 					"binary": {
 						"foo": {
-							"_$.wasm": DUMMY_BINARY_DATA
+							"_$.bin": DUMMY_BINARY_DATA
 						}
 					}
 				},
@@ -197,7 +197,7 @@ describe("scanAsset()", () => {
 			});
 			expect(conf.assetList[6]).toEqual({
 				type: "binary",
-				path: "assets/binary/foo/_$.wasm"
+				path: "assets/binary/foo/_$.bin"
 			});
 			expect(conf.assetList[7]).toEqual({
 				type: "text",
@@ -244,7 +244,7 @@ describe("scanAsset()", () => {
 			});
 			expect(conf.assetList[4]).toEqual({
 				type: "binary",
-				path: "assets/binary/foo/_$.wasm"
+				path: "assets/binary/foo/_$.bin"
 			});
 			expect(conf.assetList[5]).toEqual({
 				type: "text",
@@ -1016,7 +1016,7 @@ describe("scanAsset()", () => {
 			assets: {
 				"dummy": {
 					"type": "text",
-					"path": "assets/foo/dummy.wasm",
+					"path": "assets/foo/dummy.bin",
 				}
 			}
 		};
@@ -1024,8 +1024,8 @@ describe("scanAsset()", () => {
 			"game.json": JSON.stringify(gamejson),
 			"assets": {
 				"foo": {
-					"dummy.wasm": DUMMY_BINARY_DATA,
-					"newDummy.wasm": DUMMY_BINARY_DATA,
+					"dummy.bin": DUMMY_BINARY_DATA,
+					"newDummy.bin": DUMMY_BINARY_DATA,
 				},
 			},
 		});
@@ -1037,19 +1037,19 @@ describe("scanAsset()", () => {
 
 		let conf = JSON.parse(fs.readFileSync("./game.json").toString());
 		expect(conf.assets["dummy"].type).toBe("text");
-		expect(conf.assets["assets/foo/newDummy.wasm"].type).toBe("binary");
+		expect(conf.assets["assets/foo/newDummy.bin"].type).toBe("binary");
 
 		gamejson.assets = {
 			"dummyBinary": {
 				"type": "text",
-				"path": "assets/foo/newDummy.wasm",
+				"path": "assets/foo/newDummy.bin",
 			}
 		};
 		mockfs({
 			"game.json": JSON.stringify(gamejson),
 			"assets": {
 				"foo": {
-					"newDummy.wasm": DUMMY_BINARY_DATA,
+					"newDummy.bin": DUMMY_BINARY_DATA,
 				},
 			},
 		});
@@ -1103,11 +1103,11 @@ describe("scanAsset()", () => {
 				},
 				"bin": {
 					"type": "binary",
-					"path": "assets/foo/bindata.wasm",
+					"path": "assets/foo/bindata.bin",
 				},
 				"deletedBin": {
 					"type": "binary",
-					"path": "assets/foo/deletedBinarydata.wasm",
+					"path": "assets/foo/deletedBinarydata.bin",
 				},
 				"script": {
 					"type": "script",
@@ -1143,7 +1143,7 @@ describe("scanAsset()", () => {
 			},
 			"assets": {
 				"foo": {
-					"bindata.wasm": DUMMY_BINARY_DATA
+					"bindata.bin": DUMMY_BINARY_DATA
 				}
 			}
 		});
@@ -1199,7 +1199,7 @@ describe("scanAsset()", () => {
 				},
 				"definedDummyBin": {
 					"type": "binary",
-					"path": "binary/foo/definedDummyBin.wasm",
+					"path": "binary/foo/definedDummyBin.bin",
 				},
 				"dummyText": {
 					"type": "text",
@@ -1227,7 +1227,7 @@ describe("scanAsset()", () => {
 			},
 			"txtDummy.txt": "",
 			"assets": {
-				"untrackedBin.wasm": DUMMY_BINARY_DATA
+				"untrackedBin.bin": DUMMY_BINARY_DATA
 			}
 		});
 
@@ -1284,9 +1284,8 @@ describe("scanAsset()", () => {
 			target: "all"
 		});
 		conf = JSON.parse(fs.readFileSync("./game.json").toString());
-		console.log("v", conf);
 		expect(conf.assets["definedDummyBin"].type).toBe("binary");
-		expect(conf.assets["assets/untrackedBin.wasm"].type).toBe("binary");
+		expect(conf.assets["assets/untrackedBin.bin"].type).toBe("binary");
 	});
 
 	it("scan vacuum without no target dirs", async () => {
@@ -1451,7 +1450,7 @@ describe("scanAsset()", () => {
 				},
 				"bin": {
 					"type": "binary",
-					"path": "assets/foo/bin.wasm"
+					"path": "assets/foo/bin.bin"
 				}
 			}
 		};
@@ -1479,7 +1478,7 @@ describe("scanAsset()", () => {
 			},
 			"assets": {
 				"foo": {
-					"bin.wasm": DUMMY_BINARY_DATA
+					"bin.bin": DUMMY_BINARY_DATA
 				}
 			}
 		});
@@ -1529,7 +1528,7 @@ describe("scanAsset()", () => {
 		expect(conf.assets["audio/some/se"]).not.toBe(undefined);
 		expect(conf.assets["text/foo/textdata"]).not.toBe(undefined);
 		expect(conf.assets["script/foo/script"]).not.toBe(undefined);
-		expect(conf.assets["assets/foo/bin.wasm"]).not.toBe(undefined);
+		expect(conf.assets["assets/foo/bin.bin"]).not.toBe(undefined);
 
 		await scanAsset({
 			logger: nullLogger,
@@ -1547,12 +1546,11 @@ describe("scanAsset()", () => {
 		});
 
 		conf = JSON.parse(fs.readFileSync("./game.json").toString());
-		console.log("v", conf)
 		expect(conf.assets["dummy"]).not.toBe(undefined);
 		expect(conf.assets["se"]).not.toBe(undefined);
 		expect(conf.assets["textdata"]).not.toBe(undefined);
 		expect(conf.assets["script"]).not.toBe(undefined);
-		expect(conf.assets["assets/foo/bin.wasm"]).not.toBe(undefined);
+		expect(conf.assets["assets/foo/bin.bin"]).not.toBe(undefined);
 	});
 
 	it("can scan Asset IDs with file extensions", async () => {
@@ -1753,7 +1751,7 @@ describe("scanAsset()", () => {
 				},
 				"binary": {
 					"by": {
-						"module.wasm": DUMMY_BINARY_DATA
+						"module.bin": DUMMY_BINARY_DATA
 					}
 				},
 				"script": {
@@ -1775,7 +1773,7 @@ describe("scanAsset()", () => {
 		expect(conf.assets["assets/audio/some/se"]).toBeDefined();
 		expect(conf.assets["assets/script/foo/script.js"]).toBeDefined();
 		expect(conf.assets["assets/text/foo/textdata.txt"]).toBeDefined();
-		expect(conf.assets["assets/binary/by/module.wasm"]).toBeDefined();
+		expect(conf.assets["assets/binary/by/module.bin"]).toBeDefined();
 
 		await scanAsset({
 			logger: nullLogger,
@@ -1788,7 +1786,7 @@ describe("scanAsset()", () => {
 		expect(conf.assets["assets/audio/some/se"]).toBeDefined();
 		expect(conf.assets["assets/script/foo/script.js"]).toBeDefined();
 		expect(conf.assets["assets/text/foo/textdata.txt"]).toBeDefined();
-		expect(conf.assets["assets/binary/by/module.wasm"]).toBeDefined();
+		expect(conf.assets["assets/binary/by/module.bin"]).toBeDefined();
 	});
 
 	it("keep offset if already has", async () => {

@@ -6,7 +6,7 @@ import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
 import type { AssetConfiguration, GameConfiguration } from "@akashic/game-configuration";
 import { AssetModule } from "./AssetModule";
 import { scanAudioAssets, scanBinaryAssets, scanImageAssets, scanScriptAssets,
-	scanTextAssets, scanVectorImageAssets, textOrBinaryAssetFilter } from "./scanUtils";
+	scanTextAssets, scanVectorImageAssets, unregisteredExtensionAssetFilter } from "./scanUtils";
 import type { AssetExtension, AssetScanDirectoryTable, AssetTargetType, LibConfiguration } from "./types";
 
 export interface ScanAssetParameterObject {
@@ -184,7 +184,7 @@ export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 				dir,
 				logger,
 				p => {
-					if (!textOrBinaryAssetFilter(p)) {
+					if (!unregisteredExtensionAssetFilter(p)) {
 						// 他の種別 (例えば ".png" など) の拡張子であってはならない
 						return false;
 					}
