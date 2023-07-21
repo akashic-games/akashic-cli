@@ -351,20 +351,21 @@ export function validateGameJsonForNicolive(gamejson: cmn.GameConfiguration): vo
 	const supportedModes = nicolive.supportedModes;
 	const preferredSessionParameters = nicolive.preferredSessionParameters;
 
-	if (supportedModes) {
-		if (!Array.isArray(nicolive.supportedModes) ) {
-			throw new Error("Invalid value: Specify an array for nicolive.supportedModes.");
-		}
-		if (nicolive.supportedModes.length === 0) {
-			throw new Error(`Invalid value: Possible values for nicolive.supportedModes are "${supportedModesValues}".`);
-		}
-		nicolive.supportedModes.forEach(v => {
-			const exists = supportedModesValues.includes(v);
-			if (!exists) {
-				throw new Error(`Invalid value: Possible values for nicolive.supportedModes are ${supportedModesValues}.`);
-			}
-		});
+	if (!supportedModes) {
+		throw new Error("nicolive.supportedModes does not exist in game.json.");
 	}
+	if (!Array.isArray(supportedModes) ) {
+		throw new Error("Invalid value: Specify an array for nicolive.supportedModes.");
+	}
+	if (supportedModes.length === 0) {
+		throw new Error("Invalid value: nicolive.supportedModes is an empty array.");
+	}
+	supportedModes.forEach(v => {
+		const exists = supportedModesValues.includes(v);
+		if (!exists) {
+			console.warn(`unknown value '${v}' found in nicolive.supportedModes.`);
+		}
+	});
 
 	if (preferredSessionParameters && preferredSessionParameters.totalTimeLimit) {
 		if (typeof preferredSessionParameters.totalTimeLimit !== "number") {

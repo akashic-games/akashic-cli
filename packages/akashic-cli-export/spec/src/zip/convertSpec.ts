@@ -588,14 +588,18 @@ describe("game.json validation with nicolive option", () => {
 	});
 
 	it("error in supportedModes", () => {
+		delete gamejson.environment.nicolive.supportedModes;
+		gamejson.environment.nicolive.supportedModes = []; // supportedModes なし
+		expect(() => validateGameJsonForNicolive(gamejson)).toThrow();
+
 		gamejson.environment.nicolive.supportedModes = []; // 空
 		expect(() => validateGameJsonForNicolive(gamejson)).toThrow();
 
 		gamejson.environment.nicolive.supportedModes = "ranking"; // 配列以外
 		expect(() => validateGameJsonForNicolive(gamejson)).toThrow();
 
-		gamejson.environment.nicolive.supportedModes = ["ranking", "multi", "hoge"]; // 指定値以外
-		expect(() => validateGameJsonForNicolive(gamejson)).toThrow();
+		gamejson.environment.nicolive.supportedModes = ["ranking", "multi", "hoge"]; // 指定値以外はエラーとせず console.warn()
+		expect(() => validateGameJsonForNicolive(gamejson)).not.toThrow();
 	});
 
 	it("error in preferredSessionParameters.totalTimeLimit", () => {
