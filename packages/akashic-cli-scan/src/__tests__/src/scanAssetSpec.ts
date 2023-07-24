@@ -770,14 +770,17 @@ describe("scanAsset()", () => {
 			}
 		});
 
-		await scanAsset({
-			logger: nullLogger,
-			assetScanDirectoryTable: {
-				audio: ["audio"]
-			}
-		});
-		let conf = JSON.parse(fs.readFileSync("./game.json").toString());
-		expect(conf.assets["dummyAudio"].type).toBe("text");
+		try {
+			await scanAsset({
+				logger: nullLogger,
+				assetScanDirectoryTable: {
+					audio: ["audio"]
+				}
+			});
+			throw new Error("must throw error");
+		} catch (e) {
+			expect(e.message.indexOf("Conflicted Asset Type") >= 0).toBe(true);
+		}
 	});
 
 	it("scan audio assets info with different duration", async () => {
@@ -930,14 +933,17 @@ describe("scanAsset()", () => {
 			},
 		});
 
-		await scanAsset({
-			logger: nullLogger,
-			assetScanDirectoryTable: {
-				script: ["script"]
-			}
-		});
-		conf = JSON.parse(fs.readFileSync("./game.json").toString());
-		expect(conf.assets["dummyCode"].type).toBe("audio");
+		try {
+			await scanAsset({
+				logger: nullLogger,
+				assetScanDirectoryTable: {
+					script: ["script"]
+				}
+			});
+			throw new Error("must throw error");
+		} catch (e) {
+			expect(e.message.indexOf("Conflicted Asset Type") >= 0).toBe(true);
+		}
 	});
 
 	it("scan text assets info", async () => {
@@ -994,17 +1000,20 @@ describe("scanAsset()", () => {
 			},
 		});
 
-		await scanAsset({
-			logger: nullLogger,
-			assetScanDirectoryTable: {
-				text: ["text"]
-			},
-			assetExtension: {
-				text: []
-			}
-		});
-		conf = JSON.parse(fs.readFileSync("./game.json").toString());
-		expect(conf.assets["dummyText"].type).toBe("audio");
+		try {
+			await scanAsset({
+				logger: nullLogger,
+				assetScanDirectoryTable: {
+					text: ["text"]
+				},
+				assetExtension: {
+					text: []
+				}
+			});
+			throw new Error("must throw error");
+		} catch (e) {
+			expect(e.message.indexOf("Conflicted Asset Type") >= 0).toBe(true);
+		}
 	});
 
 	it("scan binary assets info", async () => {

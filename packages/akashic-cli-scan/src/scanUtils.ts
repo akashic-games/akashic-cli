@@ -14,7 +14,6 @@ export function scriptAssetFilter(p: string): boolean {
 }
 
 export function unregisteredExtensionAssetFilter(p: string): boolean {
-	// NOTE: その他ファイルはすべてテキストアセットとして扱う
 	return !(
 		scriptAssetFilter(p) ||
 		imageAssetFilter(p) ||

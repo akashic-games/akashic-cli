@@ -103,6 +103,13 @@ export namespace AssetModule {
 
 	export function createDefaultMergeCustomizer(logger?: Logger): MergeCustomizer {
 		return (old, fresh) => {
+			if (old.type !== fresh.type) {
+				// テキストアセットとバイナリアセット間は変換可能であり、コンテンツ開発者が目的に応じて選ぶことが出来るが、
+				// それ以外のアセット間でのtype不一致は許容しない
+				if (["binary", "text"].indexOf(old.type) === -1 || ["binary", "text"].indexOf(fresh.type) === -1) {
+					throw new Error(`Conflicted Asset Type. ${fresh.path} must be ${old.type} but not ${fresh.type}.`);
+				}
+			}
 			if (fresh.type === "audio" && old.type === "audio") {
 				if (fresh.duration !== old.duration) {
 					logger?.info(`Detected change of the audio duration for ${fresh.path} from ${old.duration} to ${fresh.duration}`);
