@@ -66,10 +66,9 @@ export async function scanBinaryAssets(
 	_logger?: Logger,
 	filter: AssetFilter = unregisteredExtensionAssetFilter
 ): Promise<AssetConfiguration[]> {
-	const relativeFilePaths: string[] = readdirRecursive(path.join(baseDir, dir));
-	const paths = relativeFilePaths.filter(filter)
-		.filter((relativeFilePath) => isBinaryFile(path.join(baseDir, dir, relativeFilePath)));
-	return paths.map<AssetConfiguration>(relativeFilePath => {
+	const relativeFilePaths: string[] = readdirRecursive(path.join(baseDir, dir))
+		.filter((filePath) => filter(filePath) && isBinaryFile(path.join(baseDir, dir, filePath)));
+	return relativeFilePaths.map<AssetConfiguration>(relativeFilePath => {
 		return {
 			type: "binary",
 			path: makeUnixPath(path.join(dir, relativeFilePath))
@@ -84,8 +83,8 @@ export async function scanTextAssets(
 	_logger?: Logger,
 	filter: AssetFilter = unregisteredExtensionAssetFilter
 ): Promise<AssetConfiguration[]> {
-	const relativeFilePaths: string[] = readdirRecursive(path.join(baseDir, dir)).filter(filter)
-		.filter((filePath) => !isBinaryFile(path.join(baseDir, dir, filePath)));
+	const relativeFilePaths: string[] = readdirRecursive(path.join(baseDir, dir))
+		.filter((filePath) => filter(filePath) && !isBinaryFile(path.join(baseDir, dir, filePath)));
 	return relativeFilePaths.map<AssetConfiguration>(relativeFilePath => {
 		return {
 			type: "text",
