@@ -140,9 +140,10 @@ export class Operator {
 	startContent = async (params?: StartContentParameterObject): Promise<void> => {
 		const store = this.store;
 		const play = store.currentPlay;
-		const tokenResult = await apiClient.createPlayToken(play!.playId, store.player!.id, false, store.player!.name);
+		const playId = play!.playId;
+		const tokenResult = await apiClient.createPlayToken(playId, store.player!.id, false, store.player!.name);
 		const instance = await play!.createLocalInstance({
-			playId: play!.playId,
+			playId,
 			playToken: tokenResult.data.playToken,
 			playlogServerUrl: "dummy-playlog-server-url",
 			executionMode: params != null && params.isReplay ? "replay" : "passive",
@@ -153,6 +154,7 @@ export class Operator {
 			resizeGameView: true
 		});
 		instance.onStop.addOnce(this._endPlayerInfoResolver);
+		instance.onTelemetryRandom.add(msg => apiClient.sendTelemetryRandom(playId, msg));
 		store.setCurrentLocalInstance(instance);
 		await instance.start();
 		instance.setProfilerValueTrigger((value: ProfilerValue) => {

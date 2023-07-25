@@ -1,30 +1,32 @@
-import { calculateFinishedTime } from "@akashic/amflow-util/lib/calculateFinishedTime";
 import { PromisifiedAMFlowProxy } from "@akashic/amflow-util/lib/PromisifiedAMFlowProxy";
+import { calculateFinishedTime } from "@akashic/amflow-util/lib/calculateFinishedTime";
 import type { AMFlowClient, Play, PlayManager } from "@akashic/headless-driver";
 import * as pl from "@akashic/playlog";
 import { Trigger } from "@akashic/trigger";
+import * as chalk from "chalk";
 import { TimeKeeper } from "../../common/TimeKeeper";
 import type { PlayAudioState } from "../../common/types/PlayAudioState";
-import type { Player } from "../../common/types/Player";
 import type { PlayInfo } from "../../common/types/PlayInfo";
 import type { PlayStatus } from "../../common/types/PlayStatus";
+import type { Player } from "../../common/types/Player";
+import type { TelemeretryRandomAction } from "../../common/types/TelemetryRandom";
 import type {
+	ClientInstanceAppearTestbedEvent,
+	ClientInstanceDescription,
+	ClientInstanceDisappearTestbedEvent,
+	PlayAudioStateChangeTestbedEvent,
 	PlayCreateTestbedEvent,
-	PlayStatusChangedTestbedEvent,
 	PlayDurationStateChangeTestbedEvent,
+	PlayStatusChangedTestbedEvent,
 	PlayerJoinTestbedEvent,
 	PlayerLeaveTestbedEvent,
 	RunnerCreateTestbedEvent,
-	RunnerRemoveTestbedEvent,
-	ClientInstanceAppearTestbedEvent,
-	ClientInstanceDisappearTestbedEvent,
 	RunnerDescription,
-	ClientInstanceDescription,
-	PlayAudioStateChangeTestbedEvent
+	RunnerRemoveTestbedEvent
 } from "../../common/types/TestbedEvent";
 import type { ServerContentLocator } from "../common/ServerContentLocator";
 import type { DumpedPlaylog } from "../common/types/DumpedPlaylog";
-import { activePermission, passivePermission, debugPermission } from "./AMFlowPermisson";
+import { activePermission, debugPermission, passivePermission } from "./AMFlowPermisson";
 
 export interface PlayStoreParameterObject {
 	playManager: PlayManager;
@@ -77,7 +79,9 @@ export interface PlayEntity {
 	joinedPlayers: Player[];
 	audioState: PlayAudioState;
 	debugAMFlow: AMFlowClient | null;
+	telemetryRandom: (TelemeretryRandomAction[] | null)[];
 }
+
 
 export class PlayStore {
 	onPlayCreate: Trigger<PlayCreateTestbedEvent>;
@@ -128,7 +132,8 @@ export class PlayStore {
 			runners: [],
 			joinedPlayers,
 			audioState,
-			debugAMFlow: null
+			debugAMFlow: null,
+			telemetryRandom: []
 		};
 
 		if (playlog) {
@@ -291,5 +296,30 @@ export class PlayStore {
 	setPlayAudioState(playId: string, audioState: PlayAudioState): void {
 		this.playEntities[playId].audioState = audioState;
 		this.onPlayAudioStateChange.fire({playId, audioState});
+	}
+
+	recordTelemetryRandom(playId: string, age: number, actions: TelemeretryRandomAction[] | null): void {
+		const { telemetryRandom } = this.playEntities[playId];
+
+		// 初出の場合: 記録するだけ
+		if (!(age in telemetryRandom)) {
+			telemetryRandom[age] = actions;
+			return;
+		}
+
+		// 記録が既にある場合: 一致することを検証
+		const recorded = telemetryRandom[age];
+		if (recorded === null && actions === null) return;
+		if (
+			(recorded === null || actions === null) ||
+			(recorded.length !== actions.length) ||
+			(actions.some((action, i) => action !== recorded[i]))
+		) {
+			console.error("==================");
+			console.error("");
+			console.error(chalk.red("Broken Multiplay: INCONSISTENT RANDOM USAGE DETECTED at age:" + age));
+			console.error("");
+			console.error("==================");
+		}
 	}
 }

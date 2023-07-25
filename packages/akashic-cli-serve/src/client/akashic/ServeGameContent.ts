@@ -1,8 +1,11 @@
 import type * as amf from "@akashic/amflow";
 import { Trigger } from "@akashic/trigger";
+import type { TelemetryRandomMessage } from "../../common/types/TelemetryRandom";
+import { TelemeretryRandomAction } from "../../common/types/TelemetryRandom";
 import type { EDumpItem } from "../common/types/EDumpItem";
 import type { ProfilerValue } from "../common/types/Profiler";
 import type { RuntimeWarning } from "./RuntimeWarning";
+import { setupRandomGeneratorHandler } from "./setupRandomGeneratorHandler";
 
 function getMatrixFromRoot(e: ae.ELike | undefined, camera: ae.CameraLike | undefined): ae.MatrixLike | null {
 	if (!e || !e.getMatrix)
@@ -47,18 +50,22 @@ export class ServeGameContent {
 	onTick: Trigger<agv.GameLike>;
 	onReset: Trigger<amf.StartPoint>;
 	onWarn: Trigger<RuntimeWarning>;
+	onTelemetryRandom: Trigger<TelemetryRandomMessage>;
 	private _game: agv.GameLike;
 	private _gameDriver: agv.GameDriverLike;
 	private _highlightedEntityId: number | null;
+	private _telemetryRandomActions: TelemeretryRandomAction[];
 
 	constructor(agvGameContent: agv.GameContent) {
 		this.agvGameContent = agvGameContent;
 		this._game = null!;
 		this._gameDriver = null!;
 		this._highlightedEntityId = null;
-		this.onTick = new Trigger<agv.GameLike>();
-		this.onReset = new Trigger<amf.StartPoint>();
-		this.onWarn = new Trigger<RuntimeWarning>();
+		this._telemetryRandomActions = [];
+		this.onTick = new Trigger();
+		this.onReset = new Trigger();
+		this.onWarn = new Trigger();
+		this.onTelemetryRandom = new Trigger();
 	}
 
 	get id(): number {
@@ -105,10 +112,20 @@ export class ServeGameContent {
 		};
 
 		const tickOriginal = game.tick;
-		game.tick = function (_advanceAge: boolean, _omittedTickCount?: number, _events?: playlog.EventLike[]) {
+		game.tick = function (advanceAge: boolean, omittedTickCount?: number, events?: playlog.EventLike[]) {
 			self.onTick.fire(game);
-			return tickOriginal.apply(this, [_advanceAge, _omittedTickCount, _events]);
+			const ret = tickOriginal.apply(this, [advanceAge, omittedTickCount, events]);
+
+			if (advanceAge)
+				self._flushTelemetryRandom();
+			return ret;
 		};
+
+		setupRandomGeneratorHandler(game, {
+			onReset: this._handleRandomReset,
+			onGenerate: this._handleRandomGenerate,
+			onGet: this._handleRandomGet
+		});
 
 		const gameDriver = this._gameDriver;
 		const resetOriginal = gameDriver._gameLoop?.reset;
@@ -204,5 +221,25 @@ export class ServeGameContent {
 
 	sendEvents(events: playlog.EventLike[]): void {
 		this.agvGameContent.sendEvents(events);
+	}
+
+	private _handleRandomReset = (): void => {
+		this._telemetryRandomActions.push(TelemeretryRandomAction.Reset);
+	};
+
+	private _handleRandomGenerate = (): void => {
+		this._telemetryRandomActions.push(TelemeretryRandomAction.Generate);
+	};
+
+	private _handleRandomGet = (): void => {
+		this._telemetryRandomActions.push(TelemeretryRandomAction.Get);
+	};
+
+	private _flushTelemetryRandom(): void {
+		const actions = this._telemetryRandomActions;
+		if (actions.length > 0)
+			this._telemetryRandomActions = [];
+		const { age } = this._game;
+		this.onTelemetryRandom.fire({ age, actions: (actions.length > 0) ? actions : null });
 	}
 }
