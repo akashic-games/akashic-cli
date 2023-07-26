@@ -11,7 +11,7 @@ describe("scanUtils", () => {
 	const DUMMY_OGG_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy.ogg"));
 	const DUMMY_OGG_DATA2 = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy2.ogg"));
 	const DUMMY_1x1_PNG_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy1x1.png"));
-	const DUMMY_BINARY_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy.wasm"));
+	const DUMMY_WASM_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy.wasm"));
 
 	beforeEach(() => {
 		mockfs({
@@ -43,7 +43,7 @@ describe("scanUtils", () => {
 					"_.ogg": DUMMY_OGG_DATA2,
 					"_.js": "var x = 1;",
 					"_.png": DUMMY_1x1_PNG_DATA,
-					"_.bin": DUMMY_BINARY_DATA
+					"_.bin": DUMMY_WASM_DATA
 				}
 			}
 		});

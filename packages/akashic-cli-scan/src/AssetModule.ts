@@ -106,7 +106,10 @@ export namespace AssetModule {
 			if (old.type !== fresh.type) {
 				// テキストアセットとバイナリアセット間は変換可能であり、コンテンツ開発者が目的に応じて選ぶことが出来るが、
 				// それ以外のアセット間でのtype不一致は許容しない
-				if (["binary", "text"].indexOf(old.type) === -1 || ["binary", "text"].indexOf(fresh.type) === -1) {
+				if (
+					(old.type !== "text" && old.type !== "binary") ||
+					(fresh.type !== "text" && fresh.type !== "binary")
+				) {
 					throw new Error(`Conflicted Asset Type. ${fresh.path} must be ${old.type} but not ${fresh.type}.`);
 				}
 			}

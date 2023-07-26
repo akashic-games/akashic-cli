@@ -73,8 +73,7 @@ export async function scanBinaryAssets(
 			type: "binary",
 			path: makeUnixPath(path.join(dir, relativeFilePath))
 		};
-	})
-		.filter(asset => asset != null);
+	});
 }
 
 export async function scanTextAssets(
@@ -90,8 +89,7 @@ export async function scanTextAssets(
 			type: "text",
 			path: makeUnixPath(path.join(dir, relativeFilePath))
 		};
-	})
-		.filter(asset => asset != null);
+	});
 }
 
 export async function scanImageAssets(
