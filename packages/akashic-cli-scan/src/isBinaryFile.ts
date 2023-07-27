@@ -5,10 +5,10 @@ const FIRST_FEW_BYTES = 8000;
 /**
  * @see https://qiita.com/okuoku/items/a21bfa68570ca67817ac
  */
-export function isBinaryFile(path: string): boolean {
+export function isBinaryFile(filePath: string): boolean {
 	let fd: number;
 	try {
-		fd = fs.openSync(path, "r");
+		fd = fs.openSync(filePath, "r");
 		const buff = Buffer.alloc(FIRST_FEW_BYTES);
 		const bytes = fs.readSync(fd, buff, 0, FIRST_FEW_BYTES, 0);
 		const index = buff.indexOf(0x00);
@@ -18,7 +18,7 @@ export function isBinaryFile(path: string): boolean {
 	} catch (error) {
 		throw error;
 	} finally {
-		fs.closeSync(fd);
+		if (fd) fs.closeSync(fd);
 
 	}
 }

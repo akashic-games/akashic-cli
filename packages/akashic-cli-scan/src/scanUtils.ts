@@ -5,7 +5,6 @@ import type { AssetConfiguration, AudioAssetConfigurationBase } from "@akashic/g
 import * as readdirRecursive from "fs-readdir-recursive";
 import { getAudioDuration } from "./getAudioDuration";
 import { getImageSize } from "./getImageSize";
-import { isBinaryFile } from "./isBinaryFile";
 
 export type AssetFilter = (path: string) => boolean;
 
@@ -13,13 +12,13 @@ export function scriptAssetFilter(p: string): boolean {
 	return /.*\.js$/i.test(p);
 }
 
-export function unregisteredExtensionAssetFilter(p: string): boolean {
-	return !(
-		scriptAssetFilter(p) ||
+export function knownExtensionAssetFilter(p: string): boolean {
+	return scriptAssetFilter(p) ||
 		imageAssetFilter(p) ||
 		vectorImageAssetFilter(p) ||
-		audioAssetFilter(p)
-	);
+		audioAssetFilter(p) ||
+		textAssetFilter(p) ||
+		binaryAssetFilter(p);
 }
 
 export function imageAssetFilter(p: string): boolean {
@@ -32,6 +31,14 @@ export function vectorImageAssetFilter(p: string): boolean {
 
 export function audioAssetFilter(p: string): boolean {
 	return /.*\.(ogg|aac|mp4|m4a)$/i.test(p);
+}
+
+export function textAssetFilter(p: string): boolean {
+	return /.*\.(txt|json)$/i.test(p);
+}
+
+export function binaryAssetFilter(p: string): boolean {
+	return /.*\.(wasm|bin)$/i.test(p);
 }
 
 export interface AudioDurationInfo {
@@ -64,10 +71,9 @@ export async function scanBinaryAssets(
 	baseDir: string,
 	dir: string,
 	_logger?: Logger,
-	filter: AssetFilter = unregisteredExtensionAssetFilter
+	filter: AssetFilter = binaryAssetFilter
 ): Promise<AssetConfiguration[]> {
-	const relativeFilePaths: string[] = readdirRecursive(path.join(baseDir, dir))
-		.filter((filePath) => filter(filePath) && isBinaryFile(path.join(baseDir, dir, filePath)));
+	const relativeFilePaths: string[] = readdirRecursive(path.join(baseDir, dir)).filter(filter);
 	return relativeFilePaths.map<AssetConfiguration>(relativeFilePath => {
 		return {
 			type: "binary",
@@ -80,10 +86,9 @@ export async function scanTextAssets(
 	baseDir: string,
 	dir: string,
 	_logger?: Logger,
-	filter: AssetFilter = unregisteredExtensionAssetFilter
+	filter: AssetFilter = textAssetFilter
 ): Promise<AssetConfiguration[]> {
-	const relativeFilePaths: string[] = readdirRecursive(path.join(baseDir, dir))
-		.filter((filePath) => filter(filePath) && !isBinaryFile(path.join(baseDir, dir, filePath)));
+	const relativeFilePaths: string[] = readdirRecursive(path.join(baseDir, dir)).filter(filter);
 	return relativeFilePaths.map<AssetConfiguration>(relativeFilePath => {
 		return {
 			type: "text",

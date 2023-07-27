@@ -5,9 +5,10 @@ import { readJSON, writeJSON } from "@akashic/akashic-cli-commons/lib/FileSystem
 import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
 import type { AssetConfiguration, GameConfiguration } from "@akashic/game-configuration";
 import { AssetModule } from "./AssetModule";
-import { scanAudioAssets, scanBinaryAssets, scanImageAssets, scanScriptAssets,
-	scanTextAssets, scanVectorImageAssets, unregisteredExtensionAssetFilter } from "./scanUtils";
+import { binaryAssetFilter, knownExtensionAssetFilter, scanAudioAssets, scanBinaryAssets, scanImageAssets, scanScriptAssets,
+	scanTextAssets, scanVectorImageAssets, textAssetFilter } from "./scanUtils";
 import type { AssetExtension, AssetScanDirectoryTable, AssetTargetType, LibConfiguration } from "./types";
+import { isBinaryFile } from "./isBinaryFile";
 
 export interface ScanAssetParameterObject {
 	/**
@@ -175,7 +176,13 @@ export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 			scannedAssets.push(...assets);
 		}
 		for (const dir of scanTargetDirsTable.binary) {
-			const assets = await scanBinaryAssets(base, dir, logger);
+			const assets = await scanBinaryAssets(
+				base,
+				dir,
+				logger,
+				p => {
+					return knownExtensionAssetFilter(p) ? binaryAssetFilter(p) : !isBinaryFile(path.join(base, dir, p));
+				});
 			scannedAssets.push(...assets);
 		}
 		for (const dir of scanTargetDirsTable.text) {
@@ -184,11 +191,17 @@ export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 				dir,
 				logger,
 				p => {
-					if (!unregisteredExtensionAssetFilter(p)) {
-						// 他の種別 (例えば ".png" など) の拡張子であってはならない
-						return false;
-					}
-					return textAssetFilterRe ? textAssetFilterRe.test(p) : false;
+					if (textAssetFilterRe) {
+						if (knownExtensionAssetFilter(p) && !textAssetFilter(p)) {
+						  // 歴史的経緯から、ユーザ指定に関わらず、.ogg, .png など (明らかに非テキストの) 拡張子はテキスト扱いさせない
+						  return false;
+						}
+
+						return textAssetFilterRe.test(p);
+					  } else {
+						// ユーザの指定がない場合、既知の拡張子なら拡張子で判断、でなければ中身で判断
+						return knownExtensionAssetFilter(p) ? textAssetFilter(p) : !isBinaryFile(path.join(base, dir, p));
+					  }
 				}
 			);
 			scannedAssets.push(...assets);
