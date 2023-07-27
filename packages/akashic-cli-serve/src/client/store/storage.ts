@@ -58,7 +58,6 @@ export class Storage {
 		this.experimentalIsChildWindow = query.experimentalIsChildWindow;
 
 		this.put({
-			showsDevtools: choose(query.showsDevtools, s.showsDevtools, false),
 			devtoolsHeight: choose(query.devtoolsHeight, s.devtoolsHeight, 200),
 			activeDevtool: choose(query.activeDevtool, s.activeDevtool, "Playback"),
 			isForceResetOnSeek: choose(query.isForceResetOnSeek, s.isForceResetOnSeek, false),
@@ -98,6 +97,7 @@ export class Storage {
 					showsDesignGuideline: choose(
 						query.showsDesignGuideline, s.showsDesignGuideline, displayOptions.showsDesignGuideline
 					),
+					showsDevtools: choose(query.showsDevtools, s.showsDevtools, res?.data?.showMenu)
 				});
 			})
 		]);

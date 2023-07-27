@@ -42,6 +42,7 @@ export class ToolBarUiStore {
 			this.showsGrid = storage.data.showsGrid;
 			this.showsProfiler = storage.data.showsProfiler;
 			this.showsDesignGuideline = storage.data.showsDesignGuideline;
+			this.showsDevtools = storage.data.showsDevtools;
 		});
 	}
 
