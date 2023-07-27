@@ -5,10 +5,10 @@ import { readJSON, writeJSON } from "@akashic/akashic-cli-commons/lib/FileSystem
 import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
 import type { AssetConfiguration, GameConfiguration } from "@akashic/game-configuration";
 import { AssetModule } from "./AssetModule";
+import { isBinaryFile } from "./isBinaryFile";
 import { binaryAssetFilter, knownExtensionAssetFilter, scanAudioAssets, scanBinaryAssets, scanImageAssets, scanScriptAssets,
 	scanTextAssets, scanVectorImageAssets, textAssetFilter } from "./scanUtils";
 import type { AssetExtension, AssetScanDirectoryTable, AssetTargetType, LibConfiguration } from "./types";
-import { isBinaryFile } from "./isBinaryFile";
 
 export interface ScanAssetParameterObject {
 	/**
@@ -181,7 +181,7 @@ export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 				dir,
 				logger,
 				p => {
-					return knownExtensionAssetFilter(p) ? binaryAssetFilter(p) : !isBinaryFile(path.join(base, dir, p));
+					return knownExtensionAssetFilter(p) ? binaryAssetFilter(p) : isBinaryFile(path.join(base, dir, p));
 				});
 			scannedAssets.push(...assets);
 		}

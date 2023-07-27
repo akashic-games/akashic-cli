@@ -17,7 +17,7 @@ describe("scanAsset()", () => {
 	const DUMMY_300x200_SUBPX_SVG_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy_300x200_subpx.svg"));
 	const DUMMY_NO_SIZE_SVG_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy_no_size.svg"));
 	const DUMMY_NO_PIXEL_SVG_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy_no_px.svg"));
-	const DUMMY_BINARY_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy.wasm"));
+	const DUMMY_WASM_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy.wasm"));
 
 	afterEach(() => {
 		mockfs.restore();
@@ -123,7 +123,7 @@ describe("scanAsset()", () => {
 					},
 					"binary": {
 						"foo": {
-							"_$.bin": DUMMY_BINARY_DATA
+							"_$.bin": DUMMY_WASM_DATA
 						}
 					}
 				},
@@ -1033,8 +1033,8 @@ describe("scanAsset()", () => {
 			"game.json": JSON.stringify(gamejson),
 			"assets": {
 				"foo": {
-					"dummy.bin": DUMMY_BINARY_DATA,
-					"newDummy.bin": DUMMY_BINARY_DATA,
+					"dummy.bin": DUMMY_WASM_DATA,
+					"newDummy.bin": DUMMY_WASM_DATA,
 				},
 			},
 		});
@@ -1058,7 +1058,7 @@ describe("scanAsset()", () => {
 			"game.json": JSON.stringify(gamejson),
 			"assets": {
 				"foo": {
-					"newDummy.bin": DUMMY_BINARY_DATA,
+					"newDummy.bin": DUMMY_WASM_DATA,
 				},
 			},
 		});
@@ -1152,7 +1152,7 @@ describe("scanAsset()", () => {
 			},
 			"assets": {
 				"foo": {
-					"bindata.bin": DUMMY_BINARY_DATA
+					"bindata.bin": DUMMY_WASM_DATA
 				}
 			}
 		});
@@ -1236,7 +1236,7 @@ describe("scanAsset()", () => {
 			},
 			"txtDummy.txt": "",
 			"assets": {
-				"untrackedBin.bin": DUMMY_BINARY_DATA
+				"untrackedBin.bin": DUMMY_WASM_DATA
 			}
 		});
 
@@ -1487,7 +1487,7 @@ describe("scanAsset()", () => {
 			},
 			"assets": {
 				"foo": {
-					"bin.bin": DUMMY_BINARY_DATA
+					"bin.bin": DUMMY_WASM_DATA
 				}
 			}
 		});
@@ -1760,7 +1760,7 @@ describe("scanAsset()", () => {
 				},
 				"binary": {
 					"by": {
-						"module.bin": DUMMY_BINARY_DATA
+						"module.bin": DUMMY_WASM_DATA
 					}
 				},
 				"script": {
