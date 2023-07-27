@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.16.37 (2023-07-27)
+
+#### Other Change
+* `akashic-cli-export`
+  * [#1257](https://github.com/akashic-games/akashic-cli/pull/1257) Add game.json validation for export-zip nicolive option ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 2.16.36 (2023-07-18)
 
 #### Bug Fix
