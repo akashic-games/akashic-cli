@@ -3,7 +3,7 @@ import { EOL } from "os";
 import * as path from "path";
 import * as fsx from "fs-extra";
 import * as mockfs from "mock-fs";
-import { bundleScripts, convertGame, ConvertGameParameterObject } from "../../../lib/zip/convert";
+import { bundleScripts, convertGame, ConvertGameParameterObject, validateGameJsonForNicolive } from "../../../lib/zip/convert";
 
 describe("convert", () => {
 
@@ -568,5 +568,53 @@ describe("convert", () => {
 					done();
 				}, done.fail);
 		});
+	});
+});
+
+describe("game.json validation with nicolive option", () => {
+	const gamejson: any = {
+		environment: {
+			nicolive: {
+				supportedModes: ["multi"],
+				preferredSessionParameters: {
+					totalTimeLimit: 80
+				}
+			}
+		}
+	};
+
+	it("validate normal end", () => {
+		expect(() => validateGameJsonForNicolive(gamejson)).not.toThrow();
+	});
+
+	it("error in supportedModes", () => {
+		delete gamejson.environment.nicolive.supportedModes;
+		gamejson.environment.nicolive.supportedModes = []; // supportedModes なし
+		expect(() => validateGameJsonForNicolive(gamejson)).toThrow();
+
+		gamejson.environment.nicolive.supportedModes = []; // 空
+		expect(() => validateGameJsonForNicolive(gamejson)).toThrow();
+
+		gamejson.environment.nicolive.supportedModes = "ranking"; // 配列以外
+		expect(() => validateGameJsonForNicolive(gamejson)).toThrow();
+
+		gamejson.environment.nicolive.supportedModes = ["ranking", "multi", "hoge"]; // 指定値以外はエラーとせず console.warn()
+		expect(() => validateGameJsonForNicolive(gamejson)).not.toThrow();
+	});
+
+	it("error in preferredSessionParameters.totalTimeLimit", () => {
+		gamejson.environment.nicolive.preferredSessionParameters.totalTimeLimit = "foo"; // 数値以外
+		expect(() => validateGameJsonForNicolive(gamejson)).toThrow();
+
+		gamejson.environment.nicolive.preferredSessionParameters.totalTimeLimit = 19; // 範囲外
+		expect(() => validateGameJsonForNicolive(gamejson)).toThrow();
+
+		gamejson.environment.nicolive.preferredSessionParameters.totalTimeLimit = 201; // 範囲外
+		expect(() => validateGameJsonForNicolive(gamejson)).toThrow();
+	});
+
+	it("nicolive property does not exist", () => {
+		delete gamejson.environment.nicolive;
+		expect(() => validateGameJsonForNicolive(gamejson)).toThrow();
 	});
 });
