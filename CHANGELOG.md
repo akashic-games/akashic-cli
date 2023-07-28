@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.16.38 (2023-07-28)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#1259](https://github.com/akashic-games/akashic-cli/pull/1259) Support shouMenu of sandbox.config.js in serve ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 2.16.37 (2023-07-27)
 
 #### Other Change
