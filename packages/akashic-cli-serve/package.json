@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-serve",
-  "version": "1.15.32",
+  "version": "1.15.33",
   "description": "A development server for Akashic Engine",
   "scripts": {
     "prepare": "npm run setup && npm run build",
