@@ -23,7 +23,7 @@
   ],
   "devDependencies": {
     "@akashic/eslint-config": "1.1.1",
-    "@akashic/game-configuration": "2.0.0",
+    "@akashic/game-configuration": "2.0.1",
     "@types/image-size": "0.7.0",
     "@types/jest": "29.5.0",
     "@types/mock-fs": "4.13.1",
