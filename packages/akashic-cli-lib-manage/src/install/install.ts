@@ -156,7 +156,7 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 						}
 					});
 				})
-				.then(() => cmn.ConfigurationFile.write(conf.getContent(), gameJsonPath, normalizedParam.logger));
+				.then(async () => await cmn.FileSystem.writeJSON<cmn.GameConfiguration>(gameJsonPath, conf.getContent()));
 		})
 		.then(restoreDirectory, restoreDirectory)
 		.then(() => normalizedParam.logger.info("Done!"));
