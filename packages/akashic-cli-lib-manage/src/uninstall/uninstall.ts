@@ -115,8 +115,8 @@ export function promiseUninstall(param: UninstallParameterObject): Promise<void>
 						if (!remainExternals[externalName]) conf.removeExternal(externalName);
 					});
 				})
-				.then(async () => {
-					return await cmn.FileSystem.writeJSON<cmn.GameConfiguration>(gameJsonPath, conf.getContent());
+				.then(() => {
+					return cmn.FileSystem.writeJSON<cmn.GameConfiguration>(gameJsonPath, conf.getContent());
 				});
 		})
 		.then(restoreDirectory, restoreDirectory)

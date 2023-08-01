@@ -67,7 +67,7 @@ export function promiseModifyBasicParameter(param: ModifyBasicParameterParameter
 				}
 				resolve();
 			})
-				.then(async() => await cmn.FileSystem.writeJSON<cmn.GameConfiguration>(gameJsonPath, content))
+				.then(() => cmn.FileSystem.writeJSON<cmn.GameConfiguration>(gameJsonPath, content))
 				.then(() => logger.info("Done!"));
 		})
 		.then(restoreDirectory)
