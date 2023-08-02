@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 2.16.39 (2023-08-02)
+
+#### Other Change
+* `akashic-cli-extra`, `akashic-cli-lib-manage`
+  * [#1261](https://github.com/akashic-games/akashic-cli/pull/1261) Support editorconfig for install and modify ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`
+  * [#1260](https://github.com/akashic-games/akashic-cli/pull/1260) chore(deps): update dependency @akashic/game-configuration to v2.0.1 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 2.16.38 (2023-07-28)
 
 #### Enhancement
