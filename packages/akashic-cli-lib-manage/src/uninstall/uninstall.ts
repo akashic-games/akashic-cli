@@ -116,7 +116,7 @@ export function promiseUninstall(param: UninstallParameterObject): Promise<void>
 					});
 				})
 				.then(() => {
-					return cmn.ConfigurationFile.write(conf.getContent(), gameJsonPath, normalizedParam.logger);
+					return cmn.FileSystem.writeJSON<cmn.GameConfiguration>(gameJsonPath, conf.getContent());
 				});
 		})
 		.then(restoreDirectory, restoreDirectory)
