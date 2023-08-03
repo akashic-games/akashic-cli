@@ -61,8 +61,7 @@ export async function scanScriptAssets(
 			path: makeUnixPath(path.join(dir, relativeFilePath)),
 			global: true
 		};
-	})
-		.filter(asset => asset != null);
+	});
 }
 
 export async function scanBinaryAssets(
