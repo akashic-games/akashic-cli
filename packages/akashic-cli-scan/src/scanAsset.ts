@@ -6,8 +6,8 @@ import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
 import type { AssetConfiguration, GameConfiguration } from "@akashic/game-configuration";
 import { AssetModule } from "./AssetModule";
 import { isBinaryFile } from "./isBinaryFile";
-import { binaryAssetFilter, knownExtensionAssetFilter, scanAudioAssets, scanBinaryAssets, scanImageAssets, scanScriptAssets,
-	scanTextAssets, scanVectorImageAssets, textAssetFilter } from "./scanUtils";
+import { knownExtensionAssetFilter, scanAudioAssets, scanBinaryAssets, scanImageAssets, scanScriptAssets,
+	scanTextAssets, scanVectorImageAssets, defaultTextAssetFilter } from "./scanUtils";
 import type { AssetExtension, AssetScanDirectoryTable, AssetTargetType, LibConfiguration } from "./types";
 
 export interface ScanAssetParameterObject {
@@ -155,7 +155,7 @@ export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 		const scannedAssets: AssetConfiguration[] = [];
 
 		const textAssetFilterRe =
-			param.assetExtension.text && param.assetExtension.text
+			param.assetExtension.text && param.assetExtension.text.length > 0
 				? new RegExp(param.assetExtension.text.join("|"), "i")
 				: undefined;
 
@@ -181,8 +181,13 @@ export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 				dir,
 				logger,
 				p => {
-					return knownExtensionAssetFilter(p) ? binaryAssetFilter(p) : isBinaryFile(path.join(base, dir, p));
-				});
+					if (knownExtensionAssetFilter(p)) return false;
+					// NOTE: ユーザ指定の拡張子オプションが追加されたら判定に利用する
+					// if (userBinaryAssetFilter(p)) return userBinaryAssetFilter(p);
+					// if (defaultBinaryAssetFilter(p)) return true;
+					return isBinaryFile(path.join(base, dir, p));
+				}
+			);
 			scannedAssets.push(...assets);
 		}
 		for (const dir of scanTargetDirsTable.text) {
@@ -191,17 +196,10 @@ export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 				dir,
 				logger,
 				p => {
-					if (textAssetFilterRe) {
-						if (knownExtensionAssetFilter(p) && !textAssetFilter(p)) {
-						  // 歴史的経緯から、ユーザ指定に関わらず、.ogg, .png など (明らかに非テキストの) 拡張子はテキスト扱いさせない
-						  return false;
-						}
-
-						return textAssetFilterRe.test(p);
-					  } else {
-						// ユーザの指定がない場合、既知の拡張子なら拡張子で判断、でなければ中身で判断
-						return knownExtensionAssetFilter(p) ? textAssetFilter(p) : !isBinaryFile(path.join(base, dir, p));
-					  }
+					if (knownExtensionAssetFilter(p)) return false; // scan が特別処理する明らかに非テキストの拡張子 (e.g. .ogg, .png) は除外する
+					if (textAssetFilterRe) return textAssetFilterRe.test(p); // ユーザ指定のフィルタがあればそれで判定する
+					if (defaultTextAssetFilter(p)) return true; // 高速化のため、数が多い・Akashic独自など、拡張子だけで判定できるものはそれで判定
+					return !isBinaryFile(path.join(base, dir, p)); // どれでもなければ中身で判定
 				}
 			);
 			scannedAssets.push(...assets);

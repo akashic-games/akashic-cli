@@ -145,7 +145,6 @@ describe("scanAsset()", () => {
 
 		it("scan assets", async () => {
 			mockfs(mockFsContent);
-
 			await scanAsset({
 				cwd: "./dir",
 				target: "all",

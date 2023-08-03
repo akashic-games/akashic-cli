@@ -2,7 +2,9 @@ import * as path from "path";
 import * as fs from "fs";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
 import * as mockfs from "mock-fs";
-import { scanAudioAssets, scanImageAssets, scanScriptAssets, scanTextAssets, scanBinaryAssets } from "../../../lib/scanUtils";
+import { scanAudioAssets, scanImageAssets, scanScriptAssets, scanTextAssets, scanBinaryAssets, knownExtensionAssetFilter } from "../../../lib/scanUtils";
+import { dir } from "console";
+import { isBinaryFile } from "../../isBinaryFile";
 
 describe("scanUtils", () => {
 	const nullLogger = new ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
@@ -116,7 +118,11 @@ describe("scanUtils", () => {
 			await scanBinaryAssets(
 				"./game",
 				"assets",
-				nullLogger
+				nullLogger,
+				p => {
+					if (knownExtensionAssetFilter(p)) return false;
+					return isBinaryFile(path.join("./game", "assets", p));
+				}
 			)
 		).toEqual([
 			{

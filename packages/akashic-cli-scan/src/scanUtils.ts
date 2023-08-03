@@ -16,9 +16,7 @@ export function knownExtensionAssetFilter(p: string): boolean {
 	return scriptAssetFilter(p) ||
 		imageAssetFilter(p) ||
 		vectorImageAssetFilter(p) ||
-		audioAssetFilter(p) ||
-		textAssetFilter(p) ||
-		binaryAssetFilter(p);
+		audioAssetFilter(p);
 }
 
 export function imageAssetFilter(p: string): boolean {
@@ -33,12 +31,12 @@ export function audioAssetFilter(p: string): boolean {
 	return /.*\.(ogg|aac|mp4|m4a)$/i.test(p);
 }
 
-export function textAssetFilter(p: string): boolean {
-	return /.*\.(txt|json)$/i.test(p);
+export function defaultTextAssetFilter(p: string): boolean {
+	return /.*\.(txt|json|asapj|asabn|asask|asaan)$/.test(p);
 }
 
-export function binaryAssetFilter(p: string): boolean {
-	return /.*\.(wasm|bin)$/i.test(p);
+export function defaultBinaryAssetFilter (_: string): boolean {
+	return false;
 }
 
 export interface AudioDurationInfo {
@@ -71,7 +69,7 @@ export async function scanBinaryAssets(
 	baseDir: string,
 	dir: string,
 	_logger?: Logger,
-	filter: AssetFilter = binaryAssetFilter
+	filter: AssetFilter = defaultBinaryAssetFilter
 ): Promise<AssetConfiguration[]> {
 	const relativeFilePaths: string[] = readdirRecursive(path.join(baseDir, dir)).filter(filter);
 	return relativeFilePaths.map<AssetConfiguration>(relativeFilePath => {
@@ -86,7 +84,7 @@ export async function scanTextAssets(
 	baseDir: string,
 	dir: string,
 	_logger?: Logger,
-	filter: AssetFilter = textAssetFilter
+	filter: AssetFilter = defaultTextAssetFilter
 ): Promise<AssetConfiguration[]> {
 	const relativeFilePaths: string[] = readdirRecursive(path.join(baseDir, dir)).filter(filter);
 	return relativeFilePaths.map<AssetConfiguration>(relativeFilePath => {
