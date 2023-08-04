@@ -18,7 +18,7 @@ export function isBinaryFile(filePath: string): boolean {
 	} catch (error) {
 		throw error;
 	} finally {
-		if (fd) fs.closeSync(fd);
+		if (fd != null) fs.closeSync(fd);
 
 	}
 }

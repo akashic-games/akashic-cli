@@ -3,8 +3,8 @@ import * as fs from "fs";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
 import * as mockfs from "mock-fs";
 import { scanAudioAssets, scanImageAssets, scanScriptAssets, scanTextAssets, scanBinaryAssets, knownExtensionAssetFilter } from "../../../lib/scanUtils";
-import { dir } from "console";
 import { isBinaryFile } from "../../isBinaryFile";
+import { defaultTextAssetFilter } from "../../scanUtils";
 
 describe("scanUtils", () => {
 	const nullLogger = new ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
@@ -90,7 +90,12 @@ describe("scanUtils", () => {
 			await scanTextAssets(
 				"./game",
 				"text",
-				nullLogger
+				nullLogger,
+				p => {
+					if (knownExtensionAssetFilter(p)) return false;
+					if (defaultTextAssetFilter(p)) return true;
+					return !isBinaryFile(path.join("./game", "text", p));
+				}
 			)
 		).toEqual([
 			{
@@ -103,7 +108,12 @@ describe("scanUtils", () => {
 			await scanTextAssets(
 				"./game",
 				"assets",
-				nullLogger
+				nullLogger,
+				p => {
+					if (knownExtensionAssetFilter(p)) return false;
+					if (defaultTextAssetFilter(p)) return true;
+					return !isBinaryFile(path.join("./game", "assets", p));
+				}
 			)
 		).toEqual([
 			{
