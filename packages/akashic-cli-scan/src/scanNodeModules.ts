@@ -61,7 +61,12 @@ export interface ScanNodeModulesParameterObject {
 	includeExtensionToAssetId?: boolean;
 }
 
-export function _completeScanNodeModulesParameterObject(param: ScanNodeModulesParameterObject): Required<ScanNodeModulesParameterObject> {
+
+interface NormalizedUpdateParameterObject extends Required<Omit<ScanNodeModulesParameterObject, "debugNpm">> {
+	debugNpm: PromisedNpm | undefined;
+}
+
+export function _completeScanNodeModulesParameterObject(param: ScanNodeModulesParameterObject): NormalizedUpdateParameterObject {
 	return {
 		cwd: param.cwd ?? process.cwd(),
 		logger: param.logger ?? new ConsoleLogger(),

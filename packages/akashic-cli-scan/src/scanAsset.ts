@@ -65,12 +65,17 @@ export interface ScanAssetParameterObject {
 	assetExtension?: AssetExtension;
 }
 
-export function _completeScanAssetParameterObject(param: ScanAssetParameterObject): Required<ScanAssetParameterObject> {
-	const assetScanDirectoryTable = param.assetScanDirectoryTable ?? {};
-	assetScanDirectoryTable.audio = assetScanDirectoryTable.audio ?? ["audio"];
-	assetScanDirectoryTable.image = assetScanDirectoryTable.image ?? ["image"];
-	assetScanDirectoryTable.script = assetScanDirectoryTable.script ?? ["script"];
-	assetScanDirectoryTable.text = assetScanDirectoryTable.text ?? ["text"];
+interface NormalizedScanAssetParameterObject extends Required<Omit<ScanAssetParameterObject, "AssetScanDirectoryTable">> {
+	assetScanDirectoryTable: Required<AssetScanDirectoryTable>;
+}
+
+export function _completeScanAssetParameterObject(param: ScanAssetParameterObject): NormalizedScanAssetParameterObject {
+	const assetScanDirectoryTable = {
+		audio: param.assetScanDirectoryTable?.audio ?? ["audio"],
+		image: param.assetScanDirectoryTable?.image ?? ["image"],
+		script: param.assetScanDirectoryTable?.script ?? ["script"],
+		text: param.assetScanDirectoryTable?.text ?? ["text"]
+	};
 	const assetExtension = param.assetExtension ?? {};
 	assetExtension.text = assetExtension.text ?? [];
 
@@ -108,7 +113,7 @@ export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 		const scriptDirs = param.assetScanDirectoryTable.script.concat();
 		const textDirs = param.assetScanDirectoryTable.text.concat();
 
-		const scanTargetDirsTable: AssetScanDirectoryTable = {
+		const scanTargetDirsTable: Required<AssetScanDirectoryTable> = {
 			audio: [],
 			image: [],
 			script: [],
@@ -145,7 +150,7 @@ export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 		}
 
 		// スキャン結果のアセット定義の配列
-		const scannedAssets: AssetConfiguration[] = [];
+		const scannedAssets: (AssetConfiguration | null)[] = [];
 
 		const textAssetFilterRe =
 			param.assetExtension.text && param.assetExtension.text

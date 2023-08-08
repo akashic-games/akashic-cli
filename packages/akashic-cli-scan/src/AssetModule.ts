@@ -38,7 +38,7 @@ export namespace AssetModule {
 		for (const asset of assets) {
 			let assetId: string;
 			if ("id" in asset) {
-				if (!forceUpdateAssetIds) {
+				if (!forceUpdateAssetIds && asset.id) {
 					assetId = asset.id;
 				} else {
 					assetId = assetIdResolver(asset);
@@ -57,7 +57,7 @@ export namespace AssetModule {
 
 	export function merge(
 		definedAssets: AssetConfiguration[],
-		scannedAssets: AssetConfiguration[],
+		scannedAssets: (AssetConfiguration | null)[],
 		assetDirTable: AssetScanDirectoryTable,
 		customizer: MergeCustomizer,
 		logger?: Logger
@@ -72,7 +72,7 @@ export namespace AssetModule {
 			if (dirs && dirs.length) {
 				dirs = dirs.map(dir => dir.endsWith("/") ? dir : dir + "/");
 				if (dirs.some(dir => definedAsset.path.startsWith(dir))) {
-					if (!scannedAssets.some(scannedAsset => definedAsset.path === scannedAsset.path)) {
+					if (!scannedAssets.some(scannedAsset => scannedAsset && definedAsset.path === scannedAsset.path)) {
 						logger?.info(
 							`Removed the declaration for '${definedAsset.path}'. The corresponding files to the path are not found.`
 						);
@@ -82,9 +82,9 @@ export namespace AssetModule {
 			}
 
 			// 既存のアセット情報を更新
-			const scannedAssetIndex = scannedAssets.findIndex(scannedAsset => scannedAsset.path === definedAsset.path);
+			const scannedAssetIndex = scannedAssets.findIndex(scannedAsset => scannedAsset && scannedAsset.path === definedAsset.path);
 			if (0 <= scannedAssetIndex) {
-				ret.push(customizer(definedAsset, scannedAssets[scannedAssetIndex]));
+				ret.push(customizer(definedAsset, scannedAssets[scannedAssetIndex]!));
 				scannedAssets.splice(scannedAssetIndex, 1);
 			} else {
 				ret.push(definedAsset);
@@ -93,6 +93,7 @@ export namespace AssetModule {
 
 		// 新規追加分
 		for (const scannedAsset of scannedAssets) {
+			if (!scannedAsset) continue;
 			logger?.info(`Added the declaration for '${path.basename(scannedAsset.path)}' (${scannedAsset.path})`);
 			ret.push(scannedAsset);
 		}

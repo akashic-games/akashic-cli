@@ -81,9 +81,9 @@ export async function scanImageAssets(
 	dir: string,
 	logger?: Logger,
 	filter: AssetFilter = imageAssetFilter
-): Promise<AssetConfiguration[]> {
+): Promise<(AssetConfiguration | null)[]> {
 	const relativeFilePaths: string[] = readdirRecursive(path.join(baseDir, dir)).filter(filter);
-	return relativeFilePaths.map<AssetConfiguration>(relativeFilePath => {
+	return relativeFilePaths.map(relativeFilePath => {
 		const absolutePath = path.join(baseDir, dir, relativeFilePath);
 		const size = getImageSize(absolutePath);
 		if (!size) {
@@ -95,7 +95,7 @@ export async function scanImageAssets(
 			path: makeUnixPath(path.join(dir, relativeFilePath)),
 			width: size.width,
 			height: size.height
-		};
+		} as AssetConfiguration;
 	})
 		.filter(asset => asset != null);
 }
@@ -105,9 +105,9 @@ export async function scanVectorImageAssets(
 	dir: string,
 	logger?: Logger,
 	filter: AssetFilter = vectorImageAssetFilter
-): Promise<AssetConfiguration[]> {
+): Promise<(AssetConfiguration | null)[]> {
 	const relativeFilePaths: string[] = readdirRecursive(path.join(baseDir, dir)).filter(filter);
-	return relativeFilePaths.map<AssetConfiguration>(relativeFilePath => {
+	return relativeFilePaths.map(relativeFilePath => {
 		const absolutePath = path.join(baseDir, dir, relativeFilePath);
 		const size = getImageSize(absolutePath);
 		if (!size) {
@@ -122,7 +122,7 @@ export async function scanVectorImageAssets(
 			path: makeUnixPath(path.join(dir, relativeFilePath)),
 			width: size.width,
 			height: size.height
-		};
+		} as AssetConfiguration;
 	})
 		.filter(asset => asset != null);
 }

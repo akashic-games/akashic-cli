@@ -1,6 +1,6 @@
 import type { AssetConfiguration } from "@akashic/game-configuration";
 
-export type AssetConfigurationWithID = AssetConfiguration & { id: string };
+export type AssetConfigurationWithID = AssetConfiguration & { id?: string };
 
 export type AssetTargetType = "image" | "audio" | "script" | "text" | "all";
 
