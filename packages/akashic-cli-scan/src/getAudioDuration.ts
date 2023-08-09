@@ -11,7 +11,8 @@ export async function getAudioDuration(filepath: string, logger?: Logger): Promi
 		return aacDuration(filepath);
 	} else if (ext === ".ogg") {
 		const metaData = await musicMetaData.parseFile(filepath, {duration: true});
-		return metaData.format.duration; // TODO: duration が取得できなかった場合のフォールバック対応。現状、`writeJSON()` に渡すオブジェクトの duration 値は NaN となり、game.json 書き込み時に null となる。
+		// TODO: duration が取得できなかった場合のフォールバック対応。現状、`writeJSON()` に渡すオブジェクトの duration 値は NaN となり、game.json 書き込み時に null となる。
+		return metaData.format.duration;
 	} else if (ext === ".mp4" || ext === ".m4a") {
 		if (ext === ".mp4")
 			logger?.warn("[deprecated] " + path.basename(filepath) + " uses deprecated format. Use AAC or M4A instead of MP4(AAC).");
