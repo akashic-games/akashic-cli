@@ -43,6 +43,7 @@ export namespace AssetModule {
 				} else {
 					assetId = assetIdResolver(asset);
 				}
+				// @ts-ignore AssetConfigurationWithID の id が必須のため delete でエラーとなるが、オプショナルにはできないため ignore とする
 				delete asset.id;
 			} else {
 				assetId = assetIdResolver(asset);
@@ -57,7 +58,7 @@ export namespace AssetModule {
 
 	export function merge(
 		definedAssets: AssetConfiguration[],
-		scannedAssets: (AssetConfiguration | null)[],
+		scannedAssets: AssetConfiguration[],
 		assetDirTable: AssetScanDirectoryTable,
 		customizer: MergeCustomizer,
 		logger?: Logger

@@ -99,7 +99,7 @@ export async function scanImageAssets(
 	dir: string,
 	logger?: Logger,
 	filter: AssetFilter = imageAssetFilter
-): Promise<(AssetConfiguration | null)[]> {
+): Promise<AssetConfiguration[]> {
 	const relativeFilePaths: string[] = readdirRecursive(path.join(baseDir, dir)).filter(filter);
 	return relativeFilePaths.map(relativeFilePath => {
 		const absolutePath = path.join(baseDir, dir, relativeFilePath);
@@ -115,7 +115,7 @@ export async function scanImageAssets(
 			height: size.height
 		} as AssetConfiguration;
 	})
-		.filter(asset => asset != null);
+		.filter((asset): asset is NonNullable<typeof asset> => asset != null);
 }
 
 export async function scanVectorImageAssets(
@@ -123,7 +123,7 @@ export async function scanVectorImageAssets(
 	dir: string,
 	logger?: Logger,
 	filter: AssetFilter = vectorImageAssetFilter
-): Promise<(AssetConfiguration | null)[]> {
+): Promise<AssetConfiguration[]> {
 	const relativeFilePaths: string[] = readdirRecursive(path.join(baseDir, dir)).filter(filter);
 	return relativeFilePaths.map(relativeFilePath => {
 		const absolutePath = path.join(baseDir, dir, relativeFilePath);
@@ -142,7 +142,7 @@ export async function scanVectorImageAssets(
 			height: size.height
 		} as AssetConfiguration;
 	})
-		.filter(asset => asset != null);
+		.filter((asset): asset is NonNullable<typeof asset> => asset != null);
 }
 
 export async function scanAudioAssets(

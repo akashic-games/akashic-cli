@@ -157,7 +157,7 @@ export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 		}
 
 		// スキャン結果のアセット定義の配列
-		const scannedAssets: (AssetConfiguration | null)[] = [];
+		const scannedAssets: AssetConfiguration[] = [];
 
 		const textAssetFilterRe =
 			param.assetExtension.text && param.assetExtension.text.length > 0
