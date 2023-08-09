@@ -5,13 +5,15 @@ import { readJSON, writeJSON } from "@akashic/akashic-cli-commons/lib/FileSystem
 import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
 import type { AssetConfiguration, GameConfiguration } from "@akashic/game-configuration";
 import { AssetModule } from "./AssetModule";
-import {scanAudioAssets, scanImageAssets, scanScriptAssets, scanTextAssets, scanVectorImageAssets, textAssetFilter} from "./scanUtils";
+import { isBinaryFile } from "./isBinaryFile";
+import { knownExtensionAssetFilter, scanAudioAssets, scanBinaryAssets, scanImageAssets, scanScriptAssets,
+	scanTextAssets, scanVectorImageAssets, defaultTextAssetFilter } from "./scanUtils";
 import type { AssetExtension, AssetScanDirectoryTable, AssetTargetType, LibConfiguration } from "./types";
 
 export interface ScanAssetParameterObject {
 	/**
 	 * 更新する対象。
-	 * `"image"`, `"audio"`, `"script"`, `"text"`, `"all"` のいずれか。
+	 * `"image"`, `"audio"`, `"script"`, `"binary"`, `"text"`, `"all"` のいずれか。
 	 * 省略された場合、 `"all"` 。
 	 */
 	target?: AssetTargetType;
@@ -117,6 +119,7 @@ export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 			audio: [],
 			image: [],
 			script: [],
+			binary: [],
 			text: []
 		};
 
@@ -126,12 +129,14 @@ export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 			scanTargetDirsTable.audio.push(...audioDirs, ...assetsDirs);
 			scanTargetDirsTable.image.push(...imageDirs, ...assetsDirs);
 			scanTargetDirsTable.script.push(...scriptDirs, ...assetsDirs);
+			scanTargetDirsTable.binary.push(...assetsDirs);
 			scanTargetDirsTable.text.push(...textDirs, ...assetsDirs);
 
 			// NOTE: 重複するディレクトリを削除
 			scanTargetDirsTable.audio = scanTargetDirsTable.audio.filter((dir, i, self) => self.indexOf(dir) === i);
 			scanTargetDirsTable.image = scanTargetDirsTable.image.filter((dir, i, self) => self.indexOf(dir) === i);
 			scanTargetDirsTable.script = scanTargetDirsTable.script.filter((dir, i, self) => self.indexOf(dir) === i);
+			scanTargetDirsTable.binary = scanTargetDirsTable.binary.filter((dir, i, self) => self.indexOf(dir) === i);
 			scanTargetDirsTable.text = scanTargetDirsTable.text.filter((dir, i, self) => self.indexOf(dir) === i);
 		} else if (target === "audio") {
 			scanTargetDirsTable.audio.push(...audioDirs);
@@ -142,6 +147,8 @@ export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 		} else if (target === "script") {
 			scanTargetDirsTable.script.push(...scriptDirs);
 			scanTargetDirsTable.script = scanTargetDirsTable.script.filter((dir, i, self) => self.indexOf(dir) === i);
+		} else if (target === "binary") {
+			scanTargetDirsTable.binary = scanTargetDirsTable.binary.filter((dir, i, self) => self.indexOf(dir) === i);
 		} else if (target === "text") {
 			scanTargetDirsTable.text.push(...textDirs);
 			scanTargetDirsTable.text = scanTargetDirsTable.text.filter((dir, i, self) => self.indexOf(dir) === i);
@@ -153,7 +160,7 @@ export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 		const scannedAssets: (AssetConfiguration | null)[] = [];
 
 		const textAssetFilterRe =
-			param.assetExtension.text && param.assetExtension.text
+			param.assetExtension.text && param.assetExtension.text.length > 0
 				? new RegExp(param.assetExtension.text.join("|"), "i")
 				: undefined;
 
@@ -173,17 +180,31 @@ export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 			const assets = await scanScriptAssets(base, dir, logger);
 			scannedAssets.push(...assets);
 		}
+		for (const dir of scanTargetDirsTable.binary) {
+			const assets = await scanBinaryAssets(
+				base,
+				dir,
+				logger,
+				p => {
+					if (knownExtensionAssetFilter(p)) return false;
+					// NOTE: ユーザ指定の拡張子オプションが追加されたら判定に利用する
+					// if (userBinaryAssetFilter(p)) return userBinaryAssetFilter(p);
+					// if (defaultBinaryAssetFilter(p)) return true;
+					return isBinaryFile(path.join(base, dir, p));
+				}
+			);
+			scannedAssets.push(...assets);
+		}
 		for (const dir of scanTargetDirsTable.text) {
 			const assets = await scanTextAssets(
 				base,
 				dir,
 				logger,
 				p => {
-					if (!textAssetFilter(p)) {
-						// 他の種別 (例えば ".png" など) の拡張子であってはならない
-						return false;
-					}
-					return textAssetFilterRe ? textAssetFilterRe.test(p) : false;
+					if (knownExtensionAssetFilter(p)) return false; // scan が特別処理する明らかに非テキストの拡張子 (e.g. .ogg, .png) は除外する
+					if (textAssetFilterRe) return textAssetFilterRe.test(p); // ユーザ指定のフィルタがあればそれで判定する
+					if (defaultTextAssetFilter(p)) return true; // 高速化のため、数が多い・Akashic独自など、拡張子だけで判定できるものはそれで判定
+					return !isBinaryFile(path.join(base, dir, p)); // どれでもなければ中身で判定
 				}
 			);
 			scannedAssets.push(...assets);
