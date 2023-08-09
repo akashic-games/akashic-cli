@@ -95,7 +95,6 @@ export namespace AssetModule {
 
 		// 新規追加分
 		for (const scannedAsset of scannedAssets) {
-			if (!scannedAsset) continue;
 			logger?.info(`Added the declaration for '${path.basename(scannedAsset.path)}' (${scannedAsset.path})`);
 			ret.push(scannedAsset);
 		}
