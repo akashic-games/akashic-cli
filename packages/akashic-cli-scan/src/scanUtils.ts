@@ -165,7 +165,7 @@ export async function scanAudioAssets(
 		durationInfos.push({
 			basename,
 			ext: ext,
-			duration: duration ? Math.ceil(duration * 1000) : NaN,
+			duration: duration != null ? Math.ceil(duration * 1000) : NaN,
 			path: unixPath
 		});
 		if (!extMap[unixPath]) extMap[unixPath] = new Set<string>();
