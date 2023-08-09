@@ -42,12 +42,13 @@ export const generateTestbedScriptAsset = <T extends Constructor<pdi.ScriptAsset
 		/**
 		 * 自作のconstructor-functionを利用する場合、現状のtypescriptではシグニチャとしてany配列しか利用できない
 		 * 引数には次のものを指定することとする
-		 * @param args[0] string アセットのID
-		 * @param args[1] string アセットのpath
-		 * @param args[2] () => g.AssetLoadError アセット読み込みエラー時のエラーハンドリングを返す関数
+		 * @param args[0] script アセットの ID
+		 * @param args[1] script アセットの path
+		 * @param args[2] script アセットの exports
+		 * @param args[3] () => g.AssetLoadError アセット読み込みエラー時のエラーハンドリングを返す関数
 		 */
 		constructor(...args: any[]) {
-			super(args[0], args[1]);
+			super(args[0], args[1], args[2]);
 			const heads = document.getElementsByTagName("head");
 			const container: Node = (heads.length === 0) ? document.body : heads[0];
 
@@ -61,7 +62,7 @@ export const generateTestbedScriptAsset = <T extends Constructor<pdi.ScriptAsset
 			};
 			this.script = undefined!;
 			this.loading = true;
-			this._createAssetLoadError = args[2];
+			this._createAssetLoadError = args[3];
 			script.src = this.path;
 			container.appendChild(script);
 		}

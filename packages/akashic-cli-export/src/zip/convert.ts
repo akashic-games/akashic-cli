@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as cmn from "@akashic/akashic-cli-commons";
-import { ImageAssetConfigurationBase } from "@akashic/game-configuration";
+import { ImageAssetConfigurationBase, NicoliveSupportedModes } from "@akashic/game-configuration";
 import * as babel from "@babel/core";
 import * as presetEnv from "@babel/preset-env";
 import * as browserify from "browserify";
@@ -87,6 +87,9 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 		.then(() => cmn.ConfigurationFile.read(path.join(param.source, "game.json"), param.logger))
 		.then(async (result: cmn.GameConfiguration) => {
 			gamejson = result;
+			if (param.nicolive) {
+				validateGameJsonForNicolive(gamejson);
+			}
 
 			// export-zip実行時のバージョンとオプションを追記
 			if (param.exportInfo) {
@@ -334,4 +337,42 @@ function encodeToString(buf: Buffer): string {
 		return buf.toString();
 	}
 	return convert(array, { from: "AUTO", to: "UNICODE", type: "string" });
+}
+
+/**
+ * --nicolive オプション時の game.json の　validate
+ */
+export function validateGameJsonForNicolive(gamejson: cmn.GameConfiguration): void {
+	const nicolive = gamejson.environment?.nicolive;
+	if (!nicolive) {
+		throw new Error("environment.nicolive does not exist in game.json.");
+	}
+	const supportedModesValues: NicoliveSupportedModes[] = ["single", "ranking", "multi_admission", "multi"];
+	const supportedModes = nicolive.supportedModes;
+	const preferredSessionParameters = nicolive.preferredSessionParameters;
+
+	if (!supportedModes) {
+		throw new Error("nicolive.supportedModes does not exist in game.json.");
+	}
+	if (!Array.isArray(supportedModes) ) {
+		throw new Error("Invalid value: Specify an array for nicolive.supportedModes.");
+	}
+	if (supportedModes.length === 0) {
+		throw new Error("Invalid value: nicolive.supportedModes is an empty array.");
+	}
+	supportedModes.forEach(v => {
+		const exists = supportedModesValues.includes(v);
+		if (!exists) {
+			console.warn(`unknown value '${v}' found in nicolive.supportedModes.`);
+		}
+	});
+
+	if (preferredSessionParameters && preferredSessionParameters.totalTimeLimit) {
+		if (typeof preferredSessionParameters.totalTimeLimit !== "number") {
+			throw new Error("Invalid Value: Specify a number value for nicolive.preferredSessionParameters.totalTimeLimit.");
+		}
+		if (preferredSessionParameters.totalTimeLimit < 20 || preferredSessionParameters.totalTimeLimit > 200) {
+			throw new Error("Invalid Value: Specify a value between 20 and 200 for nicolive.preferredSessionParameters.totalTimeLimit.");
+		}
+	}
 }

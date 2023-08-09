@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-serve",
-  "version": "1.15.31",
+  "version": "1.15.34",
   "description": "A development server for Akashic Engine",
   "scripts": {
     "prepare": "npm run setup && npm run build",
@@ -25,13 +25,13 @@
     "akashic-cli-serve": "./bin/run"
   },
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.14.16",
+    "@akashic/akashic-cli-commons": "0.14.17",
     "@akashic/akashic-cli-scan": "0.16.0",
-    "@akashic/amflow-util": "^1.2.0",
+    "@akashic/amflow-util": "^1.3.0",
     "@akashic/game-configuration": "^2.0.0",
-    "@akashic/headless-driver": "2.8.4",
+    "@akashic/headless-driver": "2.9.1",
     "@akashic/sandbox-configuration": "^2.3.0",
-    "@akashic/trigger": "1.0.1",
+    "@akashic/trigger": "2.0.0",
     "@msgpack/msgpack": "2.8.0",
     "chalk": "4.1.2",
     "chokidar": "3.5.3",
@@ -50,7 +50,7 @@
   "devDependencies": {
     "@akashic/amflow": "~3.2.0",
     "@akashic/eslint-config": "1.1.1",
-    "@akashic/pdi-types": "~1.11.0",
+    "@akashic/pdi-types": "~1.11.1",
     "@akashic/playlog": "~3.2.0",
     "@storybook/addon-actions": "^6.1.21",
     "@storybook/addon-knobs": "^6.1.21",

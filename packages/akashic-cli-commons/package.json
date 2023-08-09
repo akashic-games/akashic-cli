@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-commons",
-  "version": "0.14.16",
+  "version": "0.14.17",
   "description": "The shared definitions and routines for akashic-cli-xxx",
   "main": "lib/index.js",
   "scripts": {
@@ -39,7 +39,7 @@
   },
   "typings": "lib/index.d.ts",
   "dependencies": {
-    "@akashic/game-configuration": "2.0.0",
+    "@akashic/game-configuration": "2.0.1",
     "browserify": "17.0.0",
     "editorconfig": "^1.0.1",
     "eslint": "8.27.0",

@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-scan",
-  "version": "0.16.21",
+  "version": "0.16.22",
   "description": "Command line tool for updating assets and globalScripts.",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -23,7 +23,7 @@
   ],
   "devDependencies": {
     "@akashic/eslint-config": "1.1.1",
-    "@akashic/game-configuration": "2.0.0",
+    "@akashic/game-configuration": "2.0.1",
     "@types/image-size": "0.7.0",
     "@types/jest": "29.5.0",
     "@types/mock-fs": "4.13.1",
@@ -39,7 +39,7 @@
     "typescript": "5.0.4"
   },
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.14.16",
+    "@akashic/akashic-cli-commons": "0.14.17",
     "aac-duration": "0.0.1",
     "chokidar": "^3.5.1",
     "commander": "^8.0.0",

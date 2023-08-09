@@ -12,6 +12,9 @@ export function cli(param: CliConfigExportZip): void {
 	if (!param.omitEmptyJs) {
 		logger.info("deprecated: --no-omit-empty-js is now always enabled since output may be broken without this option.");
 	}
+	if (param.nicolive && !param.hashFilename) {
+		param.hashFilename = true;
+	}
 
 	Promise.resolve()
 		.then(() => promiseExportZip({
@@ -25,7 +28,7 @@ export function cli(param: CliConfigExportZip): void {
 			source: param.cwd,
 			dest: param.output,
 			force: param.force,
-			hashLength: !param.hashFilename && !param.nicolive ? 0 :
+			hashLength: !param.hashFilename ? 0 :
 				(param.hashFilename === true) ? 20 : Number(param.hashFilename),
 			logger,
 			omitUnbundledJs: (param.bundle || param.nicolive) && param.omitUnbundledJs,
