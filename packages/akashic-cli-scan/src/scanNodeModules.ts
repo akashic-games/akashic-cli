@@ -62,11 +62,11 @@ export interface ScanNodeModulesParameterObject {
 }
 
 
-interface NormalizedUpdateParameterObject extends Required<Omit<ScanNodeModulesParameterObject, "debugNpm">> {
+interface NormalizedScanNodeModulesParameterObject extends Required<Omit<ScanNodeModulesParameterObject, "debugNpm">> {
 	debugNpm: PromisedNpm | undefined;
 }
 
-export function _completeScanNodeModulesParameterObject(param: ScanNodeModulesParameterObject): NormalizedUpdateParameterObject {
+export function _completeScanNodeModulesParameterObject(param: ScanNodeModulesParameterObject): NormalizedScanNodeModulesParameterObject {
 	return {
 		cwd: param.cwd ?? process.cwd(),
 		logger: param.logger ?? new ConsoleLogger(),
