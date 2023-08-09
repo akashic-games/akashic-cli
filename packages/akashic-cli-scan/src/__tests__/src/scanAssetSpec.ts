@@ -17,6 +17,7 @@ describe("scanAsset()", () => {
 	const DUMMY_300x200_SUBPX_SVG_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy_300x200_subpx.svg"));
 	const DUMMY_NO_SIZE_SVG_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy_no_size.svg"));
 	const DUMMY_NO_PIXEL_SVG_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy_no_px.svg"));
+	const DUMMY_WASM_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy.wasm"));
 
 	afterEach(() => {
 		mockfs.restore();
@@ -120,6 +121,11 @@ describe("scanAsset()", () => {
 							"_1.js": "var x = 1;",
 						},
 					},
+					"binary": {
+						"foo": {
+							"_$.bin": DUMMY_WASM_DATA
+						}
+					}
 				},
 				"image": {
 					"foo": {
@@ -139,7 +145,6 @@ describe("scanAsset()", () => {
 
 		it("scan assets", async () => {
 			mockfs(mockFsContent);
-
 			await scanAsset({
 				cwd: "./dir",
 				target: "all",
@@ -190,6 +195,10 @@ describe("scanAsset()", () => {
 				global: true
 			});
 			expect(conf.assetList[6]).toEqual({
+				type: "binary",
+				path: "assets/binary/foo/_$.bin"
+			});
+			expect(conf.assetList[7]).toEqual({
 				type: "text",
 				path: "assets/text/foo/$.txt"
 			});
@@ -233,6 +242,10 @@ describe("scanAsset()", () => {
 				global: true
 			});
 			expect(conf.assetList[4]).toEqual({
+				type: "binary",
+				path: "assets/binary/foo/_$.bin"
+			});
+			expect(conf.assetList[5]).toEqual({
 				type: "text",
 				path: "assets/text/foo/$.txt"
 			});
@@ -969,7 +982,7 @@ describe("scanAsset()", () => {
 		expect(conf.assets["dummyText"].type).toBe("text");
 		expect(conf.assets["newDummy"].type).toBe("text");
 
-		gamejson.assets ={
+		gamejson.assets = {
 			"dummyText": {
 				"type": "audio",
 				"path": "text/foo/dummy.txt",
@@ -1000,6 +1013,61 @@ describe("scanAsset()", () => {
 		} catch (e) {
 			expect(e.message.indexOf("Conflicted Asset Type") >= 0).toBe(true);
 		}
+	});
+
+	it("scan binary assets info", async () => {
+		const gamejson: GameConfiguration = {
+			width: 320,
+			height: 34,
+			fps: 30,
+			main: "",
+			assets: {
+				"dummy": {
+					"type": "text",
+					"path": "assets/foo/dummy.bin",
+				}
+			}
+		};
+		mockfs({
+			"game.json": JSON.stringify(gamejson),
+			"assets": {
+				"foo": {
+					"dummy.bin": DUMMY_WASM_DATA,
+					"newDummy.bin": DUMMY_WASM_DATA,
+				},
+			},
+		});
+
+		await scanAsset({
+			target: "all",
+			logger: nullLogger
+		});
+
+		let conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		expect(conf.assets["dummy"].type).toBe("text");
+		expect(conf.assets["assets/foo/newDummy.bin"].type).toBe("binary");
+
+		gamejson.assets = {
+			"dummyBinary": {
+				"type": "text",
+				"path": "assets/foo/newDummy.bin",
+			}
+		};
+		mockfs({
+			"game.json": JSON.stringify(gamejson),
+			"assets": {
+				"foo": {
+					"newDummy.bin": DUMMY_WASM_DATA,
+				},
+			},
+		});
+
+		await scanAsset({
+			target: "all",
+			logger: nullLogger
+		});
+		conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		expect(conf.assets["dummyBinary"].type).toBe("text");
 	});
 
 	it("vacuums obsolete declarations", async () => {
@@ -1041,6 +1109,14 @@ describe("scanAsset()", () => {
 					"type": "text",
 					"path": "text/foo/deletedTextdata.txt",
 				},
+				"bin": {
+					"type": "binary",
+					"path": "assets/foo/bindata.bin",
+				},
+				"deletedBin": {
+					"type": "binary",
+					"path": "assets/foo/deletedBinarydata.bin",
+				},
 				"script": {
 					"type": "script",
 					"path": "script/foo/script.js",
@@ -1073,6 +1149,11 @@ describe("scanAsset()", () => {
 					"script.js": "var x = 1;",
 				},
 			},
+			"assets": {
+				"foo": {
+					"bindata.bin": DUMMY_WASM_DATA
+				}
+			}
 		});
 
 		await scanAsset({
@@ -1096,6 +1177,7 @@ describe("scanAsset()", () => {
 		expect(conf.assets["deletedChara"]).toBe(undefined);
 		expect(conf.assets["deletedSe"]).toBe(undefined);
 		expect(conf.assets["deletedTxt"]).toBe(undefined);
+		expect(conf.assets["deletedBin"]).toBe(undefined);
 		expect(conf.assets["deletedScript"]).toBe(undefined);
 	});
 
@@ -1123,6 +1205,10 @@ describe("scanAsset()", () => {
 					"type": "script",
 					"path": "script/foo/dummyScript.js",
 				},
+				"definedDummyBin": {
+					"type": "binary",
+					"path": "binary/foo/definedDummyBin.bin",
+				},
 				"dummyText": {
 					"type": "text",
 					"path": "script/foo/dummyText.js",
@@ -1147,7 +1233,10 @@ describe("scanAsset()", () => {
 			"code": {
 				"dummyCode.js": "var x = 1;",
 			},
-			"txtDummy.txt": ""
+			"txtDummy.txt": "",
+			"assets": {
+				"untrackedBin.bin": DUMMY_WASM_DATA
+			}
 		});
 
 		await scanAsset({
@@ -1197,6 +1286,14 @@ describe("scanAsset()", () => {
 		conf = JSON.parse(fs.readFileSync("./game.json").toString());
 		expect(conf.assets["dummySound"].type).toBe("audio");
 		expect(conf.assets["dummyAudio"].type).toBe("audio");
+
+		await scanAsset({
+			logger: nullLogger,
+			target: "all"
+		});
+		conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		expect(conf.assets["definedDummyBin"].type).toBe("binary");
+		expect(conf.assets["assets/untrackedBin.bin"].type).toBe("binary");
 	});
 
 	it("scan vacuum without no target dirs", async () => {
@@ -1358,6 +1455,10 @@ describe("scanAsset()", () => {
 				"script": {
 					"type": "script",
 					"path": "script/foo/script.js"
+				},
+				"bin": {
+					"type": "binary",
+					"path": "assets/foo/bin.bin"
 				}
 			}
 		};
@@ -1382,6 +1483,11 @@ describe("scanAsset()", () => {
 				"foo": {
 					"script.js": "var x = 1;"
 				}
+			},
+			"assets": {
+				"foo": {
+					"bin.bin": DUMMY_WASM_DATA
+				}
 			}
 		});
 
@@ -1391,7 +1497,8 @@ describe("scanAsset()", () => {
 				audio: ["audio"],
 				image: ["image"],
 				script: ["script"],
-				text: ["text"]
+				text: ["text"],
+				binary: ["assets"]
 			},
 			assetExtension: {
 				text: ["txt"]
@@ -1405,6 +1512,7 @@ describe("scanAsset()", () => {
 		expect(conf.assets["se"]).not.toBe(undefined);
 		expect(conf.assets["txt"]).not.toBe(undefined);
 		expect(conf.assets["script"]).not.toBe(undefined);
+		expect(conf.assets["bin"]).not.toBe(undefined);
 
 		await scanAsset({
 			logger: nullLogger,
@@ -1412,7 +1520,8 @@ describe("scanAsset()", () => {
 				audio: ["audio"],
 				image: ["image"],
 				script: ["script"],
-				text: ["text"]
+				text: ["text"],
+				binary: ["assets"]
 			},
 			assetExtension: {
 				text: ["txt"]
@@ -1427,6 +1536,7 @@ describe("scanAsset()", () => {
 		expect(conf.assets["audio/some/se"]).not.toBe(undefined);
 		expect(conf.assets["text/foo/textdata"]).not.toBe(undefined);
 		expect(conf.assets["script/foo/script"]).not.toBe(undefined);
+		expect(conf.assets["assets/foo/bin.bin"]).not.toBe(undefined);
 
 		await scanAsset({
 			logger: nullLogger,
@@ -1448,6 +1558,7 @@ describe("scanAsset()", () => {
 		expect(conf.assets["se"]).not.toBe(undefined);
 		expect(conf.assets["textdata"]).not.toBe(undefined);
 		expect(conf.assets["script"]).not.toBe(undefined);
+		expect(conf.assets["assets/foo/bin.bin"]).not.toBe(undefined);
 	});
 
 	it("can scan Asset IDs with file extensions", async () => {
@@ -1646,6 +1757,11 @@ describe("scanAsset()", () => {
 						"textdata.txt": "Lorem ipsum dolor sit amet, consectetur..."
 					}
 				},
+				"binary": {
+					"by": {
+						"module.bin": DUMMY_WASM_DATA
+					}
+				},
 				"script": {
 					"foo": {
 						"script.js": "var x = 1;"
@@ -1665,6 +1781,7 @@ describe("scanAsset()", () => {
 		expect(conf.assets["assets/audio/some/se"]).toBeDefined();
 		expect(conf.assets["assets/script/foo/script.js"]).toBeDefined();
 		expect(conf.assets["assets/text/foo/textdata.txt"]).toBeDefined();
+		expect(conf.assets["assets/binary/by/module.bin"]).toBeDefined();
 
 		await scanAsset({
 			logger: nullLogger,
@@ -1677,6 +1794,7 @@ describe("scanAsset()", () => {
 		expect(conf.assets["assets/audio/some/se"]).toBeDefined();
 		expect(conf.assets["assets/script/foo/script.js"]).toBeDefined();
 		expect(conf.assets["assets/text/foo/textdata.txt"]).toBeDefined();
+		expect(conf.assets["assets/binary/by/module.bin"]).toBeDefined();
 	});
 
 	it("keep offset if already has", async () => {

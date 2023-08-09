@@ -2,7 +2,9 @@ import * as path from "path";
 import * as fs from "fs";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
 import * as mockfs from "mock-fs";
-import { scanAudioAssets, scanImageAssets, scanScriptAssets, scanTextAssets } from "../../../lib/scanUtils";
+import { scanAudioAssets, scanImageAssets, scanScriptAssets, scanTextAssets, scanBinaryAssets, knownExtensionAssetFilter } from "../../../lib/scanUtils";
+import { isBinaryFile } from "../../isBinaryFile";
+import { defaultTextAssetFilter } from "../../scanUtils";
 
 describe("scanUtils", () => {
 	const nullLogger = new ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
@@ -11,6 +13,7 @@ describe("scanUtils", () => {
 	const DUMMY_OGG_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy.ogg"));
 	const DUMMY_OGG_DATA2 = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy2.ogg"));
 	const DUMMY_1x1_PNG_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy1x1.png"));
+	const DUMMY_WASM_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy.wasm"));
 
 	beforeEach(() => {
 		mockfs({
@@ -41,7 +44,8 @@ describe("scanUtils", () => {
 					"_.txt": "dummy",
 					"_.ogg": DUMMY_OGG_DATA2,
 					"_.js": "var x = 1;",
-					"_.png": DUMMY_1x1_PNG_DATA
+					"_.png": DUMMY_1x1_PNG_DATA,
+					"_.bin": DUMMY_WASM_DATA
 				}
 			}
 		});
@@ -86,7 +90,12 @@ describe("scanUtils", () => {
 			await scanTextAssets(
 				"./game",
 				"text",
-				nullLogger
+				nullLogger,
+				p => {
+					if (knownExtensionAssetFilter(p)) return false;
+					if (defaultTextAssetFilter(p)) return true;
+					return !isBinaryFile(path.join("./game", "text", p));
+				}
 			)
 		).toEqual([
 			{
@@ -99,12 +108,36 @@ describe("scanUtils", () => {
 			await scanTextAssets(
 				"./game",
 				"assets",
-				nullLogger
+				nullLogger,
+				p => {
+					if (knownExtensionAssetFilter(p)) return false;
+					if (defaultTextAssetFilter(p)) return true;
+					return !isBinaryFile(path.join("./game", "assets", p));
+				}
 			)
 		).toEqual([
 			{
 				type: "text",
 				path: "assets/_.txt"
+			}
+		]);
+	});
+
+	it("scanBinaryAssets()", async () => {
+		expect(
+			await scanBinaryAssets(
+				"./game",
+				"assets",
+				nullLogger,
+				p => {
+					if (knownExtensionAssetFilter(p)) return false;
+					return isBinaryFile(path.join("./game", "assets", p));
+				}
+			)
+		).toEqual([
+			{
+				type: "binary",
+				path: "assets/_.bin"
 			}
 		]);
 	});

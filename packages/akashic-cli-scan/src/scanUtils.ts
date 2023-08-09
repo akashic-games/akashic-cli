@@ -12,14 +12,11 @@ export function scriptAssetFilter(p: string): boolean {
 	return /.*\.js$/i.test(p);
 }
 
-export function textAssetFilter(p: string): boolean {
-	// NOTE: その他ファイルはすべてテキストアセットとして扱う
-	return !(
-		scriptAssetFilter(p) ||
+export function knownExtensionAssetFilter(p: string): boolean {
+	return scriptAssetFilter(p) ||
 		imageAssetFilter(p) ||
 		vectorImageAssetFilter(p) ||
-		audioAssetFilter(p)
-	);
+		audioAssetFilter(p);
 }
 
 export function imageAssetFilter(p: string): boolean {
@@ -32,6 +29,14 @@ export function vectorImageAssetFilter(p: string): boolean {
 
 export function audioAssetFilter(p: string): boolean {
 	return /.*\.(ogg|aac|mp4|m4a)$/i.test(p);
+}
+
+export function defaultTextAssetFilter(p: string): boolean {
+	return /.*\.(txt|json|asapj|asabn|asask|asaan)$/.test(p);
+}
+
+export function defaultBinaryAssetFilter (_: string): boolean {
+	return false;
 }
 
 export interface AudioDurationInfo {
@@ -56,15 +61,29 @@ export async function scanScriptAssets(
 			path: makeUnixPath(path.join(dir, relativeFilePath)),
 			global: true
 		};
-	})
-		.filter(asset => asset != null);
+	});
+}
+
+export async function scanBinaryAssets(
+	baseDir: string,
+	dir: string,
+	_logger?: Logger,
+	filter: AssetFilter = defaultBinaryAssetFilter
+): Promise<AssetConfiguration[]> {
+	const relativeFilePaths: string[] = readdirRecursive(path.join(baseDir, dir)).filter(filter);
+	return relativeFilePaths.map<AssetConfiguration>(relativeFilePath => {
+		return {
+			type: "binary",
+			path: makeUnixPath(path.join(dir, relativeFilePath))
+		};
+	});
 }
 
 export async function scanTextAssets(
 	baseDir: string,
 	dir: string,
 	_logger?: Logger,
-	filter: AssetFilter = textAssetFilter
+	filter: AssetFilter = defaultTextAssetFilter
 ): Promise<AssetConfiguration[]> {
 	const relativeFilePaths: string[] = readdirRecursive(path.join(baseDir, dir)).filter(filter);
 	return relativeFilePaths.map<AssetConfiguration>(relativeFilePath => {
@@ -72,8 +91,7 @@ export async function scanTextAssets(
 			type: "text",
 			path: makeUnixPath(path.join(dir, relativeFilePath))
 		};
-	})
-		.filter(asset => asset != null);
+	});
 }
 
 export async function scanImageAssets(
