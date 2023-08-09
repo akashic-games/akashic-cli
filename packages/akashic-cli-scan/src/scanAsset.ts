@@ -68,7 +68,7 @@ export interface ScanAssetParameterObject {
 }
 
 interface NormalizedScanAssetParameterObject extends Required<Omit<ScanAssetParameterObject, "AssetScanDirectoryTable">> {
-	assetScanDirectoryTable: Required<AssetScanDirectoryTable>;
+	assetScanDirectoryTable: Required<Omit<AssetScanDirectoryTable, "binary">>;
 }
 
 export function _completeScanAssetParameterObject(param: ScanAssetParameterObject): NormalizedScanAssetParameterObject {
