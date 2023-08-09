@@ -5,13 +5,13 @@ import * as aacDuration from "aac-duration";
 import * as musicMetaData from "music-metadata";
 import { mp4Inspector } from "thumbcoil";
 
-export async function getAudioDuration(filepath: string, logger?: Logger): Promise<number> {
+export async function getAudioDuration(filepath: string, logger?: Logger): Promise<number | undefined> {
 	const ext = path.extname(filepath);
 	if (ext === ".aac") {
 		return aacDuration(filepath);
 	} else if (ext === ".ogg") {
 		const metaData = await musicMetaData.parseFile(filepath, {duration: true});
-		return metaData.format.duration!;
+		return metaData.format.duration;
 	} else if (ext === ".mp4" || ext === ".m4a") {
 		if (ext === ".mp4")
 			logger?.warn("[deprecated] " + path.basename(filepath) + " uses deprecated format. Use AAC or M4A instead of MP4(AAC).");
