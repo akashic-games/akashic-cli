@@ -131,6 +131,53 @@ npm run storybook
 npm run copy:agv
 ```
 
+## Docker での起動
+
+以下コマンドで Docker コンテナを起動できます。
+
+```sh
+docker run \
+  -p 3300:3300 \
+  --name serve \
+  --rm \
+  -it \
+  --mount type=bind,src=/path/to/game,dst=/game,readonly akashic-cli-serve
+```
+
+`--mount` の `src` にコンテンツの絶対パス (`game.json` が存在するディレクトリ) を指定してください。
+`akashic-cli-serve` への引数を省略すると、 Docker コンテナ内部の `/game` をデフォルトのコンテンツのパスとして実行します。
+
+カレントディレクトリに `game.json` が存在する場合、Linux では以下のように実行できます。
+
+```sh
+docker run \
+  -p 3300:3300 \
+  --name serve \
+  --rm \
+  -it \
+  --mount type=bind,src=$(pwd),dst=/game,readonly akashic-cli-serve 
+```
+
+任意のオプション引数を `akashic-cli-serve` へ与える場合、`akashic-cli-serve` に対してコンテンツのパスを引数として明示的に指定してください。
+以下は `akashic-cli-serve` へ `--verbose` オプションを与えて実行する例です。
+Docker コンテナ内の `/game` をコンテンツのパスとして末尾で指定している点に注意してください。
+
+```sh
+docker run \
+  -p 3300:3300 \
+  --name serve \
+  --rm \
+  -it \
+  --mount type=bind,src=/path/to/game,dst=/game,readonly akashic-cli-serve \
+  --verbose /game
+```
+
+Windows 環境においては
+[バインドマウントの利用](https://matsuand.github.io/docs.docker.jp.onthefly/storage/bind-mounts/#start-a-container-with-a-bind-mount)
+および
+[Windows におけるパス変換](https://matsuand.github.io/docs.docker.jp.onthefly/desktop/windows/troubleshoot/#path-conversion-on-windows)
+を参考に適宜コンテンツのパスを変換してください。
+
 ## ライセンス
 
 本リポジトリは MIT License の元で公開されています。
