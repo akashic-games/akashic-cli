@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.16.40 (2023-08-23)
+
+#### Update Dependencies
+* `akashic-cli-scan`, `akashic-cli-serve`
+  * [#1263](https://github.com/akashic-games/akashic-cli/pull/1263) fix(deps): update dependency @akashic/headless-driver to v2.9.2 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- kamakiri_ys ([@kamakiri01](https://github.com/kamakiri01))
+
 ## 2.16.39 (2023-08-02)
 
 #### Other Change
