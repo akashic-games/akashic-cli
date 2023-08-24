@@ -6,7 +6,7 @@ const FIRST_FEW_BYTES = 8000;
  * @see https://qiita.com/okuoku/items/a21bfa68570ca67817ac
  */
 export function isBinaryFile(filePath: string): boolean {
-	let fd: number;
+	let fd: number | null = null;
 	try {
 		fd = fs.openSync(filePath, "r");
 		const buff = Buffer.alloc(FIRST_FEW_BYTES);

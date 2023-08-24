@@ -43,6 +43,7 @@ export namespace AssetModule {
 				} else {
 					assetId = assetIdResolver(asset);
 				}
+				// @ts-ignore AssetConfigurationWithID の id が必須のため delete でエラーとなるが、オプショナルにはできないため ignore とする
 				delete asset.id;
 			} else {
 				assetId = assetIdResolver(asset);
@@ -85,7 +86,7 @@ export namespace AssetModule {
 			// 既存のアセット情報を更新
 			const scannedAssetIndex = scannedAssets.findIndex(scannedAsset => scannedAsset.path === definedAsset.path);
 			if (0 <= scannedAssetIndex) {
-				ret.push(customizer(definedAsset, scannedAssets[scannedAssetIndex]));
+				ret.push(customizer(definedAsset, scannedAssets[scannedAssetIndex]!));
 				scannedAssets.splice(scannedAssetIndex, 1);
 			} else {
 				ret.push(definedAsset);

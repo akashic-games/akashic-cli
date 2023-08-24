@@ -42,7 +42,7 @@ export function defaultBinaryAssetFilter (_: string): boolean {
 export interface AudioDurationInfo {
 	basename: string;
 	ext: string;
-	duration: number;
+	duration: number | undefined;
 	path: string;
 }
 
@@ -101,7 +101,7 @@ export async function scanImageAssets(
 	filter: AssetFilter = imageAssetFilter
 ): Promise<AssetConfiguration[]> {
 	const relativeFilePaths: string[] = readdirRecursive(path.join(baseDir, dir)).filter(filter);
-	return relativeFilePaths.map<AssetConfiguration>(relativeFilePath => {
+	return relativeFilePaths.map(relativeFilePath => {
 		const absolutePath = path.join(baseDir, dir, relativeFilePath);
 		const size = getImageSize(absolutePath);
 		if (!size) {
@@ -113,9 +113,9 @@ export async function scanImageAssets(
 			path: makeUnixPath(path.join(dir, relativeFilePath)),
 			width: size.width,
 			height: size.height
-		};
+		} as AssetConfiguration;
 	})
-		.filter(asset => asset != null);
+		.filter((asset): asset is NonNullable<typeof asset> => asset != null);
 }
 
 export async function scanVectorImageAssets(
@@ -125,7 +125,7 @@ export async function scanVectorImageAssets(
 	filter: AssetFilter = vectorImageAssetFilter
 ): Promise<AssetConfiguration[]> {
 	const relativeFilePaths: string[] = readdirRecursive(path.join(baseDir, dir)).filter(filter);
-	return relativeFilePaths.map<AssetConfiguration>(relativeFilePath => {
+	return relativeFilePaths.map(relativeFilePath => {
 		const absolutePath = path.join(baseDir, dir, relativeFilePath);
 		const size = getImageSize(absolutePath);
 		if (!size) {
@@ -140,9 +140,9 @@ export async function scanVectorImageAssets(
 			path: makeUnixPath(path.join(dir, relativeFilePath)),
 			width: size.width,
 			height: size.height
-		};
+		} as AssetConfiguration;
 	})
-		.filter(asset => asset != null);
+		.filter((asset): asset is NonNullable<typeof asset> => asset != null);
 }
 
 export async function scanAudioAssets(
@@ -161,11 +161,13 @@ export async function scanAudioAssets(
 		const basename = path.basename(absolutePath, ext);
 		const nonExtRelativeFilePath = path.join(dir, path.dirname(relativeFilePath), basename);
 		const duration = await getAudioDuration(absolutePath, logger);
+		if (duration == null)
+			console.warn(`Failed to get duration of ${relativeFilePath}`);
 		const unixPath = makeUnixPath(nonExtRelativeFilePath);
 		durationInfos.push({
 			basename,
 			ext: ext,
-			duration: Math.ceil(duration * 1000),
+			duration: duration != null ? Math.ceil(duration * 1000) : undefined,
 			path: unixPath
 		});
 		if (!extMap[unixPath]) extMap[unixPath] = new Set<string>();
@@ -178,7 +180,7 @@ export async function scanAudioAssets(
 		// (別のファイルがまぎれているかもしれない) お節介なので数値に深い意味はない。
 		if (!durationRevMap.hasOwnProperty(nonExtFilePath)) continue;
 		const keys = durationRevMap[nonExtFilePath];
-		const durations = keys.map(k => durationInfos[Number(k)].duration);
+		const durations = keys.map(k => durationInfos[Number(k)].duration).filter((v): v is number => v != null);
 		const durationDiff = Math.max(...durations) - Math.min(...durations);
 		if (500 < durationDiff) {
 			logger?.warn(`Detected different durations between files prefixed with ${nonExtFilePath}.`);
@@ -187,7 +189,7 @@ export async function scanAudioAssets(
 
 	const durationMap: AudioDurationInfoMap = {};
 	for (const durationInfo of durationInfos) {
-		if (durationInfo.ext === ".ogg" || !durationMap[durationInfo.basename]) {
+		if ((durationInfo.ext === ".ogg" && durationInfo.duration != null) || !durationMap[durationInfo.basename]) {
 			durationMap[durationInfo.path] = durationInfo;
 		}
 	}
@@ -195,11 +197,12 @@ export async function scanAudioAssets(
 	const audioAssets: AssetConfiguration[] = [];
 	for (const filePath in durationMap) {
 		if (!durationMap.hasOwnProperty(filePath)) continue;
+		const duration = durationMap[filePath].duration;
 		const asset: AudioAssetConfigurationBase = {
 			type: "audio",
 			path: filePath,
 			systemId: "sound",
-			duration: durationMap[filePath].duration
+			duration: duration != null ? duration : null! // 歴史的に duration が必須となっているため duration が取得できない場合は明示的に null! を代入。
 		};
 		if (extMap[filePath].size > 0) asset.hint = { extensions: Array.from(extMap[filePath]) };
 		audioAssets.push(asset);
