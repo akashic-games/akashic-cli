@@ -184,6 +184,20 @@ Windows 環境においては
 [Windows におけるパス変換](https://docs.docker.com/desktop/troubleshoot/topics/#path-conversion-on-windows)
 を参考に適宜コンテンツのパスを変換してください。
 
+Mac の Apple Silicon (M1/M2) 環境において正常にビルドできない場合は Docker のベースイメージのアーキテクチャを `linux/amd64` に指定してください。
+
+```Dockerfile
+FROM --platform=linux/amd64 node:***
+```
+
+また、起動時に `--platform=linux/amd64` をオプションに加えてください。
+
+```sh
+docker run \
+  --platform linux/x86_64 \
+  ...
+```
+
 ## ライセンス
 
 本リポジトリは MIT License の元で公開されています。
