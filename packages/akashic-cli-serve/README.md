@@ -179,9 +179,9 @@ docker run \
 ```
 
 Windows 環境においては
-[バインドマウントの利用](https://matsuand.github.io/docs.docker.jp.onthefly/storage/bind-mounts/#start-a-container-with-a-bind-mount)
+[バインドマウントの利用](https://docs.docker.com/storage/bind-mounts/#start-a-container-with-a-bind-mount)
 および
-[Windows におけるパス変換](https://matsuand.github.io/docs.docker.jp.onthefly/desktop/windows/troubleshoot/#path-conversion-on-windows)
+[Windows におけるパス変換](https://docs.docker.com/desktop/troubleshoot/topics/#path-conversion-on-windows)
 を参考に適宜コンテンツのパスを変換してください。
 
 ## ライセンス
