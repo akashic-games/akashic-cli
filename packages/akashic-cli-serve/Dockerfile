@@ -12,6 +12,7 @@ COPY www/ ./www/
 COPY build/ ./build/
 COPY src/ ./src/
 
+# lerna 環境だと各リポジトリ内の package-lock.json が不整合を起こすため npm ci は使えない
 RUN npm install
 
 COPY . .
