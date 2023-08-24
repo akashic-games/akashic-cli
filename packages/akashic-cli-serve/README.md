@@ -133,12 +133,18 @@ npm run copy:agv
 
 ## Docker での起動
 
-以下コマンドで Docker コンテナを起動できます。
+以下コマンドで Docker イメージを作成します。
+
+```sh
+docker build -t akashic-cli-serve .
+```
+
+その後 Docker コンテナを起動してください。
 
 ```sh
 docker run \
   -p 3300:3300 \
-  --name serve \
+  --name akashic-cli-serve \
   --rm \
   -it \
   --mount type=bind,src=/path/to/game,dst=/game,readonly akashic-cli-serve
@@ -152,10 +158,10 @@ docker run \
 ```sh
 docker run \
   -p 3300:3300 \
-  --name serve \
+  --name akashic-cli-serve \
   --rm \
   -it \
-  --mount type=bind,src=$(pwd),dst=/game,readonly akashic-cli-serve 
+  --mount type=bind,src=$(pwd),dst=/game,readonly akashic-cli-serve
 ```
 
 任意のオプション引数を `akashic-cli-serve` へ与える場合、`akashic-cli-serve` に対してコンテンツのパスを引数として明示的に指定してください。
