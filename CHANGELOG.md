@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.16.41 (2023-08-24)
+
+#### Other Change
+* `akashic-cli-scan`
+  * [#1262](https://github.com/akashic-games/akashic-cli/pull/1262) enable strict in akashic-cli-scan ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 2.16.40 (2023-08-23)
 
 #### Update Dependencies
