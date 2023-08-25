@@ -131,6 +131,73 @@ npm run storybook
 npm run copy:agv
 ```
 
+## Docker での起動
+
+以下コマンドで Docker イメージを作成します。
+
+```sh
+docker build -t akashic-cli-serve .
+```
+
+その後 Docker コンテナを起動してください。
+
+```sh
+docker run \
+  -p 3300:3300 \
+  --name akashic-cli-serve \
+  --rm \
+  -it \
+  --mount type=bind,src=/path/to/game,dst=/game,readonly akashic-cli-serve
+```
+
+`--mount` の `src` にコンテンツの絶対パス (`game.json` が存在するディレクトリ) を指定してください。
+`akashic-cli-serve` への引数を省略すると、 Docker コンテナ内部の `/game` をデフォルトのコンテンツのパスとして実行します。
+
+カレントディレクトリに `game.json` が存在する場合、Linux では以下のように実行できます。
+
+```sh
+docker run \
+  -p 3300:3300 \
+  --name akashic-cli-serve \
+  --rm \
+  -it \
+  --mount type=bind,src=$(pwd),dst=/game,readonly akashic-cli-serve
+```
+
+任意のオプション引数を `akashic-cli-serve` へ与える場合、`akashic-cli-serve` に対してコンテンツのパスを引数として明示的に指定してください。
+以下は `akashic-cli-serve` へ `--verbose` オプションを与えて実行する例です。
+Docker コンテナ内の `/game` をコンテンツのパスとして末尾で指定している点に注意してください。
+
+```sh
+docker run \
+  -p 3300:3300 \
+  --name serve \
+  --rm \
+  -it \
+  --mount type=bind,src=/path/to/game,dst=/game,readonly akashic-cli-serve \
+  --verbose /game
+```
+
+Windows 環境においては
+[バインドマウントの利用](https://docs.docker.com/storage/bind-mounts/#start-a-container-with-a-bind-mount)
+および
+[Windows におけるパス変換](https://docs.docker.com/desktop/troubleshoot/topics/#path-conversion-on-windows)
+を参考に適宜コンテンツのパスを変換してください。
+
+Mac の Apple Silicon (M1/M2) 環境において正常にビルドできない場合は Docker のベースイメージのアーキテクチャを `linux/amd64` に指定してください。
+
+```Dockerfile
+FROM --platform=linux/amd64 node:***
+```
+
+また、起動時に `--platform=linux/amd64` をオプションに加えてください。
+
+```sh
+docker run \
+  --platform linux/x86_64 \
+  ...
+```
+
 ## ライセンス
 
 本リポジトリは MIT License の元で公開されています。
