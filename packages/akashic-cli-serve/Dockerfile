@@ -1,4 +1,4 @@
-FROM node:18.17-slim as build
+FROM node:20.5-slim as build
 
 WORKDIR /app
 
@@ -18,7 +18,7 @@ RUN npm install
 COPY . .
 RUN npm prune --omit=dev
 
-FROM node:18.17-slim
+FROM node:20.5-slim
 
 ENV TZ Asia/Tokyo
 ENV LANG ja_JP.UTF-8
