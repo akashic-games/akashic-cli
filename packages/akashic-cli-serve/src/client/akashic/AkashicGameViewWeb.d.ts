@@ -74,6 +74,10 @@ declare module ae {
 		transform(mat: number[]): void;
 		fillRect(x: number, y: number, width: number, height: number, cssColor: string): void;
 	}
+
+	interface WeakRefKVSLike<T extends object> {
+		get(key: string | number): T | undefined; 
+	}
 }
 
 declare module agv {
@@ -173,9 +177,9 @@ declare module agv {
 		external: GameExternalPluginsLike;
 
 		// to dump
-		db: { [id: number]: ae.ELike };
+		db: ae.WeakRefKVSLike<ae.ELike>;
 		renderers: ae.RendererLike[];
-		_localDb: { [id: number]: ae.ELike };
+		_localDb: ae.WeakRefKVSLike<ae.ELike>;
 		focusingCamera?: ae.CameraLike;
 		vars: any;
 		_modified?: boolean; // AEv3 でのみ存在
