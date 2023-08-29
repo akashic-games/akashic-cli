@@ -82,7 +82,7 @@ export class ServeGameContent {
 			const eid = self._highlightedEntityId;
 			if (eid == null)
 				return ret;
-			const e = (eid >= 0) ? game.db.get(eid) : game._localDb.get(eid);
+			const e = (eid >= 0) ? (game.db.get?.(eid) ?? game.db[eid]) : (game._localDb.get?.(eid) ?? game._localDb[eid]);
 			if (!e)
 				return ret;
 			const renderer = game.renderers[0];  // TODO 0番だけで描画するのは暫定。現実的には0しかない。
@@ -159,7 +159,7 @@ export class ServeGameContent {
 	}
 
 	getRawEntity(eid: number): any {
-		return (eid >= 0) ? this._game.db.get(eid) : this._game._localDb.get(eid);
+		return (eid >= 0) ? (this._game.db.get?.(eid) ?? this._game.db[eid]) : (this._game._localDb.get?.(eid) ?? this._game._localDb[eid]);
 	}
 
 	changeHighlightedEntity(eid: number | null): void {
