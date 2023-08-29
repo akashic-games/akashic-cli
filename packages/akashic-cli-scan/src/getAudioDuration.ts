@@ -5,12 +5,13 @@ import * as aacDuration from "aac-duration";
 import * as musicMetaData from "music-metadata";
 import { mp4Inspector } from "thumbcoil";
 
-export async function getAudioDuration(filepath: string, logger?: Logger): Promise<number> {
+export async function getAudioDuration(filepath: string, logger?: Logger): Promise<number | undefined> {
 	const ext = path.extname(filepath);
 	if (ext === ".aac") {
 		return aacDuration(filepath);
 	} else if (ext === ".ogg") {
 		const metaData = await musicMetaData.parseFile(filepath, {duration: true});
+		// TODO: duration が取得できなかった場合のフォールバック対応。現状、`writeJSON()` に渡すオブジェクトの duration 値は NaN となり、game.json 書き込み時に null となる。
 		return metaData.format.duration;
 	} else if (ext === ".mp4" || ext === ".m4a") {
 		if (ext === ".mp4")

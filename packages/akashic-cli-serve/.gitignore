@@ -6,3 +6,4 @@ www/internal
 lib
 config/
 www/public/external/engineFilesV*
+*.tar

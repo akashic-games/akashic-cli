@@ -6,7 +6,9 @@
     "module": "commonjs",
     "outDir": "./lib",
     "declaration": true,
-    "types" : ["image-size", "jest", "mock-fs", "node"]
+    "types" : ["image-size", "jest", "mock-fs", "node"],
+    "useUnknownInCatchVariables": false,
+    "strict": true
   },
   "files": [
     "./node_modules/typescript/lib/lib.es6.d.ts",

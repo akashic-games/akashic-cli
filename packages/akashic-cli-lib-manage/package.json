@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-lib-manage",
-  "version": "1.8.18",
+  "version": "1.8.19",
   "description": "npm command wrapper module for Akashic games",
   "scripts": {
     "prepublish": "npm run clean && npm run build",
@@ -27,7 +27,7 @@
   ],
   "devDependencies": {
     "@akashic/eslint-config": "1.1.1",
-    "@akashic/game-configuration": "2.0.0",
+    "@akashic/game-configuration": "2.0.1",
     "@types/commander": "2.12.2",
     "@types/form-data": "2.2.1",
     "@types/fs-extra": "9.0.13",
@@ -45,7 +45,7 @@
     "typescript": "4.8.3"
   },
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.14.16",
+    "@akashic/akashic-cli-commons": "0.14.17",
     "commander": "8.3.0",
     "minipass": "3.3.5",
     "tar": "6.1.11"

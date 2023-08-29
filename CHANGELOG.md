@@ -1,5 +1,54 @@
 # CHANGELOG
 
+## 2.16.41 (2023-08-24)
+
+#### Other Change
+* `akashic-cli-scan`
+  * [#1262](https://github.com/akashic-games/akashic-cli/pull/1262) enable strict in akashic-cli-scan ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+## 2.16.40 (2023-08-23)
+
+#### Update Dependencies
+* `akashic-cli-scan`, `akashic-cli-serve`
+  * [#1263](https://github.com/akashic-games/akashic-cli/pull/1263) fix(deps): update dependency @akashic/headless-driver to v2.9.2 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- kamakiri_ys ([@kamakiri01](https://github.com/kamakiri01))
+
+## 2.16.39 (2023-08-02)
+
+#### Other Change
+* `akashic-cli-extra`, `akashic-cli-lib-manage`
+  * [#1261](https://github.com/akashic-games/akashic-cli/pull/1261) Support editorconfig for install and modify ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-lib-manage`, `akashic-cli-scan`, `akashic-cli-serve`
+  * [#1260](https://github.com/akashic-games/akashic-cli/pull/1260) chore(deps): update dependency @akashic/game-configuration to v2.0.1 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+## 2.16.38 (2023-07-28)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#1259](https://github.com/akashic-games/akashic-cli/pull/1259) Support shouMenu of sandbox.config.js in serve ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+## 2.16.37 (2023-07-27)
+
+#### Other Change
+* `akashic-cli-export`
+  * [#1257](https://github.com/akashic-games/akashic-cli/pull/1257) Add game.json validation for export-zip nicolive option ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 2.16.36 (2023-07-18)
 
 #### Bug Fix

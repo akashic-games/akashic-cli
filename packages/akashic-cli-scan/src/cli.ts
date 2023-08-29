@@ -27,11 +27,11 @@ commander
 		"--include-ext-to-asset-id",
 		"Include file extensions to the Asset IDs (if specify `--use-path-asset-id` option, default value is true, otherwise false)"
 	)
-	.option("--image-asset-dir <dir>", "specify ImageAsset directory", commanderArgsCoordinator)
-	.option("--audio-asset-dir <dir>", "specify AudioAsset directory", commanderArgsCoordinator)
-	.option("--script-asset-dir <dir>", "specify ScriptAsset directory", commanderArgsCoordinator)
-	.option("--text-asset-dir <dir>", "specify TextAsset directory", commanderArgsCoordinator)
-	.option("--text-asset-extension <extension>", "specify TextAsset extension", commanderArgsCoordinator)
+	.option("--image-asset-dir <dir...>", "specify ImageAsset directory")
+	.option("--audio-asset-dir <dir...>", "specify AudioAsset directory")
+	.option("--script-asset-dir <dir...>", "specify ScriptAsset directory")
+	.option("--text-asset-dir <dir...>", "specify TextAsset directory")
+	.option("--text-asset-extension <extension...>", "specify TextAsset extension")
 	.action((target: AssetTargetType, opts: CliConfigScanAsset = {}) => {
 		CliConfigurationFile.read(path.join(opts.cwd ?? process.cwd(), "akashic.config.js"), (error, configuration) => {
 			if (error) {
@@ -109,9 +109,4 @@ export function run(argv: string[]): void {
 	if (argv.length < 3 || !argv[2].match(/^(asset|globalScripts)$/)) {
 		commander.help();
 	}
-}
-
-function commanderArgsCoordinator<T>(val: T, ret: T[] = []): T[] {
-	ret.push(val);
-	return ret;
 }
