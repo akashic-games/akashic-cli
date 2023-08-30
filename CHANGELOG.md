@@ -1,5 +1,27 @@
 # CHANGELOG
 
+## 2.16.42 (2023-08-30)
+
+#### Bug Fix
+* `akashic-cli-serve`
+  * [#1270](https://github.com/akashic-games/akashic-cli/pull/1270) Fix consolelog dump for serve ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Other Change
+* `akashic-cli-serve`
+  * [#1265](https://github.com/akashic-games/akashic-cli/pull/1265) feat(serve): add Dockerfile ([@yu-ogi](https://github.com/yu-ogi))
+* Other
+  * [#1266](https://github.com/akashic-games/akashic-cli/pull/1266) chore(serve): add build test for Dockerfile ([@yu-ogi](https://github.com/yu-ogi))
+
+#### Update Dependencies
+* Other
+  * [#1267](https://github.com/akashic-games/akashic-cli/pull/1267) chore(deps): update docker/setup-buildx-action action to v2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-serve`
+  * [#1268](https://github.com/akashic-games/akashic-cli/pull/1268) chore(deps): update node.js to v20 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- [@yu-ogi](https://github.com/yu-ogi)
+
 ## 2.16.41 (2023-08-24)
 
 #### Other Change
