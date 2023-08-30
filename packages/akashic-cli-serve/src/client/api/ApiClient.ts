@@ -18,7 +18,7 @@ import type {
 import type { ContentLocatorData } from "../../common/types/ContentLocatorData";
 import type { PlayAudioState } from "../../common/types/PlayAudioState";
 import type { Player } from "../../common/types/Player";
-import type { TelemetryRandomMessage } from "../../common/types/TelemetryRandom";
+import type { TelemetryMessage } from "../../common/types/TelemetryMessage";
 import * as ApiRequest from "./ApiRequest";
 
 export class ApiClient {
@@ -70,8 +70,8 @@ export class ApiClient {
 		return ApiRequest.patch<void>(`${this._baseUrl}/api/plays/${playId}/audio`, { audioState });
 	}
 
-	async sendTelemetryRandom(playId: string, msg: TelemetryRandomMessage): Promise<void> {
-		return ApiRequest.patch<void>(`${this._baseUrl}/api/plays/${playId}/random`, msg);
+	async sendTelemetry(playId: string, playerId: string, msg: TelemetryMessage): Promise<void> {
+		return ApiRequest.post<void>(`${this._baseUrl}/api/plays/${playId}/telemetry`, { ...msg, playerId });
 	}
 
 	async createPlayToken(

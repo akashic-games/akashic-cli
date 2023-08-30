@@ -5,7 +5,8 @@ export const enum TelemeretryRandomAction {
 	Get = 2,
 }
 
-export interface TelemetryRandomMessage {
+export interface TelemetryMessage {
 	age: number;
 	actions: TelemeretryRandomAction[] | null;
+	idx: number;
 }

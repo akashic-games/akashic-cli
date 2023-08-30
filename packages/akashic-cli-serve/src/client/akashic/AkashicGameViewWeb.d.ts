@@ -180,6 +180,7 @@ declare module agv {
 
 		// to dump
 		db: { [id: number]: ae.ELike };
+		_idx: number;
 		renderers: ae.RendererLike[];
 		_localDb: { [id: number]: ae.ELike };
 		focusingCamera?: ae.CameraLike;

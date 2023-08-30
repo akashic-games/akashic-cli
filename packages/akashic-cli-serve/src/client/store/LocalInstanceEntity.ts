@@ -5,7 +5,7 @@ import { action, observable, computed } from "mobx";
 import { TimeKeeper } from "../../common/TimeKeeper";
 import type { PlayAudioStateSummary } from "../../common/types/PlayAudioState";
 import type { Player } from "../../common/types/Player";
-import type { TelemetryRandomMessage } from "../../common/types/TelemetryRandom";
+import type { TelemetryMessage } from "../../common/types/TelemetryMessage";
 import type { GameViewManager } from "../akashic/GameViewManager";
 import type { RuntimeWarning } from "../akashic/RuntimeWarning";
 import type { ServeGameContent } from "../akashic/ServeGameContent";
@@ -46,10 +46,15 @@ export interface LocalInstanceEntityParameterObject {
 	useNonDebuggableScript?: boolean;
 }
 
+export interface LocalInstanceTelemetryMessage {
+	playerId: string;
+	message: TelemetryMessage;
+}
+
 export class LocalInstanceEntity implements GameInstanceEntity {
 	onStop: Trigger<LocalInstanceEntity>;
 	onWarn: Trigger<RuntimeWarning>;
-	onTelemetryRandom: Trigger<TelemetryRandomMessage>;
+	onTelemetry: Trigger<LocalInstanceTelemetryMessage>;
 
 	@observable player: Player;
 	@observable executionMode: ExecutionMode;
@@ -70,7 +75,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 	constructor(params: LocalInstanceEntityParameterObject) {
 		this.onStop = new Trigger();
 		this.onWarn = new Trigger();
-		this.onTelemetryRandom = new Trigger();
+		this.onTelemetry = new Trigger();
 		this.player = params.player;
 		this.executionMode = params.executionMode;
 		this.targetTime = 0; // 値は _timeKeeper を元に更新される
@@ -112,7 +117,7 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 			useNonDebuggableScript: params.useNonDebuggableScript
 		});
 		this._serveGameContent.onReset.add(this._handleReset, this);
-		this._serveGameContent.onTelemetryRandom.add(this.onTelemetryRandom.fire, this.onTelemetryRandom);
+		this._serveGameContent.onTelemetry.add(this._handleTelemetry, this);
 		this._initializationWaiter = this._initialize();
 	}
 
@@ -268,5 +273,9 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 		const startedAt = this.play.amflow.getStartedAt();
 		if (startedAt != null)
 			this.resetTime = sp.timestamp - startedAt;
+	}
+	
+	private _handleTelemetry(message: TelemetryMessage): void {
+		this.onTelemetry.fire({ playerId: this.player.id, message })
 	}
 }

@@ -1,12 +1,14 @@
-import * as path from "path";
 import type { AMFlowClient, RunnerManager, RunnerV1, RunnerV2, RunnerV3 } from "@akashic/headless-driver";
 import { Trigger } from "@akashic/trigger";
+import * as path from "path";
+import { setupTelemetryHandler } from "../../common/setupTelemetryHandler";
+import { TelemetryMessage } from "../../common/types/TelemetryMessage";
 import type {
 	RunnerCreateTestbedEvent,
-	RunnerRemoveTestbedEvent,
 	RunnerPauseTestbedEvent,
-	RunnerResumeTestbedEvent,
-	RunnerPutStartPointTestbedEvent
+	RunnerPutStartPointTestbedEvent,
+	RunnerRemoveTestbedEvent,
+	RunnerResumeTestbedEvent
 } from "../../common/types/TestbedEvent";
 import { serverGlobalConfig } from "../common/ServerGlobalConfig";
 import * as sandboxConfigs from "./SandboxConfigs";
@@ -25,22 +27,29 @@ export interface CreateAndStartRunnerParameterObject {
 	isPaused: boolean;
 }
 
+export interface RunnerTelemetryMessage {
+	playId: string;
+	message: TelemetryMessage;
+}
+
 export class RunnerStore {
 	onRunnerCreate: Trigger<RunnerCreateTestbedEvent>;
 	onRunnerRemove: Trigger<RunnerRemoveTestbedEvent>;
 	onRunnerPause: Trigger<RunnerPauseTestbedEvent>;
 	onRunnerResume: Trigger<RunnerResumeTestbedEvent>;
 	onRunnerPutStartPoint: Trigger<RunnerPutStartPointTestbedEvent>;
+	onRunnerTelemetry: Trigger<RunnerTelemetryMessage>;
 	private runnerManager: RunnerManager;
 	private gameExternalFactory: () => any;
 	private playIdTable: { [runnerId: string]: string };
 
 	constructor(params: RunnerStoreParameterObject) {
-		this.onRunnerCreate = new Trigger<RunnerCreateTestbedEvent>();
-		this.onRunnerRemove = new Trigger<RunnerRemoveTestbedEvent>();
-		this.onRunnerPause = new Trigger<RunnerPauseTestbedEvent>();
-		this.onRunnerResume = new Trigger<RunnerResumeTestbedEvent>();
-		this.onRunnerPutStartPoint = new Trigger<RunnerPutStartPointTestbedEvent>();
+		this.onRunnerCreate = new Trigger();
+		this.onRunnerRemove = new Trigger();
+		this.onRunnerPause = new Trigger();
+		this.onRunnerResume = new Trigger();
+		this.onRunnerPutStartPoint = new Trigger();
+		this.onRunnerTelemetry = new Trigger();
 		this.runnerManager = params.runnerManager;
 		this.gameExternalFactory = params.gameExternalFactory;
 		this.playIdTable = {};
@@ -77,7 +86,14 @@ export class RunnerStore {
 		}
 
 		const runner = this.runnerManager.getRunner(runnerId)!;
-		await this.runnerManager.startRunner(runner.runnerId, { paused: params.isPaused });
+
+		const game = await this.runnerManager.startRunner(runner.runnerId, { paused: params.isPaused });
+		if(!game)
+			throw new Error("failed to startRunner()");
+		setupTelemetryHandler(game, message => {
+			this.onRunnerTelemetry.fire({ playId: params.playId, message });
+		});
+
 		this.playIdTable[runnerId] = params.playId;
 		this.onRunnerCreate.fire({ playId: params.playId, runnerId, isActive: params.isActive });
 		if (params.isPaused)

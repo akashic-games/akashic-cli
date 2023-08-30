@@ -3,13 +3,13 @@ import { calculateFinishedTime } from "@akashic/amflow-util/lib/calculateFinishe
 import type { AMFlowClient, Play, PlayManager } from "@akashic/headless-driver";
 import * as pl from "@akashic/playlog";
 import { Trigger } from "@akashic/trigger";
-import * as chalk from "chalk";
 import { TimeKeeper } from "../../common/TimeKeeper";
 import type { PlayAudioState } from "../../common/types/PlayAudioState";
 import type { PlayInfo } from "../../common/types/PlayInfo";
 import type { PlayStatus } from "../../common/types/PlayStatus";
 import type { Player } from "../../common/types/Player";
-import type { TelemeretryRandomAction } from "../../common/types/TelemetryRandom";
+import { TelemetryConflict } from "../../common/types/TelemetryConflict";
+import type { TelemetryMessage } from "../../common/types/TelemetryMessage";
 import type {
 	ClientInstanceAppearTestbedEvent,
 	ClientInstanceDescription,
@@ -79,9 +79,9 @@ export interface PlayEntity {
 	joinedPlayers: Player[];
 	audioState: PlayAudioState;
 	debugAMFlow: AMFlowClient | null;
-	telemetryRandom: (TelemeretryRandomAction[] | null)[];
+	telemetries: TelemetryMessage[];
+	uncheckedTelemetries: { playerId: string, message: TelemetryMessage }[]
 }
-
 
 export class PlayStore {
 	onPlayCreate: Trigger<PlayCreateTestbedEvent>;
@@ -92,6 +92,7 @@ export class PlayStore {
 	onPlayerLeave: Trigger<PlayerLeaveTestbedEvent>;
 	onClientInstanceAppear: Trigger<ClientInstanceAppearTestbedEvent>;
 	onClientInstanceDisappear: Trigger<ClientInstanceDisappearTestbedEvent>;
+	onConflictTelemetry: Trigger<TelemetryConflict>;
 
 	private playManager: PlayManager;
 
@@ -99,14 +100,15 @@ export class PlayStore {
 	private playEntities: { [playId: string]: PlayEntity };
 
 	constructor(params: PlayStoreParameterObject) {
-		this.onPlayCreate = new Trigger<PlayCreateTestbedEvent>();
-		this.onPlayStatusChange = new Trigger<PlayStatusChangedTestbedEvent>();
-		this.onPlayDurationStateChange = new Trigger<PlayDurationStateChangeTestbedEvent>();
-		this.onPlayAudioStateChange = new Trigger<PlayAudioStateChangeTestbedEvent>();
-		this.onPlayerJoin = new Trigger<PlayerJoinTestbedEvent>();
-		this.onPlayerLeave = new Trigger<PlayerLeaveTestbedEvent>();
-		this.onClientInstanceAppear = new Trigger<ClientInstanceAppearTestbedEvent>();
-		this.onClientInstanceDisappear = new Trigger<ClientInstanceDisappearTestbedEvent>();
+		this.onPlayCreate = new Trigger();
+		this.onPlayStatusChange = new Trigger();
+		this.onPlayDurationStateChange = new Trigger();
+		this.onPlayAudioStateChange = new Trigger();
+		this.onPlayerJoin = new Trigger();
+		this.onPlayerLeave = new Trigger();
+		this.onClientInstanceAppear = new Trigger();
+		this.onClientInstanceDisappear = new Trigger();
+		this.onConflictTelemetry = new Trigger();
 		this.playManager = params.playManager;
 		this.playEntities = {};
 	}
@@ -133,7 +135,8 @@ export class PlayStore {
 			joinedPlayers,
 			audioState,
 			debugAMFlow: null,
-			telemetryRandom: []
+			telemetries: [],
+			uncheckedTelemetries: []
 		};
 
 		if (playlog) {
@@ -298,28 +301,55 @@ export class PlayStore {
 		this.onPlayAudioStateChange.fire({playId, audioState});
 	}
 
-	recordTelemetryRandom(playId: string, age: number, actions: TelemeretryRandomAction[] | null): void {
-		const { telemetryRandom } = this.playEntities[playId];
+	recordTelemetry(playId: string, msg: TelemetryMessage): void {
+		const playEntity = this.playEntities[playId];
+		const { telemetries, uncheckedTelemetries } = this.playEntities[playId];
+		telemetries[msg.age] = msg;
 
-		// 初出の場合: 記録するだけ
-		if (!(age in telemetryRandom)) {
-			telemetryRandom[age] = actions;
+		if (uncheckedTelemetries.length > 0) {
+			playEntity.uncheckedTelemetries = uncheckedTelemetries.filter(unchecked => {
+				if (unchecked.message.age !== msg.age) return true; // age が違うので無視して残す
+				const diff = compareTelemetry(unchecked.message, msg);
+				if (diff !== "none") {
+					console.log("CONFLICT TELEMETRY", unchecked.message, msg);
+					this.onConflictTelemetry.fire({ playerId: unchecked.playerId, age: msg.age, reason: diff });
+				}
+				return false;
+			});
+		}
+	}
+
+	checkTelemetry(playId: string, playerId: string, msg: TelemetryMessage): void {
+		const { telemetries, uncheckedTelemetries } = this.playEntities[playId];
+
+		// 正解より先に受信してしまった場合
+		if (!(msg.age in telemetries)) {
+			uncheckedTelemetries.push({ playerId, message: msg });
 			return;
 		}
 
 		// 記録が既にある場合: 一致することを検証
-		const recorded = telemetryRandom[age];
-		if (recorded === null && actions === null) return;
-		if (
-			(recorded === null || actions === null) ||
-			(recorded.length !== actions.length) ||
-			(actions.some((action, i) => action !== recorded[i]))
-		) {
-			console.error("==================");
-			console.error("");
-			console.error(chalk.red("Broken Multiplay: INCONSISTENT RANDOM USAGE DETECTED at age:" + age));
-			console.error("");
-			console.error("==================");
+		const recorded = telemetries[msg.age];
+		const diff = compareTelemetry(msg, recorded);
+		if (diff !== "none") {
+			console.log("CONFLICT TELEMETRY", msg, recorded);
+			this.onConflictTelemetry.fire({ playerId, age: msg.age, reason: diff });
 		}
 	}
+}
+
+type TelemetryDifference = "none" | "idx" | "random";
+
+function compareTelemetry(a: TelemetryMessage, b: TelemetryMessage): TelemetryDifference {
+	if (a.age !== b.age) throw new Error("Logic Error: telemetry age mismatch");
+	if (a.idx !== b.idx) return "idx";
+
+	if (
+		a.actions?.length !== b.actions?.length ||
+		(a.actions && a.actions.some((action, i) => action !== b.actions![i]))
+	) {
+		return "random";
+	}
+
+	return "none";
 }

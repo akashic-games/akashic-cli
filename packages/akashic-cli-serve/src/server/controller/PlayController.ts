@@ -206,21 +206,27 @@ export const createHandlerToPatchAudioState = (playStore: PlayStore): express.Re
 	};
 };
 
-export const createHandlerToPatchRandomState = (playStore: PlayStore): express.RequestHandler => {
+export const createHandlerToPostTelemetry = (playStore: PlayStore): express.RequestHandler => {
 	return async (req, res, next) => {
 		try {
 			const playId = req.params.playId;
 			if (!playId) {
 				throw new BadRequestError({ errorMessage: "PlayId is not given" });
 			}
-			const { age, actions } = req.body;
+			const { playerId, age, actions, idx } = req.body;
+			if (typeof playerId !== "string") {
+				throw new BadRequestError({ errorMessage: "playerId is not a string" });
+			}
 			if (typeof age !== "number") {
 				throw new BadRequestError({ errorMessage: "age is not a number" });
 			}
 			if (actions !== null && !Array.isArray(actions)) {
 				throw new BadRequestError({ errorMessage: "actions is not given" });
 			}
-			playStore.recordTelemetryRandom(playId, age, actions);
+			if (typeof idx !== "number") {
+				throw new BadRequestError({ errorMessage: "idx is not a number" });
+			}
+			playStore.checkTelemetry(playId, playerId, { age, actions, idx });
 			responseSuccess<void>(res, 200, null);
 		} catch (e) {
 			next(e);

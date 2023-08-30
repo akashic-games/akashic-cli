@@ -170,6 +170,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 	// TODO ここでRunner情報を外部からPlayStoreにねじ込むのではなく、PlayEntity や PlayEntity#createRunner() を作って管理する方が自然
 	runnerStore.onRunnerCreate.add(arg => playStore.registerRunner(arg));
 	runnerStore.onRunnerRemove.add(arg => playStore.unregisterRunner(arg));
+	runnerStore.onRunnerTelemetry.add(arg => playStore.recordTelemetry(arg.playId, arg.message));
 
 	const app = express();
 	let httpServer;
@@ -344,6 +345,9 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 	playStore.onClientInstanceDisappear.add(arg => {
 		io.emit("clientInstanceDisappear", arg);
 	});
+	playStore.onConflictTelemetry.add(arg => {
+		io.emit("telemetryConflict", arg);
+	});
 	runnerStore.onRunnerCreate.add(arg => {
 		io.emit("runnerCreate", arg);
 	});
@@ -376,6 +380,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 			const playlog = require(absolutePath) as DumpedPlaylog;
 			loadedPlaylogPlayId = await playStore.createPlay({ contentLocator, playlog });
 		} catch (e) {
+	console.log("LISTEN"); //xnv
 			getSystemLogger().error(e.message);
 			process.exit(1);
 		}
