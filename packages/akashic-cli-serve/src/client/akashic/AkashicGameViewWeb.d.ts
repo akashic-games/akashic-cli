@@ -21,6 +21,12 @@ declare module ae {
 		getMatrix(): MatrixLike;
 	}
 
+	// g.game.random の型。v1 では定義が違う (配列だった) ため、全メソッドがオプショナルである点に注意。
+	interface RandomGeneratorLike {
+		get?(min: number, max: number): number;
+		generate?(): number;
+	}
+
 	interface ELike {
 		id: number;
 		children?: ELike[];
@@ -174,11 +180,16 @@ declare module agv {
 
 		// to dump
 		db: { [id: number]: ae.ELike };
+		_idx: number;
 		renderers: ae.RendererLike[];
 		_localDb: { [id: number]: ae.ELike };
 		focusingCamera?: ae.CameraLike;
 		vars: any;
 		_modified?: boolean; // AEv3 でのみ存在
+
+		age: number;
+		random: ae.RandomGeneratorLike;
+
 		scene(): ae.SceneLike;
 		render(camera?: ae.CameraLike): void;
 		tick(advanceAge: boolean, omittedTickCount?: number, events?: playlog.EventLike[]): boolean;

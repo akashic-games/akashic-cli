@@ -1,5 +1,6 @@
 import { Trigger } from "@akashic/trigger";
 import type Emitter from "component-emitter";
+import type { TelemetryConflict } from "../../common/types/TelemetryConflict";
 import type {
 	PlayCreateTestbedEvent,
 	PlayStatusChangedTestbedEvent,
@@ -15,7 +16,8 @@ import type {
 	ClientInstanceDisappearTestbedEvent,
 	PlayBroadcastTestbedEvent,
 	PutStartPointEvent,
-	MessageEncodeTestbedEvent
+	MessageEncodeTestbedEvent,
+	TelemetryConflictTestbedEvent
 } from "../../common/types/TestbedEvent";
 import { socketInstance } from "./socketInstance";
 
@@ -31,6 +33,7 @@ export const onRunnerPause = new Trigger<RunnerPauseTestbedEvent>();
 export const onRunnerResume = new Trigger<RunnerResumeTestbedEvent>();
 export const onClientInstanceAppear = new Trigger<ClientInstanceAppearTestbedEvent>();
 export const onClientInstanceDisappear = new Trigger<ClientInstanceDisappearTestbedEvent>();
+export const onTelemetryConflict = new Trigger<TelemetryConflictTestbedEvent>();
 export const onBroadcast = new Trigger<any>();
 export const onDisconnect = new Trigger<void>();
 export const onPutStartPoint = new Trigger<PutStartPointEvent>();
@@ -48,6 +51,7 @@ socket.on("runnerPause", (arg: RunnerPauseTestbedEvent) => onRunnerPause.fire(ar
 socket.on("runnerResume", (arg: RunnerResumeTestbedEvent) => onRunnerResume.fire(arg));
 socket.on("clientInstanceAppear", (arg: ClientInstanceAppearTestbedEvent) => onClientInstanceAppear.fire(arg));
 socket.on("clientInstanceDisappear", (arg: ClientInstanceDisappearTestbedEvent) => onClientInstanceDisappear.fire(arg));
+socket.on("telemetryConflict", (arg: TelemetryConflict) => onTelemetryConflict.fire(arg));
 socket.on("playBroadcast", (arg: PlayBroadcastTestbedEvent) => onBroadcast.fire(arg));
 socket.on("disconnect", () => onDisconnect.fire());
 socket.on("putStartPoint", (arg: PutStartPointEvent) => onPutStartPoint.fire(arg));

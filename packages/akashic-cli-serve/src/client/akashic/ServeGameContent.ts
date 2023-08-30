@@ -1,5 +1,7 @@
 import type * as amf from "@akashic/amflow";
 import { Trigger } from "@akashic/trigger";
+import { setupTelemetryHandler } from "../../common/setupTelemetryHandler";
+import type { TelemetryMessage } from "../../common/types/TelemetryMessage";
 import type { EDumpItem } from "../common/types/EDumpItem";
 import type { ProfilerValue } from "../common/types/Profiler";
 import type { RuntimeWarning } from "./RuntimeWarning";
@@ -47,6 +49,7 @@ export class ServeGameContent {
 	onTick: Trigger<agv.GameLike>;
 	onReset: Trigger<amf.StartPoint>;
 	onWarn: Trigger<RuntimeWarning>;
+	onTelemetry: Trigger<TelemetryMessage>;
 	private _game: agv.GameLike;
 	private _gameDriver: agv.GameDriverLike;
 	private _highlightedEntityId: number | null;
@@ -56,9 +59,10 @@ export class ServeGameContent {
 		this._game = null!;
 		this._gameDriver = null!;
 		this._highlightedEntityId = null;
-		this.onTick = new Trigger<agv.GameLike>();
-		this.onReset = new Trigger<amf.StartPoint>();
-		this.onWarn = new Trigger<RuntimeWarning>();
+		this.onTick = new Trigger();
+		this.onReset = new Trigger();
+		this.onWarn = new Trigger();
+		this.onTelemetry = new Trigger();
 	}
 
 	get id(): number {
@@ -105,10 +109,11 @@ export class ServeGameContent {
 		};
 
 		const tickOriginal = game.tick;
-		game.tick = function (_advanceAge: boolean, _omittedTickCount?: number, _events?: playlog.EventLike[]) {
+		game.tick = function () {
 			self.onTick.fire(game);
-			return tickOriginal.apply(this, [_advanceAge, _omittedTickCount, _events]);
+			return tickOriginal.apply(this, arguments as any)
 		};
+		setupTelemetryHandler(game, this._flushTelemetry);
 
 		const gameDriver = this._gameDriver;
 		const resetOriginal = gameDriver._gameLoop?.reset;
@@ -204,5 +209,9 @@ export class ServeGameContent {
 
 	sendEvents(events: playlog.EventLike[]): void {
 		this.agvGameContent.sendEvents(events);
+	}
+
+	private _flushTelemetry = (msg: TelemetryMessage): void => {
+		this.onTelemetry.fire(msg);
 	}
 }

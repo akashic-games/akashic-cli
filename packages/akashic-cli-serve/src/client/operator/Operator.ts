@@ -1,6 +1,6 @@
 import { isServiceTypeNicoliveLike } from "../../common/targetServiceUtil";
 import type { Player } from "../../common/types/Player";
-import type { PlayBroadcastTestbedEvent } from "../../common/types/TestbedEvent";
+import type { PlayBroadcastTestbedEvent, TelemetryConflictTestbedEvent } from "../../common/types/TestbedEvent";
 import type { GameViewManager } from "../akashic/GameViewManager";
 import type { PlayerInfoResolverResultMessage } from "../akashic/plugin/CoeLimitedPlugin";
 import { CoeLimitedPlugin } from "../akashic/plugin/CoeLimitedPlugin";
@@ -52,6 +52,7 @@ export class Operator {
 		this.gameViewManager = param.gameViewManager;
 
 		Subscriber.onBroadcast.add(this._handleBroadcast);
+		Subscriber.onTelemetryConflict.add(this._handleTelemetryConflict);
 	}
 
 	assertInitialized(): Promise<unknown> {
@@ -140,9 +141,10 @@ export class Operator {
 	startContent = async (params?: StartContentParameterObject): Promise<void> => {
 		const store = this.store;
 		const play = store.currentPlay;
-		const tokenResult = await apiClient.createPlayToken(play!.playId, store.player!.id, false, store.player!.name);
+		const playId = play!.playId;
+		const tokenResult = await apiClient.createPlayToken(playId, store.player!.id, false, store.player!.name);
 		const instance = await play!.createLocalInstance({
-			playId: play!.playId,
+			playId,
 			playToken: tokenResult.data.playToken,
 			playlogServerUrl: "dummy-playlog-server-url",
 			executionMode: params != null && params.isReplay ? "replay" : "passive",
@@ -153,6 +155,7 @@ export class Operator {
 			resizeGameView: true
 		});
 		instance.onStop.addOnce(this._endPlayerInfoResolver);
+		instance.onTelemetry.add(({ playerId, message }) => apiClient.sendTelemetry(playId, playerId, message));
 		store.setCurrentLocalInstance(instance);
 		await instance.start();
 		instance.setProfilerValueTrigger((value: ProfilerValue) => {
@@ -242,6 +245,19 @@ export class Operator {
 		} catch (e) {
 			console.error("_handleBroadcast()", e);
 		}
+	};
+	
+	private _handleTelemetryConflict = (arg: TelemetryConflictTestbedEvent): void => {
+		const li = this.store.currentPlay?.localInstances.find(li => li.player.id === arg.playerId);
+		if (!li) return;
+
+		let message: string;
+		if (arg.reason === "idx") {
+			message = "アクティブインスタンスとエンティティの生成数が異なっています。マルチプレイの状態が一致しません。";
+		} else {
+			message = "アクティブインスタンスと乱数の生成回数が異なっています。マルチプレイの状態が一致しません。"
+		}
+		this.ui.showNotification("error", "状態ずれ警告", "", message)
 	};
 
 	private _createInstanceArgumentForNicolive(isBroadcaster: boolean): any {
