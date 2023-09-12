@@ -24,7 +24,7 @@ jobs:
       - name: Install
         run: npm ci
       - name: Build and export to Docker
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v5
         with:
           context: ${{ env.WORKING_DIR }}
           load: true
