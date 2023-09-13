@@ -1,5 +1,5 @@
 import * as fs from "fs";
-import { extname } from "path";
+import { basename, extname } from "path";
 import { imageSize } from "image-size";
 import { parseSync } from "svgson";
 
@@ -36,5 +36,16 @@ export function getImageSize(path: string): ISize | null {
 		};
 	}
 
-	return imageSize(path);
+	let size: ISize | null = null;
+	try {
+		size = imageSize(path);
+	} catch (e) {
+		// CMYK ベースのカラープロファイル画像の場合、image-size でエラーとなる。エラーメッセージがわかりにくいためメッセージを差し替え。
+		if (e.message === "Corrupt JPG, exceeded buffer limits") {
+			const message = `Failed to get image size of ${basename(path)}. The image may not be in sRGB format.`;
+			throw new Error(message);
+		}
+		throw e;
+	}
+	return size;
 }
