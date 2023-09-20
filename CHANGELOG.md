@@ -1,5 +1,23 @@
 # CHANGELOG
 
+## 2.16.43 (2023-09-20)
+
+#### Other Change
+* `akashic-cli-scan`
+  * [#1275](https://github.com/akashic-games/akashic-cli/pull/1275) Fix errorMessage when getImageSize() in akashi-cli-scan ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Update Dependencies
+* Other
+  * [#1274](https://github.com/akashic-games/akashic-cli/pull/1274) chore(deps): update docker/setup-qemu-action action to v3 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#1272](https://github.com/akashic-games/akashic-cli/pull/1272) chore(deps): update docker/build-push-action action to v5 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#1273](https://github.com/akashic-games/akashic-cli/pull/1273) chore(deps): update docker/setup-buildx-action action to v3 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#1271](https://github.com/akashic-games/akashic-cli/pull/1271) chore(deps): update actions/checkout action to v4 ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-serve`
+  * [#1269](https://github.com/akashic-games/akashic-cli/pull/1269) fix(deps): update dependency @akashic/trigger to v2.0.1 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 2.16.42 (2023-08-30)
 
 #### Bug Fix
