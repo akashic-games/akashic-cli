@@ -3,7 +3,13 @@ import { EOL } from "os";
 import * as path from "path";
 import * as fsx from "fs-extra";
 import * as mockfs from "mock-fs";
-import { bundleScripts, convertGame, ConvertGameParameterObject, validateGameJsonForNicolive } from "../../../lib/zip/convert";
+import {
+	bundleScripts,
+	convertGame,
+	ConvertGameParameterObject,
+	checkAudioAssetExtensions,
+	validateGameJsonForNicolive
+} from "../../../lib/zip/convert";
 
 describe("convert", () => {
 
@@ -39,8 +45,13 @@ describe("convert", () => {
 
 	describe("convertGame", () => {
 		const destDir = path.resolve(__dirname, "..", "..", "fixtures", "output");
+		const consoleSpy = jest.spyOn(global.console, "warn");
 		afterEach(() => {
 			fsx.removeSync(destDir);
+			consoleSpy.mockClear();
+		});
+		afterAll(() => {
+			consoleSpy.mockRestore();
 		});
 
 		it("can not convert game if script that is not written with ES5 syntax", (done) => {
@@ -409,7 +420,7 @@ describe("convert", () => {
 					expect(gameJson.assets.aez_bundle_main.type).toBe("script");
 					expect(gameJson.assets.test.path).toBe("text/test.json");
 					expect(gameJson.assets.test.type).toBe("text");
-					// バンドルされていない不要なファイルはgamejsonから取り除かれる
+					// バンドルされた、もしくは利用されていない不要なファイルはgamejsonから取り除かれる
 					expect(gameJson.assets.main).toBeUndefined();
 					expect(gameJson.assets.foo).toBeUndefined();
 					expect(gameJson.assets.bar).toBeUndefined();
@@ -418,6 +429,11 @@ describe("convert", () => {
 					expect(gameJson.globalScripts.includes("node_modules/@hoge/testmodule/lib/ModuleB.js")).toBeFalsy();
 					expect(gameJson.globalScripts.includes("node_modules/@hoge/testmodule/lib/ModuleC.js")).toBeFalsy();
 					expect(gameJson.globalScripts.includes("node_modules/@hoge/testmodule/lib/index.js")).toBeFalsy();
+					// バンドルに含まれず削除された利用されていない不要なファイルをログ出力
+					expect(consoleSpy).toHaveBeenCalledWith("node_modules/@hoge/testmodule/lib/ModuleB.js was not included in the bundle.");
+					expect(consoleSpy).toHaveBeenCalledWith("node_modules/@hoge/testmodule/lib/ModuleC.js was not included in the bundle.");
+					expect(consoleSpy).toHaveBeenCalledWith("node_modules/@hoge/testmodule/lib/index.js was not included in the bundle.");
+					expect(consoleSpy).toHaveBeenCalledWith("script/bar.js was not included in the bundle.");
 					done();
 				}, done.fail);
 		});
@@ -447,6 +463,8 @@ describe("convert", () => {
 					expect(gameJson.globalScripts.includes("node_modules/@hoge/testmodule/lib/ModuleB.js")).toBeTruthy();
 					expect(gameJson.globalScripts.includes("node_modules/@hoge/testmodule/lib/ModuleC.js")).toBeTruthy();
 					expect(gameJson.globalScripts.includes("node_modules/@hoge/testmodule/lib/index.js")).toBeTruthy();
+					// バンドルされていないファイルのログは出力されない
+					expect(consoleSpy).toHaveBeenCalledTimes(0);
 
 					// バンドルされたファイルは取り除かれる。
 					expect(gameJson.assets.main).toBeUndefined();
@@ -616,5 +634,58 @@ describe("game.json validation with nicolive option", () => {
 	it("nicolive property does not exist", () => {
 		delete gamejson.environment.nicolive;
 		expect(() => validateGameJsonForNicolive(gamejson)).toThrow();
+	});
+});
+
+describe("checkAudioAssetExtensions", () => {
+	const gamejson: any = {
+		assets: {
+			audio1: {
+				type: "audio",
+				duration: 456,
+				systemId: "sound",
+				global: true,
+				hint: {
+				  extensions: [".ogg", ".m4a"]
+				}
+			},
+			audio2: {
+				type: "audio",
+				duration: 456,
+				systemId: "sound",
+				global: true,
+				hint: {
+				  extensions: [".m4a"]
+				}
+			},
+			audio3: {
+				type: "audio",
+				duration: 456,
+				systemId: "sound",
+				global: true,
+				hint: {
+				  extensions: [".ogg"]
+				}
+			},
+			audio4: {
+				type: "audio",
+				duration: 456,
+				systemId: "sound",
+				global: true,
+				hint: {
+				  extensions: [".ogg", ".aac"]
+				}
+			}
+
+		}
+	};
+
+	it("Log output when checkAudioAssetExtensions", () => {
+		const spy = jest.spyOn(global.console, "warn");
+		checkAudioAssetExtensions(gamejson);
+
+		expect(spy).toHaveBeenCalledWith(".ogg is missing from audio2.hint.extensions in game.json");
+		expect(spy).toHaveBeenCalledWith(".m4a or .aac is missing from audio3.hint.extensions in game.json");
+		spy.mockRestore();
 	});
 });
