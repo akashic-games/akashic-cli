@@ -201,12 +201,11 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			gcu.removeGlobalScripts(gamejson, (filePath: string) => preservingFilePathSet.has(filePath));
 
 			if (param.bundle) {
-				const noBundledJs: string[] = files.filter(f => f.endsWith(".js")).filter(p => {
-					if (!bundledFilePaths.includes(p)) return p;
-				});
-				noBundledJs.forEach(f => {
-					if (!preservingFilePathSet.has(f)) {
-						console.warn(`${f} was not included in the bundle.`);
+				 // omitUnbundledJs が真の場合 preservingFilePathSet からjsが全て削除されているのでバンドルに含まれないファイルを取得
+				const noBundledJs: string[] = files.filter(p => p.endsWith(".js") && !bundledFilePaths.includes(p));
+				noBundledJs.forEach(p => {
+					if (!preservingFilePathSet.has(p)) {
+						console.warn(`${p} was not included in the bundle.`);
 					}
 				});
 			}
