@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as cmn from "@akashic/akashic-cli-commons";
-import { ImageAssetConfigurationBase, NicoliveSupportedModes } from "@akashic/game-configuration";
+import { AudioAssetConfigurationBase, ImageAssetConfigurationBase, NicoliveSupportedModes } from "@akashic/game-configuration";
 import * as babel from "@babel/core";
 import * as presetEnv from "@babel/preset-env";
 import * as browserify from "browserify";
@@ -87,6 +87,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 		.then(() => cmn.ConfigurationFile.read(path.join(param.source, "game.json"), param.logger))
 		.then(async (result: cmn.GameConfiguration) => {
 			gamejson = result;
+			checkAudioAssetExtensions(gamejson);
 			if (param.nicolive) {
 				validateGameJsonForNicolive(gamejson);
 			}
@@ -198,6 +199,17 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			// コピーしなかったアセットやファイルをgame.jsonから削除する
 			gcu.removeScriptAssets(gamejson, (filePath: string) => preservingFilePathSet.has(filePath));
 			gcu.removeGlobalScripts(gamejson, (filePath: string) => preservingFilePathSet.has(filePath));
+
+			if (param.bundle) {
+				const noBundledJs: string[] = files.filter(f => f.endsWith(".js")).filter(p => {
+					if (!bundledFilePaths.includes(p)) return p;
+				});
+				noBundledJs.forEach(f => {
+					if (!preservingFilePathSet.has(f)) {
+						console.warn(`${f} was not included in the bundle.`);
+					}
+				});
+			}
 
 			if (param.targetService === "nicolive") {
 				addUntaintedToImageAssets(gamejson);
@@ -373,6 +385,31 @@ export function validateGameJsonForNicolive(gamejson: cmn.GameConfiguration): vo
 		}
 		if (preferredSessionParameters.totalTimeLimit < 20 || preferredSessionParameters.totalTimeLimit > 200) {
 			throw new Error("Invalid Value: Specify a value between 20 and 200 for nicolive.preferredSessionParameters.totalTimeLimit.");
+		}
+	}
+}
+
+/**
+ * game.json audio アセットの拡張子チェック
+ */
+export function checkAudioAssetExtensions(gamejson: cmn.GameConfiguration): void {
+	for (const key in gamejson.assets) {
+		if (gamejson.assets[key].type === "audio") {
+			const asset = gamejson.assets[key] as AudioAssetConfigurationBase;
+			if (asset.hint && asset.hint.extensions) {
+				let isOggExist = false;
+				let isM4aOrAacExist = false;
+				asset.hint.extensions.forEach(v => {
+					if (v === ".ogg") isOggExist = true;
+					if (v === ".m4a" || v === ".aac") isM4aOrAacExist = true;
+				});
+
+				if (!isOggExist)
+					console.warn(`.ogg is missing from ${key}.hint.extensions in game.json`);
+
+				if (!isM4aOrAacExist)
+					console.warn(`.m4a or .aac is missing from ${key}.hint.extensions in game.json`);
+			}
 		}
 	}
 }
