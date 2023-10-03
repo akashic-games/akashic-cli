@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as cmn from "@akashic/akashic-cli-commons";
-import { AudioAssetConfigurationBase, ImageAssetConfigurationBase, NicoliveSupportedModes } from "@akashic/game-configuration";
+import { ImageAssetConfigurationBase, NicoliveSupportedModes } from "@akashic/game-configuration";
 import * as babel from "@babel/core";
 import * as presetEnv from "@babel/preset-env";
 import * as browserify from "browserify";
@@ -9,6 +9,7 @@ import { convert, detect } from "encoding-japanese";
 import * as fsx from "fs-extra";
 import readdir = require("fs-readdir-recursive");
 import * as UglifyJS from "uglify-js";
+import * as utils from "../utils";
 import { getFromHttps } from "./apiUtil";
 import { NICOLIVE_SIZE_LIMIT_GAME_JSON, NICOLIVE_SIZE_LIMIT_TOTAL_FILE } from "./constants";
 import * as gcu from "./GameConfigurationUtil";
@@ -87,7 +88,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 		.then(() => cmn.ConfigurationFile.read(path.join(param.source, "game.json"), param.logger))
 		.then(async (result: cmn.GameConfiguration) => {
 			gamejson = result;
-			checkAudioAssetExtensions(gamejson);
+			utils.checkAudioAssetExtensions(Object.values(gamejson.assets));
 			if (param.nicolive) {
 				validateGameJsonForNicolive(gamejson);
 			}
@@ -384,31 +385,6 @@ export function validateGameJsonForNicolive(gamejson: cmn.GameConfiguration): vo
 		}
 		if (preferredSessionParameters.totalTimeLimit < 20 || preferredSessionParameters.totalTimeLimit > 200) {
 			throw new Error("Invalid Value: Specify a value between 20 and 200 for nicolive.preferredSessionParameters.totalTimeLimit.");
-		}
-	}
-}
-
-/**
- * game.json audio アセットの拡張子チェック
- */
-export function checkAudioAssetExtensions(gamejson: cmn.GameConfiguration): void {
-	for (const key in gamejson.assets) {
-		if (gamejson.assets[key].type === "audio") {
-			const asset = gamejson.assets[key] as AudioAssetConfigurationBase;
-			if (asset.hint && asset.hint.extensions) {
-				let isOggExist = false;
-				let isM4aOrAacExist = false;
-				asset.hint.extensions.forEach(v => {
-					if (v === ".ogg") isOggExist = true;
-					if (v === ".m4a" || v === ".aac") isM4aOrAacExist = true;
-				});
-
-				if (!isOggExist)
-					console.warn(`may be no sound depending on the environment because no .ogg file in ${asset.path}.`);
-
-				if (!isM4aOrAacExist)
-					console.warn(`may be no sound depending on the environment because no .m4a or .aac file in ${asset.path}.`);
-			}
 		}
 	}
 }
