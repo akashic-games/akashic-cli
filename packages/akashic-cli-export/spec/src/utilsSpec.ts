@@ -53,7 +53,7 @@ describe("checkAudioAssetExtensions", () => {
 		}
 	};
 
-	it("Log output when checkAudioAssetExtensions", () => {
+	it("output warning logs", () => {
 		const spy = jest.spyOn(global.console, "warn");
 		utils.checkAudioAssetExtensions(Object.values(gamejson.assets));
 
