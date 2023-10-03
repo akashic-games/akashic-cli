@@ -88,7 +88,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 		.then(() => cmn.ConfigurationFile.read(path.join(param.source, "game.json"), param.logger))
 		.then(async (result: cmn.GameConfiguration) => {
 			gamejson = result;
-			utils.checkAudioAssetExtensions(Object.values(gamejson.assets));
+			Object.values(gamejson.assets).forEach(asset => utils.warnLackOfAudioFile(asset));
 			if (param.nicolive) {
 				validateGameJsonForNicolive(gamejson);
 			}
@@ -201,8 +201,8 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			gcu.removeScriptAssets(gamejson, (filePath: string) => preservingFilePathSet.has(filePath));
 			gcu.removeGlobalScripts(gamejson, (filePath: string) => preservingFilePathSet.has(filePath));
 
-			if (param.bundle) {
-				 // omitUnbundledJs が真の場合 preservingFilePathSet からjsが全て削除されているのでバンドルに含まれないファイルを取得
+			if (param.bundle && param.omitUnbundledJs) {
+				 // omitUnbundledJs によって js ファイルが全て省かれる場合は警告する
 				const noBundledJs: string[] = files.filter(p => p.endsWith(".js") && !bundledFilePaths.includes(p));
 				noBundledJs.forEach(p => {
 					if (!preservingFilePathSet.has(p)) {

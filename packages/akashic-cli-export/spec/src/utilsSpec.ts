@@ -1,6 +1,6 @@
 import * as utils from "../../lib/utils";
 
-describe("checkAudioAssetExtensions", () => {
+describe("warnLackOfAudioFile", () => {
 	const gamejson: any = {
 		assets: {
 			audio1: {
@@ -55,11 +55,11 @@ describe("checkAudioAssetExtensions", () => {
 
 	it("output warning logs", () => {
 		const spy = jest.spyOn(global.console, "warn");
-		utils.checkAudioAssetExtensions(Object.values(gamejson.assets));
+		Object.values(gamejson.assets).forEach((asset: any) => utils.warnLackOfAudioFile(asset));
 
 		/* eslint-disable max-len */
-		expect(spy).toHaveBeenCalledWith("may be no sound depending on the environment because no .ogg file in assets/audio/se/audio2.");
-		expect(spy).toHaveBeenCalledWith("may be no sound depending on the environment because no .m4a or .aac file in assets/audio/se/audio3.");
+		expect(spy).toHaveBeenCalledWith("No .ogg file found for assets/audio/se/audio2. This asset may not be played on some environments (e.g. Android)");
+		expect(spy).toHaveBeenCalledWith("Neither .m4a nor .aac file found for assets/audio/se/audio3. This asset may not be played on some environments (e.g. iOS)");
 		/* eslint-enable max-len */
 		spy.mockRestore();
 	});
