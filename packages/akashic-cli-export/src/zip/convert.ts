@@ -205,7 +205,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 				const noBundledJs: string[] = files.filter(p => p.endsWith(".js") && !bundledFilePaths.includes(p));
 				noBundledJs.forEach(p => {
 					if (!preservingFilePathSet.has(p)) {
-						console.warn(`${p} was not included in the bundle.`);
+						console.warn(`excluded ${p} due to unreachable/unhandled.`);
 					}
 				});
 			}
@@ -404,10 +404,10 @@ export function checkAudioAssetExtensions(gamejson: cmn.GameConfiguration): void
 				});
 
 				if (!isOggExist)
-					console.warn(`.ogg is missing from ${key}.hint.extensions in game.json`);
+					console.warn(`may be no sound depending on the environment because no .ogg file in ${asset.path}.`);
 
 				if (!isM4aOrAacExist)
-					console.warn(`.m4a or .aac is missing from ${key}.hint.extensions in game.json`);
+					console.warn(`may be no sound depending on the environment because no .m4a or .aac file in ${asset.path}.`);
 			}
 		}
 	}

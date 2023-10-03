@@ -430,10 +430,10 @@ describe("convert", () => {
 					expect(gameJson.globalScripts.includes("node_modules/@hoge/testmodule/lib/ModuleC.js")).toBeFalsy();
 					expect(gameJson.globalScripts.includes("node_modules/@hoge/testmodule/lib/index.js")).toBeFalsy();
 					// バンドルに含まれず削除された利用されていない不要なファイルをログ出力
-					expect(consoleSpy).toHaveBeenCalledWith("node_modules/@hoge/testmodule/lib/ModuleB.js was not included in the bundle.");
-					expect(consoleSpy).toHaveBeenCalledWith("node_modules/@hoge/testmodule/lib/ModuleC.js was not included in the bundle.");
-					expect(consoleSpy).toHaveBeenCalledWith("node_modules/@hoge/testmodule/lib/index.js was not included in the bundle.");
-					expect(consoleSpy).toHaveBeenCalledWith("script/bar.js was not included in the bundle.");
+					expect(consoleSpy).toHaveBeenCalledWith("excluded node_modules/@hoge/testmodule/lib/ModuleB.js due to unreachable/unhandled.");
+					expect(consoleSpy).toHaveBeenCalledWith("excluded node_modules/@hoge/testmodule/lib/ModuleC.js due to unreachable/unhandled.");
+					expect(consoleSpy).toHaveBeenCalledWith("excluded node_modules/@hoge/testmodule/lib/index.js due to unreachable/unhandled.");
+					expect(consoleSpy).toHaveBeenCalledWith("excluded script/bar.js due to unreachable/unhandled.");
 					done();
 				}, done.fail);
 		});
@@ -645,6 +645,7 @@ describe("checkAudioAssetExtensions", () => {
 				duration: 456,
 				systemId: "sound",
 				global: true,
+				path: "assets/audio/se/audio1",
 				hint: {
 				  extensions: [".ogg", ".m4a"]
 				}
@@ -654,6 +655,7 @@ describe("checkAudioAssetExtensions", () => {
 				duration: 456,
 				systemId: "sound",
 				global: true,
+				path: "assets/audio/se/audio2",
 				hint: {
 				  extensions: [".m4a"]
 				}
@@ -663,6 +665,7 @@ describe("checkAudioAssetExtensions", () => {
 				duration: 456,
 				systemId: "sound",
 				global: true,
+				path: "assets/audio/se/audio3",
 				hint: {
 				  extensions: [".ogg"]
 				}
@@ -672,11 +675,18 @@ describe("checkAudioAssetExtensions", () => {
 				duration: 456,
 				systemId: "sound",
 				global: true,
+				path: "assets/audio/se/audio4",
 				hint: {
 				  extensions: [".ogg", ".aac"]
 				}
+			},
+			nohint: {
+				type: "audio",
+				duration: 456,
+				systemId: "sound",
+				path: "assets/audio/se/nohint",
+				global: true
 			}
-
 		}
 	};
 
@@ -684,8 +694,8 @@ describe("checkAudioAssetExtensions", () => {
 		const spy = jest.spyOn(global.console, "warn");
 		checkAudioAssetExtensions(gamejson);
 
-		expect(spy).toHaveBeenCalledWith(".ogg is missing from audio2.hint.extensions in game.json");
-		expect(spy).toHaveBeenCalledWith(".m4a or .aac is missing from audio3.hint.extensions in game.json");
+		expect(spy).toHaveBeenCalledWith("may be no sound depending on the environment because no .ogg file in assets/audio/se/audio2.");
+		expect(spy).toHaveBeenCalledWith("may be no sound depending on the environment because no .m4a or .aac file in assets/audio/se/audio3.");
 		spy.mockRestore();
 	});
 });
