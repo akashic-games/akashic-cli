@@ -1,7 +1,7 @@
 import { AssetConfiguration } from "@akashic/game-configuration";
 
 /**
- * audio アセットの拡張子チェック
+ * audio アセットの拡張子をチェックし .ogg, .m4a/.aac が存在しない場合にログ出力する
  */
 export function checkAudioAssetExtensions(assets: AssetConfiguration[]): void {
 	assets.forEach(asset => {
