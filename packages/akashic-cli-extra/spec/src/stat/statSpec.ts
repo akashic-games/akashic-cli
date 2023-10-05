@@ -122,8 +122,8 @@ describe("format stat result", () => {
 		"other: 367B (4%)\n" +
 		"  game.json: 367B\n" +
 		"[*] TOTAL SIZE (using ogg): 8.43KB (8632B)\n" +
-		"[ ] TOTAL SIZE (using m4a): 5.73KB (5872B)\n" +
 		"[ ] TOTAL SIZE (using aac): 5.14KB (5267B)\n" +
+		"[ ] TOTAL SIZE (using m4a): 5.73KB (5872B)\n" +
 		"[ ] TOTAL SIZE (using mp4): 6.29KB (6443B)\n" +
 		"WARN: MP4 (.mp4) is deprecated. Use AAC(.aac) instead.\n";
 
@@ -220,7 +220,7 @@ describe("format stat result - drop m4a and aac", () => {
 		"other: 367B (4%)\n" +
 		"  game.json: 367B\n" +
 		"[*] TOTAL SIZE (using ogg): 8.43KB (8632B)\n" +
-		"[ ] TOTAL SIZE (using m4a): 1005B (1005B)\n" +
+		"[ ] TOTAL SIZE (using aac): 1005B (1005B)\n" +
 		"[ ] TOTAL SIZE (using mp4): 6.29KB (6443B)\n" +
 		"WARN: MP4 (.mp4) is deprecated. Use AAC(.aac) instead.\n";
 

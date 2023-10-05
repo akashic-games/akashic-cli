@@ -147,19 +147,18 @@ function showSize(param: StatSizeParameterObject, sizeResult: SizeResult): void 
 			sizeToString(sizeResult.totalSizeOgg()) +
 			` (${sizeResult.totalSizeOgg()}B)`
 		);
-
-		if (sizeResult.m4aAudioSize > 0 || sizeResult.aacAudioSize === 0) {
-			param.logger.print(
-				`${mark(largestFileType === FileType.M4a)} TOTAL SIZE (using m4a): ` +
-				sizeToString(sizeResult.totalSizeM4a()) +
-				` (${sizeResult.totalSizeM4a()}B)`
-			);
-		}
-		if (sizeResult.aacAudioSize > 0) {
+		if (sizeResult.aacAudioSize > 0 || sizeResult.m4aAudioSize === 0) {
 			param.logger.print(
 				`${mark(largestFileType === FileType.Aac)} TOTAL SIZE (using aac): ` +
 				sizeToString(sizeResult.totalSizeAac()) +
 				` (${sizeResult.totalSizeAac()}B)`
+			);
+		}
+		if (sizeResult.m4aAudioSize > 0) {
+			param.logger.print(
+				`${mark(largestFileType === FileType.M4a)} TOTAL SIZE (using m4a): ` +
+				sizeToString(sizeResult.totalSizeM4a()) +
+				` (${sizeResult.totalSizeM4a()}B)`
 			);
 		}
 		if (sizeResult.mp4AudioSize > 0) {
