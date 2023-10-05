@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.16.45 (2023-10-05)
+
+#### Other Change
+* `akashic-cli-export`
+  * [#1278](https://github.com/akashic-games/akashic-cli/pull/1278) Add warning output to exportzip ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 2.16.44 (2023-09-28)
 
 #### Enhancement
