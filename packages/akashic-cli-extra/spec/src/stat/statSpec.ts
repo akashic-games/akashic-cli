@@ -125,7 +125,7 @@ describe("format stat result", () => {
 		"[ ] TOTAL SIZE (using aac): 5.14KB (5267B)\n" +
 		"[ ] TOTAL SIZE (using m4a): 5.73KB (5872B)\n" +
 		"[ ] TOTAL SIZE (using mp4): 6.29KB (6443B)\n" +
-		"WARN: MP4 (.mp4) is deprecated. Use AAC(.aac) instead.\n";
+		"WARN: MP4 (.mp4) is deprecated. Use AAC(.aac) or M4A(.m4a) instead.\n";
 
 	it("will output following text", done => {
 		let buffer = "";
@@ -150,7 +150,6 @@ describe("format stat result - drop aac", () => {
 		"image: 0B (0%)\n" +
 		"text: 0B (0%)\n" +
 		"ogg audio: 7.45KB (98%)\n" +
-		"mp4 audio: 0B\n" +
 		"m4a audio: 4.75KB\n" +
 		"script: 0B (0%)\n" +
 		"other: 169B (2%)\n" +
@@ -189,7 +188,7 @@ describe("format stat result - maximum mp4, drop m4a", () => {
 		"[ ] TOTAL SIZE (using ogg): 7.61KB (7795B)\n" +
 		"[ ] TOTAL SIZE (using aac): 4.33KB (4430B)\n" +
 		"[*] TOTAL SIZE (using mp4): 9.48KB (9704B)\n" +
-		"WARN: MP4 (.mp4) is deprecated. Use AAC(.aac) instead.\n";
+		"WARN: MP4 (.mp4) is deprecated. Use AAC(.aac) or M4A(.m4a) instead.\n";
 
 	it("will output following text", done => {
 		let buffer = "";
@@ -222,7 +221,7 @@ describe("format stat result - drop m4a and aac", () => {
 		"[*] TOTAL SIZE (using ogg): 8.43KB (8632B)\n" +
 		"[ ] TOTAL SIZE (using aac): 1005B (1005B)\n" +
 		"[ ] TOTAL SIZE (using mp4): 6.29KB (6443B)\n" +
-		"WARN: MP4 (.mp4) is deprecated. Use AAC(.aac) instead.\n";
+		"WARN: MP4 (.mp4) is deprecated. Use AAC(.aac) or M4A(.m4a) instead.\n";
 
 	it("will output following text", done => {
 		let buffer = "";

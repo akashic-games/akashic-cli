@@ -109,7 +109,7 @@ function showSize(param: StatSizeParameterObject, sizeResult: SizeResult): void 
 		switch (largestFileType) {
 			case FileType.Ogg:
 				param.logger.print(formatSize("ogg audio", sizeResult.oggAudioSize));
-				param.logger.print(`mp4 audio: ${sizeToString(sizeResult.mp4AudioSize)}`);
+				if (sizeResult.mp4AudioSize > 0) param.logger.print(`mp4 audio: ${sizeToString(sizeResult.mp4AudioSize)}`);
 				if (sizeResult.aacAudioSize > 0) param.logger.print(`aac audio: ${sizeToString(sizeResult.aacAudioSize)}`);
 				if (sizeResult.m4aAudioSize > 0) param.logger.print(`m4a audio: ${sizeToString(sizeResult.m4aAudioSize)}`);
 				break;
@@ -121,13 +121,13 @@ function showSize(param: StatSizeParameterObject, sizeResult: SizeResult): void 
 				break;
 			case FileType.Aac:
 				param.logger.print(`ogg audio: ${sizeToString(sizeResult.oggAudioSize)}`);
-				param.logger.print(`mp4 audio: ${sizeToString(sizeResult.mp4AudioSize)}`);
+				if (sizeResult.mp4AudioSize > 0) param.logger.print(`mp4 audio: ${sizeToString(sizeResult.mp4AudioSize)}`);
 				if (sizeResult.aacAudioSize > 0) param.logger.print(formatSize("aac audio", sizeResult.aacAudioSize));
 				if (sizeResult.m4aAudioSize > 0) param.logger.print(`m4a audio: ${sizeToString(sizeResult.m4aAudioSize)}`);
 				break;
 			case FileType.M4a:
 				param.logger.print(`ogg audio: ${sizeToString(sizeResult.oggAudioSize)}`);
-				param.logger.print(`mp4 audio: ${sizeToString(sizeResult.mp4AudioSize)}`);
+				if (sizeResult.mp4AudioSize > 0) param.logger.print(`mp4 audio: ${sizeToString(sizeResult.mp4AudioSize)}`);
 				if (sizeResult.aacAudioSize > 0) param.logger.print(`aac audio: ${sizeToString(sizeResult.aacAudioSize)}`);
 				if (sizeResult.m4aAudioSize > 0) param.logger.print(formatSize("m4a audio", sizeResult.m4aAudioSize));
 				break;
@@ -167,7 +167,7 @@ function showSize(param: StatSizeParameterObject, sizeResult: SizeResult): void 
 				sizeToString(sizeResult.totalSizeMp4()) +
 				` (${sizeResult.totalSizeMp4()}B)`
 			);
-			param.logger.warn("MP4 (.mp4) is deprecated. Use AAC(.aac) instead.");
+			param.logger.warn("MP4 (.mp4) is deprecated. Use AAC(.aac) or M4A(.m4a) instead.");
 		}
 	} else {
 		param.logger.print(totalSize.toString());
@@ -258,7 +258,7 @@ function sizeOfAssets(param: StatSizeParameterObject, sizeResult: SizeResult): P
 					.then(
 						size => {
 							sizeResult.m4aAudioSize += size;
-							m4aExist= true;
+							m4aExist = true;
 						},
 						() => { /* .m4a, .aac はどちらか存在すればいいので、aac の処理でどちらも存在しない場合のみ警告を表示する */})
 					.then(() => fileSize(path.join(param.basepath, asset.path + ".aac")))
