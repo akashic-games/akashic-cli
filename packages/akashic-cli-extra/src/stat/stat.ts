@@ -128,8 +128,8 @@ function showSize(param: StatSizeParameterObject, sizeResult: SizeResult): void 
 			case FileType.M4a:
 				param.logger.print(`ogg audio: ${sizeToString(sizeResult.oggAudioSize)}`);
 				param.logger.print(`mp4 audio: ${sizeToString(sizeResult.mp4AudioSize)}`);
-				if (sizeResult.aacAudioSize > 0) param.logger.print(formatSize("aac audio", sizeResult.aacAudioSize));
-				if (sizeResult.m4aAudioSize > 0) param.logger.print(`m4a audio: ${sizeToString(sizeResult.m4aAudioSize)}`);
+				if (sizeResult.aacAudioSize > 0) param.logger.print(`aac audio: ${sizeToString(sizeResult.aacAudioSize)}`);
+				if (sizeResult.m4aAudioSize > 0) param.logger.print(formatSize("m4a audio", sizeResult.m4aAudioSize));
 				break;
 			default:
 				throw new Error("Audio file size retrieve failed.");
