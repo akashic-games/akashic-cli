@@ -117,10 +117,12 @@ describe("format stat result", () => {
 		"ogg audio: 7.45KB (88%)\n" +
 		"mp4 audio: 5.31KB\n" +
 		"aac audio: 4.16KB\n" +
+		"m4a audio: 4.75KB\n" +
 		"script: 494B (6%)\n" +
 		"other: 367B (4%)\n" +
 		"  game.json: 367B\n" +
 		"[*] TOTAL SIZE (using ogg): 8.43KB (8632B)\n" +
+		"[ ] TOTAL SIZE (using m4a): 5.73KB (5872B)\n" +
 		"[ ] TOTAL SIZE (using aac): 5.14KB (5267B)\n" +
 		"[ ] TOTAL SIZE (using mp4): 6.29KB (6443B)\n" +
 		"WARN: MP4 (.mp4) is deprecated. Use AAC(.aac) instead.\n";
@@ -143,7 +145,38 @@ describe("format stat result", () => {
 	});
 });
 
-describe("format stat result - maximum mp4", () => {
+describe("format stat result - drop aac", () => {
+	const expectedText =
+		"image: 0B (0%)\n" +
+		"text: 0B (0%)\n" +
+		"ogg audio: 7.45KB (98%)\n" +
+		"mp4 audio: 0B\n" +
+		"m4a audio: 4.75KB\n" +
+		"script: 0B (0%)\n" +
+		"other: 169B (2%)\n" +
+		"  game.json: 169B\n" +
+		"[*] TOTAL SIZE (using ogg): 7.61KB (7796B)\n" +
+		"[ ] TOTAL SIZE (using m4a): 4.92KB (5036B)\n";
+
+	it("will output following text", done => {
+		let buffer = "";
+		const logger = new commons.ConsoleLogger({ quiet: true, debugLogMethod: msg => {
+			buffer += msg + "\n";
+		} });
+		const basepath = path.join(__dirname, "..", "..", "fixtures", "dummyGame3");
+		return commons.ConfigurationFile.read(
+			path.join(basepath, "game.json"),
+			logger
+		)
+			.then(game => stat.size({ logger, basepath, game, raw: false }))
+			.then(() => {
+				expect(buffer).toBe(expectedText);
+			})
+			.then(done, done.fail);
+	});
+});
+
+describe("format stat result - maximum mp4, drop m4a", () => {
 	const expectedText =
 		"image: 0B (0%)\n" +
 		"text: 0B (0%)\n" +
@@ -176,9 +209,9 @@ describe("format stat result - maximum mp4", () => {
 	});
 });
 
-describe("format stat result - drop AAC", () => {
+describe("format stat result - drop m4a and aac", () => {
 	const expectedText =
-		"WARN: audio/dummy.aac, No such file.\n" +
+		"WARN: audio/dummy.m4a or .aac, No such file.\n" +
 		"image: 144B (2%)\n" +
 		"text: 0B (0%)\n" +
 		"ogg audio: 7.45KB (88%)\n" +
@@ -187,7 +220,7 @@ describe("format stat result - drop AAC", () => {
 		"other: 367B (4%)\n" +
 		"  game.json: 367B\n" +
 		"[*] TOTAL SIZE (using ogg): 8.43KB (8632B)\n" +
-		"[ ] TOTAL SIZE (using aac): 1005B (1005B)\n" +
+		"[ ] TOTAL SIZE (using m4a): 1005B (1005B)\n" +
 		"[ ] TOTAL SIZE (using mp4): 6.29KB (6443B)\n" +
 		"WARN: MP4 (.mp4) is deprecated. Use AAC(.aac) instead.\n";
 
