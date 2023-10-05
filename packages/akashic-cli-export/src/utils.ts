@@ -1,0 +1,24 @@
+import { AssetConfiguration } from "@akashic/game-configuration";
+
+/**
+ * audio アセットの拡張子をチェックし .ogg, .m4a/.aac が存在しない場合にログ出力する
+ */
+export function warnLackOfAudioFile(asset: AssetConfiguration): void {
+	if (asset.type !== "audio") return;
+
+	if (asset.hint && asset.hint.extensions) {
+		let isOggExist = false;
+		let isM4aOrAacExist = false;
+		asset.hint.extensions.forEach(v => {
+			if (v === ".ogg") isOggExist = true;
+			if (v === ".m4a" || v === ".aac") isM4aOrAacExist = true;
+		});
+
+		if (!isOggExist)
+			console.warn(`No .ogg file found for ${asset.path}. This asset may not be played on some environments (e.g. Android)`);
+
+		if (!isM4aOrAacExist)
+			// eslint-disable-next-line max-len
+			console.warn(`Neither .m4a nor .aac file found for ${asset.path}. This asset may not be played on some environments (e.g. iOS)`);
+	}
+}

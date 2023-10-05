@@ -9,6 +9,7 @@ import { convert, detect } from "encoding-japanese";
 import * as fsx from "fs-extra";
 import readdir = require("fs-readdir-recursive");
 import * as UglifyJS from "uglify-js";
+import * as utils from "../utils";
 import { getFromHttps } from "./apiUtil";
 import { NICOLIVE_SIZE_LIMIT_GAME_JSON, NICOLIVE_SIZE_LIMIT_TOTAL_FILE } from "./constants";
 import * as gcu from "./GameConfigurationUtil";
@@ -87,6 +88,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 		.then(() => cmn.ConfigurationFile.read(path.join(param.source, "game.json"), param.logger))
 		.then(async (result: cmn.GameConfiguration) => {
 			gamejson = result;
+			Object.values(gamejson.assets).forEach(asset => utils.warnLackOfAudioFile(asset));
 			if (param.nicolive) {
 				validateGameJsonForNicolive(gamejson);
 			}
@@ -198,6 +200,16 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			// コピーしなかったアセットやファイルをgame.jsonから削除する
 			gcu.removeScriptAssets(gamejson, (filePath: string) => preservingFilePathSet.has(filePath));
 			gcu.removeGlobalScripts(gamejson, (filePath: string) => preservingFilePathSet.has(filePath));
+
+			if (param.bundle && param.omitUnbundledJs) {
+				 // omitUnbundledJs によって js ファイルが全て省かれる場合は警告する
+				const noBundledJs: string[] = files.filter(p => p.endsWith(".js") && !bundledFilePaths.includes(p));
+				noBundledJs.forEach(p => {
+					if (!preservingFilePathSet.has(p)) {
+						console.warn(`excluded ${p} due to unreachable/unhandled.`);
+					}
+				});
+			}
 
 			if (param.targetService === "nicolive") {
 				addUntaintedToImageAssets(gamejson);

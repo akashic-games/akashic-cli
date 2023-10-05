@@ -3,7 +3,12 @@ import { EOL } from "os";
 import * as path from "path";
 import * as fsx from "fs-extra";
 import * as mockfs from "mock-fs";
-import { bundleScripts, convertGame, ConvertGameParameterObject, validateGameJsonForNicolive } from "../../../lib/zip/convert";
+import {
+	bundleScripts,
+	convertGame,
+	ConvertGameParameterObject,
+	validateGameJsonForNicolive
+} from "../../../lib/zip/convert";
 
 describe("convert", () => {
 
@@ -39,8 +44,13 @@ describe("convert", () => {
 
 	describe("convertGame", () => {
 		const destDir = path.resolve(__dirname, "..", "..", "fixtures", "output");
+		const consoleSpy = jest.spyOn(global.console, "warn");
 		afterEach(() => {
 			fsx.removeSync(destDir);
+			consoleSpy.mockClear();
+		});
+		afterAll(() => {
+			consoleSpy.mockRestore();
 		});
 
 		it("can not convert game if script that is not written with ES5 syntax", (done) => {
@@ -409,7 +419,7 @@ describe("convert", () => {
 					expect(gameJson.assets.aez_bundle_main.type).toBe("script");
 					expect(gameJson.assets.test.path).toBe("text/test.json");
 					expect(gameJson.assets.test.type).toBe("text");
-					// バンドルされていない不要なファイルはgamejsonから取り除かれる
+					// バンドルされた、もしくは利用されていない不要なファイルはgamejsonから取り除かれる
 					expect(gameJson.assets.main).toBeUndefined();
 					expect(gameJson.assets.foo).toBeUndefined();
 					expect(gameJson.assets.bar).toBeUndefined();
@@ -418,6 +428,13 @@ describe("convert", () => {
 					expect(gameJson.globalScripts.includes("node_modules/@hoge/testmodule/lib/ModuleB.js")).toBeFalsy();
 					expect(gameJson.globalScripts.includes("node_modules/@hoge/testmodule/lib/ModuleC.js")).toBeFalsy();
 					expect(gameJson.globalScripts.includes("node_modules/@hoge/testmodule/lib/index.js")).toBeFalsy();
+					// バンドルに含まれず削除された利用されていない不要なファイルをログ出力
+					/* eslint-disable max-len */
+					expect(consoleSpy).toHaveBeenCalledWith("excluded node_modules/@hoge/testmodule/lib/ModuleB.js due to unreachable/unhandled.");
+					expect(consoleSpy).toHaveBeenCalledWith("excluded node_modules/@hoge/testmodule/lib/ModuleC.js due to unreachable/unhandled.");
+					expect(consoleSpy).toHaveBeenCalledWith("excluded node_modules/@hoge/testmodule/lib/index.js due to unreachable/unhandled.");
+					expect(consoleSpy).toHaveBeenCalledWith("excluded script/bar.js due to unreachable/unhandled.");
+					/* eslint-enable max-len */
 					done();
 				}, done.fail);
 		});
@@ -447,6 +464,8 @@ describe("convert", () => {
 					expect(gameJson.globalScripts.includes("node_modules/@hoge/testmodule/lib/ModuleB.js")).toBeTruthy();
 					expect(gameJson.globalScripts.includes("node_modules/@hoge/testmodule/lib/ModuleC.js")).toBeTruthy();
 					expect(gameJson.globalScripts.includes("node_modules/@hoge/testmodule/lib/index.js")).toBeTruthy();
+					// バンドルされていないファイルのログは出力されない
+					expect(consoleSpy).toHaveBeenCalledTimes(0);
 
 					// バンドルされたファイルは取り除かれる。
 					expect(gameJson.assets.main).toBeUndefined();
