@@ -69,14 +69,16 @@ async function convertAssetAndOutput(
 	inputPath: string, outputPath: string,
 	minify?: boolean, errors?: string[]): Promise<string> {
 	var assets = conf._content.assets;
-	var isScript = assets[assetName].type === "script";
-	var assetString = fs.readFileSync(path.join(inputPath, assets[assetName].path), "utf8").replace(/\r\n|\r/g, "\n");
-	var assetPath = assets[assetName].path;
+	var asset = assets[assetName];
+	var isScript = asset.type === "script";
+	var exports = (asset.type === "script" && asset.exports) ?? [];
+	var assetString = fs.readFileSync(path.join(inputPath, asset.path), "utf8").replace(/\r\n|\r/g, "\n");
+	var assetPath = asset.path;
 	if (isScript) {
 		errors.push.apply(errors, await validateEs5Code(assetPath, assetString)); // ES5構文に反する箇所があるかのチェック
 	}
 
-	var code = (isScript ? wrapScript(assetString, assetName, minify) : wrapText(assetString, assetName));
+	var code = (isScript ? wrapScript(assetString, assetName, minify, exports) : wrapText(assetString, assetName));
 	var relativePath = "./js/assets/" + path.dirname(assetPath) + "/" +
 		path.basename(assetPath, path.extname(assetPath)) + (isScript ? ".js" : ".json.js");
 	var filePath = path.resolve(outputPath, relativePath);
@@ -182,8 +184,8 @@ window.optionProps.magnify = ${!!options.magnify};
 	fs.writeFileSync(path.resolve(outputPath, "./js/option.js"), script);
 }
 
-function wrapScript(code: string, name: string, minify?: boolean): string {
-	return "window.gLocalAssetContainer[\"" + name + "\"] = function(g) { " + wrap(code, minify) + "}";
+function wrapScript(code: string, name: string, minify?: boolean, exports: string[] = []): string {
+	return "window.gLocalAssetContainer[\"" + name + "\"] = function(g) { " + wrap(code, minify, exports) + "}";
 }
 
 function wrapText(code: string, name: string): string {
