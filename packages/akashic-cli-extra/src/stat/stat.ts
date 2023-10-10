@@ -5,7 +5,8 @@ import type { Logger, GameConfiguration } from "@akashic/akashic-cli-commons";
 enum FileType {
 	Ogg,
 	Mp4,
-	Aac
+	Aac,
+	M4a
 }
 
 class SizeResult {
@@ -14,6 +15,7 @@ class SizeResult {
 	oggAudioSize: number;
 	mp4AudioSize: number;
 	aacAudioSize: number;
+	m4aAudioSize: number;
 	scriptSize: number;
 	otherSize: number;
 	otherDetail: {[key: string]: number};
@@ -24,6 +26,7 @@ class SizeResult {
 		this.oggAudioSize = 0;
 		this.mp4AudioSize = 0;
 		this.aacAudioSize = 0;
+		this.m4aAudioSize = 0;
 		this.scriptSize = 0;
 		this.otherSize = 0;
 		this.otherDetail = { };
@@ -42,6 +45,11 @@ class SizeResult {
 	totalSizeMp4(): number {
 		return this.imageSize + this.textSize +
 			this.mp4AudioSize + this.scriptSize + this.otherSize;
+	}
+
+	totalSizeM4a(): number {
+		return this.imageSize + this.textSize +
+			this.m4aAudioSize + this.scriptSize + this.otherSize;
 	}
 
 	sumOfTable(): number {
@@ -75,12 +83,18 @@ export function size(param: StatSizeParameterObject): Promise<void> {
 function showSize(param: StatSizeParameterObject, sizeResult: SizeResult): void {
 	let largestFileType: FileType;
 	let totalSize: number;
-	if (sizeResult.oggAudioSize > sizeResult.aacAudioSize && sizeResult.oggAudioSize > sizeResult.mp4AudioSize) {
+	if (sizeResult.oggAudioSize > sizeResult.aacAudioSize
+		&& sizeResult.oggAudioSize > sizeResult.mp4AudioSize
+		&& sizeResult.oggAudioSize > sizeResult.m4aAudioSize
+	) {
 		largestFileType = FileType.Ogg;
 		totalSize = sizeResult.totalSizeOgg();
-	} else if (sizeResult.mp4AudioSize > sizeResult.aacAudioSize) {
+	} else if (sizeResult.mp4AudioSize > sizeResult.aacAudioSize && sizeResult.mp4AudioSize > sizeResult.m4aAudioSize) {
 		largestFileType = FileType.Mp4;
 		totalSize = sizeResult.totalSizeMp4();
+	} else if (sizeResult.m4aAudioSize > sizeResult.aacAudioSize) {
+		largestFileType = FileType.M4a;
+		totalSize = sizeResult.totalSizeM4a();
 	} else {
 		largestFileType = FileType.Aac;
 		totalSize = sizeResult.totalSizeAac();
@@ -95,18 +109,27 @@ function showSize(param: StatSizeParameterObject, sizeResult: SizeResult): void 
 		switch (largestFileType) {
 			case FileType.Ogg:
 				param.logger.print(formatSize("ogg audio", sizeResult.oggAudioSize));
-				param.logger.print(`mp4 audio: ${sizeToString(sizeResult.mp4AudioSize)}`);
+				if (sizeResult.mp4AudioSize > 0) param.logger.print(`mp4 audio: ${sizeToString(sizeResult.mp4AudioSize)}`);
 				if (sizeResult.aacAudioSize > 0) param.logger.print(`aac audio: ${sizeToString(sizeResult.aacAudioSize)}`);
+				if (sizeResult.m4aAudioSize > 0) param.logger.print(`m4a audio: ${sizeToString(sizeResult.m4aAudioSize)}`);
 				break;
 			case FileType.Mp4:
 				param.logger.print(`ogg audio: ${sizeToString(sizeResult.oggAudioSize)}`);
 				param.logger.print(formatSize("mp4 audio", sizeResult.mp4AudioSize));
 				if (sizeResult.aacAudioSize > 0) param.logger.print(`aac audio: ${sizeToString(sizeResult.aacAudioSize)}`);
+				if (sizeResult.m4aAudioSize > 0) param.logger.print(`m4a audio: ${sizeToString(sizeResult.m4aAudioSize)}`);
 				break;
 			case FileType.Aac:
 				param.logger.print(`ogg audio: ${sizeToString(sizeResult.oggAudioSize)}`);
-				param.logger.print(`mp4 audio: ${sizeToString(sizeResult.mp4AudioSize)}`);
+				if (sizeResult.mp4AudioSize > 0) param.logger.print(`mp4 audio: ${sizeToString(sizeResult.mp4AudioSize)}`);
 				if (sizeResult.aacAudioSize > 0) param.logger.print(formatSize("aac audio", sizeResult.aacAudioSize));
+				if (sizeResult.m4aAudioSize > 0) param.logger.print(`m4a audio: ${sizeToString(sizeResult.m4aAudioSize)}`);
+				break;
+			case FileType.M4a:
+				param.logger.print(`ogg audio: ${sizeToString(sizeResult.oggAudioSize)}`);
+				if (sizeResult.mp4AudioSize > 0) param.logger.print(`mp4 audio: ${sizeToString(sizeResult.mp4AudioSize)}`);
+				if (sizeResult.aacAudioSize > 0) param.logger.print(`aac audio: ${sizeToString(sizeResult.aacAudioSize)}`);
+				if (sizeResult.m4aAudioSize > 0) param.logger.print(formatSize("m4a audio", sizeResult.m4aAudioSize));
 				break;
 			default:
 				throw new Error("Audio file size retrieve failed.");
@@ -124,18 +147,27 @@ function showSize(param: StatSizeParameterObject, sizeResult: SizeResult): void 
 			sizeToString(sizeResult.totalSizeOgg()) +
 			` (${sizeResult.totalSizeOgg()}B)`
 		);
-		param.logger.print(
-			`${mark(largestFileType === FileType.Aac)} TOTAL SIZE (using aac): ` +
-			sizeToString(sizeResult.totalSizeAac()) +
-			` (${sizeResult.totalSizeAac()}B)`
-		);
+		if (sizeResult.aacAudioSize > 0 || sizeResult.m4aAudioSize === 0) {
+			param.logger.print(
+				`${mark(largestFileType === FileType.Aac)} TOTAL SIZE (using aac): ` +
+				sizeToString(sizeResult.totalSizeAac()) +
+				` (${sizeResult.totalSizeAac()}B)`
+			);
+		}
+		if (sizeResult.m4aAudioSize > 0) {
+			param.logger.print(
+				`${mark(largestFileType === FileType.M4a)} TOTAL SIZE (using m4a): ` +
+				sizeToString(sizeResult.totalSizeM4a()) +
+				` (${sizeResult.totalSizeM4a()}B)`
+			);
+		}
 		if (sizeResult.mp4AudioSize > 0) {
 			param.logger.print(
 				`${mark(largestFileType === FileType.Mp4)} TOTAL SIZE (using mp4): ` +
 				sizeToString(sizeResult.totalSizeMp4()) +
 				` (${sizeResult.totalSizeMp4()}B)`
 			);
-			param.logger.warn("MP4 (.mp4) is deprecated. Use AAC(.aac) instead.");
+			param.logger.warn("MP4 (.mp4) is deprecated. Use AAC(.aac) or M4A(.m4a) instead.");
 		}
 	} else {
 		param.logger.print(totalSize.toString());
@@ -154,7 +186,7 @@ function checkLimit(param: StatSizeParameterObject, sizeResult: SizeResult): Pro
 		return Promise.reject("cannot parse limit size value");
 	}
 
-	const actualSize = Math.max(sizeResult.totalSizeOgg(), sizeResult.totalSizeMp4(), sizeResult.totalSizeAac());
+	const actualSize = Math.max(sizeResult.totalSizeOgg(), sizeResult.totalSizeMp4(), sizeResult.totalSizeAac(), sizeResult.totalSizeM4a());
 	if (actualSize > limitSize) {
 		return Promise.reject(`file size limit exceeded (${sizeToString(actualSize - limitSize)})`);
 	}
@@ -206,6 +238,7 @@ function sizeOfAssets(param: StatSizeParameterObject, sizeResult: SizeResult): P
 						sizeResult.scriptSize += size;
 					});
 			case "audio":
+				let m4aExist = false;
 				return fileSize(path.join(param.basepath, asset.path + ".ogg"))
 					.then(
 						size => {
@@ -221,14 +254,20 @@ function sizeOfAssets(param: StatSizeParameterObject, sizeResult: SizeResult): P
 							sizeResult.mp4AudioSize += size;
 						},
 						() => {/* .mp4ファイルは存在すれば対応するが、deprecatedなのでファイルが存在しない場合でも警告を表示しない */ })
-
+					.then(() => fileSize(path.join(param.basepath, asset.path + ".m4a")))
+					.then(
+						size => {
+							sizeResult.m4aAudioSize += size;
+							m4aExist = true;
+						},
+						() => { /* .m4a, .aac はどちらか存在すればいいので、aac の処理でどちらも存在しない場合のみ警告を表示する */})
 					.then(() => fileSize(path.join(param.basepath, asset.path + ".aac")))
 					.then(
 						size => {
 							sizeResult.aacAudioSize += size;
 						},
 						() => {
-							if (!param.raw) param.logger.warn(asset.path + ".aac, No such file.");
+							if (!param.raw && !m4aExist) param.logger.warn(asset.path + ".m4a or .aac, No such file.");
 						});
 			default:
 				throw new Error(`${asset.type} is not a valid asset type name`);
