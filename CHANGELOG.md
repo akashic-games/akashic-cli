@@ -1,5 +1,23 @@
 # CHANGELOG
 
+## 2.16.46 (2023-10-10)
+
+#### Enhancement
+* `akashic-cli-extra`
+  * [#1280](https://github.com/akashic-games/akashic-cli/pull/1280) Support m4a in stat ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+* `akashic-cli-export`
+  * [#1282](https://github.com/akashic-games/akashic-cli/pull/1282) 【akashic-cli-export】内部コンポーネントの更新(engineFiles@3.7.8, engineFiles@2.2.3, engineFiles@1.2.2) ([@xnv](https://github.com/xnv))
+
+#### Update Dependencies
+* `akashic-cli-serve`
+  * [#1279](https://github.com/akashic-games/akashic-cli/pull/1279) chore(deps): update akashic major/minor dependencies (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#1277](https://github.com/akashic-games/akashic-cli/pull/1277) fix(deps): update dependency @akashic/akashic-cli-scan to v0.16.25 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 3
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- [@yu-ogi](https://github.com/yu-ogi)
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.16.45 (2023-10-05)
 
 #### Other Change
