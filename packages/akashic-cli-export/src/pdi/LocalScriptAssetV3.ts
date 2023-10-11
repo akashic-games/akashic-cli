@@ -10,13 +10,15 @@ class LocalScriptAssetV3 {
 	script: string;
 	id: string;
 	path: string;
+	exports: string[];
 	originalPath: string;
 	onDestroyed: g.Trigger<g.Asset>;
 	func: Function;
 
-	constructor(id: string, path: string) {
+	constructor(id: string, path: string, exports: string[] = []) {
 		this.id = id;
 		this.originalPath = path;
+		this.exports = exports;
 		this.path = this._assetPathFilter(path);
 		this.onDestroyed = new g.Trigger<g.Asset>();
 		this.func = window.gLocalAssetContainer[id]; // gLocalScriptContainer は index.ect 上のscriptタグ内で宣言されている
@@ -27,6 +29,7 @@ class LocalScriptAssetV3 {
 		this.id = undefined!;
 		this.originalPath = undefined!;
 		this.path = undefined!;
+		this.exports = undefined!;
 		this.onDestroyed.destroy();
 		this.onDestroyed = undefined!;
 	}

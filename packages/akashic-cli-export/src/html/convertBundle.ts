@@ -92,14 +92,16 @@ async function convertAssetToInnerHTMLObj(
 	minify?: boolean, errors?: string[]): Promise<InnerHTMLAssetData> {
 	var assets = conf._content.assets;
 	var isScript = assets[assetName].type === "script";
-	var assetString = fs.readFileSync(path.join(inputPath, assets[assetName].path), "utf8").replace(/\r\n|\r/g, "\n");
+	var asset = assets[assetName];
+	var exports = (asset.type === "script" && asset.exports) ?? [];
+	var assetString = fs.readFileSync(path.join(inputPath, asset.path), "utf8").replace(/\r\n|\r/g, "\n");
 	if (isScript) {
-		errors.push.apply(errors, await validateEs5Code(assets[assetName].path, assetString));
+		errors.push.apply(errors, await validateEs5Code(asset.path, assetString));
 	}
 	return {
 		name: assetName,
-		type: assets[assetName].type,
-		code: isScript ? wrap(assetString, minify) : encodeText(assetString)
+		type: asset.type,
+		code: isScript ? wrap(assetString, minify, exports) : encodeText(assetString)
 	};
 }
 

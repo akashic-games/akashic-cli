@@ -93,10 +93,14 @@ export function encodeText(text: string): string {
 	return text.replace(/[\u2028\u2029'"\\\b\f\n\r\t\v%]/g, encodeURIComponent);
 }
 
-export function wrap(code: string, minify?: boolean): string {
-	var PRE_SCRIPT = "(function(exports, require, module, __filename, __dirname) {";
-	var POST_SCRIPT = "})(g.module.exports, g.module.require, g.module, g.filename, g.dirname);";
-	var ret = PRE_SCRIPT + "\n" + code + "\n" + POST_SCRIPT + "\n";
+export function wrap(code: string, minify?: boolean, exports: string[] = []): string {
+	const preScript = "(function(exports, require, module, __filename, __dirname) {";
+	let postScript: string = "";
+	for (const key of exports) {
+		postScript += `exports["${key}"] = typeof ${key} !== "undefined" ? ${key} : undefined;\n`;
+	}
+	postScript += "})(g.module.exports, g.module.require, g.module, g.filename, g.dirname);";
+	const ret = preScript + "\n" + code + "\n" + postScript + "\n";
 	return minify ? UglifyJS.minify(ret, { sourceMap: true }).code : ret;
 }
 
