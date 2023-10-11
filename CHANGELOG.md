@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.16.47 (2023-10-11)
+
+#### Enhancement
+* `akashic-cli-export`
+  * [#1281](https://github.com/akashic-games/akashic-cli/pull/1281) feat(export): support g.Script#exports ([@yu-ogi](https://github.com/yu-ogi))
+
+#### Committers: 1
+- [@yu-ogi](https://github.com/yu-ogi)
+
 ## 2.16.46 (2023-10-10)
 
 #### Enhancement
