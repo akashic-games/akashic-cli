@@ -74,6 +74,7 @@
   },
   "dependencies": {
     "@akashic/akashic-cli-commons": "0.14.17",
+    "@akashic/akashic-cli-extra": "1.6.18",
     "@akashic/game-configuration": "2.0.1",
     "@babel/core": "7.20.2",
     "@babel/preset-env": "7.20.2",
