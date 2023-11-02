@@ -1,5 +1,24 @@
 # CHANGELOG
 
+## 2.16.48 (2023-11-02)
+
+#### Enhancement
+* `akashic-cli-export`
+  * [#1288](https://github.com/akashic-games/akashic-cli/pull/1288) Modify to display stat results when export-zip is output ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+  * [#1286](https://github.com/akashic-games/akashic-cli/pull/1286) 【akashic-cli-export】内部コンポーネントの更新(engineFiles@3.7.9, engineFiles@2.2.3, engineFiles@1.2.2) ([@xnv](https://github.com/xnv))
+
+#### Update Dependencies
+* `akashic-cli-init`, `akashic-cli-serve`
+  * [#1287](https://github.com/akashic-games/akashic-cli/pull/1287) chore(deps): update akashic major/minor dependencies (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#1285](https://github.com/akashic-games/akashic-cli/pull/1285) chore(deps): update actions/setup-node action to v4 ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-serve`
+  * [#1284](https://github.com/akashic-games/akashic-cli/pull/1284) chore(deps): update node.js to v21 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.16.47 (2023-10-11)
 
 #### Enhancement
