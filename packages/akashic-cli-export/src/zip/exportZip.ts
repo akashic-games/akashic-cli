@@ -2,6 +2,7 @@ import * as fs from "fs";
 import * as os from "os";
 import * as path from "path";
 import * as cmn from "@akashic/akashic-cli-commons";
+import { size as statSize } from "@akashic/akashic-cli-extra/lib/stat";
 import archiver = require("archiver");
 import readdir = require("fs-readdir-recursive");
 import { convertGame } from "./convert";
@@ -125,6 +126,16 @@ export function promiseExportZip(param: ExportZipParameterObject): Promise<void>
 				archive.finalize();
 			});
 			// TODO mkdtempのフォルダを削除すべき？
+		})
+		.then(() => {
+			const gameJson = JSON.parse(fs.readFileSync(path.resolve(destDir, "game.json"), "utf8"));
+			const params = {
+				logger: param.logger,
+				basepath: destDir,
+				game: gameJson,
+				raw: false
+			};
+			return statSize(params);
 		});
 }
 
