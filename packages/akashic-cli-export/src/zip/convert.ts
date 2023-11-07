@@ -35,6 +35,7 @@ export interface ConvertGameParameterObject {
 	omitUnbundledJs?: boolean;
 	targetService?: cmn.ServiceType;
 	nicolive?: boolean;
+	resolveAkashicRuntime?: boolean;
 }
 
 export function _completeConvertGameParameterObject(param: ConvertGameParameterObject): void {
@@ -51,6 +52,7 @@ export function _completeConvertGameParameterObject(param: ConvertGameParameterO
 	param.omitUnbundledJs = !!param.omitUnbundledJs;
 	param.targetService = param.targetService || "none";
 	param.nicolive = !!param.nicolive;
+	param.resolveAkashicRuntime = !!param.resolveAkashicRuntime;
 }
 
 export interface BundleResult {
@@ -89,7 +91,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 		.then(async (result: cmn.GameConfiguration) => {
 			gamejson = result;
 			Object.values(gamejson.assets).forEach(asset => utils.warnLackOfAudioFile(asset));
-			if (param.nicolive) {
+			if (param.nicolive && !param.resolveAkashicRuntime) {
 				validateGameJsonForNicolive(gamejson);
 			}
 
@@ -215,8 +217,8 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 				addUntaintedToImageAssets(gamejson);
 			}
 
-			if (param.nicolive) {
-				await addGameJsonValuesForNicoLive(gamejson);
+			if (param.nicolive || param.resolveAkashicRuntime) {
+				await addGameJsonValuesForNicoLive(gamejson, param.resolveAkashicRuntime);
 			}
 
 			if (bundleResult === null) {
@@ -312,15 +314,18 @@ function addUntaintedToImageAssets(gameJson: cmn.GameConfiguration): void {
 /**
  * nicolive 用に game.json に値を追加する。
  */
-async function addGameJsonValuesForNicoLive(gameJson: cmn.GameConfiguration): Promise<void> {
-	// game.jsonへの追記
-	if (!gameJson.environment) {
-		gameJson.environment = {};
+async function addGameJsonValuesForNicoLive(gameJson: cmn.GameConfiguration, akashicRuntimeOnly: boolean): Promise<void> {
+	if (!akashicRuntimeOnly) {
+		// game.jsonへの追記
+		if (!gameJson.environment) {
+			gameJson.environment = {};
+		}
+		if (!gameJson.environment.external) {
+			gameJson.environment.external = {};
+		}
+		gameJson.environment.external.send = "0";
 	}
-	if (!gameJson.environment.external) {
-		gameJson.environment.external = {};
-	}
-	gameJson.environment.external.send = "0";
+
 	if (gameJson.environment["akashic-runtime"]) {
 		return;
 	}
