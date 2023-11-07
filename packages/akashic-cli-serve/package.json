@@ -4,7 +4,7 @@
   "description": "A development server for Akashic Engine",
   "scripts": {
     "prepare": "npm run setup && npm run build",
-    "setup": "npm run copy:material-icons && npm run copy:engine-files",
+    "setup": "npm run copy:material-icons && npm run copy:agv && npm run copy:engine-files",
     "copy:material-icons": "shx mkdir -p www/public/thirdparty && shx cp -r node_modules/material-icons/iconfont www/public/thirdparty/material-icons",
     "copy:agv": "shx cp node_modules/@akashic/agvw/dist/index.js www/public/external/akashic-gameview-web.strip.js && shx mkdir -p www/internal/untrusted_loader",
     "copy:engine-files": "node build/updateEngineFiles.js",
