@@ -91,7 +91,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 		.then(async (result: cmn.GameConfiguration) => {
 			gamejson = result;
 			Object.values(gamejson.assets).forEach(asset => utils.warnLackOfAudioFile(asset));
-			if (param.nicolive && !param.resolveAkashicRuntime) {
+			if (param.nicolive) {
 				validateGameJsonForNicolive(gamejson);
 			}
 
@@ -218,7 +218,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			}
 
 			if (param.nicolive || param.resolveAkashicRuntime) {
-				await addGameJsonValuesForNicoLive(gamejson, param.resolveAkashicRuntime);
+				await addGameJsonValuesForNicoLive(gamejson);
 			}
 
 			if (bundleResult === null) {
@@ -314,17 +314,15 @@ function addUntaintedToImageAssets(gameJson: cmn.GameConfiguration): void {
 /**
  * nicolive 用に game.json に値を追加する。
  */
-async function addGameJsonValuesForNicoLive(gameJson: cmn.GameConfiguration, akashicRuntimeOnly: boolean): Promise<void> {
-	if (!akashicRuntimeOnly) {
-		// game.jsonへの追記
-		if (!gameJson.environment) {
-			gameJson.environment = {};
-		}
-		if (!gameJson.environment.external) {
-			gameJson.environment.external = {};
-		}
-		gameJson.environment.external.send = "0";
+async function addGameJsonValuesForNicoLive(gameJson: cmn.GameConfiguration): Promise<void> {
+	// game.jsonへの追記
+	if (!gameJson.environment) {
+		gameJson.environment = {};
 	}
+	if (!gameJson.environment.external) {
+		gameJson.environment.external = {};
+	}
+	gameJson.environment.external.send = "0";
 
 	if (gameJson.environment["akashic-runtime"]) {
 		return;

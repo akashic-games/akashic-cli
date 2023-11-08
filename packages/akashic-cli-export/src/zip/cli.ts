@@ -34,7 +34,7 @@ export function cli(param: CliConfigExportZip): void {
 			omitUnbundledJs: (param.bundle || param.nicolive) && param.omitUnbundledJs,
 			targetService: param.nicolive ? "nicolive" : param.targetService,
 			nicolive: param.nicolive,
-			resolveAkashicRuntime: param.resolveAkashicRuntime,
+			resolveAkashicRuntime: param.resolveAkashicRuntime || param.nicolive,
 			exportInfo: {
 				version: ver,
 				option: {
