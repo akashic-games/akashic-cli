@@ -81,8 +81,7 @@ commander
 	.option("--pack-image", "Pack small images")
 	.option("--target-service <service>", `(Deprecated) Specify the target service of the exported content:${SERVICE_TYPES}`)
 	.option("--nicolive", "Export zip file for nicolive")
-	.option("--resolve-akashic-runtime", "resolve akashic-runtime only")
-;
+	.option("--resolve-akashic-runtime", "resolve akashic-runtime only");
 
 export function run(argv: string[]): void {
 	// Commander の制約により --strip と --no-strip 引数を両立できないため、暫定対応として Commander 前に argv を処理する

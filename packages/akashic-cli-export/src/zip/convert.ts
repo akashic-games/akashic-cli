@@ -323,7 +323,6 @@ async function addGameJsonValuesForNicoLive(gameJson: cmn.GameConfiguration): Pr
 		gameJson.environment.external = {};
 	}
 	gameJson.environment.external.send = "0";
-
 	if (gameJson.environment["akashic-runtime"]) {
 		return;
 	}
