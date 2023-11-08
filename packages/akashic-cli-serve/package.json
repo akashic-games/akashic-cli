@@ -4,10 +4,11 @@
   "description": "A development server for Akashic Engine",
   "scripts": {
     "prepare": "npm run setup && npm run build",
-    "setup": "npm run copy:material-icons && npm run copy:agv && npm run copy:engine-files",
+    "setup": "npm run copy:material-icons && npm run copy:engine-files",
     "copy:material-icons": "shx mkdir -p www/public/thirdparty && shx cp -r node_modules/material-icons/iconfont www/public/thirdparty/material-icons",
-    "copy:agv": "shx cp node_modules/@akashic/agvw/dist/index.js www/public/external/akashic-gameview-web.strip.js && shx mkdir -p www/internal/untrusted_loader",
+    "copy:agv": "node build/AkashicGameViewWebBuilder.js && shx mkdir -p www/internal/untrusted_loader",
     "copy:engine-files": "node build/updateEngineFiles.js",
+    "debug:copy:agv-plugin": "shx mkdir -p www/internal && browserify node_modules/@akashic/akashic-gameview-web/lib/plugin/index.js -s agvplugin > www/internal/agvplugin.js",
     "watch:client": "webpack --mode development --config ./src/client/webpack.config.js --watch",
     "build": "npm run build:client && npm run build:server && shx cp ./config/engineFilesVersion.json ./lib/server",
     "build:client": "webpack --config ./src/client/webpack.config.js && tsc -p ./src/client/tsconfig.module.json",
@@ -47,7 +48,6 @@
     "socket.io-parser": "4.2.3"
   },
   "devDependencies": {
-    "@akashic/agvw": "^1.0.3",
     "@akashic/amflow": "~3.3.0",
     "@akashic/eslint-config": "1.1.1",
     "@akashic/pdi-types": "~1.12.0",
@@ -94,6 +94,9 @@
     "webpack": "5.79.0",
     "webpack-cli": "5.0.1",
     "whatwg-fetch": "3.6.2"
+  },
+  "optionalDependencies": {
+    "@akashic/akashic-gameview-web": "3.4.0-beta.1"
   },
   "files": [
     "package.json",
