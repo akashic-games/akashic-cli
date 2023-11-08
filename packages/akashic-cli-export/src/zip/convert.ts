@@ -217,7 +217,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 				addUntaintedToImageAssets(gamejson);
 			}
 
-			if (param.nicolive || param.resolveAkashicRuntime) {
+			if (param.resolveAkashicRuntime) {
 				await addGameJsonValuesForNicoLive(gamejson);
 			}
 

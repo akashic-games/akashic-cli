@@ -549,7 +549,8 @@ describe("convert", () => {
 				source: path.resolve(__dirname, "..", "..", "fixtures", "sample_game_v3"),
 				dest: destDir,
 				bundle: true,
-				nicolive: true
+				nicolive: true,
+				resolveAkashicRuntime: true
 			};
 			convertGame(param)
 				.then(() => {
@@ -573,7 +574,8 @@ describe("convert", () => {
 				source: path.resolve(__dirname, "..", "..", "fixtures", "sample_game_with_akashic_runtime"),
 				dest: destDir,
 				bundle: true,
-				nicolive: true
+				nicolive: true,
+				resolveAkashicRuntime: true
 			};
 			convertGame(param)
 				.then(() => {
