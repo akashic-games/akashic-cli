@@ -588,7 +588,7 @@ describe("convert", () => {
 				}, done.fail);
 		});
 
-		it("resolveAkashicRuntime option, Add only Akashic runtime in game.json.", (done) => {
+		it("resolveAkashicRuntime option, Add Akashic runtime in game.json.", (done) => {
 			const param = {
 				source: path.resolve(__dirname, "..", "..", "fixtures", "sample_game_v3"),
 				dest: destDir,
@@ -601,31 +601,10 @@ describe("convert", () => {
 					expect(gameJson.environment["sandbox-runtime"]).toBe("3");
 					expect(gameJson.environment["akashic-runtime"].version).toMatch(/^~3\.\d\.\d+(-.*)?$/);
 					expect(gameJson.environment["akashic-runtime"].flavor).toBe("-canvas");
-					expect(gameJson.environment.external).not.toBeDefined();
+					expect(gameJson.environment.external).toEqual({ send: "0" });
 					done();
 				}, done.fail);
 		});
-
-		it("resolveAkashicRuntime and nicolive option, Add only Akashic runtime in game.json.", (done) => {
-			const param = {
-				source: path.resolve(__dirname, "..", "..", "fixtures", "sample_game_v3"),
-				dest: destDir,
-				bundle: true,
-				nicolive: true,
-				resolveAkashicRuntime: true
-
-			};
-			convertGame(param)
-				.then(() => {
-					const gameJson = JSON.parse(fs.readFileSync(path.join(destDir, "game.json")).toString());
-					expect(gameJson.environment["sandbox-runtime"]).toBe("3");
-					expect(gameJson.environment["akashic-runtime"].version).toMatch(/^~3\.\d\.\d+(-.*)?$/);
-					expect(gameJson.environment["akashic-runtime"].flavor).toBe("-canvas");
-					expect(gameJson.environment.external).not.toBeDefined();
-					done();
-				}, done.fail);
-		});
-
 	});
 });
 

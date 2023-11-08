@@ -142,6 +142,7 @@ describe("Parameter checking from cli() to exportZip()", () => {
 			expect(params.logger).toBeDefined();
 			expect(params.targetService).toBe("nicolive");
 			expect(params.nicolive).toBeTruthy();
+			expect(params.resolveAkashicRuntime).toBeTruthy();
 
 			const infoOption = params.exportInfo.option;
 			expect(infoOption.hashFilename).toBe(22);
