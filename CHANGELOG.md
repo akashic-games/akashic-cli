@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.16.50 (2023-11-08)
+
+#### Bug Fix
+* `akashic-cli-serve`
+  * [#1291](https://github.com/akashic-games/akashic-cli/pull/1291) Revert "feat: use @akashic/agvw" ([@yu-ogi](https://github.com/yu-ogi))
+
+#### Committers: 1
+- [@yu-ogi](https://github.com/yu-ogi)
+
 ## 2.16.49 (2023-11-08)
 
 #### Other Change
