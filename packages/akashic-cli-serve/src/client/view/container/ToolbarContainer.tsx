@@ -110,7 +110,8 @@ export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}>
 			onChangeShowBackgroundColor: operator.ui.setShowBackgroundColor,
 			onChangeShowGrid: operator.ui.setShowGrid,
 			onChangeShowProfiler: operator.ui.setShowsProfiler,
-			onChangeShowDesignGuideline: operator.ui.setShowDesignGuideline
+			onChangeShowDesignGuideline: operator.ui.setShowDesignGuideline,
+			onClickScreenShot: operator.localInstance.onClickScreenShot
 		};
 	};
 }

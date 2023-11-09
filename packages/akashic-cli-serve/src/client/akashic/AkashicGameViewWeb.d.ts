@@ -92,6 +92,9 @@ declare module agv {
 	}
 
 	class GameContent {
+		_element: {
+			_gameContainerHtmlElement: HTMLElement;
+		};
 		readonly id: number;
 		constructor(...args: any[]);
 		pause(): void;

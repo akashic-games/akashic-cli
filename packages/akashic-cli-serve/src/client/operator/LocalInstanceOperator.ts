@@ -47,4 +47,19 @@ export class LocalInstanceOperator {
 		this.store.currentLocalInstance!.setExecutionMode("passive");
 		this.store.currentLocalInstance!.resume();
 	};
+
+	onClickScreenShot = (): void => {
+		const data = this.store.currentLocalInstance?.screenShot();
+		downloadBase64(data!);
+	};
+}
+
+// NOTE: 本来OperatorはDOM操作とは独立しているが、この関数で生成するaタグはGUIのReactと関係なくこの処理で完結するものである。
+// ほかに適切な定義場所がないため、ここで実装する
+function downloadBase64(data: string): void {
+	const link = document.createElement("a");
+	link.setAttribute("href", data);
+	link.download = "screen.png";
+	link.click();
+	link.remove();
 }

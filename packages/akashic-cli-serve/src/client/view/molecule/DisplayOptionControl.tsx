@@ -19,6 +19,7 @@ export interface DisplayOptionControlPropsData {
 	onChangeShowGrid: (show: boolean) => void;
 	onChangeShowProfiler: (show: boolean) => void;
 	onChangeShowDesignGuideline: (show: boolean) => void;
+	onClickScreenShot: () => void;
 }
 
 export interface DisplayOptionControlProps {
@@ -40,7 +41,8 @@ export const DisplayOptionControl = observer(function (props: DisplayOptionContr
 		onChangeShowBackgroundColor,
 		onChangeShowGrid,
 		onChangeShowProfiler,
-		onChangeShowDesignGuideline
+		onChangeShowDesignGuideline,
+		onClickScreenShot
 	} = props.makeProps();
 	const ref = React.useRef() as React.MutableRefObject<HTMLInputElement>;
 
@@ -128,6 +130,12 @@ export const DisplayOptionControl = observer(function (props: DisplayOptionContr
 						</a>
 					</span>
 				</label>
+			</div>
+			<div>
+				<input
+					type="button" value="スクリーンショット"
+					onClick={() => onClickScreenShot()}
+				/>
 			</div>
 		</Popover>
 	</div>;

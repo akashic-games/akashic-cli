@@ -205,4 +205,8 @@ export class ServeGameContent {
 	sendEvents(events: playlog.EventLike[]): void {
 		this.agvGameContent.sendEvents(events);
 	}
+
+	makeScreenShotData(): string {
+		return this.agvGameContent._element._gameContainerHtmlElement.getElementsByTagName("canvas")[0].toDataURL();
+	}
 }
