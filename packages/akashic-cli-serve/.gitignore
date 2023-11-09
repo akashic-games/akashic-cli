@@ -6,4 +6,5 @@ www/internal
 lib
 config/
 www/public/external/engineFilesV*
+www/public/external/akashic-gameview-web.strip.js
 *.tar
