@@ -47,7 +47,7 @@
     "socket.io-parser": "4.2.3"
   },
   "devDependencies": {
-    "@akashic/agvw": "^1.0.3",
+    "@akashic/agvw": "^1.0.4",
     "@akashic/amflow": "~3.3.0",
     "@akashic/eslint-config": "1.1.1",
     "@akashic/pdi-types": "~1.12.0",
