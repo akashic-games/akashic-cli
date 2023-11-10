@@ -54,7 +54,7 @@ export class LocalInstanceOperator {
 	};
 }
 
-// NOTE: 本来OperatorはDOM操作とは独立しているが、この関数で生成するaタグはGUIのReactと関係なくこの処理で完結するものである。
+// NOTE: 本来OperatorはDOM操作とは独立しているが、この関数で生成するaタグはGUIのReactと関係なくこの処理で完結する
 // ほかに適切な定義場所がないため、ここで実装する
 function downloadBase64(data: string): void {
 	const link = document.createElement("a");
