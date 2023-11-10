@@ -20,8 +20,34 @@
 	display: flex;
 }
 
-.help-link-icon {
+.icon {
 	font-size: 16px;
 	color: var(--color-tool-text);
 	margin: 0px 3px;
+}
+
+.button-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: 12px;
+	margin-bottom: 3px;
+}
+
+.button {
+	display: flex;
+	align-items: center;
+
+	padding: 4px 1em 4px 0.8em;
+	background: var(--color-tool-bg);
+	border: 1px solid var(--color-tool-border);
+	border-radius: 4px;
+	color: var(--color-tool-text);
+	cursor: pointer;
+}
+
+.button:active {
+	background: var(--color-tool-bg-active);
+	border: 1px solid var(--color-tool-border-active);
+	color: var(--color-tool-text-active);
 }
