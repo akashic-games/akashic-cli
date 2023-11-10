@@ -35,6 +35,7 @@ export interface ConvertGameParameterObject {
 	omitUnbundledJs?: boolean;
 	targetService?: cmn.ServiceType;
 	nicolive?: boolean;
+	resolveAkashicRuntime?: boolean;
 }
 
 export function _completeConvertGameParameterObject(param: ConvertGameParameterObject): void {
@@ -51,6 +52,7 @@ export function _completeConvertGameParameterObject(param: ConvertGameParameterO
 	param.omitUnbundledJs = !!param.omitUnbundledJs;
 	param.targetService = param.targetService || "none";
 	param.nicolive = !!param.nicolive;
+	param.resolveAkashicRuntime = !!param.resolveAkashicRuntime;
 }
 
 export interface BundleResult {
@@ -215,7 +217,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 				addUntaintedToImageAssets(gamejson);
 			}
 
-			if (param.nicolive) {
+			if (param.resolveAkashicRuntime) {
 				await addGameJsonValuesForNicoLive(gamejson);
 			}
 

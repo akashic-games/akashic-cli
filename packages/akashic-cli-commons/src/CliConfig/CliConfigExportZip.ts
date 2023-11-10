@@ -17,4 +17,5 @@ export interface CliConfigExportZip {
 	omitUnbundledJs?: boolean;
 	targetService?: ServiceType;
 	nicolive?: boolean;
+	resolveAkashicRuntime?: boolean;
 }

@@ -34,6 +34,7 @@ export function cli(param: CliConfigExportZip): void {
 			omitUnbundledJs: (param.bundle || param.nicolive) && param.omitUnbundledJs,
 			targetService: param.nicolive ? "nicolive" : param.targetService,
 			nicolive: param.nicolive,
+			resolveAkashicRuntime: param.resolveAkashicRuntime || param.nicolive,
 			exportInfo: {
 				version: ver,
 				option: {
@@ -79,7 +80,8 @@ commander
 	.option("--minify-json", "Minify JSON files")
 	.option("--pack-image", "Pack small images")
 	.option("--target-service <service>", `(Deprecated) Specify the target service of the exported content:${SERVICE_TYPES}`)
-	.option("--nicolive", "Export zip file for nicolive");
+	.option("--nicolive", "Export zip file for nicolive")
+	.option("--resolve-akashic-runtime", "Fill akashic-runtime field in game.json");
 
 export function run(argv: string[]): void {
 	// Commander の制約により --strip と --no-strip 引数を両立できないため、暫定対応として Commander 前に argv を処理する
@@ -115,7 +117,8 @@ export function run(argv: string[]): void {
 			omitEmptyJs: options.omitEmptyJs ?? conf.omitEmptyJs,
 			omitUnbundledJs: options.omitUnbundledJs ?? conf.omitUnbundledJs,
 			targetService: options.targetService ?? conf.targetService,
-			nicolive: options.nicolive ?? conf.nicolive
+			nicolive: options.nicolive ?? conf.nicolive,
+			resolveAkashicRuntime: options.resolveAkashicRuntime ?? conf.resolveAkashicRuntime
 		});
 	});
 }

@@ -549,7 +549,8 @@ describe("convert", () => {
 				source: path.resolve(__dirname, "..", "..", "fixtures", "sample_game_v3"),
 				dest: destDir,
 				bundle: true,
-				nicolive: true
+				nicolive: true,
+				resolveAkashicRuntime: true
 			};
 			convertGame(param)
 				.then(() => {
@@ -573,7 +574,8 @@ describe("convert", () => {
 				source: path.resolve(__dirname, "..", "..", "fixtures", "sample_game_with_akashic_runtime"),
 				dest: destDir,
 				bundle: true,
-				nicolive: true
+				nicolive: true,
+				resolveAkashicRuntime: true
 			};
 			convertGame(param)
 				.then(() => {
@@ -584,6 +586,24 @@ describe("convert", () => {
 					expect(gameJson.environment.nicolive.supportedModes.length).toBe(2);
 					expect(gameJson.environment.nicolive.supportedModes).toContain("single");
 					expect(gameJson.environment.nicolive.supportedModes).toContain("ranking");
+					done();
+				}, done.fail);
+		});
+
+		it("resolveAkashicRuntime option, Add Akashic runtime in game.json.", (done) => {
+			const param = {
+				source: path.resolve(__dirname, "..", "..", "fixtures", "sample_game_v3"),
+				dest: destDir,
+				resolveAkashicRuntime: true
+
+			};
+			convertGame(param)
+				.then(() => {
+					const gameJson = JSON.parse(fs.readFileSync(path.join(destDir, "game.json")).toString());
+					expect(gameJson.environment["sandbox-runtime"]).toBe("3");
+					expect(gameJson.environment["akashic-runtime"].version).toMatch(/^~3\.\d\.\d+(-.*)?$/);
+					expect(gameJson.environment["akashic-runtime"].flavor).toBe("-canvas");
+					expect(gameJson.environment.external).toEqual({ send: "0" });
 					done();
 				}, done.fail);
 		});

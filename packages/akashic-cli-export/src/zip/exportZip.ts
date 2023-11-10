@@ -24,6 +24,7 @@ export interface ExportZipParameterObject {
 	omitUnbundledJs?: boolean;
 	targetService?: cmn.ServiceType;
 	nicolive?: boolean;
+	resolveAkashicRuntime?: boolean;
 }
 
 function _createExportInfo(param: ExportZipParameterObject): cmn.ExportZipInfo {
@@ -60,7 +61,8 @@ export function _completeExportZipParameterObject(param: ExportZipParameterObjec
 		exportInfo: param.exportInfo || _createExportInfo(param),
 		omitUnbundledJs: param.omitUnbundledJs,
 		targetService: param.targetService || "none",
-		nicolive: !!param.nicolive
+		nicolive: !!param.nicolive,
+		resolveAkashicRuntime: !!param.resolveAkashicRuntime
 	};
 }
 
@@ -106,7 +108,8 @@ export function promiseExportZip(param: ExportZipParameterObject): Promise<void>
 				exportInfo: param.exportInfo,
 				omitUnbundledJs: param.omitUnbundledJs,
 				targetService: param.targetService,
-				nicolive: param.nicolive
+				nicolive: param.nicolive,
+				resolveAkashicRuntime: param.resolveAkashicRuntime
 			});
 		})
 		.then(() => {
