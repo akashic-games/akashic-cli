@@ -19,7 +19,7 @@ export interface DisplayOptionControlPropsData {
 	onChangeShowGrid: (show: boolean) => void;
 	onChangeShowProfiler: (show: boolean) => void;
 	onChangeShowDesignGuideline: (show: boolean) => void;
-	onClickScreenShot: () => void;
+	onClickScreenshot: () => void;
 }
 
 export interface DisplayOptionControlProps {
@@ -42,7 +42,7 @@ export const DisplayOptionControl = observer(function (props: DisplayOptionContr
 		onChangeShowGrid,
 		onChangeShowProfiler,
 		onChangeShowDesignGuideline,
-		onClickScreenShot
+		onClickScreenshot
 	} = props.makeProps();
 	const ref = React.useRef() as React.MutableRefObject<HTMLInputElement>;
 
@@ -132,7 +132,7 @@ export const DisplayOptionControl = observer(function (props: DisplayOptionContr
 				</label>
 			</div>
 			<div className={styles["button-container"]}>
-				<button className={styles.button} onClick={onClickScreenShot}>
+				<button className={styles.button} onClick={onClickScreenshot}>
 					<i className={"material-icons " + styles.icon}>monitor</i>
 					Save screenshot
 				</button>

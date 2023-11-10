@@ -111,7 +111,7 @@ export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}>
 			onChangeShowGrid: operator.ui.setShowGrid,
 			onChangeShowProfiler: operator.ui.setShowsProfiler,
 			onChangeShowDesignGuideline: operator.ui.setShowDesignGuideline,
-			onClickScreenShot: operator.localInstance.onClickScreenShot
+			onClickScreenshot: operator.localInstance.saveScreenShot
 		};
 	};
 }

@@ -86,7 +86,7 @@ const TestWithBehaviour = observer(() => (
 			onChangeShowGrid: (show => store.showsGrid = show),
 			onChangeShowProfiler: (show => store.showsProfiler = show),
 			onChangeShowDesignGuideline: (show => store.showsDesignGuideline = show),
-			onClickScreenShot: () => {
+			onClickScreenshot: () => {
 				// do nothing
 			}
 		})}
@@ -157,7 +157,7 @@ storiesOf("o-ToolBar", module)
 				onChangeShowGrid: action("grid"),
 				onChangeShowProfiler: action("profiler"),
 				onChangeShowDesignGuideline: action("design-guideline"),
-				onClickScreenShot: () => {
+				onClickScreenshot: () => {
 					// do nothing
 				}
 			})}
