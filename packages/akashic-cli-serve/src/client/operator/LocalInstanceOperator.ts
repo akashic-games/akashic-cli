@@ -59,7 +59,7 @@ export class LocalInstanceOperator {
 function downloadBase64(data: string): void {
 	const link = document.createElement("a");
 	link.setAttribute("href", data);
-	link.download = "screen.png";
+	link.setAttribute("download", "screen.png");
 	link.click();
 	link.remove();
 }
