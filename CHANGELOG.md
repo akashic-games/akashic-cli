@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.16.52 (2023-11-10)
+
+#### Enhancement
+* `akashic-cli-commons`, `akashic-cli-export`
+  * [#1289](https://github.com/akashic-games/akashic-cli/pull/1289) Add resolveAkashicRuntime option to export-zip ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 2.16.51 (2023-11-09)
 
 #### Bug Fix
