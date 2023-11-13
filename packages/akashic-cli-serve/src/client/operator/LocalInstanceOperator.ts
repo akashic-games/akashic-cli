@@ -48,7 +48,7 @@ export class LocalInstanceOperator {
 		this.store.currentLocalInstance!.resume();
 	};
 
-	saveScreenShot = (): void => {
+	saveScreenshot = (): void => {
 		const data = this.store.currentLocalInstance?.makeScreenshotData();
 		downloadBase64(data!);
 	};
