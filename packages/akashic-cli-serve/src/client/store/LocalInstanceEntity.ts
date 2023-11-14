@@ -250,6 +250,10 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 		this._serveGameContent.agvGameContent.setMasterVolume(muted ? 0 : 1);
 	}
 
+	makeScreenshotData(): string {
+		return this._serveGameContent.makeScreenShotData();
+	}
+
 	private async _initialize(): Promise<void> {
 		if (!this._resizeGameView)
 			return;

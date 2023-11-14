@@ -19,6 +19,7 @@ export interface DisplayOptionControlPropsData {
 	onChangeShowGrid: (show: boolean) => void;
 	onChangeShowProfiler: (show: boolean) => void;
 	onChangeShowDesignGuideline: (show: boolean) => void;
+	onClickScreenshot: () => void;
 }
 
 export interface DisplayOptionControlProps {
@@ -40,7 +41,8 @@ export const DisplayOptionControl = observer(function (props: DisplayOptionContr
 		onChangeShowBackgroundColor,
 		onChangeShowGrid,
 		onChangeShowProfiler,
-		onChangeShowDesignGuideline
+		onChangeShowDesignGuideline,
+		onClickScreenshot
 	} = props.makeProps();
 	const ref = React.useRef() as React.MutableRefObject<HTMLInputElement>;
 
@@ -124,10 +126,16 @@ export const DisplayOptionControl = observer(function (props: DisplayOptionContr
 						/>
 						Show Design Guidelines
 						<a href="https://akashic-games.github.io/shin-ichiba/design-guidelines.html" target="_blank" rel="noreferrer">
-							<i className={"material-icons " + styles["help-link-icon"]}>help</i>
+							<i className={"material-icons " + styles.icon}>help</i>
 						</a>
 					</span>
 				</label>
+			</div>
+			<div className={styles["button-container"]}>
+				<button className={styles.button} onClick={onClickScreenshot}>
+					<i className={"material-icons " + styles.icon}>monitor</i>
+					Save screenshot
+				</button>
 			</div>
 		</Popover>
 	</div>;

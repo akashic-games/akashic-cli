@@ -85,7 +85,10 @@ const TestWithBehaviour = observer(() => (
 			onChangeShowBackgroundColor: (show => store.showsBackgroundColor = show),
 			onChangeShowGrid: (show => store.showsGrid = show),
 			onChangeShowProfiler: (show => store.showsProfiler = show),
-			onChangeShowDesignGuideline: (show => store.showsDesignGuideline = show)
+			onChangeShowDesignGuideline: (show => store.showsDesignGuideline = show),
+			onClickScreenshot: () => {
+				// do nothing
+			}
 		})}
 		showsAppearance={store.showsAppearance}
 		showsDevtools={store.showsDevtools}
@@ -153,7 +156,10 @@ storiesOf("o-ToolBar", module)
 				onChangeShowBackgroundColor: action("bgcolor"),
 				onChangeShowGrid: action("grid"),
 				onChangeShowProfiler: action("profiler"),
-				onChangeShowDesignGuideline: action("design-guideline")
+				onChangeShowDesignGuideline: action("design-guideline"),
+				onClickScreenshot: () => {
+					// do nothing
+				}
 			})}
 			showsAppearance={false}
 			showsDevtools={true}
