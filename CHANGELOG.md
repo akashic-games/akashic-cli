@@ -1,5 +1,23 @@
 # CHANGELOG
 
+## 2.16.53 (2023-11-30)
+
+#### Enhancement
+* `akashic-cli-export`
+  * [#1298](https://github.com/akashic-games/akashic-cli/pull/1298) 【akashic-cli-export】内部コンポーネントの更新(engineFiles@3.7.10, engineFiles@2.4.0, engineFiles@1.4.0) ([@xnv](https://github.com/xnv))
+
+#### Bug Fix
+* `akashic-cli-serve`
+  * [#1297](https://github.com/akashic-games/akashic-cli/pull/1297) fix(serve): fix -w causes reload twice ([@xnv](https://github.com/xnv))
+
+#### Update Dependencies
+* `akashic-cli-serve`
+  * [#1295](https://github.com/akashic-games/akashic-cli/pull/1295) fix(deps): update dependency @akashic/headless-driver to v2.13.1 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- kamakiri_ys ([@kamakiri01](https://github.com/kamakiri01))
+- xnv ([@xnv](https://github.com/xnv))
+
 ## 2.16.52 (2023-11-10)
 
 #### Enhancement
