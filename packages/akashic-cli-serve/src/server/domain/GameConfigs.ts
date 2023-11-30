@@ -37,57 +37,49 @@ export async function watchContent(
 	cb: (err: any, modTargetFlag: ModTargetFlags) => void,
 	watcher?: chokidar.FSWatcher
 ): Promise<void> {
+	watcher ??= chokidar.watch(targetDir, {
+		persistent: true,
+		ignoreInitial: true,
+		ignored: "**/node_modules/**/*"
+	});
+
 	// akashic-cli-scanはwatchオプション指定時しか使われないので動的importする
 	const scan = await import("@akashic/akashic-cli-scan/lib/scanAsset");
-	if (!watcher) {
-		watcher = chokidar.watch(targetDir, {
-			persistent: true,
-			ignoreInitial: true,
-			ignored: "**/node_modules/**/*"
-		});
-	}
-	let timer: NodeJS.Timer | undefined;
-	let mods: ModTargetFlags = ModTargetFlags.None;
-	const watcherHandler = (filePath: string): void => {
-		const handler = async (): Promise<void> => {
-			const lastMods = mods;
-			mods = ModTargetFlags.None;
-			if (lastMods & ModTargetFlags.Assets) {
-				try {
-					await scan.scanAsset({ target: "all", cwd: targetDir });
-					// scanAssets の過程でGameJsonのフラグが立ってしまい、落とさないとcb()が二重で呼ばれてしまうのでここで落としておく。
-					mods &= ~ModTargetFlags.GameJson;
-					cb(null, ModTargetFlags.Assets);
-				} catch (err: any) {
-					cb(err, ModTargetFlags.Assets);
-				} finally {
-					if (mods === ModTargetFlags.None) {
-						clearInterval(timer);
-						timer = undefined;
-					}
-				}
-			} else if (lastMods & ModTargetFlags.GameJson) {
-				try {
-					cb(null, ModTargetFlags.GameJson);
-				} finally {
-					if (mods === ModTargetFlags.None) {
-						clearInterval(timer);
-						timer = undefined;
-					}
-				}
-			}
-		};
 
-		if (["assets", "audio", "image", "script", "text"].some(dir => filePath.indexOf(path.join(targetDir, dir)) !== -1)) {
-			mods |= ModTargetFlags.Assets;
-		} else if (filePath === path.join(targetDir, "game.json")) {
-			mods |= ModTargetFlags.GameJson;
+	targetDir = path.resolve(targetDir); // 相対パスで監視すると chokidar の通知してくるパスがおかしい場合があるようなのですべて絶対パスで扱う
+	const assetDirs = ["assets", "audio", "image", "script", "text"].map(d => path.join(targetDir, d) + path.sep);
+	const gameJsonPath = path.join(targetDir, "game.json");
+
+	let suppressedGameJson = false;
+	let suppressedScan = false;
+	const watcherHandler = async (filePath: string): Promise<void> => {
+		filePath = path.resolve(filePath);
+
+		if (!suppressedScan && assetDirs.some(assetDir => filePath.startsWith(assetDir))) {
+			// scanAsset() によって起こる game.json の変更を通知すると二重になってしまうので、500ms だけ無視するように。時間は仮。
+			// (game.json の変更は scanAsset() 中に完了するが、それを chokidar が検出するタイミングには保証がない。
+			// すなわち suppressedGameJson は suppressedScan では代用できない点に注意)
+			suppressedGameJson = true;
+			setTimeout(() => {
+				suppressedGameJson = false;
+			}, 500);
+
+			try {
+				suppressedScan = true; // scanAsset() 中に再帰的に scan しないよう抑制。
+				await scan.scanAsset({ target: "all", cwd: targetDir });
+			} finally {
+				suppressedScan = false;
+			}
+			cb(null, ModTargetFlags.Assets);
+			return;
 		}
 
-		if (!timer) {
-			timer = setInterval(handler, 1000);
+		if (!suppressedGameJson && filePath === gameJsonPath) {
+			cb(null, ModTargetFlags.GameJson);
+			return;
 		}
 	};
+
 	watcher.on("add", watcherHandler);
 	watcher.on("unlink", watcherHandler);
 	watcher.on("change", watcherHandler);
