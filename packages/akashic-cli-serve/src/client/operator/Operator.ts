@@ -91,6 +91,17 @@ export class Operator {
 		if (query.paused) {
 			store.currentLocalInstance!.targetTimePause();
 		}
+
+		const gameJson = this.store.contentStore.defaultContent().gameJson!;
+		const features = gameJson.environment?.features;
+		let enableWebAssembly = features?.includes("WebAssembly") || store.appOptions.disableFeatCheck;
+		if (!enableWebAssembly) {
+			Object.defineProperty(window, "WebAssembly", {
+				get: function() {
+					throw new Error("If you use WebAssembly, please add \"environment.features:[\"WebAssembly\"]\" to game.json");
+				}
+			});
+		}
 	}
 
 	setCurrentPlay = async (play: PlayEntity, isReplay: boolean = false): Promise<void> => {
