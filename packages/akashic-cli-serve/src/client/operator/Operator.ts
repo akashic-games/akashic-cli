@@ -94,7 +94,7 @@ export class Operator {
 
 		const gameJson = this.store.contentStore.defaultContent().gameJson!;
 		const features = gameJson.environment?.features;
-		let enableWebAssembly = features?.includes("WebAssembly") || store.appOptions.disableFeatCheck;
+		const enableWebAssembly = features?.includes("WebAssembly") || store.appOptions.disableFeatCheck;
 		if (!enableWebAssembly) {
 			Object.defineProperty(window, "WebAssembly", {
 				get: function() {
