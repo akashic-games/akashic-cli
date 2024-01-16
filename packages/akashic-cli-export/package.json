@@ -83,7 +83,7 @@
     "commander": "8.3.0",
     "ejs": "3.1.8",
     "encoding-japanese": "^2.0.0",
-    "fs-extra": "10.1.0",
+    "fs-extra": "11.2.0",
     "fs-readdir-recursive": "1.1.0",
     "glob": "8.1.0",
     "https": "1.0.0",
