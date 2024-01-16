@@ -51,7 +51,7 @@
     "@akashic/akashic-cli-commons": "0.14.18",
     "@akashic/akashic-cli-extra": "1.6.19",
     "commander": "8.3.0",
-    "fs-extra": "10.1.0",
+    "fs-extra": "11.2.0",
     "glob": "10.2.3",
     "ignore": "5.2.4",
     "node-fetch": "2.6.7",
