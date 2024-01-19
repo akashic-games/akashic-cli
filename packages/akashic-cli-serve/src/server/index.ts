@@ -51,7 +51,6 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 	serverGlobalConfig.proxyAudio = !!cliConfigParam.debugProxyAudio;
 	serverGlobalConfig.pauseActive = !!cliConfigParam.debugPauseActive;
 	serverGlobalConfig.preserveDisconnected = !!cliConfigParam.preserveDisconnected;
-	serverGlobalConfig.disableFeatCheck = !!cliConfigParam.debugDisableFeatCheck;
 
 	if (cliConfigParam.hostname) {
 		serverGlobalConfig.hostname = cliConfigParam.hostname;
@@ -423,7 +422,6 @@ export async function run(argv: any): Promise<void> {
 		.option("--debug-trusted-iframe", "An internal debug option")
 		.option("--debug-proxy-audio", "An internal debug option")
 		.option("--debug-pause-active", "An internal debug options: start with paused the active instance")
-		.option("--debug-disable-feat-check", "Disable sentinel for environment.features")
 		.option("--allow-external", "Read the URL allowing external access from sandbox.config.js")
 		.option("-B, --no-open-browser", "Disable to open a browser window at startup")
 		.option("--preserve-disconnected", "Disable auto closing for disconnected windows.")
@@ -453,7 +451,6 @@ export async function run(argv: any): Promise<void> {
 			debugTrustedIframe: options.debugTrustedIframe ?? conf.debugTrustedIframe,
 			debugProxyAudio: options.debugProxyAudio ?? conf.debugProxyAudio,
 			debugPauseActive: options.debugPauseActive ?? conf.debugPauseActive,
-			debugDisableFeatCheck: options.debugDisableFeatCheck ?? conf.debugDisableFeatCheck,
 			allowExternal: options.allowExternal ?? conf.allowExternal,
 			targetDirs: commander.args.length > 0 ? commander.args : (conf.targetDirs ?? [process.cwd()]),
 			openBrowser: options.openBrowser ?? conf.openBrowser,
