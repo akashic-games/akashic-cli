@@ -453,7 +453,7 @@ export async function run(argv: any): Promise<void> {
 			debugTrustedIframe: options.debugTrustedIframe ?? conf.debugTrustedIframe,
 			debugProxyAudio: options.debugProxyAudio ?? conf.debugProxyAudio,
 			debugPauseActive: options.debugPauseActive ?? conf.debugPauseActive,
-			debugDisableFeatCheck: options.debugDisableFeat ?? conf.debugDisableFeatCheck,
+			debugDisableFeatCheck: options.debugDisableFeatCheck ?? conf.debugDisableFeatCheck,
 			allowExternal: options.allowExternal ?? conf.allowExternal,
 			targetDirs: commander.args.length > 0 ? commander.args : (conf.targetDirs ?? [process.cwd()]),
 			openBrowser: options.openBrowser ?? conf.openBrowser,
