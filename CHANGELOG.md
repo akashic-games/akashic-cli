@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.16.56 (2024-01-19)
+
+#### Enhancement
+* `akashic-cli-serve`
+  * [#1309](https://github.com/akashic-games/akashic-cli/pull/1309) Add --debug-disable-feat-check option to serve ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 2.16.55 (2024-01-19)
 
 #### Enhancement
