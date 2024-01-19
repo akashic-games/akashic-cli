@@ -13,7 +13,8 @@ export const handleToGetStartupOptions = (_req: express.Request, res: express.Re
 			runInIframe: serverGlobalConfig.runInIframe,
 			pauseActive: serverGlobalConfig.pauseActive,
 			preserveDisconnected: serverGlobalConfig.preserveDisconnected,
-			experimentalOpen: serverGlobalConfig.experimentalOpen
+			experimentalOpen: serverGlobalConfig.experimentalOpen,
+			disableFeatCheck: serverGlobalConfig.disableFeatCheck
 		});
 	} catch (e) {
 		next(e);
