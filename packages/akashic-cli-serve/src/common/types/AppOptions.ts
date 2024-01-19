@@ -9,5 +9,4 @@ export interface AppOptions {
 	preserveDisconnected: boolean;
 	runInIframe: boolean;
 	experimentalOpen: number | null;
-	disableFeatCheck: boolean;
 }
