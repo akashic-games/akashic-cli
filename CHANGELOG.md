@@ -1,5 +1,22 @@
 # CHANGELOG
 
+## 2.16.55 (2024-01-19)
+
+#### Enhancement
+* `akashic-cli-commons`
+  * [#1308](https://github.com/akashic-games/akashic-cli/pull/1308) Add debugDisableFeatCheck to commons CliConfigServe ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Update Dependencies
+* `akashic-cli-serve`
+  * [#1305](https://github.com/akashic-games/akashic-cli/pull/1305) fix(deps): update dependency @akashic/headless-driver to v2.13.4 ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-init`
+  * [#1179](https://github.com/akashic-games/akashic-cli/pull/1179) fix(deps): update dependency fs-extra to v11 ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-commons`
+  * [#1252](https://github.com/akashic-games/akashic-cli/pull/1252) fix(deps): update dependency editorconfig to v2 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 ## 2.16.54 (2024-01-16)
 
 #### Enhancement
