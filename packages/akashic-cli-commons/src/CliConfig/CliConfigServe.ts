@@ -11,6 +11,7 @@ export interface CliConfigServe {
 	debugTrustedIframe?: boolean;
 	debugProxyAudio?: boolean;
 	debugPauseActive?: boolean;
+	debugDisableFeatCheck?: boolean;
 	allowExternal?: boolean;
 	targetDirs?: string[];
 	openBrowser?: boolean;
