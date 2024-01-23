@@ -91,6 +91,9 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 		.then(async (result: cmn.GameConfiguration) => {
 			gamejson = result;
 			Object.values(gamejson.assets).forEach(asset => utils.warnLackOfAudioFile(asset));
+
+			validateGameJson(gamejson);
+
 			if (param.nicolive) {
 				validateGameJsonForNicolive(gamejson);
 			}
@@ -351,6 +354,12 @@ function encodeToString(buf: Buffer): string {
 		return buf.toString();
 	}
 	return convert(array, { from: "AUTO", to: "UNICODE", type: "string" });
+}
+
+export function validateGameJson(gamejson: cmn.GameConfiguration): void {
+	if (gamejson.moduleMainScripts?.["@akashic/akashic-engine"]) {
+		throw new Error("Invalid module: no need to require @akashic/akashic-engine in content.");
+	}
 }
 
 /**

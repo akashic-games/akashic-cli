@@ -14,7 +14,8 @@ import {
 	extractAssetDefinitions,
 	getInjectedContents,
 	validateEs5Code,
-	readSandboxConfigJs
+	readSandboxConfigJs,
+	validateGameJson
 } from "./convertUtil";
 
 interface InnerHTMLAssetData {
@@ -27,6 +28,9 @@ export async function promiseConvertBundle(options: ConvertTemplateParameterObje
 	var content = await cmn.ConfigurationFile.read(path.join(options.source, "game.json"), options.logger);
 	if (!content.environment) content.environment = {};
 	content.environment["sandbox-runtime"] = content.environment["sandbox-runtime"] ? content.environment["sandbox-runtime"] : "1";
+
+	validateGameJson(content);
+
 	var conf = new cmn.Configuration({
 		content: content
 	});
