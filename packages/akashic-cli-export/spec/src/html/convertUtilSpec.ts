@@ -118,4 +118,14 @@ describe("convertUtil", function () {
 			expect(gamejson.assets.sample_text1.hasOwnProperty("hint")).toBeFalsy();
 		});
 	});
+	describe("validateGameJson", function () {
+		it("throw Error when specified gamejson include @akashic/akashic-engine", function () {
+			const gamejson: any = {
+				"moduleMainScripts": {
+					"@akashic/akashic-engine": "node_modules/@akashic/akashic-engine/index.js"
+				}
+			};
+			expect(() => convert.validateGameJson(gamejson)).toThrow();
+		});
+	});
 });

@@ -7,6 +7,7 @@ import {
 	bundleScripts,
 	convertGame,
 	ConvertGameParameterObject,
+	validateGameJson,
 	validateGameJsonForNicolive
 } from "../../../lib/zip/convert";
 
@@ -655,5 +656,16 @@ describe("game.json validation with nicolive option", () => {
 	it("nicolive property does not exist", () => {
 		delete gamejson.environment.nicolive;
 		expect(() => validateGameJsonForNicolive(gamejson)).toThrow();
+	});
+});
+
+describe("validateGameJson", function () {
+	const gamejson: any = {
+		moduleMainScripts: {
+			"@akashic/akashic-engine": "node_modules/@akashic/akashic-engine/index.js"
+		}
+	};
+	it("throw Error when specified gamejson include @akashic/akashic-engine", function () {
+		expect(() => validateGameJson(gamejson)).toThrow();
 	});
 });
