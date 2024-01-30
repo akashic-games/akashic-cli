@@ -29,7 +29,7 @@
     "@akashic/akashic-cli-lib-manage": "1.8.21",
     "@akashic/akashic-cli-scan": "0.16.27",
     "@akashic/akashic-cli-serve": "1.15.50",
-    "commander": "^8.3.0"
+    "commander": "^11.0.0"
   },
   "devDependencies": {
     "@akashic/eslint-config": "^0.1.2",
