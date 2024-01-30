@@ -273,7 +273,7 @@ describe("convert", () => {
 					// UTF8 として読み込めることを確認
 					const main = fs.readFileSync(path.join(destDir, "script/main.js"), { encoding: "utf-8" }).toString();
 					// convert が出力する改行コードに export コマンドは関与しないため、 LF に変換してテストを実行する
-					expect(main.replace("\r\n", "\n")).toBe([
+					expect(main.replace(/\r?\n/g, "\n")).toBe([
 						"var foo = require(\"./foo\");",
 						"",
 						"module.exports = function () {",
@@ -284,7 +284,7 @@ describe("convert", () => {
 						""
 					].join("\n"));
 					const foo = fs.readFileSync(path.join(destDir, "script/foo.js"), { encoding: "utf-8" }).toString();
-					expect(foo.replace("\r\n", "\n")).toBe([
+					expect(foo.replace(/\r?\n/g, "\n")).toBe([
 						"module.exports = function () {",
 						"	return \"このスクリプトファイルは Shift-JIS です。\";",
 						"};",
