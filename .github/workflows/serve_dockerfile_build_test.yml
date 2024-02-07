@@ -2,10 +2,8 @@ name: Build Test for serve Dockerfile
 
 on:
   push:
-    branches:
-      - master
-    paths:
-      - "packages/akashic-cli-serve/**"
+    tags:
+      - "@akashic/akashic-cli@*"
 
 env:
   WORKING_DIR: packages/akashic-cli-serve
