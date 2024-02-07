@@ -76,7 +76,9 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 
 
 	if (normalizedParam.moduleNames.some(name => /^@akashic\/akashic-engine(.*)$/.test(name))) {
-		return Promise.reject(new Error("Invalid module: no need to require @akashic/akashic-engine in content."));
+		return Promise.reject(new Error("Module \"@akashic/akashic-engine\" is detected."
+		+ "You don't need to install this module explicitly in the content."
+		+ "Remove it by `akashic uninstall @akashic/akashic-engine` before export."));
 	}
 
 	const restoreDirectory = cmn.Util.chdir(normalizedParam.cwd);
