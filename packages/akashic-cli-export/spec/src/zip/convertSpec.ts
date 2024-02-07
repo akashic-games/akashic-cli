@@ -2,11 +2,11 @@ import * as fs from "fs";
 import * as path from "path";
 import * as fsx from "fs-extra";
 import * as mockfs from "mock-fs";
+import { validateGameJson } from "../../../lib/utils";
 import {
 	bundleScripts,
 	convertGame,
 	ConvertGameParameterObject,
-	validateGameJson,
 	validateGameJsonForNicolive
 } from "../../../lib/zip/convert";
 

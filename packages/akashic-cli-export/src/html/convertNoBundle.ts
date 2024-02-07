@@ -3,6 +3,7 @@ import * as path from "path";
 import * as cmn from "@akashic/akashic-cli-commons";
 import * as ejs from "ejs";
 import * as fsx from "fs-extra";
+import { validateGameJson } from "../utils";
 import {
 	ConvertTemplateParameterObject,
 	copyAssetFilesStrip,
@@ -13,8 +14,7 @@ import {
 	getInjectedContents,
 	validateEs5Code,
 	readSandboxConfigJs,
-	validateEngineFilesName,
-	validateGameJson
+	validateEngineFilesName
 } from "./convertUtil";
 
 export async function promiseConvertNoBundle(options: ConvertTemplateParameterObject): Promise<void> {

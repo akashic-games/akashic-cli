@@ -222,12 +222,6 @@ export function validateEngineFilesName(filename: string, expectedMajorVersion: 
 	}
 }
 
-export function validateGameJson(gamejson: cmn.GameConfiguration): void {
-	if (gamejson.moduleMainScripts?.["@akashic/akashic-engine"]) {
-		throw new Error("Invalid module: no need to require @akashic/akashic-engine in content.");
-	}
-}
-
 function getFileContentsFromDirectory(inputDirPath: string): string[] {
 	return fs.readdirSync(inputDirPath)
 		.map(fileName => fs.readFileSync(path.join(inputDirPath, fileName), "utf8").replace(/\r\n|\r/g, "\n"));

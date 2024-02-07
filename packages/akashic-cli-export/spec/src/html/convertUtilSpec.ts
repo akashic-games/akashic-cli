@@ -1,6 +1,7 @@
 import { GameConfiguration } from "@akashic/akashic-cli-commons";
 import { ImageAssetConfigurationBase } from "@akashic/game-configuration";
 import * as convert from "../../../lib/html/convertUtil";
+import { validateGameJson } from "../../../lib/utils";
 
 describe("convertUtil", function () {
 	describe("getInjectedContents", function () {
@@ -125,7 +126,7 @@ describe("convertUtil", function () {
 					"@akashic/akashic-engine": "node_modules/@akashic/akashic-engine/index.js"
 				}
 			};
-			expect(() => convert.validateGameJson(gamejson)).toThrow();
+			expect(() => validateGameJson(gamejson)).toThrow();
 		});
 	});
 });

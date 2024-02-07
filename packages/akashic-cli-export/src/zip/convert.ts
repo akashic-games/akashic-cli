@@ -10,6 +10,7 @@ import * as fsx from "fs-extra";
 import readdir = require("fs-readdir-recursive");
 import * as UglifyJS from "uglify-js";
 import * as utils from "../utils";
+import { validateGameJson } from "../utils";
 import { getFromHttps } from "./apiUtil";
 import { NICOLIVE_SIZE_LIMIT_GAME_JSON, NICOLIVE_SIZE_LIMIT_TOTAL_FILE } from "./constants";
 import * as gcu from "./GameConfigurationUtil";
@@ -354,12 +355,6 @@ function encodeToString(buf: Buffer): string {
 		return buf.toString();
 	}
 	return convert(array, { from: "AUTO", to: "UNICODE", type: "string" });
-}
-
-export function validateGameJson(gamejson: cmn.GameConfiguration): void {
-	if (gamejson.moduleMainScripts?.["@akashic/akashic-engine"]) {
-		throw new Error("Invalid module: no need to require @akashic/akashic-engine in content.");
-	}
 }
 
 /**
