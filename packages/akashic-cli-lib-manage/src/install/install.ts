@@ -1,7 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as cmn from "@akashic/akashic-cli-commons";
-import { parse } from "parse-package-name";
 import * as tar from "tar";
 import { Configuration } from "./Configuration";
 
@@ -76,7 +75,7 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 	}
 
 
-	if (normalizedParam.moduleNames.map(name => parse(name).name).includes("@akashic/akashic-engine")) {
+	if (normalizedParam.moduleNames.some(name => /^@akashic\/akashic-engine(.*)$/.test(name))) {
 		return Promise.reject(new Error("Invalid module: no need to require @akashic/akashic-engine in content."));
 	}
 
