@@ -25,8 +25,7 @@ export function warnLackOfAudioFile(asset: AssetConfiguration): void {
 }
 
 export function validateGameJson(gamejson: cmn.GameConfiguration): void {
-	if (gamejson.moduleMainScripts?.["@akashic/akashic-engine"]
-		|| gamejson.globalScripts?.some(e => e.includes("@akashic/akashic-engine/"))) {
+	if (gamejson.moduleMainScripts?.["@akashic/akashic-engine"]) {
 		throw new Error("Module \"@akashic/akashic-engine\" is detected."
 		+ "You don't need to install this module explicitly in the content."
 		+ "Remove it by `akashic uninstall @akashic/akashic-engine` before export.");
