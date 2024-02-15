@@ -74,8 +74,7 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 		return Promise.reject(new Error("--plugin option cannot used with multiple module installing/linking."));
 	}
 
-
-	if (normalizedParam.moduleNames.some(name => /^@akashic\/akashic-engine(.*)$/.test(name))) {
+	if (normalizedParam.moduleNames.some(name => /^@akashic\/akashic-engine(@|$)/.test(name))) {
 		return Promise.reject(new Error("Module \"@akashic/akashic-engine\" is detected."
 		+ "You don't need to install this module explicitly in the content."
 		+ "Remove it by `akashic uninstall @akashic/akashic-engine` before export."));
