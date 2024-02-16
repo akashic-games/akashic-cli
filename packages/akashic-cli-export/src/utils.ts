@@ -1,3 +1,4 @@
+import * as cmn from "@akashic/akashic-cli-commons";
 import { AssetConfiguration } from "@akashic/game-configuration";
 
 /**
@@ -20,5 +21,13 @@ export function warnLackOfAudioFile(asset: AssetConfiguration): void {
 		if (!isM4aOrAacExist)
 			// eslint-disable-next-line max-len
 			console.warn(`Neither .m4a nor .aac file found for ${asset.path}. This asset may not be played on some environments (e.g. iOS)`);
+	}
+}
+
+export function validateGameJson(gamejson: cmn.GameConfiguration): void {
+	if (gamejson.moduleMainScripts?.["@akashic/akashic-engine"]) {
+		throw new Error("Module \"@akashic/akashic-engine\" is detected."
+		+ "You don't need to install this module explicitly in the content."
+		+ "Remove it by `akashic uninstall @akashic/akashic-engine` before export.");
 	}
 }

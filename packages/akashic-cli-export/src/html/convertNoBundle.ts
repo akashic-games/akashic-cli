@@ -3,6 +3,7 @@ import * as path from "path";
 import * as cmn from "@akashic/akashic-cli-commons";
 import * as ejs from "ejs";
 import * as fsx from "fs-extra";
+import { validateGameJson } from "../utils";
 import {
 	ConvertTemplateParameterObject,
 	copyAssetFilesStrip,
@@ -20,6 +21,9 @@ export async function promiseConvertNoBundle(options: ConvertTemplateParameterOb
 	var content = await cmn.ConfigurationFile.read(path.join(options.source, "game.json"), options.logger);
 	if (!content.environment) content.environment = {};
 	content.environment["sandbox-runtime"] = content.environment["sandbox-runtime"] ? content.environment["sandbox-runtime"] : "1";
+
+	validateGameJson(content);
+
 	var conf = new cmn.Configuration({
 		content: content
 	});

@@ -1,6 +1,7 @@
 import { GameConfiguration } from "@akashic/akashic-cli-commons";
 import { ImageAssetConfigurationBase } from "@akashic/game-configuration";
 import * as convert from "../../../lib/html/convertUtil";
+import { validateGameJson } from "../../../lib/utils";
 
 describe("convertUtil", function () {
 	describe("getInjectedContents", function () {
@@ -116,6 +117,16 @@ describe("convertUtil", function () {
 			// ImageAsset以外には "untainted: true" が付与されない
 			expect(gamejson.assets.main.hasOwnProperty("hint")).toBeFalsy();
 			expect(gamejson.assets.sample_text1.hasOwnProperty("hint")).toBeFalsy();
+		});
+	});
+	describe("validateGameJson", function () {
+		it("throw Error when specified gamejson include @akashic/akashic-engine", function () {
+			const gamejson: any = {
+				"moduleMainScripts": {
+					"@akashic/akashic-engine": "node_modules/@akashic/akashic-engine/index.js"
+				}
+			};
+			expect(() => validateGameJson(gamejson)).toThrow();
 		});
 	});
 });

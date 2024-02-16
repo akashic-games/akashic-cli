@@ -408,4 +408,16 @@ describe("install()", function () {
 			duration: 51214
 		});
 	});
+
+	it("no allow install @akashic/akashic-engine", function (done) {
+		mockfs({});
+		const logger = new cmn.ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
+		Promise.resolve()
+			.then(() => promiseInstall({ moduleNames: ["@akashic/akashic-engine"], cwd: ".", logger: logger }))
+			.then(() => done.fail())
+			.catch ((_err) => {/* do nothing */})
+			.then(() => promiseInstall({ moduleNames: ["@akashic/akashic-engine@1.0.0"], cwd: ".", logger: logger }))
+			.then(() => done.fail())
+			.catch ((_err) => done());
+		});
 });
