@@ -608,6 +608,22 @@ describe("convert", () => {
 					done();
 				}, done.fail);
 		});
+
+		it("niconico option, replace to nicolive option.", (done) => {
+			const param = {
+				source: path.resolve(__dirname, "..", "..", "fixtures", "simple_game_using_niconico"),
+				dest: destDir
+			};
+			convertGame(param)
+				.then(() => {
+					const gameJson = JSON.parse(fs.readFileSync(path.join(destDir, "game.json")).toString());
+					expect(gameJson.environment.nicolive.supportedModes.length).toBe(1);
+					expect(gameJson.environment.nicolive.supportedModes).toContain("single");
+					expect(gameJson.environment.niconico).toBeUndefined();
+					done();
+				}, done.fail);
+		});
+
 	});
 });
 
