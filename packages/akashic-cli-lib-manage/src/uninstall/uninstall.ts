@@ -100,6 +100,15 @@ export function promiseUninstall(param: UninstallParameterObject): Promise<void>
 					} else {
 						delete conf._content.moduleMainScripts;
 					}
+
+					if (conf._content.moduleMainPaths) {
+						const moduleMainPaths = cmn.NodeModules.listModuleMainPaths(packageJsons);
+						if (moduleMainPaths && Object.keys(moduleMainPaths).length > 0) {
+							conf._content.moduleMainPaths = moduleMainPaths;
+						} else {
+							delete conf._content.moduleMainPaths;
+						}
+					}
 				})
 				.then(() => {
 					// 依存しなくなったexternalをgame.jsonから削除する
