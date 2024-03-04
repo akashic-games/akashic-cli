@@ -252,6 +252,37 @@ describe("GameConfigurationUtil", () => {
 				"node_modules/foobar/package.json"
 			]);
 		});
+
+		it("completes preserve packagejson", () => {
+			gamejson.globalScripts = ["node_modules/foobar/lib/x.js"];
+			mockfs({
+				gamejson: "",
+				script: {
+					"main.js": "",
+					"sub.js": ""
+				},
+				node_modules: {
+					foobar: {
+						lib: {
+							"x.js": ""
+						},
+						"package.json": ""
+					}
+				}
+			});
+
+			expect(gcu.extractFilePaths(gamejson, ".", false)).toEqual([
+				"script/main.js",
+				"script/sub.js",
+				"node_modules/foobar/lib/x.js",
+			]);
+			expect(gcu.extractFilePaths(gamejson, ".", true)).toEqual([
+				"script/main.js",
+				"script/sub.js",
+				"node_modules/foobar/lib/x.js",
+				"node_modules/foobar/package.json"
+			]);
+		});
 	});
 
 	describe("extractScriptAssetFilePaths", () => {

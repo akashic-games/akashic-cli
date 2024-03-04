@@ -59,7 +59,7 @@ export function makeUniqueAssetPath(gamejson: cmn.GameConfiguration, assetPath: 
 	return targetAssetPath;
 }
 
-export function extractFilePaths(gamejson: cmn.GameConfiguration, basedir: string): string[] {
+export function extractFilePaths(gamejson: cmn.GameConfiguration, basedir: string, preservePackageJson: boolean = false): string[] {
 	let result: string[] = [];
 	Object.keys(gamejson.assets).forEach(aid => {
 		const a = gamejson.assets[aid];
@@ -77,8 +77,11 @@ export function extractFilePaths(gamejson: cmn.GameConfiguration, basedir: strin
 				// do nothing.
 			}
 		});
+		// if
 	});
 	(gamejson.globalScripts || []).forEach(p => result.push(p));
+	if (preservePackageJson) result = Array.from(
+		new Set(result.concat(cmn.NodeModules.listPackageJsonsFromScriptsPath(basedir, gamejson.globalScripts))));
 	return result;
 }
 

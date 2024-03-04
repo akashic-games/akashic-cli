@@ -37,6 +37,7 @@ export interface ConvertGameParameterObject {
 	targetService?: cmn.ServiceType;
 	nicolive?: boolean;
 	resolveAkashicRuntime?: boolean;
+	preservePackageJson?: boolean;
 }
 
 export function _completeConvertGameParameterObject(param: ConvertGameParameterObject): void {
@@ -54,6 +55,7 @@ export function _completeConvertGameParameterObject(param: ConvertGameParameterO
 	param.targetService = param.targetService || "none";
 	param.nicolive = !!param.nicolive;
 	param.resolveAkashicRuntime = !!param.resolveAkashicRuntime;
+	param.preservePackageJson = !!param.preservePackageJson;
 }
 
 export interface BundleResult {
@@ -127,7 +129,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 		})
 		.then(async (bundleResult) => {
 			const files: string[] = param.strip ?
-				gcu.extractFilePaths(gamejson, param.source) :
+				gcu.extractFilePaths(gamejson, param.source, param.preservePackageJson) :
 				readdir(param.source).map(p => cmn.Util.makeUnixPath(p));
 
 			let bundledFilePaths: string[] = [];
