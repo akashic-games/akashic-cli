@@ -27,7 +27,7 @@
   ],
   "devDependencies": {
     "@akashic/eslint-config": "1.1.1",
-    "@akashic/game-configuration": "2.0.1",
+    "@akashic/game-configuration": "~/work/akashic-games/game-configuration/akashic-game-configuration-2.2.0.tgz",
     "@types/commander": "2.12.2",
     "@types/form-data": "2.2.1",
     "@types/fs-extra": "9.0.13",
