@@ -30,5 +30,6 @@ export interface ExportZipInfo {
 		omitEmptyJs?: boolean;
 		targetService?: ServiceType;
 		nicolive?: boolean;
+		preservePackageJson?: boolean;
 	};
 }

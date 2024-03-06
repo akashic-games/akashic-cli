@@ -18,4 +18,5 @@ export interface CliConfigExportZip {
 	targetService?: ServiceType;
 	nicolive?: boolean;
 	resolveAkashicRuntime?: boolean;
+	preservePackageJson?: boolean;
 }

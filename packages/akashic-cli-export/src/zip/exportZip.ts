@@ -25,6 +25,7 @@ export interface ExportZipParameterObject {
 	targetService?: cmn.ServiceType;
 	nicolive?: boolean;
 	resolveAkashicRuntime?: boolean;
+	preservePackageJson?: boolean;
 }
 
 function _createExportInfo(param: ExportZipParameterObject): cmn.ExportZipInfo {
@@ -109,7 +110,8 @@ export function promiseExportZip(param: ExportZipParameterObject): Promise<void>
 				omitUnbundledJs: param.omitUnbundledJs,
 				targetService: param.targetService,
 				nicolive: param.nicolive,
-				resolveAkashicRuntime: param.resolveAkashicRuntime
+				resolveAkashicRuntime: param.resolveAkashicRuntime,
+				preservePackageJson: param.preservePackageJson
 			});
 		})
 		.then(() => {
