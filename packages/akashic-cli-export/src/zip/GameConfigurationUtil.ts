@@ -77,11 +77,12 @@ export function extractFilePaths(gamejson: cmn.GameConfiguration, basedir: strin
 				// do nothing.
 			}
 		});
-		// if
 	});
 	(gamejson.globalScripts || []).forEach(p => result.push(p));
-	if (preservePackageJson) result = Array.from(
-		new Set(result.concat(cmn.NodeModules.listPackageJsonsFromScriptsPath(basedir, gamejson.globalScripts))));
+	if (preservePackageJson) {
+		result = Array.from(
+			new Set(result.concat(cmn.NodeModules.listPackageJsonsFromScriptsPath(basedir, gamejson.globalScripts))));
+	}
 	return result;
 }
 

@@ -84,7 +84,7 @@ commander
 	.option("--target-service <service>", `(Deprecated) Specify the target service of the exported content:${SERVICE_TYPES}`)
 	.option("--nicolive", "Export zip file for nicolive")
 	.option("--resolve-akashic-runtime", "Fill akashic-runtime field in game.json")
-	.option("--preserve-package-json", "Preserve package.json when strip option enable");
+	.option("--preserve-package-json", "Preserve package.json even if --strip");
 
 export function run(argv: string[]): void {
 	// Commander の制約により --strip と --no-strip 引数を両立できないため、暫定対応として Commander 前に argv を処理する
