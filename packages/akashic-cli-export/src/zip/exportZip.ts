@@ -63,7 +63,8 @@ export function _completeExportZipParameterObject(param: ExportZipParameterObjec
 		omitUnbundledJs: param.omitUnbundledJs,
 		targetService: param.targetService || "none",
 		nicolive: !!param.nicolive,
-		resolveAkashicRuntime: !!param.resolveAkashicRuntime
+		resolveAkashicRuntime: !!param.resolveAkashicRuntime,
+		preservePackageJson: !!param.preservePackageJson
 	};
 }
 
