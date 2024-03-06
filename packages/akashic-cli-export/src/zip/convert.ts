@@ -227,6 +227,11 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 				await addGameJsonValuesForNicoLive(gamejson);
 			}
 
+			if (gamejson.environment?.niconico) {
+				gamejson.environment.nicolive = gamejson.environment.niconico;
+				delete gamejson.environment.niconico;
+			}
+
 			if (bundleResult === null) {
 				return;
 			}

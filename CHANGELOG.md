@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## 2.16.60 (2024-02-28)
+
+#### Enhancement
+* `akashic-cli-export`
+  * [#1322](https://github.com/akashic-games/akashic-cli/pull/1322) 【akashic-cli-export】内部コンポーネントの更新(engineFiles@3.7.17, engineFiles@2.4.0, engineFiles@1.4.0) ([@xnv](https://github.com/xnv))
+
+#### Update Dependencies
+* `akashic-cli-serve`
+  * [#1321](https://github.com/akashic-games/akashic-cli/pull/1321) fix(deps): update dependency @akashic/headless-driver to v2.13.9 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- kamakiri_ys ([@kamakiri01](https://github.com/kamakiri01))
+- xnv ([@xnv](https://github.com/xnv))
+
 
 ## 2.16.58 (2024-01-30)
 
