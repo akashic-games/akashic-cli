@@ -70,6 +70,7 @@ describe("scanNodeModules", () => {
 		let conf = JSON.parse(fs.readFileSync("./game.json").toString());
 		const globalScripts = conf.globalScripts;
 		const moduleMainScripts = conf.moduleMainScripts;
+		const moduleMainPaths = conf.moduleMainPaths;
 
 		const expectedPaths = [
 			"node_modules/dummy/main.js",
@@ -87,6 +88,7 @@ describe("scanNodeModules", () => {
 		expect(moduleMainScripts).toEqual({
 			"dummy": "node_modules/dummy/main.js"
 		});
+		expect(moduleMainPaths).toBeUndefined();
 	});
 
 	it("scan globalScripts field based on node_modules/ with npm3(flatten)", async () => {
@@ -118,6 +120,7 @@ describe("scanNodeModules", () => {
 
 		await scanNodeModules({
 			logger: nullLogger,
+			experimentalMmp: true,
 			debugNpm: new MockPromisedNpm({
 				expectDependencies: {
 					"dummy": {
@@ -131,6 +134,7 @@ describe("scanNodeModules", () => {
 		let conf = JSON.parse(fs.readFileSync("./game.json").toString());
 		const globalScripts = conf.globalScripts;
 		const moduleMainScripts = conf.moduleMainScripts;
+		const moduleMainPaths = conf.moduleMainPaths;
 
 		const expectedPaths = [
 			"node_modules/dummy/main.js",
@@ -147,6 +151,9 @@ describe("scanNodeModules", () => {
 
 		expect(moduleMainScripts).toEqual({
 			"dummy": "node_modules/dummy/main.js"
+		});
+		expect(moduleMainPaths).toEqual({
+			"node_modules/dummy/package.json": "node_modules/dummy/main.js"
 		});
 	});
 
@@ -197,6 +204,7 @@ describe("scanNodeModules", () => {
 
 		await scanNodeModules({
 			logger: nullLogger,
+			experimentalMmp: true,
 			debugNpm: new MockPromisedNpm({
 				expectDependencies: { "dummy": {}, "dummy2": {}, "@scope/scoped": {} }
 			})
@@ -205,6 +213,7 @@ describe("scanNodeModules", () => {
 		let conf = JSON.parse(fs.readFileSync("./game.json").toString());
 		const globalScripts = conf.globalScripts;
 		const moduleMainScripts = conf.moduleMainScripts;
+		const moduleMainPaths = conf.moduleMainPaths;
 
 		const expectedPaths = [
 			"node_modules/dummy/main.js",
@@ -223,6 +232,10 @@ describe("scanNodeModules", () => {
 
 		expect(moduleMainScripts).toEqual({
 			"dummy": "node_modules/dummy/main.js"
+		});
+		expect(moduleMainPaths).toEqual({
+			"node_modules/dummy/package.json": "node_modules/dummy/main.js",
+			"node_modules/@scope/scoped/package.json": "node_modules/@scope/scoped/root.js"
 		});
 	});
 
@@ -253,6 +266,7 @@ describe("scanNodeModules", () => {
 
 		await scanNodeModules({
 			logger: nullLogger,
+			experimentalMmp: true,
 			debugNpm: new MockPromisedNpm({
 				expectDependencies: {
 					"dummy": {
@@ -265,6 +279,7 @@ describe("scanNodeModules", () => {
 		let conf = JSON.parse(fs.readFileSync("./game.json").toString());
 		const globalScripts = conf.globalScripts;
 		const moduleMainScripts = conf.moduleMainScripts;
+		const moduleMainPaths = conf.moduleMainPaths;
 
 		const expectedPaths = [
 			"node_modules/dummy/noExtension.js",
@@ -276,6 +291,9 @@ describe("scanNodeModules", () => {
 		expect(moduleMainScripts).toEqual({
 			"dummy": "node_modules/dummy/noExtension.js"
 		});
+		expect(moduleMainPaths).toEqual({
+			"node_modules/dummy/package.json": "node_modules/dummy/noExtension.js"
+		});
 	});
 
 	it("scan globalScripts empty node_modules/", async () => {
@@ -286,6 +304,7 @@ describe("scanNodeModules", () => {
 
 		await scanNodeModules({
 			logger: nullLogger,
+			experimentalMmp: true,
 			debugNpm: new MockPromisedNpm({
 				expectDependencies: {}
 			})
@@ -294,6 +313,7 @@ describe("scanNodeModules", () => {
 		let conf = JSON.parse(fs.readFileSync("./game.json").toString());
 		const globalScripts = conf.globalScripts;
 		const moduleMainScripts = conf.moduleMainScripts;
+		const moduleMainPaths = conf.moduleMainPaths;
 		expect(globalScripts.length).toBe(0);
 
 		const expectedPaths: string[] = [];
@@ -302,6 +322,7 @@ describe("scanNodeModules", () => {
 		}
 
 		expect(moduleMainScripts).toBeUndefined();
+		expect(moduleMainPaths).toBeUndefined();
 	});
 
 	it("scan globalScripts field based on node_modules/, multiple versions in dependencies and devDependencies", async () => {
@@ -364,6 +385,7 @@ describe("scanNodeModules", () => {
 
 		await scanNodeModules({
 			logger: nullLogger,
+			experimentalMmp: true,
 			debugNpm: new MockPromisedNpm({
 				expectDependencies: {
 					"dummy": {
@@ -377,6 +399,7 @@ describe("scanNodeModules", () => {
 		let conf = JSON.parse(fs.readFileSync("./game.json").toString());
 		let globalScripts = conf.globalScripts;
 		let moduleMainScripts = conf.moduleMainScripts;
+		let moduleMainPaths = conf.moduleMainPaths;
 
 		let expectedPaths = [
 			"node_modules/dummy/main.js",
@@ -394,6 +417,10 @@ describe("scanNodeModules", () => {
 		expect(moduleMainScripts).toEqual({
 			"dummy": "node_modules/dummy/main.js",
 			"dummyChild": "node_modules/dummy/node_modules/dummyChild/index.js"
+		});
+		expect(moduleMainPaths).toEqual({
+			"node_modules/dummy/package.json": "node_modules/dummy/main.js",
+			"node_modules/dummy/node_modules/dummyChild/package.json": "node_modules/dummy/node_modules/dummyChild/index.js"
 		});
 
 		// nodeModules/dummyChild と modeModules/dummy/nodeModules/dummyChildを入れ替える
@@ -422,6 +449,7 @@ describe("scanNodeModules", () => {
 
 		await scanNodeModules({
 			logger: nullLogger,
+			experimentalMmp: true,
 			debugNpm: new MockPromisedNpm({
 				expectDependencies: {
 					"dummy": {
@@ -435,6 +463,7 @@ describe("scanNodeModules", () => {
 		conf = JSON.parse(fs.readFileSync("./game.json").toString());
 		globalScripts = conf.globalScripts;
 		moduleMainScripts = conf.moduleMainScripts;
+		moduleMainPaths = conf.moduleMainPaths;
 
 		expectedPaths = [
 			"node_modules/dummy/main.js",
@@ -452,6 +481,10 @@ describe("scanNodeModules", () => {
 		expect(moduleMainScripts).toEqual({
 			"dummy": "node_modules/dummy/main.js",
 			"dummyChild": "node_modules/dummyChild/index.js"
+		});
+		expect(moduleMainPaths).toEqual({
+			"node_modules/dummy/package.json": "node_modules/dummy/main.js",
+			"node_modules/dummyChild/package.json": "node_modules/dummyChild/index.js"
 		});
 	});
 
@@ -475,6 +508,7 @@ describe("scanNodeModules", () => {
 
 		await scanNodeModules({
 			logger: nullLogger,
+			experimentalMmp: true,
 			debugNpm: new MockPromisedNpm({
 				expectDependencies: {
 					"invalidDummy": {}
@@ -482,11 +516,12 @@ describe("scanNodeModules", () => {
 			})
 		});
 
-		let conf = JSON.parse(fs.readFileSync("./game.json").toString());
-		let globalScripts = conf.globalScripts;
-		let moduleMainScripts = conf.moduleMainScripts;
+		const conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		const globalScripts = conf.globalScripts;
+		const moduleMainScripts = conf.moduleMainScripts;
+		const moduleMainPaths = conf.moduleMainPaths;
 
-		let expectedPaths = [
+		const expectedPaths = [
 			"node_modules/invalidDummy/main.js",
 			"node_modules/invalidDummy/foo.js"
 		];
@@ -497,6 +532,7 @@ describe("scanNodeModules", () => {
 		}
 
 		expect(moduleMainScripts).toBeUndefined();
+		expect(moduleMainPaths).toEqual({});
 	});
 
 	it("scan all moduleMainScripts", async () => {
@@ -558,6 +594,7 @@ describe("scanNodeModules", () => {
 
 		await scanNodeModules({
 			logger: nullLogger,
+			experimentalMmp: true,
 			debugNpm: new MockPromisedNpm({
 				expectDependencies: {
 					"dummy": {}, "dummy2": {}, "@scope/scoped": {}
@@ -568,6 +605,7 @@ describe("scanNodeModules", () => {
 		let conf = JSON.parse(fs.readFileSync("./game.json").toString());
 		let globalScripts = conf.globalScripts;
 		let moduleMainScripts = conf.moduleMainScripts;
+		let moduleMainPaths = conf.moduleMainPaths;
 
 		let expectedPaths = [
 			"node_modules/dummy/main.js",
@@ -589,6 +627,12 @@ describe("scanNodeModules", () => {
 			"dummyChild": "node_modules/dummy/node_modules/dummyChild/index.js",
 			"dummy2": "node_modules/dummy2/index.js",
 			"@scope/scoped": "node_modules/@scope/scoped/root.js"
+		});
+		expect(moduleMainPaths).toEqual({
+			"node_modules/dummy/package.json": "node_modules/dummy/main.js",
+			"node_modules/dummy/node_modules/dummyChild/package.json": "node_modules/dummy/node_modules/dummyChild/index.js",
+			"node_modules/dummy2/package.json": "node_modules/dummy2/index.js",
+			"node_modules/@scope/scoped/package.json": "node_modules/@scope/scoped/root.js"
 		});
 	});
 
@@ -651,6 +695,7 @@ describe("scanNodeModules", () => {
 
 		await scanNodeModules({
 			logger: nullLogger,
+			experimentalMmp: true,
 			debugNpm: new MockPromisedNpm({
 				expectDependencies: {
 					"dummy": {}, "dummy2": {}, "@scope/scoped": {}
@@ -659,11 +704,12 @@ describe("scanNodeModules", () => {
 			noOmitPackagejson: true
 		});
 
-		let conf = JSON.parse(fs.readFileSync("./game.json").toString());
-		let globalScripts = conf.globalScripts;
-		let moduleMainScripts = conf.moduleMainScripts;
+		const conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		const globalScripts = conf.globalScripts;
+		const moduleMainScripts = conf.moduleMainScripts;
+		const moduleMainPaths = conf.moduleMainPaths;
 
-		let expectedPaths = [
+		const expectedPaths = [
 			"node_modules/dummy/main.js",
 			"node_modules/dummy/foo.js",
 			"node_modules/dummy/node_modules/dummyChild/index.js",
@@ -687,6 +733,12 @@ describe("scanNodeModules", () => {
 			"dummyChild": "node_modules/dummy/node_modules/dummyChild/index.js",
 			"dummy2": "node_modules/dummy2/index.js",
 			"@scope/scoped": "node_modules/@scope/scoped/root.js"
+		});
+		expect(moduleMainPaths).toEqual({
+			"node_modules/dummy/package.json": "node_modules/dummy/main.js",
+			"node_modules/dummy/node_modules/dummyChild/package.json": "node_modules/dummy/node_modules/dummyChild/index.js",
+			"node_modules/dummy2/package.json": "node_modules/dummy2/index.js",
+			"node_modules/@scope/scoped/package.json": "node_modules/@scope/scoped/root.js"
 		});
 	});
 
@@ -775,6 +827,7 @@ describe("scanNodeModules", () => {
 
 		await scanNodeModules({
 			logger: nullLogger,
+			experimentalMmp: true,
 			debugNpm: new MockPromisedNpm({
 				expectDependencies: {
 					"dummy": {
@@ -786,11 +839,12 @@ describe("scanNodeModules", () => {
 			fromEntryPoint: true
 		});
 
-		let conf = JSON.parse(fs.readFileSync("./game.json").toString());
-		let globalScripts = conf.globalScripts;
-		let moduleMainScripts = conf.moduleMainScripts;
+		const conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		const globalScripts = conf.globalScripts;
+		const moduleMainScripts = conf.moduleMainScripts;
+		const moduleMainPaths = conf.moduleMainPaths;
 
-		let expectedPaths = [
+		const expectedPaths = [
 			"node_modules/dummyChild/main.js",
 			"node_modules/dummy2/sub.js"
 		];
@@ -802,6 +856,9 @@ describe("scanNodeModules", () => {
 
 		expect(moduleMainScripts).toEqual({
 			"dummyChild": "node_modules/dummyChild/main.js"
+		});
+		expect(moduleMainPaths).toEqual({
+			"node_modules/dummyChild/package.json": "node_modules/dummyChild/main.js"
 		});
 	});
 
@@ -869,6 +926,7 @@ describe("scanNodeModules", () => {
 
 		await scanNodeModules({
 			logger: nullLogger,
+			experimentalMmp: true,
 			debugNpm: new MockPromisedNpm({
 				expectDependencies: {
 					"dummy": {
@@ -882,6 +940,7 @@ describe("scanNodeModules", () => {
 		const conf = JSON.parse(fs.readFileSync("./game.json").toString());
 		const globalScripts = conf.globalScripts;
 		const moduleMainScripts = conf.moduleMainScripts;
+		const moduleMainPaths = conf.moduleMainPaths;
 
 		const expectedPaths = [
 			"node_modules/dummy/foo.js",
@@ -896,6 +955,10 @@ describe("scanNodeModules", () => {
 		expect(moduleMainScripts).toEqual({
 			"dummy": "node_modules/dummy/main.js",
 			"dummyChild": "node_modules/dummy/node_modules/dummyChild/index.js",
+		});
+		expect(moduleMainPaths).toEqual({
+			"node_modules/dummy/package.json": "node_modules/dummy/main.js",
+			"node_modules/dummy/node_modules/dummyChild/package.json": "node_modules/dummy/node_modules/dummyChild/index.js",
 		});
 	});
 

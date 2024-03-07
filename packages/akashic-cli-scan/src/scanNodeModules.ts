@@ -59,6 +59,12 @@ export interface ScanNodeModulesParameterObject {
 	 * 省略された場合、 `false` 。
 	 */
 	includeExtensionToAssetId?: boolean;
+
+	/**
+	 * game.json の moduleMainPaths をサポートするかどうか。
+	 * 省略された場合、 `false` 。
+	 */
+	experimentalMmp?: boolean;
 }
 
 
@@ -75,7 +81,8 @@ export function _completeScanNodeModulesParameterObject(param: ScanNodeModulesPa
 		forceUpdateAssetIds: !!param.forceUpdateAssetIds,
 		noOmitPackagejson: !!param.noOmitPackagejson,
 		debugNpm: param.debugNpm ?? undefined,
-		includeExtensionToAssetId: !!param.includeExtensionToAssetId
+		includeExtensionToAssetId: !!param.includeExtensionToAssetId,
+		experimentalMmp: !!param.experimentalMmp
 	};
 }
 
@@ -152,6 +159,12 @@ export async function scanNodeModules(p: ScanNodeModulesParameterObject): Promis
 				}
 				// TODO: 現状globalScriptsがすべて削除された時にmoduleMainScriptsは反映されずに残ってしまうので、同時に消えるように修正すべき(残っていても実害は無い)
 				content.moduleMainScripts = Object.assign(content.moduleMainScripts || {}, moduleMainScripts);
+			}
+
+			if (param.experimentalMmp) {
+				// TODO: --experimental-mmp を削除しデフォルト動作とする
+				const moduleMainPaths = NodeModules.listModuleMainPaths(packageJsonFiles);
+				content.moduleMainPaths = Object.assign(content.moduleMainPaths || {}, moduleMainPaths);
 			}
 		}
 
