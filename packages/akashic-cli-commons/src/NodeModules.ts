@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
-import type { ModuleMainScriptsMap } from "@akashic/game-configuration";
+import type { ModuleMainPathsMap, ModuleMainScriptsMap } from "@akashic/game-configuration";
 import browserify from "browserify";
 import { ConsoleLogger } from "./ConsoleLogger";
 import type { Logger } from "./Logger";
@@ -55,6 +55,22 @@ export module NodeModules {
 			}
 		}
 		return moduleMainScripts;
+	}
+
+	export function listModuleMainPaths(packageJsonFiles: string[]): ModuleMainPathsMap {
+		if (packageJsonFiles.length === 0) return {};
+		const moduleMainPaths: ModuleMainPathsMap = {};
+
+		for (let i = 0; i < packageJsonFiles.length; i++) {
+			const packageJsonFile = packageJsonFiles[i];
+			try {
+				const { mainScriptPath } = NodeModules.extractModuleMainInfo(packageJsonFile);
+				moduleMainPaths[packageJsonFile] = Util.makeUnixPath(mainScriptPath);
+			} catch (e) {
+				// do nothing
+			}
+		}
+		return moduleMainPaths;
 	}
 
 	export function extractModuleMainInfo(packageJsonPath: string): ModuleMainInfo {

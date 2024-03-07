@@ -169,9 +169,10 @@ describe("install()", function () {
 					"dummy": "node_modules/dummy/main.js",
 					"dummyChild": "node_modules/dummy/node_modules/dummyChild/main.js"
 				});
+				expect(content.moduleMainPaths).toBeUndefined();
 				warnLogs = []; // 初期化
 			})
-			.then(() => promiseInstall({ moduleNames: ["noOmitPackagejson@0.0.0"], cwd: "./somedir", logger: logger, debugNpm: dummyNpm, noOmitPackagejson: true }))
+			.then(() => promiseInstall({ moduleNames: ["noOmitPackagejson@0.0.0"], cwd: "./somedir", logger: logger, debugNpm: dummyNpm, noOmitPackagejson: true, experimentalMmp: true }))
 			.then(() => cmn.ConfigurationFile.read("./somedir/game.json", logger))
 			.then((content) => {
 				const globalScripts = content.globalScripts;
@@ -184,6 +185,10 @@ describe("install()", function () {
 					"dummy": "node_modules/dummy/main.js",
 					"dummyChild": "node_modules/dummy/node_modules/dummyChild/main.js",
 					"noOmitPackagejson": "node_modules/noOmitPackagejson/main.js"
+				});
+				const moduleMainPaths = content.moduleMainPaths;
+				expect(moduleMainPaths).toEqual({
+					"node_modules/noOmitPackagejson/package.json": "node_modules/noOmitPackagejson/main.js"
 				});
 				warnLogs = []; // 初期化
 			})
@@ -209,7 +214,7 @@ describe("install()", function () {
 				globalScripts.push("node_modules/foo/foo.js");
 				cmn.ConfigurationFile.write(content, "./somedir/game.json", logger);
 			})
-			.then(() => promiseInstall({ moduleNames: ["dummy@1.0.1"], cwd: "./somedir", logger: logger, debugNpm: dummyNpm }))
+			.then(() => promiseInstall({ moduleNames: ["dummy@1.0.1"], cwd: "./somedir", logger: logger, debugNpm: dummyNpm, experimentalMmp: true }))
 			.then(() => cmn.ConfigurationFile.read("./somedir/game.json", logger))
 			.then((content) => {
 				const globalScripts = content.globalScripts;
@@ -227,6 +232,12 @@ describe("install()", function () {
 					"dummyChild": "node_modules/dummy/node_modules/dummyChild/main.js",
 					"noOmitPackagejson": "node_modules/noOmitPackagejson/main.js"
 				});
+				const moduleMainPaths = content.moduleMainPaths;
+				expect(moduleMainPaths).toEqual({
+					"node_modules/noOmitPackagejson/package.json": "node_modules/noOmitPackagejson/main.js",
+					"node_modules/dummy/package.json": "node_modules/dummy/index2.js"
+				});
+
 			})
 			.then(done, done.fail);
 	});

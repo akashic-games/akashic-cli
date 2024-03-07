@@ -39,7 +39,7 @@
   },
   "typings": "lib/index.d.ts",
   "dependencies": {
-    "@akashic/game-configuration": "2.0.1",
+    "@akashic/game-configuration": "2.2.0",
     "browserify": "17.0.0",
     "editorconfig": "^2.0.0",
     "eslint": "8.27.0",

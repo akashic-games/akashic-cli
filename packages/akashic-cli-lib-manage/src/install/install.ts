@@ -47,6 +47,11 @@ export interface InstallParameterObject {
 	 * 省略された場合、 `false`
 	 */
 	noOmitPackagejson?: boolean;
+
+	/**
+	 * game.json の moduleMainPaths をサポートするかどうか。
+	 */
+	experimentalMmp?: boolean;
 }
 
 interface NormalizedInstallParameterObject extends Required<Omit<InstallParameterObject, "plugin" | "debugNpm">> {
@@ -62,7 +67,8 @@ function _normalizeInstallParameterObject(param: InstallParameterObject): Normal
 		plugin: param.plugin ?? null,
 		logger: param.logger ?? new cmn.ConsoleLogger(),
 		noOmitPackagejson: !!param.noOmitPackagejson,
-		debugNpm: param.debugNpm ?? null
+		debugNpm: param.debugNpm ?? null,
+		experimentalMmp: !!param.experimentalMmp
 	};
 }
 
@@ -125,6 +131,11 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 							conf._content.environment && conf._content.environment["sandbox-runtime"]
 							? conf._content.environment["sandbox-runtime"] : "1";
 						conf.addToModuleMainScripts(packageJsonFiles, sandboxRuntime);
+
+						if (param.experimentalMmp) {
+							// TODO: --tmp-mmp を削除しデフォルト動作とする
+							conf.addModuleMainPaths(packageJsonFiles, sandboxRuntime);
+						}
 					}
 				})
 				.then(() => {

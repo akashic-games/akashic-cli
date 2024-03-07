@@ -171,6 +171,32 @@ describe("NodeModules", function () {
 		});
 	});
 
+	describe(".listModuleMainPaths()", function () {
+		it("key is the path of package.json.", function (done) {
+			jest.spyOn(Util, "requireResolve").mockImplementation((id: string, opts: { paths?: string[] | undefined }): string => {
+				const pkgJsonPath = path.join(opts.paths[0], "package.json");
+				const pkgData =  JSON.parse(fs.readFileSync(pkgJsonPath, "utf-8"));
+				const mainScriptName = pkgData.main.split(".").pop() === "js" ? pkgData.main : pkgData.main + ".js";
+				return path.join(path.resolve("."), path.dirname(pkgJsonPath), mainScriptName);
+			});
+
+			mockfs(mockFsContent);
+			Promise.resolve()
+				.then(() => NodeModules.listScriptFiles(".", ["dummy", "dummy2", "dummy3"], logger))
+				.then((filePaths) => NodeModules.listPackageJsonsFromScriptsPath(".", filePaths))
+				.then((packageJsonFiles) => NodeModules.listModuleMainPaths(packageJsonFiles))
+				.then((moduleMainPaths) => {
+					expect(moduleMainPaths).toEqual({
+						"node_modules/dummy/package.json": "node_modules/dummy/main.js",
+						"node_modules/dummy/node_modules/dummyChild/package.json": "node_modules/dummy/node_modules/dummyChild/main.js",
+						"node_modules/dummy3/package.json": "node_modules/dummy3/index.js"
+					});
+				})
+				.then(done)
+				.catch(() => done.fail());
+		});
+	});
+
 	// モジュール名に node_modules を含むモジュールに依存しているケース
 	describe(".listPackageJsonsFromScriptsPath() with failure-prone module name", function () {
 		it("list the files named package.json", function (done) {

@@ -13,7 +13,8 @@ function cli(param: CliConfigInstall): void {
 		plugin: param.plugin,
 		logger: logger,
 		link: param.link,
-		noOmitPackagejson: !param.omitPackagejson
+		noOmitPackagejson: !param.omitPackagejson,
+		experimentalMmp: param.experimentalMmp
 	};
 	Promise.resolve()
 		.then(() => promiseInstall(installParam))
@@ -36,7 +37,8 @@ commander
 	.option("-C, --cwd <dir>", "The directory incluedes game.json")
 	.option("-q, --quiet", "Suppress output")
 	.option("-p, --plugin <code>", "Also add to operationPlugins with the code", (x: string) => parseInt(x, 10))
-	.option("--no-omit-packagejson", "Add package.json of each module to the globalScripts property (to support older Akashic Engine)");
+	.option("--no-omit-packagejson", "Add package.json of each module to the globalScripts property (to support older Akashic Engine)")
+	.option("--experimental-mmp", "Supports moduleMainPaths in game.json");
 
 export function run(argv: string[]): void {
 	commander.parse(argv);
@@ -54,7 +56,8 @@ export function run(argv: string[]): void {
 			link: options.link ?? conf.link,
 			quiet: options.quiet ?? conf.quiet,
 			plugin: options.plugin ?? conf.plugin,
-			omitPackagejson: options.omitPackagejson ?? conf.omitPackagejson
+			omitPackagejson: options.omitPackagejson ?? conf.omitPackagejson,
+			experimentalMmp: options.experimentalMmp ?? conf.experimentalMmp
 		});
 	});
 }
