@@ -95,9 +95,16 @@ commander
 	.option("-e, --from-entry-point", "Scan from the entry point instead of `npm ls`")
 	.option("-q, --quiet", "Suppress output")
 	.option("--no-omit-packagejson", "Add package.json of each module to the globalScripts property (to support older Akashic Engine)")
+	.option("--experimental-mmp", "Supports moduleMainPaths in game.json")
 	.action((opts: CliConfigScanGlobalScripts = {}) => {
 		const logger = new ConsoleLogger({ quiet: opts.quiet });
-		scanNodeModules({ cwd: opts.cwd, logger, fromEntryPoint: opts.fromEntryPoint, noOmitPackagejson: !opts.omitPackagejson })
+		scanNodeModules({
+			cwd: opts.cwd,
+			logger,
+			fromEntryPoint: opts.fromEntryPoint,
+			noOmitPackagejson: !opts.omitPackagejson,
+			experimentalMmp: opts.experimentalMmp
+		})
 			.catch((err: Error) => {
 				logger.error(err.message);
 				process.exit(1);
