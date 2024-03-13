@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 2.16.61 (2024-03-13)
+
+#### Enhancement
+* `akashic-cli-commons`, `akashic-cli-scan`
+  * [#1327](https://github.com/akashic-games/akashic-cli/pull/1327) Support moduleMainPaths for scan ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+* `akashic-cli-commons`, `akashic-cli-lib-manage`
+  * [#1324](https://github.com/akashic-games/akashic-cli/pull/1324) Support mmp for install and uninstall ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 2
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- kamakiri_ys ([@kamakiri01](https://github.com/kamakiri01))
+
 ## 2.16.60 (2024-02-28)
 
 #### Enhancement
