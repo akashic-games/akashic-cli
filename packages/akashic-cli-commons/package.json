@@ -28,6 +28,7 @@
     "@types/jest": "27.5.2",
     "@types/mock-fs": "4.13.1",
     "@types/node": "14.18.30",
+    "@types/resolve": "^1.20.6",
     "@typescript-eslint/eslint-plugin": "5.43.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-import": "2.26.0",
@@ -45,7 +46,8 @@
     "eslint": "8.27.0",
     "fs-extra": "11.2.0",
     "fs-readdir-recursive": "1.1.0",
-    "js-sha256": "^0.9.0"
+    "js-sha256": "^0.9.0",
+    "resolve": "^1.22.8"
   },
   "publishConfig": {
     "access": "public",

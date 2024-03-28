@@ -1,5 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
+import resolve from "resolve";
 
 export function invertMap(obj: {[key: string]: string}): {[key: string]: string[]};
 export function invertMap(obj: {[key: string]: Object}, prop: string): {[key: string]: string[]};
@@ -98,6 +99,6 @@ export async function getTotalFileSize(directoryPath: string): Promise<number> {
 }
 
 // require.resolve() がモックできないので関数をモックするため require.resolve() するだけの関数を切り出している
-export function requireResolve(id: string, opts?: { paths?: string[] | undefined }): string {
-	return require.resolve(id, opts);
+export function requireResolve(id: string, opts?: { paths?: string[] | undefined; basedir?: string }): string {
+	return resolve.sync(id, { ...opts, preserveSymlinks: true });
 }

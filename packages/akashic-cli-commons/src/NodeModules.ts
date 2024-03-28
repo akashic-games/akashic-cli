@@ -76,7 +76,9 @@ export module NodeModules {
 	export function extractModuleMainInfo(packageJsonPath: string): ModuleMainInfo {
 		const packageJsonData = fs.readFileSync(packageJsonPath, "utf-8");
 		const d = JSON.parse(packageJsonData);
-		let mainScriptPath = Util.requireResolve(d.name, {paths: [path.join(path.dirname(packageJsonPath))]});
+		const paths = [path.join(path.dirname(packageJsonPath))];
+		const basedir = packageJsonPath;
+		let mainScriptPath = Util.requireResolve(d.name, { paths, basedir });
 		if (!mainScriptPath) {
 			throw new Error(`No ${d.name} in node_modules`);
 		}
