@@ -23,30 +23,30 @@
   "devDependencies": {
     "@akashic/eslint-config": "^1.1.0",
     "@types/browserify": "12.0.37",
-    "@types/eslint": "8.4.6",
+    "@types/eslint": "8.56.6",
     "@types/fs-extra": "9.0.13",
     "@types/jest": "27.5.2",
     "@types/mock-fs": "4.13.1",
     "@types/node": "14.18.30",
     "@types/resolve": "^1.20.6",
-    "@typescript-eslint/eslint-plugin": "5.43.0",
-    "eslint-config-prettier": "8.5.0",
-    "eslint-plugin-import": "2.26.0",
+    "@typescript-eslint/eslint-plugin": "5.62.0",
+    "eslint-config-prettier": "8.10.0",
+    "eslint-plugin-import": "2.29.1",
     "eslint-plugin-jest": "26.9.0",
     "jest": "26.6.3",
     "mock-fs": "5.2.0",
     "shx": "0.3.4",
-    "typescript": "4.8.3"
+    "typescript": "4.9.5"
   },
   "typings": "lib/index.d.ts",
   "dependencies": {
     "@akashic/game-configuration": "2.2.0",
     "browserify": "17.0.0",
     "editorconfig": "^2.0.0",
-    "eslint": "8.27.0",
+    "eslint": "8.57.0",
     "fs-extra": "11.2.0",
     "fs-readdir-recursive": "1.1.0",
-    "js-sha256": "^0.9.0",
+    "js-sha256": "^0.11.0",
     "resolve": "^1.22.8"
   },
   "publishConfig": {
