@@ -29,26 +29,26 @@
     "@akashic/eslint-config": "1.1.1",
     "@akashic/game-configuration": "2.2.0",
     "@types/commander": "2.12.2",
-    "@types/form-data": "2.2.1",
+    "@types/form-data": "2.5.0",
     "@types/fs-extra": "9.0.13",
     "@types/jest": "29.5.0",
     "@types/mock-fs": "4.13.1",
     "@types/node": "14.18.30",
     "@types/tar": "6.1.2",
-    "@typescript-eslint/eslint-plugin": "5.43.0",
-    "eslint": "8.27.0",
-    "eslint-plugin-import": "2.26.0",
+    "@typescript-eslint/eslint-plugin": "5.62.0",
+    "eslint": "8.57.0",
+    "eslint-plugin-import": "2.29.1",
     "eslint-plugin-jest": "26.9.0",
     "jest": "26.6.3",
     "mock-fs": "5.2.0",
     "rimraf": "3.0.2",
-    "typescript": "4.8.3"
+    "typescript": "4.9.5"
   },
   "dependencies": {
     "@akashic/akashic-cli-commons": "0.14.21",
     "commander": "8.3.0",
     "minipass": "3.3.5",
-    "tar": "6.1.11"
+    "tar": "6.2.1"
   },
   "publishConfig": {
     "access": "public",
