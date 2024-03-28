@@ -22,12 +22,12 @@
   ],
   "devDependencies": {
     "@akashic/eslint-config": "^1.1.0",
-    "@types/browserify": "12.0.37",
-    "@types/eslint": "8.4.6",
+    "@types/browserify": "12.0.40",
+    "@types/eslint": "8.4.10",
     "@types/fs-extra": "9.0.13",
     "@types/jest": "27.5.2",
-    "@types/mock-fs": "4.13.1",
-    "@types/node": "14.18.30",
+    "@types/mock-fs": "4.13.4",
+    "@types/node": "14.18.63",
     "@types/resolve": "^1.20.6",
     "@typescript-eslint/eslint-plugin": "5.43.0",
     "eslint-config-prettier": "8.5.0",
@@ -36,7 +36,7 @@
     "jest": "26.6.3",
     "mock-fs": "5.2.0",
     "shx": "0.3.4",
-    "typescript": "4.8.3"
+    "typescript": "4.8.4"
   },
   "typings": "lib/index.d.ts",
   "dependencies": {
