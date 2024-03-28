@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.16.62 (2024-03-28)
+
+#### Bug Fix
+* `akashic-cli-commons`, `akashic-cli-export`
+  * [#1328](https://github.com/akashic-games/akashic-cli/pull/1328) fix(commons): preserve symlinks when extracting module paths ([@yu-ogi](https://github.com/yu-ogi))
+
+#### Committers: 1
+- [@yu-ogi](https://github.com/yu-ogi)
+
 ## 2.16.61 (2024-03-13)
 
 #### Enhancement
