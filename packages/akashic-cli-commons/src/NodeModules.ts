@@ -111,11 +111,15 @@ export module NodeModules {
 		// これを検知した場合、そのモジュールへの依存はgame.jsonに追記せず、akashicコマンドユーザには警告を表示する。
 		const ignoreModulePaths = ["/akashic-cli-commons/node_modules/"];
 
+		// builtins (コアモジュール) を有効にすると browserify が polyfill したモジュールが b.on("dep", ...) で検出される。
+		// したがってここでは false を指定してコアモジュールの読み込みを禁止する。
+		const builtins = false;
+
 		const b = browserify({
 			entries: new StringStream(rootRequirer, dummyRootPath),
 			basedir: basepath,
 			preserveSymlinks: true, // npm link で node_modules 以下に置かれたモジュールを symlink パスのまま扱う
-			builtins: true  // builtins (コアモジュール) はサポートしていないが、b.on("dep", ...) で検出するためにtrueにする
+			builtins,
 		});
 		b.external("g");
 
