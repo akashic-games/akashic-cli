@@ -95,6 +95,9 @@
     "webpack-cli": "5.0.1",
     "whatwg-fetch": "3.6.2"
   },
+  "overrides": {
+    "@types/mime": "3.0.4"
+  },
   "files": [
     "package.json",
     "README.md",
