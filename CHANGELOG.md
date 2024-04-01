@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 2.16.63 (2024-04-01)
+
+#### Bug Fix
+* `akashic-cli-commons`, `akashic-cli-serve`
+  * [#1330](https://github.com/akashic-games/akashic-cli/pull/1330) fix(commons): do not detect builtin modules ([@yu-ogi](https://github.com/yu-ogi))
+
+#### Update Dependencies
+* `akashic-cli-init`, `akashic-cli-serve`
+  * [#1329](https://github.com/akashic-games/akashic-cli/pull/1329) fix(deps): update dependency express to v4.19.2 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- [@yu-ogi](https://github.com/yu-ogi)
+
 ## 2.16.62 (2024-03-28)
 
 #### Bug Fix
