@@ -1,0 +1,38 @@
+name: Bump Version and Publish
+
+on:
+  pull_request:
+    branches:
+      - master
+    types:
+      - closed
+
+env:
+  PUBLISH_VERSION: patch
+
+jobs:
+  publish:
+    # PullRequest に release ラベルが付与されている場合のみ実行
+    if: github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'release')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+      - name: Prepare
+        run: |
+          npm ci
+          npm run build
+          npm test
+      - name: Publish and Release
+        run: |
+          git config user.name 'github-actions'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          npm run publish:${{ env.PUBLISH_VERSION }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_AUTH: ${{ secrets.GITHUB_TOKEN }}

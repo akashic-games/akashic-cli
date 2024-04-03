@@ -16,7 +16,8 @@
       "matchUpdateTypes": ["patch"],
       "matchPackagePatterns": ["^@akashic/"],
       "schedule": "at any time",
-      "groupName": "akashic patch dependencies"
+      "groupName": "akashic patch dependencies",
+      "labels": ["release"]
     },
     {
       "matchUpdateTypes": ["major"],
@@ -32,7 +33,7 @@
       "draftPR": true
     },
     {
-      "packagePatterns": ["^@storybook/"],
+      "matchPackagePatterns": ["^@storybook/"],
       "enabled": false
     }
   ],
