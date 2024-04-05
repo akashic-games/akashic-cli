@@ -1,0 +1,1 @@
+window.g = client.g;

@@ -1,0 +1,12 @@
+{
+    "width": 320,
+    "height": 320,
+    "fps": 30,
+    "assets": {
+        "mainScene": {
+            "type": "script",
+            "path": "script/mainScene.js",
+            "global": true
+        }
+    }
+}

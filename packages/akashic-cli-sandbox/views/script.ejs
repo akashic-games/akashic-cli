@@ -1,0 +1,33 @@
+"use strict";
+if (! ("gScriptContainer" in window)) {
+	window.gScriptContainer = {};
+	window._savedConfig = JSON.parse(localStorage.getItem("akashic-sandbox-config"));
+
+}
+if (! gScriptContainer["<%- key %>"]) {
+	gScriptContainer["<%- key %>"] = function(g) {
+		// Akashicコンテンツで利用に注意が必要な機能が使われている場合に警告を出すよう、実体を差し替える。
+		var Date = window.Date;;
+		var Math = window.Math;
+		if (window._savedConfig.isWarnSpecifiedInConfig) {
+			if (window._savedConfig.warnUseDate !== false)
+				Date = window.MeddlingDate;
+			if (window._savedConfig.warnUseMathRandom !== false)
+				Math = window.MeddlingMath;
+		} else if (window._savedConfig.warningMeddlingAkashic) {
+			Date = window.MeddlingDate;
+			Math = window.MeddlingMath;
+		}
+
+		(function(exports, require, module, __filename, __dirname) {
+			<%- scriptContent %>
+
+			<% if (exports != null) { %>
+				<% for (var variableName in exports) { %>
+					exports["<%= exports[variableName] %>"] = typeof <%= exports[variableName] %> !== "undefined" ? <%= exports[variableName] %> : undefined;
+				<% } %>
+			<% } %>
+
+		})(g.module.exports, g.module.require, g.module, g.filename, g.dirname);
+	}
+}

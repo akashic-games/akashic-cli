@@ -1,0 +1,402 @@
+<!-- entity-list-item template -->
+<script type="text/x-template" id="entity-list-item-template">
+	<li>
+		<div>
+			<div style="float: left; width: 20px; cursor: pointer;" v-on:click="toggle">
+				<i class="fa {{ hasChildren ? open ? 'fa-caret-down' : 'fa-caret-right' : '' }}"></i>
+			</div>
+			<div class="dev-entity-tree-item" style="float: left; cursor: pointer;" v-on:click="selectEntity" v-on:mouseover="focusEntity" v-on:mouseleave="unfocusEntity">
+				{{index}}: {{model.className}}
+			</div>
+			<div style="clear: left;"></div>
+		</div>
+		<ul v-show="open" v-if="hasChildren">
+			<entity-list-item class="item" v-for="child in model.children" :model="child" :index="$index"></entity-list-item>
+		</ul>
+	</li>
+</script>
+<a id="dev-btn" class="dev-btn" title="developer menu"><i class="fa fa-cog"></i></a>
+<div id="dev-container">
+	<div id="dev-menu" v-show="showMenu" class="dev-menu-main dev-menu-hide" v-bind:class="{'dev-menu-position-right': config.isPositionRight, 'dev-menu-position-bottom': !config.isPositionRight}" v-bind:style="config.isPositionRight ? config.size.right : config.size.bottom">
+		<div v-if="entityRect.show" style="position: fixed; border: 2px solid red; z-index: 9999;" v-bind:style="entityRect.rectStyle"></div>
+		<div class="dev-control">
+			<div class="pure-menu pure-menu-horizontal">
+				<ul class="pure-menu-list">
+					<li v-for="view in views" class="pure-menu-item" v-bind:class="{'pure-menu-selected': view.show}"><a href="#" class="pure-menu-link" v-text="view.title" v-on:click="changeView(view)"></a></li>
+				</ul>
+			</div>
+			<div class="dev-control-action">
+				<a href="#" v-on:click="togglePosition"><i class="fa" v-bind:class="{'fa-toggle-down': config.isPositionRight, 'fa-toggle-right': !config.isPositionRight}"></i></a>
+				<a href="#" v-on:click="closeMenu"><i class="fa fa-times"></i></a>
+			</div>
+		</div>
+		<div class="dev-menu-body">
+			<div class="dev-menu-view" id="general-view">
+				<div class="dev-menu-contents">
+					<h2>ゲーム情報</h2>
+					<div class="pure-g">
+						<div class="pure-u-1-5">Path:</div>
+						<div class="pure-u-4-5"><input type="text" class="dev-info-text" v-model="path" readonly></div>
+					</div>
+					<div class="pure-g">
+						<div class="pure-u-1-5">Game ID:</div>
+						<div class="pure-u-4-5"><input type="text" class="dev-info-text" v-model="gameId" readonly></div>
+					</div>
+					<div class="pure-g">
+						<div class="pure-u-1-5">Self Name:</div>
+						<div class="pure-u-4-5"><input type="text" class="dev-info-text" v-model="selfName" readonly></div>
+					</div>
+					<div class="pure-g">
+						<div class="pure-u-1-5">Self ID:</div>
+						<div class="pure-u-4-5"><input type="text" class="dev-info-text" v-model="selfId" readonly></div>
+					</div>
+					<div class="pure-g">
+						<div class="pure-u-1-5">Sandbox Runtime Version:</div>
+						<div class="pure-u-4-5">v<%= version %></div>
+					</div>
+					<h2>オプション</h2>
+					<form class="pure-form">
+						<fieldset>
+							<div>
+								<label for="show-profiler">
+									<input id="show-profiler" type="checkbox" value="" v-on:change="toggleProfiler">
+									プロファイラー情報の表示
+								</label>
+							</div>
+							<div>
+								<label for="show-bg">
+									<input id="show-bg" type="checkbox" value="" v-on:change="toggleBackground">
+									背景表示
+								</label>
+							</div>
+							<div>
+								<label for="show-grid">
+									<input id="show-grid" type="checkbox" value="" v-on:change="toggleGrid">
+									グリッド表示
+								</label>
+							</div>
+							<div>
+								<label for="omit-interpolated-tick">
+									<input id="omit-interpolated-tick" type="checkbox" value="" v-on:change="toggleOmitInterpolatedTick">
+									リプレイ時、タイムスタンプ待ちのティック補間を省略 (v2以降)
+								</label>
+							</div>
+							<div>
+								<a class="pure-button" v-on:click="fitToWindow">fit to window</a>
+								<a class="pure-button" v-on:click="revertSize">default size</a>
+								<a class="pure-button" v-on:click="captureScreen" download="screen.png">スクリーンショット</a>
+							</div>
+						</fieldset>
+					</form>
+					<h2>オプション(リロードで適用)</h2>
+					<form class="pure-form">
+						<fieldset>
+							<div>
+								<label for="toggle-preventDefault">
+									<input id="toggle-preventDefault" type="checkbox" value="" v-model="config.disablePreventDefault" v-on:change="togglePreventDefault">
+									canvas要素上で発生したDOMイベントの伝搬をキャンセルしない
+								</label>
+							</div>
+							<div>
+								<label for="warning-medding-akashic">
+									<input id="warning-meddling-akashic" type="checkbox" v-model="config.warningMeddlingAkashic" v-on:change="toggleWarningMeddlingAkashic"  v-bind:disabled="config.isWarnSpecifiedInConfig">
+									Akashicコンテンツで使用すべきでない機能が使用された場合警告を出力
+									<b v-if="config.isWarnSpecifiedInConfig"><br>(sandbox.config.js で warn.useDate, warn.useMathRandom が指定されているため無効化されています)</b>
+								</label>
+							</div>
+						</fieldset>
+					</form>
+				</div>
+			</div>
+			<div class="dev-menu-view" id="events-view">
+				<div class="dev-menu-contents">
+					<h2>プレイヤー</h2>
+					<form class="pure-form">
+						<fieldset>
+							<label for="auto-join">
+								<input id="auto-join" type="checkbox" v-model="config.autoJoin" v-on:change="onAutoJoinChanged">
+								ゲーム開始時にsandbox-playerの自動Join
+							</label>
+						</fieldset>
+					</form>
+					<form class="pure-form">
+						<fieldset>
+							<input type="text" placeholder="Player ID" v-model="inputPlayerId">
+							<input type="text" placeholder="Player Name" v-model="inputPlayerName">
+							<a class="pure-button pure-button-primary" v-on:click="joinGame">Join</a>
+						</fieldset>
+					</form>
+					<table class="pure-table">
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>Name</th>
+								<th>Self</th>
+								<th>Control</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr v-for="p in players">
+								<td v-text="p.player.id"></td>
+								<td v-text="p.player.name"></td>
+								<td v-text="p.self"></td>
+								<td><a class="button-error pure-button" v-on:click="leaveGame($index)">Leave</a></td>
+							</tr>
+						</tbody>
+					</table>
+					<h2>イベント送信(Advanced)</h2>
+					<form class="pure-form">
+						<input id="auto-send" type="checkbox" v-model="config.autoSendEvents" v-on:change="onAutoSendEventsChanged">
+						ゲーム開始時にEventを自動送信<br/>
+						(有効にすると、NicoNicoタブの "セッションパラメータを送る" 機能は無効になります)
+						<textarea style="width:90%; min-height:200px" v-model="config.eventsToSend" v-on:change="onEventsToSendChanged" placeholder="Events to Send (Should be an array of events)"></textarea>
+						<submit class="pure-button pure-button-primary" v-on:click="sendEvents">Send Events</submit>
+					</form>
+					<h2>登録済みのイベント(Advanced)</h2>
+
+					<table class="pure-table">
+						<thead>
+							<tr>
+								<th>送る</th>
+								<th>#</th>
+								<th>event</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr v-for="(e, index) in events">
+								<td>
+									<a class="pure-button" v-on:click="sendEventsWithValue(events[e])">Send</a>
+									<a class="pure-button" v-on:click="insertEventString(events[e])">Copy</a>
+								</td>
+								<td v-text="e"></td>
+								<td v-text="index.substr(0, 30) + '...'"></td>
+							</tr>
+						</tbody>
+					</table>
+
+				</div>
+			</div>
+			<div class="dev-menu-view" id="camera-view">
+				<div class="dev-menu-contents">
+					<h2>カメラ</h2>
+					<table class="pure-table">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>ID</th>
+								<th>Name</th>
+								<th>Local</th>
+								<th>Control</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr v-for="c in cameras">
+								<td v-text="$index"></td>
+								<td v-text="c.id"></td>
+								<td v-text="c.name"></td>
+								<td v-text="c.local"></td>
+								<td><a class="pure-button {{ ($index === focusingCameraIndex) ? 'button-error' : '' }}" v-on:click="setFocusingCamera($index)">Focus</a></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<div class="dev-menu-view" id="e-view">
+				<div class="dev-menu-scroll-contents dev-entity-tree {{ config.isPositionRight ? 'dev-entity-tree-horizontal' : 'dev-entity-tree-vertical' }}">
+					<h2>現在のシーンに属するE</h2>
+					<form>
+						<label for="show-entity-rect" class="pure-checkbox">
+							<input id="show-entity-rect" type="checkbox" v-model="entityRect.enable">
+							エンティティの包含矩形を表示
+						</label>
+						<label v-if="entityRect.enable" for="with-children" class="pure-checkbox">
+							<input id="with-children" type="checkbox" v-model="entityRect.withChildren">
+							子孫エンティティを含める
+						</label>
+					</form>
+					<hr>
+					<a class="pure-button pure-button-primary" v-on:click="updateEntityList">更新</a>
+					<div>
+						<ul>
+							<entity-list-item v-for="e in entities" class="item" :model="e" :index="$index"></entity-list-item>
+						</ul>
+					</div>
+				</div>
+				<div class="dev-menu-scroll-contents dev-entity-property {{ config.isPositionRight ? 'dev-entity-property-horizontal' : 'dev-entity-property-vertical' }}" v-if="targetEntity">
+					<p><a class="pure-button button-success" v-on:click="consoleDump">コンソールにダンプ</a></p>
+					<p>{{ targetEntity.className }}</p>
+					<p>id: {{ targetEntity.id }}</p>
+					<p>local: {{ targetEntity.local }}</p>
+					<p>touchable: {{ targetEntity.touchable }}</p>
+					<p>destroyed: {{ targetEntity.destroyed }}</p>
+					<p>visible: {{ targetEntity.visible }}</p>
+					<p>width: {{ targetEntity.width }}</p>
+					<p>height: {{ targetEntity.height }}</p>
+					<p>x: {{ targetEntity.x }}</p>
+					<p>y: {{ targetEntity.y }}</p>
+					<p>angle: {{ targetEntity.angle }}</p>
+					<p>opacity: {{ targetEntity.opacity }}</p>
+				</div>
+			</div>
+
+			<div class="dev-menu-view" id="niconico-view">
+				<div class="dev-menu-contents">
+					<h2>ニコニコ新市場対応テスト</h2>
+					<p v-if="!isIchibaContent">
+						ニコニコ新市場非対応コンテンツです。
+						ニコニコ新市場に対応させるためには、game.json の environment フィールドに値を追加する必要があります。
+						詳細は<a href="https://akashic-games.github.io/guide/ranking.html" target="_blank">Webサイト</a>を参照してください。
+					</p>
+					<div class="{{ isIchibaContent ? '': 'disabled' }}">
+						<label>
+							<input id="send-mode" type="checkbox" v-bind:disabled="!isIchibaContent" v-model="config.sendsSessionParameter" v-on:change="onSendsSessionParameterChanged" />
+							セッションパラメータを送る(要リロード)<br/>
+							(有効にすると、Eventsタブの "ゲーム開始時にEventを自動送信" 機能は無効になります)
+						</label>
+						<table class="pure-table" v-show="config.sendsSessionParameter" style="width: 100%">
+							<thead>
+								<tr>
+									<th>property</th>
+									<th>content</th>
+								</tr>
+							</thead>
+							<tr>
+								<td>mode</td>
+								<td>
+									<select v-bind:disabled="!isIchibaContent" v-model="config.mode" v-on:change="onModeChanged">
+										<option v-for="mode in modeList" v-bind:value="mode.value">
+											{{ mode.text }}
+										</option>
+									</select>
+								</td>
+							</tr>
+							<tr v-bind:style="{ color: (isIchibaContent && config.mode === 'ranking') ? undefined : 'silver' }" >
+								<td>totalTimeLimit</td>
+								<td>
+									<div>
+										<div v-bind:style="{ color: config.usePreferredTotalTimeLimit ? 'silver' : undefined }">
+											<input type="text" v-model="config.totalTimeLimit" v-on:change="onTotalTimeLimitChanged"
+												v-bind:disabled="config.usePreferredTotalTimeLimit" />
+										</div>
+										<label>
+											<input type="checkbox"
+												v-bind:disabled="!(isIchibaContent && config.mode === 'ranking')"
+												v-model="config.usePreferredTotalTimeLimit"
+												v-on:change="onUsePreferredTotalTimeLimitChanged" />
+											<span>game.jsonのpreferredSessionParametersの値を利用する({{preferredTotalTimeLimit}}秒)</span>
+										</label>
+									</div>
+									<label>
+										<input id="stop-game" type="checkbox" v-bind:disabled="!(isIchibaContent && config.mode === 'ranking')" v-model="config.stopsGameOnTimeout" v-on:change="onStopGameChanged" />
+										<span>時間経過後にゲームを停止</span> (残{{remainingTime}}秒)
+									</label>
+									<p v-if="isStopGame" style="color:red; font-weight:bold">ゲームを停止しました。</p>
+								</td>
+							</tr>
+						</table>
+						<h3>ランキングモードで参照される値</h3>
+						<table class="pure-table" style="width: 100%">
+							<thead>
+								<tr>
+									<th>g.game.vars.gameState</th>
+									<th>value</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>score</td>
+									<td>{{ rankingGameState.score }}</td>
+								</tr>
+								<tr>
+									<td>playThreshold</td>
+									<td>{{ rankingGameState.playThreshold }}</td>
+								</tr>
+								<tr>
+									<td>clearThreshold</td>
+									<td>{{ rankingGameState.clearThreshold }}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+
+			<div class="dev-menu-view" id="playlog-view">
+				<div class="dev-menu-contents">
+					<form class="pure-form">
+						<fieldset v-if="!isReplay">
+							<a class="pure-button-primary pure-button" v-on:click="savePlaylog">今までのリプレイ情報を保存</a>
+						</fieldset>
+						<fieldset v-else>
+							<a class="pure-button-primary pure-button" v-on:click="reloadPlaylog()">通常モードで起動</a>
+						</fieldset>
+					</form>
+					<form class="pure-form" v-if="isReplay">
+						<h2>リプレイ情報の再生</h2>
+						<fieldset>
+							<a class="pure-button" title="最初から" v-on:click="rewindReplay()"><i class="fa fa-step-backward"></i></a>
+							<a class="pure-button" title="再生/停止" v-on:click="playPauseReplay()"><i class="fa {{ isPaused ? 'fa-play' : 'fa-pause' }}"></i></a>
+							<progress id="dev-menu-time-progress" style="" max="{{ replayDuration }}" value="{{ currentTime }}" v-on:click="onClickTimeProgress"></progress>
+							<a class="pure-button" title="減速" v-on:click="decelerateReplay()"><i class="fa fa-angle-down"></i></a>
+							<a class="pure-button" title="加速" v-on:click="accelerateReplay()"><i class="fa fa-angle-up"></i></a>
+							<a class="pure-button" title="ここからプレイ" v-on:click="playFromHere()" >ここからプレイ</a>
+						</fieldset>
+					</form>
+					<form class="pure-form" v-if="playlog.list.length > 0">
+						<h2>保存されているリプレイ情報一覧</h2>
+						<fieldset>
+							<ul class="dev-playlog-list">
+								<li v-for="p in playlog.list">
+									<span>{{p.name}}</span>
+									<a class="pure-button" v-on:click="reloadPlaylog(p.name)">再生</a>
+									<a class="pure-button" href="{{p.url}}" download="{{p.name}}.json">ファイル出力</a>
+									<a class="pure-button button-error" v-on:click="removePlaylog(p.name)">削除</a>
+								</li>
+							</ul>
+						</fieldset>
+					</form>
+					<form class="pure-form">
+						<h2>ダンプしたリプレイ情報の読み込み</h2>
+						<fieldset>
+							<input type="file" id="load-playlog-handler">
+						</fieldset>
+					</form>
+				</div>
+			</div>
+
+			<div class="dev-menu-view" id="snapshot-view">
+				<div class="dev-menu-contents {{ config.isPositionRight ? 'dev-entity-tree-horizontal' : 'dev-entity-tree-vertical' }}">
+					<h2>スナップショット</h2>
+					<form class="pure-form">
+						<fieldset>
+							<a class="pure-button-primary pure-button" v-on:click="saveSnapshot">スナップショット保存の要求</a>
+						</fieldset>
+					</form>
+					<h2>スナップショット一覧</h2>
+					<form class="pure-form">
+						<ul class="dev-snapshot-list">
+							<li v-for="s in snapshots">
+								<span>{{s.name}}</span>
+								<a class="pure-button" v-on:click="previewSnapshot($index, s.name)">プレビュー</a>
+								<a class="pure-button" v-on:click="loadSnapshot(s.name)">復元</a>
+								<a class="pure-button button-error" v-on:click="removeSnapshot(s.name)">削除</a>
+							</li>
+						</ul>
+					</form>
+				</div>
+				<div class="dev-menu-contents {{ config.isPositionRight ? 'dev-entity-property-horizontal' : 'dev-entity-property-vertical' }}">
+					<h2>プレビュー: {{snapshotPreview.name}}</h2>
+					<pre class="dev-snapshot-preview {{ config.isPositionRight ? '' : 'dev-snapshot-preview-vertical' }}">{{snapshotPreview.data}}</pre>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="error-dialog-main error-dialog-main-hide" v-bind:class="{'error-dialog-main-hide': !isShowingErrorDialog}">
+		<a class="error-dialog-close-btn" title="close" v-on:click="hideErrorDialog"><i class="fa fa-times"></i></a>
+		<div class="error-dialog-title">{{dialogTitle}}</div>
+		<div class="error-dialog-name">{{dialogMessage}}</div>
+		<div class="error-dialog-body">{{dialogBody}}</div>
+		<a v-if="!!dialogReferenceUrl" href="{{dialogReferenceUrl}}" target="_blank" {{}}>{{dialogReferenceMessage ?? "参考リンク"}}</a>
+	</div>
+</div>
