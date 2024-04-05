@@ -1,0 +1,73 @@
+{
+  "name": "@akashic/akashic-sandbox",
+  "version": "0.28.12",
+  "description": "Standalone runner for Akashic contents",
+  "main": "index.js",
+  "scripts": {
+    "prepare": "npm run build",
+    "start": "npm run build && node bin/run",
+    "build": "npm run copy:common && npm run copy:engine-files && npm run build:client && npm run build:server",
+    "copy:common": "cpx \"./engine-src/common/js/**/*.js\" ./js && cpx \"./engine-src/common/external/**/*.js\" ./js",
+    "copy:engine-files": "npm run copy:v1 && npm run copy:v2 && npm run copy:v3",
+    "copy:v1": "cpx \"./engine-src/v1/js/**/*.js\" ./js/v1",
+    "copy:v2": "cpx \"./engine-src/v2/js/**/*.js\" ./js/v2",
+    "copy:v3": "cpx \"./engine-src/v3/js/**/*.js\" ./js/v3",
+    "build:client": "tsc -p src/client",
+    "build:server": "tsc -p src/server",
+    "lint": "npm run lint:client && npm run lint:server",
+    "lint:client": "eslint \"src/client/*.ts\" \"src/client/**/*.ts\" --fix",
+    "lint:server": "eslint \"src/server/*.ts\" \"src/server/**/*.ts\" --fix",
+    "test": "npm run test:jasmine && npm run lint",
+    "test:jasmine": "jasmine \"./spec/**/*[sS]pec.js\""
+  },
+  "author": "DWANGO Co., Ltd.",
+  "license": "MIT",
+  "bin": {
+    "akashic-sandbox": "./bin/run"
+  },
+  "files": [
+    "bin",
+    "lib",
+    "js",
+    "css",
+    "views",
+    "thirdparty"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/akashic-games/akashic-sandbox.git"
+  },
+  "publishConfig": {
+    "@akashic:registry": "https://registry.npmjs.org/"
+  },
+  "dependencies": {
+    "@akashic/game-configuration": "^2.0.0",
+    "@akashic/headless-driver": "2.14.1",
+    "commander": "^11.0.0",
+    "debug": "^4.3.4",
+    "ejs": "^3.1.8",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3"
+  },
+  "devDependencies": {
+    "@akashic/akashic-engine": "~2.6.6",
+    "@akashic/eslint-config": "^2.0.0",
+    "@akashic/sandbox-configuration": "^2.3.0",
+    "@deboxsoft/cpx": "^1.5.0",
+    "@types/ejs": "^3.1.1",
+    "@types/express": "^4.17.14",
+    "@types/express-session": "^1.17.5",
+    "@types/jasmine": "^5.0.0",
+    "@types/node": "^20.0.0",
+    "@types/serve-static": "^1.15.0",
+    "@types/superagent": "^8.0.0",
+    "@types/supertest": "^6.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.12.0",
+    "eslint": "^8.54.0",
+    "eslint-plugin-import": "^2.29.0",
+    "eslint-plugin-jest": "^27.6.0",
+    "jasmine": "^5.0.0",
+    "supertest": "^6.3.1",
+    "typescript": "^5.0.0"
+  }
+}

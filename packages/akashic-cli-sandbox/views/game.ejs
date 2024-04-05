@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title><%= title %></title>
+<script type="text/javascript" src="/thirdparty/js/md5.min.js"></script>
+<script type="text/javascript" src="/sandboxconfig/"></script>
+<script type="text/javascript" src="/<%= engineFilesPath %>"></script>
+<script>
+window.engineFiles = <%= engineFilesVariable %>;
+window.g = engineFiles.akashicEngine;
+(function() {
+    var originalRequire = window.require;
+    window.require = function(moduleName) {
+        switch(moduleName) {
+            case "@akashic/akashic-engine":
+                return engineFiles.akashicEngine;
+            default:
+                return this.call(this, moduleName);
+        }
+    };
+})();
+</script>
+<script type="text/javascript" src="/js/TimeKeeper.js"></script>
+<% if (version === "3") { %>
+<script type="text/javascript" src="/js/SandboxScriptAssetV3.js"></script>
+<script>
+    window.SandboxScriptAsset = window.SandboxScriptAssetV3;
+</script>
+<% } else { %>
+<script type="text/javascript" src="/js/SandboxScriptAsset.js"></script>
+<% } %>
+<script type="text/javascript" src="/js/akashic/meddling/MeddlingDate.js"></script>
+<script type="text/javascript" src="/js/akashic/meddling/MeddlingMath.js"></script>
+<% if (version === "1") { %>
+<script type="text/javascript" src="/js/v<%= version %>/logger.js"></script>
+<% } %>
+<script type="text/javascript" src="/js/v<%= version %>/sandbox.js"></script>
+<% if (devMode) { %>
+<link rel="stylesheet" href="/thirdparty/css/pure-min.css">
+<link rel="stylesheet" href="/thirdparty/css/font-awesome.min.css">
+<link rel="stylesheet" href="/css/developer.css">
+<script src="/thirdparty/js/vue.min.js" type="text/javascript"></script>
+<script src="/thirdparty/js/interact.min.js" type="text/javascript"></script>
+<script src="/js/v<%= version %>/developer.js" type="text/javascript"></script>
+<% } %>
+<style>
+body{
+	overflow: hidden;
+	background:#eee;
+}
+
+#container {
+	float: left;
+	touch-action: none;
+}
+#containerRight { display: inline-block; }
+
+#container canvas{
+	background-size: contain;
+}
+
+</style>
+</head>
+<body>
+	<% if (devMode) { %>
+	<%- include("./developer", {version: version}) %>
+	<% } %>
+	<div id="container">
+		<canvas id="gridCanvas"></canvas>
+	</div>
+	<div id="containerRight">
+		<div id="profilerContainer">
+			<canvas id="profilerCanvas" />
+		</div>
+	</div>
+</body>
+</html>
