@@ -1,6 +1,6 @@
 {
-  "name": "@akashic/akashic-sandbox",
-  "version": "0.28.12",
+  "name": "@akashic/akashic-cli-sandbox",
+  "version": "1.0.0",
   "description": "Standalone runner for Akashic contents",
   "main": "index.js",
   "scripts": {
@@ -23,7 +23,7 @@
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
   "bin": {
-    "akashic-sandbox": "./bin/run"
+    "akashic-cli-sandbox": "./bin/akashic-cli-sandbox"
   },
   "files": [
     "bin",
@@ -33,10 +33,6 @@
     "views",
     "thirdparty"
   ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/akashic-games/akashic-sandbox.git"
-  },
   "publishConfig": {
     "@akashic:registry": "https://registry.npmjs.org/"
   },

@@ -18,5 +18,6 @@ commander
 	.command("export", "Export a directory as a specified format")
 	.command("stat", "Show statistics information")
 	.command("serve", "Start a server that hosts a game to test multiplaying")
+	.command("sandbox", "Start a standalone server for a game")
 	.passThroughOptions()
 	.parse(process.argv);
