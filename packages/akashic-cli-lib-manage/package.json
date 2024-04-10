@@ -48,7 +48,7 @@
     "@akashic/akashic-cli-commons": "0.14.22",
     "commander": "8.3.0",
     "minipass": "3.3.5",
-    "tar": "6.1.11"
+    "tar": "6.2.1"
   },
   "publishConfig": {
     "access": "public",
