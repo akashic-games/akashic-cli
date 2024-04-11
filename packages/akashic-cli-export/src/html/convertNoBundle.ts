@@ -14,7 +14,8 @@ import {
 	getInjectedContents,
 	validateEs5Code,
 	readSandboxConfigJs,
-	validateEngineFilesName
+	validateEngineFilesName,
+	resolveEngineFilesPath
 } from "./convertUtil";
 
 export async function promiseConvertNoBundle(options: ConvertTemplateParameterObject): Promise<void> {
@@ -115,14 +116,17 @@ async function writeHtmlFile(
 	options: ConvertTemplateParameterObject): Promise<void> {
 	const injects = options.injects ? options.injects : [];
 	const version = conf._content.environment["sandbox-runtime"];
-	// eslint-disable-next-line @typescript-eslint/no-var-requires
-	const versionsJson = require("../engineFilesVersion.json");
-	let engineFilesVariable = versionsJson[`v${version}`].variable;
 	const filePath = path.resolve(__dirname + "/../template/no-bundle-index.ejs");
+	let engineFilePath: string;
+	let engineFilesVariable: string;
 
 	if (options.debugOverrideEngineFiles) {
 		validateEngineFilesName(options.debugOverrideEngineFiles, version);
+		engineFilePath = path.resolve(options.debugOverrideEngineFiles);
 		engineFilesVariable = path.basename(options.debugOverrideEngineFiles, ".js");
+	} else {
+		engineFilePath = resolveEngineFilesPath(version);
+		engineFilesVariable = path.basename(engineFilePath, ".js");
 	}
 
 	const html = await ejs.renderFile(filePath, {
@@ -149,7 +153,8 @@ function writeCommonFiles(
 		copyAssetFiles(inputPath, outputPath, options);
 	}
 	let templatePath: string;
-	switch (conf._content.environment["sandbox-runtime"]) {
+	const version = conf._content.environment["sandbox-runtime"];
+	switch (version) {
 		case "1":
 			templatePath = "template/v1";
 			break;
@@ -167,15 +172,12 @@ function writeCommonFiles(
 		path.resolve(__dirname, "..", templatePath),
 		outputPath);
 
-	if (options.debugOverrideEngineFiles) {
-		const jsDir = path.join(outputPath, "js");
-		fsx.readdirSync(jsDir).filter(f => /^engineFilesV*/.test(f))
-			.map(f => fsx.removeSync(path.join(jsDir, f)));
-		fsx.copySync(
-			path.resolve(options.debugOverrideEngineFiles),
-			path.join(jsDir, path.basename(options.debugOverrideEngineFiles))
-		);
-	}
+	const jsDir = path.join(outputPath, "js");
+	const engineFilesPath = options.debugOverrideEngineFiles ?? resolveEngineFilesPath(version);
+	fsx.copySync(
+		path.resolve(engineFilesPath),
+		path.join(jsDir, path.basename(engineFilesPath))
+	);
 }
 
 function writeOptionScript(outputPath: string, options: ConvertTemplateParameterObject): void {

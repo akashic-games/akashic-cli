@@ -111,13 +111,16 @@ export function getDefaultBundleScripts(
 	bundleText: boolean = true,
 	overrideEngineFilesPath?: string
 ): any {
-	// eslint-disable-next-line @typescript-eslint/no-var-requires
-	const versionsJson = require("../engineFilesVersion.json");
-	let engineFilesVariable = versionsJson[`v${version}`].variable;
+	let engineFilePath: string;
+	let engineFilesVariable: string;
 
 	if (overrideEngineFilesPath) {
 		validateEngineFilesName(overrideEngineFilesPath, version);
+		engineFilePath = path.resolve(overrideEngineFilesPath);
 		engineFilesVariable = path.basename(overrideEngineFilesPath, ".js");
+	} else {
+		engineFilePath = resolveEngineFilesPath(version);
+		engineFilesVariable = path.basename(engineFilePath, ".js");
 	}
 
 	const preloadScript = `
@@ -150,8 +153,6 @@ export function getDefaultBundleScripts(
 	}
 	if (version === "1") postloadScriptNames.push("logger.js");
 
-	const engineFilePath = overrideEngineFilesPath ?
-		path.resolve(overrideEngineFilesPath) : path.resolve(__dirname, "..", templatePath, "js", `${ engineFilesVariable }.js`);
 	let preloadScripts = [loadScriptFile(engineFilePath)];
 	preloadScripts.push(preloadScript);
 
@@ -220,6 +221,15 @@ export function validateEngineFilesName(filename: string, expectedMajorVersion: 
 		throw new Error("Versions of environment[\"sandbox-runtime\"] in game.json and the version of engineFiles do not match."
 			+ ` environment[\"sandbox-runtime\"]:${expectedMajorVersion}, engineFiles:${engineFilesVersion}`);
 	}
+}
+
+export function resolveEngineFilesPath(version: string): string {
+	// @akashic/headless-driver が依存している engine-files-v* を直接参照
+	const engineFilesPackageDir = path.dirname(require.resolve(`engine-files-v${version}`));
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-var-requires
+	const engineFilesPackageJson = require(`${engineFilesPackageDir}/package.json`);
+	const engineFilesName = `engineFilesV${engineFilesPackageJson.version.replace(/[\.-]/g, "_")}.js`;
+	return path.join(engineFilesPackageDir, `dist/raw/release/full/${engineFilesName}`);
 }
 
 function getFileContentsFromDirectory(inputDirPath: string): string[] {
