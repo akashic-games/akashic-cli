@@ -2,22 +2,22 @@
 <img src="https://github.com/akashic-games/akashic-cli/blob/master/img/akashic-cli.png"/>
 </p>
 
-# Akashic Sandbox
+# akashic-cli-sandbox
 
-Akashic Sandboxは、 [Akashic Engine](https://akashic-games.github.io/) を使って作成されたゲームの動作確認ツールです。
+akashic-cli-sandbox は、 [Akashic Engine](https://akashic-games.github.io/) を使って作成されたゲームの動作確認ツールです。
 
 ## インストール
 
 Node.js が必要です。次のコマンドでインストールできます。
 
 ```
-npm install -g @akashic/akashic-sandbox
+npm install -g @akashic/akashic-cli-sandbox
 ```
 
 ## 利用方法
 
 ```
-akashic-sandbox [-p <port>] [--cascade<cascade-path>] [<path>]
+akashic-cli-sandbox [-p <port>] [--cascade<cascade-path>] [<path>]
 ```
 
 で、 `<path>` に置かれているAkashicのゲームを起動できます。
@@ -76,7 +76,7 @@ module.exports = config;
 
 ## ビルド方法
 
-**akashic-sandbox** はTypeScriptで書かれたJSモジュールであるため、ビルドにはNode.jsが必要です。
+**akashic-cli-sandbox** はTypeScriptで書かれたJSモジュールであるため、ビルドにはNode.jsが必要です。
 
 `npm run build` にてビルドできます。
 
