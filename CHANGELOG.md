@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 2.16.64 (2024-04-11)
+
+#### Enhancement
+* `akashic-cli-sandbox`, `akashic-cli`
+  * [#1334](https://github.com/akashic-games/akashic-cli/pull/1334) feat: add akashic-sandbox ([@yu-ogi](https://github.com/yu-ogi))
+
+#### Update Dependencies
+* `akashic-cli-lib-manage`
+  * [#1338](https://github.com/akashic-games/akashic-cli/pull/1338) fix(deps): update dependency tar to v6.2.1 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- [@yu-ogi](https://github.com/yu-ogi)
+
 ## 2.16.63 (2024-04-01)
 
 #### Bug Fix
