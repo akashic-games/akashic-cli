@@ -1,5 +1,5 @@
 <p align="center">
-<img src="img/akashic-sandbox.png"/>
+<img src="https://github.com/akashic-games/akashic-cli/blob/master/img/akashic-cli.png"/>
 </p>
 
 # Akashic Sandbox
@@ -38,9 +38,9 @@ Akashic Engineの詳細な利用方法については、 [公式ページ](https
 ```js
 {
 ..
-	"environment": {
-		"sandbox-runtime": "2"
-	}
+  "environment": {
+    "sandbox-runtime": "2"
+  }
 }
 ```
 
@@ -61,15 +61,15 @@ Akashic Engineの詳細な利用方法については、 [公式ページ](https
 
 ```js
 var config = {
-	/** ゲーム実行時にeventsの同名メンバーをイベントとして送信します */
-	autoSendEventName: "event0",
-	/** ゲーム実行時にデベロッパーメニューを開きます */
-	showMenu: true,
-	/** デベロッパーメニューに登録済みのイベントとして表示します */
-	events: {
-		event0: [32, null, "9999", {foo: "foo"}, false],
-		event1: [32, null, "9999", {var: "var"}, false]
-	}
+  /** ゲーム実行時にeventsの同名メンバーをイベントとして送信します */
+  autoSendEventName: "event0",
+  /** ゲーム実行時にデベロッパーメニューを開きます */
+  showMenu: true,
+  /** デベロッパーメニューに登録済みのイベントとして表示します */
+  events: {
+    event0: [32, null, "9999", {foo: "foo"}, false],
+    event1: [32, null, "9999", {var: "var"}, false]
+  }
 }
 module.exports = config;
 ```
@@ -84,12 +84,6 @@ module.exports = config;
 npm install
 npm run build # src/以下をビルド
 ```
-
-## 内部モジュールの動作確認方法
-
-akashic-sandbox を用いて内部モジュール (とくに [engine-files](https://github.com/akashic-games/engine-files)) の動作確認を行いたい場合、以下の手順を行ってください。
-
-* package.json で engine-files のエイリアスの `engine-files-v*` に対象のバージョンを指定し `npm install` します。インストール後に `npm run copy:engine-files`  を実行することで engine-files が `./js/vX/` へ一括コピーされ動作確認が行える状態となります。
 
 ## 環境変数
 
@@ -111,7 +105,7 @@ npm test
 ## ライセンス
 
 本リポジトリは MIT License の元で公開されています。
-詳しくは [LICENSE](./LICENSE) をご覧ください。
+詳しくは [LICENSE](https://github.com/akashic-games/akashic-cli/blob/master/LICENSE) をご覧ください。
 
 ただし、画像ファイルおよび音声ファイルは
 [CC BY 2.1 JP](https://creativecommons.org/licenses/by/2.1/jp/) の元で公開されています。
