@@ -1,0 +1,290 @@
+
+progress[value]::-webkit-progress-bar {
+  background-color: #eee;
+  border-radius: 2px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) inset;
+}
+
+.disabled {
+  opacity: 0.3;
+  user-select: none;
+  cursor: default;
+}
+
+.button-success,
+.button-error,
+.button-warning,
+.button-secondary {
+  color: white;
+  border-radius: 4px;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+.button-success {
+  background: rgb(28, 184, 65); /* this is a green */
+}
+.button-error {
+  background: rgb(202, 60, 60); /* this is a maroon */
+}
+.button-warning {
+  background: rgb(223, 117, 20); /* this is an orange */
+}
+.button-secondary {
+  background: rgb(66, 184, 221); /* this is a light blue */
+}
+
+.dev-btn {
+  position: fixed;
+  position: absolute;
+  top: 0px;
+  right: 5px;
+  margin-right: 5px;
+  color: #aaa;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.dev-btn:hover {
+  color: #333;
+}
+
+.dev-menu-main {
+  position: fixed;
+  background-color: #fff;
+  color: #666;
+  font-size: 14px;
+  z-index: 9999;
+  padding-top: 30px;
+  box-sizing: border-box;
+}
+
+.dev-menu-position-right {
+  top: 0px;
+  right: 0px;
+  border-left: thin solid #000;
+  height: 100%;
+}
+
+.dev-menu-position-bottom {
+  border-top: thin solid #000;
+  width: 100%;
+  height: 200px;
+  bottom: 0px;
+}
+
+.dev-menu-hide {
+  display: none;
+}
+
+.dev-menu-main h2 {
+  font-size: 1.2em;
+  color: #333;
+  margin: .2em 0;
+}
+
+.dev-control {
+  position: absolute;
+  width: 100%;
+  font-size: 14px;
+  top: 0px;
+  border-bottom: thin solid #000;
+  background-color: #fff;
+}
+
+.dev-control .pure-menu-link {
+  padding: 0px .7em;
+}
+
+.dev-control .pure-menu-selected {
+  background-color: #eee;
+}
+
+.dev-control-action {
+  font-size: 18px;
+  position: absolute;
+  right: 10px;
+  top: -2px;
+}
+
+.dev-control-action a {
+  color: #aaa;
+}
+
+.dev-control-action a:hover {
+  color: #333;
+}
+
+.dev-close-btn:hover {
+  color: #333;
+}
+
+.dev-info-text {
+  width: 100%;
+  border: 1px solid #fff;
+}
+
+.dev-info-text:focus {
+  border: 1px solid #ccc;
+}
+
+.dev-menu-body {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.dev-menu-view {
+  height: 100%;
+  padding: 0 1ex;
+}
+
+.dev-menu-contents {
+  padding: 3px;
+  box-sizing: border-box;
+}
+
+.dev-menu-scroll-contents {
+  padding: 3px;
+  overflow: scroll;
+  box-sizing: border-box;
+}
+
+/* error-dialog */
+
+.error-dialog-main {
+  position: fixed;
+  z-index: 10000;
+  width: 450px;
+  padding: 12px;
+  bottom: 0;
+  right: 0;
+  opacity: 1;
+  background-color: #fee;
+  color: #666;
+  font-size: 16px;
+  box-sizing: border-box;
+  box-shadow: 5px 5px;
+  transition: .3s ease-out;
+}
+
+.error-dialog-main-hide {
+  right: -450px;
+  opacity: 0;
+  transition: .3s ease-out;
+}
+
+.error-dialog-title {
+  font-weight: bold;
+  color: #222;
+  font-size: 20px;
+  margin: 3px 0;
+}
+
+.error-dialog-name {
+  margin: 4px 10px;
+  color: #f33;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.error-dialog-body {
+  margin: 4px 10px;
+  color: #333;
+}
+
+.error-dialog-close-btn {
+  position: absolute;
+  cursor: pointer;
+  top: 10px;
+  right: 10px;
+}
+
+/* e-view */
+
+.dev-entity-tree ul {
+  list-style-type: none;
+  padding-left: 10px;
+}
+
+.dev-entity-tree-horizontal {
+  height: 70%;
+  width: 100%;
+}
+
+.dev-entity-tree-vertical {
+  float: left;
+  height: 100%;
+  width: 70%;
+}
+
+.dev-entity-property p {
+  padding: 0px;
+  margin: 0px;
+}
+
+.dev-entity-property-horizontal {
+  height: 30%;
+  width: 100%;
+  border-top: 1px solid black;
+}
+
+.dev-entity-property-vertical {
+  float: left;
+  height: 100%;
+  width: 30%;
+}
+
+.dev-entity-tree-item:hover {
+  color: #5992aa;
+  background-color: #e1f2fa;
+}
+
+/* snapshot-view */
+.dev-snapshot-list {
+  width: 100%;
+  height: 200px;
+  box-sizing: border-box;
+  overflow-y: scroll;
+}
+
+.dev-snapshot-list li {
+  margin-left: -15px;
+  padding: 3px;
+  border-width: 0;
+}
+
+.dev-snapshot-list li span {
+  font-weight: bold;
+}
+
+.dev-snapshot-preview {
+  border: 1px #aaa dotted;
+  padding: 4px;
+  margin: 5px;
+  box-sizing: border-box;
+  width: 90%;
+  height: 80px;
+  font-size: small;
+  overflow-y: scroll;
+}
+
+/* playlog-view */
+.dev-playlog-list li {
+  list-style: none;
+}
+
+/* bottom preview */
+.dev-snapshot-preview-vertical {
+  height: 270px;
+}
+
+/* grid */
+#gridCanvas {
+  position: absolute;
+  display: none;
+  pointer-events: none;
+  z-index: 2;
+}
+
+#profilerCanvas {
+  cursor: pointer;
+  margin: 5px;
+}

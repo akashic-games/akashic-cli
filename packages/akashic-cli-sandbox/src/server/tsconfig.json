@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["es6"],
+    "noImplicitAny": true,
+    "module": "commonjs",
+    "types": ["express", "express-session"],
+    "outDir": "../../lib",
+    "useUnknownInCatchVariables": false,
+    "strict": true
+  },
+  "filesGlob": [
+    "./**/*.ts"
+  ],
+  "files": [
+    "../../typings/ect.d.ts",
+    "../../typings/extend.express.d.ts",
+    "./app.ts",
+    "./utils.ts",
+    "./controller/game.ts",
+    "./controller/js.ts",
+    "./controller/test.ts",
+    "./request/ScriptRequest.ts",
+    "./routes/game.ts",
+    "./routes/js.ts",
+    "./routes/test.ts"
+  ]
+}

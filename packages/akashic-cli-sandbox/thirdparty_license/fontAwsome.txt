@@ -1,0 +1,4 @@
+Files placed under the thirdparty/fonts/ are released under the SIL OFL 1.1.
+thirdparty/css/font-awesome.min.css is released under the MIT License.
+See http://fontawesome.io/license/.
+We could not find the actual license that claims the name of the copyright holders.

@@ -35,6 +35,16 @@
     {
       "matchPackagePatterns": ["^@storybook/"],
       "enabled": false
+    },
+    {
+      "matchFileNames": ["packages/akashic-cli-sandbox/package.json"],
+      "matchPackageNames": ["@akashic/akashic-engine"],
+      "allowedVersions": "<3.0"
+    },
+    {
+      "matchFileNames": ["packages/akashic-cli-sandbox/package.json"],
+      "matchPackageNames": ["commander"],
+      "enabled": false
     }
   ],
   "ignorePaths": [
