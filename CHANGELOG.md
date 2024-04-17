@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 2.16.65 (2024-04-17)
+
+#### Other Change
+* Other
+  * [#1342](https://github.com/akashic-games/akashic-cli/pull/1342) fix(ci): fetch all history ([@yu-ogi](https://github.com/yu-ogi))
+  * [#1341](https://github.com/akashic-games/akashic-cli/pull/1341) chore(ci): output command result as a string ([@yu-ogi](https://github.com/yu-ogi))
+* `akashic-cli-export`
+  * [#1337](https://github.com/akashic-games/akashic-cli/pull/1337) feat: resolve engine-files via the headless-driver ([@yu-ogi](https://github.com/yu-ogi))
+
+#### Committers: 1
+- [@yu-ogi](https://github.com/yu-ogi)
+
 ## 2.16.64 (2024-04-11)
 
 #### Enhancement
