@@ -34,7 +34,8 @@ jobs:
         run: |
           git config user.name 'github-actions'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> .npmrc
           npm run publish:${{ env.PUBLISH_VERSION }}
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_AUTH: ${{ secrets.GITHUB_TOKEN }}
