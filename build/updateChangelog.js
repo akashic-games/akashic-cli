@@ -37,7 +37,7 @@ try {
 	const nextVersion = semver.inc(packageJson["version"], target);
 	// 現在のCHANGELOGに次バージョンのログを追加
 	const lernaChangeLogPath = path.join(__dirname, "..", "node_modules", ".bin", "lerna-changelog");
-	const addedLog = execSync(`${lernaChangeLogPath} --next-version ${nextVersion}`).toString().trimLeft();
+	const addedLog = execSync(`${lernaChangeLogPath} --next-version ${nextVersion}`, { encoding: "utf-8" }).toString().trimLeft();
 	const currentChangeLog = fs.readFileSync(path.join(__dirname, "..", "CHANGELOG.md")).toString();
 	const nextChangeLog = currentChangeLog.replace("# CHANGELOG\n\n", "# CHANGELOG\n\n" + addedLog + "\n");
 	fs.writeFileSync(path.join(__dirname, "..", "CHANGELOG.md"), nextChangeLog);
