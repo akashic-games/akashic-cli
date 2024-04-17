@@ -27,6 +27,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # lerna-changelog の実行に tags の情報が必要なため明示的にすべての履歴を取得
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
