@@ -1,5 +1,21 @@
 # CHANGELOG
 
+## 2.17.0 (2024-05-15)
+
+#### Other Change
+* [#1343](https://github.com/akashic-games/akashic-cli/pull/1343) fix(ci): refer a token via the .npmrc file ([@yu-ogi](https://github.com/yu-ogi))
+
+#### Update Dependencies
+* `akashic-cli-commons`, `akashic-cli-export`, `akashic-cli-lib-manage`, `akashic-cli-sandbox`, `akashic-cli-scan`, `akashic-cli-serve`
+  * [#1306](https://github.com/akashic-games/akashic-cli/pull/1306) chore(deps): update akashic major/minor dependencies (minor) ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-sandbox`
+  * [#1346](https://github.com/akashic-games/akashic-cli/pull/1346) fix(deps): update dependency ejs to v3.1.10 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* `akashic-cli-export`, `akashic-cli-serve`
+  * [#1345](https://github.com/akashic-games/akashic-cli/pull/1345) fix(deps): update dependency ejs to v3.1.10 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- [@yu-ogi](https://github.com/yu-ogi)
+
 ## 2.16.65 (2024-04-17)
 
 #### Other Change
