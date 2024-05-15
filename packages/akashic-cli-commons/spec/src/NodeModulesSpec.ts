@@ -149,7 +149,7 @@ describe("NodeModules", function () {
 		it("list the files named package.json", function (done) {
 			jest.spyOn(Util, "requireResolve").mockImplementation((id: string, opts: { paths?: string[] | undefined }): string => {
 				const pkgJsonPath = path.join(opts.paths[0], "package.json");
-				const pkgData =  JSON.parse(fs.readFileSync(pkgJsonPath, "utf-8"));
+				const pkgData =  JSON.parse(fs.readFileSync(pkgJsonPath).toString("utf-8"));
 				const mainScriptName = pkgData.main.split(".").pop() === "js" ? pkgData.main : pkgData.main + ".js";
 				return path.join(path.resolve("."), path.dirname(pkgJsonPath), mainScriptName);
 			});
@@ -175,7 +175,7 @@ describe("NodeModules", function () {
 		it("key is the path of package.json.", function (done) {
 			jest.spyOn(Util, "requireResolve").mockImplementation((id: string, opts: { paths?: string[] | undefined }): string => {
 				const pkgJsonPath = path.join(opts.paths[0], "package.json");
-				const pkgData =  JSON.parse(fs.readFileSync(pkgJsonPath, "utf-8"));
+				const pkgData =  JSON.parse(fs.readFileSync(pkgJsonPath).toString("utf-8"));
 				const mainScriptName = pkgData.main.split(".").pop() === "js" ? pkgData.main : pkgData.main + ".js";
 				return path.join(path.resolve("."), path.dirname(pkgJsonPath), mainScriptName);
 			});

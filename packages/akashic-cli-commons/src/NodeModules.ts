@@ -74,7 +74,7 @@ export module NodeModules {
 	}
 
 	export function extractModuleMainInfo(packageJsonPath: string): ModuleMainInfo {
-		const packageJsonData = fs.readFileSync(packageJsonPath, "utf-8");
+		const packageJsonData = fs.readFileSync(packageJsonPath).toString("utf-8");
 		const d = JSON.parse(packageJsonData);
 		const paths = [path.join(path.dirname(packageJsonPath))];
 		const basedir = packageJsonPath;

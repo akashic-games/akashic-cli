@@ -223,10 +223,12 @@ describe("Renamer", function () {
 			mockfs.restore();
 		});
 		it("save file included dirs", function (done) {
-			fs.writeFileSync("./srcDir/script/a/b/c2.js", "hello");
-			Renamer.renameAssetFilenames(JSON.parse(JSON.stringify(content)), "./srcDir", 20);
-			expect(fs.statSync("./srcDir/script/a/b/c2.js").isFile()).toBe(true);
-			done();
+			fs.writeFile("./srcDir/script/a/b/c2.js", "hello", (err) => {
+				if (err) throw err;
+				Renamer.renameAssetFilenames(JSON.parse(JSON.stringify(content)), "./srcDir", 20);
+				expect(fs.statSync("./srcDir/script/a/b/c2.js").isFile()).toBe(true);
+				done();
+			});
 		});
 	});
 
@@ -280,9 +282,9 @@ describe("Renamer", function () {
 					done.fail();
 				} catch (error) {
 					expect(error.code).toBe("ENOENT");
-					done();
 				}
 			});
+			done();
 		});
 
 		it("not sorted dirnames", function (done) {
@@ -300,9 +302,9 @@ describe("Renamer", function () {
 					done.fail();
 				} catch (error) {
 					expect(error.code).toBe("ENOENT");
-					done();
 				}
 			});
+			done();
 		});
 
 		it("include ancenstor path", function (done) {
