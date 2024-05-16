@@ -41,7 +41,7 @@ commander
 	.option("-p, --plugin <code>", "Also add to operationPlugins with the code", (x: string) => parseInt(x, 10))
 	.option("--no-omit-packagejson", "Add package.json of each module to the globalScripts property (to support older Akashic Engine)")
 	.option("--use-mmp", "Use moduleMainPaths in game.json")
-// NOTE: --use-mms は --use-mmp がデフォルトで有効となる場合に機能する値であり、現バージョンにおいては機能しない。
+	// NOTE: --use-mms は --use-mmp がデフォルトで有効となる場合に機能する値であり、現バージョンにおいては機能しない。
 	.option("--use-mms", "Use moduleMainScripts in game.json (to support older Akashic Engine)");
 
 export function run(argv: string[]): void {
