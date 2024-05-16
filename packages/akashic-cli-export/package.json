@@ -75,7 +75,7 @@
     "@akashic/akashic-cli-commons": "0.15.0",
     "@akashic/akashic-cli-extra": "1.7.0",
     "@akashic/game-configuration": "2.3.0",
-    "@akashic/headless-driver": "2.15.1",
+    "@akashic/headless-driver": "2.15.2",
     "@babel/core": "7.20.2",
     "@babel/preset-env": "7.20.2",
     "archiver": "5.3.1",
