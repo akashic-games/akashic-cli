@@ -5,6 +5,17 @@ import * as cmn from "@akashic/akashic-cli-commons";
 import { promiseInstall } from "../../../lib/install/install";
 
 describe("install()", function () {
+	// node@20 で mock-fs 利用時に fs.existsSync() が機能していないため、spy で statSync() で存在判定をしている。
+	const fsSpy = jest.spyOn(fs, "existsSync").mockImplementation((path: fs.PathLike): boolean => {
+		try { 
+			return !!fs.statSync(path);
+		} catch (e) {
+			return false;
+		}
+	});
+	afterAll(() => { 
+		fsSpy.mockClear()
+	});
 	afterEach(function () {
 		mockfs.restore();
 	});
@@ -107,7 +118,7 @@ describe("install()", function () {
 
 		jest.spyOn(cmn.Util, "requireResolve").mockImplementation((id: string, opts: { paths?: string[] | undefined }): string => {
 			const pkgJsonPath = path.join(opts.paths[0], "package.json");
-			const pkgData =  JSON.parse(fs.readFileSync(pkgJsonPath, "utf-8"));
+			const pkgData =  JSON.parse(fs.readFileSync(pkgJsonPath).toString("utf-8"));
 			const mainScriptName = pkgData.main.split(".").pop() === "js" ? pkgData.main : pkgData.main + ".js";
 			return path.join(path.resolve("."), path.dirname(pkgJsonPath), mainScriptName);
 		});
