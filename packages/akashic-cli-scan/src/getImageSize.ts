@@ -14,7 +14,7 @@ export function getImageSize(path: string): ISize | null {
 
 	// NOTE: image-size は SVG ファイルのサイズとして常に viewPort を基準にしているようなので独自にサイズ情報を取得する
 	if (extname(path) === ".svg") {
-		const parsed = parseSync(fs.readFileSync(path, { encoding: "utf-8" }));
+		const parsed = parseSync(fs.readFileSync(path).toString("utf-8"));
 		const attr = parsed.attributes;
 
 		// 1. ルートに width, height 属性が存在しない場合はサポート外

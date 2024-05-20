@@ -19,6 +19,18 @@ describe("scanAsset()", () => {
 	const DUMMY_NO_PIXEL_SVG_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy_no_px.svg"));
 	const DUMMY_WASM_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy.wasm"));
 
+	// node@20 で mock-fs 利用時に fs.existsSync() が機能していないため、spy で statSync() で存在判定をしている。
+	const fsSpy = jest.spyOn(fs, "existsSync").mockImplementation((path: fs.PathLike): boolean => {
+		try { 
+			return !!fs.statSync(path);
+		} catch (e) {
+			return false;
+		}
+	});
+	afterAll(() => { 
+		fsSpy.mockClear()
+	});
+
 	afterEach(() => {
 		mockfs.restore();
 	});
