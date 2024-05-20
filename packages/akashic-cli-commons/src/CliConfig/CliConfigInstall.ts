@@ -5,5 +5,6 @@ export interface CliConfigInstall {
 	quiet?: boolean;
 	plugin?: number;
 	omitPackagejson?: boolean;
-	experimentalMmp?: boolean;
+	useMmp?: boolean;
+	// useMms?: boolean;
 }

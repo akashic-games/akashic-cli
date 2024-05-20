@@ -95,7 +95,9 @@ commander
 	.option("-e, --from-entry-point", "Scan from the entry point instead of `npm ls`")
 	.option("-q, --quiet", "Suppress output")
 	.option("--no-omit-packagejson", "Add package.json of each module to the globalScripts property (to support older Akashic Engine)")
-	.option("--experimental-mmp", "Supports moduleMainPaths in game.json")
+	.option("--use-mmp", "Use moduleMainPaths in game.json")
+	// NOTE: --use-mms は --use-mmp がデフォルトで有効となる場合に機能する値であり、現バージョンにおいては機能しない。
+	.option("--use-mms", "Use moduleMainScripts in game.json (to support older Akashic Engine)")
 	.action((opts: CliConfigScanGlobalScripts = {}) => {
 		const logger = new ConsoleLogger({ quiet: opts.quiet });
 		scanNodeModules({
@@ -103,7 +105,8 @@ commander
 			logger,
 			fromEntryPoint: opts.fromEntryPoint,
 			noOmitPackagejson: !opts.omitPackagejson,
-			experimentalMmp: opts.experimentalMmp
+			useMmp: opts.useMmp,
+			// useMms: opts.useMms,
 		})
 			.catch((err: Error) => {
 				logger.error(err.message);
