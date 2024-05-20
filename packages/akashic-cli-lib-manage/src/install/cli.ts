@@ -3,18 +3,20 @@ import * as path from "path";
 import type { CliConfigInstall } from "@akashic/akashic-cli-commons";
 import { ConsoleLogger, CliConfigurationFile } from "@akashic/akashic-cli-commons";
 import { Command } from "commander";
+import type { InstallParameterObject} from "./install";
 import { promiseInstall } from "./install";
 
 function cli(param: CliConfigInstall): void {
 	const logger = new ConsoleLogger({ quiet: param.quiet });
-	const installParam = {
+	const installParam: InstallParameterObject = {
 		moduleNames: param.args,
 		cwd: param.cwd,
 		plugin: param.plugin,
 		logger: logger,
 		link: param.link,
 		noOmitPackagejson: !param.omitPackagejson,
-		experimentalMmp: param.experimentalMmp
+		useMmp: param.useMmp,
+		// useMms: param.useMms,
 	};
 	Promise.resolve()
 		.then(() => promiseInstall(installParam))
@@ -38,7 +40,9 @@ commander
 	.option("-q, --quiet", "Suppress output")
 	.option("-p, --plugin <code>", "Also add to operationPlugins with the code", (x: string) => parseInt(x, 10))
 	.option("--no-omit-packagejson", "Add package.json of each module to the globalScripts property (to support older Akashic Engine)")
-	.option("--experimental-mmp", "Supports moduleMainPaths in game.json");
+	.option("--use-mmp", "Use moduleMainPaths in game.json")
+	// NOTE: --use-mms は --use-mmp がデフォルトで有効となる場合に機能する値であり、現バージョンにおいては機能しない。
+	.option("--use-mms", "Use moduleMainScripts in game.json (to support older Akashic Engine)");
 
 export function run(argv: string[]): void {
 	commander.parse(argv);
@@ -57,7 +61,8 @@ export function run(argv: string[]): void {
 			quiet: options.quiet ?? conf.quiet,
 			plugin: options.plugin ?? conf.plugin,
 			omitPackagejson: options.omitPackagejson ?? conf.omitPackagejson,
-			experimentalMmp: options.experimentalMmp ?? conf.experimentalMmp
+			useMmp: options.useMmp ?? conf.useMmp,
+			// useMms: options.useMms ?? conf.useMms,
 		});
 	});
 }

@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 2.17.2 (2024-05-20)
+
+#### Enhancement
+* `akashic-cli-commons`, `akashic-cli-lib-manage`, `akashic-cli-scan`
+  * [#1350](https://github.com/akashic-games/akashic-cli/pull/1350) feat: add `--use-mmp` option ([@yu-ogi](https://github.com/yu-ogi))
+
+#### Committers: 1
+- [@yu-ogi](https://github.com/yu-ogi)
+
+
 ## 2.17.0 (2024-05-15)
 
 #### Other Change

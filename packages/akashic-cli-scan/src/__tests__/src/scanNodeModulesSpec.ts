@@ -120,7 +120,7 @@ describe("scanNodeModules", () => {
 
 		await scanNodeModules({
 			logger: nullLogger,
-			experimentalMmp: true,
+			useMmp: true,
 			debugNpm: new MockPromisedNpm({
 				expectDependencies: {
 					"dummy": {
@@ -149,9 +149,7 @@ describe("scanNodeModules", () => {
 			expect(globalScripts.indexOf(expectedPath)).not.toBe(-1);
 		}
 
-		expect(moduleMainScripts).toEqual({
-			"dummy": "node_modules/dummy/main.js"
-		});
+		expect(moduleMainScripts).toBeUndefined();
 		expect(moduleMainPaths).toEqual({
 			"node_modules/dummy/package.json": "node_modules/dummy/main.js"
 		});
@@ -204,7 +202,7 @@ describe("scanNodeModules", () => {
 
 		await scanNodeModules({
 			logger: nullLogger,
-			experimentalMmp: true,
+			useMmp: true,
 			debugNpm: new MockPromisedNpm({
 				expectDependencies: { "dummy": {}, "dummy2": {}, "@scope/scoped": {} }
 			})
@@ -230,9 +228,7 @@ describe("scanNodeModules", () => {
 			expect(globalScripts.indexOf(expectedPath)).not.toBe(-1);
 		}
 
-		expect(moduleMainScripts).toEqual({
-			"dummy": "node_modules/dummy/main.js"
-		});
+		expect(moduleMainScripts).toBeUndefined();
 		expect(moduleMainPaths).toEqual({
 			"node_modules/dummy/package.json": "node_modules/dummy/main.js",
 			"node_modules/@scope/scoped/package.json": "node_modules/@scope/scoped/root.js"
@@ -266,7 +262,7 @@ describe("scanNodeModules", () => {
 
 		await scanNodeModules({
 			logger: nullLogger,
-			experimentalMmp: true,
+			useMmp: true,
 			debugNpm: new MockPromisedNpm({
 				expectDependencies: {
 					"dummy": {
@@ -288,9 +284,7 @@ describe("scanNodeModules", () => {
 		];
 		expect(globalScripts.length).toBe(expectedPaths.length);
 
-		expect(moduleMainScripts).toEqual({
-			"dummy": "node_modules/dummy/noExtension.js"
-		});
+		expect(moduleMainScripts).toBeUndefined();
 		expect(moduleMainPaths).toEqual({
 			"node_modules/dummy/package.json": "node_modules/dummy/noExtension.js"
 		});
@@ -304,7 +298,7 @@ describe("scanNodeModules", () => {
 
 		await scanNodeModules({
 			logger: nullLogger,
-			experimentalMmp: true,
+			useMmp: true,
 			debugNpm: new MockPromisedNpm({
 				expectDependencies: {}
 			})
@@ -385,7 +379,7 @@ describe("scanNodeModules", () => {
 
 		await scanNodeModules({
 			logger: nullLogger,
-			experimentalMmp: true,
+			useMmp: true,
 			debugNpm: new MockPromisedNpm({
 				expectDependencies: {
 					"dummy": {
@@ -414,10 +408,7 @@ describe("scanNodeModules", () => {
 			expect(globalScripts.indexOf(expectedPath)).not.toBe(-1);
 		}
 
-		expect(moduleMainScripts).toEqual({
-			"dummy": "node_modules/dummy/main.js",
-			"dummyChild": "node_modules/dummy/node_modules/dummyChild/index.js"
-		});
+		expect(moduleMainScripts).toBeUndefined();
 		expect(moduleMainPaths).toEqual({
 			"node_modules/dummy/package.json": "node_modules/dummy/main.js",
 			"node_modules/dummy/node_modules/dummyChild/package.json": "node_modules/dummy/node_modules/dummyChild/index.js"
@@ -449,7 +440,7 @@ describe("scanNodeModules", () => {
 
 		await scanNodeModules({
 			logger: nullLogger,
-			experimentalMmp: true,
+			useMmp: true,
 			debugNpm: new MockPromisedNpm({
 				expectDependencies: {
 					"dummy": {
@@ -478,10 +469,7 @@ describe("scanNodeModules", () => {
 			expect(globalScripts.indexOf(expectedPath)).not.toBe(-1);
 		}
 
-		expect(moduleMainScripts).toEqual({
-			"dummy": "node_modules/dummy/main.js",
-			"dummyChild": "node_modules/dummyChild/index.js"
-		});
+		expect(moduleMainScripts).toBeUndefined();
 		expect(moduleMainPaths).toEqual({
 			"node_modules/dummy/package.json": "node_modules/dummy/main.js",
 			"node_modules/dummyChild/package.json": "node_modules/dummyChild/index.js"
@@ -508,7 +496,7 @@ describe("scanNodeModules", () => {
 
 		await scanNodeModules({
 			logger: nullLogger,
-			experimentalMmp: true,
+			useMmp: true,
 			debugNpm: new MockPromisedNpm({
 				expectDependencies: {
 					"invalidDummy": {}
@@ -594,7 +582,7 @@ describe("scanNodeModules", () => {
 
 		await scanNodeModules({
 			logger: nullLogger,
-			experimentalMmp: true,
+			useMmp: true,
 			debugNpm: new MockPromisedNpm({
 				expectDependencies: {
 					"dummy": {}, "dummy2": {}, "@scope/scoped": {}
@@ -622,12 +610,7 @@ describe("scanNodeModules", () => {
 			expect(globalScripts.indexOf(expectedPath)).not.toBe(-1);
 		}
 
-		expect(moduleMainScripts).toEqual({
-			"dummy": "node_modules/dummy/main.js",
-			"dummyChild": "node_modules/dummy/node_modules/dummyChild/index.js",
-			"dummy2": "node_modules/dummy2/index.js",
-			"@scope/scoped": "node_modules/@scope/scoped/root.js"
-		});
+		expect(moduleMainScripts).toBeUndefined();
 		expect(moduleMainPaths).toEqual({
 			"node_modules/dummy/package.json": "node_modules/dummy/main.js",
 			"node_modules/dummy/node_modules/dummyChild/package.json": "node_modules/dummy/node_modules/dummyChild/index.js",
@@ -695,7 +678,7 @@ describe("scanNodeModules", () => {
 
 		await scanNodeModules({
 			logger: nullLogger,
-			experimentalMmp: true,
+			useMmp: true,
 			debugNpm: new MockPromisedNpm({
 				expectDependencies: {
 					"dummy": {}, "dummy2": {}, "@scope/scoped": {}
@@ -728,12 +711,7 @@ describe("scanNodeModules", () => {
 			expect(globalScripts.indexOf(expectedPath)).not.toBe(-1);
 		}
 
-		expect(moduleMainScripts).toEqual({
-			"dummy": "node_modules/dummy/main.js",
-			"dummyChild": "node_modules/dummy/node_modules/dummyChild/index.js",
-			"dummy2": "node_modules/dummy2/index.js",
-			"@scope/scoped": "node_modules/@scope/scoped/root.js"
-		});
+		expect(moduleMainScripts).toBeUndefined();
 		expect(moduleMainPaths).toEqual({
 			"node_modules/dummy/package.json": "node_modules/dummy/main.js",
 			"node_modules/dummy/node_modules/dummyChild/package.json": "node_modules/dummy/node_modules/dummyChild/index.js",
@@ -827,7 +805,7 @@ describe("scanNodeModules", () => {
 
 		await scanNodeModules({
 			logger: nullLogger,
-			experimentalMmp: true,
+			useMmp: true,
 			debugNpm: new MockPromisedNpm({
 				expectDependencies: {
 					"dummy": {
@@ -854,9 +832,7 @@ describe("scanNodeModules", () => {
 			expect(globalScripts.indexOf(expectedPath)).not.toBe(-1);
 		}
 
-		expect(moduleMainScripts).toEqual({
-			"dummyChild": "node_modules/dummyChild/main.js"
-		});
+		expect(moduleMainScripts).toBeUndefined();
 		expect(moduleMainPaths).toEqual({
 			"node_modules/dummyChild/package.json": "node_modules/dummyChild/main.js"
 		});
@@ -926,7 +902,7 @@ describe("scanNodeModules", () => {
 
 		await scanNodeModules({
 			logger: nullLogger,
-			experimentalMmp: true,
+			useMmp: true,
 			debugNpm: new MockPromisedNpm({
 				expectDependencies: {
 					"dummy": {
@@ -952,10 +928,7 @@ describe("scanNodeModules", () => {
 		];
 		expect(globalScripts).toEqual(expectedPaths);
 
-		expect(moduleMainScripts).toEqual({
-			"dummy": "node_modules/dummy/main.js",
-			"dummyChild": "node_modules/dummy/node_modules/dummyChild/index.js",
-		});
+		expect(moduleMainScripts).toBeUndefined();
 		expect(moduleMainPaths).toEqual({
 			"node_modules/dummy/package.json": "node_modules/dummy/main.js",
 			"node_modules/dummy/node_modules/dummyChild/package.json": "node_modules/dummy/node_modules/dummyChild/index.js",

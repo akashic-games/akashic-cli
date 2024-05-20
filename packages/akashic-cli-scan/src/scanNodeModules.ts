@@ -61,12 +61,17 @@ export interface ScanNodeModulesParameterObject {
 	includeExtensionToAssetId?: boolean;
 
 	/**
-	 * game.json の moduleMainPaths をサポートするかどうか。
+	 * game.json の moduleMainPaths を利用するかどうか。
 	 * 省略された場合、 `false` 。
 	 */
-	experimentalMmp?: boolean;
-}
+	useMmp?: boolean;
 
+	/**
+	 * game.json の moduleMainScripts を利用するかどうか。
+	 * この値は将来的に利用される値であり、現バージョンにおいては機能しない。
+	 */
+	// useMms?: boolean;
+}
 
 interface NormalizedScanNodeModulesParameterObject extends Required<Omit<ScanNodeModulesParameterObject, "debugNpm">> {
 	debugNpm: PromisedNpm | undefined;
@@ -82,7 +87,8 @@ export function _completeScanNodeModulesParameterObject(param: ScanNodeModulesPa
 		noOmitPackagejson: !!param.noOmitPackagejson,
 		debugNpm: param.debugNpm ?? undefined,
 		includeExtensionToAssetId: !!param.includeExtensionToAssetId,
-		experimentalMmp: !!param.experimentalMmp
+		useMmp: !!param.useMmp,
+		// useMms: !!param.useMms,
 	};
 }
 
@@ -147,25 +153,31 @@ export async function scanNodeModules(p: ScanNodeModulesParameterObject): Promis
 
 		if (globalScripts.length) {
 			const packageJsonFiles = NodeModules.listPackageJsonsFromScriptsPath(base, globalScripts);
-			const moduleMainScripts = NodeModules.listModuleMainScripts(packageJsonFiles);
 
-			if (moduleMainScripts && 0 < Object.keys(moduleMainScripts).length) {
-				if (!content.moduleMainScripts) {
-					logger.warn(
-						"Newly added the moduleMainScripts property to game.json." +
-						"This property, introduced by akashic-cli@>=1.12.2, is NOT supported by older versions of Akashic Engine." +
-						"Please ensure that you are using akashic-engine@>=2.0.2, >=1.12.7."
-					);
-				}
-				// TODO: 現状globalScriptsがすべて削除された時にmoduleMainScriptsは反映されずに残ってしまうので、同時に消えるように修正すべき(残っていても実害は無い)
-				content.moduleMainScripts = Object.assign(content.moduleMainScripts || {}, moduleMainScripts);
-			}
-
-			if (param.experimentalMmp) {
-				// TODO: --experimental-mmp を削除しデフォルト動作とする
+			// TODO: --use-mmp を削除しデフォルト動作とする (その際に --use-mms の真偽値を分岐の条件に変更する)
+			if (param.useMmp) {
 				const moduleMainPaths = NodeModules.listModuleMainPaths(packageJsonFiles);
 				content.moduleMainPaths = Object.assign(content.moduleMainPaths || {}, moduleMainPaths);
+				delete content.moduleMainScripts;
+			} else {
+				const moduleMainScripts = NodeModules.listModuleMainScripts(packageJsonFiles);
+
+				if (moduleMainScripts && 0 < Object.keys(moduleMainScripts).length) {
+					if (!content.moduleMainScripts) {
+						logger.warn(
+							"Newly added the moduleMainScripts property to game.json." +
+							"This property, introduced by akashic-cli@>=1.12.2, is NOT supported by older versions of Akashic Engine." +
+							"Please ensure that you are using akashic-engine@>=2.0.2, >=1.12.7."
+						);
+					}
+					content.moduleMainScripts = Object.assign(content.moduleMainScripts || {}, moduleMainScripts);
+				}
+
+				delete content.moduleMainPaths;
 			}
+		} else {
+			delete content.moduleMainPaths;
+			delete content.moduleMainScripts;
 		}
 
 		content.globalScripts = globalScripts;

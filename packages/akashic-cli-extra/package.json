@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-extra",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "Extra tools of akashic-cli-xxx",
   "bin": {
     "akashic-cli-config": "./bin/akashic-cli-config",
@@ -26,7 +26,7 @@
     "lib"
   ],
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.15.0",
+    "@akashic/akashic-cli-commons": "0.15.1",
     "commander": "8.3.0",
     "ini": "4.1.1",
     "lodash.get": "4.4.2",

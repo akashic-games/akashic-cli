@@ -172,7 +172,7 @@ describe("install()", function () {
 				expect(content.moduleMainPaths).toBeUndefined();
 				warnLogs = []; // 初期化
 			})
-			.then(() => promiseInstall({ moduleNames: ["noOmitPackagejson@0.0.0"], cwd: "./somedir", logger: logger, debugNpm: dummyNpm, noOmitPackagejson: true, experimentalMmp: true }))
+			.then(() => promiseInstall({ moduleNames: ["noOmitPackagejson@0.0.0"], cwd: "./somedir", logger: logger, debugNpm: dummyNpm, noOmitPackagejson: true, useMmp: true }))
 			.then(() => cmn.ConfigurationFile.read("./somedir/game.json", logger))
 			.then((content) => {
 				const globalScripts = content.globalScripts;
@@ -214,7 +214,7 @@ describe("install()", function () {
 				globalScripts.push("node_modules/foo/foo.js");
 				cmn.ConfigurationFile.write(content, "./somedir/game.json", logger);
 			})
-			.then(() => promiseInstall({ moduleNames: ["dummy@1.0.1"], cwd: "./somedir", logger: logger, debugNpm: dummyNpm, experimentalMmp: true }))
+			.then(() => promiseInstall({ moduleNames: ["dummy@1.0.1"], cwd: "./somedir", logger: logger, debugNpm: dummyNpm, useMmp: true }))
 			.then(() => cmn.ConfigurationFile.read("./somedir/game.json", logger))
 			.then((content) => {
 				const globalScripts = content.globalScripts;
