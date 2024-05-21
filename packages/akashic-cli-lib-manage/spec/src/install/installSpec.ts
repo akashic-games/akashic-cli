@@ -3,19 +3,11 @@ import * as path from "path";
 import * as mockfs from "mock-fs";
 import * as cmn from "@akashic/akashic-cli-commons";
 import { promiseInstall } from "../../../lib/install/install";
+import { workaroundMockFsExistsSync } from "../testUtils"; 
 
 describe("install()", function () {
-	// node@20 で mock-fs 利用時に fs.existsSync() が機能していないため、spy で statSync() で存在判定をしている。
-	const fsSpy = jest.spyOn(fs, "existsSync").mockImplementation((path: fs.PathLike): boolean => {
-		try { 
-			return !!fs.statSync(path);
-		} catch (e) {
-			return false;
-		}
-	});
-	afterAll(() => { 
-		fsSpy.mockClear()
-	});
+	workaroundMockFsExistsSync();
+
 	afterEach(function () {
 		mockfs.restore();
 	});
