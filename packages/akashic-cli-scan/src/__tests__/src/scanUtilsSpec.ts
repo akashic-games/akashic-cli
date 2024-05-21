@@ -5,6 +5,7 @@ import * as mockfs from "mock-fs";
 import { scanAudioAssets, scanImageAssets, scanScriptAssets, scanTextAssets, scanBinaryAssets, knownExtensionAssetFilter } from "../../../lib/scanUtils";
 import { isBinaryFile } from "../../isBinaryFile";
 import { defaultTextAssetFilter } from "../../scanUtils";
+import { workaroundMockFsExistsSync } from "./testUtils";
 
 describe("scanUtils", () => {
 	const nullLogger = new ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
@@ -15,14 +16,8 @@ describe("scanUtils", () => {
 	const DUMMY_1x1_PNG_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy1x1.png"));
 	const DUMMY_WASM_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy.wasm"));
 
-	// node@20 で mock-fs 利用時に fs.existsSync() が機能していないため、spy で statSync() で存在判定をしている。
-	const fsSpy = jest.spyOn(fs, "existsSync").mockImplementation((path: fs.PathLike): boolean => {
-		return !!fs.statSync(path);
-	});
-	afterAll(() => { 
-		fsSpy.mockRestore()
-	});
-
+	workaroundMockFsExistsSync();
+	
 	beforeEach(() => {
 		mockfs({
 			"game": {

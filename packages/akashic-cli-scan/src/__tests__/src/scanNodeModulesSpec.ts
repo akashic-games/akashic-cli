@@ -5,11 +5,13 @@ import * as mockfs from "mock-fs";
 import { scanNodeModules } from "../../../lib/scanNodeModules";
 import { Util } from "@akashic/akashic-cli-commons";
 import { MockPromisedNpm } from "./helpers/MockPromisedNpm";
+import { workaroundMockFsExistsSync } from "./testUtils";
 
 describe("scanNodeModules", () => {
 	const nullLogger = new ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
 	let spy: jest.SpyInstance;
-	let fsSpy: jest.SpyInstance;
+	workaroundMockFsExistsSync();
+
 	beforeAll(() => {
 		spy = jest.spyOn(Util, "requireResolve").mockImplementation((id: string, opts: { paths?: string[] | undefined }): string => {
 			const pkgJsonPath = path.join(opts.paths[0], "package.json");
@@ -18,21 +20,12 @@ describe("scanNodeModules", () => {
 			const mainScriptName = pkgData.main.split(".").pop() === "js" ? pkgData.main : pkgData.main + ".js";
 			return path.join(path.resolve("."), path.dirname(pkgJsonPath), mainScriptName);
 		});
-		// node@20 で mock-fs 利用時に fs.existsSync() が機能していないため、spy で statSync() で存在判定をしている。
-		fsSpy = jest.spyOn(fs, "existsSync").mockImplementation((path: fs.PathLike): boolean => {
-			try { 
-				return !!fs.statSync(path);
-			} catch (e) {
-				return false;
-			}
-		});
 	});
 	afterEach(() => {
 		mockfs.restore();
 	});
 	afterAll(() => {
 		spy.mockClear();
-		fsSpy.mockClear()
 	});
 
 	it("scan globalScripts field based on node_modules/", async () => {
