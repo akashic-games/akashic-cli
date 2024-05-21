@@ -1,6 +1,6 @@
 import * as fs from "fs";
 
-export function workaroundMockFsExistsSync() {
+export function workaroundMockFsExistsSync(): void {
 	let fsSpy: jest.SpyInstance;
 
 	beforeAll(() => {
