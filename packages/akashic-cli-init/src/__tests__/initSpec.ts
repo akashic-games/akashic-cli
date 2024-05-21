@@ -7,7 +7,7 @@ import { completeTemplateConfig } from "../../lib/init/TemplateConfig";
 const _extractFromTemplate = internals._extractFromTemplate;
 
 describe("init.ts", () => {
-	// node@20 で mock-fs 利用時に fs.existsSync() が機能していないため、spy で statSync() で存在判定をしている。
+	// node@20 で mock-fs でモックしたディレクトリ構造に対し fs.existsSync() を実行すると必ず偽が返ってくるので、spy で statSync() で存在判定をしている。
 	const fsSpy = jest.spyOn(fs, "existsSync").mockImplementation((path: fs.PathLike): boolean => {
 		try {
 			return !!fs.statSync(path);
