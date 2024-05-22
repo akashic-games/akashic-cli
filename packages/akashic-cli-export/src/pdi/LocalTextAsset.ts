@@ -1,3 +1,5 @@
+import * as g from "@akashic/akashic-engine";
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class LocalTextAsset extends g.TextAsset {
 	data: string;

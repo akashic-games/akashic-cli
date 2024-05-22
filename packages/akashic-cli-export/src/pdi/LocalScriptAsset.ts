@@ -1,7 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-interface Window {
-	gLocalAssetContainer: {[key: string]: any};
-}
+import * as g from "@akashic/akashic-engine";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class LocalScriptAsset extends g.ScriptAsset {

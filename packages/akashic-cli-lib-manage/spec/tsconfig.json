@@ -8,9 +8,6 @@
     "outDir": "./build",
     "types" : ["commander", "form-data", "fs-extra", "jest", "mock-fs", "node"]
   },
-  "files": [
-    "../node_modules/typescript/lib/lib.es6.d.ts"
-  ],
   "include": [
     "./src/**/*.ts"
   ]

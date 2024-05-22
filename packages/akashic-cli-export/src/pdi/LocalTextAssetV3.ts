@@ -1,3 +1,4 @@
+import * as g from "@akashic/akashic-engine";
 
 // 本来であればv3系のg.TextAssetをimplementsすべきだが、ビルド時に使用しているakashic-engineはv2系なので一からクラス定義している
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

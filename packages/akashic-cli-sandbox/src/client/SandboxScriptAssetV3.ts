@@ -1,8 +1,4 @@
-// Windowオブジェクトの定義のため、未使用の lint エラーを抑止
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-interface Window {
-	gScriptContainer: {[key: string]: Function};
-}
+import * as g from "@akashic/akashic-engine";
 
 // 本来であればv3系のg.ScriptAssetをimplementsすべきだが、ビルド時に使用しているakashic-engineはv2系なので一からクラス定義している
 // game.ejs で参照されるため、未使用の lint エラーを抑止
