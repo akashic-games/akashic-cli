@@ -1,4 +1,5 @@
-import * as g from "@akashic/akashic-engine";
+import type * as akashicEngine from "@akashic/akashic-engine";
+declare var g: typeof akashicEngine;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class LocalScriptAsset extends g.ScriptAsset {
@@ -9,7 +10,7 @@ class LocalScriptAsset extends g.ScriptAsset {
 		this.func = window.gLocalAssetContainer[id]; // gLocalScriptContainer は index.ect 上のscriptタグ内で宣言されている
 	}
 
-	_load(loader: g.AssetLoadHandler): void {
+	_load(loader: akashicEngine.AssetLoadHandler): void {
 		if (this.func !== undefined) {
 			setTimeout(() => {
 				loader._onAssetLoad(this);
@@ -21,7 +22,7 @@ class LocalScriptAsset extends g.ScriptAsset {
 		}
 	}
 
-	execute(execEnv: g.ScriptAssetExecuteEnvironment): any {
+	execute(execEnv: akashicEngine.ScriptAssetExecuteEnvironment): any {
 		this.func(execEnv);
 		return execEnv.module.exports;
 	}
