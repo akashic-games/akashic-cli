@@ -1,4 +1,5 @@
-import * as g from "@akashic/akashic-engine";
+import type * as akashicEngine from "@akashic/akashic-engine";
+declare var g: typeof akashicEngine;
 
 // ビルド時はnode_modules下のakashic-engineモジュールのgを参照しているが、実際に利用するgはjs下のengineFilesV*_*_*.jsのものなので、本来なら実行時に参照するgを動的に決定できるようにすべき
 // game.ejs で参照されるため、未使用の lint エラーを抑止
@@ -28,7 +29,7 @@ class SandboxScriptAsset extends g.ScriptAsset {
 		container.appendChild(script);
 	}
 
-	_load(loader: g.AssetLoadHandler): void {
+	_load(loader: akashicEngine.AssetLoadHandler): void {
 		const waitLoader = (): void => {
 			if (this.loading) {
 				setTimeout(waitLoader, 100);
@@ -43,7 +44,7 @@ class SandboxScriptAsset extends g.ScriptAsset {
 		setTimeout(waitLoader, this.loading ? 100 : 0);
 	}
 
-	execute(execEnv: g.ScriptAssetExecuteEnvironment): any {
+	execute(execEnv: akashicEngine.ScriptAssetExecuteEnvironment): any {
 		window.gScriptContainer[this.path](execEnv);
 		return execEnv.module.exports;
 	}
