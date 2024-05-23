@@ -157,7 +157,7 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 						// NOTE: akashic-lib.json の存在確認後に akashic-lib.json が削除された場合は処理が中断されてしまうことに注意
 						if (!fs.existsSync(libPath)) return;
 
-						const libJsonData: cmn.LibConfiguration = JSON.parse(fs.readFileSync(libPath, "utf8"));
+						const libJsonData: cmn.LibConfiguration = JSON.parse(fs.readFileSync(libPath).toString("utf8"));
 						if (libJsonData.gameConfigurationData) {
 							const environment = libJsonData.gameConfigurationData.environment;
 							if (environment && environment.external) {

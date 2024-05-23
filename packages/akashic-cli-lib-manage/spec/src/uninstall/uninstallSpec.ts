@@ -3,8 +3,11 @@ import * as path from "path";
 import * as mockfs from "mock-fs";
 import * as cmn from "@akashic/akashic-cli-commons";
 import { uninstall, promiseUninstall } from "../../../lib/uninstall/uninstall";
+import { workaroundMockFsExistsSync } from "../testUtils";
 
 describe("uninstall()", function () {
+	workaroundMockFsExistsSync();
+	
 	afterEach(function () {
 		mockfs.restore();
 	});
@@ -121,7 +124,7 @@ describe("uninstall()", function () {
 
 		jest.spyOn(cmn.Util, "requireResolve").mockImplementation((id: string, opts: { paths?: string[] | undefined }): string => {
 			const pkgJsonPath = path.join(opts.paths[0], "package.json");
-			const pkgData =  JSON.parse(fs.readFileSync(pkgJsonPath, "utf-8"));
+			const pkgData =  JSON.parse(fs.readFileSync(pkgJsonPath).toString("utf-8"));
 			const mainScriptName = pkgData.main.split(".").pop() === "js" ? pkgData.main : pkgData.main + ".js";
 			return path.join(path.resolve("."), path.dirname(pkgJsonPath), mainScriptName);
 		});
@@ -281,7 +284,6 @@ describe("uninstall()", function () {
 			.then((content: cmn.GameConfiguration) => {
 				expect(content.environment.external.fooEx).toBe(undefined);
 				expect(content.environment.external.buzzEx).toBe("10000");
-				done();
 			}).then(done, done.fail)
 		});
 
@@ -301,7 +303,6 @@ describe("uninstall()", function () {
 			.then((content: cmn.GameConfiguration) => {
 				expect(content.environment.external.fooEx).toBe("100");
 				expect(content.environment.external.buzzEx).toBe("10000");
-				done();
 			}).then(done, done.fail)
 		});
 
@@ -319,7 +320,6 @@ describe("uninstall()", function () {
 			.then((content: cmn.GameConfiguration) => {
 				expect(content.environment.external.fooEx).toBe("100");
 				expect(content.environment.external.buzzEx).toBe("10000");
-				done();
 			}).then(done, done.fail)
 		});
 	});
@@ -435,7 +435,6 @@ describe("uninstall()", function () {
 			.then((content: cmn.GameConfiguration) => {
 				expect(content.environment.external.fooEx).toBe("100");
 				expect(content.environment.external.buzzEx).toBe("10000");
-				done();
 			}).then(done, done.fail)
 		});
 
@@ -453,7 +452,6 @@ describe("uninstall()", function () {
 			.then((content: cmn.GameConfiguration) => {
 				expect(content.environment.external.fooEx).toBe("100");
 				expect(content.environment.external.buzzEx).toBe("10000");
-				done();
 			}).then(done, done.fail)
 		});
 
@@ -471,7 +469,6 @@ describe("uninstall()", function () {
 			.then((content: cmn.GameConfiguration) => {
 				expect(content.environment.external.fooEx).toBe("100");
 				expect(content.environment.external.buzzEx).toBe("10000");
-				done();
 			}).then(done, done.fail)
 		});
 
@@ -490,7 +487,6 @@ describe("uninstall()", function () {
 			.then((content: cmn.GameConfiguration) => {
 				expect(content.environment.external.fooEx).toBe("100");
 				expect(content.environment.external.buzzEx).toBe("10000");
-				done();
 			}).then(done, done.fail)
 		});
 	});

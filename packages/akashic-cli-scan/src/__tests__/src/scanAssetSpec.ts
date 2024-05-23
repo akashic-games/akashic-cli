@@ -4,6 +4,7 @@ import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
 import type { AssetConfiguration, AssetConfigurationMap, AudioAssetConfigurationBase, GameConfiguration } from "@akashic/game-configuration";
 import * as mockfs from "mock-fs";
 import { scanAsset } from "../../../lib/scanAsset";
+import { workaroundMockFsExistsSync } from "./testUtils";
 
 describe("scanAsset()", () => {
 	const nullLogger = new ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
@@ -18,6 +19,8 @@ describe("scanAsset()", () => {
 	const DUMMY_NO_SIZE_SVG_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy_no_size.svg"));
 	const DUMMY_NO_PIXEL_SVG_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy_no_px.svg"));
 	const DUMMY_WASM_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy.wasm"));
+
+	workaroundMockFsExistsSync();
 
 	afterEach(() => {
 		mockfs.restore();

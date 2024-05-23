@@ -5,20 +5,22 @@ import * as mockfs from "mock-fs";
 import { scanNodeModules } from "../../../lib/scanNodeModules";
 import { Util } from "@akashic/akashic-cli-commons";
 import { MockPromisedNpm } from "./helpers/MockPromisedNpm";
+import { workaroundMockFsExistsSync } from "./testUtils";
 
 describe("scanNodeModules", () => {
 	const nullLogger = new ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
 	let spy: jest.SpyInstance;
+	workaroundMockFsExistsSync();
+
 	beforeAll(() => {
 		spy = jest.spyOn(Util, "requireResolve").mockImplementation((id: string, opts: { paths?: string[] | undefined }): string => {
 			const pkgJsonPath = path.join(opts.paths[0], "package.json");
-			const pkgData =  JSON.parse(fs.readFileSync(pkgJsonPath, "utf-8"));
+			const pkgData =  JSON.parse(fs.readFileSync(pkgJsonPath).toString("utf-8"));
 			if (!pkgData.name) return "";
 			const mainScriptName = pkgData.main.split(".").pop() === "js" ? pkgData.main : pkgData.main + ".js";
 			return path.join(path.resolve("."), path.dirname(pkgJsonPath), mainScriptName);
 		});
 	});
-
 	afterEach(() => {
 		mockfs.restore();
 	});

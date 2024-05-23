@@ -4,9 +4,12 @@ import * as fs from "fs-extra";
 import * as mockfs from "mock-fs";
 import { internals } from "../../lib/init/init";
 import { completeTemplateConfig } from "../../lib/init/TemplateConfig";
+import { workaroundMockFsExistsSync } from "./testUtils";
 const _extractFromTemplate = internals._extractFromTemplate;
 
 describe("init.ts", () => {
+	workaroundMockFsExistsSync();
+
 	describe("_extractFromTemplate()", () => {
 		beforeEach(() => {
 			mockfs({

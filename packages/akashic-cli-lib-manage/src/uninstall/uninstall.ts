@@ -138,7 +138,7 @@ export function uninstall(param: UninstallParameterObject, cb: (err: any) => voi
 
 function extractExternalsFromLibJson(libPath: string, externals: {[key: string]: string}): void {
 	try {
-		const libJsonData: cmn.LibConfiguration = JSON.parse(fs.readFileSync(libPath, "utf8"));
+		const libJsonData: cmn.LibConfiguration = JSON.parse(fs.readFileSync(libPath).toString("utf-8"));
 		if (!libJsonData || !libJsonData.gameConfigurationData) return;
 
 		const environment = libJsonData.gameConfigurationData.environment;
@@ -156,7 +156,7 @@ function extractExternalsFromLibJson(libPath: string, externals: {[key: string]:
 function removeAssetListFromLibJson(name: string, libPath: string, conf: cmn.GameConfiguration): void {
 	if (!fs.existsSync(libPath)) return;
 
-	const libJsonData: cmn.LibConfiguration = JSON.parse(fs.readFileSync(libPath, "utf8"));
+	const libJsonData: cmn.LibConfiguration = JSON.parse(fs.readFileSync(libPath).toString("utf-8"));
 	if (
 		!libJsonData ||
 		!libJsonData.assetList ||
