@@ -9,8 +9,7 @@
     "types" : ["archiver", "browserify", "commander", "fs-extra", "fs-readdir-recursive", "node", "uglify-js", "pngjs"]
   },
   "files": [
-    "./typings/babel.d.ts",
-    "./node_modules/@akashic/akashic-engine/lib/main.d.ts"
+    "./typings/babel.d.ts"
   ],
   "include": [
     "./src/**/*.ts"

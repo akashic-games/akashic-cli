@@ -1,8 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-interface Window {
-	gScriptContainer: {[key: string]: Function};
-}
-
 // 本来であればv3系のg.ScriptAssetをimplementsすべきだが、ビルド時に使用しているakashic-engineはv2系なので一からクラス定義している
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class LocalScriptAssetV3 {
@@ -12,7 +7,7 @@ class LocalScriptAssetV3 {
 	path: string;
 	exports: string[];
 	originalPath: string;
-	onDestroyed: g.Trigger<g.Asset>;
+	onDestroyed: Trigger<Asset>;
 	func: Function;
 
 	constructor(id: string, path: string, exports: string[] = []) {
@@ -20,7 +15,7 @@ class LocalScriptAssetV3 {
 		this.originalPath = path;
 		this.exports = exports;
 		this.path = this._assetPathFilter(path);
-		this.onDestroyed = new g.Trigger<g.Asset>();
+		this.onDestroyed = new g.Trigger<Asset>();
 		this.func = window.gLocalAssetContainer[id]; // gLocalScriptContainer は index.ect 上のscriptタグ内で宣言されている
 	}
 
@@ -48,7 +43,7 @@ class LocalScriptAssetV3 {
 		return execEnv.module.exports;
 	}
 
-	_load(loader: g.AssetLoadHandler): void {
+	_load(loader: AssetLoadHandler): void {
 		if (this.func !== undefined) {
 			setTimeout(() => {
 				loader._onAssetLoad(this);

@@ -8,7 +8,6 @@
     "types" : ["node", "commander"]
   },
   "files": [
-    "./node_modules/typescript/lib/lib.es6.d.ts",
     "./src/ui.ts"
   ]
 }

@@ -4,14 +4,15 @@
     "lib": ["es2015", "dom"],
     "noImplicitAny": true,
     "module": "commonjs",
-    "outDir": "../../js"
+    "outDir": "../../js",
+    "types": ["jest"]
   },
   "files": [
-    "../../node_modules/@akashic/akashic-engine/lib/main.d.ts",
     "./TimeKeeper.ts",
     "./SandboxScriptAsset.ts",
     "./SandboxScriptAssetV3.ts",
     "./akashic/meddling/MeddlingDate.ts",
-    "./akashic/meddling/MeddlingMath.ts"
+    "./akashic/meddling/MeddlingMath.ts",
+    "./global.d.ts"
   ]
 }

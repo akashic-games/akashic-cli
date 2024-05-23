@@ -7,7 +7,7 @@ class LocalTextAsset extends g.TextAsset {
 		this.data = decodeURIComponent(window.gLocalAssetContainer[id]);
 	}
 
-	_load(loader: g.AssetLoadHandler): void {
+	_load(loader: AssetLoadHandler): void {
 		if (this.data !== undefined) {
 			setTimeout(() => {
 				loader._onAssetLoad(this);
