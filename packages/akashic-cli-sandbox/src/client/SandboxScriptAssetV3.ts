@@ -1,6 +1,3 @@
-import type * as akashicEngine from "@akashic/akashic-engine";
-declare var g: typeof akashicEngine;
-
 // 本来であればv3系のg.ScriptAssetをimplementsすべきだが、ビルド時に使用しているakashic-engineはv2系なので一からクラス定義している
 // game.ejs で参照されるため、未使用の lint エラーを抑止
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -10,7 +7,7 @@ class SandboxScriptAssetV3 {
 	id: string;
 	path: string;
 	originalPath: string;
-	onDestroyed: akashicEngine.Trigger<akashicEngine.Asset>;
+	onDestroyed: Trigger<Asset>;
 	loading: boolean;
 	exports: string[];
 
@@ -19,7 +16,7 @@ class SandboxScriptAssetV3 {
 		this.originalPath = path;
 		this.exports = exports;
 		this.path = this._assetPathFilter(path);
-		this.onDestroyed = new g.Trigger<akashicEngine.Asset>();
+		this.onDestroyed = new g.Trigger<Asset>();
 		// いきなり読んじゃう
 		const heads = document.getElementsByTagName("head");
 		const container: Node = (heads.length === 0) ? document.body : heads[0];
@@ -61,7 +58,7 @@ class SandboxScriptAssetV3 {
 		return execEnv.module.exports;
 	}
 
-	_load(loader: akashicEngine.AssetLoadHandler): void {
+	_load(loader: AssetLoadHandler): void {
 		const waitLoader = (): void => {
 			if (this.loading) {
 				setTimeout(waitLoader, 100);

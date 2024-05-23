@@ -1,6 +1,3 @@
-import type * as akashicEngine from "@akashic/akashic-engine";
-declare var g: typeof akashicEngine;
-
 // 本来であればv3系のg.TextAssetをimplementsすべきだが、ビルド時に使用しているakashic-engineはv2系なので一からクラス定義している
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class LocalTextAssetV3 {
@@ -8,14 +5,14 @@ class LocalTextAssetV3 {
 	id: string;
 	path: string;
 	originalPath: string;
-	onDestroyed: akashicEngine.Trigger<akashicEngine.Asset>;
+	onDestroyed: Trigger<Asset>;
 	data: string;
 
 	constructor(id: string, path: string) {
 		this.id = id;
 		this.originalPath = path;
 		this.path = this._assetPathFilter(path);
-		this.onDestroyed = new g.Trigger<akashicEngine.Asset>();
+		this.onDestroyed = new g.Trigger<Asset>();
 		this.data = decodeURIComponent(window.gLocalAssetContainer[id]);
 	}
 
@@ -36,7 +33,7 @@ class LocalTextAssetV3 {
 		return false;
 	}
 
-	_load(loader: akashicEngine.AssetLoadHandler): void {
+	_load(loader: AssetLoadHandler): void {
 		if (this.data !== undefined) {
 			setTimeout(() => {
 				loader._onAssetLoad(this);

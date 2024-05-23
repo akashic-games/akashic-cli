@@ -13,6 +13,6 @@
     "./SandboxScriptAssetV3.ts",
     "./akashic/meddling/MeddlingDate.ts",
     "./akashic/meddling/MeddlingMath.ts",
-    "./window.d.ts"
+    "./global.d.ts"
   ]
 }

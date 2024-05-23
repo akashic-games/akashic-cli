@@ -1,6 +1,3 @@
-import type * as akashicEngine from "@akashic/akashic-engine";
-declare var g: typeof akashicEngine;
-
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class LocalTextAsset extends g.TextAsset {
 	data: string;
@@ -10,7 +7,7 @@ class LocalTextAsset extends g.TextAsset {
 		this.data = decodeURIComponent(window.gLocalAssetContainer[id]);
 	}
 
-	_load(loader: akashicEngine.AssetLoadHandler): void {
+	_load(loader: AssetLoadHandler): void {
 		if (this.data !== undefined) {
 			setTimeout(() => {
 				loader._onAssetLoad(this);
