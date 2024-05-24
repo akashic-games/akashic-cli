@@ -58,7 +58,7 @@ export interface InstallParameterObject {
 	 * game.json の moduleMainScripts を利用するかどうか。
 	 * この値は将来的に利用される値であり、現バージョンにおいては機能しない。
 	 */
-	// useMms?: boolean;
+	useMms?: boolean;
 }
 
 interface NormalizedInstallParameterObject extends Required<Omit<InstallParameterObject, "plugin" | "debugNpm">> {
@@ -76,7 +76,7 @@ function _normalizeInstallParameterObject(param: InstallParameterObject): Normal
 		noOmitPackagejson: !!param.noOmitPackagejson,
 		debugNpm: param.debugNpm ?? null,
 		useMmp: !!param.useMmp,
-		// useMms: !!param.useMms,
+		useMms: !!param.useMms,
 	};
 }
 
@@ -111,6 +111,28 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 			if ((normalizedParam.plugin != null) && conf.findExistingOperationPluginIndex(normalizedParam.plugin) !== -1)
 				throw new Error("Conflicted code for operation plugins: " + normalizedParam.plugin + ".");
 
+			if (normalizedParam.useMmp && conf._content.moduleMainScripts != null)
+				throw new Error(
+					"To enable the `--use-mmp` option, remove the `moduleMainScripts` property. " +
+					"This issue may be resolved by running the following command: \n" +
+					"> akashic scan globalScripts --use-mmp"
+				);
+			if (normalizedParam.useMms && conf._content.moduleMainPaths != null)
+				throw new Error(
+					"To enable the `--use-mms` option, remove the `moduleMainPaths` property. " +
+					"This issue may be resolved by running the following command: \n" +
+					"> akashic scan globalScripts --use-mms"
+				);
+			if (
+				(!normalizedParam.useMms && !normalizedParam.useMmp) &&
+				(conf._content.moduleMainPaths != null && conf._content.moduleMainScripts != null)
+			)
+				throw new Error(
+					"Defining both the `moduleMainPaths` property and the `moduleMainScripts` property simultaneously is not supported. " +
+					"This issue may be resolved by running the following command: \n" +
+					"> akashic scan globalScripts --use-mms"
+				);
+
 			return Promise.resolve()
 				.then(() => {
 					if (normalizedParam.link) {
@@ -138,11 +160,19 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 						const sandboxRuntime =
 							conf._content.environment && conf._content.environment["sandbox-runtime"]
 							? conf._content.environment["sandbox-runtime"] : "1";
-						conf.addToModuleMainScripts(packageJsonFiles, sandboxRuntime);
-
-						if (param.useMmp) {
-							// TODO: --use-mmp を削除しデフォルト動作とする (その際に --use-mms の真偽値を分岐の条件に変更する)
-							conf.addModuleMainPaths(packageJsonFiles, sandboxRuntime);
+						if (sandboxRuntime === "1" || sandboxRuntime === "2") {
+							if (normalizedParam.useMmp) {
+								normalizedParam.logger.warn(
+									"The --use-mmp option is ignored because `sandbox-runtime` in game.json is `1` or `2`."
+								);
+							}
+							conf.addToModuleMainScripts(packageJsonFiles);
+						} else {
+							if (normalizedParam.useMmp || conf._content.moduleMainPaths) {
+								conf.addModuleMainPaths(packageJsonFiles);
+							} else {
+								conf.addToModuleMainScripts(packageJsonFiles);
+							}
 						}
 					}
 				})
