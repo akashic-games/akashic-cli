@@ -61,16 +61,19 @@ export interface ScanNodeModulesParameterObject {
 	includeExtensionToAssetId?: boolean;
 
 	/**
-	 * game.json の moduleMainPaths を利用するかどうか。
+	 * game.json の moduleMainPaths を優先して利用するかどうか。
+	 * `useMms` の指定よりも優先される。
+	 * 本値が `false` の場合、 game.json の内容に応じて `moduleMainPaths` と `moduleMainScripts` のどちらを利用するか判断する。
 	 * 省略された場合、 `false` 。
 	 */
 	useMmp?: boolean;
 
 	/**
-	 * game.json の moduleMainScripts を利用するかどうか。
-	 * この値は将来的に利用される値であり、現バージョンにおいては機能しない。
+	 * game.json の moduleMainScripts を優先して利用するかどうか。
+	 * 本値が `false` の場合、 game.json の内容に応じて `moduleMainPaths` と `moduleMainScripts` のどちらを利用するか判断する。
+	 * 省略された場合、 `false` 。
 	 */
-	// useMms?: boolean;
+	useMms?: boolean;
 }
 
 interface NormalizedScanNodeModulesParameterObject extends Required<Omit<ScanNodeModulesParameterObject, "debugNpm">> {
@@ -88,7 +91,7 @@ export function _completeScanNodeModulesParameterObject(param: ScanNodeModulesPa
 		debugNpm: param.debugNpm ?? undefined,
 		includeExtensionToAssetId: !!param.includeExtensionToAssetId,
 		useMmp: !!param.useMmp,
-		// useMms: !!param.useMms,
+		useMms: !!param.useMms,
 	};
 }
 
@@ -101,8 +104,24 @@ export async function scanNodeModules(p: ScanNodeModulesParameterObject): Promis
 		const gamePath = "./game.json";
 		const base = ".";
 		const content = await readJSON<GameConfiguration>(gamePath);
+		const sandboxRuntime = content.environment?.["sandbox-runtime"] ?? "1";
 
 		let entryPaths: string | string[];
+		let useMmp: boolean = false;
+
+		if (sandboxRuntime === "3") {
+			if (param.useMmp) {
+				useMmp = true;
+			} else if (param.useMms) {
+				useMmp = false;
+			} else if (content.moduleMainPaths != null) {
+				useMmp = true;
+			} else {
+				useMmp = false;
+			}
+		} else {
+			useMmp = false;
+		}
 
 		if (param.fromEntryPoint) {
 			let entryPointPath: string | null = null;
@@ -154,8 +173,7 @@ export async function scanNodeModules(p: ScanNodeModulesParameterObject): Promis
 		if (globalScripts.length) {
 			const packageJsonFiles = NodeModules.listPackageJsonsFromScriptsPath(base, globalScripts);
 
-			// TODO: --use-mmp を削除しデフォルト動作とする (その際に --use-mms の真偽値を分岐の条件に変更する)
-			if (param.useMmp) {
+			if (useMmp) {
 				const moduleMainPaths = NodeModules.listModuleMainPaths(packageJsonFiles);
 				content.moduleMainPaths = Object.assign(content.moduleMainPaths || {}, moduleMainPaths);
 				delete content.moduleMainScripts;
@@ -163,13 +181,6 @@ export async function scanNodeModules(p: ScanNodeModulesParameterObject): Promis
 				const moduleMainScripts = NodeModules.listModuleMainScripts(packageJsonFiles);
 
 				if (moduleMainScripts && 0 < Object.keys(moduleMainScripts).length) {
-					if (!content.moduleMainScripts) {
-						logger.warn(
-							"Newly added the moduleMainScripts property to game.json." +
-							"This property, introduced by akashic-cli@>=1.12.2, is NOT supported by older versions of Akashic Engine." +
-							"Please ensure that you are using akashic-engine@>=2.0.2, >=1.12.7."
-						);
-					}
 					content.moduleMainScripts = Object.assign(content.moduleMainScripts || {}, moduleMainScripts);
 				}
 

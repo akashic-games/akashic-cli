@@ -96,7 +96,6 @@ commander
 	.option("-q, --quiet", "Suppress output")
 	.option("--no-omit-packagejson", "Add package.json of each module to the globalScripts property (to support older Akashic Engine)")
 	.option("--use-mmp", "Use moduleMainPaths in game.json")
-	// NOTE: --use-mms は --use-mmp がデフォルトで有効となる場合に機能する値であり、現バージョンにおいては機能しない。
 	.option("--use-mms", "Use moduleMainScripts in game.json (to support older Akashic Engine)")
 	.action((opts: CliConfigScanGlobalScripts = {}) => {
 		const logger = new ConsoleLogger({ quiet: opts.quiet });
@@ -106,7 +105,7 @@ commander
 			fromEntryPoint: opts.fromEntryPoint,
 			noOmitPackagejson: !opts.omitPackagejson,
 			useMmp: opts.useMmp,
-			// useMms: opts.useMms,
+			useMms: opts.useMms,
 		})
 			.catch((err: Error) => {
 				logger.error(err.message);

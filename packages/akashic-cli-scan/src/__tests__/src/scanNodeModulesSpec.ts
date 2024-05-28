@@ -6,6 +6,7 @@ import { scanNodeModules } from "../../../lib/scanNodeModules";
 import { Util } from "@akashic/akashic-cli-commons";
 import { MockPromisedNpm } from "./helpers/MockPromisedNpm";
 import { workaroundMockFsExistsSync } from "./testUtils";
+import { ScanNodeModulesParameterObject } from "../../scanNodeModules";
 
 describe("scanNodeModules", () => {
 	const nullLogger = new ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
@@ -28,51 +29,53 @@ describe("scanNodeModules", () => {
 		spy.mockClear();
 	});
 
-	it("scan globalScripts field based on node_modules/", async () => {
-		mockfs({
-			"game.json": "{}",
-			"node_modules": {
-				"dummy": {
-					"package.json": JSON.stringify({
-						name: "dummy",
-						version: "0.0.0",
-						main: "main.js",
-						dependencies: { "dummyChild": "*" }
-					}),
-					"main.js": [
-						"require('./foo');",
-						"require('dummyChild');",
-					].join("\n"),
-					"foo.js": "module.exports = 1;",
-					"node_modules": {
-						"dummyChild": {
-							"index.js": "module.exports = 'dummyChild';"
-						}
-					}
-				},
-				"dummy2": {
-					"index.js": "require('./sub')",
-					"sub.js": "",
-				}
-			}
-		});
-
-		await scanNodeModules({
-			logger: nullLogger,
-			debugNpm: new MockPromisedNpm({
-				expectDependencies: {
+	describe("scan globalScripts field based on node_modules/", () => {
+		const prepareMock = (gamejson: object) => {
+			mockfs({
+				"game.json": JSON.stringify(gamejson),
+				"node_modules": {
 					"dummy": {
-						dependencies: { "dummyChild": {} }
+						"package.json": JSON.stringify({
+							name: "dummy",
+							version: "0.0.0",
+							main: "main.js",
+							dependencies: { "dummyChild": "*" }
+						}),
+						"main.js": [
+							"require('./foo');",
+							"require('dummyChild');",
+						].join("\n"),
+						"foo.js": "module.exports = 1;",
+						"node_modules": {
+							"dummyChild": {
+								"index.js": "module.exports = 'dummyChild';"
+							}
+						}
 					},
-					"dummy2": {}
+					"dummy2": {
+						"index.js": "require('./sub')",
+						"sub.js": "",
+					}
 				}
-			})
-		});
+			});
+		};
 
-		let conf = JSON.parse(fs.readFileSync("./game.json").toString());
-		const globalScripts = conf.globalScripts;
-		const moduleMainScripts = conf.moduleMainScripts;
-		const moduleMainPaths = conf.moduleMainPaths;
+		const scan = async (param?: ScanNodeModulesParameterObject) => {
+			return scanNodeModules({
+				logger: nullLogger,
+				debugNpm: new MockPromisedNpm({
+					expectDependencies: {
+						"dummy": {
+							dependencies: { "dummyChild": {} }
+						},
+						"dummy2": {}
+					}
+				}),
+				...param,
+			});
+		};
+
+		const readConfig = () => JSON.parse(fs.readFileSync("./game.json").toString());
 
 		const expectedPaths = [
 			"node_modules/dummy/main.js",
@@ -81,21 +84,106 @@ describe("scanNodeModules", () => {
 			"node_modules/dummy2/index.js",
 			"node_modules/dummy2/sub.js"
 		];
-		expect(globalScripts.length).toBe(expectedPaths.length);
 
-		for (const expectedPath of expectedPaths) {
-			expect(globalScripts.indexOf(expectedPath)).not.toBe(-1);
-		}
+		const assertGlobalScripts = (conf: any) => {
+			const globalScripts = conf.globalScripts;
+			expect(conf.globalScripts.length).toBe(expectedPaths.length);
+			for (const expectedPath of expectedPaths) {
+				expect(globalScripts.indexOf(expectedPath)).not.toBe(-1);
+			}
+		};
 
-		expect(moduleMainScripts).toEqual({
-			"dummy": "node_modules/dummy/main.js"
+		const assertModuleMainScripts = (conf: any) => {
+			const moduleMainScripts = conf.moduleMainScripts;
+			expect(moduleMainScripts).toEqual({
+				"dummy": "node_modules/dummy/main.js"
+			});
+		};
+
+		const assertModuleMainPaths = (conf: any) => {
+			const moduleMainPaths = conf.moduleMainPaths;
+			expect(moduleMainPaths).toEqual({
+				"node_modules/dummy/package.json": "node_modules/dummy/main.js"
+			});
+		};
+
+		afterEach(mockfs.restore);
+
+		test.each(["1", "2", undefined])("should be used `moduleMainScripts` if `sandbox-runtime` is `%s`", async sandboxRuntime => {
+			prepareMock({ environment: { "sandbox-runtime": sandboxRuntime } });
+			await scan({ useMmp: true });
+			const conf = readConfig();
+			assertGlobalScripts(conf);
+			assertModuleMainScripts(conf);
+			expect(conf.moduleMainPaths).toBeUndefined();
 		});
-		expect(moduleMainPaths).toBeUndefined();
+
+		test("should be used `moduleMainPaths` and be removed `moduleMainScripts` if `useMmp` is specified", async () => {
+			prepareMock({
+				moduleMainPaths: {},
+				moduleMainScripts: {},
+				environment: { "sandbox-runtime": "3" },
+			});
+			await scan({ useMmp: true });
+			const conf = readConfig();
+			assertGlobalScripts(conf);
+			assertModuleMainPaths(conf);
+			expect(conf.moduleMainScripts).toBeUndefined();
+		});
+
+		test("should be used `moduleMainScripts` and be removed `moduleMainPaths` if `useMms` is specified", async () => {
+			prepareMock({
+				moduleMainPaths: {},
+				moduleMainScripts: {},
+				environment: { "sandbox-runtime": "3" },
+			});
+			await scan({ useMms: true });
+			const conf = readConfig();
+			assertGlobalScripts(conf);
+			assertModuleMainScripts(conf);
+			expect(conf.moduleMainPaths).toBeUndefined();
+		});
+
+		test("should be used `moduleMainPaths` and be removed `moduleMainScripts` if `moduleMainPaths` exists", async () => {
+			prepareMock({
+				moduleMainPaths: {},
+				moduleMainScripts: {},
+				environment: { "sandbox-runtime": "3" },
+			});
+			await scan();
+			const conf = readConfig();
+			assertGlobalScripts(conf);
+			assertModuleMainPaths(conf);
+			expect(conf.moduleMainScripts).toBeUndefined();
+		});
+
+		test("should be used `moduleMainScripts` if only `moduleMainScripts` exists", async () => {
+			prepareMock({
+				moduleMainScripts: {},
+				environment: { "sandbox-runtime": "3" },
+			});
+			await scan();
+			const conf = readConfig();
+			assertGlobalScripts(conf);
+			assertModuleMainScripts(conf);
+			expect(conf.moduleMainPaths).toBeUndefined();
+		});
+
+		test("should be used `moduleMainScripts` if neither `moduleMainPaths` nor `moduleMainScripts` exist", async () => {
+			prepareMock({
+				environment: { "sandbox-runtime": "3" },
+			});
+			await scan();
+			const conf = readConfig();
+			assertGlobalScripts(conf);
+			assertModuleMainScripts(conf);
+			expect(conf.moduleMainPaths).toBeUndefined();
+		});
 	});
 
 	it("scan globalScripts field based on node_modules/ with npm3(flatten)", async () => {
 		mockfs({
-			"game.json": "{}",
+			"game.json": `{ "environment": { "sandbox-runtime": "3" } }`,
 			"node_modules": {
 				"dummy": {
 					"package.json": JSON.stringify({
@@ -159,7 +247,7 @@ describe("scanNodeModules", () => {
 
 	it("scan globalScripts field based on node_modules/ with @scope", async () => {
 		mockfs({
-			"game.json": "{}",
+			"game.json": `{ "environment": { "sandbox-runtime": "3" } }`,
 			"node_modules": {
 				"dummy": {
 					"package.json": JSON.stringify({
@@ -239,7 +327,7 @@ describe("scanNodeModules", () => {
 
 	it("scan globalScripts If main in package.json has no extension", async () => {
 		mockfs({
-			"game.json": "{}",
+			"game.json": `{ "environment": { "sandbox-runtime": "3" } }`,
 			"node_modules": {
 				"dummy": {
 					"package.json": JSON.stringify({
@@ -294,7 +382,7 @@ describe("scanNodeModules", () => {
 
 	it("scan globalScripts empty node_modules/", async () => {
 		mockfs({
-			"game.json": "{}",
+			"game.json": `{ "environment": { "sandbox-runtime": "3" } }`,
 			"node_modules": {}
 		});
 
@@ -323,7 +411,7 @@ describe("scanNodeModules", () => {
 
 	it("scan globalScripts field based on node_modules/, multiple versions in dependencies and devDependencies", async () => {
 		let mockFsContent: { [key: string]: any } = {
-			"game.json": "{}",
+			"game.json": `{ "environment": { "sandbox-runtime": "3" } }`,
 			"node_modules": {
 				"dummy": {
 					"package.json": JSON.stringify({
@@ -480,7 +568,7 @@ describe("scanNodeModules", () => {
 
 	it("scan invalid package.json - no name", async () => {
 		mockfs({
-			"game.json": "{}",
+			"game.json": `{ "environment": { "sandbox-runtime": "3" } }`,
 			"node_modules": {
 				"invalidDummy": {
 					"package.json": JSON.stringify({
@@ -527,7 +615,7 @@ describe("scanNodeModules", () => {
 
 	it("scan all moduleMainScripts", async () => {
 		mockfs({
-			"game.json": "{}",
+			"game.json": `{ "environment": { "sandbox-runtime": "3" } }`,
 			"node_modules": {
 				"dummy": {
 					"package.json": JSON.stringify({
@@ -623,7 +711,7 @@ describe("scanNodeModules", () => {
 
 	it("scan globalScripts: given --no-omit-packagejson property", async () => {
 		mockfs({
-			"game.json": "{}",
+			"game.json": `{ "environment": { "sandbox-runtime": "3" } }`,
 			"node_modules": {
 				"dummy": {
 					"package.json": JSON.stringify({
@@ -738,7 +826,10 @@ describe("scanNodeModules", () => {
 						path: "script/subdir/anAsset.js",
 						global: true
 					}
-				}
+				},
+				environment: {
+					"sandbox-runtime": "3"
+				},
 			}),
 			"script": {
 				"main.js": [
@@ -863,7 +954,10 @@ describe("scanNodeModules", () => {
 				],
 				moduleMainScripts: {
 					"dummy": "node_modules/dummy/main.js"
-				}
+				},
+				environment: {
+					"sandbox-runtime": "3"
+				},
 			}),
 			"script": {
 				"main.js": [
@@ -947,7 +1041,10 @@ describe("scanNodeModules", () => {
 				],
 				moduleMainScripts: {
 					"dummy": "node_modules/dummy/main.js"
-				}
+				},
+				environment: {
+					"sandbox-runtime": "3"
+				},
 			}),
 			"node_modules": {
 				"dummy": {
@@ -984,57 +1081,5 @@ describe("scanNodeModules", () => {
 		});
 
 		expect(warnLogs.length).toBe(0);
-	});
-
-	it("output warning message when moduleMainScript doesn't existed in game.json", async () => {
-		mockfs({
-			"game.json": JSON.stringify({
-				assets: {
-				},
-				globalScripts: [
-					"node_modules/dummy/main.js",
-					"node_modules/dummy/package.json"
-				]
-			}),
-			"node_modules": {
-				"dummy": {
-					"package.json": JSON.stringify({
-						name: "dummy",
-						version: "0.0.0",
-						main: "main.js"
-					}),
-					"main.js": [
-						"module.exports = 1;"
-					].join("\n")
-				}
-			}
-		});
-
-		const warnLogs: string[] = [];
-		class Logger extends ConsoleLogger {
-			info(message: any) {
-				// do nothing
-			}
-			warn(message: any) {
-				warnLogs.push(message);
-			}
-		}
-		const logger = new Logger();
-
-		await scanNodeModules({
-			logger,
-			debugNpm: new MockPromisedNpm({
-				expectDependencies: {
-					"dummy": {}
-				}
-			})
-		});
-
-		expect(warnLogs.length).toBe(1);
-		expect(warnLogs[0]).toBe(
-			"Newly added the moduleMainScripts property to game.json." +
-			"This property, introduced by akashic-cli@>=1.12.2, is NOT supported by older versions of Akashic Engine." +
-			"Please ensure that you are using akashic-engine@>=2.0.2, >=1.12.7."
-		);
 	});
 });
