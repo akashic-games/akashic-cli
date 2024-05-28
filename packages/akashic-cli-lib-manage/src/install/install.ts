@@ -113,8 +113,10 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 
 			if (normalizedParam.useMmp && conf._content.moduleMainScripts != null)
 				throw new Error(
-					"To enable the `--use-mmp` option, remove the `moduleMainScripts` property. " +
-					"This issue may be resolved by running the following command: \n" +
+					"An old property `moduleMainScripts` found in game.json and rejected by `--use-mmp` " +
+					"option that forces to use `moduleMainPaths` instead. If you need `moduleMainScripts` " +
+					"(e.g. to support older Akashic Engine), remove `--use-mmp`. Otherwise run the " +
+					"following command to migrate to `moduleMainPaths`: \n" +
 					"> akashic scan globalScripts --use-mmp"
 				);
 			if (normalizedParam.useMms && conf._content.moduleMainPaths != null)
