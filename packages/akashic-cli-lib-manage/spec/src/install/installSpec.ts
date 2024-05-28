@@ -217,7 +217,7 @@ describe("install()", function () {
 
 				let content: any;
 
-				// 1. sandbox-runtime が 3 ではない場合は useMmp は無視される
+				// 1-1. sandbox-runtime が 3 ではない場合は useMmp は無視される
 				content = defaultConfig({
 					moduleMainPaths: {},
 					environment: { "sandbox-runtime": "2" },
@@ -227,7 +227,7 @@ describe("install()", function () {
 				content = await readConfig();
 				expect(content.moduleMainScripts).toEqual({ "dummy": "node_modules/dummy/index2.js" });
 
-				// 2. sandbox-runtime 3 にて moduleMainPaths のみ存在した場合は moduleMainPaths に追加
+				// 1-2. sandbox-runtime 3 にて moduleMainPaths のみ存在した場合は moduleMainPaths に追加
 				content = defaultConfig({
 					moduleMainPaths: {},
 					environment: { "sandbox-runtime": "3" },
@@ -238,7 +238,7 @@ describe("install()", function () {
 				expect(content.moduleMainScripts).toBeUndefined();
 				expect(content.moduleMainPaths).toEqual({ "node_modules/dummy/package.json": "node_modules/dummy/index2.js" });
 
-				// 3. sandbox-runtime 3 にて moduleMainScripts のみ存在した場合は moduleMainScripts に追加
+				// 1-3. sandbox-runtime 3 にて moduleMainScripts のみ存在した場合は moduleMainScripts に追加
 				content = defaultConfig({
 					moduleMainScripts: {},
 					environment: { "sandbox-runtime": "3" },
@@ -249,7 +249,7 @@ describe("install()", function () {
 				expect(content.moduleMainScripts).toEqual({ "dummy": "node_modules/dummy/index2.js" });
 				expect(content.moduleMainPaths).toBeUndefined();
 
-				// 4. sandbox-runtime 3 にて useMmp が有効なことを確認
+				// 1-4. sandbox-runtime 3 にて useMmp が有効なことを確認
 				content = defaultConfig({
 					environment: { "sandbox-runtime": "3" },
 				});
@@ -259,7 +259,7 @@ describe("install()", function () {
 				expect(content.moduleMainScripts).toBeUndefined();
 				expect(content.moduleMainPaths).toEqual({ "node_modules/dummy/package.json": "node_modules/dummy/index2.js" });
 
-				// 5. sandbox-runtime 3 にて useMms が有効なことを確認
+				// 1-5. sandbox-runtime 3 にて useMms が有効なことを確認
 				content = defaultConfig({
 					environment: { "sandbox-runtime": "3" },
 				});
