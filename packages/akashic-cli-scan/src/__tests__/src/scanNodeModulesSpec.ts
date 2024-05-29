@@ -107,8 +107,6 @@ describe("scanNodeModules", () => {
 			});
 		};
 
-		afterEach(mockfs.restore);
-
 		test.each(["1", "2", undefined])("should be used `moduleMainScripts` if `sandbox-runtime` is `%s`", async sandboxRuntime => {
 			prepareMock({ environment: { "sandbox-runtime": sandboxRuntime } });
 			await scan({ useMmp: true });
