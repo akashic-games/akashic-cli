@@ -114,10 +114,8 @@ export async function scanNodeModules(p: ScanNodeModulesParameterObject): Promis
 				useMmp = true;
 			} else if (param.useMms) {
 				useMmp = false;
-			} else if (content.moduleMainPaths != null) {
-				useMmp = true;
 			} else {
-				useMmp = false;
+				useMmp = content.moduleMainPaths != null;
 			}
 		} else {
 			useMmp = false;
