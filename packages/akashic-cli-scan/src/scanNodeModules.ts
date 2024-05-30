@@ -109,7 +109,7 @@ export async function scanNodeModules(p: ScanNodeModulesParameterObject): Promis
 		let entryPaths: string | string[];
 		let useMmp: boolean = false;
 
-		if (sandboxRuntime === "3") {
+		if (sandboxRuntime !== "1" && sandboxRuntime !== "2") {
 			if (param.useMmp) {
 				useMmp = true;
 			} else if (param.useMms) {
