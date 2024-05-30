@@ -63,14 +63,14 @@ export interface ScanNodeModulesParameterObject {
 	/**
 	 * game.json の moduleMainPaths を優先して利用するかどうか。
 	 * `useMms` の指定よりも優先される。
-	 * 本値が `false` の場合、 game.json の内容に応じて `moduleMainPaths` と `moduleMainScripts` のどちらを利用するか判断する。
+	 * 本値と `useMms` が `false` の場合、 game.json の内容に応じて `moduleMainPaths` と `moduleMainScripts` のどちらを利用するか判断する。
 	 * 省略された場合、 `false` 。
 	 */
 	useMmp?: boolean;
 
 	/**
 	 * game.json の moduleMainScripts を優先して利用するかどうか。
-	 * 本値が `false` の場合、 game.json の内容に応じて `moduleMainPaths` と `moduleMainScripts` のどちらを利用するか判断する。
+	 * 本値と `useMmp` が `false` の場合、 game.json の内容に応じて `moduleMainPaths` と `moduleMainScripts` のどちらを利用するか判断する。
 	 * 省略された場合、 `false` 。
 	 */
 	useMms?: boolean;
