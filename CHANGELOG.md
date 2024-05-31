@@ -1,5 +1,20 @@
 # CHANGELOG
 
+## 2.17.3 (2024-05-31)
+
+#### Enhancement
+* `akashic-cli-commons`, `akashic-cli-lib-manage`, `akashic-cli-scan`
+  * [#1353](https://github.com/akashic-games/akashic-cli/pull/1353) feat(install): enable --use-mms option ([@yu-ogi](https://github.com/yu-ogi))
+  * [#1354](https://github.com/akashic-games/akashic-cli/pull/1354) feat(scan): enable --use-mms option ([@yu-ogi](https://github.com/yu-ogi))
+
+#### Other Change
+* `akashic-cli-commons`, `akashic-cli-init`, `akashic-cli-lib-manage`, `akashic-cli-scan`
+  * [#1351](https://github.com/akashic-games/akashic-cli/pull/1351) Depulicate node16 and use20 in actions ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 2
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+- [@yu-ogi](https://github.com/yu-ogi)
+
 ## 2.17.2 (2024-05-20)
 
 #### Enhancement
