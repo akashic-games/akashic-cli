@@ -94,11 +94,14 @@ export function promiseUninstall(param: UninstallParameterObject): Promise<void>
 					conf.vacuumGlobalScripts();
 					const globalScripts = conf._content.globalScripts ?? [];
 					const packageJsons = cmn.NodeModules.listPackageJsonsFromScriptsPath(".", globalScripts);
-					const moduleMainScripts = cmn.NodeModules.listModuleMainScripts(packageJsons);
-					if (moduleMainScripts && Object.keys(moduleMainScripts).length > 0) {
-						conf._content.moduleMainScripts = moduleMainScripts;
-					} else {
-						delete conf._content.moduleMainScripts;
+
+					if (conf._content.moduleMainScripts) {
+						const moduleMainScripts = cmn.NodeModules.listModuleMainScripts(packageJsons);
+						if (moduleMainScripts && Object.keys(moduleMainScripts).length > 0) {
+							conf._content.moduleMainScripts = moduleMainScripts;
+						} else {
+							conf._content.moduleMainScripts = {};
+						}
 					}
 
 					if (conf._content.moduleMainPaths) {
@@ -106,7 +109,7 @@ export function promiseUninstall(param: UninstallParameterObject): Promise<void>
 						if (moduleMainPaths && Object.keys(moduleMainPaths).length > 0) {
 							conf._content.moduleMainPaths = moduleMainPaths;
 						} else {
-							delete conf._content.moduleMainPaths;
+							conf._content.moduleMainPaths = {};
 						}
 					}
 				})

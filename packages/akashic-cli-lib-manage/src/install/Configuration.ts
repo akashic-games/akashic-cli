@@ -30,32 +30,18 @@ export class Configuration extends cmn.Configuration {
 		}
 	}
 
-	addToModuleMainScripts(packageJsonFiles: string[], sandboxRuntime: string): void {
+	addToModuleMainScripts(packageJsonFiles: string[]): void {
 		this._logger.info("Adding file paths to moduleMainScripts...");
 		const moduleMainScripts = cmn.NodeModules.listModuleMainScripts(packageJsonFiles);
 		if (moduleMainScripts && Object.keys(moduleMainScripts).length > 0) {
-			if (! this._content.moduleMainScripts && (sandboxRuntime === "1" || sandboxRuntime === "2")) {
-				this._logger.warn(
-					"Newly added the moduleMainScripts property to game.json." +
-					"This property, introduced by akashic-cli@>=1.12.2, is NOT supported by older versions of Akashic Engine." +
-					"Please ensure that you are using akashic-engine@>=2.0.2, >=1.12.7."
-				);
-			}
 			this._content.moduleMainScripts = Object.assign(this._content.moduleMainScripts || {}, moduleMainScripts);
 		}
 	}
 
-	addModuleMainPaths(packageJsonFiles: string[], sandboxRuntime: string): void {
+	addModuleMainPaths(packageJsonFiles: string[]): void {
 		this._logger.info("Adding file paths to moduleMainPaths...");
 		const moduleMainPaths = cmn.NodeModules.listModuleMainPaths(packageJsonFiles);
 		if (moduleMainPaths && Object.keys(moduleMainPaths).length > 0) {
-			if (! this._content.moduleMainScripts && (sandboxRuntime === "1" || sandboxRuntime === "2")) {
-				this._logger.warn(
-					"Newly added the moduleMainScripts property to game.json." +
-					"This property, introduced by akashic-cli@>=1.12.2, is NOT supported by older versions of Akashic Engine." +
-					"Please ensure that you are using akashic-engine@>=2.0.2, >=1.12.7."
-				);
-			}
 			this._content.moduleMainPaths = Object.assign(this._content.moduleMainPaths || {}, moduleMainPaths);
 		}
 	}

@@ -16,7 +16,7 @@ function cli(param: CliConfigInstall): void {
 		link: param.link,
 		noOmitPackagejson: !param.omitPackagejson,
 		useMmp: param.useMmp,
-		// useMms: param.useMms,
+		useMms: param.useMms,
 	};
 	Promise.resolve()
 		.then(() => promiseInstall(installParam))
@@ -41,7 +41,6 @@ commander
 	.option("-p, --plugin <code>", "Also add to operationPlugins with the code", (x: string) => parseInt(x, 10))
 	.option("--no-omit-packagejson", "Add package.json of each module to the globalScripts property (to support older Akashic Engine)")
 	.option("--use-mmp", "Use moduleMainPaths in game.json")
-	// NOTE: --use-mms は --use-mmp がデフォルトで有効となる場合に機能する値であり、現バージョンにおいては機能しない。
 	.option("--use-mms", "Use moduleMainScripts in game.json (to support older Akashic Engine)");
 
 export function run(argv: string[]): void {
@@ -62,7 +61,7 @@ export function run(argv: string[]): void {
 			plugin: options.plugin ?? conf.plugin,
 			omitPackagejson: options.omitPackagejson ?? conf.omitPackagejson,
 			useMmp: options.useMmp ?? conf.useMmp,
-			// useMms: options.useMms ?? conf.useMms,
+			useMms: options.useMms ?? conf.useMms,
 		});
 	});
 }

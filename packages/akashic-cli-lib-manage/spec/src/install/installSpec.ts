@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import * as mockfs from "mock-fs";
 import * as cmn from "@akashic/akashic-cli-commons";
-import { promiseInstall } from "../../../lib/install/install";
+import { InstallParameterObject, promiseInstall } from "../../../lib/install/install";
 import { workaroundMockFsExistsSync } from "../testUtils"; 
 
 describe("install()", function () {
@@ -49,21 +49,7 @@ describe("install()", function () {
 	});
 
 	it("installs modules and update globalScripts", function (done) {
-		let warnLogs: string[] = [];
-		const logger: cmn.Logger = {
-			warn: function(message) {
-				warnLogs.push(message);
-			},
-			info: function(_message) {
-				// do nothing
-			},
-			print: function(_message) {
-				// do nothing
-			},
-			error: function(_message) {
-				// do nothing
-			},
-		};
+		const logger = new cmn.ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
 
 		let mockModules: any = {
 			"dummy": {
@@ -143,13 +129,7 @@ describe("install()", function () {
 					"dummy": "node_modules/dummy/main.js",
 					"dummyChild": "node_modules/dummy/node_modules/dummyChild/main.js"
 				});
-				expect(warnLogs.length).toBe(1);
-				expect(warnLogs[0]).toBe(
-					"Newly added the moduleMainScripts property to game.json." +
-					"This property, introduced by akashic-cli@>=1.12.2, is NOT supported by older versions of Akashic Engine." +
-					"Please ensure that you are using akashic-engine@>=2.0.2, >=1.12.7."
-				);
-				warnLogs = []; // 初期化
+				expect(content.moduleMainPaths).toBeUndefined();
 			})
 			.then(() => promiseInstall({ moduleNames: ["dummy2@1.0.1"], cwd: "./somedir", plugin: 12, logger: logger, debugNpm: dummyNpm }))
 			.then(() => cmn.ConfigurationFile.read("./somedir/game.json", logger))
@@ -173,14 +153,12 @@ describe("install()", function () {
 					"dummyChild": "node_modules/dummy/node_modules/dummyChild/main.js"
 				});
 				expect(content.moduleMainPaths).toBeUndefined();
-				warnLogs = []; // 初期化
 			})
-			.then(() => promiseInstall({ moduleNames: ["noOmitPackagejson@0.0.0"], cwd: "./somedir", logger: logger, debugNpm: dummyNpm, noOmitPackagejson: true, useMmp: true }))
+			.then(() => promiseInstall({ moduleNames: ["noOmitPackagejson@0.0.0"], cwd: "./somedir", logger: logger, debugNpm: dummyNpm, noOmitPackagejson: true }))
 			.then(() => cmn.ConfigurationFile.read("./somedir/game.json", logger))
 			.then((content) => {
 				const globalScripts = content.globalScripts;
 
-				expect(warnLogs.length).toBe(0);
 				expect(globalScripts.indexOf("node_modules/noOmitPackagejson/main.js")).not.toBe(-1);
 				expect(globalScripts.indexOf("node_modules/noOmitPackagejson/package.json")).not.toBe(-1);
 				const moduleMainScripts = content.moduleMainScripts;
@@ -189,11 +167,7 @@ describe("install()", function () {
 					"dummyChild": "node_modules/dummy/node_modules/dummyChild/main.js",
 					"noOmitPackagejson": "node_modules/noOmitPackagejson/main.js"
 				});
-				const moduleMainPaths = content.moduleMainPaths;
-				expect(moduleMainPaths).toEqual({
-					"node_modules/noOmitPackagejson/package.json": "node_modules/noOmitPackagejson/main.js"
-				});
-				warnLogs = []; // 初期化
+				expect(content.moduleMainPaths).toBeUndefined();
 			})
 			.then(() => {
 				// dummyモジュールの定義を書き換えて反映されるか確認する
@@ -217,12 +191,10 @@ describe("install()", function () {
 				globalScripts.push("node_modules/foo/foo.js");
 				cmn.ConfigurationFile.write(content, "./somedir/game.json", logger);
 			})
-			.then(() => promiseInstall({ moduleNames: ["dummy@1.0.1"], cwd: "./somedir", logger: logger, debugNpm: dummyNpm, useMmp: true }))
+			.then(() => promiseInstall({ moduleNames: ["dummy@1.0.1"], cwd: "./somedir", logger: logger, debugNpm: dummyNpm }))
 			.then(() => cmn.ConfigurationFile.read("./somedir/game.json", logger))
 			.then((content) => {
 				const globalScripts = content.globalScripts;
-
-				expect(warnLogs.length).toBe(0);
 				expect(globalScripts.indexOf("node_modules/dummy/main.js")).toBe(-1);
 				expect(globalScripts.indexOf("node_modules/dummy/foo.js")).toBe(-1);
 				expect(globalScripts.indexOf("node_modules/dummy/node_modules/dummyChild/main.js")).toBe(-1);
@@ -235,12 +207,92 @@ describe("install()", function () {
 					"dummyChild": "node_modules/dummy/node_modules/dummyChild/main.js",
 					"noOmitPackagejson": "node_modules/noOmitPackagejson/main.js"
 				});
-				const moduleMainPaths = content.moduleMainPaths;
-				expect(moduleMainPaths).toEqual({
-					"node_modules/noOmitPackagejson/package.json": "node_modules/noOmitPackagejson/main.js",
-					"node_modules/dummy/package.json": "node_modules/dummy/index2.js"
-				});
+			})
+			.then(async () => {
+				// moduleMainPaths の動作確認
+				const install = (param?: InstallParameterObject) => promiseInstall({ moduleNames: ["dummy@1.0.1"], cwd: "./somedir", logger: logger, debugNpm: dummyNpm, ...param });
+				const readConfig = () => cmn.ConfigurationFile.read("./somedir/game.json", logger);
+				const writeConfig = () => cmn.ConfigurationFile.write(content, "./somedir/game.json", logger);
+				const defaultConfig = (config?: any) => ({...config});
 
+				let content: any;
+
+				// 1-1. sandbox-runtime が 3 ではない場合は useMmp は無視される
+				content = defaultConfig({
+					moduleMainPaths: {},
+					environment: { "sandbox-runtime": "2" },
+				});
+				await writeConfig();
+				await install({ useMmp: true });
+				content = await readConfig();
+				expect(content.moduleMainScripts).toEqual({ "dummy": "node_modules/dummy/index2.js" });
+
+				// 1-2. sandbox-runtime 3 にて moduleMainPaths のみ存在した場合は moduleMainPaths に追加
+				content = defaultConfig({
+					moduleMainPaths: {},
+					environment: { "sandbox-runtime": "3" },
+				});
+				await writeConfig();
+				await install();
+				content = await readConfig();
+				expect(content.moduleMainScripts).toBeUndefined();
+				expect(content.moduleMainPaths).toEqual({ "node_modules/dummy/package.json": "node_modules/dummy/index2.js" });
+
+				// 1-3. sandbox-runtime 3 にて moduleMainScripts のみ存在した場合は moduleMainScripts に追加
+				content = defaultConfig({
+					moduleMainScripts: {},
+					environment: { "sandbox-runtime": "3" },
+				});
+				await writeConfig();
+				await install();
+				content = await readConfig();
+				expect(content.moduleMainScripts).toEqual({ "dummy": "node_modules/dummy/index2.js" });
+				expect(content.moduleMainPaths).toBeUndefined();
+
+				// 1-4. sandbox-runtime 3 にて useMmp が有効なことを確認
+				content = defaultConfig({
+					environment: { "sandbox-runtime": "3" },
+				});
+				await writeConfig();
+				await install({ useMmp: true });
+				content = await readConfig();
+				expect(content.moduleMainScripts).toBeUndefined();
+				expect(content.moduleMainPaths).toEqual({ "node_modules/dummy/package.json": "node_modules/dummy/index2.js" });
+
+				// 1-5. sandbox-runtime 3 にて useMms が有効なことを確認
+				content = defaultConfig({
+					environment: { "sandbox-runtime": "3" },
+				});
+				await writeConfig();
+				await install({ useMms: true });
+				content = await readConfig();
+				expect(content.moduleMainScripts).toEqual({ "dummy": "node_modules/dummy/index2.js" });
+				expect(content.moduleMainPaths).toBeUndefined();
+
+				// 2-1. sandbox-runtime 3 にて moduleMainPaths と moduleMainScripts が両方とも存在した場合はエラー
+				content = defaultConfig({
+					moduleMainScripts: {},
+					moduleMainPaths: {},
+					environment: { "sandbox-runtime": "3" },
+				});
+				await writeConfig();
+				await expect(install()).rejects.toThrow();
+
+				// 2-2. sandbox-runtime 3 にて moduleMainScripts が存在する場合に useMmp を有効にするとエラー
+				content = defaultConfig({
+					moduleMainScripts: {},
+					environment: { "sandbox-runtime": "3" },
+				});
+				await writeConfig();
+				await expect(install({ useMmp: true })).rejects.toThrow();
+
+				// 2-3. sandbox-runtime 3 にて moduleMainPaths が存在する場合に useMms を有効にするとエラー
+				content = defaultConfig({
+					moduleMainPaths: {},
+					environment: { "sandbox-runtime": "3" },
+				});
+				await writeConfig();
+				await expect(install({ useMms: true })).rejects.toThrow();
 			})
 			.then(done, done.fail);
 	});
