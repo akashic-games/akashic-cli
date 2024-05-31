@@ -168,8 +168,8 @@ describe("uninstall()", function () {
 				const globalScripts = content.globalScripts;
 				expect(globalScripts).toEqual([]);
 				const moduleMainScripts = content.moduleMainScripts;
-				expect(moduleMainScripts).toBeUndefined();
-				expect(content.moduleMainPaths).toBeUndefined();
+				expect(moduleMainScripts).toEqual({});
+				expect(content.moduleMainPaths).toEqual({});
 			})
 			.then(done, done.fail);
 	});

@@ -18,5 +18,5 @@ export interface CliConfigScanGlobalScripts {
 	fromEntryPoint?: boolean;
 	omitPackagejson?: boolean;
 	useMmp?: boolean;
-	// useMms?: boolean;
+	useMms?: boolean;
 }

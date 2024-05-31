@@ -137,7 +137,8 @@ try{
 	if (packageJson["dependencies"]) {
 		assertNotContains(Object.keys(packageJson["dependencies"]), "@akashic-extension/akashic-label");
 	}
-	assertNotContains(Object.keys(gameJson), "moduleMainScripts");
+	assertContains(Object.keys(gameJson), "moduleMainScripts");
+	assert.deepEqual(gameJson.moduleMainScripts, {});
 	assertNotContains(gameJson["globalScripts"], "node_modules/@akashic-extension/akashic-label/lib/index.js");
 
 	console.log("Completed!");
