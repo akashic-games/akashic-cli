@@ -1,0 +1,12 @@
+{
+  "$schema": "https://unpkg.com/@changesets/config@3.0.1/schema.json",
+  "changelog": [
+    "@changesets/changelog-github",
+    { "repo": "akashic-games/akashic-cli" }
+  ],
+  "commit": false,
+  "access": "public",
+  "baseBranch": "master",
+  "updateInternalDependencies": "patch",
+  "ignore": []
+}

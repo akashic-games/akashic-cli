@@ -43,7 +43,7 @@ akashic serve
 akashic export html -o ../exported-my-game
 ```
 
-各コマンドの詳細については、 [利用ガイド](http://akashic-games.github.io/guide/akashic-cli.html) を参照してください。
+各コマンドの詳細については、 [利用ガイド](https://akashic-games.github.io/reference/tool/akashic-cli/akashic-cli.html) を参照してください。
 Akashic Engineの詳細な利用方法については、 [公式ページ](https://akashic-games.github.io/) を参照してください。
 
 ## ビルド方法
@@ -59,14 +59,18 @@ npm run build
 
 ## 開発者向け
 
-* akashic-cli への PullReuest 作成時には、CHANGELOGに変更内容を記録するために以下の作業が必要になります。
-  * CHANGELOGにPullRequestのタイトルが記載されるため、PullRequestのタイトルには変更内容が分かるように記載してください。
-  * PullRequest の内容にあったラベルを Labels で設定してください。利用できるラベルの種類は以下の通りです。
-    * breaking: 互換性の破壊
-    * enhancement: 機能追加
-    * bug: バグ修正
-    * documentation: ドキュメントの追加・修正
-    * other: 上記4つに当てはまらない変更
+### バージョンの更新
+
+akashic-cli への PullRequest 作成時に [changeset](https://github.com/changesets/changesets) を利用して変更内容を記録します。
+
+```sh
+npm run changeset
+```
+
+対話型プロンプトにより変更内容を入力後 `./.changeset` ディレクトリに出力されるファイルを PullRequest のコミットに含めてください。
+
+対象の PullRequest をマージするとバージョン更新の PullRequest が自動的に作成されます。
+内容を確認後、その PullRequest をマージすることで publish が完了します。
 
 ## ライセンス
 
