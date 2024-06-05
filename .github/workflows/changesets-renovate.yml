@@ -1,0 +1,33 @@
+name: Generate changeset for Renovate
+
+on:
+  pull_request_target:
+    paths:
+      - '.github/workflows/changesets-renovate.yml'
+      - '**/package-lock.json'
+      - '**/package.json'
+
+env:
+  NODE_VERSION: 20
+
+jobs:
+  generate-changeset:
+    runs-on: ubuntu-latest
+    if: github.actor == 'renovate[bot]' && github.repository == 'akashic-games/akashic-cli' && contains(github.event.pull_request.labels.*.name, 'release')
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          ref: ${{ github.head_ref }}
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - name: Run changesets-renovate
+        run: |
+          git config user.name 'github-actions'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          npm install --global @scaleway/changesets-renovate
+          changesets-renovate

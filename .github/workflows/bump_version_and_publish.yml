@@ -3,7 +3,7 @@ name: Bump Version and Publish
 on:
   pull_request:
     branches:
-      - master
+      - main
     types:
       - closed
 

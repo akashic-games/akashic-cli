@@ -4,44 +4,32 @@
   "version": "0.0.1",
   "description": "Command-line utility for akashic game development",
   "scripts": {
-    "postinstall": "lerna bootstrap --no-ci --loglevel silly",
-    "build": "lerna run build",
-    "test": "npm run lint:md && lerna run test && node test/e2e.js --local",
+    "postinstall": "npm run build",
+    "build": "nx run-many -t build",
+    "test": "npm run lint:md && nx run-many -t test && node test/e2e.js --local",
     "test:published": "node test/e2e.js",
     "lint:md": "remark . --frail --no-stdout --quiet --rc-path ./.remarkrc",
-    "publish:patch": "node build/updateChangelog.js patch && npm run commit-changelog && lerna publish patch --dist-tag ${PUBLISH_DIST_TAG:-latest} --yes",
-    "publish:minor": "node build/updateChangelog.js minor && npm run commit-changelog && lerna publish minor --dist-tag ${PUBLISH_DIST_TAG:-latest} --yes",
-    "publish:major": "node build/updateChangelog.js major && npm run commit-changelog && lerna publish major --dist-tag ${PUBLISH_DIST_TAG:-latest} --yes",
-    "publish:force-patch-all": "node build/prepareRepublish.js && cross-env PUBLISH_MODE=force node build/updateChangelog.js patch && npm run commit-changelog && lerna publish patch --force-publish=* --dist-tag ${PUBLISH_DIST_TAG:-latest} --yes",
-    "publish:prerelease": "lerna publish prerelease --dist-tag ${PUBLISH_DIST_TAG:-next} --yes",
-    "publish:from-package": "lerna publish from-package --dist-tag ${PUBLISH_DIST_TAG:-latest} --yes",
-    "commit-changelog": "git add ./CHANGELOG.md && git commit -m 'Update Changelog'"
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release-packages": "changeset publish"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
-  "changelog": {
-    "repo": "akashic-games/akashic-cli",
-    "labels": {
-      "breaking": "Breaking Change",
-      "enhancement": "Enhancement",
-      "bug": "Bug Fix",
-      "documentation": "Documentation",
-      "other": "Other Change",
-      "dependencies": "Update Dependencies",
-      "republish": "Republish"
-    }
-  },
-  "devDependencies": {
-    "@akashic/remark-preset-lint": "^0.1.1",
-    "cross-env": "^7.0.3",
-    "lerna": "^5.5.2",
-    "lerna-changelog": "^1.0.1",
-    "remark-cli": "^10.0.1",
-    "semver": "^7.3.7",
-    "shelljs": "^0.8.5"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/akashic-games/akashic-cli.git"
+  },
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  },
+  "devDependencies": {
+    "@akashic/remark-preset-lint": "^0.1.1",
+    "@changesets/changelog-github": "^0.5.0",
+    "@changesets/cli": "^2.27.5",
+    "nx": "^19.1.0",
+    "remark-cli": "^10.0.1",
+    "shelljs": "^0.8.5"
   }
 }

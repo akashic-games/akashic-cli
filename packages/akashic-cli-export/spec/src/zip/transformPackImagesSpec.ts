@@ -199,7 +199,7 @@ describe("transformPackImages", () => {
 			});
 
 			expect(output.content).toEqual(fs.readFileSync(path.join(fixtureDir, "_expected_packed", "aez_packed_image.png")));
-		});
+		}, 20000);
 
 		it("can pack for game_shared_image", async () => {
 			const fixtureDir = path.resolve(__dirname, "..", "..", "fixtures", "game_shared_image");

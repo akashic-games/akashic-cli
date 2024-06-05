@@ -4,7 +4,7 @@
   "description": "Standalone runner for Akashic contents",
   "main": "index.js",
   "scripts": {
-    "prepare": "npm run build",
+    "prepublish": "npm run build",
     "start": "npm run build && node bin/run",
     "build": "npm run copy:common && npm run copy:engine-files && npm run build:client && npm run build:server",
     "copy:common": "cpx \"./engine-src/common/js/**/*.js\" ./js && cpx \"./engine-src/common/external/**/*.js\" ./js",
