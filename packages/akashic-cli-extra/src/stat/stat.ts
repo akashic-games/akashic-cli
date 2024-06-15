@@ -18,6 +18,7 @@ class SizeResult {
 	aacAudioSize: number;
 	m4aAudioSize: number;
 	scriptSize: number;
+	binarySize: number;
 	otherSize: number;
 	otherDetail: {[key: string]: number};
 
@@ -30,28 +31,29 @@ class SizeResult {
 		this.aacAudioSize = 0;
 		this.m4aAudioSize = 0;
 		this.scriptSize = 0;
+		this.binarySize = 0;
 		this.otherSize = 0;
 		this.otherDetail = { };
 	}
 
 	totalSizeOgg(): number {
 		return this.imageSize + this.vectorImageSize + this.textSize +
-			this.oggAudioSize + this.scriptSize + this.otherSize;
+			this.oggAudioSize + this.scriptSize + this.binarySize + this.otherSize;
 	}
 
 	totalSizeAac(): number {
 		return this.imageSize + this.vectorImageSize + this.textSize +
-			this.aacAudioSize + this.scriptSize + this.otherSize;
+			this.aacAudioSize + this.scriptSize + this.binarySize + this.otherSize;
 	}
 
 	totalSizeMp4(): number {
 		return this.imageSize + this.vectorImageSize + this.textSize +
-			this.mp4AudioSize + this.scriptSize + this.otherSize;
+			this.mp4AudioSize + this.scriptSize + this.binarySize + this.otherSize;
 	}
 
 	totalSizeM4a(): number {
 		return this.imageSize + this.vectorImageSize + this.textSize +
-			this.m4aAudioSize + this.scriptSize + this.otherSize;
+			this.m4aAudioSize + this.scriptSize + this.binarySize + this.otherSize;
 	}
 
 	sumOfTable(): number {
@@ -139,6 +141,7 @@ function showSize(param: StatSizeParameterObject, sizeResult: SizeResult): void 
 		}
 
 		param.logger.print(formatSize("script", sizeResult.scriptSize));
+		param.logger.print(formatSize("binary", sizeResult.binarySize));
 		param.logger.print(formatSize("other", sizeResult.otherSize));
 
 		Object.keys(sizeResult.otherDetail).forEach(key =>
@@ -244,6 +247,11 @@ function sizeOfAssets(param: StatSizeParameterObject, sizeResult: SizeResult): P
 				return fileSize(path.join(param.basepath, asset.path))
 					.then(size => {
 						sizeResult.scriptSize += size;
+					});
+			case "binary":
+				return fileSize(path.join(param.basepath, asset.path))
+					.then(size => {
+						sizeResult.binarySize += size;
 					});
 			case "audio":
 				let m4aExist = false;
