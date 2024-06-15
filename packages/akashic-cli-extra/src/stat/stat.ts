@@ -11,6 +11,7 @@ enum FileType {
 
 class SizeResult {
 	imageSize: number;
+	vectorImageSize: number;
 	textSize: number;
 	oggAudioSize: number;
 	mp4AudioSize: number;
@@ -22,6 +23,7 @@ class SizeResult {
 
 	constructor() {
 		this.imageSize = 0;
+		this.vectorImageSize = 0;
 		this.textSize = 0;
 		this.oggAudioSize = 0;
 		this.mp4AudioSize = 0;
@@ -33,22 +35,22 @@ class SizeResult {
 	}
 
 	totalSizeOgg(): number {
-		return this.imageSize + this.textSize +
+		return this.imageSize + this.vectorImageSize + this.textSize +
 			this.oggAudioSize + this.scriptSize + this.otherSize;
 	}
 
 	totalSizeAac(): number {
-		return this.imageSize + this.textSize +
+		return this.imageSize + this.vectorImageSize + this.textSize +
 			this.aacAudioSize + this.scriptSize + this.otherSize;
 	}
 
 	totalSizeMp4(): number {
-		return this.imageSize + this.textSize +
+		return this.imageSize + this.vectorImageSize + this.textSize +
 			this.mp4AudioSize + this.scriptSize + this.otherSize;
 	}
 
 	totalSizeM4a(): number {
-		return this.imageSize + this.textSize +
+		return this.imageSize + this.vectorImageSize + this.textSize +
 			this.m4aAudioSize + this.scriptSize + this.otherSize;
 	}
 
@@ -104,6 +106,7 @@ function showSize(param: StatSizeParameterObject, sizeResult: SizeResult): void 
 		const persent = (value: number): string => (value / totalSize * 100).toFixed(0);
 		const formatSize = (name: string, size: number): string => `${name}: ${sizeToString(size)} (${persent(size)}%)`;
 		param.logger.print(formatSize("image", sizeResult.imageSize));
+		param.logger.print(formatSize("vector-image", sizeResult.vectorImageSize));
 		param.logger.print(formatSize("text", sizeResult.textSize));
 
 		switch (largestFileType) {
@@ -226,6 +229,11 @@ function sizeOfAssets(param: StatSizeParameterObject, sizeResult: SizeResult): P
 				return fileSize(path.join(param.basepath, asset.path))
 					.then(size => {
 						sizeResult.imageSize += size;
+					});
+			case "vector-image":
+				return fileSize(path.join(param.basepath, asset.path))
+					.then(size => {
+						sizeResult.vectorImageSize += size;
 					});
 			case "text":
 				return fileSize(path.join(param.basepath, asset.path))
