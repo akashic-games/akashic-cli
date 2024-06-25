@@ -194,4 +194,32 @@ describe("exportHTML", function () {
 			})
 			.then(done, done.fail);
 	});
+
+	it("promiseExportHTML - copy sandbox.config.js to TempDir", (done) => {
+		Promise.resolve()
+			.then(function () {
+				const param: exp.ExportHTMLParameterObject = {
+					logger: undefined,
+					cwd: path.join(__dirname, "..", "..", "fixtures", "sample_game"),
+					source: ".",
+					output: undefined,
+					force: true,
+					strip: true,
+					minify: true,
+					magnify: false,
+					unbundleText: false,
+					hashLength: 20,
+					autoSendEventName: "sessionParameter"
+				};
+				return exp.promiseExportHTML(param);
+			})
+			.then((dest) => {
+				const html = fsx.readFileSync(path.join(dest, "index.html")).toString("utf-8");
+				expect(html.indexOf("autoSendEventName") !== -1).toBeTruthy();
+				expect(html.indexOf("sessionParameter") !== -1).toBeTruthy();
+				fsx.removeSync(dest);
+			})
+			.then(done, done.fail);
+	});
+
 });
