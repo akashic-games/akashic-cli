@@ -142,6 +142,9 @@ export function exportHTML(param: ExportHTMLParameterObject, cb: (err?: any) => 
 
 function createRenamedGame(sourcePath: string, hashLength: number, logger: cmn.Logger): Promise<string> {
 	const destDirPath = path.resolve(fs.mkdtempSync(path.join(os.tmpdir(), "akashic-export-html-")));
+	if (fs.existsSync(path.resolve(sourcePath, "sandbox.config.js"))) {
+		fs.copyFileSync(path.resolve(sourcePath, "sandbox.config.js"), path.resolve(destDirPath, "sandbox.config.js"));
+	}
 	Utils.copyContentFiles(sourcePath, destDirPath);
 	return Promise.resolve()
 		.then(() => cmn.ConfigurationFile.read(path.join(destDirPath, "game.json"), logger))
