@@ -1,2 +1,3 @@
 packages/akashic-cli-extra/spec/fixtures/**/*.json text eol=lf
 packages/akashic-cli-extra/spec/fixtures/**/*.js   text eol=lf
+packages/akashic-cli-extra/spec/fixtures/**/*.svg  text eol=lf
