@@ -1,0 +1,22 @@
+{
+	"width": 320,
+	"height": 320,
+	"fps": 30,
+	"assets": {
+		"mainScene": {
+			"type": "script",
+			"path": "script/mainScene.js",
+			"global": true
+		},
+		"circle": {
+			"type": "vector-image",
+			"path": "image/circle.svg",
+			"width": 100,
+			"height": 100
+		},
+		"assets/dummyData.bin": {
+			"type": "binary",
+			"path": "assets/dummyData.bin"
+		}
+	}
+}
