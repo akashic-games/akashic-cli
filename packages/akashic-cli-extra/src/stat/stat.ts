@@ -11,45 +11,49 @@ enum FileType {
 
 class SizeResult {
 	imageSize: number;
+	vectorImageSize: number;
 	textSize: number;
 	oggAudioSize: number;
 	mp4AudioSize: number;
 	aacAudioSize: number;
 	m4aAudioSize: number;
 	scriptSize: number;
+	binarySize: number;
 	otherSize: number;
 	otherDetail: {[key: string]: number};
 
 	constructor() {
 		this.imageSize = 0;
+		this.vectorImageSize = 0;
 		this.textSize = 0;
 		this.oggAudioSize = 0;
 		this.mp4AudioSize = 0;
 		this.aacAudioSize = 0;
 		this.m4aAudioSize = 0;
 		this.scriptSize = 0;
+		this.binarySize = 0;
 		this.otherSize = 0;
 		this.otherDetail = { };
 	}
 
 	totalSizeOgg(): number {
-		return this.imageSize + this.textSize +
-			this.oggAudioSize + this.scriptSize + this.otherSize;
+		return this.imageSize + this.vectorImageSize + this.textSize +
+			this.oggAudioSize + this.scriptSize + this.binarySize + this.otherSize;
 	}
 
 	totalSizeAac(): number {
-		return this.imageSize + this.textSize +
-			this.aacAudioSize + this.scriptSize + this.otherSize;
+		return this.imageSize + this.vectorImageSize + this.textSize +
+			this.aacAudioSize + this.scriptSize + this.binarySize + this.otherSize;
 	}
 
 	totalSizeMp4(): number {
-		return this.imageSize + this.textSize +
-			this.mp4AudioSize + this.scriptSize + this.otherSize;
+		return this.imageSize + this.vectorImageSize + this.textSize +
+			this.mp4AudioSize + this.scriptSize + this.binarySize + this.otherSize;
 	}
 
 	totalSizeM4a(): number {
-		return this.imageSize + this.textSize +
-			this.m4aAudioSize + this.scriptSize + this.otherSize;
+		return this.imageSize + this.vectorImageSize + this.textSize +
+			this.m4aAudioSize + this.scriptSize + this.binarySize + this.otherSize;
 	}
 
 	sumOfTable(): number {
@@ -104,6 +108,7 @@ function showSize(param: StatSizeParameterObject, sizeResult: SizeResult): void 
 		const persent = (value: number): string => (value / totalSize * 100).toFixed(0);
 		const formatSize = (name: string, size: number): string => `${name}: ${sizeToString(size)} (${persent(size)}%)`;
 		param.logger.print(formatSize("image", sizeResult.imageSize));
+		param.logger.print(formatSize("vector-image", sizeResult.vectorImageSize));
 		param.logger.print(formatSize("text", sizeResult.textSize));
 
 		switch (largestFileType) {
@@ -136,6 +141,7 @@ function showSize(param: StatSizeParameterObject, sizeResult: SizeResult): void 
 		}
 
 		param.logger.print(formatSize("script", sizeResult.scriptSize));
+		param.logger.print(formatSize("binary", sizeResult.binarySize));
 		param.logger.print(formatSize("other", sizeResult.otherSize));
 
 		Object.keys(sizeResult.otherDetail).forEach(key =>
@@ -227,6 +233,11 @@ function sizeOfAssets(param: StatSizeParameterObject, sizeResult: SizeResult): P
 					.then(size => {
 						sizeResult.imageSize += size;
 					});
+			case "vector-image":
+				return fileSize(path.join(param.basepath, asset.path))
+					.then(size => {
+						sizeResult.vectorImageSize += size;
+					});
 			case "text":
 				return fileSize(path.join(param.basepath, asset.path))
 					.then(size => {
@@ -236,6 +247,11 @@ function sizeOfAssets(param: StatSizeParameterObject, sizeResult: SizeResult): P
 				return fileSize(path.join(param.basepath, asset.path))
 					.then(size => {
 						sizeResult.scriptSize += size;
+					});
+			case "binary":
+				return fileSize(path.join(param.basepath, asset.path))
+					.then(size => {
+						sizeResult.binarySize += size;
 					});
 			case "audio":
 				let m4aExist = false;
