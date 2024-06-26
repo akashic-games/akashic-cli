@@ -1,5 +1,20 @@
 # CHANGELOG
 
+## 2.17.5 (2024-06-26)
+
+#### Bug Fix
+* `akashic-cli-export`
+  * [#1363](https://github.com/akashic-games/akashic-cli/pull/1363) Fix exporthtml to copy sandboxconfigjs ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Update Dependencies
+* `akashic-cli-serve`
+  * [#1361](https://github.com/akashic-games/akashic-cli/pull/1361) fix(deps): update dependency socket.io to v4.6.2 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#1360](https://github.com/akashic-games/akashic-cli/pull/1360) chore(deps): update docker/build-push-action action to v6 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 
 ## 2.17.3 (2024-05-31)
 
