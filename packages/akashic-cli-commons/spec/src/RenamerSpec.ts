@@ -52,13 +52,20 @@ describe("Renamer", function () {
 								type: "audio",
 								path: "audio/foo",
 								global: true
+							},
+							bar_plugin: {
+								"type": "script",
+								"path": "node_modules/foo/bar/barPlugin.js",
+								"global": true
 							}
 						},
 						globalScripts: [
-							"node_modules/foo/bar/index.js"
+							"node_modules/foo/bar/index.js",
+							"node_modules/foo/bar/barPlugin.js"
 						],
 						moduleMainScripts: {
-							foo: "node_modules/foo/bar/index.js"
+							foo: "node_modules/foo/bar/index.js",
+							bar_plugin:"node_modules/foo/bar/barPlugin.js"
 						}
 					}),
 					script: {
@@ -75,7 +82,8 @@ describe("Renamer", function () {
 					node_modules: {
 						foo: {
 							bar: {
-								"index.js": "console.log('foo');"
+								"index.js": "console.log('foo');",
+								"barPlugin.js": "console.log('barPlugin.js');",
 							}
 						}
 					}
@@ -124,6 +132,13 @@ describe("Renamer", function () {
 					path: "files/825a514c9ba0f7565c0b.js",
 					virtualPath: "node_modules/foo/bar/index.js",
 					global: true
+				});
+				// asset と globalScripts で同じパスの場合は globalScripts の処理でリネームしない
+				expect(gamejson.assets["bar_plugin"]).toEqual({
+					type: 'script',
+					path: 'files/a57a44b454ed3a456b27.js',
+					global: true,
+					virtualPath: 'node_modules/foo/bar/barPlugin.js'
 				});
 				// moduleMainScripts はvirtualPathで扱うのでリネームされていてはならない
 				expect(gamejson.moduleMainScripts["foo"]).toBe("node_modules/foo/bar/index.js");

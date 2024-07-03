@@ -87,11 +87,13 @@ function _renameAssets(content: GameConfiguration, basedir: string, maxHashLengt
 }
 
 function _renameGlobalScripts(content: GameConfiguration, processedAssetPaths: Set<string>, basedir: string, maxHashLength: number): void {
+	const assetsValues = Object.values(content.assets);
 	if (content.globalScripts) {
 		content.globalScripts.forEach((name: string, idx: number) => {
 			const assetname = "a_e_z_" + idx;
 			const hashedFilePath = hashFilepath(name, maxHashLength);
 			const isRenamedAsset = processedAssetPaths.has(hashedFilePath);
+			if ( assetsValues.find(v => v.path === hashedFilePath) ) return; // asset にハッシュ化済みの同パスがある場合はスキップ
 
 			content.assets[assetname] = {
 				type: /\.json$/i.test(name) ? "text" : "script",
