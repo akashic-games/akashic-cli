@@ -85,7 +85,7 @@
     "encoding-japanese": "^2.0.0",
     "fs-extra": "11.2.0",
     "fs-readdir-recursive": "1.1.0",
-    "glob": "8.1.0",
+    "glob": "10.4.3",
     "https": "1.0.0",
     "maxrects-packer": "2.7.3",
     "pngjs": "6.0.0",
