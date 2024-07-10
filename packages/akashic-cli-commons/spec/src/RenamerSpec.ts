@@ -55,8 +55,7 @@ describe("Renamer", function () {
 							},
 							bar_plugin: {
 								"type": "script",
-								"path": "node_modules/foo/bar/barPlugin.js",
-								"global": true
+								"path": "node_modules/foo/bar/barPlugin.js"
 							}
 						},
 						globalScripts: [
@@ -137,7 +136,7 @@ describe("Renamer", function () {
 				expect(gamejson.assets["bar_plugin"]).toEqual({
 					type: 'script',
 					path: 'files/a57a44b454ed3a456b27.js',
-					global: true,
+					global: true,  // 元定義にはないが、globalScripts に存在するため true に書き換えられる
 					virtualPath: 'node_modules/foo/bar/barPlugin.js'
 				});
 				// moduleMainScripts はvirtualPathで扱うのでリネームされていてはならない

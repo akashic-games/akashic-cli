@@ -26,7 +26,7 @@ export function hashFilepath(filepath: string, nameLength: number): string {
  * @param maxHashLength ハッシュ化後のファイル名の文字数の最大値。省略された場合、20文字
  */
 export function renameAssetFilenames(content: GameConfiguration, basedir: string, maxHashLength: number = 20): void {
-	const processedAssetPaths: Set<string> = new Set();
+	const processedAssetPaths: Map<string, string> = new Map();
 	_renameAssets(content, basedir, maxHashLength, processedAssetPaths);
 	_renameGlobalScripts(content, processedAssetPaths, basedir, maxHashLength);
 }
@@ -37,7 +37,7 @@ export function renameAssetFilenames(content: GameConfiguration, basedir: string
  * @param filePath リネームするファイルのパス
  * @param newFilePath リネームされたファイルのパス
  */
-function _renameFilename(basedir: string, filePath: string, newFilePath: string, _processedAssetPaths: Set<string>): void {
+function _renameFilename(basedir: string, filePath: string, newFilePath: string): void {
 	try {
 		fs.accessSync(path.resolve(basedir, newFilePath));
 	} catch (error) {
@@ -51,11 +51,11 @@ function _renameFilename(basedir: string, filePath: string, newFilePath: string,
 	throw new Error(ERROR_FILENAME_CONFLICT);
 }
 
-function _renameAudioFilename(basedir: string, filePath: string, newFilePath: string, processedAssetPaths: Set<string>): void {
+function _renameAudioFilename(basedir: string, filePath: string, newFilePath: string): void {
 	KNOWN_AUDIO_EXTENSIONS.forEach((ext) => {
 		try {
 			fs.accessSync(path.resolve(basedir, filePath + ext));
-			_renameFilename(basedir, filePath + ext, newFilePath + ext, processedAssetPaths);
+			_renameFilename(basedir, filePath + ext, newFilePath + ext);
 		} catch (error) {
 			if (error.code === "ENOENT") return; // 全てのオーディオ拡張子が揃っているとは限らない
 			throw error;
@@ -63,7 +63,7 @@ function _renameAudioFilename(basedir: string, filePath: string, newFilePath: st
 	});
 }
 
-function _renameAssets(content: GameConfiguration, basedir: string, maxHashLength: number, processedAssetPaths: Set<string>): void {
+function _renameAssets(content: GameConfiguration, basedir: string, maxHashLength: number, processedAssetPaths: Map<string, string>): void {
 	const assetNames = Object.keys(content.assets);
 	const dirpaths: string[] = [];
 	assetNames.forEach((name) => {
@@ -74,27 +74,37 @@ function _renameAssets(content: GameConfiguration, basedir: string, maxHashLengt
 
 		content.assets[name].path = hashedFilePath;
 		content.assets[name].virtualPath = content.assets[name].virtualPath ?? filePath;
-		processedAssetPaths.add(hashedFilePath);
+		processedAssetPaths.set(hashedFilePath, name);
 		if (isRenamedAsset) return; // 同じパスのアセットを既にハッシュ化済みの場合、ファイルはリネーム済み
 		if (content.assets[name].type !== "audio") {
-			_renameFilename(basedir, filePath, hashedFilePath, processedAssetPaths);
+			_renameFilename(basedir, filePath, hashedFilePath);
 		} else {
-			_renameAudioFilename(basedir, filePath, hashedFilePath, processedAssetPaths);
+			_renameAudioFilename(basedir, filePath, hashedFilePath);
 		}
 	});
 	const assetAncestorDirs = _listAncestorDirNames(dirpaths);
 	_removeDirectoryIfEmpty(assetAncestorDirs, basedir);
 }
 
-function _renameGlobalScripts(content: GameConfiguration, processedAssetPaths: Set<string>, basedir: string, maxHashLength: number): void {
-	const assetsValues = Object.values(content.assets);
-	const pathSet = new Set(assetsValues.map(item => item.path));
+function _renameGlobalScripts(
+	content: GameConfiguration,
+	processedAssetPaths: Map<string, string>,
+	basedir: string, maxHashLength: number
+): void {
 	if (content.globalScripts) {
 		content.globalScripts.forEach((name: string, idx: number) => {
 			const assetname = "a_e_z_" + idx;
 			const hashedFilePath = hashFilepath(name, maxHashLength);
 			const isRenamedAsset = processedAssetPaths.has(hashedFilePath);
-			if (pathSet.has(hashedFilePath)) return; // asset にハッシュ化済みの同パスがある場合はスキップ
+
+			if (isRenamedAsset) {
+				const assetId = processedAssetPaths.get(hashedFilePath)!;
+				if (!content.assets[assetId].global) {
+					// 対象 assset が global:true でなければ書き換える
+					content.assets[assetId].global = true;
+				}
+				return; // asset にハッシュ化済みの同パスがある場合はスキップ
+			}
 
 			content.assets[assetname] = {
 				type: /\.json$/i.test(name) ? "text" : "script",
@@ -102,9 +112,8 @@ function _renameGlobalScripts(content: GameConfiguration, processedAssetPaths: S
 				path: hashedFilePath,
 				global: true
 			};
-			processedAssetPaths.add(hashedFilePath);
-			if (isRenamedAsset) return; // 同じパスのアセットを既にハッシュ化済みの場合、ファイルはリネーム済み
-			_renameFilename(basedir, name, hashedFilePath, processedAssetPaths);
+			processedAssetPaths.set(hashedFilePath, name);
+			_renameFilename(basedir, name, hashedFilePath);
 		});
 
 		const assetDirs = _listAncestorDirNames(content.globalScripts.map((filepath) => path.dirname(filepath)));
