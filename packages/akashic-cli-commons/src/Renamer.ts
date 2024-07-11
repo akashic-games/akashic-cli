@@ -89,7 +89,8 @@ function _renameAssets(content: GameConfiguration, basedir: string, maxHashLengt
 function _renameGlobalScripts(
 	content: GameConfiguration,
 	processedAssetPaths: Map<string, string>,
-	basedir: string, maxHashLength: number
+	basedir: string, 
+	maxHashLength: number
 ): void {
 	if (content.globalScripts) {
 		content.globalScripts.forEach((name: string, idx: number) => {
@@ -112,7 +113,7 @@ function _renameGlobalScripts(
 				path: hashedFilePath,
 				global: true
 			};
-			processedAssetPaths.set(hashedFilePath, name);
+			processedAssetPaths.set(hashedFilePath, assetname);
 			_renameFilename(basedir, name, hashedFilePath);
 		});
 
