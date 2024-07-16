@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.17.7 (2024-07-16)
+
+#### Bug Fix
+* `akashic-cli-commons`
+  * [#1364](https://github.com/akashic-games/akashic-cli/pull/1364) Fix bug with export-html hash option ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
+#### Committers: 1
+- ShinobuTakahashi ([@ShinobuTakahashi](https://github.com/ShinobuTakahashi))
+
 
 ## 2.17.5 (2024-06-26)
 
