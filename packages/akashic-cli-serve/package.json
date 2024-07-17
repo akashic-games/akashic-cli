@@ -3,7 +3,8 @@
   "version": "1.16.6",
   "description": "A development server for Akashic Engine",
   "scripts": {
-    "prepare": "npm run setup && npm run build",
+    "prepare": "npm run setup",
+    "prepublish": "npm run build",
     "setup": "npm run copy:material-icons && npm run copy:agv && npm run copy:engine-files",
     "copy:material-icons": "node build/copyIcons.js",
     "copy:agv": "node build/copyAgv.js",
