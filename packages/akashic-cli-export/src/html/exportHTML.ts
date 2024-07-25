@@ -81,6 +81,7 @@ export function promiseExportHtmlRaw(param: ExportHTMLParameterObject): Promise<
 				unbundleText: param.unbundleText,
 				exportInfo: param.exportInfo,
 				autoSendEventName: param.autoSendEventName,
+				autoGivenArgsName: param.autoGivenArgsName,
 				debugOverrideEngineFiles: param.debugOverrideEngineFiles
 			};
 			if (param.bundle) {

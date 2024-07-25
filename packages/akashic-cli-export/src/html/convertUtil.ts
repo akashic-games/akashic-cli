@@ -2,6 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import * as cmn from "@akashic/akashic-cli-commons";
 import { AssetConfigurationMap, ImageAssetConfigurationBase } from "@akashic/game-configuration";
+import type { SandboxConfiguration } from "@akashic/sandbox-configuration";
 import * as fsx from "fs-extra";
 import readdir = require("fs-readdir-recursive");
 import * as UglifyJS from "uglify-js";
@@ -22,6 +23,7 @@ export interface ConvertTemplateParameterObject {
 		option: string;
 	};
 	autoSendEventName?: string | boolean;
+	autoGivenArgsName?: string;
 	sandboxConfigJsCode?: string;
 	omitUnbundledJs?: boolean;
 	debugOverrideEngineFiles?: string;
@@ -230,6 +232,24 @@ export function resolveEngineFilesPath(version: string): string {
 	const engineFilesPackageJson = require(`${engineFilesPackageDir}/package.json`);
 	const engineFilesName = `engineFilesV${engineFilesPackageJson.version.replace(/[\.-]/g, "_")}.js`;
 	return path.join(engineFilesPackageDir, `dist/raw/release/full/${engineFilesName}`);
+}
+
+export function validateSandboxConfigJs(
+	conf: SandboxConfiguration,
+	autoSendEventName: string | boolean,
+	autoGivenArgsName: string
+): void {
+	if (autoSendEventName) {
+		if (typeof autoSendEventName === "string" && !conf.events[autoSendEventName]){
+			throw  Error(`${autoSendEventName} does not exist in events in sandbox.config.js.`);
+		}
+	}
+
+	if (autoGivenArgsName) {
+		if (!conf.arguments[autoGivenArgsName]) {
+			throw  Error(`${autoGivenArgsName} does not exist in arguments in sandbox.config.js.`);
+		}
+	}
 }
 
 function getFileContentsFromDirectory(inputDirPath: string): string[] {

@@ -39,8 +39,14 @@ if (! ("__akashic__" in window)) {
 	<% } %>
 <% } %>
 
-<% if (autoSendEventName) { %>
-	window.__akashic__.autoSendEventName = <%- JSON.stringify(autoSendEventName) %>;
+<% if (autoSendEventName || autoGivenArgsName) { %>
+	<% if (autoSendEventName) { %>
+        window.__akashic__.autoSendEventName = <%- JSON.stringify(autoSendEventName) %>;
+    <% } %>
+	
+    <% if (autoGivenArgsName) { %>
+        window.__akashic__.autoGivenArgsName = <%- JSON.stringify(autoGivenArgsName) %>;
+    <% } %>
 	window.__akashic__.sandboxConfigFunc = function () {
 		var module = { exports: {} };
 		var exports = module.exports;

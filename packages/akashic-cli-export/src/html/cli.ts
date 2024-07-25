@@ -24,6 +24,7 @@ function cli(param: CliConfigExportHtml): void {
 		injects: param.injects,
 		unbundleText: !param.bundle,
 		autoSendEventName: param.autoSendEventName || param.autoSendEvents,
+		autoGivenArgsName: param.autoGivenArgsName,
 		omitUnbundledJs: param.omitUnbundledJs,
 		compress: param.output ? path.extname(param.output) === ".zip" : false,
 		debugOverrideEngineFiles: param.debugOverrideEngineFiles,
@@ -75,6 +76,7 @@ commander
 	.option("-i, --inject [fileName]", "specify injected file content into index.html", inject, [])
 	.option("--autoSendEvents [eventName]", "(deprecated)event name that send automatically when game start")
 	.option("-A, --auto-send-event-name [eventName]", "event name that send automatically when game start")
+	.option("--auto-given-args-name [argsName]", "argument name that given automatically when game start")
 	.option("-a, --atsumaru", "obsolete  option. Use 'akashic export zip --nicolive' instead")
 	.option("--no-omit-unbundled-js", "Unnecessary script files are included even when the `--atsumaru` option is specified.")
 	.option("--debug-override-engine-files <filePath>", "Use the specified engineFiles");
@@ -116,6 +118,7 @@ export function run(argv: string[]): void {
 			hashFilename: options.hashFilename ?? conf.hashFilename,
 			injects: options.inject ?? conf.injects,
 			autoSendEventName: options.autoSendEventName ?? options.autoSendEvents ?? conf.autoSendEventName ?? conf.autoSendEvents,
+			autoGivenArgsName: options.autoGivenArgsName ?? conf.autoGivenArgsName,
 			omitUnbundledJs: options.omitUnbundledJs ?? conf.omitUnbundledJs,
 			debugOverrideEngineFiles: options.debugOverrideEngineFiles ?? conf.debugOverrideEngineFiles
 		});

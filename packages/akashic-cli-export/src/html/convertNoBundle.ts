@@ -15,7 +15,8 @@ import {
 	validateEs5Code,
 	readSandboxConfigJs,
 	validateEngineFilesName,
-	resolveEngineFilesPath
+	resolveEngineFilesPath,
+	validateSandboxConfigJs
 } from "./convertUtil";
 
 export async function promiseConvertNoBundle(options: ConvertTemplateParameterObject): Promise<void> {
@@ -36,13 +37,15 @@ export async function promiseConvertNoBundle(options: ConvertTemplateParameterOb
 	fsx.outputFileSync(gamejsonPath, wrapText(JSON.stringify(conf._content, null, "\t"), "game.json"));
 	assetPaths.push("./js/game.json.js");
 
-	if (options.autoSendEventName) {
+	if (options.autoSendEventName || options.autoGivenArgsName) {
+		let sandboxConfig;
 		try {
 			options.sandboxConfigJsCode = readSandboxConfigJs(options.source);
+			sandboxConfig = require(path.join(options.source, "sandbox.config.js"));
 		} catch (error) {
-			options.autoSendEventName = false;
-			console.log("failed read sandbox.config.js, autoSendEventName disabled.");
+			throw Error("failed read sandbox.config.js.");
 		}
+		validateSandboxConfigJs(sandboxConfig, options.autoSendEventName, options.autoGivenArgsName);
 	}
 
 	var nonBinaryAssetNames = extractAssetDefinitions(conf, "script").concat(extractAssetDefinitions(conf, "text"));
@@ -138,6 +141,7 @@ async function writeHtmlFile(
 		exportVersion: options.exportInfo !== undefined ? options.exportInfo.version : "",
 		exportOption: options.exportInfo !== undefined ? options.exportInfo.option : "",
 		autoSendEventName: options.autoSendEventName,
+		autoGivenArgsName: options.autoGivenArgsName,
 		sandboxConfigJsCode: options.sandboxConfigJsCode !== undefined ? options.sandboxConfigJsCode : ""
 	});
 	fs.writeFileSync(path.resolve(outputPath, "./index.html"), html);

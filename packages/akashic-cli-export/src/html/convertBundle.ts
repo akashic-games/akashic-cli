@@ -15,6 +15,7 @@ import {
 	extractAssetDefinitions,
 	getInjectedContents,
 	validateEs5Code,
+	validateSandboxConfigJs,
 	readSandboxConfigJs
 } from "./convertUtil";
 
@@ -42,13 +43,15 @@ export async function promiseConvertBundle(options: ConvertTemplateParameterObje
 		code: encodeText(JSON.stringify(conf._content, null, "\t"))
 	});
 
-	if (options.autoSendEventName) {
+	if (options.autoSendEventName || options.autoGivenArgsName) {
+		let sandboxConfig;
 		try {
 			options.sandboxConfigJsCode = readSandboxConfigJs(options.source);
+			sandboxConfig = require(path.join(options.source, "sandbox.config.js"));
 		} catch (error) {
-			options.autoSendEventName = false;
-			console.log("failed read sandbox.config.js, autoSendEventName disabled.");
+			throw Error("failed read sandbox.config.js.");
 		}
+		validateSandboxConfigJs(sandboxConfig, options.autoSendEventName, options.autoGivenArgsName);
 	}
 
 	var errorMessages: string[] = [];
@@ -151,6 +154,7 @@ async function writeHtmlFile(
 		exportVersion: options.exportInfo !== undefined ? options.exportInfo.version : "",
 		exportOption: options.exportInfo !== undefined ? options.exportInfo.option : "",
 		autoSendEventName: options.autoSendEventName,
+		autoGivenArgsName: options.autoGivenArgsName,
 		sandboxConfigJsCode: options.sandboxConfigJsCode !== undefined ? options.sandboxConfigJsCode : ""
 	});
 	fs.writeFileSync(path.resolve(outputPath, "./index.html"), html);
