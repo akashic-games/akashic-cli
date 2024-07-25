@@ -13,6 +13,7 @@ export interface CliConfigExportHtml {
 	injects?: string[];
 	autoSendEvents?: string | boolean;
 	autoSendEventName?: string | boolean;
+	autoGivenArgsName?: string;
 	omitUnbundledJs?: boolean;
 	debugOverrideEngineFiles?: string;
 }
