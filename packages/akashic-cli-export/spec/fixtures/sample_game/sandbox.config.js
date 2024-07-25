@@ -14,5 +14,8 @@ module.exports = {
                 }
             }
         ]
-    ]}
+    ]},
+    arguments: {
+        argumentParameter: {"test": true}
+    },
 };

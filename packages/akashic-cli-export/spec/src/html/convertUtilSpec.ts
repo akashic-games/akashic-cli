@@ -129,4 +129,27 @@ describe("convertUtil", function () {
 			expect(() => validateGameJson(gamejson)).toThrow();
 		});
 	});
+
+	describe("validateSandboxConfigJs", () => {
+		const sandboxConfig = {
+			"autoSendEventName": "mySessionParameter",
+			arguments: {
+			  hoge: {"test": "test"}
+			},
+			events: {
+				"mySessionParameter": [32, 0, ":akashic", {}]
+			}
+		};
+
+		it("throw error if autoSendEventName is not in events in sandbox.config.js", () => {
+			expect(() => convert.validateSandboxConfigJs(sandboxConfig, "dummy", "hoge"))
+				.toThrow("dummy does not exist in events in sandbox.config.js.");
+
+			expect(() => convert.validateSandboxConfigJs(sandboxConfig, "mySessionParameter", "dummy"))
+				.toThrow("dummy does not exist in arguments in sandbox.config.js.");
+
+			expect(() => convert.validateSandboxConfigJs(sandboxConfig, "mySessionParameter", "hoge")).not.toThrow();
+		});
+	});
+
 });
