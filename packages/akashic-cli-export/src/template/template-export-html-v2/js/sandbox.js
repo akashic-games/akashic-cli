@@ -19,8 +19,9 @@ window.addEventListener("load", function() {
 			playId: sandboxPlayId
 		});
 
+		var sandboxConfig;
 		if (window.__akashic__.autoSendEventName === true || typeof window.__akashic__.autoSendEventName === "string") {
-			var sandboxConfig = window.__akashic__.sandboxConfigFunc();
+			sandboxConfig = window.__akashic__.sandboxConfigFunc();
 			var autoSendEventName = window.__akashic__.autoSendEventName;
 			if (autoSendEventName === true) {
 			  autoSendEventName = sandboxConfig.autoSendEventName || sandboxConfig.autoSendEvents;
@@ -28,6 +29,14 @@ window.addEventListener("load", function() {
 			if (!!sandboxConfig && autoSendEventName && sandboxConfig.events && sandboxConfig.events[autoSendEventName]) {
 				sandboxConfig.events[autoSendEventName].forEach(function (ev){amflowClient.sendEvent(ev)});
 			}
+		}
+
+		var gameArguments;
+		if (window.__akashic__.autoGivenArgsName) { 
+			if (!sandboxConfig) {
+				sandboxConfig = window.__akashic__.sandboxConfigFunc();
+			}
+			gameArguments = sandboxConfig.arguments[window.__akashic__.autoGivenArgsName];
 		}
 
 		var audioPlugins;
@@ -112,6 +121,7 @@ window.addEventListener("load", function() {
 		driver.initialize({
 			configurationUrl: "game.json",
 			assetBase: "./",
+			gameArgs: gameArguments,
 			driverConfiguration: {
 				playId: sandboxPlayId,
 				playToken: "dummyToken",
