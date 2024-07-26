@@ -132,7 +132,7 @@ describe("convertUtil", function () {
 
 	describe("validateSandboxConfigJs", () => {
 		const sandboxConfig = {
-			"autoSendEventName": "mySessionParameter",
+			autoSendEventName: "mySessionParameter",
 			arguments: {
 			  hoge: {"test": "test"}
 			},
@@ -142,13 +142,17 @@ describe("convertUtil", function () {
 		};
 
 		it("throw error if autoSendEventName is not in events in sandbox.config.js", () => {
+			expect(() => convert.validateSandboxConfigJs(sandboxConfig, "mySessionParameter", "hoge")).not.toThrow();
 			expect(() => convert.validateSandboxConfigJs(sandboxConfig, "dummy", "hoge"))
 				.toThrow("dummy does not exist in events in sandbox.config.js.");
-
 			expect(() => convert.validateSandboxConfigJs(sandboxConfig, "mySessionParameter", "dummy"))
 				.toThrow("dummy does not exist in arguments in sandbox.config.js.");
 
-			expect(() => convert.validateSandboxConfigJs(sandboxConfig, "mySessionParameter", "hoge")).not.toThrow();
+			// autoSendEventName が 真偽値の場合
+			expect(() => convert.validateSandboxConfigJs(sandboxConfig, true, "hoge")).not.toThrow();
+			sandboxConfig.autoSendEventName = "foo";
+			expect(() => convert.validateSandboxConfigJs(sandboxConfig, true, "dummy"))
+				.toThrow("foo does not exist in events in sandbox.config.js.");
 		});
 	});
 

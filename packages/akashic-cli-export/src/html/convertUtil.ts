@@ -240,7 +240,10 @@ export function validateSandboxConfigJs(
 	autoGivenArgsName: string
 ): void {
 	if (autoSendEventName) {
-		if (typeof autoSendEventName === "string" && !conf.events[autoSendEventName]){
+		if (autoSendEventName === true) {
+			autoSendEventName = conf.autoSendEventName || conf.autoSendEvents;
+		}
+		if (!conf.events[autoSendEventName]){
 			throw  Error(`${autoSendEventName} does not exist in events in sandbox.config.js.`);
 		}
 	}
