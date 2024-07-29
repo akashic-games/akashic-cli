@@ -1,24 +1,14 @@
 name: Publish and Release
 
 on:
-  workflow_dispatch:
-    inputs:
-      version:
-        type: choice
-        description: |
-          A valid semver string to increment the version.
-          "force-patch-all" will update all packages to increment patch version forcefully, then publish.
-          "from-package" will publish packages where the latest version is not present in the registry.
-        options:
-          - "patch"
-          - "minor"
-          - "major"
-          - "prerelease"
-          - "force-patch-all"
-          - "from-package"
+  push:
+    branches:
+      - main
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 env:
-  NODE_VERSION: 18
+  NODE_VERSION: 20
 
 jobs:
   release:
@@ -28,7 +18,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # lerna-changelog の実行に tags の情報が必要なため明示的にすべての履歴を取得
+          # CHANGELOG の差分を適切に生成するため明示的にすべての履歴を取得
+          fetch-depth: 0
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -36,15 +27,17 @@ jobs:
           cache: npm
       - name: Prepare
         run: |
+          # npm において package-lock.json の optional dependencies を欠落するバグがあるらしく、削除した後に再インストールをする
+          # @see https://nx.dev/troubleshooting/troubleshoot-nx-install-issues#native-modules
+          # @see https://github.com/npm/cli/issues/4828
+          rm package-lock.json
           npm install
-          npm run build
           npm test
-      - name: Publish and Release
-        run: |
-          git config user.name 'github-actions'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> .npmrc
-          npm run publish:${{ github.event.inputs.version }}
+      - name: Create Release PullRequest or Publish
+        uses: changesets/action@v1
+        with:
+          publish: npm run release-packages
+          version: npm run version-packages
         env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_AUTH: ${{ secrets.GITHUB_TOKEN }}
