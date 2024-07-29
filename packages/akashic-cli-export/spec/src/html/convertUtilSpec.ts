@@ -1,5 +1,5 @@
-import { GameConfiguration } from "@akashic/akashic-cli-commons";
-import { ImageAssetConfigurationBase } from "@akashic/game-configuration";
+import type { GameConfiguration } from "@akashic/akashic-cli-commons";
+import type { ImageAssetConfigurationBase } from "@akashic/game-configuration";
 import * as convert from "../../../lib/html/convertUtil";
 import { validateGameJson } from "../../../lib/utils";
 

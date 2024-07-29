@@ -8,7 +8,7 @@ import * as fsx from "fs-extra";
 import readdir = require("fs-readdir-recursive");
 import { promiseConvertBundle } from "./convertBundle";
 import { promiseConvertNoBundle } from "./convertNoBundle";
-import { ConvertTemplateParameterObject } from "./convertUtil";
+import type { ConvertTemplateParameterObject } from "./convertUtil";
 import * as Utils from "./Utils";
 
 export interface ExportHTMLParameterObject extends ConvertTemplateParameterObject {

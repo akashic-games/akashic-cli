@@ -1,4 +1,4 @@
-import { CliConfigExportZip } from "@akashic/akashic-cli-commons";
+import type { CliConfigExportZip } from "@akashic/akashic-cli-commons";
 import { cli } from "../../../lib/zip/cli";
 import * as exp from "../../../lib/zip/exportZip";
 

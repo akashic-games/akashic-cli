@@ -4,8 +4,9 @@ import * as cmn from "@akashic/akashic-cli-commons";
 import * as ejs from "ejs";
 import * as fsx from "fs-extra";
 import { validateGameJson } from "../utils";
+import type {
+	ConvertTemplateParameterObject} from "./convertUtil";
 import {
-	ConvertTemplateParameterObject,
 	copyAssetFilesStrip,
 	copyAssetFiles,
 	encodeText,
@@ -26,16 +27,16 @@ interface InnerHTMLAssetData {
 }
 
 export async function promiseConvertBundle(options: ConvertTemplateParameterObject): Promise<void> {
-	var content = await cmn.ConfigurationFile.read(path.join(options.source, "game.json"), options.logger);
+	const content = await cmn.ConfigurationFile.read(path.join(options.source, "game.json"), options.logger);
 	if (!content.environment) content.environment = {};
 	content.environment["sandbox-runtime"] = content.environment["sandbox-runtime"] ? content.environment["sandbox-runtime"] : "1";
 
 	validateGameJson(content);
 
-	var conf = new cmn.Configuration({
+	const conf = new cmn.Configuration({
 		content: content
 	});
-	var innerHTMLAssetArray: InnerHTMLAssetData[] = [];
+	let innerHTMLAssetArray: InnerHTMLAssetData[] = [];
 
 	innerHTMLAssetArray.push({
 		name: "game.json",
@@ -54,8 +55,8 @@ export async function promiseConvertBundle(options: ConvertTemplateParameterObje
 		validateSandboxConfigJs(sandboxConfig, options.autoSendEventName, options.autoGivenArgsName);
 	}
 
-	var errorMessages: string[] = [];
-	var innerHTMLAssetNames = extractAssetDefinitions(conf, "script");
+	const errorMessages: string[] = [];
+	let innerHTMLAssetNames = extractAssetDefinitions(conf, "script");
 	if (!options.unbundleText) {
 		innerHTMLAssetNames = innerHTMLAssetNames.concat(extractAssetDefinitions(conf, "text"));
 	}
@@ -97,11 +98,11 @@ export async function promiseConvertBundle(options: ConvertTemplateParameterObje
 async function convertAssetToInnerHTMLObj(
 	assetName: string, inputPath: string, conf: cmn.Configuration,
 	minify?: boolean, errors?: string[]): Promise<InnerHTMLAssetData> {
-	var assets = conf._content.assets;
-	var isScript = assets[assetName].type === "script";
-	var asset = assets[assetName];
-	var exports = (asset.type === "script" && asset.exports) ?? [];
-	var assetString = fs.readFileSync(path.join(inputPath, asset.path), "utf8").replace(/\r\n|\r/g, "\n");
+	const assets = conf._content.assets;
+	const isScript = assets[assetName].type === "script";
+	const asset = assets[assetName];
+	const exports = (asset.type === "script" && asset.exports) ?? [];
+	const assetString = fs.readFileSync(path.join(inputPath, asset.path), "utf8").replace(/\r\n|\r/g, "\n");
 	if (isScript) {
 		errors.push.apply(errors, await validateEs5Code(asset.path, assetString));
 	}
@@ -115,10 +116,10 @@ async function convertAssetToInnerHTMLObj(
 async function convertScriptNameToInnerHTMLObj(
 	scriptName: string, inputPath: string,
 	minify?: boolean, errors?: string[]): Promise<InnerHTMLAssetData> {
-	var scriptString = fs.readFileSync(path.join(inputPath, scriptName), "utf8").replace(/\r\n|\r/g, "\n");
-	var isScript = /\.js$/i.test(scriptName);
+	let scriptString = fs.readFileSync(path.join(inputPath, scriptName), "utf8").replace(/\r\n|\r/g, "\n");
+	const isScript = /\.js$/i.test(scriptName);
 
-	var scriptPath = path.resolve("./", scriptName);
+	const scriptPath = path.resolve("./", scriptName);
 	if (path.extname(scriptPath) === ".json") {
 		scriptString = encodeText(scriptString);
 	}
@@ -136,7 +137,7 @@ async function writeHtmlFile(
 	innerHTMLAssetArray: InnerHTMLAssetData[], outputPath: string,
 	conf: cmn.Configuration, options: ConvertTemplateParameterObject, templatePath: string): Promise<void> {
 	const injects = options.injects ? options.injects : [];
-	var scripts = getDefaultBundleScripts(
+	const scripts = getDefaultBundleScripts(
 		templatePath,
 		conf._content.environment["sandbox-runtime"],
 		options.minify,

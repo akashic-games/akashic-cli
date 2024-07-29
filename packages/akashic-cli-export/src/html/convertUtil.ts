@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as cmn from "@akashic/akashic-cli-commons";
-import { AssetConfigurationMap, ImageAssetConfigurationBase } from "@akashic/game-configuration";
+import type { AssetConfigurationMap, ImageAssetConfigurationBase } from "@akashic/game-configuration";
 import type { SandboxConfiguration } from "@akashic/sandbox-configuration";
 import * as fsx from "fs-extra";
 import readdir = require("fs-readdir-recursive");
@@ -30,8 +30,8 @@ export interface ConvertTemplateParameterObject {
 }
 
 export function extractAssetDefinitions (conf: cmn.Configuration, type: string): string[] {
-	var assets = conf._content.assets;
-	var assetNames = Object.keys(assets);
+	const assets = conf._content.assets;
+	const assetNames = Object.keys(assets);
 	return assetNames.filter((assetName) => assets[assetName].type === type);
 }
 
@@ -39,14 +39,14 @@ export function copyAssetFilesStrip(
 	inputPath: string, outputPath: string,
 	assets: AssetConfigurationMap, options: ConvertTemplateParameterObject): void {
 	options.logger.info("copying stripped fileset...");
-	var assetNames = Object.keys(assets);
+	const assetNames = Object.keys(assets);
 	assetNames.filter((assetName) => {
 		return assets[assetName].type !== "script" && (options.unbundleText || assets[assetName].type !== "text");
 	}).forEach((assetName) => {
-		var assetPath = assets[assetName].path;
-		var assetDir = path.dirname(assetPath);
+		const assetPath = assets[assetName].path;
+		const assetDir = path.dirname(assetPath);
 		fsx.mkdirsSync(path.resolve(outputPath, assetDir));
-		var dst = path.join(outputPath, assetPath);
+		const dst = path.join(outputPath, assetPath);
 		if (assets[assetName].type === "audio") {
 			cmn.KNOWN_AUDIO_EXTENSIONS.forEach((ext) => {
 				try {
@@ -140,7 +140,7 @@ export function getDefaultBundleScripts(
 			};
 		})();
 	`;
-	let postloadScriptNames =
+	const postloadScriptNames =
 		["sandbox.js", "initGlobals.js"];
 	if (version === "3") {
 		postloadScriptNames.push("pdi/LocalScriptAssetV3.js");

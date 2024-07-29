@@ -1,13 +1,14 @@
 import * as fs from "fs";
 import * as path from "path";
-import { ConsoleLogger, CliConfigurationFile, CliConfigExportZip, SERVICE_TYPES } from "@akashic/akashic-cli-commons";
+import type { CliConfigExportZip} from "@akashic/akashic-cli-commons";
+import { ConsoleLogger, CliConfigurationFile, SERVICE_TYPES } from "@akashic/akashic-cli-commons";
 import { Command } from "commander";
 import { promiseExportZip } from "./exportZip";
 
-var ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "..", "package.json"), "utf8")).version;
+const ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "..", "package.json"), "utf8")).version;
 
 export function cli(param: CliConfigExportZip): void {
-	var logger = new ConsoleLogger({ quiet: param.quiet });
+	const logger = new ConsoleLogger({ quiet: param.quiet });
 
 	if (!param.omitEmptyJs) {
 		logger.info("deprecated: --no-omit-empty-js is now always enabled since output may be broken without this option.");
