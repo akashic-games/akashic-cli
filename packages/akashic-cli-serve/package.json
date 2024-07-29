@@ -97,7 +97,7 @@
     "whatwg-fetch": "3.6.2"
   },
   "overrides": {
-    "@types/mime": "3.0.4"
+    "@types/mime": "4.0.0"
   },
   "files": [
     "package.json",
