@@ -22,7 +22,8 @@ export function resolveEngineFilesPath(version: SandboxRuntimeVersion): string {
 	} else {
 		const engineFilesName = resolveEngineFilesVariable(version);
 		const libName = `engine-files-v${version}`;
-		engineFilesPath = path.join(path.dirname(require.resolve(libName)), `dist/raw/debug/full/${engineFilesName}.js`);
+		const engineFilesPackagePath = path.dirname(require.resolve(libName, { paths: [require.resolve("@akashic/headless-driver")] }));
+		engineFilesPath = path.join(engineFilesPackagePath, `dist/raw/debug/full/${engineFilesName}.js`);
 	}
 	return engineFilesPath;
 }
