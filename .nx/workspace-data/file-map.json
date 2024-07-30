@@ -1,0 +1,3961 @@
+{
+  "version": "6.0",
+  "nxVersion": "19.5.3",
+  "deps": {
+    "@akashic/remark-preset-lint": "^0.1.1",
+    "@changesets/changelog-github": "^0.5.0",
+    "@changesets/cli": "^2.27.5",
+    "nx": "^19.1.0",
+    "remark-cli": "^10.0.1",
+    "shelljs": "^0.8.5"
+  },
+  "pathMappings": {},
+  "nxJsonPlugins": [],
+  "fileMap": {
+    "projectFileMap": {
+      "@akashic/akashic-cli": [
+        {
+          "file": "packages/akashic-cli/.eslintrc.js",
+          "hash": "10063700881124627508"
+        },
+        {
+          "file": "packages/akashic-cli/.gitignore",
+          "hash": "14472712910061454953"
+        },
+        {
+          "file": "packages/akashic-cli/.npmrc",
+          "hash": "8384425242415060788"
+        },
+        {
+          "file": "packages/akashic-cli/CHANGELOG.md",
+          "hash": "16426156324289054274"
+        },
+        {
+          "file": "packages/akashic-cli/README.md",
+          "hash": "9584656309956112449"
+        },
+        {
+          "file": "packages/akashic-cli/bin/akashic",
+          "hash": "11642284841136347697"
+        },
+        {
+          "file": "packages/akashic-cli/bin/akashic-config",
+          "hash": "12644103545255982632"
+        },
+        {
+          "file": "packages/akashic-cli/bin/akashic-export",
+          "hash": "1142191489142981519"
+        },
+        {
+          "file": "packages/akashic-cli/bin/akashic-init",
+          "hash": "122317528497985666"
+        },
+        {
+          "file": "packages/akashic-cli/bin/akashic-install",
+          "hash": "2927948707681660071"
+        },
+        {
+          "file": "packages/akashic-cli/bin/akashic-link",
+          "hash": "3799312270287015640"
+        },
+        {
+          "file": "packages/akashic-cli/bin/akashic-modify",
+          "hash": "15514889524058194185"
+        },
+        {
+          "file": "packages/akashic-cli/bin/akashic-sandbox",
+          "hash": "11335094254680693618"
+        },
+        {
+          "file": "packages/akashic-cli/bin/akashic-scan",
+          "hash": "10779394931947299103"
+        },
+        {
+          "file": "packages/akashic-cli/bin/akashic-serve",
+          "hash": "11318240710645687149"
+        },
+        {
+          "file": "packages/akashic-cli/bin/akashic-stat",
+          "hash": "5706083873315271614"
+        },
+        {
+          "file": "packages/akashic-cli/bin/akashic-uninstall",
+          "hash": "15744515504425496754"
+        },
+        {
+          "file": "packages/akashic-cli/bin/akashic-unlink",
+          "hash": "1638788554823367685"
+        },
+        {
+          "file": "packages/akashic-cli/bin/akashic-update",
+          "hash": "12542671868852904941"
+        },
+        {
+          "file": "packages/akashic-cli/package-lock.json",
+          "hash": "1839880001436701744"
+        },
+        {
+          "file": "packages/akashic-cli/package.json",
+          "hash": "6658130706955411691",
+          "deps": [
+            "@akashic/akashic-cli-commons",
+            "@akashic/akashic-cli-export",
+            "@akashic/akashic-cli-extra",
+            "@akashic/akashic-cli-init",
+            "@akashic/akashic-cli-lib-manage",
+            "@akashic/akashic-cli-sandbox",
+            "@akashic/akashic-cli-scan",
+            "@akashic/akashic-cli-serve"
+          ]
+        },
+        {
+          "file": "packages/akashic-cli/spec/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/akashic-cli/src/ui.ts",
+          "hash": "17718099847157700002"
+        },
+        {
+          "file": "packages/akashic-cli/tsconfig.json",
+          "hash": "4770333815184300604"
+        }
+      ],
+      "@akashic/akashic-cli-init": [
+        {
+          "file": "packages/akashic-cli-init/.eslintrc.js",
+          "hash": "13130465080386834124"
+        },
+        {
+          "file": "packages/akashic-cli-init/.gitignore",
+          "hash": "7756539381652458816"
+        },
+        {
+          "file": "packages/akashic-cli-init/.npmrc",
+          "hash": "8384425242415060788"
+        },
+        {
+          "file": "packages/akashic-cli-init/CHANGELOG.md",
+          "hash": "5441723469739022104"
+        },
+        {
+          "file": "packages/akashic-cli-init/README.md",
+          "hash": "10170360584531558064"
+        },
+        {
+          "file": "packages/akashic-cli-init/bin/run",
+          "hash": "8430416474698940233"
+        },
+        {
+          "file": "packages/akashic-cli-init/jest.config.js",
+          "hash": "1870798470248722893"
+        },
+        {
+          "file": "packages/akashic-cli-init/package-lock.json",
+          "hash": "9509673057696908009"
+        },
+        {
+          "file": "packages/akashic-cli-init/package.json",
+          "hash": "16939589774164456072",
+          "deps": [
+            "@akashic/akashic-cli-commons",
+            "@akashic/akashic-cli-extra"
+          ]
+        },
+        {
+          "file": "packages/akashic-cli-init/src/__tests__/.eslintrc.js",
+          "hash": "4840322431799039888"
+        },
+        {
+          "file": "packages/akashic-cli-init/src/__tests__/BasicParametersSpec.ts",
+          "hash": "6277901315728729992"
+        },
+        {
+          "file": "packages/akashic-cli-init/src/__tests__/InitParameterObjectSpec.ts",
+          "hash": "650260085886849576"
+        },
+        {
+          "file": "packages/akashic-cli-init/src/__tests__/TemplateConfigSpec.ts",
+          "hash": "3081450570585054293"
+        },
+        {
+          "file": "packages/akashic-cli-init/src/__tests__/TemplateMetadataSpec.ts",
+          "hash": "4330769174615079034"
+        },
+        {
+          "file": "packages/akashic-cli-init/src/__tests__/cloneTemplateSpec.ts",
+          "hash": "1648553917594080682"
+        },
+        {
+          "file": "packages/akashic-cli-init/src/__tests__/initSpec.ts",
+          "hash": "17061137292237830074"
+        },
+        {
+          "file": "packages/akashic-cli-init/src/__tests__/listTemplatesSpec.ts",
+          "hash": "14978295659600359506"
+        },
+        {
+          "file": "packages/akashic-cli-init/src/__tests__/support/fixture/local/javascript-minimal/.eslintrc.json",
+          "hash": "18336830772264525617"
+        },
+        {
+          "file": "packages/akashic-cli-init/src/__tests__/support/fixture/local/javascript-minimal/.gitignore",
+          "hash": "7663861978715868291"
+        },
+        {
+          "file": "packages/akashic-cli-init/src/__tests__/support/fixture/local/javascript-minimal/game.json",
+          "hash": "727651732403508383"
+        },
+        {
+          "file": "packages/akashic-cli-init/src/__tests__/support/fixture/local/javascript-minimal/package.json",
+          "hash": "12677875718724643482"
+        },
+        {
+          "file": "packages/akashic-cli-init/src/__tests__/support/fixture/local/javascript-minimal/script/main.js",
+          "hash": "6782882483664484853"
+        },
+        {
+          "file": "packages/akashic-cli-init/src/__tests__/support/fixture/remote/javascript.zip",
+          "hash": "9510444719589979130"
+        },
+        {
+          "file": "packages/akashic-cli-init/src/__tests__/support/fixture/remote/template-list.json",
+          "hash": "6330463067037222326"
+        },
+        {
+          "file": "packages/akashic-cli-init/src/__tests__/support/fixture/remote/template-list.unsupported.json",
+          "hash": "13740517653088875589"
+        },
+        {
+          "file": "packages/akashic-cli-init/src/__tests__/support/fixture/remote/typescript.zip",
+          "hash": "14251048152693755286"
+        },
+        {
+          "file": "packages/akashic-cli-init/src/__tests__/support/mockConfigFile.ts",
+          "hash": "13677020753111676304"
+        },
+        {
+          "file": "packages/akashic-cli-init/src/__tests__/support/mockPrompt.ts",
+          "hash": "14376246466925859892"
+        },
+        {
+          "file": "packages/akashic-cli-init/src/__tests__/testUtils.ts",
+          "hash": "7819924543815275853"
+        },
+        {
+          "file": "packages/akashic-cli-init/src/__tests__/tsconfig.json",
+          "hash": "11947949800564943263"
+        },
+        {
+          "file": "packages/akashic-cli-init/src/cli.ts",
+          "hash": "793383599798428079"
+        },
+        {
+          "file": "packages/akashic-cli-init/src/common/InitCommonOptions.ts",
+          "hash": "2385698706137184798"
+        },
+        {
+          "file": "packages/akashic-cli-init/src/common/TemplateMetadata.ts",
+          "hash": "7073914249789649236"
+        },
+        {
+          "file": "packages/akashic-cli-init/src/index.ts",
+          "hash": "16478007006987047657"
+        },
+        {
+          "file": "packages/akashic-cli-init/src/init/BasicParameters.ts",
+          "hash": "5229278645514431782"
+        },
+        {
+          "file": "packages/akashic-cli-init/src/init/InitParameterObject.ts",
+          "hash": "10570091114122989475"
+        },
+        {
+          "file": "packages/akashic-cli-init/src/init/TemplateConfig.ts",
+          "hash": "1203845784705728711"
+        },
+        {
+          "file": "packages/akashic-cli-init/src/init/cloneTemplate.ts",
+          "hash": "18302627425976694936"
+        },
+        {
+          "file": "packages/akashic-cli-init/src/init/init.ts",
+          "hash": "6691501775175109044"
+        },
+        {
+          "file": "packages/akashic-cli-init/src/list/ListTemplatesParameterObject.ts",
+          "hash": "17868140637943383974"
+        },
+        {
+          "file": "packages/akashic-cli-init/src/list/listTemplates.ts",
+          "hash": "7805352763352133159"
+        },
+        {
+          "file": "packages/akashic-cli-init/template-spec.md",
+          "hash": "1567473574092481843"
+        },
+        {
+          "file": "packages/akashic-cli-init/tsconfig.json",
+          "hash": "8344520531757820181"
+        },
+        {
+          "file": "packages/akashic-cli-init/typings/prompt.d.ts",
+          "hash": "17805325740893731553"
+        }
+      ],
+      "@akashic/akashic-cli-scan": [
+        {
+          "file": "packages/akashic-cli-scan/.eslintrc.js",
+          "hash": "13536910475305426771"
+        },
+        {
+          "file": "packages/akashic-cli-scan/.gitignore",
+          "hash": "3150371429710746512"
+        },
+        {
+          "file": "packages/akashic-cli-scan/.npmrc",
+          "hash": "8384425242415060788"
+        },
+        {
+          "file": "packages/akashic-cli-scan/CHANGELOG.md",
+          "hash": "18374545030823321376"
+        },
+        {
+          "file": "packages/akashic-cli-scan/README.md",
+          "hash": "2643506380206651622"
+        },
+        {
+          "file": "packages/akashic-cli-scan/bin/run",
+          "hash": "8430416474698940233"
+        },
+        {
+          "file": "packages/akashic-cli-scan/jest.config.js",
+          "hash": "5078089845894839766"
+        },
+        {
+          "file": "packages/akashic-cli-scan/package-lock.json",
+          "hash": "5293420837323193279"
+        },
+        {
+          "file": "packages/akashic-cli-scan/package.json",
+          "hash": "6471945202067916195",
+          "deps": [
+            "@akashic/akashic-cli-commons"
+          ]
+        },
+        {
+          "file": "packages/akashic-cli-scan/src/AssetModule.ts",
+          "hash": "17956941178511037067"
+        },
+        {
+          "file": "packages/akashic-cli-scan/src/__tests__/fixtures/dummy.aac",
+          "hash": "17481437866043196386"
+        },
+        {
+          "file": "packages/akashic-cli-scan/src/__tests__/fixtures/dummy.m4a",
+          "hash": "8499929392537648504"
+        },
+        {
+          "file": "packages/akashic-cli-scan/src/__tests__/fixtures/dummy.mp4",
+          "hash": "7780537695461671697"
+        },
+        {
+          "file": "packages/akashic-cli-scan/src/__tests__/fixtures/dummy.ogg",
+          "hash": "7234094028522584511"
+        },
+        {
+          "file": "packages/akashic-cli-scan/src/__tests__/fixtures/dummy.wasm",
+          "hash": "5341867242611089562"
+        },
+        {
+          "file": "packages/akashic-cli-scan/src/__tests__/fixtures/dummy1x1.png",
+          "hash": "16994889605478644278"
+        },
+        {
+          "file": "packages/akashic-cli-scan/src/__tests__/fixtures/dummy2.ogg",
+          "hash": "18083587459066665679"
+        },
+        {
+          "file": "packages/akashic-cli-scan/src/__tests__/fixtures/dummy_300x200.svg",
+          "hash": "11291753795031199222"
+        },
+        {
+          "file": "packages/akashic-cli-scan/src/__tests__/fixtures/dummy_300x200_subpx.svg",
+          "hash": "12435668101060712500"
+        },
+        {
+          "file": "packages/akashic-cli-scan/src/__tests__/fixtures/dummy_no_px.svg",
+          "hash": "12223071634059025603"
+        },
+        {
+          "file": "packages/akashic-cli-scan/src/__tests__/fixtures/dummy_no_size.svg",
+          "hash": "12165345647303072081"
+        },
+        {
+          "file": "packages/akashic-cli-scan/src/__tests__/src/AssetModuleSpec.ts",
+          "hash": "5584702145080924551"
+        },
+        {
+          "file": "packages/akashic-cli-scan/src/__tests__/src/getAudioDurationSpec.ts",
+          "hash": "8909223091509114653"
+        },
+        {
+          "file": "packages/akashic-cli-scan/src/__tests__/src/helpers/MockPromisedNpm.ts",
+          "hash": "16901738093529755096"
+        },
+        {
+          "file": "packages/akashic-cli-scan/src/__tests__/src/scanAssetSpec.ts",
+          "hash": "16947601364415864584"
+        },
+        {
+          "file": "packages/akashic-cli-scan/src/__tests__/src/scanNodeModulesSpec.ts",
+          "hash": "7075400273529732909"
+        },
+        {
+          "file": "packages/akashic-cli-scan/src/__tests__/src/scanUtilsSpec.ts",
+          "hash": "8687019831983701278"
+        },
+        {
+          "file": "packages/akashic-cli-scan/src/__tests__/src/testUtils.ts",
+          "hash": "344586814236799917"
+        },
+        {
+          "file": "packages/akashic-cli-scan/src/__tests__/tsconfig.json",
+          "hash": "17383561144551030391"
+        },
+        {
+          "file": "packages/akashic-cli-scan/src/cli.ts",
+          "hash": "17785284957024042846"
+        },
+        {
+          "file": "packages/akashic-cli-scan/src/getAudioDuration.ts",
+          "hash": "13708857556154850873"
+        },
+        {
+          "file": "packages/akashic-cli-scan/src/getImageSize.ts",
+          "hash": "17192592033629845225"
+        },
+        {
+          "file": "packages/akashic-cli-scan/src/index.ts",
+          "hash": "14795394783751667505"
+        },
+        {
+          "file": "packages/akashic-cli-scan/src/isBinaryFile.ts",
+          "hash": "10369801816774962570"
+        },
+        {
+          "file": "packages/akashic-cli-scan/src/scanAsset.ts",
+          "hash": "3634203092862941737"
+        },
+        {
+          "file": "packages/akashic-cli-scan/src/scanNodeModules.ts",
+          "hash": "1069973672771096091"
+        },
+        {
+          "file": "packages/akashic-cli-scan/src/scanUtils.ts",
+          "hash": "18071064593940251834"
+        },
+        {
+          "file": "packages/akashic-cli-scan/src/types.ts",
+          "hash": "14828656669112603588"
+        },
+        {
+          "file": "packages/akashic-cli-scan/src/watchAsset.ts",
+          "hash": "933201387123565266"
+        },
+        {
+          "file": "packages/akashic-cli-scan/tsconfig.json",
+          "hash": "521468333988746250"
+        },
+        {
+          "file": "packages/akashic-cli-scan/typings/aac-duration.d.ts",
+          "hash": "200129316851716881"
+        },
+        {
+          "file": "packages/akashic-cli-scan/typings/fs-readdir-recursive.d.ts",
+          "hash": "6856329423215625100"
+        },
+        {
+          "file": "packages/akashic-cli-scan/typings/thumbcoil.d.ts",
+          "hash": "211802299106376114"
+        }
+      ],
+      "@akashic/akashic-cli-sandbox": [
+        {
+          "file": "packages/akashic-cli-sandbox/.editorconfig",
+          "hash": "8398878379944681532"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/.gitignore",
+          "hash": "4169773880494682531"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/.npmrc",
+          "hash": "4827679571781855889"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/CHANGELOG.md",
+          "hash": "1620596741137949562"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/README.md",
+          "hash": "6247210424819163243"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/bin/akashic-cli-sandbox",
+          "hash": "11489161756747303580"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/css/developer.css",
+          "hash": "454926665380376575"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/engine-src/common/js/prepare.js",
+          "hash": "7663761067856811457"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/engine-src/common/js/test.js",
+          "hash": "3162659494520246490"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/engine-src/v1/js/developer.js",
+          "hash": "2024252831357462878"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/engine-src/v1/js/logger.js",
+          "hash": "4778410982246465475"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/engine-src/v1/js/sandbox.js",
+          "hash": "1556895223808907686"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/engine-src/v2/js/developer.js",
+          "hash": "8925210787969150776"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/engine-src/v2/js/sandbox.js",
+          "hash": "5846505245434281784"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/engine-src/v3/js/developer.js",
+          "hash": "4425421598673119292"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/engine-src/v3/js/sandbox.js",
+          "hash": "11503148620938842740"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/index.js",
+          "hash": "12733702986580461544"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/js/v1/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/js/v2/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/js/v3/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/package-lock.json",
+          "hash": "2983269057335956054"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/package.json",
+          "hash": "11461369940489543160"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/spec/fixtures/css/style.css",
+          "hash": "7777799195829372591"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/spec/fixtures/games/errRuntimeValue/game.json",
+          "hash": "10659277745489525547"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/spec/fixtures/games/errRuntimeValue/script/mainScene.js",
+          "hash": "16702328294618736396"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/spec/fixtures/games/hello/game.json",
+          "hash": "5195395364563635424"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/spec/fixtures/games/hello/script/mainScene.js",
+          "hash": "9340153354587716267"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/spec/fixtures/games/v2/game.json",
+          "hash": "16052608753709092123"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/spec/fixtures/games/v2/script/mainScene.js",
+          "hash": "9340153354587716267"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/spec/fixtures/js/script.js",
+          "hash": "13967742473319974751"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/spec/server/routes-spec.js",
+          "hash": "9277876028140784197"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/src/client/.eslintrc.json",
+          "hash": "16265656471345412548"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/src/client/SandboxScriptAsset.ts",
+          "hash": "158161806562927210"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/src/client/SandboxScriptAssetV3.ts",
+          "hash": "18364230531096072747"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/src/client/TimeKeeper.ts",
+          "hash": "5389646504799570009"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/src/client/akashic/meddling/MeddlingDate.ts",
+          "hash": "4938669907744835549"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/src/client/akashic/meddling/MeddlingMath.ts",
+          "hash": "12252709373951266015"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/src/client/global.d.ts",
+          "hash": "5754984159090248042"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/src/client/tsconfig.json",
+          "hash": "11175181094267533268"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/src/server/.eslintrc.json",
+          "hash": "6045213027881325990"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/src/server/app.ts",
+          "hash": "14953101573463151864"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/src/server/controller/game.ts",
+          "hash": "11166596006230540057"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/src/server/controller/js.ts",
+          "hash": "8727874874982311020"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/src/server/controller/sandboxConfig.ts",
+          "hash": "13329992861571791056"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/src/server/controller/test.ts",
+          "hash": "9097949799517463219"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/src/server/request/ScriptRequest.ts",
+          "hash": "16803464619849388495"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/src/server/routes/game.ts",
+          "hash": "13222777026414003221"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/src/server/routes/js.ts",
+          "hash": "16063496526736001472"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/src/server/routes/sandboxConfig.ts",
+          "hash": "8988674551543529081"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/src/server/routes/test.ts",
+          "hash": "4093469199329854412"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/src/server/tsconfig.json",
+          "hash": "13325329212141226319"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/src/server/utils.ts",
+          "hash": "9399334418769382136"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/thirdparty/css/font-awesome.min.css",
+          "hash": "17805165560017306763"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/thirdparty/css/pure-min.css",
+          "hash": "1119909159806397063"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/thirdparty/fonts/FontAwesome.otf",
+          "hash": "4778109929545441497"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/thirdparty/fonts/fontawesome-webfont.eot",
+          "hash": "14526103625327319961"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/thirdparty/fonts/fontawesome-webfont.svg",
+          "hash": "8921399404367460788"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/thirdparty/fonts/fontawesome-webfont.ttf",
+          "hash": "12834953068289697558"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/thirdparty/fonts/fontawesome-webfont.woff",
+          "hash": "1979630379804513687"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/thirdparty/fonts/fontawesome-webfont.woff2",
+          "hash": "8913462694443676062"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/thirdparty/js/interact.min.js",
+          "hash": "4452947029949812187"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/thirdparty/js/md5.min.js",
+          "hash": "11323178602455248790"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/thirdparty/js/vue.min.js",
+          "hash": "406276413073686571"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/thirdparty_license/README.txt",
+          "hash": "14100998290704324191"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/thirdparty_license/fontAwsome.txt",
+          "hash": "17958600018111255298"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/thirdparty_license/md5.min.js.txt",
+          "hash": "7683395556544460331"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/typings/ect.d.ts",
+          "hash": "11155969442882919632"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/typings/extend.express.d.ts",
+          "hash": "9397004814882375532"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/views/developer.ejs",
+          "hash": "15811253924439142036"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/views/engine.ejs",
+          "hash": "3721277379023574109"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/views/error.ejs",
+          "hash": "8577072072572778776"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/views/finish.ejs",
+          "hash": "16034380195106468792"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/views/game.ejs",
+          "hash": "16831969264984168796"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/views/script.ejs",
+          "hash": "14248955168185992838"
+        },
+        {
+          "file": "packages/akashic-cli-sandbox/views/test.ejs",
+          "hash": "12441316514143641784"
+        }
+      ],
+      "@akashic/akashic-cli-lib-manage": [
+        {
+          "file": "packages/akashic-cli-lib-manage/.eslintrc.js",
+          "hash": "13130465080386834124"
+        },
+        {
+          "file": "packages/akashic-cli-lib-manage/.gitignore",
+          "hash": "10455961837809013683"
+        },
+        {
+          "file": "packages/akashic-cli-lib-manage/.npmrc",
+          "hash": "8384425242415060788"
+        },
+        {
+          "file": "packages/akashic-cli-lib-manage/README.md",
+          "hash": "8464567412559241634"
+        },
+        {
+          "file": "packages/akashic-cli-lib-manage/bin/akashic-cli-install",
+          "hash": "2765953540190452467"
+        },
+        {
+          "file": "packages/akashic-cli-lib-manage/bin/akashic-cli-uninstall",
+          "hash": "17327655829807692022"
+        },
+        {
+          "file": "packages/akashic-cli-lib-manage/bin/akashic-cli-update",
+          "hash": "17387223352436946135"
+        },
+        {
+          "file": "packages/akashic-cli-lib-manage/jest.config.js",
+          "hash": "13877798032906791124"
+        },
+        {
+          "file": "packages/akashic-cli-lib-manage/package-lock.json",
+          "hash": "16845899379185596348"
+        },
+        {
+          "file": "packages/akashic-cli-lib-manage/package.json",
+          "hash": "17768910560268971389",
+          "deps": [
+            "@akashic/akashic-cli-commons"
+          ]
+        },
+        {
+          "file": "packages/akashic-cli-lib-manage/spec/src/install/ConfigurationSpec.ts",
+          "hash": "3390534139515270385"
+        },
+        {
+          "file": "packages/akashic-cli-lib-manage/spec/src/install/installSpec.ts",
+          "hash": "7274874756703132030"
+        },
+        {
+          "file": "packages/akashic-cli-lib-manage/spec/src/testUtils.ts",
+          "hash": "344586814236799917"
+        },
+        {
+          "file": "packages/akashic-cli-lib-manage/spec/src/uninstall/ConfigurationSpec.ts",
+          "hash": "8211095396069520678"
+        },
+        {
+          "file": "packages/akashic-cli-lib-manage/spec/src/uninstall/helpers/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/akashic-cli-lib-manage/spec/src/uninstall/uninstallSpec.ts",
+          "hash": "6525987563880674418"
+        },
+        {
+          "file": "packages/akashic-cli-lib-manage/spec/src/update/helpers/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/akashic-cli-lib-manage/spec/src/update/helpers/MockPromisedNpm.ts",
+          "hash": "12352078876762657149"
+        },
+        {
+          "file": "packages/akashic-cli-lib-manage/spec/src/update/updateSpec.ts",
+          "hash": "13884750063374260600"
+        },
+        {
+          "file": "packages/akashic-cli-lib-manage/spec/support/jasmine.json",
+          "hash": "15328278350368103475"
+        },
+        {
+          "file": "packages/akashic-cli-lib-manage/spec/tsconfig.json",
+          "hash": "15378397294319519280"
+        },
+        {
+          "file": "packages/akashic-cli-lib-manage/src/install/Configuration.ts",
+          "hash": "8737933007117470279"
+        },
+        {
+          "file": "packages/akashic-cli-lib-manage/src/install/cli.ts",
+          "hash": "10063633166333993018"
+        },
+        {
+          "file": "packages/akashic-cli-lib-manage/src/install/index.ts",
+          "hash": "16183737344218626254"
+        },
+        {
+          "file": "packages/akashic-cli-lib-manage/src/install/install.ts",
+          "hash": "13624960133900734321"
+        },
+        {
+          "file": "packages/akashic-cli-lib-manage/src/uninstall/Configuration.ts",
+          "hash": "6168160001982514205"
+        },
+        {
+          "file": "packages/akashic-cli-lib-manage/src/uninstall/cli.ts",
+          "hash": "2988028235079907410"
+        },
+        {
+          "file": "packages/akashic-cli-lib-manage/src/uninstall/index.ts",
+          "hash": "8329910647366845725"
+        },
+        {
+          "file": "packages/akashic-cli-lib-manage/src/uninstall/uninstall.ts",
+          "hash": "11729603165892285123"
+        },
+        {
+          "file": "packages/akashic-cli-lib-manage/src/update/cli.ts",
+          "hash": "13396429616571086728"
+        },
+        {
+          "file": "packages/akashic-cli-lib-manage/src/update/index.ts",
+          "hash": "4812103796160410989"
+        },
+        {
+          "file": "packages/akashic-cli-lib-manage/src/update/update.ts",
+          "hash": "11938235285073527143"
+        },
+        {
+          "file": "packages/akashic-cli-lib-manage/tsconfig.json",
+          "hash": "605603799127636879"
+        }
+      ],
+      "@akashic/akashic-cli-serve": [
+        {
+          "file": "packages/akashic-cli-serve/.dockerignore",
+          "hash": "11581211567117675645"
+        },
+        {
+          "file": "packages/akashic-cli-serve/.gitignore",
+          "hash": "8465086059749784309"
+        },
+        {
+          "file": "packages/akashic-cli-serve/.npmrc",
+          "hash": "508447612730586458"
+        },
+        {
+          "file": "packages/akashic-cli-serve/.storybook/addons.js",
+          "hash": "14394689349017314349"
+        },
+        {
+          "file": "packages/akashic-cli-serve/.storybook/config.js",
+          "hash": "7057098242919859446"
+        },
+        {
+          "file": "packages/akashic-cli-serve/.storybook/preview-head.html",
+          "hash": "5810161061617942648"
+        },
+        {
+          "file": "packages/akashic-cli-serve/.storybook/webpack.config.js",
+          "hash": "4893246345839904132"
+        },
+        {
+          "file": "packages/akashic-cli-serve/CHANGELOG.md",
+          "hash": "2926813726223340636"
+        },
+        {
+          "file": "packages/akashic-cli-serve/Dockerfile",
+          "hash": "14748993015183956797"
+        },
+        {
+          "file": "packages/akashic-cli-serve/README.md",
+          "hash": "1714580749792116642"
+        },
+        {
+          "file": "packages/akashic-cli-serve/bin/run",
+          "hash": "10363701042997604491"
+        },
+        {
+          "file": "packages/akashic-cli-serve/build/copyAgv.js",
+          "hash": "3105428772374159237"
+        },
+        {
+          "file": "packages/akashic-cli-serve/build/copyIcons.js",
+          "hash": "5258593792092235941"
+        },
+        {
+          "file": "packages/akashic-cli-serve/build/updateEngineFiles.js",
+          "hash": "2062138186368887563"
+        },
+        {
+          "file": "packages/akashic-cli-serve/jest.config.js",
+          "hash": "2947800384078234225"
+        },
+        {
+          "file": "packages/akashic-cli-serve/package-lock.json",
+          "hash": "17604107045755049098"
+        },
+        {
+          "file": "packages/akashic-cli-serve/package.json",
+          "hash": "6598908012778699762",
+          "deps": [
+            "@akashic/akashic-cli-commons",
+            "@akashic/akashic-cli-scan"
+          ]
+        },
+        {
+          "file": "packages/akashic-cli-serve/spec/fixture/sample_content/.eslintrc.json",
+          "hash": "17921197309295347177"
+        },
+        {
+          "file": "packages/akashic-cli-serve/spec/fixture/sample_content/README.md",
+          "hash": "4656708064724791642"
+        },
+        {
+          "file": "packages/akashic-cli-serve/spec/fixture/sample_content/audio/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/akashic-cli-serve/spec/fixture/sample_content/game.json",
+          "hash": "1553938777489134962"
+        },
+        {
+          "file": "packages/akashic-cli-serve/spec/fixture/sample_content/image/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/akashic-cli-serve/spec/fixture/sample_content/package.json",
+          "hash": "16881262219094367746"
+        },
+        {
+          "file": "packages/akashic-cli-serve/spec/fixture/sample_content/script/main.js",
+          "hash": "16182444842627336230"
+        },
+        {
+          "file": "packages/akashic-cli-serve/spec/fixture/sample_content/text/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/akashic-cli-serve/spec/helper/ApiRequestMock.js",
+          "hash": "16588155828135537205"
+        },
+        {
+          "file": "packages/akashic-cli-serve/spec/helper/SubscriberMock.js",
+          "hash": "8462151625376366641"
+        },
+        {
+          "file": "packages/akashic-cli-serve/spec/server/GameConfigsSpec.js",
+          "hash": "10541464591465425213"
+        },
+        {
+          "file": "packages/akashic-cli-serve/spec/server/SocketIOAMFlowManagerSpec.js",
+          "hash": "5204826599195890454"
+        },
+        {
+          "file": "packages/akashic-cli-serve/spec/server/SubscriberSpec.js",
+          "hash": "8764713923566667828"
+        },
+        {
+          "file": "packages/akashic-cli-serve/spec/support/jasmine.json",
+          "hash": "4586374166697877216"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/.eslintrc.js",
+          "hash": "3537221254562388503"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/AkashicServeWindow.ts",
+          "hash": "6483020448220558147"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/akashic/AkashicGameViewWeb.d.ts",
+          "hash": "5852916293838718055"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/akashic/AssetV3.ts",
+          "hash": "14321529365641494043"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/akashic/GameViewManager.ts",
+          "hash": "14631177477411558781"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/akashic/RuntimeWarning.ts",
+          "hash": "6543800732767279119"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/akashic/ServeGameContent.ts",
+          "hash": "4295990989042100300"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/akashic/SocketIOAMFlowClient.ts",
+          "hash": "1524616447862893478"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/akashic/TestbedScriptAsset.ts",
+          "hash": "4636436120077280355"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/akashic/plugin/CoeLimitedPlugin.ts",
+          "hash": "3232168734369282888"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/akashic/plugin/CoePlugin.ts",
+          "hash": "8060952471003686069"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/akashic/plugin/NicoPlugin.ts",
+          "hash": "15565027977116774923"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/akashic/plugin/SendPlugin.ts",
+          "hash": "18030324028201718734"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/akashic/scriptHelper.ts",
+          "hash": "15860153126868133989"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/api/ApiClient.ts",
+          "hash": "10553326261625945490"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/api/ApiRequest.ts",
+          "hash": "15314897244849055137"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/api/Subscriber.ts",
+          "hash": "4077498391308264688"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/api/apiClientInstance.ts",
+          "hash": "8496195436931485947"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/api/createSocketInstance.ts",
+          "hash": "18137926150085358251"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/api/socketInstance.ts",
+          "hash": "4056083729422498356"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/bootstrap.tsx",
+          "hash": "12529882652524627224"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/common/ClientContentLocator.ts",
+          "hash": "5113756637447559565"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/common/DateUtil.ts",
+          "hash": "8510431252595261412"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/common/createSessionParameter.ts",
+          "hash": "12350304904074929161"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/common/exception/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/common/queryParameters.ts",
+          "hash": "6479852695891963969"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/common/types/EDumpItem.ts",
+          "hash": "5573266826114076293"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/common/types/Profiler.ts",
+          "hash": "17252634576324706529"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/common/types/ScenarioEventData.ts",
+          "hash": "1846252261139675054"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/common/types/ScreenSize.ts",
+          "hash": "4283072042026344599"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/common/types/plugin.ts",
+          "hash": "2846125016332242811"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/css.d.ts",
+          "hash": "1340116973004814673"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/operator/DevtoolOperator.ts",
+          "hash": "17920613817379162707"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/operator/LocalInstanceOperator.ts",
+          "hash": "6452442226778605928"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/operator/Operator.ts",
+          "hash": "3244417386076204305"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/operator/PlayOperator.ts",
+          "hash": "9531328979891642619"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/operator/UiOperator.ts",
+          "hash": "12384725212475110621"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/store/ContentEntity.ts",
+          "hash": "14681979608682799275"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/store/ContentStore.ts",
+          "hash": "133237276027741661"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/store/DevtoolUiStore.ts",
+          "hash": "6497543913638194"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/store/ExecutionMode.ts",
+          "hash": "1686714924756770827"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/store/GameInstanceEntity.ts",
+          "hash": "2588679676891528374"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/store/LocalInstanceEntity.ts",
+          "hash": "11644358067406681803"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/store/NotificationType.ts",
+          "hash": "10597918117548563630"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/store/NotificationUiStore.ts",
+          "hash": "14174908929094652040"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/store/PlayEntity.ts",
+          "hash": "4764347873189308579"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/store/PlayStore.ts",
+          "hash": "10509798554239557847"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/store/PlayerInfoResolverUiStore.ts",
+          "hash": "7179385677157012967"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/store/ProfilerStore.ts",
+          "hash": "14891210088301863870"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/store/ServerInstanceEntity.ts",
+          "hash": "5793321033564844815"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/store/StartupScreenUiStore.ts",
+          "hash": "17434398587271721181"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/store/Store.ts",
+          "hash": "6661986572413123410"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/store/ToolBarUiStore.ts",
+          "hash": "9259099674692895466"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/store/storage.ts",
+          "hash": "15870506613456566628"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/tsconfig.json",
+          "hash": "17976940938547749468"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/tsconfig.module.json",
+          "hash": "5083506865295474724"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/App.css",
+          "hash": "10681924274337814038"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/App.tsx",
+          "hash": "2254438512172009728"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/atom/DevtoolSelectorBar.css",
+          "hash": "10813421814559040109"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/atom/DevtoolSelectorBar.tsx",
+          "hash": "14243823306037772740"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/atom/FlexScrollY.css",
+          "hash": "13373205728509114665"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/atom/FlexScrollY.tsx",
+          "hash": "13105402329755675815"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/atom/GameViewFitter.css",
+          "hash": "4487890883780113573"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/atom/GameViewFitter.tsx",
+          "hash": "16780179103756215392"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/atom/Notification.css",
+          "hash": "9641383838248904650"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/atom/Notification.tsx",
+          "hash": "5623837378388615540"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/atom/Popover.css",
+          "hash": "16148200798164477121"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/atom/Popover.tsx",
+          "hash": "13284331417606842500"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/atom/RightResizable.css",
+          "hash": "4262522414051983069"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/atom/RightResizable.tsx",
+          "hash": "9037099643431330444"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/atom/ToolCheckbox.css",
+          "hash": "8814535689582032364"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/atom/ToolCheckbox.tsx",
+          "hash": "3931846526030791850"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/atom/ToolChoiceButton.css",
+          "hash": "14023215677207263430"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/atom/ToolChoiceButton.tsx",
+          "hash": "12517905503693820880"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/atom/ToolControlGroup.css",
+          "hash": "1435646102109288255"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/atom/ToolControlGroup.tsx",
+          "hash": "6279226309269471082"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/atom/ToolIconButton.css",
+          "hash": "11475108827697348929"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/atom/ToolIconButton.tsx",
+          "hash": "14185176008734376618"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/atom/ToolLabel.css",
+          "hash": "15346295728703763369"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/atom/ToolLabel.tsx",
+          "hash": "6181126425975436935"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/atom/ToolLabelButton.css",
+          "hash": "16967257713614201530"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/atom/ToolLabelButton.tsx",
+          "hash": "2035585376759964539"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/atom/ToolProgressBar.css",
+          "hash": "2158606949398590782"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/atom/ToolProgressBar.tsx",
+          "hash": "402826865802038476"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/atom/ToolToggleLabel.css",
+          "hash": "17156379832255216097"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/atom/ToolToggleLabel.tsx",
+          "hash": "10479481843082421683"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/atom/TopResizable.css",
+          "hash": "10584039643959387727"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/atom/TopResizable.tsx",
+          "hash": "1755375392786881155"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/container/DevtoolContainer.tsx",
+          "hash": "11119183034277268826"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/container/GameScreenContainer.tsx",
+          "hash": "5016759899689575537"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/container/NotificationContainer.tsx",
+          "hash": "17218247535532208734"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/container/StartupScreenContainer.tsx",
+          "hash": "16779660101719673484"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/container/ToolbarContainer.tsx",
+          "hash": "4801005463321607421"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/global.css",
+          "hash": "17464597386914001398"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/molecule/AudioOptionControl.css",
+          "hash": "10403138659443849234"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/molecule/AudioOptionControl.tsx",
+          "hash": "13721361212665199577"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/molecule/DisplayOptionControl.css",
+          "hash": "14738706231004877341"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/molecule/DisplayOptionControl.tsx",
+          "hash": "3427416276293395641"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/molecule/EntityTreeDevtool.css",
+          "hash": "15442112462049498494"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/molecule/EntityTreeDevtool.tsx",
+          "hash": "15404527570531206043"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/molecule/EntityTreeOptionBar.css",
+          "hash": "3164114874880806885"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/molecule/EntityTreeOptionBar.tsx",
+          "hash": "3547982424658744707"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/molecule/EventsDevtool.css",
+          "hash": "9737120326084403802"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/molecule/EventsDevtool.tsx",
+          "hash": "2661690396736186745"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/molecule/InstanceControl.css",
+          "hash": "2549463147515416916"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/molecule/InstanceControl.tsx",
+          "hash": "13946351266015991251"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/molecule/InstancesDevtool.css",
+          "hash": "14919513550601331072"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/molecule/InstancesDevtool.tsx",
+          "hash": "9488603475642521395"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/molecule/InternalDevtool.tsx",
+          "hash": "6280208782596613149"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/molecule/NiconicoDevtool.css",
+          "hash": "12207240435018017711"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/molecule/NiconicoDevtool.tsx",
+          "hash": "4861597072653719275"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/molecule/PlayControl.tsx",
+          "hash": "18115452691081135343"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/molecule/PlaybackDevtool.css",
+          "hash": "7962410690048186479"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/molecule/PlaybackDevtool.tsx",
+          "hash": "9394576205230902204"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/molecule/PlaybackOptionBar.css",
+          "hash": "9570907402736603787"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/molecule/PlaybackOptionBar.tsx",
+          "hash": "2818879938715539914"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/molecule/PlayerControl.tsx",
+          "hash": "1033768148030861298"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/molecule/PlayerInfoResolverDialog.css",
+          "hash": "16283595737976673760"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/molecule/PlayerInfoResolverDialog.tsx",
+          "hash": "2424300312958169569"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/molecule/ProfilerCanvas.tsx",
+          "hash": "3730079855064769669"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/organism/Devtool.css",
+          "hash": "387901224984485965"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/organism/Devtool.tsx",
+          "hash": "6012960914181526047"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/organism/GameScreen.css",
+          "hash": "1862370155939090407"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/organism/GameScreen.tsx",
+          "hash": "9645717275936659452"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/organism/StartupScreen.css",
+          "hash": "3023169488909363816"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/organism/StartupScreen.tsx",
+          "hash": "12585925863665644120"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/organism/ToolBar.css",
+          "hash": "10689077283783882991"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/organism/ToolBar.tsx",
+          "hash": "11941973899630841458"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/stories/Devtool.stories.tsx",
+          "hash": "13994238524117546677"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/stories/DevtoolSelectorBar.stories.tsx",
+          "hash": "6299233843335010749"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/stories/EventsDevtool.stories.tsx",
+          "hash": "16951105675655228185"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/stories/GameScreen.stories.tsx",
+          "hash": "4688690885400159634"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/stories/InstanceControl.stories.tsx",
+          "hash": "5115233861152761049"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/stories/InstancesDevtool.stories.tsx",
+          "hash": "15997832824199431869"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/stories/PlayControl.stories.tsx",
+          "hash": "14656924711502198670"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/stories/PlayerControl.stories.tsx",
+          "hash": "236689858343480088"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/stories/Popover.stories.tsx",
+          "hash": "12006268106106866109"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/stories/RightResizable.stories.tsx",
+          "hash": "17892145131052560423"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/stories/StartupScreen.stories.tsx",
+          "hash": "13841399761062978982"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/stories/ToolBar.stories.tsx",
+          "hash": "6552129307558291879"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/stories/ToolChoiceButton.stories.tsx",
+          "hash": "1973940729771486014"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/stories/ToolControlGroup.stories.tsx",
+          "hash": "18223155108216488944"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/stories/ToolIconButton.stories.tsx",
+          "hash": "13929188629611989831"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/stories/ToolLabel.stories.tsx",
+          "hash": "16551064812096267851"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/stories/ToolLabelButton.stories.tsx",
+          "hash": "17209162744102482409"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/stories/ToolProgressBar.stories.tsx",
+          "hash": "836750585956064297"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/stories/ToolToggleLabel.stories.tsx",
+          "hash": "14709485118060793267"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/view/stories/TopResizable.stories.tsx",
+          "hash": "17896256592342473581"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/client/webpack.config.js",
+          "hash": "2201020355878108605"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/common/ContentLocator.ts",
+          "hash": "6224341489843645298"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/common/MsgpackParser.ts",
+          "hash": "10388028755847373799"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/common/TimeKeeper.ts",
+          "hash": "18389823526602530863"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/common/targetServiceUtil.ts",
+          "hash": "17355138256997088467"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/common/types/ApiResponse.ts",
+          "hash": "3606259890523434934"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/common/types/AppOptions.ts",
+          "hash": "10901718729517753705"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/common/types/ContentDesc.ts",
+          "hash": "8460257249047403047"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/common/types/ContentLocatorData.ts",
+          "hash": "14613908617610037724"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/common/types/PlayAudioState.ts",
+          "hash": "1052637033824291847"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/common/types/PlayDurationState.ts",
+          "hash": "1221406399219286781"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/common/types/PlayInfo.ts",
+          "hash": "9955107470589447853"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/common/types/PlayStatus.ts",
+          "hash": "12597532109160461587"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/common/types/Player.ts",
+          "hash": "6477141866851224063"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/common/types/StartPointHeader.ts",
+          "hash": "6725270963999676125"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/common/types/TestbedEvent.ts",
+          "hash": "3577308840660588539"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/server/.eslintrc.js",
+          "hash": "13130465080386834124"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/server/common/ApiError.ts",
+          "hash": "14806206242171049029"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/server/common/ApiResponse.ts",
+          "hash": "1825165388460730236"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/server/common/ServerContentLocator.ts",
+          "hash": "15494317893976977966"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/server/common/ServerGlobalConfig.ts",
+          "hash": "18408755449920383974"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/server/common/types/DumpedPlaylog.ts",
+          "hash": "14959107846893680489"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/server/controller/BroadcastController.ts",
+          "hash": "17627040672054893750"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/server/controller/ContentController.ts",
+          "hash": "7084772712109099318"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/server/controller/HealthCheckController.ts",
+          "hash": "11825188332076341537"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/server/controller/PlayController.ts",
+          "hash": "11137347830053804050"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/server/controller/PlayTokenController.ts",
+          "hash": "7920841417061998691"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/server/controller/PlayerIdController.ts",
+          "hash": "10969276799397086928"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/server/controller/RunnerController.ts",
+          "hash": "13421137193010609197"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/server/controller/SandboxConfigController.ts",
+          "hash": "9931565313468031088"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/server/controller/ScriptAssetController.ts",
+          "hash": "15590819613454142171"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/server/controller/StartPointHeaderListController.ts",
+          "hash": "8150052968571087940"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/server/controller/StartupOptionsController.ts",
+          "hash": "6425015691396320032"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/server/domain/AMFlowPermisson.ts",
+          "hash": "9148539593590040021"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/server/domain/EngineConfig.ts",
+          "hash": "11885136994806718499"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/server/domain/GameConfigs.ts",
+          "hash": "7569255349587132076"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/server/domain/PlayStore.ts",
+          "hash": "5818362496762263390"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/server/domain/PlayerIdStore.ts",
+          "hash": "8273691654085312676"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/server/domain/RunnerStore.ts",
+          "hash": "7999809243331055528"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/server/domain/SandboxConfigs.ts",
+          "hash": "2320504704249311316"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/server/domain/SocketIOAMFlowManager.ts",
+          "hash": "9493584645600509813"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/server/domain/dynamicRequire.ts",
+          "hash": "5431821369371069032"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/server/global.d.ts",
+          "hash": "13059475553165473119"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/server/index.ts",
+          "hash": "5251645104343644705"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/server/route/ApiRoute.ts",
+          "hash": "8111988369486266375"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/server/route/ContentsRoute.ts",
+          "hash": "4896467938814052263"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/server/route/HealthCheckRoute.ts",
+          "hash": "9943576547788214075"
+        },
+        {
+          "file": "packages/akashic-cli-serve/src/server/tsconfig.json",
+          "hash": "6145933939014061258"
+        },
+        {
+          "file": "packages/akashic-cli-serve/tslint.json",
+          "hash": "9188243343931991772"
+        },
+        {
+          "file": "packages/akashic-cli-serve/views/health-check-status.ejs",
+          "hash": "546906079436861382"
+        },
+        {
+          "file": "packages/akashic-cli-serve/www/public/external/playlogClientV3_2_1.js",
+          "hash": "18028899192177658673"
+        },
+        {
+          "file": "packages/akashic-cli-serve/www/public/favicon.ico",
+          "hash": "13802127668449546763"
+        },
+        {
+          "file": "packages/akashic-cli-serve/www/public/img/design-guideline.png",
+          "hash": "11840663943799892750"
+        },
+        {
+          "file": "packages/akashic-cli-serve/www/public/index.html",
+          "hash": "13939340241014725782"
+        }
+      ],
+      "@akashic/akashic-cli-extra": [
+        {
+          "file": "packages/akashic-cli-extra/.eslintrc.js",
+          "hash": "13130465080386834124"
+        },
+        {
+          "file": "packages/akashic-cli-extra/.gitignore",
+          "hash": "18249803284771120419"
+        },
+        {
+          "file": "packages/akashic-cli-extra/.npmrc",
+          "hash": "8384425242415060788"
+        },
+        {
+          "file": "packages/akashic-cli-extra/README.md",
+          "hash": "17245936323158215373"
+        },
+        {
+          "file": "packages/akashic-cli-extra/bin/akashic-cli-config",
+          "hash": "7002939666792377007"
+        },
+        {
+          "file": "packages/akashic-cli-extra/bin/akashic-cli-modify",
+          "hash": "4777583937193447816"
+        },
+        {
+          "file": "packages/akashic-cli-extra/bin/akashic-cli-stat",
+          "hash": "945026843981517494"
+        },
+        {
+          "file": "packages/akashic-cli-extra/jest.config.js",
+          "hash": "4919117332762959842"
+        },
+        {
+          "file": "packages/akashic-cli-extra/package-lock.json",
+          "hash": "9950134165577452891"
+        },
+        {
+          "file": "packages/akashic-cli-extra/package.json",
+          "hash": "3863229875614132790",
+          "deps": [
+            "@akashic/akashic-cli-commons"
+          ]
+        },
+        {
+          "file": "packages/akashic-cli-extra/spec/.eslintrc.js",
+          "hash": "4840322431799039888"
+        },
+        {
+          "file": "packages/akashic-cli-extra/spec/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/akashic-cli-extra/spec/fixtures/dummyGame1/game.json",
+          "hash": "14711620810922763740"
+        },
+        {
+          "file": "packages/akashic-cli-extra/spec/fixtures/dummyGame1/script/mainScene.js",
+          "hash": "8982495793789667404"
+        },
+        {
+          "file": "packages/akashic-cli-extra/spec/fixtures/dummyGame2/audio/dummy.aac",
+          "hash": "17481437866043196386"
+        },
+        {
+          "file": "packages/akashic-cli-extra/spec/fixtures/dummyGame2/audio/dummy.m4a",
+          "hash": "12903417080916527403"
+        },
+        {
+          "file": "packages/akashic-cli-extra/spec/fixtures/dummyGame2/audio/dummy.mp4",
+          "hash": "7780537695461671697"
+        },
+        {
+          "file": "packages/akashic-cli-extra/spec/fixtures/dummyGame2/audio/dummy.ogg",
+          "hash": "17889982546924323064"
+        },
+        {
+          "file": "packages/akashic-cli-extra/spec/fixtures/dummyGame2/game.json",
+          "hash": "7042882681245961363"
+        },
+        {
+          "file": "packages/akashic-cli-extra/spec/fixtures/dummyGame2/image/dummy1x1.png",
+          "hash": "16994889605478644278"
+        },
+        {
+          "file": "packages/akashic-cli-extra/spec/fixtures/dummyGame2/script/mainScene.js",
+          "hash": "8982495793789667404"
+        },
+        {
+          "file": "packages/akashic-cli-extra/spec/fixtures/dummyGame3/audio/dummy.m4a",
+          "hash": "12903417080916527403"
+        },
+        {
+          "file": "packages/akashic-cli-extra/spec/fixtures/dummyGame3/audio/dummy.ogg",
+          "hash": "17889982546924323064"
+        },
+        {
+          "file": "packages/akashic-cli-extra/spec/fixtures/dummyGame3/game.json",
+          "hash": "10597704281213921718"
+        },
+        {
+          "file": "packages/akashic-cli-extra/spec/fixtures/dummyGame4/audio/dummy.aac",
+          "hash": "17481437866043196386"
+        },
+        {
+          "file": "packages/akashic-cli-extra/spec/fixtures/dummyGame4/audio/dummy.mp4",
+          "hash": "18148534655359156726"
+        },
+        {
+          "file": "packages/akashic-cli-extra/spec/fixtures/dummyGame4/audio/dummy.ogg",
+          "hash": "17889982546924323064"
+        },
+        {
+          "file": "packages/akashic-cli-extra/spec/fixtures/dummyGame4/game.json",
+          "hash": "10934698882912753510"
+        },
+        {
+          "file": "packages/akashic-cli-extra/spec/fixtures/dummyGame5/audio/dummy.mp4",
+          "hash": "7780537695461671697"
+        },
+        {
+          "file": "packages/akashic-cli-extra/spec/fixtures/dummyGame5/audio/dummy.ogg",
+          "hash": "17889982546924323064"
+        },
+        {
+          "file": "packages/akashic-cli-extra/spec/fixtures/dummyGame5/game.json",
+          "hash": "7042882681245961363"
+        },
+        {
+          "file": "packages/akashic-cli-extra/spec/fixtures/dummyGame5/image/dummy1x1.png",
+          "hash": "16994889605478644278"
+        },
+        {
+          "file": "packages/akashic-cli-extra/spec/fixtures/dummyGame5/script/mainScene.js",
+          "hash": "8982495793789667404"
+        },
+        {
+          "file": "packages/akashic-cli-extra/spec/fixtures/dummyGame6_bin_vector/assets/dummyData.bin",
+          "hash": "6173715712583588169"
+        },
+        {
+          "file": "packages/akashic-cli-extra/spec/fixtures/dummyGame6_bin_vector/game.json",
+          "hash": "2756421145478961315"
+        },
+        {
+          "file": "packages/akashic-cli-extra/spec/fixtures/dummyGame6_bin_vector/image/circle.svg",
+          "hash": "3744832310129848128"
+        },
+        {
+          "file": "packages/akashic-cli-extra/spec/fixtures/dummyGame6_bin_vector/script/mainScene.js",
+          "hash": "8982495793789667404"
+        },
+        {
+          "file": "packages/akashic-cli-extra/spec/src/config/configSpec.ts",
+          "hash": "18216907755262585257"
+        },
+        {
+          "file": "packages/akashic-cli-extra/spec/src/modify/modifySpec.ts",
+          "hash": "5372570125297265723"
+        },
+        {
+          "file": "packages/akashic-cli-extra/spec/src/stat/statSpec.ts",
+          "hash": "13312633105929279141"
+        },
+        {
+          "file": "packages/akashic-cli-extra/spec/support/jasmine.json",
+          "hash": "15328278350368103475"
+        },
+        {
+          "file": "packages/akashic-cli-extra/spec/tsconfig.json",
+          "hash": "16259142860101224373"
+        },
+        {
+          "file": "packages/akashic-cli-extra/src/config/cli.ts",
+          "hash": "13943586995113996046"
+        },
+        {
+          "file": "packages/akashic-cli-extra/src/config/config.ts",
+          "hash": "16075442369894873955"
+        },
+        {
+          "file": "packages/akashic-cli-extra/src/config/index.ts",
+          "hash": "13540849831759885915"
+        },
+        {
+          "file": "packages/akashic-cli-extra/src/modify/cli.ts",
+          "hash": "11663557574488334599"
+        },
+        {
+          "file": "packages/akashic-cli-extra/src/modify/index.ts",
+          "hash": "1204234818908981512"
+        },
+        {
+          "file": "packages/akashic-cli-extra/src/modify/modify.ts",
+          "hash": "17193386430162907386"
+        },
+        {
+          "file": "packages/akashic-cli-extra/src/stat/cli.ts",
+          "hash": "4112556450585365411"
+        },
+        {
+          "file": "packages/akashic-cli-extra/src/stat/index.ts",
+          "hash": "8508592781036733280"
+        },
+        {
+          "file": "packages/akashic-cli-extra/src/stat/stat.ts",
+          "hash": "15427754680495968655"
+        },
+        {
+          "file": "packages/akashic-cli-extra/tsconfig.json",
+          "hash": "6074098237903433885"
+        },
+        {
+          "file": "packages/akashic-cli-extra/typings/selected_lodash.d.ts",
+          "hash": "1291261272903477164"
+        }
+      ],
+      "@akashic/akashic-cli-export": [
+        {
+          "file": "packages/akashic-cli-export/.eslintignore",
+          "hash": "7499583745425855275"
+        },
+        {
+          "file": "packages/akashic-cli-export/.eslintrc.js",
+          "hash": "6842218692363540273"
+        },
+        {
+          "file": "packages/akashic-cli-export/.gitignore",
+          "hash": "1979320533648229573"
+        },
+        {
+          "file": "packages/akashic-cli-export/.npmrc",
+          "hash": "8384425242415060788"
+        },
+        {
+          "file": "packages/akashic-cli-export/README.md",
+          "hash": "18358782937375893063"
+        },
+        {
+          "file": "packages/akashic-cli-export/bin/akashic-cli-export-html",
+          "hash": "9202138011203444600"
+        },
+        {
+          "file": "packages/akashic-cli-export/bin/akashic-cli-export-zip",
+          "hash": "13314829331833011225"
+        },
+        {
+          "file": "packages/akashic-cli-export/bin/run",
+          "hash": "80282769704111145"
+        },
+        {
+          "file": "packages/akashic-cli-export/jest.config.js",
+          "hash": "10025376361236184510"
+        },
+        {
+          "file": "packages/akashic-cli-export/package-lock.json",
+          "hash": "14327273702907415465"
+        },
+        {
+          "file": "packages/akashic-cli-export/package.json",
+          "hash": "16679215797859252143",
+          "deps": [
+            "@akashic/akashic-cli-commons",
+            "@akashic/akashic-cli-extra"
+          ]
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/.eslintrc.js",
+          "hash": "3644556568151682424"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/engineFilesV3_1_99.js",
+          "hash": "11016586472757613934"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/game_exclude_files/audio/dummy.ogg",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/game_exclude_files/exclude/dummy.js",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/game_exclude_files/exclude/dummy.png",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/game_exclude_files/exclude/dummy.txt",
+          "hash": "4055606894390288348"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/game_exclude_files/game.json",
+          "hash": "15086121892470318418"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/game_exclude_files/image/hoge.png",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/game_exclude_files/image/img.png",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/game_exclude_files/script/main.js",
+          "hash": "5062042522029129011"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/game_exclude_files/text/foo.txt",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/game_few_images/.eslintrc.json",
+          "hash": "18336830772264525617"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/game_few_images/.gitignore",
+          "hash": "7663861978715868291"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/game_few_images/_expected_packed/aez_packed_image.png",
+          "hash": "9490654749942841967"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/game_few_images/assets/112x69.png",
+          "hash": "12033010746959395426"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/game_few_images/game.json",
+          "hash": "5433077051811814854"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/game_few_images/image/1000x1000.png",
+          "hash": "10348030839675745170"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/game_few_images/image/149x101.png",
+          "hash": "15872928977026037945"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/game_few_images/image/94x73.png",
+          "hash": "12288039774260235251"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/game_few_images/package.json",
+          "hash": "16948365981796549293"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/game_few_images/script/main.js",
+          "hash": "756181718187176629"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/game_hint_exts/audio/dummyse.aac",
+          "hash": "15597462626135526918"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/game_hint_exts/audio/dummyse.invalidext",
+          "hash": "15597462626135526918"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/game_hint_exts/audio/dummyse.m4a",
+          "hash": "15597462626135526918"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/game_hint_exts/audio/dummyse.ogg",
+          "hash": "15597462626135526918"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/game_hint_exts/game.json",
+          "hash": "12674773598117344579"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/game_hint_exts/package.json",
+          "hash": "13962078979354936212"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/game_hint_exts/script/main.js",
+          "hash": "5062042522029129011"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/game_shared_image/_expected_packed/aez_packed_image.png",
+          "hash": "4122636411037133926"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/game_shared_image/assets/112x69.png",
+          "hash": "12033010746959395426"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/game_shared_image/game.json",
+          "hash": "7880518872776746698"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/game_shared_image/image/1000x1000.png",
+          "hash": "10348030839675745170"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/game_shared_image/image/94x73.png",
+          "hash": "12288039774260235251"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/game_shared_image/package.json",
+          "hash": "16948365981796549293"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/game_shared_image/script/main.js",
+          "hash": "15362785961140882080"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/game_too_large_images/assets/100x1400.png",
+          "hash": "16559814850910291415"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/game_too_large_images/assets/1400x100.png",
+          "hash": "13797434004042005970"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/game_too_large_images/game.json",
+          "hash": "3354710616294933810"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/game_too_large_images/package.json",
+          "hash": "16948365981796549293"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/game_too_large_images/script/main.js",
+          "hash": "7527584668252062269"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/game_unpackable_images/assets/1000x1000.png",
+          "hash": "10348030839675745170"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/game_unpackable_images/game.json",
+          "hash": "3913472372233867933"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/game_unpackable_images/image/1000x1000.png",
+          "hash": "10348030839675745170"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/game_unpackable_images/package.json",
+          "hash": "16948365981796549293"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/game_unpackable_images/script/main.js",
+          "hash": "4920952744299140264"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/innerhtml/sample_script.html",
+          "hash": "13186753234115894541"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/innerhtml/sample_style.html",
+          "hash": "7247343038420214348"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/_expected_packed/aez_packed_image.png",
+          "hash": "12588923928022961125"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/audio/SE/SE_collision.aac",
+          "hash": "7596015152946704980"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/audio/SE/SE_collision.ogg",
+          "hash": "11675809187121079656"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/audio/SE/SE_count.aac",
+          "hash": "17926074721760430060"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/audio/SE/SE_count.ogg",
+          "hash": "3633217631930132793"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/audio/SE/SE_dash.aac",
+          "hash": "18264921283509508549"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/audio/SE/SE_dash.ogg",
+          "hash": "14664973130979765938"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/audio/SE/SE_finish.aac",
+          "hash": "13034700346879040200"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/audio/SE/SE_finish.ogg",
+          "hash": "1576639968989072997"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/audio/SE/SE_jewel.aac",
+          "hash": "14557678972591141550"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/audio/SE/SE_jewel.ogg",
+          "hash": "17192431533271505063"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/audio/SE/SE_select.aac",
+          "hash": "8937032650668013937"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/audio/SE/SE_select.ogg",
+          "hash": "5178039738422556635"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/audio/SE/SE_start.aac",
+          "hash": "15373751094720308341"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/audio/SE/SE_start.ogg",
+          "hash": "10924358528097071994"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/audio/snake_bgm.aac",
+          "hash": "3659734112707946315"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/audio/snake_bgm.ogg",
+          "hash": "12759980280432036645"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/audio/snake_result.aac",
+          "hash": "7536392514182979974"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/audio/snake_result.ogg",
+          "hash": "17143044930088967869"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/audio/snake_result_intro.aac",
+          "hash": "5747416183429906467"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/audio/snake_result_intro.ogg",
+          "hash": "3537689997512213135"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/game.json",
+          "hash": "3439774811879477323"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/Font/main_num_score.png",
+          "hash": "5752166689703233636"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/Font/main_num_time_c.png",
+          "hash": "9351101009268549746"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/Font/main_num_time_r.png",
+          "hash": "11920626410980245062"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/Snake/snakeA_body.png",
+          "hash": "15501561581451117601"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/Snake/snakeA_head_alive.png",
+          "hash": "15423067086650200922"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/Snake/snakeA_head_death.png",
+          "hash": "5415920366373822962"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/Snake/snakeA_head_gold.png",
+          "hash": "14107962198557337503"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/Snake/snakeB_body.png",
+          "hash": "907366471681702309"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/Snake/snakeB_head_alive.png",
+          "hash": "10906599849587454167"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/Snake/snakeB_head_death.png",
+          "hash": "18382507852133534102"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/Snake/snakeB_head_gold.png",
+          "hash": "1904461927213920783"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/Snake/snakeC_body.png",
+          "hash": "17550274891005372546"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/Snake/snakeC_head_alive.png",
+          "hash": "15003978721478640560"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/Snake/snakeC_head_death.png",
+          "hash": "7828015789359536646"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/Snake/snakeC_head_gold.png",
+          "hash": "1367148840476726934"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/Snake/snakeD_body.png",
+          "hash": "4280077597793126910"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/Snake/snakeD_head_alive.png",
+          "hash": "7741973389534686183"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/Snake/snakeD_head_death.png",
+          "hash": "8900809231098471585"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/Snake/snakeD_head_gold.png",
+          "hash": "3942674418184188766"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/Snake/snakeE_body.png",
+          "hash": "9763759038098055657"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/Snake/snakeE_head_alive.png",
+          "hash": "5246983201775128449"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/Snake/snakeE_head_death.png",
+          "hash": "5106258530462569216"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/Snake/snakeE_head_gold.png",
+          "hash": "5247572130987873611"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/Snake/snakeF_body.png",
+          "hash": "9593952983676598795"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/Snake/snakeF_head_alive.png",
+          "hash": "4597705768176025298"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/Snake/snakeF_head_death.png",
+          "hash": "5073391852962292395"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/Snake/snakeF_head_gold.png",
+          "hash": "7746927489426477182"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/Snake/snakeG_body.png",
+          "hash": "5940654644112474959"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/Snake/snakeG_head_alive.png",
+          "hash": "1589612983699478992"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/Snake/snakeG_head_death.png",
+          "hash": "14588583763964808167"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/Snake/snakeG_head_gold.png",
+          "hash": "14340354037545299093"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/Snake/snakeH_body.png",
+          "hash": "9891981353121718046"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/Snake/snakeH_head_alive.png",
+          "hash": "4315880589432783294"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/Snake/snakeH_head_death.png",
+          "hash": "10391089071453246211"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/Snake/snakeH_head_gold.png",
+          "hash": "11058882680648894039"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/Snake/snakeI_body.png",
+          "hash": "3288611549173789910"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/Snake/snakeI_head_alive.png",
+          "hash": "16703916480883653876"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/Snake/snakeI_head_death.png",
+          "hash": "15307467579712134142"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/Snake/snakeI_head_gold.png",
+          "hash": "10203339927420104464"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/Snake/snake_body_death.png",
+          "hash": "15900175756575111055"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/Snake/snake_body_gold.png",
+          "hash": "15837317219679984686"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/UI/main_base_kill.png",
+          "hash": "13378051931829825528"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/UI/main_base_length.png",
+          "hash": "9074975446543497786"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/UI/main_base_time.png",
+          "hash": "10197087095604621678"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/UI/main_btn_close_off.png",
+          "hash": "637204241253446749"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/UI/main_btn_close_on.png",
+          "hash": "9136184601802542355"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/UI/main_btn_rank_off.png",
+          "hash": "14827582024909054547"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/UI/main_btn_rank_off_diff.png",
+          "hash": "980953530020053373"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/UI/main_btn_rank_on.png",
+          "hash": "390899366827829256"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/UI/main_btn_rank_on_diff.png",
+          "hash": "12432391589760803851"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/UI/main_btn_spawn_off.png",
+          "hash": "13758812427138334613"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/UI/main_btn_spawn_off_angel.png",
+          "hash": "6415925221930667293"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/UI/main_btn_spawn_on.png",
+          "hash": "2292514233712281847"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/UI/main_btn_spawn_on_angel.png",
+          "hash": "2288182389254591696"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/UI/main_btn_spawn_unable.png",
+          "hash": "16811214019145201834"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/UI/main_dash_base.png",
+          "hash": "16158507471930514341"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/UI/main_dash_gauge1.png",
+          "hash": "6597730552505906875"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/UI/main_deathpop.png",
+          "hash": "1810389325778552747"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/UI/main_jewel_pop.png",
+          "hash": "12475442374194445837"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/UI/main_map_base.png",
+          "hash": "9270855543260137283"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/UI/main_map_feed.png",
+          "hash": "6945688354184567797"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/UI/main_map_jewel.png",
+          "hash": "4917199863458254791"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/UI/main_map_you.png",
+          "hash": "9958222032897665719"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/UI/main_rank_1.png",
+          "hash": "8464091822213785537"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/UI/main_rank_2.png",
+          "hash": "10117177421071960502"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/UI/main_rank_3.png",
+          "hash": "14270682509020313773"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/UI/main_rank_4.png",
+          "hash": "11377806828568727381"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/UI/main_rank_5.png",
+          "hash": "6652756344288451674"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/UI/main_rank_base.png",
+          "hash": "15365376868486242626"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/UI/main_rank_host.png",
+          "hash": "6765134708980054330"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/UI/main_rank_you.png",
+          "hash": "14500514933763530707"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/UI/main_rpop_body.png",
+          "hash": "7370922763949742933"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/UI/main_rpop_head_jewel.png",
+          "hash": "4585294256233903110"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/UI/main_rpop_head_kill.png",
+          "hash": "14683815467296891861"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/UI/main_rpop_tail.png",
+          "hash": "9953134789191108820"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/UI/red_rpop_body.png",
+          "hash": "9395091805957377897"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/UI/red_rpop_head_chance.png",
+          "hash": "17257161760405865875"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/UI/red_rpop_tail.png",
+          "hash": "11351391336268000556"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/explosion_effect.png",
+          "hash": "12398041047505416670"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/field_base.png",
+          "hash": "11320563123869503867"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/field_tiles.png",
+          "hash": "13005830647440111616"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/main_count_1.png",
+          "hash": "1312907601689848974"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/main_count_2.png",
+          "hash": "16551110771946147334"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/main_count_3.png",
+          "hash": "3699015892367141163"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/main_count_finish.png",
+          "hash": "16355872226141673999"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/main_count_start.png",
+          "hash": "16788754431412055360"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/main_dash_eff.png",
+          "hash": "6284558403983877979"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/main_feed.png",
+          "hash": "2911542479968859551"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/main_jewel_body.png",
+          "hash": "5608324133668430781"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/snake_reborn.png",
+          "hash": "6139853117117070841"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/MainGameScene/snake_reborn_text.png",
+          "hash": "10396566313816024515"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/ResultScene/result_base_ranking.png",
+          "hash": "11979903826419875568"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/ResultScene/result_base_treasure.png",
+          "hash": "1483431341660251786"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/ResultScene/result_btn_back_off.png",
+          "hash": "17232853089203475870"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/ResultScene/result_btn_back_off_unable.png",
+          "hash": "8461322254977546703"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/ResultScene/result_btn_back_on.png",
+          "hash": "3540876961080959299"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/ResultScene/result_btn_next_off.png",
+          "hash": "15417970940123551527"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/ResultScene/result_btn_next_off_unable.png",
+          "hash": "1151311019375756048"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/ResultScene/result_btn_next_on.png",
+          "hash": "16760884911757265590"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/ResultScene/result_num_b.png",
+          "hash": "18144383213164160946"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/ResultScene/result_num_r.png",
+          "hash": "17646674121890658847"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/ResultScene/result_title_kill.png",
+          "hash": "5050698121912786896"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/ResultScene/result_title_length.png",
+          "hash": "11152994312001411545"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/ResultScene/result_unit_i_b.png",
+          "hash": "13874762583163896255"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/ResultScene/result_unit_i_r.png",
+          "hash": "2765510275479664393"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/ResultScene/result_unit_ji_b.png",
+          "hash": "6279953717914899005"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/ResultScene/result_unit_ji_r.png",
+          "hash": "15171154691726722757"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/TitleScene/btn_frame_join.png",
+          "hash": "15714484233453039455"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/TitleScene/btn_frame_join_disable.png",
+          "hash": "10455768092705283408"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/image/TitleScene/frame_howto.png",
+          "hash": "11893888254837882646"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/script/StateManager.js",
+          "hash": "17869231520495525080"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/script/_bootstrap.js",
+          "hash": "6212309729602118021"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/script/assetIds.js",
+          "hash": "3318471255109912302"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/script/commonUtils/lottery.js",
+          "hash": "15532361446937275577"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/script/commonUtils/utils.js",
+          "hash": "8953118807360799220"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/script/config/GameConfig.js",
+          "hash": "1767205604877161106"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/script/config/ParameterObject.js",
+          "hash": "1767205604877161106"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/script/config/defaultParameter.js",
+          "hash": "10499067272744215368"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/script/entity/DashingGauge.js",
+          "hash": "11678244344335242677"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/script/entity/Field.js",
+          "hash": "17981105597058546091"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/script/entity/Food.js",
+          "hash": "17858911059681418967"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/script/entity/Jewel.js",
+          "hash": "12558484411016578172"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/script/entity/MiniMap.js",
+          "hash": "17696442933894864922"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/script/entity/OffsetGroup.js",
+          "hash": "15262070547119813257"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/script/entity/PopupNotice.js",
+          "hash": "6011765553140785508"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/script/entity/ResultScene/RankingLabel.js",
+          "hash": "9438022892537724662"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/script/entity/ScorePanel.js",
+          "hash": "11623010260144836083"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/script/entity/Snake.js",
+          "hash": "11377571088486675504"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/script/entity/TimePanel.js",
+          "hash": "17066952702059121479"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/script/entity/TitleScene/BigButton.js",
+          "hash": "13147933533784241556"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/script/entity/TitleScene/HowtoText.js",
+          "hash": "12788355683406558149"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/script/entity/TitleScene/RecruitmentCountDown.js",
+          "hash": "1611907726523268621"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/script/entity/TitleScene/WaitingText.js",
+          "hash": "8974581561551416435"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/script/main.js",
+          "hash": "6103431840678761704"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/script/scene/Behavior.js",
+          "hash": "4691412238646777688"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/script/scene/MainGameScene/MainGameBehavior.js",
+          "hash": "3392247308526100468"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/script/scene/MainGameScene/MainGameScene.js",
+          "hash": "12212366889811618995"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/script/scene/ResultScene/ResultBehavior.js",
+          "hash": "15433857102825739198"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/script/scene/ResultScene/ResultScene.js",
+          "hash": "16098115648851808123"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/script/scene/SceneBase.js",
+          "hash": "5623567689677411740"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/script/scene/TitleScene/TitleBehavior.js",
+          "hash": "17755739536334167908"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/script/scene/TitleScene/TitleScene.js",
+          "hash": "12114123741490229282"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/script/types/MessageEventType.js",
+          "hash": "9732018973522960621"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/script/types/PlayerList.js",
+          "hash": "1767205604877161106"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/script/types/ResultLogData.js",
+          "hash": "1767205604877161106"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/script/types/UserTouchState.js",
+          "hash": "15224613849618666918"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/script/utils/StateRoleChecker.js",
+          "hash": "1252216224226111195"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/script/utils/audioUtils.js",
+          "hash": "15430736184294598993"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/script/utils/entityUtils.js",
+          "hash": "11849562878588527724"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/script/utils/joinSequence.js",
+          "hash": "7715722983172389311"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/text/foodAvailableChars.json",
+          "hash": "14778531515550959821"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/text/glyph/main_num_score_glyph.json",
+          "hash": "4664099533843913561"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/text/glyph/main_num_time_glyph.json",
+          "hash": "11118269590607339537"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/niconicoSnake/text/glyph/result_glyph.json",
+          "hash": "10063309670889347145"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/sample_game/audio/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/sample_game/audio/dummyse.aac",
+          "hash": "15597462626135526918"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/sample_game/audio/dummyse.invalidext",
+          "hash": "15597462626135526918"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/sample_game/audio/dummyse.m4a",
+          "hash": "15597462626135526918"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/sample_game/audio/dummyse.ogg",
+          "hash": "15597462626135526918"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/sample_game/game.json",
+          "hash": "11302800800552469235"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/sample_game/image/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/sample_game/image/sample.png",
+          "hash": "5635282132332329360"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/sample_game/package.json",
+          "hash": "13962078979354936212"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/sample_game/sandbox.config.js",
+          "hash": "11690407239385268153"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/sample_game/script/main.js",
+          "hash": "5062042522029129011"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/sample_game/text/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/sample_game_v2/audio/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/sample_game_v2/game.json",
+          "hash": "12870206149919753271"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/sample_game_v2/image/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/sample_game_v2/package.json",
+          "hash": "16672961643491691042"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/sample_game_v2/script/main.js",
+          "hash": "5062042522029129011"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/sample_game_v2/text/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/sample_game_v3/audio/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/sample_game_v3/game.json",
+          "hash": "365431012013362900"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/sample_game_v3/image/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/sample_game_v3/package.json",
+          "hash": "12795710880381970475"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/sample_game_v3/script/main.js",
+          "hash": "5062042522029129011"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/sample_game_v3/text/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/sample_game_with_akashic_runtime/audio/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/sample_game_with_akashic_runtime/game.json",
+          "hash": "3725320395471592662"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/sample_game_with_akashic_runtime/image/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/sample_game_with_akashic_runtime/package.json",
+          "hash": "16625424112007850067"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/sample_game_with_akashic_runtime/script/main.js",
+          "hash": "5062042522029129011"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/sample_game_with_akashic_runtime/text/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game/game.json",
+          "hash": "4087533321680879176"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game/package.json",
+          "hash": "18319007861600897922"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game/script/bar.js",
+          "hash": "2381175782023122108"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game/script/foo.js",
+          "hash": "11634087597024876814"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game/script/main.js",
+          "hash": "14485289024231183263"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game/script/unrefered.js",
+          "hash": "547797404783911666"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game/text/test.json",
+          "hash": "16307728588759452699"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_es6/game.json",
+          "hash": "3988078328107801243"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_es6/script/bar.js",
+          "hash": "2381175782023122108"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_es6/script/foo.js",
+          "hash": "9022800882047902084"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_es6/script/main.js",
+          "hash": "5861528524130514769"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_using_external/game.json",
+          "hash": "18388956402599192060"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_using_external/package.json",
+          "hash": "8479305634101338492"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_using_external/script/ignore.js",
+          "hash": "10533815908077531553"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_using_external/script/main.js",
+          "hash": "8589296285434951472"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_using_external/script/unrefered.js",
+          "hash": "547797404783911666"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_using_external/text/test.json",
+          "hash": "16307728588759452699"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_using_niconico/game.json",
+          "hash": "3110141435898774873"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_using_niconico/package.json",
+          "hash": "18319007861600897922"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_using_niconico/script/main.js",
+          "hash": "14485289024231183263"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_using_niconico/text/test.json",
+          "hash": "16307728588759452699"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_using_non_utf8/assets/euc-jp.txt",
+          "hash": "16901769767631544886"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_using_non_utf8/game.json",
+          "hash": "6475266765556989567"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_using_non_utf8/package.json",
+          "hash": "18319007861600897922"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_using_non_utf8/script/foo.js",
+          "hash": "438835468724805096"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_using_non_utf8/script/main.js",
+          "hash": "16372323898960299827"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_using_non_utf8/text/sjis.txt",
+          "hash": "600425394586572653"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_using_non_utf8/text/utf8.txt",
+          "hash": "15284667174158332767"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_with_aez_bundle_main/game.json",
+          "hash": "2872143234717457015"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_with_aez_bundle_main/package.json",
+          "hash": "13036136838128372152"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_with_aez_bundle_main/script/aez_bundle_main.js",
+          "hash": "14485289024231183263"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_with_aez_bundle_main/script/bar.js",
+          "hash": "2381175782023122108"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_with_aez_bundle_main/script/foo.js",
+          "hash": "11634087597024876814"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_with_aez_bundle_main/text/test.json",
+          "hash": "16307728588759452699"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_with_aez_bundle_main2/game.json",
+          "hash": "6660453765814600294"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_with_aez_bundle_main2/package.json",
+          "hash": "10708959492745094026"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_with_aez_bundle_main2/script/aez_bundle_main.js",
+          "hash": "547797404783911666"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_with_aez_bundle_main2/script/bar.js",
+          "hash": "2381175782023122108"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_with_aez_bundle_main2/script/foo.js",
+          "hash": "11634087597024876814"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_with_aez_bundle_main2/script/main.js",
+          "hash": "14485289024231183263"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_with_aez_bundle_main2/text/test.json",
+          "hash": "16307728588759452699"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_with_aez_bundle_main3/game.json",
+          "hash": "8130400716221004009"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_with_aez_bundle_main3/image/akashic-cli.png",
+          "hash": "5635282132332329360"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_with_aez_bundle_main3/package.json",
+          "hash": "16906609552941366931"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_with_aez_bundle_main3/script/bar.js",
+          "hash": "2381175782023122108"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_with_aez_bundle_main3/script/foo.js",
+          "hash": "11634087597024876814"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_with_aez_bundle_main3/script/main.js",
+          "hash": "2196562571316192317"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_with_aez_bundle_main4/game.json",
+          "hash": "503058499085952129"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_with_aez_bundle_main4/package.json",
+          "hash": "1643697264058328157"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_with_aez_bundle_main4/script/bar.js",
+          "hash": "2381175782023122108"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_with_aez_bundle_main4/script/foo.js",
+          "hash": "15420974862832873442"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_with_aez_bundle_main4/script/main.js",
+          "hash": "1761762831628984402"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_with_aez_bundle_main4/text/test.json",
+          "hash": "16307728588759452699"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_with_main_scene/game.json",
+          "hash": "13092986911636094431"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_with_main_scene/package.json",
+          "hash": "11854322601336743124"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_with_main_scene/script/bar.js",
+          "hash": "2381175782023122108"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_with_main_scene/script/foo.js",
+          "hash": "11634087597024876814"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_with_main_scene/script/main.js",
+          "hash": "2196562571316192317"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_with_main_scene/script/mainScene.js",
+          "hash": "16501105164332216426"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_with_operation_plugins/game.json",
+          "hash": "2596140739841849168"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_with_operation_plugins/package.json",
+          "hash": "18248789986605824983"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_with_operation_plugins/script/bar.js",
+          "hash": "2381175782023122108"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_with_operation_plugins/script/foo.js",
+          "hash": "11634087597024876814"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/fixtures/simple_game_with_operation_plugins/script/main.js",
+          "hash": "12260154918350508127"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/src/html/apiUtilSpec.ts",
+          "hash": "17223816203234602956"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/src/html/convertUtilSpec.ts",
+          "hash": "9039229487199150998"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/src/html/exportHTMLSpec.ts",
+          "hash": "13732828051436691812"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/src/html/utilsSpec.ts",
+          "hash": "17327540029841265334"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/src/pdi/gameExternalStorageSpec.ts",
+          "hash": "10196408950812816413"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/src/utilsSpec.ts",
+          "hash": "18104989635470162286"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/src/zip/GameConfigurationUtilSpec.ts",
+          "hash": "8640291329000301835"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/src/zip/cliSpec.ts",
+          "hash": "751169516771101415"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/src/zip/convertSpec.ts",
+          "hash": "8874588547881726096"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/src/zip/packRectsSpec.ts",
+          "hash": "11878632136785992833"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/src/zip/transformPackImagesSpec.ts",
+          "hash": "1800630183145208084"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/support/jasmine.json",
+          "hash": "2515377060847029530"
+        },
+        {
+          "file": "packages/akashic-cli-export/spec/tsconfig.json",
+          "hash": "14573822371723695416"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/html/Utils.ts",
+          "hash": "18300196518822250075"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/html/apiUtil.ts",
+          "hash": "969499934218417501"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/html/cli.ts",
+          "hash": "639293085826735600"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/html/convertBundle.ts",
+          "hash": "8072122282720559348"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/html/convertNoBundle.ts",
+          "hash": "15877158080236678854"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/html/convertUtil.ts",
+          "hash": "9355600649008353934"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/html/exportHTML.ts",
+          "hash": "13219397721514104238"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/html/index.ts",
+          "hash": "1204234818908981512"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/pdi/LocalScriptAsset.ts",
+          "hash": "3054617641862047886"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/pdi/LocalScriptAssetV3.ts",
+          "hash": "10215651808951260057"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/pdi/LocalTextAsset.ts",
+          "hash": "369905714196716056"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/pdi/LocalTextAssetV3.ts",
+          "hash": "7414768147253073814"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/pdi/global.d.ts",
+          "hash": "18395848842457915993"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/pdi/storage/GameExternalStorage.ts",
+          "hash": "13361767719385476919"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/pdi/storage/KVSLike.ts",
+          "hash": "16256409584563090931"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/pdi/storage/content-storage-types/GameExternalStorageLike.ts",
+          "hash": "11163454970702566259"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/pdi/storage/content-storage-types/index.ts",
+          "hash": "2836265361445666729"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/pdi/storage/content-storage-types/types.ts",
+          "hash": "2256646013787974295"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/template/bundle-index.ejs",
+          "hash": "14280441657117049277"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/template/no-bundle-index.ejs",
+          "hash": "16530036098343044569"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/template/template-export-html-v1/.npmrc",
+          "hash": "7068874420173971954"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/template/template-export-html-v1/css/style.css",
+          "hash": "3864739311497863276"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/template/template-export-html-v1/js/initGlobals.js",
+          "hash": "5419779906524019829"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/template/template-export-html-v1/js/logger.js",
+          "hash": "4778410982246465475"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/template/template-export-html-v1/js/sandbox.js",
+          "hash": "10197018916247829344"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/template/template-export-html-v1/package.json",
+          "hash": "7932515296393614195"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/template/template-export-html-v2/.npmrc",
+          "hash": "7068874420173971954"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/template/template-export-html-v2/css/style.css",
+          "hash": "3864739311497863276"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/template/template-export-html-v2/js/initGlobals.js",
+          "hash": "5419779906524019829"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/template/template-export-html-v2/js/logger.js",
+          "hash": "16664654512012855334"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/template/template-export-html-v2/js/sandbox.js",
+          "hash": "8294871073454104833"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/template/template-export-html-v2/package.json",
+          "hash": "3483731058509016902"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/template/template-export-html-v3/.npmrc",
+          "hash": "7068874420173971954"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/template/template-export-html-v3/css/style.css",
+          "hash": "3864739311497863276"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/template/template-export-html-v3/js/initGlobals.js",
+          "hash": "5419779906524019829"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/template/template-export-html-v3/js/sandbox.js",
+          "hash": "7311919271683534343"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/template/template-export-html-v3/package.json",
+          "hash": "3028983787670617115"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/utils.ts",
+          "hash": "15660646450649147806"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/zip/GameConfigurationUtil.ts",
+          "hash": "2163163480995981789"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/zip/apiUtil.ts",
+          "hash": "969499934218417501"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/zip/cli.ts",
+          "hash": "1748475842766520616"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/zip/constants.ts",
+          "hash": "9684874388928163751"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/zip/convert.ts",
+          "hash": "8497596839021646359"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/zip/exportZip.ts",
+          "hash": "10203533353140160823"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/zip/index.ts",
+          "hash": "9102159238707440707"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/zip/packRects.ts",
+          "hash": "17745910210822555351"
+        },
+        {
+          "file": "packages/akashic-cli-export/src/zip/transformPackImages.ts",
+          "hash": "15302420966189653676"
+        },
+        {
+          "file": "packages/akashic-cli-export/tsconfig.json",
+          "hash": "16476192140309214481"
+        },
+        {
+          "file": "packages/akashic-cli-export/typings/babel.d.ts",
+          "hash": "6108417570752740298"
+        }
+      ],
+      "@akashic/akashic-cli-commons": [
+        {
+          "file": "packages/akashic-cli-commons/.eslintrc.js",
+          "hash": "13130465080386834124"
+        },
+        {
+          "file": "packages/akashic-cli-commons/.gitignore",
+          "hash": "10455961837809013683"
+        },
+        {
+          "file": "packages/akashic-cli-commons/.npmrc",
+          "hash": "8384425242415060788"
+        },
+        {
+          "file": "packages/akashic-cli-commons/CHANGELOG.md",
+          "hash": "11583212501397372702"
+        },
+        {
+          "file": "packages/akashic-cli-commons/README.md",
+          "hash": "14233454343781885632"
+        },
+        {
+          "file": "packages/akashic-cli-commons/jest.config.js",
+          "hash": "2622080225747148352"
+        },
+        {
+          "file": "packages/akashic-cli-commons/package-lock.json",
+          "hash": "3120948087978359098"
+        },
+        {
+          "file": "packages/akashic-cli-commons/package.json",
+          "hash": "11659063740769193111"
+        },
+        {
+          "file": "packages/akashic-cli-commons/spec/src/CliConfig/CliConfigurationFileSpec.ts",
+          "hash": "3653284126822762308"
+        },
+        {
+          "file": "packages/akashic-cli-commons/spec/src/CliConfig/CliConfigurationFileSpec_invalid.ts",
+          "hash": "1566405262233586728"
+        },
+        {
+          "file": "packages/akashic-cli-commons/spec/src/ConfigurationFileSpec.ts",
+          "hash": "2185244196640619596"
+        },
+        {
+          "file": "packages/akashic-cli-commons/spec/src/ConfigurationSpec.ts",
+          "hash": "15939560325085403433"
+        },
+        {
+          "file": "packages/akashic-cli-commons/spec/src/ConsoleLoggerSpec.ts",
+          "hash": "16252593478792001103"
+        },
+        {
+          "file": "packages/akashic-cli-commons/spec/src/FileSystemSpec.ts",
+          "hash": "14447998578423233346"
+        },
+        {
+          "file": "packages/akashic-cli-commons/spec/src/NodeModulesSpec.ts",
+          "hash": "9443721042019859677"
+        },
+        {
+          "file": "packages/akashic-cli-commons/spec/src/PromisedNpmSpec.ts",
+          "hash": "9246239722711139845"
+        },
+        {
+          "file": "packages/akashic-cli-commons/spec/src/RenamerSpec.ts",
+          "hash": "128206201161346758"
+        },
+        {
+          "file": "packages/akashic-cli-commons/spec/src/StringStreamSpec.ts",
+          "hash": "6416112755937422777"
+        },
+        {
+          "file": "packages/akashic-cli-commons/spec/src/UtilSpec.ts",
+          "hash": "3689107590500462866"
+        },
+        {
+          "file": "packages/akashic-cli-commons/spec/src/asHumanReadableSpec.ts",
+          "hash": "16933975506911804859"
+        },
+        {
+          "file": "packages/akashic-cli-commons/spec/src/helpers/buildEditorconfig.ts",
+          "hash": "16190185730008678084"
+        },
+        {
+          "file": "packages/akashic-cli-commons/spec/support/jasmine.json",
+          "hash": "10922415761593742254"
+        },
+        {
+          "file": "packages/akashic-cli-commons/spec/tsconfig.json",
+          "hash": "2303340261754043163"
+        },
+        {
+          "file": "packages/akashic-cli-commons/src/CliConfig/CliConfigExportHtml.ts",
+          "hash": "598671728778722016"
+        },
+        {
+          "file": "packages/akashic-cli-commons/src/CliConfig/CliConfigExportZip.ts",
+          "hash": "17751038621820149646"
+        },
+        {
+          "file": "packages/akashic-cli-commons/src/CliConfig/CliConfigInit.ts",
+          "hash": "3636004572639835522"
+        },
+        {
+          "file": "packages/akashic-cli-commons/src/CliConfig/CliConfigInstall.ts",
+          "hash": "9175494391779060026"
+        },
+        {
+          "file": "packages/akashic-cli-commons/src/CliConfig/CliConfigModify.ts",
+          "hash": "10017833002829133135"
+        },
+        {
+          "file": "packages/akashic-cli-commons/src/CliConfig/CliConfigScan.ts",
+          "hash": "8223206463881602563"
+        },
+        {
+          "file": "packages/akashic-cli-commons/src/CliConfig/CliConfigServe.ts",
+          "hash": "1158406601032529361"
+        },
+        {
+          "file": "packages/akashic-cli-commons/src/CliConfig/CliConfigStat.ts",
+          "hash": "6954948747456580678"
+        },
+        {
+          "file": "packages/akashic-cli-commons/src/CliConfig/CliConfigUninstall.ts",
+          "hash": "4358626273415629492"
+        },
+        {
+          "file": "packages/akashic-cli-commons/src/CliConfig/CliConfigUpdate.ts",
+          "hash": "5450151091246920344"
+        },
+        {
+          "file": "packages/akashic-cli-commons/src/CliConfig/CliConfiguration.ts",
+          "hash": "148263991470113219"
+        },
+        {
+          "file": "packages/akashic-cli-commons/src/CliConfig/CliConfigurationFile.ts",
+          "hash": "16092760438905284778"
+        },
+        {
+          "file": "packages/akashic-cli-commons/src/Configuration.ts",
+          "hash": "13718887321867023714"
+        },
+        {
+          "file": "packages/akashic-cli-commons/src/ConfigurationFile.ts",
+          "hash": "1981136658340861241"
+        },
+        {
+          "file": "packages/akashic-cli-commons/src/ConsoleLogger.ts",
+          "hash": "8157607867720494261"
+        },
+        {
+          "file": "packages/akashic-cli-commons/src/FileSystem.ts",
+          "hash": "2476016622564867711"
+        },
+        {
+          "file": "packages/akashic-cli-commons/src/GameConfiguration.ts",
+          "hash": "10025236835093526950"
+        },
+        {
+          "file": "packages/akashic-cli-commons/src/LibConfiguration.ts",
+          "hash": "12876247041154337395"
+        },
+        {
+          "file": "packages/akashic-cli-commons/src/LintUtil.ts",
+          "hash": "631211309100600676"
+        },
+        {
+          "file": "packages/akashic-cli-commons/src/Logger.ts",
+          "hash": "16476763235083156392"
+        },
+        {
+          "file": "packages/akashic-cli-commons/src/NodeModules.ts",
+          "hash": "232034205826819226"
+        },
+        {
+          "file": "packages/akashic-cli-commons/src/PromisedNpm.ts",
+          "hash": "15297650562469132771"
+        },
+        {
+          "file": "packages/akashic-cli-commons/src/Renamer.ts",
+          "hash": "10764385477306436763"
+        },
+        {
+          "file": "packages/akashic-cli-commons/src/ServiceType.ts",
+          "hash": "6717316757092529268"
+        },
+        {
+          "file": "packages/akashic-cli-commons/src/StringStream.ts",
+          "hash": "433752087128679217"
+        },
+        {
+          "file": "packages/akashic-cli-commons/src/Util.ts",
+          "hash": "18137150454661425290"
+        },
+        {
+          "file": "packages/akashic-cli-commons/src/asHumanReadable.ts",
+          "hash": "16875220632740423881"
+        },
+        {
+          "file": "packages/akashic-cli-commons/src/index.ts",
+          "hash": "7478234528676579892"
+        },
+        {
+          "file": "packages/akashic-cli-commons/src/knownAudioExtensions.ts",
+          "hash": "2204782385026056793"
+        },
+        {
+          "file": "packages/akashic-cli-commons/tsconfig.json",
+          "hash": "16540596058263802916"
+        },
+        {
+          "file": "packages/akashic-cli-commons/typings/extend.npm.d.ts",
+          "hash": "16564445305203760936"
+        },
+        {
+          "file": "packages/akashic-cli-commons/typings/fs-readdir-recursive.d.ts",
+          "hash": "6856329423215625100"
+        }
+      ]
+    },
+    "nonProjectFiles": [
+      {
+        "file": ".changeset/README.md",
+        "hash": "4888845876018830777"
+      },
+      {
+        "file": ".changeset/config.json",
+        "hash": "9102024175498004774"
+      },
+      {
+        "file": ".changeset/smooth-hairs-pump.md",
+        "hash": "3968006255480895404"
+      },
+      {
+        "file": ".gitattributes",
+        "hash": "10732653295258374551"
+      },
+      {
+        "file": ".github/workflows/bump_version_and_publish.yml",
+        "hash": "7181777387031649325"
+      },
+      {
+        "file": ".github/workflows/changesets-renovate.yml",
+        "hash": "6138966784760935890"
+      },
+      {
+        "file": ".github/workflows/release.yml",
+        "hash": "16785077374088602864"
+      },
+      {
+        "file": ".github/workflows/serve_dockerfile_build_test.yml",
+        "hash": "14191705712308348388"
+      },
+      {
+        "file": ".github/workflows/test.yml",
+        "hash": "7770689280869196107"
+      },
+      {
+        "file": ".gitignore",
+        "hash": "16591899166181716753"
+      },
+      {
+        "file": ".remarkignore",
+        "hash": "8938942556918239976"
+      },
+      {
+        "file": ".remarkrc",
+        "hash": "16867360717826820753"
+      },
+      {
+        "file": "CHANGELOG.md",
+        "hash": "10021143411977659491"
+      },
+      {
+        "file": "LICENSE",
+        "hash": "2399115620334287388"
+      },
+      {
+        "file": "README.md",
+        "hash": "9862959886940252814"
+      },
+      {
+        "file": "img/akashic-cli.png",
+        "hash": "5635282132332329360"
+      },
+      {
+        "file": "nx.json",
+        "hash": "15976951050101145244"
+      },
+      {
+        "file": "package-lock.json",
+        "hash": "10136561549899242389"
+      },
+      {
+        "file": "package.json",
+        "hash": "7264317044357311822"
+      },
+      {
+        "file": "packages/.remarkrc",
+        "hash": "16744492716881582893"
+      },
+      {
+        "file": "packages/tslint.json",
+        "hash": "12932881027304454272"
+      },
+      {
+        "file": "renovate.json",
+        "hash": "16560177478164025893"
+      },
+      {
+        "file": "test/e2e.js",
+        "hash": "6444829458251198772"
+      }
+    ]
+  }
+}
