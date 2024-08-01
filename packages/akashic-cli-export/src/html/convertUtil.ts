@@ -227,7 +227,8 @@ export function validateEngineFilesName(filename: string, expectedMajorVersion: 
 
 export function resolveEngineFilesPath(version: string): string {
 	// @akashic/headless-driver が依存している engine-files-v* を直接参照
-	const engineFilesPackageDir = path.dirname(require.resolve(`engine-files-v${version}`));
+	const headlessDriverPath = require.resolve("@akashic/headless-driver");
+	const engineFilesPackageDir = path.dirname(require.resolve(`engine-files-v${version}`, {paths: [headlessDriverPath]}));
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-var-requires
 	const engineFilesPackageJson = require(`${engineFilesPackageDir}/package.json`);
 	const engineFilesName = `engineFilesV${engineFilesPackageJson.version.replace(/[\.-]/g, "_")}.js`;
