@@ -209,7 +209,8 @@ describe("exportHTML", function () {
 					magnify: false,
 					unbundleText: false,
 					hashLength: 20,
-					autoSendEventName: "sessionParameter"
+					autoSendEventName: "sessionParameter",
+					autoGivenArgsName: "argumentParameter"
 				};
 				return exp.promiseExportHTML(param);
 			})
@@ -217,6 +218,8 @@ describe("exportHTML", function () {
 				const html = fsx.readFileSync(path.join(dest, "index.html")).toString("utf-8");
 				expect(html.indexOf("autoSendEventName") !== -1).toBeTruthy();
 				expect(html.indexOf("sessionParameter") !== -1).toBeTruthy();
+				expect(html.indexOf("autoGivenArgsName") !== -1).toBeTruthy();
+				expect(html.indexOf("argumentParameter") !== -1).toBeTruthy();
 				fsx.removeSync(dest);
 			})
 			.then(done, done.fail);

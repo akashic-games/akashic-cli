@@ -3,10 +3,11 @@ import * as path from "path";
 import * as fsx from "fs-extra";
 import * as mockfs from "mock-fs";
 import { validateGameJson } from "../../../lib/utils";
+import type {
+	ConvertGameParameterObject} from "../../../lib/zip/convert";
 import {
 	bundleScripts,
 	convertGame,
-	ConvertGameParameterObject,
 	validateGameJsonForNicolive
 } from "../../../lib/zip/convert";
 
@@ -54,7 +55,7 @@ describe("convert", () => {
 		});
 
 		it("can not convert game if script that is not written with ES5 syntax", (done) => {
-			var warningMessage = "";
+			let warningMessage = "";
 			const param = {
 				source: path.resolve(__dirname, "..", "..", "fixtures", "simple_game_es6"),
 				dest: destDir,
@@ -85,7 +86,7 @@ describe("convert", () => {
 		});
 
 		it("can downpile script to ES5", (done) => {
-			var warningMessage = "";
+			let warningMessage = "";
 			const param = {
 				source: path.resolve(__dirname, "..", "..", "fixtures", "simple_game_es6"),
 				dest: destDir,

@@ -1,5 +1,5 @@
-import { GameConfiguration } from "@akashic/akashic-cli-commons";
-import { ImageAssetConfigurationBase } from "@akashic/game-configuration";
+import type { GameConfiguration } from "@akashic/akashic-cli-commons";
+import type { ImageAssetConfigurationBase } from "@akashic/game-configuration";
 import * as convert from "../../../lib/html/convertUtil";
 import { validateGameJson } from "../../../lib/utils";
 
@@ -129,4 +129,31 @@ describe("convertUtil", function () {
 			expect(() => validateGameJson(gamejson)).toThrow();
 		});
 	});
+
+	describe("validateSandboxConfigJs", () => {
+		const sandboxConfig = {
+			autoSendEventName: "mySessionParameter",
+			arguments: {
+			  hoge: {"test": "test"}
+			},
+			events: {
+				"mySessionParameter": [32, 0, ":akashic", {}]
+			}
+		};
+
+		it("throw error if autoSendEventName is not in events in sandbox.config.js", () => {
+			expect(() => convert.validateSandboxConfigJs(sandboxConfig, "mySessionParameter", "hoge")).not.toThrow();
+			expect(() => convert.validateSandboxConfigJs(sandboxConfig, "dummy", "hoge"))
+				.toThrow("dummy does not exist in events in sandbox.config.js.");
+			expect(() => convert.validateSandboxConfigJs(sandboxConfig, "mySessionParameter", "dummy"))
+				.toThrow("dummy does not exist in arguments in sandbox.config.js.");
+
+			// autoSendEventName が 真偽値の場合
+			expect(() => convert.validateSandboxConfigJs(sandboxConfig, true, "hoge")).not.toThrow();
+			sandboxConfig.autoSendEventName = "foo";
+			expect(() => convert.validateSandboxConfigJs(sandboxConfig, true, "dummy"))
+				.toThrow("foo does not exist in events in sandbox.config.js.");
+		});
+	});
+
 });

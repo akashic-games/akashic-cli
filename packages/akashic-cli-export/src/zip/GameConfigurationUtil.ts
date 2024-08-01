@@ -22,8 +22,8 @@ export function makeScriptAssetPath(filename: string): string {
 }
 
 export function findUniqueScriptAssetName(gamejson: cmn.GameConfiguration, prefix: string): string {
-	let idTable: { [keys: string]: boolean } = {};
-	let pathTable: { [key: string]: boolean } = {};
+	const idTable: { [keys: string]: boolean } = {};
+	const pathTable: { [key: string]: boolean } = {};
 
 	Object.keys(gamejson.assets).forEach(aid => (idTable[aid] = pathTable[gamejson.assets[aid].path] = true));
 	(gamejson.globalScripts || []).forEach(p => (idTable[p] = pathTable[p] = true));
@@ -87,7 +87,7 @@ export function extractFilePaths(gamejson: cmn.GameConfiguration, basedir: strin
 }
 
 export function extractScriptAssetFilePaths(gamejson: cmn.GameConfiguration): string[] {
-	let result: string[] = [];
+	const result: string[] = [];
 	Object.keys(gamejson.assets).forEach(aid => (gamejson.assets[aid].type === "script") && result.push(gamejson.assets[aid].path));
 	(gamejson.globalScripts || []).forEach(p => (/\.js$/.test(p)) && result.push(p));
 	return result;

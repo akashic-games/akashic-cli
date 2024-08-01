@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
-import { GameConfiguration } from "@akashic/akashic-cli-commons";
+import type { GameConfiguration } from "@akashic/akashic-cli-commons";
 import * as Utils from "../../../lib/html/Utils";
 
 describe("Util", () => {

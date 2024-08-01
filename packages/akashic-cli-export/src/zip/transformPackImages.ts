@@ -1,12 +1,13 @@
 import * as fs from "fs";
 import * as path from "path";
 import { writeFile, unlink } from "@akashic/akashic-cli-commons/lib/FileSystem";
-import { GameConfiguration } from "@akashic/akashic-cli-commons/lib/GameConfiguration";
+import type { GameConfiguration } from "@akashic/akashic-cli-commons/lib/GameConfiguration";
 import { mkdirpSync } from "@akashic/akashic-cli-commons/lib/Util";
-import { AssetConfiguration, ImageAssetConfigurationBase } from "@akashic/game-configuration";
+import type { AssetConfiguration, ImageAssetConfigurationBase } from "@akashic/game-configuration";
 import type { PNG } from "pngjs";
 import { makeUniqueAssetPath } from "./GameConfigurationUtil";
-import { packSmallRects, PackResult, PackTarget } from "./packRects";
+import type { PackResult, PackTarget } from "./packRects";
+import { packSmallRects } from "./packRects";
 
 /**
  * コンテンツ内の小さい画像 (PNG ファイル) を、一定サイズに収まる限りでパッキングして一つにまとめる。
@@ -48,11 +49,11 @@ export interface PackingFileSideEffect {
  * パッキング結果のファイル副作用を実際のファイルに反映する。
  */
 export async function flushPackSideEffect(sideEffect: PackingFileSideEffect): Promise<void> {
-	for (let output of sideEffect.outputs) {
+	for (const output of sideEffect.outputs) {
 		mkdirpSync(path.dirname(output.path)); // TODO ほかの利用箇所と合わせて非同期版を作って移行する
 		await writeFile(output.path, output.content);
 	}
-	for (let discardable of sideEffect.discardables) {
+	for (const discardable of sideEffect.discardables) {
 		await unlink(discardable);
 	}
 }

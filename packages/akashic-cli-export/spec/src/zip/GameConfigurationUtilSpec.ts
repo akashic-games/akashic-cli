@@ -1,4 +1,4 @@
-import * as cmn from "@akashic/akashic-cli-commons";
+import type * as cmn from "@akashic/akashic-cli-commons";
 import * as mockfs from "mock-fs";
 import * as gcu from "../../../lib/zip/GameConfigurationUtil";
 

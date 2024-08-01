@@ -1,6 +1,6 @@
 // TODO: このファイルは将来的には外部から参照するようにする
 
-import {
+import type {
 	StoragePlayScope,
 	StorageValueType,
 	StorageReadOrder,

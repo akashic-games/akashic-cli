@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as cmn from "@akashic/akashic-cli-commons";
-import { ImageAssetConfigurationBase, NicoliveSupportedModes } from "@akashic/game-configuration";
+import type { ImageAssetConfigurationBase, NicoliveSupportedModes } from "@akashic/game-configuration";
 import * as babel from "@babel/core";
 import * as presetEnv from "@babel/preset-env";
 import * as browserify from "browserify";
@@ -149,7 +149,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 
 			// operation plugin に登録されているスクリプトファイルは bundle されていても残しておく必要がある
 			const operationPluginRoots = (gamejson.operationPlugins ?? []).map(plugin => plugin.script);
-			for (let pluginRoot of operationPluginRoots) {
+			for (const pluginRoot of operationPluginRoots) {
 				let actualPluginRoot: string;
 				if (pluginRoot.startsWith("./")) {
 					actualPluginRoot = pluginRoot;

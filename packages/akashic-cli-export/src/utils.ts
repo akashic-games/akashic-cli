@@ -1,5 +1,5 @@
-import * as cmn from "@akashic/akashic-cli-commons";
-import { AssetConfiguration } from "@akashic/game-configuration";
+import type * as cmn from "@akashic/akashic-cli-commons";
+import type { AssetConfiguration } from "@akashic/game-configuration";
 
 /**
  * audio アセットの拡張子をチェックし .ogg, .m4a/.aac が存在しない場合にログ出力する
