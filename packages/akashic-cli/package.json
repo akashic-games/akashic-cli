@@ -33,7 +33,7 @@
     "commander": "^8.3.0"
   },
   "devDependencies": {
-    "@akashic/eslint-config": "1.1.0",
+    "@akashic/eslint-config": "1.1.1",
     "@types/node": "^14.18.30",
     "@typescript-eslint/eslint-plugin": "5.43.0",
     "eslint": "8.27.0",

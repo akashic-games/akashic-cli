@@ -22,7 +22,7 @@
     "lib"
   ],
   "devDependencies": {
-    "@akashic/eslint-config": "1.1.1",
+    "@akashic/eslint-config": "2.1.0",
     "@akashic/game-configuration": "2.3.0",
     "@types/image-size": "0.7.0",
     "@types/jest": "29.5.12",
