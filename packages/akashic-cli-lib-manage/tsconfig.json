@@ -1,14 +1,15 @@
 {
   "compilerOptions": {
-    "target": "ES5",
-    "lib": ["es6"],
+    "target": "ES2020",
+    "lib": ["es2020"],
     "noImplicitAny": true,
     "module": "commonjs",
     "outDir": "./lib",
     "declaration": true,
     "types" : ["commander", "form-data", "fs-extra", "jest", "mock-fs", "node"],
     "useUnknownInCatchVariables": false,
-    "strict": true
+    "strict": true,
+    "allowSyntheticDefaultImports": true
   },
   "include": [
     "./src/**/*.ts"
