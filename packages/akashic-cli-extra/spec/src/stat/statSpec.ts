@@ -129,7 +129,7 @@ describe("format stat result", () => {
 		"[ ] TOTAL SIZE (using mp4): 6.29KB (6443B)\n" +
 		"WARN: MP4 (.mp4) is deprecated. Use AAC(.aac) or M4A(.m4a) instead.\n";
 
-	it("will output following text", done => {
+	it("will output following text", () => {
 		let buffer = "";
 		const logger = new commons.ConsoleLogger({ debugLogMethod: msg => {
 			buffer += msg + "\n";
@@ -142,8 +142,7 @@ describe("format stat result", () => {
 			.then(game => stat.size({ logger, basepath, game, raw: false }))
 			.then(() => {
 				expect(buffer).toBe(expectedText);
-			})
-			.then(done, done.fail);
+			});
 	});
 });
 
@@ -161,7 +160,7 @@ describe("format stat result - drop aac", () => {
 		"[*] TOTAL SIZE (using ogg): 7.61KB (7796B)\n" +
 		"[ ] TOTAL SIZE (using m4a): 4.92KB (5036B)\n";
 
-	it("will output following text", done => {
+	it("will output following text", () => {
 		let buffer = "";
 		const logger = new commons.ConsoleLogger({ quiet: true, debugLogMethod: msg => {
 			buffer += msg + "\n";
@@ -174,8 +173,7 @@ describe("format stat result - drop aac", () => {
 			.then(game => stat.size({ logger, basepath, game, raw: false }))
 			.then(() => {
 				expect(buffer).toBe(expectedText);
-			})
-			.then(done, done.fail);
+			});
 	});
 });
 
@@ -196,7 +194,7 @@ describe("format stat result - maximum mp4, drop m4a", () => {
 		"[*] TOTAL SIZE (using mp4): 9.48KB (9704B)\n" +
 		"WARN: MP4 (.mp4) is deprecated. Use AAC(.aac) or M4A(.m4a) instead.\n";
 
-	it("will output following text", done => {
+	it("will output following text", () => {
 		let buffer = "";
 		const logger = new commons.ConsoleLogger({ quiet: true, debugLogMethod: msg => {
 			buffer += msg + "\n";
@@ -209,8 +207,7 @@ describe("format stat result - maximum mp4, drop m4a", () => {
 			.then(game => stat.size({ logger, basepath, game, raw: false }))
 			.then(() => {
 				expect(buffer).toBe(expectedText);
-			})
-			.then(done, done.fail);
+			});
 	});
 });
 
@@ -231,7 +228,7 @@ describe("format stat result - drop m4a and aac", () => {
 		"[ ] TOTAL SIZE (using mp4): 6.29KB (6443B)\n" +
 		"WARN: MP4 (.mp4) is deprecated. Use AAC(.aac) or M4A(.m4a) instead.\n";
 
-	it("will output following text", done => {
+	it("will output following text", () => {
 		let buffer = "";
 		const logger = new commons.ConsoleLogger({ debugLogMethod: msg => {
 			buffer += msg + "\n";
@@ -244,8 +241,7 @@ describe("format stat result - drop m4a and aac", () => {
 			.then(game => stat.size({ logger, basepath, game, raw: false }))
 			.then(() => {
 				expect(buffer).toBe(expectedText);
-			})
-			.then(done, done.fail);
+			});
 	});
 });
 
@@ -263,7 +259,7 @@ describe("format stat result - vector-image and binary", () => {
 		"[ ] TOTAL SIZE (using ogg): 1017B (1017B)\n" +
 		"[*] TOTAL SIZE (using aac): 1017B (1017B)\n";
 
-	it("will output following text", done => {
+	it("will output following text", () => {
 		let buffer = "";
 		const logger = new commons.ConsoleLogger({ debugLogMethod: msg => {
 			buffer += msg + "\n";
@@ -276,7 +272,6 @@ describe("format stat result - vector-image and binary", () => {
 			.then(game => stat.size({ logger, basepath, game, raw: false }))
 			.then(() => {
 				expect(buffer).toBe(expectedText);
-			})
-			.then(done, done.fail);
+			});
 	});
 });
