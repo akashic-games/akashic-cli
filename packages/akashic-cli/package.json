@@ -30,7 +30,7 @@
     "@akashic/akashic-cli-sandbox": "1.1.6",
     "@akashic/akashic-cli-scan": "0.17.3",
     "@akashic/akashic-cli-serve": "1.16.7",
-    "commander": "^8.3.0"
+    "commander": "^12.0.0"
   },
   "devDependencies": {
     "@akashic/eslint-config": "1.1.0",
