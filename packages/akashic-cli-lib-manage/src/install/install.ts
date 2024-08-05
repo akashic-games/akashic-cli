@@ -226,17 +226,17 @@ export function install(param: InstallParameterObject, cb: (err: any) => void): 
 
 function _getPackageNameFromTgzFile(fileName: string): string {
 	let buf: Buffer;
-	const onentry = (entry: tar.FileStat): void => {
-		const splitPath = entry.header.path.split("/");
+	const onReadEntry = (entry: tar.ReadEntry): void => {
+		const splitPath = entry.header.path?.split("/");
 		// splitPath[0] は解凍後のディレクトリ名が入る。そのディレクトリ直下のpackage.jsonのみを対象とする。
-		if (splitPath[1] === "package.json") {
+		if (splitPath && splitPath[1] === "package.json") {
 			const chunks: Uint8Array[]  = [];
 			entry.on("data", c => chunks.push(c));
 			entry.on("finish", () => buf = Buffer.concat(chunks));
 		}
 	};
 	tar.t({
-		onentry,
+		onReadEntry,
 		file: fileName,
 		sync: true
 	});
