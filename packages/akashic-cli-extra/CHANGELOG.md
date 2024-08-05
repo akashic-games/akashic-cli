@@ -1,5 +1,11 @@
 # @akashic/akashic-cli-extra
 
+## 1.7.6
+
+### Patch Changes
+
+- [#1379](https://github.com/akashic-games/akashic-cli/pull/1379) [`f05ed1d`](https://github.com/akashic-games/akashic-cli/commit/f05ed1da2a204f816f446d8f57b83011aea8f05b) Thanks [@yu-ogi](https://github.com/yu-ogi)! - Update internal modules
+
 ## 1.7.5
 
 ### Patch Changes
