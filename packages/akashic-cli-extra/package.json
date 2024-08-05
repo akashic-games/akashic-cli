@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-extra",
-  "version": "1.7.4",
+  "version": "1.7.5",
   "description": "Extra tools of akashic-cli-xxx",
   "bin": {
     "akashic-cli-config": "./bin/akashic-cli-config",
@@ -27,7 +27,7 @@
   ],
   "dependencies": {
     "@akashic/akashic-cli-commons": "0.15.3",
-    "commander": "8.3.0",
+    "commander": "12.1.0",
     "ini": "4.1.1",
     "lodash.get": "4.4.2",
     "lodash.set": "4.3.2",
@@ -44,7 +44,7 @@
     "eslint": "8.27.0",
     "eslint-plugin-import": "2.26.0",
     "eslint-plugin-jest": "26.9.0",
-    "jest": "26.6.3",
+    "jest": "29.7.0",
     "mock-fs": "5.2.0",
     "rimraf": "3.0.2",
     "typescript": "3.9.10"

@@ -1,5 +1,5 @@
 import { Trigger } from "@akashic/trigger";
-import type Emitter from "component-emitter";
+import type ComponentEmitter from "component-emitter";
 import type {
 	PlayCreateTestbedEvent,
 	PlayStatusChangedTestbedEvent,
@@ -18,6 +18,8 @@ import type {
 	MessageEncodeTestbedEvent
 } from "../../common/types/TestbedEvent";
 import { socketInstance } from "./socketInstance";
+
+type Emitter = InstanceType<typeof ComponentEmitter>;
 
 export const onPlayCreate = new Trigger<PlayCreateTestbedEvent>();
 export const onPlayStatusChange = new Trigger<PlayStatusChangedTestbedEvent>();
