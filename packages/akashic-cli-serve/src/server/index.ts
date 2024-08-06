@@ -11,7 +11,7 @@ import type { OptionValues } from "commander";
 import { Command } from "commander";
 import * as cors from "cors";
 import * as express from "express";
-import * as open from "open";
+import type * as Open from "open";
 import * as socketio from "socket.io";
 import parser from "../common/MsgpackParser";
 import { isServiceTypeNicoliveLike } from "../common/targetServiceUtil";
@@ -38,6 +38,13 @@ function convertToStrings(params: any[]): string[] {
 			return param.toString();
 		}
 	});
+}
+
+// open@9 以降 pure ESM なので import() で読み込む
+async function importOpen(): Promise<(typeof Open)["default"]> {
+	// CommonJS 設定の TS では dynamic import が require() に変換されてしまうので、eval() で強引に imoprt() する
+	// eslint-disable-next-line no-eval
+	return (await eval("import('open')")).default;
 }
 
 async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Promise<void> {
@@ -397,7 +404,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 		}
 
 		if (cliConfigParam.openBrowser) {
-			open(url);
+			importOpen().then(open => open(url));
 		}
 	});
 }
