@@ -1,5 +1,3 @@
-import * as queryString from "query-string";
-
 const timeout = (ms: number): Promise<Response> => {
 	return new Promise((_, reject) => setTimeout(() => reject(new Error("API実行がタイムアウトしました")), ms));
 };
@@ -11,12 +9,8 @@ const fetchWithTimeout = (url: string, options?: RequestInit, timeoutMilliSec?: 
 	return Promise.race([fetch(url, options), timeout(timeoutMilliSecond)]);
 };
 
-export const get = async<T>(url: string, params?: {[key: string]: string}): Promise<T> => {
-	let urlWithQuery = url;
-	if (params) {
-		urlWithQuery = `${url}?${queryString.stringify(params)}`;
-	}
-	const response = await fetchWithTimeout(urlWithQuery);
+export const get = async<T>(url: string): Promise<T> => {
+	const response = await fetchWithTimeout(url);
 	if (400 <= response.status) {
 		throw new Error("Failed to GET " + url + ". Status: " + response.status);
 	}
@@ -38,12 +32,8 @@ export const post = async<T>(url: string, params?: {[key: string]: any}): Promis
 };
 
 // deleteは予約語なので代わりにdelを用いる
-export const del = async<T>(url: string, params?: {[key: string]: string}): Promise<T> => {
-	let urlWithQuery = url;
-	if (params) {
-		urlWithQuery = `${url}?${queryString.stringify(params)}`;
-	}
-	const response = await fetchWithTimeout(urlWithQuery, {method: "DELETE"});
+export const del = async<T>(url: string): Promise<T> => {
+	const response = await fetchWithTimeout(url, {method: "DELETE"});
 	if (400 <= response.status) {
 		throw new Error("Failed to DELETE " + url + ". Status: " + response.status);
 	}
