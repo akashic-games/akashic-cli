@@ -1,12 +1,7 @@
 const fetch = require("node-fetch");
-const queryString = require("query-string");
 
-exports.get = function(url, params) {
-	var urlWithQuery = url;
-	if (params) {
-		urlWithQuery = `${url}?${queryString.stringify(params)}`;
-	}
-	return fetch(urlWithQuery)
+exports.get = function(url) {
+	return fetch(url)
 		.then(function(response) {
 			if (400 <= response.status) {
 				throw new Error("Failed to GET " + url + ". Status: " + response.status);
@@ -30,12 +25,8 @@ exports.post = function(url, params) {
 		});
 };
 
-exports.del = function(url, params) {
-	var urlWithQuery = url;
-	if (params) {
-		urlWithQuery = `${url}?${queryString.stringify(params)}`;
-	}
-	return fetch(urlWithQuery, {method: "DELETE"})
+exports.del = function(url) {
+	return fetch(url, {method: "DELETE"})
 		.then(function(response) {
 			if (400 <= response.status) {
 				throw new Error("Failed to DELETE " + url + ". Status: " + response.status);
