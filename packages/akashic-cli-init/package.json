@@ -31,8 +31,7 @@
     "@types/fs-extra": "9.0.13",
     "@types/jest": "29.5.12",
     "@types/mock-fs": "4.13.4",
-    "@types/node": "18.15.11",
-    "@types/node-fetch": "2.6.2",
+    "@types/node": "20.14.14",
     "@types/unzipper": "0.10.5",
     "@typescript-eslint/eslint-plugin": "5.43.0",
     "eslint": "8.27.0",
@@ -54,7 +53,6 @@
     "fs-extra": "11.2.0",
     "glob": "11.0.0",
     "ignore": "5.2.4",
-    "node-fetch": "2.6.7",
     "prompt": "1.3.0",
     "unzipper": "0.10.11"
   },
