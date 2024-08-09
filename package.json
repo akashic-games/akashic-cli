@@ -29,7 +29,7 @@
     "@changesets/changelog-github": "^0.5.0",
     "@changesets/cli": "^2.27.5",
     "nx": "^19.1.0",
-    "remark-cli": "^10.0.1",
+    "remark-cli": "^12.0.0",
     "shelljs": "^0.8.5"
   }
 }
