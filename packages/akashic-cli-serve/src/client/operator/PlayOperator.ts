@@ -15,16 +15,16 @@ export class PlayOperator {
 		Subscriber.onDisconnect.add(this.closeThisWindowIfNeeded);
 	}
 
-	togglePauseActive = (pauses: boolean): void => {
+	togglePauseActive = async (pauses: boolean): Promise<void> => {
 		if (pauses) {
-			this.store.currentPlay!.pauseActive();
+			await this.store.currentPlay!.pauseActive();
 		} else {
-			this.store.currentPlay!.resumeActive();
+			await this.store.currentPlay!.resumeActive();
 		}
 	};
 
-	step = (): void => {
-		this.store.currentPlay!.stepActive();
+	step = async (): Promise<void> => {
+		await this.store.currentPlay!.stepActive();
 	};
 
 	toggleJoinLeaveSelf = (toJoin: boolean): void => {
@@ -105,16 +105,16 @@ export class PlayOperator {
 		this.downloadFile(`/api/plays/${playId}/playlog`, `playlog_${playId}.json`);
 	};
 
-	muteAll = (): void => {
-		this.store.currentPlay!.muteAll();
+	muteAll = async (): Promise<void> => {
+		await this.store.currentPlay!.muteAll();
 	};
 
-	muteOthers = (): void => {
-		this.store.currentPlay!.muteOthers();
+	muteOthers = async (): Promise<void> => {
+		await this.store.currentPlay!.muteOthers();
 	};
 
-	unmuteAll = (): void => {
-		this.store.currentPlay!.unmuteAll();
+	unmuteAll = async (): Promise<void> => {
+		await this.store.currentPlay!.unmuteAll();
 	};
 
 	// 指定したURLからファイルをダウンロードする

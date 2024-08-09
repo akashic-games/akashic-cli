@@ -172,35 +172,35 @@ export class PlayEntity {
 		this.amflow.sendEvent([playlog.EventCode.Message, 0, playerId, data]);
 	}
 
-	pauseActive(): void {
+	async pauseActive(): Promise<void> {
 		// 手抜き実装: サーバインスタンスは全てアクティブ(つまり一つしかない)前提
 		this.serverInstances.forEach(si => si.pause());
-		apiClient.pausePlayDuration(this.playId);
+		await apiClient.pausePlayDuration(this.playId);
 	}
 
-	resumeActive(): void {
+	async resumeActive(): Promise<void> {
 		// 手抜き実装: サーバインスタンスは全てアクティブ(つまり一つしかない)前提
 		this.serverInstances.forEach(si => si.resume());
-		apiClient.resumePlayDuration(this.playId);
+		await apiClient.resumePlayDuration(this.playId);
 	}
 
-	stepActive(): void {
+	async stepActive(): Promise<void> {
 		// 手抜き実装: サーバインスタンスは全てアクティブ(つまり一つしかない)前提
 		this.serverInstances.forEach(si => si.step());
-		apiClient.stepPlayDuration(this.playId);
+		await apiClient.stepPlayDuration(this.playId);
 	}
 
-	muteAll(): void {
-		apiClient.changePlayAudioState(this.playId, { muteType: "all" });
+	async muteAll(): Promise<void> {
+		await apiClient.changePlayAudioState(this.playId, { muteType: "all" });
 	}
 
-	muteOthers(): void {
+	async muteOthers(): Promise<void> {
 		const soloPlayerId = this.localInstances[0]?.player?.id;
-		apiClient.changePlayAudioState(this.playId, { muteType: "solo", soloPlayerId });
+		await apiClient.changePlayAudioState(this.playId, { muteType: "solo", soloPlayerId });
 	}
 
-	unmuteAll(): void {
-		apiClient.changePlayAudioState(this.playId, { muteType: "none" });
+	async unmuteAll(): Promise<void> {
+		await apiClient.changePlayAudioState(this.playId, { muteType: "none" });
 	}
 
 	@action
@@ -302,8 +302,8 @@ export class PlayEntity {
 		}
 	}
 
-	private _handleParentTeardown = (): void => {
-		this.teardown();
+	private _handleParentTeardown = async (): Promise<void> => {
+		await this.teardown();
 	};
 
 	/* eslint-disable @typescript-eslint/indent */

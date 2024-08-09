@@ -34,8 +34,8 @@ export class LocalInstanceOperator {
 		this.store.currentLocalInstance!.reset(sp);
 	};
 
-	togglePause = (pause: boolean): void => {
-		this.store.currentLocalInstance!.togglePause(pause);
+	togglePause = async (pause: boolean): Promise<void> => {
+		await this.store.currentLocalInstance!.togglePause(pause);
 	};
 
 	switchToReplay = (time: number): void => {
@@ -43,9 +43,9 @@ export class LocalInstanceOperator {
 		this.store.currentLocalInstance!.setTargetTime(time);
 	};
 
-	switchToRealtime = (): void => {
+	switchToRealtime = async (): Promise<void> => {
 		this.store.currentLocalInstance!.setExecutionMode("passive");
-		this.store.currentLocalInstance!.resume();
+		await this.store.currentLocalInstance!.resume();
 	};
 
 	saveScreenshot = (): void => {
