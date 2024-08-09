@@ -2,7 +2,6 @@ import * as fs from "fs";
 import * as os from "os";
 import * as path from "path";
 import { readdir } from "@akashic/akashic-cli-commons/lib/FileSystem";
-import fetch from "node-fetch";
 import * as unzipper from "unzipper";
 
 // TODO: 適切な場所に移動
@@ -94,7 +93,9 @@ export async function fetchTemplate(metadata: TemplateMetadata): Promise<string>
 		}
 		case "remote": {
 			const { name, url } = metadata;
-			const zip = await (await fetch(url)).buffer();
+			const res = await fetch(url);
+			const arrayBuffer = await res.arrayBuffer();
+			const zip = Buffer.from(arrayBuffer);
 			const dest = fs.mkdtempSync(path.join(os.tmpdir(), name + "-"));
 			await _extractZip(zip, dest);
 			const templateRoot = await _findTemplateRoot(dest);
