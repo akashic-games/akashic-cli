@@ -27,7 +27,7 @@
     "@types/image-size": "0.7.0",
     "@types/jest": "29.5.12",
     "@types/mock-fs": "4.13.4",
-    "@types/node": "18.15.11",
+    "@types/node": "18.15.13",
     "@typescript-eslint/eslint-plugin": "5.43.0",
     "eslint": "8.27.0",
     "eslint-plugin-import": "2.26.0",
@@ -35,7 +35,7 @@
     "jest": "29.7.0",
     "mock-fs": "5.2.0",
     "shx": "0.3.4",
-    "ts-jest": "29.1.2",
+    "ts-jest": "29.1.5",
     "typescript": "5.0.4"
   },
   "dependencies": {
@@ -45,7 +45,7 @@
     "commander": "^12.0.0",
     "fs-readdir-recursive": "1.1.0",
     "image-size": "~1.0.0",
-    "music-metadata": "7.13.0",
+    "music-metadata": "7.13.5",
     "svgson": "^5.2.1",
     "thumbcoil": "~1.2.0"
   },
