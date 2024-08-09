@@ -19,19 +19,19 @@ describe("stat.size dummy game", () => {
 	it("stat size --limit 0", done => {
 		testWithSize(gamePath, false, "0")
 			.catch(err => expect(err).toBe("file size limit exceeded (650B)"))
-			.then(done);
+			.finally(done);
 	});
 
 	it("stat size --limit 123", done => {
 		testWithSize(gamePath, false, "123")
 			.catch(err => expect(err).toBe("file size limit exceeded (527B)"))
-			.then(done);
+			.finally(done);
 	});
 
 	it("stat size --limit 123B", done => {
 		testWithSize(gamePath, false, "123B")
 			.catch(err => expect(err).toBe("file size limit exceeded (527B)"))
-			.then(done);
+			.finally(done);
 	});
 
 	it("stat size --limit 123K", done => {
@@ -77,7 +77,7 @@ describe("stat.size dummy game", () => {
 	it("stat size --limit 123 --raw", done => {
 		testWithSize(gamePath, true, "123")
 			.catch(err => expect(err).toBe("file size limit exceeded (527B)"))
-			.then(done);
+			.finally(done);
 	});
 });
 
@@ -92,7 +92,7 @@ describe("stat.size with sound and audio", () => {
 	it("stat size --limit 0", done => {
 		testWithSize(gamePath, false, "0")
 			.catch(err => expect(err).toBe("file size limit exceeded (8.43KB)"))
-			.then(done);
+			.finally(done);
 	});
 
 	it("stat size --limit 64K", done => {

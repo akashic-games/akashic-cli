@@ -21,23 +21,24 @@ export function run(argv: string[]): void {
 	commander
 		.command("get [target]")
 		.description("get configuration from your .akashicrc")
-		.action((target: string, opts: any = {}) => {
+		.action(async (target: string, opts: any = {}) => {
 			const logger = new ConsoleLogger({ quiet: opts.quiet });
-			config.getConfigItem(null, target).then(value => logger.print(value));
+			const value = await config.getConfigItem(null, target);
+			logger.print(value);
 		});
 
 	commander
 		.command("set [target] [value]")
 		.description("set configuration to your .akashicrc")
-		.action((target: string, value: string, _opts: any = {}) => {
-			config.setConfigItem(null, target, value);
+		.action(async (target: string, value: string, _opts: any = {}) => {
+			await config.setConfigItem(null, target, value);
 		});
 
 	commander
 		.command("delete [target]")
 		.description("delete configuration from your .akashicrc")
-		.action((target: string, _opts: any = {}) => {
-			config.deleteConfigItem(null, target);
+		.action(async (target: string, _opts: any = {}) => {
+			await config.deleteConfigItem(null, target);
 		});
 
 	commander
@@ -45,9 +46,9 @@ export function run(argv: string[]): void {
 		// akashicrcの仕様を定義する validator が出来るまで --all は実装できない
 		// .option("-a, --all", "List all items")
 		.description("list configuration from your .akashicrc")
-		.action((opts: any = {}) => {
+		.action(async (opts: any = {}) => {
 			const logger = new ConsoleLogger({ quiet: opts.quiet });
-			config.listConfigItems(logger);
+			await config.listConfigItems(logger);
 		});
 
 
