@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.15.7
+
+### Patch Changes
+
+- [#1382](https://github.com/akashic-games/akashic-cli/pull/1382) [`c7d0c89`](https://github.com/akashic-games/akashic-cli/commit/c7d0c89825c48b0ab91e1195f512b8beb9a4aa63) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Change node-fetch in akashic-init to fetch
+
 ## 1.15.6
 
 ### Patch Changes
