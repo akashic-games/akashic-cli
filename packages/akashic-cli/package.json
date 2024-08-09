@@ -34,13 +34,13 @@
   },
   "devDependencies": {
     "@akashic/eslint-config": "1.1.0",
-    "@types/node": "^14.18.30",
-    "@typescript-eslint/eslint-plugin": "5.43.0",
-    "eslint": "8.27.0",
+    "@types/node": "^20.0.0",
+    "@typescript-eslint/eslint-plugin": "5.62.0",
+    "eslint": "8.57.0",
     "eslint-plugin-import": "2.26.0",
-    "eslint-plugin-jest": "26.9.0",
-    "rimraf": "^3.0.2",
-    "typescript": "^3.9.10"
+    "eslint-plugin-jest": "28.8.0",
+    "rimraf": "^6.0.0",
+    "typescript": "^5.0.0"
   },
   "publishConfig": {
     "access": "public",
