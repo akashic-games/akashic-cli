@@ -71,8 +71,8 @@ export function promiseModifyBasicParameter(param: ModifyBasicParameterParameter
 				.then(() => logger.info("Done!"));
 		})
 		.then(restoreDirectory)
-		.catch((err) => {
-			restoreDirectory();
+		.catch(async (err) => {
+			await restoreDirectory();
 			throw new Error(err);
 		});
 }

@@ -115,7 +115,7 @@ export function promiseExportHTML(p: ExportHTMLParameterObject): Promise<string>
 	return promiseExportHtmlRaw(param)
 		.then((dest: string) => {
 			if (param.compress) {
-				return new Promise<void>((resolve, reject) => {
+				return new Promise<void>(async (resolve, reject) => {
 					const files = readdir(dest).map(p => ({
 						src: path.resolve(dest, p),
 						entryName: p
@@ -126,7 +126,7 @@ export function promiseExportHTML(p: ExportHTMLParameterObject): Promise<string>
 					archive.on("error", (err) => reject(err));
 					archive.pipe(ostream);
 					files.forEach((f) => archive.file(f.src, { name: f.entryName }));
-					archive.finalize();
+					await archive.finalize();
 				}).finally(() => {
 					fsx.removeSync(dest);
 				});

@@ -118,7 +118,7 @@ export function promiseExportZip(param: ExportZipParameterObject): Promise<void>
 		.then(() => {
 			if (!outZip)
 				return;
-			return new Promise<void>((resolve, reject) => {
+			return new Promise<void>(async (resolve, reject) => {
 				const files = readdir(destDir).map(p => ({
 					src: path.resolve(destDir, p),
 					entryName: p
@@ -129,7 +129,7 @@ export function promiseExportZip(param: ExportZipParameterObject): Promise<void>
 				archive.on("error", (err) => reject(err));
 				archive.pipe(ostream);
 				files.forEach((f) => archive.file(f.src, {name: f.entryName}));
-				archive.finalize();
+				await archive.finalize();
 			});
 			// TODO mkdtempのフォルダを削除すべき？
 		})
