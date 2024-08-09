@@ -79,8 +79,8 @@ export async function promiseInit(p: InitParameterObject): Promise<void> {
 	param.logger.info("Done!");
 }
 
-export function init(param: InitParameterObject, cb: (err?: any) => void): Promise<void> | void {
-	promiseInit(param).then<void>(cb);
+export async function init(param: InitParameterObject, cb: (err?: any) => void): Promise<Promise<void> | void> {
+	await promiseInit(param).then<void>(cb);
 }
 
 interface ExtractFromTemplateOptions {
