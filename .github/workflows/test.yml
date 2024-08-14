@@ -1,6 +1,13 @@
 name: test
 
-on: [push, pull_request]
+on:
+  pull_request:
+    types: [opened, synchronize]
+  push:
+
+concurrency:
+  group: ${{ startsWith(github.head_ref, 'renovate/') && 'renovate' || format('{0}-{1}', github.workflow, github.ref) }}
+  cancel-in-progress: ${{ !startsWith(github.head_ref, 'renovate/') }}
 
 jobs:
   build:
@@ -21,9 +28,5 @@ jobs:
           cache: npm
       - name: Run test
         run: |
-          # npm において package-lock.json の optional dependencies を欠落するバグがあるらしく、削除した後に再インストールをする
-          # @see https://nx.dev/troubleshooting/troubleshoot-nx-install-issues#native-modules
-          # @see https://github.com/npm/cli/issues/4828
-          rm package-lock.json
-          npm install
+          npm ci
           npm test
