@@ -78,7 +78,6 @@
     "material-icons": "1.12.2",
     "mobx": "5.15.7",
     "mobx-react": "6.3.1",
-    "node-fetch": "2.6.13",
     "react": "16.14.0",
     "react-dom": "16.14.0",
     "react-measure": "2.5.2",
