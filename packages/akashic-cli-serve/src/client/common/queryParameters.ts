@@ -1,5 +1,3 @@
-import * as queryString from "query-string";
-
 /**
  * URL のクエリパラメータから得られる値。
  *
@@ -307,14 +305,17 @@ export function makeServeQueryParameters(query: RawParsedQuery): ServeQueryParam
 }
 
 export const queryParameters: ServeQueryParameters = (function () {
-	const query = queryString.parse(window.location.search);
-	const ret = makeServeQueryParameters(query);
+	const searchParams = new URLSearchParams(window.location.search);
+	const query: RawParsedQuery = {};
+	searchParams.forEach((val, key) => {
+		query[key] = val;
+	});
 
-	if (ret.ignoreSession) {
+	if (searchParams.has("ignoreSession")) {
 		// ブラウザ不具合に対応するための内部利用用途なので、URLから消す。
-		delete query.ignoreSession;
-		history.replaceState(null, "", location.pathname + "?" + queryString.stringify(query));
+		searchParams.delete("ignoreSession");
+		history.replaceState(null, "", location.pathname + "?" + searchParams.toString());
 	}
 
-	return ret;
+	return makeServeQueryParameters(query);
 })();
