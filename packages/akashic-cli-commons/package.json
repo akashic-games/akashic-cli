@@ -22,7 +22,7 @@
   ],
   "devDependencies": {
     "@akashic/eslint-config": "^2.1.0",
-    "@types/browserify": "12.0.37",
+    "@types/browserify": "12.0.40",
     "@types/eslint": "8.56.11",
     "@types/fs-extra": "11.0.4",
     "@types/jest": "29.5.12",

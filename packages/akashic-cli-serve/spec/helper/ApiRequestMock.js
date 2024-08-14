@@ -1,4 +1,3 @@
-const fetch = require("node-fetch");
 const queryString = require("query-string");
 
 exports.get = function(url, params) {

@@ -34,7 +34,7 @@
     "@types/jest": "29.5.12",
     "@types/mock-fs": "4.13.4",
     "@types/node": "18.19.44",
-    "@types/tar": "6.1.2",
+    "@types/tar": "6.1.13",
     "@typescript-eslint/eslint-plugin": "5.62.0",
     "eslint": "8.57.0",
     "eslint-plugin-import": "2.29.1",
