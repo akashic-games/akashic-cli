@@ -2,15 +2,21 @@ import * as fs from "fs";
 import * as path from "path";
 import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
 import * as aacDuration from "aac-duration";
-import * as musicMetaData from "music-metadata";
+import type { IAudioMetadata, IOptions, parseFile } from "music-metadata";
 import { mp4Inspector } from "thumbcoil";
+
+async function getMetadata(filepath: string, options?: IOptions): Promise<IAudioMetadata> {
+	// eslint-disable-next-line no-eval
+	const musicMetadata = (await eval("import('music-metadata')"));
+	return (musicMetadata.parseFile as typeof parseFile)(filepath, options);
+}
 
 export async function getAudioDuration(filepath: string, logger?: Logger): Promise<number | undefined> {
 	const ext = path.extname(filepath);
 	if (ext === ".aac") {
 		return aacDuration(filepath);
 	} else if (ext === ".ogg") {
-		const metaData = await musicMetaData.parseFile(filepath, {duration: true});
+		const metaData = await getMetadata(filepath, { duration: true });
 		// TODO: duration が取得できなかった場合のフォールバック対応。現状、`writeJSON()` に渡すオブジェクトの duration 値は NaN となり、game.json 書き込み時に null となる。
 		return metaData.format.duration;
 	} else if (ext === ".mp4" || ext === ".m4a") {

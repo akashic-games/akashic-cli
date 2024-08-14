@@ -6,6 +6,8 @@ import { scanAudioAssets, scanImageAssets, scanScriptAssets, scanTextAssets, sca
 import { isBinaryFile } from "../../isBinaryFile";
 import { defaultTextAssetFilter } from "../../scanUtils";
 import { workaroundMockFsExistsSync } from "./testUtils";
+import * as getAudioDuration from "../../../lib/getAudioDuration";
+import { mockGetDuration } from "./helpers/MockGetDuration";
 
 describe("scanUtils", () => {
 	const nullLogger = new ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
@@ -17,6 +19,18 @@ describe("scanUtils", () => {
 	const DUMMY_WASM_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy.wasm"));
 
 	workaroundMockFsExistsSync();
+
+	// FIXME: ES Module 移行時に削除
+	beforeAll(() => {
+		jest.spyOn(getAudioDuration, "getAudioDuration").mockImplementation((filepath, logger?: any) => {
+			return mockGetDuration(filepath, logger);
+		});
+	});
+
+	afterAll(() => {
+		jest.resetAllMocks();
+	});
+	// FIXME: ES Module 移行時に削除ここまで
 	
 	beforeEach(() => {
 		mockfs({
