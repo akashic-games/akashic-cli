@@ -35,5 +35,10 @@ module.exports = {
 				"format": ["camelCase", "UPPER_CASE", "PascalCase"]
 			}
 		]
-	}
+	},
+	settings: {
+		react: {
+			version: "detect"
+		},
+	},
 }
