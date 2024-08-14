@@ -107,8 +107,12 @@ export async function fetchTemplate(metadata: TemplateMetadata): Promise<string>
 }
 
 async function _extractZip(buf: Buffer, dest: string): Promise<void> {
-	const directory = await unzipper.Open.buffer(buf);
-	await directory.extract({ path: dest });
+	try {
+		const directory = await unzipper.Open.buffer(buf);
+		await directory.extract({ path: dest });
+	} catch (_e) {
+		throw new Error("failed to extract zip file");
+	}
 }
 
 async function _findTemplateRoot(dirpath: string): Promise<string | null> {
