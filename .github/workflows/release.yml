@@ -27,11 +27,7 @@ jobs:
           cache: npm
       - name: Prepare
         run: |
-          # npm において package-lock.json の optional dependencies を欠落するバグがあるらしく、削除した後に再インストールをする
-          # @see https://nx.dev/troubleshooting/troubleshoot-nx-install-issues#native-modules
-          # @see https://github.com/npm/cli/issues/4828
-          rm package-lock.json
-          npm install
+          npm ci
           npm test
       - name: Create Release PullRequest or Publish
         uses: changesets/action@v1
