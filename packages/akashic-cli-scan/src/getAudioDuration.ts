@@ -5,7 +5,9 @@ import * as aacDuration from "aac-duration";
 import type { IAudioMetadata, IOptions, parseFile } from "music-metadata";
 import { mp4Inspector } from "thumbcoil";
 
-async function getMetadata(filepath: string, options?: IOptions): Promise<IAudioMetadata> {
+// music-metadata@8 以降 pure ESM なので import() で読み込む
+async function importMetadata(filepath: string, options?: IOptions): Promise<IAudioMetadata> {
+	// CommonJS 設定の TS では dynamic import が require() に変換されてしまうので、eval() で強引に import() する
 	// eslint-disable-next-line no-eval
 	const musicMetadata = (await eval("import('music-metadata')"));
 	return (musicMetadata.parseFile as typeof parseFile)(filepath, options);
@@ -16,7 +18,7 @@ export async function getAudioDuration(filepath: string, logger?: Logger): Promi
 	if (ext === ".aac") {
 		return aacDuration(filepath);
 	} else if (ext === ".ogg") {
-		const metaData = await getMetadata(filepath, { duration: true });
+		const metaData = await importMetadata(filepath, { duration: true });
 		// TODO: duration が取得できなかった場合のフォールバック対応。現状、`writeJSON()` に渡すオブジェクトの duration 値は NaN となり、game.json 書き込み時に null となる。
 		return metaData.format.duration;
 	} else if (ext === ".mp4" || ext === ".m4a") {
