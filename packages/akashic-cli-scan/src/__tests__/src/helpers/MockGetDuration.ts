@@ -47,5 +47,5 @@ export async function mockGetDuration(filepath: string, logger?: any): Promise<n
 			return NaN;
 		}
 	}
-	return 0;
+	throw new Error("invalid file");
 }
