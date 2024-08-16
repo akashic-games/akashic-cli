@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-serve",
-  "version": "1.16.9",
+  "version": "1.16.10",
   "description": "A development server for Akashic Engine",
   "scripts": {
     "prepare": "npm run setup",
@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "@akashic/akashic-cli-commons": "0.15.3",
-    "@akashic/akashic-cli-scan": "0.17.5",
+    "@akashic/akashic-cli-scan": "0.17.6",
     "@akashic/amflow-util": "^1.3.0",
     "@akashic/game-configuration": "^2.1.0",
     "@akashic/headless-driver": "2.15.5",
