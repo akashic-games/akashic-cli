@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.16.10
+
+### Patch Changes
+
+- Updated dependencies [[`15ca680`](https://github.com/akashic-games/akashic-cli/commit/15ca68051da2c979ed4962baf5f20632f4702e27)]:
+  - @akashic/akashic-cli-scan@0.17.6
+
 ## 1.16.9
 
 ### Patch Changes

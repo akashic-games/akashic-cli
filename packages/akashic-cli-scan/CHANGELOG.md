@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.17.6
+
+### Patch Changes
+
+- [#1368](https://github.com/akashic-games/akashic-cli/pull/1368) [`15ca680`](https://github.com/akashic-games/akashic-cli/commit/15ca68051da2c979ed4962baf5f20632f4702e27) Thanks [@renovate](https://github.com/apps/renovate)! - Update music-metadata@10
+
 ## 0.17.5
 
 ### Patch Changes
