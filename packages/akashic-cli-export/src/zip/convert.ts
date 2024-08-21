@@ -10,7 +10,7 @@ import { nodeResolve } from "@rollup/plugin-node-resolve";
 import { convert, detect } from "encoding-japanese";
 import * as fsx from "fs-extra";
 import readdir = require("fs-readdir-recursive");
-import type { ModuleFormat, RollupBuild} from "rollup";
+import type { RollupBuild } from "rollup";
 import { rollup } from "rollup";
 import * as UglifyJS from "uglify-js";
 import * as utils from "../utils";
@@ -71,29 +71,27 @@ export async function bundleScripts(entryPoint: string, basedir: string): Promis
 	const inputOptions = {
 		input: path.join(basedir, entryPoint),
 		external: ["g"],
-		plugins: [commonjs(), json(), nodeResolve({preferBuiltins: true})]
-	};
-	const outOptions = {
-		file: path.join(basedir, "aez_bundle_main.js"),
-		format: "cjs" as ModuleFormat
+		plugins: [commonjs(), json(), nodeResolve({ preferBuiltins: true })]
 	};
 
 	let bundle: RollupBuild;
 	try {
 		bundle = await rollup(inputOptions);
-		const rollupOutput = await bundle.generate(outOptions);
+		const rollupOutput = await bundle.generate({
+			file: path.join(basedir, "aez_bundle_main.js"),
+			format: "cjs"
+		});
 		let code: string;
 		let filePaths: string[];
 		for (const chunkOrAsset of rollupOutput.output) {
 			if (chunkOrAsset.type !== "asset") {
 				code = chunkOrAsset.code;
 				filePaths = chunkOrAsset.moduleIds;
+				break;
 			}
 		}
 		filePaths = filePaths.map(p => cmn.Util.makeUnixPath(path.relative(basedir, p)));
 		return { bundle: code, filePaths };
-	 } catch (e) {
-		throw Error(e);
 	 } finally {
 		if (bundle)
 			await bundle.close();
@@ -141,7 +139,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			}
 			if (!param.bundle)
 				return null;
-			return await bundleScripts(gamejson.main || gamejson.assets.mainScene.path, param.source);
+			return bundleScripts(gamejson.main || gamejson.assets.mainScene.path, param.source);
 		})
 		.then(async (bundleResult) => {
 			const files: string[] = param.strip ?
