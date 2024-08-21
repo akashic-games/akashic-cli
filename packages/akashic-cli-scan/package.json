@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-scan",
-  "version": "0.17.5",
+  "version": "0.17.6",
   "description": "Command line tool for updating assets and globalScripts.",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -24,19 +24,19 @@
   "devDependencies": {
     "@akashic/eslint-config": "1.1.1",
     "@akashic/game-configuration": "2.3.0",
-    "@types/image-size": "0.7.0",
+    "@types/image-size": "0.8.0",
     "@types/jest": "29.5.12",
     "@types/mock-fs": "4.13.4",
-    "@types/node": "18.15.11",
-    "@typescript-eslint/eslint-plugin": "5.43.0",
-    "eslint": "8.27.0",
-    "eslint-plugin-import": "2.26.0",
+    "@types/node": "18.19.44",
+    "@typescript-eslint/eslint-plugin": "5.62.0",
+    "eslint": "8.57.0",
+    "eslint-plugin-import": "2.29.1",
     "eslint-plugin-jest": "26.9.0",
     "jest": "29.7.0",
     "mock-fs": "5.2.0",
     "shx": "0.3.4",
-    "ts-jest": "29.1.2",
-    "typescript": "5.0.4"
+    "ts-jest": "29.2.4",
+    "typescript": "5.5.4"
   },
   "dependencies": {
     "@akashic/akashic-cli-commons": "0.15.3",
@@ -44,8 +44,8 @@
     "chokidar": "^3.5.1",
     "commander": "^12.0.0",
     "fs-readdir-recursive": "1.1.0",
-    "image-size": "~1.0.0",
-    "music-metadata": "7.13.0",
+    "image-size": "~1.1.0",
+    "music-metadata": "10.1.0",
     "svgson": "^5.2.1",
     "thumbcoil": "~1.2.0"
   },

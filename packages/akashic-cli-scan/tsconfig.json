@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "ES5",
-    "lib": ["es5"],
+    "target": "ES2020",
+    "lib": ["es2020"],
     "noImplicitAny": true,
     "module": "commonjs",
     "outDir": "./lib",
@@ -14,6 +14,7 @@
     "./typings/fs-readdir-recursive.d.ts",
     "./typings/aac-duration.d.ts",
     "./typings/thumbcoil.d.ts",
+    "./typings/music-metadata.d.ts",
     "./src/index.ts"
   ]
 }
