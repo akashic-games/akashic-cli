@@ -24,7 +24,7 @@ describe("convert", () => {
 				path.resolve(__dirname, "..", "..", "fixtures", "simple_game")
 			)
 				.then((result) => {
-					// バンドル時に rollup の plugin が独自の js ファイルを含めるので、toEqual() は利用せず個々にファイルを確認 
+					// バンドル時に rollup の plugin が独自の js ファイルを含めるので、toEqual() は利用せず個々にファイルを確認
 					expect(result.filePaths.includes("script/bar.js")).toBeTruthy();
 					expect(result.filePaths.includes("script/foo.js")).toBeTruthy();
 					expect(result.filePaths.includes("text/test.json")).toBeTruthy();
