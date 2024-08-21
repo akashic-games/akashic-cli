@@ -70,6 +70,7 @@ export interface BundleResult {
 export async function bundleScripts(entryPoint: string, basedir: string): Promise<BundleResult> {
 	const inputOptions = {
 		input: path.join(basedir, entryPoint),
+		external: ["g"],
 		plugins: [commonjs(), json(), nodeResolve({preferBuiltins: true})]
 	};
 	const outOptions = {
@@ -140,7 +141,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			}
 			if (!param.bundle)
 				return null;
-			return bundleScripts(gamejson.main || gamejson.assets.mainScene.path, param.source);
+			return await bundleScripts(gamejson.main || gamejson.assets.mainScene.path, param.source);
 		})
 		.then(async (bundleResult) => {
 			const files: string[] = param.strip ?
