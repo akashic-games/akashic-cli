@@ -31,7 +31,7 @@
     "@akashic/game-configuration": "^2.1.0",
     "@akashic/headless-driver": "2.15.5",
     "@akashic/sandbox-configuration": "^2.3.0",
-    "@akashic/trigger": "2.1.0",
+    "@akashic/trigger": "2.1.1",
     "@msgpack/msgpack": "2.8.0",
     "chalk": "4.1.2",
     "chokidar": "3.6.0",
