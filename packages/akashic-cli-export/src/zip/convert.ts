@@ -10,7 +10,7 @@ import { nodeResolve } from "@rollup/plugin-node-resolve";
 import { convert, detect } from "encoding-japanese";
 import * as fsx from "fs-extra";
 import readdir = require("fs-readdir-recursive");
-import type { RollupBuild } from "rollup";
+import type { OutputChunk, RollupBuild } from "rollup";
 import { rollup } from "rollup";
 import * as UglifyJS from "uglify-js";
 import * as utils from "../utils";
@@ -81,16 +81,9 @@ export async function bundleScripts(entryPoint: string, basedir: string): Promis
 			file: path.join(basedir, "aez_bundle_main.js"),
 			format: "cjs"
 		});
-		let code: string;
-		let filePaths: string[];
-		for (const chunkOrAsset of rollupOutput.output) {
-			if (chunkOrAsset.type !== "asset") {
-				code = chunkOrAsset.code;
-				filePaths = chunkOrAsset.moduleIds;
-				break;
-			}
-		}
-		filePaths = filePaths.map(p => cmn.Util.makeUnixPath(path.relative(basedir, p)));
+		const chunk = rollupOutput.output.find(chunkOrAsset => chunkOrAsset.type === "chunk");
+		const { code, moduleIds } = chunk as OutputChunk;
+		const filePaths = moduleIds.map(p => cmn.Util.makeUnixPath(path.relative(basedir, p)));
 		return { bundle: code, filePaths };
 	 } finally {
 		if (bundle)
