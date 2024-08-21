@@ -2,10 +2,10 @@ import * as fs from "fs";
 import * as path from "path";
 import type { ModuleMainPathsMap, ModuleMainScriptsMap } from "@akashic/game-configuration";
 import browserify from "browserify";
-import { ConsoleLogger } from "./ConsoleLogger";
-import type { Logger } from "./Logger";
-import { StringStream } from "./StringStream";
-import * as Util from "./Util";
+import { ConsoleLogger } from "./ConsoleLogger.js";
+import type { Logger } from "./Logger.js";
+import { StringStream } from "./StringStream.js";
+import * as Util from "./Util.js";
 
 interface ModuleMainInfo {
 	moduleName: string;

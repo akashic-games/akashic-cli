@@ -2,8 +2,8 @@ import * as fs from "fs";
 import * as path from "path";
 import * as fsx from "fs-extra";
 import { sha256 } from "js-sha256";
-import type { GameConfiguration } from "./GameConfiguration";
-import { KNOWN_AUDIO_EXTENSIONS } from "./knownAudioExtensions";
+import type { GameConfiguration } from "./GameConfiguration.js";
+import { KNOWN_AUDIO_EXTENSIONS } from "./knownAudioExtensions.js";
 
 export const ERROR_FILENAME_CONFLICT = "ERROR_FILENAME_CONFLICT";
 export const ERROR_PATH_INCLUDE_ANCESTOR = "ERROR_PATH_INCLUDE_ANCESTOR";

@@ -1,4 +1,4 @@
-import type { Logger } from "./Logger";
+import type { Logger } from "./Logger.js";
 
 /**
  * `ConsoleLogger` のコンストラクタに指定できる引数の型。
