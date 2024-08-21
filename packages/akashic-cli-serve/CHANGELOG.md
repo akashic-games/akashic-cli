@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.16.11
+
+### Patch Changes
+
+- [#1390](https://github.com/akashic-games/akashic-cli/pull/1390) [`c254192`](https://github.com/akashic-games/akashic-cli/commit/c25419288ffe9867b618c19f3c2a9b47473e64c7) Thanks [@renovate](https://github.com/apps/renovate)! - Updated dependency `@akashic/trigger` to `2.1.1`.
+
 ## 1.16.10
 
 ### Patch Changes
