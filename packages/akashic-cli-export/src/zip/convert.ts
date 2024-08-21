@@ -4,10 +4,14 @@ import * as cmn from "@akashic/akashic-cli-commons";
 import type { ImageAssetConfigurationBase, NicoliveSupportedModes } from "@akashic/game-configuration";
 import * as babel from "@babel/core";
 import * as presetEnv from "@babel/preset-env";
-import * as browserify from "browserify";
+import commonjs from "@rollup/plugin-commonjs";
+import json from "@rollup/plugin-json";
+import { nodeResolve } from "@rollup/plugin-node-resolve";
 import { convert, detect } from "encoding-japanese";
 import * as fsx from "fs-extra";
 import readdir = require("fs-readdir-recursive");
+import type { ModuleFormat, RollupBuild} from "rollup";
+import { rollup } from "rollup";
 import * as UglifyJS from "uglify-js";
 import * as utils from "../utils";
 import { validateGameJson } from "../utils";
@@ -63,25 +67,36 @@ export interface BundleResult {
 	filePaths: string[];
 }
 
-export function bundleScripts(entryPoint: string, basedir: string): Promise<BundleResult> {
-	const b = browserify({
-		entries: entryPoint,
-		basedir,
-		builtins: false,
-		standalone: "aez_bundle_main"
-	});
-	b.external("g");
-	const filePaths: string[] = [];
-	b.on("dep", (row: any) => {
-		filePaths.push(cmn.Util.makeUnixPath(path.relative(basedir, row.file)));
-	});
-	return new Promise<BundleResult>((resolve, reject) => {
-		b.bundle((err: any, buf: Buffer) => {
-			if (err)
-				return reject(err);
-			resolve({ bundle: encodeToString(buf), filePaths });
-		});
-	});
+export async function bundleScripts(entryPoint: string, basedir: string): Promise<BundleResult> {
+	const inputOptions = {
+		input: path.join(basedir, entryPoint),
+		plugins: [commonjs(), json(), nodeResolve({preferBuiltins: true})]
+	};
+	const outOptions = {
+		file: path.join(basedir, "aez_bundle_main.js"),
+		format: "cjs" as ModuleFormat
+	};
+
+	let bundle: RollupBuild;
+	try {
+		bundle = await rollup(inputOptions);
+		const rollupOutput = await bundle.generate(outOptions);
+		let code: string;
+		let filePaths: string[];
+		for (const chunkOrAsset of rollupOutput.output) {
+			if (chunkOrAsset.type !== "asset") {
+				code = chunkOrAsset.code;
+				filePaths = chunkOrAsset.moduleIds;
+			}
+		}
+		filePaths = filePaths.map(p => cmn.Util.makeUnixPath(path.relative(basedir, p)));
+		return { bundle: code, filePaths };
+	 } catch (e) {
+		throw Error(e);
+	 } finally {
+		if (bundle)
+			await bundle.close();
+	 }
 }
 
 export function convertGame(param: ConvertGameParameterObject): Promise<void> {
