@@ -1,5 +1,11 @@
 # @akashic/akashic-cli-export
 
+## 1.9.13
+
+### Patch Changes
+
+- [#1395](https://github.com/akashic-games/akashic-cli/pull/1395) [`31396d1`](https://github.com/akashic-games/akashic-cli/commit/31396d1633416b8127edf134416972e1d7b5619e) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Modify export package.json
+
 ## 1.9.12
 
 ### Patch Changes
