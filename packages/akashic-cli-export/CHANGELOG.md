@@ -1,5 +1,11 @@
 # @akashic/akashic-cli-export
 
+## 1.9.12
+
+### Patch Changes
+
+- [#1391](https://github.com/akashic-games/akashic-cli/pull/1391) [`42b8347`](https://github.com/akashic-games/akashic-cli/commit/42b8347907b4fcd1213c2c88b1b3ac6eeeb97ee6) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Change browserify to rollup in export
+
 ## 1.9.11
 
 ### Patch Changes
