@@ -72,7 +72,7 @@
     "@akashic/akashic-cli-commons": "0.15.3",
     "@akashic/akashic-cli-extra": "1.7.6",
     "@akashic/game-configuration": "2.3.0",
-    "@akashic/headless-driver": "2.15.6",
+    "@akashic/headless-driver": "2.15.7",
     "@rollup/plugin-commonjs": "^26.0.1",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^15.2.3",
