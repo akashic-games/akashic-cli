@@ -1,5 +1,14 @@
 # Change Log
 
+## 2.17.17
+
+### Patch Changes
+
+- Updated dependencies [[`2cb34ff`](https://github.com/akashic-games/akashic-cli/commit/2cb34ffb559fa09ad337212b24216af498533941)]:
+  - @akashic/akashic-cli-export@1.9.14
+  - @akashic/akashic-cli-sandbox@1.1.7
+  - @akashic/akashic-cli-serve@1.16.12
+
 ## 2.17.16
 
 ### Patch Changes
