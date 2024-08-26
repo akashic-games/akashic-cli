@@ -24,12 +24,11 @@ describe("convert", () => {
 				path.resolve(__dirname, "..", "..", "fixtures", "simple_game")
 			)
 				.then((result) => {
-					expect(result.filePaths).toEqual([
-						"script/bar.js",
-						"script/foo.js",
-						"script/main.js",
-						"text/test.json"
-					]);
+					// バンドル時に rollup の plugin が独自の js ファイルを含めるので、toEqual() は利用せず個々にファイルを確認
+					expect(result.filePaths.includes("script/bar.js")).toBeTruthy();
+					expect(result.filePaths.includes("script/foo.js")).toBeTruthy();
+					expect(result.filePaths.includes("text/test.json")).toBeTruthy();
+					expect(result.filePaths.includes("script/main.js")).toBeTruthy();
 
 					// bundle結果の内容を確認するのは難しいので、簡易的に実行結果を確認しておく
 					const f = new Function("module", "exports", result.bundle);

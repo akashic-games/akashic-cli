@@ -1,5 +1,29 @@
 # @akashic/akashic-cli-export
 
+## 1.9.15
+
+### Patch Changes
+
+- [#1399](https://github.com/akashic-games/akashic-cli/pull/1399) [`f581cb9`](https://github.com/akashic-games/akashic-cli/commit/f581cb92fa71194656d72eb85ef72783cf7a0861) Thanks [@renovate](https://github.com/apps/renovate)! - Updated dependency `@akashic/headless-driver` to `2.15.7`.
+
+## 1.9.14
+
+### Patch Changes
+
+- [#1397](https://github.com/akashic-games/akashic-cli/pull/1397) [`2cb34ff`](https://github.com/akashic-games/akashic-cli/commit/2cb34ffb559fa09ad337212b24216af498533941) Thanks [@renovate](https://github.com/apps/renovate)! - Updated dependency `@akashic/headless-driver` to `2.15.6`.
+
+## 1.9.13
+
+### Patch Changes
+
+- [#1395](https://github.com/akashic-games/akashic-cli/pull/1395) [`31396d1`](https://github.com/akashic-games/akashic-cli/commit/31396d1633416b8127edf134416972e1d7b5619e) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Modify export package.json
+
+## 1.9.12
+
+### Patch Changes
+
+- [#1391](https://github.com/akashic-games/akashic-cli/pull/1391) [`42b8347`](https://github.com/akashic-games/akashic-cli/commit/42b8347907b4fcd1213c2c88b1b3ac6eeeb97ee6) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Change browserify to rollup in export
+
 ## 1.9.11
 
 ### Patch Changes
