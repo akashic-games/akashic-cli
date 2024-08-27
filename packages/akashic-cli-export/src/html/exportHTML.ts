@@ -126,7 +126,7 @@ export function promiseExportHTML(p: ExportHTMLParameterObject): Promise<string>
 					archive.on("error", (err) => reject(err));
 					archive.pipe(ostream);
 					files.forEach((f) => archive.file(f.src, { name: f.entryName }));
-					await archive.finalize();
+					return archive.finalize();
 				}).finally(() => {
 					fsx.removeSync(dest);
 				});
