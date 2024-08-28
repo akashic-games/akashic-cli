@@ -29,10 +29,10 @@ export class StartupScreenContainer extends React.Component<StartupScreenContain
 		/>;
 	}
 
-	private _handleClickStart = async (): Promise<void> => {
+	private _handleClickStart = (): Promise<void> => {
 		const { operator, startupScreenUiStore } = this.props;
 		const argText = startupScreenUiStore.instanceArgumentEditContent;
-		await operator.startContent({
+		return operator.startContent({
 			joinsSelf: startupScreenUiStore.joinsAutomatically,
 			instanceArgument: (argText !== "") ? JSON.parse(argText) : undefined
 		});

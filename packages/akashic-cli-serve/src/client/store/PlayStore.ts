@@ -148,8 +148,8 @@ export class PlayStore {
 	}
 
 	// このメソッドは onPlayCreate の通知を受けた時の処理なので完了を待たない
-	private handlePlayCreate = async (e: PlayCreateTestbedEvent): Promise<void> => {
-		await this.handlePlayCreateImpl(e);
+	private handlePlayCreate = (e: PlayCreateTestbedEvent): Promise<void> => {
+		return this.handlePlayCreateImpl(e);
 	};
 
 	private handlePlayCreateImpl = async (e: PlayCreateTestbedEvent): Promise<void> => {
