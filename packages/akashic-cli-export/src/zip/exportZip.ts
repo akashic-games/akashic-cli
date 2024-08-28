@@ -118,7 +118,7 @@ export function promiseExportZip(param: ExportZipParameterObject): Promise<void>
 		.then(() => {
 			if (!outZip)
 				return;
-			return new Promise<void>(async (resolve, reject) => {
+			return new Promise<void>((resolve, reject) => {
 				const files = readdir(destDir).map(p => ({
 					src: path.resolve(destDir, p),
 					entryName: p
