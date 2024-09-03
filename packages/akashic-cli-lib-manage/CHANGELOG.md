@@ -1,5 +1,11 @@
 # @akashic/akashic-cli-lib-manage
 
+## 1.9.6
+
+### Patch Changes
+
+- [#1384](https://github.com/akashic-games/akashic-cli/pull/1384) [`2d513f5`](https://github.com/akashic-games/akashic-cli/commit/2d513f5140544aca31be44a611effa2387e2e024) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Update eslint-config
+
 ## 1.9.5
 
 ### Patch Changes
