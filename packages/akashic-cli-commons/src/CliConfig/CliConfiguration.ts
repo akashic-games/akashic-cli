@@ -1,13 +1,13 @@
-import type { CliConfigExportHtml } from "./CliConfigExportHtml";
-import type { CliConfigExportZip } from "./CliConfigExportZip";
-import type { CliConfigInit } from "./CliConfigInit";
-import type { CliConfigInstall } from "./CliConfigInstall";
-import type { CliConfigModify } from "./CliConfigModify";
-import type { CliConfigScanAsset, CliConfigScanGlobalScripts } from "./CliConfigScan";
-import type { CliConfigServe } from "./CliConfigServe";
-import type { CliConfigStat } from "./CliConfigStat";
-import type { CliConfigUninstall } from "./CliConfigUninstall";
-import type { CliConfigUpdate } from "./CliConfigUpdate";
+import type { CliConfigExportHtml } from "./CliConfigExportHtml.js";
+import type { CliConfigExportZip } from "./CliConfigExportZip.js";
+import type { CliConfigInit } from "./CliConfigInit.js";
+import type { CliConfigInstall } from "./CliConfigInstall.js";
+import type { CliConfigModify } from "./CliConfigModify.js";
+import type { CliConfigScanAsset, CliConfigScanGlobalScripts } from "./CliConfigScan.js";
+import type { CliConfigServe } from "./CliConfigServe.js";
+import type { CliConfigStat } from "./CliConfigStat.js";
+import type { CliConfigUninstall } from "./CliConfigUninstall.js";
+import type { CliConfigUpdate } from "./CliConfigUpdate.js";
 
 /**
  * akashic.config.js の型。

@@ -5,6 +5,8 @@ import type { AssetConfiguration, AssetConfigurationMap, AudioAssetConfiguration
 import * as mockfs from "mock-fs";
 import { scanAsset } from "../../../lib/scanAsset";
 import { workaroundMockFsExistsSync } from "./testUtils";
+import * as getAudioDuration from "../../../lib/getAudioDuration";
+import { mockGetDuration } from "./helpers/MockGetDuration";
 
 describe("scanAsset()", () => {
 	const nullLogger = new ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
@@ -21,6 +23,18 @@ describe("scanAsset()", () => {
 	const DUMMY_WASM_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy.wasm"));
 
 	workaroundMockFsExistsSync();
+
+	// FIXME: ES Module 移行時に削除
+	beforeAll(() => {
+		jest.spyOn(getAudioDuration, "getAudioDuration").mockImplementation((filepath, logger?: any) => {
+			return mockGetDuration(filepath, logger);
+		});
+	});
+
+	afterAll(() => {
+		jest.resetAllMocks();
+	});
+	// FIXME: ES Module 移行時に削除ここまで
 
 	afterEach(() => {
 		mockfs.restore();
@@ -1825,6 +1839,7 @@ describe("scanAsset()", () => {
 		});
 
 		await scanAsset({
+			logger: nullLogger,
 			assetScanDirectoryTable: { audio: ["audio"] }
 		});
 
