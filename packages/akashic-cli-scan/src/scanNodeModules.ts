@@ -195,6 +195,6 @@ export async function scanNodeModules(p: ScanNodeModulesParameterObject): Promis
 
 		logger.info("Done!");
 	} finally {
-		restoreDirectory();
+		await restoreDirectory();
 	}
 }

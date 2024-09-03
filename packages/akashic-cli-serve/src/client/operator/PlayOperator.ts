@@ -1,4 +1,5 @@
 import { toJS as mobxToJS } from "mobx";
+import type { PlayPatchApiResponse } from "../../common/types/ApiResponse";
 import * as Subscriber from "../api/Subscriber";
 import type { Store } from "../store/Store";
 
@@ -15,16 +16,16 @@ export class PlayOperator {
 		Subscriber.onDisconnect.add(this.closeThisWindowIfNeeded);
 	}
 
-	togglePauseActive = (pauses: boolean): void => {
+	togglePauseActive = (pauses: boolean): Promise<PlayPatchApiResponse> => {
 		if (pauses) {
-			this.store.currentPlay!.pauseActive();
+			return this.store.currentPlay!.pauseActive();
 		} else {
-			this.store.currentPlay!.resumeActive();
+			return this.store.currentPlay!.resumeActive();
 		}
 	};
 
-	step = (): void => {
-		this.store.currentPlay!.stepActive();
+	step = (): Promise<PlayPatchApiResponse> => {
+		return this.store.currentPlay!.stepActive();
 	};
 
 	toggleJoinLeaveSelf = (toJoin: boolean): void => {
@@ -105,16 +106,16 @@ export class PlayOperator {
 		this.downloadFile(`/api/plays/${playId}/playlog`, `playlog_${playId}.json`);
 	};
 
-	muteAll = (): void => {
-		this.store.currentPlay!.muteAll();
+	muteAll = (): Promise<void> => {
+		return this.store.currentPlay!.muteAll();
 	};
 
-	muteOthers = (): void => {
-		this.store.currentPlay!.muteOthers();
+	muteOthers = (): Promise<void> => {
+		return this.store.currentPlay!.muteOthers();
 	};
 
-	unmuteAll = (): void => {
-		this.store.currentPlay!.unmuteAll();
+	unmuteAll = (): Promise<void> => {
+		return this.store.currentPlay!.unmuteAll();
 	};
 
 	// 指定したURLからファイルをダウンロードする

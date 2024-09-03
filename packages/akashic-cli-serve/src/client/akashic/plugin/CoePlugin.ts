@@ -82,7 +82,7 @@ export class CoePlugin implements agv.ExternalPlugin {
 					throw new Error("Not implemented");
 				}
 				const contentUrl = resolveContentUrl(parameters.application!, parameters.cascadeApplications);
-				startLocalSession(contentUrl, parameters);
+				await startLocalSession(contentUrl, parameters);
 			} catch (e) {
 				// TODO: エラーハンドリング
 				console.error(e);

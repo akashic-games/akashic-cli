@@ -245,12 +245,15 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 				const contentId = `${i}`;
 				const targetPlayIds: string[] = [];
 				// 対象のコンテンツIDしか分からないので先に対応するコンテンツのrunnerを全て停止させる
-				playStore.getPlayIdsFromContentId(contentId).forEach(playId => {
-					playStore.getPlayInfo(playId)?.runners.forEach(runner => {
-						runnerStore.stopRunner(runner.runnerId);
-					});
+				const playIds = playStore.getPlayIdsFromContentId(contentId);
+				for (const playId of playIds) {
+					const runners = playStore.getPlayInfo(playId)?.runners;
+					if (runners) {
+						for (const runner of runners)
+							await runnerStore.stopRunner(runner.runnerId);
+					}
 					targetPlayIds.push(playId);
-				});
+				};
 				if (targetPlayIds.length === 0)
 					return;
 				const playId = await playStore.createPlay({
@@ -390,7 +393,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 		}
 	}
 
-	httpServer.listen(serverGlobalConfig.port, () => {
+	httpServer.listen(serverGlobalConfig.port, async () => {
 		if (serverGlobalConfig.port < 1024) {
 			getSystemLogger().warn("Akashic Serve is a development server which is not appropriate for public release. " +
 				`We do not recommend to listen on a well-known port ${serverGlobalConfig.port}.`);
@@ -405,7 +408,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 		}
 
 		if (cliConfigParam.openBrowser) {
-			open(url);
+			await open(url);
 		}
 	});
 }

@@ -54,14 +54,14 @@ export function run(argv: string[]): void {
 	commander.parse(argv);
 	const options = commander.opts();
 
-	CliConfigurationFile.read(path.join(options.cwd || process.cwd(), "akashic.config.js"), (error, configuration) => {
+	CliConfigurationFile.read(path.join(options.cwd || process.cwd(), "akashic.config.js"), async (error, configuration) => {
 		if (error) {
 			console.error(error);
 			process.exit(1);
 		}
 
 		const conf = configuration!.commandOptions?.init ?? {};
-		cli({
+		await cli({
 			cwd: options.cwd ?? conf.cwd,
 			quiet: options.quiet ?? conf.quiet,
 			repository: options.repository,
