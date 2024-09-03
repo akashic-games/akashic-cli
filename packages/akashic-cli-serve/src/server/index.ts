@@ -6,7 +6,7 @@ import { CliConfigurationFile } from "@akashic/akashic-cli-commons/lib/CliConfig
 import { SERVICE_TYPES } from "@akashic/akashic-cli-commons/lib/ServiceType";
 import { PlayManager, RunnerManager, setSystemLogger, getSystemLogger } from "@akashic/headless-driver";
 import * as bodyParser from "body-parser";
-import * as chalk from "chalk";
+import type * as Chalk from "chalk";
 import type { OptionValues } from "commander";
 import { Command } from "commander";
 import * as cors from "cors";
@@ -40,6 +40,13 @@ function convertToStrings(params: any[]): string[] {
 	});
 }
 
+// chalk@5 以降 pure ESM なので import() で読み込む
+async function importChalk(): Promise<(typeof Chalk)["default"]> {
+	// CommonJS 設定の TS では dynamic import が require() に変換されてしまうので、eval() で強引に imoprt() する
+	// eslint-disable-next-line no-eval
+	return (await eval("import('chalk')")).default;
+}
+
 async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Promise<void> {
 	if (cliConfigParam.port && isNaN(cliConfigParam.port)) {
 		console.error("Invalid --port option: " + cliConfigParam.port);
@@ -63,6 +70,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 		serverGlobalConfig.useGivenPort = true;
 	}
 
+	const chalk = await importChalk();
 	if (cliConfigParam.verbose) {
 		serverGlobalConfig.verbose = true;
 		setSystemLogger({
