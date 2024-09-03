@@ -8,9 +8,7 @@
     "types" : ["node", "commander", "ini"],
     "strict": true
   },
-  "files": [
-    "./typings/selected_lodash.d.ts"
-  ],
+  
   "include": [
     "./src/**/*.ts"
   ]

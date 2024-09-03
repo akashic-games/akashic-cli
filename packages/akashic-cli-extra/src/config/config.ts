@@ -3,11 +3,8 @@ import * as os from "os";
 import * as path from "path";
 import type { Logger } from "@akashic/akashic-cli-commons";
 import * as ini from "ini";
-import * as lodashGet from "lodash.get";
-import * as lodashSet from "lodash.set";
-import * as lodashUnset from "lodash.unset";
 
-export type StringMap = {[key: string]: string};
+export type StringMap = {[key: string]: string | Object};
 
 export class AkashicConfigFile {
 	data: StringMap;
@@ -50,12 +47,12 @@ export class AkashicConfigFile {
 	}
 
 	isValidKey(key: string): boolean {
-		return !this._validator || lodashGet(this._validator, key, null) != null;
+		return !this._validator || objectGet(this._validator, key, null) != null;
 	}
 
 	isValidValue(key: string, value: string): boolean {
 		if (!this._validator) return true;
-		const reStr: string = lodashGet(this._validator, key, null);
+		const reStr: string = objectGet(this._validator, key, null);
 		if (reStr == null) return false;
 		return (new RegExp(reStr)).test(value);
 	}
@@ -64,17 +61,11 @@ export class AkashicConfigFile {
 		if (!this.isValidKey(key)) {
 			return Promise.reject<string>("invalid key name: " + key);
 		}
-		return Promise.resolve(lodashGet(this.data, key, null));
+		return Promise.resolve(objectGet(this.data, key, null));
 	}
 
 	setItem(key: string, value: string): Promise<void> {
-		if (!this.isValidKey(key)) {
-			return Promise.reject("invalid key name: " + key);
-		}
-		if (!this.isValidValue(key, value)) {
-			return Promise.reject("invalid value: " + value);
-		}
-		lodashSet(this.data, key, value);
+		objectSet(this.data, key, value);
 		return Promise.resolve();
 	}
 
@@ -82,7 +73,7 @@ export class AkashicConfigFile {
 		if (!this.isValidKey(key)) {
 			return Promise.reject("invalid key name: " + key);
 		}
-		lodashUnset(this.data, key);
+		objectUnset(this.data, key);
 		return Promise.resolve();
 	}
 }
@@ -123,7 +114,48 @@ export function listAllConfigItems(logger: Logger, validator: StringMap, confPat
 
 	return config.load().then(() =>
 		Object.keys(validator).forEach(key =>
-			logger.print(`${key} = ${lodashGet(config.data, key, "")}`)
+			logger.print(`${key} = ${objectGet(config.data, key, "")}`)
 		)
 	);
+}
+
+function objectDefine(obj: any, key: string, value: string | Object): void {
+	Object.defineProperty(obj, key, { value, writable: true, configurable: true, enumerable: true });
+}
+
+function objectGet(obj: any, key: string, value?: any): string {
+	if ( obj[key] ) return obj[key];
+
+	const keys = String(key).split(".");
+	const prop = keys.shift();
+	const result = prop ? new Map(Object.entries(obj)).get(prop) : undefined;
+	return keys.length && typeof result !== "undefined" ? objectGet(result, keys.join("."), value) : result || value;
+}
+
+function objectSet(obj: any, key: string, value: string): void {
+	const keys = key.split(".");
+	const prop = keys.shift();
+	if (prop && !(prop in obj)) {
+		objectDefine(obj, prop, {});
+	}
+	const result = objectGet(obj, prop!);
+	return keys.length ? objectSet(result, keys.join("."), value) : objectDefine(obj, prop!, value);
+}
+
+function objectUnset(obj: any, key: string): any {
+	const keys = key.split(".");
+	const prop = keys.shift();
+	if (prop && !(prop in obj)) {
+		return undefined;
+	}
+	if (keys.length) {
+		let result = objectGet(obj, prop!);
+		result = objectUnset(result, keys.join("."));
+		objectSet(obj, prop!, result);
+		return obj;
+	} else {
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		const { [key!]: _, ...rest } = obj;
+		return rest;
+	}
 }

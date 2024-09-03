@@ -26,6 +26,11 @@ describe("config module", () => {
 			.then(value => expect(value).toBe("42"))
 			.then(() => config.getItem("banana.item3"))
 			.then(value => expect(value).toBeNull())
+			.then(() => {
+				config.deleteItem("apple.item1");
+				config.getItem("apple.item1")
+					.then((v) => expect(v).toBeNull());
+			})
 			.then(done, done.fail);
 	});
 });
