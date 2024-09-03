@@ -23,7 +23,7 @@ export function run(argv: string[]): void {
 		.description("get configuration from your .akashicrc")
 		.action((target: string, opts: any = {}) => {
 			const logger = new ConsoleLogger({ quiet: opts.quiet });
-			config.getConfigItem(null, target).then(value => logger.print(value));
+			config.getConfigItem(null, target).then(value => {logger.print(value ?? "null")});
 		});
 
 	commander

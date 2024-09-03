@@ -3,9 +3,11 @@ import * as os from "os";
 import * as path from "path";
 import type { Logger } from "@akashic/akashic-cli-commons";
 import * as ini from "ini";
-import * as lodashGet from "lodash.get";
-import * as lodashSet from "lodash.set";
-import * as lodashUnset from "lodash.unset";
+import {
+	get as lodashGet,
+	set as lodashSet,
+	unset as lodashUnset
+} from "lodash";
 
 export type StringMap = {[key: string]: string};
 
@@ -55,12 +57,12 @@ export class AkashicConfigFile {
 
 	isValidValue(key: string, value: string): boolean {
 		if (!this._validator) return true;
-		const reStr: string = lodashGet(this._validator, key, null);
+		const reStr = lodashGet(this._validator, key, null);
 		if (reStr == null) return false;
 		return (new RegExp(reStr)).test(value);
 	}
 
-	getItem(key: string): Promise<string> {
+	getItem(key: string): Promise<string | null> {
 		if (!this.isValidKey(key)) {
 			return Promise.reject<string>("invalid key name: " + key);
 		}
@@ -87,7 +89,7 @@ export class AkashicConfigFile {
 	}
 }
 
-export function getConfigItem(validator: StringMap | null, key: string, confPath?: string): Promise<string> {
+export function getConfigItem(validator: StringMap | null, key: string, confPath?: string): Promise<string | null> {
 	const config = new AkashicConfigFile(validator, confPath);
 	return config.load().then(() => config.getItem(key));
 }
