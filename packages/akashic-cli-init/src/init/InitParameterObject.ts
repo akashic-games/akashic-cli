@@ -84,6 +84,10 @@ export async function completeInitParameterObject(param: InitParameterObject): P
 		throw new Error(`invalid option githubProtocol: ${githubProtocol}`);
 	if (!isGitProtocol(gheProtocol))
 		throw new Error(`invalid option gheProtocol: ${gheProtocol}`);
+	if (!type)
+		throw new Error(`invalid option type: ${type}`);
+	if (!githubHost)
+		throw new Error(`invalid option githubHost: ${githubHost}`);
 
 	const { gitType, owner, repo } = parseCloneTargetInfo(type);
 	if (gitType === "github" && owner !== "akashic-games" ) {
@@ -121,7 +125,7 @@ export async function completeInitParameterObject(param: InitParameterObject): P
 	};
 }
 
-function isGitProtocol(s: string): s is GitProtocol {
+function isGitProtocol(s: string | null): s is GitProtocol {
 	return s === "https" || s === "ssh";
 }
 
