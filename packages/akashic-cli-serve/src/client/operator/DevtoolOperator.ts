@@ -145,9 +145,9 @@ export class DevtoolOperator {
 			gameContent.onTick.add(this.tickHandler, this);
 	};
 
-	private tickHandler(game: agv.GameLike): void {
+	private async tickHandler(game: agv.GameLike): Promise<void> {
 		if (this.store.devtoolUiStore.stopsGameOnTimeout)
-			this.updateRemainingTime();
+			await this.updateRemainingTime();
 
 		if (game.vars && game.vars.gameState) {
 			this.store.devtoolUiStore.setScore(game.vars.gameState.score);
@@ -156,7 +156,7 @@ export class DevtoolOperator {
 		}
 	}
 
-	private updateRemainingTime(): void {
+	private async updateRemainingTime(): Promise<void> {
 		if (!this.store.devtoolUiStore.isAutoSendEvent
 			|| this.store.devtoolUiStore.emulatingShinichibaMode !== "ranking"
 			|| this.store.currentLocalInstance!.executionMode === "replay"
@@ -165,7 +165,7 @@ export class DevtoolOperator {
 		const dur = this.store.currentPlay!.duration / 1000;
 		const totalTimeLimit = this.store.devtoolUiStore.totalTimeLimit;
 		if (dur >= totalTimeLimit! && !this.store.currentPlay!.isActivePausing) {
-			this.store.currentPlay!.pauseActive();
+			await this.store.currentPlay!.pauseActive();
 		}
 	}
 }

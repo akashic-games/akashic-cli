@@ -6,7 +6,7 @@ import { CliConfigurationFile } from "@akashic/akashic-cli-commons/lib/CliConfig
 import { SERVICE_TYPES } from "@akashic/akashic-cli-commons/lib/ServiceType";
 import { PlayManager, RunnerManager, setSystemLogger, getSystemLogger } from "@akashic/headless-driver";
 import * as bodyParser from "body-parser";
-import * as chalk from "chalk";
+import type * as Chalk from "chalk";
 import type { OptionValues } from "commander";
 import { Command } from "commander";
 import * as cors from "cors";
@@ -40,6 +40,13 @@ function convertToStrings(params: any[]): string[] {
 	});
 }
 
+// chalk@5 以降 pure ESM なので import() で読み込む
+async function importChalk(): Promise<(typeof Chalk)["default"]> {
+	// CommonJS 設定の TS では dynamic import が require() に変換されてしまうので、eval() で強引に imoprt() する
+	// eslint-disable-next-line no-eval
+	return (await eval("import('chalk')")).default;
+}
+
 async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Promise<void> {
 	if (cliConfigParam.port && isNaN(cliConfigParam.port)) {
 		console.error("Invalid --port option: " + cliConfigParam.port);
@@ -63,6 +70,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 		serverGlobalConfig.useGivenPort = true;
 	}
 
+	const chalk = await importChalk();
 	if (cliConfigParam.verbose) {
 		serverGlobalConfig.verbose = true;
 		setSystemLogger({
@@ -237,12 +245,15 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 				const contentId = `${i}`;
 				const targetPlayIds: string[] = [];
 				// 対象のコンテンツIDしか分からないので先に対応するコンテンツのrunnerを全て停止させる
-				playStore.getPlayIdsFromContentId(contentId).forEach(playId => {
-					playStore.getPlayInfo(playId)?.runners.forEach(runner => {
-						runnerStore.stopRunner(runner.runnerId);
-					});
+				const playIds = playStore.getPlayIdsFromContentId(contentId);
+				for (const playId of playIds) {
+					const runners = playStore.getPlayInfo(playId)?.runners;
+					if (runners) {
+						for (const runner of runners)
+							await runnerStore.stopRunner(runner.runnerId);
+					}
 					targetPlayIds.push(playId);
-				});
+				};
 				if (targetPlayIds.length === 0)
 					return;
 				const playId = await playStore.createPlay({
@@ -382,7 +393,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 		}
 	}
 
-	httpServer.listen(serverGlobalConfig.port, () => {
+	httpServer.listen(serverGlobalConfig.port, async () => {
 		if (serverGlobalConfig.port < 1024) {
 			getSystemLogger().warn("Akashic Serve is a development server which is not appropriate for public release. " +
 				`We do not recommend to listen on a well-known port ${serverGlobalConfig.port}.`);
@@ -397,7 +408,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 		}
 
 		if (cliConfigParam.openBrowser) {
-			open(url);
+			await open(url);
 		}
 	});
 }

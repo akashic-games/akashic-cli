@@ -1,5 +1,14 @@
 # Change Log
 
+## 1.16.14
+
+### Patch Changes
+
+- [#1384](https://github.com/akashic-games/akashic-cli/pull/1384) [`2d513f5`](https://github.com/akashic-games/akashic-cli/commit/2d513f5140544aca31be44a611effa2387e2e024) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Update eslint-config
+
+- Updated dependencies [[`2d513f5`](https://github.com/akashic-games/akashic-cli/commit/2d513f5140544aca31be44a611effa2387e2e024)]:
+  - @akashic/akashic-cli-scan@0.17.7
+
 ## 1.16.13
 
 ### Patch Changes

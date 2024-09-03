@@ -70,11 +70,7 @@ export function promiseModifyBasicParameter(param: ModifyBasicParameterParameter
 				.then(() => cmn.FileSystem.writeJSON<cmn.GameConfiguration>(gameJsonPath, content))
 				.then(() => logger.info("Done!"));
 		})
-		.then(restoreDirectory)
-		.catch((err) => {
-			restoreDirectory();
-			throw new Error(err);
-		});
+		.finally(restoreDirectory);
 }
 
 export function modifyBasicParameter(param: ModifyBasicParameterParameterObject, cb: (err?: any) => void): void {

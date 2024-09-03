@@ -26,7 +26,7 @@ window.addEventListener("load", async () => {
 			<App store={store} operator={operator} gameViewManager={gameViewManager} />,
 			document.getElementById("container")
 		);
-		operator.bootstrap();
+		await operator.bootstrap();
 
 		if (!window.opener && store.appOptions.experimentalOpen) {
 			for (let i = 0; i < store.appOptions.experimentalOpen; i++) {

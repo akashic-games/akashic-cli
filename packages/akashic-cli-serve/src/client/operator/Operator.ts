@@ -59,7 +59,7 @@ export class Operator {
 	}
 
 	async bootstrap(contentLocator?: ClientContentLocator): Promise<void> {
-		this._initializePlugins(contentLocator || this.store.contentStore.defaultContent().locator);
+		await this._initializePlugins(contentLocator || this.store.contentStore.defaultContent().locator);
 		const store = this.store;
 		const initialJoinPlayer = (isServiceTypeNicoliveLike(store.targetService) && store.player) || undefined;
 		let play: PlayEntity | null = null;
@@ -112,7 +112,7 @@ export class Operator {
 		let previousPlay;
 		if (store.currentPlay) {
 			previousPlay = store.currentPlay;
-			store.currentPlay.deleteAllLocalInstances();
+			await store.currentPlay.deleteAllLocalInstances();
 			store.setCurrentLocalInstance(null);
 		}
 
@@ -239,12 +239,12 @@ export class Operator {
 		return play;
 	}
 
-	private _handleBroadcast = (arg: PlayBroadcastTestbedEvent): void => {
+	private _handleBroadcast = async (arg: PlayBroadcastTestbedEvent): Promise<void> => {
 		try {
 			switch (arg.message.type) {
 				case "switchPlay":  // TODO typeを型づける
 					if (this.store.currentPlay!.playId === arg.playId) {
-						this.setCurrentPlay(this.store.playStore.plays[arg.message.nextPlayId]);
+						await this.setCurrentPlay(this.store.playStore.plays[arg.message.nextPlayId]);
 					}
 					break;
 				default:

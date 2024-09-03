@@ -46,11 +46,7 @@ export function promiseUpdate(param: UpdateParameterObject): Promise<void> {
 	return Promise.resolve()
 		.then(() => npm.update(normalizedParam.moduleNames))
 		.then(() => normalizedParam.logger.info("Done!"))
-		.then(restoreDirectory)
-		.catch((err) => {
-			restoreDirectory();
-			throw new Error(err);
-		});
+		.finally(restoreDirectory);
 }
 
 export function update(param: UpdateParameterObject, cb: (err: any) => void): void {

@@ -80,7 +80,7 @@ export async function promiseInit(p: InitParameterObject): Promise<void> {
 }
 
 export function init(param: InitParameterObject, cb: (err?: any) => void): Promise<void> | void {
-	promiseInit(param).then<void>(cb);
+	return promiseInit(param).then<void>(cb);
 }
 
 interface ExtractFromTemplateOptions {

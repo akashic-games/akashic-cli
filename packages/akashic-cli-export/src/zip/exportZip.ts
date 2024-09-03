@@ -129,7 +129,7 @@ export function promiseExportZip(param: ExportZipParameterObject): Promise<void>
 				archive.on("error", (err) => reject(err));
 				archive.pipe(ostream);
 				files.forEach((f) => archive.file(f.src, {name: f.entryName}));
-				archive.finalize();
+				return archive.finalize();
 			});
 			// TODO mkdtempのフォルダを削除すべき？
 		})

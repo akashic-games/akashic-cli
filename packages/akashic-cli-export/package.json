@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-export",
-  "version": "1.9.15",
+  "version": "1.9.16",
   "description": "A module to convert your Akashic game to a runnable standalone.",
   "scripts": {
     "prepublish": "npm run clean && npm run build",
@@ -42,7 +42,7 @@
   ],
   "devDependencies": {
     "@akashic/akashic-engine": "~2.6.7",
-    "@akashic/eslint-config": "1.1.0",
+    "@akashic/eslint-config": "2.1.0",
     "@akashic/sandbox-configuration": "^2.3.0",
     "@types/archiver": "5.3.4",
     "@types/commander": "2.12.2",
@@ -55,10 +55,10 @@
     "@types/node": "22.2.0",
     "@types/pngjs": "6.0.5",
     "@types/uglify-js": "3.17.5",
-    "@typescript-eslint/eslint-plugin": "5.43.0",
-    "eslint": "8.27.0",
+    "@typescript-eslint/eslint-plugin": "6.21.0",
+    "eslint": "8.57.0",
     "eslint-plugin-import": "2.29.1",
-    "eslint-plugin-jest": "26.9.0",
+    "eslint-plugin-jest": "27.9.0",
     "jest": "29.7.0",
     "minimatch": "5.1.6",
     "mock-fs": "5.2.0",
@@ -70,7 +70,7 @@
   },
   "dependencies": {
     "@akashic/akashic-cli-commons": "0.15.3",
-    "@akashic/akashic-cli-extra": "1.7.6",
+    "@akashic/akashic-cli-extra": "1.7.7",
     "@akashic/game-configuration": "2.3.0",
     "@akashic/headless-driver": "2.15.7",
     "@rollup/plugin-commonjs": "^26.0.1",
