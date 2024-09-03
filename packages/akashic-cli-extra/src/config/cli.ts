@@ -24,6 +24,8 @@ export function run(argv: string[]): void {
 		.action(async (target: string, opts: any = {}) => {
 			const logger = new ConsoleLogger({ quiet: opts.quiet });
 			const value = await config.getConfigItem(null, target);
+			// 互換性のために "null" の文字列を返している。(config に存在しない場合)
+			// 利用者は akashic-cli 内部に限られるはずで、本当は悪影響なくこの仕様は変更できる可能性がある。
 			logger.print(value ?? "null");
 		});
 
