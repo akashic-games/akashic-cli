@@ -1,5 +1,17 @@
 # Change Log
 
+## 1.16.16
+
+### Patch Changes
+
+- [#1410](https://github.com/akashic-games/akashic-cli/pull/1410) [`50050de`](https://github.com/akashic-games/akashic-cli/commit/50050deb431275365eb0bd43e934b66923d98ce3) Thanks [@renovate](https://github.com/apps/renovate)! - Updated dependency `@akashic/headless-driver` to `2.15.8`.
+
+## 1.16.15
+
+### Patch Changes
+
+- [#1408](https://github.com/akashic-games/akashic-cli/pull/1408) [`31cb5e7`](https://github.com/akashic-games/akashic-cli/commit/31cb5e73886d4d62c60abe2fc5cb196f96e57217) Thanks [@renovate](https://github.com/apps/renovate)! - Updated dependency `@akashic/trigger` to `2.1.3`.
+
 ## 1.16.14
 
 ### Patch Changes
