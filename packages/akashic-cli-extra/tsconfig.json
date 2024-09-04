@@ -6,11 +6,9 @@
     "module": "commonjs",
     "outDir": "./lib",
     "types" : ["node", "commander", "ini"],
-    "strict": true
+    "strict": true,
+    "esModuleInterop": true
   },
-  "files": [
-    "./typings/selected_lodash.d.ts"
-  ],
   "include": [
     "./src/**/*.ts"
   ]

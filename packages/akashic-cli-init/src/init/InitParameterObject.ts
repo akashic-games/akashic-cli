@@ -77,7 +77,7 @@ export async function completeInitParameterObject(param: InitParameterObject): P
 	const type = await _complete(param.type, configFile.getItem("init.defaultTemplateType"), "javascript");
 	const githubHost = await _complete(param.githubHost, configFile.getItem("init.github.host"), "github.com");
 	const githubProtocol = await _complete(param.githubProtocol, configFile.getItem("init.github.protocol"), "https");
-	const gheHost = await _complete(param.gheHost, configFile.getItem("init.ghe.host"), null);
+	const gheHost = await _complete(param.gheHost, configFile.getItem("init.ghe.host"), "");
 	const gheProtocol = await _complete(param.gheProtocol, configFile.getItem("init.ghe.protocol"), "https");
 
 	if (!isGitProtocol(githubProtocol))
@@ -125,7 +125,7 @@ function isGitProtocol(s: string): s is GitProtocol {
 	return s === "https" || s === "ssh";
 }
 
-async function _complete<T>(val: T | undefined, altVal: Promise<T | undefined>, defaultVal: T): Promise<T> {
+async function _complete<T>(val: T | undefined, altVal: Promise<T | undefined>, defaultVal: NonNullable<T>): Promise<NonNullable<T>> {
 	if (val != null) {
 		return val;
 	} else {
