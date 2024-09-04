@@ -1,5 +1,14 @@
 # Change Log
 
+## 1.15.9
+
+### Patch Changes
+
+- [#1406](https://github.com/akashic-games/akashic-cli/pull/1406) [`49d02f3`](https://github.com/akashic-games/akashic-cli/commit/49d02f3e1115192c3650bc0886fcc250ba9e838c) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Modify lodash on akashic-extra for security
+
+- Updated dependencies [[`49d02f3`](https://github.com/akashic-games/akashic-cli/commit/49d02f3e1115192c3650bc0886fcc250ba9e838c)]:
+  - @akashic/akashic-cli-extra@1.7.8
+
 ## 1.15.8
 
 ### Patch Changes
