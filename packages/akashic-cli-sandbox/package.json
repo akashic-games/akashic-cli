@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "@akashic/game-configuration": "^2.0.0",
-    "@akashic/headless-driver": "2.15.7",
+    "@akashic/headless-driver": "2.15.8",
     "commander": "^11.0.0",
     "debug": "^4.3.4",
     "ejs": "^3.1.8",
