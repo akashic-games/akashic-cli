@@ -1,10 +1,10 @@
 import * as path from "path";
-import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
-import { invertMap, makeUnixPath } from "@akashic/akashic-cli-commons/lib/Util";
+import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger.js";
+import { invertMap, makeUnixPath } from "@akashic/akashic-cli-commons/lib/Util.js";
 import type { AssetConfiguration, AudioAssetConfigurationBase } from "@akashic/game-configuration";
 import * as readdirRecursive from "fs-readdir-recursive";
-import { getAudioDuration } from "./getAudioDuration";
-import { getImageSize } from "./getImageSize";
+import { getAudioDuration } from "./getAudioDuration.js";
+import { getImageSize } from "./getImageSize.js";
 
 export type AssetFilter = (path: string) => boolean;
 

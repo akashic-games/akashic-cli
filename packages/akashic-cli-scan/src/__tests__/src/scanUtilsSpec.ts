@@ -1,13 +1,13 @@
 import * as path from "path";
 import * as fs from "fs";
-import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
+import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger.js";
 import * as mockfs from "mock-fs";
-import { scanAudioAssets, scanImageAssets, scanScriptAssets, scanTextAssets, scanBinaryAssets, knownExtensionAssetFilter } from "../../../lib/scanUtils";
-import { isBinaryFile } from "../../isBinaryFile";
-import { defaultTextAssetFilter } from "../../scanUtils";
-import { workaroundMockFsExistsSync } from "./testUtils";
-import * as getAudioDuration from "../../../lib/getAudioDuration";
-import { mockGetDuration } from "./helpers/MockGetDuration";
+import { scanAudioAssets, scanImageAssets, scanScriptAssets, scanTextAssets, scanBinaryAssets, knownExtensionAssetFilter } from "../../../lib/scanUtils.js";
+import { isBinaryFile } from "../../isBinaryFile.js";
+import { defaultTextAssetFilter } from "../../scanUtils.js";
+import { workaroundMockFsExistsSync } from "./testUtils.js";
+import * as getAudioDuration from "../../getAudioDuration.js";
+import { mockGetDuration } from "./helpers/MockGetDuration.js";
 
 describe("scanUtils", () => {
 	const nullLogger = new ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });

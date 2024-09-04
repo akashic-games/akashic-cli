@@ -1,4 +1,4 @@
-import { PromisedNpm, PromisedNpmParameterObject } from "@akashic/akashic-cli-commons/lib/PromisedNpm";
+import { PromisedNpm, PromisedNpmParameterObject } from "@akashic/akashic-cli-commons/lib/PromisedNpm.js";
 
 export interface MockPromisedNpmParameterObject extends PromisedNpmParameterObject {
 	expectDependencies: {[key: string]: any};

@@ -1,8 +1,8 @@
 import * as mockfs from "mock-fs";
 import * as path from "path";
 import * as fs from "fs";
-import * as getAudioDuration from "../../getAudioDuration";
-import { mockGetDuration } from "./helpers/MockGetDuration";
+import * as getAudioDuration from "../../getAudioDuration.js";
+import { mockGetDuration } from "./helpers/MockGetDuration.js";
 
 describe("getAudioDuration", function () {
 	var DUMMY_OGG_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy.ogg"));

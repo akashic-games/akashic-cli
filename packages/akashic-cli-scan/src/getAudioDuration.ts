@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
-import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
+import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger.js";
 import * as aacDuration from "aac-duration";
 import type { IAudioMetadata, IOptions, parseFile } from "music-metadata";
 import { mp4Inspector } from "thumbcoil";

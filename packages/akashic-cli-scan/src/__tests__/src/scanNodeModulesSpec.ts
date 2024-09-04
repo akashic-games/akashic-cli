@@ -1,12 +1,12 @@
 import * as fs from "fs";
 import * as path from "path";
-import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
+import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger.js";
 import * as mockfs from "mock-fs";
-import { scanNodeModules } from "../../../lib/scanNodeModules";
+import { scanNodeModules } from "../../../lib/scanNodeModules.js";
 import { Util } from "@akashic/akashic-cli-commons";
-import { MockPromisedNpm } from "./helpers/MockPromisedNpm";
-import { workaroundMockFsExistsSync } from "./testUtils";
-import { ScanNodeModulesParameterObject } from "../../scanNodeModules";
+import { MockPromisedNpm } from "./helpers/MockPromisedNpm.js";
+import { workaroundMockFsExistsSync } from "./testUtils.js";
+import { ScanNodeModulesParameterObject } from "../../scanNodeModules.js";
 
 describe("scanNodeModules", () => {
 	const nullLogger = new ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });

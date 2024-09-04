@@ -1,11 +1,11 @@
 import * as fs from "fs";
 import * as path from "path";
-import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
-import { readJSON, writeJSON } from "@akashic/akashic-cli-commons/lib/FileSystem";
-import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
-import { NodeModules } from "@akashic/akashic-cli-commons/lib/NodeModules";
-import { PromisedNpm } from "@akashic/akashic-cli-commons/lib/PromisedNpm";
-import { chdir } from "@akashic/akashic-cli-commons/lib/Util";
+import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger.js";
+import { readJSON, writeJSON } from "@akashic/akashic-cli-commons/lib/FileSystem.js";
+import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger.js";
+import { NodeModules } from "@akashic/akashic-cli-commons/lib/NodeModules.js";
+import { PromisedNpm } from "@akashic/akashic-cli-commons/lib/PromisedNpm.js";
+import { chdir } from "@akashic/akashic-cli-commons/lib/Util.js";
 import type { GameConfiguration } from "@akashic/game-configuration";
 
 export interface ScanNodeModulesParameterObject {

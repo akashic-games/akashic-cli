@@ -1,12 +1,12 @@
 import * as path from "path";
 import * as fs from "fs";
-import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
+import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger.js";
 import type { AssetConfiguration, AssetConfigurationMap, AudioAssetConfigurationBase, GameConfiguration } from "@akashic/game-configuration";
 import * as mockfs from "mock-fs";
-import { scanAsset } from "../../../lib/scanAsset";
-import { workaroundMockFsExistsSync } from "./testUtils";
-import * as getAudioDuration from "../../../lib/getAudioDuration";
-import { mockGetDuration } from "./helpers/MockGetDuration";
+import { scanAsset } from "../../../lib/scanAsset.js";
+import { workaroundMockFsExistsSync } from "./testUtils.js";
+import * as getAudioDuration from "../../../lib/getAudioDuration.js";
+import { mockGetDuration } from "./helpers/MockGetDuration.js";
 
 describe("scanAsset()", () => {
 	const nullLogger = new ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
