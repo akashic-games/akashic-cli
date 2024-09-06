@@ -12,7 +12,7 @@ export class MockPromisedNpm extends PromisedNpm {
 	constructor(param: MockPromisedNpmParameterObject) {
 		super({});
 		this.expectDependencies = param.expectDependencies;
-		this.expectDevDependencies = param.expectDevDependencies;
+		this.expectDevDependencies = param.expectDevDependencies ?? {};
 	}
 	_load(): Promise<void> {
 		return Promise.resolve();

@@ -1,10 +1,26 @@
+import { existsSync, readdirSync } from "fs";
 import * as path from "path";
 import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger.js";
 import { invertMap, makeUnixPath } from "@akashic/akashic-cli-commons/lib/Util.js";
 import type { AssetConfiguration, AudioAssetConfigurationBase } from "@akashic/game-configuration";
-import * as readdirRecursive from "fs-readdir-recursive";
 import { getAudioDuration } from "./getAudioDuration.js";
 import { getImageSize } from "./getImageSize.js";
+
+const readdirRecursive = (dir: string, baseDir = dir): string[] => {
+	let files: string[] = [];
+	if (!existsSync(dir)) return files;
+	const items = readdirSync(dir, { withFileTypes: true });
+	for (const item of items) {
+		const fullPath = path.join(dir, item.name);
+		const relativePath = path.relative(baseDir, fullPath);
+		if (item.isDirectory()) {
+			files = files.concat(readdirRecursive(fullPath, baseDir));
+		} else {
+			files.push(relativePath);
+		}
+	}
+	return files;
+};
 
 export type AssetFilter = (path: string) => boolean;
 

@@ -25,7 +25,7 @@ npm run build
 ## テスト方法
 
 1. [eslint](https://eslint.org/ "eslint")を使ったLint
-2. [jest](https://jestjs.io/ "jest")を使ったテスト
+2. [vitest](https://vitest.dev/ "vitest")を使ったテスト
 
 がそれぞれ実行されます。
 

@@ -4,7 +4,7 @@ interface Mp4Inspector {
 
 declare module "thumbcoil" {
 	namespace thumbcoil {
-		var mp4Inspector: Mp4Inspector;
+		const mp4Inspector: Mp4Inspector;
 	}
-	export = thumbcoil;
+	export default thumbcoil;
 }
