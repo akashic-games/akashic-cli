@@ -5,9 +5,9 @@ import type { GameConfiguration } from "@akashic/akashic-cli-commons/lib/GameCon
 import { mkdirpSync } from "@akashic/akashic-cli-commons/lib/Util";
 import type { AssetConfiguration, ImageAssetConfigurationBase } from "@akashic/game-configuration";
 import type { PNG } from "pngjs";
-import { makeUniqueAssetPath } from "./GameConfigurationUtil";
-import type { PackResult, PackTarget } from "./packRects";
-import { packSmallRects } from "./packRects";
+import { makeUniqueAssetPath } from "./GameConfigurationUtil.js";
+import type { PackResult, PackTarget } from "./packRects.js";
+import { packSmallRects } from "./packRects.js";
 
 /**
  * コンテンツ内の小さい画像 (PNG ファイル) を、一定サイズに収まる限りでパッキングして一つにまとめる。

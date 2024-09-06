@@ -3,7 +3,7 @@ import * as path from "path";
 import type { CliConfigUpdate } from "@akashic/akashic-cli-commons";
 import { ConsoleLogger, CliConfigurationFile } from "@akashic/akashic-cli-commons";
 import { Command } from "commander";
-import { promiseUpdate } from "./update";
+import { promiseUpdate } from "./update.js";
 
 const ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "..", "package.json"), "utf8")).version;
 

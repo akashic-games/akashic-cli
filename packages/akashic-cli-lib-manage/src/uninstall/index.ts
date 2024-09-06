@@ -1,2 +1,2 @@
-export { run } from "./cli";
-export { uninstall, promiseUninstall } from "./uninstall";
+export { run } from "./cli.js";
+export { uninstall, promiseUninstall } from "./uninstall.js";

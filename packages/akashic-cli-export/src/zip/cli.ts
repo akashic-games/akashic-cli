@@ -3,7 +3,7 @@ import * as path from "path";
 import type { CliConfigExportZip} from "@akashic/akashic-cli-commons";
 import { ConsoleLogger, CliConfigurationFile, SERVICE_TYPES } from "@akashic/akashic-cli-commons";
 import { Command } from "commander";
-import { promiseExportZip } from "./exportZip";
+import { promiseExportZip } from "./exportZip.js";
 
 const ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "..", "package.json"), "utf8")).version;
 

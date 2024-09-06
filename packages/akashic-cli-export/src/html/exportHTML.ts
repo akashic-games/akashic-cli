@@ -6,10 +6,10 @@ import * as cmn from "@akashic/akashic-cli-commons";
 import archiver = require("archiver");
 import * as fsx from "fs-extra";
 import readdir = require("fs-readdir-recursive");
-import { promiseConvertBundle } from "./convertBundle";
-import { promiseConvertNoBundle } from "./convertNoBundle";
-import type { ConvertTemplateParameterObject } from "./convertUtil";
-import * as Utils from "./Utils";
+import { promiseConvertBundle } from "./convertBundle.js";
+import { promiseConvertNoBundle } from "./convertNoBundle.js";
+import type { ConvertTemplateParameterObject } from "./convertUtil.js";
+import * as Utils from "./Utils.js";
 
 export interface ExportHTMLParameterObject extends ConvertTemplateParameterObject {
 	quiet?: boolean;

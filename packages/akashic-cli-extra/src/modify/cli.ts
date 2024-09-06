@@ -3,7 +3,7 @@ import * as path from "path";
 import type { CliConfigModify } from "@akashic/akashic-cli-commons";
 import { ConsoleLogger, CliConfigurationFile } from "@akashic/akashic-cli-commons";
 import { Command } from "commander";
-import { promiseModifyBasicParameter } from "./modify";
+import { promiseModifyBasicParameter } from "./modify.js";
 
 const commander = new Command();
 

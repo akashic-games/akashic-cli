@@ -5,7 +5,7 @@ import * as cmn from "@akashic/akashic-cli-commons";
 import { size as statSize } from "@akashic/akashic-cli-extra/lib/stat";
 import archiver = require("archiver");
 import readdir = require("fs-readdir-recursive");
-import { convertGame } from "./convert";
+import { convertGame } from "./convert.js";
 
 export interface ExportZipParameterObject {
 	bundle?: boolean;

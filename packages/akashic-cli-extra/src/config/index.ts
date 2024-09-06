@@ -1,4 +1,4 @@
-import { run } from "./cli";
+import { run } from "./cli.js";
 export { run };
 export {
 	StringMap,
@@ -6,4 +6,4 @@ export {
 	getConfigItem,
 	setConfigItem,
 	deleteConfigItem
-} from "./config";
+} from "./config.js";

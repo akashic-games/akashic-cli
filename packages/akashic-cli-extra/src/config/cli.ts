@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons";
 import { Command } from "commander";
-import * as config from "./config";
+import * as config from "./config.js";
 
 /**
  * akashic cli configを実行する

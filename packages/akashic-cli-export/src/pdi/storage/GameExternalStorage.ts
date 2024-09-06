@@ -1,5 +1,5 @@
-import * as types from "./content-storage-types";
-import type { KVSLike } from "./KVSLike";
+import * as types from "./content-storage-types/index.js";
+import type { KVSLike } from "./KVSLike.js";
 
 export interface GameExternalStorageParameterObject {
 	kvs: KVSLike;

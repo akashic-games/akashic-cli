@@ -3,7 +3,7 @@ import * as path from "path";
 import type { CliConfigUninstall } from "@akashic/akashic-cli-commons";
 import { ConsoleLogger, CliConfigurationFile } from "@akashic/akashic-cli-commons";
 import { Command } from "commander";
-import { promiseUninstall } from "./uninstall";
+import { promiseUninstall } from "./uninstall.js";
 
 function cli(param: CliConfigUninstall): void {
 	const logger = new ConsoleLogger({ quiet: param.quiet });

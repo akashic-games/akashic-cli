@@ -1,5 +1,5 @@
-import type { InitCommonOptions } from "../common/InitCommonOptions";
-import { completeInitCommonOptions } from "../common/InitCommonOptions";
+import type { InitCommonOptions } from "../common/InitCommonOptions.js";
+import { completeInitCommonOptions } from "../common/InitCommonOptions.js";
 
 export interface ListTemplatesParameterObject extends InitCommonOptions {
 	// add nothing.

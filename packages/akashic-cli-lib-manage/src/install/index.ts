@@ -1,2 +1,2 @@
-export { run } from "./cli";
-export { install, promiseInstall } from "./install";
+export { run } from "./cli.js";
+export { install, promiseInstall } from "./install.js";
