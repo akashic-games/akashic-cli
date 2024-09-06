@@ -1,6 +1,6 @@
-import { collectLocalTemplatesMetadata, fetchRemoteTemplatesMetadata } from "../common/TemplateMetadata";
-import type { ListTemplatesParameterObject} from "./ListTemplatesParameterObject";
-import { completeListTemplatesParamterObject } from "./ListTemplatesParameterObject";
+import { collectLocalTemplatesMetadata, fetchRemoteTemplatesMetadata } from "../common/TemplateMetadata.js";
+import type { ListTemplatesParameterObject} from "./ListTemplatesParameterObject.js";
+import { completeListTemplatesParamterObject } from "./ListTemplatesParameterObject.js";
 
 export async function listTemplates(p: ListTemplatesParameterObject): Promise<void> {
 	const param = await completeListTemplatesParamterObject(p);

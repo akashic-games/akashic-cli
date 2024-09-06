@@ -7,7 +7,7 @@ import type {
 	StorageWriteType,
 	StorageData,
 	StorageWriteFailureType
-} from "./types";
+} from "./types.js";
 
 /**
  * GameExternalStorageReadRequest.limitのデフォルト値

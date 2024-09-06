@@ -1,5 +1,5 @@
 export {
 	update, promiseUpdate
-} from "./update";
-import { run } from "./cli";
+} from "./update.js";
+import { run } from "./cli.js";
 export { run };

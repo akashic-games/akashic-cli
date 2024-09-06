@@ -2,7 +2,7 @@ import * as childProcess from "child_process";
 import * as fs from "fs/promises";
 import * as path from "path";
 import * as util from "util";
-import type { GitProtocol, InitParameterObject } from "./InitParameterObject";
+import type { GitProtocol, InitParameterObject } from "./InitParameterObject.js";
 const exec = util.promisify(childProcess.exec);
 
 interface GitCloneParameterObject {

@@ -13,12 +13,12 @@ import readdir = require("fs-readdir-recursive");
 import type { OutputChunk, RollupBuild } from "rollup";
 import { rollup } from "rollup";
 import * as UglifyJS from "uglify-js";
-import * as utils from "../utils";
-import { validateGameJson } from "../utils";
-import { getFromHttps } from "./apiUtil";
-import { NICOLIVE_SIZE_LIMIT_GAME_JSON, NICOLIVE_SIZE_LIMIT_TOTAL_FILE } from "./constants";
-import * as gcu from "./GameConfigurationUtil";
-import { transformPackSmallImages } from "./transformPackImages";
+import * as utils from "../utils.js";
+import { validateGameJson } from "../utils.js";
+import { getFromHttps } from "./apiUtil.js";
+import { NICOLIVE_SIZE_LIMIT_GAME_JSON, NICOLIVE_SIZE_LIMIT_TOTAL_FILE } from "./constants.js";
+import * as gcu from "./GameConfigurationUtil.js";
+import { transformPackSmallImages } from "./transformPackImages.js";
 
 export interface ConvertGameParameterObject {
 	bundle?: boolean;

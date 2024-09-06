@@ -8,13 +8,13 @@ import {
 	digestOfTemplateMetadata,
 	fetchRemoteTemplatesMetadata,
 	fetchTemplate
-} from "../common/TemplateMetadata";
-import { updateConfigurationFile } from "./BasicParameters";
-import { cloneTemplate, parseCloneTargetInfo } from "./cloneTemplate";
-import type { InitParameterObject} from "./InitParameterObject";
-import { completeInitParameterObject } from "./InitParameterObject";
-import type { TemplateConfig, NormalizedTemplateConfig } from "./TemplateConfig";
-import { completeTemplateConfig } from "./TemplateConfig";
+} from "../common/TemplateMetadata.js";
+import { updateConfigurationFile } from "./BasicParameters.js";
+import { cloneTemplate, parseCloneTargetInfo } from "./cloneTemplate.js";
+import type { InitParameterObject} from "./InitParameterObject.js";
+import { completeInitParameterObject } from "./InitParameterObject.js";
+import type { TemplateConfig, NormalizedTemplateConfig } from "./TemplateConfig.js";
+import { completeTemplateConfig } from "./TemplateConfig.js";
 
 export async function promiseInit(p: InitParameterObject): Promise<void> {
 	const param = await completeInitParameterObject(p);

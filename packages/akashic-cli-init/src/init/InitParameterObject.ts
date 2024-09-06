@@ -1,6 +1,6 @@
-import type { InitCommonOptions} from "../common/InitCommonOptions";
-import { completeInitCommonOptions, confirmAccessToUrl } from "../common/InitCommonOptions";
-import { createGitUri, parseCloneTargetInfo } from "./cloneTemplate";
+import type { InitCommonOptions} from "../common/InitCommonOptions.js";
+import { completeInitCommonOptions, confirmAccessToUrl } from "../common/InitCommonOptions.js";
+import { createGitUri, parseCloneTargetInfo } from "./cloneTemplate.js";
 
 export type GitProtocol = "https" | "ssh";
 

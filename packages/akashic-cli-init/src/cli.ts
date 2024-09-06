@@ -4,8 +4,8 @@ import type { CliConfigInit } from "@akashic/akashic-cli-commons/lib/CliConfig/C
 import { CliConfigurationFile } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigurationFile";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
 import { Command } from "commander";
-import { promiseInit } from "./init/init";
-import { listTemplates } from "./list/listTemplates";
+import { promiseInit } from "./init/init.js";
+import { listTemplates } from "./list/listTemplates.js";
 
 async function cli(param: CliConfigInit): Promise<void> {
 	const logger = new ConsoleLogger({ quiet: param.quiet });

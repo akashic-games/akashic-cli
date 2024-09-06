@@ -3,9 +3,9 @@ import * as path from "path";
 import * as cmn from "@akashic/akashic-cli-commons";
 import * as ejs from "ejs";
 import * as fsx from "fs-extra";
-import { validateGameJson } from "../utils";
+import { validateGameJson } from "../utils.js";
 import type {
-	ConvertTemplateParameterObject} from "./convertUtil";
+	ConvertTemplateParameterObject} from "./convertUtil.js";
 import {
 	copyAssetFilesStrip,
 	copyAssetFiles,
@@ -18,7 +18,7 @@ import {
 	validateEs5Code,
 	validateSandboxConfigJs,
 	readSandboxConfigJs
-} from "./convertUtil";
+} from "./convertUtil.js";
 
 interface InnerHTMLAssetData {
 	name: string;

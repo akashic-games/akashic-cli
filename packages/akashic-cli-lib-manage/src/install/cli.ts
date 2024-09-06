@@ -3,8 +3,8 @@ import * as path from "path";
 import type { CliConfigInstall } from "@akashic/akashic-cli-commons";
 import { ConsoleLogger, CliConfigurationFile } from "@akashic/akashic-cli-commons";
 import { Command } from "commander";
-import type { InstallParameterObject} from "./install";
-import { promiseInstall } from "./install";
+import type { InstallParameterObject} from "./install.js";
+import { promiseInstall } from "./install.js";
 
 function cli(param: CliConfigInstall): void {
 	const logger = new ConsoleLogger({ quiet: param.quiet });

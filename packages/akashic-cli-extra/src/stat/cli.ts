@@ -3,7 +3,7 @@ import * as path from "path";
 import type { Logger, CliConfigStat } from "@akashic/akashic-cli-commons";
 import { ConsoleLogger, ConfigurationFile, CliConfigurationFile } from "@akashic/akashic-cli-commons";
 import { Command } from "commander";
-import * as stat from "./stat";
+import * as stat from "./stat.js";
 
 function statSize(logger: Logger, param: CliConfigStat): void {
 	const basepath = param.cwd || process.cwd();
