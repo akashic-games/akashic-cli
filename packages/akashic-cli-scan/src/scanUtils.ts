@@ -6,6 +6,7 @@ import type { AssetConfiguration, AudioAssetConfigurationBase } from "@akashic/g
 import { getAudioDuration } from "./getAudioDuration.js";
 import { getImageSize } from "./getImageSize.js";
 
+// FIXME: akashic-cli-commons が ES Module に移行したタイミングで移すべき
 const readdirRecursive = (dir: string, baseDir = dir): string[] => {
 	let files: string[] = [];
 	if (!existsSync(dir)) return files;

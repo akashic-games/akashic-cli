@@ -14,7 +14,6 @@
     "esModuleInterop": true
   },
   "files": [
-    "./typings/fs-readdir-recursive.d.ts",
     "./typings/aac-duration.d.ts",
     "./typings/thumbcoil.d.ts",
     "./typings/music-metadata.d.ts",
