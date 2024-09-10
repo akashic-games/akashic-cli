@@ -1,4 +1,4 @@
 declare module "aac-duration" {
-	var duration: (path: string) => number;
-	export = duration;
+	const duration: (path: string) => number;
+	export default duration;
 }
