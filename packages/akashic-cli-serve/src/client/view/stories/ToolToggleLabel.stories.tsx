@@ -3,7 +3,7 @@ import * as React from "react";
 import { ToolToggleLabel } from "../atom/ToolToggleLabel";
 
 export default {
-	title: "a-ToolToggleLabel",
+	title: "a-ToolToggleLabel"
 };
 
 export const Pushed = {
@@ -13,7 +13,7 @@ export const Pushed = {
 		</ToolToggleLabel>
 	),
 
-	name: "pushed",
+	name: "pushed"
 };
 
 export const NonPushed = {
@@ -23,5 +23,5 @@ export const NonPushed = {
 		</ToolToggleLabel>
 	),
 
-	name: "non-pushed",
+	name: "non-pushed"
 };

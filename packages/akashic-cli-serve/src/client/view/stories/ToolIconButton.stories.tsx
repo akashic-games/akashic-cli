@@ -5,7 +5,7 @@ import * as React from "react";
 import { ToolIconButton } from "../atom/ToolIconButton";
 
 const store = observable({
-	pushed: false,
+	pushed: false
 });
 
 const TestWithBehaviour = observer(() => (
@@ -19,7 +19,7 @@ const TestWithBehaviour = observer(() => (
 ));
 
 export default {
-	title: "a-ToolIconButton",
+	title: "a-ToolIconButton"
 };
 
 export const Basic = {
@@ -32,7 +32,7 @@ export const Basic = {
 		/>
 	),
 
-	name: "basic",
+	name: "basic"
 };
 
 export const Disabled = {
@@ -45,7 +45,7 @@ export const Disabled = {
 		/>
 	),
 
-	name: "disabled",
+	name: "disabled"
 };
 
 export const Pushed = {
@@ -58,7 +58,7 @@ export const Pushed = {
 		/>
 	),
 
-	name: "pushed",
+	name: "pushed"
 };
 
 export const PushedPushedIcon = {
@@ -72,7 +72,7 @@ export const PushedPushedIcon = {
 		/>
 	),
 
-	name: "pushed&pushedIcon",
+	name: "pushed&pushedIcon"
 };
 
 export const NonPushedPushedIcon = {
@@ -86,7 +86,7 @@ export const NonPushedPushedIcon = {
 		/>
 	),
 
-	name: "non-pushed&pushedIcon",
+	name: "non-pushed&pushedIcon"
 };
 
 export const PushedDisabled = {
@@ -100,7 +100,7 @@ export const PushedDisabled = {
 		/>
 	),
 
-	name: "pushed&disabled",
+	name: "pushed&disabled"
 };
 
 export const WithText = {
@@ -114,10 +114,10 @@ export const WithText = {
 		</ToolIconButton>
 	),
 
-	name: "with text",
+	name: "with text"
 };
 
 export const WithBehaviorToggle = {
 	render: () => <TestWithBehaviour />,
-	name: "with behavior (toggle)",
+	name: "with behavior (toggle)"
 };

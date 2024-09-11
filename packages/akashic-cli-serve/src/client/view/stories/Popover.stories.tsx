@@ -4,7 +4,7 @@ import * as React from "react";
 import { Popover } from "../atom/Popover";
 
 const store = observable({
-	shows: false,
+	shows: false
 });
 
 const TestWithBehaviour = observer(() => {
@@ -28,7 +28,7 @@ const TestWithBehaviour = observer(() => {
 });
 
 export default {
-	title: "a-Popover",
+	title: "a-Popover"
 };
 
 export const Basic = {
@@ -47,10 +47,10 @@ export const Basic = {
 		</Popover>
 	),
 
-	name: "basic",
+	name: "basic"
 };
 
 export const WithBehavior = {
 	render: () => <TestWithBehaviour />,
-	name: "with-behavior",
+	name: "with-behavior"
 };

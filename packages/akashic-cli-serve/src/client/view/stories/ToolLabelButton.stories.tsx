@@ -2,7 +2,7 @@ import * as React from "react";
 import { ToolLabelButton } from "../atom/ToolLabelButton";
 
 export default {
-	title: "a-ToolLabelButton",
+	title: "a-ToolLabelButton"
 };
 
 export const Basic = {
@@ -12,5 +12,5 @@ export const Basic = {
 		</ToolLabelButton>
 	),
 
-	name: "basic",
+	name: "basic"
 };

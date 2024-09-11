@@ -3,7 +3,7 @@ import * as React from "react";
 import { PlayControl } from "../molecule/PlayControl";
 
 export default {
-	title: "m-PlayControl",
+	title: "m-PlayControl"
 };
 
 export const Basic = {
@@ -16,12 +16,12 @@ export const Basic = {
 				onClickReset: action("reset"),
 				onClickActivePause: action("active-pause"),
 				onClickAddInstance: action("add-instance"),
-				onClickStep: action("step"),
+				onClickStep: action("step")
 			})}
 		/>
 	),
 
-	name: "basic",
+	name: "basic"
 };
 
 export const Pausing = {
@@ -34,10 +34,10 @@ export const Pausing = {
 				onClickReset: action("reset"),
 				onClickActivePause: action("active-pause"),
 				onClickAddInstance: action("add-instance"),
-				onClickStep: action("step"),
+				onClickStep: action("step")
 			})}
 		/>
 	),
 
-	name: "pausing",
+	name: "pausing"
 };

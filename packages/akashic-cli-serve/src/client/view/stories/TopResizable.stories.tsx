@@ -5,7 +5,7 @@ import * as React from "react";
 import { TopResizable } from "../atom/TopResizable";
 
 const store = observable({
-	height: 200,
+	height: 200
 });
 
 const TestWithBehaviour = observer(() => (
@@ -14,7 +14,7 @@ const TestWithBehaviour = observer(() => (
 			display: "flex",
 			flexFlow: "column nowrap",
 			padding: 20,
-			height: 300,
+			height: 300
 		}}
 	>
 		<div style={{ flex: "1 1 auto", background: "#ddd" }} />
@@ -31,7 +31,7 @@ const TestWithBehaviour = observer(() => (
 ));
 
 export default {
-	title: "a-TopResizable",
+	title: "a-TopResizable"
 };
 
 export const Basic = {
@@ -45,10 +45,10 @@ export const Basic = {
 		</div>
 	),
 
-	name: "basic",
+	name: "basic"
 };
 
 export const WithBehavior = {
 	render: () => <TestWithBehaviour />,
-	name: "with-behavior",
+	name: "with-behavior"
 };

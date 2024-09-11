@@ -9,7 +9,7 @@ function createDummyDiv(width: number, height: number): HTMLElement {
 }
 
 export default {
-	title: "o-GameScreen",
+	title: "o-GameScreen"
 };
 
 export const Basic = {
@@ -35,7 +35,7 @@ export const Basic = {
 		/>
 	),
 
-	name: "basic",
+	name: "basic"
 };
 
 export const Background = {
@@ -61,7 +61,7 @@ export const Background = {
 		/>
 	),
 
-	name: "background",
+	name: "background"
 };
 
 export const BackgroundGrid = {
@@ -87,7 +87,7 @@ export const BackgroundGrid = {
 		/>
 	),
 
-	name: "background&grid",
+	name: "background&grid"
 };
 
 export const DesignGuideline = {
@@ -113,7 +113,7 @@ export const DesignGuideline = {
 		/>
 	),
 
-	name: "designGuideline",
+	name: "designGuideline"
 };
 
 export const ConfirmDialog = {
@@ -132,7 +132,7 @@ export const ConfirmDialog = {
 				remainingSeconds: 15,
 				name: "プレイヤー名X",
 				guestName: "ゲスト名Y",
-				onClick: action("onClick"),
+				onClick: action("onClick")
 			}}
 			profilerCanvasProps={undefined}
 			shouldStopPropagationFunc={() => {
@@ -144,7 +144,7 @@ export const ConfirmDialog = {
 		/>
 	),
 
-	name: "confirmDialog",
+	name: "confirmDialog"
 };
 
 export const Profiler = {
@@ -167,35 +167,35 @@ export const Profiler = {
 						data: [30, 31, 28, 32, 35, 30, 31, 28, 32, 35],
 						max: 35,
 						min: 28,
-						fixed: 2,
+						fixed: 2
 					},
 					{
 						name: "skipped",
 						data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 						max: 0,
 						min: 0,
-						fixed: 1,
+						fixed: 1
 					},
 					{
 						name: "interval",
 						data: [36, 31, 32, 32, 34, 36, 33, 33, 30, 30],
 						max: 36,
 						min: 30,
-						fixed: 1,
+						fixed: 1
 					},
 					{
 						name: "frame",
 						data: [4, 1, 0, 0, 0, 1, 2, 0, 0, 0],
 						max: 4,
 						min: 0,
-						fixed: 1,
+						fixed: 1
 					},
 					{
 						name: "rendering",
 						data: [1, 0, 1, 0, 1, 0, 1, 0, 1, 0],
 						max: 1,
 						min: 0,
-						fixed: 1,
+						fixed: 1
 					},
 				],
 				profilerStyleSetting: {
@@ -211,10 +211,10 @@ export const Profiler = {
 					graphColor: "lavender",
 					graphWidth: 3,
 					graphWidthMargin: 1,
-					graphPadding: 5,
+					graphPadding: 5
 				},
 				profilerWidth: 150,
-				profilerHeight: 61,
+				profilerHeight: 61
 			}}
 			shouldStopPropagationFunc={() => {
 				action("shouldStopPropagation");
@@ -225,5 +225,5 @@ export const Profiler = {
 		/>
 	),
 
-	name: "profiler",
+	name: "profiler"
 };

@@ -13,9 +13,9 @@ const store = observable({
 		"Start (difficulty: 10)": JSON.stringify([[32, 0, "test2"]], null, 2),
 		Stop: JSON.stringify([[32, 0, "stop"]], null, 2),
 		"foo (a very long long argument name example to test, woo hoo!)":
-      JSON.stringify([[32, 0, "Long"]], null, 2),
+        JSON.stringify([[32, 0, "Long"]], null, 2)
 	} as { [name: string]: string },
-	selectedArgumentName: "",
+	selectedArgumentName: ""
 });
 
 const Box = (props: any): JSX.Element => {
@@ -24,7 +24,7 @@ const Box = (props: any): JSX.Element => {
 		flexFlow: "row nowrap",
 		justifyContent: "center",
 		padding: 10,
-		border: "1px dotted red",
+		border: "1px dotted red"
 	};
 	return <div style={style}>{props.children}</div>;
 };
@@ -51,7 +51,7 @@ const TestWithBehaviour = observer(() => (
 ));
 
 export default {
-	title: "m-StartupScreen",
+	title: "m-StartupScreen"
 };
 
 export const Basic = {
@@ -78,7 +78,7 @@ export const Basic = {
 		</Box>
 	),
 
-	name: "basic",
+	name: "basic"
 };
 
 export const ManyArgumentsTable = {
@@ -123,7 +123,7 @@ export const ManyArgumentsTable = {
 					"Test 29": "1",
 					"Test 30": "1",
 					"Test 31": "1",
-					"Test 32": "1",
+					"Test 32": "1"
 				}}
 				selectedArgumentName={"Test 9"}
 				argumentEditContent={"[\"test\"]"}
@@ -137,10 +137,10 @@ export const ManyArgumentsTable = {
 		</Box>
 	),
 
-	name: "many argumentsTable",
+	name: "many argumentsTable"
 };
 
 export const WithBehavior = {
 	render: () => <TestWithBehaviour />,
-	name: "with-behavior",
+	name: "with-behavior"
 };

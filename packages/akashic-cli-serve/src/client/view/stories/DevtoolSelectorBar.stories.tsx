@@ -3,7 +3,7 @@ import * as React from "react";
 import { DevtoolSelectorBar } from "../atom/DevtoolSelectorBar";
 
 export default {
-	title: "a-DevtoolSelectorBar",
+	title: "a-DevtoolSelectorBar"
 };
 
 export const Basic = {
@@ -13,12 +13,12 @@ export const Basic = {
 				{ name: "Instances", onClick: action("instance"), active: true },
 				{ name: "Entities", onClick: action("entities") },
 				{ name: "Events", onClick: action("events") },
-				{ name: "Niconico", onClick: action("niconico"), warning: true },
+				{ name: "Niconico", onClick: action("niconico"), warning: true }
 			]}
 		/>
 	),
 
-	name: "basic",
+	name: "basic"
 };
 
 export const ActiveWarn = {
@@ -30,11 +30,11 @@ export const ActiveWarn = {
 					name: "Instances",
 					onClick: action("instance"),
 					active: true,
-					warning: true,
-				},
+					warning: true
+				}
 			]}
 		/>
 	),
 
-	name: "active&warn",
+	name: "active&warn"
 };

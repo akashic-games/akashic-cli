@@ -8,7 +8,7 @@ const store = observable({
 	max: 100,
 	value: 10,
 	subValue: 4,
-	markerValue: 20,
+	markerValue: 20
 });
 
 const TestWithBehaviour = observer(() => (
@@ -69,7 +69,7 @@ const TestWithBehaviour = observer(() => (
 ));
 
 export default {
-	title: "a-ToolProgressBar",
+	title: "a-ToolProgressBar"
 };
 
 export const Basic = {
@@ -83,28 +83,28 @@ export const Basic = {
 		/>
 	),
 
-	name: "basic",
+	name: "basic"
 };
 
 export const Active = {
 	render: () => <ToolProgressBar width={200} max={100} value={64} active />,
 
-	name: "active",
+	name: "active"
 };
 
 export const Min = {
 	render: () => <ToolProgressBar width={200} max={10} value={0} />,
-	name: "min",
+	name: "min"
 };
 
 export const Max = {
 	render: () => <ToolProgressBar width={200} max={100} value={100} />,
-	name: "max",
+	name: "max"
 };
 
 export const NoWidth = {
 	render: () => <ToolProgressBar max={100} value={50} />,
-	name: "no-width",
+	name: "no-width"
 };
 
 export const SubMarker = {
@@ -118,10 +118,10 @@ export const SubMarker = {
 		/>
 	),
 
-	name: "sub/marker",
+	name: "sub/marker"
 };
 
 export const WithBehaviour = {
 	render: () => <TestWithBehaviour />,
-	name: "with-behaviour",
+	name: "with-behaviour"
 };

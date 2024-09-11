@@ -13,9 +13,9 @@ const store = observable({
 		"Start (difficulty: 10)": [[32, 0, "test2"]],
 		Stop: [[32, 0, "stop"]],
 		"foo (a very long long event name example to test, woo hoo!)": [
-			[32, 0, "Long"],
+			[32, 0, "Long"]
 		],
-	} as { [name: string]: any[] },
+	} as { [name: string]: any[] }
 });
 
 const TestWithBehaviour = observer(() => (
@@ -37,7 +37,7 @@ const TestWithBehaviour = observer(() => (
 ));
 
 export default {
-	title: "m-EventsDevtool",
+	title: "m-EventsDevtool"
 };
 
 export const Basic = {
@@ -107,7 +107,7 @@ export const ManyEvents = {
 				"Test 29",
 				"Test 30",
 				"Test 31",
-				"Test 32",
+				"Test 32"
 			]}
 			eventEditContent={"[\"test\"]"}
 			onClickShowEventList={action("list")}
@@ -119,10 +119,10 @@ export const ManyEvents = {
 		/>
 	),
 
-	name: "many events",
+	name: "many events"
 };
 
 export const WithBehavior = {
 	render: () => <TestWithBehaviour />,
-	name: "with-behavior",
+	name: "with-behavior"
 };

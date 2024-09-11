@@ -3,7 +3,7 @@ import * as React from "react";
 import { PlayerControl } from "../molecule/PlayerControl";
 
 export default {
-	title: "m-PlayerControl",
+	title: "m-PlayerControl"
 };
 
 export const JoinedEnabled = {
@@ -13,12 +13,12 @@ export const JoinedEnabled = {
 				selfId: "1234567asdfg",
 				isJoined: true,
 				isJoinEnabled: true,
-				onClickJoinLeave: action("joinleave"),
+				onClickJoinLeave: action("joinleave")
 			})}
 		/>
 	),
 
-	name: "joined&enabled",
+	name: "joined&enabled"
 };
 
 export const NonJoinedDisabled = {
@@ -28,10 +28,10 @@ export const NonJoinedDisabled = {
 				selfId: "1234567asdfg",
 				isJoined: false,
 				isJoinEnabled: false,
-				onClickJoinLeave: action("joinleave"),
+				onClickJoinLeave: action("joinleave")
 			})}
 		/>
 	),
 
-	name: "non-joined&disabled",
+	name: "non-joined&disabled"
 };

@@ -5,7 +5,7 @@ import * as React from "react";
 import { ToolChoiceButton } from "../atom/ToolChoiceButton";
 
 const store = observable({
-	pushedIndex: 0,
+	pushedIndex: 0
 });
 
 const TestWithBehaviour = observer(() => (
@@ -14,7 +14,7 @@ const TestWithBehaviour = observer(() => (
 			{ label: "Elem1", title: "title 1" },
 			{ label: "Elem2" },
 			{ label: "Third Element" },
-			{ label: "Last One" },
+			{ label: "Last One" }
 		]}
 		className="test"
 		pushedIndex={store.pushedIndex}
@@ -23,7 +23,7 @@ const TestWithBehaviour = observer(() => (
 ));
 
 export default {
-	title: "a-ToolChoiceButton",
+	title: "a-ToolChoiceButton"
 };
 
 export const Basic = {
@@ -32,14 +32,14 @@ export const Basic = {
 			items={[
 				{ label: "Elem1", title: "title 1" },
 				{ label: "Elem2" },
-				{ label: "Third Element" },
+				{ label: "Third Element" }
 			]}
 			className="test"
 			onClick={action("onClick")}
 		/>
 	),
 
-	name: "basic",
+	name: "basic"
 };
 
 export const AllDisabled = {
@@ -48,7 +48,7 @@ export const AllDisabled = {
 			items={[
 				{ label: "Elem1", title: "title 1" },
 				{ label: "Elem2" },
-				{ label: "Third Element" },
+				{ label: "Third Element" }
 			]}
 			disabled={true}
 			pushedIndex={null}
@@ -56,7 +56,7 @@ export const AllDisabled = {
 		/>
 	),
 
-	name: "all-disabled",
+	name: "all-disabled"
 };
 
 export const PartialDisabled = {
@@ -65,17 +65,17 @@ export const PartialDisabled = {
 			items={[
 				{ label: "Elem1", title: "title 1" },
 				{ label: "Elem2", disabled: true },
-				{ label: "Third Element" },
+				{ label: "Third Element" }
 			]}
 			pushedIndex={0}
 			onClick={action("onClick")}
 		/>
 	),
 
-	name: "partial-disabled",
+	name: "partial-disabled"
 };
 
 export const WithBehaviorToggle = {
 	render: () => <TestWithBehaviour />,
-	name: "with behavior (toggle)",
+	name: "with behavior (toggle)"
 };

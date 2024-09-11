@@ -23,7 +23,7 @@ const store = observable({
 	showsProfiler: false,
 	isActivePausing: false,
 	audioStateSummary: "all-player-unmuted" as PlayAudioStateSummary,
-	showsDesignGuideline: false,
+	showsDesignGuideline: false
 });
 
 window.setInterval(() => {
@@ -40,7 +40,7 @@ const TestWithBehaviour = observer(() => (
 			onClickReset: action("reset"),
 			onClickActivePause: (v) => (store.isActivePausing = v),
 			onClickAddInstance: action("add-instance"),
-			onClickStep: action("step"),
+			onClickStep: action("step")
 		})}
 		makeInstanceControlProps={() => ({
 			currentTime: store.realtime
@@ -77,7 +77,7 @@ const TestWithBehaviour = observer(() => (
 				(store.showsAudioOptionPopover = show),
 			onClickSolo: () => (store.audioStateSummary = "only-this-player-unmuted"),
 			onClickMuteAll: () => (store.audioStateSummary = "all-player-muted"),
-			onClickMuteNone: () => (store.audioStateSummary = "all-player-unmuted"),
+			onClickMuteNone: () => (store.audioStateSummary = "all-player-unmuted")
 		})}
 		makeDisplayOptionControlProps={() => ({
 			showsDisplayOptionPopover: store.showsDisplayOptionPopover,
@@ -112,7 +112,7 @@ const TestWithBehaviour = observer(() => (
 ));
 
 export default {
-	title: "o-ToolBar",
+	title: "o-ToolBar"
 };
 
 export const Basic = {
@@ -125,7 +125,7 @@ export const Basic = {
 				onClickReset: action("reset"),
 				onClickActivePause: action("active-pause"),
 				onClickAddInstance: action("add-instance"),
-				onClickStep: action("step"),
+				onClickStep: action("step")
 			})}
 			makeInstanceControlProps={() => ({
 				currentTime: 2234 * 1000,
@@ -136,13 +136,13 @@ export const Basic = {
 				onProgressChange: action("progress-change"),
 				onProgressCommit: action("progress-commit"),
 				onClickPause: action("click-pause"),
-				onClickFastForward: action("click-fast-forward"),
+				onClickFastForward: action("click-fast-forward")
 			})}
 			makePlayerControlProps={() => ({
 				selfId: "1234567asdfg",
 				isJoined: true,
 				isJoinEnabled: false,
-				onClickJoinLeave: action("joinleave"),
+				onClickJoinLeave: action("joinleave")
 			})}
 			makeAudioOptionControlProps={() => ({
 				showsAudioOptionPopover: false,
@@ -175,7 +175,7 @@ export const Basic = {
 				onChangeShowDesignGuideline: action("design-guideline"),
 				onClickScreenshot: () => {
 					// do nothing
-				},
+				}
 			})}
 			showsAppearance={false}
 			showsDevtools={true}
@@ -186,10 +186,10 @@ export const Basic = {
 		/>
 	),
 
-	name: "basic",
+	name: "basic"
 };
 
 export const WithBehavior = {
 	render: () => <TestWithBehaviour />,
-	name: "with-behavior",
+	name: "with-behavior"
 };

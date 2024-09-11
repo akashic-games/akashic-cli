@@ -2,7 +2,7 @@ import * as React from "react";
 import { ToolControlGroup } from "../atom/ToolControlGroup";
 
 export default {
-	title: "a-ToolControlGroup",
+	title: "a-ToolControlGroup"
 };
 
 export const Basic = {
@@ -13,5 +13,5 @@ export const Basic = {
 		</ToolControlGroup>
 	),
 
-	name: "basic",
+	name: "basic"
 };

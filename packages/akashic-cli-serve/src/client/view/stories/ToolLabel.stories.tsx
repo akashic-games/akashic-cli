@@ -8,5 +8,5 @@ export default {
 export const Basic = {
 	render: () => <ToolLabel title="some title">selfId: 141l51g8bnag</ToolLabel>,
 
-	name: "basic",
+	name: "basic"
 };

@@ -5,7 +5,7 @@ import * as React from "react";
 import { RightResizable } from "../atom/RightResizable";
 
 const store = observable({
-	width: 200,
+	width: 200
 });
 
 const TestWithBehaviour = observer(() => (
@@ -22,7 +22,7 @@ const TestWithBehaviour = observer(() => (
 					boxSizing: "border-box",
 					width: "100%",
 					padding: 10,
-					border: "1px solid gray",
+					border: "1px solid gray"
 				}}
 			>
         Foo
@@ -33,7 +33,7 @@ const TestWithBehaviour = observer(() => (
 ));
 
 export default {
-	title: "a-RightResizable",
+	title: "a-RightResizable"
 };
 
 export const Basic = {
@@ -47,10 +47,10 @@ export const Basic = {
 		</div>
 	),
 
-	name: "basic",
+	name: "basic"
 };
 
 export const WithBehavior = {
 	render: () => <TestWithBehaviour />,
-	name: "with-behavior",
+	name: "with-behavior"
 };

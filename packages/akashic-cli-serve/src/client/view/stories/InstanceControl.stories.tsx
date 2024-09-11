@@ -3,7 +3,7 @@ import * as React from "react";
 import { InstanceControl } from "../molecule/InstanceControl";
 
 export default {
-	title: "m-InstanceControl",
+	title: "m-InstanceControl"
 };
 
 export const Basic = {
@@ -18,10 +18,10 @@ export const Basic = {
 				onProgressChange: action("progress-change"),
 				onProgressCommit: action("progress-commit"),
 				onClickPause: action("click-pause"),
-				onClickFastForward: action("click-fast-forward"),
+				onClickFastForward: action("click-fast-forward")
 			})}
 		/>
 	),
 
-	name: "basic",
+	name: "basic"
 };

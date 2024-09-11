@@ -28,7 +28,7 @@ const store = observable({
 	isActiveExists: true,
 	isActivePaused: false,
 	isForceResetOnSeek: true,
-	selectedStartPointIndex: null as number | null,
+	selectedStartPointIndex: null as number | null
 });
 
 const nicoProps: NiconicoDevtoolProps = {
@@ -49,7 +49,7 @@ const nicoProps: NiconicoDevtoolProps = {
 	onUsePreferredTotalTimeLimitChanged: action(
 		"events:use-preferred-total-time-limit-changed",
 	),
-	onUseStopGameChanged: action("events:use-stop-game-changed"),
+	onUseStopGameChanged: action("events:use-stop-game-changed")
 };
 
 const dummyPlaybackDevtoolProps: PlaybackDevtoolProps = {
@@ -73,12 +73,12 @@ const dummyPlaybackDevtoolProps: PlaybackDevtoolProps = {
 	onClickFastForward: action("click-fastforward"),
 	onHoverStartPoint: action("hover-startpoint"),
 	onJumpWithStartPoint: action("jump-startpoint"),
-	onDumpStartPoint: action("doubleclick-startpoint"),
+	onDumpStartPoint: action("doubleclick-startpoint")
 };
 
 function createFilledRectDumpItem(
 	id: number,
-	cssColor: string = "black",
+	cssColor: string = "black"
 ): EDumpItem {
 	return {
 		id,
@@ -96,7 +96,7 @@ function createFilledRectDumpItem(
 		angle: 0,
 		touchable: false,
 		visible: true,
-		cssColor,
+		cssColor
 	};
 }
 
@@ -111,7 +111,7 @@ const TestWithBehaviour = observer(() => (
 			startPointHeaders: [
 				{ frame: 150, timestamp: 1627467453814 },
 				{ frame: 300, timestamp: 1627467458813 },
-				{ frame: 450, timestamp: 1627467463814 },
+				{ frame: 450, timestamp: 1627467463814 }
 			],
 			focusedStartPointHeaderIndex: store.selectedStartPointIndex!,
 			currentTime: store.currentTime,
@@ -136,7 +136,7 @@ const TestWithBehaviour = observer(() => (
 			onHoverStartPoint: (v, hovers) =>
 				(store.selectedStartPointIndex = hovers ? v : null),
 			onJumpWithStartPoint: action("jump-startpoint"),
-			onDumpStartPoint: action("dump-startpoint"),
+			onDumpStartPoint: action("dump-startpoint")
 		}}
 		eventsDevtoolProps={{
 			showsEventList: store.showsEventList,
@@ -148,13 +148,13 @@ const TestWithBehaviour = observer(() => (
 				"Foo",
 				"Start",
 				"Stop",
-				"A very long event name to see how it will be shown on your display ya?",
+				"A very long event name to see how it will be shown on your display ya?"
 			],
 			eventEditContent: store.eventEditContent,
 			onClickSendEvent: action("events:send"),
 			onClickCopyEvent: action("events:copy"),
 			onClickSendEditingEvent: action("events:send-edit"),
-			onEventEditContentChanged: (v) => (store.eventEditContent = v),
+			onEventEditContentChanged: (v) => (store.eventEditContent = v)
 		}}
 		instancesDevtoolProps={{
 			instances: [
@@ -163,31 +163,31 @@ const TestWithBehaviour = observer(() => (
 					env: "(server)",
 					playerId: null,
 					name: null,
-					isJoined: false,
+					isJoined: false
 				},
 				{
 					type: "passive",
 					env: "Chrome",
 					playerId: "1234567890",
 					name: "player-1",
-					isJoined: true,
+					isJoined: true
 				},
 				{
 					type: "passive",
 					env: "Chrome",
 					playerId: "aa0941jlta",
 					name: "player-2",
-					isJoined: false,
+					isJoined: false
 				},
 				{
 					type: "passive",
 					env: "Firefox",
 					playerId: "asfaiout",
 					name: "player-3",
-					isJoined: true,
+					isJoined: true
 				},
 			],
-			onClickAddInstance: action("add-instance"),
+			onClickAddInstance: action("add-instance")
 		}}
 		entityTreeDevtoolProps={{
 			entityTrees: [
@@ -233,12 +233,12 @@ const TestWithBehaviour = observer(() => (
 									angle: 0,
 									touchable: true,
 									visible: true,
-									cssColor: "red",
+									cssColor: "red"
 								},
 							],
 							angle: 45,
 							touchable: true,
-							visible: false,
+							visible: false
 						},
 						{
 							id: 2,
@@ -257,13 +257,13 @@ const TestWithBehaviour = observer(() => (
 							local: true,
 							touchable: false,
 							visible: true,
-							text: "100 pt.",
+							text: "100 pt."
 						},
 					],
 					angle: 0,
 					touchable: true,
 					visible: true,
-					text: "我輩は人である。名前はもうある。どこで生れたかはとんと見当がつかぬがまあ病院である。",
+					text: "我輩は人である。名前はもうある。どこで生れたかはとんと見当がつかぬがまあ病院である。"
 				},
 			],
 			entityTreeStateTable: store.entityTreeStateTable,
@@ -279,23 +279,23 @@ const TestWithBehaviour = observer(() => (
 			onClickToggleOpenEntityChildren: (e) => {
 				store.entityTreeStateTable.set(
 					e.id,
-					!store.entityTreeStateTable.get(e.id),
+					!store.entityTreeStateTable.get(e.id)
 				);
 			},
 			onClickEntityItem: action("click-entity"),
 			onMouseOverEntityItem: action("mouseover"),
-			onMouseLeaveEntityItem: action("mouseleave"),
+			onMouseLeaveEntityItem: action("mouseleave")
 		}}
 		niconicoDevtoolProps={nicoProps}
 		internalDevtoolProps={{
 			sendScreenshotEvent: action("send-screenshot-event"),
-			sendFinishEvent: action("send-finish-event"),
+			sendFinishEvent: action("send-finish-event")
 		}}
 	/>
 ));
 
 export default {
-	title: "o-Devtool",
+	title: "o-Devtool"
 };
 
 export const Instances = {
@@ -317,13 +317,13 @@ export const Instances = {
 					"Foo",
 					"Start",
 					"Stop",
-					"A very long event name to see how it will be shown on your display ya?",
+					"A very long event name to see how it will be shown on your display ya?"
 				],
 				eventEditContent: "[\"test\", 1]",
 				onClickSendEvent: action("events:send"),
 				onClickCopyEvent: action("events:copy"),
 				onClickSendEditingEvent: action("events:send-edit"),
-				onEventEditContentChanged: action("events:edit"),
+				onEventEditContentChanged: action("events:edit")
 			}}
 			instancesDevtoolProps={{
 				instances: [
@@ -332,199 +332,199 @@ export const Instances = {
 						env: "(server)",
 						playerId: null,
 						name: null,
-						isJoined: false,
+						isJoined: false
 					},
 					{
 						type: "passive",
 						env: "Chrome",
 						playerId: "1234567890",
 						name: "player-1",
-						isJoined: false,
+						isJoined: false
 					},
 					{
 						type: "passive",
 						env: "Chrome",
 						playerId: "aa0941jlta",
 						name: "player-2",
-						isJoined: false,
+						isJoined: false
 					},
 					{
 						type: "passive",
 						env: "Firefox",
 						playerId: "asfaiout",
 						name: "player-3",
-						isJoined: false,
+						isJoined: false
 					},
 					{
 						type: "passive",
 						env: "Firefox",
 						playerId: "asfaiout1",
 						name: "player-4",
-						isJoined: false,
+						isJoined: false
 					},
 					{
 						type: "passive",
 						env: "Firefox",
 						playerId: "asfaiout2",
 						name: "player-5",
-						isJoined: false,
+						isJoined: false
 					},
 					{
 						type: "passive",
 						env: "Firefox",
 						playerId: "asfaiout3",
 						name: "player-6",
-						isJoined: false,
+						isJoined: false
 					},
 					{
 						type: "passive",
 						env: "Firefox",
 						playerId: "asfaiout4",
 						name: "player-7",
-						isJoined: false,
+						isJoined: false
 					},
 					{
 						type: "passive",
 						env: "Firefox",
 						playerId: "asfaiout5",
 						name: "player-8",
-						isJoined: false,
+						isJoined: false
 					},
 					{
 						type: "passive",
 						env: "Firefox",
 						playerId: "asfaiout6",
 						name: "player-9",
-						isJoined: false,
+						isJoined: false
 					},
 					{
 						type: "passive",
 						env: "Firefox",
 						playerId: "asfaiout7",
 						name: "player-10",
-						isJoined: false,
+						isJoined: false
 					},
 					{
 						type: "passive",
 						env: "Firefox",
 						playerId: "asfaiout8",
 						name: "player-11",
-						isJoined: false,
+						isJoined: false
 					},
 					{
 						type: "passive",
 						env: "Firefox",
 						playerId: "asfaiout9",
 						name: "player-12",
-						isJoined: false,
+						isJoined: false
 					},
 					{
 						type: "passive",
 						env: "Firefox",
 						playerId: "asfaiout10",
 						name: "player-13",
-						isJoined: false,
+						isJoined: false
 					},
 					{
 						type: "passive",
 						env: "Firefox",
 						playerId: "asfaiout11",
 						name: "player-14",
-						isJoined: false,
+						isJoined: false
 					},
 					{
 						type: "passive",
 						env: "Firefox",
 						playerId: "asfaiout12",
 						name: "player-15",
-						isJoined: false,
+						isJoined: false
 					},
 					{
 						type: "passive",
 						env: "Firefox",
 						playerId: "asfaiout13",
 						name: "player-16",
-						isJoined: false,
+						isJoined: false
 					},
 					{
 						type: "passive",
 						env: "Firefox",
 						playerId: "asfaiout14",
 						name: "player-17",
-						isJoined: false,
+						isJoined: false
 					},
 					{
 						type: "passive",
 						env: "Firefox",
 						playerId: "asfaiout15",
 						name: "player-18",
-						isJoined: false,
+						isJoined: false
 					},
 					{
 						type: "passive",
 						env: "Firefox",
 						playerId: "asfaiout16",
 						name: "player-19",
-						isJoined: false,
+						isJoined: false
 					},
 					{
 						type: "passive",
 						env: "Firefox",
 						playerId: "asfaiout17",
 						name: "player-20",
-						isJoined: false,
+						isJoined: false
 					},
 					{
 						type: "passive",
 						env: "Firefox",
 						playerId: "asfaiout18",
 						name: "player-21",
-						isJoined: false,
+						isJoined: false
 					},
 					{
 						type: "passive",
 						env: "Firefox",
 						playerId: "asfaiout19",
 						name: "player-22",
-						isJoined: false,
+						isJoined: false
 					},
 					{
 						type: "passive",
 						env: "Firefox",
 						playerId: "asfaiout20",
 						name: "player-23",
-						isJoined: false,
+						isJoined: false
 					},
 					{
 						type: "passive",
 						env: "Firefox",
 						playerId: "asfaiout21",
 						name: "player-24",
-						isJoined: false,
+						isJoined: false
 					},
 					{
 						type: "passive",
 						env: "Firefox",
 						playerId: "asfaiout22",
 						name: "player-25",
-						isJoined: false,
+						isJoined: false
 					},
 					{
 						type: "passive",
 						env: "Firefox",
 						playerId: "asfaiout23",
 						name: "player-26",
-						isJoined: false,
+						isJoined: false
 					},
 					{
 						type: "passive",
 						env: "Firefox",
 						playerId: "asfaiout24",
 						name: "player-27",
-						isJoined: false,
+						isJoined: false
 					},
 				],
-				onClickAddInstance: action("add-instance"),
+				onClickAddInstance: action("add-instance")
 			}}
 			entityTreeDevtoolProps={{
 				entityTrees: [
@@ -541,7 +541,7 @@ export const Instances = {
 						scaleX: 1,
 						scaleY: 1,
 						touchable: true,
-						visible: true,
+						visible: true
 					},
 				],
 				entityTreeStateTable: observable.map({ 1: false }),
@@ -555,17 +555,17 @@ export const Instances = {
 				onClickToggleOpenEntityChildren: action("toggle"),
 				onClickEntityItem: action("click-entity"),
 				onMouseOverEntityItem: action("mouseover"),
-				onMouseLeaveEntityItem: action("mouseleave"),
+				onMouseLeaveEntityItem: action("mouseleave")
 			}}
 			niconicoDevtoolProps={nicoProps}
 			internalDevtoolProps={{
 				sendScreenshotEvent: action("send-screenshot-event"),
-				sendFinishEvent: action("send-finish-event"),
+				sendFinishEvent: action("send-finish-event")
 			}}
 		/>
 	),
 
-	name: "instances",
+	name: "instances"
 };
 
 export const Events = {
@@ -619,13 +619,13 @@ export const Events = {
 					"Test 29",
 					"Test 30",
 					"Test 31",
-					"Test 32",
+					"Test 32"
 				],
 				eventEditContent: "[\"test\", 1]",
 				onClickSendEvent: action("events:send"),
 				onClickCopyEvent: action("events:copy"),
 				onClickSendEditingEvent: action("events:send-edit"),
-				onEventEditContentChanged: action("events:edit"),
+				onEventEditContentChanged: action("events:edit")
 			}}
 			instancesDevtoolProps={{
 				instances: [
@@ -634,31 +634,31 @@ export const Events = {
 						env: "(server)",
 						playerId: null,
 						name: null,
-						isJoined: false,
+						isJoined: false
 					},
 					{
 						type: "passive",
 						env: "Chrome",
 						playerId: "1234567890",
 						name: "player-1",
-						isJoined: false,
+						isJoined: false
 					},
 					{
 						type: "passive",
 						env: "Chrome",
 						playerId: "aa0941jlta",
 						name: "player-2",
-						isJoined: false,
+						isJoined: false
 					},
 					{
 						type: "passive",
 						env: "Firefox",
 						playerId: "asfaiout",
 						name: "player-3",
-						isJoined: false,
+						isJoined: false
 					},
 				],
-				onClickAddInstance: action("add-instance"),
+				onClickAddInstance: action("add-instance")
 			}}
 			entityTreeDevtoolProps={{
 				entityTrees: [],
@@ -673,17 +673,17 @@ export const Events = {
 				onClickToggleOpenEntityChildren: action("toggle"),
 				onClickEntityItem: action("click-entity"),
 				onMouseOverEntityItem: action("mouseover"),
-				onMouseLeaveEntityItem: action("mouseleave"),
+				onMouseLeaveEntityItem: action("mouseleave")
 			}}
 			niconicoDevtoolProps={nicoProps}
 			internalDevtoolProps={{
 				sendScreenshotEvent: action("send-screenshot-event"),
-				sendFinishEvent: action("send-finish-event"),
+				sendFinishEvent: action("send-finish-event")
 			}}
 		/>
 	),
 
-	name: "events",
+	name: "events"
 };
 
 export const EntityTree = {
@@ -706,7 +706,7 @@ export const EntityTree = {
 				onClickSendEvent: action("events:send"),
 				onClickCopyEvent: action("events:copy"),
 				onClickSendEditingEvent: action("events:send-edit"),
-				onEventEditContentChanged: action("events:edit"),
+				onEventEditContentChanged: action("events:edit")
 			}}
 			instancesDevtoolProps={{
 				instances: [
@@ -715,31 +715,31 @@ export const EntityTree = {
 						env: "(server)",
 						playerId: null,
 						name: null,
-						isJoined: false,
+						isJoined: false
 					},
 					{
 						type: "passive",
 						env: "Chrome",
 						playerId: "1234567890",
 						name: "player-1",
-						isJoined: false,
+						isJoined: false
 					},
 					{
 						type: "passive",
 						env: "Chrome",
 						playerId: "aa0941jlta",
 						name: "player-2",
-						isJoined: false,
+						isJoined: false
 					},
 					{
 						type: "passive",
 						env: "Firefox",
 						playerId: "asfaiout",
 						name: "player-3",
-						isJoined: false,
+						isJoined: false
 					},
 				],
-				onClickAddInstance: action("add-instance"),
+				onClickAddInstance: action("add-instance")
 			}}
 			entityTreeDevtoolProps={{
 				entityTrees: [
@@ -782,7 +782,7 @@ export const EntityTree = {
 					createFilledRectDumpItem(136),
 					createFilledRectDumpItem(137),
 					createFilledRectDumpItem(138),
-					createFilledRectDumpItem(139),
+					createFilledRectDumpItem(139)
 				],
 				entityTreeStateTable: observable.map({}),
 				selectedEntityId: null,
@@ -795,17 +795,17 @@ export const EntityTree = {
 				onClickToggleOpenEntityChildren: action("toggle"),
 				onClickEntityItem: action("click-entity"),
 				onMouseOverEntityItem: action("mouseover"),
-				onMouseLeaveEntityItem: action("mouseleave"),
+				onMouseLeaveEntityItem: action("mouseleave")
 			}}
 			niconicoDevtoolProps={nicoProps}
 			internalDevtoolProps={{
 				sendScreenshotEvent: action("send-screenshot-event"),
-				sendFinishEvent: action("send-finish-event"),
+				sendFinishEvent: action("send-finish-event")
 			}}
 		/>
 	),
 
-	name: "entity-tree",
+	name: "entity-tree"
 };
 
 export const Niconico = {
@@ -828,11 +828,11 @@ export const Niconico = {
 				onClickSendEvent: action("events:send"),
 				onClickCopyEvent: action("events:copy"),
 				onClickSendEditingEvent: action("events:send-edit"),
-				onEventEditContentChanged: action("events:edit"),
+				onEventEditContentChanged: action("events:edit")
 			}}
 			instancesDevtoolProps={{
 				instances: [],
-				onClickAddInstance: action("add-instance"),
+				onClickAddInstance: action("add-instance")
 			}}
 			entityTreeDevtoolProps={{
 				entityTrees: [],
@@ -847,17 +847,17 @@ export const Niconico = {
 				onClickToggleOpenEntityChildren: action("toggle"),
 				onClickEntityItem: action("click-entity"),
 				onMouseOverEntityItem: action("mouseover"),
-				onMouseLeaveEntityItem: action("mouseleave"),
+				onMouseLeaveEntityItem: action("mouseleave")
 			}}
 			niconicoDevtoolProps={nicoProps}
 			internalDevtoolProps={{
 				sendScreenshotEvent: action("send-screenshot-event"),
-				sendFinishEvent: action("send-finish-event"),
+				sendFinishEvent: action("send-finish-event")
 			}}
 		/>
 	),
 
-	name: "niconico",
+	name: "niconico"
 };
 
 export const Playback = {
@@ -880,11 +880,11 @@ export const Playback = {
 				onClickSendEvent: action("events:send"),
 				onClickCopyEvent: action("events:copy"),
 				onClickSendEditingEvent: action("events:send-edit"),
-				onEventEditContentChanged: action("events:edit"),
+				onEventEditContentChanged: action("events:edit")
 			}}
 			instancesDevtoolProps={{
 				instances: [],
-				onClickAddInstance: action("add-instance"),
+				onClickAddInstance: action("add-instance")
 			}}
 			entityTreeDevtoolProps={{
 				entityTrees: [],
@@ -899,17 +899,17 @@ export const Playback = {
 				onClickToggleOpenEntityChildren: action("toggle"),
 				onClickEntityItem: action("click-entity"),
 				onMouseOverEntityItem: action("mouseover"),
-				onMouseLeaveEntityItem: action("mouseleave"),
+				onMouseLeaveEntityItem: action("mouseleave")
 			}}
 			niconicoDevtoolProps={nicoProps}
 			internalDevtoolProps={{
 				sendScreenshotEvent: action("send-screenshot-event"),
-				sendFinishEvent: action("send-finish-event"),
+				sendFinishEvent: action("send-finish-event")
 			}}
 		/>
 	),
 
-	name: "playback",
+	name: "playback"
 };
 
 export const WithBehavior = {
