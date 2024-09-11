@@ -34,7 +34,6 @@ export const Basic = {
 			onClickCapture={action("onClickCapture")}
 		/>
 	),
-
 	name: "basic"
 };
 
@@ -60,7 +59,6 @@ export const Background = {
 			onClickCapture={action("onClickCapture")}
 		/>
 	),
-
 	name: "background"
 };
 
@@ -86,7 +84,6 @@ export const BackgroundGrid = {
 			onClickCapture={action("onClickCapture")}
 		/>
 	),
-
 	name: "background&grid"
 };
 
@@ -112,7 +109,6 @@ export const DesignGuideline = {
 			onClickCapture={action("onClickCapture")}
 		/>
 	),
-
 	name: "designGuideline"
 };
 
@@ -143,7 +139,6 @@ export const ConfirmDialog = {
 			onClickCapture={action("onClickCapture")}
 		/>
 	),
-
 	name: "confirmDialog"
 };
 
@@ -196,7 +191,7 @@ export const Profiler = {
 						max: 1,
 						min: 0,
 						fixed: 1
-					},
+					}
 				],
 				profilerStyleSetting: {
 					margin: 5,
@@ -224,6 +219,5 @@ export const Profiler = {
 			onClickCapture={action("onClickCapture")}
 		/>
 	),
-
 	name: "profiler"
 };

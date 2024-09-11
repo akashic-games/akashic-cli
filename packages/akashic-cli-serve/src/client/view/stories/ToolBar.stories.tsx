@@ -43,11 +43,9 @@ const TestWithBehaviour = observer(() => (
 			onClickStep: action("step")
 		})}
 		makeInstanceControlProps={() => ({
-			currentTime: store.realtime
-        ? store.duration
-        : store.seeking
-          ? store.currentTimePreview
-          : store.currentTime,
+			currentTime:
+				store.realtime ? store.duration :
+					store.seeking ? store.currentTimePreview : store.currentTime,
 			duration: store.duration,
 			resetTime: 10,
 			isPaused: store.paused,

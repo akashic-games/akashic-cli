@@ -77,7 +77,6 @@ export const Basic = {
 			/>
 		</Box>
 	),
-
 	name: "basic"
 };
 
@@ -136,7 +135,6 @@ export const ManyArgumentsTable = {
 			/>
 		</Box>
 	),
-
 	name: "many argumentsTable"
 };
 

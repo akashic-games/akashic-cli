@@ -14,7 +14,7 @@ const store = observable({
 const TestWithBehaviour = observer(() => (
 	<>
 		<div style={{ width: 300, display: "flex", flexFlow: "row nowrap" }}>
-      subValue
+			subValue
 			<div style={{ flex: "1 1 auto" }}>
 				<ToolProgressBar
 					max={store.max}
@@ -25,7 +25,7 @@ const TestWithBehaviour = observer(() => (
 			</div>
 		</div>
 		<div style={{ width: 300, display: "flex", flexFlow: "row nowrap" }}>
-      max
+      		max
 			<div style={{ flex: "1 1 auto" }}>
 				<ToolProgressBar
 					max={200}
@@ -36,7 +36,7 @@ const TestWithBehaviour = observer(() => (
 			</div>
 		</div>
 		<div style={{ width: 300, display: "flex", flexFlow: "row nowrap" }}>
-      markerValue
+      		markerValue
 			<div style={{ flex: "1 1 auto" }}>
 				<ToolProgressBar
 					max={store.max}
@@ -82,13 +82,11 @@ export const Basic = {
 			onCommit={action("commit")}
 		/>
 	),
-
 	name: "basic"
 };
 
 export const Active = {
 	render: () => <ToolProgressBar width={200} max={100} value={64} active />,
-
 	name: "active"
 };
 
@@ -117,7 +115,6 @@ export const SubMarker = {
 			markerValue={70}
 		/>
 	),
-
 	name: "sub/marker"
 };
 

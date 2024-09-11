@@ -20,7 +20,6 @@ export const Basic = {
 			})}
 		/>
 	),
-
 	name: "basic"
 };
 
@@ -38,6 +37,5 @@ export const Pausing = {
 			})}
 		/>
 	),
-
 	name: "pausing"
 };

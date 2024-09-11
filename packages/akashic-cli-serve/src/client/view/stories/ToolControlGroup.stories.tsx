@@ -12,6 +12,5 @@ export const Basic = {
 			<p style={{ margin: 3, padding: 2, border: "1px solid gray" }}>Zoo</p>
 		</ToolControlGroup>
 	),
-
 	name: "basic"
 };

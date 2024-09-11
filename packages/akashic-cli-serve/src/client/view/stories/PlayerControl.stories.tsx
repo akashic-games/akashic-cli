@@ -17,7 +17,6 @@ export const JoinedEnabled = {
 			})}
 		/>
 	),
-
 	name: "joined&enabled"
 };
 
@@ -32,6 +31,5 @@ export const NonJoinedDisabled = {
 			})}
 		/>
 	),
-
 	name: "non-joined&disabled"
 };

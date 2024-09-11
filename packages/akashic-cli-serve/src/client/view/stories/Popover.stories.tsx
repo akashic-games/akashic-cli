@@ -20,7 +20,7 @@ const TestWithBehaviour = observer(() => {
 				outsideRef={ref}
 			>
 				<p style={{ flex: "1 1 auto", padding: 10, border: "1px solid gray" }}>
-          Foo
+					Foo
 				</p>
 			</Popover>
 		</div>
@@ -42,7 +42,7 @@ export const Basic = {
 			}}
 		>
 			<p style={{ flex: "1 1 auto", padding: 10, border: "1px solid gray" }}>
-        Foo
+				Foo
 			</p>
 		</Popover>
 	),

@@ -12,7 +12,6 @@ export const Pushed = {
 			<i className="material-icons">zoom_in</i>
 		</ToolToggleLabel>
 	),
-
 	name: "pushed"
 };
 
@@ -22,6 +21,5 @@ export const NonPushed = {
 			<p>Foo</p>
 		</ToolToggleLabel>
 	),
-
 	name: "non-pushed"
 };

@@ -22,6 +22,5 @@ export const Basic = {
 			})}
 		/>
 	),
-
 	name: "basic"
 };

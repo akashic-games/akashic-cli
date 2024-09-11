@@ -62,7 +62,7 @@ export const Basic = {
 		/>
 	),
 
-	name: "basic",
+	name: "basic"
 };
 
 export const ManyEvents = {
@@ -118,7 +118,6 @@ export const ManyEvents = {
 			onEventEditContentChanged={action("edit-content")}
 		/>
 	),
-
 	name: "many events"
 };
 

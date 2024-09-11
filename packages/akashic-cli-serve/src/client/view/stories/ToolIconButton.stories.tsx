@@ -110,10 +110,9 @@ export const WithText = {
 			icon="pause"
 			onClick={action("clicked")}
 		>
-      Send to the play
+			Send to the play
 		</ToolIconButton>
 	),
-
 	name: "with text"
 };
 

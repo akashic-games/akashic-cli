@@ -38,7 +38,6 @@ export const Basic = {
 			onClick={action("onClick")}
 		/>
 	),
-
 	name: "basic"
 };
 
@@ -55,7 +54,6 @@ export const AllDisabled = {
 			onClick={action("onClick")}
 		/>
 	),
-
 	name: "all-disabled"
 };
 
@@ -71,7 +69,6 @@ export const PartialDisabled = {
 			onClick={action("onClick")}
 		/>
 	),
-
 	name: "partial-disabled"
 };
 

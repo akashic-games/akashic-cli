@@ -17,7 +17,6 @@ export const Basic = {
 			]}
 		/>
 	),
-
 	name: "basic"
 };
 
@@ -35,6 +34,5 @@ export const ActiveWarn = {
 			]}
 		/>
 	),
-
 	name: "active&warn"
 };

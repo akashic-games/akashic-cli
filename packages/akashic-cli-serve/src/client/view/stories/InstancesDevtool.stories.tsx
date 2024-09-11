@@ -42,6 +42,5 @@ export const Basic = {
 			onClickAddInstance={action("add-instance")}
 		/>
 	),
-
 	name: "basic"
 };

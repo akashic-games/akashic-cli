@@ -39,12 +39,11 @@ export const Basic = {
 		<div style={{ padding: 20 }}>
 			<TopResizable height={200} minHeight={50} onResize={action("resize")}>
 				<p style={{ flex: "1 1 auto", padding: 10, border: "1px solid gray" }}>
-          Foo
+          			Foo
 				</p>
 			</TopResizable>
 		</div>
 	),
-
 	name: "basic"
 };
 

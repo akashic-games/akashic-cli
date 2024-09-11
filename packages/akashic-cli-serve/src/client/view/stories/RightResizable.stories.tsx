@@ -25,7 +25,7 @@ const TestWithBehaviour = observer(() => (
 					border: "1px solid gray"
 				}}
 			>
-        Foo
+    			Foo
 			</p>
 		</RightResizable>
 		<div style={{ flex: "1 1 auto", background: "#ddd" }} />
@@ -41,12 +41,11 @@ export const Basic = {
 		<div style={{ padding: 20 }}>
 			<RightResizable width={200} minWidth={50} onResize={action("resize")}>
 				<p style={{ flex: "1 1 auto", padding: 10, border: "1px solid gray" }}>
-          Foo
+          			Foo
 				</p>
 			</RightResizable>
 		</div>
 	),
-
 	name: "basic"
 };
 
