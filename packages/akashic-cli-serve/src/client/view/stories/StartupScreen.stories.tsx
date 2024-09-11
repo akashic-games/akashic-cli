@@ -1,5 +1,4 @@
 import { action } from "@storybook/addon-actions";
-import { storiesOf } from "@storybook/react";
 import { observable } from "mobx";
 import { observer } from "mobx-react";
 import * as React from "react";
@@ -12,10 +11,11 @@ const store = observable({
 	argumentsTable: {
 		"Start (difficulty: 3)": JSON.stringify([[32, 0, "test1"]], null, 2),
 		"Start (difficulty: 10)": JSON.stringify([[32, 0, "test2"]], null, 2),
-		"Stop": JSON.stringify([[32, 0, "stop"]], null, 2),
-		"foo (a very long long argument name example to test, woo hoo!)": JSON.stringify([[32, 0, "Long"]], null, 2)
-	} as ({ [name: string]: string }),
-	selectedArgumentName: ""
+		Stop: JSON.stringify([[32, 0, "stop"]], null, 2),
+		"foo (a very long long argument name example to test, woo hoo!)":
+      JSON.stringify([[32, 0, "Long"]], null, 2),
+	} as { [name: string]: string },
+	selectedArgumentName: "",
 });
 
 const Box = (props: any): JSX.Element => {
@@ -24,7 +24,7 @@ const Box = (props: any): JSX.Element => {
 		flexFlow: "row nowrap",
 		justifyContent: "center",
 		padding: 10,
-		border: "1px dotted red"
+		border: "1px dotted red",
 	};
 	return <div style={style}>{props.children}</div>;
 };
@@ -34,22 +34,28 @@ const TestWithBehaviour = observer(() => (
 		<StartupScreen
 			listWidth={store.width}
 			listMinWidth={200}
-			onListResize={w => (store.width = w)}
+			onListResize={(w) => (store.width = w)}
 			argumentsTable={store.argumentsTable}
 			selectedArgumentName={store.selectedArgumentName}
 			argumentEditContent={store.editContent}
 			joinsAutomatically={store.joinsAutomatically}
-			onSelectArgument={name => (
+			onSelectArgument={(name) => (
 				(store.selectedArgumentName = name!),
-				(store.editContent = (store.argumentsTable[name!] || "")))}
-			onArgumentsEditContentChanged={v => (store.editContent = v)}
-			onChangeJoinsAutomatically={v => (store.joinsAutomatically = v)}
-			onClickStart={action("start-content")} />
+				(store.editContent = store.argumentsTable[name!] || "")
+			)}
+			onArgumentsEditContentChanged={(v) => (store.editContent = v)}
+			onChangeJoinsAutomatically={(v) => (store.joinsAutomatically = v)}
+			onClickStart={action("start-content")}
+		/>
 	</Box>
 ));
 
-storiesOf("m-StartupScreen", module)
-	.add("basic", () => (
+export default {
+	title: "m-StartupScreen",
+};
+
+export const Basic = {
+	render: () => (
 		<Box>
 			<StartupScreen
 				listWidth={250}
@@ -57,8 +63,8 @@ storiesOf("m-StartupScreen", module)
 				argumentsTable={{
 					"Start (difficulty: 3)": "1",
 					"Start (difficulty: 10)": "1",
-					"Stop": "1",
-					"foo (a very long long argument name example to test, woo hoo!)": "1"
+					Stop: "1",
+					"foo (a very long long argument name example to test, woo hoo!)": "1",
 				}}
 				selectedArgumentName={"Stop"}
 				argumentEditContent={"[\"test\"]"}
@@ -67,10 +73,16 @@ storiesOf("m-StartupScreen", module)
 				onSelectArgument={action("select")}
 				onArgumentsEditContentChanged={action("edit-content")}
 				onChangeJoinsAutomatically={action("change-joins-auto")}
-				onClickStart={action("start-content")} />
+				onClickStart={action("start-content")}
+			/>
 		</Box>
-	))
-	.add("many argumentsTable", () => (
+	),
+
+	name: "basic",
+};
+
+export const ManyArgumentsTable = {
+	render: () => (
 		<Box>
 			<StartupScreen
 				listWidth={250}
@@ -78,7 +90,7 @@ storiesOf("m-StartupScreen", module)
 				argumentsTable={{
 					"Start (difficulty: 3)": "1",
 					"Start (difficulty: 10)": "1",
-					"Stop": "1",
+					Stop: "1",
 					"foo (a very long long argument name example to test, woo hoo!)": "1",
 					"Test 1": "1",
 					"Test 2": "1",
@@ -111,7 +123,7 @@ storiesOf("m-StartupScreen", module)
 					"Test 29": "1",
 					"Test 30": "1",
 					"Test 31": "1",
-					"Test 32": "1"
+					"Test 32": "1",
 				}}
 				selectedArgumentName={"Test 9"}
 				argumentEditContent={"[\"test\"]"}
@@ -120,9 +132,15 @@ storiesOf("m-StartupScreen", module)
 				onSelectArgument={action("select")}
 				onArgumentsEditContentChanged={action("edit-content")}
 				onChangeJoinsAutomatically={action("change-joins-auto")}
-				onClickStart={action("start-content")} />
+				onClickStart={action("start-content")}
+			/>
 		</Box>
-	))
-	.add("with-behavior", () => <TestWithBehaviour />);
+	),
 
+	name: "many argumentsTable",
+};
 
+export const WithBehavior = {
+	render: () => <TestWithBehaviour />,
+	name: "with-behavior",
+};

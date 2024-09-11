@@ -1,5 +1,4 @@
 import { action } from "@storybook/addon-actions";
-import { storiesOf } from "@storybook/react";
 import { observable } from "mobx";
 import { observer } from "mobx-react";
 import * as React from "react";
@@ -19,11 +18,16 @@ const TestWithBehaviour = observer(() => (
 		]}
 		className="test"
 		pushedIndex={store.pushedIndex}
-		onClick={v => (store.pushedIndex = v)} />
+		onClick={(v) => (store.pushedIndex = v)}
+	/>
 ));
 
-storiesOf("a-ToolChoiceButton", module)
-	.add("basic", () => (
+export default {
+	title: "a-ToolChoiceButton",
+};
+
+export const Basic = {
+	render: () => (
 		<ToolChoiceButton
 			items={[
 				{ label: "Elem1", title: "title 1" },
@@ -31,9 +35,15 @@ storiesOf("a-ToolChoiceButton", module)
 				{ label: "Third Element" },
 			]}
 			className="test"
-			onClick={action("onClick")} />
-	))
-	.add("all-disabled", () => (
+			onClick={action("onClick")}
+		/>
+	),
+
+	name: "basic",
+};
+
+export const AllDisabled = {
+	render: () => (
 		<ToolChoiceButton
 			items={[
 				{ label: "Elem1", title: "title 1" },
@@ -42,9 +52,15 @@ storiesOf("a-ToolChoiceButton", module)
 			]}
 			disabled={true}
 			pushedIndex={null}
-			onClick={action("onClick")} />
-	))
-	.add("partial-disabled", () => (
+			onClick={action("onClick")}
+		/>
+	),
+
+	name: "all-disabled",
+};
+
+export const PartialDisabled = {
+	render: () => (
 		<ToolChoiceButton
 			items={[
 				{ label: "Elem1", title: "title 1" },
@@ -52,6 +68,14 @@ storiesOf("a-ToolChoiceButton", module)
 				{ label: "Third Element" },
 			]}
 			pushedIndex={0}
-			onClick={action("onClick")} />
-	))
-	.add("with behavior (toggle)", () => <TestWithBehaviour />);
+			onClick={action("onClick")}
+		/>
+	),
+
+	name: "partial-disabled",
+};
+
+export const WithBehaviorToggle = {
+	render: () => <TestWithBehaviour />,
+	name: "with behavior (toggle)",
+};

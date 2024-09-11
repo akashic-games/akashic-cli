@@ -1,5 +1,4 @@
 import { action } from "@storybook/addon-actions";
-import { storiesOf } from "@storybook/react";
 import * as React from "react";
 import { GameScreen } from "../organism/GameScreen";
 
@@ -9,8 +8,12 @@ function createDummyDiv(width: number, height: number): HTMLElement {
 	return e;
 }
 
-storiesOf("o-GameScreen", module)
-	.add("basic", () => (
+export default {
+	title: "o-GameScreen",
+};
+
+export const Basic = {
+	render: () => (
 		<GameScreen
 			showsBackgroundImage={false}
 			showsBackgroundColor={false}
@@ -30,8 +33,13 @@ storiesOf("o-GameScreen", module)
 			onMouseMoveCapture={action("onMouseMoveCapture")}
 			onClickCapture={action("onClickCapture")}
 		/>
-	))
-	.add("background", () => (
+	),
+
+	name: "basic",
+};
+
+export const Background = {
+	render: () => (
 		<GameScreen
 			showsBackgroundImage={true}
 			showsBackgroundColor={true}
@@ -51,8 +59,13 @@ storiesOf("o-GameScreen", module)
 			onMouseMoveCapture={action("onMouseMoveCapture")}
 			onClickCapture={action("onClickCapture")}
 		/>
-	))
-	.add("background&grid", () => (
+	),
+
+	name: "background",
+};
+
+export const BackgroundGrid = {
+	render: () => (
 		<GameScreen
 			showsBackgroundImage={true}
 			showsBackgroundColor={true}
@@ -72,8 +85,13 @@ storiesOf("o-GameScreen", module)
 			onMouseMoveCapture={action("onMouseMoveCapture")}
 			onClickCapture={action("onClickCapture")}
 		/>
-	))
-	.add("designGuideline", () => (
+	),
+
+	name: "background&grid",
+};
+
+export const DesignGuideline = {
+	render: () => (
 		<GameScreen
 			showsBackgroundImage={false}
 			showsBackgroundColor={false}
@@ -93,8 +111,13 @@ storiesOf("o-GameScreen", module)
 			onMouseMoveCapture={action("onMouseMoveCapture")}
 			onClickCapture={action("onClickCapture")}
 		/>
-	))
-	.add("confirmDialog", () => (
+	),
+
+	name: "designGuideline",
+};
+
+export const ConfirmDialog = {
+	render: () => (
 		<GameScreen
 			showsBackgroundImage={false}
 			showsBackgroundColor={false}
@@ -109,7 +132,7 @@ storiesOf("o-GameScreen", module)
 				remainingSeconds: 15,
 				name: "プレイヤー名X",
 				guestName: "ゲスト名Y",
-				onClick: action("onClick")
+				onClick: action("onClick"),
 			}}
 			profilerCanvasProps={undefined}
 			shouldStopPropagationFunc={() => {
@@ -119,8 +142,13 @@ storiesOf("o-GameScreen", module)
 			onMouseMoveCapture={action("onMouseMoveCapture")}
 			onClickCapture={action("onClickCapture")}
 		/>
-	))
-	.add("profiler", () => (
+	),
+
+	name: "confirmDialog",
+};
+
+export const Profiler = {
+	render: () => (
 		<GameScreen
 			showsBackgroundImage={false}
 			showsBackgroundColor={false}
@@ -139,36 +167,36 @@ storiesOf("o-GameScreen", module)
 						data: [30, 31, 28, 32, 35, 30, 31, 28, 32, 35],
 						max: 35,
 						min: 28,
-						fixed: 2
+						fixed: 2,
 					},
 					{
 						name: "skipped",
 						data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 						max: 0,
 						min: 0,
-						fixed: 1
+						fixed: 1,
 					},
 					{
 						name: "interval",
 						data: [36, 31, 32, 32, 34, 36, 33, 33, 30, 30],
 						max: 36,
 						min: 30,
-						fixed: 1
+						fixed: 1,
 					},
 					{
 						name: "frame",
 						data: [4, 1, 0, 0, 0, 1, 2, 0, 0, 0],
 						max: 4,
 						min: 0,
-						fixed: 1
+						fixed: 1,
 					},
 					{
 						name: "rendering",
 						data: [1, 0, 1, 0, 1, 0, 1, 0, 1, 0],
 						max: 1,
 						min: 0,
-						fixed: 1
-					}
+						fixed: 1,
+					},
 				],
 				profilerStyleSetting: {
 					margin: 5,
@@ -183,10 +211,10 @@ storiesOf("o-GameScreen", module)
 					graphColor: "lavender",
 					graphWidth: 3,
 					graphWidthMargin: 1,
-					graphPadding: 5
+					graphPadding: 5,
 				},
 				profilerWidth: 150,
-				profilerHeight: 61
+				profilerHeight: 61,
 			}}
 			shouldStopPropagationFunc={() => {
 				action("shouldStopPropagation");
@@ -195,4 +223,7 @@ storiesOf("o-GameScreen", module)
 			onMouseMoveCapture={action("onMouseMoveCapture")}
 			onClickCapture={action("onClickCapture")}
 		/>
-	));
+	),
+
+	name: "profiler",
+};

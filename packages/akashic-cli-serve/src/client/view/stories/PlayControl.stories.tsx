@@ -1,29 +1,43 @@
 import { action } from "@storybook/addon-actions";
-import { storiesOf } from "@storybook/react";
 import * as React from "react";
 import { PlayControl } from "../molecule/PlayControl";
 
-storiesOf("m-PlayControl", module)
-	.add("basic", () => (
-		<PlayControl makeProps={() => ({
-			playbackRate: 1.5,
-			isActivePausing: false,
-			isActiveExists: true,
-			onClickReset: action("reset"),
-			onClickActivePause: action("active-pause"),
-			onClickAddInstance: action("add-instance"),
-			onClickStep: action("step")
+export default {
+	title: "m-PlayControl",
+};
 
-		})} />
-	))
-	.add("pausing", () => (
-		<PlayControl makeProps={() => ({
-			playbackRate: 1.5,
-			isActivePausing: true,
-			isActiveExists: true,
-			onClickReset: action("reset"),
-			onClickActivePause: action("active-pause"),
-			onClickAddInstance: action("add-instance"),
-			onClickStep: action("step")
-		})} />
-	));
+export const Basic = {
+	render: () => (
+		<PlayControl
+			makeProps={() => ({
+				playbackRate: 1.5,
+				isActivePausing: false,
+				isActiveExists: true,
+				onClickReset: action("reset"),
+				onClickActivePause: action("active-pause"),
+				onClickAddInstance: action("add-instance"),
+				onClickStep: action("step"),
+			})}
+		/>
+	),
+
+	name: "basic",
+};
+
+export const Pausing = {
+	render: () => (
+		<PlayControl
+			makeProps={() => ({
+				playbackRate: 1.5,
+				isActivePausing: true,
+				isActiveExists: true,
+				onClickReset: action("reset"),
+				onClickActivePause: action("active-pause"),
+				onClickAddInstance: action("add-instance"),
+				onClickStep: action("step"),
+			})}
+		/>
+	),
+
+	name: "pausing",
+};
