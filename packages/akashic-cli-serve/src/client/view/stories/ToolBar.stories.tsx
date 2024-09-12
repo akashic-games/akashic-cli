@@ -1,5 +1,4 @@
 import { action } from "@storybook/addon-actions";
-import { storiesOf } from "@storybook/react";
 import { observable } from "mobx";
 import { observer } from "mobx-react";
 import * as React from "react";
@@ -39,37 +38,44 @@ const TestWithBehaviour = observer(() => (
 			isActivePausing: store.isActivePausing,
 			isActiveExists: true,
 			onClickReset: action("reset"),
-			onClickActivePause: (v => (store.isActivePausing = v)),
+			onClickActivePause: (v) => (store.isActivePausing = v),
 			onClickAddInstance: action("add-instance"),
 			onClickStep: action("step")
 		})}
 		makeInstanceControlProps={() => ({
 			currentTime:
-					store.realtime ? store.duration :
+				store.realtime ? store.duration :
 					store.seeking ? store.currentTimePreview : store.currentTime,
 			duration: store.duration,
 			resetTime: 10,
 			isPaused: store.paused,
 			isProgressActive: store.seeking,
 			enableFastForward: !store.realtime,
-			onProgressChange: (t => (store.currentTimePreview = t, store.seeking = true)),
-			onProgressCommit: (t => (store.currentTime = t, store.seeking = false, store.realtime = false)),
-			onClickPause: (t => (store.paused = t)),
-			onClickFastForward: () => (store.realtime = true)
+			onProgressChange: (t) => (
+				(store.currentTimePreview = t), (store.seeking = true)
+			),
+			onProgressCommit: (t) => (
+				(store.currentTime = t),
+				(store.seeking = false),
+				(store.realtime = false)
+			),
+			onClickPause: (t) => (store.paused = t),
+			onClickFastForward: () => (store.realtime = true),
 		})}
 		makePlayerControlProps={() => ({
 			selfId: "1234567asdfg",
 			isJoined: true,
 			isJoinEnabled: store.realtime,
-			onClickJoinLeave: action("joinleave")
+			onClickJoinLeave: action("joinleave"),
 		})}
 		makeAudioOptionControlProps={() => ({
 			showsAudioOptionPopover: store.showsAudioOptionPopover,
 			audioStateSummary: store.audioStateSummary,
-			onClickAudioOptionPopover: (show => store.showsAudioOptionPopover = show),
-			onClickSolo: (() => store.audioStateSummary = "only-this-player-unmuted"),
-			onClickMuteAll: (() => store.audioStateSummary = "all-player-muted"),
-			onClickMuteNone: (() => store.audioStateSummary = "all-player-unmuted")
+			onClickAudioOptionPopover: (show) =>
+				(store.showsAudioOptionPopover = show),
+			onClickSolo: () => (store.audioStateSummary = "only-this-player-unmuted"),
+			onClickMuteAll: () => (store.audioStateSummary = "all-player-muted"),
+			onClickMuteNone: () => (store.audioStateSummary = "all-player-unmuted")
 		})}
 		makeDisplayOptionControlProps={() => ({
 			showsDisplayOptionPopover: store.showsDisplayOptionPopover,
@@ -79,28 +85,36 @@ const TestWithBehaviour = observer(() => (
 			showsGrid: store.showsGrid,
 			showsProfiler: store.showsProfiler,
 			showsDesignGuideline: store.showsDesignGuideline,
-			onClickDisplayOptionPopover: (show => store.showsDisplayOptionPopover = show),
-			onChangeFitsToScreen: (fits => store.fitsToScreen = fits),
-			onChangeShowBackgroundImage: (show => store.showsBackgroundImage = show),
-			onChangeShowBackgroundColor: (show => store.showsBackgroundColor = show),
-			onChangeShowGrid: (show => store.showsGrid = show),
-			onChangeShowProfiler: (show => store.showsProfiler = show),
-			onChangeShowDesignGuideline: (show => store.showsDesignGuideline = show),
+			onClickDisplayOptionPopover: (show) =>
+				(store.showsDisplayOptionPopover = show),
+			onChangeFitsToScreen: (fits) => (store.fitsToScreen = fits),
+			onChangeShowBackgroundImage: (show) =>
+				(store.showsBackgroundImage = show),
+			onChangeShowBackgroundColor: (show) =>
+				(store.showsBackgroundColor = show),
+			onChangeShowGrid: (show) => (store.showsGrid = show),
+			onChangeShowProfiler: (show) => (store.showsProfiler = show),
+			onChangeShowDesignGuideline: (show) =>
+				(store.showsDesignGuideline = show),
 			onClickScreenshot: () => {
 				// do nothing
-			}
+			},
 		})}
 		showsAppearance={store.showsAppearance}
 		showsDevtools={store.showsDevtools}
 		showsInstanceControl={store.showsDevtools}
 		targetService={"none"}
-		onToggleAppearance={v => (store.showsAppearance = v)}
-		onClickDevTools={v => (store.showsDevtools = v)}
+		onToggleAppearance={(v) => (store.showsAppearance = v)}
+		onClickDevTools={(v) => (store.showsDevtools = v)}
 	/>
 ));
 
-storiesOf("o-ToolBar", module)
-	.add("basic", () => (
+export default {
+	title: "o-ToolBar"
+};
+
+export const Basic = {
+	render: () => (
 		<ToolBar
 			makePlayControlProps={() => ({
 				playbackRate: 150,
@@ -140,7 +154,7 @@ storiesOf("o-ToolBar", module)
 				},
 				onClickMuteNone: () => {
 					// do nothing
-				}
+				},
 			})}
 			makeDisplayOptionControlProps={() => ({
 				showsDisplayOptionPopover: true,
@@ -168,5 +182,12 @@ storiesOf("o-ToolBar", module)
 			onToggleAppearance={action("toggle-appearance")}
 			onClickDevTools={action("dev-tools")}
 		/>
-	))
-	.add("with-behavior", () => <TestWithBehaviour />);
+	),
+
+	name: "basic"
+};
+
+export const WithBehavior = {
+	render: () => <TestWithBehaviour />,
+	name: "with-behavior"
+};
