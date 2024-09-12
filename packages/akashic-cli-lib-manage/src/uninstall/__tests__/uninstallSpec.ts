@@ -14,7 +14,7 @@ describe("uninstall()", () => {
 		mockfs({});
 		await expect(
 			promiseUninstall({ moduleNames: ["foo", "bar"], plugin: true })
-		).rejects.toBeDefined();
+		).rejects.toThrow();
 	});
 
 	it("handles npm failure", async () => {
@@ -30,7 +30,7 @@ describe("uninstall()", () => {
 				logger: logger,
 				debugNpm: new DummyNpm({ logger })
 			})
-		).rejects.toBeDefined();
+		).rejects.toThrow();
 	});
 
 	it("removes declaration from globalScripts", async () => {
