@@ -657,11 +657,5 @@ describe("uninstall()", () => {
 			expect(content.assets["node_modules/@akashic-extension/audio-library/assets/audios/bgm_2"]).toBeUndefined();
 			expect(content.assets["node_modules/@akashic-extension/audio-library/assets/audios/bgm_3"]).toBeUndefined();
 		});
-
-		// it("test", () => {
-		// 	mockfs(mockfsContent)
-		// 	expect(1 + 1).toBe(2);
-		// 	expect(true).toBe(true);
-		// });
 	});
 });
