@@ -12,7 +12,9 @@
     "strict": true,
     "allowSyntheticDefaultImports": true
   },
-  "include": [
-    "./src/**/*.ts"
+  "files": [
+    "./src/install/index.ts",
+    "./src/uninstall/index.ts",
+    "./src/update/index.ts"
   ]
 }

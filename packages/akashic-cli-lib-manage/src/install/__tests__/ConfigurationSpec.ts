@@ -1,5 +1,5 @@
 import * as cmn from "@akashic/akashic-cli-commons";
-import { Configuration } from "../../../lib/install/Configuration";
+import { Configuration } from "../Configuration";
 
 describe("Configuration", function () {
 	function createConfiguration(content: cmn.GameConfiguration): Configuration {

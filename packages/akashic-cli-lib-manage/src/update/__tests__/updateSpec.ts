@@ -1,18 +1,23 @@
-import * as path from "path";
-import * as fs from "fs";
 import * as cmn from "@akashic/akashic-cli-commons";
-import { update } from "../../../lib/update/update";
-import { MockPromisedNpm } from "./helpers/MockPromisedNpm";
+import { update, UpdateParameterObject } from "../../update/update.js";
+import { MockPromisedNpm } from "./helpers/MockPromisedNpm.js";
 
-describe("update", function () {
-	var nullLogger = new cmn.ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
-	var nullNpm: cmn.PromisedNpm = new MockPromisedNpm({
-		logger: nullLogger, 
-	});
-	it("does not crash when called", function (done: any) {
-		update({ debugNpm: nullNpm, moduleNames: undefined, logger: nullLogger }, (err: any) => {
-			expect(!!err).toBe(false);
-			done();
+describe("update", () => {
+	const nullLogger = new cmn.ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
+	const nullNpm: cmn.PromisedNpm = new MockPromisedNpm({ logger: nullLogger });
+	const updatePromisified = (options: UpdateParameterObject): Promise<void> => {
+		return new Promise((resolve, reject) => {
+			update(options, (err: any) => {
+				if (err) {
+					reject(err);
+				} else {
+					resolve();
+				}
+			});
 		});
+	};
+
+	it("does not crash when called", async () => {
+		await updatePromisified({ debugNpm: nullNpm, moduleNames: undefined, logger: nullLogger });
 	});
 });
