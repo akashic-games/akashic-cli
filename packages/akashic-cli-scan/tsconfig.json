@@ -7,7 +7,7 @@
     "moduleResolution": "Node16",
     "outDir": "./lib",
     "declaration": true,
-    "types" : ["image-size", "vitest/globals", "mock-fs", "node"],
+    "types" : ["image-size", "mock-fs", "node"],
     "useUnknownInCatchVariables": false,
     "strict": true,
     "allowJs": true,
@@ -17,7 +17,6 @@
     "./typings/aac-duration.d.ts",
     "./typings/thumbcoil.d.ts",
     "./typings/music-metadata.d.ts",
-    "./typings/vitest.d.ts",
     "./src/index.ts"
   ]
 }
