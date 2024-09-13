@@ -1,7 +1,5 @@
 // 本来であればv3系のg.ScriptAssetをimplementsすべきだが、ビルド時に使用しているakashic-engineはv2系なので一からクラス定義している
-// game.ejs で参照されるため、未使用の lint エラーを抑止
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-class SandboxScriptAssetV3 {
+export class SandboxScriptAssetV3 {
 	type: string = "script";
 	script: string;
 	id: string;

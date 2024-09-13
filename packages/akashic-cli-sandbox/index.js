@@ -1,33 +1,37 @@
-const pkg = require("./package.json");
-const debug = require("debug")("script-test:server");
-const http = require("http");
-const commander = require("commander");
+import { createServer } from "http";
+import { program } from "commander";
+import { existsSync } from "fs";
+import { createRequire } from "module";
+import path from "path";
+import debugLib from "debug";
+import appLib from "./lib/app.js";
+
+const debug = debugLib("script-test:server");
+const require = createRequire(import.meta.url);
+const { version } = require("./package.json");
 
 function collect(val, acc) {
 	acc.push(val);
 	return acc;
 }
 
-commander
-	.version(pkg.version)
+program
+	.version(version)
 	.usage("[options] <game path>")
 	.option("--cascade <path>", "path to contents to cascade", collect, [])
 	.option("-p, --port <port>", "number of listen port. default 3000", parseInt)
 	.option("-s, --scenario <scenario>", "scenario file");
 
-exports.run = (argv) => {
-	commander.parse(argv);
+export const run = (argv) => {
+	program.parse(argv);
 
-	const opts = commander.opts();
-	const gameBase = commander.args.length > 0 ? commander.args[0] : process.cwd();
-	const app = require("./lib/app")({ gameBase: gameBase, cascadeBases: opts.cascade });
+	const opts = program.opts();
+	const gameBase = program.args.length > 0 ? program.args[0] : process.cwd();
+	const app = appLib({ gameBase: gameBase, cascadeBases: opts.cascade });
 	const port = normalizePort(opts.port || process.env.PORT || 3000);
 
-	const path = require("path");
-	const fs = require("fs");
-
 	if (opts.scenario) {
-		if (!fs.existsSync(opts.scenario)) {
+		if (!existsSync(opts.scenario)) {
 			console.error("can not load " + opts.scenario);
 			return;
 		}
@@ -35,14 +39,14 @@ exports.run = (argv) => {
 	}
 
 	const gameJsonPath = path.join(app.gameBase, "game.json");
-	if (!opts.scenario && !fs.existsSync(gameJsonPath)) {
-		console.error("can not load " + path.join(app.gameBase, "game.json"));
+	if (!opts.scenario && !existsSync(gameJsonPath)) {
+		console.error(`can not load ${gameJsonPath}`);
 		return;
 	}
 
 	app.set("port", port);
 
-	const server = http.createServer(app);
+	const server = createServer(app);
 
 	server.listen(port);
 	server.on("error", onError);

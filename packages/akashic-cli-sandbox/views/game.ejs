@@ -21,17 +21,23 @@ window.g = engineFiles.akashicEngine;
     };
 })();
 </script>
-<script type="text/javascript" src="/js/TimeKeeper.js"></script>
 <% if (version === "3") { %>
-<script type="text/javascript" src="/js/SandboxScriptAssetV3.js"></script>
-<script>
-    window.SandboxScriptAsset = window.SandboxScriptAssetV3;
+<script type="module">
+    import { SandboxScriptAssetV3 } from "/js/SandboxScriptAssetV3.js";
+    window.SandboxScriptAsset = SandboxScriptAssetV3;
 </script>
 <% } else { %>
-<script type="text/javascript" src="/js/SandboxScriptAsset.js"></script>
+<script type="module">
+    import { SandboxScriptAsset } from "/js/SandboxScriptAsset.js";
+    window.SandboxScriptAsset = SandboxScriptAsset;
+</script>
 <% } %>
-<script type="text/javascript" src="/js/akashic/meddling/MeddlingDate.js"></script>
-<script type="text/javascript" src="/js/akashic/meddling/MeddlingMath.js"></script>
+<script type="module">
+    import "/js/akashic/meddling/MeddlingDate.js";
+    import "/js/akashic/meddling/MeddlingMath.js";
+    import { TimeKeeper } from "/js/TimeKeeper.js";
+    window.TimeKeeper = TimeKeeper;
+</script>
 <% if (version === "1") { %>
 <script type="text/javascript" src="/js/v<%= version %>/logger.js"></script>
 <% } %>

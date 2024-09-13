@@ -1,9 +1,9 @@
-import express = require("express");
+import type { RequestHandler } from "express";
 
-const controller: express.RequestHandler = (_req: express.Request, res: express.Response, _next: Function) => {
+const controller: RequestHandler = (_req, res) => {
 	res.render("test", {
 		title: "test"
 	});
 };
 
-module.exports = controller;
+export default controller;

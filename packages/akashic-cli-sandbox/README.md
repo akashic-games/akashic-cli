@@ -93,8 +93,8 @@ npm run build # src/以下をビルド
 
 ## テスト方法
 
-1. [TSLint](https://github.com/palantir/tslint "TSLint")を使ったLint
-2. [Jasmine](http://jasmine.github.io/ "Jasmine")を使ったユニットテスト
+1. [eslint](https://eslint.org/ "eslint")を使ったLint
+2. [vitest](https://vitest.dev/ "vitest")を使ったテスト
 
 が実行されます。
 

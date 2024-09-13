@@ -1,7 +1,7 @@
-import express = require("express");
-import controller = require("../controller/js");
+import express from "express";
+import controller from "../controller/js.js";
 const router = express.Router();
 
-router.get("/:scriptName(*.js$)", <express.RequestHandler>controller);
+router.get("/:scriptName(*.js$)", controller);
 
-module.exports = router;
+export default router;
