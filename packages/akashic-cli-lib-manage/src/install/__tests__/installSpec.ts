@@ -1,54 +1,43 @@
 import * as fs from "fs";
 import * as path from "path";
-import * as mockfs from "mock-fs";
+import mockfs from "mock-fs";
+import { vi } from "vitest";
 import * as cmn from "@akashic/akashic-cli-commons";
-import { InstallParameterObject, promiseInstall } from "../../../lib/install/install";
-import { workaroundMockFsExistsSync } from "../testUtils"; 
+import { InstallParameterObject, promiseInstall } from "../install.js";
 
-describe("install()", function () {
-	workaroundMockFsExistsSync();
+describe("install()", () => {
 
-	afterEach(function () {
+	afterEach(() => {
 		mockfs.restore();
 	});
 
-	it("handles npm install failure", function (done) {
-		mockfs({});
+	it("handles npm install failure", async () => {
 		const logger = new cmn.ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
 		const dummyNpm = new cmn.PromisedNpm({});
-		dummyNpm.install = function (names) { return Promise.reject("InstallFail:" + names); };
-		Promise.resolve()
-			.then(() => promiseInstall({ moduleNames: ["bar"], logger: logger, debugNpm: dummyNpm }))
-			.then(() => done.fail())
-			.catch((err) => {
-				expect(err).toBe("InstallFail:bar");
-			})
-			.then(() => cmn.ConfigurationFile.read("./game.json", logger))
-			.then((content) => {
-				expect(content.globalScripts).toBeUndefined();
-			})
-			.then(done, done.fail);
+		dummyNpm.install = (names) => Promise.reject("InstallFail:" + names);
+
+		await expect(
+			promiseInstall({ moduleNames: ["bar"], logger: logger, debugNpm: dummyNpm })
+		).rejects.toThrow("InstallFail:bar")
+
+		const content = await cmn.ConfigurationFile.read("./game.json", logger);
+		expect(content.globalScripts).toBeUndefined();
 	});
 
-	it("handles npm link failure", function (done) {
-		mockfs({});
+	it("handles npm link failure", async () => {
 		const logger = new cmn.ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
 		const dummyNpm = new cmn.PromisedNpm({});
-		dummyNpm.link = function (names) { return Promise.reject("LinkFail:" + names); };
-		Promise.resolve()
-			.then(() => promiseInstall({ moduleNames: ["bar"], link: true, logger: logger, debugNpm: dummyNpm }))
-			.then(() => done.fail())
-			.catch((err) => {
-				expect(err).toBe("LinkFail:bar");
-			})
-			.then(() => cmn.ConfigurationFile.read("./game.json", logger))
-			.then((content) => {
-				expect(content.globalScripts).toBeUndefined();
-			})
-			.then(done, done.fail);
+		dummyNpm.link = (names) => Promise.reject("LinkFail:" + names);
+
+		await expect(
+			promiseInstall({ moduleNames: ["bar"], link: true, logger: logger, debugNpm: dummyNpm })
+		).rejects.toThrow("LinkFail:bar")
+
+		const content = await cmn.ConfigurationFile.read("./game.json", logger);
+		expect(content.globalScripts).toBeUndefined();
 	});
 
-	it("installs modules and update globalScripts", function (done) {
+	it("installs modules and updates globalScripts", async () => {
 		const logger = new cmn.ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
 
 		let mockModules: any = {
@@ -94,18 +83,19 @@ describe("install()", function () {
 			}
 		};
 
-		jest.spyOn(cmn.Util, "requireResolve").mockImplementation((id: string, opts: { paths?: string[] | undefined }): string => {
-			const pkgJsonPath = path.join(opts.paths[0], "package.json");
-			const pkgData =  JSON.parse(fs.readFileSync(pkgJsonPath).toString("utf-8"));
+		const requireResolve = vi.spyOn(cmn.Util, "requireResolve");
+		requireResolve.mockImplementation((id: string, opts?: { paths?: string[] | undefined }) => {
+			const pkgJsonPath = path.join(opts!.paths![0], "package.json");
+			const pkgData = JSON.parse(fs.readFileSync(pkgJsonPath).toString("utf-8"));
 			const mainScriptName = pkgData.main.split(".").pop() === "js" ? pkgData.main : pkgData.main + ".js";
 			return path.join(path.resolve("."), path.dirname(pkgJsonPath), mainScriptName);
 		});
 
 		mockfs(mockFsContent);
 		const dummyNpm = new cmn.PromisedNpm({});
-		dummyNpm.install = function (names) {
-			names = (names instanceof Array) ? names : [names];
-			names.forEach(function (name) {
+		dummyNpm.install = (names: string[]) => {
+			names = Array.isArray(names) ? names : [names];
+			names.forEach((name) => {
 				const nameNoVer = cmn.Util.makeModuleNameNoVer(name);
 				mockFsContent.somedir.node_modules[nameNoVer] = mockModules[nameNoVer];
 			});
@@ -114,11 +104,11 @@ describe("install()", function () {
 			return Promise.resolve();
 		};
 
-		Promise.resolve()
+		return Promise.resolve()
 			.then(() => promiseInstall({ moduleNames: ["dummy"], cwd: "./somedir", logger: logger, debugNpm: dummyNpm }))
 			.then(() => cmn.ConfigurationFile.read("./somedir/game.json", logger))
 			.then((content) => {
-				const globalScripts = content.globalScripts;
+				const globalScripts = content.globalScripts!;
 				expect(globalScripts instanceof Array).toBe(true);
 				expect(globalScripts.length).toBe(3);
 				expect(globalScripts.indexOf("node_modules/dummy/main.js")).not.toBe(-1);
@@ -140,7 +130,7 @@ describe("install()", function () {
 						script: "dummy2"
 					}
 				]);
-				const globalScripts = content.globalScripts;
+				const globalScripts = content.globalScripts!;
 				expect(globalScripts.length).toBe(5);
 				expect(globalScripts.indexOf("node_modules/dummy/main.js")).not.toBe(-1);
 				expect(globalScripts.indexOf("node_modules/dummy/foo.js")).not.toBe(-1);
@@ -157,7 +147,7 @@ describe("install()", function () {
 			.then(() => promiseInstall({ moduleNames: ["noOmitPackagejson@0.0.0"], cwd: "./somedir", logger: logger, debugNpm: dummyNpm, noOmitPackagejson: true }))
 			.then(() => cmn.ConfigurationFile.read("./somedir/game.json", logger))
 			.then((content) => {
-				const globalScripts = content.globalScripts;
+				const globalScripts = content.globalScripts!;
 
 				expect(globalScripts.indexOf("node_modules/noOmitPackagejson/main.js")).not.toBe(-1);
 				expect(globalScripts.indexOf("node_modules/noOmitPackagejson/package.json")).not.toBe(-1);
@@ -187,14 +177,14 @@ describe("install()", function () {
 			.then(() => cmn.ConfigurationFile.read("./somedir/game.json", logger))
 			.then((content) => {
 				// 存在しないファイルをgame.jsonに指定
-				const globalScripts = content.globalScripts;
+				const globalScripts = content.globalScripts!;
 				globalScripts.push("node_modules/foo/foo.js");
 				cmn.ConfigurationFile.write(content, "./somedir/game.json", logger);
 			})
 			.then(() => promiseInstall({ moduleNames: ["dummy@1.0.1"], cwd: "./somedir", logger: logger, debugNpm: dummyNpm }))
 			.then(() => cmn.ConfigurationFile.read("./somedir/game.json", logger))
 			.then((content) => {
-				const globalScripts = content.globalScripts;
+				const globalScripts = content.globalScripts!;
 				expect(globalScripts.indexOf("node_modules/dummy/main.js")).toBe(-1);
 				expect(globalScripts.indexOf("node_modules/dummy/foo.js")).toBe(-1);
 				expect(globalScripts.indexOf("node_modules/dummy/node_modules/dummyChild/main.js")).toBe(-1);
@@ -294,34 +284,29 @@ describe("install()", function () {
 				await writeConfig();
 				await expect(install({ useMms: true })).rejects.toThrow();
 			})
-			.then(done, done.fail);
 	});
 
-	it("rejects plugin option for multiple module installing", function (done) {
+	it("rejects plugin option for multiple module installing", async () => {
 		mockfs({});
 		const logger = new cmn.ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
-		Promise.resolve()
-			.then(() => promiseInstall({ moduleNames: ["dummy@1.0.1", "anotherdummy"], cwd: ".", plugin: 10, logger: logger }))
-			.then(() => done.fail())
-			.catch ((_err) => done());
+		await expect(
+			promiseInstall({ moduleNames: ["dummy@1.0.1", "anotherdummy"], cwd: ".", plugin: 10, logger: logger })
+		).rejects.toThrow();
 	});
 
-	it("just performs npm install unless moduleNames given", function (done) {
+	it("just performs npm install unless moduleNames given", async () => {
 		mockfs({});
 		const logger = new cmn.ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
 		let installCallCount = 0;
 		const dummyNpm = new cmn.PromisedNpm({});
-		dummyNpm.install = function (names) {
+		dummyNpm.install = (names: string[]) => {
 			++installCallCount;
 			// npm install (引数なし) が呼ばれることを確認するため、引数があったらreject。
 			return names ? Promise.reject() : Promise.resolve();
 		};
-		Promise.resolve()
-			.then(() => promiseInstall({ cwd: ".", logger: logger, debugNpm: dummyNpm }))
-			.then(() => {
-				expect(installCallCount).toBe(1);
-			})
-			.then(done, done.fail);
+
+		await promiseInstall({ cwd: ".", logger: logger, debugNpm: dummyNpm });
+		expect(installCallCount).toBe(1);
 	});
 
 	it("should import assets from the akashic-lib.json", async () => {
@@ -475,15 +460,16 @@ describe("install()", function () {
 		});
 	});
 
-	it("no allow install @akashic/akashic-engine", function (done) {
+	it("no allow install @akashic/akashic-engine", async () => {
 		mockfs({});
 		const logger = new cmn.ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
-		Promise.resolve()
-			.then(() => promiseInstall({ moduleNames: ["@akashic/akashic-engine"], cwd: ".", logger: logger }))
-			.then(() => done.fail())
-			.catch ((_err) => {/* do nothing */})
-			.then(() => promiseInstall({ moduleNames: ["@akashic/akashic-engine@1.0.0"], cwd: ".", logger: logger }))
-			.then(() => done.fail())
-			.catch ((_err) => done());
-		});
+
+		await expect(
+			promiseInstall({ moduleNames: ["@akashic/akashic-engine"], cwd: ".", logger: logger })
+		).rejects.toThrow();
+
+		await expect(
+			promiseInstall({ moduleNames: ["@akashic/akashic-engine@1.0.0"], cwd: ".", logger: logger })
+		).rejects.toThrow();
+	});
 });

@@ -1,17 +1,18 @@
-import * as fs from "fs";
 import * as path from "path";
+import { createRequire } from "module";
 import type { CliConfigUpdate } from "@akashic/akashic-cli-commons";
 import { ConsoleLogger, CliConfigurationFile } from "@akashic/akashic-cli-commons";
 import { Command } from "commander";
 import { promiseUpdate } from "./update.js";
 
-const ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "..", "package.json"), "utf8")).version;
+const require = createRequire(import.meta.url);
+const { version } = require("../../package.json");
 
 const commander = new Command();
 commander
 	.usage("[options] <moduleName...>")
 	.description("Update installed npm modules")
-	.version(ver);
+	.version(version);
 
 function cli(param: CliConfigUpdate): void {
 	const logger = new ConsoleLogger({ quiet: param.quiet });

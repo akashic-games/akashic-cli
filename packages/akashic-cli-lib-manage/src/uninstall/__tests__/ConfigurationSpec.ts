@@ -1,5 +1,5 @@
 import * as cmn from "@akashic/akashic-cli-commons";
-import { Configuration } from "../../../lib/uninstall/Configuration";
+import { Configuration } from "../Configuration.js";
 
 describe("Configuration", function () {
 	describe("#removeOperationPlugin()", function () {
