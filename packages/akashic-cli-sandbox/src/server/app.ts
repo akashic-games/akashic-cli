@@ -6,7 +6,6 @@ import session  from "express-session";
 import gameRoute from "./routes/game.js";
 import jsRoute from "./routes/js.js";
 import sandboxConfigRoute from "./routes/sandboxConfig.js";
-import testRoute from "./routes/test.js";
 import type { SandboxRuntimeVersion } from "./utils.js";
 import { resolveEngineFilesPath, resolveEngineFilesVariable } from "./utils.js";
 
@@ -17,11 +16,6 @@ interface AkashicSandbox extends express.Express {
 	gameBase?: string;
 	cascadeBases?: string[];
 	scenario?: any;
-}
-
-interface ASSession extends session.Session {
-	cntr?: number;
-	results?: any[];
 }
 
 interface AppOptions {
@@ -39,14 +33,6 @@ interface ModuleEnvironment {
 // Akashic Sandboxに必要な部分だけ定義
 interface GameConfiguration {
 	environment?: ModuleEnvironment;
-}
-
-function result2csv(results: any[]): string {
-	let csv: string = "";
-	for (let i = 0; i < results.length; i++) {
-		csv += results[i].name + "," + results[i].elapse + "\n";
-	}
-	return csv;
 }
 
 function getContentModuleEnvironment(gameJsonPath: string): ModuleEnvironment | null {
@@ -186,66 +172,6 @@ export default function (options: AppOptions = {}): AkashicSandbox {
 			externals: JSON.stringify(externals),
 			engineFilesPath: `js/v${version}/${resolveEngineFilesVariable(version as SandboxRuntimeVersion)}.js`
 		});
-	});
-
-	// TODO: `/test/`, `/start/`, `/next/`, `/finish/` の　scenario オプションに関するパスは使われてないのでいずれ削除する。
-	app.use("^\/test$", (_req, res, _next) => {
-		res.redirect("/test/");
-	});
-	app.use("/test/*.js$", (req, _res, next) => {
-		const ssn: ASSession = req.session;
-		req.baseDir = app.scenario.benchmarks[ssn.cntr ?? 0].target;
-		next();
-	});
-	app.use("/start/", (req, res, _next) => {
-		const scenarioJSONString = fs.readFileSync(app.settings.scenarioPath).toString();
-		app.scenario = JSON.parse(scenarioJSONString);
-		const ssn: ASSession = req.session;
-		ssn.cntr = 0;
-		ssn.results = [];
-		res.redirect("/test/");
-	});
-	app.use("/next/", (req, res, _next) => {
-		const ssn: ASSession = req.session;
-
-		const elapse: number = Number(req.query.elapse);
-		ssn.results?.push(
-			{
-				"name": app.scenario.benchmarks[ssn.cntr ?? 0].name,
-				"elapse": elapse
-			}
-		);
-
-		ssn.cntr = Number.isInteger(ssn.cntr) ? ssn.cntr! + 1 : 0;
-		if (ssn.cntr! < app.scenario.benchmarks.length) {
-			res.redirect("/test/");
-		} else {
-			res.redirect("/finish/");
-		}
-	});
-	app.use("/finish/", (req, res, _next) => {
-		const ssn: ASSession = req.session;
-		console.log("you arrived at 'finish'");
-
-		res.render("finish", {
-			"resultjson": JSON.stringify(ssn.results),
-			"resultcsv": result2csv(ssn.results ?? []),
-			"title": "finish"
-		});
-	});
-	app.use("/test", jsRoute);
-	app.use("/test", (req, res, next) => {
-		const ssn: ASSession = req.session;
-		res.locals.maxAge = app.scenario.benchmarks[ssn.cntr ?? 0].maxAge;
-		res.locals.renderPerFrame = app.scenario.benchmarks[ssn.cntr ?? 0].renderPerFrame;
-		res.locals.renderPerFrame = (res.locals.renderPerFrame === undefined) ? "undefined" : res.locals.renderPerFrame;
-		res.locals.loopCount = app.scenario.benchmarks[ssn.cntr ?? 0].loopCount;
-		res.locals.loopCount = (res.locals.loopCount === undefined) ? "undefined" : res.locals.loopCount;
-		(testRoute)(req, res, next);
-	});
-	app.use("/test/", (req, res, next) => {
-		const ssn: ASSession = req.session;
-		express.static(app.scenario.benchmarks[ssn.cntr ?? 0].target)(req, res, next);
 	});
 
 	app.use((_req, _res, next) => {
