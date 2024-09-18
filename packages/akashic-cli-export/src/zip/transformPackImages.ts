@@ -1,8 +1,8 @@
 import * as fs from "fs";
 import * as path from "path";
-import { writeFile, unlink } from "@akashic/akashic-cli-commons/lib/FileSystem";
-import type { GameConfiguration } from "@akashic/akashic-cli-commons/lib/GameConfiguration";
-import { mkdirpSync } from "@akashic/akashic-cli-commons/lib/Util";
+import { writeFile, unlink } from "@akashic/akashic-cli-commons/lib/FileSystem.js";
+import type { GameConfiguration } from "@akashic/akashic-cli-commons/lib/GameConfiguration.js";
+import { mkdirpSync } from "@akashic/akashic-cli-commons/lib/Util.js";
 import type { AssetConfiguration, ImageAssetConfigurationBase } from "@akashic/game-configuration";
 import type { PNG } from "pngjs";
 import { makeUniqueAssetPath } from "./GameConfigurationUtil.js";

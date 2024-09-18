@@ -1,6 +1,6 @@
 import type * as cmn from "@akashic/akashic-cli-commons";
-import * as mockfs from "mock-fs";
-import * as gcu from "../../../lib/zip/GameConfigurationUtil";
+import mockfs from "mock-fs";
+import * as gcu from "../GameConfigurationUtil.js";
 
 describe("GameConfigurationUtil", () => {
 	let gamejson: cmn.GameConfiguration;

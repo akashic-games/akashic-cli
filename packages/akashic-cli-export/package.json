@@ -2,6 +2,7 @@
   "name": "@akashic/akashic-cli-export",
   "version": "1.9.18",
   "description": "A module to convert your Akashic game to a runnable standalone.",
+  "type": "module",
   "scripts": {
     "prepublish": "npm run clean && npm run build",
     "clean": "shx rm -rf lib && shx rm -rf spec/build",
@@ -17,14 +18,9 @@
     "build:template:v2": "cd src/template/template-export-html-v2 && npm install --no-package-lock && npm run build && cd ../../",
     "build:template:v3": "cd src/template/template-export-html-v3 && npm install --no-package-lock && npm run build && cd ../../",
     "build:template:ejs": "shx cp src/template/bundle-index.ejs lib/template/ && shx cp src/template/no-bundle-index.ejs lib/template/",
-    "lint": "npm run lint:src && npm run lint:spec && npm run lint:js",
-    "lint:src": "eslint \"src/**/*.ts\" --fix",
-    "lint:spec": "eslint \"./spec/src/**/*.ts\" --fix",
-    "lint:js": "eslint \"./src/template/**/*.js\" --fix",
-    "test": "npm run test:ts && npm run lint",
-    "test:ts": "npm run test:ts:compile && npm run test:ts:jest",
-    "test:ts:compile": "tsc -p ./spec",
-    "test:ts:jest": "jest"
+    "lint": "eslint -c .eslintrc.cjs --fix",
+    "test": "npm run test:vitest && npm run lint",
+    "test:vitest": "vitest run"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
@@ -35,10 +31,7 @@
     "akashic-cli-zip": "./bin/akashic-cli-export-zip"
   },
   "files": [
-    "README.md",
-    "bin",
-    "lib",
-    "package.json"
+    "lib"
   ],
   "devDependencies": {
     "@akashic/akashic-engine": "~2.6.7",
@@ -49,7 +42,6 @@
     "@types/ejs": "3.1.5",
     "@types/encoding-japanese": "^2.0.1",
     "@types/fs-extra": "9.0.13",
-    "@types/fs-readdir-recursive": "1.1.3",
     "@types/glob": "8.1.0",
     "@types/mock-fs": "4.13.4",
     "@types/node": "22.2.0",
@@ -66,6 +58,7 @@
     "typescript": "4.9.5",
     "uglify-save-license": "0.4.1",
     "vinyl-source-stream": "2.0.0",
+    "vitest": "^2.1.1",
     "zip": "1.2.0"
   },
   "dependencies": {
@@ -83,7 +76,6 @@
     "ejs": "3.1.10",
     "encoding-japanese": "^2.0.0",
     "fs-extra": "11.2.0",
-    "fs-readdir-recursive": "1.1.0",
     "glob": "11.0.0",
     "https": "1.0.0",
     "maxrects-packer": "2.7.3",

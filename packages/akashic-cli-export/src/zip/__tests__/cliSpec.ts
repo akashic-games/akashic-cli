@@ -1,9 +1,10 @@
+import { vi } from "vitest";
 import type { CliConfigExportZip } from "@akashic/akashic-cli-commons";
-import { cli } from "../../../lib/zip/cli";
-import * as exp from "../../../lib/zip/exportZip";
+import { cli } from "../cli.js";
+import * as exp from "../exportZip.js";
 
 describe("Parameter checking from cli() to exportZip()", () => {
-	const mockFn = jest.spyOn(exp, "promiseExportZip");
+	const mockFn = vi.spyOn(exp, "promiseExportZip");
 	afterEach(() => {
 		mockFn.mockReset();
 	});
@@ -11,7 +12,7 @@ describe("Parameter checking from cli() to exportZip()", () => {
 		mockFn.mockRestore();
 	});
 
-	it("no configs", (done) => {
+	it("no configs", () => {
 		const configs = {};
 		mockFn.mockImplementation(params => {
 			expect(params.bundle).toBeUndefined();
@@ -44,11 +45,11 @@ describe("Parameter checking from cli() to exportZip()", () => {
 			expect(infoOption.nicolive).toBeUndefined();
 			return Promise.resolve();
 		});
-		Promise.resolve().then(() => cli(configs))
-			.then(done, done.fail);
+
+		return Promise.resolve().then(() => cli(configs));
 	});
 
-	it("with all configs", (done) => {
+	it("with all configs", () => {
 		const configs: CliConfigExportZip = {
 			cwd: "./somewhere",
 			quiet: true,
@@ -98,11 +99,11 @@ describe("Parameter checking from cli() to exportZip()", () => {
 			expect(infoOption.nicolive).toBeTruthy();
 			return Promise.resolve();
 		 });
-		 Promise.resolve().then(() => cli(configs))
-			.then(done, done.fail);
+
+		return Promise.resolve().then(() => cli(configs));
 	});
 
-	it("nicolive parameter is true", (done) => {
+	it("nicolive parameter is true", () => {
 		const configs = { nicolive: true };
 		mockFn.mockImplementation(params => {
 			expect(params.bundle).toBeTruthy();
@@ -120,11 +121,11 @@ describe("Parameter checking from cli() to exportZip()", () => {
 			expect(infoOption.nicolive).toBeTruthy();
 			return Promise.resolve();
 		});
-		Promise.resolve().then(() => cli(configs))
-			.then(done, done.fail);
+
+		return Promise.resolve().then(() => cli(configs));
 	});
 
-	it("when nicolive is true and there are other parameters", (done) => {
+	it("when nicolive is true and there are other parameters", () => {
 		const configs: CliConfigExportZip = {
 			nicolive: true,
 			bundle: false,
@@ -150,7 +151,7 @@ describe("Parameter checking from cli() to exportZip()", () => {
 			expect(infoOption.nicolive).toBeTruthy();
 			return Promise.resolve();
 		});
-		Promise.resolve().then(() => cli(configs))
-			.then(done, done.fail);
+
+		return Promise.resolve().then(() => cli(configs));
 	});
 });
