@@ -150,7 +150,7 @@ describe("app", () => {
         });
     });
 
-    describe("soundbox-runtime value is invalid", () => {
+    describe("sandbox-runtime value is invalid", () => {
         it("should error if the value is 4", async () => {
             const gameBase = path.join(__dirname, "../fixtures/games/errRuntimeValue");
             expect(() => void App({ gameBase })).toThrowError("sandbox-runtime value is invalid. Please set the environment. sandbox-runtime value of game.json to 1, 2, or 3.");
