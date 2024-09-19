@@ -91,7 +91,7 @@ export async function fetchTemplate(metadata: TemplateMetadata): Promise<string>
 	switch (metadata.sourceType) {
 		case "local": {
 			const destDir = fs.mkdtempSync(path.join(os.tmpdir(), metadata.name + "-"));
-			fsx.copySync(metadata.path, destDir, { recursive: true });
+			fs.cpSync(metadata.path, destDir, { recursive: true });
 			return destDir;
 		}
 		case "remote": {
