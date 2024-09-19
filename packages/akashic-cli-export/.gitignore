@@ -1,5 +1,5 @@
 node_modules/
-lib/
+/lib/
 coverage/
 .idea/
 .vscode/
@@ -11,6 +11,3 @@ coverage/
 !src/__tests__/fixtures/simple_game_using_external/node_modules
 !src/__tests__/fixtures/simple_game_with_aez_bundle_main4/node_modules
 !src/__tests__/fixtures/simple_game_with_operation_plugins/node_modules
-!src/__tests__/fixtures/simple_game_using_external/node_modules/**/lib/
-!src/__tests__/fixtures/simple_game_with_aez_bundle_main4/node_modules/**/lib/
-!src/__tests__/fixtures/simple_game_with_operation_plugins/node_modules/**/lib/
