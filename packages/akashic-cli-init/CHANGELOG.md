@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.15.10
+
+### Patch Changes
+
+- [#1427](https://github.com/akashic-games/akashic-cli/pull/1427) [`0047bef`](https://github.com/akashic-games/akashic-cli/commit/0047beff94d6a57157722715ff681ec2ee6b46aa) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Fix issue with akashic-init deleting local template
+
 ## 1.15.9
 
 ### Patch Changes
