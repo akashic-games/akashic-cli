@@ -81,7 +81,7 @@ export async function fetchRemoteTemplatesMetadata(templateListJsonUri: string):
 /**
  * テンプレートを取得する。
  *
- * remote ならテンポラリディレクトリにダウンロードし、localなら何もしない。
+ * remote ならテンポラリディレクトリにダウンロードし、local ならテンポラリディレクトリにコピーする。
  *
  * @param metadata 取得するテンプレート
  * @returns 取得したテンプレート(template.jsonがあるディレクトリ)のパス。テンポラリディレクトリでありうる。
@@ -89,7 +89,9 @@ export async function fetchRemoteTemplatesMetadata(templateListJsonUri: string):
 export async function fetchTemplate(metadata: TemplateMetadata): Promise<string> {
 	switch (metadata.sourceType) {
 		case "local": {
-			return metadata.path;
+			const destDir = fs.mkdtempSync(path.join(os.tmpdir(), metadata.name + "-"));
+			fs.cpSync(metadata.path, destDir, { recursive: true });
+			return destDir;
 		}
 		case "remote": {
 			const { name, url } = metadata;
