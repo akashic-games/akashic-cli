@@ -2,7 +2,6 @@ import * as fs from "fs";
 import * as os from "os";
 import * as path from "path";
 import { readdir } from "@akashic/akashic-cli-commons/lib/FileSystem";
-import * as fsx from "fs-extra";
 import * as unzipper from "unzipper";
 
 // TODO: 適切な場所に移動
