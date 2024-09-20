@@ -46,7 +46,7 @@ describe("Parameter checking from cli() to exportZip()", () => {
 			return Promise.resolve();
 		});
 
-		return Promise.resolve().then(() => cli(configs));
+		return Promise.resolve(cli(configs));
 	});
 
 	it("with all configs", () => {
@@ -100,7 +100,7 @@ describe("Parameter checking from cli() to exportZip()", () => {
 			return Promise.resolve();
 		 });
 
-		return Promise.resolve().then(() => cli(configs));
+		return Promise.resolve(cli(configs));
 	});
 
 	it("nicolive parameter is true", () => {
@@ -122,7 +122,7 @@ describe("Parameter checking from cli() to exportZip()", () => {
 			return Promise.resolve();
 		});
 
-		return Promise.resolve().then(() => cli(configs));
+		return Promise.resolve(cli(configs));
 	});
 
 	it("when nicolive is true and there are other parameters", () => {
@@ -152,6 +152,6 @@ describe("Parameter checking from cli() to exportZip()", () => {
 			return Promise.resolve();
 		});
 
-		return Promise.resolve().then(() => cli(configs));
+		return Promise.resolve(cli(configs));
 	});
 });
