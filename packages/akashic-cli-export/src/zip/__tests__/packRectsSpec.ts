@@ -1,5 +1,5 @@
-import type { PackTarget } from "../../../lib/zip/packRects";
-import { packSmallRects } from "../../../lib/zip/packRects";
+import type { PackTarget } from "../packRects.js";
+import { packSmallRects } from "../packRects.js";
 
 describe("packRects", () => {
 	describe("packSmallRects()", () => {

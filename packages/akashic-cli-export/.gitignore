@@ -1,16 +1,13 @@
-node_modules
+node_modules/
+/lib/
+coverage/
+.idea/
+.vscode/
+
 .DS_Store*
-npm-debug.log
+*.log
 *.iml
-coverage
-lib
-.idea
-spec/build
-.vscode
 
 !src/__tests__/fixtures/simple_game_using_external/node_modules
 !src/__tests__/fixtures/simple_game_with_aez_bundle_main4/node_modules
 !src/__tests__/fixtures/simple_game_with_operation_plugins/node_modules
-!src/__tests__/fixtures/simple_game_using_external/node_modules/**/lib/
-!src/__tests__/fixtures/simple_game_with_aez_bundle_main4/node_modules/**/lib/
-!src/__tests__/fixtures/simple_game_with_operation_plugins/node_modules/**/lib/

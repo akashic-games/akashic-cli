@@ -1,7 +1,7 @@
 import type { GameConfiguration } from "@akashic/akashic-cli-commons";
 import type { ImageAssetConfigurationBase } from "@akashic/game-configuration";
-import * as convert from "../../../lib/html/convertUtil";
-import { validateGameJson } from "../../../lib/utils";
+import { validateGameJson } from "../../utils.js";
+import * as convert from "../convertUtil.js";
 
 describe("convertUtil", function () {
 	describe("getInjectedContents", function () {
@@ -15,13 +15,13 @@ describe("convertUtil", function () {
 		it("can get file content", function () {
 			const existFileContents = convert.getInjectedContents(
 				__dirname,
-				["../../fixtures/innerhtml/sample_script.html"]
+				["../../__tests__/fixtures/innerhtml/sample_script.html"]
 			);
 			expect(existFileContents.length).toBe(1);
 			expect(existFileContents[0]).toBe(sampleScriptContent);
 		});
 		it("can get file contents in specified directory", function () {
-			const existFileContents = convert.getInjectedContents(__dirname, ["../../fixtures/innerhtml"]);
+			const existFileContents = convert.getInjectedContents(__dirname, ["../../__tests__/fixtures/innerhtml"]);
 			expect(existFileContents.length).toBe(2);
 			expect(existFileContents[0]).toBe(sampleScriptContent);
 			expect(existFileContents[1]).toBe(sampleStyleContent);
@@ -29,7 +29,7 @@ describe("convertUtil", function () {
 		it("can get file contents by specified order", function () {
 			const existFileContents = convert.getInjectedContents(
 				__dirname,
-				["../../fixtures/innerhtml/sample_style.html", "../../fixtures/innerhtml/sample_script.html"]
+				["../../__tests__/fixtures/innerhtml/sample_style.html", "../../__tests__/fixtures/innerhtml/sample_script.html"]
 			);
 			expect(existFileContents.length).toBe(2);
 			expect(existFileContents[0]).toBe(sampleStyleContent);

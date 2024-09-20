@@ -1,15 +1,12 @@
 import * as fs from "fs";
+import { createRequire } from "module";
 import * as path from "path";
 import * as cmn from "@akashic/akashic-cli-commons";
 import type { ImageAssetConfigurationBase, NicoliveSupportedModes } from "@akashic/game-configuration";
 import * as babel from "@babel/core";
-import * as presetEnv from "@babel/preset-env";
-import commonjs from "@rollup/plugin-commonjs";
-import json from "@rollup/plugin-json";
+import presetEnv from "@babel/preset-env";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
-import { convert, detect } from "encoding-japanese";
 import * as fsx from "fs-extra";
-import readdir = require("fs-readdir-recursive");
 import type { OutputChunk, RollupBuild } from "rollup";
 import { rollup } from "rollup";
 import * as UglifyJS from "uglify-js";
@@ -19,6 +16,12 @@ import { getFromHttps } from "./apiUtil.js";
 import { NICOLIVE_SIZE_LIMIT_GAME_JSON, NICOLIVE_SIZE_LIMIT_TOTAL_FILE } from "./constants.js";
 import * as gcu from "./GameConfigurationUtil.js";
 import { transformPackSmallImages } from "./transformPackImages.js";
+
+// NOTE: 以下のパッケージは型定義が存在しないか JS と型定義の齟齬があるため `require()` を用いている
+const require = createRequire(import.meta.url);
+const commonjs = require("@rollup/plugin-commonjs");
+const json = require("@rollup/plugin-json");
+const { convert, detect } = require("encoding-japanese");
 
 export interface ConvertGameParameterObject {
 	bundle?: boolean;
@@ -137,7 +140,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 		.then(async (bundleResult) => {
 			const files: string[] = param.strip ?
 				gcu.extractFilePaths(gamejson, param.source, param.preservePackageJson) :
-				readdir(param.source).map(p => cmn.Util.makeUnixPath(p));
+				utils.readdirRecursive(param.source).map(p => cmn.Util.makeUnixPath(p));
 
 			let bundledFilePaths: string[] = [];
 			const preservingFilePathSet = new Set<string>(files);

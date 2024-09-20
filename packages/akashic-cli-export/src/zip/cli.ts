@@ -1,11 +1,12 @@
-import * as fs from "fs";
+import { createRequire } from "module";
 import * as path from "path";
 import type { CliConfigExportZip} from "@akashic/akashic-cli-commons";
 import { ConsoleLogger, CliConfigurationFile, SERVICE_TYPES } from "@akashic/akashic-cli-commons";
 import { Command } from "commander";
 import { promiseExportZip } from "./exportZip.js";
 
-const ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "..", "package.json"), "utf8")).version;
+const require = createRequire(import.meta.url);
+const { version } = require("../../package.json");
 
 export function cli(param: CliConfigExportZip): void {
 	const logger = new ConsoleLogger({ quiet: param.quiet });
@@ -38,7 +39,7 @@ export function cli(param: CliConfigExportZip): void {
 			resolveAkashicRuntime: param.resolveAkashicRuntime || param.nicolive,
 			preservePackageJson: param.preservePackageJson,
 			exportInfo: {
-				version: ver,
+				version,
 				option: {
 					quiet: param.quiet,
 					force: param.force,
@@ -64,7 +65,7 @@ export function cli(param: CliConfigExportZip): void {
 
 const commander = new Command();
 commander
-	.version(ver);
+	.version(version);
 
 commander
 	.description("Export an Akashic game to a zip file")

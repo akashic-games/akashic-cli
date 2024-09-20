@@ -43,8 +43,8 @@ npm run build
 
 ## テスト方法
 
-1. [TSLint](https://github.com/palantir/tslint "TSLint")を使ったLint
-2. [Jest](https://jestjs.io/ "Jest")を使ったテスト
+1. [eslint](https://eslint.org/ "eslint")を使ったLint
+2. [vitest](https://vitest.dev/ "vitest")を使ったテスト
 
 がそれぞれ実行されます。
 

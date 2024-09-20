@@ -1,4 +1,5 @@
-import * as utils from "../../lib/utils";
+import { vi } from "vitest";
+import * as utils from "../utils.js";
 
 describe("warnLackOfAudioFile", () => {
 	const gamejson: any = {
@@ -54,7 +55,7 @@ describe("warnLackOfAudioFile", () => {
 	};
 
 	it("output warning logs", () => {
-		const spy = jest.spyOn(global.console, "warn");
+		const spy = vi.spyOn(global.console, "warn");
 		Object.values(gamejson.assets).forEach((asset: any) => utils.warnLackOfAudioFile(asset));
 
 		/* eslint-disable max-len */
