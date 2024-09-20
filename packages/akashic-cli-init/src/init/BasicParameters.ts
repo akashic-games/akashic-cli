@@ -1,7 +1,7 @@
-import { ConfigurationFile } from "@akashic/akashic-cli-commons/lib/ConfigurationFile";
-import type { GameConfiguration } from "@akashic/akashic-cli-commons/lib/GameConfiguration";
-import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
-import * as Prompt from "prompt";
+import { ConfigurationFile } from "@akashic/akashic-cli-commons/lib/ConfigurationFile.js";
+import type { GameConfiguration } from "@akashic/akashic-cli-commons/lib/GameConfiguration.js";
+import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger.js";
+import Prompt from "prompt";
 
 /**
  * game.jsonの初期値として与えるパラメータ。

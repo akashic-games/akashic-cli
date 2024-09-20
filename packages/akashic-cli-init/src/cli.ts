@@ -1,8 +1,8 @@
-import * as fs from "fs";
+import { createRequire } from "module";
 import * as path from "path";
-import type { CliConfigInit } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigInit";
-import { CliConfigurationFile } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigurationFile";
-import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
+import type { CliConfigInit } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigInit.js";
+import { CliConfigurationFile } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigurationFile.js";
+import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger.js";
 import { Command } from "commander";
 import { promiseInit } from "./init/init.js";
 import { listTemplates } from "./list/listTemplates.js";
@@ -31,11 +31,12 @@ async function cli(param: CliConfigInit): Promise<void> {
 	}
 }
 
-const ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "package.json"), "utf8")).version;
+const require = createRequire(import.meta.url);
+const { version } = require("../package.json");
 
 const commander = new Command();
 commander
-	.version(ver);
+	.version(version);
 commander
 	.description("Generate project skeleton and initialize game.json.")
 	.option("-C, --cwd <dir>", "The directory to initialize")

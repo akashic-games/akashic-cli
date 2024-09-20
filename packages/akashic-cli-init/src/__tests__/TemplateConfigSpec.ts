@@ -1,6 +1,7 @@
-import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
-import * as mockfs from "mock-fs";
-import { completeTemplateConfig } from "../init/TemplateConfig";
+import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger.js";
+import mockfs from "mock-fs";
+import { completeTemplateConfig } from "../init/TemplateConfig.js";
+import { vi } from "vitest";
 
 describe("completeTemplateConfig", () => {
 	beforeEach(() => {
@@ -13,7 +14,7 @@ describe("completeTemplateConfig", () => {
 
 	it("can complete TemplateConfig", async () => {
 		const logger = new ConsoleLogger({ quiet: true });
-		const warn = jest.spyOn(logger, "warn");
+		const warn = vi.spyOn(logger, "warn");
 		const config = await completeTemplateConfig(
 			{
 				formatVersion: "0",
