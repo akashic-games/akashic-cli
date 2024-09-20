@@ -1,4 +1,4 @@
-import * as fs from "fs";
+import { createRequire } from "module";
 import * as path from "path";
 import type { CliConfigExportHtml} from "@akashic/akashic-cli-commons";
 import { ConsoleLogger, CliConfigurationFile } from "@akashic/akashic-cli-commons";
@@ -6,7 +6,8 @@ import { Command } from "commander";
 import type { ExportHTMLParameterObject } from "./exportHTML.js";
 import { promiseExportHTML } from "./exportHTML.js";
 
-const ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "..", "package.json"), "utf8")).version;
+const require = createRequire(import.meta.url);
+const { version } = require("../../package.json");
 
 function cli(param: CliConfigExportHtml): void {
 	const logger = new ConsoleLogger({ quiet: param.quiet });
@@ -32,7 +33,7 @@ function cli(param: CliConfigExportHtml): void {
 		debugOverrideEngineFiles: param.debugOverrideEngineFiles,
 		// index.htmlに書き込むためのexport実行時の情報
 		exportInfo: {
-			version: ver, // export実行時のバージョン
+			version, // export実行時のバージョン
 			// export実行時のオプション情報。index.htmlに表示される値であるため、実行環境のディレクトリの情報は持たせていないことに注意。
 			option: JSON.stringify({
 				force: param.force,
@@ -61,7 +62,7 @@ function cli(param: CliConfigExportHtml): void {
 
 const commander = new Command();
 commander
-	.version(ver);
+	.version(version);
 
 commander
 	.description("convert your Akashic game runnable standalone.")

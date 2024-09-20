@@ -1,2 +1,4 @@
 #!/usr/bin/env node
-require("../lib/html").run(process.argv);
+
+import { run } from "../lib/html";
+run(process.argv);

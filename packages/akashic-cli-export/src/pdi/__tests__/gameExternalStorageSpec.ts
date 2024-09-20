@@ -1,6 +1,6 @@
 // TODO: このテストは将来的には外部で実行するようにする
-import type * as types from "../../../lib/pdi/storage/content-storage-types";
-import { GameExternalStorage } from "../../../lib/pdi/storage/GameExternalStorage";
+import type * as types from "../storage/content-storage-types/index.js";
+import { GameExternalStorage } from "../storage/GameExternalStorage.js";
 
 // NOTE: 簡易 KVS 実装
 class KVS {

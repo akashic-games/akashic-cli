@@ -1,15 +1,19 @@
 import * as fs from "fs";
 import * as path from "path";
+import { createRequire } from "module";
+import { vi } from "vitest";
 import * as fsx from "fs-extra";
-import * as mockfs from "mock-fs";
-import { validateGameJson } from "../../../lib/utils";
-import type {
-	ConvertGameParameterObject} from "../../../lib/zip/convert";
+import mockfs from "mock-fs";
+import { validateGameJson } from "../../utils.js";
+import type { ConvertGameParameterObject } from "../convert.js";
 import {
 	bundleScripts,
 	convertGame,
 	validateGameJsonForNicolive
-} from "../../../lib/zip/convert";
+} from "../convert.js";
+
+const require = createRequire(import.meta.url);
+const fixturesDir = path.resolve(__dirname, "..", "..", "__tests__", "fixtures");
 
 describe("convert", () => {
 
@@ -18,33 +22,31 @@ describe("convert", () => {
 	});
 
 	describe("bundleScripts", () => {
-		it("bundles scripts", (done) => {
-			bundleScripts(
-				require("../../fixtures/simple_game/game.json").main,
-				path.resolve(__dirname, "..", "..", "fixtures", "simple_game")
-			)
-				.then((result) => {
-					// バンドル時に rollup の plugin が独自の js ファイルを含めるので、toEqual() は利用せず個々にファイルを確認
-					expect(result.filePaths.includes("script/bar.js")).toBeTruthy();
-					expect(result.filePaths.includes("script/foo.js")).toBeTruthy();
-					expect(result.filePaths.includes("text/test.json")).toBeTruthy();
-					expect(result.filePaths.includes("script/main.js")).toBeTruthy();
+		it("bundles scripts", async () => {
+			const result = await bundleScripts(
+				require("../../__tests__/fixtures/simple_game/game.json").main,
+				path.resolve(fixturesDir, "simple_game")
+			);
 
-					// bundle結果の内容を確認するのは難しいので、簡易的に実行結果を確認しておく
-					const f = new Function("module", "exports", result.bundle);
-					const m = { exports: {} };
-					f(m, m.exports);
-					expect(typeof m.exports).toBe("function");
-					expect((m.exports as Function)()).toEqual({ x: 200, y: 12 });
+			// バンドル時に rollup の plugin が独自の js ファイルを含めるので、toEqual() は利用せず個々にファイルを確認
+			expect(result.filePaths.includes("script/bar.js")).toBeTruthy();
+			expect(result.filePaths.includes("script/foo.js")).toBeTruthy();
+			expect(result.filePaths.includes("text/test.json")).toBeTruthy();
+			expect(result.filePaths.includes("script/main.js")).toBeTruthy();
 
-					done();
-				}, done.fail);
+			// bundle結果の内容を確認するのは難しいので、簡易的に実行結果を確認しておく
+			const f = new Function("module", "exports", result.bundle);
+			const m = { exports: {} };
+			f(m, m.exports);
+
+			expect(typeof m.exports).toBe("function");
+			expect((m.exports as Function)()).toEqual({ x: 200, y: 12 });
 		});
 	});
 
 	describe("convertGame", () => {
-		const destDir = path.resolve(__dirname, "..", "..", "fixtures", "output");
-		const consoleSpy = jest.spyOn(global.console, "warn");
+		const destDir = path.resolve(fixturesDir, "output");
+		const consoleSpy = vi.spyOn(global.console, "warn");
 		afterEach(() => {
 			fsx.removeSync(destDir);
 			consoleSpy.mockClear();
@@ -53,10 +55,10 @@ describe("convert", () => {
 			consoleSpy.mockRestore();
 		});
 
-		it("can not convert game if script that is not written with ES5 syntax", (done) => {
+		it("can not convert game if script that is not written with ES5 syntax", async () => {
 			let warningMessage = "";
 			const param = {
-				source: path.resolve(__dirname, "..", "..", "fixtures", "simple_game_es6"),
+				source: path.resolve(fixturesDir, "simple_game_es6"),
 				dest: destDir,
 				logger: {
 					warn: (message: string) => {
@@ -73,21 +75,20 @@ describe("convert", () => {
 					}
 				}
 			};
-			convertGame(param)
+			return convertGame(param)
 				.then(() => {
 					expect(fs.existsSync(destDir)).toBe(true);
 					const expected = "Non-ES5 syntax found.\n"
 						+ "script/main.js(1:1): Parsing error: The keyword 'const' is reserved\n"
 						+ "script/foo.js(1:1): Parsing error: The keyword 'const' is reserved";
 					expect(warningMessage).toBe(expected);
-					done();
-				}, done.fail);
+				});
 		});
 
-		it("can downpile script to ES5", (done) => {
+		it("can downpile script to ES5", async () => {
 			let warningMessage = "";
 			const param = {
-				source: path.resolve(__dirname, "..", "..", "fixtures", "simple_game_es6"),
+				source: path.resolve(fixturesDir, "simple_game_es6"),
 				dest: destDir,
 				babel: true,
 				logger: {
@@ -105,7 +106,7 @@ describe("convert", () => {
 					}
 				}
 			};
-			convertGame(param)
+			return convertGame(param)
 				.then(() => {
 					expect(fs.existsSync(destDir)).toBe(true);
 					expect(warningMessage).toBe("");
@@ -113,16 +114,15 @@ describe("convert", () => {
 					expect(fs.existsSync(path.join(destDir, "script/bar.js"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "script/foo.js"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "game.json"))).toBe(true);
-					done();
-				}, done.fail);
+				});
 		});
 
-		it("copy all files in target directory", (done) => {
+		it("copy all files in target directory", async () => {
 			const param = {
-				source: path.resolve(__dirname, "..", "..", "fixtures", "simple_game_using_external"),
+				source: path.resolve(fixturesDir, "simple_game_using_external"),
 				dest: destDir
 			};
-			convertGame(param)
+			return convertGame(param)
 				.then(() => {
 					expect(fs.existsSync(path.join(destDir, "node_modules/external/index.js"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "node_modules/external/package.json"))).toBe(true);
@@ -132,17 +132,16 @@ describe("convert", () => {
 					expect(fs.existsSync(path.join(destDir, "text/test.json"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "game.json"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "package.json"))).toBe(true);
-					done();
-				}, done.fail);
+				});
 		});
 
-		it("copy only necessary files in target directory when strip mode", (done) => {
+		it("copy only necessary files in target directory when strip mode", async () => {
 			const param = {
-				source: path.resolve(__dirname, "..", "..", "fixtures", "simple_game_using_external"),
+				source: path.resolve(fixturesDir, "simple_game_using_external"),
 				dest: destDir,
 				strip: true
 			};
-			convertGame(param)
+			return convertGame(param)
 				.then(() => {
 					expect(fs.existsSync(path.join(destDir, "node_modules/external/index.js"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "node_modules/external/package.json"))).toBe(false);
@@ -152,18 +151,17 @@ describe("convert", () => {
 					expect(fs.existsSync(path.join(destDir, "text/test.json"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "game.json"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "package.json"))).toBe(false);
-					done();
-				}, done.fail);
+				});
 		});
 
-		it("copy bundled-script in target directory when bundle mode", (done) => {
+		it("copy bundled-script in target directory when bundle mode", async () => {
 			const param = {
-				source: path.resolve(__dirname, "..", "..", "fixtures", "simple_game_using_external"),
+				source: path.resolve(fixturesDir, "simple_game_using_external"),
 				dest: destDir,
 				bundle: true,
 				omitUnbundledJs: false
 			};
-			convertGame(param)
+			return convertGame(param)
 				.then(() => {
 					expect(fs.existsSync(path.join(destDir, "node_modules/external/index.js"))).toBe(false);
 					expect(fs.existsSync(path.join(destDir, "node_modules/external/package.json"))).toBe(true);
@@ -180,12 +178,11 @@ describe("convert", () => {
 					expect(gameJson.assets.aez_bundle_main.type).toBe("script");
 					expect(gameJson.assets.aez_bundle_main.global).toBe(true);
 					expect(gameJson.assets.ignore2.global).toBeTruthy(); // omitEmptyJs があった時は偽になりえたので念のため確認
-					done();
-				}, done.fail);
+				});
 		});
 
-		it("does not copy output directory, even if it exists in source directory", (done) => {
-			const souceDirectory = path.resolve(__dirname, "..", "..", "fixtures", "simple_game_using_external");
+		it("does not copy output directory, even if it exists in source directory", async () => {
+			const souceDirectory = path.resolve(fixturesDir, "simple_game_using_external");
 			const outputDirectory = path.join(souceDirectory, "output");
 			const param = {
 				source: souceDirectory,
@@ -193,7 +190,7 @@ describe("convert", () => {
 				bundle: true,
 				omitUnbundledJs: true
 			};
-			convertGame(param)
+			return convertGame(param)
 				.then(() => {
 					expect(fs.existsSync(path.join(outputDirectory, "script/unrefered.js"))).toBe(false);
 					expect(fs.existsSync(path.join(outputDirectory, "script/aez_bundle_main.js"))).toBe(true);
@@ -204,19 +201,18 @@ describe("convert", () => {
 					expect(fs.readFileSync(path.join(outputDirectory, "game.json")).toString())
 						.not.toBe(fs.readFileSync(path.join(param.source, "game.json")).toString());
 					fsx.removeSync(outputDirectory);
-					done();
-				}, done.fail);
+				});
 		});
 
-		it("copy only necessary files and bundled-script in target directory when strip and bundle mode", (done) => {
+		it("copy only necessary files and bundled-script in target directory when strip and bundle mode", async () => {
 			const param = {
-				source: path.resolve(__dirname, "..", "..", "fixtures", "simple_game_using_external"),
+				source: path.resolve(fixturesDir, "simple_game_using_external"),
 				dest: destDir,
 				strip: true,
 				bundle: true,
 				omitUnbundledJs: true
 			};
-			convertGame(param)
+			return convertGame(param)
 				.then(() => {
 					expect(fs.existsSync(path.join(destDir, "node_modules/external/index.js"))).toBe(false);
 					expect(fs.existsSync(path.join(destDir, "node_modules/external/package.json"))).toBe(false);
@@ -229,16 +225,15 @@ describe("convert", () => {
 					expect(fs.existsSync(path.join(destDir, "package.json"))).toBe(false);
 					expect(fs.readFileSync(path.join(destDir, "game.json")).toString())
 						.not.toBe(fs.readFileSync(path.join(param.source, "game.json")).toString());
-					done();
-				}, done.fail);
+				});
 		});
 
-		it("includes empty .js (regression test for omitEmptyJs, a removed option)", (done) => {
+		it("includes empty .js (regression test for omitEmptyJs, a removed option)", async () => {
 			const param = {
-				source: path.resolve(__dirname, "..", "..", "fixtures", "simple_game_using_external"),
+				source: path.resolve(fixturesDir, "simple_game_using_external"),
 				dest: destDir
 			};
-			convertGame(param)
+			return convertGame(param)
 				.then(() => {
 					expect(fs.existsSync(path.join(destDir, "node_modules/external/index.js"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "node_modules/external/package.json"))).toBe(true);
@@ -251,16 +246,15 @@ describe("convert", () => {
 					const gameJson = fs.readFileSync(path.join(destDir, "game.json")).toString();
 					const gameJsonObj = JSON.parse(gameJson);
 					expect(gameJsonObj.assets.ignore2.global).toBeTruthy();
-					done();
-				}, done.fail);
+				});
 		});
 
-		it("convert non UTF-8 content", (done) => {
+		it("convert non UTF-8 content", async () => {
 			const param = {
-				source: path.resolve(__dirname, "..", "..", "fixtures", "simple_game_using_non_utf8"),
+				source: path.resolve(fixturesDir, "simple_game_using_non_utf8"),
 				dest: destDir
 			};
-			convertGame(param)
+			return convertGame(param)
 				.then(() => {
 					expect(fs.existsSync(path.join(destDir, "script/main.js"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "script/foo.js"))).toBe(true);
@@ -296,17 +290,16 @@ describe("convert", () => {
 					expect(sjis).toBe("このテキストファイルは Shift-JIS です");
 					const utf8 = fs.readFileSync(path.join(destDir, "text/utf8.txt"), { encoding: "utf-8" }).toString();
 					expect(utf8).toBe("このテキストファイルは UTF8 です");
-					done();
-				}, done.fail);
+				});
 		});
 
-		it("rewrite aez_bundle_main.js, even if aez_bundle_main script-asset already exists as entry-point", (done) => {
+		it("rewrite aez_bundle_main.js, even if aez_bundle_main script-asset already exists as entry-point", async () => {
 			const param = {
-				source: path.resolve(__dirname, "..", "..", "fixtures", "simple_game_with_aez_bundle_main"),
+				source: path.resolve(fixturesDir, "simple_game_with_aez_bundle_main"),
 				dest: destDir,
 				bundle: true
 			};
-			convertGame(param)
+			return convertGame(param)
 				.then(() => {
 					expect(fs.existsSync(path.join(destDir, "script/aez_bundle_main.js"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "script/bar.js"))).toBe(false);
@@ -318,18 +311,17 @@ describe("convert", () => {
 						.not.toBe(fs.readFileSync(path.join(param.source, "game.json")).toString());
 					expect(fs.readFileSync(path.join(destDir, "script/aez_bundle_main.js")).toString())
 						.not.toBe(fs.readFileSync(path.join(param.source, "script/aez_bundle_main.js")).toString());
-					done();
-				}, done.fail);
+				});
 		});
 
-		it("does not rewrite aez_bundle_main.js, even if aez_bundle_main script-asset already exists as not entry-point", (done) => {
+		it("does not rewrite aez_bundle_main.js, even if aez_bundle_main script-asset already exists as not entry-point", async () => {
 			const param = {
-				source: path.resolve(__dirname, "..", "..", "fixtures", "simple_game_with_aez_bundle_main2"),
+				source: path.resolve(fixturesDir, "simple_game_with_aez_bundle_main2"),
 				dest: destDir,
 				bundle: true,
 				omitUnbundledJs: false
 			};
-			convertGame(param)
+			return convertGame(param)
 				.then(() => {
 					expect(fs.existsSync(path.join(destDir, "script/aez_bundle_main.js"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "script/bar.js"))).toBe(false);
@@ -342,17 +334,16 @@ describe("convert", () => {
 					expect(fs.existsSync(path.join(destDir, "package.json"))).toBe(true);
 					expect(fs.readFileSync(path.join(destDir, "game.json")).toString())
 						.not.toBe(fs.readFileSync(path.join(param.source, "game.json")).toString());
-					done();
-				}, done.fail);
+				});
 		});
 
-		it("does not rewrite aez_bundle_main-asset, even if same name asset already exists as not script-asset", (done) => {
+		it("does not rewrite aez_bundle_main-asset, even if same name asset already exists as not script-asset", async () => {
 			const param = {
-				source: path.resolve(__dirname, "..", "..", "fixtures", "simple_game_with_aez_bundle_main3"),
+				source: path.resolve(fixturesDir, "simple_game_with_aez_bundle_main3"),
 				dest: destDir,
 				bundle: true
 			};
-			convertGame(param)
+			return convertGame(param)
 				.then(() => {
 					expect(fs.existsSync(path.join(destDir, "script/bar.js"))).toBe(false);
 					expect(fs.existsSync(path.join(destDir, "script/foo.js"))).toBe(false);
@@ -368,18 +359,17 @@ describe("convert", () => {
 					expect(gameJson.assets.aez_bundle_main.path).toBe("image/akashic-cli.png");
 					expect(gameJson.assets.aez_bundle_main.type).toBe("image");
 					expect(gameJson.assets.aez_bundle_main.hint).not.toBeDefined();
-					done();
-				}, done.fail);
+				});
 		});
 
-		it("rewrite mainScene-asset, even if main is not included in game.json", (done) => {
+		it("rewrite mainScene-asset, even if main is not included in game.json", async () => {
 			const param = {
-				source: path.resolve(__dirname, "..", "..", "fixtures", "simple_game_with_main_scene"),
+				source: path.resolve(fixturesDir, "simple_game_with_main_scene"),
 				dest: destDir,
 				bundle: true,
 				omitUnbundledJs: false
 			};
-			convertGame(param)
+			return convertGame(param)
 				.then(() => {
 					expect(fs.existsSync(path.join(destDir, "script/bar.js"))).toBe(false);
 					expect(fs.existsSync(path.join(destDir, "script/foo.js"))).toBe(false);
@@ -395,18 +385,17 @@ describe("convert", () => {
 					expect(gameJson.assets.mainScene.type).toBe("script");
 					expect(gameJson.assets.mainScene.global).toBe(true);
 					expect(gameJson.assets.notEntryPoint.path).toBe("script/mainScene.js");
-					done();
-				}, done.fail);
+				});
 		});
 
-		it("Unnecessary files are deleted by bundle", (done) => {
+		it("Unnecessary files are deleted by bundle", async () => {
 			const param = {
-				source: path.resolve(__dirname, "..", "..", "fixtures", "simple_game_with_aez_bundle_main4"),
+				source: path.resolve(fixturesDir, "simple_game_with_aez_bundle_main4"),
 				dest: destDir,
 				bundle: true,
 				omitUnbundledJs: true
 			};
-			convertGame(param)
+			return convertGame(param)
 				.then(() => {
 					expect(fs.existsSync(path.join(destDir, "script/aez_bundle_main.js"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "script/bar.js"))).toBe(false);
@@ -436,18 +425,17 @@ describe("convert", () => {
 					expect(consoleSpy).toHaveBeenCalledWith("excluded node_modules/@hoge/testmodule/lib/index.js due to unreachable/unhandled.");
 					expect(consoleSpy).toHaveBeenCalledWith("excluded script/bar.js due to unreachable/unhandled.");
 					/* eslint-enable max-len */
-					done();
-				}, done.fail);
+				});
 		});
 
-		it("Unnecessary files are also saved with bundle", (done) => {
+		it("Unnecessary files are also saved with bundle", async () => {
 			const param = {
-				source: path.resolve(__dirname, "..", "..", "fixtures", "simple_game_with_aez_bundle_main4"),
+				source: path.resolve(fixturesDir, "simple_game_with_aez_bundle_main4"),
 				dest: destDir,
 				bundle: true,
 				omitUnbundledJs: false
 			};
-			convertGame(param)
+			return convertGame(param)
 				.then(() => {
 					expect(fs.existsSync(path.join(destDir, "script/aez_bundle_main.js"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "script/bar.js"))).toBe(true);
@@ -472,17 +460,16 @@ describe("convert", () => {
 					expect(gameJson.assets.main).toBeUndefined();
 					expect(gameJson.assets.foo).toBeUndefined();
 					expect(gameJson.globalScripts.includes("node_modules/@hoge/testmodule/lib/ModuleA.js")).toBeFalsy();
-					done();
-				}, done.fail);
+				});
 		});
 
-		it("Add untainted: true to gamejson's image asset when targetService is nicolive", (done) => {
+		it("Add untainted: true to gamejson's image asset when targetService is nicolive", async () => {
 			const param: ConvertGameParameterObject = {
-				source: path.resolve(__dirname, "..", "..", "fixtures", "simple_game_with_aez_bundle_main3"),
+				source: path.resolve(fixturesDir, "simple_game_with_aez_bundle_main3"),
 				dest: destDir,
 				targetService: "nicolive"
 			};
-			convertGame(param)
+			return convertGame(param)
 				.then(() => {
 					expect(fs.existsSync(path.join(destDir, "script/bar.js"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "script/foo.js"))).toBe(true);
@@ -495,35 +482,33 @@ describe("convert", () => {
 					const imgAsset = gameJson.assets.aez_bundle_main;
 					expect(imgAsset.type).toBe("image");
 					expect(imgAsset.hint.untainted).toBeTruthy();
-					done();
-				}, done.fail);
+				});
 		});
 
-		it("No change in the gamejson image asset gamejson's image asset when targetService is none", (done) => {
+		it("No change in the gamejson image asset gamejson's image asset when targetService is none", async () => {
 			const param: ConvertGameParameterObject = {
-				source: path.resolve(__dirname, "..", "..", "fixtures", "simple_game_with_aez_bundle_main3"),
+				source: path.resolve(fixturesDir, "simple_game_with_aez_bundle_main3"),
 				dest: destDir,
 				targetService: "none"
 			};
-			convertGame(param)
+			return convertGame(param)
 				.then(() => {
 					const gameJson = JSON.parse(fs.readFileSync(path.join(destDir, "game.json")).toString());
 					const imgAsset = gameJson.assets.aez_bundle_main;
 					expect(imgAsset.type).toBe("image");
 					expect(imgAsset.hint).not.toBeDefined();
-					done();
-				}, done.fail);
+				});
 		});
 
-		it("Operation plugin scripts are saved even if they are depended by bundled file", (done) => {
+		it("Operation plugin scripts are saved even if they are depended by bundled file", async () => {
 			const param: ConvertGameParameterObject = {
-				source: path.resolve(__dirname, "..", "..", "fixtures", "simple_game_with_operation_plugins"),
+				source: path.resolve(fixturesDir, "simple_game_with_operation_plugins"),
 				dest: destDir,
 				bundle: true,
 				targetService: "nicolive",
 				omitUnbundledJs: true
 			};
-			convertGame(param)
+			return convertGame(param)
 				.then(() => {
 					expect(fs.existsSync(path.join(destDir, "script/aez_bundle_main.js"))).toBe(true);
 					// bundle済みのファイルは残らない
@@ -541,19 +526,18 @@ describe("convert", () => {
 					// モジュール名/lib 記述されていても参照できる
 					expect(fs.existsSync(path.join(destDir, "node_modules/@hoge/testmodule3/lib/index.js"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "node_modules/@hoge/testmodule3/lib/ModuleA.js"))).toBe(true);
-					done();
-				}, done.fail);
+				});
 		});
 
-		it("nicolive option, can add akashic-runtime to gamejson.", (done) => {
+		it("nicolive option, can add akashic-runtime to gamejson.", async () => {
 			const param = {
-				source: path.resolve(__dirname, "..", "..", "fixtures", "sample_game_v3"),
+				source: path.resolve(fixturesDir, "sample_game_v3"),
 				dest: destDir,
 				bundle: true,
 				nicolive: true,
 				resolveAkashicRuntime: true
 			};
-			convertGame(param)
+			return convertGame(param)
 				.then(() => {
 					expect(fs.existsSync(path.join(destDir, "script/aez_bundle_main.js"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "game.json"))).toBe(true);
@@ -566,19 +550,18 @@ describe("convert", () => {
 					expect(gameJson.environment.external).toEqual({ send: "0" });
 					expect(gameJson.environment["akashic-runtime"].version).toMatch(/^~3\.\d\.\d+(-.*)?$/);
 					expect(gameJson.environment["akashic-runtime"].flavor).toBe("-canvas");
-					done();
-				}, done.fail);
+				});
 		});
 
-		it("nicolive option, Do not add akashic-runtime if it already exists in game.json.", (done) => {
+		it("nicolive option, Do not add akashic-runtime if it already exists in game.json.", async () => {
 			const param = {
-				source: path.resolve(__dirname, "..", "..", "fixtures", "sample_game_with_akashic_runtime"),
+				source: path.resolve(fixturesDir, "sample_game_with_akashic_runtime"),
 				dest: destDir,
 				bundle: true,
 				nicolive: true,
 				resolveAkashicRuntime: true
 			};
-			convertGame(param)
+			return convertGame(param)
 				.then(() => {
 					const gameJson = JSON.parse(fs.readFileSync(path.join(destDir, "game.json")).toString());
 					expect(gameJson.environment.external.send).toBe("0");
@@ -587,41 +570,38 @@ describe("convert", () => {
 					expect(gameJson.environment.nicolive.supportedModes.length).toBe(2);
 					expect(gameJson.environment.nicolive.supportedModes).toContain("single");
 					expect(gameJson.environment.nicolive.supportedModes).toContain("ranking");
-					done();
-				}, done.fail);
+				});
 		});
 
-		it("resolveAkashicRuntime option, Add Akashic runtime in game.json.", (done) => {
+		it("resolveAkashicRuntime option, Add Akashic runtime in game.json.", async () => {
 			const param = {
-				source: path.resolve(__dirname, "..", "..", "fixtures", "sample_game_v3"),
+				source: path.resolve(fixturesDir, "sample_game_v3"),
 				dest: destDir,
 				resolveAkashicRuntime: true
 
 			};
-			convertGame(param)
+			return convertGame(param)
 				.then(() => {
 					const gameJson = JSON.parse(fs.readFileSync(path.join(destDir, "game.json")).toString());
 					expect(gameJson.environment["sandbox-runtime"]).toBe("3");
 					expect(gameJson.environment["akashic-runtime"].version).toMatch(/^~3\.\d\.\d+(-.*)?$/);
 					expect(gameJson.environment["akashic-runtime"].flavor).toBe("-canvas");
 					expect(gameJson.environment.external).toEqual({ send: "0" });
-					done();
-				}, done.fail);
+				});
 		});
 
-		it("niconico option, replace to nicolive option.", (done) => {
+		it("niconico option, replace to nicolive option.", async () => {
 			const param = {
-				source: path.resolve(__dirname, "..", "..", "fixtures", "simple_game_using_niconico"),
+				source: path.resolve(fixturesDir, "simple_game_using_niconico"),
 				dest: destDir
 			};
-			convertGame(param)
+			return convertGame(param)
 				.then(() => {
 					const gameJson = JSON.parse(fs.readFileSync(path.join(destDir, "game.json")).toString());
 					expect(gameJson.environment.nicolive.supportedModes.length).toBe(1);
 					expect(gameJson.environment.nicolive.supportedModes).toContain("single");
 					expect(gameJson.environment.niconico).toBeUndefined();
-					done();
-				}, done.fail);
+				});
 		});
 
 	});

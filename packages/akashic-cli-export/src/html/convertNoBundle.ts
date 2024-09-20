@@ -1,8 +1,10 @@
 import * as fs from "fs";
+import { createRequire } from "module";
 import * as path from "path";
+import { fileURLToPath } from "url";
 import * as cmn from "@akashic/akashic-cli-commons";
 import * as ejs from "ejs";
-import * as fsx from "fs-extra";
+import fsx from "fs-extra";
 import { validateGameJson } from "../utils.js";
 import type {
 	ConvertTemplateParameterObject} from "./convertUtil.js";
@@ -19,6 +21,10 @@ import {
 	resolveEngineFilesPath,
 	validateSandboxConfigJs
 } from "./convertUtil.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const require = createRequire(import.meta.url);
 
 export async function promiseConvertNoBundle(options: ConvertTemplateParameterObject): Promise<void> {
 	const content = await cmn.ConfigurationFile.read(path.join(options.source, "game.json"), options.logger);
@@ -174,7 +180,7 @@ function writeCommonFiles(
 	}
 
 	fsx.copySync(
-		path.resolve(__dirname, "..", templatePath),
+		path.resolve(__dirname, "..", "..", "lib", templatePath),
 		outputPath);
 
 	const jsDir = path.join(outputPath, "js");

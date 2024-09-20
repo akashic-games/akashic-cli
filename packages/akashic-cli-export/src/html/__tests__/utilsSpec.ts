@@ -1,18 +1,18 @@
 import * as fs from "fs";
 import * as path from "path";
 import type { GameConfiguration } from "@akashic/akashic-cli-commons";
-import * as Utils from "../../../lib/html/Utils";
+import * as Utils from "../Utils.js";
 
 describe("Util", () => {
 	describe("copyContentFiles", () => {
-		const outPath = path.join(__dirname, "..", "..", "fixtures", "out");
+		const outPath = path.join(__dirname, "..", "..",  "__tests__", "fixtures", "out");
 
 		afterEach(() => {
 			fs.rmSync(outPath, { recursive: true, force: true });
 		});
 
 		it("Copies only the files described in game.json", async () => {
-			const contentPath = path.join(__dirname, "..", "..", "fixtures", "game_exclude_files");
+			const contentPath = path.join(__dirname, "..", "..",  "__tests__", "fixtures", "game_exclude_files");
 			fs.mkdirSync(outPath);
 			Utils.copyContentFiles(contentPath, outPath);
 
@@ -30,7 +30,7 @@ describe("Util", () => {
 		});
 
 		it("Copies audio files as per hint.extensions, if given", async () => {
-			const contentPath = path.join(__dirname, "..", "..", "fixtures", "game_hint_exts");
+			const contentPath = path.join(__dirname, "..", "..",  "__tests__", "fixtures", "game_hint_exts");
 			fs.mkdirSync(outPath);
 			Utils.copyContentFiles(contentPath, outPath);
 
@@ -46,7 +46,7 @@ describe("Util", () => {
 		});
 
 		it("Copies existing audio files, unless hint.extensions given", async () => {
-			const contentPath = path.join(__dirname, "..", "..", "fixtures", "sample_game");
+			const contentPath = path.join(__dirname, "..", "..",  "__tests__", "fixtures", "sample_game");
 			fs.mkdirSync(outPath);
 			Utils.copyContentFiles(contentPath, outPath);
 
