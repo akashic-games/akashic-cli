@@ -1,2 +1,4 @@
 #!/usr/bin/env node
-require("../lib/config").run(process.argv);
+
+import { run } from "../lib/config/cli.js";
+run(process.argv);

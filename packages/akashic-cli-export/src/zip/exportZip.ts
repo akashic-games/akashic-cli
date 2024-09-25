@@ -3,7 +3,7 @@ import * as os from "os";
 import * as path from "path";
 import { fileURLToPath } from "url";
 import * as cmn from "@akashic/akashic-cli-commons";
-import stat = require("@akashic/akashic-cli-extra/lib/stat");
+import { size as statSize } from "@akashic/akashic-cli-extra/lib/stat/stat.js";
 import archiver = require("archiver");
 import { readdirRecursive } from "../utils.js";
 import { convertGame } from "./convert.js";
@@ -145,7 +145,7 @@ export function promiseExportZip(param: ExportZipParameterObject): Promise<void>
 				game: gameJson,
 				raw: false
 			};
-			return stat.size(params);
+			return statSize(params);
 		});
 }
 
