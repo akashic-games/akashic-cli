@@ -25,7 +25,7 @@
     "@types/browserify": "12.0.40",
     "@types/eslint": "8.56.11",
     "@types/fs-extra": "11.0.4",
-    "@types/jest": "29.5.12",
+    "@types/jest": "29.5.13",
     "@types/mock-fs": "4.13.4",
     "@types/node": "20.14.15",
     "@types/resolve": "^1.20.6",
