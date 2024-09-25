@@ -41,7 +41,7 @@
   "dependencies": {
     "@akashic/akashic-cli-commons": "0.15.3",
     "aac-duration": "0.0.1",
-    "chokidar": "^3.5.1",
+    "chokidar": "^4.0.0",
     "commander": "^12.0.0",
     "fs-readdir-recursive": "1.1.0",
     "image-size": "~1.1.0",
