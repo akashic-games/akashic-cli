@@ -1,18 +1,17 @@
 import * as path from "path";
-import * as mockfs from "mock-fs";
+import mockfs from "mock-fs";
 import * as fs from "fs";
-import * as Util from "../../lib/Util";
-import * as Renamer from "../../lib/Renamer";
-import { ConfigurationFile } from "../../lib/ConfigurationFile";
-import { AssetConfigurationMap } from "@akashic/game-configuration";
+import * as Util from "../Util";
+import * as Renamer from "../Renamer.js";
+import { ConfigurationFile } from "../ConfigurationFile.js";
 
-describe("Renamer", function () {
+describe("Renamer", () => {
 	afterEach(() => {
 		mockfs.restore();
 	});
 
-	it(".hashFilepath()", function () {
-		var arr = ["script/mainScene.js", "node_modules/foo/bar/index.js", "image/hoge.png"];
+	it(".hashFilepath()", () => {
+		const arr = ["script/mainScene.js", "node_modules/foo/bar/index.js", "image/hoge.png"];
 		expect(arr.map((v) => Util.makeUnixPath(Renamer.hashFilepath(v, 256)))).toEqual([
 			"files/04ef22b752657e08b66fe185c9f9592944afe6ab0ba51380f04d33f42d6a409c.js",
 			"files/825a514c9ba0f7565c0bc4415451ee2350476c9c18abf970a98cdd62113617ce.js",
@@ -25,8 +24,8 @@ describe("Renamer", function () {
 		]);
 	});
 
-	describe(".hashFilePaths()", function () {
-		beforeEach(function () {
+	describe(".hashFilePaths()", () => {
+		beforeEach(() => {
 			mockfs({
 				srcDir: {
 					"game.json": JSON.stringify({
@@ -90,117 +89,110 @@ describe("Renamer", function () {
 				destDir: {}
 			});
 		});
-		afterEach(function () {
+		afterEach(() => {
 			mockfs.restore();
 		});
 
-		it("hash game.json", function (done) {
-			Promise.resolve()
-			.then(() => ConfigurationFile.read(path.join("./srcDir", "game.json"), undefined))
-			.then((gamejson) => {
-				Renamer.renameAssetFilenames(gamejson, "./srcDir");
+		it("hash game.json", async () => {
+			const gamejson = await ConfigurationFile.read(path.join("./srcDir", "game.json"), undefined!);
+			Renamer.renameAssetFilenames(gamejson, "./srcDir");
 
-				expect(gamejson.main).toBe("./script/mainScene");
-				expect(gamejson.assets["mainScene"]).toEqual({
-					type: "script",
-					path: "files/04ef22b752657e08b66f.js",
-					virtualPath: "script/mainScene.js",
+			expect(gamejson.main).toBe("./script/mainScene");
+			expect(gamejson.assets["mainScene"]).toEqual({
+				type: "script",
+				path: "files/04ef22b752657e08b66f.js",
+				virtualPath: "script/mainScene.js",
+				global: true
+			});
+			expect(gamejson.assets["sub"]).toEqual({
+				type: "script",
+				path: "files/ec09c6fef46489affb10.js",
+				virtualPath: "script/virtualSub.js", // 最初から指定されていた virtualPath は保存される。
+				global: true
+			});
+			expect(gamejson.assets["hoge"]).toEqual({
+				type: "image",
+				path: "files/a70844aefe0a5ceb64eb.png",
+				virtualPath: "image/hoge.png",
+				global: true
+			});
+			expect(gamejson.assets["foo"]).toEqual({
+				type: "audio",
+				path: "files/47acba638f0bcfc681d7",
+				virtualPath: "audio/foo",
+				global: true
+			});
+			// globalScripts は scriptAsset に変換される
+			expect(gamejson.assets["a_e_z_0"]).toEqual({
+				type: "script",
+				path: "files/825a514c9ba0f7565c0b.js",
+				virtualPath: "node_modules/foo/bar/index.js",
+				global: true
+			});
+			// asset と globalScripts で同じパスの場合は globalScripts の処理でリネームしない
+			expect(gamejson.assets["bar_plugin"]).toEqual({
+				type: 'script',
+				path: 'files/a57a44b454ed3a456b27.js',
+				global: true,  // 元定義にはないが、globalScripts に存在するため true に書き換えられる
+				virtualPath: 'node_modules/foo/bar/barPlugin.js'
+			});
+			// moduleMainScripts はvirtualPathで扱うのでリネームされていてはならない
+			expect(gamejson.moduleMainScripts!["foo"]).toBe("node_modules/foo/bar/index.js");
+
+			// ファイルが存在するか確認
+			expect(fs.statSync(path.join("srcDir", "files/a70844aefe0a5ceb64eb.png")).isFile()).toBe(true);
+			expect(fs.statSync(path.join("srcDir", "files/04ef22b752657e08b66f.js")).isFile()).toBe(true);
+			expect(fs.statSync(path.join("srcDir", "files/47acba638f0bcfc681d7.mp4")).isFile()).toBe(true);
+			expect(fs.statSync(path.join("srcDir", "files/47acba638f0bcfc681d7.ogg")).isFile()).toBe(true);
+			expect(fs.statSync(path.join("srcDir", "files/825a514c9ba0f7565c0b.js")).isFile()).toBe(true);
+		});
+
+		// アセットの path が重複している場合、重複するアセットでハッシュ化後のファイルを共有する
+		it("hash game.json - throw error", async () => {
+			const gamejson = await ConfigurationFile.read(path.join("./srcDir", "game.json"), undefined!);
+			gamejson.assets = {
+				hoge: {
+					type: "image",
+					path: "image/hoge.png",
+					width: 100,
+					height: 111,
 					global: true
-				});
-				expect(gamejson.assets["sub"]).toEqual({
-					type: "script",
-					path: "files/ec09c6fef46489affb10.js",
-					virtualPath: "script/virtualSub.js", // 最初から指定されていた virtualPath は保存される。
+				},
+				hoge2: {
+					type: "image",
+					path: "image/hoge.png",
+					width: 50,
+					height: 55,
 					global: true
-				});
+				}
+			};
+			gamejson.globalScripts = [];
+
+			expect(() => {
+				Renamer.renameAssetFilenames(gamejson, "./srcDir");
+				expect(fs.statSync(path.join("srcDir", "files/04ef22b752657e08b66f.js")).isFile()).toBe(true);
 				expect(gamejson.assets["hoge"]).toEqual({
 					type: "image",
 					path: "files/a70844aefe0a5ceb64eb.png",
 					virtualPath: "image/hoge.png",
+					width: 100,
+					height: 111,
 					global: true
 				});
-				expect(gamejson.assets["foo"]).toEqual({
-					type: "audio",
-					path: "files/47acba638f0bcfc681d7",
-					virtualPath: "audio/foo",
+				expect(gamejson.assets["hoge2"]).toEqual({
+					type: "image",
+					path: "files/a70844aefe0a5ceb64eb.png",
+					virtualPath: "image/hoge.png",
+					width: 50,
+					height: 55,
 					global: true
 				});
-				// globalScripts は scriptAsset に変換される
-				expect(gamejson.assets["a_e_z_0"]).toEqual({
-					type: "script",
-					path: "files/825a514c9ba0f7565c0b.js",
-					virtualPath: "node_modules/foo/bar/index.js",
-					global: true
-				});
-				// asset と globalScripts で同じパスの場合は globalScripts の処理でリネームしない
-				expect(gamejson.assets["bar_plugin"]).toEqual({
-					type: 'script',
-					path: 'files/a57a44b454ed3a456b27.js',
-					global: true,  // 元定義にはないが、globalScripts に存在するため true に書き換えられる
-					virtualPath: 'node_modules/foo/bar/barPlugin.js'
-				});
-				// moduleMainScripts はvirtualPathで扱うのでリネームされていてはならない
-				expect(gamejson.moduleMainScripts["foo"]).toBe("node_modules/foo/bar/index.js");
-				expect(fs.statSync(path.join("srcDir", "files/a70844aefe0a5ceb64eb.png")).isFile()).toBe(true);
-				expect(fs.statSync(path.join("srcDir", "files/04ef22b752657e08b66f.js")).isFile()).toBe(true);
-				expect(fs.statSync(path.join("srcDir", "files/47acba638f0bcfc681d7.mp4")).isFile()).toBe(true);
-				expect(fs.statSync(path.join("srcDir", "files/47acba638f0bcfc681d7.ogg")).isFile()).toBe(true);
-				expect(fs.statSync(path.join("srcDir", "files/825a514c9ba0f7565c0b.js")).isFile()).toBe(true);
-				done();
-			})
-			.catch(done.fail)
-		});
-
-		// アセットの path が重複している場合、重複するアセットでハッシュ化後のファイルを共有する
-		it("hash game.json - throw error", function (done) {
-			Promise.resolve()
-			.then(() => ConfigurationFile.read(path.join("./srcDir", "game.json"), undefined))
-			.then((gamejson) => {
-				gamejson.assets = {
-					hoge: {
-						type: "image",
-						path: "image/hoge.png",
-						width: 100,
-						height: 111,
-						global: true
-					},
-					hoge2: {
-						type: "image",
-						path: "image/hoge.png",
-						width: 50,
-						height: 55,
-						global: true
-					}
-				};
-				gamejson.globalScripts = [];
-				expect(() => {
-					Renamer.renameAssetFilenames(gamejson, "./srcDir");
-					expect(fs.statSync(path.join("srcDir", "files/04ef22b752657e08b66f.js")).isFile()).toBe(true);
-					expect(gamejson.assets["hoge"]).toEqual({
-						type: "image",
-						path: "files/a70844aefe0a5ceb64eb.png",
-						virtualPath: "image/hoge.png",
-						width: 100,
-						height: 111,
-						global: true
-					});
-					expect(gamejson.assets["hoge2"]).toEqual({
-						type: "image",
-						path: "files/a70844aefe0a5ceb64eb.png",
-						virtualPath: "image/hoge.png",
-						width: 50,
-						height: 55,
-						global: true
-					});
-
-				});
-				done();
-			})
-			.catch(done.fail);
+			});
 		});
 	});
-	describe("renameAssetFilenames()", function () {
-		var content = {
+
+	describe("renameAssetFilenames()", () => {
+		const content = {
 			main: "./script/a/b/c.js",
 			assets: {
 				c: {
@@ -215,7 +207,7 @@ describe("Renamer", function () {
 				}
 			},
 		};
-		beforeEach(function () {
+		beforeEach(() => {
 			mockfs({
 				srcDir: {
 					"game.json": JSON.stringify(content),
@@ -233,21 +225,18 @@ describe("Renamer", function () {
 				destDir: {}
 			});
 		});
-		afterEach(function () {
+		afterEach(() => {
 			mockfs.restore();
 		});
-		it("save file included dirs", function (done) {
-			fs.writeFile("./srcDir/script/a/b/c2.js", "hello", (err) => {
-				if (err) throw err;
-				Renamer.renameAssetFilenames(JSON.parse(JSON.stringify(content)), "./srcDir", 20);
-				expect(fs.statSync("./srcDir/script/a/b/c2.js").isFile()).toBe(true);
-				done();
-			});
+		it("save file included dirs", async () => {
+			await fs.promises.writeFile("./srcDir/script/a/b/c2.js", "hello");
+			Renamer.renameAssetFilenames(JSON.parse(JSON.stringify(content)), "./srcDir", 20);
+			expect(fs.statSync("./srcDir/script/a/b/c2.js").isFile()).toBe(true);
 		});
 	});
 
-	describe("_removeDirectoryIfEmpty()", function () {
-		var content = {
+	describe("_removeDirectoryIfEmpty()", () => {
+		const content = {
 			main: "./script/a/b/c.js",
 			assets: {
 				c: {
@@ -262,7 +251,7 @@ describe("Renamer", function () {
 				}
 			},
 		};
-		beforeEach(function () {
+		beforeEach(() => {
 			mockfs({
 				srcDir: {
 					"game.json": JSON.stringify(content),
@@ -278,51 +267,50 @@ describe("Renamer", function () {
 				destDir: {}
 			});
 		});
-		afterEach(function () {
+		afterEach(() => {
 			mockfs.restore();
 		});
-		it("delete empty dirs", function (done) {
+
+		it("delete empty dirs", async () => {
 			// ファイルへのパスが含まれるケースは想定しない
-			var ancestors = [
+			const ancestors = [
 				'srcDir/script/a/b',
 				'srcDir/script/a',
 				'srcDir/script',
 				'srcDir/script/d'
 			];
 			Renamer._removeDirectoryIfEmpty(ancestors, "./");
-			ancestors.forEach((ancestor) => {
+			for (const ancestor of ancestors) {
 				try {
 					fs.statSync(ancestor);
-					done.fail();
+					throw new Error("Directory should have been deleted");
 				} catch (error) {
 					expect(error.code).toBe("ENOENT");
 				}
-			});
-			done();
+			}
 		});
 
-		it("not sorted dirnames", function (done) {
+		it("not sorted dirnames", async () => {
 			// パス長さ順にソートされていないパスを渡した場合
-			var ancestors = [
+			const ancestors = [
 				'srcDir/script/d',
 				'srcDir/script',
 				'srcDir/script/a',
 				'srcDir/script/a/b',
 			];
 			Renamer._removeDirectoryIfEmpty(ancestors, "./");
-			ancestors.forEach((ancestor) => {
+			for (const ancestor of ancestors) {
 				try {
 					fs.statSync(ancestor);
-					done.fail();
+					throw new Error("Directory should have been deleted");
 				} catch (error) {
 					expect(error.code).toBe("ENOENT");
 				}
-			});
-			done();
+			}
 		});
 
-		it("include ancenstor path", function (done) {
-			var ancestors = [
+		it("include ancestor path", async () => {
+			const ancestors = [
 				'../otherAncenstorsrcDir/script/d',
 				'../otherAncenstorsrcDir/script',
 				'../otherAncenstorsrcDir/script/a',
@@ -330,17 +318,16 @@ describe("Renamer", function () {
 			];
 			try {
 				Renamer._removeDirectoryIfEmpty(ancestors, "./");
-				done.fail();
+				throw new Error("Should have thrown an error for ancestor path inclusion");
 			} catch (error) {
 				expect(error.message).toBe("ERROR_PATH_INCLUDE_ANCESTOR");
-				done();
 			}
 		});
 	});
 
-	describe("_listAncestorDirNames()", function () {
-		it("return ancestor paths", function (done) {
-			var ancestors = Renamer._listAncestorDirNames(["./srcDir/script/a/b/c.js"]).sort((a, b) => (b.length - a.length));
+	describe("_listAncestorDirNames()", () => {
+		it("return ancestor paths", async () => {
+			const ancestors = Renamer._listAncestorDirNames(["./srcDir/script/a/b/c.js"]).sort((a, b) => (b.length - a.length));
 			expect(ancestors).toEqual([
 				'./srcDir/script/a/b/c.js',
 				'./srcDir/script/a/b',
@@ -348,11 +335,10 @@ describe("Renamer", function () {
 				'./srcDir/script',
 				'./srcDir'
 			].map((ancestorPath) => path.normalize(ancestorPath)));
-			done();
 		});
 
-		it("2 paths", function (done) {
-			var ancestors = Renamer._listAncestorDirNames(["./srcDir/script/a/b/c.js", "./srcDir/script/d/e/f.js"])
+		it("2 paths", async () => {
+			const ancestors = Renamer._listAncestorDirNames(["./srcDir/script/a/b/c.js", "./srcDir/script/d/e/f.js"])
 				.sort((a, b) => (a === b) ? 0 : (a < b) ? 1 : -1);
 			expect(ancestors).toEqual([
 				'./srcDir/script/d/e/f.js',
@@ -364,11 +350,10 @@ describe("Renamer", function () {
 				'./srcDir/script',
 				'./srcDir'
 			].map((ancestorPath) => path.normalize(ancestorPath)));
-			done();
 		});
 
-		it("include ancenstor path", function (done) {
-			var ancestors = Renamer._listAncestorDirNames(["../otherAncenstorsrcDir/script/a/b/c.js"]).sort((a, b) => (b.length - a.length));
+		it("include ancestor path", async () => {
+			const ancestors = Renamer._listAncestorDirNames(["../otherAncenstorsrcDir/script/a/b/c.js"]).sort((a, b) => (b.length - a.length));
 			expect(ancestors).toEqual([
 				'../otherAncenstorsrcDir/script/a/b/c.js',
 				'../otherAncenstorsrcDir/script/a/b',
@@ -376,7 +361,6 @@ describe("Renamer", function () {
 				'../otherAncenstorsrcDir/script',
 				'../otherAncenstorsrcDir'
 			].map((ancestorPath) => path.normalize(ancestorPath)));
-			done();
 		});
 	});
 });

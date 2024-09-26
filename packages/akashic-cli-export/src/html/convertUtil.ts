@@ -7,7 +7,6 @@ import type { AssetConfigurationMap, ImageAssetConfigurationBase } from "@akashi
 import type { SandboxConfiguration } from "@akashic/sandbox-configuration";
 import fsx from "fs-extra";
 import * as UglifyJS from "uglify-js";
-import { readdirRecursive } from "../utils.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -85,7 +84,7 @@ export function copyAssetFiles(inputPath: string, outputPath: string, options: C
 		return path.relative(scriptPath, src)[0] === "." && (options.unbundleText || path.relative(textPath, src)[0] === ".");
 	};
 	try {
-		const files = readdirRecursive(inputPath);
+		const files = cmn.Util.readdirRecursive(inputPath);
 		files.forEach(p => {
 			cmn.Util.mkdirpSync(path.dirname(path.resolve(outputPath, p)));
 			if (isAssetToBeCopied(path.resolve(inputPath, p))) {

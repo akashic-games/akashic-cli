@@ -1,16 +1,16 @@
-import { ConsoleLogger } from "../../lib/ConsoleLogger";
+import { ConsoleLogger } from "../ConsoleLogger.js";
 
-describe("ConsoleLogger", function () {
-	it("can be instantiated", function () {
-		var self = new ConsoleLogger();
+describe("ConsoleLogger", () => {
+	it("can be instantiated", () => {
+		const self = new ConsoleLogger();
 		expect(self.quiet).toBe(false);
 		expect(typeof self._log).toBe("function");
 	});
 
-	it("logs error, warn and info", function () {
-		var logged: string[] = [];
-		var self = new ConsoleLogger({ debugLogMethod: logged.push.bind(logged) });
-		var errorCause = {}, warnCause = {}, infoCause = {};
+	it("logs error, warn and info", () => {
+		const logged: string[] = [];
+		const self = new ConsoleLogger({ debugLogMethod: logged.push.bind(logged) });
+		const errorCause = {}, warnCause = {}, infoCause = {};
 		self.error("error", errorCause);
 		self.warn("warning", warnCause);
 		self.info("info log", infoCause);
@@ -30,10 +30,10 @@ describe("ConsoleLogger", function () {
 		expect(logged[8]).toBe("INFO: another info");
 	});
 
-	it("suppresses info if quiet", function () {
-		var logged: string[] = [];
-		var self = new ConsoleLogger({ quiet: true, debugLogMethod: logged.push.bind(logged) });
-		var errorCause = {}, warnCause = {}, infoCause = {};
+	it("suppresses info if quiet", () => {
+		const logged: string[] = [];
+		const self = new ConsoleLogger({ quiet: true, debugLogMethod: logged.push.bind(logged) });
+		const errorCause = {}, warnCause = {}, infoCause = {};
 		self.error("error", errorCause);
 		self.warn("warning", warnCause);
 		self.info("info log", infoCause);

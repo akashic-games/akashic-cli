@@ -1,11 +1,11 @@
-import * as mockfs from "mock-fs";
-import { ConfigurationFile } from "../../lib/ConfigurationFile";
-import { ConsoleLogger } from "../../lib/ConsoleLogger";
-import { Logger } from "../../lib/Logger";
+import mockfs from "mock-fs";
+import { ConfigurationFile } from "../ConfigurationFile.js";
+import { ConsoleLogger } from "../ConsoleLogger.js";
+import { Logger } from "../Logger.js";
 
-describe("ConfigurationFile", function () {
+describe("ConfigurationFile", () => {
 
-	var mockFsContent = {
+	const mockFsContent = {
 		"dirname": {
 			"foo.js": ""
 		},
@@ -17,69 +17,54 @@ describe("ConfigurationFile", function () {
 		"invalid-json.json": "hogehoge"
 	};
 
-	var logger: Logger;
-	var loggedResult: string[];
-	beforeEach(function () {
+	let logger: Logger;
+	let loggedResult: string[];
+	beforeEach(() => {
 		loggedResult = [];
 		logger = new ConsoleLogger({ debugLogMethod: loggedResult.push.bind(loggedResult) });
 		mockfs(mockFsContent);
 	});
-	afterEach(function () {
+	afterEach(() => {
 		mockfs.restore();
 	});
 
-	describe(".read()", function () {
-		it("reads configuration file", function (done) {
-			Promise.resolve()
-				.then(() => ConfigurationFile.read("./game1.json", logger))
-				.then((content) => {
-					expect(content).toEqual({
-						width: 320,
-						height: 50,
-						fps: 45
-					});
-				})
-				.then(done, done.fail);
+	describe(".read()", () => {
+		it("reads configuration file", async () => {
+			const content = await ConfigurationFile.read("./game1.json", logger);
+			expect(content).toEqual({
+				width: 320,
+				height: 50,
+				fps: 45
+			});
 		});
-		it("rejects directory", function (done) {
-			Promise.resolve()
-				.then(() => ConfigurationFile.read("./dirname", logger))
-				.then(() => done.fail())
-				.catch((e) => done());
+
+		it("rejects directory", async () => {
+			await expect(ConfigurationFile.read("./dirname", logger)).rejects.toThrow();
 		});
-		it("creates empty data unless the file exists", function (done) {
-			Promise.resolve()
-				.then(() => ConfigurationFile.read("./inexistent.json", logger))
-				.then((content) => {
-					expect(loggedResult.length).toBe(1);
-					expect(content).toEqual({});
-				})
-				.then(done, done.fail);
+
+		it("creates empty data unless the file exists", async () => {
+			const content = await ConfigurationFile.read("./inexistent.json", logger);
+			expect(loggedResult.length).toBe(1);
+			expect(content).toEqual({});
 		});
-		it("rejects invalid JSON", function (done) {
-			Promise.resolve()
-				.then(() => ConfigurationFile.read("./invalid-json.json", logger))
-				.then(() => done.fail())
-				.catch((e) => done());
+
+		it("rejects invalid JSON", async () => {
+			await expect(ConfigurationFile.read("./invalid-json.json", logger)).rejects.toThrow();
 		});
 	});
 
-	describe(".write()", function () {
-		it("writes to the file", function (done) {
-			var data = { width: 10, height: 5, fps: 30, main: "main.js", assets: {} };
-			Promise.resolve()
-				.then(() => ConfigurationFile.write(data, "./game1.json", logger))
-				.then(() => ConfigurationFile.read("./game1.json", logger))
-				.then((content) => {
-					expect(content).toEqual(data);
-				})
-				.then(done, done.fail);
+	describe(".write()", () => {
+		it("writes to the file", async () => {
+			const data = { width: 10, height: 5, fps: 30, main: "main.js", assets: {} };
+			await ConfigurationFile.write(data, "./game1.json", logger);
+			const content = await ConfigurationFile.read("./game1.json", logger);
+			expect(content).toEqual(data);
 		});
-		it("rejects writing to directory", function (done) {
-			Promise.resolve()
-				.then(() => ConfigurationFile.write({} as any, "./dirname", logger))  // 中身は問わないので any
-				.then(() => done.fail())
-				.catch((e) => done());
+
+		it("rejects writing to directory", async () => {
+			await expect(
+				ConfigurationFile.write({} as any, "./dirname", logger) // 中身は問わないので any
+			).rejects.toThrow();
 		});
 	});
 });

@@ -1,8 +1,8 @@
-import { PromisedNpm } from "../../lib/PromisedNpm";
+import { PromisedNpm } from "../PromisedNpm.js";
 
-describe("PromisedNpm", function () {
-	describe("ls", function() {
-		it("can get json-object", function () {
+describe("PromisedNpm", () => {
+	describe("ls", () => {
+		it("can get json-object", () => {
 			(new PromisedNpm({})).ls()
 				.then((result) => {
 					expect(result.dependencies).toBeDefined();

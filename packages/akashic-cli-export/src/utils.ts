@@ -33,20 +33,3 @@ export function validateGameJson(gamejson: cmn.GameConfiguration): void {
 		+ "Remove it by `akashic uninstall @akashic/akashic-engine` before export.");
 	}
 }
-
-// FIXME: akashic-cli-commons が ES Module に移行したタイミングで移すべき
-export function readdirRecursive(dir: string, baseDir: string = dir): string[] {
-	let files: string[] = [];
-	if (!existsSync(dir)) return files;
-	const items = readdirSync(dir, { withFileTypes: true });
-	for (const item of items) {
-		const fullPath = path.join(dir, item.name);
-		const relativePath = path.relative(baseDir, fullPath);
-		if (item.isDirectory()) {
-			files = files.concat(readdirRecursive(fullPath, baseDir));
-		} else {
-			files.push(relativePath);
-		}
-	}
-	return files;
-};

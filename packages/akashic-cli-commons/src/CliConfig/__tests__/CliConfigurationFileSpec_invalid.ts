@@ -1,10 +1,10 @@
-import * as mockfs from "mock-fs";
+import mockfs from "mock-fs";
 import * as path from "path";
-import { CliConfigurationFile } from "../../../lib/CliConfig/CliConfigurationFile";
+import { CliConfigurationFile } from "../../CliConfig/CliConfigurationFile.js";
 
-describe("invalid ConfigurationFile", function () {
+describe("invalid ConfigurationFile", () => {
 
-	var mockBrokenCAkashicConfigJs = {
+	const mockBrokenCAkashicConfigJs = {
 		"akashic.config.js": `
 		var config = {
 			commandOptions: {
@@ -17,26 +17,23 @@ describe("invalid ConfigurationFile", function () {
 		`
 	};
 
-	describe(".read()", function () {
-		beforeEach(function () {
+	describe(".read()", () => {
+		beforeEach(() => {
 			mockfs(mockBrokenCAkashicConfigJs);
 		});
-		afterEach(function () {
+		afterEach(() => {
 			mockfs.restore();
 		});
-		it("invalid akashic.config.js", function (done) {
-			CliConfigurationFile.read(path.join(process.cwd(), "./akashic.config.js"), (error, config) => {
-				if (error) return done();
-				expect(config).toEqual({
-					commandOptions: {
-						serve: {
-							port: 3030
-						}
-					}
+
+		it("invalid akashic.config.js", async () => {
+			await expect(new Promise((resolve, reject) => {
+				CliConfigurationFile.read(path.join(process.cwd(), "./akashic.config.js"), (error, config) => {
+					if (error) return reject(error);
+					resolve(config);
 				});
-				done.fail();
+			})).resolves.toEqual({
+				commandOptions: {}
 			});
 		});
 	});
 });
-

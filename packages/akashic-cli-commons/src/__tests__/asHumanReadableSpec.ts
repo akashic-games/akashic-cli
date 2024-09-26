@@ -1,4 +1,4 @@
-import { asHumanReadable } from "../../lib/";
+import { asHumanReadable } from "../asHumanReadable.js";
 
 test("asHumanReadable()", () => {
 	// Bytes

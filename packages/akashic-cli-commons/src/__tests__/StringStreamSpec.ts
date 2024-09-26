@@ -1,28 +1,30 @@
-import { StringStream } from "../../lib/StringStream";
+import { StringStream } from "../StringStream.js";
 
-describe("StringStream", function () {
-	it("can be instantiated", function () {
-		var stream = new StringStream("fooo");
-		expect(stream.content).toBe("fooo");
-		expect(stream.file).toBeUndefined();
+describe("StringStream", () => {
+	it("can be instantiated", () => {
+		const stream1 = new StringStream("fooo");
+		expect(stream1.content).toBe("fooo");
+		expect(stream1.file).toBeUndefined();
 
-		var stream = new StringStream("zoooo", "fname");
-		expect(stream.content).toBe("zoooo");
-		expect(stream.file).toBe("fname");
+		const stream2 = new StringStream("zoooo", "fname");
+		expect(stream2.content).toBe("zoooo");
+		expect(stream2.file).toBe("fname");
 	});
 
-	it("can be used as a stream", function (done) {
-		var str = "zooooo";
-		var stream = new StringStream(str, "fname");
+	it("can be used as a stream", async () => {
+		const str = "zooooo";
+		const stream = new StringStream(str, "fname");
+		let result = "";
 
-		var result = "";
-		stream.resume();
-		stream.on("data", function (data) {
-			result += data;
+		await new Promise((resolve, reject) => {
+			stream.resume();
+			stream.on("data", (data) => {
+				result += data;
+			});
+			stream.on("end", resolve);
+			stream.on("error", reject);
 		});
-		stream.on("end", function () {
-			expect(result).toBe(str);
-			done();
-		});
+
+		expect(result).toBe(str);
 	});
 });

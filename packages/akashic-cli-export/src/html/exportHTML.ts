@@ -5,7 +5,6 @@ import * as path from "path";
 import * as cmn from "@akashic/akashic-cli-commons";
 import archiver = require("archiver");
 import * as fsx from "fs-extra";
-import { readdirRecursive } from "../utils.js";
 import { promiseConvertBundle } from "./convertBundle.js";
 import { promiseConvertNoBundle } from "./convertNoBundle.js";
 import type { ConvertTemplateParameterObject } from "./convertUtil.js";
@@ -116,7 +115,7 @@ export function promiseExportHTML(p: ExportHTMLParameterObject): Promise<string>
 		.then((dest: string) => {
 			if (param.compress) {
 				return new Promise<void>((resolve, reject) => {
-					const files = readdirRecursive(dest).map(p => ({
+					const files = cmn.Util.readdirRecursive(dest).map(p => ({
 						src: path.resolve(dest, p),
 						entryName: p
 					}));
