@@ -1,21 +1,20 @@
-import * as child_process from "child_process";
-import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
-import * as InitCommonOptions from "../common/InitCommonOptions";
-import * as ct from "../init/cloneTemplate";
+import { exec } from "child_process";
+import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger.js";
+import * as InitCommonOptions from "../common/InitCommonOptions.js";
+import * as ct from "../init/cloneTemplate.js";
+import { MockInstance, vi } from "vitest";
 
-jest.mock("child_process");
-const mockExec = child_process.exec as unknown as jest.Mock;
-mockExec.mockImplementation((_command: any, _opts: any, callback: Function) => {
-	callback();
-});
+vi.mock("child_process", () => ({
+	exec: vi.fn((_cmd, _opts, callback) => callback()),
+}));
 
 describe("cloneTemplate()", () => {
-	let mockConfirm: jest.SpyInstance = null!; // beforeAll() で必ず代入するので非 null 型とする
+	let mockConfirm: MockInstance = null!;
 	beforeEach(() => {
-		mockExec.mockClear();
+		vi.clearAllMocks();
 	});
 	beforeAll(async () => {
-		mockConfirm = jest.spyOn(InitCommonOptions, "confirmAccessToUrl").mockResolvedValue(true);
+		mockConfirm = vi.spyOn(InitCommonOptions, "confirmAccessToUrl").mockResolvedValue(true);
 	});
 	afterAll(() => {
 		mockConfirm.mockRestore();
@@ -40,8 +39,11 @@ describe("cloneTemplate()", () => {
 		);
 
 		// NOTE: clone の後の半角スペース2つは実装上の都合
-		expect(mockExec.mock.calls[0][0]).toEqual(
-			"git clone  git@github.com:akashic-games/akashic-template.git /path/to/dummy/dir"
+		expect(exec).toHaveBeenCalledTimes(1);
+		expect(exec).toHaveBeenCalledWith(
+			"git clone  git@github.com:akashic-games/akashic-template.git /path/to/dummy/dir",
+			expect.anything(),
+			expect.anything(),
 		);
 	});
 
@@ -64,14 +66,16 @@ describe("cloneTemplate()", () => {
 			}
 		);
 
-		expect(mockExec.mock.calls[0][0]).toEqual(
-			"git clone --branch beta https://my.another.company.com/my-another-orgs/my-another-repo.git " +
-			"/path/to/another/local/dir"
+		expect(exec).toHaveBeenCalledTimes(1);
+		expect(exec).toHaveBeenCalledWith(
+			"git clone --branch beta https://my.another.company.com/my-another-orgs/my-another-repo.git /path/to/another/local/dir",
+			expect.anything(),
+			expect.anything(),
 		);
 	});
 
 	it("should reference env.GIT_BIN_PATH", async () => {
-		process.env.GIT_BIN_PATH = "/path/to/git/bin/git";
+		vi.stubEnv("GIT_BIN_PATH", "/path/to/git/bin/git");
 
 		await ct.cloneTemplate(
 			"github.com",
@@ -91,12 +95,15 @@ describe("cloneTemplate()", () => {
 		);
 
 		// NOTE: --depth と --branch の順は実装上の都合
-		expect(mockExec.mock.calls[0][0]).toEqual(
+		expect(exec).toHaveBeenCalledTimes(1);
+		expect(exec).toHaveBeenCalledWith(
 			"/path/to/git/bin/git clone --depth 1 --branch next https://github.com/akashic-games/akashic-template.git " +
-			"/path/to/dummy/dir"
+			"/path/to/dummy/dir",
+			expect.anything(),
+			expect.anything(),
 		);
 
-		process.env.GIT_BIN_PATH = undefined;
+		vi.stubEnv("GIT_BIN_PATH", undefined);
 	});
 });
 

@@ -1,10 +1,10 @@
 import * as os from "os";
 import * as path from "path";
-import {ConsoleLogger} from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
+import {ConsoleLogger} from "@akashic/akashic-cli-commons/lib/ConsoleLogger.js";
 import * as fs from "fs-extra";
-import * as mockfs from "mock-fs";
-import * as bp from "../../lib/init/BasicParameters";
-import * as mockPrompt from "./support/mockPrompt";
+import mockfs from "mock-fs";
+import * as bp from "../init/BasicParameters.js";
+import * as mockPrompt from "./support/mockPrompt.js";
 
 describe("BasicParameters", function () {
 
@@ -22,8 +22,7 @@ describe("BasicParameters", function () {
 			mockfs.restore();
 		});
 
-		// TODO: ファイル読み込み時に処理が止まってしまうため、暫定的処置としてこのテストを無効化する
-		xit("update game.json", async () => {
+		it("update game.json", async () => {
 			const conf = { width: 12, height: 23, fps: 34, assets: {} };
 			fs.writeJsonSync(confPath, conf);
 			await bp.updateConfigurationFile(confPath, quietLogger, true);
