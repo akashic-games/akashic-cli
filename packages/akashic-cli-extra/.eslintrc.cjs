@@ -9,9 +9,8 @@ module.exports = {
 		tsconfigRootDir: __dirname
 	},
 	ignorePatterns: [
-		"**/*.js"
-	],
-	rules: {
-		"@typescript-eslint/no-empty-function": "off"
-	}
+		"**/*.js",
+		"*.cjs",
+		"*.ts"
+	]
 }

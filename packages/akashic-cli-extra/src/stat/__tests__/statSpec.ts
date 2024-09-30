@@ -1,6 +1,6 @@
 import * as path from "path";
 import * as commons from "@akashic/akashic-cli-commons";
-import * as stat from "../../../lib/stat/stat";
+import * as stat from "../stat.js";
 
 function testWithSize(basepath: string, raw: boolean, limit?: string): Promise<void> {
 	const logger = new commons.ConsoleLogger({ debugLogMethod: _msg => { /* do nothing */ } });
@@ -9,104 +9,86 @@ function testWithSize(basepath: string, raw: boolean, limit?: string): Promise<v
 }
 
 describe("stat.size dummy game", () => {
-	const gamePath = path.join(__dirname, "..", "..", "fixtures", "dummyGame1");
+	const gamePath = path.join(__dirname, "fixtures", "dummyGame1");
 
-	it("you can call size with empty option", done => {
-		testWithSize(gamePath, false)
-			.then(done, done.fail);
+	it("you can call size with empty option", async () => {
+		await testWithSize(gamePath, false);
 	});
 
-	it("stat size --limit 0", done => {
-		testWithSize(gamePath, false, "0")
-			.catch(err => expect(err).toBe("file size limit exceeded (650B)"))
-			.finally(done);
+	it("stat size --limit 0", async () => {
+		await expect(testWithSize(gamePath, false, "0"))
+			.rejects.toBe("file size limit exceeded (650B)");
 	});
 
-	it("stat size --limit 123", done => {
-		testWithSize(gamePath, false, "123")
-			.catch(err => expect(err).toBe("file size limit exceeded (527B)"))
-			.finally(done);
+	it("stat size --limit 123", async () => {
+		await expect(testWithSize(gamePath, false, "123"))
+			.rejects.toBe("file size limit exceeded (527B)");
 	});
 
-	it("stat size --limit 123B", done => {
-		testWithSize(gamePath, false, "123B")
-			.catch(err => expect(err).toBe("file size limit exceeded (527B)"))
-			.finally(done);
+	it("stat size --limit 123B", async () => {
+		await expect(testWithSize(gamePath, false, "123B"))
+			.rejects.toBe("file size limit exceeded (527B)");
 	});
 
-	it("stat size --limit 123K", done => {
-		testWithSize(gamePath, false, "123K")
-			.then(done, done.fail);
+	it("stat size --limit 123K", async () => {
+		await testWithSize(gamePath, false, "123K");
 	});
 
-	it("stat size --limit 123KB", done => {
-		testWithSize(gamePath, false, "123KB")
-			.then(done, done.fail);
+	it("stat size --limit 123KB", async () => {
+		await testWithSize(gamePath, false, "123KB");
 	});
 
-	it("stat size --limit 123k", done => {
-		testWithSize(gamePath, false, "123k")
-			.then(done, done.fail);
+	it("stat size --limit 123k", async () => {
+		await testWithSize(gamePath, false, "123k");
 	});
 
-	it("stat size --limit 123kb", done => {
-		testWithSize(gamePath, false, "123kb")
-			.then(done, done.fail);
+	it("stat size --limit 123kb", async () => {
+		await testWithSize(gamePath, false, "123kb");
 	});
 
-	it("stat size --limit 123M", done => {
-		testWithSize(gamePath, false, "123M")
-			.then(done, done.fail);
+	it("stat size --limit 123M", async () => {
+		await testWithSize(gamePath, false, "123M");
 	});
 
-	it("stat size --limit 123MB", done => {
-		testWithSize(gamePath, false, "123MB")
-			.then(done, done.fail);
+	it("stat size --limit 123MB", async () => {
+		await testWithSize(gamePath, false, "123MB");
 	});
 
-	it("stat size --limit 123G", done => {
-		testWithSize(gamePath, false, "123G")
-			.then(done, done.fail);
+	it("stat size --limit 123G", async () => {
+		await testWithSize(gamePath, false, "123G");
 	});
 
-	it("stat size --raw", done => {
-		testWithSize(gamePath, true)
-			.then(done, done.fail);
+	it("stat size --raw", async () => {
+		await testWithSize(gamePath, true);
 	});
 
-	it("stat size --limit 123 --raw", done => {
-		testWithSize(gamePath, true, "123")
-			.catch(err => expect(err).toBe("file size limit exceeded (527B)"))
-			.finally(done);
+	it("stat size --limit 123 --raw", async () => {
+		await expect(testWithSize(gamePath, true, "123"))
+			.rejects.toBe("file size limit exceeded (527B)");
 	});
 });
-
 describe("stat.size with sound and audio", () => {
-	const gamePath = path.join(__dirname, "..", "..", "fixtures", "dummyGame2");
+	const gamePath = path.join(__dirname, "fixtures", "dummyGame2");
 
-	it("stat size with empty option", done => {
-		testWithSize(gamePath, false)
-			.then(done, done.fail);
+	it("stat size with empty option", async () => {
+		await testWithSize(gamePath, false);
 	});
 
-	it("stat size --limit 0", done => {
-		testWithSize(gamePath, false, "0")
-			.catch(err => expect(err).toBe("file size limit exceeded (8.43KB)"))
-			.finally(done);
+	it("stat size --limit 0", async () => {
+		await expect(testWithSize(gamePath, false, "0"))
+			.rejects.toBe("file size limit exceeded (8.43KB)");
 	});
 
-	it("stat size --limit 64K", done => {
-		testWithSize(gamePath, false, "64K")
-			.then(done, done.fail);
+	it("stat size --limit 64K", async () => {
+		await testWithSize(gamePath, false, "64K");
 	});
 });
 
 describe("stat.size with incomplete game.json", () => {
-	const gamePath = path.join(__dirname, "..", "..", "fixtures", "dummyGame3");
+	const gamePath = path.join(__dirname, "fixtures", "dummyGame3");
 
-	it("stat size without command option", done => {
-		testWithSize(gamePath, false)
-			.then(done, done.fail);
+	it("stat size without command option", async () => {
+		await testWithSize(gamePath, false);
 	});
 });
 
@@ -134,7 +116,7 @@ describe("format stat result", () => {
 		const logger = new commons.ConsoleLogger({ debugLogMethod: msg => {
 			buffer += msg + "\n";
 		} });
-		const basepath = path.join(__dirname, "..", "..", "fixtures", "dummyGame2");
+		const basepath = path.join(__dirname, "fixtures", "dummyGame2");
 		return commons.ConfigurationFile.read(
 			path.join(basepath, "game.json"),
 			logger
@@ -165,7 +147,7 @@ describe("format stat result - drop aac", () => {
 		const logger = new commons.ConsoleLogger({ quiet: true, debugLogMethod: msg => {
 			buffer += msg + "\n";
 		} });
-		const basepath = path.join(__dirname, "..", "..", "fixtures", "dummyGame3");
+		const basepath = path.join(__dirname, "fixtures", "dummyGame3");
 		return commons.ConfigurationFile.read(
 			path.join(basepath, "game.json"),
 			logger
@@ -199,7 +181,7 @@ describe("format stat result - maximum mp4, drop m4a", () => {
 		const logger = new commons.ConsoleLogger({ quiet: true, debugLogMethod: msg => {
 			buffer += msg + "\n";
 		} });
-		const basepath = path.join(__dirname, "..", "..", "fixtures", "dummyGame4");
+		const basepath = path.join(__dirname, "fixtures", "dummyGame4");
 		return commons.ConfigurationFile.read(
 			path.join(basepath, "game.json"),
 			logger
@@ -233,7 +215,7 @@ describe("format stat result - drop m4a and aac", () => {
 		const logger = new commons.ConsoleLogger({ debugLogMethod: msg => {
 			buffer += msg + "\n";
 		} });
-		const basepath = path.join(__dirname, "..", "..", "fixtures", "dummyGame5");
+		const basepath = path.join(__dirname, "fixtures", "dummyGame5");
 		return commons.ConfigurationFile.read(
 			path.join(basepath, "game.json"),
 			logger
@@ -264,7 +246,7 @@ describe("format stat result - vector-image and binary", () => {
 		const logger = new commons.ConsoleLogger({ debugLogMethod: msg => {
 			buffer += msg + "\n";
 		} });
-		const basepath = path.join(__dirname, "..", "..", "fixtures", "dummyGame6_bin_vector");
+		const basepath = path.join(__dirname, "fixtures", "dummyGame6_bin_vector");
 		return commons.ConfigurationFile.read(
 			path.join(basepath, "game.json"),
 			logger
