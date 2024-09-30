@@ -10,6 +10,8 @@ module.exports = {
 		tsconfigRootDir: __dirname
 	},
 	ignorePatterns: [
-		"**/*.js"
+		"**/*.js",
+		"*.cjs",
+		"*.ts",
 	]
 }
