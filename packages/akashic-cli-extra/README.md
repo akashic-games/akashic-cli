@@ -56,8 +56,8 @@ npm run build
 
 ## テスト方法
 
-1. [TSLint](https://github.com/palantir/tslint "TSLint")を使ったLint
-2. [Jest](https://jestjs.io/ "Jest")を使ったテスト
+1. [eslint](https://eslint.org/ "eslint")を使ったLint
+2. [vitest](https://vitest.dev/ "vitest")を使ったテスト
 
 がそれぞれ実行されます。
 
@@ -71,5 +71,3 @@ npm test
 
 ただし、画像ファイルおよび音声ファイルは
 [CC BY 2.1 JP](https://creativecommons.org/licenses/by/2.1/jp/) の元で公開されています。
-
-

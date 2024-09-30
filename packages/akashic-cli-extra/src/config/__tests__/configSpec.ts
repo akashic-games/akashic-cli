@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as os from "os";
 import * as path from "path";
-import * as akashicConfig from "../../../lib/config/config";
+import * as akashicConfig from "../config.js";
 
 describe("config module", () => {
 	const confDirPath = fs.mkdtempSync(path.join(os.tmpdir(), "akashic-cli-config"));
@@ -12,21 +12,21 @@ describe("config module", () => {
 		"banana.item3": "^\\w+$"
 	};
 
-	it("AkashicConfigFile", (done) => {
+	it("AkashicConfigFile", async () => {
 		const confPath = path.join(confDirPath, ".akashicrc");
 		fs.writeFileSync(confPath, "");
 		const config = new akashicConfig.AkashicConfigFile(testValidator, confPath);
-		config.setItem("apple.item1", "testValue")
-			.then(() => config.setItem("apple.item2", "42"))
-			.then(() => config.save())
-			.then(() => config.load())
-			.then(() => config.getItem("apple.item1"))
-			.then(value => expect(value).toBe("testValue"))
-			.then(() => config.getItem("apple.item2"))
-			.then(value => expect(value).toBe("42"))
-			.then(() => config.getItem("banana.item3"))
-			.then(value => expect(value).toBeNull())
-			.then(done, done.fail);
+
+		await config.setItem("apple.item1", "testValue");
+		await config.setItem("apple.item2", "42");
+		await config.save();
+		await config.load();
+		let value = await config.getItem("apple.item1");
+		expect(value).toBe("testValue");
+		value = await config.getItem("apple.item2");
+		expect(value).toBe("42");
+		value = await config.getItem("banana.item3");
+		expect(value).toBeNull();
 	});
 });
 
@@ -38,49 +38,39 @@ describe("cli functions", () => {
 		"test.testKey1": "^\\w*$"
 	};
 
-	it("setConfigItem", done => {
-		Promise.resolve()
-			.then(() => akashicConfig.setConfigItem(testValidator, "test.testKey1", "testValue", confPath))
-			.then(done, done.fail);
+	it("setConfigItem", async () => {
+		await akashicConfig.setConfigItem(testValidator, "test.testKey1", "testValue", confPath);
 	});
 
-	it("getConfigItem", done => {
-		Promise.resolve()
-			.then(() => akashicConfig.setConfigItem(testValidator, "test.testKey1", "testValue", confPath))
-			.then(() => akashicConfig.getConfigItem(testValidator, "test.testKey1", confPath))
-			.then(value => expect(value).toBe("testValue"))
-			.then(done, done.fail);
+	it("getConfigItem", async () => {
+		await akashicConfig.setConfigItem(testValidator, "test.testKey1", "testValue", confPath);
+		const value = await akashicConfig.getConfigItem(testValidator, "test.testKey1", confPath);
+		expect(value).toBe("testValue");
 	});
 
-	it("deleteConfigItem", done => {
-		Promise.resolve()
-			.then(() => akashicConfig.setConfigItem(testValidator, "test.testKey1", "testValue", confPath))
-			.then(() => akashicConfig.deleteConfigItem(testValidator, "test.testKey1", confPath))
-			.then(() => akashicConfig.getConfigItem(testValidator, "test.testKey1", confPath))
-			.then(value => expect(value).toBeNull())
-			.then(done, done.fail);
+	it("deleteConfigItem", async () => {
+		await akashicConfig.setConfigItem(testValidator, "test.testKey1", "testValue", confPath);
+		await akashicConfig.deleteConfigItem(testValidator, "test.testKey1", confPath);
+		const value = await akashicConfig.getConfigItem(testValidator, "test.testKey1", confPath);
+		expect(value).toBeNull();
 	});
 
-	it("listConfigItems", done => {
-		Promise.resolve()
-			.then(() => akashicConfig.setConfigItem(testValidator, "test.testKey1", "testValue", confPath))
-			.then(() => akashicConfig.listConfigItems({
-				print: () => {},
-				error: () => {},
-				warn: () => {},
-				info: () => {}
-			}, confPath))
-			.then(done, done.fail);
+	it("listConfigItems", async () => {
+		await akashicConfig.setConfigItem(testValidator, "test.testKey1", "testValue", confPath);
+		await akashicConfig.listConfigItems({
+			print: () => {},
+			error: () => {},
+			warn: () => {},
+			info: () => {}
+		}, confPath);
 	});
 
-	it("listAllConfigItems", done => {
-		Promise.resolve()
-			.then(() => akashicConfig.listAllConfigItems({
-				print: () => {},
-				error: () => {},
-				warn: () => {},
-				info: () => {}
-			}, testValidator, confPath))
-			.then(done, done.fail);
+	it("listAllConfigItems", async () => {
+		await akashicConfig.listAllConfigItems({
+			print: () => {},
+			error: () => {},
+			warn: () => {},
+			info: () => {}
+		}, testValidator, confPath);
 	});
 });
