@@ -404,6 +404,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 
 // TODOこのファイルを改名してcli.tsにする
 export async function run(argv: any): Promise<void> {
+	console.log("++++++++++++akashic-cli-serve RUN++++++++++++");
 	const ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "..", "package.json"), "utf8")).version;
 	const commander = new Command();
 	commander

@@ -49,6 +49,7 @@ export const createHandlerToGetContent = (): express.RequestHandler => {
 export const createHandlerToGetEngineConfig = (dirPaths: string[], isRaw: boolean): express.RequestHandler => {
 	return (req, res, next) => {
 		try {
+			console.log("content.json api__________ request:", req.params);
 			const contentId = Number(req.params.contentId);
 			if (!dirPaths[contentId]) {
 				throw new NotFoundError({ errorMessage: `contentId:${contentId} is not found.` });
@@ -61,10 +62,13 @@ export const createHandlerToGetEngineConfig = (dirPaths: string[], isRaw: boolea
 			const hostname = serverGlobalConfig.useGivenHostname ? serverGlobalConfig.hostname : urlInfo[0];
 			const port = serverGlobalConfig.useGivenPort ? serverGlobalConfig.port : parseInt(urlInfo[1], 10);
 			const baseUrl = `${serverGlobalConfig.protocol}://${hostname}:${port}`;
+			console.log("content.json api__________ variables:", contentId, hostname, port, baseUrl);
 			const engineConfigJson = EngineConfig.getEngineConfig({ baseUrl, contentId, baseDir: dirPaths[contentId], isRaw });
+			console.log("content.json api__________ reaponse:", engineConfigJson);
 			// akashic-gameview側でレスポンスがengineConfigJsonの形式なっていることを前提にしているので、resoponseSuccessは使わない
 			res.status(200).json(engineConfigJson);
 		} catch (e) {
+			console.error(e);
 			next(e);
 		}
 	};
