@@ -48,6 +48,7 @@ export const createHandlerToGetContent = (): express.RequestHandler => {
 
 export const createHandlerToGetEngineConfig = (dirPaths: string[], isRaw: boolean): express.RequestHandler => {
 	return (req, res, next) => {
+		console.log("content.json_api__________ START_______________");
 		try {
 			console.log("content.json api__________ request:", req.params);
 			const contentId = Number(req.params.contentId);

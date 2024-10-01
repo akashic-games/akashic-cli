@@ -40,6 +40,8 @@ export const createHandlerToGetPlay = (playStore: PlayStore): express.RequestHan
 		try {
 			const playId = req.params.playId;
 			const playInfo = playStore.getPlayInfo(playId);
+			console.log("_____________createHandlerToGetPlay_______________");
+			console.log(playId, playInfo);
 			if (!playInfo) {
 				throw new NotFoundError({
 					errorMessage: "Play is not found"
