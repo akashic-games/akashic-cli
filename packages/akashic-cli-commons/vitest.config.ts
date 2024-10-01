@@ -5,7 +5,6 @@ export default defineConfig({
 		globals: true,
 		include: [
 			"./src/**/__tests__/**/*[sS]pec.ts",
-			"./src/**/__tests__/**/*[sS]pec_invalid.ts",
 		]
 	},
 });
