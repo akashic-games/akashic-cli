@@ -12,6 +12,7 @@ import assert from "assert";
 import { fileURLToPath } from "url";
 import { promisify } from "util";
 import { createRequire } from "module";
+import { setTimeout } from "timers/promises";
 import getPort from "get-port";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -57,28 +58,6 @@ function spawn(command, argv) {
 			process.kill(child.PID);
 		}
 	};
-}
-
-async function waitUntil(interval, callback, timeout = 5000) {
-	const now = performance.now();
-	const until = now + timeout;
-	return new Promise((resolve, reject) => {
-		const timer = setInterval(async () => {
-			try {
-				if (await callback()) {
-					clearInterval(timer);
-					resolve();
-					return;
-				}
-				if (until < performance.now()) {
-					throw new Error("waitUntil(): process timeout");
-				}
-			} catch (e) {
-				clearInterval(timer);
-				reject(e);
-			}
-		}, interval);
-	});
 }
 
 async function checkHttp(url) {
@@ -193,7 +172,7 @@ try {
 			const finalize = spawn(`${akashicCliPath} sandbox`, ["-p", port]);
 			try {
 				const baseUrl = `http://localhost:${port}`;
-				await waitUntil(100, () => checkHttp(baseUrl));
+				await setTimeout(1000); // 起動するまで待機
 				const engine = await (await fetch(`${baseUrl}/engine`)).json();
 				assert.equal(engine.engine_configuration_version, "1.0");
 
@@ -229,7 +208,7 @@ try {
 			const finalize = spawn(`${akashicCliPath} sandbox`, ["-p", port, "--cascade", cascadeGameJsonDir]);
 			try {
 				const baseUrl = `http://localhost:${port}`;
-				await waitUntil(100, () => checkHttp(baseUrl));
+				await setTimeout(1000); // 起動するまで待機
 				const engine = await (await fetch(`${baseUrl}/engine`)).json();
 				assert.equal(engine.engine_configuration_version, "1.0");
 
