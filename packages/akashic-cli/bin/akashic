@@ -1,2 +1,4 @@
 #!/usr/bin/env node
-require("../lib/ui");
+
+import { run } from "../lib/ui.js";
+run(process.argv);

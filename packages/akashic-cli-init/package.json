@@ -39,7 +39,6 @@
     "typescript": "5.5.4",
     "vitest": "^2.1.1"
   },
-  "typings": "lib/index.d.ts",
   "dependencies": {
     "@akashic/akashic-cli-commons": "0.15.3",
     "@akashic/akashic-cli-extra": "1.7.8",
