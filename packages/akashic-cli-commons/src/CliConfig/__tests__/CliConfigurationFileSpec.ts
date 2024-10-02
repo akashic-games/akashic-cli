@@ -1,41 +1,45 @@
-import * as mockfs from "mock-fs";
-import * as path from "path";
-import { CliConfigurationFile } from "../../../lib/CliConfig/CliConfigurationFile";
+import { CliConfigurationFile } from "../../CliConfig/CliConfigurationFile.js";
+const mock = require("mock-require");
 
-describe("ConfigurationFile", function () {
-
-	describe(".read()", function () {
-		beforeEach(function () {
-			jest.mock("akashic.config.js", () => {
-				return {
-					commandOptions: {
-						serve: {
-							port: 3030
-						}
+describe("ConfigurationFile", () => {
+	describe(".read()", () => {
+		beforeEach(() => {
+			mock("akashic.config.js", ({
+				commandOptions: {
+					serve: {
+						port: 3030
 					}
-				};
-			}, {virtual: true});
+				}
+			}));
+		});
+		afterEach(() => {
+			mock.stop("akashic.config.js");
 		});
 
-		it("reads akashic.config.js", function (done) {
-			CliConfigurationFile.read("akashic.config.js", (error, config) => {
-				if (error) return done.fail();
-				expect(config).toEqual({
-					commandOptions: {
-						serve: {
-							port: 3030
-						}
-					}
+		it("reads akashic.config.js", async () => {
+			const config = await new Promise((resolve, reject) => {
+				CliConfigurationFile.read("akashic.config.js", (error, config) => {
+					if (error) return reject(error);
+					resolve(config);
 				});
-				done();
+			});
+			expect(config).toEqual({
+				commandOptions: {
+					serve: {
+						port: 3030
+					}
+				}
 			});
 		});
-		it("invalid path", function (done) {
-			CliConfigurationFile.read("./invalid/dir/akashic.config.js", (error, config) => {
-				expect(config).toEqual({
-					commandOptions: {}
+
+		it("invalid path", async () => {
+			const config = await new Promise((resolve) => {
+				CliConfigurationFile.read("./invalid/dir/akashic.config.js", (_error, config) => {
+					resolve(config);
 				});
-				done();
+			});
+			expect(config).toEqual({
+				commandOptions: {}
 			});
 		});
 	});

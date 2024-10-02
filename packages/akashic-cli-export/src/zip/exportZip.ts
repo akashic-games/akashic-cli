@@ -5,7 +5,6 @@ import { fileURLToPath } from "url";
 import * as cmn from "@akashic/akashic-cli-commons";
 import { size as statSize } from "@akashic/akashic-cli-extra/lib/stat/stat.js";
 import archiver = require("archiver");
-import { readdirRecursive } from "../utils.js";
 import { convertGame } from "./convert.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -123,7 +122,7 @@ export function promiseExportZip(param: ExportZipParameterObject): Promise<void>
 			if (!outZip)
 				return;
 			return new Promise<void>((resolve, reject) => {
-				const files = readdirRecursive(destDir).map(p => ({
+				const files = cmn.Util.readdirRecursive(destDir).map(p => ({
 					src: path.resolve(destDir, p),
 					entryName: p
 				}));

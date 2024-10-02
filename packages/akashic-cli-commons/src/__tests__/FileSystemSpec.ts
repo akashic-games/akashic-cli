@@ -1,9 +1,9 @@
-import * as mockfs from "mock-fs";
-import { readFile, writeFile, readJSON, writeJSON, readdir, unlink } from "../../lib/FileSystem";
-import { buildEditorconfig } from "./helpers/buildEditorconfig";
+import mockfs from "mock-fs";
+import { readFile, writeFile, readJSON, writeJSON, readdir, unlink } from "../FileSystem.js";
+import { buildEditorconfig } from "./helpers/buildEditorconfig.js";
 
 describe("FileSystemSpec", () => {
-	afterEach(function () {
+	afterEach(() => {
 		mockfs.restore();
 	});
 

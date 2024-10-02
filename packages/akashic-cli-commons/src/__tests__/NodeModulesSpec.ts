@@ -1,14 +1,14 @@
 import * as fs from "fs";
 import * as path from "path";
-import * as mockfs from "mock-fs";
-import { ConsoleLogger } from "../../lib/ConsoleLogger";
-import { Logger } from "../../lib/Logger";
-import { NodeModules } from "../../lib/NodeModules";
-import { Util } from "../../lib";
+import mockfs from "mock-fs";
+import { vi } from "vitest";
+import { ConsoleLogger } from "../ConsoleLogger.js";
+import { Logger } from "../Logger.js";
+import { NodeModules } from "../NodeModules.js";
+import { Util } from "..";
 
-describe("NodeModules", function () {
-
-	var mockFsContent = {
+describe("NodeModules", () => {
+	const mockFsContent = {
 		"node_modules": {
 			"dummy": {
 				"package.json": JSON.stringify({
@@ -55,153 +55,127 @@ describe("NodeModules", function () {
 		logger = new ConsoleLogger({ debugLogMethod: () => { /* do nothing */ } });
 		mockfs(mockFsContent);
 	});
-
-	beforeEach(function () {
-	});
-	afterEach(function () {
+	afterEach(() => {
 		mockfs.restore();
 	});
 
-	describe(".listModulesFiles()", function () {
-		it("list the script files and all package.json", function (done) {
+	describe(".listModulesFiles()", () => {
+		it("lists the script files and all package.json", async () => {
 			mockfs(mockFsContent);
-			Promise.resolve()
-				.then(() => NodeModules.listModuleFiles(".", ["dummy@1", "dummy2", "dummy3"], logger))
-				.then((pkgjsonPaths) => {
-					expect(pkgjsonPaths.sort((a, b) => ((a > b) ? 1 : (a < b) ? -1 : 0))).toEqual([
-						"node_modules/dummy/foo.js",
-						"node_modules/dummy/main.js",
-						"node_modules/dummy/node_modules/dummyChild/main.js",
-						"node_modules/dummy/node_modules/dummyChild/package.json",
-						"node_modules/dummy/package.json",
-						"node_modules/dummy2/index.js",
-						"node_modules/dummy2/sub.js",
-						"node_modules/dummy3/package.json",
-						"node_modules/dummy3/index.js",
-						"node_modules/dummy3/sub.js"
-					].sort((a, b) => ((a > b) ? 1 : (a < b) ? -1 : 0)));
-				})
-				.then(() => NodeModules.listModuleFiles(".", "dummy2", logger))
-				.then((pkgjsonPaths) => {
-					expect(pkgjsonPaths.sort((a, b) => ((a > b) ? 1 : (a < b) ? -1 : 0))).toEqual([
-						"node_modules/dummy2/index.js",
-						"node_modules/dummy2/sub.js"
-					]);
-				})
-				.then(done)
-				.catch(() => done.fail());
+
+			let pkgjsonPaths = await NodeModules.listModuleFiles(".", ["dummy@1", "dummy2", "dummy3"], logger);
+			expect(pkgjsonPaths.sort((a, b) => ((a > b) ? 1 : (a < b) ? -1 : 0))).toEqual([
+				"node_modules/dummy/foo.js",
+				"node_modules/dummy/main.js",
+				"node_modules/dummy/node_modules/dummyChild/main.js",
+				"node_modules/dummy/node_modules/dummyChild/package.json",
+				"node_modules/dummy/package.json",
+				"node_modules/dummy2/index.js",
+				"node_modules/dummy2/sub.js",
+				"node_modules/dummy3/package.json",
+				"node_modules/dummy3/index.js",
+				"node_modules/dummy3/sub.js"
+			].sort((a, b) => ((a > b) ? 1 : (a < b) ? -1 : 0)));
+
+			pkgjsonPaths = await NodeModules.listModuleFiles(".", "dummy2", logger);
+			expect(pkgjsonPaths.sort((a, b) => ((a > b) ? 1 : (a < b) ? -1 : 0))).toEqual([
+				"node_modules/dummy2/index.js",
+				"node_modules/dummy2/sub.js"
+			]);
 		});
 	});
 
-	describe(".listPackageJsonsFromScriptsPath()", function () {
-		it("list the files named package.json", function (done) {
+	describe(".listPackageJsonsFromScriptsPath()", () => {
+		it("lists the files named package.json", async () => {
 			mockfs(mockFsContent);
-			Promise.resolve()
-				.then(() => NodeModules.listScriptFiles(".", ["dummy", "dummy2", "dummy3"], logger))
-				.then((filePaths) => NodeModules.listPackageJsonsFromScriptsPath(".", filePaths))
-				.then((pkgJsonPaths) => {
-					expect(pkgJsonPaths.sort((a, b) => ((a > b) ? 1 : (a < b) ? -1 : 0))).toEqual([
-						"node_modules/dummy/package.json",
-						"node_modules/dummy/node_modules/dummyChild/package.json",
-						"node_modules/dummy3/package.json"
-					].sort((a, b) => ((a > b) ? 1 : (a < b) ? -1 : 0)))
-				})
-				.then(() => NodeModules.listScriptFiles(".", "dummy2", logger))
-				.then((filePaths) => NodeModules.listPackageJsonsFromScriptsPath(".", filePaths))
-				.then((pkgJsonPaths) => {
-					expect(pkgJsonPaths).toEqual([]);
-				})
-				.then(done)
-				.catch(() => done.fail());
+			const filePaths = await NodeModules.listScriptFiles(".", ["dummy", "dummy2", "dummy3"], logger);
+			const pkgJsonPaths = NodeModules.listPackageJsonsFromScriptsPath(".", filePaths);
+			
+			expect(pkgJsonPaths.sort()).toEqual([
+				"node_modules/dummy/package.json",
+				"node_modules/dummy/node_modules/dummyChild/package.json",
+				"node_modules/dummy3/package.json"
+			].sort());
+			
+			const filePathsDummy2 = await NodeModules.listScriptFiles(".", "dummy2", logger);
+			const pkgJsonPathsDummy2 = NodeModules.listPackageJsonsFromScriptsPath(".", filePathsDummy2);
+			
+			expect(pkgJsonPathsDummy2).toEqual([]);
 		});
 	});
 
-	describe(".listScriptFiles()", function () {
-		it("list the scripts in node_modules/ up", function (done) {
+	describe(".listScriptFiles()", () => {
+		it("lists the scripts in node_modules/ up", async () => {
 			mockfs(mockFsContent);
-			Promise.resolve()
-				.then(() => NodeModules.listScriptFiles(".", ["dummy", "dummy2", "dummy3"], logger))
-				.then((filePaths) => {
-					expect(filePaths.sort((a, b) => ((a > b) ? 1 : (a < b) ? -1 : 0))).toEqual([
-						"node_modules/dummy/foo.js",
-						"node_modules/dummy/main.js",
-						"node_modules/dummy/node_modules/dummyChild/main.js",
-						"node_modules/dummy2/index.js",
-						"node_modules/dummy2/sub.js",
-						"node_modules/dummy3/index.js",
-						"node_modules/dummy3/sub.js",
-					]);
-				})
-				.then(() => NodeModules.listScriptFiles(".", "dummy", logger))
-				.then((filePaths) => {
-					expect(filePaths.sort((a, b) => ((a > b) ? 1 : (a < b) ? -1 : 0))).toEqual([
-						"node_modules/dummy/foo.js",
-						"node_modules/dummy/main.js",
-						"node_modules/dummy/node_modules/dummyChild/main.js"
-					]);
-				})
-				.then(done)
-				.catch(() => done.fail());
+			const filePaths = await NodeModules.listScriptFiles(".", ["dummy", "dummy2", "dummy3"], logger);
+			expect(filePaths.sort()).toEqual([
+				"node_modules/dummy/foo.js",
+				"node_modules/dummy/main.js",
+				"node_modules/dummy/node_modules/dummyChild/main.js",
+				"node_modules/dummy2/index.js",
+				"node_modules/dummy2/sub.js",
+				"node_modules/dummy3/index.js",
+				"node_modules/dummy3/sub.js",
+			]);
+			
+			const filePathsDummy = await NodeModules.listScriptFiles(".", "dummy", logger);
+			expect(filePathsDummy.sort()).toEqual([
+				"node_modules/dummy/foo.js",
+				"node_modules/dummy/main.js",
+				"node_modules/dummy/node_modules/dummyChild/main.js"
+			]);
 		});
 	});
 
-	describe(".listModuleMainScripts()", function () {
-		it("list the files named package.json", function (done) {
-			jest.spyOn(Util, "requireResolve").mockImplementation((id: string, opts: { paths?: string[] | undefined }): string => {
-				const pkgJsonPath = path.join(opts.paths[0], "package.json");
+	describe(".listModuleMainScripts()", () => {
+		it("lists the files named package.json", async () => {
+			vi.spyOn(Util, "requireResolve").mockImplementation((id: string, opts?: { paths?: string[] | undefined }): string => {
+				const pkgJsonPath = path.join(opts!.paths![0], "package.json");
 				const pkgData =  JSON.parse(fs.readFileSync(pkgJsonPath).toString("utf-8"));
 				const mainScriptName = pkgData.main.split(".").pop() === "js" ? pkgData.main : pkgData.main + ".js";
 				return path.join(path.resolve("."), path.dirname(pkgJsonPath), mainScriptName);
 			});
 
 			mockfs(mockFsContent);
-			Promise.resolve()
-				.then(() => NodeModules.listScriptFiles(".", ["dummy", "dummy2", "dummy3"], logger))
-				.then((filePaths) => NodeModules.listPackageJsonsFromScriptsPath(".", filePaths))
-				.then((packageJsonFiles) => NodeModules.listModuleMainScripts(packageJsonFiles))
-				.then((moduleMainScripts) => {
-					expect(moduleMainScripts).toEqual({
-						"dummy": "node_modules/dummy/main.js",
-						"dummyChild": "node_modules/dummy/node_modules/dummyChild/main.js",
-						"dummy3": "node_modules/dummy3/index.js"
-					});
-				})
-				.then(done)
-				.catch(() => done.fail());
+			const filePaths = await NodeModules.listScriptFiles(".", ["dummy", "dummy2", "dummy3"], logger);
+			const packageJsonFiles = NodeModules.listPackageJsonsFromScriptsPath(".", filePaths);
+			const moduleMainScripts = NodeModules.listModuleMainScripts(packageJsonFiles);
+
+			expect(moduleMainScripts).toEqual({
+				"dummy": "node_modules/dummy/main.js",
+				"dummyChild": "node_modules/dummy/node_modules/dummyChild/main.js",
+				"dummy3": "node_modules/dummy3/index.js"
+			});
 		});
 	});
 
-	describe(".listModuleMainPaths()", function () {
-		it("key is the path of package.json.", function (done) {
-			jest.spyOn(Util, "requireResolve").mockImplementation((id: string, opts: { paths?: string[] | undefined }): string => {
-				const pkgJsonPath = path.join(opts.paths[0], "package.json");
+	describe(".listModuleMainPaths()", () => {
+		it("keys are the path of package.json.", async () => {
+			vi.spyOn(Util, "requireResolve").mockImplementation((id: string, opts?: { paths?: string[] | undefined }): string => {
+				const pkgJsonPath = path.join(opts!.paths![0], "package.json");
 				const pkgData =  JSON.parse(fs.readFileSync(pkgJsonPath).toString("utf-8"));
 				const mainScriptName = pkgData.main.split(".").pop() === "js" ? pkgData.main : pkgData.main + ".js";
 				return path.join(path.resolve("."), path.dirname(pkgJsonPath), mainScriptName);
 			});
 
 			mockfs(mockFsContent);
-			Promise.resolve()
-				.then(() => NodeModules.listScriptFiles(".", ["dummy", "dummy2", "dummy3"], logger))
-				.then((filePaths) => NodeModules.listPackageJsonsFromScriptsPath(".", filePaths))
-				.then((packageJsonFiles) => NodeModules.listModuleMainPaths(packageJsonFiles))
-				.then((moduleMainPaths) => {
-					expect(moduleMainPaths).toEqual({
-						"node_modules/dummy/package.json": "node_modules/dummy/main.js",
-						"node_modules/dummy/node_modules/dummyChild/package.json": "node_modules/dummy/node_modules/dummyChild/main.js",
-						"node_modules/dummy3/package.json": "node_modules/dummy3/index.js"
-					});
-				})
-				.then(done)
-				.catch(() => done.fail());
+			const filePaths = await NodeModules.listScriptFiles(".", ["dummy", "dummy2", "dummy3"], logger);
+			const packageJsonFiles = NodeModules.listPackageJsonsFromScriptsPath(".", filePaths);
+			const moduleMainPaths = NodeModules.listModuleMainPaths(packageJsonFiles);
+
+			expect(moduleMainPaths).toEqual({
+				"node_modules/dummy/package.json": "node_modules/dummy/main.js",
+				"node_modules/dummy/node_modules/dummyChild/package.json": "node_modules/dummy/node_modules/dummyChild/main.js",
+				"node_modules/dummy3/package.json": "node_modules/dummy3/index.js"
+			});
 		});
 	});
 
 	// モジュール名に node_modules を含むモジュールに依存しているケース
-	describe(".listPackageJsonsFromScriptsPath() with failure-prone module name", function () {
-		it("list the files named package.json", function (done) {
+	describe(".listPackageJsonsFromScriptsPath() with failure-prone module name", () => {
+		it("lists the files named package.json", async () => {
 			// このテストではmockFsContentの中身を変えるので、mockFsContentは使い回せない。使い回した場合タイミングによりエラーとなる。
-			var mockFsContent2 = {
+			const mockFsContent2 = {
 				"node_modules": {
 					"@dummy": {
 						"dummy_node_modules": {
@@ -254,19 +228,16 @@ describe("NodeModules", function () {
 				}
 			};
 			mockfs(mockFsContent2);
-			Promise.resolve()
-				.then(() => NodeModules.listScriptFiles(".", ["@dummy/dummy_node_modules", "dummy_node_modules"], logger))
-				.then((filePaths) => NodeModules.listPackageJsonsFromScriptsPath(".", filePaths))
-				.then((pkgJsonPaths) => {
-					expect(pkgJsonPaths.sort((a, b) => ((a > b) ? 1 : (a < b) ? -1 : 0))).toEqual([
-						"node_modules/@dummy/dummy_node_modules/package.json",
-						"node_modules/@dummy/dummy_node_modules/node_modules/dummyChild/package.json",
-						"node_modules/dummy_node_modules/package.json",
-						"node_modules/dummy_node_modules/node_modules/dummyChild/package.json"
-					].sort((a, b) => ((a > b) ? 1 : (a < b) ? -1 : 0)))
-				})
-				.then(done)
-				.catch(() => done.fail());
+
+			const filePaths = await NodeModules.listScriptFiles(".", ["@dummy/dummy_node_modules", "dummy_node_modules"], logger);
+			const pkgJsonPaths = NodeModules.listPackageJsonsFromScriptsPath(".", filePaths);
+
+			expect(pkgJsonPaths.sort()).toEqual([
+				"node_modules/@dummy/dummy_node_modules/package.json",
+				"node_modules/@dummy/dummy_node_modules/node_modules/dummyChild/package.json",
+				"node_modules/dummy_node_modules/package.json",
+				"node_modules/dummy_node_modules/node_modules/dummyChild/package.json"
+			].sort());
 		});
 	});
 
