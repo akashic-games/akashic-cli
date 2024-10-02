@@ -140,7 +140,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 		.then(async (bundleResult) => {
 			const files: string[] = param.strip ?
 				gcu.extractFilePaths(gamejson, param.source, param.preservePackageJson) :
-				utils.readdirRecursive(param.source).map(p => cmn.Util.makeUnixPath(p));
+				cmn.Util.readdirRecursive(param.source).map(p => cmn.Util.makeUnixPath(p));
 
 			let bundledFilePaths: string[] = [];
 			const preservingFilePathSet = new Set<string>(files);

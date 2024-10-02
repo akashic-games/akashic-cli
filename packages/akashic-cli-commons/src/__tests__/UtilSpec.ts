@@ -1,19 +1,19 @@
-import * as mockfs from "mock-fs";
+import mockfs from "mock-fs";
 import * as fs from "fs";
-import * as Util from "../../lib/Util";
+import * as Util from "../Util.js";
 
-describe("Util", function () {
+describe("Util", () => {
 	afterEach(() => {
 		mockfs.restore();
 	});
 
-	it(".filterMap()", function () {
-		var arr = [1, 3, 100, -5, "foo", false, "zoo", 4];
+	it(".filterMap()", () => {
+		const arr = [1, 3, 100, -5, "foo", false, "zoo", 4];
 		expect(Util.filterMap(arr, (v) => (typeof v === "string" ? v.toUpperCase() : undefined))).toEqual(["FOO", "ZOO"]);
 		expect(Util.filterMap(arr, (v) => (typeof v === "number" ? v * 2 : undefined))).toEqual([2, 6, 200, -10, 8]);
 	});
 
-	it(".makeModuleNameNoVer()", function () {
+	it(".makeModuleNameNoVer()", () => {
 		expect(Util.makeModuleNameNoVer("foo")).toBe("foo");
 		expect(Util.makeModuleNameNoVer("foo@0.1.0")).toBe("foo");
 		expect(Util.makeModuleNameNoVer("foo@1")).toBe("foo");
@@ -26,15 +26,15 @@ describe("Util", function () {
 		expect(Util.makeUnixPath("/foo/bar/")).toBe("/foo/bar/");
 	});
 
-	describe(".invertMap()", function () {
-		it("reverses key/value pair", function () {
-			var o = {
+	describe(".invertMap()", () => {
+		it("reverses key/value pair", () => {
+			const o = {
 				foo: "fooValue",
 				bar: "one",
 				zoo: "tt",
 				dee: "tt",
 			};
-			var reversed = Util.invertMap(o);
+			const reversed = Util.invertMap(o);
 			expect("foo" in reversed).toBe(false);
 			expect("bar" in reversed).toBe(false);
 			expect("zoo" in reversed).toBe(false);
@@ -45,8 +45,8 @@ describe("Util", function () {
 			expect(reversed.tt.indexOf("dee")).not.toBe(-1);
 		});
 
-		it("reverses a key and a property in the value", function () {
-			var o = {
+		it("reverses a key and a property in the value", () => {
+			const o = {
 				foo: {
 					id: "id1",
 					value: false,
@@ -59,7 +59,7 @@ describe("Util", function () {
 					id: "id42",
 				}
 			};
-			var reversed = Util.invertMap(o, "id");
+			const reversed = Util.invertMap(o, "id");
 			expect("foo" in reversed).toBe(false);
 			expect("bar" in reversed).toBe(false);
 			expect("zoo" in reversed).toBe(false);
