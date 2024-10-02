@@ -1,5 +1,4 @@
 import { action } from "@storybook/addon-actions";
-import { storiesOf } from "@storybook/react";
 import * as React from "react";
 import { GameScreen } from "../organism/GameScreen";
 
@@ -9,8 +8,12 @@ function createDummyDiv(width: number, height: number): HTMLElement {
 	return e;
 }
 
-storiesOf("o-GameScreen", module)
-	.add("basic", () => (
+export default {
+	title: "o-GameScreen"
+};
+
+export const Basic = {
+	render: () => (
 		<GameScreen
 			showsBackgroundImage={false}
 			showsBackgroundColor={false}
@@ -30,8 +33,12 @@ storiesOf("o-GameScreen", module)
 			onMouseMoveCapture={action("onMouseMoveCapture")}
 			onClickCapture={action("onClickCapture")}
 		/>
-	))
-	.add("background", () => (
+	),
+	name: "basic"
+};
+
+export const Background = {
+	render: () => (
 		<GameScreen
 			showsBackgroundImage={true}
 			showsBackgroundColor={true}
@@ -51,8 +58,12 @@ storiesOf("o-GameScreen", module)
 			onMouseMoveCapture={action("onMouseMoveCapture")}
 			onClickCapture={action("onClickCapture")}
 		/>
-	))
-	.add("background&grid", () => (
+	),
+	name: "background"
+};
+
+export const BackgroundGrid = {
+	render: () => (
 		<GameScreen
 			showsBackgroundImage={true}
 			showsBackgroundColor={true}
@@ -72,8 +83,12 @@ storiesOf("o-GameScreen", module)
 			onMouseMoveCapture={action("onMouseMoveCapture")}
 			onClickCapture={action("onClickCapture")}
 		/>
-	))
-	.add("designGuideline", () => (
+	),
+	name: "background&grid"
+};
+
+export const DesignGuideline = {
+	render: () => (
 		<GameScreen
 			showsBackgroundImage={false}
 			showsBackgroundColor={false}
@@ -93,8 +108,12 @@ storiesOf("o-GameScreen", module)
 			onMouseMoveCapture={action("onMouseMoveCapture")}
 			onClickCapture={action("onClickCapture")}
 		/>
-	))
-	.add("confirmDialog", () => (
+	),
+	name: "designGuideline"
+};
+
+export const ConfirmDialog = {
+	render: () => (
 		<GameScreen
 			showsBackgroundImage={false}
 			showsBackgroundColor={false}
@@ -119,8 +138,12 @@ storiesOf("o-GameScreen", module)
 			onMouseMoveCapture={action("onMouseMoveCapture")}
 			onClickCapture={action("onClickCapture")}
 		/>
-	))
-	.add("profiler", () => (
+	),
+	name: "confirmDialog"
+};
+
+export const Profiler = {
+	render: () => (
 		<GameScreen
 			showsBackgroundImage={false}
 			showsBackgroundColor={false}
@@ -195,4 +218,6 @@ storiesOf("o-GameScreen", module)
 			onMouseMoveCapture={action("onMouseMoveCapture")}
 			onClickCapture={action("onClickCapture")}
 		/>
-	));
+	),
+	name: "profiler"
+};
