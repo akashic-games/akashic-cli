@@ -1,8 +1,10 @@
-import * as fs from "fs";
-import * as path from "path";
+import { createRequire } from "module";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons";
 import { Command } from "commander";
 import * as config from "./config.js";
+
+const require = createRequire(import.meta.url);
+const { version } = require("../../package.json");
 
 /**
  * akashic cli configを実行する
@@ -10,12 +12,10 @@ import * as config from "./config.js";
  * この関数は複数回呼ばれるべきではない
  */
 export function run(argv: string[]): void {
-
-	const packageJson = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "..", "package.json"), "utf8"));
 	const commander = new Command();
 	commander
 		.description("List and edit configurations")
-		.version(packageJson.version)
+		.version(version)
 		.usage("<command> [argument]");
 
 	commander

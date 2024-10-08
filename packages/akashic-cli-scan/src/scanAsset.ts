@@ -1,14 +1,14 @@
 import * as fs from "fs";
 import * as path from "path";
-import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
-import { readJSON, writeJSON } from "@akashic/akashic-cli-commons/lib/FileSystem";
-import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
+import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger.js";
+import { readJSON, writeJSON } from "@akashic/akashic-cli-commons/lib/FileSystem.js";
+import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger.js";
 import type { AssetConfiguration, GameConfiguration } from "@akashic/game-configuration";
-import { AssetModule } from "./AssetModule";
-import { isBinaryFile } from "./isBinaryFile";
+import { AssetModule } from "./AssetModule.js";
+import { isBinaryFile } from "./isBinaryFile.js";
 import { knownExtensionAssetFilter, scanAudioAssets, scanBinaryAssets, scanImageAssets, scanScriptAssets,
-	scanTextAssets, scanVectorImageAssets, defaultTextAssetFilter } from "./scanUtils";
-import type { AssetExtension, AssetScanDirectoryTable, AssetTargetType, LibConfiguration } from "./types";
+	scanTextAssets, scanVectorImageAssets, defaultTextAssetFilter } from "./scanUtils.js";
+import type { AssetExtension, AssetScanDirectoryTable, AssetTargetType, LibConfiguration } from "./types.js";
 
 export interface ScanAssetParameterObject {
 	/**

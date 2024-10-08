@@ -1,7 +1,5 @@
 // ビルド時はnode_modules下のakashic-engineモジュールのgを参照しているが、実際に利用するgはjs下のengineFilesV*_*_*.jsのものなので、本来なら実行時に参照するgを動的に決定できるようにすべき
-// game.ejs で参照されるため、未使用の lint エラーを抑止
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-class SandboxScriptAsset extends g.ScriptAsset {
+export class SandboxScriptAsset extends g.ScriptAsset {
 	loading: boolean;
 	script: string;
 	path: string;

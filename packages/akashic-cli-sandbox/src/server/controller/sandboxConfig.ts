@@ -1,11 +1,12 @@
-import fs = require("fs");
-import path = require("path");
+import fs from "fs";
+import { createRequire } from "module";
+import path from "path";
 import type { SandboxConfiguration } from "@akashic/sandbox-configuration";
-import express = require("express");
-import sr = require("../request/ScriptRequest");
+import type { RequestHandler } from "express";
 
+const require = createRequire(import.meta.url);
 
-const controller: express.RequestHandler = (req: sr.ScriptRequest, res: express.Response, _next: Function) => {
+const controller: RequestHandler = (req, res, _next) => {
 	const scriptPath = path.resolve(path.join(req.baseDir, "sandbox.config.js"));
 
 	if (! fs.existsSync(scriptPath)) {
@@ -25,7 +26,7 @@ const controller: express.RequestHandler = (req: sr.ScriptRequest, res: express.
 	res.send(createLoadingScript(sandboxConfig));
 };
 
-module.exports = controller;
+export default controller;
 
 function completeConfigParams(c: SandboxConfiguration): SandboxConfiguration {
 	const config = {

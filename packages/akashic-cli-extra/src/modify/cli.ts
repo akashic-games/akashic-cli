@@ -1,11 +1,13 @@
-import * as fs from "fs";
 import * as path from "path";
+import { createRequire } from "module";
 import type { CliConfigModify } from "@akashic/akashic-cli-commons";
 import { ConsoleLogger, CliConfigurationFile } from "@akashic/akashic-cli-commons";
 import { Command } from "commander";
 import { promiseModifyBasicParameter } from "./modify.js";
 
 const commander = new Command();
+const require = createRequire(import.meta.url);
+const { version } = require("../../package.json");
 
 function cliBasicParameter(target: string, value: string, opts: CliConfigModify): void {
 	const logger = new ConsoleLogger({ quiet: opts.quiet });
@@ -44,7 +46,7 @@ function defineCommand(commandName: string): void {
 });
 
 commander
-	.version(JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "..", "package.json"), "utf8")).version);
+	.version(version);
 
 commander
 	.command("*", "", {noHelp: true})

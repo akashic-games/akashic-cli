@@ -1,5 +1,5 @@
-import * as fs from "fs";
 import * as path from "path";
+import { createRequire } from "module";
 import type { Logger, CliConfigStat } from "@akashic/akashic-cli-commons";
 import { ConsoleLogger, ConfigurationFile, CliConfigurationFile } from "@akashic/akashic-cli-commons";
 import { Command } from "commander";
@@ -25,14 +25,15 @@ function errorExit(logger: Logger, message: string): void {
 	process.exit(1);
 }
 
-const version = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "..", "package.json"), "utf8")).version;
+const require = createRequire(import.meta.url);
+const { version } = require("../../package.json");
 
 const commander = new Command();
 commander
 	.description("Show statistics information")
 	.version(version)
 	.usage("size [options]")
-	.option("-C, --cwd <dir>", "The directory incluedes game.json")
+	.option("-C, --cwd <dir>", "The directory includes game.json")
 	.option("-q, --quiet", "Suppress output")
 	.option("-l, --limit <limit>", "Limit size")
 	.option("--raw", "Raw mode. Result will not contain logger prefix.");

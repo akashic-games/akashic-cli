@@ -1,5 +1,5 @@
 import type { AssetConfiguration } from "@akashic/game-configuration";
-import { AssetModule } from "../../../lib/AssetModule";
+import { AssetModule } from "../../../lib/AssetModule.js";
 
 describe("AssetManagerSpec", () => {
 	it("toArray()", async () => {

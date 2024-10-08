@@ -1,4 +1,7 @@
+import { createRequire } from "module";
 import type { CliConfiguration } from "./CliConfiguration.js";
+
+const require = createRequire(import.meta.url);
 
 /**
  * akashic.config.js をファイルとして取り扱うモジュール。

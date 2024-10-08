@@ -1,6 +1,9 @@
-import path = require("path");
+import { createRequire } from "module";
+import path from "path";
 
 export type SandboxRuntimeVersion = "1" | "2" | "3";
+
+const require = createRequire(import.meta.url);
 
 export function resolveEngineFilesVariable(version: SandboxRuntimeVersion): string {
 	let engineFilesVariable: string = "";

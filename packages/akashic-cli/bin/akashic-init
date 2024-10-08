@@ -1,2 +1,6 @@
 #!/usr/bin/env node
-require("@akashic/akashic-cli-init").run(process.argv);
+
+(async () => {
+	const { run } = await import("@akashic/akashic-cli-init/lib/cli.js");
+	run(process.argv);
+})();

@@ -1,3 +1,3 @@
-export { scanAsset } from "./scanAsset";
-export { scanNodeModules } from "./scanNodeModules";
-export { run } from "./cli";
+export { scanAsset } from "./scanAsset.js";
+export { scanNodeModules } from "./scanNodeModules.js";
+export { run } from "./cli.js";

@@ -1,7 +1,10 @@
 import * as fs from "fs";
+import { createRequire } from "module";
 import * as path from "path";
-import { extractAssetPaths } from "@akashic/game-configuration/lib/utils/extractAssetPaths";
+import { extractAssetPaths } from "@akashic/game-configuration/lib/utils/extractAssetPaths.js";
 import * as glob from "glob";
+
+const require = createRequire(import.meta.url);
 
 /**
  * 指定したコンテンツで使われているファイルを別ディレクトリにコピーします

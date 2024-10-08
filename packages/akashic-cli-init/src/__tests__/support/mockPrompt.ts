@@ -1,4 +1,4 @@
-import * as Prompt from "prompt";
+import Prompt from "prompt";
 
 let originalPromptGet: any = null;
 

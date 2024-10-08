@@ -2,8 +2,8 @@ import * as fs from "fs";
 import * as path from "path";
 import * as util from "util";
 import type { CliConfigServe } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigServe";
-import { CliConfigurationFile } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigurationFile";
-import { SERVICE_TYPES } from "@akashic/akashic-cli-commons/lib/ServiceType";
+import type { CliConfigurationFile } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigurationFile";
+import type { SERVICE_TYPES } from "@akashic/akashic-cli-commons/lib/ServiceType";
 import { PlayManager, RunnerManager, setSystemLogger, getSystemLogger } from "@akashic/headless-driver";
 import * as bodyParser from "body-parser";
 import type * as Chalk from "chalk";
@@ -45,6 +45,18 @@ async function importChalk(): Promise<(typeof Chalk)["default"]> {
 	// CommonJS 設定の TS では dynamic import が require() に変換されてしまうので、eval() で強引に imoprt() する
 	// eslint-disable-next-line no-eval
 	return (await eval("import('chalk')")).default;
+}
+
+async function importCommonsConfiguration(): Promise<(typeof CliConfigurationFile)> {
+	// CommonJS 設定の TS では dynamic import が require() に変換されてしまうので、eval() で強引に import() する
+	// eslint-disable-next-line no-eval
+	return (await eval("import('@akashic/akashic-cli-commons/lib/CliConfig/CliConfigurationFile.js')")).CliConfigurationFile;
+}
+
+async function importCommonsServiceType(): Promise<(typeof SERVICE_TYPES)> {
+	// CommonJS 設定の TS では dynamic import が require() に変換されてしまうので、eval() で強引に import() する
+	// eslint-disable-next-line no-eval
+	return (await eval("import('@akashic/akashic-cli-commons/lib/ServiceType.js')")).SERVICE_TYPES;
 }
 
 async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Promise<void> {
@@ -111,6 +123,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 			process.exit(1);
 		}
 
+		const SERVICE_TYPES = await importCommonsServiceType();
 		if (!SERVICE_TYPES.includes(cliConfigParam.targetService)) {
 			const serviceName: string = cliConfigParam.targetService;
 			if (serviceName === "nicolive:ranking" || serviceName === "nicolive:single") {
@@ -416,7 +429,9 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 // TODOこのファイルを改名してcli.tsにする
 export async function run(argv: any): Promise<void> {
 	const ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "..", "package.json"), "utf8")).version;
+	const SERVICE_TYPES = await importCommonsServiceType();
 	const commander = new Command();
+
 	commander
 		.version(ver)
 		.description("Development server for Akashic Engine to debug multiple-player games")
@@ -446,6 +461,10 @@ export async function run(argv: any): Promise<void> {
 		.parse(argv);
 
 	const options = commander.opts();
+
+	// eslint-disable-next-line @typescript-eslint/naming-convention
+	const CliConfigurationFile = await importCommonsConfiguration();
+
 	CliConfigurationFile.read(path.join(options.cwd || process.cwd(), "akashic.config.js"), async (error, configuration) => {
 		if (error) {
 			console.error(error);

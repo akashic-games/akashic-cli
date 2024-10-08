@@ -1,2 +1,4 @@
 #!/usr/bin/env node
-require("../lib/modify").run(process.argv);
+
+import { run } from "../lib/modify/cli.js";
+run(process.argv);

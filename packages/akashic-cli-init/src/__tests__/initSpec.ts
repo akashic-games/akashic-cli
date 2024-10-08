@@ -1,14 +1,14 @@
 import * as path from "path";
-import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
+import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger.js";
 import * as fs from "fs-extra";
-import * as mockfs from "mock-fs";
-import { internals } from "../../lib/init/init";
-import { completeTemplateConfig } from "../../lib/init/TemplateConfig";
-import { workaroundMockFsExistsSync } from "./testUtils";
+import mockfs from "mock-fs";
+import { internals } from "../init/init.js";
+import { completeTemplateConfig } from "../init/TemplateConfig.js";
+import { vi } from "vitest";
+
 const _extractFromTemplate = internals._extractFromTemplate;
 
 describe("init.ts", () => {
-	workaroundMockFsExistsSync();
 
 	describe("_extractFromTemplate()", () => {
 		beforeEach(() => {
@@ -50,7 +50,7 @@ describe("init.ts", () => {
 
 		it("reject unsupported formatVersion", async () => {
 			const src = ".akashic-templates/never-refered";
-			const mockFn = jest.fn<Promise<any>, [any, string]>(completeTemplateConfig);
+			const mockFn = vi.fn<(templateConfig: any, baseDir: string) => Promise<any>>(completeTemplateConfig);
 			await expect(mockFn({ formatVersion: "101" }, src))
 				.rejects.toThrow(
 					"Unsupported formatVersion: \"101\". " +

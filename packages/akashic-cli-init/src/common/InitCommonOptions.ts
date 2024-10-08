@@ -1,9 +1,9 @@
 import * as os from "os";
 import * as path from "path";
-import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
-import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
-import * as config from "@akashic/akashic-cli-extra/lib/config";
-import * as Prompt from "prompt";
+import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger.js";
+import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger.js";
+import * as config from "@akashic/akashic-cli-extra/lib/config/config.js";
+import Prompt from "prompt";
 
 export interface InitCommonOptions {
 	/**

@@ -1,8 +1,10 @@
 import * as fs from "fs";
+import { createRequire } from "module";
 import * as path from "path";
+import { fileURLToPath } from "url";
 import * as cmn from "@akashic/akashic-cli-commons";
 import * as ejs from "ejs";
-import * as fsx from "fs-extra";
+import fsx from "fs-extra";
 import { validateGameJson } from "../utils.js";
 import type {
 	ConvertTemplateParameterObject} from "./convertUtil.js";
@@ -25,6 +27,10 @@ interface InnerHTMLAssetData {
 	type: string;
 	code: string;
 }
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const require = createRequire(import.meta.url);
 
 export async function promiseConvertBundle(options: ConvertTemplateParameterObject): Promise<void> {
 	const content = await cmn.ConfigurationFile.read(path.join(options.source, "game.json"), options.logger);
@@ -144,7 +150,7 @@ async function writeHtmlFile(
 		!options.unbundleText,
 		options.debugOverrideEngineFiles
 	);
-	const filePath = path.resolve(__dirname + "/../template/bundle-index.ejs");
+	const filePath = path.join(__dirname, "..", "..", "lib", "template", "bundle-index.ejs");
 	const html = await ejs.renderFile(filePath, {
 		assets: innerHTMLAssetArray,
 		preloadScripts: scripts.preloadScripts,
@@ -174,7 +180,7 @@ function writeCommonFiles(
 	const jsDir = path.resolve(outputPath, "js");
 	const cssDir = path.resolve(outputPath, "css");
 	fsx.copySync(
-		path.resolve(__dirname, "..", templatePath),
+		path.resolve(__dirname, "..", "..", "lib", templatePath),
 		outputPath,
 		{ filter: (_src: string, dest: string): boolean => (dest !== jsDir && dest !== cssDir) }
 	);

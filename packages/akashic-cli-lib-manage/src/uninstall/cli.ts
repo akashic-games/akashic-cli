@@ -1,5 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
+import { createRequire } from "module";
 import type { CliConfigUninstall } from "@akashic/akashic-cli-commons";
 import { ConsoleLogger, CliConfigurationFile } from "@akashic/akashic-cli-commons";
 import { Command } from "commander";
@@ -16,11 +17,12 @@ function cli(param: CliConfigUninstall): void {
 		});
 }
 
-const ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "..", "package.json"), "utf8")).version;
+const require = createRequire(import.meta.url);
+const { version } = require("../../package.json");
 
 const commander = new Command();
 commander
-	.version(ver);
+	.version(version);
 
 commander
 	.description("Uninstall a node module and update globalScripts")

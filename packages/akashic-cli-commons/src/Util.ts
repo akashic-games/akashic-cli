@@ -98,6 +98,28 @@ export async function getTotalFileSize(directoryPath: string): Promise<number> {
 	return totalSize;
 }
 
+/**
+ * 指定ディレクトリ以下のすべてのファイルを再帰的に取得する
+ * @param dir パス
+ * @param baseDir ベース
+ * @returns 
+ */
+export function readdirRecursive(dir: string, baseDir: string = dir): string[] {
+	let files: string[] = [];
+	if (!fs.existsSync(dir)) return files;
+	const items = fs.readdirSync(dir, { withFileTypes: true });
+	for (const item of items) {
+		const fullPath = path.join(dir, item.name);
+		const relativePath = path.relative(baseDir, fullPath);
+		if (item.isDirectory()) {
+			files = files.concat(readdirRecursive(fullPath, baseDir));
+		} else {
+			files.push(relativePath);
+		}
+	}
+	return files;
+};
+
 // require.resolve() がモックできないので関数をモックするため require.resolve() するだけの関数を切り出している
 export function requireResolve(id: string, opts?: { paths?: string[] | undefined; basedir?: string }): string {
 	return resolve.sync(id, { ...opts, preserveSymlinks: true });

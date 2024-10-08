@@ -1,11 +1,10 @@
-import fs = require("fs");
-import path = require("path");
+import fs from "fs";
+import path from "path";
 import type { GameConfiguration, ScriptAssetConfigurationBase } from "@akashic/game-configuration";
-import { makePathKeyObject } from "@akashic/game-configuration/lib/utils/makePathKeyObject";
-import express = require("express");
-import sr = require("../request/ScriptRequest");
+import { makePathKeyObject } from "@akashic/game-configuration/lib/utils/makePathKeyObject.js";
+import type { RequestHandler } from "express";
 
-const controller = (req: sr.ScriptRequest, res: express.Response, next: Function): void => {
+const controller: RequestHandler = (req, res, next): void => {
 	const scriptPath = path.join(req.baseDir, req.params.scriptName);
 	// TODO: pathがbaseDir以下かの検査（scriptNameに..とか入れられるとたどれちゃう）
 	if (! fs.existsSync(scriptPath)) {
@@ -31,4 +30,4 @@ const controller = (req: sr.ScriptRequest, res: express.Response, next: Function
 	}
 };
 
-module.exports = controller;
+export default controller;

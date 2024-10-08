@@ -1,2 +1,4 @@
 #!/usr/bin/env node
-require("../lib/update").run(process.argv);
+
+import { run } from "../lib/update/index.js";
+run(process.argv);

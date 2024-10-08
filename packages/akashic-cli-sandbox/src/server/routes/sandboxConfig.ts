@@ -1,7 +1,7 @@
-import express = require("express");
-import controller = require("../controller/sandboxConfig");
+import express from "express";
+import controller from "../controller/sandboxConfig.js";
 const router = express.Router();
 
-router.get("/", <express.RequestHandler>controller);
+router.get("/", controller);
 
-module.exports = router;
+export default router;

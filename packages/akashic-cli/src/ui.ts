@@ -1,11 +1,12 @@
-import * as fs from "fs";
-import * as path from "path";
 import { Command } from "commander";
-const ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "package.json"), "utf8")).version;
+import { createRequire } from "module";
+
+const require = createRequire(import.meta.url);
+const { version } = require("../package.json");
 
 const commander = new Command();
 commander
-	.version(ver)
+	.version(version)
 	.command("init", "Initialize game.json and make asset directories")
 	.command("scan", "Update asset and globalScripts properties of game.json")
 	.command("modify", "Update meta data of game.json")
@@ -19,5 +20,8 @@ commander
 	.command("stat", "Show statistics information")
 	.command("serve", "Start a server that hosts a game to test multiplaying")
 	.command("sandbox", "Start a standalone server for a game")
-	.passThroughOptions()
-	.parse(process.argv);
+	.passThroughOptions();
+
+export function run(argv: string[]) {
+	commander.parse(argv);
+}

@@ -8,7 +8,7 @@
 
 ## インストール
 
-akashic-cli は Node.js v4.2 以降で動作します。
+akashic-cli は Node.js v18 以降で動作します。
 以下のコマンドでインストールできます。
 
 ```sh
@@ -43,7 +43,7 @@ akashic serve
 akashic export html -o ../exported-my-game
 ```
 
-各コマンドの詳細については、 [利用ガイド](http://akashic-games.github.io/guide/akashic-cli.html) を参照してください。
+各コマンドの詳細については、 [利用ガイド](https://akashic-games.github.io/reference/tool/akashic-cli/akashic-cli.html) を参照してください。
 Akashic Engineの詳細な利用方法については、 [公式ページ](https://akashic-games.github.io/) を参照してください。
 
 ## ライセンス
@@ -52,4 +52,3 @@ Akashic Engineの詳細な利用方法については、 [公式ページ](https
 
 ただし、画像ファイルおよび音声ファイルは
 [CC BY 2.1 JP](https://creativecommons.org/licenses/by/2.1/jp/) の元で公開されています。
-

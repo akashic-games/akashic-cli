@@ -1,2 +1,6 @@
 #!/usr/bin/env node
-require("@akashic/akashic-cli-extra/lib/modify").run(process.argv);
+
+(async () => {
+	const { run } = await import("@akashic/akashic-cli-extra/lib/modify/index.js");
+	run(process.argv);
+})();

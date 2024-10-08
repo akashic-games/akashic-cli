@@ -1,22 +1,22 @@
 import * as fs from "fs";
 import * as path from "path";
-import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
-import * as mockfs from "mock-fs";
-import { scanNodeModules } from "../../../lib/scanNodeModules";
+import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger.js";
+import mockfs from "mock-fs";
+import { MockInstance, vi } from "vitest";
+import { scanNodeModules } from "../../scanNodeModules.js";
 import { Util } from "@akashic/akashic-cli-commons";
-import { MockPromisedNpm } from "./helpers/MockPromisedNpm";
-import { workaroundMockFsExistsSync } from "./testUtils";
-import { ScanNodeModulesParameterObject } from "../../scanNodeModules";
+import { MockPromisedNpm } from "./helpers/MockPromisedNpm.js";
+import { ScanNodeModulesParameterObject } from "../../scanNodeModules.js";
 
 describe("scanNodeModules", () => {
 	const nullLogger = new ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
-	let spy: jest.SpyInstance;
-	workaroundMockFsExistsSync();
+	let requireResolve: MockInstance;
 
 	beforeAll(() => {
-		spy = jest.spyOn(Util, "requireResolve").mockImplementation((id: string, opts: { paths?: string[] | undefined }): string => {
-			const pkgJsonPath = path.join(opts.paths[0], "package.json");
-			const pkgData =  JSON.parse(fs.readFileSync(pkgJsonPath).toString("utf-8"));
+		requireResolve = vi.spyOn(Util, "requireResolve");
+		requireResolve.mockImplementation((id: string, opts?: { paths?: string[] | undefined }) => {
+			const pkgJsonPath = path.join(opts!.paths![0], "package.json");
+			const pkgData = JSON.parse(fs.readFileSync(pkgJsonPath).toString("utf-8"));
 			if (!pkgData.name) return "";
 			const mainScriptName = pkgData.main.split(".").pop() === "js" ? pkgData.main : pkgData.main + ".js";
 			return path.join(path.resolve("."), path.dirname(pkgJsonPath), mainScriptName);
@@ -26,7 +26,7 @@ describe("scanNodeModules", () => {
 		mockfs.restore();
 	});
 	afterAll(() => {
-		spy.mockClear();
+		requireResolve.mockClear();
 	});
 
 	describe("scan globalScripts field based on node_modules/", () => {

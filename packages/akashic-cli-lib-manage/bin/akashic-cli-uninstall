@@ -1,2 +1,4 @@
 #!/usr/bin/env node
-require("../lib/uninstall").run(process.argv);
+
+import { run } from "../lib/uninstall/index.js";
+run(process.argv);

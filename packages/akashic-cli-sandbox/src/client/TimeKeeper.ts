@@ -1,6 +1,4 @@
-// game.ejs で参照されるため、未使用の lint エラーを抑止
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-class TimeKeeper {
+export class TimeKeeper {
 	_origin: number;
 	_pausedTime: number;
 	_limit: number;

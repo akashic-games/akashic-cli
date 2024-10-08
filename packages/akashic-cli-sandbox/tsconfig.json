@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "noImplicitAny": true,
+    "module": "Node16",
+    "moduleResolution": "Node16",
+    "useUnknownInCatchVariables": false,
+    "strict": true
+  }
+}

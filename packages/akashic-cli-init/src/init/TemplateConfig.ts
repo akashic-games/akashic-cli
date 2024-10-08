@@ -1,8 +1,12 @@
+import { createRequire } from "module";
 import * as path from "path";
-import { readdir } from "@akashic/akashic-cli-commons/lib/FileSystem";
-import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
+import { readdir } from "@akashic/akashic-cli-commons/lib/FileSystem.js";
+import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger.js";
 import { glob } from "glob";
-import ignore from "ignore";
+
+// FIXME: ignore@6.0.2 において型に齟齬があるため暫定的に require() を用いている
+const require = createRequire(import.meta.url);
+const ignore = require("ignore");
 
 export interface TemplateFileEntry {
 	src: string;

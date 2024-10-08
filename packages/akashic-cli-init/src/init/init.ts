@@ -1,8 +1,9 @@
+import { existsSync } from "fs";
 import * as fs from "fs/promises";
 import * as path from "path";
-import { readJSON } from "@akashic/akashic-cli-commons/lib/FileSystem";
-import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
-import { copySync, existsSync } from "fs-extra";
+import { readJSON } from "@akashic/akashic-cli-commons/lib/FileSystem.js";
+import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger.js";
+import fsx from "fs-extra";
 import {
 	collectLocalTemplatesMetadata,
 	digestOfTemplateMetadata,
@@ -107,7 +108,7 @@ async function _extractFromTemplate(
 			throw new Error(`aborted to copy files, because followings already exist. [${existings.join(", ")}]`);
 	}
 	copyReqs.forEach(req => {
-		copySync(req.src, req.dest, { overwrite: forceCopy });
+		fsx.copySync(req.src, req.dest, { overwrite: forceCopy });
 		logger?.info(`copied ${req.srcRelative}.`);
 	});
 }

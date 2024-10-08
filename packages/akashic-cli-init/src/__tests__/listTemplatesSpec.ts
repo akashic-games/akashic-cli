@@ -1,24 +1,31 @@
 import * as path from "path";
-import * as express from "express";
-import * as getPort from "get-port";
-import * as Prompt from "prompt";
-import { listTemplates } from "../../lib/list/listTemplates";
-import { MockConfigFile } from "./support/mockConfigFile";
+import express from "express";
+import getPort from "get-port";
+import { vi } from "vitest";
+import { listTemplates } from "../list/listTemplates.js";
+import { MockConfigFile } from "./support/mockConfigFile.js";
+
+vi.mock("prompt", async () => {
+	const actualPrompt = await vi.importActual<any>("prompt");
+	return {
+		default: {
+			...actualPrompt.default,
+			get: vi.fn((_schema, func) => {
+				func(undefined, { confirm: "y" });
+			}),
+		},
+	};
+});
 
 describe("list.ts", () => {
 	let templateServer: any = null;
 	let repositoryUrl = "";
-	let mockPromptGet: jest.SpyInstance = null!; // beforeAll() で必ず代入するので非 null 型とする
 	beforeAll(async () => {
 		const port = await getPort();
 		const app = express();
 		app.use(express.static(path.resolve(__dirname, "support", "fixture")));
 		templateServer = app.listen(port);
 		repositoryUrl = `http://127.0.0.1:${port}/remote/`;
-
-		mockPromptGet = jest.spyOn(Prompt, "get").mockImplementation((_schema, func) => {
-			func(undefined, { confirm: "y" });
-		});
 	});
 	afterAll(() => {
 		if (templateServer) {
@@ -26,7 +33,6 @@ describe("list.ts", () => {
 			templateServer = null;
 			repositoryUrl = "";
 		}
-		mockPromptGet.mockRestore();
 	});
 
 	describe("listTemplates()", () => {

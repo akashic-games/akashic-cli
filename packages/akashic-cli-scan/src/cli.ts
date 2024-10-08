@@ -1,19 +1,22 @@
 import * as path from "path";
-import type { CliConfigScanAsset, CliConfigScanGlobalScripts } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigScan";
-import { CliConfigurationFile } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigurationFile";
-import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
+import { createRequire } from "module";
+import type { CliConfigScanAsset, CliConfigScanGlobalScripts } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigScan.js";
+import { CliConfigurationFile } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigurationFile.js";
+import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger.js";
 import { Command } from "commander";
-import type { ScanAssetParameterObject } from "./scanAsset";
-import { scanAsset } from "./scanAsset";
-import { scanNodeModules } from "./scanNodeModules";
-import type { AssetTargetType } from "./types";
-import { watchAsset } from "./watchAsset";
+import type { ScanAssetParameterObject } from "./scanAsset.js";
+import { scanAsset } from "./scanAsset.js";
+import { scanNodeModules } from "./scanNodeModules.js";
+import type { AssetTargetType } from "./types.js";
+import { watchAsset } from "./watchAsset.js";
 
-const ver = require("../package.json").version; // eslint-disable-line @typescript-eslint/no-var-requires
+const require = createRequire(import.meta.url);
+const { version } = require("../package.json");
+
 const commander = new Command();
 commander
 	.description("Update various properties of game.json")
-	.version(ver);
+	.version(version);
 
 commander
 	.command("asset [target]")

@@ -1,8 +1,8 @@
 import * as path from "path";
 import type { Logger } from "@akashic/akashic-cli-commons";
-import { makeUnixPath } from "@akashic/akashic-cli-commons/lib/Util";
+import { makeUnixPath } from "@akashic/akashic-cli-commons/lib/Util.js";
 import type { AssetConfiguration, AssetConfigurationMap } from "@akashic/game-configuration";
-import type { AssetConfigurationWithID, AssetScanDirectoryTable } from "./types";
+import type { AssetConfigurationWithID, AssetScanDirectoryTable } from "./types.js";
 
 export interface AssetIdResolverParameterObject {
 	resolveAssetIdsFromPath: boolean;

@@ -1,10 +1,14 @@
 #!/usr/bin/env node
-var argv = process.argv.slice(0);
-var type = argv.splice(2, 1)[0];
+
+const argv = process.argv.slice(0);
+const type = argv.splice(2, 1)[0];
+
 if (type === "html") {
-	require("../lib/html").run(argv);
+	const { run } = await import("../lib/html/index.js");
+	run(argv);
 } else if (type === "zip") {
-	require("../lib/zip").run(argv);
+	const { run } = await import("../lib/zip/index.js");
+	run(argv);
 } else if (type === "help" || type === "--help" || type === "-h") {
 	console.log([
 		"  ",
