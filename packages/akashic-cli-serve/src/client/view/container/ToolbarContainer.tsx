@@ -20,8 +20,7 @@ export interface ToolBarContainerProps {
 	targetService: ServiceType;
 }
 
-@observer
-export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}> {
+export const ToolBarContainer = observer(class ToolBarContainer extends React.Component<ToolBarContainerProps, {}> {
 	render(): React.ReactNode {
 		const { operator, localInstance, toolBarUiStore, targetService } = this.props;
 		return <ToolBar
@@ -114,4 +113,5 @@ export class ToolBarContainer extends React.Component<ToolBarContainerProps, {}>
 			onClickScreenshot: operator.localInstance.saveScreenshot
 		};
 	};
-}
+});
+

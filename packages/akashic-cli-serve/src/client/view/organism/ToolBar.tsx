@@ -13,7 +13,7 @@ import type { PlayControlPropsData } from "../molecule/PlayControl";
 import { PlayControl } from "../molecule/PlayControl";
 import type { PlayerControlPropsData } from "../molecule/PlayerControl";
 import { PlayerControl } from "../molecule/PlayerControl";
-import * as styles from "./ToolBar.css";
+import * as styles from "./ToolBar.module.css";
 
 export interface ToolBarProps {
 	makePlayControlProps: () => PlayControlPropsData;
@@ -29,8 +29,7 @@ export interface ToolBarProps {
 	onClickDevTools: (show: boolean) => void;
 }
 
-@observer
-export class ToolBar extends React.Component<ToolBarProps, {}> {
+export const ToolBar = observer(class ToolBar extends React.Component<ToolBarProps, {}> {
 	render(): React.ReactNode {
 		const props = this.props;
 		return <div className={styles["tool-bar"]}>
@@ -67,4 +66,5 @@ export class ToolBar extends React.Component<ToolBarProps, {}> {
 			</div>
 		</div>;
 	}
-}
+});
+

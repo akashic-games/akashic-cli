@@ -3,7 +3,7 @@ import * as React from "react";
 import type { GameViewManager } from "../akashic/GameViewManager";
 import type { Operator } from "../operator/Operator";
 import type { Store } from "../store/Store";
-import * as styles from "./App.css";
+import * as styles from "./App.module.css";
 import { FlexScrollY } from "./atom/FlexScrollY";
 import { GameViewFitter } from "./atom/GameViewFitter";
 import { DevtoolContainer } from "./container/DevtoolContainer";

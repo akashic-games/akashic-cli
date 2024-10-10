@@ -2,7 +2,7 @@ import * as React from "react";
 import type { ContentRect } from "react-measure";
 import Measure from "react-measure";
 import type { ScreenSize } from "../../common/types/ScreenSize";
-import * as styles from "./GameViewFitter.css";
+import * as styles from "./GameViewFitter.module.css";
 
 export interface GameViewFitterProps {
 	intrinsicSize: ScreenSize;

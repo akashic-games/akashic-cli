@@ -10,8 +10,7 @@ export interface StartupScreenContainerProps {
 	argumentsTable: { [name: string]: string };
 }
 
-@observer
-export class StartupScreenContainer extends React.Component<StartupScreenContainerProps, {}> {
+export const StartupScreenContainer = observer(class StartupScreenContainer extends React.Component<StartupScreenContainerProps, {}> {
 	render(): React.ReactNode {
 		const { operator, startupScreenUiStore, argumentsTable } = this.props;
 		return <StartupScreen
@@ -37,4 +36,5 @@ export class StartupScreenContainer extends React.Component<StartupScreenContain
 			instanceArgument: (argText !== "") ? JSON.parse(argText) : undefined
 		});
 	};
-}
+});
+

@@ -2,7 +2,7 @@ import { observer } from "mobx-react";
 import * as React from "react";
 import { FlexScrollY } from "../atom/FlexScrollY";
 import { RightResizable } from "../atom/RightResizable";
-import * as styles from "./StartupScreen.css";
+import * as styles from "./StartupScreen.module.css";
 
 export interface StartupScreenProps {
 	listWidth: number;
@@ -18,8 +18,7 @@ export interface StartupScreenProps {
 	onClickStart: () => void;
 }
 
-@observer
-export class StartupScreen extends React.Component<StartupScreenProps, {}> {
+export const StartupScreen = observer(class StartupScreen extends React.Component<StartupScreenProps, {}> {
 	render(): React.ReactNode {
 		const {
 			listWidth,
@@ -133,4 +132,5 @@ export class StartupScreen extends React.Component<StartupScreenProps, {}> {
 	private _handleTextAreaChange = (ev: React.ChangeEvent<HTMLTextAreaElement>): void => {
 		this.props.onArgumentsEditContentChanged(ev.target.value);
 	};
-}
+});
+

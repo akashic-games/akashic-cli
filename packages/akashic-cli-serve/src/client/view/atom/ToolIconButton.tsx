@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import * as styles from "./ToolIconButton.css";
+import * as styles from "./ToolIconButton.module.css";
 
 export interface ToolIconButtonProps {
 	/**
@@ -45,8 +45,7 @@ export interface ToolIconButtonProps {
 	children?: React.ReactNode;
 }
 
-@observer
-export class ToolIconButton extends React.Component<ToolIconButtonProps, {}> {
+export const ToolIconButton = observer(class ToolIconButton extends React.Component<ToolIconButtonProps, {}> {
 	render(): JSX.Element {
 		const { className, icon, title, pushed, pushedIcon, disabled, children, size } = this.props;
 		const pushedClass = (pushed && !pushedIcon) ? " " + styles.pushed : "";
@@ -62,4 +61,5 @@ export class ToolIconButton extends React.Component<ToolIconButtonProps, {}> {
 	private _onClick = (): void => {
 		this.props.onClick?.(!this.props.pushed);
 	};
-}
+});
+

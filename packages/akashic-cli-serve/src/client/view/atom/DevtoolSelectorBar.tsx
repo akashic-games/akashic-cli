@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import * as styles from "./DevtoolSelectorBar.css";
+import * as styles from "./DevtoolSelectorBar.module.css";
 
 export interface DevtoolSelectorBarItem {
 	name: string;
@@ -13,8 +13,7 @@ export interface DevtoolSelectorBarProps {
 	items: DevtoolSelectorBarItem[];
 }
 
-@observer
-export class DevtoolSelectorBar extends React.Component<DevtoolSelectorBarProps, {}> {
+export const DevtoolSelectorBar = observer(class DevtoolSelectorBar extends React.Component<DevtoolSelectorBarProps, {}> {
 	render(): React.ReactNode {
 		return <div className={styles["devtool-selector-bar"]}>
 			{
@@ -29,4 +28,5 @@ export class DevtoolSelectorBar extends React.Component<DevtoolSelectorBarProps,
 			}
 		</div>;
 	}
-}
+});
+

@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import * as styles from "./ToolCheckbox.css";
+import * as styles from "./ToolCheckbox.module.css";
 
 export interface ToolCheckboxProps {
 	checked: boolean;

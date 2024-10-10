@@ -4,7 +4,7 @@ import { millisecondsToHms } from "../../common/DateUtil";
 import { ToolControlGroup } from "../atom/ToolControlGroup";
 import { ToolIconButton } from "../atom/ToolIconButton";
 import { ToolProgressBar } from "../atom/ToolProgressBar";
-import * as styles from "./InstanceControl.css";
+import * as styles from "./InstanceControl.module.css";
 
 export interface InstanceControlPropsData {
 	currentTime: number;
@@ -23,8 +23,7 @@ export interface InstanceControlProps {
 	makeProps: () => InstanceControlPropsData;
 }
 
-@observer
-export class InstanceControl extends React.Component<InstanceControlProps, {}> {
+export const InstanceControl = observer(class InstanceControl extends React.Component<InstanceControlProps, {}> {
 	render(): React.ReactNode {
 		const props = this.props.makeProps();
 		const { currentTime, resetTime, duration } = props;
@@ -56,4 +55,5 @@ export class InstanceControl extends React.Component<InstanceControlProps, {}> {
 			</p>
 		</ToolControlGroup>;
 	}
-}
+});
+

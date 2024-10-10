@@ -12,8 +12,7 @@ export interface NotificationContainerProps {
 /**
  * NotificatonUiStore の表示・操作をするためのコンポーネント
  */
-@observer
-export class NotificationContainer extends React.Component<NotificationContainerProps, {}> {
+export const NotificationContainer = observer(class NotificationContainer extends React.Component<NotificationContainerProps, {}> {
 	componentDidMount(): void {
 		// このコンポーネントの責務とは少し違うが、適当な場所が無いのでここでエラーをハンドルする
 		window.addEventListener("error", this.handleError);
@@ -46,4 +45,5 @@ export class NotificationContainer extends React.Component<NotificationContainer
 	private handleClickNotificationClose = (): void => {
 		this.props.operator.ui.hideNotification();
 	};
-}
+});
+
