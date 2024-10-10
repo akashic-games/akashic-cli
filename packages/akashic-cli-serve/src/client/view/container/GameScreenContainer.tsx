@@ -17,8 +17,7 @@ export interface GameScreenContainerProps {
 	operator: Operator;
 }
 
-@observer
-export class GameScreenContainer extends React.Component<GameScreenContainerProps, {}> {
+export const GameScreenContainer = observer(class GameScreenContainer extends React.Component<GameScreenContainerProps, {}> {
 	render(): React.ReactNode {
 		const { toolBarUiStore } = this.props.store;
 		return <GameScreen
@@ -74,4 +73,5 @@ export class GameScreenContainer extends React.Component<GameScreenContainerProp
 			profilerHeight: profilerStore.profilerHeight
 		} : undefined;
 	};
-}
+});
+

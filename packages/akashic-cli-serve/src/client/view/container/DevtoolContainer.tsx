@@ -17,8 +17,7 @@ export interface DevtoolContainerProps {
 	sandboxConfig: NormalizedSandboxConfiguration;
 }
 
-@observer
-export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}> {
+export const DevtoolContainer = observer(class DevtoolContainer extends React.Component<DevtoolContainerProps, {}> {
 	render(): React.ReactNode {
 		const { play, operator, localInstance, toolBarUiStore, devtoolUiStore, sandboxConfig } = this.props;
 		return <Devtool
@@ -121,4 +120,5 @@ export class DevtoolContainer extends React.Component<DevtoolContainerProps, {}>
 			}}
 		/>;
 	}
-}
+});
+

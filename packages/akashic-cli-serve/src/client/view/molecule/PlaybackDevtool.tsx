@@ -4,7 +4,7 @@ import type { StartPointHeader } from "../../../common/types/StartPointHeader";
 import { millisecondsToHms, timeValueToString } from "../../common/DateUtil";
 import { FlexScrollY } from "../atom/FlexScrollY";
 import { ToolIconButton } from "../atom/ToolIconButton";
-import * as styles from "./PlaybackDevtool.css";
+import * as styles from "./PlaybackDevtool.module.css";
 import type { PlaybackOptionBarProps } from "./PlaybackOptionBar";
 import { PlaybackOptionBar } from "./PlaybackOptionBar";
 

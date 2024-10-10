@@ -4,7 +4,7 @@ import * as React from "react";
 import scrollIntoView from "scroll-into-view-if-needed";
 import type { EDumpItem } from "../../common/types/EDumpItem";
 import { FlexScrollY } from "../atom/FlexScrollY";
-import * as styles from "./EntityTreeDevtool.css";
+import * as styles from "./EntityTreeDevtool.module.css";
 import type { EntityTreeOptionBarProps } from "./EntityTreeOptionBar";
 import { EntityTreeOptionBar } from "./EntityTreeOptionBar";
 
@@ -116,8 +116,7 @@ function renderEDumpItem(e: EDumpItem, props: EntityTreeDevtoolProps): React.Rea
 	</div>;
 }
 
-@observer
-export class EntityTreeDevtool extends React.Component<EntityTreeDevtoolProps, {}> {
+export const EntityTreeDevtool = observer(class EntityTreeDevtool extends React.Component<EntityTreeDevtoolProps, {}> {
 	render(): React.ReactNode {
 		const props = this.props;
 		return <div className={styles["entity-tree-devtool"]}>
@@ -137,4 +136,5 @@ export class EntityTreeDevtool extends React.Component<EntityTreeDevtoolProps, {
 			</div>
 		</div>;
 	}
-}
+});
+

@@ -15,8 +15,7 @@ export interface PlayerControlProps {
 	makeProps: () => PlayerControlPropsData;
 }
 
-@observer
-export class PlayerControl extends React.Component<PlayerControlProps, {}> {
+export const PlayerControl = observer(class PlayerControl extends React.Component<PlayerControlProps, {}> {
 	render(): React.ReactNode {
 		const props = this.props.makeProps();
 		return <ToolControlGroup label="Player">
@@ -34,4 +33,5 @@ export class PlayerControl extends React.Component<PlayerControlProps, {}> {
 			</ToolIconButton>
 		</ToolControlGroup>;
 	}
-}
+});
+

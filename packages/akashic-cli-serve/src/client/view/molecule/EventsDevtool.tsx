@@ -4,7 +4,7 @@ import { FlexScrollY } from "../atom/FlexScrollY";
 import { RightResizable } from "../atom/RightResizable";
 import { ToolIconButton } from "../atom/ToolIconButton";
 import { ToolLabelButton } from "../atom/ToolLabelButton";
-import * as styles from "./EventsDevtool.css";
+import * as styles from "./EventsDevtool.module.css";
 
 export interface EventsDevtoolProps {
 	showsEventList: boolean;
@@ -20,8 +20,7 @@ export interface EventsDevtoolProps {
 	onEventEditContentChanged: (content: string) => void;
 }
 
-@observer
-export class EventsDevtool extends React.Component<EventsDevtoolProps, {}> {
+export const EventsDevtool = observer(class EventsDevtool extends React.Component<EventsDevtoolProps, {}> {
 	render(): React.ReactNode {
 		const props = this.props;
 		const { onClickSendEvent, onClickCopyEvent, onClickSendEditingEvent } = props;
@@ -90,4 +89,5 @@ export class EventsDevtool extends React.Component<EventsDevtoolProps, {}> {
 	private _handleTextAreaChange = (ev: React.ChangeEvent<HTMLTextAreaElement>): void => {
 		this.props.onEventEditContentChanged(ev.target.value);
 	};
-}
+});
+

@@ -2,7 +2,7 @@ import { observer } from "mobx-react";
 import * as React from "react";
 import { Popover } from "../atom/Popover";
 import { ToolIconButton } from "../atom/ToolIconButton";
-import * as styles from "./DisplayOptionControl.css";
+import * as styles from "./DisplayOptionControl.module.css";
 
 export interface DisplayOptionControlPropsData {
 	showsDisplayOptionPopover: boolean;

@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import * as React from "react";
 import type { NotificationType } from "../../store/NotificationType";
-import * as styles from "./Notification.css";
+import * as styles from "./Notification.module.css";
 import { ToolIconButton } from "./ToolIconButton";
 
 export interface NotificationProps {
@@ -15,8 +15,7 @@ export interface NotificationProps {
 	onClickClose: () => void;
 }
 
-@observer
-export class Notification extends React.Component<NotificationProps, {}> {
+export const Notification = observer(class Notification extends React.Component<NotificationProps, {}> {
 
 	render(): React.ReactNode {
 		const hidden = this.props.isShown ? "" : styles["notification-hidden"];
@@ -59,4 +58,5 @@ export class Notification extends React.Component<NotificationProps, {}> {
 		}
 		return null;
 	}
-}
+});
+
