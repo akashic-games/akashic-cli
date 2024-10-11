@@ -1,7 +1,7 @@
 // Akashic Engine の使う部分に無理やり型をつける
 // TODO engineFiles 内の型をなんとかして使う？
 declare module ae {
-	const enum EntityStateFlags {
+	enum EntityStateFlags {
 		Hidden = 1
 	}
 

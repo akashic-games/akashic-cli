@@ -17,7 +17,8 @@ module.exports = {
 		ecmaVersion: 12
 	},
 	ignorePatterns: [
-		"**/*.js"
+		"**/*.js",
+		"**/vite.config.mts"
 	],
 	plugins: [
 		"react"

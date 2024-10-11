@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Akashic Serve</title>
-    <link rel="shortcut icon" type="image/x-icon" href="/public/favicon.ico" />
-    <link href="/public/thirdparty/material-icons/material-icons.css" rel="stylesheet" type="text/css">
+    <link rel="shortcut icon" type="image/x-icon" href="./static/favicon.ico" />
+    <link href="./static/thirdparty/material-icons/material-icons.css" rel="stylesheet" type="text/css">
 </head>
 <body>
     <div id="container"></div>
@@ -19,6 +19,6 @@
             window.agvplugin = require("@akashic/akashic-gameview-web/lib/plugin");
         } catch (_error) {}
     </script>
-    <script src="/public/js/index.js"></script>
+    <script type="module" src="./bootstrap.tsx"></script>
 </body>
 </html>

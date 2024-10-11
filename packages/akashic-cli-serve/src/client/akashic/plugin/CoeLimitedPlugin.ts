@@ -39,6 +39,9 @@ export class CoeLimitedPlugin implements agv.ExternalPlugin {
 			startLocalSession: (param: StartLocalSessionPameterObject): void => {
 				if (param.applicationName !== ALLOWED_APPLICATION_NAME)
 					return;
+				// FIXME playlog で isolatedModules を考慮したのち削除。
+				// @ts-expect-error src/clent/ は isolatedModules: true なので const enum の MessageEventIndex がエラーになるが、
+				// 実際は playlog が preserveConstEnums でビルドされているため問題にならない。
 				const localEventData = param.localEvents[0][pl.MessageEventIndex.Data];
 				const limitSeconds = localEventData?.parameters?.limitSeconds;
 				this.startPlayerInfoResolver(limitSeconds, param.messageHandler);

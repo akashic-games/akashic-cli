@@ -1,8 +1,11 @@
 import { encode, decode } from "@msgpack/msgpack";
-import Emitter = require("component-emitter");
-import type { Packet} from "socket.io-parser";
+import * as ComponentEmitter from "component-emitter";
+import type { Packet } from "socket.io-parser";
 import { PacketType } from "socket.io-parser";
 import type { MessageEncodeTestbedEvent } from "./types/TestbedEvent";
+
+// NOTE: component-emitteer の型定義に問題があり (？) import { Emitter } も import Emitter もエラーになる。
+const Emitter = ComponentEmitter.default;
 
 class Encoder extends Emitter {
 	encode(packet: Packet): any[] {
