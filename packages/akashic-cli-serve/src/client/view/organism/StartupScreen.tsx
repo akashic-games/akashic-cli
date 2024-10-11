@@ -2,7 +2,7 @@ import { observer } from "mobx-react";
 import * as React from "react";
 import { FlexScrollY } from "../atom/FlexScrollY";
 import { RightResizable } from "../atom/RightResizable";
-import * as styles from "./StartupScreen.module.css";
+import styles from "./StartupScreen.module.css";
 
 export interface StartupScreenProps {
 	listWidth: number;

@@ -4,7 +4,7 @@ import { FlexScrollY } from "../atom/FlexScrollY";
 import { RightResizable } from "../atom/RightResizable";
 import { ToolIconButton } from "../atom/ToolIconButton";
 import { ToolLabelButton } from "../atom/ToolLabelButton";
-import * as styles from "./EventsDevtool.module.css";
+import styles from "./EventsDevtool.module.css";
 
 export interface EventsDevtoolProps {
 	showsEventList: boolean;

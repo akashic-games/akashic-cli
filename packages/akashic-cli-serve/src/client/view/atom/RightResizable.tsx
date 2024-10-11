@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import * as styles from "./RightResizable.module.css";
+import styles from "./RightResizable.module.css";
 
 export interface RightResizableProps {
 	width: number;

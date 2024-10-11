@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import * as styles from "./ToolIconButton.module.css";
+import styles from "./ToolIconButton.module.css";
 
 export interface ToolIconButtonProps {
 	/**

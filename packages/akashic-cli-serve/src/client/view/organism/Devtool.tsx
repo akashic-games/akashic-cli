@@ -14,7 +14,7 @@ import type { NiconicoDevtoolProps } from "../molecule/NiconicoDevtool";
 import { NiconicoDevtool } from "../molecule/NiconicoDevtool";
 import type { PlaybackDevtoolProps } from "../molecule/PlaybackDevtool";
 import { PlaybackDevtool } from "../molecule/PlaybackDevtool";
-import * as styles from "./Devtool.module.css";
+import styles from "./Devtool.module.css";
 
 // TODO 適切な箇所に定義を移す
 export const devtoolTypes = [

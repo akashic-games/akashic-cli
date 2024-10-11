@@ -4,7 +4,7 @@ import { millisecondsToHms } from "../../common/DateUtil";
 import { ToolControlGroup } from "../atom/ToolControlGroup";
 import { ToolIconButton } from "../atom/ToolIconButton";
 import { ToolProgressBar } from "../atom/ToolProgressBar";
-import * as styles from "./InstanceControl.module.css";
+import styles from "./InstanceControl.module.css";
 
 export interface InstanceControlPropsData {
 	currentTime: number;
