@@ -13,7 +13,6 @@
   "files": [
     "./src/html/index.ts",
     "./src/zip/index.ts",
-    "./src/pdi/index.ts",
     "./src/pdi/storage/index.ts",
     "./src/pdi/global.d.ts",
     "./typings/babel.d.ts"
