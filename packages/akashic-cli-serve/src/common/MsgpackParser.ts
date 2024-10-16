@@ -1,13 +1,13 @@
 import { encode, decode } from "@msgpack/msgpack";
-import * as ComponentEmitter from "component-emitter";
+import { Emitter } from "@socket.io/component-emitter";
 import type { Packet } from "socket.io-parser";
 import { PacketType } from "socket.io-parser";
 import type { MessageEncodeTestbedEvent } from "./types/TestbedEvent";
 
-// NOTE: component-emitteer の型定義に問題があり (？) import { Emitter } も import Emitter もエラーになる。
-const Emitter = ComponentEmitter.default;
+type EncoderEvents = { encoded: (d: MessageEncodeTestbedEvent) => void };
+type DecoderEvents = { decoded: (p: Packet) => void };
 
-class Encoder extends Emitter {
+class Encoder extends Emitter<EncoderEvents, EncoderEvents> {
 	encode(packet: Packet): any[] {
 		const encoded = encode(packet);
 		this.emit("encoded", { packet, encoded } as MessageEncodeTestbedEvent);
@@ -15,7 +15,7 @@ class Encoder extends Emitter {
 	}
 }
 
-class Decoder extends Emitter {
+class Decoder extends Emitter<DecoderEvents, DecoderEvents> {
 	add(chunk: any): void {
 		const packet = decode(chunk) as Packet;
 		// 指定の namespace への初回接続時 (PacketType === CONNECT) に `packet.data` の値が `authPayload` として利用されるが、

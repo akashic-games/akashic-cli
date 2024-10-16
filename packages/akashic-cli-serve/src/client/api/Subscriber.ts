@@ -1,5 +1,5 @@
 import { Trigger } from "@akashic/trigger";
-import type ComponentEmitter from "component-emitter";
+import type parser from "../../common/MsgpackParser";
 import type {
 	PlayCreateTestbedEvent,
 	PlayStatusChangedTestbedEvent,
@@ -18,8 +18,6 @@ import type {
 	MessageEncodeTestbedEvent
 } from "../../common/types/TestbedEvent";
 import { socketInstance } from "./socketInstance";
-
-type Emitter = InstanceType<typeof ComponentEmitter>;
 
 export const onPlayCreate = new Trigger<PlayCreateTestbedEvent>();
 export const onPlayStatusChange = new Trigger<PlayStatusChangedTestbedEvent>();
@@ -61,5 +59,6 @@ export const onMessageEncode = new Trigger<MessageEncodeTestbedEvent>();
 // @see https://github.com/socketio/socket.io-client/blob/d0c0557/lib/manager.ts#L184-L185
 const socketManager: any = socketInstance.io;
 if (socketManager.encoder) {
-	(socketManager.encoder as Emitter).on("encoded", (args: MessageEncodeTestbedEvent) => onMessageEncode.fire(args));
+	const encoder: InstanceType<typeof parser.Encoder> = socketManager.encoder;
+	encoder.on("encoded", args => onMessageEncode.fire(args));
 }
