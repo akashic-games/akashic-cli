@@ -1,10 +1,6 @@
 // Akashic Engine の使う部分に無理やり型をつける
 // TODO engineFiles 内の型をなんとかして使う？
 declare module ae {
-	enum EntityStateFlags {
-		Hidden = 1
-	}
-
 	interface PointLike {
 		x: number;
 		y: number;
