@@ -5,6 +5,7 @@
     "lib": ["dom", "es2015"],
     "noImplicitAny": true,
     "module": "commonjs" ,
+    "isolatedModules": true,
     "esModuleInterop": true,
     "sourceMap": true,
     "outDir": "../../lib/module",

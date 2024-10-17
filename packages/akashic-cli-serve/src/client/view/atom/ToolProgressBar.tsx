@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import * as styles from "./ToolProgressBar.module.css";
+import styles from "./ToolProgressBar.module.css";
 
 export interface ToolProgressBarProps {
 	/**

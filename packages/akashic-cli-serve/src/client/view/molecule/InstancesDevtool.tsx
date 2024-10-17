@@ -2,7 +2,7 @@ import { observer } from "mobx-react";
 import * as React from "react";
 import { FlexScrollY } from "../atom/FlexScrollY";
 import { ToolIconButton } from "../atom/ToolIconButton";
-import * as styles from "./InstancesDevtool.module.css";
+import styles from "./InstancesDevtool.module.css";
 
 export interface InstanceViewData {
 	type: "active" | "passive";  // TODO isActive: boolean にする

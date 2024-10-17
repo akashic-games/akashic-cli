@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import * as styles from "./TopResizable.module.css";
+import styles from "./TopResizable.module.css";
 
 export interface TopResizableProps {
 	height: number;

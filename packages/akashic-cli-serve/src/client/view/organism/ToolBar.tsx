@@ -13,7 +13,7 @@ import type { PlayControlPropsData } from "../molecule/PlayControl";
 import { PlayControl } from "../molecule/PlayControl";
 import type { PlayerControlPropsData } from "../molecule/PlayerControl";
 import { PlayerControl } from "../molecule/PlayerControl";
-import * as styles from "./ToolBar.module.css";
+import styles from "./ToolBar.module.css";
 
 export interface ToolBarProps {
 	makePlayControlProps: () => PlayControlPropsData;

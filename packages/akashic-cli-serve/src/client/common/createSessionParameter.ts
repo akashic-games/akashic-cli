@@ -15,6 +15,9 @@ export function createSessionParameter(service: ServiceType): playlog.Event {
 	];
 
 	if (service !== "none") {
+		// FIXME playlog で isolatedModules を考慮したのち削除。
+		// @ts-expect-error src/clent/ は isolatedModules: true なので const enum の MessageEventIndex がエラーになるが、
+		// 実際は playlog が preserveConstEnums でビルドされているため問題にならない。
 		ret[playlog.MessageEventIndex.Data].parameters.service = "nicolive";
 	}
 

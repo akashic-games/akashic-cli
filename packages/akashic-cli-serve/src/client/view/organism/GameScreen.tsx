@@ -4,7 +4,7 @@ import type { PlayerInfoResolverDialogProps } from "../molecule/PlayerInfoResolv
 import { PlayerInfoResolverDialog } from "../molecule/PlayerInfoResolverDialog";
 import type { ProfilerCanvasProps } from "../molecule/ProfilerCanvas";
 import { ProfilerCanvas } from "../molecule/ProfilerCanvas";
-import * as styles from "./GameScreen.module.css";
+import styles from "./GameScreen.module.css";
 
 export interface GameScreenProps {
 	showsBackgroundImage: boolean;

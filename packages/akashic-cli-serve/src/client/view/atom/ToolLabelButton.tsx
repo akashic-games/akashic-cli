@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import * as styles from "./ToolLabelButton.module.css";
+import styles from "./ToolLabelButton.module.css";
 
 export interface ToolLabelButtonProps {
 	className?: string;

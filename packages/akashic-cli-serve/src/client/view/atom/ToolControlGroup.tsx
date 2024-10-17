@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import * as styles from "./ToolControlGroup.module.css";
+import styles from "./ToolControlGroup.module.css";
 
 export interface ToolControlGroupProps {
 	label: string;

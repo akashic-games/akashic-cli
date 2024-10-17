@@ -12,6 +12,7 @@
     ],
     "sourceMap": true,
     "outDir": "../../lib",
+    "esModuleInterop": true,
     "removeComments": true,
     "downlevelIteration": true,
     "noImplicitAny": true,

@@ -4,7 +4,7 @@ import * as React from "react";
 import scrollIntoView from "scroll-into-view-if-needed";
 import type { EDumpItem } from "../../common/types/EDumpItem";
 import { FlexScrollY } from "../atom/FlexScrollY";
-import * as styles from "./EntityTreeDevtool.module.css";
+import styles from "./EntityTreeDevtool.module.css";
 import type { EntityTreeOptionBarProps } from "./EntityTreeOptionBar";
 import { EntityTreeOptionBar } from "./EntityTreeOptionBar";
 
@@ -74,7 +74,7 @@ function renderEDumpItem(e: EDumpItem, props: EntityTreeDevtoolProps): React.Rea
 	const hasChildren = e.children && e.children.length > 0;
 	const showsChildren = !props.entityTreeStateTable.get(e.id);
 	const buttonStyle = styles["entity-expand-button"] + (hasChildren ? ""  : " " + styles["entity-expand-button-hidden"]);
-	return <div key={e.id} className={e.visible ? null : styles["invisible-entity"]} ref={isSelected ? scrollRefIntoView : null}>
+	return <div key={e.id} className={e.visible ? "" : styles["invisible-entity"]} ref={isSelected ? scrollRefIntoView : null}>
 		<div
 			className={styles["entity-item"] + (isSelected ? " " + styles.selected : "")}
 			onMouseOver={onMouseOver}

@@ -5,7 +5,7 @@ import { Popover } from "../atom/Popover";
 import type { ToolChoiceButtonItem } from "../atom/ToolChoiceButton";
 import { ToolChoiceButton } from "../atom/ToolChoiceButton";
 import { ToolIconButton } from "../atom/ToolIconButton";
-import * as styles from "./AudioOptionControl.module.css";
+import styles from "./AudioOptionControl.module.css";
 
 export interface AudioOptionControlPropsData {
 	showsAudioOptionPopover: boolean;

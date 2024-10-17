@@ -4,6 +4,15 @@ import type { EDumpItem } from "../common/types/EDumpItem";
 import type { ProfilerValue } from "../common/types/Profiler";
 import type { RuntimeWarning } from "./RuntimeWarning";
 
+// akashic-engine の g.EntityStateFlags のうち、必要な部分のコピー。
+//
+// serve からは akashic-engine の定義を直接参照できないため必要。
+// なお同じ役割の AkashicGameViewWeb.d.ts は d.ts のため型しか置けない。値を伴う enum, const enum は書けないので暫定的にここ (利用箇所) で定義する。
+// TODO AkashicGameViewWeb.d.ts との関係整理
+const enum EntityStateFlags {
+	Hidden = 1
+}
+
 function getMatrixFromRoot(e: ae.ELike | undefined, camera: ae.CameraLike | undefined): ae.MatrixLike | null {
 	if (!e || !e.getMatrix)
 		return camera ? camera.getMatrix() : null;
@@ -36,7 +45,7 @@ function makeEDumpItem(e: ae.ELike): EDumpItem {
 		anchorY: e.anchorY,
 		local: e.local,
 		touchable: e.touchable,
-		visible: !(e.state & ae.EntityStateFlags.Hidden),
+		visible: !(e.state & EntityStateFlags.Hidden),
 		cssColor: (e.cssColor != null) ? e.cssColor : null,
 		text: (e.text != null) ? e.text : null
 	};

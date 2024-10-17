@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import * as styles from "./DevtoolSelectorBar.module.css";
+import styles from "./DevtoolSelectorBar.module.css";
 
 export interface DevtoolSelectorBarItem {
 	name: string;

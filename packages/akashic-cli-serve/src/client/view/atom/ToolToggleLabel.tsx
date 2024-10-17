@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import * as styles from "./ToolToggleLabel.module.css";
+import styles from "./ToolToggleLabel.module.css";
 
 export interface ToolToggleLabelProps {
 	isPushed: boolean;

@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import * as React from "react";
 import { FlexScrollY } from "../atom/FlexScrollY";
-import * as styles from "./NiconicoDevtool.module.css";
+import styles from "./NiconicoDevtool.module.css";
 
 export interface NiconicoDevtoolProps {
 	isAutoSendEvent: boolean;

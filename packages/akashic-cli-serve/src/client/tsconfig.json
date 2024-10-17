@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "ES2015",
     "declaration": false,
     "downlevelIteration": true,
-    "lib": ["dom", "es5"],
+    "lib": ["dom", "ES2018"],
+    "types": ["vite/client"],
     "noImplicitAny": true,
     "module": "commonjs" ,
     "esModuleInterop": true,
@@ -13,11 +14,12 @@
     "noUnusedParameters": true,
     "experimentalDecorators": true,
     "useUnknownInCatchVariables": false,
+    "isolatedModules": true,
+    "skipLibCheck": true, // FIXME mobx-react@6.3.1 の型エラー回避に必要。mobx と併せて更新して外せないか確認する
     "strict": true
   },
   "include": [
     "./view/stories/**/*.tsx",
-    "./css.d.ts",
     "./akashic/AkashicGameViewWeb.d.ts",
     "./bootstrap.tsx"
   ]
