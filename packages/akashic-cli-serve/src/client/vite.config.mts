@@ -8,6 +8,9 @@ export default defineConfig({
 		outDir: "../../www/public/",
 		emptyOutDir: false,
 	},
+
+	// vite serve 用の設定。利用時は別で適当なコンテンツを実行する serve を起動しておく必要がある (e.g. `node bin/run -B --port 3300 <content>`) 。
+	// TODO HMR が効かない問題を解消する
 	server: {
 		proxy: {
 			'/api': 'http://localhost:3300',
