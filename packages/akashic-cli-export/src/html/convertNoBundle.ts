@@ -201,8 +201,8 @@ window.optionProps.magnify = ${!!options.magnify};
 	fs.writeFileSync(path.resolve(outputPath, "./js/option.js"), script);
 }
 
-function wrapScript(code: string, name: string, minify?: boolean, exports: string[] = []): string {
-	return "window.gLocalAssetContainer[\"" + name + "\"] = function(g) { " + wrap(code, minify, exports) + "}";
+function wrapScript(code: string, name: string, terser?: unknown, exports: string[] = []): string {
+	return "window.gLocalAssetContainer[\"" + name + "\"] = function(g) { " + wrap(code, terser, exports) + "}";
 }
 
 function wrapText(code: string, name: string): string {

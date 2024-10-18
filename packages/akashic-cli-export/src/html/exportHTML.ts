@@ -72,6 +72,7 @@ export function promiseExportHtmlRaw(param: ExportHTMLParameterObject): Promise<
 				logger: param.logger,
 				strip: param.strip,
 				minify: param.minify,
+				terser: param.terser,
 				magnify: param.magnify,
 				force: param.force,
 				source: gamepath,

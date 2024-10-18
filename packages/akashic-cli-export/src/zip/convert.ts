@@ -9,7 +9,7 @@ import { nodeResolve } from "@rollup/plugin-node-resolve";
 import * as fsx from "fs-extra";
 import type { OutputChunk, RollupBuild } from "rollup";
 import { rollup } from "rollup";
-import * as UglifyJS from "uglify-js";
+import { minify_sync } from "terser";
 import * as utils from "../utils.js";
 import { validateGameJson } from "../utils.js";
 import { getFromHttps } from "./apiUtil.js";
@@ -29,6 +29,7 @@ export interface ConvertGameParameterObject {
 	minify?: boolean;
 	minifyJs?: boolean;
 	minifyJson?: boolean;
+	terser?: unknown;
 	packImage?: boolean;
 	strip?: boolean;
 	source?: string;
@@ -53,6 +54,7 @@ export function _completeConvertGameParameterObject(param: ConvertGameParameterO
 	param.minify = !!param.minify;
 	param.minifyJs = !!param.minifyJs;
 	param.minifyJson = !!param.minifyJson;
+	param.terser = param.terser;
 	param.strip = !!param.strip;
 	param.source = param.source || process.cwd();
 	param.hashLength = param.hashLength || 0;
@@ -290,7 +292,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			const scriptAssetPaths = gcu.extractScriptAssetFilePaths(gamejson).map(p => path.resolve(param.dest, p));
 			scriptAssetPaths.forEach(p => {
 				const code = fs.readFileSync(p).toString();
-				fs.writeFileSync(p, UglifyJS.minify(code).code);
+				fs.writeFileSync(p, minify_sync(code, param.terser).code);
 			});
 		})
 		.then(async () => {

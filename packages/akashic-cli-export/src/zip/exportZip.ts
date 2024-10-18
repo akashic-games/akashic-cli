@@ -16,6 +16,7 @@ export interface ExportZipParameterObject {
 	minify?: boolean;
 	minifyJs?: boolean;
 	minifyJson?: boolean;
+	terser?: unknown;
 	packImage?: boolean;
 	strip?: boolean;
 	source?: string;
@@ -55,6 +56,7 @@ export function _completeExportZipParameterObject(param: ExportZipParameterObjec
 		minify: !!param.minify,
 		minifyJs: !!param.minifyJs,
 		minifyJson: !!param.minifyJson,
+		terser: param.terser,
 		packImage: !!param.packImage,
 		strip: !!param.strip,
 		source: param.source || process.cwd(),
@@ -104,6 +106,7 @@ export function promiseExportZip(param: ExportZipParameterObject): Promise<void>
 				minify: param.minify,
 				minifyJs: param.minifyJs,
 				minifyJson: param.minifyJson,
+				terser: param.terser,
 				packImage: param.packImage,
 				strip: param.strip,
 				source: param.source,

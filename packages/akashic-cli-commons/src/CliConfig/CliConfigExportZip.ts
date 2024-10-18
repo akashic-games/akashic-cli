@@ -9,6 +9,7 @@ export interface CliConfigExportZip {
 	minify?: boolean;
 	minifyJs?: boolean;
 	minifyJson?: boolean;
+	terser?: unknown;
 	packImage?: boolean;
 	bundle?: boolean;
 	babel?: boolean;

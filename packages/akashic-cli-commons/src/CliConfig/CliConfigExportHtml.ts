@@ -8,6 +8,7 @@ export interface CliConfigExportHtml {
 	strip?: boolean;
 	hashFilename?: number | boolean;
 	minify?: boolean;
+	terser?: unknown;
 	bundle?: boolean;
 	magnify?: boolean;
 	injects?: string[];
