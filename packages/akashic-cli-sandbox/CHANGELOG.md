@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.1.10
+
+### Patch Changes
+
+- [#1448](https://github.com/akashic-games/akashic-cli/pull/1448) [`7043a1f`](https://github.com/akashic-games/akashic-cli/commit/7043a1fa6b687d7b8364f505f44df4443c88c1e4) Thanks [@renovate](https://github.com/apps/renovate)! - Updated dependency `@akashic/headless-driver` to `2.15.9`.
+
 ## 1.1.9
 
 ### Patch Changes
