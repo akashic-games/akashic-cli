@@ -1,5 +1,5 @@
 import type { Preview } from "@storybook/react";
-import "../www/public/thirdparty/material-icons/material-icons.css";
+import "../src/client/static/thirdparty/material-icons/material-icons.css";
 
 const preview: Preview = {
   parameters: {}
