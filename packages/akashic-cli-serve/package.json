@@ -89,7 +89,10 @@
     "vite": "^5.4.8"
   },
   "overrides": {
-    "@types/mime": "4.0.0"
+    "@types/mime": "4.0.0",
+    "vite": {
+      "rollup": "npm:@rollup/wasm-node"
+    }
   },
   "files": [
     "package.json",
