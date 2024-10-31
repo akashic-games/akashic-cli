@@ -31,4 +31,4 @@ jobs:
           npm ci
           npm test
         env:
-          NX_DISABLE_DB: false
+          NX_DISABLE_DB: true
