@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "postinstall": "npm run build",
-    "build": "nx run-many -t build --verbose",
+    "build": "nx run-many -t build",
     "test": "npm run lint:md && nx run-many -t test && node test/e2e.js --local",
     "test:published": "node test/e2e.js",
     "lint:md": "remark . --frail --no-stdout --quiet --rc-path ./.remarkrc",
