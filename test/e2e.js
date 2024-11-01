@@ -123,7 +123,7 @@ try {
 		assertContains(files, "package.json");
 		assertContains(files, "README.md");
 		assertContains(files, "sandbox.config.js");
-		assertContains(files, ".eslintrc.js");
+		assertContains(files, "eslint.config.js");
 		assertContains(files, ".gitignore");
 		assertContains(files, "jest.config.js");
 		assertContains(files, "tsconfig.jest.json");
