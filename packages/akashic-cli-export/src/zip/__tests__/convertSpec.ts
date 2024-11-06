@@ -275,14 +275,12 @@ describe("convert", () => {
 						"		y: foo()",
 						"	};",
 						"}",
-						""
 					].join("\n"));
 					const foo = fs.readFileSync(path.join(destDir, "script/foo.js"), { encoding: "utf-8" }).toString();
 					expect(foo.replace(/\r?\n/g, "\n")).toBe([
 						"module.exports = function () {",
 						"	return \"このスクリプトファイルは Shift-JIS です。\";",
 						"};",
-						""
 					].join("\n"));
 					const eucjp = fs.readFileSync(path.join(destDir, "assets/euc-jp.txt"), { encoding: "utf-8" }).toString();
 					expect(eucjp).toBe("このテキストファイルは EUC-JP です");
