@@ -6,6 +6,7 @@ import * as cmn from "@akashic/akashic-cli-commons";
 import type { AssetConfigurationMap, ImageAssetConfigurationBase } from "@akashic/game-configuration";
 import type { SandboxConfiguration } from "@akashic/sandbox-configuration";
 import fsx from "fs-extra";
+import type { MinifyOptions } from "terser";
 import { minify_sync } from "terser";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -17,7 +18,7 @@ export interface ConvertTemplateParameterObject {
 	logger: cmn.Logger;
 	strip: boolean;
 	minify: boolean;
-	terser: unknown;
+	terser: MinifyOptions;
 	magnify: boolean;
 	force: boolean;
 	source: string;
@@ -101,7 +102,7 @@ export function encodeText(text: string): string {
 	return text.replace(/[\u2028\u2029'"\\\b\f\n\r\t\v%]/g, encodeURIComponent);
 }
 
-export function wrap(code: string, terser?: unknown, exports: string[] = []): string {
+export function wrap(code: string, terser?: MinifyOptions, exports: string[] = []): string {
 	const preScript = "(function(exports, require, module, __filename, __dirname) {";
 	let postScript: string = "";
 	for (const key of exports) {

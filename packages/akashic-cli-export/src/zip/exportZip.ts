@@ -5,6 +5,7 @@ import { fileURLToPath } from "url";
 import * as cmn from "@akashic/akashic-cli-commons";
 import { size as statSize } from "@akashic/akashic-cli-extra/lib/stat/stat.js";
 import archiver = require("archiver");
+import type { MinifyOptions } from "terser";
 import { convertGame } from "./convert.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -16,7 +17,7 @@ export interface ExportZipParameterObject {
 	minify?: boolean;
 	minifyJs?: boolean;
 	minifyJson?: boolean;
-	terser?: unknown;
+	terser?: MinifyOptions;
 	packImage?: boolean;
 	strip?: boolean;
 	source?: string;

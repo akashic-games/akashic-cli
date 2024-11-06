@@ -9,6 +9,7 @@ import { nodeResolve } from "@rollup/plugin-node-resolve";
 import * as fsx from "fs-extra";
 import type { OutputChunk, RollupBuild } from "rollup";
 import { rollup } from "rollup";
+import type { MinifyOptions } from "terser";
 import { minify_sync } from "terser";
 import * as utils from "../utils.js";
 import { validateGameJson } from "../utils.js";
@@ -29,7 +30,7 @@ export interface ConvertGameParameterObject {
 	minify?: boolean;
 	minifyJs?: boolean;
 	minifyJson?: boolean;
-	terser?: unknown;
+	terser?: MinifyOptions;
 	packImage?: boolean;
 	strip?: boolean;
 	source?: string;
