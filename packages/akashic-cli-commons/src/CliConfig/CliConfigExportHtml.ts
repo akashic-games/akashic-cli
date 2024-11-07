@@ -9,7 +9,7 @@ export interface CliConfigExportHtml {
 	hashFilename?: number | boolean;
 	minify?: boolean;
 	/**
-	 * terser による minify の際のオプション。minifyJs が true の時のみ参照される。
+	 * terser による minify の際のオプション。minify プロパティが true の時のみ参照される。
 	 * 指定可能な値は https://terser.org/docs/api-reference/#minify-options を参照。
 	 */
 	terser?: object;

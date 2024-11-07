@@ -10,7 +10,7 @@ export interface CliConfigExportZip {
 	minifyJs?: boolean;
 	minifyJson?: boolean;
 	/**
-	 * terser による minify の際のオプション。minifyJs が true の時のみ参照される。
+	 * terser による minify の際のオプション。minifyJs (または minify) プロパティが true の時のみ参照される。
 	 * 指定可能な値は https://terser.org/docs/api-reference/#minify-options を参照。
 	 */
 	terser?: object;
