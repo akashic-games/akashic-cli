@@ -9,6 +9,7 @@ import { nodeResolve } from "@rollup/plugin-node-resolve";
 import * as fsx from "fs-extra";
 import type { OutputChunk, RollupBuild } from "rollup";
 import { rollup } from "rollup";
+import type { MinifyOptions } from "terser";
 import { minify_sync } from "terser";
 import * as utils from "../utils.js";
 import { validateGameJson } from "../utils.js";
@@ -29,7 +30,7 @@ export interface ConvertGameParameterObject {
 	minify?: boolean;
 	minifyJs?: boolean;
 	minifyJson?: boolean;
-	terser?: unknown;
+	terser?: MinifyOptions;
 	packImage?: boolean;
 	strip?: boolean;
 	source?: string;
@@ -96,7 +97,26 @@ export async function bundleScripts(entryPoint: string, basedir: string): Promis
 	 }
 }
 
+const babelOption = {
+	presets: [
+		babel.createConfigItem([presetEnv, {
+			modules: false,
+			targets: {
+				"ie": 10
+			}
+		}],
+		{ type: "preset" })
+	]
+};
+
 export function convertGame(param: ConvertGameParameterObject): Promise<void> {
+	function optimizeScript(script: string): string {
+		// この順序は入れ替えられない (先に minify すると babel がコードを整形してしまう)
+		const downpiled = param.babel ? babel.transform(script, babelOption).code : script;
+		const minified = param.minifyJs ? minify_sync(downpiled, param.terser).code : downpiled;
+		return minified;
+	}
+
 	_completeConvertGameParameterObject(param);
 	let gamejson: cmn.GameConfiguration;
 
@@ -196,23 +216,11 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 				});
 			}
 
-			const babelOption = {
-				presets: [
-					babel.createConfigItem([presetEnv, {
-						modules: false,
-						targets: {
-							"ie": 10
-						}
-					}],
-					{ type: "preset" })
-				]
-			};
-
 			preservingFilePathSet.forEach(p => {
 				const buff = fs.readFileSync(path.resolve(param.source, p));
 				cmn.Util.mkdirpSync(path.dirname(path.resolve(param.dest, p)));
 				const value: string | Buffer =
-					(param.babel && gcu.isScriptJsFile(p)) ? babel.transform(encodeToString(buff).trim(), babelOption).code :
+					(gcu.isScriptJsFile(p)) ? optimizeScript(encodeToString(buff).trim()) :
 					(param.minifyJson && gcu.isTextJsonFile(p)) ? JSON.stringify(JSON.parse(encodeToString(buff))) :
 					gcu.isMaybeTextFile(p) ? encodeToString(buff) : buff;
 				fs.writeFileSync(path.resolve(param.dest, p), value);
@@ -261,7 +269,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			}
 			const entryPointAbsPath = path.resolve(param.dest, entryPointPath);
 			cmn.Util.mkdirpSync(path.dirname(entryPointAbsPath));
-			const code = param.babel ? babel.transform(bundleResult.bundle, babelOption).code : bundleResult.bundle;
+			const code = optimizeScript(bundleResult.bundle);
 			fs.writeFileSync(entryPointAbsPath, code);
 		})
 		.then(() => {
@@ -285,15 +293,6 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			return cmn.ConfigurationFile.write(
 				gamejson, path.resolve(param.dest, "game.json"), param.logger, { minify: param.minifyJson }
 			);
-		})
-		.then(() => {
-			if (!param.minify && !param.minifyJs)
-				return;
-			const scriptAssetPaths = gcu.extractScriptAssetFilePaths(gamejson).map(p => path.resolve(param.dest, p));
-			scriptAssetPaths.forEach(p => {
-				const code = fs.readFileSync(p).toString();
-				fs.writeFileSync(p, minify_sync(code, param.terser).code);
-			});
 		})
 		.then(async () => {
 			// ニコ生環境向けの簡易ファイルサイズチェック
