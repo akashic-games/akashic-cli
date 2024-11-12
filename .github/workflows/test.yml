@@ -26,9 +26,16 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
           cache: npm
+      - name: Setup Repo
+			  continue-on-error: true
+        run: |
+          npm ci
+      - name: Setup Repo (workaround vite problem)
+        run: |
+					npm i -D vite --os ${{ contains(matrix.os, 'ubuntu') && 'linux' || 'win32' }}
+					npm run build
       - name: Run test
         run: |
-          npm ci --os ${{ contains(matrix.os, 'ubuntu') && 'linux' || 'win32' }}
           npm test
         env:
           NX_DISABLE_DB: true
