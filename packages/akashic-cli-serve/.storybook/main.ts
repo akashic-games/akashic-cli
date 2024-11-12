@@ -5,8 +5,7 @@ const config: StorybookConfig = {
   stories: ["../src/**/*.stories.tsx"],
   addons: [
     "@storybook/addon-actions",
-    "@storybook/addon-controls",
-    "storybook-addon-jsx"
+    "@storybook/addon-controls"
   ],
   core: {
     builder: "@storybook/builder-vite"
