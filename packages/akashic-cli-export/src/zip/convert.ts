@@ -98,6 +98,7 @@ export async function bundleScripts(entryPoint: string, basedir: string): Promis
 export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 	_completeConvertGameParameterObject(param);
 	let gamejson: cmn.GameConfiguration;
+
 	cmn.Util.mkdirpSync(path.resolve(param.dest));
 	return Promise.resolve()
 		.then(() => cmn.ConfigurationFile.read(path.join(param.source, "game.json"), param.logger))
