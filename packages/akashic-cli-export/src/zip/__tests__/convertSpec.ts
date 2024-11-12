@@ -46,16 +46,9 @@ describe("convert", () => {
 	});
 
 	describe("convertGame", () => {
-		// const destDir = path.resolve(fixturesDir, "output");
-		let destDir = "";
+		const destDir = path.resolve(fixturesDir, "output");
 		const consoleSpy = vi.spyOn(global.console, "warn");
-		beforeEach(() => {
-			const r = Math.random().toString(36).slice(2, 7);
-			destDir =  path.resolve(fixturesDir, "output") + "_" + r;
-			// console.log("----------- before", destDir);
-		});
 		afterEach(() => {
-			// console.log("----------- after", destDir);
 			fsx.removeSync(destDir);
 			consoleSpy.mockClear();
 		});
