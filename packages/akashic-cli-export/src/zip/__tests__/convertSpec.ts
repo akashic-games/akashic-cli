@@ -638,7 +638,7 @@ describe("convert", () => {
 					const mainScript = fs.readFileSync(path.join(destDir, "script/aez_bundle_main.js")).toString().split("\n");
 					expect(mainScript[0]).toBe(LICENSE_TEXT_PREFIX.replace(/\r?\n/g, ""));
 
-					const license = fs.readFileSync(path.join(destDir, "thirdpary_license.txt")).toString("utf-8").split("\n");
+					const license = fs.readFileSync(path.join(destDir, "thirdpary_license.txt")).toString().split(/\r?\n/g);
 					console.log("@@@@@", license);
 					expect(license).toEqual(
 						[
@@ -668,7 +668,7 @@ describe("convert", () => {
 					const mainScript = fs.readFileSync(path.join(destDir, "script/main.js")).toString().split("\n");
 					expect(mainScript[0]).toBe(LICENSE_TEXT_PREFIX.replace(/\r?\n/g, ""));
 
-					const license = fs.readFileSync(path.join(destDir, "thirdpary_license.txt")).toString().split("\n");
+					const license = fs.readFileSync(path.join(destDir, "thirdpary_license.txt")).toString().split(/\r?\n/g);
 					expect(license).toEqual(
 						[
 							"# external",
