@@ -99,7 +99,6 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 	_completeConvertGameParameterObject(param);
 	let gamejson: cmn.GameConfiguration;
 
-	cmn.Util.mkdirpSync(path.dirname(path.resolve(param.dest)));
 	const destDirPath = path.extname(param.dest) ? path.dirname(path.resolve(param.dest)) : path.resolve(param.dest); 
 	cmn.Util.mkdirpSync(destDirPath);
 
