@@ -18,6 +18,8 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
         node: [18.x, 20.x]
+    env:
+      NX_DISABLE_DB: true
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -37,5 +39,3 @@ jobs:
       - name: Run test
         run: |
           npm test
-        env:
-          NX_DISABLE_DB: true
