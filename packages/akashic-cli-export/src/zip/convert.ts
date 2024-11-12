@@ -98,10 +98,7 @@ export async function bundleScripts(entryPoint: string, basedir: string): Promis
 export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 	_completeConvertGameParameterObject(param);
 	let gamejson: cmn.GameConfiguration;
-
-	const destDirPath = path.extname(param.dest) ? path.dirname(path.resolve(param.dest)) : path.resolve(param.dest); 
-	cmn.Util.mkdirpSync(destDirPath);
-
+	cmn.Util.mkdirpSync(path.resolve(param.dest));
 	return Promise.resolve()
 		.then(() => cmn.ConfigurationFile.read(path.join(param.source, "game.json"), param.logger))
 		.then(async (result: cmn.GameConfiguration) => {
