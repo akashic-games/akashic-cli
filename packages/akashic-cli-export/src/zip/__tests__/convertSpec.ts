@@ -639,7 +639,6 @@ describe("convert", () => {
 					expect(mainScript[0]).toBe(LICENSE_TEXT_PREFIX.replace(/\r?\n/g, ""));
 
 					const license = fs.readFileSync(path.join(destDir, "thirdpary_license.txt")).toString().split(/\r?\n/g);
-					console.log("@@@@@", license);
 					expect(license).toEqual(
 						[
 							"# external",
