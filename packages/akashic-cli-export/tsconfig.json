@@ -8,7 +8,7 @@
     "outDir": "./lib",
     "declaration": true,
     "esModuleInterop": true,
-    "types" : ["archiver", "browserify", "commander", "fs-extra", "node", "uglify-js", "pngjs"]
+    "types" : ["archiver", "browserify", "commander", "fs-extra", "node", "pngjs"]
   },
   "files": [
     "./src/html/index.ts",
