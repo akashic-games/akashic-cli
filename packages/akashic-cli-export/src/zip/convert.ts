@@ -221,18 +221,6 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			const existLicense = liceneUtil.writeLicenseTextFile(param.source, param.dest, filePaths);
 			const prefixCode = existLicense ? liceneUtil.LICENSE_TEXT_PREFIX : "";
 
-			const babelOption = {
-				presets: [
-					babel.createConfigItem([presetEnv, {
-						modules: false,
-						targets: {
-							"ie": 10
-						}
-					}],
-					{ type: "preset" })
-				]
-			};
-
 			preservingFilePathSet.forEach(p => {
 				const buff = fs.readFileSync(path.resolve(param.source, p));
 				cmn.Util.mkdirpSync(path.dirname(path.resolve(param.dest, p)));
@@ -240,7 +228,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 					(gcu.isScriptJsFile(p)) ? optimizeScript(encodeToString(buff).trim()) :
 					(param.minifyJson && gcu.isTextJsonFile(p)) ? JSON.stringify(JSON.parse(encodeToString(buff))) :
 					gcu.isMaybeTextFile(p) ? encodeToString(buff) : buff;
-				
+
 				if (bundleResult === null && gamejson.main.includes(p)) {
 					value = prefixCode + value;
 				}
