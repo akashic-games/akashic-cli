@@ -6,7 +6,8 @@ import * as cmn from "@akashic/akashic-cli-commons";
 import type { AssetConfigurationMap, ImageAssetConfigurationBase } from "@akashic/game-configuration";
 import type { SandboxConfiguration } from "@akashic/sandbox-configuration";
 import fsx from "fs-extra";
-import * as UglifyJS from "uglify-js";
+import type { MinifyOptions } from "terser";
+import { minify_sync } from "terser";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -17,6 +18,7 @@ export interface ConvertTemplateParameterObject {
 	logger: cmn.Logger;
 	strip: boolean;
 	minify: boolean;
+	terser: MinifyOptions;
 	magnify: boolean;
 	force: boolean;
 	source: string;
@@ -100,21 +102,21 @@ export function encodeText(text: string): string {
 	return text.replace(/[\u2028\u2029'"\\\b\f\n\r\t\v%]/g, encodeURIComponent);
 }
 
-export function wrap(code: string, minify?: boolean, exports: string[] = []): string {
+export function wrap(code: string, terser?: MinifyOptions, exports: string[] = []): string {
 	const preScript = "(function(exports, require, module, __filename, __dirname) {";
 	let postScript: string = "";
 	for (const key of exports) {
 		postScript += `exports["${key}"] = typeof ${key} !== "undefined" ? ${key} : undefined;\n`;
 	}
 	postScript += "})(g.module.exports, g.module.require, g.module, g.filename, g.dirname);";
-	const ret = preScript + "\n" + code + "\n" + postScript + "\n";
-	return minify ? UglifyJS.minify(ret, { sourceMap: true }).code : ret;
+	const ret = preScript + "\n" + (terser ? minify_sync(code, terser).code : code) + "\n" + postScript + "\n";
+	return ret;
 }
 
 export function getDefaultBundleScripts(
 	templatePath: string,
 	version: string,
-	minify?: boolean,
+	options: ConvertTemplateParameterObject,
 	bundleText: boolean = true,
 	overrideEngineFilesPath?: string
 ): any {
@@ -168,9 +170,10 @@ export function getDefaultBundleScripts(
 		return loadScriptFile(filePath);
 	});
 
-	if (minify) {
-		preloadScripts = preloadScripts.map(script => UglifyJS.minify(script, { sourceMap: true }).code);
-		postloadScripts = postloadScripts.map(script => UglifyJS.minify(script, { sourceMap: true }).code);
+	if (options.minify) {
+		// NOTE: エンジン側が提供するコードを mangling されると動作に支障をきたす可能性があるため、この部分はデフォルト設定を与える
+		preloadScripts = preloadScripts.map(script => minify_sync(script).code);
+		postloadScripts = postloadScripts.map(script => minify_sync(script).code);
 	}
 	return {
 		preloadScripts,

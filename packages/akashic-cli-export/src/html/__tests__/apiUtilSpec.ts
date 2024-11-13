@@ -37,9 +37,9 @@ describe("apiUtil", function () {
 				})
 				.catch(function (err: any) {
 					// レスポンスコードが不定のため先頭一致で判定
-					expect(err.message.startsWith(
-						"Failed to get resource. url: https://akashic-games.github.io/notfound. status code: ")
-					).toBe(true);
+					expect(err.message).match(
+						/^Failed to get resource\. url: https:\/\/akashic-games\.github\.io\/notfound\. status code:.*/
+					);
 				});
 		});
 	});

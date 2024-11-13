@@ -46,7 +46,6 @@
     "@types/mock-fs": "4.13.4",
     "@types/node": "22.2.0",
     "@types/pngjs": "6.0.5",
-    "@types/uglify-js": "3.17.5",
     "@typescript-eslint/eslint-plugin": "6.21.0",
     "eslint": "8.57.0",
     "eslint-plugin-import": "2.29.1",
@@ -79,7 +78,7 @@
     "maxrects-packer": "2.7.3",
     "pngjs": "7.0.0",
     "rollup": "4.20.0",
-    "uglify-js": "3.19.2"
+    "terser": "^5.34.1"
   },
   "publishConfig": {
     "access": "public",

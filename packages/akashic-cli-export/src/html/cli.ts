@@ -22,6 +22,7 @@ function cli(param: CliConfigExportHtml): void {
 		hashLength: !param.hashFilename ? 0 :
 			(param.hashFilename === true || param.hashFilename === undefined) ? 20 : Number(param.hashFilename),
 		minify: param.minify,
+		terser: param.terser,
 		bundle: param.bundle,
 		magnify: param.magnify,
 		injects: param.injects,
@@ -41,6 +42,7 @@ function cli(param: CliConfigExportHtml): void {
 				strip: param.strip,
 				hashFilename: param.hashFilename,
 				minify: param.minify,
+				terser: param.terser,
 				bundle: param.bundle,
 				magnify: param.magnify
 			})
@@ -116,6 +118,7 @@ export function run(argv: string[]): void {
 			source: options.source ?? conf.source,
 			strip: options.strip ?? conf.strip,
 			minify: options.minify ?? conf.minify,
+			terser: options.terser ?? conf.terser,
 			bundle: options.bundle ?? conf.bundle,
 			magnify: options.magnify ?? conf.magnify,
 			hashFilename: options.hashFilename ?? conf.hashFilename,
