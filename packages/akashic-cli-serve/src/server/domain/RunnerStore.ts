@@ -6,9 +6,11 @@ import type {
 	RunnerRemoveTestbedEvent,
 	RunnerPauseTestbedEvent,
 	RunnerResumeTestbedEvent,
-	RunnerPutStartPointTestbedEvent
+	RunnerPutStartPointTestbedEvent,
+	NicoliveCommentPluginStartStopTestbedEvent
 } from "../../common/types/TestbedEvent";
 import { serverGlobalConfig } from "../common/ServerGlobalConfig";
+import { NicoliveCommentPluginHost } from "./nicoliveComment/NicoliveCommentPluginHost";
 import * as sandboxConfigs from "./SandboxConfigs";
 
 export interface RunnerStoreParameterObject {
@@ -31,16 +33,18 @@ export class RunnerStore {
 	onRunnerPause: Trigger<RunnerPauseTestbedEvent>;
 	onRunnerResume: Trigger<RunnerResumeTestbedEvent>;
 	onRunnerPutStartPoint: Trigger<RunnerPutStartPointTestbedEvent>;
+	onNicoliveCommentPluginStartStop: Trigger<NicoliveCommentPluginStartStopTestbedEvent>;
 	private runnerManager: RunnerManager;
 	private gameExternalFactory: () => any;
 	private playIdTable: { [runnerId: string]: string };
 
 	constructor(params: RunnerStoreParameterObject) {
-		this.onRunnerCreate = new Trigger<RunnerCreateTestbedEvent>();
-		this.onRunnerRemove = new Trigger<RunnerRemoveTestbedEvent>();
-		this.onRunnerPause = new Trigger<RunnerPauseTestbedEvent>();
-		this.onRunnerResume = new Trigger<RunnerResumeTestbedEvent>();
-		this.onRunnerPutStartPoint = new Trigger<RunnerPutStartPointTestbedEvent>();
+		this.onRunnerCreate = new Trigger();
+		this.onRunnerRemove = new Trigger();
+		this.onRunnerPause = new Trigger();
+		this.onRunnerResume = new Trigger();
+		this.onRunnerPutStartPoint = new Trigger();
+		this.onNicoliveCommentPluginStartStop = new Trigger();
 		this.runnerManager = params.runnerManager;
 		this.gameExternalFactory = params.gameExternalFactory;
 		this.playIdTable = {};
@@ -51,7 +55,16 @@ export class RunnerStore {
 		const externalAssets = (sandboxConfig ? sandboxConfig.externalAssets : undefined) === undefined ? [] : sandboxConfig.externalAssets;
 		const allowedUrls = this.createAllowedUrls(params.contentId, externalAssets);
 
-		const externalValue = { ...this.gameExternalFactory() ?? {} };
+		let externalValue: { [name: string]: unknown } = {};
+		if (sandboxConfig.external?.nicoliveComment) {
+			const { playId } = params;
+			// TODO commentPluginHost を PlayEntity に (？) 保持する。現状は生成後にアクセスする契機がないのでどこにも保持していない
+			const commentPluginHost = new NicoliveCommentPluginHost(sandboxConfig.external.nicoliveComment, params.amflow);
+			commentPluginHost.onStartStop.add(started => this.onNicoliveCommentPluginStartStop.fire({ playId, started }));
+			externalValue.nicoliveComment = commentPluginHost.plugin;
+		}
+
+		externalValue = { ...externalValue, ...this.gameExternalFactory() };
 		const serverExternal = sandboxConfig?.server?.external;
 		if (serverExternal) {
 			for (const pluginName of Object.keys(serverExternal)) {
