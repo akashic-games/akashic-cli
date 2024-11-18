@@ -121,7 +121,6 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 	_completeConvertGameParameterObject(param);
 	let gamejson: cmn.GameConfiguration;
 
-	cmn.Util.mkdirpSync(path.resolve(param.dest));
 	return Promise.resolve()
 		.then(() => cmn.ConfigurationFile.read(path.join(param.source, "game.json"), param.logger))
 		.then(async (result: cmn.GameConfiguration) => {
@@ -218,7 +217,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			}
 
 			const filePaths = bundleResult ? bundledFilePaths : Array.from(preservingFilePathSet);
-			const existLicense = liceneUtil.writeLicenseTextFile(param.source, param.dest, filePaths);
+			const existLicense = await liceneUtil.writeLicenseTextFile(param.source, param.dest, filePaths);
 			const prefixCode = existLicense ? liceneUtil.LICENSE_TEXT_PREFIX : "";
 
 			preservingFilePathSet.forEach(p => {

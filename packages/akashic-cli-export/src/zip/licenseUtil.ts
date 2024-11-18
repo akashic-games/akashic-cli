@@ -1,9 +1,6 @@
 import * as cmn from "@akashic/akashic-cli-commons";
 import * as fs from "fs";
 import * as path from "path";
-import { createRequire } from "module";
-
-const require = createRequire(import.meta.url);
 
 interface LicenseInfo { 
     name: string;
@@ -20,9 +17,9 @@ export const LICENSE_TEXT_PREFIX  = "// For the library license, see thirdpary_l
  * @param dest 出力先
  * @param filePaths ファイルパスの配列
  */
-export function writeLicenseTextFile(source: string, dest: string, filePaths: string[]): boolean {
+export async function writeLicenseTextFile(source: string, dest: string, filePaths: string[]): Promise<boolean> {
     const libPkgJsonPaths = cmn.NodeModules.listPackageJsonsFromScriptsPath(source, filePaths);
-    const licenseInfos = makeLicenseInfo(source, libPkgJsonPaths);
+    const licenseInfos = await makeLicenseInfo(source, libPkgJsonPaths);
     if (!libPkgJsonPaths.length || !licenseInfos.length) return false;
 
     let textAry: string[] = [];
@@ -33,16 +30,20 @@ export function writeLicenseTextFile(source: string, dest: string, filePaths: st
     });
     const body = textAry.join("\n");
 
+    if (!fs.existsSync(dest)) { 
+        cmn.Util.mkdirpSync(dest);
+    }
     fs.writeFileSync(path.resolve(dest, "thirdpary_license.txt"), body);
     return true;
 }
 
-function makeLicenseInfo(source: string, pkgJsonPaths: string[]): LicenseInfo[] {
+async function makeLicenseInfo(source: string, pkgJsonPaths: string[]): Promise<LicenseInfo[]> {
     const licenseInfos: LicenseInfo[] = [];
-    pkgJsonPaths.forEach( p => {
+    for (const p of pkgJsonPaths) {
         const pkgJsonPath = path.resolve(source, p);
-        const pkgJson = require(pkgJsonPath);
+        const pkgJson = await cmn.FileSystem.readJSON<any>(pkgJsonPath);
         // LICENSE ファイルは root 直下のファイルを部分一致で取得
+        // TODO: LICENSE-LGPL のようなファイルは機械的に扱えないので警告を出すようにする。 LICENSE(license) に任意の拡張子がついたものを対象とする。
         const files = fs.readdirSync(path.dirname(pkgJsonPath));
         const licenseFile = files.find((file) => /LICENSE/.test(file));
         if (!licenseFile) return;
@@ -56,6 +57,6 @@ function makeLicenseInfo(source: string, pkgJsonPaths: string[]): LicenseInfo[] 
                 licenseText: text
             });
         }
-    });
+    };
     return licenseInfos;
 }
