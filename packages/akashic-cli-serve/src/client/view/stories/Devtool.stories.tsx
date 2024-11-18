@@ -3,7 +3,7 @@ import { observable } from "mobx";
 import { observer } from "mobx-react";
 import * as React from "react";
 import type { EDumpItem } from "../../common/types/EDumpItem";
-import type { NiconicoDevtoolProps } from "../molecule/NiconicoDevtool";
+import type { NiconicoDevtoolRankingPageProps } from "../molecule/NiconicoDevtoolRankingPage";
 import type { PlaybackDevtoolProps } from "../molecule/PlaybackDevtool";
 import { Devtool } from "../organism/Devtool";
 
@@ -31,7 +31,7 @@ const store = observable({
 	selectedStartPointIndex: null as number | null
 });
 
-const nicoProps: NiconicoDevtoolProps = {
+const nicoProps: NiconicoDevtoolRankingPageProps = {
 	isAutoSendEvent: true,
 	usePreferredTimeLimit: true,
 	stopsGameOnTimeout: true,

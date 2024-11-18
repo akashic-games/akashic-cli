@@ -10,8 +10,8 @@ import type { InstancesDevtoolProps } from "../molecule/InstancesDevtool";
 import { InstancesDevtool } from "../molecule/InstancesDevtool";
 import type { InternalDevtoolProps } from "../molecule/InternalDevtool";
 import { InternalDevtool } from "../molecule/InternalDevtool";
-import type { NiconicoDevtoolProps } from "../molecule/NiconicoDevtool";
-import { NiconicoDevtool } from "../molecule/NiconicoDevtool";
+import type { NiconicoDevtoolRankingPageProps } from "../molecule/NiconicoDevtoolRankingPage";
+import { NiconicoDevtoolRankingPage } from "../molecule/NiconicoDevtoolRankingPage";
 import type { PlaybackDevtoolProps } from "../molecule/PlaybackDevtool";
 import { PlaybackDevtool } from "../molecule/PlaybackDevtool";
 import styles from "./Devtool.module.css";
@@ -38,7 +38,7 @@ export interface DevtoolProps {
 	eventsDevtoolProps: EventsDevtoolProps;
 	instancesDevtoolProps: InstancesDevtoolProps;
 	entityTreeDevtoolProps: EntityTreeDevtoolProps;
-	niconicoDevtoolProps: NiconicoDevtoolProps;
+	niconicoDevtoolProps: NiconicoDevtoolRankingPageProps;
 	internalDevtoolProps: InternalDevtoolProps;
 }
 
@@ -73,7 +73,7 @@ export const Devtool = observer(class Devtool extends React.Component<DevtoolPro
 				{ (activeDevtool === "Instances") && <InstancesDevtool {...props.instancesDevtoolProps} /> }
 				{ (activeDevtool === "Events") && <EventsDevtool {...props.eventsDevtoolProps} /> }
 				{ (activeDevtool === "EntityTree") && <EntityTreeDevtool {...props.entityTreeDevtoolProps} /> }
-				{ (activeDevtool === "Niconico") && <NiconicoDevtool {...props.niconicoDevtoolProps} /> }
+				{ (activeDevtool === "Niconico") && <NiconicoDevtoolRankingPage {...props.niconicoDevtoolProps} /> }
 				{ (activeDevtool === "Internal") && <InternalDevtool {...props.internalDevtoolProps} /> }
 			</div>
 		</TopResizable>;
