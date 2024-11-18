@@ -28,7 +28,7 @@ export class NicoliveCommentPluginHost {
 				if (this.started)
 					throw new Error("NicoliveCommentPlugin already started.");
 
-				this.filter = new Set(opts.fields ?? DEFAULT_FIELDS);
+				this.filter = new Set(opts?.fields ?? DEFAULT_FIELDS);
 
 				amflow.onTick(this._handleTick);
 				if (callback)
@@ -56,7 +56,7 @@ export class NicoliveCommentPluginHost {
 
 		objectForEach(templates, (templ) => {
 			const { startBy, comments } = templ;
-			if (!startBy || startBy === "ui") return;
+			if (!startBy || startBy === "manual") return;
 
 			const base = startBy === "pluginStart" ? startAge : 0;
 			let lastFrame = base;
