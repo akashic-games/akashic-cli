@@ -30,9 +30,7 @@ export async function writeLicenseTextFile(source: string, dest: string, filePat
     });
     const body = textAry.join("\n");
 
-    if (!fs.existsSync(dest)) { 
-        cmn.Util.mkdirpSync(dest);
-    }
+    cmn.Util.mkdirpSync(dest);
     fs.writeFileSync(path.resolve(dest, "thirdpary_license.txt"), body);
     return true;
 }
