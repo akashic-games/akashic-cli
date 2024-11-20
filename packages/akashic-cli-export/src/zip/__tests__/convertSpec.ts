@@ -11,6 +11,7 @@ import {
 	convertGame,
 	validateGameJsonForNicolive
 } from "../convert.js";
+import { LICENSE_TEXT_PREFIX } from "../licenseUtil.js";
 
 const require = createRequire(import.meta.url);
 const fixturesDir = path.resolve(__dirname, "..", "..", "__tests__", "fixtures");
@@ -114,6 +115,7 @@ describe("convert", () => {
 					expect(fs.existsSync(path.join(destDir, "script/bar.js"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "script/foo.js"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "game.json"))).toBe(true);
+					expect(fs.existsSync(path.join(destDir, "thirdpary_license.txt"))).toBeFalsy();
 				});
 		});
 
@@ -132,6 +134,7 @@ describe("convert", () => {
 					expect(fs.existsSync(path.join(destDir, "text/test.json"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "game.json"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "package.json"))).toBe(true);
+					expect(fs.existsSync(path.join(destDir, "thirdpary_license.txt"))).toBeTruthy();
 				});
 		});
 
@@ -151,6 +154,7 @@ describe("convert", () => {
 					expect(fs.existsSync(path.join(destDir, "text/test.json"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "game.json"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "package.json"))).toBe(false);
+					expect(fs.existsSync(path.join(destDir, "thirdpary_license.txt"))).toBeTruthy();
 				});
 		});
 
@@ -172,6 +176,7 @@ describe("convert", () => {
 					expect(fs.existsSync(path.join(destDir, "text/test.json"))).toBe(false);
 					expect(fs.existsSync(path.join(destDir, "game.json"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "package.json"))).toBe(true);
+					expect(fs.existsSync(path.join(destDir, "thirdpary_license.txt"))).toBeTruthy();
 					const gameJson = JSON.parse(fs.readFileSync(path.join(destDir, "game.json")).toString());
 					expect(gameJson.main).toBe("./script/aez_bundle_main.js");
 					expect(gameJson.assets.aez_bundle_main.path).toBe("script/aez_bundle_main.js");
@@ -198,6 +203,7 @@ describe("convert", () => {
 					expect(fs.existsSync(path.join(outputDirectory, "game.json"))).toBe(true);
 					expect(fs.existsSync(path.join(outputDirectory, "package.json"))).toBe(true);
 					expect(fs.existsSync(path.join(outputDirectory, "output"))).toBe(false);
+					expect(fs.existsSync(path.join(destDir, "thirdpary_license.txt"))).toBeFalsy();
 					expect(fs.readFileSync(path.join(outputDirectory, "game.json")).toString())
 						.not.toBe(fs.readFileSync(path.join(param.source, "game.json")).toString());
 					fsx.removeSync(outputDirectory);
@@ -225,6 +231,7 @@ describe("convert", () => {
 					expect(fs.existsSync(path.join(destDir, "package.json"))).toBe(false);
 					expect(fs.readFileSync(path.join(destDir, "game.json")).toString())
 						.not.toBe(fs.readFileSync(path.join(param.source, "game.json")).toString());
+					expect(fs.existsSync(path.join(destDir, "thirdpary_license.txt"))).toBeTruthy();
 				});
 		});
 
@@ -246,6 +253,7 @@ describe("convert", () => {
 					const gameJson = fs.readFileSync(path.join(destDir, "game.json")).toString();
 					const gameJsonObj = JSON.parse(gameJson);
 					expect(gameJsonObj.assets.ignore2.global).toBeTruthy();
+					expect(fs.existsSync(path.join(destDir, "thirdpary_license.txt"))).toBeTruthy();
 				});
 		});
 
@@ -263,6 +271,7 @@ describe("convert", () => {
 					expect(fs.existsSync(path.join(destDir, "text/utf8.txt"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "game.json"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "package.json"))).toBe(true);
+					expect(fs.existsSync(path.join(destDir, "thirdpary_license.txt"))).toBeFalsy();
 
 					// UTF8 として読み込めることを確認
 					const main = fs.readFileSync(path.join(destDir, "script/main.js"), { encoding: "utf-8" }).toString();
@@ -305,6 +314,7 @@ describe("convert", () => {
 					expect(fs.existsSync(path.join(destDir, "text/test.json"))).toBe(false);
 					expect(fs.existsSync(path.join(destDir, "game.json"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "package.json"))).toBe(true);
+					expect(fs.existsSync(path.join(destDir, "thirdpary_license.txt"))).toBeFalsy();
 					expect(fs.readFileSync(path.join(destDir, "game.json")).toString())
 						.not.toBe(fs.readFileSync(path.join(param.source, "game.json")).toString());
 					expect(fs.readFileSync(path.join(destDir, "script/aez_bundle_main.js")).toString())
@@ -332,6 +342,7 @@ describe("convert", () => {
 					expect(fs.existsSync(path.join(destDir, "package.json"))).toBe(true);
 					expect(fs.readFileSync(path.join(destDir, "game.json")).toString())
 						.not.toBe(fs.readFileSync(path.join(param.source, "game.json")).toString());
+					expect(fs.existsSync(path.join(destDir, "thirdpary_license.txt"))).toBeFalsy();
 				});
 		});
 
@@ -351,6 +362,7 @@ describe("convert", () => {
 					expect(fs.existsSync(path.join(destDir, "image/akashic-cli.png"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "game.json"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "package.json"))).toBe(true);
+					expect(fs.existsSync(path.join(destDir, "thirdpary_license.txt"))).toBeFalsy();
 					const gameJson = JSON.parse(fs.readFileSync(path.join(destDir, "game.json")).toString());
 					expect(gameJson.assets.aez_bundle_main0.path).toBe("script/aez_bundle_main0.js");
 					expect(gameJson.assets.aez_bundle_main0.type).toBe("script");
@@ -376,6 +388,7 @@ describe("convert", () => {
 					expect(fs.existsSync(path.join(destDir, "script/mainScene0.js"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "game.json"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "package.json"))).toBe(true);
+					expect(fs.existsSync(path.join(destDir, "thirdpary_license.txt"))).toBeFalsy();
 					expect(fs.readFileSync(path.join(destDir, "script/mainScene.js")).toString())
 						.toBe(fs.readFileSync(path.join(param.source, "script/mainScene.js")).toString());
 					const gameJson = JSON.parse(fs.readFileSync(path.join(destDir, "game.json")).toString());
@@ -401,6 +414,7 @@ describe("convert", () => {
 					expect(fs.existsSync(path.join(destDir, "text/test.json"))).toBe(false);
 					expect(fs.existsSync(path.join(destDir, "game.json"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "package.json"))).toBe(true);
+					expect(fs.existsSync(path.join(destDir, "thirdpary_license.txt"))).toBeFalsy();
 
 					const gameJson = JSON.parse(fs.readFileSync(path.join(destDir, "game.json")).toString());
 					expect(gameJson.assets.aez_bundle_main.path).toBe("script/aez_bundle_main.js");
@@ -439,6 +453,7 @@ describe("convert", () => {
 					expect(fs.existsSync(path.join(destDir, "script/bar.js"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "script/foo.js"))).toBe(false);
 					expect(fs.existsSync(path.join(destDir, "text/test.json"))).toBe(false);
+					expect(fs.existsSync(path.join(destDir, "thirdpary_license.txt"))).toBeFalsy(); // node_modules に LICENSE がないので false
 
 					const gameJson = JSON.parse(fs.readFileSync(path.join(destDir, "game.json")).toString());
 					expect(gameJson.assets.aez_bundle_main.path).toBe("script/aez_bundle_main.js");
@@ -476,6 +491,7 @@ describe("convert", () => {
 					expect(fs.existsSync(path.join(destDir, "image/akashic-cli.png"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "game.json"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "package.json"))).toBe(true);
+					expect(fs.existsSync(path.join(destDir, "thirdpary_license.txt"))).toBeFalsy();
 					const gameJson = JSON.parse(fs.readFileSync(path.join(destDir, "game.json")).toString());
 					const imgAsset = gameJson.assets.aez_bundle_main;
 					expect(imgAsset.type).toBe("image");
@@ -509,6 +525,7 @@ describe("convert", () => {
 			return convertGame(param)
 				.then(() => {
 					expect(fs.existsSync(path.join(destDir, "script/aez_bundle_main.js"))).toBe(true);
+					expect(fs.existsSync(path.join(destDir, "thirdpary_license.txt"))).toBeFalsy(); // node_modules に LICENSE がないので false
 					// bundle済みのファイルは残らない
 					expect(fs.existsSync(path.join(destDir, "script/main.js"))).toBe(false);
 					expect(fs.existsSync(path.join(destDir, "script/foo.js"))).toBe(false);
@@ -540,6 +557,7 @@ describe("convert", () => {
 					expect(fs.existsSync(path.join(destDir, "script/aez_bundle_main.js"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "game.json"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "package.json"))).toBe(true);
+					expect(fs.existsSync(path.join(destDir, "thirdpary_license.txt"))).toBeFalsy();
 					const gameJson = JSON.parse(fs.readFileSync(path.join(destDir, "game.json")).toString());
 					expect(gameJson.assets.aez_bundle_main.path).toBe("script/aez_bundle_main.js");
 					expect(gameJson.assets.aez_bundle_main.type).toBe("script");
@@ -602,6 +620,64 @@ describe("convert", () => {
 				});
 		});
 
+		it("thirdpary_license.txt by bundle", () => {
+			const param = {
+				source: path.resolve(fixturesDir, "simple_game_using_external"),
+				dest: destDir,
+				bundle: true
+			};
+			return convertGame(param)
+				.then(() => {
+					expect(fs.existsSync(path.join(destDir, "node_modules/external/index.js"))).toBeFalsy();
+					expect(fs.existsSync(path.join(destDir, "node_modules/external/package.json"))).toBeTruthy()
+					expect(fs.existsSync(path.join(destDir, "script/main.js"))).toBeFalsy();
+					expect(fs.existsSync(path.join(destDir, "thirdpary_license.txt"))).toBeTruthy();
+
+					const mainScript = fs.readFileSync(path.join(destDir, "script/aez_bundle_main.js")).toString().split("\n");
+					expect(mainScript[0]).toBe(LICENSE_TEXT_PREFIX.replace(/\r?\n/g, ""));
+
+					const license = fs.readFileSync(path.join(destDir, "thirdpary_license.txt")).toString().split(/\r?\n/g);
+					expect(license).toEqual(
+						[
+							"# external",
+							"",
+							"The MIT License (MIT)",
+							"",
+							"Copyright (c) 2024 hogehoge",
+							"",
+						]	
+					);
+				});
+		});
+
+		it("thirdpary_license.txt by no bundle", () => {
+			const param = {
+				source: path.resolve(fixturesDir, "simple_game_using_external"),
+				dest: destDir,
+			};
+			return convertGame(param)
+				.then(() => {
+					expect(fs.existsSync(path.join(destDir, "node_modules/external/index.js"))).toBeTruthy()
+					expect(fs.existsSync(path.join(destDir, "node_modules/external/package.json"))).toBeTruthy()
+					expect(fs.existsSync(path.join(destDir, "script/main.js"))).toBeTruthy()
+					expect(fs.existsSync(path.join(destDir, "thirdpary_license.txt"))).toBeTruthy()
+
+					const mainScript = fs.readFileSync(path.join(destDir, "script/main.js")).toString().split("\n");
+					expect(mainScript[0]).toBe(LICENSE_TEXT_PREFIX.replace(/\r?\n/g, ""));
+
+					const license = fs.readFileSync(path.join(destDir, "thirdpary_license.txt")).toString().split(/\r?\n/g);
+					expect(license).toEqual(
+						[
+							"# external",
+							"",
+							"The MIT License (MIT)",
+							"",
+							"Copyright (c) 2024 hogehoge",
+							"",
+						]	
+					);
+				});
+		});
 	});
 });
 

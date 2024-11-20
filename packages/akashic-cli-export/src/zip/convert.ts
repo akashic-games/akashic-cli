@@ -17,6 +17,7 @@ import { getFromHttps } from "./apiUtil.js";
 import { NICOLIVE_SIZE_LIMIT_GAME_JSON, NICOLIVE_SIZE_LIMIT_TOTAL_FILE } from "./constants.js";
 import * as gcu from "./GameConfigurationUtil.js";
 import { transformPackSmallImages } from "./transformPackImages.js";
+import * as liceneUtil from "./licenseUtil.js";
 
 // NOTE: 以下のパッケージは型定義が存在しないか JS と型定義の齟齬があるため `require()` を用いている
 const require = createRequire(import.meta.url);
@@ -120,7 +121,6 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 	_completeConvertGameParameterObject(param);
 	let gamejson: cmn.GameConfiguration;
 
-	cmn.Util.mkdirpSync(path.dirname(path.resolve(param.dest)));
 	return Promise.resolve()
 		.then(() => cmn.ConfigurationFile.read(path.join(param.source, "game.json"), param.logger))
 		.then(async (result: cmn.GameConfiguration) => {
@@ -216,13 +216,21 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 				});
 			}
 
+			const filePaths = bundleResult ? bundledFilePaths : Array.from(preservingFilePathSet);
+			const existLicense = await liceneUtil.writeLicenseTextFile(param.source, param.dest, filePaths);
+			const prefixCode = existLicense ? liceneUtil.LICENSE_TEXT_PREFIX : "";
+
 			preservingFilePathSet.forEach(p => {
 				const buff = fs.readFileSync(path.resolve(param.source, p));
 				cmn.Util.mkdirpSync(path.dirname(path.resolve(param.dest, p)));
-				const value: string | Buffer =
+				let value: string | Buffer =
 					(gcu.isScriptJsFile(p)) ? optimizeScript(encodeToString(buff).trim()) :
 					(param.minifyJson && gcu.isTextJsonFile(p)) ? JSON.stringify(JSON.parse(encodeToString(buff))) :
 					gcu.isMaybeTextFile(p) ? encodeToString(buff) : buff;
+
+				if (bundleResult === null && gamejson.main.includes(p)) {
+					value = prefixCode + value;
+				}
 				fs.writeFileSync(path.resolve(param.dest, p), value);
 			});
 			// コピーしなかったアセットやファイルをgame.jsonから削除する
@@ -270,7 +278,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			const entryPointAbsPath = path.resolve(param.dest, entryPointPath);
 			cmn.Util.mkdirpSync(path.dirname(entryPointAbsPath));
 			const code = optimizeScript(bundleResult.bundle);
-			fs.writeFileSync(entryPointAbsPath, code);
+			fs.writeFileSync(entryPointAbsPath, prefixCode + code);
 		})
 		.then(() => {
 			if (!param.packImage) return;
