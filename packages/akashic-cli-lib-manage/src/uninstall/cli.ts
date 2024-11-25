@@ -1,8 +1,7 @@
-import * as fs from "fs";
 import * as path from "path";
 import { createRequire } from "module";
-import type { CliConfigUninstall } from "@akashic/akashic-cli-commons";
-import { ConsoleLogger, CliConfigurationFile } from "@akashic/akashic-cli-commons";
+import type { CliConfigUninstall, CliConfiguration } from "@akashic/akashic-cli-commons";
+import { ConsoleLogger, FileSystem } from "@akashic/akashic-cli-commons";
 import { Command } from "commander";
 import { promiseUninstall } from "./uninstall.js";
 
@@ -32,23 +31,25 @@ commander
 	.option("-q, --quiet", "Suppress output")
 	.option("-p, --plugin", "Also remove from operationPlugins ", (x: string) => parseInt(x, 10));
 
-export function run(argv: string[]): void {
+export async function run(argv: string[]): Promise<void> {
 	commander.parse(argv);
 	const options = commander.opts();
-	CliConfigurationFile.read(path.join(options.cwd || process.cwd(), "akashic.config.js"), (error, configuration) => {
-		if (error) {
+	let configuration: CliConfiguration = { commandOptions: {} };
+	try { 
+		configuration = await FileSystem.readFile<CliConfiguration>(path.join(options.cwd || process.cwd(), "akashic.config.js"), "utf-8");
+	} catch (error) {
+		if (error.code !== "ENOENT") {
 			console.error(error);
 			process.exit(1);
 		}
-
-		const conf = configuration!.commandOptions?.uninstall ?? {};
-		cli({
-			args: commander.args ?? conf.args,
-			cwd: options.cwd ?? conf.cwd,
-			unlink: options.unlink ?? conf.unlink,
-			quiet: options.quiet ?? conf.quiet,
-			plugin: options.plugin ?? conf.plugin
-		});
+	}
+	const conf = configuration!.commandOptions?.uninstall ?? {};
+	cli({
+		args: commander.args ?? conf.args,
+		cwd: options.cwd ?? conf.cwd,
+		unlink: options.unlink ?? conf.unlink,
+		quiet: options.quiet ?? conf.quiet,
+		plugin: options.plugin ?? conf.plugin
 	});
 }
 
