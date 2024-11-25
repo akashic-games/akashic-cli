@@ -2,7 +2,8 @@ import * as fs from "fs";
 import * as path from "path";
 import * as util from "util";
 import type { CliConfigServe } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigServe";
-import type { CliConfigurationFile } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigurationFile";
+import type { CliConfiguration } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfiguration";
+import type { readFile } from "@akashic/akashic-cli-commons/lib/FileSystem";
 import type { SERVICE_TYPES } from "@akashic/akashic-cli-commons/lib/ServiceType";
 import { PlayManager, RunnerManager, setSystemLogger, getSystemLogger } from "@akashic/headless-driver";
 import * as bodyParser from "body-parser";
@@ -47,10 +48,10 @@ async function importChalk(): Promise<(typeof Chalk)["default"]> {
 	return (await eval("import('chalk')")).default;
 }
 
-async function importCommonsConfiguration(): Promise<(typeof CliConfigurationFile)> {
+async function importCommonsReadFile(): Promise<(typeof readFile)> {
 	// CommonJS 設定の TS では dynamic import が require() に変換されてしまうので、eval() で強引に import() する
 	// eslint-disable-next-line no-eval
-	return (await eval("import('@akashic/akashic-cli-commons/lib/CliConfig/CliConfigurationFile.js')")).CliConfigurationFile;
+	return (await eval("import('@akashic/akashic-cli-commons/lib/FileSystem.js')")).readFile;
 }
 
 async function importCommonsServiceType(): Promise<(typeof SERVICE_TYPES)> {
@@ -463,37 +464,39 @@ export async function run(argv: any): Promise<void> {
 	const options = commander.opts();
 
 	// eslint-disable-next-line @typescript-eslint/naming-convention
-	const CliConfigurationFile = await importCommonsConfiguration();
+	const readFile = await importCommonsReadFile();
 
-	CliConfigurationFile.read(path.join(options.cwd || process.cwd(), "akashic.config.js"), async (error, configuration) => {
-		if (error) {
+	let configuration: CliConfiguration = { commandOptions: {} };
+	try {
+		configuration = await readFile<CliConfiguration>(path.join(options.cwd || process.cwd(), "akashic.config.js"), "utf-8");
+	} catch (error) {
+		if (error.code !== "ENOENT") {
 			console.error(error);
 			process.exit(1);
 		}
-
-		const conf = configuration!.commandOptions?.serve ?? {};
-		const cliConfigParam: CliConfigServe = {
-			port: options.port ?? conf.port,
-			hostname: options.hostname ?? conf.hostname,
-			verbose: options.verbose ?? conf.verbose,
-			autoStart: options.autoStart ?? conf.autoStart,
-			targetService: options.targetService ?? conf.targetService,
-			debugPlaylog: options.debugPlaylog ?? conf.debugPlaylog,
-			debugUntrusted: options.debugUntrusted ?? conf.debugUntrusted,
-			debugTrustedIframe: options.debugTrustedIframe ?? conf.debugTrustedIframe,
-			debugProxyAudio: options.debugProxyAudio ?? conf.debugProxyAudio,
-			debugPauseActive: options.debugPauseActive ?? conf.debugPauseActive,
-			debugDisableFeatCheck: options.debugDisableFeatCheck ?? conf.debugDisableFeatCheck,
-			allowExternal: options.allowExternal ?? conf.allowExternal,
-			targetDirs: commander.args.length > 0 ? commander.args : (conf.targetDirs ?? [process.cwd()]),
-			openBrowser: options.openBrowser ?? conf.openBrowser,
-			preserveDisconnected: options.preserveDisconnected ?? conf.preserveDisconnected,
-			watch: options.watch ?? conf.watch,
-			experimentalOpen: options.experimentalOpen ?? conf.experimentalOpen,
-			sslCert: options.sslCert ?? conf.sslCert,
-			sslKey: options.sslKey ?? conf.sslKey,
-			corsAllowOrigin: options.corsAllowOrigin ?? conf.corsAllowOrigin
-		};
-		await cli(cliConfigParam, options);
-	});
+	}
+	const conf = configuration!.commandOptions?.serve ?? {};
+	const cliConfigParam: CliConfigServe = {
+		port: options.port ?? conf.port,
+		hostname: options.hostname ?? conf.hostname,
+		verbose: options.verbose ?? conf.verbose,
+		autoStart: options.autoStart ?? conf.autoStart,
+		targetService: options.targetService ?? conf.targetService,
+		debugPlaylog: options.debugPlaylog ?? conf.debugPlaylog,
+		debugUntrusted: options.debugUntrusted ?? conf.debugUntrusted,
+		debugTrustedIframe: options.debugTrustedIframe ?? conf.debugTrustedIframe,
+		debugProxyAudio: options.debugProxyAudio ?? conf.debugProxyAudio,
+		debugPauseActive: options.debugPauseActive ?? conf.debugPauseActive,
+		debugDisableFeatCheck: options.debugDisableFeatCheck ?? conf.debugDisableFeatCheck,
+		allowExternal: options.allowExternal ?? conf.allowExternal,
+		targetDirs: commander.args.length > 0 ? commander.args : (conf.targetDirs ?? [process.cwd()]),
+		openBrowser: options.openBrowser ?? conf.openBrowser,
+		preserveDisconnected: options.preserveDisconnected ?? conf.preserveDisconnected,
+		watch: options.watch ?? conf.watch,
+		experimentalOpen: options.experimentalOpen ?? conf.experimentalOpen,
+		sslCert: options.sslCert ?? conf.sslCert,
+		sslKey: options.sslKey ?? conf.sslKey,
+		corsAllowOrigin: options.corsAllowOrigin ?? conf.corsAllowOrigin
+	};
+	await cli(cliConfigParam, options);
 }
