@@ -7,6 +7,7 @@ export function readFile(path: string, options: undefined | null): Promise<Buffe
 export function readFile(path: string, options: BufferEncoding): Promise<string>;
 export function readFile(path: string, options: BufferEncoding | undefined | null): Promise<string | Buffer>;
 export function readFile(path: string): Promise<Buffer>;
+export function readFile<T>(path: string, options: BufferEncoding  | undefined | null): Promise<T>;
 export function readFile(filepath: string, options: BufferEncoding | undefined | null = null): Promise<string | Buffer> {
 	return new Promise<string | Buffer>((resolve, reject) => {
 		fs.readFile(filepath, options, (err, data) => {
