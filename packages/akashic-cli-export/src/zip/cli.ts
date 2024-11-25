@@ -1,7 +1,7 @@
 import { createRequire } from "module";
 import * as path from "path";
-import type { CliConfigExportZip} from "@akashic/akashic-cli-commons";
-import { ConsoleLogger, CliConfigurationFile, SERVICE_TYPES } from "@akashic/akashic-cli-commons";
+import type { CliConfigExportZip, CliConfiguration} from "@akashic/akashic-cli-commons";
+import { ConsoleLogger, FileSystem, SERVICE_TYPES } from "@akashic/akashic-cli-commons";
 import { Command } from "commander";
 import { promiseExportZip } from "./exportZip.js";
 
@@ -89,45 +89,47 @@ commander
 	.option("--resolve-akashic-runtime", "Fill akashic-runtime field in game.json")
 	.option("--preserve-package-json", "Preserve package.json even if --strip");
 
-export function run(argv: string[]): void {
+export async function run(argv: string[]): Promise<void> {
 	// Commander の制約により --strip と --no-strip 引数を両立できないため、暫定対応として Commander 前に argv を処理する
 	const argvCopy = dropDeprecatedArgs(argv);
 	commander.parse(argvCopy);
 	const options = commander.opts();
 
-	CliConfigurationFile.read(path.join(options.cwd || process.cwd(), "akashic.config.js"), (error, configuration) => {
-		if (error) {
+	let configuration: CliConfiguration = { commandOptions: {} };
+	try { 
+		configuration = await FileSystem.readFile<CliConfiguration>(path.join(options.cwd || process.cwd(), "akashic.config.js"), "utf-8");
+	} catch (error) {
+		if (error.code !== "ENOENT") {
 			console.error(error);
 			process.exit(1);
 		}
+	}
+	if (options.targetService && !SERVICE_TYPES.includes(options.targetService)) {
+		console.error("Invalid --target-service option argument: " + options.targetService);
+		process.exit(1);
+	}
 
-		if (options.targetService && !SERVICE_TYPES.includes(options.targetService)) {
-			console.error("Invalid --target-service option argument: " + options.targetService);
-			process.exit(1);
-		}
-
-		const conf = configuration!.commandOptions?.export?.zip ?? {};
-		cli({
-			cwd: options.cwd ?? conf.cwd,
-			quiet: options.quiet ?? conf.quiet,
-			output: options.output ?? conf.output,
-			force: options.force ?? conf.force,
-			strip: options.strip ?? conf.strip,
-			minify: options.minify ?? conf.minify,
-			minifyJs: options.minifyJs ?? conf.minifyJs,
-			minifyJson: options.minifyJson ?? conf.minifyJson,
-			terser: options.terser ?? conf.terser,
-			packImage: options.packImage ?? conf.packImage,
-			hashFilename: options.hashFilename ?? conf.hashFilename,
-			bundle: options.bundle ?? conf.bundle,
-			babel: options.es5Downpile ?? conf.babel,
-			omitEmptyJs: options.omitEmptyJs ?? conf.omitEmptyJs,
-			omitUnbundledJs: options.omitUnbundledJs ?? conf.omitUnbundledJs,
-			targetService: options.targetService ?? conf.targetService,
-			nicolive: options.nicolive ?? conf.nicolive,
-			resolveAkashicRuntime: options.resolveAkashicRuntime ?? conf.resolveAkashicRuntime,
-			preservePackageJson: options.preservePackageJson ?? options.preservePackageJson
-		});
+	const conf = configuration!.commandOptions?.export?.zip ?? {};
+	cli({
+		cwd: options.cwd ?? conf.cwd,
+		quiet: options.quiet ?? conf.quiet,
+		output: options.output ?? conf.output,
+		force: options.force ?? conf.force,
+		strip: options.strip ?? conf.strip,
+		minify: options.minify ?? conf.minify,
+		minifyJs: options.minifyJs ?? conf.minifyJs,
+		minifyJson: options.minifyJson ?? conf.minifyJson,
+		terser: options.terser ?? conf.terser,
+		packImage: options.packImage ?? conf.packImage,
+		hashFilename: options.hashFilename ?? conf.hashFilename,
+		bundle: options.bundle ?? conf.bundle,
+		babel: options.es5Downpile ?? conf.babel,
+		omitEmptyJs: options.omitEmptyJs ?? conf.omitEmptyJs,
+		omitUnbundledJs: options.omitUnbundledJs ?? conf.omitUnbundledJs,
+		targetService: options.targetService ?? conf.targetService,
+		nicolive: options.nicolive ?? conf.nicolive,
+		resolveAkashicRuntime: options.resolveAkashicRuntime ?? conf.resolveAkashicRuntime,
+		preservePackageJson: options.preservePackageJson ?? options.preservePackageJson
 	});
 }
 
