@@ -1,0 +1,12 @@
+
+.niconico-devtool {
+  flex: 1 1 auto;
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+.page {
+  flex: 1 1 auto;
+  display: flex;
+  border-left: 1px solid #eee;
+}
