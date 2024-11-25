@@ -1,23 +1,24 @@
 import * as path from "path";
 import { createRequire } from "module";
-import type { Logger, CliConfigStat } from "@akashic/akashic-cli-commons";
-import { ConsoleLogger, ConfigurationFile, CliConfigurationFile } from "@akashic/akashic-cli-commons";
+import type { Logger, CliConfigStat, GameConfiguration, CliConfiguration } from "@akashic/akashic-cli-commons";
+import { ConsoleLogger, FileSystem } from "@akashic/akashic-cli-commons";
 import { Command } from "commander";
 import * as stat from "./stat.js";
 
-function statSize(logger: Logger, param: CliConfigStat): void {
+async function statSize(logger: Logger, param: CliConfigStat): Promise<void> {
 	const basepath = param.cwd || process.cwd();
-	ConfigurationFile.read(path.join(basepath, "game.json"), logger)
-		.then(game =>
-			stat.size({
-				logger,
-				basepath,
-				game,
-				limit: param.limit,
-				raw: !!param.raw
-			})
-		)
-		.catch(err => errorExit(logger, err));
+	try {
+		const game = await FileSystem.readJSON<GameConfiguration>(path.join(basepath, "game.json"));
+		await stat.size({
+			logger,
+			basepath,
+			game,
+			limit: param.limit,
+			raw: !!param.raw
+		});
+	} catch (err: any) {
+		errorExit(logger, err.message);
+	}
 }
 
 function errorExit(logger: Logger, message: string): void {
@@ -51,22 +52,24 @@ function cli(param: CliConfigStat): void {
 	}
 }
 
-export function run(argv: string[]): void {
+export async function run(argv: string[]): Promise<void> {
 	commander.parse(argv);
 	const options = commander.opts();
-	CliConfigurationFile.read(path.join(options.cwd || process.cwd(), "akashic.config.js"), (error, configuration) => {
-		if (error) {
+	let configuration: CliConfiguration = { commandOptions: {} };
+	try {
+		configuration = await FileSystem.readFile<CliConfiguration>(path.join(options.cwd || process.cwd(), "akashic.config.js"), "utf-8");
+	} catch (error: any) {
+		if (error.code !== "ENOENT") {
 			console.error(error);
 			process.exit(1);
 		}
-
-		const conf = configuration!.commandOptions?.stat ?? {};
-		cli({
-			args: commander.args ?? conf.args,
-			cwd: options.cwd ?? conf.cwd,
-			quiet: options.quiet ?? conf.quiet,
-			limit: options.limit ?? conf.limit,
-			raw: options.raw ?? conf.raw
-		});
+	}
+	const conf = configuration!.commandOptions?.stat ?? {};
+	cli({
+		args: commander.args ?? conf.args,
+		cwd: options.cwd ?? conf.cwd,
+		quiet: options.quiet ?? conf.quiet,
+		limit: options.limit ?? conf.limit,
+		raw: options.raw ?? conf.raw
 	});
 }
