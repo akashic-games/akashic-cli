@@ -1,5 +1,9 @@
 import * as fs from "fs";
 import * as editorconfig from "editorconfig";
+import { createRequire } from "module";
+import { Util } from "./index.js";
+
+const require = createRequire(import.meta.url);
 
 export type WriteDataFormatter<T> = (content: T) => string;
 
@@ -7,7 +11,6 @@ export function readFile(path: string, options: undefined | null): Promise<Buffe
 export function readFile(path: string, options: BufferEncoding): Promise<string>;
 export function readFile(path: string, options: BufferEncoding | undefined | null): Promise<string | Buffer>;
 export function readFile(path: string): Promise<Buffer>;
-export function readFile<T>(path: string, options: BufferEncoding  | undefined | null): Promise<T>;
 export function readFile(filepath: string, options: BufferEncoding | undefined | null = null): Promise<string | Buffer> {
 	return new Promise<string | Buffer>((resolve, reject) => {
 		fs.readFile(filepath, options, (err, data) => {
@@ -57,5 +60,32 @@ export function unlink(filepath: string): Promise<void> {
 		fs.unlink(filepath, err => {
 			return void (err ? reject(err) : resolve());
 		});
+	});
+}
+
+export function readJS(path: string): Promise<unknown> {
+	return new Promise<string | Buffer>((resolve, reject) => {
+		try {
+			const js = require(path);
+			delete require.cache[Util.requireResolve(path)];
+			resolve(js);
+		} catch(err) { 
+			reject(err);
+		}
+	});
+}
+
+export async function readJSWithDefault<T>(path: string, defaultValue: T): Promise<T> {
+	return new Promise<T>(async (resolve, reject) => {
+		try { 
+			const js = await readJS(path);
+			resolve(js as T);
+
+		} catch (err) {
+			if (err.code !== "MODULE_NOT_FOUND") {
+				return reject(err);
+			}
+			resolve(defaultValue);
+		}
 	});
 }
