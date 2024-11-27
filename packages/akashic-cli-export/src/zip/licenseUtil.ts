@@ -44,7 +44,7 @@ async function makeLicenseInfo(source: string, pkgJsonPaths: string[]): Promise<
         // TODO: LICENSE-LGPL のようなファイルは機械的に扱えないので警告を出すようにする。 LICENSE(license) に任意の拡張子がついたものを対象とする。
         const files = fs.readdirSync(path.dirname(pkgJsonPath));
         const licenseFile = files.find((file) => /LICENSE/.test(file));
-        if (!licenseFile) return;
+        if (!licenseFile) continue;
         const licensePath = path.join(path.dirname(pkgJsonPath), licenseFile);
 
         if (fs.existsSync(licensePath)) {

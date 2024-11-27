@@ -1,11 +1,12 @@
 import { createRequire } from "module";
 import * as path from "path";
 import type { CliConfigInit } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigInit.js";
-import { CliConfigurationFile } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigurationFile.js";
+import type { CliConfiguration } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfiguration.js";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger.js";
 import { Command } from "commander";
 import { promiseInit } from "./init/init.js";
 import { listTemplates } from "./list/listTemplates.js";
+import { readJSWithDefault } from "@akashic/akashic-cli-commons/lib/FileSystem.js";
 
 async function cli(param: CliConfigInit): Promise<void> {
 	const logger = new ConsoleLogger({ quiet: param.quiet });
@@ -51,25 +52,24 @@ commander
 	.option("-f, --force", "Overwrite existing files")
 	.option("-y, --yes", "Initialize without user input");
 
-export function run(argv: string[]): void {
+export async function run(argv: string[]): Promise<void> {
 	commander.parse(argv);
 	const options = commander.opts();
-
-	CliConfigurationFile.read(path.join(options.cwd || process.cwd(), "akashic.config.js"), async (error, configuration) => {
-		if (error) {
-			console.error(error);
-			process.exit(1);
-		}
-
-		const conf = configuration!.commandOptions?.init ?? {};
-		await cli({
-			cwd: options.cwd ?? conf.cwd,
-			quiet: options.quiet ?? conf.quiet,
-			repository: options.repository,
-			type: options.type ?? conf.type,
-			list: options.list ?? conf.list,
-			yes: options.yes ?? conf.yes,
-			force: options.force ?? conf.force
-		});
+	let configuration;
+	try { 
+		configuration = await readJSWithDefault<CliConfiguration>(path.join(options.cwd || process.cwd(), "akashic.config.js"), { commandOptions: {} });
+	} catch (error) {
+		console.error(error);
+		process.exit(1);
+	}
+	const conf = configuration!.commandOptions?.init ?? {};
+	await cli({
+		cwd: options.cwd ?? conf.cwd,
+		quiet: options.quiet ?? conf.quiet,
+		repository: options.repository,
+		type: options.type ?? conf.type,
+		list: options.list ?? conf.list,
+		yes: options.yes ?? conf.yes,
+		force: options.force ?? conf.force
 	});
 }
