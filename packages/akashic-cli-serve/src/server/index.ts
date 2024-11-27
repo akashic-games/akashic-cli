@@ -3,7 +3,7 @@ import * as path from "path";
 import * as util from "util";
 import type { CliConfigServe } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigServe";
 import type { CliConfiguration } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfiguration";
-import type { readFile } from "@akashic/akashic-cli-commons/lib/FileSystem";
+import type { readJSWithDefault } from "@akashic/akashic-cli-commons/lib/FileSystem";
 import type { SERVICE_TYPES } from "@akashic/akashic-cli-commons/lib/ServiceType";
 import { PlayManager, RunnerManager, setSystemLogger, getSystemLogger } from "@akashic/headless-driver";
 import * as bodyParser from "body-parser";
@@ -48,10 +48,10 @@ async function importChalk(): Promise<(typeof Chalk)["default"]> {
 	return (await eval("import('chalk')")).default;
 }
 
-async function importCommonsReadFile(): Promise<(typeof readFile)> {
+async function importCommonsReadJSWithDefault(): Promise<(typeof readJSWithDefault)> {
 	// CommonJS 設定の TS では dynamic import が require() に変換されてしまうので、eval() で強引に import() する
 	// eslint-disable-next-line no-eval
-	return (await eval("import('@akashic/akashic-cli-commons/lib/FileSystem.js')")).readFile;
+	return (await eval("import('@akashic/akashic-cli-commons/lib/FileSystem.js')")).readJSWithDefault;
 }
 
 async function importCommonsServiceType(): Promise<(typeof SERVICE_TYPES)> {
@@ -464,16 +464,17 @@ export async function run(argv: any): Promise<void> {
 	const options = commander.opts();
 
 	// eslint-disable-next-line @typescript-eslint/naming-convention
-	const readFile = await importCommonsReadFile();
+	const readJSWithDefault = await importCommonsReadJSWithDefault();
 
-	let configuration: CliConfiguration = { commandOptions: {} };
+	let configuration;
 	try {
-		configuration = await readFile<CliConfiguration>(path.join(options.cwd || process.cwd(), "akashic.config.js"), "utf-8");
+		configuration = await readJSWithDefault<CliConfiguration>(
+			path.join(options.cwd || process.cwd(), "akashic.config.js"),
+			{ commandOptions: {} }
+		);
 	} catch (error) {
-		if (error.code !== "ENOENT") {
-			console.error(error);
-			process.exit(1);
-		}
+		console.error(error);
+		process.exit(1);
 	}
 	const conf = configuration!.commandOptions?.serve ?? {};
 	const cliConfigParam: CliConfigServe = {

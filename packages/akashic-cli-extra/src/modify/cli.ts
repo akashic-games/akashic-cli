@@ -26,14 +26,12 @@ function defineCommand(commandName: string): void {
 		.option("-C, --cwd <dir>", "The directory incluedes game.json")
 		.option("-q, --quiet", "Suppress output")
 		.action(async (value: string, opts: CliConfigModify = {}) => {
-			let configuration: CliConfiguration = { commandOptions: {} };
+			let configuration;
 			try { 
-				configuration = await FileSystem.readFile<CliConfiguration>(path.join(opts.cwd || process.cwd(), "akashic.config.js"), "utf-8");
-			} catch (error: any) {
-				if (error.code !== "ENOENT") {
-					console.error(error);
-					process.exit(1);
-				}
+				configuration = await FileSystem.readJSWithDefault<CliConfiguration>(path.join(opts.cwd || process.cwd(), "akashic.config.js"), { commandOptions: {} });
+			} catch (error) {
+				console.error(error);
+				process.exit(1);
 			}
 			const conf = configuration!.commandOptions?.modify ?? {};
 			cliBasicParameter(commandName, value, {

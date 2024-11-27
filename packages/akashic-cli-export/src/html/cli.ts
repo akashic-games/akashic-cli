@@ -92,14 +92,12 @@ export async function run(argv: string[]): Promise<void> {
 	commander.parse(argvCopy);
 	const options = commander.opts();
 
-	let configuration: CliConfiguration = { commandOptions: {} };
+	let configuration;
 	try { 
-		configuration = await FileSystem.readFile<CliConfiguration>(path.join(options.cwd || process.cwd(), "akashic.config.js"), "utf-8");
+		configuration = await FileSystem.readJSWithDefault<CliConfiguration>(path.join(options.cwd || process.cwd(), "akashic.config.js"), { commandOptions: {} });
 	} catch (error) {
-		if (error.code !== "ENOENT") {
-			console.error(error);
-			process.exit(1);
-		}
+		console.error(error);
+		process.exit(1);
 	}
 	if (options.debugOverrideEngineFiles) {
 		if (!/^engineFilesV\d+_\d+_\d+.*\.js$/.test(path.basename(options.debugOverrideEngineFiles))) {

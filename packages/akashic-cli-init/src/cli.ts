@@ -6,7 +6,7 @@ import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger.js
 import { Command } from "commander";
 import { promiseInit } from "./init/init.js";
 import { listTemplates } from "./list/listTemplates.js";
-import { readFile } from "@akashic/akashic-cli-commons/lib/FileSystem.js";
+import { readJSWithDefault } from "@akashic/akashic-cli-commons/lib/FileSystem.js";
 
 async function cli(param: CliConfigInit): Promise<void> {
 	const logger = new ConsoleLogger({ quiet: param.quiet });
@@ -55,14 +55,12 @@ commander
 export async function run(argv: string[]): Promise<void> {
 	commander.parse(argv);
 	const options = commander.opts();
-	let configuration: CliConfiguration = { commandOptions: {} };
+	let configuration;
 	try { 
-		configuration = await readFile<CliConfiguration>(path.join(options.cwd || process.cwd(), "akashic.config.js"), "utf-8");
+		configuration = await readJSWithDefault<CliConfiguration>(path.join(options.cwd || process.cwd(), "akashic.config.js"), { commandOptions: {} });
 	} catch (error) {
-		if (error.code !== "ENOENT") {
-			console.error(error);
-			process.exit(1);
-		}
+		console.error(error);
+		process.exit(1);
 	}
 	const conf = configuration!.commandOptions?.init ?? {};
 	await cli({

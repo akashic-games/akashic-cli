@@ -9,7 +9,7 @@ import { scanNodeModules } from "./scanNodeModules.js";
 import type { AssetTargetType } from "./types.js";
 import { watchAsset } from "./watchAsset.js";
 import type { CliConfiguration } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfiguration.js";
-import { readFile } from "@akashic/akashic-cli-commons/lib/FileSystem.js";
+import { readJSWithDefault } from "@akashic/akashic-cli-commons/lib/FileSystem.js";
 
 const require = createRequire(import.meta.url);
 const { version } = require("../package.json");
@@ -37,15 +37,13 @@ commander
 	.option("--text-asset-dir <dir...>", "specify TextAsset directory")
 	.option("--text-asset-extension <extension...>", "specify TextAsset extension")
 	.action(async (target: AssetTargetType, opts: CliConfigScanAsset = {}) => {
-		let configuration: CliConfiguration = { commandOptions: {} };
+		let configuration;
 		try { 
-			configuration = await readFile<CliConfiguration>(path.join(opts.cwd || process.cwd(), "akashic.config.js"), "utf-8");
+			configuration = await readJSWithDefault<CliConfiguration>(path.join(opts.cwd || process.cwd(), "akashic.config.js"), { commandOptions: {} });
 		} catch (error) {
-			if (error.code !== "ENOENT") {
-				console.error(error);
-				process.exit(1);
-			}
-		}		
+			console.error(error);
+			process.exit(1);
+		}
 		const conf = configuration!.commandOptions?.scan?.asset ?? {};
 		const logger = new ConsoleLogger({ quiet: opts.quiet ?? conf.quiet });
 		const assetScanDirectoryTable = {

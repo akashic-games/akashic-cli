@@ -55,14 +55,12 @@ function cli(param: CliConfigStat): void {
 export async function run(argv: string[]): Promise<void> {
 	commander.parse(argv);
 	const options = commander.opts();
-	let configuration: CliConfiguration = { commandOptions: {} };
+	let configuration;
 	try {
-		configuration = await FileSystem.readFile<CliConfiguration>(path.join(options.cwd || process.cwd(), "akashic.config.js"), "utf-8");
-	} catch (error: any) {
-		if (error.code !== "ENOENT") {
-			console.error(error);
-			process.exit(1);
-		}
+		configuration = await FileSystem.readJSWithDefault<CliConfiguration>(path.join(options.cwd || process.cwd(), "akashic.config.js"), { commandOptions: {} });
+	} catch (error) {
+		console.error(error);
+		process.exit(1);
 	}
 	const conf = configuration!.commandOptions?.stat ?? {};
 	cli({
