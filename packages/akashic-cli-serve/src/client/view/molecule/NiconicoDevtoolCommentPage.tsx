@@ -1,19 +1,25 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import type { NicoliveComment } from "../../../server/domain/nicoliveComment/NicoliveCommentPlugin";
+import type { NicoliveComment } from "../../../common/types/NicoliveCommentPlugin";
+import type {
+	NiconicoDevtoolCommentPageSenderLimitation,
+	NiconicoDevtoolCommentPageSenderType
+} from "../../store/DevtoolUiCommentPageStore";
 import { ToolChoiceButton, type ToolChoiceButtonItem } from "../atom/ToolChoiceButton";
 import styles from "./NiconicoDevtoolCommentPage.module.css";
 
-export type NiconicoDevtoolCommentPageSenderType = "Anonymous" | "Operator" | "Named";
-
-export interface NiconicoDevtoolCommentPageProps {
+export interface NiconicoDevtoolCommentPagePropsModel {
 	comments: NicoliveComment[];
 	templates: string[];
 	isEnabled: boolean;
 	senderType: NiconicoDevtoolCommentPageSenderType;
-	isSenderTypeFixed: boolean;
+	senderLimitation: NiconicoDevtoolCommentPageSenderLimitation;
 	commandInput: string;
 	commentInput: string;
+}
+
+export interface NiconicoDevtoolCommentPageProps {
+	model: NiconicoDevtoolCommentPagePropsModel;
 	onCommentInputChanged: (content: string) => void;
 	onCommandInputChanged: (content: string) => void;
 	onSenderTypeChanged: (type: NiconicoDevtoolCommentPageSenderType) => void;
@@ -21,30 +27,24 @@ export interface NiconicoDevtoolCommentPageProps {
 	onClickTemplate: (index: number) => void;
 }
 
-const commentModeChoiceItems: (ToolChoiceButtonItem & { type: NiconicoDevtoolCommentPageSenderType })[] = [
-	{ label: "Anonyomous", title: "匿名 (なふだ OFF) でコメント", type: "Anonymous" },
-	{ label: "Named", title: "非匿名 (なふだ ON) でコメント", type: "Named" },
-	{ label: "Operator", title: "配信者としてコメント", type: "Operator" },
+const commentModeChoiceItemsBase: (ToolChoiceButtonItem & { type: NiconicoDevtoolCommentPageSenderType })[] = [
+	{ label: "Anonyomous", title: "匿名 (なふだ OFF) でコメント", type: "anonymous" },
+	{ label: "Named", title: "非匿名 (なふだ ON) でコメント", type: "named" },
+	{ label: "Operator", title: "配信者としてコメント", type: "operator" },
 ];
 
+const commentModeChoiceItemsTable: { [limitation in NiconicoDevtoolCommentPageSenderLimitation]: typeof commentModeChoiceItemsBase } = {
+	operator: commentModeChoiceItemsBase.map(item => ({ ...item, disabled: item.type !== "operator" })),
+	audience: commentModeChoiceItemsBase.map(item => ({ ...item, disabled: item.type === "operator" })),
+	none: commentModeChoiceItemsBase,
+};
+
 export const NiconicoDevtoolCommentPage = observer(function NiconicoDevtoolCommentPage(props: NiconicoDevtoolCommentPageProps) {
-	const {
-		comments,
-		templates,
-		isEnabled,
-		senderType,
-		isSenderTypeFixed,
-		commandInput,
-		commentInput,
-		onCommandInputChanged,
-		onCommentInputChanged,
-		onSenderTypeChanged,
-		onClickSend,
-		onClickTemplate,
-	} = props;
+	const { model, onCommandInputChanged, onCommentInputChanged, onSenderTypeChanged, onClickSend, onClickTemplate } = props;
+	const { comments, templates, isEnabled, senderType, senderLimitation, commandInput, commentInput } = model;
 
 	const handleChoiceSenderType = React.useCallback((index: number) => {
-		onSenderTypeChanged(commentModeChoiceItems[index].type);
+		onSenderTypeChanged(commentModeChoiceItemsBase[index].type);
 	}, [onSenderTypeChanged]);
 
 	return (
@@ -116,9 +116,9 @@ export const NiconicoDevtoolCommentPage = observer(function NiconicoDevtoolComme
 				<div className={styles.mode}>
 					As:
 					<ToolChoiceButton
-						items={commentModeChoiceItems}
-						pushedIndex={commentModeChoiceItems.findIndex(item => item.type === senderType)}
-						disabled={isSenderTypeFixed || !isEnabled}
+						items={commentModeChoiceItemsTable[senderLimitation]}
+						pushedIndex={commentModeChoiceItemsTable[senderLimitation].findIndex(item => item.type === senderType)}
+						disabled={!isEnabled}
 						onClick={handleChoiceSenderType}
 					/>
 				</div>

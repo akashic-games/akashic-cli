@@ -15,6 +15,7 @@
   overflow-x: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  user-select: none;
 }
 
 .page-selector-list li:hover {

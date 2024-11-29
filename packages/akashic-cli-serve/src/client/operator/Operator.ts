@@ -1,4 +1,6 @@
+import type { NormalizedSandboxConfiguration } from "@akashic/sandbox-configuration";
 import { isServiceTypeNicoliveLike } from "../../common/targetServiceUtil";
+import type { SandboxConfigExternalDefinition } from "../../common/types/NicoliveCommentConfig";
 import type { Player } from "../../common/types/Player";
 import type { PlayBroadcastTestbedEvent } from "../../common/types/TestbedEvent";
 import type { GameViewManager } from "../akashic/GameViewManager";
@@ -6,6 +8,7 @@ import type { PlayerInfoResolverResultMessage } from "../akashic/plugin/CoeLimit
 import { CoeLimitedPlugin } from "../akashic/plugin/CoeLimitedPlugin";
 import type { CreateCoeLocalInstanceParameterObject } from "../akashic/plugin/CoePlugin";
 import { CoePlugin } from "../akashic/plugin/CoePlugin";
+import { NicoliveCommentClientPlugin } from "../akashic/plugin/NicoliveCommentClientPlugin";
 import { NicoPlugin } from "../akashic/plugin/NicoPlugin";
 import { SendPlugin } from "../akashic/plugin/SendPlugin";
 import { apiClient } from "../api/apiClientInstance";
@@ -77,9 +80,10 @@ export class Operator {
 				play = await this._createServerLoop(loc, initialJoinPlayer, false, false); // TODO: (起動時の最初のプレイで) audioState を指定する方法
 			}
 		}
-		await this.setCurrentPlay(play, query.mode === "replay");
+		const isReplay = query.mode === "replay";
+		await this.setCurrentPlay(play, isReplay);
 
-		if (query.mode === "replay") {
+		if (isReplay) {
 			if (query.replayResetAge != null) {
 				await this.localInstance.resetByAge(query.replayResetAge);
 			}
@@ -120,23 +124,31 @@ export class Operator {
 
 		store.setCurrentPlay(play);
 
-		let argument = undefined;
-		if (isServiceTypeNicoliveLike(store.targetService)) {
-			let isBroadcaster = false;
-			if (previousPlay) {
-				isBroadcaster = previousPlay.joinedPlayerTable.has(store.player!.id);
-			} else {
-				isBroadcaster = play.joinedPlayerTable.size === 0;
-			}
-			argument = this._createInstanceArgumentForNicolive(isBroadcaster);
-		}
+		const isServiceNicolive = isServiceTypeNicoliveLike(store.targetService);
+		const isNicoliveBroadcaster = isServiceNicolive && (
+			previousPlay?.joinedPlayerTable.has(store.player!.id) ?? // 前プレイがあれば引き継ぐ
+			(play.joinedPlayerTable.size === 0) // なければ最初のプレイヤーが放送者
+		);
 
+		let argument = undefined;
 		if (query.argumentsValue) {
 			argument = JSON.parse(query.argumentsValue);
 			store.startupScreenUiStore.setInstanceArgumentEditContent(query.argumentsValue, true);
 		} else if (query.argumentsName && !!store.currentPlay!.content.argumentsTable[query.argumentsName]) {
 			argument = JSON.parse(store.currentPlay!.content.argumentsTable[query.argumentsName]);
 			this.ui.selectInstanceArguments(query.argumentsName, true);
+		} else if (isServiceNicolive) {
+			argument = this._createInstanceArgumentForNicolive(isNicoliveBroadcaster);
+		}
+
+		if (isServiceNicolive) {
+			const sandboxConfig = play.content.sandboxConfig as NormalizedSandboxConfiguration & SandboxConfigExternalDefinition;
+			const commentTemplateNames = Object.keys(sandboxConfig.external?.nicoliveComment?.templates || []);
+			this.devtool.resetCommentPage(
+				commentTemplateNames,
+				isNicoliveBroadcaster ? "operator" : "anonymous",
+				isServiceNicolive ? (isNicoliveBroadcaster ? "operator" : "audience") : "none",
+			);
 		}
 
 		if (store.appOptions.autoStart) {
@@ -173,6 +185,9 @@ export class Operator {
 			this.store.profilerStore.pushProfilerValueResult("frame", value.frameTime);
 			this.store.profilerStore.pushProfilerValueResult("rendering", value.renderingTime);
 		});
+
+		this.store.devtoolUiStore.initTotalTimeLimit(play!.content.preferredSessionParameters.totalTimeLimit!);
+		this.devtool.setupNiconicoDevtoolValueWatcher();
 
 		if (params != null && params.joinsSelf) {
 			store.currentPlay!.join(store.player!.id, store.player!.name);
@@ -271,7 +286,18 @@ export class Operator {
 
 	//  TODO: 複数のコンテンツ対応。引数の contentLocator は複数コンテンツに対応していないが暫定とする
 	private async _initializePlugins(contentLocator: ClientContentLocator): Promise<void> {
+		const commentPlugin = new NicoliveCommentClientPlugin();
+		commentPlugin.onStartStop.add(started => {
+			this.devtool.setCommentPageIsEnabled(started);
+			if (started) {
+				this.devtool.startWatchNicoliveComment();
+			} else {
+				this.devtool.stopWatchNicoliveComment();
+			}
+		});
+
 		this.gameViewManager.registerExternalPlugin(new NicoPlugin());
+		this.gameViewManager.registerExternalPlugin(commentPlugin);
 		this.gameViewManager.registerExternalPlugin(new SendPlugin());
 		this.gameViewManager.registerExternalPlugin(new CoePlugin({
 			onLocalInstanceCreate: this._createLocalSessionInstance,

@@ -1,4 +1,5 @@
 import type * as amf from "@akashic/amflow";
+import type * as realPlaylog from "@akashic/playlog";
 import { Trigger } from "@akashic/trigger";
 import type { EDumpItem } from "../common/types/EDumpItem";
 import type { ProfilerValue } from "../common/types/Profiler";
@@ -51,9 +52,14 @@ function makeEDumpItem(e: ae.ELike): EDumpItem {
 	};
 }
 
+export interface OnTickArguments {
+	game: agv.GameLike;
+	events: realPlaylog.Event[] | undefined;
+}
+
 export class ServeGameContent {
 	readonly agvGameContent: agv.GameContent;
-	onTick: Trigger<agv.GameLike>;
+	onTick: Trigger<OnTickArguments>;
 	onReset: Trigger<amf.StartPoint>;
 	onWarn: Trigger<RuntimeWarning>;
 	private _game: agv.GameLike;
@@ -65,9 +71,9 @@ export class ServeGameContent {
 		this._game = null!;
 		this._gameDriver = null!;
 		this._highlightedEntityId = null;
-		this.onTick = new Trigger<agv.GameLike>();
-		this.onReset = new Trigger<amf.StartPoint>();
-		this.onWarn = new Trigger<RuntimeWarning>();
+		this.onTick = new Trigger();
+		this.onReset = new Trigger();
+		this.onWarn = new Trigger();
 	}
 
 	get id(): number {
@@ -114,9 +120,12 @@ export class ServeGameContent {
 		};
 
 		const tickOriginal = game.tick;
-		game.tick = function (_advanceAge: boolean, _omittedTickCount?: number, _events?: playlog.EventLike[]) {
-			self.onTick.fire(game);
-			return tickOriginal.apply(this, [_advanceAge, _omittedTickCount, _events]);
+		game.tick = function (advanceAge: boolean, omittedTickCount?: number, events?: playlog.EventLike[]) {
+			// EventLike は AkashicGameViewWeb.d.ts の記述の都合上導入した型なので、外部に渡す時は本物の playlog に読み替える
+			const evs = events as unknown as realPlaylog.Event[] | undefined;
+			self.onTick.fire({ game, events: evs });
+
+			return tickOriginal.call(this, advanceAge, omittedTickCount, events);
 		};
 
 		const gameDriver = this._gameDriver;

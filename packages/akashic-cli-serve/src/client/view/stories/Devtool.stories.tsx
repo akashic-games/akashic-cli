@@ -3,7 +3,7 @@ import { observable } from "mobx";
 import { observer } from "mobx-react";
 import * as React from "react";
 import type { EDumpItem } from "../../common/types/EDumpItem";
-import type { NiconicoDevtoolRankingPageProps } from "../molecule/NiconicoDevtoolRankingPage";
+import type { NiconicoDevtoolProps } from "../molecule/NiconicoDevtool";
 import type { PlaybackDevtoolProps } from "../molecule/PlaybackDevtool";
 import { Devtool } from "../organism/Devtool";
 
@@ -31,25 +31,47 @@ const store = observable({
 	selectedStartPointIndex: null as number | null
 });
 
-const nicoProps: NiconicoDevtoolRankingPageProps = {
-	isAutoSendEvent: true,
-	usePreferredTimeLimit: true,
-	stopsGameOnTimeout: true,
-	totalTimeLimitInputValue: 75,
-	emulatingShinichibaMode: "ranking",
-	totalTimeLimit: 65,
-	playDuration: 0,
-	preferredTotalTimeLimit: 55,
-	score: 700,
-	playThreshold: 100,
-	clearThreshold: 500,
-	onAutoSendEventsChanged: action("events:auto-send-events-changed"),
-	onModeSelectChanged: action("events:mode-select-changed"),
-	onTotalTimeLimitInputValueChanged: action("events:total-time-limit-changed"),
-	onUsePreferredTotalTimeLimitChanged: action(
-		"events:use-preferred-total-time-limit-changed",
-	),
-	onUseStopGameChanged: action("events:use-stop-game-changed")
+const nicoProps: NiconicoDevtoolProps = {
+	rankingPageProps: {
+		isAutoSendEvent: true,
+		usePreferredTimeLimit: true,
+		stopsGameOnTimeout: true,
+		totalTimeLimitInputValue: 75,
+		emulatingShinichibaMode: "ranking",
+		totalTimeLimit: 65,
+		playDuration: 0,
+		preferredTotalTimeLimit: 55,
+		score: 700,
+		playThreshold: 100,
+		clearThreshold: 500,
+		onAutoSendEventsChanged: action("events:auto-send-events-changed"),
+		onModeSelectChanged: action("events:mode-select-changed"),
+		onTotalTimeLimitInputValueChanged: action("events:total-time-limit-changed"),
+		onUsePreferredTotalTimeLimitChanged: action(
+			"events:use-preferred-total-time-limit-changed"
+		),
+		onUseStopGameChanged: action("events:use-stop-game-changed")
+	},
+	commentPageProps: {
+		model: {
+			comments: [],
+			templates: [],
+			isEnabled: false,
+			senderType: "anonymous",
+			senderLimitation: "operator",
+			commandInput: "",
+			commentInput: ""
+		},
+		onCommentInputChanged: action("events:comment-input-changed"),
+		onCommandInputChanged: action("events:command-input-changed"),
+		onSenderTypeChanged: action("events:sender-type-changed"),
+		onClickSend: action("events:send-comment"),
+		onClickTemplate: action("events:send-template"),
+	},
+	activePage: "ranking",
+	selectorWidth: 120,
+	onResizeSelector: action("events:resize-selector"),
+	onChangePage: action("events:cahnge-page"),
 };
 
 const dummyPlaybackDevtoolProps: PlaybackDevtoolProps = {
