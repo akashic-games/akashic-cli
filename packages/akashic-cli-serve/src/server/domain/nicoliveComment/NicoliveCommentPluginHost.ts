@@ -1,8 +1,8 @@
 import type { AMFlow } from "@akashic/amflow";
 import { TickIndex, type Tick, type MessageEvent, EventCode } from "@akashic/playlog";
 import { Trigger } from "@akashic/trigger";
-import type { NicoliveCommentConfig } from "./NicoliveCommentConfig";
-import type { NicoliveComment, NicoliveCommentPlugin } from "./NicoliveCommentPlugin";
+import type { NicoliveCommentConfig } from "../../../common/types/NicoliveCommentConfig";
+import type { NicoliveComment, NicoliveCommentPlugin } from "../../../common/types/NicoliveCommentPlugin";
 
 const DEFAULT_FIELDS: (keyof NicoliveComment)[] = ["comment", "userID", "isAnonymous", "isOperatorComment"];
 const NULL_COMMENT: NicoliveComment = { comment: "", command: "" };
