@@ -82,7 +82,7 @@ export async function promiseConvertBundle(options: ConvertTemplateParameterObje
 	}
 
 	if (errorMessages.length > 0) {
-		options.logger.warn("The following ES7 syntax errors exist.\n" + errorMessages.join("\n"));
+		options.logger.warn("The following ES2015 syntax errors exist.\n" + errorMessages.join("\n"));
 	}
 
 	let templatePath: string;

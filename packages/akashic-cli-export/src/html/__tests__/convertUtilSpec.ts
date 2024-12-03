@@ -37,32 +37,29 @@ describe("convertUtil", function () {
 		});
 	});
 	describe("validateEsCode", function () {
-		it("If the code is written in ES7 or lower syntax, no errors.", async function () {
-			const es7orLessCode = `
+		it("If the code is written in ES2015 or lower syntax, no errors.", async function () {
+			const es6orLessCode = `
 				"use strict";
-				var fn = function () {
+				var fn = () => {
 					return 1;
 				};
 				var array = [1, 2];
 				const a = array[0];
 				const b = array[1];
-				array.includes(1);
 			`;
-			expect((await convert.validateEsCode("es7.js", es7orLessCode)).length).toBe(0);
+			expect((await convert.validateEsCode("es6.js", es6orLessCode)).length).toBe(0);
 		});
-		it("If the code is written in ES8 syntax, an error.", async function () {
-			const es8Code = `
+		it("If the code is written in ES2016 syntax, an error.", async function () {
+			const es7Code = `
 				"use strict";
 				const fn = () => {
 					return 1;
 				}
-				const obj1 = {a: 1, b: 2};
-				const obj2 = {c: 10, d: 20};
-				const obj3 = {...obj1, ...obj2};				
+				const x = 3 ** 2;
 			`;
-			const result = await convert.validateEsCode("es8.js", es8Code);
+			const result = await convert.validateEsCode("es7.js", es7Code);
 			expect(result.length).toBe(1);
-			expect(result[0]).toBe("es8.js(8:19): Parsing error: Unexpected token ...");
+			expect(result[0]).toBe("es7.js(6:18): Parsing error: Unexpected token *");
 		});
 	});
 	describe("encodeText", function () {

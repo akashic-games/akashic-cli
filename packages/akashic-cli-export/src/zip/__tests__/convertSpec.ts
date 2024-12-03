@@ -56,7 +56,7 @@ describe("convert", () => {
 			consoleSpy.mockRestore();
 		});
 
-		it("can not convert game if script that is not written with ES7 or less syntax", async () => {
+		it("can not convert game if script that is not written with ES2015 syntax", async () => {
 			let warningMessage = "";
 			const param = {
 				source: path.resolve(fixturesDir, "simple_game_es6"),
@@ -79,8 +79,8 @@ describe("convert", () => {
 			return convertGame(param)
 				.then(() => {
 					expect(fs.existsSync(destDir)).toBe(true);
-					const expected = "Non-ES7 syntax found.\n"
-						+ "script/main.js(9:16): Parsing error: Unexpected token ..."
+					const expected = "Non-ES2015 syntax found.\n"
+						+ "script/main.js(4:15): Parsing error: Unexpected token *"
 					expect(warningMessage).toBe(expected);
 				});
 		});

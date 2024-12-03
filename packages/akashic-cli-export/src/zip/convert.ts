@@ -140,7 +140,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 					option: param.exportInfo.option
 				};
 			}
-			// 全スクリプトがES7以下の構文になっていることを確認する
+			// 全スクリプトがサポート下限の ES バージョンの構文になっていることを確認する
 			let errorMessages: string[] = [];
 			const filePaths = gcu.extractScriptAssetFilePaths(gamejson);
 			for (const filePath of filePaths) {
@@ -153,7 +153,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 				}
 			}
 			if (errorMessages.length > 0) {
-				param.logger.warn("Non-ES7 syntax found.\n" + errorMessages.join("\n"));
+				param.logger.warn("Non-ES2015 syntax found.\n" + errorMessages.join("\n"));
 			}
 			if (!param.bundle)
 				return null;
