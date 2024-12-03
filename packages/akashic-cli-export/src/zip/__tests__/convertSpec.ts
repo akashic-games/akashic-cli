@@ -56,7 +56,7 @@ describe("convert", () => {
 			consoleSpy.mockRestore();
 		});
 
-		it("can not convert game if script that is not written with ES5 syntax", async () => {
+		it("can not convert game if script that is not written with ES7 or less syntax", async () => {
 			let warningMessage = "";
 			const param = {
 				source: path.resolve(fixturesDir, "simple_game_es6"),
@@ -79,9 +79,8 @@ describe("convert", () => {
 			return convertGame(param)
 				.then(() => {
 					expect(fs.existsSync(destDir)).toBe(true);
-					const expected = "Non-ES5 syntax found.\n"
-						+ "script/main.js(1:1): Parsing error: The keyword 'const' is reserved\n"
-						+ "script/foo.js(1:1): Parsing error: The keyword 'const' is reserved";
+					const expected = "Non-ES7 syntax found.\n"
+						+ "script/main.js(9:16): Parsing error: Unexpected token ..."
 					expect(warningMessage).toBe(expected);
 				});
 		});

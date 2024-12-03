@@ -140,7 +140,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 					option: param.exportInfo.option
 				};
 			}
-			// 全スクリプトがES5構文になっていることを確認する
+			// 全スクリプトがES7以下の構文になっていることを確認する
 			let errorMessages: string[] = [];
 			const filePaths = gcu.extractScriptAssetFilePaths(gamejson);
 			for (const filePath of filePaths) {

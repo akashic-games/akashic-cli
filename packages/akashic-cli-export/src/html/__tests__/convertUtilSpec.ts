@@ -36,31 +36,33 @@ describe("convertUtil", function () {
 			expect(existFileContents[1]).toBe(sampleScriptContent);
 		});
 	});
-	describe("validateEs5Code", function () {
-		it("return empty array if code is written with ES5 syntax", async function () {
-			const es5Code = `
+	describe("validateEsCode", function () {
+		it("If the code is written in ES7 or lower syntax, no errors.", async function () {
+			const es7orLessCode = `
 				"use strict";
 				var fn = function () {
 					return 1;
 				};
 				var array = [1, 2];
-				var a = array[0];
-				var b = array[1];
+				const a = array[0];
+				const b = array[1];
+				array.includes(1);
 			`;
-			expect((await convert.validateEs5Code("es5.js", es5Code)).length).toBe(0);
+			expect((await convert.validateEsCode("es7.js", es7orLessCode)).length).toBe(0);
 		});
-		it("return error messages if code is not written with ES5 syntax", async function () {
-			const es6Code = `
+		it("If the code is written in ES8 syntax, an error.", async function () {
+			const es8Code = `
 				"use strict";
 				const fn = () => {
 					return 1;
 				}
-				const array = [1, 3];
-				const [a, b] = array;
+				const obj1 = {a: 1, b: 2};
+				const obj2 = {c: 10, d: 20};
+				const obj3 = {...obj1, ...obj2};				
 			`;
-			const result = await convert.validateEs5Code("es6.js", es6Code);
+			const result = await convert.validateEsCode("es8.js", es8Code);
 			expect(result.length).toBe(1);
-			expect(result[0]).toBe("es6.js(3:5): Parsing error: The keyword \'const\' is reserved");
+			expect(result[0]).toBe("es8.js(8:19): Parsing error: Unexpected token ...");
 		});
 	});
 	describe("encodeText", function () {
