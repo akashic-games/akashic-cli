@@ -18,7 +18,7 @@ import {
 	getDefaultBundleStyle,
 	extractAssetDefinitions,
 	getInjectedContents,
-	validateEs5Code,
+	validateEsCode,
 	validateSandboxConfigJs,
 	readSandboxConfigJs
 } from "./convertUtil.js";
@@ -82,7 +82,7 @@ export async function promiseConvertBundle(options: ConvertTemplateParameterObje
 	}
 
 	if (errorMessages.length > 0) {
-		options.logger.warn("The following ES5 syntax errors exist.\n" + errorMessages.join("\n"));
+		options.logger.warn("The following ES7 syntax errors exist.\n" + errorMessages.join("\n"));
 	}
 
 	let templatePath: string;
@@ -112,7 +112,7 @@ async function convertAssetToInnerHTMLObj(
 	const exports = (asset.type === "script" && asset.exports) ?? [];
 	const assetString = fs.readFileSync(path.join(inputPath, asset.path), "utf8").replace(/\r\n|\r/g, "\n");
 	if (isScript) {
-		errors.push.apply(errors, await validateEs5Code(asset.path, assetString));
+		errors.push.apply(errors, await validateEsCode(asset.path, assetString));
 	}
 	return {
 		name: assetName,
@@ -132,7 +132,7 @@ async function convertScriptNameToInnerHTMLObj(
 		scriptString = encodeText(scriptString);
 	}
 	if (isScript) {
-		errors.push.apply(errors, await validateEs5Code(scriptName, scriptString));
+		errors.push.apply(errors, await validateEsCode(scriptName, scriptString));
 	}
 	return {
 		name: scriptName,

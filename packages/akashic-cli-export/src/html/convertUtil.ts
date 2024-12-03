@@ -199,8 +199,8 @@ export function getInjectedContents(baseDir: string, injects: string[]): string[
 	return injectedContents;
 }
 
-export async function validateEs5Code(fileName: string, code: string): Promise<string[]> {
-	const errInfo = await cmn.LintUtil.validateEs5Code(code);
+export async function validateEsCode(fileName: string, code: string): Promise<string[]> {
+	const errInfo = await cmn.LintUtil.validateEsCode(code);
 	return errInfo.map(info => `${fileName}(${info.line}:${info.column}): ${info.message}`);
 }
 

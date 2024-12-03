@@ -16,7 +16,7 @@ import {
 	wrap,
 	extractAssetDefinitions,
 	getInjectedContents,
-	validateEs5Code,
+	validateEsCode,
 	readSandboxConfigJs,
 	validateEngineFilesName,
 	resolveEngineFilesPath,
@@ -75,7 +75,7 @@ export async function promiseConvertNoBundle(options: ConvertTemplateParameterOb
 		assetPaths = assetPaths.concat(globalScriptPaths);
 	}
 	if (errorMessages.length > 0) {
-		options.logger.warn("The following ES5 syntax errors exist.\n" + errorMessages.join("\n"));
+		options.logger.warn("The following ES7 syntax errors exist.\n" + errorMessages.join("\n"));
 	}
 	await writeHtmlFile(assetPaths, options.output, conf, options);
 	writeOptionScript(options.output, options);
@@ -93,7 +93,7 @@ async function convertAssetAndOutput(
 	const assetString = fs.readFileSync(path.join(inputPath, asset.path), "utf8").replace(/\r\n|\r/g, "\n");
 	const assetPath = asset.path;
 	if (isScript) {
-		errors.push.apply(errors, await validateEs5Code(assetPath, assetString)); // ES5構文に反する箇所があるかのチェック
+		errors.push.apply(errors, await validateEsCode(assetPath, assetString)); // ES7以下の構文に反する箇所があるかのチェック
 	}
 
 	const code = (isScript ? wrapScript(assetString, assetName, terser, exports) : wrapText(assetString, assetName));
@@ -111,7 +111,7 @@ async function convertGlobalScriptAndOutput(
 	const scriptString = fs.readFileSync(path.join(inputPath, scriptName), "utf8").replace(/\r\n|\r/g, "\n");
 	const isScript = /\.js$/i.test(scriptName);
 	if (isScript) {
-		errors.push.apply(errors, await validateEs5Code(scriptName, scriptString)); // ES5構文に反する箇所があるかのチェック
+		errors.push.apply(errors, await validateEsCode(scriptName, scriptString)); // ES7以下の構文に反する箇所があるかのチェック
 	}
 
 	const code = isScript ? wrapScript(scriptString, scriptName, terser) : wrapText(scriptString, scriptName);

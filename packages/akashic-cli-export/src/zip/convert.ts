@@ -146,14 +146,14 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			for (const filePath of filePaths) {
 				const code = fs.readFileSync(path.resolve(param.source, filePath)).toString();
 				if (!param.babel) {
-					const errInfo = await cmn.LintUtil.validateEs5Code(code);
+					const errInfo = await cmn.LintUtil.validateEsCode(code);
 					errorMessages = errorMessages.concat(
 						errInfo.map(info => `${filePath}(${info.line}:${info.column}): ${info.message}`)
 					);
 				}
 			}
 			if (errorMessages.length > 0) {
-				param.logger.warn("Non-ES5 syntax found.\n" + errorMessages.join("\n"));
+				param.logger.warn("Non-ES7 syntax found.\n" + errorMessages.join("\n"));
 			}
 			if (!param.bundle)
 				return null;
