@@ -5,11 +5,11 @@ export interface LintErrorInfo {
 	message: string;
 }
 
-export async function validateEs5Code(code: string): Promise<LintErrorInfo[]> {
+export async function validateEsCode(code: string): Promise<LintErrorInfo[]> {
 	const eslint = await import("eslint");
 	const errors = (new eslint.Linter()).verify(code, {
 		parserOptions: {
-			ecmaVersion: 5
+			ecmaVersion: 2016
 		}
 	});
 	return errors.map(error => {
