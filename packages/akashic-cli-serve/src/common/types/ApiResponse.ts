@@ -74,6 +74,7 @@ export type PlayDeleteApiResponse = ApiResponse<PlayDeleteApiResponseData>;
 export type PlayPatchApiResponse = ApiResponse<PlayPatchApiResponseData>;
 export type PlayTokenPostApiResponse = ApiResponse<PlayTokenPostApiResponseData>;
 export type PlayerPostApiResponse = ApiResponse<PlayerIdPostApiResponseData>;
+export type PlaySendNicoliveCommentResponse = ApiResponse<void>;
 export type RunnerPostApiResponse = ApiResponse<RunnerPostApiResponseData>;
 export type RunnerDeleteApiResponse = ApiResponse<RunnerDeleteApiResponseData>;
 export type RunnerPatchApiResponse = ApiResponse<RunnerPatchApiResponseData>;

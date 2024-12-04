@@ -1,5 +1,4 @@
-import type { NicoliveComment } from "../../common/types/NicoliveCommentPlugin";
-import { isNicoliveCommentMessageEvent, MessageEventIndexData } from "../akashic/PlaylogShim";
+import { isNicoliveCommentMessageEvent, MessageEventIndexData } from "../../common/PlaylogShim";
 import type { OnTickArguments } from "../akashic/ServeGameContent";
 import type { EDumpItem } from "../common/types/EDumpItem";
 import type { NiconicoDevtoolCommentPageSenderLimitation, NiconicoDevtoolCommentPageSenderType } from "../store/DevtoolUiCommentPageStore";
@@ -169,10 +168,6 @@ export class DevtoolOperator {
 		commentPageStore.setIsEnabled(false);
 		commentPageStore.setSenderType(senderType);
 		commentPageStore.setSenderLimitation(senderLimitation);
-	};
-
-	addCommentPageComment = (comments: NicoliveComment[]): void => {
-		this.store.devtoolUiStore.commentPage.addComments(comments);
 	};
 
 	setCommentPageIsEnabled = (isEnabled: boolean): void => {

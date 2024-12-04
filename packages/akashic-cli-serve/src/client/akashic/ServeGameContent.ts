@@ -220,7 +220,7 @@ export class ServeGameContent {
 		}
 	}
 
-	sendEvents(events: playlog.EventLike[]): void {
+	sendEvents(events: realPlaylog.Event[]): void {
 		this.agvGameContent.sendEvents(events);
 	}
 

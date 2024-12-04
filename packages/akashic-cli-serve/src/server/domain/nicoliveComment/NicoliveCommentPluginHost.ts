@@ -1,7 +1,8 @@
 import type { AMFlow } from "@akashic/amflow";
-import { TickIndex, type Tick, type MessageEvent, EventCode } from "@akashic/playlog";
+import { TickIndex, type Tick } from "@akashic/playlog";
 import { Trigger } from "@akashic/trigger";
-import type { NicoliveCommentConfig } from "../../../common/types/NicoliveCommentConfig";
+import { createNicoliveCommentMessageEvent } from "../../../common/PlaylogShim";
+import type { NicoliveCommentConfig, NicoliveCommentConfigComment } from "../../../common/types/NicoliveCommentConfig";
 import type { NicoliveComment, NicoliveCommentPlugin } from "../../../common/types/NicoliveCommentPlugin";
 
 const DEFAULT_FIELDS: (keyof NicoliveComment)[] = ["comment", "userID", "isAnonymous", "isOperatorComment"];
@@ -46,6 +47,41 @@ export class NicoliveCommentPluginHost {
 		};
 	}
 
+	planToSendByTemplate(name: string): boolean {
+		return this._planToSendImpl(this.config.templates[name]?.comments);
+	}
+
+	planToSend(c: NicoliveComment): boolean {
+		return this._planToSendImpl([{ comment: "", ...c }]);
+	}
+
+	protected _planToSendImpl(comments: NicoliveCommentConfigComment[]): boolean {
+		const { amflow } = this;
+
+		if (!this.started) {
+			console.warn("NicoliveCommentPluginHost: plugin not started.");
+			return false;
+		}
+
+		const replan = (tick: Tick): void => {
+			amflow.offTick(replan);
+
+			const age = tick[TickIndex.Frame];
+			if (!this.planned)
+				this._setupPlan(age);
+
+			let lastFrame = age + 1; // age は今既に来ている tick なので次の tick から送る
+			comments.forEach(c => {
+				const comment = { ...NULL_COMMENT, ...c };
+				const frame = lastFrame = (comment.frame != null) ? age + comment.frame : lastFrame;
+				arrayMapAdd(this.plan, frame, filterProperty(comment, this.filter));
+			});
+		};
+
+		amflow.onTick(replan);
+		return true;
+	}
+
 	protected _setupPlan(startAge: number): void {
 		if (this.planned) return;
 		this.planned = true;
@@ -76,7 +112,7 @@ export class NicoliveCommentPluginHost {
 
 		const comments = this.plan.get(age);
 		if (comments?.length) {
-			this.amflow.sendEvent(createCommentMessageEvent(comments));
+			this.amflow.sendEvent(createNicoliveCommentMessageEvent(comments));
 		}
 	};
 }
@@ -90,18 +126,6 @@ function arrayMapAdd<K, V>(map: Map<K, V[]>, k: K, v: V): void {
 		map.get(k)?.push(v);
 	else
 		map.set(k, [v]);
-}
-
-function createCommentMessageEvent(comments: NicoliveComment[]): MessageEvent {
-	return [
-		EventCode.Message,
-		0,
-		":akashic",
-		{
-			type: "nicoservice:stream:comment",
-			comments
-		}
-	];
 }
 
 function filterProperty<T extends object>(o: T, filter: Set<keyof T>): Partial<T> {

@@ -13,9 +13,11 @@ import type {
 	SandboxConfigApiResponse,
 	OptionsApiResponse,
 	PlayerPostApiResponse,
-	StartPointHeaderListResponse
+	StartPointHeaderListResponse,
+	PlaySendNicoliveCommentResponse
 } from "../../common/types/ApiResponse";
 import type { ContentLocatorData } from "../../common/types/ContentLocatorData";
+import type { NicoliveComment } from "../../common/types/NicoliveCommentPlugin";
 import type { PlayAudioState } from "../../common/types/PlayAudioState";
 import type { Player } from "../../common/types/Player";
 import * as ApiRequest from "./ApiRequest";
@@ -122,6 +124,20 @@ export class ApiClient {
 		return ApiRequest.patch<RunnerPatchApiResponse>(
 			`${this._baseUrl}/api/runners/${runnerId}`,
 			{status: "paused", step: true}
+		);
+	};
+
+	async requestToSendNicoliveCommentByTemplate(playId: string, templateName: string): Promise<PlaySendNicoliveCommentResponse> {
+		return ApiRequest.post<PlaySendNicoliveCommentResponse>(
+			`${this._baseUrl}/api/plays/${playId}/comment-template`,
+			{name: templateName}
+		);
+	};
+
+	async requestToSendNicoliveComment(playId: string, comment: NicoliveComment): Promise<PlaySendNicoliveCommentResponse> {
+		return ApiRequest.post<PlaySendNicoliveCommentResponse>(
+			`${this._baseUrl}/api/plays/${playId}/comment`,
+			{ ...comment, isAnonymous: comment.isAnonymous?.toString(), isOperatorComment: comment.isOperatorComment?.toString() }
 		);
 	};
 

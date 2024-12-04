@@ -1,6 +1,7 @@
 import * as path from "path";
 import type { AMFlowClient, RunnerManager, RunnerV1, RunnerV2, RunnerV3 } from "@akashic/headless-driver";
 import { Trigger } from "@akashic/trigger";
+import type { NicoliveComment } from "../../common/types/NicoliveCommentPlugin";
 import type {
 	RunnerCreateTestbedEvent,
 	RunnerRemoveTestbedEvent,
@@ -27,6 +28,14 @@ export interface CreateAndStartRunnerParameterObject {
 	isPaused: boolean;
 }
 
+/**
+ * ランナー関連情報。headless-driver の Runner で管理できないデータを保持する。
+ */
+export interface RunnerEntity {
+	playId: string;
+	nicoliveCommentPluginHost: NicoliveCommentPluginHost | null;
+}
+
 export class RunnerStore {
 	onRunnerCreate: Trigger<RunnerCreateTestbedEvent>;
 	onRunnerRemove: Trigger<RunnerRemoveTestbedEvent>;
@@ -36,7 +45,7 @@ export class RunnerStore {
 	onNicoliveCommentPluginStartStop: Trigger<NicoliveCommentPluginStartStopTestbedEvent>;
 	private runnerManager: RunnerManager;
 	private gameExternalFactory: () => any;
-	private playIdTable: { [runnerId: string]: string };
+	private runnerEntities: { [runnerId: string]: RunnerEntity };
 
 	constructor(params: RunnerStoreParameterObject) {
 		this.onRunnerCreate = new Trigger();
@@ -47,7 +56,7 @@ export class RunnerStore {
 		this.onNicoliveCommentPluginStartStop = new Trigger();
 		this.runnerManager = params.runnerManager;
 		this.gameExternalFactory = params.gameExternalFactory;
-		this.playIdTable = {};
+		this.runnerEntities = {};
 	}
 
 	async createAndStartRunner(params: CreateAndStartRunnerParameterObject): Promise<RunnerV1 | RunnerV2 | RunnerV3> {
@@ -56,12 +65,12 @@ export class RunnerStore {
 		const allowedUrls = this.createAllowedUrls(params.contentId, externalAssets);
 
 		let externalValue: { [name: string]: unknown } = {};
+		let nicoliveCommentPluginHost: NicoliveCommentPluginHost | null = null;
 		if (sandboxConfig.external?.nicoliveComment) {
 			const { playId } = params;
-			// TODO commentPluginHost を PlayEntity に (？) 保持する。現状は生成後にアクセスする契機がないのでどこにも保持していない
-			const commentPluginHost = new NicoliveCommentPluginHost(sandboxConfig.external.nicoliveComment, params.amflow);
-			commentPluginHost.onStartStop.add(started => this.onNicoliveCommentPluginStartStop.fire({ playId, started }));
-			externalValue.nicoliveComment = commentPluginHost.plugin;
+			nicoliveCommentPluginHost = new NicoliveCommentPluginHost(sandboxConfig.external.nicoliveComment, params.amflow);
+			nicoliveCommentPluginHost.onStartStop.add(started => this.onNicoliveCommentPluginStartStop.fire({ playId, started }));
+			externalValue.nicoliveComment = nicoliveCommentPluginHost.plugin;
 		}
 
 		externalValue = { ...externalValue, ...this.gameExternalFactory() };
@@ -91,7 +100,10 @@ export class RunnerStore {
 
 		const runner = this.runnerManager.getRunner(runnerId)!;
 		await this.runnerManager.startRunner(runner.runnerId, { paused: params.isPaused });
-		this.playIdTable[runnerId] = params.playId;
+		this.runnerEntities[runnerId] = {
+			playId: params.playId,
+			nicoliveCommentPluginHost,
+		};
 		this.onRunnerCreate.fire({ playId: params.playId, runnerId, isActive: params.isActive });
 		if (params.isPaused)
 			this.onRunnerPause.fire({ playId: params.playId, runnerId });
@@ -104,9 +116,9 @@ export class RunnerStore {
 			// コンテンツがエラーの場合、runnerを取得できないので取得できる場合のみ実行
 			await this.runnerManager.stopRunner(runnerId);
 		}
-		const playId = this.playIdTable[runnerId];
+		const playId = this.runnerEntities[runnerId]!.playId;
 		this.onRunnerRemove.fire({ playId, runnerId });
-		delete this.playIdTable[runnerId];
+		delete this.runnerEntities[runnerId];
 	}
 
 	async pauseRunner(runnerId: string): Promise<void> {
@@ -130,6 +142,16 @@ export class RunnerStore {
 		if (runner) {
 			await this.runnerManager.stepRunner(runner.runnerId);
 		}
+	}
+
+	sendCommentsByTemplate(runnerId: string, name: string): boolean {
+		const commentPluginHost = this.runnerEntities[runnerId]?.nicoliveCommentPluginHost;
+		return commentPluginHost?.planToSendByTemplate(name) ?? false;
+	}
+
+	sendComment(runnerId: string, comment: NicoliveComment): boolean {
+		const commentPluginHost = this.runnerEntities[runnerId]?.nicoliveCommentPluginHost;
+		return commentPluginHost?.planToSend(comment) ?? false;
 	}
 
 	private createAllowedUrls(contentId: string, externalAssets: (string | RegExp)[] | null): (string | RegExp)[] | null {

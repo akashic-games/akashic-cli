@@ -124,12 +124,8 @@ export const DevtoolContainer = observer(class DevtoolContainer extends React.Co
 					onCommandInputChanged: operator.devtool.setCommentPageCommandInput,
 					onCommentInputChanged: operator.devtool.setCommentPageCommentInput,
 					onSenderTypeChanged: operator.devtool.setCommentPageSenderType,
-					onClickSend: function (): void {
-						throw new Error("Function not implemented.");
-					},
-					onClickTemplate: function (_index: number): void {
-						throw new Error("Function not implemented.");
-					}
+					onClickSend: operator.play.sendEditorNicoliveCommentEvent,
+					onClickTemplate: operator.play.sendRegisteredNicoliveCommentEvent,
 				},
 				onChangePage: operator.devtool.setNiconicoDevtoolActivePage,
 				onResizeSelector: operator.devtool.setNiconicoDevtoolSelectorWidth,
