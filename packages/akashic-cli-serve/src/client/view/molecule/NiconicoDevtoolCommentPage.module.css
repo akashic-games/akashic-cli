@@ -105,6 +105,10 @@
   cursor: not-allowed;
 }
 
+.comment-input-row > button:active {
+  background-color: #301f6e;
+}
+
 .comment-template-row {
   flex: 0 0 auto;
   display: flex;

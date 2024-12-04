@@ -24,7 +24,7 @@ export interface NiconicoDevtoolCommentPageProps {
 	onCommandInputChanged: (content: string) => void;
 	onSenderTypeChanged: (type: NiconicoDevtoolCommentPageSenderType) => void;
 	onClickSend: () => void;
-	onClickTemplate: (index: number) => void;
+	onClickTemplate: (name: string) => void;
 }
 
 const commentModeChoiceItemsBase: (ToolChoiceButtonItem & { type: NiconicoDevtoolCommentPageSenderType })[] = [
@@ -46,6 +46,21 @@ export const NiconicoDevtoolCommentPage = observer(function NiconicoDevtoolComme
 	const handleChoiceSenderType = React.useCallback((index: number) => {
 		onSenderTypeChanged(commentModeChoiceItemsBase[index].type);
 	}, [onSenderTypeChanged]);
+
+	const handleCommandInputChanged = React.useCallback((ev: React.ChangeEvent<HTMLInputElement>) => {
+		onCommandInputChanged(ev.target!.value);
+	}, [onCommandInputChanged]);
+
+	const handleCommentInputChanged = React.useCallback((ev: React.ChangeEvent<HTMLInputElement>) => {
+		onCommentInputChanged(ev.target!.value);
+	}, [onCommentInputChanged]);
+
+	const handleCommentInputKeyDown = React.useCallback((ev: React.KeyboardEvent<HTMLInputElement>) => {
+		if (ev.key === "Enter") {
+			ev.preventDefault();
+			onClickSend();
+		}
+	}, [onClickSend]);
 
 	return (
 		<div className={styles["comment-devtool"]}>
@@ -80,7 +95,7 @@ export const NiconicoDevtoolCommentPage = observer(function NiconicoDevtoolComme
 										<button
 											key={`${i}/${item}`}
 											className={styles.item}
-											onClick={() => onClickTemplate(i)}
+											onClick={() => onClickTemplate(item)}
 											disabled={!isEnabled}
 										>
 											{item}
@@ -98,7 +113,7 @@ export const NiconicoDevtoolCommentPage = observer(function NiconicoDevtoolComme
 					type="text"
 					placeholder="Command"
 					value={commandInput}
-					onChange={ev => onCommandInputChanged(ev.target!.value)}
+					onChange={handleCommandInputChanged}
 					disabled={!isEnabled}
 				/>
 
@@ -107,7 +122,8 @@ export const NiconicoDevtoolCommentPage = observer(function NiconicoDevtoolComme
 					className={styles["input-comment"]}
 					placeholder="Comment"
 					value={commentInput}
-					onChange={ev => onCommentInputChanged(ev.target!.value)}
+					onChange={handleCommentInputChanged}
+					onKeyDown={handleCommentInputKeyDown}
 					disabled={!isEnabled}
 				/>
 
