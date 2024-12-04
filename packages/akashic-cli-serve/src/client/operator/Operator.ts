@@ -113,9 +113,7 @@ export class Operator {
 		if (store.currentPlay === play)
 			return;
 
-		let previousPlay;
 		if (store.currentPlay) {
-			previousPlay = store.currentPlay;
 			await store.currentPlay.deleteAllLocalInstances();
 			store.setCurrentLocalInstance(null);
 		}
@@ -125,10 +123,7 @@ export class Operator {
 		store.setCurrentPlay(play);
 
 		const isServiceNicolive = isServiceTypeNicoliveLike(store.targetService);
-		const isNicoliveBroadcaster = isServiceNicolive && (
-			previousPlay?.joinedPlayerTable.has(store.player!.id) ?? // 前プレイがあれば引き継ぐ
-			(play.joinedPlayerTable.size === 0) // なければ最初のプレイヤーが放送者
-		);
+		const isNicoliveBroadcaster = isServiceNicolive && play.joinedPlayerTable.has(store.player!.id);
 
 		let argument = undefined;
 		if (query.argumentsValue) {
