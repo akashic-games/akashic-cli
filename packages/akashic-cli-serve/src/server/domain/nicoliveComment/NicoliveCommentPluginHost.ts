@@ -27,14 +27,17 @@ export class NicoliveCommentPluginHost {
 		this.plugin = {
 			start: (opts, callback) => {
 				if (this.started) {
-					callback?.(new Error("NicoliveCommentPlugin already started."));
-					return;
+					// throw せず callback で返す方が自然だが、このメソッドの callback は省略可能である。
+					// 同期的に通知できるロジックエラーの経路としてはむしろ throw する方がユーザが問題に気づきやすい。
+					throw new Error("NicoliveCommentPlugin already started.");
 				}
 
 				if (opts?.fields) {
 					const invalidFileds = opts.fields.filter(f => VALID_FIELDS.indexOf(f) === -1);
-					if (invalidFileds.length)
-						console.warn(`nicoliveComment.start(): ignored unknown fields ${JSON.stringify(invalidFileds)}`);
+					if (invalidFileds.length) {
+						// 上と同じ理由で意図的に callback を経由せず直接 throw する。
+						throw new Error(`nicoliveComment.start(): ignored unknown fields ${JSON.stringify(invalidFileds)}`);
+					}
 				}
 
 				this.filter = new Set(opts?.fields ?? DEFAULT_FIELDS);
