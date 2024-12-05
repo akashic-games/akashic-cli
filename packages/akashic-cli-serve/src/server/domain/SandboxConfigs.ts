@@ -5,10 +5,16 @@ import * as  sandboxConfigUtils  from "@akashic/sandbox-configuration/lib/utils"
 import * as chokidar from "chokidar";
 import { BadRequestError, NotFoundError } from "../common/ApiError";
 import { dynamicRequire } from "./dynamicRequire";
+import type { NicoliveCommentConfig } from "./nicoliveComment/NicoliveCommentConfig";
 
 interface ResolvedSandboxConfig extends NormalizedSandboxConfiguration {
 	// backgroundImage がローカルファイルの場合、クライアントからは GET /contents/:contentId/sandboxConfig/backgroundImage で取得される。その場合のローカルファイルのパスをここに保持する。
 	resolvedBackgroundImagePath: string | null;
+
+	// TODO sandbox-configuration に移す
+	external?: {
+		nicoliveComment?: NicoliveCommentConfig;
+	};
 }
 
 const configs: { [key: string]: ResolvedSandboxConfig } = {};
