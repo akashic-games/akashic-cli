@@ -4,6 +4,7 @@ import { Trigger } from "@akashic/trigger";
 import type { NicoliveCommentConfig } from "./NicoliveCommentConfig";
 import type { NicoliveComment, NicoliveCommentPlugin } from "./NicoliveCommentPlugin";
 
+const VALID_FIELDS: string[] = ["comment", "userID", "isAnonymous", "isOperatorComment", "command"] satisfies (keyof NicoliveComment)[];
 const DEFAULT_FIELDS: (keyof NicoliveComment)[] = ["comment", "userID", "isAnonymous", "isOperatorComment"];
 const NULL_COMMENT: NicoliveComment = { comment: "", command: "" };
 
@@ -25,8 +26,16 @@ export class NicoliveCommentPluginHost {
 
 		this.plugin = {
 			start: (opts, callback) => {
-				if (this.started)
-					throw new Error("NicoliveCommentPlugin already started.");
+				if (this.started) {
+					callback?.(new Error("NicoliveCommentPlugin already started."));
+					return;
+				}
+
+				if (opts?.fields) {
+					const invalidFileds = opts.fields.filter(f => VALID_FIELDS.indexOf(f) === -1);
+					if (invalidFileds.length)
+						console.warn(`nicoliveComment.start(): ignored unknown fields ${JSON.stringify(invalidFileds)}`);
+				}
 
 				this.filter = new Set(opts?.fields ?? DEFAULT_FIELDS);
 
