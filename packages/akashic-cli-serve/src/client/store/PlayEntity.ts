@@ -4,6 +4,7 @@ import type { ObservableMap } from "mobx";
 import { observable, action } from "mobx";
 import { TimeKeeper } from "../../common/TimeKeeper";
 import type { PlayPatchApiResponse } from "../../common/types/ApiResponse";
+import type { NicoliveComment } from "../../common/types/NicoliveCommentPlugin";
 import type { PlayAudioState } from "../../common/types/PlayAudioState";
 import type { PlayDurationState } from "../../common/types/PlayDurationState";
 import type { Player } from "../../common/types/Player";
@@ -222,6 +223,14 @@ export class PlayEntity {
 
 	unmuteAll(): Promise<void> {
 		return apiClient.changePlayAudioState(this.playId, { muteType: "none" });
+	}
+
+	async sendNicoliveCommentByTemplate(templateName: string): Promise<void> {
+		await apiClient.requestToSendNicoliveCommentByTemplate(this.playId, templateName);
+	}
+
+	async sendNicoliveComment(comment: NicoliveComment): Promise<void> {
+		await apiClient.requestToSendNicoliveComment(this.playId, comment);
 	}
 
 	@action
