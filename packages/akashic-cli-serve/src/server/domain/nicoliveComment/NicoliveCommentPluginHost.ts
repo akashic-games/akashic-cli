@@ -27,16 +27,15 @@ export class NicoliveCommentPluginHost {
 		this.plugin = {
 			start: (opts, callback) => {
 				if (this.started) {
-					// throw せず callback で返す方が自然だが、このメソッドの callback は省略可能である。
-					// 同期的に通知できるロジックエラーの経路としてはむしろ throw する方がユーザが問題に気づきやすい。
-					throw new Error("NicoliveCommentPlugin already started.");
+					callOrThrow(callback, new Error("NicoliveCommentPlugin already started."));
+					return;
 				}
 
 				if (opts?.fields) {
 					const invalidFileds = opts.fields.filter(f => VALID_FIELDS.indexOf(f) === -1);
 					if (invalidFileds.length) {
-						// 上と同じ理由で意図的に callback を経由せず直接 throw する。
-						throw new Error(`nicoliveComment.start(): ignored unknown fields ${JSON.stringify(invalidFileds)}`);
+						callOrThrow(callback, new Error(`nicoliveComment.start(): invalid fields ${JSON.stringify(invalidFileds)}.`));
+						return;
 					}
 				}
 
@@ -124,3 +123,19 @@ function filterProperty<T extends object>(o: T, filter: Set<keyof T>): Partial<T
 	});
 	return ret;
 };
+
+/**
+ * callback が関数であるなら err を与えて呼び出す。でなければ err を throw する。
+ *
+ * 以下すべてを満たす時に利用すること。
+ * (a) エラー通知用のコールバックが省略可能で、必ずしもそれでエラー通知ができない
+ * (b) err がロジックエラー (コンテンツ開発者の対応が必要) であり、serve としてはゲーム開発者が確実に気づける形が望ましい
+ * (c) 通知したいエラーが同期的に発生している
+ */
+function callOrThrow(callback: ((err?: Error) => void) | null | undefined, err: Error): void {
+	if (callback) {
+		callback(err);
+	} else {
+		throw err;
+	}
+}
