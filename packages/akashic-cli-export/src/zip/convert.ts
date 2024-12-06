@@ -16,8 +16,8 @@ import { validateGameJson } from "../utils.js";
 import { getFromHttps } from "./apiUtil.js";
 import { NICOLIVE_SIZE_LIMIT_GAME_JSON, NICOLIVE_SIZE_LIMIT_TOTAL_FILE } from "./constants.js";
 import * as gcu from "./GameConfigurationUtil.js";
-import { transformPackSmallImages } from "./transformPackImages.js";
 import * as liceneUtil from "./licenseUtil.js";
+import { transformPackSmallImages } from "./transformPackImages.js";
 
 // NOTE: 以下のパッケージは型定義が存在しないか JS と型定義の齟齬があるため `require()` を用いている
 const require = createRequire(import.meta.url);
@@ -150,23 +150,23 @@ function generateAssetBundleString(assets: ScriptAssetContent[]): string {
 			asset => [
 				`"/${asset.path}": {`,
 				"type:\"script\",",
-				`path:"${asset.path}",` +
-				`global:${!!asset.global},` +
+				`path:"${asset.path}",`,
+				`global:${!!asset.global},`,
 				(asset.preload ? `preload:${!!asset.preload},` : ""),
 				"execute: rv => {",
-				(
-					"\n'use strict';\n" +
-					"const module = rv.module;" +
-					"const exports = module.exports;" +
-					"const require = module.require;" +
-					"const __dirname = rv.dirname;" +
-					"const __filename = rv.filename;" +
-					`\n${asset.code}\n` +
+				[
+					"\n'use strict';\n",
+					"const module = rv.module;",
+					"const exports = module.exports;",
+					"const require = module.require;",
+					"const __dirname = rv.dirname;",
+					"const __filename = rv.filename;",
+					`\n${asset.code}\n`,
 					(asset.exports ?? [])
 						.map(key => `exports["${key}"] = typeof ${key} !== "undefined" ? ${key} : undefined;`)
-						.join("") +
-					"return module.exports;\n"
-				),
+						.join(""),
+					"return module.exports;\n",
+				].join(""),
 				"},\n",
 				"},",
 			].join("")
