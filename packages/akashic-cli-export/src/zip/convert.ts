@@ -16,8 +16,8 @@ import { validateGameJson } from "../utils.js";
 import { getFromHttps } from "./apiUtil.js";
 import { NICOLIVE_SIZE_LIMIT_GAME_JSON, NICOLIVE_SIZE_LIMIT_TOTAL_FILE } from "./constants.js";
 import * as gcu from "./GameConfigurationUtil.js";
-import { transformPackSmallImages } from "./transformPackImages.js";
 import * as liceneUtil from "./licenseUtil.js";
+import { transformPackSmallImages } from "./transformPackImages.js";
 
 // NOTE: 以下のパッケージは型定義が存在しないか JS と型定義の齟齬があるため `require()` を用いている
 const require = createRequire(import.meta.url);
@@ -74,7 +74,53 @@ export interface BundleResult {
 	filePaths: string[];
 }
 
-export async function bundleScripts(entryPoint: string, basedir: string): Promise<BundleResult> {
+interface ScriptAssetContent {
+	path: string;
+	code: string;
+	global?: boolean;
+	preload?: boolean;
+	exports?: string[];
+}
+
+export async function bundleScripts(
+	gamejson: cmn.GameConfiguration,
+	basedir: string,
+	optimizeScript?: (code: string) => string,
+): Promise<BundleResult> {
+	if (gamejson.environment?.["sandbox-runtime"] === "3") {
+		const scriptAssetContents: ScriptAssetContent[] = [];
+
+		for (const asset of Object.values(gamejson.assets)) {
+			if (asset.type !== "script") continue;
+
+			let code = fs.readFileSync(path.resolve(basedir, asset.path)).toString();
+			code = optimizeScript ? optimizeScript(code) : code;
+
+			scriptAssetContents.push({
+				...asset,
+				code,
+			});
+		}
+
+		for (const globalScript of gamejson.globalScripts ?? []) {
+			let code = fs.readFileSync(path.resolve(basedir, globalScript)).toString();
+			code = optimizeScript ? optimizeScript(code) : code;
+
+			scriptAssetContents.push({
+				path: globalScript,
+				global: true,
+				code,
+			});
+		}
+
+		return {
+			bundle: generateAssetBundleString(scriptAssetContents),
+			filePaths: scriptAssetContents.map(content => content.path),
+		};
+	}
+
+	const entryPoint = gamejson.main || gamejson.assets.mainScene.path;
+
 	const inputOptions = {
 		input: path.join(basedir, entryPoint),
 		external: ["g"],
@@ -96,6 +142,36 @@ export async function bundleScripts(entryPoint: string, basedir: string): Promis
 		if (bundle)
 			await bundle.close();
 	 }
+}
+
+function generateAssetBundleString(assets: ScriptAssetContent[]): string {
+	return `module.exports={assets:{${
+		assets.map(
+			asset => [
+				`"/${asset.path}": {`,
+				"type:\"script\",",
+				`path:"${asset.path}",`,
+				`global:${!!asset.global},`,
+				(asset.preload ? `preload:${!!asset.preload},` : ""),
+				"execute: rv => {",
+				[
+					"\n'use strict';\n",
+					"const module = rv.module;",
+					"const exports = module.exports;",
+					"const require = module.require;",
+					"const __dirname = rv.dirname;",
+					"const __filename = rv.filename;",
+					`\n${asset.code}\n`,
+					(asset.exports ?? [])
+						.map(key => `exports["${key}"] = typeof ${key} !== "undefined" ? ${key} : undefined;`)
+						.join(""),
+					"return module.exports;\n",
+				].join(""),
+				"},\n",
+				"},",
+			].join("")
+		).join("")
+	}}}`;
 }
 
 const babelOption = {
@@ -155,9 +231,11 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			if (errorMessages.length > 0) {
 				param.logger.warn("Non-ES5 syntax found.\n" + errorMessages.join("\n"));
 			}
+
 			if (!param.bundle)
 				return null;
-			return bundleScripts(gamejson.main || gamejson.assets.mainScene.path, param.source);
+
+			return bundleScripts(gamejson, param.source, optimizeScript);
 		})
 		.then(async (bundleResult) => {
 			const files: string[] = param.strip ?
@@ -233,6 +311,16 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 				}
 				fs.writeFileSync(path.resolve(param.dest, p), value);
 			});
+
+			if (gamejson.environment?.["sandbox-runtime"] === "3" && bundleResult) {
+				const assetBundlePath = gcu.addScriptAsset(gamejson, "aez_asset_bundle");
+				const assetBundleAbsPath = path.resolve(param.dest, assetBundlePath);
+				cmn.Util.mkdirpSync(path.dirname(assetBundleAbsPath));
+				fs.writeFileSync(assetBundleAbsPath, bundleResult.bundle);
+				gamejson.assetBundle = "./" + assetBundlePath;
+				preservingFilePathSet.add(assetBundlePath);
+			}
+
 			// コピーしなかったアセットやファイルをgame.jsonから削除する
 			gcu.removeScriptAssets(gamejson, (filePath: string) => preservingFilePathSet.has(filePath));
 			gcu.removeGlobalScripts(gamejson, (filePath: string) => preservingFilePathSet.has(filePath));
@@ -260,9 +348,10 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 				delete gamejson.environment.niconico;
 			}
 
-			if (bundleResult === null) {
+			if (bundleResult === null || gamejson.environment?.["sandbox-runtime"] === "3") {
 				return;
 			}
+
 			let entryPointPath: string;
 			if (!!gamejson.main) {
 				entryPointPath = gcu.addScriptAsset(gamejson, "aez_bundle_main");
