@@ -24,7 +24,9 @@
 		"sandbox-runtime": "2"
 	},
 	"globalScripts": [
-		"node_modules/external/index.js"
+		"node_modules/external/index.js",
+		"node_modules/foo/index.js",
+		"node_modules/hoge/index.js"
 	],
 	"moduleMainScripts": {
 		"external": "node_modules/external/index.js"
