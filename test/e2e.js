@@ -69,17 +69,26 @@ async function checkHttp(url) {
 	}
 }
 
-async function createAkashicConfigJs() { 	
-	const content = `
-		module.exports = {
-		  commandOptions: {
-		    init : {
-			  type: "typescript",
-			  yes: true
-		    }
-		  }
-	    };
-	`;
+async function createAkashicConfigJs() { 
+	const options = {
+		commandOptions: {
+			init: {
+				type: "typescript",
+				yes: true
+			},
+			export: {
+				zip: {
+					strip: true,
+					bundle: true
+				},
+				html: {
+					output: "output",
+					bundle: true
+				}
+			}
+		}
+	};
+	const content = `module.exports = ${JSON.stringify(options)};`;
 	await writeFile("akashic.config.js", content);
 }
 
@@ -170,13 +179,13 @@ try {
 	// TODO 出力結果検証
 	{
 		console.log("test @akashic/akashic-cli-export-html");
-		await exec(`${akashicCliPath} export html --output output --bundle`);
+		await exec(`${akashicCliPath} export html`);
 	}
 
 	// TODO 出力結果検証
 	{
 		console.log("test @akashic/akashic-cli-export-zip");
-		await exec(`${akashicCliPath} export zip --strip --bundle`);
+		await exec(`${akashicCliPath} export zip`);
 	}
 
 	try {
