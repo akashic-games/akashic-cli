@@ -69,6 +69,29 @@ async function checkHttp(url) {
 	}
 }
 
+async function createAkashicConfigJs() { 
+	const options = {
+		commandOptions: {
+			init: {
+				type: "typescript",
+				yes: true
+			},
+			export: {
+				zip: {
+					strip: true,
+					bundle: true
+				},
+				html: {
+					output: "output",
+					bundle: true
+				}
+			}
+		}
+	};
+	const content = `module.exports = ${JSON.stringify(options)};`;
+	await writeFile("akashic.config.js", content);
+}
+
 try {
 	console.log("Start test");
 
@@ -113,7 +136,8 @@ try {
 	{
 		console.log("test @akashic/akashic-cli-init");
 		shell.cd(`${targetDir}/game`);
-		await exec(`${akashicCliPath} init --type typescript -y`);
+		await createAkashicConfigJs();
+		await exec(`${akashicCliPath} init`);
 		const files = await readdir(`${targetDir}/game`);
 		assertContains(files, "audio");
 		assertContains(files, "image");
@@ -155,13 +179,13 @@ try {
 	// TODO 出力結果検証
 	{
 		console.log("test @akashic/akashic-cli-export-html");
-		await exec(`${akashicCliPath} export html --output output --bundle`);
+		await exec(`${akashicCliPath} export html`);
 	}
 
 	// TODO 出力結果検証
 	{
 		console.log("test @akashic/akashic-cli-export-zip");
-		await exec(`${akashicCliPath} export zip --strip --bundle`);
+		await exec(`${akashicCliPath} export zip`);
 	}
 
 	try {

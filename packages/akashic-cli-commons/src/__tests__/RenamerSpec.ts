@@ -1,9 +1,10 @@
 import * as path from "path";
 import mockfs from "mock-fs";
 import * as fs from "fs";
-import * as Util from "../Util";
+import * as Util from "../Util.js";
 import * as Renamer from "../Renamer.js";
-import { ConfigurationFile } from "../ConfigurationFile.js";
+import { GameConfiguration } from "../GameConfiguration.js";
+import { readJSON } from "../FileSystem.js";
 
 describe("Renamer", () => {
 	afterEach(() => {
@@ -94,7 +95,7 @@ describe("Renamer", () => {
 		});
 
 		it("hash game.json", async () => {
-			const gamejson = await ConfigurationFile.read(path.join("./srcDir", "game.json"), undefined!);
+			const gamejson = await readJSON<GameConfiguration>(path.join("./srcDir", "game.json"));
 			Renamer.renameAssetFilenames(gamejson, "./srcDir");
 
 			expect(gamejson.main).toBe("./script/mainScene");
@@ -149,7 +150,7 @@ describe("Renamer", () => {
 
 		// アセットの path が重複している場合、重複するアセットでハッシュ化後のファイルを共有する
 		it("hash game.json - throw error", async () => {
-			const gamejson = await ConfigurationFile.read(path.join("./srcDir", "game.json"), undefined!);
+			const gamejson = await readJSON<GameConfiguration>(path.join("./srcDir", "game.json"));
 			gamejson.assets = {
 				hoge: {
 					type: "image",

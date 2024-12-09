@@ -9,9 +9,7 @@ export { CliConfigStat } from "./CliConfig/CliConfigStat.js";
 export { CliConfigUninstall } from "./CliConfig/CliConfigUninstall.js";
 export { CliConfigUpdate } from "./CliConfig/CliConfigUpdate.js";
 export { CliConfiguration } from "./CliConfig/CliConfiguration.js";
-export { CliConfigurationFile } from "./CliConfig/CliConfigurationFile.js";
 export { Configuration, ConfigurationParameterObject } from "./Configuration.js";
-export { ConfigurationFile } from "./ConfigurationFile.js";
 export { ConsoleLogger } from "./ConsoleLogger.js";
 export * as FileSystem from "./FileSystem.js";
 export {
