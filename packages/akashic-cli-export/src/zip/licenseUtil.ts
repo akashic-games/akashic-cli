@@ -40,15 +40,25 @@ async function makeLicenseInfo(source: string, pkgJsonPaths: string[]): Promise<
     for (const p of pkgJsonPaths) {
         const pkgJsonPath = path.resolve(source, p);
         const pkgJson = await cmn.FileSystem.readJSON<any>(pkgJsonPath);
-        // LICENSE ファイルは root 直下のファイルを部分一致で取得
-        // TODO: LICENSE-LGPL のようなファイルは機械的に扱えないので警告を出すようにする。 LICENSE(license) に任意の拡張子がついたものを対象とする。
+
         const files = fs.readdirSync(path.dirname(pkgJsonPath));
-        const licenseFile = files.find((file) => /LICENSE/.test(file));
-        if (!licenseFile) return;
+        const licenseFile = files.find((file) => {
+            // package.json のルールに合わせて拡張子は txt, md を許容
+            if (/^LICENSE$/i.test(file) || /^LICENSE.(txt|md)/i.test(file)) {
+                return file;    
+            }
+            // LICENSE-LGPL のようなファイルは機械的に扱えないので警告を出力
+            if (/LICENSE\-\w+$/i.test(file)) {
+                console.warn(`[WARNING]: LICENSE file for ${pkgJson.name} is "${file}".`);
+                return file;
+            }
+        });
+        if (!licenseFile) continue;
         const licensePath = path.join(path.dirname(pkgJsonPath), licenseFile);
 
         if (fs.existsSync(licensePath)) {
-            const text = fs.readFileSync(licensePath, "utf-8");
+            validateLicense(licenseFile, pkgJson.name, pkgJson.license);
+            const text = fs.readFileSync(licensePath, "utf-8");   
             licenseInfos.push({
                 name: pkgJson.name,
                 type:pkgJson.license, 
@@ -57,4 +67,11 @@ async function makeLicenseInfo(source: string, pkgJsonPaths: string[]): Promise<
         }
     };
     return licenseInfos;
+}
+
+function validateLicense(fileName: string, libName: string, license: string): void {
+    // MIT/ISC 以外のライセンスは警告
+    if (!/(MIT|ISC)/i.test(license)) {
+        console.warn(`[WARNING]: LICENSE for ${libName} is "${license}".`);
+    }
 }
