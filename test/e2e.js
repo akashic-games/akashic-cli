@@ -69,6 +69,20 @@ async function checkHttp(url) {
 	}
 }
 
+async function createAkashicConfigJs() { 	
+	const content = `
+		module.exports = {
+		  commandOptions: {
+		    init : {
+			  type: "typescript",
+			  yes: true
+		    }
+		  }
+	    };
+	`;
+	await writeFile("akashic.config.js", content);
+}
+
 try {
 	console.log("Start test");
 
@@ -113,7 +127,8 @@ try {
 	{
 		console.log("test @akashic/akashic-cli-init");
 		shell.cd(`${targetDir}/game`);
-		await exec(`${akashicCliPath} init --type typescript -y`);
+		await createAkashicConfigJs();
+		await exec(`${akashicCliPath} init`);
 		const files = await readdir(`${targetDir}/game`);
 		assertContains(files, "audio");
 		assertContains(files, "image");
