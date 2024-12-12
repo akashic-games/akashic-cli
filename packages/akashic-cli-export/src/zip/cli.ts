@@ -1,5 +1,4 @@
 import { createRequire } from "module";
-import * as path from "path";
 import type { CliConfigExportZip} from "@akashic/akashic-cli-commons";
 import { ConsoleLogger, CliConfigurationFile, SERVICE_TYPES } from "@akashic/akashic-cli-commons";
 import { Command } from "commander";
@@ -95,11 +94,7 @@ export function run(argv: string[]): void {
 	commander.parse(argvCopy);
 	const options = commander.opts();
 
-	CliConfigurationFile.read(path.join(options.cwd || process.cwd(), "akashic.config.js"), (error, configuration) => {
-		if (error) {
-			console.error(error);
-			process.exit(1);
-		}
+	CliConfigurationFile.load(options.cwd || process.cwd()).then(configuration => {
 
 		if (options.targetService && !SERVICE_TYPES.includes(options.targetService)) {
 			console.error("Invalid --target-service option argument: " + options.targetService);
@@ -128,6 +123,9 @@ export function run(argv: string[]): void {
 			resolveAkashicRuntime: options.resolveAkashicRuntime ?? conf.resolveAkashicRuntime,
 			preservePackageJson: options.preservePackageJson ?? options.preservePackageJson
 		});
+	}).catch(error => {
+		console.error(error);
+		process.exit(1);
 	});
 }
 

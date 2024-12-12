@@ -54,11 +54,7 @@ function cli(param: CliConfigStat): void {
 export function run(argv: string[]): void {
 	commander.parse(argv);
 	const options = commander.opts();
-	CliConfigurationFile.read(path.join(options.cwd || process.cwd(), "akashic.config.js"), (error, configuration) => {
-		if (error) {
-			console.error(error);
-			process.exit(1);
-		}
+	CliConfigurationFile.load(options.cwd || process.cwd()).then(configuration => {
 
 		const conf = configuration!.commandOptions?.stat ?? {};
 		cli({
@@ -68,5 +64,8 @@ export function run(argv: string[]): void {
 			limit: options.limit ?? conf.limit,
 			raw: options.raw ?? conf.raw
 		});
+	}).catch(error => {
+		console.error(error);
+		process.exit(1);
 	});
 }

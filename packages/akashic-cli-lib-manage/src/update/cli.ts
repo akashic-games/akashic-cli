@@ -29,18 +29,16 @@ commander
 export function run(argv: string[]): void {
 	commander.parse(argv);
 	const options = commander.opts();
-	CliConfigurationFile.read(path.join(options.cwd || process.cwd(), "akashic.config.js"), (error, configuration) => {
-		if (error) {
-			console.error(error);
-			process.exit(1);
-		}
-
+	CliConfigurationFile.load(options.cwd || process.cwd()).then(configuration => {
 		const conf = configuration!.commandOptions?.update ?? {};
 		cli({
 			cwd: options.cwd ?? conf.cwd,
 			quiet: options.quiet ?? conf.quiet,
 			args: commander.args ?? conf.args
 		});
+	}).catch(error => {
+		console.error(error);
+		process.exit(1);
 	});
 }
 commander

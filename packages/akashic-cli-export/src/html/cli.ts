@@ -92,11 +92,7 @@ export function run(argv: string[]): void {
 	commander.parse(argvCopy);
 	const options = commander.opts();
 
-	CliConfigurationFile.read(path.join(options.cwd || process.cwd(), "akashic.config.js"), (error, configuration) => {
-		if (error) {
-			console.error(error);
-			process.exit(1);
-		}
+	CliConfigurationFile.load(options.cwd || process.cwd()).then(configuration => {
 		if (options.debugOverrideEngineFiles) {
 			if (!/^engineFilesV\d+_\d+_\d+.*\.js$/.test(path.basename(options.debugOverrideEngineFiles))) {
 				console.error(`Invalid ---debug-override-engine-files option argument:${options.debugOverrideEngineFiles},`
@@ -128,6 +124,9 @@ export function run(argv: string[]): void {
 			omitUnbundledJs: options.omitUnbundledJs ?? conf.omitUnbundledJs,
 			debugOverrideEngineFiles: options.debugOverrideEngineFiles ?? conf.debugOverrideEngineFiles
 		});
+	}).catch(error => {
+		console.error(error);
+		process.exit(1);
 	});
 }
 
