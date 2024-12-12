@@ -653,7 +653,7 @@ describe("convert", () => {
 			return convertGame(param)
 				.then(() => {
 					expect(fs.existsSync(path.join(destDir, "node_modules/external/index.js"))).toBeFalsy();
-					expect(fs.existsSync(path.join(destDir, "node_modules/external/package.json"))).toBeTruthy()
+					expect(fs.existsSync(path.join(destDir, "node_modules/external/package.json"))).toBeTruthy();
 					expect(fs.existsSync(path.join(destDir, "script/main.js"))).toBeFalsy();
 					expect(fs.existsSync(path.join(destDir, "thirdpary_license.txt"))).toBeTruthy();
 
@@ -669,7 +669,7 @@ describe("convert", () => {
 							"",
 							"Copyright (c) 2024 hogehoge",
 							"",
-						]	
+						]
 					);
 				});
 		});
@@ -681,10 +681,10 @@ describe("convert", () => {
 			};
 			return convertGame(param)
 				.then(() => {
-					expect(fs.existsSync(path.join(destDir, "node_modules/external/index.js"))).toBeTruthy()
-					expect(fs.existsSync(path.join(destDir, "node_modules/external/package.json"))).toBeTruthy()
-					expect(fs.existsSync(path.join(destDir, "script/main.js"))).toBeTruthy()
-					expect(fs.existsSync(path.join(destDir, "thirdpary_license.txt"))).toBeTruthy()
+					expect(fs.existsSync(path.join(destDir, "node_modules/external/index.js"))).toBeTruthy();
+					expect(fs.existsSync(path.join(destDir, "node_modules/external/package.json"))).toBeTruthy();
+					expect(fs.existsSync(path.join(destDir, "script/main.js"))).toBeTruthy();
+					expect(fs.existsSync(path.join(destDir, "thirdpary_license.txt"))).toBeTruthy();
 
 					const mainScript = fs.readFileSync(path.join(destDir, "script/main.js")).toString().split("\n");
 					expect(mainScript[0]).toBe(LICENSE_TEXT_PREFIX.replace(/\r?\n/g, ""));
@@ -698,7 +698,7 @@ describe("convert", () => {
 							"",
 							"Copyright (c) 2024 hogehoge",
 							"",
-						]	
+						]
 					);
 				});
 		});
@@ -738,33 +738,33 @@ describe("convert - v3", () => {
 			const assetBundle = executeCommonJS(result.bundle);
 
 			expect(assetBundle.assets).toBeTypeOf("object");
-			expect(assetBundle.assets["/script/main.js"].type).toBe("script");
-			expect(assetBundle.assets["/script/main.js"].path).toBe("script/main.js");
-			expect(assetBundle.assets["/script/main.js"].global).toBe(true);
-			expect(assetBundle.assets["/script/main.js"].execute).toBeTypeOf("function");
+			expect(assetBundle.assets.main.type).toBe("script");
+			expect(assetBundle.assets.main.path).toBe("script/main.js");
+			expect(assetBundle.assets.main.global).toBe(true);
+			expect(assetBundle.assets.main.execute).toBeTypeOf("function");
 			compareAssetBundleFunction(
 				path.resolve(fixturesDir, "simple_game", "script/main.js"),
-				assetBundle.assets["/script/main.js"].execute
+				assetBundle.assets.main.execute
 			);
 
 			expect(assetBundle.assets).toBeTypeOf("object");
-			expect(assetBundle.assets["/script/foo.js"].type).toBe("script");
-			expect(assetBundle.assets["/script/foo.js"].path).toBe("script/foo.js");
-			expect(assetBundle.assets["/script/foo.js"].global).toBe(true);
-			expect(assetBundle.assets["/script/foo.js"].execute).toBeTypeOf("function");
+			expect(assetBundle.assets.foo.type).toBe("script");
+			expect(assetBundle.assets.foo.path).toBe("script/foo.js");
+			expect(assetBundle.assets.foo.global).toBe(true);
+			expect(assetBundle.assets.foo.execute).toBeTypeOf("function");
 			compareAssetBundleFunction(
 				path.resolve(fixturesDir, "simple_game", "script/foo.js"),
-				assetBundle.assets["/script/foo.js"].execute
+				assetBundle.assets.foo.execute
 			);
 
 			expect(assetBundle.assets).toBeTypeOf("object");
-			expect(assetBundle.assets["/script/bar.js"].type).toBe("script");
-			expect(assetBundle.assets["/script/bar.js"].path).toBe("script/bar.js");
-			expect(assetBundle.assets["/script/bar.js"].global).toBe(true);
-			expect(assetBundle.assets["/script/bar.js"].execute).toBeTypeOf("function");
+			expect(assetBundle.assets.bar.type).toBe("script");
+			expect(assetBundle.assets.bar.path).toBe("script/bar.js");
+			expect(assetBundle.assets.bar.global).toBe(true);
+			expect(assetBundle.assets.bar.execute).toBeTypeOf("function");
 			compareAssetBundleFunction(
 				path.resolve(fixturesDir, "simple_game", "script/bar.js"),
-				assetBundle.assets["/script/bar.js"].execute
+				assetBundle.assets.bar.execute
 			);
 		});
 	});

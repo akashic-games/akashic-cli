@@ -75,6 +75,7 @@ export interface BundleResult {
 }
 
 interface ScriptAssetContent {
+	id: string;
 	path: string;
 	code: string;
 	global?: boolean;
@@ -90,7 +91,7 @@ export async function bundleScripts(
 	if (gamejson.environment?.["sandbox-runtime"] === "3") {
 		const scriptAssetContents: ScriptAssetContent[] = [];
 
-		for (const asset of Object.values(gamejson.assets)) {
+		for (const [assetId, asset] of Object.entries(gamejson.assets)) {
 			if (asset.type !== "script") continue;
 
 			let code = fs.readFileSync(path.resolve(basedir, asset.path)).toString();
@@ -98,6 +99,7 @@ export async function bundleScripts(
 
 			scriptAssetContents.push({
 				...asset,
+				id: assetId,
 				code,
 			});
 		}
@@ -107,6 +109,7 @@ export async function bundleScripts(
 			code = optimizeScript ? optimizeScript(code) : code;
 
 			scriptAssetContents.push({
+				id: globalScript,
 				path: globalScript,
 				global: true,
 				code,
@@ -148,7 +151,7 @@ function generateAssetBundleString(assets: ScriptAssetContent[]): string {
 	return `module.exports={assets:{${
 		assets.map(
 			asset => [
-				`"/${asset.path}": {`,
+				`"${asset.id}": {`,
 				"type:\"script\",",
 				`path:"${asset.path}",`,
 				`global:${!!asset.global},`,
