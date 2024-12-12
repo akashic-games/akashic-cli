@@ -70,6 +70,11 @@ export function _completeConvertGameParameterObject(param: ConvertGameParameterO
 }
 
 export interface BundleResult {
+	/**
+	 * "assetBundle": アセットバンドル (game.json の "assetBundle" の追加が必要)
+	 * "script": バンドルされたスクリプト (game.json の "main" の上書きが必要)
+	 */
+	type: "assetBundle" | "script";
 	bundle: string;
 	filePaths: string[];
 }
@@ -117,6 +122,7 @@ export async function bundleScripts(
 		}
 
 		return {
+			type: "assetBundle",
 			bundle: generateAssetBundleString(scriptAssetContents),
 			filePaths: scriptAssetContents.map(content => content.path),
 		};
@@ -140,7 +146,7 @@ export async function bundleScripts(
 		const chunk = rollupOutput.output.find(chunkOrAsset => chunkOrAsset.type === "chunk");
 		const { code, moduleIds } = chunk as OutputChunk;
 		const filePaths = moduleIds.map(p => cmn.Util.makeUnixPath(path.relative(basedir, p)));
-		return { bundle: code, filePaths };
+		return { type: "script", bundle: code, filePaths };
 	 } finally {
 		if (bundle)
 			await bundle.close();
@@ -315,7 +321,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 				fs.writeFileSync(path.resolve(param.dest, p), value);
 			});
 
-			if (gamejson.environment?.["sandbox-runtime"] === "3" && bundleResult) {
+			if (bundleResult?.type === "assetBundle") {
 				const assetBundlePath = gcu.addScriptAsset(gamejson, "aez_asset_bundle");
 				const assetBundleAbsPath = path.resolve(param.dest, assetBundlePath);
 				cmn.Util.mkdirpSync(path.dirname(assetBundleAbsPath));
@@ -351,7 +357,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 				delete gamejson.environment.niconico;
 			}
 
-			if (bundleResult === null || gamejson.environment?.["sandbox-runtime"] === "3") {
+			if (bundleResult?.type !== "script") {
 				return;
 			}
 
