@@ -22,8 +22,8 @@ describe("licenseUtil", () => {
 	it("writeLicenseTextFile()", async () => {
 		const result = await writeLicenseTextFile(contentPath, destDir,  moduleFilePaths);
 
-		expect(consoleSpy).toHaveBeenCalledWith("[WARNING]: LICENSE file for foo is \"license-warn\".");
-		expect(consoleSpy).toHaveBeenCalledWith("[WARNING]: LICENSE for hoge is \"LGPL-3.0-or-later\".");
+		expect(consoleSpy).toBeCalledWith(expect.stringMatching(/^\[WARNING\].+foo.+license-warn.+.$/));		
+		expect(consoleSpy).toBeCalledWith(expect.stringMatching(/^\[WARNING\].+hoge.+LGPL-3.0-or-later.+.$/));
 		expect(result).toBeTruthy();
 
 		const license = fsx.readFileSync(path.join(destDir, "thirdpary_license.txt")).toString().split(/\r?\n/g);
@@ -32,16 +32,8 @@ describe("licenseUtil", () => {
 				"# external",
 				"",
 				"The MIT License (MIT) by external",
-				"",
-				"# foo",
-				"",
-				"ISC License　by foo",
-				"",
-				"# hoge",
-				"",
-				"LGPL Licens by hoge",
 				""
-			]	
+			]
 		);
 	});
 });

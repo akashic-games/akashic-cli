@@ -43,22 +43,21 @@ async function makeLicenseInfo(source: string, pkgJsonPaths: string[]): Promise<
 
         const files = fs.readdirSync(path.dirname(pkgJsonPath));
         const licenseFile = files.find((file) => {
-            // package.json のルールに合わせて拡張子は txt, md を許容
-            if (/^LICENSE$/i.test(file) || /^LICENSE.(txt|md)/i.test(file)) {
-                return file;    
+            // 仕様上はあらゆる拡張子が許されているが、テキストファイルに取り込むのでここでは .txt と .md のみ考慮する
+            if (/^LICEN[SC]E$/i.test(file) || /^LICEN[SC]E.(txt|md)$/i.test(file)) {
+                return true;    
             }
             // LICENSE-LGPL のようなファイルは機械的に扱えないので警告を出力
             if (/LICENSE\-\w+$/i.test(file)) {
-                console.warn(`[WARNING]: LICENSE file for ${pkgJson.name} is "${file}".`);
-                return file;
+                console.warn(`[WARNING]: The license of ${pkgJson.name} will not be included in thirdparty_license.txt since akashic export doesn't know its license file name "${file}".You may need to follow the license by yourself.`);
+                return false;
             }
         });
         if (!licenseFile) continue;
         const licensePath = path.join(path.dirname(pkgJsonPath), licenseFile);
 
-        if (fs.existsSync(licensePath)) {
-            validateLicense(licenseFile, pkgJson.name, pkgJson.license);
-            const text = fs.readFileSync(licensePath, "utf-8");   
+        if (fs.existsSync(licensePath) && validateLicense(pkgJson.name, pkgJson.license)) {
+            const text = fs.readFileSync(licensePath, "utf-8");
             licenseInfos.push({
                 name: pkgJson.name,
                 type:pkgJson.license, 
@@ -69,9 +68,12 @@ async function makeLicenseInfo(source: string, pkgJsonPaths: string[]): Promise<
     return licenseInfos;
 }
 
-function validateLicense(fileName: string, libName: string, license: string): void {
+function validateLicense(libName: string, license: string): boolean {
     // MIT/ISC 以外のライセンスは警告
     if (!/(MIT|ISC)/i.test(license)) {
-        console.warn(`[WARNING]: LICENSE for ${libName} is "${license}".`);
+        console.warn(`[WARNING]: The license of ${libName} will not be included in thirdparty_license.txt since akashic export doesn't know its license "${license}". You may need to follow the license by yourself.`);
+        return false;
     }
+
+    return true;
 }
