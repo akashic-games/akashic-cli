@@ -45,7 +45,7 @@ export namespace CliConfigurationFile {
 	 * 2. akashic.config.cjs
 	 * 3. akashic.config.js
 	 *
-	 * @param confDir 設定ファイルがあるディレクトリ。
+	 * @param confDir 設定ファイルがあるファイルまたはディレクトリ。
 	 */
 	export async function load(confDir: string): Promise<CliConfiguration> {
 		const candidateConfigPaths = isDirectory(confDir) ? priority.map(filename => join(confDir, filename)) : [confDir];
