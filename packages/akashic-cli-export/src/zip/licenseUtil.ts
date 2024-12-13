@@ -48,15 +48,15 @@ async function makeLicenseInfo(source: string, pkgJsonPaths: string[]): Promise<
                 return true;    
             }
             // LICENSE-LGPL のようなファイルは機械的に扱えないので警告を出力
-            if (/LICENSE\-\w+$/i.test(file)) {
-                console.warn(`[WARNING]: The license of ${pkgJson.name} will not be included in thirdparty_license.txt since akashic export doesn't know its license file name "${file}".You may need to follow the license by yourself.`);
+            if (/^LICEN[SC]E[^a-z]/i.test(file)) {
+                console.warn(`[WARNING]: Detected a license-like file "${file}" in ${pkgJson.name} but ignored (not included in thirdparty_license.txt) because akashic export doesn't know how it should be handled. You may need to follow the license by yourself.`);
                 return false;
             }
         });
         if (!licenseFile) continue;
         const licensePath = path.join(path.dirname(pkgJsonPath), licenseFile);
 
-        if (fs.existsSync(licensePath) && validateLicense(pkgJson.name, pkgJson.license)) {
+        if (fs.existsSync(licensePath) && isAutoIncludableLicense(pkgJson.name, pkgJson.license)) {
             const text = fs.readFileSync(licensePath, "utf-8");
             licenseInfos.push({
                 name: pkgJson.name,
@@ -68,12 +68,12 @@ async function makeLicenseInfo(source: string, pkgJsonPaths: string[]): Promise<
     return licenseInfos;
 }
 
-function validateLicense(libName: string, license: string): boolean {
+function isAutoIncludableLicense(libName: string, license: string): boolean {
     // MIT/ISC 以外のライセンスは警告
-    if (!/(MIT|ISC)/i.test(license)) {
+    if (/(MIT|ISC)/i.test(license)) {
+        return true;
+    } else { 
         console.warn(`[WARNING]: The license of ${libName} will not be included in thirdparty_license.txt since akashic export doesn't know its license "${license}". You may need to follow the license by yourself.`);
         return false;
     }
-
-    return true;
 }
