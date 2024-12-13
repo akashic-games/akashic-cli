@@ -63,7 +63,7 @@ function isDirectory(path: string): boolean {
 	try {
 		const stats = statSync(path);
 		return stats.isDirectory();
-	} catch (_) {
+	} catch {
 		return false;
 	}
 }
