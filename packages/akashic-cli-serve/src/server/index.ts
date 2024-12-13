@@ -1,6 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as util from "util";
+import type { CliConfiguration } from "@akashic/akashic-cli-commons";
 import type { CliConfigServe } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigServe";
 import type { CliConfigurationFile } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigurationFile";
 import type { SERVICE_TYPES } from "@akashic/akashic-cli-commons/lib/ServiceType";
@@ -465,35 +466,37 @@ export async function run(argv: any): Promise<void> {
 	// eslint-disable-next-line @typescript-eslint/naming-convention
 	const CliConfigurationFile = await importCommonsConfiguration();
 
-	CliConfigurationFile.read(path.join(options.cwd || process.cwd(), "akashic.config.js"), async (error, configuration) => {
-		if (error) {
-			console.error(error);
-			process.exit(1);
-		}
+	let configuration: CliConfiguration;
+	try {
+		configuration = await CliConfigurationFile.load(options.cwd || process.cwd());
+	} catch (error) {
+		console.error(error);
+		process.exit(1);
+	}
 
-		const conf = configuration!.commandOptions?.serve ?? {};
-		const cliConfigParam: CliConfigServe = {
-			port: options.port ?? conf.port,
-			hostname: options.hostname ?? conf.hostname,
-			verbose: options.verbose ?? conf.verbose,
-			autoStart: options.autoStart ?? conf.autoStart,
-			targetService: options.targetService ?? conf.targetService,
-			debugPlaylog: options.debugPlaylog ?? conf.debugPlaylog,
-			debugUntrusted: options.debugUntrusted ?? conf.debugUntrusted,
-			debugTrustedIframe: options.debugTrustedIframe ?? conf.debugTrustedIframe,
-			debugProxyAudio: options.debugProxyAudio ?? conf.debugProxyAudio,
-			debugPauseActive: options.debugPauseActive ?? conf.debugPauseActive,
-			debugDisableFeatCheck: options.debugDisableFeatCheck ?? conf.debugDisableFeatCheck,
-			allowExternal: options.allowExternal ?? conf.allowExternal,
-			targetDirs: commander.args.length > 0 ? commander.args : (conf.targetDirs ?? [process.cwd()]),
-			openBrowser: options.openBrowser ?? conf.openBrowser,
-			preserveDisconnected: options.preserveDisconnected ?? conf.preserveDisconnected,
-			watch: options.watch ?? conf.watch,
-			experimentalOpen: options.experimentalOpen ?? conf.experimentalOpen,
-			sslCert: options.sslCert ?? conf.sslCert,
-			sslKey: options.sslKey ?? conf.sslKey,
-			corsAllowOrigin: options.corsAllowOrigin ?? conf.corsAllowOrigin
-		};
-		await cli(cliConfigParam, options);
-	});
+	const conf = configuration!.commandOptions?.serve ?? {};
+
+	const cliConfigParam: CliConfigServe = {
+		port: options.port ?? conf.port,
+		hostname: options.hostname ?? conf.hostname,
+		verbose: options.verbose ?? conf.verbose,
+		autoStart: options.autoStart ?? conf.autoStart,
+		targetService: options.targetService ?? conf.targetService,
+		debugPlaylog: options.debugPlaylog ?? conf.debugPlaylog,
+		debugUntrusted: options.debugUntrusted ?? conf.debugUntrusted,
+		debugTrustedIframe: options.debugTrustedIframe ?? conf.debugTrustedIframe,
+		debugProxyAudio: options.debugProxyAudio ?? conf.debugProxyAudio,
+		debugPauseActive: options.debugPauseActive ?? conf.debugPauseActive,
+		debugDisableFeatCheck: options.debugDisableFeatCheck ?? conf.debugDisableFeatCheck,
+		allowExternal: options.allowExternal ?? conf.allowExternal,
+		targetDirs: commander.args.length > 0 ? commander.args : (conf.targetDirs ?? [process.cwd()]),
+		openBrowser: options.openBrowser ?? conf.openBrowser,
+		preserveDisconnected: options.preserveDisconnected ?? conf.preserveDisconnected,
+		watch: options.watch ?? conf.watch,
+		experimentalOpen: options.experimentalOpen ?? conf.experimentalOpen,
+		sslCert: options.sslCert ?? conf.sslCert,
+		sslKey: options.sslKey ?? conf.sslKey,
+		corsAllowOrigin: options.corsAllowOrigin ?? conf.corsAllowOrigin
+	};
+	await cli(cliConfigParam, options);
 }
