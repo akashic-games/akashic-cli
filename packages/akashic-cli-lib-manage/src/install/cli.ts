@@ -1,6 +1,5 @@
-import * as path from "path";
 import { createRequire } from "module";
-import type { CliConfigInstall, CliConfiguration } from "@akashic/akashic-cli-commons";
+import type { CliConfigInstall } from "@akashic/akashic-cli-commons";
 import { ConsoleLogger, FileSystem } from "@akashic/akashic-cli-commons";
 import { Command } from "commander";
 import type { InstallParameterObject} from "./install.js";

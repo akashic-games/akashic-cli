@@ -1,4 +1,3 @@
-import * as path from "path";
 import { createRequire } from "module";
 import type { CliConfigUpdate } from "@akashic/akashic-cli-commons";
 import { ConsoleLogger, FileSystem } from "@akashic/akashic-cli-commons";

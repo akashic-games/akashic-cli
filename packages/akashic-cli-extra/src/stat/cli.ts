@@ -1,6 +1,6 @@
 import * as path from "path";
 import { createRequire } from "module";
-import type { Logger, CliConfigStat, GameConfiguration, CliConfiguration } from "@akashic/akashic-cli-commons";
+import type { Logger, CliConfigStat, GameConfiguration } from "@akashic/akashic-cli-commons";
 import { ConsoleLogger, FileSystem } from "@akashic/akashic-cli-commons";
 import { Command } from "commander";
 import * as stat from "./stat.js";

@@ -1,6 +1,6 @@
 import { createRequire } from "module";
 import * as path from "path";
-import type { CliConfigExportHtml, CliConfiguration} from "@akashic/akashic-cli-commons";
+import type { CliConfigExportHtml } from "@akashic/akashic-cli-commons";
 import { ConsoleLogger, FileSystem} from "@akashic/akashic-cli-commons";
 import { Command } from "commander";
 import type { ExportHTMLParameterObject } from "./exportHTML.js";

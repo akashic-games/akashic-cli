@@ -1,6 +1,6 @@
 import { createRequire } from "module";
 import type { CliConfigExportZip} from "@akashic/akashic-cli-commons";
-import { ConsoleLogger,  FileSystem, SERVICE_TYPES } from "@akashic/akashic-cli-commons";
+import { ConsoleLogger, FileSystem, SERVICE_TYPES } from "@akashic/akashic-cli-commons";
 import { Command } from "commander";
 import { promiseExportZip } from "./exportZip.js";
 

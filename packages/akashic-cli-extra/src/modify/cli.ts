@@ -1,6 +1,6 @@
 import * as path from "path";
 import { createRequire } from "module";
-import type { CliConfigModify, CliConfiguration } from "@akashic/akashic-cli-commons";
+import type { CliConfigModify } from "@akashic/akashic-cli-commons";
 import { ConsoleLogger, FileSystem } from "@akashic/akashic-cli-commons";
 import { Command } from "commander";
 import { promiseModifyBasicParameter } from "./modify.js";

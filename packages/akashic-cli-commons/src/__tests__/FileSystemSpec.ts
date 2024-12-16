@@ -2,8 +2,6 @@ import mockfs from "mock-fs";
 import { readFile, writeFile, readJSON, writeJSON, readdir, unlink } from "../FileSystem.js";
 import { buildEditorconfig } from "./helpers/buildEditorconfig.js";
 
-const mock = require("mock-require");
-
 describe("FileSystemSpec", () => {
 	afterEach(() => {
 		mockfs.restore();

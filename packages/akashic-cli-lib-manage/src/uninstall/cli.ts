@@ -1,6 +1,5 @@
-import * as path from "path";
 import { createRequire } from "module";
-import type { CliConfigUninstall, CliConfiguration } from "@akashic/akashic-cli-commons";
+import type { CliConfigUninstall } from "@akashic/akashic-cli-commons";
 import { ConsoleLogger, FileSystem } from "@akashic/akashic-cli-commons";
 import { Command } from "commander";
 import { promiseUninstall } from "./uninstall.js";
