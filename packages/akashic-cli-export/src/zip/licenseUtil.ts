@@ -40,14 +40,23 @@ async function makeLicenseInfo(source: string, pkgJsonPaths: string[]): Promise<
     for (const p of pkgJsonPaths) {
         const pkgJsonPath = path.resolve(source, p);
         const pkgJson = await cmn.FileSystem.readJSON<any>(pkgJsonPath);
-        // LICENSE ファイルは root 直下のファイルを部分一致で取得
-        // TODO: LICENSE-LGPL のようなファイルは機械的に扱えないので警告を出すようにする。 LICENSE(license) に任意の拡張子がついたものを対象とする。
+
         const files = fs.readdirSync(path.dirname(pkgJsonPath));
-        const licenseFile = files.find((file) => /LICENSE/.test(file));
+        const licenseFile = files.find((file) => {
+            // 仕様上はあらゆる拡張子が許されているが、テキストファイルに取り込むのでここでは .txt と .md のみ考慮する
+            if (/^LICEN[SC]E$/i.test(file) || /^LICEN[SC]E.(txt|md)$/i.test(file)) {
+                return true;    
+            }
+            // LICENSE-LGPL のようなファイルは機械的に扱えないので警告を出力
+            if (/^LICEN[SC]E[^a-z]/i.test(file)) {
+                console.warn(`[WARNING]: Detected a license-like file "${file}" in ${pkgJson.name} but ignored (not included in thirdparty_license.txt) because akashic export doesn't know how it should be handled. You may need to follow the license by yourself.`);
+                return false;
+            }
+        });
         if (!licenseFile) continue;
         const licensePath = path.join(path.dirname(pkgJsonPath), licenseFile);
 
-        if (fs.existsSync(licensePath)) {
+        if (fs.existsSync(licensePath) && isAutoIncludableLicense(pkgJson.name, pkgJson.license)) {
             const text = fs.readFileSync(licensePath, "utf-8");
             licenseInfos.push({
                 name: pkgJson.name,
@@ -57,4 +66,14 @@ async function makeLicenseInfo(source: string, pkgJsonPaths: string[]): Promise<
         }
     };
     return licenseInfos;
+}
+
+function isAutoIncludableLicense(libName: string, license: string): boolean {
+    // MIT/ISC 以外のライセンスは警告
+    if (/(MIT|ISC)/i.test(license)) {
+        return true;
+    } else { 
+        console.warn(`[WARNING]: The license of ${libName} will not be included in thirdparty_license.txt since akashic export doesn't know its license "${license}". You may need to follow the license by yourself.`);
+        return false;
+    }
 }

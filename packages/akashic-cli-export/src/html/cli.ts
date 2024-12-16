@@ -94,7 +94,7 @@ export async function run(argv: string[]): Promise<void> {
 
 	let configuration;
 	try { 
-		configuration = await FileSystem.readJSWithDefault<CliConfiguration>(path.join(options.cwd || process.cwd(), "akashic.config.js"), { commandOptions: {} });
+		configuration = await FileSystem.load(options.cwd || process.cwd());
 	} catch (error) {
 		console.error(error);
 		process.exit(1);
@@ -103,7 +103,7 @@ export async function run(argv: string[]): Promise<void> {
 		if (!/^engineFilesV\d+_\d+_\d+.*\.js$/.test(path.basename(options.debugOverrideEngineFiles))) {
 			console.error(`Invalid ---debug-override-engine-files option argument:${options.debugOverrideEngineFiles},`
 				+ "File name should be in engineFilesVx_x_x format");
-			process.exit(1);
+				process.exit(1);
 		}
 	}
 	if (options.atsumaru) {
@@ -129,6 +129,7 @@ export async function run(argv: string[]): Promise<void> {
 		autoGivenArgsName: options.autoGivenArgsName ?? conf.autoGivenArgsName,
 		omitUnbundledJs: options.omitUnbundledJs ?? conf.omitUnbundledJs,
 		debugOverrideEngineFiles: options.debugOverrideEngineFiles ?? conf.debugOverrideEngineFiles
+
 	});
 }
 

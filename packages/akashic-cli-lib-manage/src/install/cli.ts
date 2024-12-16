@@ -49,7 +49,7 @@ export async function run(argv: string[]): Promise<void> {
 	const options = commander.opts();
 	let configuration;
 	try { 
-		configuration = await FileSystem.readJSWithDefault<CliConfiguration>(path.join(options.cwd || process.cwd(), "akashic.config.js"), { commandOptions: {} });
+		configuration = await FileSystem.load(options.cwd || process.cwd());
 	} catch (error) {
 		console.error(error);
 		process.exit(1);

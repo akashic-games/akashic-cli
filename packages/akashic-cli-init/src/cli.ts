@@ -1,12 +1,10 @@
 import { createRequire } from "module";
-import * as path from "path";
 import type { CliConfigInit } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigInit.js";
-import type { CliConfiguration } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfiguration.js";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger.js";
 import { Command } from "commander";
 import { promiseInit } from "./init/init.js";
 import { listTemplates } from "./list/listTemplates.js";
-import { readJSWithDefault } from "@akashic/akashic-cli-commons/lib/FileSystem.js";
+import { load } from "@akashic/akashic-cli-commons/lib/FileSystem.js";
 
 async function cli(param: CliConfigInit): Promise<void> {
 	const logger = new ConsoleLogger({ quiet: param.quiet });
@@ -55,9 +53,10 @@ commander
 export async function run(argv: string[]): Promise<void> {
 	commander.parse(argv);
 	const options = commander.opts();
+
 	let configuration;
 	try { 
-		configuration = await readJSWithDefault<CliConfiguration>(path.join(options.cwd || process.cwd(), "akashic.config.js"), { commandOptions: {} });
+		configuration = await load(options.cwd || process.cwd());
 	} catch (error) {
 		console.error(error);
 		process.exit(1);

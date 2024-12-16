@@ -1,6 +1,6 @@
 import * as path from "path";
 import { createRequire } from "module";
-import type { CliConfigUpdate, CliConfiguration } from "@akashic/akashic-cli-commons";
+import type { CliConfigUpdate } from "@akashic/akashic-cli-commons";
 import { ConsoleLogger, FileSystem } from "@akashic/akashic-cli-commons";
 import { Command } from "commander";
 import { promiseUpdate } from "./update.js";
@@ -29,9 +29,10 @@ commander
 export async function run(argv: string[]): Promise<void> {
 	commander.parse(argv);
 	const options = commander.opts();
+
 	let configuration;
 	try { 
-		configuration = await FileSystem.readJSWithDefault<CliConfiguration>(path.join(options.cwd || process.cwd(), "akashic.config.js"), { commandOptions: {} });
+		configuration = await FileSystem.load(options.cwd || process.cwd());
 	} catch (error) {
 		console.error(error);
 		process.exit(1);
