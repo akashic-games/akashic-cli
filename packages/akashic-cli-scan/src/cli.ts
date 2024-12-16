@@ -1,4 +1,3 @@
-import * as path from "path";
 import { createRequire } from "module";
 import type { CliConfigScanAsset, CliConfigScanGlobalScripts } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigScan.js";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger.js";
@@ -8,8 +7,7 @@ import { scanAsset } from "./scanAsset.js";
 import { scanNodeModules } from "./scanNodeModules.js";
 import type { AssetTargetType } from "./types.js";
 import { watchAsset } from "./watchAsset.js";
-import type { CliConfiguration } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfiguration.js";
-import { readJSWithDefault } from "@akashic/akashic-cli-commons/lib/FileSystem.js";
+import { load } from "@akashic/akashic-cli-commons/lib/FileSystem.js";
 
 const require = createRequire(import.meta.url);
 const { version } = require("../package.json");
@@ -39,7 +37,7 @@ commander
 	.action(async (target: AssetTargetType, opts: CliConfigScanAsset = {}) => {
 		let configuration;
 		try { 
-			configuration = await readJSWithDefault<CliConfiguration>(path.join(opts.cwd || process.cwd(), "akashic.config.js"), { commandOptions: {} });
+			configuration = await load(opts.cwd || process.cwd());
 		} catch (error) {
 			console.error(error);
 			process.exit(1);

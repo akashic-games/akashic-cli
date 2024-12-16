@@ -1,7 +1,6 @@
 import mockfs from "mock-fs";
-import { readFile, writeFile, readJSON, writeJSON, readdir, unlink, readJS, readJSWithDefault } from "../FileSystem.js";
+import { readFile, writeFile, readJSON, writeJSON, readdir, unlink } from "../FileSystem.js";
 import { buildEditorconfig } from "./helpers/buildEditorconfig.js";
-import { Util } from "../index.js";
 
 const mock = require("mock-require");
 
@@ -181,47 +180,5 @@ describe("FileSystemSpec", () => {
 
 		await unlink("./foo/test.json");
 		expect(readJSON("./foo/test.json")).rejects.toMatchObject({ code: "ENOENT" });
-	});
-	
-	describe("readJS, readJSWithDefault", () => {
-		const mockContent = {
-			commandOptions: {
-				serve: {
-					port: 3030
-				}
-			}
-		};
-		const spy = vi.spyOn(Util, "requireResolve").mockRejectedValue("some.js");
-
-		beforeEach(() => {
-			mock("some.js", mockContent);
-		});
-		afterEach(() => {
-			mock.stop("some.js");
-		});
-		afterAll(() => {
-			spy.mockClear();
-		});
-
-		it("readJS - read js file", async () => {
-			const js = await readJS("some.js");
-			expect(js).toEqual(mockContent);
-		});
-
-		it("readJS - If the file does not exist", async () => {
-			await expect(readJS("notFound.js")).rejects.toThrow();
-		});
-
-
-		it("readJSWithDefault - read js file", async () => {
-			const js = await readJSWithDefault("some.js", {hoge: "default"})
-			expect(js).toEqual(mockContent);
-		});
-
-		it("readJS - If the file does not exist, the default value is returned.", async () => {
-			const defaultValue = {hoge: "default"};
-			const js = await readJSWithDefault("notFound.js", defaultValue);
-			expect(js).toEqual(defaultValue);
-		});
 	});
 });

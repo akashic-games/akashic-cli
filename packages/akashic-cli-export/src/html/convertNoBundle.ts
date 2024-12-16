@@ -29,11 +29,7 @@ const require = createRequire(import.meta.url);
 
 export async function promiseConvertNoBundle(options: ConvertTemplateParameterObject): Promise<void> {
 	let content;
-	try {
-		content = await cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join(options.source, "game.json"));
-	} catch (e) {
-		throw Error("No game.json found.");
-	}
+	content = await cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join(options.source, "game.json"));
 	if (!content.environment) content.environment = {};
 	content.environment["sandbox-runtime"] = content.environment["sandbox-runtime"] ? content.environment["sandbox-runtime"] : "1";
 

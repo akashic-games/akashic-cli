@@ -1,9 +1,9 @@
 import * as fs from "fs";
 import * as editorconfig from "editorconfig";
-import { createRequire } from "module";
-import { Util } from "./index.js";
-
-const require = createRequire(import.meta.url);
+import { join } from "path";
+import { existsSync, statSync } from "fs";
+import type { CliConfiguration } from "./CliConfig/CliConfiguration.js";
+import { loadModule } from "./loadModule.js";
 
 export type WriteDataFormatter<T> = (content: T) => string;
 
@@ -63,29 +63,37 @@ export function unlink(filepath: string): Promise<void> {
 	});
 }
 
-export function readJS(path: string): Promise<unknown> {
-	return new Promise<string | Buffer>((resolve, reject) => {
-		try {
-			const js = require(path);
-			delete require.cache[Util.requireResolve(path)];
-			resolve(js);
-		} catch(err) { 
-			reject(err);
-		}
-	});
+const priority = [
+	"akashic.config.mjs",
+	"akashic.config.cjs",
+	"akashic.config.js",
+];
+
+/**
+ * akashic-cli の設定ファイルを読み込む。
+ * ファイルを指定した場合はそのファイルを、ディレクトリを指定した場合は以下の優先順位で読み込む。
+ * 1. akashic.config.mjs
+ * 2. akashic.config.cjs
+ * 3. akashic.config.js
+ *
+ * @param confDir 設定ファイルがあるファイルまたはディレクトリ。
+ */
+export async function load(confDir: string): Promise<CliConfiguration> {
+	const candidateConfigPaths = isDirectory(confDir) ? priority.map(filename => join(confDir, filename)) : [confDir];
+
+	for (const candidateConfigPath of candidateConfigPaths) {
+		if (!existsSync(candidateConfigPath)) continue;
+		return loadModule(candidateConfigPath);
+	}
+
+	return { commandOptions: {} };
 }
 
-export async function readJSWithDefault<T>(path: string, defaultValue: T): Promise<T> {
-	return new Promise<T>(async (resolve, reject) => {
-		try { 
-			const js = await readJS(path);
-			resolve(js as T);
-
-		} catch (err) {
-			if (err.code !== "MODULE_NOT_FOUND") {
-				return reject(err);
-			}
-			resolve(defaultValue);
-		}
-	});
+function isDirectory(path: string): boolean {
+	try {
+		const stats = statSync(path);
+		return stats.isDirectory();
+	} catch {
+		return false;
+	}
 }

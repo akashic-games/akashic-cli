@@ -28,7 +28,7 @@ function defineCommand(commandName: string): void {
 		.action(async (value: string, opts: CliConfigModify = {}) => {
 			let configuration;
 			try { 
-				configuration = await FileSystem.readJSWithDefault<CliConfiguration>(path.join(opts.cwd || process.cwd(), "akashic.config.js"), { commandOptions: {} });
+				configuration = await FileSystem.load(path.join(opts.cwd || process.cwd()));
 			} catch (error) {
 				console.error(error);
 				process.exit(1);
