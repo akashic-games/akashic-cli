@@ -6,7 +6,7 @@
 
 import { tmpdir } from "os";
 import { dirname, join, resolve } from "path";
-import { mkdtemp, readdir, readFile, writeFile } from "fs/promises";
+import { mkdtemp, readdir, readFile, unlink, writeFile } from "fs/promises";
 import { exec as _exec, spawn as _spawn } from "child_process";
 import assert from "assert";
 import { fileURLToPath } from "url";
@@ -72,10 +72,6 @@ async function checkHttp(url) {
 async function createAkashicConfigJs() { 
 	const options = {
 		commandOptions: {
-			init: {
-				type: "typescript",
-				yes: true
-			},
 			export: {
 				zip: {
 					strip: true,
@@ -83,7 +79,8 @@ async function createAkashicConfigJs() {
 				},
 				html: {
 					output: "output",
-					bundle: true
+					bundle: true,
+					force: true
 				}
 			}
 		}
@@ -136,8 +133,7 @@ try {
 	{
 		console.log("test @akashic/akashic-cli-init");
 		shell.cd(`${targetDir}/game`);
-		await createAkashicConfigJs();
-		await exec(`${akashicCliPath} init`);
+		await exec(`${akashicCliPath} init --type typescript -y`);
 		const files = await readdir(`${targetDir}/game`);
 		assertContains(files, "audio");
 		assertContains(files, "image");
@@ -179,6 +175,9 @@ try {
 	// TODO 出力結果検証
 	{
 		console.log("test @akashic/akashic-cli-export-html");
+		await exec(`${akashicCliPath} export html --output output --bundle`);
+
+		await createAkashicConfigJs();
 		await exec(`${akashicCliPath} export html`);
 	}
 
@@ -186,6 +185,9 @@ try {
 	{
 		console.log("test @akashic/akashic-cli-export-zip");
 		await exec(`${akashicCliPath} export zip`);
+
+		await unlink("akashic.config.js");
+		await exec(`${akashicCliPath} export zip --strip --bundle --force`);
 	}
 
 	try {
