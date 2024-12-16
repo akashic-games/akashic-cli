@@ -176,9 +176,11 @@ try {
 	{
 		console.log("test @akashic/akashic-cli-export-html");
 		await exec(`${akashicCliPath} export html --output output --bundle`);
-
+		console.log("----- 1");
 		await createAkashicConfigJs();
+		console.log("----- 2");
 		await exec(`${akashicCliPath} export html`);
+		console.log("----- 3");
 	}
 
 	// TODO 出力結果検証
