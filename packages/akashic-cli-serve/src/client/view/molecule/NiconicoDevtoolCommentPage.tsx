@@ -56,7 +56,7 @@ export const NiconicoDevtoolCommentPage = observer(function NiconicoDevtoolComme
 	}, [onCommentInputChanged]);
 
 	const handleCommentInputKeyDown = React.useCallback((ev: React.KeyboardEvent<HTMLInputElement>) => {
-		if (ev.key === "Enter") {
+		if (ev.key === "Enter" && !ev.nativeEvent.isComposing) {
 			ev.preventDefault();
 			onClickSend();
 		}

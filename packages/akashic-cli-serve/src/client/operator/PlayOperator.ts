@@ -121,12 +121,15 @@ export class PlayOperator {
 
 	sendEditorNicoliveCommentEvent = async (): Promise<void> => {
 		const { commandInput: command, commentInput: comment, senderType } = this.store.devtoolUiStore.commentPage;
+		if (!comment) return;
+
 		const cmt: NicoliveComment =
 			senderType === "anonymous" ?
 				{ command, comment, isAnonymous: true, userID: `anon-${Date.now() % 1000}` } :
 			senderType === "operator" ?
 				{ command, comment, isOperatorComment: true } :
 				{ command, comment, isAnonymous: false, userID: this.store.player?.id };
+		this.store.devtoolUiStore.commentPage.setCommentInput("");
 		return this.store.currentPlay?.sendNicoliveComment(cmt);
 	};
 
