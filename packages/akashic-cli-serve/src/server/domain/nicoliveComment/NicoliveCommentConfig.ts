@@ -24,7 +24,7 @@ export interface NicoliveCommentConfigComment {
 	userID?: string;
 
 	/**
-	 * なふだ機能が ON であるか否か。
+	 * なふだ機能が OFF であるか否か。
 	 * 省略された場合、コンテンツは偽として扱う必要がある。
 	 */
 	isAnonymous?: boolean;
