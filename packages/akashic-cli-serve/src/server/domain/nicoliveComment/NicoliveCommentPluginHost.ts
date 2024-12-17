@@ -59,7 +59,12 @@ export class NicoliveCommentPluginHost {
 	}
 
 	planToSendByTemplate(name: string): boolean {
-		return this._planToSendImpl(this.config.templates[name]?.comments);
+		const comments = this.config.templates?.[name]?.comments;
+		if (!Array.isArray(comments) || comments.length === 0) {
+			console.warn(`NicoliveCommentPluginHost: no template named '${name}'`);
+			return false;
+		}
+		return this._planToSendImpl(comments);
 	}
 
 	planToSend(c: NicoliveComment): boolean {
@@ -81,10 +86,11 @@ export class NicoliveCommentPluginHost {
 			if (!this.planned)
 				this._setupPlan(age);
 
-			let lastFrame = age + 1; // age は今既に来ている tick なので次の tick から送る
+			const base = age + 1; // age は今既に来ている tick なので次の tick から送る
+			let lastFrame = base;
 			comments.forEach(c => {
 				const comment = { ...NULL_COMMENT, ...c };
-				const frame = lastFrame = (comment.frame != null) ? age + comment.frame : lastFrame;
+				const frame = lastFrame = (comment.frame != null) ? base + comment.frame : lastFrame;
 				arrayMapAdd(this.plan, frame, filterProperty(comment, this.filter));
 			});
 		};
@@ -100,6 +106,9 @@ export class NicoliveCommentPluginHost {
 		const { plan, config } = this;
 		const { templates } = config;
 		plan.clear();
+
+		if (!templates)
+			return;
 
 		objectForEach(templates, (templ) => {
 			const { startBy, comments } = templ;

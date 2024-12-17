@@ -136,15 +136,13 @@ export class Operator {
 			argument = this._createInstanceArgumentForNicolive(isNicoliveBroadcaster);
 		}
 
-		if (isServiceNicolive) {
-			const sandboxConfig = play.content.sandboxConfig as NormalizedSandboxConfiguration & SandboxConfigExternalDefinition;
-			const commentTemplateNames = Object.keys(sandboxConfig.external?.nicoliveComment?.templates || []);
-			this.devtool.resetCommentPage(
-				commentTemplateNames,
-				isNicoliveBroadcaster ? "operator" : "anonymous",
-				isServiceNicolive ? (isNicoliveBroadcaster ? "operator" : "audience") : "none",
-			);
-		}
+		const sandboxConfig = play.content.sandboxConfig as NormalizedSandboxConfiguration & SandboxConfigExternalDefinition;
+		const commentTemplateNames = Object.keys(sandboxConfig.external?.nicoliveComment?.templates || []);
+		this.devtool.resetCommentPage(
+			commentTemplateNames,
+			isNicoliveBroadcaster ? "operator" : "anonymous",
+			isServiceNicolive ? (isNicoliveBroadcaster ? "operator" : "audience") : "none",
+		);
 
 		if (store.appOptions.autoStart) {
 			await this.startContent({

@@ -83,7 +83,7 @@ export interface NicoliveCommentConfig {
 	 * コメントツールで流すコメントのテンプレート。
 	 * キー名はテンプレート名、値はテンプレートの内容。
 	 */
-	templates: { [name: string]: NicoliveCommentConfigTemplate };
+	templates?: { [name: string]: NicoliveCommentConfigTemplate };
 }
 
 /**

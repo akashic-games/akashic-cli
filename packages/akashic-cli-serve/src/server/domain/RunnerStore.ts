@@ -11,6 +11,7 @@ import type {
 	NicoliveCommentPluginStartStopTestbedEvent
 } from "../../common/types/TestbedEvent";
 import { serverGlobalConfig } from "../common/ServerGlobalConfig";
+import * as gameConfigs from "./GameConfigs";
 import { NicoliveCommentPluginHost } from "./nicoliveComment/NicoliveCommentPluginHost";
 import * as sandboxConfigs from "./SandboxConfigs";
 
@@ -61,14 +62,15 @@ export class RunnerStore {
 
 	async createAndStartRunner(params: CreateAndStartRunnerParameterObject): Promise<RunnerV1 | RunnerV2 | RunnerV3> {
 		const sandboxConfig = sandboxConfigs.get(params.contentId);
+		const gameConfig = gameConfigs.get(params.contentId);
 		const externalAssets = (sandboxConfig ? sandboxConfig.externalAssets : undefined) === undefined ? [] : sandboxConfig.externalAssets;
 		const allowedUrls = this.createAllowedUrls(params.contentId, externalAssets);
 
 		let externalValue: { [name: string]: unknown } = {};
 		let nicoliveCommentPluginHost: NicoliveCommentPluginHost | null = null;
-		if (sandboxConfig.external?.nicoliveComment) {
+		if (gameConfig.environment?.external?.nicoliveComment) {
 			const { playId } = params;
-			nicoliveCommentPluginHost = new NicoliveCommentPluginHost(sandboxConfig.external.nicoliveComment, params.amflow);
+			nicoliveCommentPluginHost = new NicoliveCommentPluginHost(sandboxConfig.external?.nicoliveComment ?? {}, params.amflow);
 			nicoliveCommentPluginHost.onStartStop.add(started => this.onNicoliveCommentPluginStartStop.fire({ playId, started }));
 			externalValue.nicoliveComment = nicoliveCommentPluginHost.plugin;
 		}
