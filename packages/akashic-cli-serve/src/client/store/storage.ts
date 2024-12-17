@@ -1,5 +1,6 @@
 import { apiClient } from "../api/apiClientInstance";
 import { queryParameters as query } from "../common/queryParameters";
+import type { NiconicoDevtoolPageType } from "../view/molecule/NiconicoDevtool";
 
 export interface StorageData {
 	playerId: string;
@@ -28,6 +29,8 @@ export interface StorageData {
 	totalTimeLimitInputValue: number;
 	showsProfiler: boolean;
 	showsDesignGuideline: boolean;
+	niconicoToolActivePage: NiconicoDevtoolPageType;
+	niconicoToolSelectorWidth: number;
 }
 
 function choose<T>(a: T | null | undefined, b: T | null | undefined, c: T): T {
@@ -69,6 +72,7 @@ export class Storage {
 			instanceArgumentEditContent: choose(query.instanceArgumentEditContent, s.instanceArgumentEditContent, ""),
 			showsHiddenEntity: choose(query.showsHiddenEntity, s.showsHiddenEntity, true),
 			joinsAutomatically: choose(query.joinsAutomatically, s.joinsAutomatically, false),
+			niconicoToolActivePage: choose(query.niconicoToolActigePage, s.niconicoToolActivePage, "ranking"),
 			isAutoSendEvents: choose(query.isAutoSendEvents, s.isAutoSendEvents, false),
 			emulatingShinichibaMode: choose(query.emulatingShinichibaMode, s.emulatingShinichibaMode, "single"),
 			usePreferredTotalTimeLimit: choose(query.usePreferredTotalTimeLimit, s.usePreferredTotalTimeLimit, false),

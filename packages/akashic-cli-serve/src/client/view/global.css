@@ -30,8 +30,8 @@
 
 	--color-pane-bg: white;
 	--color-pane-button-bg: white;
-	--color-pane-button-bg-selected: #ccd;
-	--color-pane-button-text-selected: white;
+	--color-pane-button-bg-selected: rgb(214, 214, 228);
+	--color-pane-button-text-selected: rgb(12, 50, 146);
 
 	--zindex-game-screen-bg: -1;
 	--zindex-game-screen: calc(var(--zindex-game-screen-bg) + 1);
