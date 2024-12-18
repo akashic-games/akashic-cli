@@ -7,8 +7,12 @@ const require = createRequire(import.meta.url);
  * 拡張子に応じてモジュールを読み込む。
  */
 export async function loadModule(filePath: string): Promise<any> {
-	const fullPath = resolve(filePath);
+	let fullPath = resolve(filePath);
 	const ext = extname(fullPath);
+	if (process.platform === "win32") {
+		// Windows の場合 "c:¥" 始まりになり、"c:" が URL の scheme と勘違いされエラーとなるので "file://" を接頭に付与
+		fullPath = `file://${fullPath}`;
+	}
 
 	if (ext === ".mjs") {
 		return (await import(fullPath)).default;

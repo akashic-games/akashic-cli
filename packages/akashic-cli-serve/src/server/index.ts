@@ -3,7 +3,7 @@ import * as path from "path";
 import * as util from "util";
 import type { CliConfiguration } from "@akashic/akashic-cli-commons";
 import type { CliConfigServe } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigServe";
-import type { CliConfigurationFile } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigurationFile";
+import type { load } from "@akashic/akashic-cli-commons/lib/FileSystem";
 import type { SERVICE_TYPES } from "@akashic/akashic-cli-commons/lib/ServiceType";
 import { PlayManager, RunnerManager, setSystemLogger, getSystemLogger } from "@akashic/headless-driver";
 import * as bodyParser from "body-parser";
@@ -48,10 +48,10 @@ async function importChalk(): Promise<(typeof Chalk)["default"]> {
 	return (await eval("import('chalk')")).default;
 }
 
-async function importCommonsConfiguration(): Promise<(typeof CliConfigurationFile)> {
+async function importCommonsLoad(): Promise<(typeof load)> {
 	// CommonJS 設定の TS では dynamic import が require() に変換されてしまうので、eval() で強引に import() する
 	// eslint-disable-next-line no-eval
-	return (await eval("import('@akashic/akashic-cli-commons/lib/CliConfig/CliConfigurationFile.js')")).CliConfigurationFile;
+	return (await eval("import('@akashic/akashic-cli-commons/lib/FileSystem.js')")).load;
 }
 
 async function importCommonsServiceType(): Promise<(typeof SERVICE_TYPES)> {
@@ -464,18 +464,16 @@ export async function run(argv: any): Promise<void> {
 	const options = commander.opts();
 
 	// eslint-disable-next-line @typescript-eslint/naming-convention
-	const CliConfigurationFile = await importCommonsConfiguration();
+	const load = await importCommonsLoad();
 
 	let configuration: CliConfiguration;
 	try {
-		configuration = await CliConfigurationFile.load(options.cwd || process.cwd());
+		configuration = await load(options.cwd || process.cwd());
 	} catch (error) {
 		console.error(error);
 		process.exit(1);
 	}
-
 	const conf = configuration!.commandOptions?.serve ?? {};
-
 	const cliConfigParam: CliConfigServe = {
 		port: options.port ?? conf.port,
 		hostname: options.hostname ?? conf.hostname,

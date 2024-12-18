@@ -6,7 +6,7 @@
 
 import { tmpdir } from "os";
 import { dirname, join, resolve } from "path";
-import { mkdtemp, readdir, readFile, writeFile } from "fs/promises";
+import { mkdtemp, readdir, readFile, unlink, writeFile } from "fs/promises";
 import { exec as _exec, spawn as _spawn } from "child_process";
 import assert from "assert";
 import { fileURLToPath } from "url";
@@ -67,6 +67,27 @@ async function checkHttp(url) {
 	} catch (_error) {
 		return false;
 	}
+}
+
+async function createAkashicConfigJs() { 
+	const options = {
+		commandOptions: {
+			export: {
+				zip: {
+					strip: true,
+					bundle: true,
+					force: true
+				},
+				html: {
+					output: "output",
+					bundle: true,
+					force: true
+				}
+			}
+		}
+	};
+	const content = `module.exports = ${JSON.stringify(options)};`;
+	await writeFile("akashic.config.js", content);
 }
 
 try {
@@ -154,14 +175,18 @@ try {
 
 	// TODO 出力結果検証
 	{
-		console.log("test @akashic/akashic-cli-export-html");
+		console.log("test @akashic/akashic-cli-export-html/zip");
 		await exec(`${akashicCliPath} export html --output output --bundle`);
+		await exec(`${akashicCliPath} export zip --strip --bundle --force`);
 	}
 
 	// TODO 出力結果検証
 	{
-		console.log("test @akashic/akashic-cli-export-zip");
-		await exec(`${akashicCliPath} export zip --strip --bundle`);
+		console.log("test @akashic/akashic-cli-export-html/zip with akashic.config.js");
+		await createAkashicConfigJs();
+		await exec(`${akashicCliPath} export html`);
+		await exec(`${akashicCliPath} export zip`);
+		await unlink("akashic.config.js");
 	}
 
 	try {
