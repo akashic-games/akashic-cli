@@ -10,6 +10,7 @@ export async function loadModule(filePath: string): Promise<any> {
 	let fullPath = resolve(filePath);
 	const ext = extname(fullPath);
 	if (process.platform === "win32") {
+		// Windows の場合 "c:¥" 始まりになり、"c:" が URL の scheme と勘違いされエラーとなるので "file://" を接頭に付与
 		fullPath = `file://${fullPath}`;
 	}
 

@@ -75,7 +75,8 @@ async function createAkashicConfigJs() {
 			export: {
 				zip: {
 					strip: true,
-					bundle: true
+					bundle: true,
+					force: true
 				},
 				html: {
 					output: "output",
