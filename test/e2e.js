@@ -130,7 +130,7 @@ try {
 	} else {
 		console.log("skip to check version");
 	}
-	await createAkashicConfigJs();
+
 	// ゲームディレクトリを作成しつつakashic-cli-initのテスト
 	{
 		console.log("test @akashic/akashic-cli-init");
@@ -188,18 +188,18 @@ try {
 		console.log("** zip:", akashicCliPath);
 	}
 //-----------------------------------------
-	console.log("***", fs.existsSync("akashic.config.js"));
-	// {
-	// 	await createAkashicConfigJs();
-	// 	console.log("***", fs.existsSync("akashic.config.js"));
-	// }
+	{
+		await createAkashicConfigJs();
+		console.log("***", fs.existsSync("akashic.config.js"));
+	}
 
-	// {
-	// 	console.log("test @akashic/akashic-cli-export-html with akashic.config.js");
-	// 	// await createAkashicConfigJs();
-	// 	console.log("** html1:", akashicCliPath);
-	// 	await exec(`${akashicCliPath} export html --output output -f`);
-	// }
+	{
+		console.log("test @akashic/akashic-cli-export-html with akashic.config.js");
+		console.log("***", fs.existsSync("akashic.config.js"));
+		// await createAkashicConfigJs();
+		console.log("** html1:", akashicCliPath);
+		await exec(`${akashicCliPath} export html`);
+	}
 
 	// {
 	// 	console.log("test @akashic/akashic-cli-export-zip with akashic.config.js");
