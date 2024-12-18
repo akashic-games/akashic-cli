@@ -8,15 +8,10 @@ const require = createRequire(import.meta.url);
  */
 export async function loadModule(filePath: string): Promise<any> {
 	let fullPath = resolve(filePath);
-	// const fullPath = process.platform === "win32" ?  "file://" : "" + resolve(filePath);
-	
-	console.log("*** os:", process.platform);
-	console.log("*** path:", fullPath);
 	const ext = extname(fullPath);
 	if (process.platform === "win32") {
 		fullPath = `file://${fullPath}`;
 	}
-	console.log("*** fullPath:", fullPath);
 
 	if (ext === ".mjs") {
 		return (await import(fullPath)).default;
