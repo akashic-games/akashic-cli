@@ -101,6 +101,7 @@ try {
 
 	// akashic-cliのインストール
 	let akashicCliPath;
+	console.log("@@@ platform:", process.platform, testsPublished);
 	if (testsPublished) {
 		console.log("install @akashic/akashic-cli@latest");
 		await exec("npm init -y");
@@ -113,7 +114,6 @@ try {
 		// (npm i @akashic/akashic-cli した時は実行可能な .cmd ファイルが作られるが、ここでは存在しない)
 		// 仕方がないので node をつけて node に実行させる。
 		if (process.platform === "win32") {
-			console.log("@@@ platform:", process.platform);
 			akashicCliPath = `node file://${akashicCliPath}`;
 		}
 
