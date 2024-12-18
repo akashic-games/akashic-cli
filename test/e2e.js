@@ -189,13 +189,13 @@ try {
 	}
 //-----------------------------------------
 	{
-		await exec(`pwd`);
+		console.log("*** pwd:", await exec(`pwd`));
 		await createAkashicConfigJs();
 		console.log("***", fs.existsSync("akashic.config.js"));
 	}
 
 	{
-		await exec(`ls -l`);
+		console.log("*** ls:", await exec(`ls -l`));
 		console.log("test @akashic/akashic-cli-export-html with akashic.config.js");
 		// await createAkashicConfigJs();
 		console.log("** html1:", akashicCliPath);
