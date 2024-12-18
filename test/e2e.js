@@ -113,7 +113,7 @@ try {
 		// (npm i @akashic/akashic-cli した時は実行可能な .cmd ファイルが作られるが、ここでは存在しない)
 		// 仕方がないので node をつけて node に実行させる。
 		if (process.platform === "win32") {
-			akashicCliPath = `node ${akashicCliPath}`;
+			akashicCliPath = `node file://${akashicCliPath}`;
 		}
 
 		console.log(`use ${akashicCliPath}`);
