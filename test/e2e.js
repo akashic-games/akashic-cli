@@ -176,20 +176,21 @@ try {
 	{
 		console.log("test @akashic/akashic-cli-export-html");
 		await exec(`${akashicCliPath} export html --output output --bundle`);
-		console.log("----- 1");
+		console.log("----- html 1");
 		await createAkashicConfigJs();
-		console.log("----- 2");
+		console.log("----- html 2");
 		await exec(`${akashicCliPath} export html`);
-		console.log("----- 3");
+		console.log("----- html 3");
 	}
 
 	// TODO 出力結果検証
 	{
 		console.log("test @akashic/akashic-cli-export-zip");
 		await exec(`${akashicCliPath} export zip`);
-
+		console.log("----- zip 1");
 		await unlink("akashic.config.js");
 		await exec(`${akashicCliPath} export zip --strip --bundle --force`);
+		console.log("----- zip 2");
 	}
 
 	try {
