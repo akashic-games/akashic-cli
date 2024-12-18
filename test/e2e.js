@@ -175,22 +175,25 @@ try {
 
 	// TODO 出力結果検証
 	{
-		console.log("test @akashic/akashic-cli-export-html/zip");
+		console.log("test @akashic/akashic-cli-export-html");
 		await exec(`${akashicCliPath} export html --output output --bundle`);
-		console.log("----- html end");
-		await exec(`${akashicCliPath} export zip --strip --bundle --force`);
-		console.log("----- zip end");
-	}
+	}		
 
 	// TODO 出力結果検証
 	{
-		console.log("test @akashic/akashic-cli-export-htmo/zip. use akashic.config.js");
-		await createAkashicConfigJs();
-		await exec(`${akashicCliPath} export html`);
-		console.log("----- html end");
+		console.log("test @akashic/akashic-cli-export-zip");
+		await exec(`${akashicCliPath} export zip --strip --bundle`);
+	}
 
+	{
+		console.log("test @akashic/akashic-cli-export-html with akashic.config.js");
+		await createAkashicConfigJs();
+		await exec(`${akashicCliPath} export html`);		
+	}
+
+	{
+		console.log("test @akashic/akashic-cli-export-zip with akashic.config.js");
 		await exec(`${akashicCliPath} export zip`);
-		console.log("----- zip end");
 		await unlink("akashic.config.js");
 	}
 
