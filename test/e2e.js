@@ -187,21 +187,21 @@ try {
 		console.log("** zip:", akashicCliPath);
 	}
 
-	{
-		await createAkashicConfigJs();
-	}
+	// {
+	// 	await createAkashicConfigJs();
+	// }
 
 	{
 		console.log("test @akashic/akashic-cli-export-html with akashic.config.js");
 		// await createAkashicConfigJs();
 		console.log("** html1:", akashicCliPath);
-		await exec(`${akashicCliPath} export html`);
+		await exec(`${akashicCliPath} export html --output output -f`);
 	}
 
 	{
 		console.log("test @akashic/akashic-cli-export-zip with akashic.config.js");
 		console.log("** zip1:", akashicCliPath);
-		await exec(`${akashicCliPath} export zip`);
+		await exec(`${akashicCliPath} export zip -f`);
 		// await exec(`${akashicCliPath} export zip`);
 		// await unlink("akashic.config.js");
 	}
