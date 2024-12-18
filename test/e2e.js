@@ -189,7 +189,6 @@ try {
 	}
 //-----------------------------------------
 	{
-		console.log("*** pwd:", await exec(`pwd`));
 		await createAkashicConfigJs();
 		console.log("***", fs.existsSync("akashic.config.js"));
 	}
