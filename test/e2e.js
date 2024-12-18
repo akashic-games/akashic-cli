@@ -114,7 +114,7 @@ try {
 		// (npm i @akashic/akashic-cli した時は実行可能な .cmd ファイルが作られるが、ここでは存在しない)
 		// 仕方がないので node をつけて node に実行させる。
 		if (process.platform === "win32") {
-			akashicCliPath = `node ${akashicCliPath}`;
+			akashicCliPath = `node file://${akashicCliPath}`;
 		}
 
 		console.log(`use ${akashicCliPath}`);
@@ -195,7 +195,6 @@ try {
 
 	{
 		console.log("test @akashic/akashic-cli-export-html with akashic.config.js");
-		console.log("***", fs.existsSync("akashic.config.js"));
 		// await createAkashicConfigJs();
 		console.log("** html1:", akashicCliPath);
 		await exec(`${akashicCliPath} export html`);
