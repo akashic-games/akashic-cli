@@ -7,11 +7,16 @@ const require = createRequire(import.meta.url);
  * 拡張子に応じてモジュールを読み込む。
  */
 export async function loadModule(filePath: string): Promise<any> {
-	// const fullPath = resolve(filePath);
-	const fullPath = process.platform === "win32" ?  "file://" : "" + resolve(filePath);
+	let fullPath = resolve(filePath);
+	// const fullPath = process.platform === "win32" ?  "file://" : "" + resolve(filePath);
+	
 	console.log("*** os:", process.platform);
 	console.log("*** path:", fullPath);
 	const ext = extname(fullPath);
+	if (process.platform === "win32") {
+		fullPath = `file://${fullPath}`;
+	}
+	console.log("*** fullPath:", fullPath);
 
 	if (ext === ".mjs") {
 		return (await import(fullPath)).default;
