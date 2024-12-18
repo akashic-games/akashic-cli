@@ -14,6 +14,7 @@ import { promisify } from "util";
 import { createRequire } from "module";
 import { setTimeout } from "timers/promises";
 import getPort from "get-port";
+import * as fs from "fs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -187,9 +188,10 @@ try {
 		console.log("** zip:", akashicCliPath);
 	}
 
-	// {
-	// 	await createAkashicConfigJs();
-	// }
+	{
+		await createAkashicConfigJs();
+		console.log("***", fs.existsSync("akashic.config.js"));
+	}
 
 	{
 		console.log("test @akashic/akashic-cli-export-html with akashic.config.js");
