@@ -88,7 +88,7 @@ async function createAkashicConfigJs() {
 		}
 	};
 	const content = `module.exports = ${JSON.stringify(options)};`;
-	await writeFile("akashic.config.js", content);
+	await writeFile("./akashic.config.js", content);
 }
 
 try {
@@ -187,7 +187,7 @@ try {
 		await exec(`${akashicCliPath} export zip --strip --bundle`);
 		console.log("** zip:", akashicCliPath);
 	}
-
+//-----------------------------------------
 	{
 		await createAkashicConfigJs();
 		console.log("***", fs.existsSync("akashic.config.js"));
@@ -207,6 +207,7 @@ try {
 		// await exec(`${akashicCliPath} export zip`);
 		// await unlink("akashic.config.js");
 	}
+//-----------------------------------------
 
 	try {
 		console.log("test @akashic/akashic-cli-sandbox");
