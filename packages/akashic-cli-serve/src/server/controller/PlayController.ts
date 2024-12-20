@@ -9,6 +9,7 @@ import { BadRequestError, NotFoundError } from "../common/ApiError";
 import { responseSuccess } from "../common/ApiResponse";
 import { ServerContentLocator } from "../common/ServerContentLocator";
 import type { PlayStore } from "../domain/PlayStore";
+import type { RunnerStore } from "../domain/RunnerStore";
 
 export const createHandlerToCreatePlay = (playStore: PlayStore): express.RequestHandler => {
 	return async (req, res, next) => {
@@ -157,6 +158,67 @@ export const createHandlerToSendEvent = (playStore: PlayStore, toLatestPlay: boo
 			}
 			events.forEach(ev => amflow.sendEvent(ev));
 			responseSuccess<void>(res, 200, null);
+		} catch (e) {
+			next(e);
+		}
+	};
+};
+
+export const createHandlerToSendNicoliveCommentByTemplate = (playStore: PlayStore, runnerStore: RunnerStore): express.RequestHandler => {
+	return async (req, res, next) => {
+		try {
+			const playId = req.params.playId;
+			const name = req.body.name;
+			if (!playId) {
+				throw new BadRequestError({ errorMessage: "Invalid runnerId" });
+			}
+			if (!name) {
+				throw new BadRequestError({ errorMessage: "No name given" });
+			}
+
+			const playInfo = playStore.getPlayInfo(playId);
+			if (!playInfo) {
+				throw new BadRequestError({ errorMessage: `No play found for ${playId}` });
+			}
+			const runnerId = playInfo.runners[0]?.runnerId;
+			if (!runnerId) {
+				throw new BadRequestError({ errorMessage: `No runner for ${playId}` });
+			}
+
+			runnerStore.sendCommentsByTemplate(runnerId, name);
+			responseSuccess<void>(res, 200, null);
+		} catch (e) {
+			next(e);
+		}
+	};
+};
+
+function maybeBoolOf(s: string): boolean | undefined {
+	return (s === "true") || (s === "false" ? false : undefined);
+}
+
+export const createHandlerToSendNicoliveComment  = (playStore: PlayStore, runnerStore: RunnerStore): express.RequestHandler => {
+	return async (req, res, next) => {
+		try {
+			const playId = req.params.playId;
+			const { comment, command, userID }  = req.body;
+			const isAnonymous = maybeBoolOf(req.body.isAnonymous);
+			const isOperatorComment = maybeBoolOf(req.body.isOperatorComment);
+
+			if (!playId) {
+				throw new BadRequestError({ errorMessage: "Invalid runnerId" });
+			}
+			const playInfo = playStore.getPlayInfo(playId);
+			if (!playInfo) {
+				throw new BadRequestError({ errorMessage: `No play found for ${playId}` });
+			}
+			const runnerId = playInfo.runners[0]?.runnerId;
+			if (!runnerId) {
+				throw new BadRequestError({ errorMessage: `No runner for ${playId}` });
+			}
+
+			const success = runnerStore.sendComment(runnerId, { comment, command, userID, isAnonymous, isOperatorComment });
+			responseSuccess<boolean>(res, 200, success);
 		} catch (e) {
 			next(e);
 		}

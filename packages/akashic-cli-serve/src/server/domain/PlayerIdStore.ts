@@ -1,33 +1,62 @@
+import { createHash } from "crypto";
+
+export interface PlayerIdRegisterResult {
+	/**
+	 * 既に登録済みだったか。
+	 */
+	isDuplicated: boolean;
+	/**
+	 * プレイヤー ID をハッシュ化した値。
+	 */
+	hashedPlayerId: string;
+}
+
+export interface PlayerIdCreateResult {
+	/**
+	 * 生成されたプレイヤー ID 。
+	 */
+	playerId: string;
+	/**
+	 * プレイヤー ID をハッシュ化した値。
+	 */
+	hashedPlayerId: string;
+}
+
 export class PlayerIdStore {
-	private playerIds: string[];
+	private hashedIdTable: { [playerId: string]: string };
 	private knownMaxPlayerId: number; // playerId生成時に既存のものと被ることが無いようにplayerIdの中で最大値のものを記録しておく
 
 	constructor() {
-		this.playerIds = [];
+		this.hashedIdTable = {};
 		this.knownMaxPlayerId = 0;
 	}
 
-	/**
-	 * 引数のプレイヤーIDを登録する。
-	 * 同一のplayerIdが存在する場合はtrueを、そうでない場合falseを返す。
-	 */
-	registerPlayerId(playerId: string): boolean {
-		if (this.playerIds.some(id => id === playerId)) {
-			return true;
+	registerPlayerId(playerId: string): PlayerIdRegisterResult {
+		const { hashedIdTable } = this;
+		if (hashedIdTable.hasOwnProperty(playerId)) {
+			return { isDuplicated: true, hashedPlayerId: hashedIdTable[playerId] };
 		}
+
 		const playerIdInt = parseInt(playerId.replace(/^pid/, ""), 10);
 		// playerIdが数値を表す文字列でない場合、NaNになってこの条件に弾かれるのでknownMaxPlayerIdに代入されることはない
 		if (this.knownMaxPlayerId < playerIdInt) {
 			this.knownMaxPlayerId = playerIdInt;
 		}
-		this.playerIds.push(playerId);
-		return false;
+
+		const hashedPlayerId = md5(playerId);
+		hashedIdTable[playerId] = hashedPlayerId;
+		return { isDuplicated: false, hashedPlayerId };
 	}
 
-	createPlayerId(): string {
+	createPlayerId(): PlayerIdCreateResult {
 		this.knownMaxPlayerId++;
 		const newPlayerId = "pid" + this.knownMaxPlayerId.toString();
-		this.playerIds.push(newPlayerId);
-		return newPlayerId;
+		const hashedPlayerId = md5(newPlayerId);
+		this.hashedIdTable[newPlayerId] = hashedPlayerId;
+		return { playerId: newPlayerId, hashedPlayerId };
 	}
+}
+
+function md5(s: string): string {
+	return createHash("md5").update(s).digest("hex");
 }

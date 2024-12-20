@@ -1,5 +1,6 @@
 import { toJS as mobxToJS } from "mobx";
 import type { PlayPatchApiResponse } from "../../common/types/ApiResponse";
+import type { NicoliveComment } from "../../common/types/NicoliveCommentPlugin";
 import * as Subscriber from "../api/Subscriber";
 import type { Store } from "../store/Store";
 
@@ -116,6 +117,24 @@ export class PlayOperator {
 
 	unmuteAll = (): Promise<void> => {
 		return this.store.currentPlay!.unmuteAll();
+	};
+
+	sendEditorNicoliveCommentEvent = async (): Promise<void> => {
+		const { commandInput: command, commentInput: comment, senderType } = this.store.devtoolUiStore.commentPage;
+		if (!comment) return;
+
+		const cmt: NicoliveComment =
+			senderType === "anonymous" ?
+				{ command, comment, isAnonymous: true, userID: this.store.hashedPlayerId! } :
+			senderType === "operator" ?
+				{ command, comment, isOperatorComment: true } :
+				{ command, comment, isAnonymous: false, userID: this.store.player?.id };
+		this.store.devtoolUiStore.commentPage.setCommentInput("");
+		return this.store.currentPlay?.sendNicoliveComment(cmt);
+	};
+
+	sendRegisteredNicoliveCommentEvent = async (name: string): Promise<void> => {
+		return this.store.currentPlay?.sendNicoliveCommentByTemplate(name);
 	};
 
 	// 指定したURLからファイルをダウンロードする

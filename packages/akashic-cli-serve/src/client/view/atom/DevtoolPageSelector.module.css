@@ -1,0 +1,28 @@
+
+.page-selector-list {
+  width: 100%;
+  list-style-type: none;
+  padding-right: 1rem;
+}
+
+.page-selector-list li {
+  margin: 4px 4px 4px 0;
+  padding: 4px 10px;
+  font-size: 1.1rem;
+  border-start-end-radius: 16px 50%;
+  border-end-end-radius: 16px 50%;
+  cursor: pointer;
+  overflow-x: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  user-select: none;
+}
+
+.page-selector-list li:hover {
+  background-color: var(--color-pane-button-bg-hover);
+}
+
+.page-selector-list li.active {
+  color: var(--color-pane-button-text-selected);
+  background-color: var(--color-pane-button-bg-selected);
+}

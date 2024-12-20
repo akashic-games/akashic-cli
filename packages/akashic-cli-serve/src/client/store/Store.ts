@@ -54,6 +54,7 @@ export class Store {
 	@observable profilerStore: ProfilerStore;
 	@observable appOptions: AppOptions;
 	@observable player: Player | null;
+	@observable hashedPlayerId: string | null;
 	@observable contentLocator: ClientContentLocator;
 
 	@observable currentPlay: PlayEntity | null;
@@ -76,6 +77,7 @@ export class Store {
 		this.profilerStore = new ProfilerStore();
 		this.appOptions = null!;
 		this.player = null;
+		this.hashedPlayerId = null;
 		this.currentPlay = null;
 		this.currentLocalInstance = null;
 		this.gameViewSize = { width: 10, height: 10 }; // ゲーム表示時に更新されるが不具合の際に現象が分かりやすいようサイズをつけておく
@@ -103,6 +105,7 @@ export class Store {
 			this._initializationWaiter
 		]).then(() => {
 			this.player = { id: storage.data.playerId, name: storage.data.playerName };
+			this.hashedPlayerId = storage.hashedPlayerId;
 		});
 	}
 
