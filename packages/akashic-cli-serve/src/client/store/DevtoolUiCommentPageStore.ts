@@ -2,7 +2,7 @@ import { observable, action } from "mobx";
 import type { NicoliveComment } from "../../common/types/NicoliveCommentPlugin";
 
 /**
- * コメント送信者タイプの制限。
+ * コメント送信者タイプ。
  *
  * - "anonymous": 匿名の視聴者。コメントを isAnonymous: true で送る
  * - "named": 顕名の視聴者。isAnonymous, isOperatorComment なしで送る
