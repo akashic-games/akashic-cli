@@ -36,6 +36,7 @@ export interface PlayTokenPostApiResponseData {
 export interface PlayerIdPostApiResponseData {
 	playerId: string;
 	isDuplicated: boolean;
+	hashedPlayerId: string;
 }
 
 export interface RunnerPostApiResponseData {

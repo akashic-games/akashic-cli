@@ -41,7 +41,11 @@ export class Storage {
 	static SESSION_STORAGE_KEY: string = "aktb:config";
 
 	data!: StorageData;
+
+	// query から解決するのでここに保持しているが、永続化はしない値。
+	// 将来的にまとめて interface に切り出すか、そもそも storage の管轄外に出すか検討。
 	experimentalIsChildWindow: boolean | null = false;
+	hashedPlayerId: string | null = null;
 
 	private _initializationWaiter: Promise<[void, void]>;
 
@@ -84,10 +88,11 @@ export class Storage {
 		const playerId: string = choose(query.playerId, s.playerId, undefined);
 		this._initializationWaiter = Promise.all([
 			apiClient.registerPlayerId(playerId).then(response => {
-				// プレイヤーID重複の警告等はどのように表示すべきか？
-				const registered = response.data.playerId;
+				const { playerId: registered, isDuplicated, hashedPlayerId } = response.data;
 				const playerName: string = choose(query.playerName, s.playerName, `player-${registered}`);
 				this.put({ playerId: registered, playerName });
+				this.hashedPlayerId = hashedPlayerId;
+				void isDuplicated; // (プレイヤーID重複) の扱い未定
 			}),
 			// TODO: 暫定で 0 番目のコンテンツの sandboxConfig を取得する。ルートセッションのコンテンツの値を使うべき
 			apiClient.getSandboxConfig(0).then(res => {

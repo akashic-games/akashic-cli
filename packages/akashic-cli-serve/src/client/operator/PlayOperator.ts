@@ -125,7 +125,7 @@ export class PlayOperator {
 
 		const cmt: NicoliveComment =
 			senderType === "anonymous" ?
-				{ command, comment, isAnonymous: true, userID: `anon-${Date.now() % 1000}` } :
+				{ command, comment, isAnonymous: true, userID: this.store.hashedPlayerId! } :
 			senderType === "operator" ?
 				{ command, comment, isOperatorComment: true } :
 				{ command, comment, isAnonymous: false, userID: this.store.player?.id };
