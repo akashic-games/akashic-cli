@@ -1,7 +1,6 @@
-import * as path from "path";
 import { createRequire } from "module";
 import type { CliConfigUpdate } from "@akashic/akashic-cli-commons";
-import { ConsoleLogger, CliConfigurationFile } from "@akashic/akashic-cli-commons";
+import { ConsoleLogger, FileSystem } from "@akashic/akashic-cli-commons";
 import { Command } from "commander";
 import { promiseUpdate } from "./update.js";
 
@@ -26,19 +25,22 @@ function cli(param: CliConfigUpdate): void {
 commander
 	.option("-q, --quiet", "Suppress output");
 
-export function run(argv: string[]): void {
+export async function run(argv: string[]): Promise<void> {
 	commander.parse(argv);
 	const options = commander.opts();
-	CliConfigurationFile.load(options.cwd || process.cwd()).then(configuration => {
-		const conf = configuration!.commandOptions?.update ?? {};
-		cli({
-			cwd: options.cwd ?? conf.cwd,
-			quiet: options.quiet ?? conf.quiet,
-			args: commander.args ?? conf.args
-		});
-	}).catch(error => {
+
+	let configuration;
+	try { 
+		configuration = await FileSystem.load(options.cwd || process.cwd());
+	} catch (error) {
 		console.error(error);
 		process.exit(1);
+	}
+	const conf = configuration!.commandOptions?.update ?? {};
+	cli({
+		cwd: options.cwd ?? conf.cwd,
+		quiet: options.quiet ?? conf.quiet,
+		args: commander.args ?? conf.args
 	});
 }
 commander

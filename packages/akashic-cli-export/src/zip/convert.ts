@@ -207,7 +207,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 	let gamejson: cmn.GameConfiguration;
 
 	return Promise.resolve()
-		.then(() => cmn.ConfigurationFile.read(path.join(param.source, "game.json"), param.logger))
+		.then(() => cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join(param.source, "game.json")))
 		.then(async (result: cmn.GameConfiguration) => {
 			gamejson = result;
 			Object.values(gamejson.assets).forEach(asset => utils.warnLackOfAudioFile(asset));
@@ -396,9 +396,8 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 					throw error;
 				}
 			}
-			return cmn.ConfigurationFile.write(
-				gamejson, path.resolve(param.dest, "game.json"), param.logger, { minify: param.minifyJson }
-			);
+			const formatter = param.minifyJson ? (s: cmn.GameConfiguration) => JSON.stringify(s) : undefined;
+			return cmn.FileSystem.writeJSON<cmn.GameConfiguration>(path.resolve(param.dest, "game.json"), gamejson, formatter);
 		})
 		.then(async () => {
 			// ニコ生環境向けの簡易ファイルサイズチェック

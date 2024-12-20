@@ -1,7 +1,5 @@
-import * as path from "path";
 import { createRequire } from "module";
 import type { CliConfigScanAsset, CliConfigScanGlobalScripts } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigScan.js";
-import { CliConfigurationFile } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigurationFile.js";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger.js";
 import { Command } from "commander";
 import type { ScanAssetParameterObject } from "./scanAsset.js";
@@ -9,6 +7,7 @@ import { scanAsset } from "./scanAsset.js";
 import { scanNodeModules } from "./scanNodeModules.js";
 import type { AssetTargetType } from "./types.js";
 import { watchAsset } from "./watchAsset.js";
+import { load } from "@akashic/akashic-cli-commons/lib/FileSystem.js";
 
 const require = createRequire(import.meta.url);
 const { version } = require("../package.json");
@@ -35,50 +34,50 @@ commander
 	.option("--script-asset-dir <dir...>", "specify ScriptAsset directory")
 	.option("--text-asset-dir <dir...>", "specify TextAsset directory")
 	.option("--text-asset-extension <extension...>", "specify TextAsset extension")
-	.action((target: AssetTargetType, opts: CliConfigScanAsset = {}) => {
-		CliConfigurationFile.read(path.join(opts.cwd ?? process.cwd(), "akashic.config.js"), (error, configuration) => {
-			if (error) {
-				console.error(error);
-				process.exit(1);
-			}
-
-			const conf = configuration!.commandOptions?.scan?.asset ?? {};
-			const logger = new ConsoleLogger({ quiet: opts.quiet ?? conf.quiet });
-			const assetScanDirectoryTable = {
-				audio: opts.audioAssetDir ?? conf.audioAssetDir,
-				image: opts.imageAssetDir ?? conf.imageAssetDir,
-				script: opts.scriptAssetDir ?? conf.scriptAssetDir,
-				text: opts.textAssetDir ?? conf.textAssetDir
-			};
-			const assetExtension = {
-				text: opts.textAssetExtension ?? conf.textAssetExtension
-			};
-			const parameter: ScanAssetParameterObject = {
-				target,
-				cwd: opts.cwd ?? conf.cwd,
-				logger,
-				resolveAssetIdsFromPath: opts.usePathAssetId ?? conf.usePathAssetId,
-				forceUpdateAssetIds: opts.updateAssetId ?? conf.updateAssetId,
-				includeExtensionToAssetId: opts.usePathAssetId ?? (opts.includeExtensionToAssetId ?? conf.includeExtensionToAssetId),
-				assetScanDirectoryTable,
-				assetExtension
-			};
-			if (opts.watch) {
-				logger.warn("--watch option is deprecated. DO NOT USE.");
-				watchAsset(parameter, (err) => {
-					if (err) {
-						logger.error(err.message);
-						process.exit(1);
-					}
+	.action(async (target: AssetTargetType, opts: CliConfigScanAsset = {}) => {
+		let configuration;
+		try { 
+			configuration = await load(opts.cwd || process.cwd());
+		} catch (error) {
+			console.error(error);
+			process.exit(1);
+		}
+		const conf = configuration!.commandOptions?.scan?.asset ?? {};
+		const logger = new ConsoleLogger({ quiet: opts.quiet ?? conf.quiet });
+		const assetScanDirectoryTable = {
+			audio: opts.audioAssetDir ?? conf.audioAssetDir,
+			image: opts.imageAssetDir ?? conf.imageAssetDir,
+			script: opts.scriptAssetDir ?? conf.scriptAssetDir,
+			text: opts.textAssetDir ?? conf.textAssetDir
+		};
+		const assetExtension = {
+			text: opts.textAssetExtension ?? conf.textAssetExtension
+		};
+		const parameter: ScanAssetParameterObject = {
+			target,
+			cwd: opts.cwd ?? conf.cwd,
+			logger,
+			resolveAssetIdsFromPath: opts.usePathAssetId ?? conf.usePathAssetId,
+			forceUpdateAssetIds: opts.updateAssetId ?? conf.updateAssetId,
+			includeExtensionToAssetId: opts.usePathAssetId ?? (opts.includeExtensionToAssetId ?? conf.includeExtensionToAssetId),
+			assetScanDirectoryTable,
+			assetExtension
+		};
+		if (opts.watch) {
+			logger.warn("--watch option is deprecated. DO NOT USE.");
+			watchAsset(parameter, (err) => {
+				if (err) {
+					logger.error(err.message);
+					process.exit(1);
+				}
+			});
+		} else {
+			scanAsset(parameter)
+				.catch((err: Error) => {
+					logger.error(err.message);
+					process.exit(1);
 				});
-			} else {
-				scanAsset(parameter)
-					.catch((err: Error) => {
-						logger.error(err.message);
-						process.exit(1);
-					});
-			}
-		});
+		}
 	})
 	.on("--help", () => {
 		console.log("  Target:");

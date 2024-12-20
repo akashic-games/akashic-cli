@@ -39,7 +39,7 @@ function _completeModifyBasicParameterParameterObject(
 	};
 }
 
-export function promiseModifyBasicParameter(param: ModifyBasicParameterParameterObject): Promise<void> {
+export async function promiseModifyBasicParameter(param: ModifyBasicParameterParameterObject): Promise<void> {
 	const { target, value, cwd, logger } = _completeModifyBasicParameterParameterObject(param);
 
 	if (typeof value !== "number" || isNaN(value) || value <= 0 || Math.round(value) !== value) {
@@ -48,29 +48,30 @@ export function promiseModifyBasicParameter(param: ModifyBasicParameterParameter
 
 	const restoreDirectory = cmn.Util.chdir(cwd);
 	const gameJsonPath = path.join(process.cwd(), "game.json");
-	return Promise.resolve()
-		.then(() => cmn.ConfigurationFile.read(gameJsonPath, logger))
-		.then((content: cmn.GameConfiguration) => {
-			return new Promise<void>((resolve, reject) => {
-				switch (target) {
-					case "width":
-						content.width = value;
-						break;
-					case "height":
-						content.height = value;
-						break;
-					case "fps":
-						content.fps = value;
-						break;
-					default:
-						return reject("unknown target: " + target);
-				}
-				resolve();
-			})
-				.then(() => cmn.FileSystem.writeJSON<cmn.GameConfiguration>(gameJsonPath, content))
-				.then(() => logger.info("Done!"));
-		})
-		.finally(restoreDirectory);
+	let content = {} as cmn.GameConfiguration;
+	try {
+		content = await cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join(process.cwd(), "game.json"));
+	} catch (e) {
+		logger.info("No game.json found. Create a new one.");
+	}
+
+	switch (target) {
+		case "width":
+			content.width = value;
+			break;
+		case "height":
+			content.height = value;
+			break;
+		case "fps":
+			content.fps = value;
+			break;
+		default:
+			throw ("unknown target: " + target);
+	};
+
+	await cmn.FileSystem.writeJSON<cmn.GameConfiguration>(gameJsonPath, content);
+	logger.info("Done!");
+	await restoreDirectory();
 }
 
 export function modifyBasicParameter(param: ModifyBasicParameterParameterObject, cb: (err?: any) => void): void {
