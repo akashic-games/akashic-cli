@@ -174,7 +174,6 @@ describe("install()", () => {
 				const globalScripts = content.globalScripts!;
 				globalScripts.push("node_modules/foo/foo.js");
 				await cmn.FileSystem.writeJSON<cmn.GameConfiguration>("./somedir/game.json", content);
-				// cmn.ConfigurationFile.write(content, "./somedir/game.json", logger);
 			})
 			.then(() => promiseInstall({ moduleNames: ["dummy@1.0.1"], cwd: "./somedir", logger: logger, debugNpm: dummyNpm }))
 			.then(() => cmn.FileSystem.readJSON<cmn.GameConfiguration>("./somedir/game.json"))

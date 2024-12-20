@@ -396,7 +396,8 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 					throw error;
 				}
 			}
-			return cmn.FileSystem.writeJSON<cmn.GameConfiguration>(path.resolve(param.dest, "game.json"), gamejson);
+			const formatter = param.minifyJson ? (s: cmn.GameConfiguration) => JSON.stringify(s) : undefined;
+			return cmn.FileSystem.writeJSON<cmn.GameConfiguration>(path.resolve(param.dest, "game.json"), gamejson, formatter);
 		})
 		.then(async () => {
 			// ニコ生環境向けの簡易ファイルサイズチェック
