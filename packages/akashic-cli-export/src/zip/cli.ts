@@ -77,7 +77,8 @@ commander
 	.option("-M, --minify", "(DEPRECATED: use --minify-js) Minify JavaScript files")
 	.option("-H, --hash-filename [length]", "Rename asset files with their hash values")
 	.option("-b, --bundle", "Bundle script assets into a single file")
-	.option("--no-es5-downpile", "No convert JavaScript into es5")
+	.option("--no-es5-downpile", "(DEPRECATED: use --no-es-downpile) No convert JavaScript into es5")
+	.option("--no-es-downpile", "No convert JavaScript")
 	.option("--no-omit-empty-js", "(DEPRECATED) Changes nothing. Provided for backward compatibility")
 	.option("--no-omit-unbundled-js", "Preserve unbundled .js files (not required from root). Works with --bundle only")
 	.option("--minify-js", "Minify JavaScript files")
@@ -105,6 +106,9 @@ export async function run(argv: string[]): Promise<void> {
 		console.error("Invalid --target-service option argument: " + options.targetService);
 		process.exit(1);
 	}
+	if (options.esDownpile && !options.es5Downpile) {
+		options.esDownpile = options.es5Downpile;
+	}
 
 	const conf = configuration!.commandOptions?.export?.zip ?? {};
 	cli({
@@ -120,7 +124,7 @@ export async function run(argv: string[]): Promise<void> {
 		packImage: options.packImage ?? conf.packImage,
 		hashFilename: options.hashFilename ?? conf.hashFilename,
 		bundle: options.bundle ?? conf.bundle,
-		babel: options.es5Downpile ?? conf.babel,
+		babel: options.esDownpile ?? conf.babel,
 		omitEmptyJs: options.omitEmptyJs ?? conf.omitEmptyJs,
 		omitUnbundledJs: options.omitUnbundledJs ?? conf.omitUnbundledJs,
 		targetService: options.targetService ?? conf.targetService,
