@@ -16,7 +16,6 @@ import {
 	wrap,
 	extractAssetDefinitions,
 	getInjectedContents,
-	validateEs5Code,
 	readSandboxConfigJs,
 	validateEngineFilesName,
 	resolveEngineFilesPath,
@@ -92,9 +91,6 @@ async function convertAssetAndOutput(
 	const exports = (asset.type === "script" && asset.exports) ?? [];
 	const assetString = fs.readFileSync(path.join(inputPath, asset.path), "utf8").replace(/\r\n|\r/g, "\n");
 	const assetPath = asset.path;
-	if (isScript) {
-		errors.push.apply(errors, await validateEs5Code(assetPath, assetString)); // ES5構文に反する箇所があるかのチェック
-	}
 
 	const code = (isScript ? wrapScript(assetString, assetName, terser, exports) : wrapText(assetString, assetName));
 	const relativePath = "./js/assets/" + path.dirname(assetPath) + "/" +
@@ -110,9 +106,6 @@ async function convertGlobalScriptAndOutput(
 	terser: MinifyOptions | undefined, errors?: string[]): Promise<string> {
 	const scriptString = fs.readFileSync(path.join(inputPath, scriptName), "utf8").replace(/\r\n|\r/g, "\n");
 	const isScript = /\.js$/i.test(scriptName);
-	if (isScript) {
-		errors.push.apply(errors, await validateEs5Code(scriptName, scriptString)); // ES5構文に反する箇所があるかのチェック
-	}
 
 	const code = isScript ? wrapScript(scriptString, scriptName, terser) : wrapText(scriptString, scriptName);
 	const relativePath = "./globalScripts/" + scriptName + (isScript ? "" : ".js");
