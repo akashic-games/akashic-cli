@@ -17,7 +17,7 @@ import type {
 	PlaySendNicoliveCommentResponse
 } from "../../common/types/ApiResponse";
 import type { ContentLocatorData } from "../../common/types/ContentLocatorData";
-import type { NicoliveComment } from "../../common/types/NicoliveCommentPlugin";
+import type { NicoliveCommentEventComment } from "../../common/types/NicoliveCommentPlugin";
 import type { PlayAudioState } from "../../common/types/PlayAudioState";
 import type { Player } from "../../common/types/Player";
 import * as ApiRequest from "./ApiRequest";
@@ -134,7 +134,7 @@ export class ApiClient {
 		);
 	};
 
-	async requestToSendNicoliveComment(playId: string, comment: NicoliveComment): Promise<PlaySendNicoliveCommentResponse> {
+	async requestToSendNicoliveComment(playId: string, comment: NicoliveCommentEventComment): Promise<PlaySendNicoliveCommentResponse> {
 		return ApiRequest.post<PlaySendNicoliveCommentResponse>(
 			`${this._baseUrl}/api/plays/${playId}/comment`,
 			{ ...comment, isAnonymous: comment.isAnonymous?.toString(), isOperatorComment: comment.isOperatorComment?.toString() }

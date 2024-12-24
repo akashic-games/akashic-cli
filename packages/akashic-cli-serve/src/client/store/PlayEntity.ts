@@ -4,7 +4,7 @@ import type { ObservableMap } from "mobx";
 import { observable, action } from "mobx";
 import { TimeKeeper } from "../../common/TimeKeeper";
 import type { PlayPatchApiResponse } from "../../common/types/ApiResponse";
-import type { NicoliveComment } from "../../common/types/NicoliveCommentPlugin";
+import type { NicoliveCommentEventComment } from "../../common/types/NicoliveCommentPlugin";
 import type { PlayAudioState } from "../../common/types/PlayAudioState";
 import type { PlayDurationState } from "../../common/types/PlayDurationState";
 import type { Player } from "../../common/types/Player";
@@ -229,7 +229,7 @@ export class PlayEntity {
 		await apiClient.requestToSendNicoliveCommentByTemplate(this.playId, templateName);
 	}
 
-	async sendNicoliveComment(comment: NicoliveComment): Promise<void> {
+	async sendNicoliveComment(comment: NicoliveCommentEventComment): Promise<void> {
 		await apiClient.requestToSendNicoliveComment(this.playId, comment);
 	}
 

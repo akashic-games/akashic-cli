@@ -2,13 +2,19 @@ import type { AMFlow } from "@akashic/amflow";
 import { TickIndex, type Tick } from "@akashic/playlog";
 import { Trigger } from "@akashic/trigger";
 import { callOrThrow } from "../../../common/callOrThrow";
-import { createNicoliveCommentMessageEvent } from "../../../common/PlaylogShim";
+import { createNicoliveCommentEvent } from "../../../common/PlaylogShim";
 import type { NicoliveCommentConfig, NicoliveCommentConfigComment } from "../../../common/types/NicoliveCommentConfig";
-import type { NicoliveComment, NicoliveCommentPlugin } from "../../../common/types/NicoliveCommentPlugin";
+import type { NicoliveCommentEventComment, NicoliveCommentPlugin } from "../../../common/types/NicoliveCommentPlugin";
 
-const VALID_FIELDS: string[] = ["comment", "userID", "isAnonymous", "isOperatorComment", "command"] satisfies (keyof NicoliveComment)[];
-const DEFAULT_FIELDS: (keyof NicoliveComment)[] = ["comment", "userID", "isAnonymous", "isOperatorComment"];
-const NULL_COMMENT: NicoliveComment = { comment: "", command: "" };
+const VALID_FIELDS: string[] = [
+	"comment",
+	"userID",
+	"isAnonymous",
+	"isOperatorComment",
+	"command",
+] satisfies (keyof NicoliveCommentEventComment)[];
+const DEFAULT_FIELDS: (keyof NicoliveCommentEventComment)[] = ["comment", "userID", "isAnonymous", "isOperatorComment"];
+const NULL_COMMENT: NicoliveCommentEventComment = { comment: "", command: "" };
 
 export class NicoliveCommentPluginHost {
 	onStartStop: Trigger<boolean> = new Trigger();
@@ -16,11 +22,11 @@ export class NicoliveCommentPluginHost {
 
 	protected config: NicoliveCommentConfig;
 	protected amflow: AMFlow;
-	protected filter: Set<keyof NicoliveComment> = new Set();
+	protected filter: Set<keyof NicoliveCommentEventComment> = new Set();
 
 	protected started: boolean = false;
 	protected planned: boolean = false;
-	protected plan: Map<number, NicoliveComment[]> = new Map();
+	protected plan: Map<number, NicoliveCommentEventComment[]> = new Map();
 
 	constructor(config: NicoliveCommentConfig, amflow: AMFlow) {
 		this.config = config;
@@ -68,7 +74,7 @@ export class NicoliveCommentPluginHost {
 		return this._planToSendImpl(comments);
 	}
 
-	planToSend(c: NicoliveComment): boolean {
+	planToSend(c: NicoliveCommentEventComment): boolean {
 		return this._planToSendImpl([{ comment: "", ...c }]);
 	}
 
@@ -133,7 +139,7 @@ export class NicoliveCommentPluginHost {
 
 		const comments = this.plan.get(age);
 		if (comments?.length) {
-			this.amflow.sendEvent(createNicoliveCommentMessageEvent(comments));
+			this.amflow.sendEvent(createNicoliveCommentEvent(comments));
 		}
 	};
 }

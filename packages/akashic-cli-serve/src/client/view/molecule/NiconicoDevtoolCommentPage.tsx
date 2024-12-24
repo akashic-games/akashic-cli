@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import type { NicoliveComment } from "../../../common/types/NicoliveCommentPlugin";
+import type { NicoliveCommentEventComment } from "../../../common/types/NicoliveCommentPlugin";
 import type {
 	NiconicoDevtoolCommentPageSenderLimitation,
 	NiconicoDevtoolCommentPageSenderType
@@ -9,7 +9,7 @@ import { ToolChoiceButton, type ToolChoiceButtonItem } from "../atom/ToolChoiceB
 import styles from "./NiconicoDevtoolCommentPage.module.css";
 
 export interface NiconicoDevtoolCommentPagePropsModel {
-	comments: NicoliveComment[];
+	comments: NicoliveCommentEventComment[];
 	templates: string[];
 	isEnabled: boolean;
 	senderType: NiconicoDevtoolCommentPageSenderType;
@@ -144,7 +144,7 @@ export const NiconicoDevtoolCommentPage = observer(function NiconicoDevtoolComme
 });
 
 interface CommentRowProps {
-	comment: NicoliveComment;
+	comment: NicoliveCommentEventComment;
 	index: number;
 }
 

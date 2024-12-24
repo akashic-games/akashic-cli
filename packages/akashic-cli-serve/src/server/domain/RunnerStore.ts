@@ -1,7 +1,7 @@
 import * as path from "path";
 import type { AMFlowClient, RunnerManager, RunnerV1, RunnerV2, RunnerV3 } from "@akashic/headless-driver";
 import { Trigger } from "@akashic/trigger";
-import type { NicoliveComment } from "../../common/types/NicoliveCommentPlugin";
+import type { NicoliveCommentEventComment } from "../../common/types/NicoliveCommentPlugin";
 import type {
 	RunnerCreateTestbedEvent,
 	RunnerRemoveTestbedEvent,
@@ -151,7 +151,7 @@ export class RunnerStore {
 		return commentPluginHost?.planToSendByTemplate(name) ?? false;
 	}
 
-	sendComment(runnerId: string, comment: NicoliveComment): boolean {
+	sendComment(runnerId: string, comment: NicoliveCommentEventComment): boolean {
 		const commentPluginHost = this.runnerEntities[runnerId]?.nicoliveCommentPluginHost;
 		return commentPluginHost?.planToSend(comment) ?? false;
 	}

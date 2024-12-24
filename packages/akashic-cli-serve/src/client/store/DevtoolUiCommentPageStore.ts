@@ -1,5 +1,5 @@
 import { observable, action } from "mobx";
-import type { NicoliveComment } from "../../common/types/NicoliveCommentPlugin";
+import type { NicoliveCommentEventComment } from "../../common/types/NicoliveCommentPlugin";
 
 /**
  * コメント送信者タイプ。
@@ -20,7 +20,7 @@ export type NiconicoDevtoolCommentPageSenderType = "anonymous" | "named" | "oper
 export type NiconicoDevtoolCommentPageSenderLimitation = "operator" | "audience" | "none";
 
 export class DevtoolUiCommentPageStore {
-	@observable comments: NicoliveComment[] = [];
+	@observable comments: NicoliveCommentEventComment[] = [];
 	@observable templates: string[] = [];
 	@observable isEnabled: boolean = false;
 	@observable senderType: NiconicoDevtoolCommentPageSenderType = "anonymous";
@@ -29,7 +29,7 @@ export class DevtoolUiCommentPageStore {
 	@observable commentInput: string = "";
 
 	@action
-	addComments(comments: NicoliveComment[]): void {
+	addComments(comments: NicoliveCommentEventComment[]): void {
 		this.comments.push(...comments);
 	}
 

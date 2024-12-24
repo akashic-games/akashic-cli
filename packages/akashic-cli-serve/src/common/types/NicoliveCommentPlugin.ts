@@ -3,7 +3,7 @@
 /**
  * コメントデータ。
  */
-export interface NicoliveComment {
+export interface NicoliveCommentEventComment {
 	/**
 	 * コメント本文。
 	 *
@@ -58,7 +58,7 @@ export interface NicoliveCommentStartOptions {
 	 * 指定する場合、値は `NicoliveComment` のプロパティ名の配列でなければならない。
 	 * 省略した場合、 `["comment", "userID", "isAnonymous", "isOperatorComment"]` と見なされる。
 	 */
-	fields?: (keyof NicoliveComment)[];
+	fields?: (keyof NicoliveCommentEventComment)[];
 }
 
 export interface NicoliveCommentPlugin {

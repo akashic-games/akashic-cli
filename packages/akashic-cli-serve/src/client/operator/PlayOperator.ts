@@ -1,6 +1,6 @@
 import { toJS as mobxToJS } from "mobx";
 import type { PlayPatchApiResponse } from "../../common/types/ApiResponse";
-import type { NicoliveComment } from "../../common/types/NicoliveCommentPlugin";
+import type { NicoliveCommentEventComment } from "../../common/types/NicoliveCommentPlugin";
 import * as Subscriber from "../api/Subscriber";
 import type { Store } from "../store/Store";
 
@@ -123,7 +123,7 @@ export class PlayOperator {
 		const { commandInput: command, commentInput: comment, senderType } = this.store.devtoolUiStore.commentPage;
 		if (!comment) return;
 
-		const cmt: NicoliveComment =
+		const cmt: NicoliveCommentEventComment =
 			senderType === "anonymous" ?
 				{ command, comment, isAnonymous: true, userID: this.store.hashedPlayerId! } :
 			senderType === "operator" ?

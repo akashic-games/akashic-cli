@@ -1,4 +1,4 @@
-import { isNicoliveCommentMessageEvent, MessageEventIndexData } from "../../common/PlaylogShim";
+import { isNicoliveCommentEvent, MessageEventIndexData } from "../../common/PlaylogShim";
 import type { OnTickArguments } from "../akashic/ServeGameContent";
 import type { EDumpItem } from "../common/types/EDumpItem";
 import type { NiconicoDevtoolCommentPageSenderLimitation, NiconicoDevtoolCommentPageSenderType } from "../store/DevtoolUiCommentPageStore";
@@ -198,7 +198,7 @@ export class DevtoolOperator {
 		if (!events) return;
 		for (let i = 0; i < events.length; ++i) {
 			const ev = events[i];
-			if (isNicoliveCommentMessageEvent(ev))
+			if (isNicoliveCommentEvent(ev))
 				this.store.devtoolUiStore.commentPage.addComments(ev[MessageEventIndexData].comments);
 		}
 	};

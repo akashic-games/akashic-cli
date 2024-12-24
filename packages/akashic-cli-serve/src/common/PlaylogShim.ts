@@ -1,5 +1,5 @@
 import type { MessageEventIndex, EventCode, EventIndex, MessageEvent, Event } from "@akashic/playlog";
-import type { NicoliveComment } from "./types/NicoliveCommentPlugin";
+import type { NicoliveCommentEventComment } from "./types/NicoliveCommentPlugin";
 
 // serve (のクライアント側) は isolatedModules: true のため、
 // const enum で定義されている EventCode は「値として」は参照できない (コンパイルエラーになる)。
@@ -11,18 +11,18 @@ export const EventCodeMessage: EventCode.Message = 32;
 export const EventIndexCode: EventIndex.Code = 0;
 export const MessageEventIndexData: MessageEventIndex.Data = 3;
 
-export interface NicoliveCommentMessageEvent extends MessageEvent {
+export interface NicoliveCommentEvent extends MessageEvent {
 	[MessageEventIndexData]: {
 		type: "nicoservice:stream:comment";
-		comments: NicoliveComment[];
+		comments: NicoliveCommentEventComment[];
 	};
 }
 
-export function isNicoliveCommentMessageEvent(ev: Event): ev is NicoliveCommentMessageEvent {
+export function isNicoliveCommentEvent(ev: Event): ev is NicoliveCommentEvent {
 	return ev[EventIndexCode] === EventCodeMessage && ev[MessageEventIndexData]?.type === "nicoservice:stream:comment";
 }
 
-export function createNicoliveCommentMessageEvent(comments: NicoliveComment[]): NicoliveCommentMessageEvent {
+export function createNicoliveCommentEvent(comments: NicoliveCommentEventComment[]): NicoliveCommentEvent {
 	return [
 		EventCodeMessage,
 		0,
