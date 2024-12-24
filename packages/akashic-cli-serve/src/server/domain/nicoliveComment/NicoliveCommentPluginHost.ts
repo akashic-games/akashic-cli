@@ -1,8 +1,10 @@
 import type { AMFlow } from "@akashic/amflow";
-import { TickIndex, type Tick, type MessageEvent, EventCode } from "@akashic/playlog";
+import { TickIndex, type Tick } from "@akashic/playlog";
 import { Trigger } from "@akashic/trigger";
-import type { NicoliveCommentConfig } from "./NicoliveCommentConfig";
-import type { NicoliveComment, NicoliveCommentPlugin } from "./NicoliveCommentPlugin";
+import { callOrThrow } from "../../../common/callOrThrow";
+import { createNicoliveCommentMessageEvent } from "../../../common/PlaylogShim";
+import type { NicoliveCommentConfig, NicoliveCommentConfigComment } from "../../../common/types/NicoliveCommentConfig";
+import type { NicoliveComment, NicoliveCommentPlugin } from "../../../common/types/NicoliveCommentPlugin";
 
 const VALID_FIELDS: string[] = ["comment", "userID", "isAnonymous", "isOperatorComment", "command"] satisfies (keyof NicoliveComment)[];
 const DEFAULT_FIELDS: (keyof NicoliveComment)[] = ["comment", "userID", "isAnonymous", "isOperatorComment"];
@@ -57,6 +59,47 @@ export class NicoliveCommentPluginHost {
 		};
 	}
 
+	planToSendByTemplate(name: string): boolean {
+		const comments = this.config.templates?.[name]?.comments;
+		if (!Array.isArray(comments) || comments.length === 0) {
+			console.warn(`NicoliveCommentPluginHost: no template named '${name}'`);
+			return false;
+		}
+		return this._planToSendImpl(comments);
+	}
+
+	planToSend(c: NicoliveComment): boolean {
+		return this._planToSendImpl([{ comment: "", ...c }]);
+	}
+
+	protected _planToSendImpl(comments: NicoliveCommentConfigComment[]): boolean {
+		const { amflow } = this;
+
+		if (!this.started) {
+			console.warn("NicoliveCommentPluginHost: plugin not started.");
+			return false;
+		}
+
+		const replan = (tick: Tick): void => {
+			amflow.offTick(replan);
+
+			const age = tick[TickIndex.Frame];
+			if (!this.planned)
+				this._setupPlan(age);
+
+			const base = age + 1; // age は今既に来ている tick なので次の tick から送る
+			let lastFrame = base;
+			comments.forEach(c => {
+				const comment = { ...NULL_COMMENT, ...c };
+				const frame = lastFrame = (comment.frame != null) ? base + comment.frame : lastFrame;
+				arrayMapAdd(this.plan, frame, filterProperty(comment, this.filter));
+			});
+		};
+
+		amflow.onTick(replan);
+		return true;
+	}
+
 	protected _setupPlan(startAge: number): void {
 		if (this.planned) return;
 		this.planned = true;
@@ -64,6 +107,9 @@ export class NicoliveCommentPluginHost {
 		const { plan, config } = this;
 		const { templates } = config;
 		plan.clear();
+
+		if (!templates)
+			return;
 
 		objectForEach(templates, (templ) => {
 			const { startBy, comments } = templ;
@@ -87,7 +133,7 @@ export class NicoliveCommentPluginHost {
 
 		const comments = this.plan.get(age);
 		if (comments?.length) {
-			this.amflow.sendEvent(createCommentMessageEvent(comments));
+			this.amflow.sendEvent(createNicoliveCommentMessageEvent(comments));
 		}
 	};
 }
@@ -103,18 +149,6 @@ function arrayMapAdd<K, V>(map: Map<K, V[]>, k: K, v: V): void {
 		map.set(k, [v]);
 }
 
-function createCommentMessageEvent(comments: NicoliveComment[]): MessageEvent {
-	return [
-		EventCode.Message,
-		0,
-		":akashic",
-		{
-			type: "nicoservice:stream:comment",
-			comments
-		}
-	];
-}
-
 function filterProperty<T extends object>(o: T, filter: Set<keyof T>): Partial<T> {
 	const ret: Partial<T> = {};
 	objectForEach(o, (v, k) => {
@@ -123,19 +157,3 @@ function filterProperty<T extends object>(o: T, filter: Set<keyof T>): Partial<T
 	});
 	return ret;
 };
-
-/**
- * callback が関数であるなら err を与えて呼び出す。でなければ err を throw する。
- *
- * 以下すべてを満たす時に利用すること。
- * (a) エラー通知用のコールバックが省略可能で、必ずしもそれでエラー通知ができない
- * (b) err がロジックエラー (コンテンツ開発者の対応が必要) であり、serve としてはゲーム開発者が確実に気づける形が望ましい
- * (c) 通知したいエラーが同期的に発生している
- */
-function callOrThrow(callback: ((err?: Error) => void) | null | undefined, err: Error): void {
-	if (callback) {
-		callback(err);
-	} else {
-		throw err;
-	}
-}

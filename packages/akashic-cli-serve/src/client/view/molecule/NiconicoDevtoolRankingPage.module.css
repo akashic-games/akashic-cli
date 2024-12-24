@@ -1,0 +1,58 @@
+.niconico-devtool {
+	flex: 1 1 auto;
+	display: flex;
+	flex-flow: column nowrap;
+	/* background: var(--color-tool-bg); */
+}
+
+.niconico-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 12px;
+	text-align: left;
+	color: var(--color-base-text);
+	background: var(--color-base-bg);
+	cursor: default;
+	user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+}
+
+.niconico-table th:not(:last-child),
+.niconico-table td:not(:last-child) {
+	border-right: 1px solid var(--color-base-grid);
+}
+
+.niconico-table th {
+	padding: 4px 8px;
+	font-weight: normal;
+	background: var(--color-tool-bg);
+	border-bottom: 1px solid var(--color-base-grid);
+}
+
+.niconico-table td {
+	padding: 2px 8px;
+}
+
+.niconico-table tr:nth-child(odd) {
+	background: var(--color-base-bg-alt);
+}
+
+.niconico-table tr:hover {
+	background: var(--color-base-bg-active);
+}
+
+.text-silver {
+	color: silver;
+}
+.text-red-bold {
+	color: red;
+	font-weight:bold
+}
+
+
+.hidden { display: none; }
+
+.text-hidden {visibility: hidden;}
+
+.text-visible {visibility: visible; }

@@ -83,5 +83,15 @@ export interface NicoliveCommentConfig {
 	 * コメントツールで流すコメントのテンプレート。
 	 * キー名はテンプレート名、値はテンプレートの内容。
 	 */
-	templates: { [name: string]: NicoliveCommentConfigTemplate };
+	templates?: { [name: string]: NicoliveCommentConfigTemplate };
+}
+
+/**
+ * sandbox.config.js の型 (SnadboxConfiguration) に対する拡張。
+ * TODO sandbox-configuration の SandboxConfiguration, NormalizedSandboxConfiguration に取り込む。
+ */
+export interface SandboxConfigExternalDefinition {
+	external?: {
+		nicoliveComment?: NicoliveCommentConfig;
+	};
 }

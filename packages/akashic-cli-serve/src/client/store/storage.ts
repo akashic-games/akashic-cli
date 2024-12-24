@@ -1,5 +1,6 @@
 import { apiClient } from "../api/apiClientInstance";
 import { queryParameters as query } from "../common/queryParameters";
+import type { NiconicoDevtoolPageType } from "../view/molecule/NiconicoDevtool";
 
 export interface StorageData {
 	playerId: string;
@@ -28,6 +29,8 @@ export interface StorageData {
 	totalTimeLimitInputValue: number;
 	showsProfiler: boolean;
 	showsDesignGuideline: boolean;
+	niconicoToolActivePage: NiconicoDevtoolPageType;
+	niconicoToolSelectorWidth: number;
 }
 
 function choose<T>(a: T | null | undefined, b: T | null | undefined, c: T): T {
@@ -38,7 +41,11 @@ export class Storage {
 	static SESSION_STORAGE_KEY: string = "aktb:config";
 
 	data!: StorageData;
+
+	// query から解決するのでここに保持しているが、永続化はしない値。
+	// 将来的にまとめて interface に切り出すか、そもそも storage の管轄外に出すか検討。
 	experimentalIsChildWindow: boolean | null = false;
+	hashedPlayerId: string | null = null;
 
 	private _initializationWaiter: Promise<[void, void]>;
 
@@ -69,6 +76,7 @@ export class Storage {
 			instanceArgumentEditContent: choose(query.instanceArgumentEditContent, s.instanceArgumentEditContent, ""),
 			showsHiddenEntity: choose(query.showsHiddenEntity, s.showsHiddenEntity, true),
 			joinsAutomatically: choose(query.joinsAutomatically, s.joinsAutomatically, false),
+			niconicoToolActivePage: choose(query.niconicoToolActigePage, s.niconicoToolActivePage, "ranking"),
 			isAutoSendEvents: choose(query.isAutoSendEvents, s.isAutoSendEvents, false),
 			emulatingShinichibaMode: choose(query.emulatingShinichibaMode, s.emulatingShinichibaMode, "single"),
 			usePreferredTotalTimeLimit: choose(query.usePreferredTotalTimeLimit, s.usePreferredTotalTimeLimit, false),
@@ -80,10 +88,11 @@ export class Storage {
 		const playerId: string = choose(query.playerId, s.playerId, undefined);
 		this._initializationWaiter = Promise.all([
 			apiClient.registerPlayerId(playerId).then(response => {
-				// プレイヤーID重複の警告等はどのように表示すべきか？
-				const registered = response.data.playerId;
+				const { playerId: registered, isDuplicated, hashedPlayerId } = response.data;
 				const playerName: string = choose(query.playerName, s.playerName, `player-${registered}`);
 				this.put({ playerId: registered, playerName });
+				this.hashedPlayerId = hashedPlayerId;
+				void isDuplicated; // (プレイヤーID重複) の扱い未定
 			}),
 			// TODO: 暫定で 0 番目のコンテンツの sandboxConfig を取得する。ルートセッションのコンテンツの値を使うべき
 			apiClient.getSandboxConfig(0).then(res => {
