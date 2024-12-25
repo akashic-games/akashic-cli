@@ -17,7 +17,6 @@ export {
 	ExportZipInfo
 } from "./GameConfiguration.js";
 export { LibConfiguration } from "./LibConfiguration.js";
-export * as LintUtil from "./LintUtil.js";
 export { Logger } from "./Logger.js";
 export { NodeModules } from "./NodeModules.js";
 export { PromisedNpm, PromisedNpmParameterObject, NpmLsResultObject } from "./PromisedNpm.js";

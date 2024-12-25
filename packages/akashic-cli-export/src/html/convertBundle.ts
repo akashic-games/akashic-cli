@@ -18,7 +18,6 @@ import {
 	getDefaultBundleStyle,
 	extractAssetDefinitions,
 	getInjectedContents,
-	validateEs5Code,
 	validateSandboxConfigJs,
 	readSandboxConfigJs
 } from "./convertUtil.js";
@@ -111,9 +110,6 @@ async function convertAssetToInnerHTMLObj(
 	const asset = assets[assetName];
 	const exports = (asset.type === "script" && asset.exports) ?? [];
 	const assetString = fs.readFileSync(path.join(inputPath, asset.path), "utf8").replace(/\r\n|\r/g, "\n");
-	if (isScript) {
-		errors.push.apply(errors, await validateEs5Code(asset.path, assetString));
-	}
 	return {
 		name: assetName,
 		type: asset.type,
@@ -130,9 +126,6 @@ async function convertScriptNameToInnerHTMLObj(
 	const scriptPath = path.resolve("./", scriptName);
 	if (path.extname(scriptPath) === ".json") {
 		scriptString = encodeText(scriptString);
-	}
-	if (isScript) {
-		errors.push.apply(errors, await validateEs5Code(scriptName, scriptString));
 	}
 	return {
 		name: scriptName,

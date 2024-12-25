@@ -188,7 +188,7 @@ const babelOption = {
 		babel.createConfigItem([presetEnv, {
 			modules: false,
 			targets: {
-				"ie": 10
+				"chrome": 51
 			}
 		}],
 		{ type: "preset" })
@@ -224,21 +224,6 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 					version: param.exportInfo.version,
 					option: param.exportInfo.option
 				};
-			}
-			// 全スクリプトがES5構文になっていることを確認する
-			let errorMessages: string[] = [];
-			const filePaths = gcu.extractScriptAssetFilePaths(gamejson);
-			for (const filePath of filePaths) {
-				const code = fs.readFileSync(path.resolve(param.source, filePath)).toString();
-				if (!param.babel) {
-					const errInfo = await cmn.LintUtil.validateEs5Code(code);
-					errorMessages = errorMessages.concat(
-						errInfo.map(info => `${filePath}(${info.line}:${info.column}): ${info.message}`)
-					);
-				}
-			}
-			if (errorMessages.length > 0) {
-				param.logger.warn("Non-ES5 syntax found.\n" + errorMessages.join("\n"));
 			}
 
 			if (!param.bundle)

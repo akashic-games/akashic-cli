@@ -80,37 +80,7 @@ describe("convert", () => {
 			consoleSpy.mockRestore();
 		});
 
-		it("can not convert game if script that is not written with ES5 syntax", async () => {
-			let warningMessage = "";
-			const param = {
-				source: path.resolve(fixturesDir, "simple_game_es6"),
-				dest: destDir,
-				logger: {
-					warn: (message: string) => {
-						warningMessage = message;
-					},
-					print: (message: string) => {
-						console.log(message);
-					},
-					error: (message: string) => {
-						console.error(message);
-					},
-					info: (message: string) => {
-						console.log(message);
-					}
-				}
-			};
-			return convertGame(param)
-				.then(() => {
-					expect(fs.existsSync(destDir)).toBe(true);
-					const expected = "Non-ES5 syntax found.\n"
-						+ "script/main.js(1:1): Parsing error: The keyword 'const' is reserved\n"
-						+ "script/foo.js(1:1): Parsing error: The keyword 'const' is reserved";
-					expect(warningMessage).toBe(expected);
-				});
-		});
-
-		it("can downpile script to ES5", async () => {
+		it("can downpile script", async () => {
 			let warningMessage = "";
 			const param = {
 				source: path.resolve(fixturesDir, "simple_game_es6"),
@@ -135,7 +105,11 @@ describe("convert", () => {
 				.then(() => {
 					expect(fs.existsSync(destDir)).toBe(true);
 					expect(warningMessage).toBe("");
-					expect(fs.existsSync(path.join(destDir, "script/main.js"))).toBe(true);
+					const script = fs.readFileSync(path.join(destDir, "script/main.js"), "utf8");
+					expect(script).toBeDefined();
+					expect(/\(\) =>/.test(script)).toBeTruthy(); // ES2015 のアロー関数はそのまま
+					expect(/\*\*/.test(script)).toBeFalsy(); // ES2016 のべき乗演算子は Math.pow()に変換される
+					expect(/Math\.pow/.test(script)).toBeTruthy();
 					expect(fs.existsSync(path.join(destDir, "script/bar.js"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "script/foo.js"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "game.json"))).toBe(true);

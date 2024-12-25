@@ -199,11 +199,6 @@ export function getInjectedContents(baseDir: string, injects: string[]): string[
 	return injectedContents;
 }
 
-export async function validateEs5Code(fileName: string, code: string): Promise<string[]> {
-	const errInfo = await cmn.LintUtil.validateEs5Code(code);
-	return errInfo.map(info => `${fileName}(${info.line}:${info.column}): ${info.message}`);
-}
-
 export function readSandboxConfigJs(sourceDir: string): string {
 	const sandboxConfigJsPath = path.join(sourceDir, "sandbox.config.js");
 	return fs.readFileSync(sandboxConfigJsPath, "utf8").replace(/\r\n|\r/g, "\n");
