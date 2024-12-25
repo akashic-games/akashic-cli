@@ -15,7 +15,8 @@ import type {
 	ClientInstanceDisappearTestbedEvent,
 	PlayBroadcastTestbedEvent,
 	PutStartPointEvent,
-	MessageEncodeTestbedEvent
+	MessageEncodeTestbedEvent,
+	NicoliveCommentPluginStartStopTestbedEvent
 } from "../../common/types/TestbedEvent";
 import { socketInstance } from "./socketInstance";
 
@@ -34,6 +35,7 @@ export const onClientInstanceDisappear = new Trigger<ClientInstanceDisappearTest
 export const onBroadcast = new Trigger<any>();
 export const onDisconnect = new Trigger<void>();
 export const onPutStartPoint = new Trigger<PutStartPointEvent>();
+export const onNicoliveCommentPluginStartStop = new Trigger<NicoliveCommentPluginStartStopTestbedEvent>();
 
 const socket = socketInstance;
 socket.on("playCreate", (arg: PlayCreateTestbedEvent) => onPlayCreate.fire(arg));
@@ -51,6 +53,9 @@ socket.on("clientInstanceDisappear", (arg: ClientInstanceDisappearTestbedEvent) 
 socket.on("playBroadcast", (arg: PlayBroadcastTestbedEvent) => onBroadcast.fire(arg));
 socket.on("disconnect", () => onDisconnect.fire());
 socket.on("putStartPoint", (arg: PutStartPointEvent) => onPutStartPoint.fire(arg));
+socket.on("nicoliveCommentPluginStartStop", (arg: NicoliveCommentPluginStartStopTestbedEvent) => {
+	onNicoliveCommentPluginStartStop.fire(arg);
+});
 
 export const onMessageEncode = new Trigger<MessageEncodeTestbedEvent>();
 

@@ -1,14 +1,18 @@
 import * as path from "path";
 import type { AMFlowClient, RunnerManager, RunnerV1, RunnerV2, RunnerV3 } from "@akashic/headless-driver";
 import { Trigger } from "@akashic/trigger";
+import type { NicoliveCommentEventComment } from "../../common/types/NicoliveCommentPlugin";
 import type {
 	RunnerCreateTestbedEvent,
 	RunnerRemoveTestbedEvent,
 	RunnerPauseTestbedEvent,
 	RunnerResumeTestbedEvent,
-	RunnerPutStartPointTestbedEvent
+	RunnerPutStartPointTestbedEvent,
+	NicoliveCommentPluginStartStopTestbedEvent
 } from "../../common/types/TestbedEvent";
 import { serverGlobalConfig } from "../common/ServerGlobalConfig";
+import * as gameConfigs from "./GameConfigs";
+import { NicoliveCommentPluginHost } from "./nicoliveComment/NicoliveCommentPluginHost";
 import * as sandboxConfigs from "./SandboxConfigs";
 
 export interface RunnerStoreParameterObject {
@@ -25,33 +29,53 @@ export interface CreateAndStartRunnerParameterObject {
 	isPaused: boolean;
 }
 
+/**
+ * ランナー関連情報。headless-driver の Runner で管理できないデータを保持する。
+ */
+export interface RunnerEntity {
+	playId: string;
+	nicoliveCommentPluginHost: NicoliveCommentPluginHost | null;
+}
+
 export class RunnerStore {
 	onRunnerCreate: Trigger<RunnerCreateTestbedEvent>;
 	onRunnerRemove: Trigger<RunnerRemoveTestbedEvent>;
 	onRunnerPause: Trigger<RunnerPauseTestbedEvent>;
 	onRunnerResume: Trigger<RunnerResumeTestbedEvent>;
 	onRunnerPutStartPoint: Trigger<RunnerPutStartPointTestbedEvent>;
+	onNicoliveCommentPluginStartStop: Trigger<NicoliveCommentPluginStartStopTestbedEvent>;
 	private runnerManager: RunnerManager;
 	private gameExternalFactory: () => any;
-	private playIdTable: { [runnerId: string]: string };
+	private runnerEntities: { [runnerId: string]: RunnerEntity };
 
 	constructor(params: RunnerStoreParameterObject) {
-		this.onRunnerCreate = new Trigger<RunnerCreateTestbedEvent>();
-		this.onRunnerRemove = new Trigger<RunnerRemoveTestbedEvent>();
-		this.onRunnerPause = new Trigger<RunnerPauseTestbedEvent>();
-		this.onRunnerResume = new Trigger<RunnerResumeTestbedEvent>();
-		this.onRunnerPutStartPoint = new Trigger<RunnerPutStartPointTestbedEvent>();
+		this.onRunnerCreate = new Trigger();
+		this.onRunnerRemove = new Trigger();
+		this.onRunnerPause = new Trigger();
+		this.onRunnerResume = new Trigger();
+		this.onRunnerPutStartPoint = new Trigger();
+		this.onNicoliveCommentPluginStartStop = new Trigger();
 		this.runnerManager = params.runnerManager;
 		this.gameExternalFactory = params.gameExternalFactory;
-		this.playIdTable = {};
+		this.runnerEntities = {};
 	}
 
 	async createAndStartRunner(params: CreateAndStartRunnerParameterObject): Promise<RunnerV1 | RunnerV2 | RunnerV3> {
 		const sandboxConfig = sandboxConfigs.get(params.contentId);
+		const gameConfig = gameConfigs.get(params.contentId);
 		const externalAssets = (sandboxConfig ? sandboxConfig.externalAssets : undefined) === undefined ? [] : sandboxConfig.externalAssets;
 		const allowedUrls = this.createAllowedUrls(params.contentId, externalAssets);
 
-		const externalValue = { ...this.gameExternalFactory() ?? {} };
+		let externalValue: { [name: string]: unknown } = {};
+		let nicoliveCommentPluginHost: NicoliveCommentPluginHost | null = null;
+		if (gameConfig.environment?.external?.nicoliveComment) {
+			const { playId } = params;
+			nicoliveCommentPluginHost = new NicoliveCommentPluginHost(sandboxConfig.external?.nicoliveComment ?? {}, params.amflow);
+			nicoliveCommentPluginHost.onStartStop.add(started => this.onNicoliveCommentPluginStartStop.fire({ playId, started }));
+			externalValue.nicoliveComment = nicoliveCommentPluginHost.plugin;
+		}
+
+		externalValue = { ...externalValue, ...this.gameExternalFactory() };
 		const serverExternal = sandboxConfig?.server?.external;
 		if (serverExternal) {
 			for (const pluginName of Object.keys(serverExternal)) {
@@ -78,7 +102,10 @@ export class RunnerStore {
 
 		const runner = this.runnerManager.getRunner(runnerId)!;
 		await this.runnerManager.startRunner(runner.runnerId, { paused: params.isPaused });
-		this.playIdTable[runnerId] = params.playId;
+		this.runnerEntities[runnerId] = {
+			playId: params.playId,
+			nicoliveCommentPluginHost,
+		};
 		this.onRunnerCreate.fire({ playId: params.playId, runnerId, isActive: params.isActive });
 		if (params.isPaused)
 			this.onRunnerPause.fire({ playId: params.playId, runnerId });
@@ -91,9 +118,9 @@ export class RunnerStore {
 			// コンテンツがエラーの場合、runnerを取得できないので取得できる場合のみ実行
 			await this.runnerManager.stopRunner(runnerId);
 		}
-		const playId = this.playIdTable[runnerId];
+		const playId = this.runnerEntities[runnerId]!.playId;
 		this.onRunnerRemove.fire({ playId, runnerId });
-		delete this.playIdTable[runnerId];
+		delete this.runnerEntities[runnerId];
 	}
 
 	async pauseRunner(runnerId: string): Promise<void> {
@@ -117,6 +144,16 @@ export class RunnerStore {
 		if (runner) {
 			await this.runnerManager.stepRunner(runner.runnerId);
 		}
+	}
+
+	sendCommentsByTemplate(runnerId: string, name: string): boolean {
+		const commentPluginHost = this.runnerEntities[runnerId]?.nicoliveCommentPluginHost;
+		return commentPluginHost?.planToSendByTemplate(name) ?? false;
+	}
+
+	sendComment(runnerId: string, comment: NicoliveCommentEventComment): boolean {
+		const commentPluginHost = this.runnerEntities[runnerId]?.nicoliveCommentPluginHost;
+		return commentPluginHost?.planToSend(comment) ?? false;
 	}
 
 	private createAllowedUrls(contentId: string, externalAssets: (string | RegExp)[] | null): (string | RegExp)[] | null {

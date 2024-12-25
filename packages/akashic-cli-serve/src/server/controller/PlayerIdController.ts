@@ -6,13 +6,13 @@ import type { PlayerIdStore } from "../domain/PlayerIdStore";
 export const createHandlerToRegisterPlayerId = (playerIdStore: PlayerIdStore): express.RequestHandler => {
 	return (req, res, next) => {
 		try {
-			let playerId = req.body.playerId;
+			const playerId = req.body.playerId;
 			if (playerId) {
-				const isDuplicated = playerIdStore.registerPlayerId(playerId);
-				responseSuccess<PlayerIdPostApiResponseData>(res, 200, { playerId, isDuplicated });
+				const { isDuplicated, hashedPlayerId } = playerIdStore.registerPlayerId(playerId);
+				responseSuccess<PlayerIdPostApiResponseData>(res, 200, { playerId, isDuplicated, hashedPlayerId });
 			} else {
-				playerId = playerIdStore.createPlayerId();
-				responseSuccess<PlayerIdPostApiResponseData>(res, 200, { playerId, isDuplicated: false });
+				const { playerId, hashedPlayerId } = playerIdStore.createPlayerId();
+				responseSuccess<PlayerIdPostApiResponseData>(res, 200, { playerId, isDuplicated: false, hashedPlayerId });
 			}
 		} catch (e) {
 			next(e);
