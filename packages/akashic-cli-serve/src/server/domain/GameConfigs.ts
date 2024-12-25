@@ -32,14 +32,6 @@ export function get(contentId: string): GameConfiguration {
 	return configs[contentId];
 }
 
-// pure ESM なので import() で読み込む
-// eslint-disable-next-line @typescript-eslint/consistent-type-imports
-async function importScan(): Promise<(typeof import("@akashic/akashic-cli-scan/lib/scanAsset"))> {
-	// CommonJS 設定の TS では dynamic import が require() に変換されてしまうので、eval() で強引に import() する
-	// eslint-disable-next-line no-eval
-	return (await eval("import('@akashic/akashic-cli-scan/lib/scanAsset')")).default;
-}
-
 export async function watchContent(
 	targetDir: string,
 	cb: (err: any, modTargetFlag: ModTargetFlags) => void,
@@ -52,7 +44,7 @@ export async function watchContent(
 	});
 
 	// akashic-cli-scanはwatchオプション指定時しか使われないので動的importする
-	const scan = await importScan();
+	const scan = await import('@akashic/akashic-cli-scan/lib/scanAsset.js');
 
 	targetDir = path.resolve(targetDir); // 相対パスで監視すると chokidar の通知してくるパスがおかしい場合があるようなのですべて絶対パスで扱う
 	const assetDirs = ["assets", "audio", "image", "script", "text"].map(d => path.join(targetDir, d) + path.sep);

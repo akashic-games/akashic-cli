@@ -1,6 +1,10 @@
+import { createRequire } from "module";
 import * as path from "path";
-import { serverGlobalConfig } from "../common/ServerGlobalConfig";
-import * as gameConfigs from "../domain/GameConfigs";
+import { serverGlobalConfig } from "../common/ServerGlobalConfig.js";
+import type { EngineFilesVersions } from "./EngineFilesVersions.js";
+import * as gameConfigs from "./GameConfigs.js";
+
+const require = createRequire(import.meta.url);
 
 export interface EngineConfig {
 	engine_urls: string[];
@@ -32,7 +36,7 @@ export const getEngineConfig = (param: GetEngineConfigParameterObject): EngineCo
 		}
 	}
 	// eslint-disable-next-line @typescript-eslint/no-var-requires
-	const versionsJson = require("../engineFilesVersion.json");
+	const versionsJson: EngineFilesVersions = require("../engineFilesVersion.json");
 
 	if (process.env.ENGINE_FILES_V3_PATH) {
 		versionsJson.v3.fileName = path.basename(process.env.ENGINE_FILES_V3_PATH);

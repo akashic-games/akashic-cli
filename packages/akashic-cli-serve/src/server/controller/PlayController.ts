@@ -4,11 +4,11 @@ import type {
 	PlayApiResponseData,
 	PlayDeleteApiResponseData,
 	PlayPatchApiResponseData
-} from "../../common/types/ApiResponse";
-import { BadRequestError, NotFoundError } from "../common/ApiError";
-import { responseSuccess } from "../common/ApiResponse";
-import { ServerContentLocator } from "../common/ServerContentLocator";
-import type { PlayStore } from "../domain/PlayStore";
+} from "../../common/types/ApiResponse.js";
+import { BadRequestError, NotFoundError } from "../common/ApiError.js";
+import { responseSuccess } from "../common/ApiResponse.js";
+import { ServerContentLocator } from "../common/ServerContentLocator.js";
+import type { PlayStore } from "../domain/PlayStore.js";
 
 export const createHandlerToCreatePlay = (playStore: PlayStore): express.RequestHandler => {
 	return async (req, res, next) => {

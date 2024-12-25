@@ -1,12 +1,12 @@
-import path = require("path");
+import path from "path";
 import type * as express from "express";
-import type { ContentGetApiResponseData } from "../../common/types/ApiResponse";
-import { NotFoundError, BadRequestError } from "../common/ApiError";
-import { responseSuccess } from "../common/ApiResponse";
-import { serverGlobalConfig } from "../common/ServerGlobalConfig";
-import * as EngineConfig from "../domain/EngineConfig";
-import * as gameConfigs from "../domain/GameConfigs";
-import * as sandboxConfigs from "../domain/SandboxConfigs";
+import type { ContentGetApiResponseData } from "../../common/types/ApiResponse.js";
+import { NotFoundError, BadRequestError } from "../common/ApiError.js";
+import { responseSuccess } from "../common/ApiResponse.js";
+import { serverGlobalConfig } from "../common/ServerGlobalConfig.js";
+import * as EngineConfig from "../domain/EngineConfig.js";
+import * as gameConfigs from "../domain/GameConfigs.js";
+import * as sandboxConfigs from "../domain/SandboxConfigs.js";
 
 export const createHandlerToGetContents = (targetDirs: string[]): express.RequestHandler => {
 	// サーバ開始後、sandbox.config.js はここで初めて読み込まれる。この処理以前に sandbox.config.js が必要な場合は、その部分で `register()` を行うこと。
