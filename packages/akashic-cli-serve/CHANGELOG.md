@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.16.17-next.0
+
+### Patch Changes
+
+- [`963fcf1`](https://github.com/akashic-games/akashic-cli/commit/963fcf151dad00f96e4025c53d463ce4374d45c8) Thanks [@xnv](https://github.com/xnv)! - prerelease for #1459
+
 ## 1.16.16
 
 ### Patch Changes
