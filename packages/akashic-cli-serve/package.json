@@ -17,8 +17,8 @@
     "build:server": "tsc -p ./src/server",
     "test": "jest && npm run lint",
     "lint": "npm run lint:client && npm run lint:server",
-    "lint:client": "eslint -c ./src/client/.eslintrc.js \"src/client/**/*.ts\" \"src/common/**/*.ts\" \"src/client/**/*.tsx\" --fix",
-    "lint:server": "eslint \"src/server/**/*.ts\" --fix",
+    "lint:client": "eslint -c ./src/client/.eslintrc.cjs \"src/client/**/*.ts\" \"src/common/**/*.ts\" \"src/client/**/*.tsx\" --fix",
+    "lint:server": "eslint -c ./src/server/.eslintrc.cjs \"src/server/**/*.ts\" --fix",
     "storybook": "sb dev -p 9001"
   },
   "author": "DWANGO Co., Ltd.",
