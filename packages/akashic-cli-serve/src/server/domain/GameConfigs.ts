@@ -44,7 +44,7 @@ export async function watchContent(
 	});
 
 	// akashic-cli-scanはwatchオプション指定時しか使われないので動的importする
-	const scan = await import('@akashic/akashic-cli-scan/lib/scanAsset.js');
+	const scan = await import("@akashic/akashic-cli-scan/lib/scanAsset.js");
 
 	targetDir = path.resolve(targetDir); // 相対パスで監視すると chokidar の通知してくるパスがおかしい場合があるようなのですべて絶対パスで扱う
 	const assetDirs = ["assets", "audio", "image", "script", "text"].map(d => path.join(targetDir, d) + path.sep);

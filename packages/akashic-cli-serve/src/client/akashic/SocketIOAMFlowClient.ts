@@ -25,6 +25,10 @@ export class SocketIOAMFlowClient implements amflow.AMFlow {
 		this._connectionId = null;
 	}
 
+	debugGetConnectionId(): string | null {
+		return this._connectionId;
+	}
+
 	/**
 	 * 現状開いているplayの開始時刻を取得する。
 	 * SocketIOAMFlowClient独自拡張。暫定。

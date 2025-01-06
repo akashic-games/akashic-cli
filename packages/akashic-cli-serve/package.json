@@ -15,7 +15,7 @@
     "build:client": "vite build src/client/ && tsc --noEmit -p src/client/tsconfig.json",
     "build:module": "tsc -p src/client/tsconfig.module.json",
     "build:server": "tsc -p ./src/server",
-    "test": "jest && npm run lint",
+    "test": "vitest run -r src/server/ && npm run lint",
     "lint": "npm run lint:client && npm run lint:server",
     "lint:client": "eslint -c ./src/client/.eslintrc.cjs \"src/client/**/*.ts\" \"src/common/**/*.ts\" \"src/client/**/*.tsx\" --fix",
     "lint:server": "eslint -c ./src/server/.eslintrc.cjs \"src/server/**/*.ts\" --fix",
@@ -86,7 +86,8 @@
     "shx": "0.3.4",
     "socket.io-client": "4.7.5",
     "typescript": "5.6.2",
-    "vite": "^5.4.8"
+    "vite": "^5.4.8",
+    "vitest": "^2.1.8"
   },
   "overrides": {
     "@types/mime": "4.0.0",
