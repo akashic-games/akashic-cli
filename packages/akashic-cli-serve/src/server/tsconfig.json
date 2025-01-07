@@ -26,5 +26,8 @@
   "include": [
     "./**/*.ts",
     "../client/akashic/SocketIOAMFlowClient.ts"
+  ],
+  "exclude": [
+    "./__tests__/**/*.ts"
   ]
 }
