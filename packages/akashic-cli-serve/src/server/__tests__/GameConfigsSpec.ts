@@ -1,23 +1,33 @@
-const os = require("os");
-const fs = require("fs");
-const path = require("path");
-const rimraf = require("rimraf");
-const { watchContent } = require("../../lib/server/domain/GameConfigs");
+import fs from "fs";
+import os from "os";
+import path from "path";
+import { type FSWatcherLike, watchContent } from "../domain/GameConfigs.js";
 
-// FIXME: akashic-cli-scan は ES Module で現状 jest 環境では動作せず、やむなく無効化している。serve が ES Module に移行したタイミングで有効化すべし。
-xdescribe("GameConfigs", () => {
+describe("GameConfigs", () => {
 	describe("watchContent", () => {
-		let targetDir = null;
-		let watcher = null;
-		let watcherFuncs = {};
+		interface FSWatcherMock extends FSWatcherLike {
+			fire(event: string, fileName: string): void;
+			flushPromises(): Promise<void>[];
+		}
+
+		let targetDir: string = null!;
+		let watcher: FSWatcherMock = null!;
+		let watcherFuncs: { [ev: string]: Function } = {};
 		beforeEach(() => {
+			const promises: Promise<void>[] = [];
 			watcher = {
-				on: (event, func) => {
+				on: (event: string, func: Function) => {
 					watcherFuncs[event] = func;
 				},
-				fire: (event, fileName) => {
+				fire: (event: string, fileName: string) => {
 					watcherFuncs[event](fileName);
-				}
+				},
+				debugNotifyPromise: (p: Promise<void>) => {
+					promises.push(p);
+				},
+				flushPromises: () => {
+					return promises.splice(0, promises.length);
+				},
 			};
 
 			// mock-fsを利用すると動的にrequireしている箇所でモジュールが読めなくなるので、実ファイルシステムを利用
@@ -53,59 +63,54 @@ xdescribe("GameConfigs", () => {
 
 		afterEach(() => {
 			if (targetDir) {
-				rimraf.sync(targetDir);
-				targetDir = null;
+				fs.rmSync(targetDir, { recursive: true, force: true });
+				targetDir = null!;
 			}
-			watcher = null;
+			watcher = null!;
 			watcherFuncs = {};
 		});
 
-		it("call callback once when updated asset", (done) => {
-			jest.setTimeout(10000);
+		it("call callback once when updated asset", async () => {
+			// jest.setTimeout(10000);
 			let count = 0;
-			watchContent(
+			await watchContent(
 				targetDir,
 				(err, modTargetFlag) => {
 					count++;
 					expect(err).toBeNull();
 					expect(modTargetFlag).toBe(0x2);
 				},
-				watcher 
-			).then(() => {
-				fs.writeFileSync(path.join(targetDir, "text", "c.txt"), "ccc");
-				fs.unlinkSync(path.join(targetDir, "text", "a.txt"));
-				// テストではchokidarが呼ばれないので、実際に発生する想定のイベントを手動実行する
-				watcher.fire("add", path.join(targetDir, "text", "c.txt"));
-				watcher.fire("unlink", path.join(targetDir, "text", "a.txt"));
-				watcher.fire("change", path.join(targetDir, "game.json")); // asset変更時に呼ばれる想定
-				setTimeout(() => {
-					expect(count).toBe(1);
-					done();
-				}, 3000);
-			});
+				watcher
+			);
+			fs.writeFileSync(path.join(targetDir, "text", "c.txt"), "ccc");
+			fs.unlinkSync(path.join(targetDir, "text", "a.txt"));
+			// テストではchokidarが呼ばれないので、実際に発生する想定のイベントを手動実行する
+			watcher.fire("add", path.join(targetDir, "text", "c.txt"));
+			watcher.fire("unlink", path.join(targetDir, "text", "a.txt"));
+			watcher.fire("change", path.join(targetDir, "game.json")); // asset変更時に呼ばれる想定
+			await Promise.all(watcher.flushPromises());
+
+			expect(count).toBe(1);
 		});
 
-		it("can callback when updated game.json", (done) => {
+		it("can callback when updated game.json", async () => {
 			let count = 0;
-			watchContent(
+			await watchContent(
 				targetDir,
 				(err, modTargetFlag) => {
 					count++;
 					expect(err).toBeNull();
 					expect(modTargetFlag).toBe(0x1);
 				},
-				watcher 
-			).then(() => {
-				const gameJson = JSON.parse(fs.readFileSync(path.join(targetDir, "game.json")));
-				gameJson["fps"] = 60;
-				fs.writeFileSync(path.join(targetDir, "game.json"), JSON.stringify(gameJson));
-				// テストではchokidarが呼ばれないので、実際に発生する想定のイベントを手動実行する
-				watcher.fire("change", path.join(targetDir, "game.json"));
-				setTimeout(() => {
-					expect(count).toBe(1);
-					done();
-				}, 3000);
-			});
+				watcher
+			);
+			const gameJson = JSON.parse(fs.readFileSync(path.join(targetDir, "game.json"), "utf-8"));
+			gameJson.fps = 60;
+			fs.writeFileSync(path.join(targetDir, "game.json"), JSON.stringify(gameJson));
+			// テストではchokidarが呼ばれないので、実際に発生する想定のイベントを手動実行する
+			watcher.fire("change", path.join(targetDir, "game.json"));
+			await Promise.all(watcher.flushPromises());
+			expect(count).toBe(1);
 		});
 	});
 });

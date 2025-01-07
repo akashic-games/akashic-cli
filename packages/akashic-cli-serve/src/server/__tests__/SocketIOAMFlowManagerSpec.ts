@@ -10,13 +10,13 @@ import { ServerContentLocator } from "../common/ServerContentLocator.js";
 import { PlayStore } from "../domain/PlayStore.js";
 import { SocketIOAMFlowManager } from "../domain/SocketIOAMFlowManager.js";
 
-interface Awaiter<T> {
+interface Awaitee<T> {
 	promise: Promise<T>;
 	resolve: (value: T | PromiseLike<T>) => void;
 	reject: (reason?: any) => void;
 }
 
-function makeAwaitee<T = void>(): Awaiter<T> {
+function makeAwaitee<T = void>(): Awaitee<T> {
 	let resolve: (value: T | PromiseLike<T>) => void;
 	let reject: (reason?: any) => void;
 	const promise = new Promise<T>((res, rej) => {
@@ -25,7 +25,6 @@ function makeAwaitee<T = void>(): Awaiter<T> {
 	});
 	return { promise, resolve: resolve!, reject: reject! };
 }
-
 
 describe("SocketIOAMFlowManager", () => {
 	let testServerPort: number;

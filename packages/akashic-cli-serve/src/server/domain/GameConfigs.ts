@@ -32,10 +32,15 @@ export function get(contentId: string): GameConfiguration {
 	return configs[contentId];
 }
 
+export interface FSWatcherLike {
+	on(ev: "add" | "unlink" | "change", handler: (path: string) => Promise<void>): void;
+	debugNotifyPromise?(p: Promise<void>): void;
+}
+
 export async function watchContent(
 	targetDir: string,
 	cb: (err: any, modTargetFlag: ModTargetFlags) => void,
-	watcher?: chokidar.FSWatcher
+	watcher?: FSWatcherLike
 ): Promise<void> {
 	watcher ??= chokidar.watch(targetDir, {
 		persistent: true,
@@ -66,7 +71,9 @@ export async function watchContent(
 
 			try {
 				suppressedScan = true; // scanAsset() 中に再帰的に scan しないよう抑制。
-				await scan.scanAsset({ target: "all", cwd: targetDir });
+				const p = scan.scanAsset({ target: "all", cwd: targetDir });
+				watcher.debugNotifyPromise?.(p);
+				await p;
 			} finally {
 				suppressedScan = false;
 			}
