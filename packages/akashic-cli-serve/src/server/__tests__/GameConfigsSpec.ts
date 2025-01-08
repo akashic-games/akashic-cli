@@ -71,7 +71,6 @@ describe("GameConfigs", () => {
 		});
 
 		it("call callback once when updated asset", async () => {
-			// jest.setTimeout(10000);
 			let count = 0;
 			await watchContent(
 				targetDir,
