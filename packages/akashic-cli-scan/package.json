@@ -23,7 +23,7 @@
   ],
   "devDependencies": {
     "@akashic/eslint-config": "2.1.0",
-    "@akashic/game-configuration": "2.3.0",
+    "@akashic/game-configuration": "2.4.0",
     "@types/image-size": "0.8.0",
     "@types/mock-fs": "4.13.4",
     "@types/node": "18.19.44",
@@ -41,7 +41,7 @@
     "chokidar": "^4.0.0",
     "commander": "^12.0.0",
     "image-size": "~1.1.0",
-    "music-metadata": "10.2.0",
+    "music-metadata": "10.6.5",
     "svgson": "^5.2.1",
     "thumbcoil": "~1.2.0"
   },
