@@ -46,7 +46,7 @@
   },
   "dependencies": {
     "@akashic/akashic-cli-commons": "0.15.3",
-    "commander": "12.1.0",
+    "commander": "13.0.0",
     "minipass": "7.1.2",
     "tar": "7.4.3"
   },
