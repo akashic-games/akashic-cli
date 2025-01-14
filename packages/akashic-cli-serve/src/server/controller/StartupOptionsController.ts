@@ -1,7 +1,7 @@
 import type * as express from "express";
-import type {OptionsApiResponseData} from "../../common/types/ApiResponse";
-import {responseSuccess} from "../common/ApiResponse";
-import {serverGlobalConfig} from "../common/ServerGlobalConfig";
+import type {OptionsApiResponseData} from "../../common/types/ApiResponse.js";
+import {responseSuccess} from "../common/ApiResponse.js";
+import {serverGlobalConfig} from "../common/ServerGlobalConfig.js";
 
 export const handleToGetStartupOptions = (_req: express.Request, res: express.Response, next: Function): void => {
 	try {

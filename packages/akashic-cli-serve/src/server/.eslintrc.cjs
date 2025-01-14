@@ -4,11 +4,11 @@ module.exports = {
 		"@akashic/eslint-config"
 	],
 	parserOptions: {
-		project: "./tsconfig.json",
+		project: "./tsconfig.test.json",
 		sourceType: "module",
 		tsconfigRootDir: __dirname
 	},
 	ignorePatterns: [
-		"**/*.js"
+		"**/*.cjs"
 	]
-}
+};

@@ -1,6 +1,6 @@
 import * as express from "express";
-import {createHandleToGetStatus} from "../controller/HealthCheckController";
-import type {PlayStore} from "../domain/PlayStore";
+import {createHandleToGetStatus} from "../controller/HealthCheckController.js";
+import type {PlayStore} from "../domain/PlayStore.js";
 
 export interface HealthCheckRouterParameterObject {
 	playStore: PlayStore;

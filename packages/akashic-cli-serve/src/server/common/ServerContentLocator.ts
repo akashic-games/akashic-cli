@@ -1,5 +1,5 @@
-import { ContentLocator } from "../../common/ContentLocator";
-import { serverGlobalConfig } from "./ServerGlobalConfig";
+import { ContentLocator } from "../../common/ContentLocator.js";
+import { serverGlobalConfig } from "./ServerGlobalConfig.js";
 
 export class ServerContentLocator extends ContentLocator {
 	asAbsoluteUrl(): string {
