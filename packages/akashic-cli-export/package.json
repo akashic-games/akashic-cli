@@ -41,8 +41,8 @@
     "package.json"
   ],
   "devDependencies": {
-    "@akashic/akashic-engine": "~2.6.7",
-    "@akashic/eslint-config": "2.1.0",
+    "@akashic/akashic-engine": "~3.20.0",
+    "@akashic/eslint-config": "3.0.0",
     "@akashic/sandbox-configuration": "^2.3.0",
     "@types/archiver": "5.3.4",
     "@types/commander": "2.12.5",
