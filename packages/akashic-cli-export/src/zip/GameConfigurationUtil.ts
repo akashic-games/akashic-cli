@@ -11,6 +11,15 @@ export function removeScriptAssets(gamejson: cmn.GameConfiguration, filter: (fil
 	});
 }
 
+export function removeTextAssets(gamejson: cmn.GameConfiguration, filter: (filepath: string) => boolean): void {
+	Object.keys(gamejson.assets).forEach(key => {
+		const asset = gamejson.assets[key];
+		if (asset.type === "text" && !filter(asset.path)) {
+			delete gamejson.assets[key];
+		}
+	});
+}
+
 export function removeGlobalScripts(gamejson: cmn.GameConfiguration, filter: (filepath: string) => boolean): void {
 	if (gamejson.globalScripts) {
 		gamejson.globalScripts = gamejson.globalScripts.filter((p: string) => filter(p));
