@@ -45,6 +45,9 @@
     "svgson": "^5.2.1",
     "thumbcoil": "~1.2.0"
   },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "*"
+  },
   "publishConfig": {
     "access": "public",
     "@akashic:registry": "https://registry.npmjs.org/"
