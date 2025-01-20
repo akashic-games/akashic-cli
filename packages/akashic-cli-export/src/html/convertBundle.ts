@@ -69,7 +69,7 @@ export async function promiseConvertBundle(options: ConvertTemplateParameterObje
 
 	const terser = options.minify ? options.terser ?? {} : undefined;
 	const tempAssetData = await Promise.all(innerHTMLAssetNames.map((assetName: string) => {
-		return convertAssetToInnerHTMLObj(assetName, options.source, conf, terser, errorMessages);
+		return convertAssetToInnerHTMLObj(assetName, options.source, conf, terser, options.babel, errorMessages);
 	}));
 	innerHTMLAssetArray = innerHTMLAssetArray.concat(tempAssetData);
 
@@ -103,8 +103,13 @@ export async function promiseConvertBundle(options: ConvertTemplateParameterObje
 }
 
 async function convertAssetToInnerHTMLObj(
-	assetName: string, inputPath: string, conf: cmn.Configuration,
-	terser: MinifyOptions | undefined, errors?: string[]): Promise<InnerHTMLAssetData> {
+	assetName: string, 
+	inputPath: string, 
+	conf: cmn.Configuration,
+	terser: MinifyOptions | undefined, 
+	babel: boolean,
+	_errors?: string[]
+): Promise<InnerHTMLAssetData> {
 	const assets = conf._content.assets;
 	const isScript = assets[assetName].type === "script";
 	const asset = assets[assetName];
@@ -113,7 +118,7 @@ async function convertAssetToInnerHTMLObj(
 	return {
 		name: assetName,
 		type: asset.type,
-		code: isScript ? wrap(assetString, terser, exports) : encodeText(assetString)
+		code: isScript ? wrap(assetString, terser, babel, exports) : encodeText(assetString)
 	};
 }
 
@@ -130,7 +135,7 @@ async function convertScriptNameToInnerHTMLObj(
 	return {
 		name: scriptName,
 		type: isScript ? "script" : "text",
-		code: isScript ? wrap(scriptString, terser) : scriptString
+		code: isScript ? wrap(scriptString, terser, false) : scriptString
 	};
 }
 
