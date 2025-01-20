@@ -26,7 +26,7 @@ describe("licenseUtil", () => {
 		expect(consoleSpy).toBeCalledWith(expect.stringMatching(/^\[WARNING\].+hoge.+LGPL-3.0-or-later.+.$/));
 		expect(result).toBeTruthy();
 
-		const license = fsx.readFileSync(path.join(destDir, "thirdpary_license.txt")).toString().split(/\r?\n/g);
+		const license = fsx.readFileSync(path.join(destDir, "thirdparty_license.txt")).toString().split(/\r?\n/g);
 		expect(license).toEqual(
 			[
 				"# external",
