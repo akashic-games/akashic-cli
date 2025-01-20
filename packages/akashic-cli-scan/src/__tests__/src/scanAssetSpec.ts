@@ -1,13 +1,15 @@
 import * as fs from "fs";
 import * as path from "path";
 import { fileURLToPath } from "url";
-import mockfs from "mock-fs";
+import { randomBytes } from "crypto";
+import * as mockfs from "./helpers/mockfs.js";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger.js";
 import type { AssetConfiguration, AssetConfigurationMap, AudioAssetConfigurationBase, GameConfiguration } from "@akashic/game-configuration";
 import { scanAsset } from "../../scanAsset.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const base = randomBytes(8).toString("hex");
 
 describe("scanAsset()", () => {
 	const nullLogger = new ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
@@ -23,8 +25,8 @@ describe("scanAsset()", () => {
 	const DUMMY_NO_PIXEL_SVG_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy_no_px.svg"));
 	const DUMMY_WASM_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy.wasm"));
 
-	afterEach(() => {
-		mockfs.restore();
+	afterAll(() => {
+		mockfs.restore(base);
 	});
 
 	describe("basic", () => {
@@ -58,12 +60,13 @@ describe("scanAsset()", () => {
 		};
 
 		it("scan assets", async () => {
-			mockfs(mockFsContent);
+			const baseDir = mockfs.create(base, mockFsContent);
+			console.log("baseDir", baseDir);
 
-			await scanAsset({ cwd: "./game", target: "text", logger: nullLogger });
-			await scanAsset({ cwd: "./game", target: "audio", logger: nullLogger });
+			await scanAsset({ cwd: path.join(baseDir, "./game"), target: "text", logger: nullLogger });
+			await scanAsset({ cwd: path.join(baseDir, "./game"), target: "audio", logger: nullLogger });
 
-			const conf: GameConfiguration = JSON.parse(fs.readFileSync("./game/game.json").toString());
+			const conf: GameConfiguration = JSON.parse(fs.readFileSync(path.join(baseDir, "./game/game.json")).toString());
 			const assets = conf.assets as AssetConfigurationMap;
 			expect(assets["$"]).toEqual({ type: "text", path: "text/foo/$.txt" });
 			expect(assets["_"]).toEqual({ type: "audio", path: "audio/foo/_", systemId: "sound", duration: 8000, hint: { extensions: [".ogg"] } });
@@ -72,10 +75,10 @@ describe("scanAsset()", () => {
 		});
 
 		it("scan all assets by default", async () => {
-			mockfs(mockFsContent);
+			const baseDir = mockfs.create(base, mockFsContent);
 
-			await scanAsset({ cwd: "./game", logger: nullLogger });
-			const conf = JSON.parse(fs.readFileSync("./game/game.json").toString());
+			await scanAsset({ cwd: path.join(baseDir, "./game"), logger: nullLogger });
+			const conf = JSON.parse(fs.readFileSync(path.join(baseDir, "./game/game.json")).toString());
 			const assets = conf.assets as AssetConfigurationMap;
 			expect(assets["$"]).toEqual({ type: "text", path: "text/foo/$.txt" });
 			expect(assets["_"]).toEqual({ type: "audio", path: "audio/foo/_", systemId: "sound", duration: 8000, hint: { "extensions": [".ogg"] } });
@@ -83,10 +86,10 @@ describe("scanAsset()", () => {
 		});
 
 		it("scan asset ids from these path", async () => {
-			mockfs(mockFsContent);
+			const baseDir = mockfs.create(base, mockFsContent);
 
-			await scanAsset({ cwd: "./game", logger: nullLogger, resolveAssetIdsFromPath: true });
-			const conf: GameConfiguration = JSON.parse(fs.readFileSync("./game/game.json").toString());
+			await scanAsset({ cwd: path.join(baseDir, "./game"), logger: nullLogger, resolveAssetIdsFromPath: true });
+			const conf: GameConfiguration = JSON.parse(fs.readFileSync(path.join(baseDir, "./game/game.json")).toString());
 			const assets = conf.assets as AssetConfigurationMap;
 			expect(assets["text/foo/$"]).toEqual({ type: "text", path: "text/foo/$.txt" });
 			expect(assets["audio/foo/_"]).toEqual({ type: "audio", path: "audio/foo/_", systemId: "sound", duration: 8000, hint: { "extensions": [".ogg"] }  });
@@ -94,10 +97,10 @@ describe("scanAsset()", () => {
 		});
 
 		it("rejects unknown target", async () => {
-			mockfs(mockFsContent);
+			const baseDir = mockfs.create(base, mockFsContent);
 
 			try {
-				await scanAsset({ cwd: "./game", target: "INVALID_TARGET" as any, logger: nullLogger });
+				await scanAsset({ cwd: path.join(baseDir, "./game"), target: "INVALID_TARGET" as any, logger: nullLogger });
 				throw new Error("must throw error")
 			} catch (err) {
 				expect(!!err).toBe(true);
@@ -148,9 +151,10 @@ describe("scanAsset()", () => {
 		};
 
 		it("scan assets", async () => {
-			mockfs(mockFsContent);
+			const baseDir = mockfs.create(base, mockFsContent);
+
 			await scanAsset({
-				cwd: "./dir",
+				cwd: path.join(baseDir, "./dir"),
 				target: "all",
 				assetScanDirectoryTable: {
 					image: ["image"],
@@ -158,7 +162,7 @@ describe("scanAsset()", () => {
 				},
 				logger: nullLogger
 			});
-			let conf = JSON.parse(fs.readFileSync("./dir/akashic-lib.json").toString());
+			let conf = JSON.parse(fs.readFileSync(path.join(baseDir, "./dir/akashic-lib.json")).toString());
 
 			// NOTE: アセットのスキャン順は仕様としては明記されていない。
 			expect(conf.assetList[0]).toEqual({
@@ -208,18 +212,18 @@ describe("scanAsset()", () => {
 			});
 
 			// remove image asset
-			fs.unlinkSync("./dir/image/foo/_$.png");
-			fs.unlinkSync("./dir/image/bar/_$_.svg");
+			fs.unlinkSync(path.join(baseDir, "./dir/image/foo/_$.png"));
+			fs.unlinkSync(path.join(baseDir, "./dir/image/bar/_$_.svg"));
 
 			await scanAsset({
-				cwd: "./dir",
+				cwd: path.join(baseDir, "./dir"),
 				target: "image",
 				assetScanDirectoryTable: {
 					image: ["image"]
 				},
 				logger: nullLogger
 			});
-			conf = JSON.parse(fs.readFileSync("./dir/akashic-lib.json").toString());
+			conf = JSON.parse(fs.readFileSync(path.join(baseDir, "./dir/akashic-lib.json")).toString());
 
 			expect(conf.assetList[0]).toEqual({
 				type: "audio",
@@ -285,7 +289,7 @@ describe("scanAsset()", () => {
 				}
 			}
 		};
-		mockfs({
+		const baseDir = mockfs.create(base, {
 			"game.json": JSON.stringify(gamejson),
 			"image": {
 				"foo": {
@@ -310,26 +314,29 @@ describe("scanAsset()", () => {
 		});
 
 		await scanAsset({
+			cwd: path.join(baseDir, "./"),
 			target: "image",
 			assetScanDirectoryTable: {
 				image: ["image"]
 			},
 			logger: nullLogger
 		});
-		let conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		let conf = JSON.parse(fs.readFileSync(path.join(baseDir, "./game.json")).toString());
 		expect(conf.assets["d"].type).toBe("image");
 
 		await scanAsset({
+			cwd: path.join(baseDir, "./"),
 			target: "script",
 			assetScanDirectoryTable: {
 				script: ["script"]
 			},
 			logger: nullLogger
 		});
-		conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		conf = JSON.parse(fs.readFileSync(path.join(baseDir, "./game.json")).toString());
 		expect(conf.assets["_1"].type).toBe("script");
 
 		await scanAsset({
+			cwd: path.join(baseDir, "./"),
 			target: "text",
 			assetScanDirectoryTable: {
 				text: ["text"]
@@ -339,17 +346,18 @@ describe("scanAsset()", () => {
 			},
 			logger: nullLogger
 		});
-		conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		conf = JSON.parse(fs.readFileSync(path.join(baseDir, "./game.json")).toString());
 		expect(conf.assets["$"].type).toBe("text");
 
 		await scanAsset({
+			cwd: path.join(baseDir, "./"),
 			target: "audio",
 			assetScanDirectoryTable: {
 				audio: ["audio"]
 			},
 			logger: nullLogger
 		});
-		conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		conf = JSON.parse(fs.readFileSync(path.join(baseDir, "./game.json")).toString());
 		expect(conf.assets["_"].type).toBe("audio");
 	});
 
@@ -361,7 +369,7 @@ describe("scanAsset()", () => {
 			main: "",
 			assets: []
 		};
-		mockfs({
+		const baseDir = mockfs.create(base, {
 			"game.json": JSON.stringify(gamejson),
 			"image": {
 				"foo": {
@@ -394,7 +402,7 @@ describe("scanAsset()", () => {
 
 		await scanAsset({
 			logger: nullLogger,
-			cwd: "./",
+			cwd: path.join(baseDir, "./"),
 			assetScanDirectoryTable: {
 				audio: ["audio"],
 				image: ["image"],
@@ -406,7 +414,7 @@ describe("scanAsset()", () => {
 			}
 		});
 
-		let conf: GameConfiguration = JSON.parse(fs.readFileSync("./game.json").toString());
+		let conf: GameConfiguration = JSON.parse(fs.readFileSync(path.join(baseDir, "./game.json")).toString());
 		let assets = conf.assets as AssetConfiguration[];
 
 		// NOTE: 要素の順番は実装に依存する
@@ -463,6 +471,7 @@ describe("scanAsset()", () => {
 
 		await scanAsset({
 			logger: nullLogger,
+			cwd: path.join(baseDir, "./"),
 			assetScanDirectoryTable: {
 				audio: ["audio"],
 				image: ["image"],
@@ -474,7 +483,7 @@ describe("scanAsset()", () => {
 			}
 		});
 
-		conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		conf = JSON.parse(fs.readFileSync(path.join(baseDir, "./game.json")).toString());
 		assets = conf.assets as AssetConfiguration[];
 
 		// NOTE: 要素の順番は実装に依存する
@@ -542,7 +551,7 @@ describe("scanAsset()", () => {
 				}
 			}
 		};
-		mockfs({
+		let baseDir = mockfs.create(base, {
 			"game.json": JSON.stringify(gamejson),
 			"image": {
 				"foo": {
@@ -554,11 +563,12 @@ describe("scanAsset()", () => {
 
 		await scanAsset({
 			logger: nullLogger,
+			cwd: path.join(baseDir, "./"),
 			assetScanDirectoryTable: {
 				image: ["image"]
 			}
 		});
-		let conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		let conf = JSON.parse(fs.readFileSync(path.join(baseDir, "./game.json")).toString());
 
 		expect(conf.assets["dummyImage"].type).toBe("image");
 		expect(conf.assets["dummyImage"].width).toBe(1);
@@ -575,7 +585,7 @@ describe("scanAsset()", () => {
 				"path": "image/foo/dummy.png",
 			}
 		};
-		mockfs({
+		baseDir = mockfs.create(base, {
 			"game.json": JSON.stringify(gamejson),
 			"image": {
 				"foo": {
@@ -603,7 +613,7 @@ describe("scanAsset()", () => {
 			main: "",
 			assets: {}
 		};
-		mockfs({
+		const baseDir = mockfs.create(base, {
 			"game.json": JSON.stringify(gamejson),
 			"image": {
 				"dummy.svg": DUMMY_NO_SIZE_SVG_DATA
@@ -615,6 +625,7 @@ describe("scanAsset()", () => {
 
 		await scanAsset({
 			logger,
+			cwd: path.join(baseDir, "./"),
 			assetScanDirectoryTable: {
 				audio: ["image"]
 			}
@@ -632,7 +643,7 @@ describe("scanAsset()", () => {
 			main: "",
 			assets: {}
 		};
-		mockfs({
+		const baseDir = mockfs.create(base, {
 			"game.json": JSON.stringify(gamejson),
 			"image": {
 				"dummy.svg": DUMMY_NO_PIXEL_SVG_DATA
@@ -644,6 +655,7 @@ describe("scanAsset()", () => {
 
 		await scanAsset({
 			logger,
+			cwd: path.join(baseDir, "./"),
 			assetScanDirectoryTable: {
 				audio: ["image"]
 			}
@@ -676,7 +688,7 @@ describe("scanAsset()", () => {
 				}
 			}
 		};
-		mockfs({
+		const baseDir = mockfs.create(base, {
 			"game.json": JSON.stringify(gamejson),
 			"audio": {
 				"foo": {
@@ -689,12 +701,13 @@ describe("scanAsset()", () => {
 
 		await scanAsset({
 			logger: nullLogger,
+			cwd: path.join(baseDir, "./"),
 			assetScanDirectoryTable: {
 				audio: ["audio"]
 			}
 		});
 
-		let conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		let conf = JSON.parse(fs.readFileSync(path.join(baseDir, "./game.json")).toString());
 		expect(conf.assets["dummyAudio"].type).toBe("audio");
 		expect(conf.assets["newDummy"].type).toBe("audio");
 		expect(conf.assets["newDummy"].systemId).toBe("sound");
@@ -724,7 +737,7 @@ describe("scanAsset()", () => {
 				}
 			}
 		};
-		mockfs({
+		const baseDir = mockfs.create(base, {
 			"game.json": JSON.stringify(gamejson),
 			"audio": {
 				"foo": {
@@ -737,12 +750,13 @@ describe("scanAsset()", () => {
 
 		await scanAsset({
 			logger: nullLogger,
+			cwd: path.join(baseDir, "./"),
 			assetScanDirectoryTable: {
 				audio: ["audio"]
 			}
 		});
 
-		let conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		let conf = JSON.parse(fs.readFileSync(path.join(baseDir, "./game.json")).toString());
 		expect(conf.assets["dummyAudio"].type).toBe("audio");
 		expect(conf.assets["newDummy"].type).toBe("audio");
 		expect(conf.assets["newDummy"].systemId).toBe("sound");
@@ -763,7 +777,7 @@ describe("scanAsset()", () => {
 				}
 			}
 		};
-		mockfs({
+		const baseDir = mockfs.create(base, {
 			"game.json": JSON.stringify(gamejson),
 			"audio": {
 				"bar": {
@@ -776,6 +790,7 @@ describe("scanAsset()", () => {
 		try {
 			await scanAsset({
 				logger: nullLogger,
+				cwd: path.join(baseDir, "./"),
 				assetScanDirectoryTable: {
 					audio: ["audio"]
 				}
@@ -794,7 +809,7 @@ describe("scanAsset()", () => {
 			main: "",
 			assets: {}
 		};
-		mockfs({
+		const baseDir = mockfs.create(base, {
 			"game.json": JSON.stringify(gamejson),
 			"audio": {
 				"dummy.ogg": DUMMY_OGG_DATA,
@@ -809,6 +824,7 @@ describe("scanAsset()", () => {
 
 		await scanAsset({
 			logger,
+			cwd: path.join(baseDir, "./"),
 			assetScanDirectoryTable: {
 				audio: ["audio"]
 			}
@@ -834,7 +850,7 @@ describe("scanAsset()", () => {
 				}
 			}
 		};
-		mockfs({
+		const baseDir = mockfs.create(base, {
 			"game.json": JSON.stringify(gamejson),
 			"audio": {
 				"bar": {
@@ -845,6 +861,7 @@ describe("scanAsset()", () => {
 
 		try {
 			await scanAsset({
+				cwd: path.join(baseDir, "./"),
 				logger: nullLogger,
 				assetScanDirectoryTable: {
 					audio: ["audio"]
@@ -864,7 +881,7 @@ describe("scanAsset()", () => {
 			main: "",
 			assets: {}
 		};
-		mockfs({
+		const baseDir = mockfs.create(base, {
 			"game.json": JSON.stringify(gamejson),
 			"assets": {
 				"bgm.main.ogg": DUMMY_OGG_DATA,
@@ -874,13 +891,14 @@ describe("scanAsset()", () => {
 
 		await scanAsset({
 			logger: nullLogger,
+			cwd: path.join(baseDir, "./"),
 			target: "all",
 			assetScanDirectoryTable: {
 				audio: ["audio"]
 			}
 		});
 
-		let conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		let conf = JSON.parse(fs.readFileSync(path.join(baseDir, "./game.json")).toString());
 		expect(conf.assets["assets/bgm.main"]).not.toBe(undefined);
 		expect(conf.assets["assets/bgm.clear"]).not.toBe(undefined);
 	});
@@ -898,7 +916,7 @@ describe("scanAsset()", () => {
 				}
 			}
 		};
-		mockfs({
+		let baseDir = mockfs.create(base, {
 			"game.json": JSON.stringify(gamejson),
 			"script": {
 				"foo": {
@@ -910,12 +928,13 @@ describe("scanAsset()", () => {
 
 		await scanAsset({
 			logger: nullLogger,
+			cwd: path.join(baseDir, "./"),
 			assetScanDirectoryTable: {
 				script: ["script"]
 			}
 		});
 
-		let conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		let conf = JSON.parse(fs.readFileSync(path.join(baseDir, "./game.json")).toString());
 		expect(conf.assets["dummyCode"].type).toBe("script");
 		expect(conf.assets["newDummy"]).toBe(undefined);
 
@@ -927,7 +946,7 @@ describe("scanAsset()", () => {
 				"systemId": undefined as any,
 			}
 		};
-		mockfs({
+		baseDir = mockfs.create(base, {
 			"game.json": JSON.stringify(gamejson),
 			"script": {
 				"foo": {
@@ -939,6 +958,7 @@ describe("scanAsset()", () => {
 		try {
 			await scanAsset({
 				logger: nullLogger,
+				cwd: path.join(baseDir, "./"),
 				assetScanDirectoryTable: {
 					script: ["script"]
 				}
@@ -962,7 +982,7 @@ describe("scanAsset()", () => {
 				}
 			}
 		};
-		mockfs({
+		let baseDir = mockfs.create(base, {
 			"game.json": JSON.stringify(gamejson),
 			"text": {
 				"foo": {
@@ -974,6 +994,7 @@ describe("scanAsset()", () => {
 
 		await scanAsset({
 			logger: nullLogger,
+			cwd: path.join(baseDir, "./"),
 			assetScanDirectoryTable: {
 				text: ["text"]
 			},
@@ -982,7 +1003,7 @@ describe("scanAsset()", () => {
 			}
 		});
 
-		let conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		let conf = JSON.parse(fs.readFileSync(path.join(baseDir, "./game.json")).toString());
 		expect(conf.assets["dummyText"].type).toBe("text");
 		expect(conf.assets["newDummy"].type).toBe("text");
 
@@ -994,7 +1015,7 @@ describe("scanAsset()", () => {
 				"systemId": undefined as any,
 			}
 		};
-		mockfs({
+		baseDir = mockfs.create(base, {
 			"game.json": JSON.stringify(gamejson),
 			"text": {
 				"foo": {
@@ -1006,6 +1027,7 @@ describe("scanAsset()", () => {
 		try {
 			await scanAsset({
 				logger: nullLogger,
+				cwd: path.join(baseDir, "./"),
 				assetScanDirectoryTable: {
 					text: ["text"]
 				},
@@ -1032,7 +1054,7 @@ describe("scanAsset()", () => {
 				}
 			}
 		};
-		mockfs({
+		let baseDir = mockfs.create(base, {
 			"game.json": JSON.stringify(gamejson),
 			"assets": {
 				"foo": {
@@ -1043,11 +1065,12 @@ describe("scanAsset()", () => {
 		});
 
 		await scanAsset({
+			cwd: path.join(baseDir, "./"),
 			target: "all",
 			logger: nullLogger
 		});
 
-		let conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		let conf = JSON.parse(fs.readFileSync(path.join(baseDir, "./game.json")).toString());
 		expect(conf.assets["dummy"].type).toBe("text");
 		expect(conf.assets["assets/foo/newDummy.bin"].type).toBe("binary");
 
@@ -1057,7 +1080,7 @@ describe("scanAsset()", () => {
 				"path": "assets/foo/newDummy.bin",
 			}
 		};
-		mockfs({
+		baseDir = mockfs.create(base, {
 			"game.json": JSON.stringify(gamejson),
 			"assets": {
 				"foo": {
@@ -1067,10 +1090,11 @@ describe("scanAsset()", () => {
 		});
 
 		await scanAsset({
+			cwd: path.join(baseDir, "./"),
 			target: "all",
 			logger: nullLogger
 		});
-		conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		conf = JSON.parse(fs.readFileSync(path.join(baseDir, "./game.json")).toString());
 		expect(conf.assets["dummyBinary"].type).toBe("text");
 	});
 
@@ -1131,7 +1155,7 @@ describe("scanAsset()", () => {
 				},
 			}
 		};
-		mockfs({
+		const baseDir = mockfs.create(base, {
 			"game.json": JSON.stringify(gamejson),
 			"image": {
 				"foo": {
@@ -1140,7 +1164,7 @@ describe("scanAsset()", () => {
 			},
 			"audio": {
 				"some": {
-					"se.ogg": "", // invalid data
+					"se.ogg": Buffer.from(""), // invalid data
 				},
 			},
 			"text": {
@@ -1162,6 +1186,7 @@ describe("scanAsset()", () => {
 
 		await scanAsset({
 			logger: nullLogger,
+			cwd: path.join(baseDir, "./"),
 			assetScanDirectoryTable: {
 				audio: ["audio"],
 				image: ["image"],
@@ -1173,7 +1198,7 @@ describe("scanAsset()", () => {
 			}
 		});
 
-		let conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		let conf = JSON.parse(fs.readFileSync(path.join(baseDir, "./game.json")).toString());
 		expect(conf.assets["chara"]).not.toBe(undefined);
 		expect(conf.assets["se"]).not.toBe(undefined);
 		expect(conf.assets["txt"]).not.toBe(undefined);
@@ -1223,7 +1248,7 @@ describe("scanAsset()", () => {
 				}
 			}
 		};
-		mockfs({
+		const baseDir = mockfs.create(base, {
 			"game.json": JSON.stringify(gamejson),
 			"sound": {
 				"dummySound.ogg": DUMMY_OGG_DATA
@@ -1245,28 +1270,31 @@ describe("scanAsset()", () => {
 
 		await scanAsset({
 			logger: nullLogger,
+			cwd: path.join(baseDir, "./"),
 			target: "image",
 			assetScanDirectoryTable: {
 				image: ["img"]
 			}
 		});
-		let conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		let conf = JSON.parse(fs.readFileSync(path.join(baseDir, "./game.json")).toString());
 		expect(conf.assets["dummyImg"].type).toBe("image");
 		expect(conf.assets["dummyImage"].type).toBe("image");
 
 		await scanAsset({
 			logger: nullLogger,
+			cwd: path.join(baseDir, "./"),
 			target: "script",
 			assetScanDirectoryTable: {
 				script: ["code"]
 			}
 		});
-		conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		conf = JSON.parse(fs.readFileSync(path.join(baseDir, "./game.json")).toString());
 		expect(conf.assets["dummyCode"].type).toBe("script");
 		expect(conf.assets["dummyScript"].type).toBe("script");
 
 		await scanAsset({
 			logger: nullLogger,
+			cwd: path.join(baseDir, "./"),
 			target: "text",
 			assetScanDirectoryTable: {
 				text: ["txt"]
@@ -1275,27 +1303,29 @@ describe("scanAsset()", () => {
 				text: []
 			}
 		});
-		conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		conf = JSON.parse(fs.readFileSync(path.join(baseDir, "./game.json")).toString());
 		expect(conf.assets["dummyTxt"].type).toBe("text");
 		expect(conf.assets["dummyText"].type).toBe("text");
 		expect(conf.assets["dummyText2"].type).toBe("text");
 
 		await scanAsset({
 			logger: nullLogger,
+			cwd: path.join(baseDir, "./"),
 			target: "audio",
 			assetScanDirectoryTable: {
 				audio: ["sound"]
 			}
 		});
-		conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		conf = JSON.parse(fs.readFileSync(path.join(baseDir, "./game.json")).toString());
 		expect(conf.assets["dummySound"].type).toBe("audio");
 		expect(conf.assets["dummyAudio"].type).toBe("audio");
 
 		await scanAsset({
+			cwd: path.join(baseDir, "./"),
 			logger: nullLogger,
 			target: "all"
 		});
-		conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		conf = JSON.parse(fs.readFileSync(path.join(baseDir, "./game.json")).toString());
 		expect(conf.assets["definedDummyBin"].type).toBe("binary");
 		expect(conf.assets["assets/untrackedBin.bin"].type).toBe("binary");
 	});
@@ -1324,7 +1354,7 @@ describe("scanAsset()", () => {
 				},
 			}
 		};
-		mockfs({
+		const baseDir = mockfs.create(base, {
 			"game.json": JSON.stringify(gamejson),
 			"sound": {
 				"dummySound.ogg": DUMMY_OGG_DATA
@@ -1342,26 +1372,29 @@ describe("scanAsset()", () => {
 
 		await scanAsset({
 			logger: nullLogger,
+			cwd: path.join(baseDir, "./"),
 			target: "image",
 			assetScanDirectoryTable: {
 				image: ["img"]
 			}
 		});
-		let conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		let conf = JSON.parse(fs.readFileSync(path.join(baseDir, "./game.json")).toString());
 		expect(conf.assets["dummyImg"].type).toBe("image");
 
 		await scanAsset({
 			logger: nullLogger,
+			cwd: path.join(baseDir, "./"),
 			target: "script",
 			assetScanDirectoryTable: {
 				script: ["code"]
 			}
 		});
-		conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		conf = JSON.parse(fs.readFileSync(path.join(baseDir, "./game.json")).toString());
 		expect(conf.assets["dummyCode"].type).toBe("script");
 
 		await scanAsset({
 			logger: nullLogger,
+			cwd: path.join(baseDir, "./"),
 			target: "text",
 			assetScanDirectoryTable: {
 				text: ["txt"]
@@ -1370,17 +1403,18 @@ describe("scanAsset()", () => {
 				text: []
 			}
 		});
-		conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		conf = JSON.parse(fs.readFileSync(path.join(baseDir, "./game.json")).toString());
 		expect(conf.assets["dummyTxt"].type).toBe("text");
 
 		await scanAsset({
 			logger: nullLogger,
+			cwd: path.join(baseDir, "./"),
 			target: "audio",
 			assetScanDirectoryTable: {
 				audio: ["sound"]
 			}
 		});
-		conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		conf = JSON.parse(fs.readFileSync(path.join(baseDir, "./game.json")).toString());
 		expect(conf.assets["dummySound"].type).toBe("audio");
 	});
 
@@ -1400,7 +1434,7 @@ describe("scanAsset()", () => {
 				}
 			}
 		};
-		mockfs({
+		const baseDir = mockfs.create(base, {
 			"game.json": JSON.stringify(gamejson),
 			"image": {
 				"foo": {
@@ -1411,6 +1445,7 @@ describe("scanAsset()", () => {
 
 		await scanAsset({
 			logger: nullLogger,
+			cwd: path.join(baseDir, "./"),
 			assetScanDirectoryTable: {
 				audio: ["audio"],
 				image: ["image"],
@@ -1422,7 +1457,7 @@ describe("scanAsset()", () => {
 			}
 		});
 
-		let conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		let conf = JSON.parse(fs.readFileSync(path.join(baseDir, "./game.json")).toString());
 		expect(conf.assets).toEqual({
 			dummy: {
 				type: "image",
@@ -1466,7 +1501,7 @@ describe("scanAsset()", () => {
 				}
 			}
 		};
-		mockfs({
+		const baseDir = mockfs.create(base, {
 			"game.json": JSON.stringify(gamejson),
 			"image": {
 				"foo": {
@@ -1497,6 +1532,7 @@ describe("scanAsset()", () => {
 
 		await scanAsset({
 			logger: nullLogger,
+			cwd: path.join(baseDir, "./"),
 			assetScanDirectoryTable: {
 				audio: ["audio"],
 				image: ["image"],
@@ -1511,7 +1547,7 @@ describe("scanAsset()", () => {
 			resolveAssetIdsFromPath: true
 		});
 
-		let conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		let conf = JSON.parse(fs.readFileSync(path.join(baseDir, "./game.json")).toString());
 		expect(conf.assets["chara"]).not.toBe(undefined);
 		expect(conf.assets["se"]).not.toBe(undefined);
 		expect(conf.assets["txt"]).not.toBe(undefined);
@@ -1520,6 +1556,7 @@ describe("scanAsset()", () => {
 
 		await scanAsset({
 			logger: nullLogger,
+			cwd: path.join(baseDir, "./"),
 			assetScanDirectoryTable: {
 				audio: ["audio"],
 				image: ["image"],
@@ -1535,7 +1572,7 @@ describe("scanAsset()", () => {
 			includeExtensionToAssetId: false
 		});
 
-		conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		conf = JSON.parse(fs.readFileSync(path.join(baseDir, "./game.json")).toString());
 		expect(conf.assets["image/foo/dummy"]).not.toBe(undefined);
 		expect(conf.assets["audio/some/se"]).not.toBe(undefined);
 		expect(conf.assets["text/foo/textdata"]).not.toBe(undefined);
@@ -1544,6 +1581,7 @@ describe("scanAsset()", () => {
 
 		await scanAsset({
 			logger: nullLogger,
+			cwd: path.join(baseDir, "./"),
 			assetScanDirectoryTable: {
 				audio: ["audio"],
 				image: ["image"],
@@ -1557,7 +1595,7 @@ describe("scanAsset()", () => {
 			includeExtensionToAssetId: false
 		});
 
-		conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		conf = JSON.parse(fs.readFileSync(path.join(baseDir, "./game.json")).toString());
 		expect(conf.assets["dummy"]).not.toBe(undefined);
 		expect(conf.assets["se"]).not.toBe(undefined);
 		expect(conf.assets["textdata"]).not.toBe(undefined);
@@ -1598,7 +1636,7 @@ describe("scanAsset()", () => {
 				}
 			}
 		};
-		mockfs({
+		const baseDir = mockfs.create(base, {
 			"game.json": JSON.stringify(gamejson),
 			"image": {
 				"foo": {
@@ -1627,6 +1665,7 @@ describe("scanAsset()", () => {
 
 		await scanAsset({
 			logger: nullLogger,
+			cwd: path.join(baseDir, "./"),
 			assetScanDirectoryTable: {
 				audio: ["audio"],
 				image: ["image"],
@@ -1640,7 +1679,7 @@ describe("scanAsset()", () => {
 			resolveAssetIdsFromPath: false
 		});
 
-		let conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		let conf = JSON.parse(fs.readFileSync(path.join(baseDir, "./game.json")).toString());
 		expect(conf.assets["chara"]).not.toBe(undefined);
 		expect(conf.assets["se"]).not.toBe(undefined);
 		expect(conf.assets["txt"]).not.toBe(undefined);
@@ -1649,6 +1688,7 @@ describe("scanAsset()", () => {
 
 		await scanAsset({
 			logger: nullLogger,
+			cwd: path.join(baseDir, "./"),
 			assetScanDirectoryTable: {
 				audio: ["audio"],
 				image: ["image"],
@@ -1663,7 +1703,7 @@ describe("scanAsset()", () => {
 			resolveAssetIdsFromPath: false
 		});
 
-		conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		conf = JSON.parse(fs.readFileSync(path.join(baseDir, "./game.json")).toString());
 		expect(conf.assets["dummy.png"]).not.toBe(undefined);
 		expect(conf.assets["se"]).not.toBe(undefined);
 		expect(conf.assets["textdata.txt"]).not.toBe(undefined);
@@ -1672,6 +1712,7 @@ describe("scanAsset()", () => {
 
 		await scanAsset({
 			logger: nullLogger,
+			cwd: path.join(baseDir, "./"),
 			assetScanDirectoryTable: {
 				audio: ["audio"],
 				image: ["image"],
@@ -1685,7 +1726,7 @@ describe("scanAsset()", () => {
 			resolveAssetIdsFromPath: true,
 			includeExtensionToAssetId: true
 		});
-		conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		conf = JSON.parse(fs.readFileSync(path.join(baseDir, "./game.json")).toString());
 		expect(conf.assets["image/foo/dummy.png"]).not.toBe(undefined);
 		expect(conf.assets["audio/some/se"]).not.toBe(undefined);
 		expect(conf.assets["text/foo/textdata.txt"]).not.toBe(undefined);
@@ -1694,6 +1735,7 @@ describe("scanAsset()", () => {
 
 		await scanAsset({
 			logger: nullLogger,
+			cwd: path.join(baseDir, "./"),
 			assetScanDirectoryTable: {
 				audio: ["audio"],
 				image: ["image"],
@@ -1708,7 +1750,7 @@ describe("scanAsset()", () => {
 			includeExtensionToAssetId: false,
 		});
 
-		conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		conf = JSON.parse(fs.readFileSync(path.join(baseDir, "./game.json")).toString());
 		expect(conf.assets["dummy"]).not.toBe(undefined);
 		expect(conf.assets["se"]).not.toBe(undefined);
 		expect(conf.assets["textdata"]).not.toBe(undefined);
@@ -1745,7 +1787,7 @@ describe("scanAsset()", () => {
 				}
 			}
 		};
-		mockfs({
+		const baseDir = mockfs.create(base, {
 			"game.json": JSON.stringify(gamejson),
 			"assets": {
 				"image": {
@@ -1776,10 +1818,11 @@ describe("scanAsset()", () => {
 
 		await scanAsset({
 			logger: nullLogger,
+			cwd: path.join(baseDir, "./"),
 			forceUpdateAssetIds: true
 		});
 
-		let conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		let conf = JSON.parse(fs.readFileSync(path.join(baseDir, "./game.json")).toString());
 		// NOTE: assets/ 以下のアセットに関しては includeExtensionToAssetId の値によらず常に拡張子を含む
 		expect(conf.assets["assets/image/dummy.png"]).toBeDefined();
 		expect(conf.assets["assets/audio/some/se"]).toBeDefined();
@@ -1789,11 +1832,12 @@ describe("scanAsset()", () => {
 
 		await scanAsset({
 			logger: nullLogger,
+			cwd: path.join(baseDir, "./"),
 			forceUpdateAssetIds: true,
 			includeExtensionToAssetId: true
 		});
 
-		conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		conf = JSON.parse(fs.readFileSync(path.join(baseDir, "./game.json")).toString());
 		expect(conf.assets["assets/image/dummy.png"]).toBeDefined();
 		expect(conf.assets["assets/audio/some/se"]).toBeDefined();
 		expect(conf.assets["assets/script/foo/script.js"]).toBeDefined();
@@ -1817,7 +1861,7 @@ describe("scanAsset()", () => {
 				},
 			]
 		};
-		mockfs({
+		const baseDir = mockfs.create(base, {
 			"game.json": JSON.stringify(gamejson),
 			"audio": {
 				"dummy.ogg": DUMMY_OGG_DATA,
@@ -1827,10 +1871,11 @@ describe("scanAsset()", () => {
 
 		await scanAsset({
 			logger: nullLogger,
+			cwd: path.join(baseDir, "./"),
 			assetScanDirectoryTable: { audio: ["audio"] }
 		});
 
-		let conf: GameConfiguration = JSON.parse(fs.readFileSync("./game.json").toString());
+		let conf: GameConfiguration = JSON.parse(fs.readFileSync(path.join(baseDir, "./game.json")).toString());
 		let assets = conf.assets as AssetConfiguration[];
 		expect((assets[0] as AudioAssetConfigurationBase).duration).toBe(1250); // duration が更新されている
 		expect((assets[0] as AudioAssetConfigurationBase).offset).toBe(300); // offset が維持されている
