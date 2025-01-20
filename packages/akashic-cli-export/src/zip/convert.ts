@@ -79,13 +79,22 @@ export interface BundleResult {
 	filePaths: string[];
 }
 
-interface ScriptAssetContent {
+interface AssetContent {
 	id: string;
 	path: string;
-	code: string;
 	global?: boolean;
+}
+
+interface ScriptAssetContent extends AssetContent {
+	type: "script";
+	code: string;
 	preload?: boolean;
 	exports?: string[];
+}
+
+interface TextAssetContent extends AssetContent {
+	type: "text";
+	data: string;
 }
 
 export async function bundleScripts(
@@ -94,26 +103,35 @@ export async function bundleScripts(
 	optimizeScript?: (code: string) => string,
 ): Promise<BundleResult> {
 	if (gamejson.environment?.["sandbox-runtime"] === "3") {
-		const scriptAssetContents: ScriptAssetContent[] = [];
+		const assetContents: (ScriptAssetContent | TextAssetContent)[] = [];
 
 		for (const [assetId, asset] of Object.entries(gamejson.assets)) {
-			if (asset.type !== "script") continue;
+			if (asset.type === "script") {
+				let code = fs.readFileSync(path.resolve(basedir, asset.path)).toString();
+				code = optimizeScript ? optimizeScript(code) : code;
 
-			let code = fs.readFileSync(path.resolve(basedir, asset.path)).toString();
-			code = optimizeScript ? optimizeScript(code) : code;
+				assetContents.push({
+					...asset,
+					id: assetId,
+					code,
+				});
+			} else if (asset.type === "text") {
+				const data = fs.readFileSync(path.resolve(basedir, asset.path)).toString();
 
-			scriptAssetContents.push({
-				...asset,
-				id: assetId,
-				code,
-			});
+				assetContents.push({
+					...asset,
+					id: assetId,
+					data,
+				});
+			}
 		}
 
 		for (const globalScript of gamejson.globalScripts ?? []) {
 			let code = fs.readFileSync(path.resolve(basedir, globalScript)).toString();
 			code = optimizeScript ? optimizeScript(code) : code;
 
-			scriptAssetContents.push({
+			assetContents.push({
+				type: "script",
 				id: globalScript,
 				path: globalScript,
 				global: true,
@@ -123,8 +141,8 @@ export async function bundleScripts(
 
 		return {
 			type: "assetBundle",
-			bundle: generateAssetBundleString(scriptAssetContents),
-			filePaths: scriptAssetContents.map(content => content.path),
+			bundle: generateAssetBundleString(assetContents),
+			filePaths: assetContents.map(content => content.path),
 		};
 	}
 
@@ -153,34 +171,48 @@ export async function bundleScripts(
 	 }
 }
 
-function generateAssetBundleString(assets: ScriptAssetContent[]): string {
+function generateAssetBundleString(assets: (ScriptAssetContent | TextAssetContent)[]): string {
 	return `module.exports={assets:{${
 		assets.map(
 			asset => [
 				`"${asset.id}": {`,
-				"type:\"script\",",
-				`path:"${asset.path}",`,
-				`global:${!!asset.global},`,
-				(asset.preload ? `preload:${!!asset.preload},` : ""),
-				"execute: rv => {",
 				[
-					"\n'use strict';\n",
-					"const module = rv.module;",
-					"const exports = module.exports;",
-					"const require = module.require;",
-					"const __dirname = rv.dirname;",
-					"const __filename = rv.filename;",
-					`\n${asset.code}\n`,
-					(asset.exports ?? [])
-						.map(key => `exports["${key}"] = typeof ${key} !== "undefined" ? ${key} : undefined;`)
-						.join(""),
-					"return module.exports;\n",
+					`type:"${asset.type}",`,
+					`path:"${asset.path}",`,
+					(asset.global ? `global:${!!asset.global},` : ""),
+					asset.type === "script" ?
+						[
+							(asset.preload ? `preload:${!!asset.preload},` : ""),
+							"execute: rv => {",
+							[
+								"\n'use strict';\n",
+								"const module = rv.module;",
+								"const exports = module.exports;",
+								"const require = module.require;",
+								"const __dirname = rv.dirname;",
+								"const __filename = rv.filename;",
+								`\n${asset.code}\n`,
+								(asset.exports ?? [])
+									.map(key => `exports["${key}"] = typeof ${key} !== "undefined" ? ${key} : undefined;`)
+									.join(""),
+								"return module.exports;\n",
+								"},\n",
+							].join(""),
+						].join("")
+					:
+						`data: \`${escapeForTemplateLiteral(asset.data)}\`,\n`,
 				].join(""),
-				"},\n",
 				"},",
 			].join("")
 		).join("")
 	}}}`;
+}
+
+function escapeForTemplateLiteral(str: string): string {
+	return str
+		.replace(/\\/g, "\\\\")
+		.replace(/`/g, "\\`")
+		.replace(/\${/g, "\\${");
 }
 
 const babelOption = {
@@ -316,7 +348,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			}
 
 			// コピーしなかったアセットやファイルをgame.jsonから削除する
-			gcu.removeScriptAssets(gamejson, (filePath: string) => preservingFilePathSet.has(filePath));
+			gcu.removeAssets(gamejson, (asset) => preservingFilePathSet.has(asset.path));
 			gcu.removeGlobalScripts(gamejson, (filePath: string) => preservingFilePathSet.has(filePath));
 
 			if (param.bundle && param.omitUnbundledJs) {

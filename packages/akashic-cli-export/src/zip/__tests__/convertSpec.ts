@@ -417,12 +417,11 @@ describe("convert", () => {
 					const gameJson = JSON.parse(fs.readFileSync(path.join(destDir, "game.json")).toString());
 					expect(gameJson.assets.aez_bundle_main.path).toBe("script/aez_bundle_main.js");
 					expect(gameJson.assets.aez_bundle_main.type).toBe("script");
-					expect(gameJson.assets.test.path).toBe("text/test.json");
-					expect(gameJson.assets.test.type).toBe("text");
 					// バンドルされた、もしくは利用されていない不要なファイルはgamejsonから取り除かれる
 					expect(gameJson.assets.main).toBeUndefined();
 					expect(gameJson.assets.foo).toBeUndefined();
 					expect(gameJson.assets.bar).toBeUndefined();
+					expect(gameJson.assets.test).toBeUndefined();
 
 					expect(gameJson.globalScripts.includes("node_modules/@hoge/testmodule/lib/ModuleA.js")).toBeFalsy();
 					expect(gameJson.globalScripts.includes("node_modules/@hoge/testmodule/lib/ModuleB.js")).toBeFalsy();
@@ -456,8 +455,6 @@ describe("convert", () => {
 					const gameJson = JSON.parse(fs.readFileSync(path.join(destDir, "game.json")).toString());
 					expect(gameJson.assets.aez_bundle_main.path).toBe("script/aez_bundle_main.js");
 					expect(gameJson.assets.aez_bundle_main.type).toBe("script");
-					expect(gameJson.assets.test.path).toBe("text/test.json");
-					expect(gameJson.assets.test.type).toBe("text");
 					// バントルされていないファイルも omitUnbundledJs: false により残る。
 					expect(gameJson.assets.bar.path).toBe("script/bar.js");
 					expect(gameJson.assets.bar.type).toBe("script");
@@ -470,6 +467,7 @@ describe("convert", () => {
 					// バンドルされたファイルは取り除かれる。
 					expect(gameJson.assets.main).toBeUndefined();
 					expect(gameJson.assets.foo).toBeUndefined();
+					expect(gameJson.assets.test).toBeUndefined();
 					expect(gameJson.globalScripts.includes("node_modules/@hoge/testmodule/lib/ModuleA.js")).toBeFalsy();
 				});
 		});
@@ -682,6 +680,7 @@ describe("convert - v3", () => {
 				"script/main.js",
 				"script/bar.js",
 				"script/foo.js",
+				"text/test.json",
 			]);
 			expect(result.bundle).toBeTypeOf("string");
 
@@ -716,6 +715,12 @@ describe("convert - v3", () => {
 				path.resolve(fixturesDir, "simple_game", "script/bar.js"),
 				assetBundle.assets.bar.execute
 			);
+
+			expect(assetBundle.assets).toBeTypeOf("object");
+			expect(assetBundle.assets.test.type).toBe("text");
+			expect(assetBundle.assets.test.path).toBe("text/test.json");
+			expect(assetBundle.assets.test.global).toBe(true);
+			expect(JSON.parse(assetBundle.assets.test.data)).toEqual({ value: 12 });
 		});
 	});
 
@@ -742,7 +747,7 @@ describe("convert - v3", () => {
 			expect(fs.existsSync(path.join(destDir, "script/aez_asset_bundle.js"))).toBe(true);
 			expect(fs.existsSync(path.join(destDir, "script/bar.js"))).toBe(false);
 			expect(fs.existsSync(path.join(destDir, "script/foo.js"))).toBe(false);
-			expect(fs.existsSync(path.join(destDir, "text/test.json"))).toBe(true);
+			expect(fs.existsSync(path.join(destDir, "text/test.json"))).toBe(false);
 			expect(fs.existsSync(path.join(destDir, "game.json"))).toBe(true);
 			expect(fs.existsSync(path.join(destDir, "package.json"))).toBe(true);
 			expect(
@@ -760,16 +765,17 @@ describe("convert - v3", () => {
 			};
 			await convertGame(param);
 
-			// もともと存在した aez_asset_bundle.js を含むスクリプトアセットは消える
+			// もともと存在した aez_asset_bundle.js を含むスクリプトアセット/テキストアセットは消える
 			expect(fs.existsSync(path.join(destDir, "script/aez_asset_bundle.js"))).toBe(false);
 			expect(fs.existsSync(path.join(destDir, "script/bar.js"))).toBe(false);
 			expect(fs.existsSync(path.join(destDir, "script/foo.js"))).toBe(false);
+			expect(fs.existsSync(path.join(destDir, "text/test.json"))).toBe(false);
 
 			// script/aez_asset_bundle.jsに被らない名前のスクリプトファイルが生成される
 			expect(fs.existsSync(path.join(destDir, "script/aez_asset_bundle0.js"))).toBe(true);
 
+
 			// それ以外のアセットは残る
-			expect(fs.existsSync(path.join(destDir, "text/test.json"))).toBe(true);
 			expect(fs.existsSync(path.join(destDir, "game.json"))).toBe(true);
 			expect(fs.readFileSync(path.join(destDir, "game.json")).toString())
 				.not.toBe(fs.readFileSync(path.join(param.source, "game.json")).toString());
@@ -812,19 +818,17 @@ describe("convert - v3", () => {
 
 			expect(fs.existsSync(path.join(destDir, "script/aez_asset_bundle.js"))).toBe(true);
 
-			// もともと存在した aez_asset_bundle.js を含むスクリプトアセットは消える
+			// もともと存在した aez_asset_bundle.js を含むスクリプトアセット/テキストアセットは消える
 			expect(fs.existsSync(path.join(destDir, "script/bar.js"))).toBe(false);
 			expect(fs.existsSync(path.join(destDir, "script/foo.js"))).toBe(false);
+			expect(fs.existsSync(path.join(destDir, "text/test.json"))).toBe(false);
 
 			// それ以外のアセットは残る
-			expect(fs.existsSync(path.join(destDir, "text/test.json"))).toBe(true);
 			expect(fs.existsSync(path.join(destDir, "game.json"))).toBe(true);
 
 			const gameJson = JSON.parse(fs.readFileSync(path.join(destDir, "game.json")).toString());
 			expect(gameJson.assets.aez_asset_bundle.path).toBe("script/aez_asset_bundle.js");
 			expect(gameJson.assets.aez_asset_bundle.type).toBe("script");
-			expect(gameJson.assets.test.path).toBe("text/test.json");
-			expect(gameJson.assets.test.type).toBe("text");
 
 			// バンドルされたファイルは game.json から取り除かれる
 			expect(gameJson.assets.main).toBeUndefined();
