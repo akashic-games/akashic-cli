@@ -348,8 +348,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			}
 
 			// コピーしなかったアセットやファイルをgame.jsonから削除する
-			gcu.removeScriptAssets(gamejson, (filePath: string) => preservingFilePathSet.has(filePath));
-			gcu.removeTextAssets(gamejson, (filePath: string) => preservingFilePathSet.has(filePath));
+			gcu.removeAssets(gamejson, (asset) => preservingFilePathSet.has(asset.path));
 			gcu.removeGlobalScripts(gamejson, (filePath: string) => preservingFilePathSet.has(filePath));
 
 			if (param.bundle && param.omitUnbundledJs) {
