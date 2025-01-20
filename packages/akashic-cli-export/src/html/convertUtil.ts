@@ -117,7 +117,7 @@ const babelOption = {
 	]
 };
 
-export function wrap(code: string, terser?: MinifyOptions, isBabel?: boolean, exports: string[] = []): string {
+export function wrap(code: string, terser?: MinifyOptions, downpile?: boolean, exports: string[] = []): string {
 	const preScript = "(function(exports, require, module, __filename, __dirname) {";
 	let postScript: string = "";
 	for (const key of exports) {
@@ -125,7 +125,7 @@ export function wrap(code: string, terser?: MinifyOptions, isBabel?: boolean, ex
 	}
 	postScript += "})(g.module.exports, g.module.require, g.module, g.filename, g.dirname);";
 	// downpile -> minify の順序は入れ替えられない (先に minify すると babel がコードを整形してしまう)
-	const downpiled = isBabel ? babel.transform(code, babelOption).code : code;
+	const downpiled = downpile ? babel.transform(code, babelOption).code : code;
 	const ret = preScript + "\n" + (terser ? minify_sync(downpiled, terser).code : downpiled) + "\n" + postScript + "\n";
 	return ret;
 }

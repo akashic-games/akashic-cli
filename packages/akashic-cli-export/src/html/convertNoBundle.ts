@@ -86,7 +86,7 @@ async function convertAssetAndOutput(
 	inputPath: string,
 	outputPath: string,
 	terser: MinifyOptions | undefined,
-	isBable: boolean,
+	babel: boolean,
 	_errors?: string[]
 ): Promise<string> {
 	const assets = conf._content.assets;
@@ -96,7 +96,7 @@ async function convertAssetAndOutput(
 	const assetString = fs.readFileSync(path.join(inputPath, asset.path), "utf8").replace(/\r\n|\r/g, "\n");
 	const assetPath = asset.path;
 
-	const code = (isScript ? wrapScript(assetString, assetName, terser, isBable, exports) : wrapText(assetString, assetName));
+	const code = (isScript ? wrapScript(assetString, assetName, terser, babel, exports) : wrapText(assetString, assetName));
 	const relativePath = "./js/assets/" + path.dirname(assetPath) + "/" +
 		path.basename(assetPath, path.extname(assetPath)) + (isScript ? ".js" : ".json.js");
 	const filePath = path.resolve(outputPath, relativePath);
@@ -200,8 +200,8 @@ window.optionProps.magnify = ${!!options.magnify};
 	fs.writeFileSync(path.resolve(outputPath, "./js/option.js"), script);
 }
 
-function wrapScript(code: string, name: string, terser?: MinifyOptions, downpile?: boolean, exports: string[] = []): string {
-	return "window.gLocalAssetContainer[\"" + name + "\"] = function(g) { " + wrap(code, terser, downpile, exports) + "}";
+function wrapScript(code: string, name: string, terser?: MinifyOptions, bable?: boolean, exports: string[] = []): string {
+	return "window.gLocalAssetContainer[\"" + name + "\"] = function(g) { " + wrap(code, terser, bable, exports) + "}";
 }
 
 function wrapText(code: string, name: string): string {
