@@ -3,6 +3,7 @@ import * as path from "path";
 import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger.js";
 import aacDuration from "aac-duration";
 import { parseFile } from "music-metadata";
+import type { IAudioMetadata } from "music-metadata";
 import * as thumbcoil from "thumbcoil";
 
 export async function getAudioDuration(filepath: string, logger?: Logger): Promise<number | undefined> {
@@ -10,9 +11,13 @@ export async function getAudioDuration(filepath: string, logger?: Logger): Promi
 	if (ext === ".aac") {
 		return aacDuration(filepath);
 	} else if (ext === ".ogg") {
-		const metaData = await parseFile(filepath, { duration: true });
-		// TODO: duration が取得できなかった場合のフォールバック対応。現状、`writeJSON()` に渡すオブジェクトの duration 値は NaN となり、game.json 書き込み時に null となる。
-		return metaData.format.duration;
+		let metaData: IAudioMetadata | null = null;
+		try {
+			metaData = await parseFile(filepath, { duration: true });
+		} catch (error) {
+			logger?.error(error);
+		}
+		return metaData?.format.duration;
 	} else if (ext === ".mp4" || ext === ".m4a") {
 		if (ext === ".mp4")
 			logger?.warn("[deprecated] " + path.basename(filepath) + " uses deprecated format. Use AAC or M4A instead of MP4(AAC).");
