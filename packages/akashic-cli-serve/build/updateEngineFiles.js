@@ -29,7 +29,7 @@ try {
 		const rootPath = path.dirname(entryPath); // index.js と package.json が同層にあることが前提
 		const version = require(path.join(rootPath, "package.json")).version;
 		const fileName = `engineFilesV${version.replace(/[\.-]/g, "_")}.js`;
-		const engineFilesPath = path.join(rootPath, `dist/raw/release/full/${fileName}`);
+		const engineFilesPath = path.join(rootPath, `dist/raw/debug/full/${fileName}`);
 
 		versions[key].version = version;
 		versions[key].fileName = fileName;
