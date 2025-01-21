@@ -1,7 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
 import { fileURLToPath } from "url";
-import { randomBytes } from "crypto";
 import * as mockfs from "./helpers/mockfs.js";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger.js";
 import type { AssetConfiguration, AssetConfigurationMap, AudioAssetConfigurationBase, GameConfiguration } from "@akashic/game-configuration";
@@ -9,7 +8,7 @@ import { scanAsset } from "../../scanAsset.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const base = randomBytes(8).toString("hex");
+const base = `scanAssetSpec-${Date.now()}`;
 
 describe("scanAsset()", () => {
 	const nullLogger = new ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });

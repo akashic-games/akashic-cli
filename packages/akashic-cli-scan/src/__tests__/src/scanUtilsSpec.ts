@@ -1,7 +1,6 @@
 import * as path from "path";
 import * as fs from "fs";
 import { fileURLToPath } from "url";
-import { randomBytes } from "crypto";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger.js";
 import * as mockfs from "./helpers/mockfs.js";
 import { scanAudioAssets, scanImageAssets, scanScriptAssets, scanTextAssets, scanBinaryAssets, knownExtensionAssetFilter } from "../../scanUtils.js";
@@ -10,7 +9,7 @@ import { defaultTextAssetFilter } from "../../scanUtils.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const base = randomBytes(8).toString("hex");
+const base = `scanUtilsSpec-${Date.now()}`;
 
 describe("scanUtils", () => {
 	const nullLogger = new ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
