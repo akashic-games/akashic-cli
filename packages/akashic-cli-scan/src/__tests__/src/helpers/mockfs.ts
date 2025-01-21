@@ -11,7 +11,7 @@ type FileStructure = {
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const tmpDir = join(__dirname, "..", "..", "fixtures", "tmp");
+const tmpDir = join(__dirname, "..", "..", "tmp-expanded-fixtures");
 
 function createFiles(baseDir: string, structure: FileStructure): void {
 	for (const key in structure) {
