@@ -68,8 +68,7 @@ export async function promiseConvertNoBundle(options: ConvertTemplateParameterOb
 				scriptName,
 				options.source,
 				options.output,
-				terser,
-				errorMessages);
+				terser);
 		}));
 		assetPaths = assetPaths.concat(globalScriptPaths);
 	}
@@ -106,7 +105,7 @@ async function convertAssetAndOutput(
 
 async function convertGlobalScriptAndOutput(
 	scriptName: string, inputPath: string, outputPath: string,
-	terser: MinifyOptions | undefined, errors?: string[]): Promise<string> {
+	terser: MinifyOptions | undefined): Promise<string> {
 	const scriptString = fs.readFileSync(path.join(inputPath, scriptName), "utf8").replace(/\r\n|\r/g, "\n");
 	const isScript = /\.js$/i.test(scriptName);
 	const code = isScript ? wrapScript(scriptString, scriptName, terser, false) : wrapText(scriptString, scriptName);
