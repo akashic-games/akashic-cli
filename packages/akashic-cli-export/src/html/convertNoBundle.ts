@@ -59,7 +59,7 @@ export async function promiseConvertNoBundle(options: ConvertTemplateParameterOb
 	const nonBinaryAssetNames = extractAssetDefinitions(conf, "script").concat(extractAssetDefinitions(conf, "text"));
 	const errorMessages: string[] = [];
 	const nonBinaryAssetPaths = await Promise.all(nonBinaryAssetNames.map((assetName: string) => {
-		return convertAssetAndOutput(assetName, conf, options.source, options.output, terser, options.babel, errorMessages);
+		return convertAssetAndOutput(assetName, conf, options.source, options.output, terser, options.babel);
 	}));
 	assetPaths = assetPaths.concat(nonBinaryAssetPaths);
 	if (conf._content.globalScripts) {
@@ -86,8 +86,7 @@ async function convertAssetAndOutput(
 	inputPath: string,
 	outputPath: string,
 	terser: MinifyOptions | undefined,
-	babel: boolean,
-	_errors?: string[]
+	babel: boolean
 ): Promise<string> {
 	const assets = conf._content.assets;
 	const asset = assets[assetName];
@@ -200,8 +199,8 @@ window.optionProps.magnify = ${!!options.magnify};
 	fs.writeFileSync(path.resolve(outputPath, "./js/option.js"), script);
 }
 
-function wrapScript(code: string, name: string, terser?: MinifyOptions, bable?: boolean, exports: string[] = []): string {
-	return "window.gLocalAssetContainer[\"" + name + "\"] = function(g) { " + wrap(code, terser, bable, exports) + "}";
+function wrapScript(code: string, name: string, terser?: MinifyOptions, babel?: boolean, exports: string[] = []): string {
+	return "window.gLocalAssetContainer[\"" + name + "\"] = function(g) { " + wrap(code, terser, babel, exports) + "}";
 }
 
 function wrapText(code: string, name: string): string {
