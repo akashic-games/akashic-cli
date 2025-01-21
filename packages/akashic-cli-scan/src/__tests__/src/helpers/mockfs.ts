@@ -37,10 +37,6 @@ export function restore(base: string): void {
 }
 
 export function create(base: string, structure: FileStructure): string {
-	if (existsSync(tmpBaseDir)) {
-		rmSync(tmpBaseDir, { force: true, recursive: true });
-	}
-
 	const baseDir = join(tmpBaseDir, base);
 	mkdirSync(baseDir, { recursive: true });
 
