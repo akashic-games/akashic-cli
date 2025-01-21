@@ -139,7 +139,7 @@ describe("scanUtils", () => {
 				nullLogger,
 				p => {
 					if (knownExtensionAssetFilter(p)) return false;
-					return isBinaryFile(path.join(path.join(baseDir, "./game"), "assets", p));
+					return isBinaryFile(path.join(baseDir, "./game", "assets", p));
 				}
 			)
 		).toEqual([
