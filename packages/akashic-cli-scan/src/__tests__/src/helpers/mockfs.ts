@@ -18,7 +18,7 @@ function createFiles(baseDir: string, structure: FileStructure): void {
 		const targetPath = join(baseDir, key);
 		const value = structure[key];
 
-		if (typeof value === "object" && value !== null && !Buffer.isBuffer(value) && typeof value !== "string") {
+		if (typeof value === "object" && value !== null && !Buffer.isBuffer(value)) {
 			// ディレクトリ
 			if (!existsSync(targetPath)) {
 				mkdirSync(targetPath, { recursive: true });
@@ -26,9 +26,7 @@ function createFiles(baseDir: string, structure: FileStructure): void {
 			createFiles(targetPath, value);
 		} else {
 			// ファイル
-			if (!existsSync(targetPath)) {
-				writeFileSync(targetPath, value);
-			}
+			writeFileSync(targetPath, value);
 		}
 	}
 }
