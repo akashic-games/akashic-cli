@@ -61,7 +61,6 @@ describe("scanAsset()", () => {
 
 		it("scan assets", async () => {
 			const baseDir = mockfs.create(base, mockFsContent);
-			console.log("baseDir", baseDir);
 
 			await scanAsset({ cwd: path.join(baseDir, "./game"), target: "text", logger: nullLogger });
 			await scanAsset({ cwd: path.join(baseDir, "./game"), target: "audio", logger: nullLogger });
