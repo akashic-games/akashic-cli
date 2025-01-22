@@ -8,6 +8,8 @@ import type { SandboxConfiguration } from "@akashic/sandbox-configuration";
 import fsx from "fs-extra";
 import type { MinifyOptions } from "terser";
 import { minify_sync } from "terser";
+import * as babel from "@babel/core";
+import presetEnv from "@babel/preset-env";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -33,6 +35,7 @@ export interface ConvertTemplateParameterObject {
 	autoGivenArgsName?: string;
 	sandboxConfigJsCode?: string;
 	omitUnbundledJs?: boolean;
+	esDownpile?: boolean;
 	debugOverrideEngineFiles?: string;
 }
 
@@ -102,14 +105,28 @@ export function encodeText(text: string): string {
 	return text.replace(/[\u2028\u2029'"\\\b\f\n\r\t\v%]/g, encodeURIComponent);
 }
 
-export function wrap(code: string, terser?: MinifyOptions, exports: string[] = []): string {
+const babelOption = {
+	presets: [
+		babel.createConfigItem([presetEnv, {
+			modules: false,
+			targets: {
+				"chrome": 51
+			}
+		}],
+		{ type: "preset" })
+	]
+};
+
+export function wrap(code: string, terser?: MinifyOptions, esDownpile?: boolean, exports: string[] = []): string {
 	const preScript = "(function(exports, require, module, __filename, __dirname) {";
 	let postScript: string = "";
 	for (const key of exports) {
 		postScript += `exports["${key}"] = typeof ${key} !== "undefined" ? ${key} : undefined;\n`;
 	}
 	postScript += "})(g.module.exports, g.module.require, g.module, g.filename, g.dirname);";
-	const ret = preScript + "\n" + (terser ? minify_sync(code, terser).code : code) + "\n" + postScript + "\n";
+	// downpile -> minify の順序は入れ替えられない (先に minify すると babel がコードを整形してしまう)
+	const downpiled = esDownpile ? babel.transform(code, babelOption).code : code;
+	const ret = preScript + "\n" + (terser ? minify_sync(downpiled, terser).code : downpiled) + "\n" + postScript + "\n";
 	return ret;
 }
 

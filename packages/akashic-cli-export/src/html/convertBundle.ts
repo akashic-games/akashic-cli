@@ -69,13 +69,13 @@ export async function promiseConvertBundle(options: ConvertTemplateParameterObje
 
 	const terser = options.minify ? options.terser ?? {} : undefined;
 	const tempAssetData = await Promise.all(innerHTMLAssetNames.map((assetName: string) => {
-		return convertAssetToInnerHTMLObj(assetName, options.source, conf, terser, errorMessages);
+		return convertAssetToInnerHTMLObj(assetName, options.source, conf, terser, options.esDownpile);
 	}));
 	innerHTMLAssetArray = innerHTMLAssetArray.concat(tempAssetData);
 
 	if (conf._content.globalScripts) {
 		const tempScriptData = await Promise.all(conf._content.globalScripts.map((scriptName: string) => {
-			return convertScriptNameToInnerHTMLObj(scriptName, options.source, terser, errorMessages);
+			return convertScriptNameToInnerHTMLObj(scriptName, options.source, terser);
 		}));
 		innerHTMLAssetArray = innerHTMLAssetArray.concat(tempScriptData);
 	}
@@ -103,8 +103,12 @@ export async function promiseConvertBundle(options: ConvertTemplateParameterObje
 }
 
 async function convertAssetToInnerHTMLObj(
-	assetName: string, inputPath: string, conf: cmn.Configuration,
-	terser: MinifyOptions | undefined, errors?: string[]): Promise<InnerHTMLAssetData> {
+	assetName: string, 
+	inputPath: string, 
+	conf: cmn.Configuration,
+	terser: MinifyOptions | undefined, 
+	esDownpile: boolean
+): Promise<InnerHTMLAssetData> {
 	const assets = conf._content.assets;
 	const isScript = assets[assetName].type === "script";
 	const asset = assets[assetName];
@@ -113,13 +117,13 @@ async function convertAssetToInnerHTMLObj(
 	return {
 		name: assetName,
 		type: asset.type,
-		code: isScript ? wrap(assetString, terser, exports) : encodeText(assetString)
+		code: isScript ? wrap(assetString, terser, esDownpile, exports) : encodeText(assetString)
 	};
 }
 
 async function convertScriptNameToInnerHTMLObj(
 	scriptName: string, inputPath: string,
-	terser: MinifyOptions | undefined, errors?: string[]): Promise<InnerHTMLAssetData> {
+	terser: MinifyOptions | undefined): Promise<InnerHTMLAssetData> {
 	let scriptString = fs.readFileSync(path.join(inputPath, scriptName), "utf8").replace(/\r\n|\r/g, "\n");
 	const isScript = /\.js$/i.test(scriptName);
 
@@ -130,7 +134,7 @@ async function convertScriptNameToInnerHTMLObj(
 	return {
 		name: scriptName,
 		type: isScript ? "script" : "text",
-		code: isScript ? wrap(scriptString, terser) : scriptString
+		code: isScript ? wrap(scriptString, terser, false) : scriptString
 	};
 }
 

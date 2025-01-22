@@ -8,10 +8,10 @@ interface LicenseInfo {
     licenseText: string;
 }
 
-export const LICENSE_TEXT_PREFIX  = "// For the library license, see thirdpary_license.txt.\n\n";
+export const LICENSE_TEXT_PREFIX  = "// For the library license, see thirdparty_license.txt.\n\n";
 
 /**
- * ライブラリのライセンスファイルをまとめて thirdpary_license.txt へ書き出す
+ * ライブラリのライセンスファイルをまとめて thirdparty_license.txt へ書き出す
  * 
  * @param source コンテンツの game.json があるディレクトリパス
  * @param dest 出力先
@@ -31,7 +31,7 @@ export async function writeLicenseTextFile(source: string, dest: string, filePat
     const body = textAry.join("\n");
 
     cmn.Util.mkdirpSync(dest);
-    fs.writeFileSync(path.resolve(dest, "thirdpary_license.txt"), body);
+    fs.writeFileSync(path.resolve(dest, "thirdparty_license.txt"), body);
     return true;
 }
 

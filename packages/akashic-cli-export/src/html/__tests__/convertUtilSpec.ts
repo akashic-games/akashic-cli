@@ -129,4 +129,20 @@ describe("convertUtil", function () {
 		});
 	});
 
+	describe("wrap", () => {
+		it("babel arguments enabled/disabled", () => {
+			const code = `
+			test = () => {
+				return x ** 2;
+			};`
+			const downpiled = convert.wrap(code, {}, true);
+			expect(/\(\)\s?=>/.test(downpiled)).toBeTruthy(); // ES2015 のアロー関数はそのまま
+			expect(/\*\*/.test(downpiled)).toBeFalsy(); // ES2016 のべき乗演算子は Math.pow()に変換される
+
+			const noDownpiled = convert.wrap(code, null, false);
+			console.log("*", noDownpiled);
+			expect(/\(\)\s?=>/.test(noDownpiled)).toBeTruthy(); 
+			expect(/\*\*/.test(noDownpiled)).toBeTruthy(); 
+		});
+	})
 });

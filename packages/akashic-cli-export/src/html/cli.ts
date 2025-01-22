@@ -30,6 +30,7 @@ function cli(param: CliConfigExportHtml): void {
 		autoSendEventName: param.autoSendEventName || param.autoSendEvents,
 		autoGivenArgsName: param.autoGivenArgsName,
 		omitUnbundledJs: param.omitUnbundledJs,
+		esDownpile: (param.esDownpile != null) ? param.esDownpile : true,
 		compress: param.output ? path.extname(param.output) === ".zip" : false,
 		debugOverrideEngineFiles: param.debugOverrideEngineFiles,
 		// index.htmlに書き込むためのexport実行時の情報
@@ -84,6 +85,7 @@ commander
 	.option("--auto-given-args-name [argsName]", "argument name that given automatically when game start")
 	.option("-a, --atsumaru", "obsolete  option. Use 'akashic export zip --nicolive' instead")
 	.option("--no-omit-unbundled-js", "Unnecessary script files are included even when the `--atsumaru` option is specified.")
+	.option("--no-es-downpile", "No convert JavaScript")
 	.option("--debug-override-engine-files <filePath>", "Use the specified engineFiles");
 
 export async function run(argv: string[]): Promise<void> {
@@ -128,6 +130,7 @@ export async function run(argv: string[]): Promise<void> {
 		autoSendEventName: options.autoSendEventName ?? options.autoSendEvents ?? conf.autoSendEventName ?? conf.autoSendEvents,
 		autoGivenArgsName: options.autoGivenArgsName ?? conf.autoGivenArgsName,
 		omitUnbundledJs: options.omitUnbundledJs ?? conf.omitUnbundledJs,
+		esDownpile: options.esDownpile ?? conf.esDownpile,
 		debugOverrideEngineFiles: options.debugOverrideEngineFiles ?? conf.debugOverrideEngineFiles
 
 	});
