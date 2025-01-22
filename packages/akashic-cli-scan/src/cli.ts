@@ -4,7 +4,7 @@ import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger.js
 import { Command } from "commander";
 import type { ScanAssetParameterObject } from "./scanAsset.js";
 import { scanAsset } from "./scanAsset.js";
-import { scanNodeModules } from "./scanNodeModules.js";
+import { scanNodeModules, ScanNodeModulesParameterObject } from "./scanNodeModules.js";
 import type { AssetTargetType } from "./types.js";
 import { watchAsset } from "./watchAsset.js";
 import { load } from "@akashic/akashic-cli-commons/lib/FileSystem.js";
@@ -99,16 +99,26 @@ commander
 	.option("--no-omit-packagejson", "Add package.json of each module to the globalScripts property (to support older Akashic Engine)")
 	.option("--use-mmp", "Use moduleMainPaths in game.json")
 	.option("--use-mms", "Use moduleMainScripts in game.json (to support older Akashic Engine)")
-	.action((opts: CliConfigScanGlobalScripts = {}) => {
+	.action(async (opts: CliConfigScanGlobalScripts = {}) => {
+		let configuration;
+		try { 
+			configuration = await load(opts.cwd || process.cwd());
+		} catch (error) {
+			console.error(error);
+			process.exit(1);
+		}
+
+		const conf = configuration!.commandOptions?.scan?.globalScripts ?? {};
 		const logger = new ConsoleLogger({ quiet: opts.quiet });
-		scanNodeModules({
-			cwd: opts.cwd,
+		const parameter: ScanNodeModulesParameterObject = {
+			cwd: opts.cwd ?? conf.cwd,
 			logger,
-			fromEntryPoint: opts.fromEntryPoint,
-			noOmitPackagejson: !opts.omitPackagejson,
-			useMmp: opts.useMmp,
-			useMms: opts.useMms,
-		})
+			fromEntryPoint: opts.fromEntryPoint ?? conf.fromEntryPoint,
+			omitPackagejson: opts.omitPackagejson ?? conf.omitPackagejson,
+			useMmp: opts.useMmp ?? conf.useMmp,
+			useMms: opts.useMms ?? conf.useMms,
+		};
+		scanNodeModules(parameter)
 			.catch((err: Error) => {
 				logger.error(err.message);
 				process.exit(1);
