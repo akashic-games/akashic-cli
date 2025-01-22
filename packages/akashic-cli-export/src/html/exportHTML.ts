@@ -72,7 +72,7 @@ export function promiseExportHtmlRaw(param: ExportHTMLParameterObject): Promise<
 				logger: param.logger,
 				strip: param.strip,
 				minify: param.minify,
-				babel: param.babel,
+				esDownpile: param.esDownpile,
 				terser: param.terser,
 				magnify: param.magnify,
 				force: param.force,

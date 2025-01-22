@@ -59,7 +59,7 @@ export async function promiseConvertNoBundle(options: ConvertTemplateParameterOb
 	const nonBinaryAssetNames = extractAssetDefinitions(conf, "script").concat(extractAssetDefinitions(conf, "text"));
 	const errorMessages: string[] = [];
 	const nonBinaryAssetPaths = await Promise.all(nonBinaryAssetNames.map((assetName: string) => {
-		return convertAssetAndOutput(assetName, conf, options.source, options.output, terser, options.babel);
+		return convertAssetAndOutput(assetName, conf, options.source, options.output, terser, options.esDownpile);
 	}));
 	assetPaths = assetPaths.concat(nonBinaryAssetPaths);
 	if (conf._content.globalScripts) {
@@ -85,7 +85,7 @@ async function convertAssetAndOutput(
 	inputPath: string,
 	outputPath: string,
 	terser: MinifyOptions | undefined,
-	babel: boolean
+	esDownpile: boolean
 ): Promise<string> {
 	const assets = conf._content.assets;
 	const asset = assets[assetName];
@@ -94,7 +94,7 @@ async function convertAssetAndOutput(
 	const assetString = fs.readFileSync(path.join(inputPath, asset.path), "utf8").replace(/\r\n|\r/g, "\n");
 	const assetPath = asset.path;
 
-	const code = (isScript ? wrapScript(assetString, assetName, terser, babel, exports) : wrapText(assetString, assetName));
+	const code = (isScript ? wrapScript(assetString, assetName, terser, esDownpile, exports) : wrapText(assetString, assetName));
 	const relativePath = "./js/assets/" + path.dirname(assetPath) + "/" +
 		path.basename(assetPath, path.extname(assetPath)) + (isScript ? ".js" : ".json.js");
 	const filePath = path.resolve(outputPath, relativePath);
@@ -198,8 +198,8 @@ window.optionProps.magnify = ${!!options.magnify};
 	fs.writeFileSync(path.resolve(outputPath, "./js/option.js"), script);
 }
 
-function wrapScript(code: string, name: string, terser?: MinifyOptions, babel?: boolean, exports: string[] = []): string {
-	return "window.gLocalAssetContainer[\"" + name + "\"] = function(g) { " + wrap(code, terser, babel, exports) + "}";
+function wrapScript(code: string, name: string, terser?: MinifyOptions, esDownpile?: boolean, exports: string[] = []): string {
+	return "window.gLocalAssetContainer[\"" + name + "\"] = function(g) { " + wrap(code, terser, esDownpile, exports) + "}";
 }
 
 function wrapText(code: string, name: string): string {

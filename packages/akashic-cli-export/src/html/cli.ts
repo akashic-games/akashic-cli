@@ -30,7 +30,7 @@ function cli(param: CliConfigExportHtml): void {
 		autoSendEventName: param.autoSendEventName || param.autoSendEvents,
 		autoGivenArgsName: param.autoGivenArgsName,
 		omitUnbundledJs: param.omitUnbundledJs,
-		babel: (param.babel != null) ? param.babel : true,
+		esDownpile: (param.esDownpile != null) ? param.esDownpile : true,
 		compress: param.output ? path.extname(param.output) === ".zip" : false,
 		debugOverrideEngineFiles: param.debugOverrideEngineFiles,
 		// index.htmlに書き込むためのexport実行時の情報
@@ -130,7 +130,7 @@ export async function run(argv: string[]): Promise<void> {
 		autoSendEventName: options.autoSendEventName ?? options.autoSendEvents ?? conf.autoSendEventName ?? conf.autoSendEvents,
 		autoGivenArgsName: options.autoGivenArgsName ?? conf.autoGivenArgsName,
 		omitUnbundledJs: options.omitUnbundledJs ?? conf.omitUnbundledJs,
-		babel: options.esDownpile ?? conf.babel,
+		esDownpile: options.esDownpile ?? conf.esDownpile,
 		debugOverrideEngineFiles: options.debugOverrideEngineFiles ?? conf.debugOverrideEngineFiles
 
 	});
