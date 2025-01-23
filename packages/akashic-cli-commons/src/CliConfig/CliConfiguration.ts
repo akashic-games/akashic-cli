@@ -23,7 +23,7 @@ export interface CliConfiguration {
 		modify?: Partial<CliConfigModify>;
 		scan?: {
 			asset?: Partial<CliConfigScanAsset>;
-			globalSCripts?: Partial<CliConfigScanGlobalScripts>;
+			globalScripts?: Partial<CliConfigScanGlobalScripts>;
 		};
 		serve?: Partial<CliConfigServe>;
 		stat?: Partial<CliConfigStat>;
