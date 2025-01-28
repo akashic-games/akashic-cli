@@ -14,7 +14,8 @@ export const handleToGetStartupOptions = (_req: express.Request, res: express.Re
 			pauseActive: serverGlobalConfig.pauseActive,
 			preserveDisconnected: serverGlobalConfig.preserveDisconnected,
 			experimentalOpen: serverGlobalConfig.experimentalOpen,
-			disableFeatCheck: serverGlobalConfig.disableFeatCheck
+			disableFeatCheck: serverGlobalConfig.disableFeatCheck,
+			fontFamilies: serverGlobalConfig.fontFamilies,
 		});
 	} catch (e) {
 		next(e);

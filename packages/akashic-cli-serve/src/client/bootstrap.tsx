@@ -35,6 +35,10 @@ window.addEventListener("load", async () => {
 			// 保存数,順序を保つため、指定数 window を開いたら localStorage に対象のデータが残っていてもクリアする。
 			localStorage.removeItem("win_" + store.contentStore.defaultContent().gameLocationKey);
 		}
+
+		for (const fontFamily of store.appOptions.fontFamilies) {
+			await document.fonts.load(`16px '${fontFamily}'`);
+		}
 	} catch (e) {
 		console.error(e);
 	}

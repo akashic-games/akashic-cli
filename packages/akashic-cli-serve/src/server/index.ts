@@ -7,6 +7,7 @@ import type { CliConfiguration } from "@akashic/akashic-cli-commons";
 import type { CliConfigServe } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigServe.js";
 import { load } from "@akashic/akashic-cli-commons/lib/FileSystem.js";
 import { SERVICE_TYPES } from "@akashic/akashic-cli-commons/lib/ServiceType.js";
+import { getFontFormat } from "@akashic/akashic-cli-commons/lib/Util.js";
 import { PlayManager, RunnerManager, setSystemLogger, getSystemLogger } from "@akashic/headless-driver";
 import bodyParser from "body-parser";
 import chalk from "chalk";
@@ -321,6 +322,59 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 		});
 	}
 
+	const serveDefaultFontCSS = (): void => {
+		serverGlobalConfig.fontFamilies = [];
+
+		app.use("/public/external/fonts/fonts.css", (_, res) => {
+			res.contentType("text/css");
+			res.send("");
+		});
+	};
+
+	if (cliConfigParam.fonts && cliConfigParam.fonts.length > 0) {
+		try {
+			const fonts = cliConfigParam.fonts;
+			for (const font of fonts) {
+				const fontPath = path.resolve(process.cwd(), font.path);
+				if (!fs.existsSync(fontPath)) {
+					throw new Error(`${fontPath} not found.`);
+				}
+				app.use(path.join("/public/external/fonts", path.basename(font.path)), (_, res) => res.send(fs.readFileSync(fontPath)));
+			}
+
+			let responseBody = "";
+
+			for (const font of fonts) {
+				const fontFormat = getFontFormat(font.path);
+				if (fontFormat == null) {
+					const extension = path.extname(font.path);
+					throw new Error(
+						`The file extension "${extension}" from "${font.path}" is not supported in 'commandOptions.serve.fonts'.`
+					);
+				}
+				responseBody += [
+					"@font-face {",
+					Object.entries(font.descriptors).map(([key, value]) => `${key}: '${value}';`).join("\n"),
+					`src: url('${path.join("/public/external/fonts", path.basename(font.path))}') format('${fontFormat}');`,
+					"}",
+				].join("\n");
+			}
+
+			app.use("/public/external/fonts/fonts.css", (_, res) => {
+				res.contentType("text/css");
+				res.send(responseBody);
+			});
+
+			serverGlobalConfig.fontFamilies = fonts.map(font => font.descriptors["font-family"]);
+		} catch (error) {
+			getSystemLogger().error(error.message);
+			getSystemLogger().error("Proceeding without applying the 'commandOptions.serve.fonts' specification.");
+			serveDefaultFontCSS();
+		}
+	} else {
+		serveDefaultFontCSS();
+	}
+
 	app.use("/public/", express.static(path.join(__dirname, "..", "..", "www", "public")));
 	app.use("/internal/", express.static(path.join(__dirname, "..", "..", "www", "internal")));
 	app.use("/api/", createApiRouter({ playStore, runnerStore, playerIdStore, amflowManager, io }));
@@ -475,7 +529,8 @@ export async function run(argv: any): Promise<void> {
 		experimentalOpen: options.experimentalOpen ?? conf.experimentalOpen,
 		sslCert: options.sslCert ?? conf.sslCert,
 		sslKey: options.sslKey ?? conf.sslKey,
-		corsAllowOrigin: options.corsAllowOrigin ?? conf.corsAllowOrigin
+		corsAllowOrigin: options.corsAllowOrigin ?? conf.corsAllowOrigin,
+		fonts: conf.fonts,
 	};
 	await cli(cliConfigParam, options);
 }
