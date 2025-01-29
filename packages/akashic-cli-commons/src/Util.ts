@@ -133,8 +133,9 @@ export function getFontFormat(filePath: string): string | null {
 	const extension = path.extname(filePath);
 	switch (extension) {
 		case ".ttf":
-		case ".otf":
 			return "truetype";
+		case ".otf":
+			return "opentype";
 		case ".woff":
 			return "woff";
 		case ".woff2":
