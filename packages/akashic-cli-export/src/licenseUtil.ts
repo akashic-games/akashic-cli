@@ -8,10 +8,11 @@ interface LicenseInfo {
     licenseText: string;
 }
 
-export const LICENSE_TEXT_PREFIX  = "// For the library license, see thirdparty_license.txt.\n\n";
+export const LICENSE_TEXT_PREFIX  = "// For the library license, see library_license.txt.\n\n";
+export const LICENSE_TEXT_PREFIX_HTML  = "<!-- For the library license, see library_license.txt. -->\n";
 
 /**
- * ライブラリのライセンスファイルをまとめて thirdparty_license.txt へ書き出す
+ * ライブラリのライセンスファイルをまとめて library_license.txt へ書き出す
  * 
  * @param source コンテンツの game.json があるディレクトリパス
  * @param dest 出力先
@@ -19,6 +20,7 @@ export const LICENSE_TEXT_PREFIX  = "// For the library license, see thirdparty_
  */
 export async function writeLicenseTextFile(source: string, dest: string, filePaths: string[]): Promise<boolean> {
     const libPkgJsonPaths = cmn.NodeModules.listPackageJsonsFromScriptsPath(source, filePaths);
+    console.log("libPkgJsonPaths:", libPkgJsonPaths);
     const licenseInfos = await makeLicenseInfo(source, libPkgJsonPaths);
     if (!libPkgJsonPaths.length || !licenseInfos.length) return false;
 
@@ -31,7 +33,8 @@ export async function writeLicenseTextFile(source: string, dest: string, filePat
     const body = textAry.join("\n");
 
     cmn.Util.mkdirpSync(dest);
-    fs.writeFileSync(path.resolve(dest, "thirdparty_license.txt"), body);
+    console.log("--- dest:", path.resolve(dest, "library_license.txt"));
+    fs.writeFileSync(path.resolve(dest, "library_license.txt"), body);
     return true;
 }
 
@@ -49,7 +52,7 @@ async function makeLicenseInfo(source: string, pkgJsonPaths: string[]): Promise<
             }
             // LICENSE-LGPL のようなファイルは機械的に扱えないので警告を出力
             if (/^LICEN[SC]E[^a-z]/i.test(file)) {
-                console.warn(`[WARNING]: Detected a license-like file "${file}" in ${pkgJson.name} but ignored (not included in thirdparty_license.txt) because akashic export doesn't know how it should be handled. You may need to follow the license by yourself.`);
+                console.warn(`[WARNING]: Detected a license-like file "${file}" in ${pkgJson.name} but ignored (not included in library_license.txt) because akashic export doesn't know how it should be handled. You may need to follow the license by yourself.`);
                 return false;
             }
         });
@@ -73,7 +76,7 @@ function isAutoIncludableLicense(libName: string, license: string): boolean {
     if (/(MIT|ISC)/i.test(license)) {
         return true;
     } else { 
-        console.warn(`[WARNING]: The license of ${libName} will not be included in thirdparty_license.txt since akashic export doesn't know its license "${license}". You may need to follow the license by yourself.`);
+        console.warn(`[WARNING]: The license of ${libName} will not be included in library_license.txt since akashic export doesn't know its license "${license}". You may need to follow the license by yourself.`);
         return false;
     }
 }
