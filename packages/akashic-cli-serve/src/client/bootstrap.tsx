@@ -21,11 +21,12 @@ const pluginFuncs = {};
 
 window.addEventListener("load", async () => {
 	try {
+		await operator.assertInitialized();
+
 		for (const fontFamily of store.appOptions.fontFamilies) {
 			await document.fonts.load(`16px '${fontFamily}'`);
 		}
 
-		await operator.assertInitialized();
 		ReactDOM.render(
 			<App store={store} operator={operator} gameViewManager={gameViewManager} />,
 			document.getElementById("container")
