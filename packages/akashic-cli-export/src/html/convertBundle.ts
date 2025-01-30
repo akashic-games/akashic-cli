@@ -84,7 +84,7 @@ export async function promiseConvertBundle(options: ConvertTemplateParameterObje
 	}
 
 	const existLicense = await liceneUtil.writeLicenseTextFile(options.source, options.output, libPaths, conf._content.environment["sandbox-runtime"]);
-	const licenseComment = existLicense ? liceneUtil.LICENSE_TEXT_PREFIX_HTML : "";
+	const licenseComment = existLicense ? liceneUtil.LICENSE_TEXT_HTML : "";
 	
 	if (errorMessages.length > 0) {
 		options.logger.warn("The following ES5 syntax errors exist.\n" + errorMessages.join("\n"));
