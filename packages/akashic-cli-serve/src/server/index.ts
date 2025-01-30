@@ -357,7 +357,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 					"@font-face {",
 					Object.entries(font.descriptors).map(([key, value]) => `${key}: ${value};`).join("\n"),
 					`src: url('${path.join("/public/external/fonts", fontFilename)}') format('${fontFormat}');`,
-					"}",
+					"}\n",
 				].join("\n");
 
 				app.get(path.join("/public/external/fonts", fontFilename), (_, res) => res.send(fs.readFileSync(fontPath)));
