@@ -1,6 +1,12 @@
 import * as cmn from "@akashic/akashic-cli-commons";
 import * as fs from "fs";
 import * as path from "path";
+import { fileURLToPath } from "url";
+import { createRequire } from "module";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const require = createRequire(import.meta.url);
 
 interface LicenseInfo { 
     name: string;
@@ -17,12 +23,17 @@ export const LICENSE_TEXT_PREFIX_HTML  = "<!-- For the library license, see libr
  * @param source コンテンツの game.json があるディレクトリパス
  * @param dest 出力先
  * @param filePaths ファイルパスの配列
+ * @param engineFilesVersion engineFiles のバージョン。akashic 関連のライセンス情報を含める場合に指定する
  */
-export async function writeLicenseTextFile(source: string, dest: string, filePaths: string[]): Promise<boolean> {
+export async function writeLicenseTextFile(source: string, dest: string, filePaths: string[], engineFilesVersion?: string): Promise<boolean> {
     const libPkgJsonPaths = cmn.NodeModules.listPackageJsonsFromScriptsPath(source, filePaths);
-    console.log("libPkgJsonPaths:", libPkgJsonPaths);
-    const licenseInfos = await makeLicenseInfo(source, libPkgJsonPaths);
-    if (!libPkgJsonPaths.length || !licenseInfos.length) return false;
+    let licenseInfos = await makeLicenseInfo(source, libPkgJsonPaths);
+    if (!engineFilesVersion && (!libPkgJsonPaths.length || !licenseInfos.length)) return false;
+
+    if (engineFilesVersion) { 
+        const akashicLicenseInfos = await makeAkashicLibsLicenseInfo(engineFilesVersion);
+        licenseInfos = [...licenseInfos, ...akashicLicenseInfos];
+    }
 
     let textAry: string[] = [];
     licenseInfos.forEach(obj => {
@@ -33,9 +44,27 @@ export async function writeLicenseTextFile(source: string, dest: string, filePat
     const body = textAry.join("\n");
 
     cmn.Util.mkdirpSync(dest);
-    console.log("--- dest:", path.resolve(dest, "library_license.txt"));
     fs.writeFileSync(path.resolve(dest, "library_license.txt"), body);
     return true;
+}
+
+async function makeAkashicLibsLicenseInfo(engineFilesVersion: string): Promise<LicenseInfo[]> {
+    const rootPath = path.resolve(__dirname, "..", "..", "..");
+    const headlessDriverPath = require.resolve("@akashic/headless-driver");
+    const engineFilesPackageDir = path.dirname(require.resolve(`engine-files-v${engineFilesVersion}`, {paths: [headlessDriverPath]}));
+    const engineFilesPackageJson = require(`${engineFilesPackageDir}/package.json`);
+    
+    const libNames = Object.keys(engineFilesPackageJson.dependencies);
+    const libPkgJsonPaths = [];
+    for (const name of libNames) {     
+        try {
+            const libPath = require.resolve(path.join(name, "package.json"));
+            libPkgJsonPaths.push(libPath);
+        } catch(e) { 
+            // do noting
+        }
+    };
+    return await makeLicenseInfo(rootPath, libPkgJsonPaths);
 }
 
 async function makeLicenseInfo(source: string, pkgJsonPaths: string[]): Promise<LicenseInfo[]> {
@@ -60,7 +89,11 @@ async function makeLicenseInfo(source: string, pkgJsonPaths: string[]): Promise<
         const licensePath = path.join(path.dirname(pkgJsonPath), licenseFile);
 
         if (fs.existsSync(licensePath) && isAutoIncludableLicense(pkgJson.name, pkgJson.license)) {
-            const text = fs.readFileSync(licensePath, "utf-8");
+            let text = fs.readFileSync(licensePath, "utf-8");
+
+            if(!/[\r\n|\n|\r]$/.test(text)) {
+                text += "\n";
+            };
             licenseInfos.push({
                 name: pkgJson.name,
                 type:pkgJson.license, 
