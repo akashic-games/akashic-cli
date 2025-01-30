@@ -17,7 +17,8 @@ const controller: RequestHandler = (req, res, _next) => {
 		version: version,
 		devMode: devMode,
 		engineFilesVariable: engineFilesVariable,
-		engineFilesPath: `js/v${version}/${engineFilesVariable}.js`
+		engineFilesPath: `js/v${version}/${engineFilesVariable}.js`,
+		fontFamilies: res.locals.fontFamilies ?? [],
 	});
 };
 
