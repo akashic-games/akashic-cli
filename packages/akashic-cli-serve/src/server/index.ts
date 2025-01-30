@@ -6,6 +6,7 @@ import * as util from "util";
 import type { CliConfiguration } from "@akashic/akashic-cli-commons";
 import type { CliConfigServe } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigServe.js";
 import { load } from "@akashic/akashic-cli-commons/lib/FileSystem.js";
+import { hashFilepath } from "@akashic/akashic-cli-commons/lib/Renamer.js";
 import { SERVICE_TYPES } from "@akashic/akashic-cli-commons/lib/ServiceType.js";
 import { getFontFormat } from "@akashic/akashic-cli-commons/lib/Util.js";
 import { PlayManager, RunnerManager, setSystemLogger, getSystemLogger } from "@akashic/headless-driver";
@@ -334,17 +335,14 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 	if (cliConfigParam.fonts && cliConfigParam.fonts.length > 0) {
 		try {
 			const fonts = cliConfigParam.fonts;
+			let responseBody = "";
+
 			for (const font of fonts) {
 				const fontPath = path.resolve(process.cwd(), font.path);
 				if (!fs.existsSync(fontPath)) {
 					throw new Error(`${fontPath} not found.`);
 				}
-				app.use(path.join("/public/external/fonts", path.basename(font.path)), (_, res) => res.send(fs.readFileSync(fontPath)));
-			}
 
-			let responseBody = "";
-
-			for (const font of fonts) {
 				const fontFormat = getFontFormat(font.path);
 				if (fontFormat == null) {
 					const extension = path.extname(font.path);
@@ -352,15 +350,20 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 						`The file extension "${extension}" from "${font.path}" is not supported in 'commandOptions.serve.fonts'.`
 					);
 				}
+
+				const fontFilename = hashFilepath(fontPath, 16);
+
 				responseBody += [
 					"@font-face {",
-					Object.entries(font.descriptors).map(([key, value]) => `${key}: ${value}`).join("\n"),
-					`src: url('${path.join("/public/external/fonts", path.basename(font.path))}') format('${fontFormat}');`,
+					Object.entries(font.descriptors).map(([key, value]) => `${key}: ${value};`).join("\n"),
+					`src: url('${path.join("/public/external/fonts", fontFilename)}') format('${fontFormat}');`,
 					"}",
 				].join("\n");
+
+				app.get(path.join("/public/external/fonts", fontFilename), (_, res) => res.send(fs.readFileSync(fontPath)));
 			}
 
-			app.use("/public/external/fonts/fonts.css", (_, res) => {
+			app.get("/public/external/fonts/fonts.css", (_, res) => {
 				res.contentType("text/css");
 				res.send(responseBody);
 			});
