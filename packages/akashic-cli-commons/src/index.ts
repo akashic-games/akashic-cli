@@ -3,6 +3,7 @@ export { CliConfigExportZip } from "./CliConfig/CliConfigExportZip.js";
 export { CliConfigInit } from "./CliConfig/CliConfigInit.js";
 export { CliConfigInstall } from "./CliConfig/CliConfigInstall.js";
 export { CliConfigModify } from "./CliConfig/CliConfigModify.js";
+export { CliConfigSandbox } from "./CliConfig/CliConfigSandbox.js";
 export { CliConfigScanAsset, CliConfigScanGlobalScripts } from "./CliConfig/CliConfigScan.js";
 export { CliConfigServe } from "./CliConfig/CliConfigServe.js";
 export { CliConfigStat } from "./CliConfig/CliConfigStat.js";
