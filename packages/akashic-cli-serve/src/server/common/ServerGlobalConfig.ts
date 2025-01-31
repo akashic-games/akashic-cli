@@ -17,6 +17,7 @@ export interface ServerGlobalConfig {
 	experimentalOpen: number | null;
 	protocol: string;
 	disableFeatCheck: boolean;
+	fontFamilies: string[];
 }
 
 export const DEFAULT_HOSTNAME = "localhost";
@@ -38,5 +39,6 @@ export const serverGlobalConfig: ServerGlobalConfig = {
 	preserveDisconnected: false,
 	experimentalOpen: null,
 	protocol: "http",
-	disableFeatCheck: false
+	disableFeatCheck: false,
+	fontFamilies: [],
 };

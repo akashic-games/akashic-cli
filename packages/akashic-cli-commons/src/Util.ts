@@ -124,3 +124,23 @@ export function readdirRecursive(dir: string, baseDir: string = dir): string[] {
 export function requireResolve(id: string, opts?: { paths?: string[] | undefined; basedir?: string }): string {
 	return resolve.sync(id, { ...opts, preserveSymlinks: true });
 }
+
+/**
+ * フォントファイルの拡張子からフォント形式を取得する。
+ * @param filePath パス
+ */
+export function getFontFormat(filePath: string): string | null {
+	const extension = path.extname(filePath);
+	switch (extension) {
+		case ".ttf":
+			return "truetype";
+		case ".otf":
+			return "opentype";
+		case ".woff":
+			return "woff";
+		case ".woff2":
+			return "woff2";
+	}
+
+	return null;
+};

@@ -10,4 +10,5 @@ export interface AppOptions {
 	runInIframe: boolean;
 	experimentalOpen: number | null;
 	disableFeatCheck: boolean;
+	fontFamilies: string[];
 }
