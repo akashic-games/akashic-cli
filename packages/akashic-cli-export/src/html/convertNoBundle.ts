@@ -76,13 +76,13 @@ export async function promiseConvertNoBundle(options: ConvertTemplateParameterOb
 		assetPaths = assetPaths.concat(globalScriptPaths);
 	}
 
-	const existLicense = await liceneUtil.writeLicenseTextFile(options.source, options.output, libPaths, content.environment["sandbox-runtime"]);
-	const licenseComment = existLicense ? liceneUtil.LICENSE_TEXT_HTML : "";
+	await liceneUtil.writeLicenseTextFile(options.source, options.output, libPaths, content.environment["sandbox-runtime"]);
+	// const licenseComment = existLicense ? liceneUtil.LICENSE_TEXT_HTML : "";
 
 	if (errorMessages.length > 0) {
 		options.logger.warn("The following ES5 syntax errors exist.\n" + errorMessages.join("\n"));
 	}
-	await writeHtmlFile(assetPaths, options.output, conf, options, licenseComment);
+	await writeHtmlFile(assetPaths, options.output, conf, options);
 	writeOptionScript(options.output, options);
 }
 
@@ -127,8 +127,7 @@ async function writeHtmlFile(
 	assetPaths: string[],
 	outputPath: string,
 	conf: cmn.Configuration,
-	options: ConvertTemplateParameterObject,
-	licenseComment: string
+	options: ConvertTemplateParameterObject
 ): Promise<void> {
 	const injects = options.injects ? options.injects : [];
 	const version = conf._content.environment["sandbox-runtime"];
@@ -155,8 +154,7 @@ async function writeHtmlFile(
 		exportOption: options.exportInfo !== undefined ? options.exportInfo.option : "",
 		autoSendEventName: options.autoSendEventName,
 		autoGivenArgsName: options.autoGivenArgsName,
-		sandboxConfigJsCode: options.sandboxConfigJsCode !== undefined ? options.sandboxConfigJsCode : "",
-		licenseComment
+		sandboxConfigJsCode: options.sandboxConfigJsCode !== undefined ? options.sandboxConfigJsCode : ""
 	});
 	fs.writeFileSync(path.resolve(outputPath, "./index.html"), html);
 }

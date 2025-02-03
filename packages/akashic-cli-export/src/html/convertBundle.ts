@@ -83,8 +83,7 @@ export async function promiseConvertBundle(options: ConvertTemplateParameterObje
 		innerHTMLAssetArray = innerHTMLAssetArray.concat(tempScriptData);
 	}
 
-	const existLicense = await liceneUtil.writeLicenseTextFile(options.source, options.output, libPaths, conf._content.environment["sandbox-runtime"]);
-	const licenseComment = existLicense ? liceneUtil.LICENSE_TEXT_HTML : "";
+	await liceneUtil.writeLicenseTextFile(options.source, options.output, libPaths, conf._content.environment["sandbox-runtime"]);
 	
 	if (errorMessages.length > 0) {
 		options.logger.warn("The following ES5 syntax errors exist.\n" + errorMessages.join("\n"));
@@ -104,7 +103,7 @@ export async function promiseConvertBundle(options: ConvertTemplateParameterObje
 		default:
 			throw Error("Unknown engine version: `environment[\"sandbox-runtime\"]` field in game.json should be \"1\", \"2\", or \"3\".");
 	}
-	await writeHtmlFile(innerHTMLAssetArray, options.output, conf, options, templatePath, licenseComment);
+	await writeHtmlFile(innerHTMLAssetArray, options.output, conf, options, templatePath);
 	writeCommonFiles(options.source, options.output, conf, options, templatePath);
 }
 
@@ -149,8 +148,7 @@ async function writeHtmlFile(
 	outputPath: string,
 	conf: cmn.Configuration, 
 	options: ConvertTemplateParameterObject, 
-	templatePath: string,
-	licenseComment: string
+	templatePath: string
 ): Promise<void> {
 	const injects = options.injects ? options.injects : [];
 	const scripts = getDefaultBundleScripts(
@@ -172,8 +170,7 @@ async function writeHtmlFile(
 		exportOption: options.exportInfo !== undefined ? options.exportInfo.option : "",
 		autoSendEventName: options.autoSendEventName,
 		autoGivenArgsName: options.autoGivenArgsName,
-		sandboxConfigJsCode: options.sandboxConfigJsCode !== undefined ? options.sandboxConfigJsCode : "",
-		licenseComment
+		sandboxConfigJsCode: options.sandboxConfigJsCode !== undefined ? options.sandboxConfigJsCode : ""
 	});
 	fs.writeFileSync(path.resolve(outputPath, "./index.html"), html);
 }

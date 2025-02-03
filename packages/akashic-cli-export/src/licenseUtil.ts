@@ -15,7 +15,6 @@ interface LicenseInfo {
 }
 
 export const LICENSE_TEXT_PREFIX  = "// For the library license, see library_license.txt.\n\n";
-export const LICENSE_TEXT_HTML  = "<!-- For the library license, see library_license.txt. -->\n";
 
 /**
  * ライブラリのライセンスファイルをまとめて library_license.txt へ書き出す
