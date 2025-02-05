@@ -1,17 +1,26 @@
 import * as fs from "fs";
+import { createRequire } from "module";
 import * as path from "path";
+import { fileURLToPath } from "url";
 import * as cmn from "@akashic/akashic-cli-commons";
 import type { AssetConfigurationMap, ImageAssetConfigurationBase } from "@akashic/game-configuration";
 import type { SandboxConfiguration } from "@akashic/sandbox-configuration";
-import * as fsx from "fs-extra";
-import readdir = require("fs-readdir-recursive");
-import * as UglifyJS from "uglify-js";
+import fsx from "fs-extra";
+import type { MinifyOptions } from "terser";
+import { minify_sync } from "terser";
+import * as babel from "@babel/core";
+import presetEnv from "@babel/preset-env";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const require = createRequire(import.meta.url);
 
 export interface ConvertTemplateParameterObject {
 	output: string;
 	logger: cmn.Logger;
 	strip: boolean;
 	minify: boolean;
+	terser: MinifyOptions;
 	magnify: boolean;
 	force: boolean;
 	source: string;
@@ -26,6 +35,7 @@ export interface ConvertTemplateParameterObject {
 	autoGivenArgsName?: string;
 	sandboxConfigJsCode?: string;
 	omitUnbundledJs?: boolean;
+	esDownpile?: boolean;
 	debugOverrideEngineFiles?: string;
 }
 
@@ -79,7 +89,7 @@ export function copyAssetFiles(inputPath: string, outputPath: string, options: C
 		return path.relative(scriptPath, src)[0] === "." && (options.unbundleText || path.relative(textPath, src)[0] === ".");
 	};
 	try {
-		const files = readdir(inputPath);
+		const files = cmn.Util.readdirRecursive(inputPath);
 		files.forEach(p => {
 			cmn.Util.mkdirpSync(path.dirname(path.resolve(outputPath, p)));
 			if (isAssetToBeCopied(path.resolve(inputPath, p))) {
@@ -95,21 +105,35 @@ export function encodeText(text: string): string {
 	return text.replace(/[\u2028\u2029'"\\\b\f\n\r\t\v%]/g, encodeURIComponent);
 }
 
-export function wrap(code: string, minify?: boolean, exports: string[] = []): string {
+const babelOption = {
+	presets: [
+		babel.createConfigItem([presetEnv, {
+			modules: false,
+			targets: {
+				"chrome": 51
+			}
+		}],
+		{ type: "preset" })
+	]
+};
+
+export function wrap(code: string, terser?: MinifyOptions, esDownpile?: boolean, exports: string[] = []): string {
 	const preScript = "(function(exports, require, module, __filename, __dirname) {";
 	let postScript: string = "";
 	for (const key of exports) {
 		postScript += `exports["${key}"] = typeof ${key} !== "undefined" ? ${key} : undefined;\n`;
 	}
 	postScript += "})(g.module.exports, g.module.require, g.module, g.filename, g.dirname);";
-	const ret = preScript + "\n" + code + "\n" + postScript + "\n";
-	return minify ? UglifyJS.minify(ret, { sourceMap: true }).code : ret;
+	// downpile -> minify の順序は入れ替えられない (先に minify すると babel がコードを整形してしまう)
+	const downpiled = esDownpile ? babel.transform(code, babelOption).code : code;
+	const ret = preScript + "\n" + (terser ? minify_sync(downpiled, terser).code : downpiled) + "\n" + postScript + "\n";
+	return ret;
 }
 
 export function getDefaultBundleScripts(
 	templatePath: string,
 	version: string,
-	minify?: boolean,
+	options: ConvertTemplateParameterObject,
 	bundleText: boolean = true,
 	overrideEngineFilesPath?: string
 ): any {
@@ -143,14 +167,14 @@ export function getDefaultBundleScripts(
 	const postloadScriptNames =
 		["sandbox.js", "initGlobals.js"];
 	if (version === "3") {
-		postloadScriptNames.push("pdi/LocalScriptAssetV3.js");
+		postloadScriptNames.push("pdi/LocalScriptAssetV3.cjs");
 		if (bundleText) {
-			postloadScriptNames.push("pdi/LocalTextAssetV3.js");
+			postloadScriptNames.push("pdi/LocalTextAssetV3.cjs");
 		}
 	} else {
-		postloadScriptNames.push("pdi/LocalScriptAsset.js");
+		postloadScriptNames.push("pdi/LocalScriptAsset.cjs");
 		if (bundleText) {
-			postloadScriptNames.push("pdi/LocalTextAsset.js");
+			postloadScriptNames.push("pdi/LocalTextAsset.cjs");
 		}
 	}
 	if (version === "1") postloadScriptNames.push("logger.js");
@@ -159,13 +183,14 @@ export function getDefaultBundleScripts(
 	preloadScripts.push(preloadScript);
 
 	let postloadScripts = postloadScriptNames.map((fileName) => {
-		const filePath = path.resolve(__dirname, "..", templatePath, "js", fileName);
+		const filePath = path.resolve(__dirname, "..", "..", "lib", templatePath, "js", fileName);
 		return loadScriptFile(filePath);
 	});
 
-	if (minify) {
-		preloadScripts = preloadScripts.map(script => UglifyJS.minify(script, { sourceMap: true }).code);
-		postloadScripts = postloadScripts.map(script => UglifyJS.minify(script, { sourceMap: true }).code);
+	if (options.minify) {
+		// NOTE: エンジン側が提供するコードを mangling されると動作に支障をきたす可能性があるため、この部分はデフォルト設定を与える
+		preloadScripts = preloadScripts.map(script => minify_sync(script).code);
+		postloadScripts = postloadScripts.map(script => minify_sync(script).code);
 	}
 	return {
 		preloadScripts,
@@ -174,7 +199,7 @@ export function getDefaultBundleScripts(
 }
 
 export function getDefaultBundleStyle(templatePath: string): string {
-	const filepath = path.resolve(__dirname, "..", templatePath, "css", "style.css");
+	const filepath = path.resolve(__dirname, "..", "..", "lib", templatePath, "css", "style.css");
 	return fs.readFileSync(filepath, "utf8").replace(/\r\n|\r/g, "\n");
 }
 
@@ -189,11 +214,6 @@ export function getInjectedContents(baseDir: string, injects: string[]): string[
 		}
 	}
 	return injectedContents;
-}
-
-export async function validateEs5Code(fileName: string, code: string): Promise<string[]> {
-	const errInfo = await cmn.LintUtil.validateEs5Code(code);
-	return errInfo.map(info => `${fileName}(${info.line}:${info.column}): ${info.message}`);
 }
 
 export function readSandboxConfigJs(sourceDir: string): string {

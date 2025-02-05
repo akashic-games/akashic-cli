@@ -7,9 +7,8 @@ export interface InternalDevtoolProps {
 	sendFinishEvent: () => void;
 }
 
-@observer
 // 現状のUIでカテゴリ分けが難しいものを暫定的に置くためのタグ
-export class InternalDevtool extends React.Component<InternalDevtoolProps, {}> {
+export const InternalDevtool = observer(class InternalDevtool extends React.Component<InternalDevtoolProps, {}> {
 	render(): React.ReactNode {
 		return <div>
 			<ToolLabelButton
@@ -28,4 +27,4 @@ export class InternalDevtool extends React.Component<InternalDevtoolProps, {}> {
 			</ToolLabelButton>
 		</div>;
 	}
-}
+});

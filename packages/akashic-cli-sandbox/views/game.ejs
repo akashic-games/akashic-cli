@@ -21,17 +21,30 @@ window.g = engineFiles.akashicEngine;
     };
 })();
 </script>
-<script type="text/javascript" src="/js/TimeKeeper.js"></script>
 <% if (version === "3") { %>
-<script type="text/javascript" src="/js/SandboxScriptAssetV3.js"></script>
-<script>
-    window.SandboxScriptAsset = window.SandboxScriptAssetV3;
+<script type="module">
+    import { SandboxScriptAssetV3 } from "/js/SandboxScriptAssetV3.js";
+    window.SandboxScriptAsset = SandboxScriptAssetV3;
 </script>
 <% } else { %>
-<script type="text/javascript" src="/js/SandboxScriptAsset.js"></script>
+<script type="module">
+    import { SandboxScriptAsset } from "/js/SandboxScriptAsset.js";
+    window.SandboxScriptAsset = SandboxScriptAsset;
+</script>
 <% } %>
-<script type="text/javascript" src="/js/akashic/meddling/MeddlingDate.js"></script>
-<script type="text/javascript" src="/js/akashic/meddling/MeddlingMath.js"></script>
+<script type="module">
+    import "/js/akashic/meddling/MeddlingDate.js";
+    import "/js/akashic/meddling/MeddlingMath.js";
+    import { TimeKeeper } from "/js/TimeKeeper.js";
+    window.TimeKeeper = TimeKeeper;
+</script>
+<script type="module">
+    window.loadFonts = async () => {
+        for (const fontFamily of <%- JSON.stringify(fontFamilies) %>) {
+            await document.fonts.load(`16px '${fontFamily}'`);
+        }
+    };
+</script>
 <% if (version === "1") { %>
 <script type="text/javascript" src="/js/v<%= version %>/logger.js"></script>
 <% } %>
@@ -40,6 +53,7 @@ window.g = engineFiles.akashicEngine;
 <link rel="stylesheet" href="/thirdparty/css/pure-min.css">
 <link rel="stylesheet" href="/thirdparty/css/font-awesome.min.css">
 <link rel="stylesheet" href="/css/developer.css">
+<link rel="stylesheet" href="/css/fonts/fonts.css">
 <script src="/thirdparty/js/vue.min.js" type="text/javascript"></script>
 <script src="/thirdparty/js/interact.min.js" type="text/javascript"></script>
 <script src="/js/v<%= version %>/developer.js" type="text/javascript"></script>
@@ -71,7 +85,7 @@ body{
 	</div>
 	<div id="containerRight">
 		<div id="profilerContainer">
-			<canvas id="profilerCanvas" />
+			<canvas id="profilerCanvas"></canvas>
 		</div>
 	</div>
 </body>

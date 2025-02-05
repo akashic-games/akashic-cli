@@ -1,7 +1,7 @@
-import { ConfigurationFile } from "@akashic/akashic-cli-commons/lib/ConfigurationFile";
-import type { GameConfiguration } from "@akashic/akashic-cli-commons/lib/GameConfiguration";
-import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
-import * as Prompt from "prompt";
+import { readJSON, writeJSON } from "@akashic/akashic-cli-commons/lib/FileSystem.js";
+import type { GameConfiguration } from "@akashic/akashic-cli-commons/lib/GameConfiguration.js";
+import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger.js";
+import Prompt from "prompt";
 
 /**
  * game.jsonの初期値として与えるパラメータ。
@@ -98,17 +98,19 @@ function setBasicParameters(conf: GameConfiguration, basicParams: BasicParameter
 /**
  * 指定した game.json の基本パラメータを更新する
  */
-export function updateConfigurationFile(confPath: string, logger: Logger, skipAsk: boolean): Promise<void> {
-	return ConfigurationFile.read(confPath, logger)
-		.then(conf =>
-			promptGetBasicParameters({
-				width: conf.width,
-				height: conf.height,
-				fps: conf.fps
-			}, skipAsk)
-				.then(basicParams => {
-					setBasicParameters(conf, basicParams);
-					return ConfigurationFile.write(conf, confPath, logger);
-				})
-		);
+export async function updateConfigurationFile(confPath: string, logger: Logger, skipAsk: boolean): Promise<void> {
+	let conf = {} as GameConfiguration;
+	try {
+		conf = await readJSON<GameConfiguration>(confPath);
+	} catch (e) {
+		logger.info("No game.json found. Create a new one.");
+	}
+	const basicParams = await promptGetBasicParameters({
+		width: conf.width,
+		height: conf.height,
+		fps: conf.fps
+	}, skipAsk);
+		
+	setBasicParameters(conf, basicParams);
+	return await writeJSON(confPath, conf);
 }

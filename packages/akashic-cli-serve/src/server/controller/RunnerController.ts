@@ -3,11 +3,11 @@ import type {
 	RunnerDeleteApiResponseData,
 	RunnerPostApiResponseData,
 	RunnerPatchApiResponseData
-} from "../../common/types/ApiResponse";
-import { BadRequestError } from "../common/ApiError";
-import { responseSuccess } from "../common/ApiResponse";
-import type { PlayStore } from "../domain/PlayStore";
-import type { RunnerStore } from "../domain/RunnerStore";
+} from "../../common/types/ApiResponse.js";
+import { BadRequestError } from "../common/ApiError.js";
+import { responseSuccess } from "../common/ApiResponse.js";
+import type { PlayStore } from "../domain/PlayStore.js";
+import type { RunnerStore } from "../domain/RunnerStore.js";
 
 export const createHandlerToCreateRunner = (
 	playStore: PlayStore,

@@ -1,17 +1,17 @@
-import * as fs from "fs";
-import * as path from "path";
+import { createRequire } from "module";
 import type { CliConfigUpdate } from "@akashic/akashic-cli-commons";
-import { ConsoleLogger, CliConfigurationFile } from "@akashic/akashic-cli-commons";
+import { ConsoleLogger, FileSystem } from "@akashic/akashic-cli-commons";
 import { Command } from "commander";
 import { promiseUpdate } from "./update.js";
 
-const ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "..", "package.json"), "utf8")).version;
+const require = createRequire(import.meta.url);
+const { version } = require("../../package.json");
 
 const commander = new Command();
 commander
 	.usage("[options] <moduleName...>")
 	.description("Update installed npm modules")
-	.version(ver);
+	.version(version);
 
 function cli(param: CliConfigUpdate): void {
 	const logger = new ConsoleLogger({ quiet: param.quiet });
@@ -25,21 +25,22 @@ function cli(param: CliConfigUpdate): void {
 commander
 	.option("-q, --quiet", "Suppress output");
 
-export function run(argv: string[]): void {
+export async function run(argv: string[]): Promise<void> {
 	commander.parse(argv);
 	const options = commander.opts();
-	CliConfigurationFile.read(path.join(options.cwd || process.cwd(), "akashic.config.js"), (error, configuration) => {
-		if (error) {
-			console.error(error);
-			process.exit(1);
-		}
 
-		const conf = configuration!.commandOptions?.update ?? {};
-		cli({
-			cwd: options.cwd ?? conf.cwd,
-			quiet: options.quiet ?? conf.quiet,
-			args: commander.args ?? conf.args
-		});
+	let configuration;
+	try { 
+		configuration = await FileSystem.load(options.cwd || process.cwd());
+	} catch (error) {
+		console.error(error);
+		process.exit(1);
+	}
+	const conf = configuration!.commandOptions?.update ?? {};
+	cli({
+		cwd: options.cwd ?? conf.cwd,
+		quiet: options.quiet ?? conf.quiet,
+		args: commander.args ?? conf.args
 	});
 }
 commander

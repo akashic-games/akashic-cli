@@ -1,7 +1,7 @@
 import type * as express from "express";
-import type { PlayerIdPostApiResponseData } from "../../common/types/ApiResponse";
-import { responseSuccess } from "../common/ApiResponse";
-import type { PlayerIdStore } from "../domain/PlayerIdStore";
+import type { PlayerIdPostApiResponseData } from "../../common/types/ApiResponse.js";
+import { responseSuccess } from "../common/ApiResponse.js";
+import type { PlayerIdStore } from "../domain/PlayerIdStore.js";
 
 export const createHandlerToRegisterPlayerId = (playerIdStore: PlayerIdStore): express.RequestHandler => {
 	return (req, res, next) => {

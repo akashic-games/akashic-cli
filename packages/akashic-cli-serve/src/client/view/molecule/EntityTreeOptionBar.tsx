@@ -2,7 +2,7 @@ import { observer } from "mobx-react";
 import * as React from "react";
 import { ToolCheckbox } from "../atom/ToolCheckbox";
 import { ToolIconButton } from "../atom/ToolIconButton";
-import * as styles from "./EntityTreeOptionBar.css";
+import styles from "./EntityTreeOptionBar.module.css";
 
 export interface EntityTreeOptionBarProps {
 	isSelectingEntity: boolean;

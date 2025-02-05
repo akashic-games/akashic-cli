@@ -32,10 +32,15 @@ export function get(contentId: string): GameConfiguration {
 	return configs[contentId];
 }
 
+export interface FSWatcherLike {
+	on(ev: "add" | "unlink" | "change", handler: (path: string) => Promise<void>): void;
+	debugNotifyPromise?(p: Promise<void>): void;
+}
+
 export async function watchContent(
 	targetDir: string,
 	cb: (err: any, modTargetFlag: ModTargetFlags) => void,
-	watcher?: chokidar.FSWatcher
+	watcher?: FSWatcherLike
 ): Promise<void> {
 	watcher ??= chokidar.watch(targetDir, {
 		persistent: true,
@@ -44,7 +49,7 @@ export async function watchContent(
 	});
 
 	// akashic-cli-scanはwatchオプション指定時しか使われないので動的importする
-	const scan = await import("@akashic/akashic-cli-scan/lib/scanAsset");
+	const scan = await import("@akashic/akashic-cli-scan/lib/scanAsset.js");
 
 	targetDir = path.resolve(targetDir); // 相対パスで監視すると chokidar の通知してくるパスがおかしい場合があるようなのですべて絶対パスで扱う
 	const assetDirs = ["assets", "audio", "image", "script", "text"].map(d => path.join(targetDir, d) + path.sep);
@@ -66,7 +71,9 @@ export async function watchContent(
 
 			try {
 				suppressedScan = true; // scanAsset() 中に再帰的に scan しないよう抑制。
-				await scan.scanAsset({ target: "all", cwd: targetDir });
+				const p = scan.scanAsset({ target: "all", cwd: targetDir });
+				watcher.debugNotifyPromise?.(p);
+				await p;
 			} finally {
 				suppressedScan = false;
 			}

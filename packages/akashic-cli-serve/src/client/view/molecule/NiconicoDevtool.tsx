@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import * as React from "react";
 import { FlexScrollY } from "../atom/FlexScrollY";
-import * as styles from "./NiconicoDevtool.css";
+import styles from "./NiconicoDevtool.module.css";
 
 export interface NiconicoDevtoolProps {
 	isAutoSendEvent: boolean;
@@ -22,8 +22,7 @@ export interface NiconicoDevtoolProps {
 	onUseStopGameChanged: (value: boolean) => void;
 }
 
-@observer
-export class NiconicoDevtool extends React.Component<NiconicoDevtoolProps, {}> {
+export const NiconicoDevtool = observer(class NiconicoDevtool extends React.Component<NiconicoDevtoolProps, {}> {
 	readonly modeList = [
 		{ text: "ひとりで遊ぶ(single)", value: "single" },
 		{ text: "ランキング(ranking)", value: "ranking" }
@@ -161,4 +160,5 @@ export class NiconicoDevtool extends React.Component<NiconicoDevtoolProps, {}> {
 		const value = parseInt(e.target.value, 10);
 		this.props.onTotalTimeLimitInputValueChanged(value);
 	};
-}
+});
+

@@ -161,16 +161,36 @@ export class PlayEntity {
 
 	join(playerId: string, name?: string): void {
 		const highestPriority = 3;
-		this.amflow.enqueueEvent([playlog.EventCode.Join, highestPriority, playerId, name]);
+		this.amflow.enqueueEvent([
+			// @ts-expect-error src/clent/ は isolatedModules: true なので const enum の EventCode がエラーになるが、
+			// 実際は playlog が preserveConstEnums でビルドされているため問題にならない。
+			playlog.EventCode.Join,
+			highestPriority,
+			playerId,
+			name
+		]);
 	}
 
 	leave(playerId: string): void {
 		const highestPriority = 3;
-		this.amflow.enqueueEvent([playlog.EventCode.Leave, highestPriority, playerId]);
+		this.amflow.enqueueEvent([
+			// @ts-expect-error src/clent/ は isolatedModules: true なので const enum の EventCode がエラーになるが、
+			// 実際は playlog が preserveConstEnums でビルドされているため問題にならない。
+			playlog.EventCode.Leave,
+			highestPriority,
+			playerId
+		]);
 	}
 
 	sendScenarioEvent(playerId: string, data: ScenarioEventData): void {
-		this.amflow.sendEvent([playlog.EventCode.Message, 0, playerId, data]);
+		this.amflow.sendEvent([
+			// @ts-expect-error src/clent/ は isolatedModules: true なので const enum の EventCode がエラーになるが、
+			// 実際は playlog が preserveConstEnums でビルドされているため問題にならない。
+			playlog.EventCode.Message,
+			0,
+			playerId,
+			data
+		]);
 	}
 
 	pauseActive(): Promise<PlayPatchApiResponse> {

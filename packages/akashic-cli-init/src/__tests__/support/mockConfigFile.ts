@@ -1,4 +1,4 @@
-import { AkashicConfigFile} from "@akashic/akashic-cli-extra/lib/config";
+import { AkashicConfigFile } from "@akashic/akashic-cli-extra/lib/config/config.js";
 
 export class MockConfigFile extends AkashicConfigFile {
 	private _obj: any;

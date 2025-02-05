@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import * as styles from "./RightResizable.css";
+import styles from "./RightResizable.module.css";
 
 export interface RightResizableProps {
 	width: number;
@@ -9,8 +9,7 @@ export interface RightResizableProps {
 	onResize: (width: number) => void;
 }
 
-@observer
-export class RightResizable extends React.Component<RightResizableProps, {}> {
+export const RightResizable = observer(class RightResizable extends React.Component<RightResizableProps, {}> {
 	private lastPageX: number | null;
 
 	constructor(props: RightResizableProps) {
@@ -46,4 +45,5 @@ export class RightResizable extends React.Component<RightResizableProps, {}> {
 		window.removeEventListener("mousemove", this._onMouseMoveWindow);
 		window.removeEventListener("mouseup", this._onMouseUpWindow);
 	};
-}
+});
+

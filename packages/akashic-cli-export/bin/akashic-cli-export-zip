@@ -1,2 +1,4 @@
 #!/usr/bin/env node
-require("../lib/zip").run(process.argv);
+
+import { run } from "../lib/zip/index.js";
+run(process.argv);

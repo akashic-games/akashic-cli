@@ -1,4 +1,4 @@
-import { asHumanReadable } from "@akashic/akashic-cli-commons/lib/asHumanReadable";
+import { asHumanReadable } from "@akashic/akashic-cli-commons/lib/asHumanReadable.js";
 import type {ServiceType} from "@akashic/akashic-cli-commons/lib/ServiceType";
 import {observable, action, autorun} from "mobx";
 import { isServiceTypeNicoliveLike } from "../../common/targetServiceUtil";

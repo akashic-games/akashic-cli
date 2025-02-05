@@ -1,2 +1,4 @@
 #!/usr/bin/env node
-require("../lib/stat").run(process.argv);
+
+import { run } from "../lib/stat/cli.js";
+run(process.argv);

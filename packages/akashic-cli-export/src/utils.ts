@@ -1,3 +1,5 @@
+import { existsSync, readdirSync } from "fs";
+import * as path from "path";
 import type * as cmn from "@akashic/akashic-cli-commons";
 import type { AssetConfiguration } from "@akashic/game-configuration";
 

@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import * as styles from "./PlayerInfoResolverDialog.css";
+import styles from "./PlayerInfoResolverDialog.module.css";
 
 export interface PlayerInfoResolverDialogProps {
 	remainingSeconds: number;
@@ -9,8 +9,7 @@ export interface PlayerInfoResolverDialogProps {
 	onClick: (accepted: boolean) => void;
 }
 
-@observer
-export class PlayerInfoResolverDialog extends React.Component<PlayerInfoResolverDialogProps, {}> {
+export const PlayerInfoResolverDialog = observer(class PlayerInfoResolverDialog extends React.Component<PlayerInfoResolverDialogProps, {}> {
 	render(): React.ReactNode {
 		const { remainingSeconds, onClick, name, guestName } = this.props;
 		return <div className={styles.dialog}>
@@ -29,4 +28,5 @@ export class PlayerInfoResolverDialog extends React.Component<PlayerInfoResolver
 			</div>
 		</div>;
 	}
-}
+});
+

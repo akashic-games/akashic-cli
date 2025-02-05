@@ -1,7 +1,7 @@
 import type * as express from "express";
 import type * as socketio from "socket.io";
-import { BadRequestError } from "../common/ApiError";
-import { responseSuccess } from "../common/ApiResponse";
+import { BadRequestError } from "../common/ApiError.js";
+import { responseSuccess } from "../common/ApiResponse.js";
 
 export const createHandlerToBroadcast = (io: socketio.Server): express.RequestHandler => {
 	return async (req, res, next) => {

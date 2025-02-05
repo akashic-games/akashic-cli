@@ -2,22 +2,20 @@
   "name": "@akashic/akashic-cli",
   "version": "2.17.26",
   "description": "Command-line utility for akashic game development",
+  "type": "module",
   "bin": {
     "akashic": "./bin/akashic"
   },
   "scripts": {
     "prepublish": "npm run clean && npm run build",
-    "clean": "rimraf ./lib && rimraf ./spec/build",
-    "start": "npm run build && node bin/run",
+    "clean": "rimraf ./lib",
     "build": "tsc -p ./",
-    "lint": "eslint \"src/**/*.ts\" --fix",
+    "lint": "eslint -c .eslintrc.cjs --fix",
     "test": "npm run lint"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
   "files": [
-    "README.md",
-    "package.json",
     "bin",
     "lib"
   ],
@@ -33,13 +31,12 @@
     "commander": "^12.0.0"
   },
   "devDependencies": {
-    "@akashic/eslint-config": "2.1.0",
-    "@types/node": "^14.18.30",
-    "@typescript-eslint/eslint-plugin": "6.21.0",
-    "eslint": "8.57.0",
-    "eslint-plugin-import": "2.29.1",
-    "eslint-plugin-jest": "27.9.0",
-    "rimraf": "^3.0.2",
+    "@akashic/eslint-config": "^2.1.0",
+    "@types/node": "^20.16.9",
+    "@typescript-eslint/eslint-plugin": "^8.7.0",
+    "eslint": "^8.57.1",
+    "eslint-plugin-import": "^2.30.0",
+    "rimraf": "^6.0.1",
     "typescript": "^5.6.2"
   },
   "publishConfig": {

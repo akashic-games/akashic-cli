@@ -1,33 +1,24 @@
-import fs = require("fs");
-import path = require("path");
-import express = require("express");
-import * as session  from "express-session";
-import sr = require("./request/ScriptRequest");
-import gameRoute = require("./routes/game");
-import jsRoute = require("./routes/js");
-import sandboxConfigRoute = require("./routes/sandboxConfig");
-import testRoute = require("./routes/test");
-import type { SandboxRuntimeVersion } from "./utils";
-import { resolveEngineFilesPath, resolveEngineFilesVariable } from "./utils";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+import type { CliConfigSandbox } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigSandbox.js";
+import { hashFilepath } from "@akashic/akashic-cli-commons/lib/Renamer.js";
+import { getFontFormat } from "@akashic/akashic-cli-commons/lib/Util.js";
+import express from "express";
+import session from "express-session";
+import gameRoute from "./routes/game.js";
+import jsRoute from "./routes/js.js";
+import sandboxConfigRoute from "./routes/sandboxConfig.js";
+import type { SandboxRuntimeVersion } from "./utils.js";
+import { resolveEngineFilesPath, resolveEngineFilesVariable } from "./utils.js";
 
-declare global {
-	namespace Express {
-		export interface Request {
-			baseDir: string;
-			useRawScript: boolean;
-		}
-	}
-}
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 interface AkashicSandbox extends express.Express {
 	gameBase?: string;
 	cascadeBases?: string[];
 	scenario?: any;
-}
-
-interface ASSession extends session.Session {
-	cntr?: number;
-	results?: any[];
 }
 
 interface AppOptions {
@@ -36,6 +27,7 @@ interface AppOptions {
 	cssBase?: string;
 	thirdpartyBase?: string;
 	cascadeBases?: string[];
+	fonts?: CliConfigSandbox["fonts"];
 }
 
 interface ModuleEnvironment {
@@ -47,14 +39,6 @@ interface GameConfiguration {
 	environment?: ModuleEnvironment;
 }
 
-function result2csv(results: any[]): string {
-	let csv: string = "";
-	for (let i = 0; i < results.length; i++) {
-		csv += results[i].name + "," + results[i].elapse + "\n";
-	}
-	return csv;
-}
-
 function getContentModuleEnvironment(gameJsonPath: string): ModuleEnvironment | null {
 	if (fs.existsSync(gameJsonPath)) {
 		const configuration: GameConfiguration = JSON.parse(fs.readFileSync(gameJsonPath, "utf8"));
@@ -63,13 +47,15 @@ function getContentModuleEnvironment(gameJsonPath: string): ModuleEnvironment | 
 	return null;
 }
 
-module.exports = function (options: AppOptions = {}): AkashicSandbox {
+export default function (options: AppOptions = {}): AkashicSandbox {
 	const appBase = path.join(__dirname, "..");
 	const gameBase = options.gameBase ? options.gameBase : process.cwd();
 	const cascadeBases = options.cascadeBases || [];
 	const jsBase = options.jsBase ? options.jsBase : path.join(appBase, "js");
 	const cssBase = options.cssBase ? options.cssBase : path.join(appBase, "css");
 	const thridpartyBase = options.thirdpartyBase ? options.thirdpartyBase : path.join(appBase, "thirdparty");
+	const fonts = options.fonts ?? [];
+	const fontFamilies = fonts.map(font => font.descriptors["font-family"]);
 
 	const app: AkashicSandbox = express();
 	const isDev = app.get("env") === "development";
@@ -100,20 +86,20 @@ module.exports = function (options: AppOptions = {}): AkashicSandbox {
 	app.cascadeBases = cascadeBases;
 
 	// TODO: change to middleware
-	app.use("/game/*.js$", (req: sr.ScriptRequest, _res: express.Response, next: Function) => {
+	app.use("/game/*.js$", (req, _res, next) => {
 		req.baseDir = app.gameBase!;
 		next();
 	});
-	app.use("/raw_game/*.js$", (req: sr.ScriptRequest, _res: express.Response, next: Function) => {
+	app.use("/raw_game/*.js$", (req, _res, next) => {
 		req.baseDir = app.gameBase!;
 		req.useRawScript = true;
 		next();
 	});
-	app.use("/cascade/:index/*.js$", (req: sr.ScriptRequest, _res: express.Response, next: Function) => {
+	app.use("/cascade/:index/*.js$", (req, _res, next) => {
 		req.baseDir = app.cascadeBases![Number(req.params.index)];
 		next();
 	});
-	app.use("/raw_cascade/:index/*.js$", (req: sr.ScriptRequest, _res: express.Response, next: Function) => {
+	app.use("/raw_cascade/:index/*.js$", (req, _res, next) => {
 		req.baseDir = app.cascadeBases![Number(req.params.index)];
 		req.useRawScript = true;
 		next();
@@ -122,14 +108,14 @@ module.exports = function (options: AppOptions = {}): AkashicSandbox {
 	app.set("views", path.join(__dirname, "..", "views"));
 	app.set("view engine", "ejs");
 
-	app.use("^\/$", (_req: express.Request, res: express.Response, _next: Function) => {
+	app.use("^\/$", (_req, res, _next) => {
 		res.redirect("/game/");
 	});
-	app.use("^\/game$", (_req: express.Request, res: express.Response, _next: Function) => {
+	app.use("^\/game$", (_req, res, _next) => {
 		res.redirect("/game/");
 	});
 	// /js/ /css/ /thirdparty/ を静的ファイルとして参照できるようにする
-	app.use("/js/v:version/engineFilesV*.js", (req: express.Request, res: express.Response, next: express.NextFunction) => {
+	app.use("/js/v:version/engineFilesV*.js", (req, res, next) => {
 		const engineFilesPath = resolveEngineFilesPath(req.params.version as SandboxRuntimeVersion);
 
 		if (fs.existsSync(engineFilesPath)) {
@@ -140,29 +126,85 @@ module.exports = function (options: AppOptions = {}): AkashicSandbox {
 			next();
 		}
 	});
+
+	const serveDefaultFontCSS = (): void => {
+		app.get("/css/fonts/fonts.css", (_, res) => {
+			res.contentType("text/css");
+			res.send("");
+		});
+	};
+
+	if (fonts && fonts.length > 0) {
+		try {
+			let responseBody = "";
+
+			for (const font of fonts) {
+				const fontPath = path.resolve(gameBase, font.path);
+				if (!fs.existsSync(fontPath)) {
+					throw new Error(`${fontPath} not found.`);
+				}
+
+				const fontFormat = getFontFormat(font.path);
+				if (fontFormat == null) {
+					const extension = path.extname(font.path);
+					throw new Error(
+						`The file extension "${extension}" from "${font.path}" is not supported in 'commandOptions.sandbox.fonts'.`
+					);
+				}
+
+				const fontFilename = hashFilepath(fontPath, 16);
+
+				responseBody += [
+					"@font-face {",
+					Object.entries(font.descriptors).map(([key, value]) => `${key}: ${value};`).join("\n"),
+					`src: url('${path.join("/css/fonts", fontFilename)}') format('${fontFormat}');`,
+					"}\n",
+				].join("\n");
+
+				app.get(path.join("/css/fonts", fontFilename), (_, res) => res.send(fs.readFileSync(fontPath)));
+			}
+
+			app.get("/css/fonts/fonts.css", (_, res) => {
+				res.contentType("text/css");
+				res.send(responseBody);
+			});
+
+			app.use((_req, res, next) => {
+				res.locals.fontFamilies = fontFamilies;
+				next();
+			});
+		} catch (error) {
+			console.error(error.message);
+			console.error("Proceeding without applying the 'commandOptions.sandbox.fonts' specification.");
+			serveDefaultFontCSS();
+		}
+	} else {
+		serveDefaultFontCSS();
+	}
+
 	app.use("/js/", express.static(jsBase));
 	app.use("/css/", express.static(cssBase));
 	app.use("/thirdparty/", express.static(thridpartyBase));
 
-	app.use("/sandboxconfig/", (req: sr.ScriptRequest, _res: express.Response, next: Function) => {
+	app.use("/sandboxconfig/", (req, _res, next) => {
 		req.baseDir = app.gameBase!;
 		next();
-	}, <express.RequestHandler>sandboxConfigRoute);
+	}, sandboxConfigRoute);
 
 	// /game/ は sandbox をブラウザで開く場合に利用、/raw_game/ は /engine のエンジン設定ファイルを使う場合に利用
-	app.use("/game", <express.RequestHandler>jsRoute);
-	app.use("/game", <express.RequestHandler>gameRoute);
+	app.use("/game", jsRoute);
+	app.use("/game", gameRoute);
 	app.use("/game/", express.static(app.gameBase));
-	app.use("/raw_game", <express.RequestHandler>jsRoute);
+	app.use("/raw_game", jsRoute);
 	app.use("/raw_game/", express.static(app.gameBase));
-	app.use("/cascade/:index", <express.RequestHandler>jsRoute);
-	app.use("/raw_cascade/:index", <express.RequestHandler>jsRoute);
+	app.use("/cascade/:index", jsRoute);
+	app.use("/raw_cascade/:index", jsRoute);
 	for (let i = 0; i < app.cascadeBases.length; ++i) {
 		app.use("/cascade/" + i + "/", express.static(app.cascadeBases[i]));
 		app.use("/raw_cascade/" + i + "/", express.static(app.cascadeBases[i]));
 	}
 
-	app.use("/configuration/", (req: express.Request, res: express.Response, _next: Function) => {
+	app.use("/configuration/", (req, res, _next) => {
 		const prefix = req.query.raw ? "/raw_" : "/";
 		if (app.cascadeBases == null || app.cascadeBases.length === 0) {
 			res.redirect(prefix + "game/game.json");
@@ -174,11 +216,11 @@ module.exports = function (options: AppOptions = {}): AkashicSandbox {
 		res.json({ definitions: defs });
 	});
 
-	app.use("/basepath/", (_req: express.Request, res: express.Response, _next: Function) => {
+	app.use("/basepath/", (_req, res, _next) => {
 		res.send(app.gameBase);
 	});
 
-	app.use("/engine", (req: express.Request, res: express.Response, _next: Function) => {
+	app.use("/engine", (req, res, _next) => {
 		const host = req.protocol + "://" + req.get("host");
 		res.type("application/json");
 
@@ -194,67 +236,7 @@ module.exports = function (options: AppOptions = {}): AkashicSandbox {
 		});
 	});
 
-	// TODO: `/test/`, `/start/`, `/next/`, `/finish/` の　scenario オプションに関するパスは使われてないのでいずれ削除する。
-	app.use("^\/test$", (_req: express.Request, res: express.Response, _next: Function) => {
-		res.redirect("/test/");
-	});
-	app.use("/test/*.js$", (req: sr.ScriptRequest, _res: express.Response, next: Function) => {
-		const ssn: ASSession = req.session;
-		req.baseDir = app.scenario.benchmarks[ssn.cntr ?? 0].target;
-		next();
-	});
-	app.use("/start/", (req: express.Request, res: express.Response, _next: Function) => {
-		const scenarioJSONString = fs.readFileSync(app.settings.scenarioPath).toString();
-		app.scenario = JSON.parse(scenarioJSONString);
-		const ssn: ASSession = req.session;
-		ssn.cntr = 0;
-		ssn.results = [];
-		res.redirect("/test/");
-	});
-	app.use("/next/", (req: express.Request, res: express.Response, _next: Function) => {
-		const ssn: ASSession = req.session;
-
-		const elapse: number = Number(req.query.elapse);
-		ssn.results?.push(
-			{
-				"name": app.scenario.benchmarks[ssn.cntr ?? 0].name,
-				"elapse": elapse
-			}
-		);
-
-		ssn.cntr = Number.isInteger(ssn.cntr) ? ssn.cntr! + 1 : 0;
-		if (ssn.cntr! < app.scenario.benchmarks.length) {
-			res.redirect("/test/");
-		} else {
-			res.redirect("/finish/");
-		}
-	});
-	app.use("/finish/", (req: express.Request, res: express.Response, _next: Function) => {
-		const ssn: ASSession = req.session;
-		console.log("you arrived at 'finish'");
-
-		res.render("finish", {
-			"resultjson": JSON.stringify(ssn.results),
-			"resultcsv": result2csv(ssn.results ?? []),
-			"title": "finish"
-		});
-	});
-	app.use("/test", <express.RequestHandler>jsRoute);
-	app.use("/test", (req: express.Request, res: express.Response, next: express.NextFunction) => {
-		const ssn: ASSession = req.session;
-		res.locals.maxAge = app.scenario.benchmarks[ssn.cntr ?? 0].maxAge;
-		res.locals.renderPerFrame = app.scenario.benchmarks[ssn.cntr ?? 0].renderPerFrame;
-		res.locals.renderPerFrame = (res.locals.renderPerFrame === undefined) ? "undefined" : res.locals.renderPerFrame;
-		res.locals.loopCount = app.scenario.benchmarks[ssn.cntr ?? 0].loopCount;
-		res.locals.loopCount = (res.locals.loopCount === undefined) ? "undefined" : res.locals.loopCount;
-		(<express.RequestHandler>testRoute)(req, res, next);
-	});
-	app.use("/test/", (req: express.Request, res: express.Response, next: express.NextFunction) => {
-		const ssn: ASSession = req.session;
-		express.static(app.scenario.benchmarks[ssn.cntr ?? 0].target)(req, res, next);
-	});
-
-	app.use((_req: express.Request, _res: express.Response, next: Function) => {
+	app.use((_req, _res, next) => {
 		const err = new Error("Not Found");
 		err.status = 404;
 		next(err);
@@ -262,7 +244,7 @@ module.exports = function (options: AppOptions = {}): AkashicSandbox {
 
 	let errorHandler: express.ErrorRequestHandler;
 	if (isDev) {
-		errorHandler = (err: any, _req: express.Request, res: express.Response, _next: Function): any => {
+		errorHandler = (err: any, _req, res, _next): any => {
 			res.status(err.status || 500);
 			res.render("error", {
 				title: "error",
@@ -271,7 +253,7 @@ module.exports = function (options: AppOptions = {}): AkashicSandbox {
 			});
 		};
 	} else {
-		errorHandler = (err: any, _req: express.Request, res: express.Response, _next: Function): any => {
+		errorHandler = (err, _req, res, _next): any => {
 			res.status(err.status || 500);
 			res.render("error", {
 				title: "error",

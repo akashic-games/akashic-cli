@@ -1,11 +1,11 @@
 import * as fs from "fs";
 import * as path from "path";
 import type * as express from "express";
-import type { SandboxConfigApiResponseData } from "../../common/types/ApiResponse";
-import { BadRequestError, NotFoundError } from "../common/ApiError";
-import { responseSuccess } from "../common/ApiResponse";
-import { dynamicRequire } from "../domain/dynamicRequire";
-import * as sandboxConfigs from "../domain/SandboxConfigs";
+import type { SandboxConfigApiResponseData } from "../../common/types/ApiResponse.js";
+import { BadRequestError, NotFoundError } from "../common/ApiError.js";
+import { responseSuccess } from "../common/ApiResponse.js";
+import { dynamicRequire } from "../domain/dynamicRequire.js";
+import * as sandboxConfigs from "../domain/SandboxConfigs.js";
 
 export const createHandlerToGetSandboxConfig = (dirPaths: string[]): express.RequestHandler => {
 	return async (req, res, next) => {

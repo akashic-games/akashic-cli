@@ -1,4 +1,5 @@
 import type { ServiceType } from "../ServiceType.js";
+import type { CliConfigFontDeclaration } from "./common.js";
 
 export interface CliConfigServe {
 	hostname?: string;
@@ -21,4 +22,5 @@ export interface CliConfigServe {
 	sslCert?: string;
 	sslKey?: string;
 	corsAllowOrigin?: string;
+	fonts?: CliConfigFontDeclaration[];
 }

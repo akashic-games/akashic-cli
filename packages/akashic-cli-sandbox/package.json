@@ -2,6 +2,7 @@
   "name": "@akashic/akashic-cli-sandbox",
   "version": "1.1.12",
   "description": "Standalone runner for Akashic contents",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "prepublish": "npm run build",
@@ -17,8 +18,8 @@
     "lint": "npm run lint:client && npm run lint:server",
     "lint:client": "eslint \"src/client/*.ts\" \"src/client/**/*.ts\" --fix",
     "lint:server": "eslint \"src/server/*.ts\" \"src/server/**/*.ts\" --fix",
-    "test": "npm run test:jasmine && npm run lint",
-    "test:jasmine": "jasmine \"./spec/**/*[sS]pec.js\""
+    "test": "npm run test:vitest && npm run lint",
+    "test:vitest": "vitest run"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
@@ -26,7 +27,6 @@
     "akashic-cli-sandbox": "./bin/akashic-cli-sandbox"
   },
   "files": [
-    "bin",
     "lib",
     "js",
     "css",
@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "@akashic/game-configuration": "^2.0.0",
-    "@akashic/headless-driver": "2.15.11",
+    "@akashic/headless-driver": "2.15.12",
     "commander": "^11.0.0",
     "debug": "^4.3.4",
     "ejs": "^3.1.8",
@@ -54,8 +54,6 @@
     "@types/ejs": "^3.1.1",
     "@types/express": "^4.17.14",
     "@types/express-session": "^1.17.5",
-    "@types/jasmine": "^5.0.0",
-    "@types/jest": "^29.5.12",
     "@types/node": "^20.0.0",
     "@types/serve-static": "^1.15.0",
     "@types/superagent": "^8.0.0",
@@ -63,9 +61,8 @@
     "@typescript-eslint/eslint-plugin": "^6.12.0",
     "eslint": "^8.54.0",
     "eslint-plugin-import": "^2.29.0",
-    "eslint-plugin-jest": "^27.6.0",
-    "jasmine": "^5.0.0",
     "supertest": "^6.3.1",
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "vitest": "^2.1.0"
   }
 }

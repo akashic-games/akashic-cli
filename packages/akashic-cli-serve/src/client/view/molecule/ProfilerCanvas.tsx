@@ -10,8 +10,7 @@ export interface ProfilerCanvasProps {
 	profilerHeight: number; // プロファイラ１つ分の縦幅
 }
 
-@observer
-export class ProfilerCanvas extends React.Component<ProfilerCanvasProps, {}> {
+export const ProfilerCanvas = observer(class ProfilerCanvas extends React.Component<ProfilerCanvasProps, {}> {
 	private profilerCanvasContext: CanvasRenderingContext2D|null = null;
 	private disposeAutoRun: (() => void) | null = null;
 
@@ -148,4 +147,5 @@ export class ProfilerCanvas extends React.Component<ProfilerCanvasProps, {}> {
 		this.profilerCanvasContext.fillStyle = color;
 		this.profilerCanvasContext.fillText(text, x, y, maxWidth);
 	};
-}
+});
+

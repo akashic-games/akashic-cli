@@ -1,11 +1,11 @@
 import * as fs from "fs";
 import * as path from "path";
-import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
-import { readJSON, writeJSON } from "@akashic/akashic-cli-commons/lib/FileSystem";
-import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger";
-import { NodeModules } from "@akashic/akashic-cli-commons/lib/NodeModules";
-import { PromisedNpm } from "@akashic/akashic-cli-commons/lib/PromisedNpm";
-import { chdir } from "@akashic/akashic-cli-commons/lib/Util";
+import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger.js";
+import { readJSON, writeJSON } from "@akashic/akashic-cli-commons/lib/FileSystem.js";
+import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger.js";
+import { NodeModules } from "@akashic/akashic-cli-commons/lib/NodeModules.js";
+import { PromisedNpm } from "@akashic/akashic-cli-commons/lib/PromisedNpm.js";
+import { chdir } from "@akashic/akashic-cli-commons/lib/Util.js";
 import type { GameConfiguration } from "@akashic/game-configuration";
 
 export interface ScanNodeModulesParameterObject {
@@ -35,10 +35,10 @@ export interface ScanNodeModulesParameterObject {
 	debugNpm?: PromisedNpm | undefined;
 
 	/**
-	 * `globalScripts` に外部モジュールの package.json のパスを含めるかどうか。
-	 * 省略された場合、 `false` 。
+	 * `globalScripts` に外部モジュールの package.json のパスを省くかどうか。
+	 * 省略された場合、 `true` 。
 	 */
-	noOmitPackagejson?: boolean;
+	omitPackagejson?: boolean;
 
 	/**
 	 * アセットIDをアセットのパスから解決するかどうか。
@@ -87,7 +87,7 @@ export function _completeScanNodeModulesParameterObject(param: ScanNodeModulesPa
 		fromEntryPoint: !!param.fromEntryPoint,
 		resolveAssetIdsFromPath: !!param.resolveAssetIdsFromPath,
 		forceUpdateAssetIds: !!param.forceUpdateAssetIds,
-		noOmitPackagejson: !!param.noOmitPackagejson,
+		omitPackagejson: param.omitPackagejson ?? true,
 		debugNpm: param.debugNpm ?? undefined,
 		includeExtensionToAssetId: !!param.includeExtensionToAssetId,
 		useMmp: !!param.useMmp,
@@ -160,7 +160,7 @@ export async function scanNodeModules(p: ScanNodeModulesParameterObject): Promis
 			entryPaths = dependencyPackageNames;
 		}
 
-		const listFiles = param.noOmitPackagejson ? NodeModules.listModuleFiles : NodeModules.listScriptFiles;
+		const listFiles = param.omitPackagejson ? NodeModules.listScriptFiles : NodeModules.listModuleFiles;
 		const modulePaths = await listFiles(base, entryPaths, logger) ?? [];
 		// 既に登録されている globalScripts のうち存在しているものを残した後、新規で追加されたスクリプトのみを追加している。この追加時に重複を防ぐためにSetを用いている。
 		const globalScripts = Array.from(new Set([

@@ -1,11 +1,10 @@
-import * as fs from "fs";
-import * as path from "path";
-import type { CliConfigInit } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigInit";
-import { CliConfigurationFile } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigurationFile";
-import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
+import { createRequire } from "module";
+import type { CliConfigInit } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigInit.js";
+import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger.js";
 import { Command } from "commander";
 import { promiseInit } from "./init/init.js";
 import { listTemplates } from "./list/listTemplates.js";
+import { load } from "@akashic/akashic-cli-commons/lib/FileSystem.js";
 
 async function cli(param: CliConfigInit): Promise<void> {
 	const logger = new ConsoleLogger({ quiet: param.quiet });
@@ -31,11 +30,12 @@ async function cli(param: CliConfigInit): Promise<void> {
 	}
 }
 
-const ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "package.json"), "utf8")).version;
+const require = createRequire(import.meta.url);
+const { version } = require("../package.json");
 
 const commander = new Command();
 commander
-	.version(ver);
+	.version(version);
 commander
 	.description("Generate project skeleton and initialize game.json.")
 	.option("-C, --cwd <dir>", "The directory to initialize")
@@ -50,25 +50,25 @@ commander
 	.option("-f, --force", "Overwrite existing files")
 	.option("-y, --yes", "Initialize without user input");
 
-export function run(argv: string[]): void {
+export async function run(argv: string[]): Promise<void> {
 	commander.parse(argv);
 	const options = commander.opts();
 
-	CliConfigurationFile.read(path.join(options.cwd || process.cwd(), "akashic.config.js"), async (error, configuration) => {
-		if (error) {
-			console.error(error);
-			process.exit(1);
-		}
-
-		const conf = configuration!.commandOptions?.init ?? {};
-		await cli({
-			cwd: options.cwd ?? conf.cwd,
-			quiet: options.quiet ?? conf.quiet,
-			repository: options.repository,
-			type: options.type ?? conf.type,
-			list: options.list ?? conf.list,
-			yes: options.yes ?? conf.yes,
-			force: options.force ?? conf.force
-		});
+	let configuration;
+	try { 
+		configuration = await load(options.cwd || process.cwd());
+	} catch (error) {
+		console.error(error);
+		process.exit(1);
+	}
+	const conf = configuration!.commandOptions?.init ?? {};
+	await cli({
+		cwd: options.cwd ?? conf.cwd,
+		quiet: options.quiet ?? conf.quiet,
+		repository: options.repository,
+		type: options.type ?? conf.type,
+		list: options.list ?? conf.list,
+		yes: options.yes ?? conf.yes,
+		force: options.force ?? conf.force
 	});
 }

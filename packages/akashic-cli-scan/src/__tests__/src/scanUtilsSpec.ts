@@ -1,13 +1,15 @@
 import * as path from "path";
 import * as fs from "fs";
-import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger";
-import * as mockfs from "mock-fs";
-import { scanAudioAssets, scanImageAssets, scanScriptAssets, scanTextAssets, scanBinaryAssets, knownExtensionAssetFilter } from "../../../lib/scanUtils";
-import { isBinaryFile } from "../../isBinaryFile";
-import { defaultTextAssetFilter } from "../../scanUtils";
-import { workaroundMockFsExistsSync } from "./testUtils";
-import * as getAudioDuration from "../../../lib/getAudioDuration";
-import { mockGetDuration } from "./helpers/MockGetDuration";
+import { fileURLToPath } from "url";
+import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger.js";
+import * as mockfs from "./helpers/mockfs.js";
+import { scanAudioAssets, scanImageAssets, scanScriptAssets, scanTextAssets, scanBinaryAssets, knownExtensionAssetFilter } from "../../scanUtils.js";
+import { isBinaryFile } from "../../isBinaryFile.js";
+import { defaultTextAssetFilter } from "../../scanUtils.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const base = `scanUtilsSpec-${Date.now()}`;
 
 describe("scanUtils", () => {
 	const nullLogger = new ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
@@ -18,22 +20,10 @@ describe("scanUtils", () => {
 	const DUMMY_1x1_PNG_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy1x1.png"));
 	const DUMMY_WASM_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy.wasm"));
 
-	workaroundMockFsExistsSync();
+	let baseDir: string;
 
-	// FIXME: ES Module 移行時に削除
 	beforeAll(() => {
-		jest.spyOn(getAudioDuration, "getAudioDuration").mockImplementation((filepath, logger?: any) => {
-			return mockGetDuration(filepath, logger);
-		});
-	});
-
-	afterAll(() => {
-		jest.resetAllMocks();
-	});
-	// FIXME: ES Module 移行時に削除ここまで
-	
-	beforeEach(() => {
-		mockfs({
+		baseDir = mockfs.create(base, {
 			"game": {
 				"text": {
 					"foo": {
@@ -68,14 +58,14 @@ describe("scanUtils", () => {
 		});
 	});
 
-	afterEach(() => {
-		mockfs.restore();
+	afterAll(() => {
+		mockfs.restore(base);
 	});
 
 	it("scanScriptAssets()", async () => {
 		expect(
 			await scanScriptAssets(
-				"./game",
+				path.join(baseDir, "./game"),
 				"script",
 				nullLogger
 			)
@@ -89,7 +79,7 @@ describe("scanUtils", () => {
 
 		expect(
 			await scanScriptAssets(
-				"./game",
+				path.join(baseDir, "./game"),
 				"assets",
 				nullLogger
 			)
@@ -105,7 +95,7 @@ describe("scanUtils", () => {
 	it("scanTextAssets()", async () => {
 		expect(
 			await scanTextAssets(
-				"./game",
+				path.join(baseDir, "./game"),
 				"text",
 				nullLogger,
 				p => {
@@ -123,13 +113,13 @@ describe("scanUtils", () => {
 
 		expect(
 			await scanTextAssets(
-				"./game",
+				path.join(baseDir, "./game"),
 				"assets",
 				nullLogger,
 				p => {
 					if (knownExtensionAssetFilter(p)) return false;
 					if (defaultTextAssetFilter(p)) return true;
-					return !isBinaryFile(path.join("./game", "assets", p));
+					return !isBinaryFile(path.join(baseDir, "./game", "assets", p));
 				}
 			)
 		).toEqual([
@@ -143,12 +133,12 @@ describe("scanUtils", () => {
 	it("scanBinaryAssets()", async () => {
 		expect(
 			await scanBinaryAssets(
-				"./game",
+				path.join(baseDir, "./game"),
 				"assets",
 				nullLogger,
 				p => {
 					if (knownExtensionAssetFilter(p)) return false;
-					return isBinaryFile(path.join("./game", "assets", p));
+					return isBinaryFile(path.join(baseDir, "./game", "assets", p));
 				}
 			)
 		).toEqual([
@@ -162,7 +152,7 @@ describe("scanUtils", () => {
 	it("scanImageAssets()", async () => {
 		expect(
 			await scanImageAssets(
-				"./game",
+				path.join(baseDir, "./game"),
 				"image",
 				nullLogger
 			)
@@ -177,7 +167,7 @@ describe("scanUtils", () => {
 
 		expect(
 			await scanImageAssets(
-				"./game",
+				path.join(baseDir, "./game"),
 				"assets",
 				nullLogger
 			)
@@ -201,7 +191,7 @@ describe("scanUtils", () => {
 
 		expect(
 			await scanAudioAssets(
-				"./game",
+				path.join(baseDir, "./game"),
 				"audio",
 				new Logger()
 			)
@@ -223,7 +213,7 @@ describe("scanUtils", () => {
 
 		expect(
 			await scanAudioAssets(
-				"./game",
+				path.join(baseDir, "./game"),
 				"assets",
 				nullLogger
 			)

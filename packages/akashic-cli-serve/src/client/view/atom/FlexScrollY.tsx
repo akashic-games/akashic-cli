@@ -1,5 +1,5 @@
 import * as React from "react";
-import * as styles from "./FlexScrollY.css";
+import styles from "./FlexScrollY.module.css";
 
 export interface FlexScrollYProps {
 	children?: React.ReactNode;

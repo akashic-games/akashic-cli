@@ -14,7 +14,7 @@ import type { NiconicoDevtoolProps } from "../molecule/NiconicoDevtool";
 import { NiconicoDevtool } from "../molecule/NiconicoDevtool";
 import type { PlaybackDevtoolProps } from "../molecule/PlaybackDevtool";
 import { PlaybackDevtool } from "../molecule/PlaybackDevtool";
-import * as styles from "./Devtool.css";
+import styles from "./Devtool.module.css";
 
 // TODO 適切な箇所に定義を移す
 export const devtoolTypes = [
@@ -42,8 +42,7 @@ export interface DevtoolProps {
 	internalDevtoolProps: InternalDevtoolProps;
 }
 
-@observer
-export class Devtool extends React.Component<DevtoolProps, {}> {
+export const Devtool = observer(class Devtool extends React.Component<DevtoolProps, {}> {
 	private _onSelectToolTable: { [key: string]: () => void };
 
 	constructor(props: DevtoolProps) {
@@ -103,4 +102,5 @@ export class Devtool extends React.Component<DevtoolProps, {}> {
 	private _onSelectInternalTool = (): void => {
 		this.props.onSelectDevtool("Internal");
 	};
-}
+});
+

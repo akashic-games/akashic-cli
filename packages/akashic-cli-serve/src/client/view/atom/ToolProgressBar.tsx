@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import * as styles from "./ToolProgressBar.css";
+import styles from "./ToolProgressBar.module.css";
 
 export interface ToolProgressBarProps {
 	/**
@@ -51,8 +51,7 @@ function clamp(v: number, min: number, max: number): number {
 	return Math.max(min, Math.min(max, v));
 }
 
-@observer
-export class ToolProgressBar extends React.Component<ToolProgressBarProps, {}> {
+export const ToolProgressBar = observer(class ToolProgressBar extends React.Component<ToolProgressBarProps, {}> {
 	private _ref: HTMLDivElement | null;
 
 	constructor(props: ToolProgressBarProps) {
@@ -139,4 +138,5 @@ export class ToolProgressBar extends React.Component<ToolProgressBarProps, {}> {
 		const offset = pageX - (window.pageXOffset + left);
 		return Math.round(clamp(offset / width, 0, 1) * max);
 	}
-}
+});
+

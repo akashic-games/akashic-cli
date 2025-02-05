@@ -5,7 +5,7 @@ import { millisecondsToHms } from "../../common/DateUtil";
 import { ToolCheckbox } from "../atom/ToolCheckbox";
 import { ToolIconButton } from "../atom/ToolIconButton";
 import { ToolProgressBar } from "../atom/ToolProgressBar";
-import * as styles from "./PlaybackOptionBar.css";
+import styles from "./PlaybackOptionBar.module.css";
 
 export interface PlaybackOptionBarProps {
 	currentTime: number;

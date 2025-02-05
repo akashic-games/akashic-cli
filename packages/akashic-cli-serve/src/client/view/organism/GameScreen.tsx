@@ -4,7 +4,7 @@ import type { PlayerInfoResolverDialogProps } from "../molecule/PlayerInfoResolv
 import { PlayerInfoResolverDialog } from "../molecule/PlayerInfoResolverDialog";
 import type { ProfilerCanvasProps } from "../molecule/ProfilerCanvas";
 import { ProfilerCanvas } from "../molecule/ProfilerCanvas";
-import * as styles from "./GameScreen.css";
+import styles from "./GameScreen.module.css";
 
 export interface GameScreenProps {
 	showsBackgroundImage: boolean;
@@ -23,8 +23,7 @@ export interface GameScreenProps {
 	onClickCapture?: (p: { x: number; y: number }) => void;
 }
 
-@observer
-export class GameScreen extends React.Component<GameScreenProps, {}> {
+export const GameScreen = observer(class GameScreen extends React.Component<GameScreenProps, {}> {
 	render(): React.ReactNode {
 		const {
 			showsBackgroundImage: showsBgImage,
@@ -173,4 +172,5 @@ export class GameScreen extends React.Component<GameScreenProps, {}> {
 			};
 		}
 	};
-}
+});
+

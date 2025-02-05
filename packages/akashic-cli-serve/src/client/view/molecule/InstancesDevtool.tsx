@@ -2,7 +2,7 @@ import { observer } from "mobx-react";
 import * as React from "react";
 import { FlexScrollY } from "../atom/FlexScrollY";
 import { ToolIconButton } from "../atom/ToolIconButton";
-import * as styles from "./InstancesDevtool.css";
+import styles from "./InstancesDevtool.module.css";
 
 export interface InstanceViewData {
 	type: "active" | "passive";  // TODO isActive: boolean にする
@@ -17,8 +17,7 @@ export interface InstancesDevtoolProps {
 	onClickAddInstance: () => void;
 }
 
-@observer
-export class InstancesDevtool extends React.Component<InstancesDevtoolProps, {}> {
+export const InstancesDevtool = observer(class InstancesDevtool extends React.Component<InstancesDevtoolProps, {}> {
 	render(): React.ReactNode {
 		return <div className={styles["instances-devtool"]}>
 			<div className={styles["instance-toolbar"]}>
@@ -71,4 +70,5 @@ export class InstancesDevtool extends React.Component<InstancesDevtoolProps, {}>
 		ev.preventDefault();
 		this.props.onClickAddInstance();
 	};
-}
+});
+

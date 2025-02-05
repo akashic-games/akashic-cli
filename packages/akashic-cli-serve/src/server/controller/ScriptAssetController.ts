@@ -2,9 +2,9 @@ import * as fs from "fs";
 import * as path from "path";
 import type { GameConfiguration } from "@akashic/akashic-cli-commons";
 import type { ScriptAssetConfigurationBase } from "@akashic/game-configuration";
-import { makePathKeyObject } from "@akashic/game-configuration/lib/utils/makePathKeyObject";
+import { makePathKeyObject } from "@akashic/game-configuration/lib/utils/makePathKeyObject.js";
 import type * as express from "express";
-import * as gameConfigs from "../domain/GameConfigs";
+import * as gameConfigs from "../domain/GameConfigs.js";
 
 export const createScriptAssetController = (baseDir: string, index: number): express.RequestHandler => {
 	// TODO: require() のキャッシュするモジュールのインターフェース (index でアクセスする点) と register() 箇所を見直す

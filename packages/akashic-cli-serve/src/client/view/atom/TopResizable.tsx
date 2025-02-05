@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import * as styles from "./TopResizable.css";
+import styles from "./TopResizable.module.css";
 
 export interface TopResizableProps {
 	height: number;
@@ -9,8 +9,7 @@ export interface TopResizableProps {
 	onResize: (height: number) => void;
 }
 
-@observer
-export class TopResizable extends React.Component<TopResizableProps, {}> {
+export const TopResizable = observer(class TopResizable extends React.Component<TopResizableProps, {}> {
 	private lastPageY: number | null;
 
 	constructor(props: TopResizableProps) {
@@ -46,4 +45,5 @@ export class TopResizable extends React.Component<TopResizableProps, {}> {
 		window.removeEventListener("mousemove", this._onMouseMoveWindow);
 		window.removeEventListener("mouseup", this._onMouseUpWindow);
 	};
-}
+});
+

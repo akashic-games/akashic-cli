@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "lib/pdi",
+    "module": "Preserve",
+    "moduleResolution": "Classic",
+    "declaration": false,
+    "skipLibCheck": true
+  },
+  "files": [
+    "./src/pdi/global.d.ts",
+    "./src/pdi/index.ts"
+  ]
+}
