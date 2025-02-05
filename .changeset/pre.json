@@ -12,5 +12,7 @@
     "@akashic/akashic-cli-scan": "0.17.7",
     "@akashic/akashic-cli-serve": "1.16.19"
   },
-  "changesets": []
+  "changesets": [
+    "honest-walls-melt"
+  ]
 }
