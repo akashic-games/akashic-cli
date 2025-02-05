@@ -140,7 +140,6 @@ describe("convertUtil", function () {
 			expect(/\*\*/.test(downpiled)).toBeFalsy(); // ES2016 のべき乗演算子は Math.pow()に変換される
 
 			const noDownpiled = convert.wrap(code, null, false);
-			console.log("*", noDownpiled);
 			expect(/\(\)\s?=>/.test(noDownpiled)).toBeTruthy(); 
 			expect(/\*\*/.test(noDownpiled)).toBeTruthy(); 
 		});

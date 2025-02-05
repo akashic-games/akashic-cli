@@ -14,6 +14,7 @@ describe("exportHTML", function () {
 					force: true,
 					strip: true,
 					minify: false,
+					terser: {},
 					magnify: false,
 					unbundleText: false
 				};
@@ -34,6 +35,7 @@ describe("exportHTML", function () {
 					force: true,
 					strip: true,
 					minify: false,
+					terser: {},
 					magnify: false,
 					unbundleText: false
 				};
@@ -48,6 +50,7 @@ describe("exportHTML", function () {
 					force: true,
 					strip: true,
 					minify: false,
+					terser: {},
 					magnify: false,
 					unbundleText: false
 				};
@@ -68,6 +71,7 @@ describe("exportHTML", function () {
 					force: true,
 					strip: true,
 					minify: false,
+					terser: {},
 					magnify: false,
 					unbundleText: false
 				};
@@ -75,6 +79,7 @@ describe("exportHTML", function () {
 			})
 			.then((dest) => {
 				expect(dest).toMatch(/^.*akashic-export-html-tmp-.+$/);
+				expect(fsx.existsSync(path.join(dest, "library_license.txt"))).toBeTruthy();
 				fsx.removeSync(dest);
 			});
 	});
@@ -90,6 +95,7 @@ describe("exportHTML", function () {
 					force: true,
 					strip: true,
 					minify: false,
+					terser: {},
 					magnify: false,
 					unbundleText: false,
 					compress: true
@@ -113,6 +119,7 @@ describe("exportHTML", function () {
 					force: true,
 					strip: false,
 					minify: false,
+					terser: {},
 					magnify: false,
 					unbundleText: false,
 					debugOverrideEngineFiles: path.join(__dirname, "..", "..", "__tests__", "fixtures", "engineFilesV3_1_99.js")
@@ -140,6 +147,7 @@ describe("exportHTML", function () {
 					force: true,
 					strip: false,
 					minify: false,
+					terser: {},
 					magnify: false,
 					unbundleText: false,
 					bundle: true,
@@ -165,6 +173,7 @@ describe("exportHTML", function () {
 			force: true,
 			strip: true,
 			minify: false,
+			terser: {},
 			magnify: false,
 			unbundleText: false,
 			hashLength: 0 // ファイル名ハッシュ化なし: 改名先が (HTML に埋め込まれた game.json をパースしないと) わからないので
@@ -189,6 +198,7 @@ describe("exportHTML", function () {
 					force: true,
 					strip: true,
 					minify: true,
+					terser: {},
 					magnify: false,
 					unbundleText: false,
 					hashLength: 20,
