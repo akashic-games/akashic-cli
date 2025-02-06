@@ -21,6 +21,7 @@ import {
 	resolveEngineFilesPath,
 	validateSandboxConfigJs
 } from "./convertUtil.js";
+import * as liceneUtil from "../licenseUtil.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -62,8 +63,10 @@ export async function promiseConvertNoBundle(options: ConvertTemplateParameterOb
 		return convertAssetAndOutput(assetName, conf, options.source, options.output, terser, options.esDownpile);
 	}));
 	assetPaths = assetPaths.concat(nonBinaryAssetPaths);
+	const libPaths: string[] = [];
 	if (conf._content.globalScripts) {
 		const globalScriptPaths = await Promise.all(conf._content.globalScripts.map((scriptName: string) => {
+			libPaths.push(scriptName);
 			return convertGlobalScriptAndOutput(
 				scriptName,
 				options.source,
@@ -72,6 +75,9 @@ export async function promiseConvertNoBundle(options: ConvertTemplateParameterOb
 		}));
 		assetPaths = assetPaths.concat(globalScriptPaths);
 	}
+
+	await liceneUtil.writeLicenseTextFile(options.source, options.output, libPaths, content.environment["sandbox-runtime"]);
+
 	if (errorMessages.length > 0) {
 		options.logger.warn("The following ES5 syntax errors exist.\n" + errorMessages.join("\n"));
 	}
@@ -120,7 +126,8 @@ async function writeHtmlFile(
 	assetPaths: string[],
 	outputPath: string,
 	conf: cmn.Configuration,
-	options: ConvertTemplateParameterObject): Promise<void> {
+	options: ConvertTemplateParameterObject
+): Promise<void> {
 	const injects = options.injects ? options.injects : [];
 	const version = conf._content.environment["sandbox-runtime"];
 	const filePath = path.resolve(__dirname + "/../template/no-bundle-index.ejs");

@@ -21,6 +21,7 @@ import {
 	validateSandboxConfigJs,
 	readSandboxConfigJs
 } from "./convertUtil.js";
+import * as liceneUtil from "../licenseUtil.js";
 
 interface InnerHTMLAssetData {
 	name: string;
@@ -73,13 +74,17 @@ export async function promiseConvertBundle(options: ConvertTemplateParameterObje
 	}));
 	innerHTMLAssetArray = innerHTMLAssetArray.concat(tempAssetData);
 
+	const libPaths: string[] = [];
 	if (conf._content.globalScripts) {
 		const tempScriptData = await Promise.all(conf._content.globalScripts.map((scriptName: string) => {
+			libPaths.push(scriptName);
 			return convertScriptNameToInnerHTMLObj(scriptName, options.source, terser);
 		}));
 		innerHTMLAssetArray = innerHTMLAssetArray.concat(tempScriptData);
 	}
 
+	await liceneUtil.writeLicenseTextFile(options.source, options.output, libPaths, conf._content.environment["sandbox-runtime"]);
+	
 	if (errorMessages.length > 0) {
 		options.logger.warn("The following ES5 syntax errors exist.\n" + errorMessages.join("\n"));
 	}
@@ -139,8 +144,12 @@ async function convertScriptNameToInnerHTMLObj(
 }
 
 async function writeHtmlFile(
-	innerHTMLAssetArray: InnerHTMLAssetData[], outputPath: string,
-	conf: cmn.Configuration, options: ConvertTemplateParameterObject, templatePath: string): Promise<void> {
+	innerHTMLAssetArray: InnerHTMLAssetData[], 
+	outputPath: string,
+	conf: cmn.Configuration, 
+	options: ConvertTemplateParameterObject, 
+	templatePath: string
+): Promise<void> {
 	const injects = options.injects ? options.injects : [];
 	const scripts = getDefaultBundleScripts(
 		templatePath,
