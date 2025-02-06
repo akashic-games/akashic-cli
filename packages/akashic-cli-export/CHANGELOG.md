@@ -1,5 +1,11 @@
 # @akashic/akashic-cli-export
 
+## 2.0.0-next.1
+
+### Patch Changes
+
+- [#1493](https://github.com/akashic-games/akashic-cli/pull/1493) [`1896f73`](https://github.com/akashic-games/akashic-cli/commit/1896f731ed18dac261ad54834d5d6bd6e0321618) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Support library license in export-html
+
 ## 2.0.0-next.0
 
 ### Major Changes
