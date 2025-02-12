@@ -38,6 +38,7 @@
     "@akashic:registry": "https://registry.npmjs.org/"
   },
   "dependencies": {
+    "@akashic/akashic-cli-commons": "1.0.0-next.0",
     "@akashic/game-configuration": "^2.0.0",
     "@akashic/headless-driver": "2.15.12",
     "commander": "^11.0.0",
