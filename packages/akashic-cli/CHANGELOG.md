@@ -1,5 +1,12 @@
 # Change Log
 
+## 3.0.0-next.2
+
+### Patch Changes
+
+- Updated dependencies [[`b057814`](https://github.com/akashic-games/akashic-cli/commit/b057814e1423c0af424f5251d2c151ac2e40f463)]:
+  - @akashic/akashic-cli-sandbox@2.0.0-next.1
+
 ## 3.0.0-next.1
 
 ### Patch Changes
