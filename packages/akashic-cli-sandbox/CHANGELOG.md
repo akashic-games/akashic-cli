@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2.0.0-next.1
+
+### Patch Changes
+
+- [#1501](https://github.com/akashic-games/akashic-cli/pull/1501) [`b057814`](https://github.com/akashic-games/akashic-cli/commit/b057814e1423c0af424f5251d2c151ac2e40f463) Thanks [@xnv](https://github.com/xnv)! - Fix crash when installed sandbox only, caused by a lacking dependency
+
 ## 2.0.0-next.0
 
 ### Major Changes
