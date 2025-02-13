@@ -39,5 +39,5 @@ COPY --from=build --chown=node:node /app/config ./config
 
 USER node
 EXPOSE 3300
-ENTRYPOINT ["/tini", "--", "node", "bin/run"]
+ENTRYPOINT ["/tini", "--", "node", "bin/run.js"]
 CMD ["/game"]

@@ -20,14 +20,13 @@
     "./package.json": "./package.json"
   },
   "bin": {
-    "akashic-cli-config": "./bin/akashic-cli-config",
-    "akashic-cli-modify": "./bin/akashic-cli-modify",
-    "akashic-cli-stat": "./bin/akashic-cli-stat"
+    "akashic-cli-config": "./bin/akashic-cli-config.js",
+    "akashic-cli-modify": "./bin/akashic-cli-modify.js",
+    "akashic-cli-stat": "./bin/akashic-cli-stat.js"
   },
   "scripts": {
     "prepublish": "npm run clean && npm run build",
     "clean": "rimraf ./lib && rimraf ./spec/build",
-    "start": "npm run build && node bin/run",
     "build": "tsc -p ./",
     "test": "npm run test:vitest && npm run test:lint",
     "test:vitest": "vitest run",

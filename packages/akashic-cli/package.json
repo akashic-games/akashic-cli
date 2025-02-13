@@ -4,7 +4,7 @@
   "description": "Command-line utility for akashic game development",
   "type": "module",
   "bin": {
-    "akashic": "./bin/akashic"
+    "akashic": "./bin/akashic.js"
   },
   "scripts": {
     "prepublish": "npm run clean && npm run build",

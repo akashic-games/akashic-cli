@@ -15,7 +15,7 @@
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
   "bin": {
-    "akashic-cli-scan": "./bin/run"
+    "akashic-cli-scan": "./bin/run.js"
   },
   "files": [
     "bin",

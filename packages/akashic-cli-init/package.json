@@ -6,7 +6,7 @@
   "scripts": {
     "prepublish": "npm run clean && npm run build",
     "clean": "rimraf ./lib",
-    "start": "npm run build && node bin/run",
+    "start": "npm run build && node bin/run.js",
     "build": "tsc -p ./",
     "lint": "eslint -c .eslintrc.cjs --fix",
     "test": "npm run test:vitest && npm run lint",
@@ -15,7 +15,7 @@
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
   "bin": {
-    "akashic-cli-init": "./bin/run"
+    "akashic-cli-init": "./bin/run.js"
   },
   "files": [
     "lib"
