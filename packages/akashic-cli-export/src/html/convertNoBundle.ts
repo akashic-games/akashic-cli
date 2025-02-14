@@ -6,7 +6,7 @@ import * as cmn from "@akashic/akashic-cli-commons";
 import * as ejs from "ejs";
 import fsx from "fs-extra";
 import type { MinifyOptions } from "terser";
-import * as liceneUtil from "../licenseUtil.js";
+import * as licenseUtil from "../licenseUtil.js";
 import { validateGameJson } from "../utils.js";
 import type {
 	ConvertTemplateParameterObject} from "./convertUtil.js";
@@ -76,7 +76,7 @@ export async function promiseConvertNoBundle(options: ConvertTemplateParameterOb
 		assetPaths = assetPaths.concat(globalScriptPaths);
 	}
 
-	await liceneUtil.writeLicenseTextFile(options.source, options.output, libPaths, content.environment["sandbox-runtime"]);
+	await licenseUtil.writeLicenseTextFile(options.source, options.output, libPaths, content.environment["sandbox-runtime"]);
 
 	if (errorMessages.length > 0) {
 		options.logger.warn("The following ES5 syntax errors exist.\n" + errorMessages.join("\n"));
