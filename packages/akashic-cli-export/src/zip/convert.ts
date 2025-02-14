@@ -12,8 +12,7 @@ import { rollup } from "rollup";
 import type { MinifyOptions } from "terser";
 import { minify_sync } from "terser";
 import * as liceneUtil from "../licenseUtil.js";
-import * as utils from "../utils.js";
-import { validateGameJson } from "../utils.js";
+import { validateGameJson, warnLackOfAudioFile } from "../utils.js";
 import { getFromHttps } from "./apiUtil.js";
 import { NICOLIVE_SIZE_LIMIT_GAME_JSON, NICOLIVE_SIZE_LIMIT_TOTAL_FILE } from "./constants.js";
 import * as gcu from "./GameConfigurationUtil.js";
@@ -242,7 +241,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 		.then(() => cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join(param.source, "game.json")))
 		.then(async (result: cmn.GameConfiguration) => {
 			gamejson = result;
-			Object.values(gamejson.assets).forEach(asset => utils.warnLackOfAudioFile(asset));
+			Object.values(gamejson.assets).forEach(asset => warnLackOfAudioFile(asset));
 
 			validateGameJson(gamejson);
 
@@ -347,8 +346,9 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 				preservingFilePathSet.add(assetBundlePath);
 			}
 
-			// コピーしなかったアセットやファイルをgame.jsonから削除する
-			gcu.removeAssets(gamejson, (asset) => preservingFilePathSet.has(asset.path));
+			// preservingFilePathSet (維持するファイル一覧) にないものは game.json から削除する。
+			// 暫定措置: audio は常に残す。(path に拡張子がないので preservingFilePathSet と比較できない。今後 audio を bundle しない限り動作上の悪影響はない)
+			gcu.removeAssets(gamejson, (asset) => (asset.type === "audio") || preservingFilePathSet.has(asset.path));
 			gcu.removeGlobalScripts(gamejson, (filePath: string) => preservingFilePathSet.has(filePath));
 
 			if (param.bundle && param.omitUnbundledJs) {
