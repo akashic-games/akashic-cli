@@ -30,7 +30,7 @@
     "build": "tsc -p ./",
     "test": "npm run test:vitest && npm run test:lint",
     "test:vitest": "vitest run",
-    "test:lint": "eslint -c .eslintrc.cjs --fix"
+    "test:lint": "eslint -c .eslintrc.cjs --fix \"./src/**/*.ts\""
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",

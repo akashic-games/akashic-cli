@@ -10,7 +10,7 @@
     "prepublish": "npm run clean && npm run build",
     "clean": "rimraf ./lib",
     "build": "tsc -p ./",
-    "lint": "eslint -c .eslintrc.cjs --fix",
+    "lint": "eslint -c .eslintrc.cjs --fix \"./src/**/*.ts\"",
     "test": "npm run lint"
   },
   "author": "DWANGO Co., Ltd.",
@@ -31,9 +31,9 @@
     "commander": "^12.0.0"
   },
   "devDependencies": {
-    "@akashic/eslint-config": "^2.1.0",
+    "@akashic/eslint-config": "2.1.0",
     "@types/node": "^20.16.9",
-    "@typescript-eslint/eslint-plugin": "^8.7.0",
+    "@typescript-eslint/eslint-plugin": "6.21.0",
     "eslint": "^8.57.1",
     "eslint-plugin-import": "^2.30.0",
     "rimraf": "^6.0.1",

@@ -6,6 +6,7 @@ import * as cmn from "@akashic/akashic-cli-commons";
 import * as ejs from "ejs";
 import fsx from "fs-extra";
 import type { MinifyOptions } from "terser";
+import * as liceneUtil from "../licenseUtil.js";
 import { validateGameJson } from "../utils.js";
 import type {
 	ConvertTemplateParameterObject} from "./convertUtil.js";
@@ -21,7 +22,6 @@ import {
 	validateSandboxConfigJs,
 	readSandboxConfigJs
 } from "./convertUtil.js";
-import * as liceneUtil from "../licenseUtil.js";
 
 interface InnerHTMLAssetData {
 	name: string;
@@ -84,7 +84,7 @@ export async function promiseConvertBundle(options: ConvertTemplateParameterObje
 	}
 
 	await liceneUtil.writeLicenseTextFile(options.source, options.output, libPaths, conf._content.environment["sandbox-runtime"]);
-	
+
 	if (errorMessages.length > 0) {
 		options.logger.warn("The following ES5 syntax errors exist.\n" + errorMessages.join("\n"));
 	}
@@ -108,10 +108,10 @@ export async function promiseConvertBundle(options: ConvertTemplateParameterObje
 }
 
 async function convertAssetToInnerHTMLObj(
-	assetName: string, 
-	inputPath: string, 
+	assetName: string,
+	inputPath: string,
 	conf: cmn.Configuration,
-	terser: MinifyOptions | undefined, 
+	terser: MinifyOptions | undefined,
 	esDownpile: boolean
 ): Promise<InnerHTMLAssetData> {
 	const assets = conf._content.assets;
@@ -144,10 +144,10 @@ async function convertScriptNameToInnerHTMLObj(
 }
 
 async function writeHtmlFile(
-	innerHTMLAssetArray: InnerHTMLAssetData[], 
+	innerHTMLAssetArray: InnerHTMLAssetData[],
 	outputPath: string,
-	conf: cmn.Configuration, 
-	options: ConvertTemplateParameterObject, 
+	conf: cmn.Configuration,
+	options: ConvertTemplateParameterObject,
 	templatePath: string
 ): Promise<void> {
 	const injects = options.injects ? options.injects : [];

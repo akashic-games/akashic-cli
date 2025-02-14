@@ -8,7 +8,7 @@
     "clean": "rimraf ./lib",
     "start": "npm run build && node bin/run.js",
     "build": "tsc -p ./",
-    "lint": "eslint -c .eslintrc.cjs --fix",
+    "lint": "eslint -c .eslintrc.cjs --fix \"./src/**/*.ts\"",
     "test": "npm run test:vitest && npm run lint",
     "test:vitest": "vitest run"
   },

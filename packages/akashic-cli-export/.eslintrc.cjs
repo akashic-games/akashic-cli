@@ -2,7 +2,8 @@ module.exports = {
 	root: true,
 	ignorePatterns: [
 		"*.js",
-		"/*.ts"
+		"/*.ts",
+		"**/__tests__/**/*"
 	],
 	overrides: [
 		{

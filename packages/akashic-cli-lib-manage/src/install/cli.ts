@@ -47,7 +47,7 @@ export async function run(argv: string[]): Promise<void> {
 	commander.parse(argv);
 	const options = commander.opts();
 	let configuration;
-	try { 
+	try {
 		configuration = await FileSystem.load(options.cwd || process.cwd());
 	} catch (error) {
 		console.error(error);

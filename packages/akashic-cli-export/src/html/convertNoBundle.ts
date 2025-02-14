@@ -6,6 +6,7 @@ import * as cmn from "@akashic/akashic-cli-commons";
 import * as ejs from "ejs";
 import fsx from "fs-extra";
 import type { MinifyOptions } from "terser";
+import * as liceneUtil from "../licenseUtil.js";
 import { validateGameJson } from "../utils.js";
 import type {
 	ConvertTemplateParameterObject} from "./convertUtil.js";
@@ -21,7 +22,6 @@ import {
 	resolveEngineFilesPath,
 	validateSandboxConfigJs
 } from "./convertUtil.js";
-import * as liceneUtil from "../licenseUtil.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
