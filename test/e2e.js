@@ -2,7 +2,7 @@
 //
 // Usage:
 //  node test/e2e.js          (latestタグでpublishされたものをインストールしてテスト)
-//  node test/e2e.js --local  (このリポジトリの packages/akashic-cli/bin/akashic をテスト)
+//  node test/e2e.js --local  (このリポジトリの packages/akashic-cli/bin/akashic.js をテスト)
 
 import { tmpdir } from "os";
 import { dirname, join, resolve } from "path";
@@ -107,7 +107,7 @@ try {
 		await exec("npm install @akashic/akashic-cli@latest");
 		akashicCliPath = `${targetDir}/node_modules/.bin/akashic`;
 	} else {
-		akashicCliPath = resolve(__dirname, "..", "packages", "akashic-cli", "bin", "akashic");
+		akashicCliPath = resolve(__dirname, "..", "packages", "akashic-cli", "bin", "akashic.js");
 
 		// workaround: Windows 環境は shebang を解釈しないのでそのままでは実行できない。
 		// (npm i @akashic/akashic-cli した時は実行可能な .cmd ファイルが作られるが、ここでは存在しない)

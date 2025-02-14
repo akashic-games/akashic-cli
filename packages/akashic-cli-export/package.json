@@ -6,7 +6,7 @@
   "scripts": {
     "prepublish": "npm run clean && npm run build",
     "clean": "shx rm -rf lib && shx rm -rf spec/build",
-    "start": "npm run build && node bin/run",
+    "start": "npm run build && node bin/run.js",
     "build": "npm run build:app && npm run copy:pdi && npm run build:template",
     "build:app": "tsc -p ./ && tsc -p ./tsconfig.cjs.json",
     "copy:pdi": "npm run copy:pdi:v1 && npm run copy:pdi:v2 && npm run copy:pdi:v3",
@@ -25,10 +25,10 @@
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
   "bin": {
-    "akashic-cli-export": "./bin/run",
-    "akashic-cli-export-html": "./bin/akashic-cli-export-html",
-    "akashic-cli-export-zip": "./bin/akashic-cli-export-zip",
-    "akashic-cli-zip": "./bin/akashic-cli-export-zip"
+    "akashic-cli-export": "./bin/run.js",
+    "akashic-cli-export-html": "./bin/akashic-cli-export-html.js",
+    "akashic-cli-export-zip": "./bin/akashic-cli-export-zip.js",
+    "akashic-cli-zip": "./bin/akashic-cli-export-zip.js"
   },
   "files": [
     "lib"

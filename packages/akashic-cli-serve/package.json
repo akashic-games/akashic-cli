@@ -24,7 +24,7 @@
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
   "bin": {
-    "akashic-cli-serve": "./bin/run"
+    "akashic-cli-serve": "./bin/run.js"
   },
   "dependencies": {
     "@akashic/akashic-cli-commons": "1.0.0-next.0",

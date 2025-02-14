@@ -14,9 +14,9 @@
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
   "bin": {
-    "akashic-cli-install": "./bin/akashic-cli-install",
-    "akashic-cli-uninstall": "./bin/akashic-cli-uninstall",
-    "akashic-cli-update": "./bin/akashic-cli-update"
+    "akashic-cli-install": "./bin/akashic-cli-install.js",
+    "akashic-cli-uninstall": "./bin/akashic-cli-uninstall.js",
+    "akashic-cli-update": "./bin/akashic-cli-update.js"
   },
   "files": [
     "lib"
