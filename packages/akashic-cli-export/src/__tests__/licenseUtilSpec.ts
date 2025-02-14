@@ -22,8 +22,8 @@ describe("licenseUtil", () => {
 	it("writeLicenseTextFile()", async () => {
 		const result = await writeLicenseTextFile(contentPath, destDir,  moduleFilePaths);
 
-		expect(consoleSpy).toBeCalledWith(expect.stringMatching(/^\[WARNING\].+license-warn.+foo.+.$/));		
-		expect(consoleSpy).toBeCalledWith(expect.stringMatching(/^\[WARNING\].+hoge.+LGPL-3.0-or-later.+.$/));
+		expect(consoleSpy).toBeCalledWith(expect.stringMatching(/^\[WARN\].+license-warn.+foo.+.$/));		
+		expect(consoleSpy).toBeCalledWith(expect.stringMatching(/^\[WARN\].+hoge.+LGPL-3.0-or-later.+.$/));
 		expect(result).toBeTruthy();
 
 		const license = fsx.readFileSync(path.join(destDir, "library_license.txt")).toString().split(/\r?\n/g);
