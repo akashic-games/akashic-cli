@@ -1,7 +1,7 @@
 import * as fs from "fs";
-import * as editorconfig from "editorconfig";
-import { join } from "path";
 import { existsSync, statSync } from "fs";
+import { join } from "path";
+import * as editorconfig from "editorconfig";
 import type { CliConfiguration } from "./CliConfig/CliConfiguration.js";
 import { loadModule } from "./loadModule.js";
 

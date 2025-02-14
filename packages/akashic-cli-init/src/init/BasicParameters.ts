@@ -110,7 +110,7 @@ export async function updateConfigurationFile(confPath: string, logger: Logger, 
 		height: conf.height,
 		fps: conf.fps
 	}, skipAsk);
-		
+
 	setBasicParameters(conf, basicParams);
 	return await writeJSON(confPath, conf);
 }

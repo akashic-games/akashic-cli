@@ -1,5 +1,5 @@
-import * as path from "path";
 import { createRequire } from "module";
+import * as path from "path";
 import type { Logger, CliConfigStat, GameConfiguration } from "@akashic/akashic-cli-commons";
 import { ConsoleLogger, FileSystem } from "@akashic/akashic-cli-commons";
 import { Command } from "commander";
@@ -39,12 +39,12 @@ commander
 	.option("-l, --limit <limit>", "Limit size")
 	.option("--raw", "Raw mode. Result will not contain logger prefix.");
 
-function cli(param: CliConfigStat): void {
+async function cli(param: CliConfigStat): Promise<void> {
 	const logger = new ConsoleLogger({ quiet: param.quiet });
 	const target = param.args.length > 0 ? param.args[0] : "(empty)";
 	switch (target) {
 		case "size":
-			statSize(logger, param);
+			await statSize(logger, param);
 			break;
 		default:
 			commander.help();
@@ -63,7 +63,7 @@ export async function run(argv: string[]): Promise<void> {
 		process.exit(1);
 	}
 	const conf = configuration!.commandOptions?.stat ?? {};
-	cli({
+	await cli({
 		args: commander.args ?? conf.args,
 		cwd: options.cwd ?? conf.cwd,
 		quiet: options.quiet ?? conf.quiet,

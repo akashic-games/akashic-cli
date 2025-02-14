@@ -11,12 +11,12 @@ import type { OutputChunk, RollupBuild } from "rollup";
 import { rollup } from "rollup";
 import type { MinifyOptions } from "terser";
 import { minify_sync } from "terser";
+import * as liceneUtil from "../licenseUtil.js";
 import * as utils from "../utils.js";
 import { validateGameJson } from "../utils.js";
 import { getFromHttps } from "./apiUtil.js";
 import { NICOLIVE_SIZE_LIMIT_GAME_JSON, NICOLIVE_SIZE_LIMIT_TOTAL_FILE } from "./constants.js";
 import * as gcu from "./GameConfigurationUtil.js";
-import * as liceneUtil from "../licenseUtil.js";
 import { transformPackSmallImages } from "./transformPackImages.js";
 
 // NOTE: 以下のパッケージは型定義が存在しないか JS と型定義の齟齬があるため `require()` を用いている

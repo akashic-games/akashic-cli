@@ -1,5 +1,5 @@
-import * as path from "path";
 import { createRequire } from "module";
+import * as path from "path";
 import type { CliConfigModify } from "@akashic/akashic-cli-commons";
 import { ConsoleLogger, FileSystem } from "@akashic/akashic-cli-commons";
 import { Command } from "commander";
@@ -27,7 +27,7 @@ function defineCommand(commandName: string): void {
 		.option("-q, --quiet", "Suppress output")
 		.action(async (value: string, opts: CliConfigModify = {}) => {
 			let configuration;
-			try { 
+			try {
 				configuration = await FileSystem.load(path.join(opts.cwd || process.cwd()));
 			} catch (error) {
 				console.error(error);

@@ -5,11 +5,11 @@ import { fileURLToPath } from "url";
 import * as cmn from "@akashic/akashic-cli-commons";
 import type { AssetConfigurationMap, ImageAssetConfigurationBase } from "@akashic/game-configuration";
 import type { SandboxConfiguration } from "@akashic/sandbox-configuration";
+import * as babel from "@babel/core";
+import presetEnv from "@babel/preset-env";
 import fsx from "fs-extra";
 import type { MinifyOptions } from "terser";
 import { minify_sync } from "terser";
-import * as babel from "@babel/core";
-import presetEnv from "@babel/preset-env";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

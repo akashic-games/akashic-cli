@@ -152,5 +152,5 @@ async function createRenamedGame(sourcePath: string, hashLength: number): Promis
 	const gamejson = await cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join(destDirPath, "game.json"));
 	cmn.Renamer.renameAssetFilenames(gamejson, destDirPath, hashLength);
 	await cmn.FileSystem.writeJSON<cmn.GameConfiguration>(path.resolve(path.join(destDirPath, "game.json")), gamejson);
-	return destDirPath;	
+	return destDirPath;
 }

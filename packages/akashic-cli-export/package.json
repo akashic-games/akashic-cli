@@ -18,7 +18,7 @@
     "build:template:v2": "cd src/template/template-export-html-v2 && npm install --no-package-lock && npm run build && cd ../../",
     "build:template:v3": "cd src/template/template-export-html-v3 && npm install --no-package-lock && npm run build && cd ../../",
     "build:template:ejs": "shx cp src/template/bundle-index.ejs lib/template/ && shx cp src/template/no-bundle-index.ejs lib/template/",
-    "lint": "eslint -c .eslintrc.cjs --fix",
+    "lint": "eslint -c .eslintrc.cjs --fix \"src/**/*.ts\"",
     "test": "npm run test:vitest && npm run lint",
     "test:vitest": "vitest run"
   },

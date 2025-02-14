@@ -1,4 +1,4 @@
-import { CliConfigFontDeclaration } from "./common.js";
+import type { CliConfigFontDeclaration } from "./common.js";
 
 export interface CliConfigSandbox {
 	args?: string[];

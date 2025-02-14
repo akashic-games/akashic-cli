@@ -95,7 +95,7 @@ export async function run(argv: string[]): Promise<void> {
 	const options = commander.opts();
 
 	let configuration;
-	try { 
+	try {
 		configuration = await FileSystem.load(options.cwd || process.cwd());
 	} catch (error) {
 		console.error(error);
@@ -103,9 +103,11 @@ export async function run(argv: string[]): Promise<void> {
 	}
 	if (options.debugOverrideEngineFiles) {
 		if (!/^engineFilesV\d+_\d+_\d+.*\.js$/.test(path.basename(options.debugOverrideEngineFiles))) {
-			console.error(`Invalid ---debug-override-engine-files option argument:${options.debugOverrideEngineFiles},`
-				+ "File name should be in engineFilesVx_x_x format");
-				process.exit(1);
+			console.error(
+				`Invalid ---debug-override-engine-files option argument:${options.debugOverrideEngineFiles}, ` +
+				"File name should be in engineFilesVx_x_x format"
+			);
+			process.exit(1);
 		}
 	}
 	if (options.atsumaru) {

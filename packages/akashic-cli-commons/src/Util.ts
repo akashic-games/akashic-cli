@@ -102,7 +102,7 @@ export async function getTotalFileSize(directoryPath: string): Promise<number> {
  * 指定ディレクトリ以下のすべてのファイルを再帰的に取得する
  * @param dir パス
  * @param baseDir ベース
- * @returns 
+ * @returns
  */
 export function readdirRecursive(dir: string, baseDir: string = dir): string[] {
 	let files: string[] = [];
