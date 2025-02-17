@@ -10,8 +10,6 @@ let setInterval;
 			thisArg: typeof window,
 			args: Parameters<typeof window.setTimeout>
 		) {
-			const [callback, timeout, ...rest] = args;
-
 			const message = "グローバル関数の setTimeout() が実行されました。" +
 				"Akashicコンテンツでは scene.setTimeout() を利用してください。";
 
@@ -24,7 +22,7 @@ let setInterval;
 				}
 			}));
 
-			return Reflect.apply(target, thisArg, [callback, timeout, ...rest]);
+			return Reflect.apply(target, thisArg, args);
 		}
 	});
 })();
@@ -36,8 +34,6 @@ let setInterval;
 			thisArg: typeof window,
 			args: Parameters<typeof window.setInterval>
 		) {
-			const [callback, interval, ...rest] = args;
-
 			const message = "グローバル関数の setInterval() が実行されました。" +
 				"Akashicコンテンツでは scene.setInterval() を利用してください。";
 
@@ -50,7 +46,7 @@ let setInterval;
 				}
 			}));
 
-			return Reflect.apply(target, thisArg, [callback, interval, ...rest]);
+			return Reflect.apply(target, thisArg, args);
 		}
 	});
 })();
