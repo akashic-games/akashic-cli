@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.0.0-next.1
+
+### Patch Changes
+
+- [#1507](https://github.com/akashic-games/akashic-cli/pull/1507) [`b075741`](https://github.com/akashic-games/akashic-cli/commit/b0757417b225982dbde05b44d260f66f59574873) Thanks [@xnv](https://github.com/xnv)! - Fix export-html crash when the output path ends with `.zip`
+
 ## 1.0.0-next.0
 
 ### Major Changes

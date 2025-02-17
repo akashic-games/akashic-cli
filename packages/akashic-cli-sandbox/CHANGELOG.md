@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 2.0.0-next.2
+
+### Patch Changes
+
+- [#1503](https://github.com/akashic-games/akashic-cli/pull/1503) [`2428caf`](https://github.com/akashic-games/akashic-cli/commit/2428cafb6af5547b91f35832602b2b4d15e9f6ad) Thanks [@xnv](https://github.com/xnv)! - fix commands broken on early versions of Node.js v18, v20 and v21
+
+- [#1509](https://github.com/akashic-games/akashic-cli/pull/1509) [`8248ef1`](https://github.com/akashic-games/akashic-cli/commit/8248ef1082214e3bbce117638be8d4ef40b806bd) Thanks [@yu-ogi](https://github.com/yu-ogi)! - warn when using global timer functions
+
+- Updated dependencies [[`b075741`](https://github.com/akashic-games/akashic-cli/commit/b0757417b225982dbde05b44d260f66f59574873)]:
+  - @akashic/akashic-cli-commons@1.0.0-next.1
+
 ## 2.0.0-next.1
 
 ### Patch Changes

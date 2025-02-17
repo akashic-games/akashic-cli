@@ -1,5 +1,15 @@
 # Change Log
 
+## 2.0.0-next.1
+
+### Patch Changes
+
+- [#1503](https://github.com/akashic-games/akashic-cli/pull/1503) [`2428caf`](https://github.com/akashic-games/akashic-cli/commit/2428cafb6af5547b91f35832602b2b4d15e9f6ad) Thanks [@xnv](https://github.com/xnv)! - fix commands broken on early versions of Node.js v18, v20 and v21
+
+- Updated dependencies [[`2428caf`](https://github.com/akashic-games/akashic-cli/commit/2428cafb6af5547b91f35832602b2b4d15e9f6ad), [`b075741`](https://github.com/akashic-games/akashic-cli/commit/b0757417b225982dbde05b44d260f66f59574873)]:
+  - @akashic/akashic-cli-extra@2.0.0-next.1
+  - @akashic/akashic-cli-commons@1.0.0-next.1
+
 ## 2.0.0-next.0
 
 ### Major Changes
