@@ -183,7 +183,7 @@ describe("exportHTML", function () {
 		expect(fsx.statSync(path.join(dest, "audio", "dummyse.ogg"))).toBeTruthy();
 		expect(fsx.statSync(path.join(dest, "audio", "dummyse.aac"))).toBeTruthy();
 		expect(fsx.statSync(path.join(dest, "audio", "dummyse.m4a"))).toBeTruthy();
-		expect(() => void fsx.statSync(path.join(dest, "audio", "dummyse.invalidext"))).toThrow();
+		expect(() => fsx.statSync(path.join(dest, "audio", "dummyse.invalidext"))).toThrow();
 		fsx.removeSync(dest);
 	});
 
