@@ -4,7 +4,7 @@ import * as os from "os";
 import * as path from "path";
 import * as cmn from "@akashic/akashic-cli-commons";
 import archiver = require("archiver");
-import * as fsx from "fs-extra";
+import fsx from "fs-extra";
 import { promiseConvertBundle } from "./convertBundle.js";
 import { promiseConvertNoBundle } from "./convertNoBundle.js";
 import type { ConvertTemplateParameterObject } from "./convertUtil.js";

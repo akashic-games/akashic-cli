@@ -2,7 +2,7 @@ import * as fs from "fs";
 import { createRequire } from "module";
 import * as path from "path";
 import vm from "vm";
-import * as fsx from "fs-extra";
+import fsx from "fs-extra";
 import mockfs from "mock-fs";
 import { vi } from "vitest";
 import { validateGameJson } from "../../utils.js";

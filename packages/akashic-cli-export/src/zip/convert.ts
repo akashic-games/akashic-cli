@@ -6,7 +6,7 @@ import type { ImageAssetConfigurationBase, NicoliveSupportedModes } from "@akash
 import * as babel from "@babel/core";
 import presetEnv from "@babel/preset-env";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
-import * as fsx from "fs-extra";
+import fsx from "fs-extra";
 import type { OutputChunk, RollupBuild } from "rollup";
 import { rollup } from "rollup";
 import type { MinifyOptions } from "terser";

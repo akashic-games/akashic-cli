@@ -1,5 +1,5 @@
 import * as path from "path";
-import * as fsx from "fs-extra";
+import fsx from "fs-extra";
 import * as exp from "../exportHTML.js";
 
 describe("exportHTML", function () {

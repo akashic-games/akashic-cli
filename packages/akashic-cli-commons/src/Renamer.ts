@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
-import * as fsx from "fs-extra";
+import fsx from "fs-extra";
 import { sha256 } from "js-sha256";
 import type { GameConfiguration } from "./GameConfiguration.js";
 import { KNOWN_AUDIO_EXTENSIONS } from "./knownAudioExtensions.js";
