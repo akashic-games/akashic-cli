@@ -13,8 +13,12 @@
     "@akashic/akashic-cli-serve": "1.16.19"
   },
   "changesets": [
+    "beige-scissors-wash",
+    "clean-seas-sleep",
+    "good-dancers-breathe",
     "honest-walls-melt",
     "moody-forks-search",
+    "polite-socks-relate",
     "swift-geese-develop"
   ]
 }
