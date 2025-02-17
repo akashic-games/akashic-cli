@@ -17,7 +17,7 @@ let setInterval;
 			window.dispatchEvent(new ErrorEvent("akashicWarning", {
 				error: {
 					message,
-					referenceUrl: "https://akashic-games.github.io/reverse-reference/v3/logic/timer-timeout.html#%E8%A9%B3%E7%B4%B0",
+					referenceUrl: "https://akashic-games.github.io/reverse-reference/v3/logic/timer-timeout.html",
 					referenceMessage: "対応方法はこちらを参照してください。"
 				}
 			}));
@@ -41,7 +41,7 @@ let setInterval;
 			window.dispatchEvent(new ErrorEvent("akashicWarning", {
 				error: {
 					message,
-					referenceUrl: "https://akashic-games.github.io/reverse-reference/v3/logic/timer-interval.html#%E8%A9%B3%E7%B4%B0",
+					referenceUrl: "https://akashic-games.github.io/reverse-reference/v3/logic/timer-interval.html",
 					referenceMessage: "対応方法はこちらを参照してください。"
 				}
 			}));
