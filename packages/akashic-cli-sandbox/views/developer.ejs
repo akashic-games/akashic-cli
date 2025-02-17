@@ -98,7 +98,7 @@
 								</label>
 							</div>
 							<div>
-								<label for="warning-medding-akashic">
+								<label for="warning-meddling-akashic">
 									<input id="warning-meddling-akashic" type="checkbox" v-model="config.warningMeddlingAkashic" v-on:change="toggleWarningMeddlingAkashic"  v-bind:disabled="config.isWarnSpecifiedInConfig">
 									Akashicコンテンツで使用すべきでない機能が使用された場合警告を出力
 									<b v-if="config.isWarnSpecifiedInConfig"><br>(sandbox.config.js で warn.useDate, warn.useMathRandom が指定されているため無効化されています)</b>
