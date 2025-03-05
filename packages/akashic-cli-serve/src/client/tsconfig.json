@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
-    "target": "ES2015",
+    "target": "ES2020",
     "declaration": false,
     "downlevelIteration": true,
-    "lib": ["dom", "ES2018"],
+    "lib": ["dom", "ES2020"],
     "types": ["vite/client"],
     "noImplicitAny": true,
     "module": "commonjs" ,
@@ -21,6 +21,7 @@
   "include": [
     "./view/stories/**/*.tsx",
     "./akashic/AkashicGameViewWeb.d.ts",
-    "./bootstrap.tsx"
+    "./bootstrap.tsx",
+    "./sandbox/bootstrap.tsx"
   ]
 }
