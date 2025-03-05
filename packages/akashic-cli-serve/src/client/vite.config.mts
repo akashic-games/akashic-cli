@@ -1,5 +1,9 @@
 import { defineConfig } from 'vite';
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
 import react from '@vitejs/plugin-react';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
 	plugins: [react()],
@@ -7,6 +11,12 @@ export default defineConfig({
 	build: {
 		outDir: "../../www/public/",
 		emptyOutDir: false,
+		rollupOptions: {
+			input: {
+				serve: resolve(__dirname, "index.html"),
+				sandbox: resolve(__dirname, "sandbox", "index.html"),
+			},
+		},
 	},
 
 	// vite serve 用の設定。利用時は別で適当なコンテンツを実行する serve を起動しておく必要がある (e.g. `node bin/run.js -B --port 3300 <content>`) 。

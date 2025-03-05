@@ -4,6 +4,10 @@ import parser from "../../common/MsgpackParser";
 declare const io: typeof ioc.io;
 
 export function createSocketInstance(uri: string): ioc.Socket {
+	// SocketIO を利用しないケース (Sandbox) においては io が存在しない。
+	// 既存のコードに影響を与えないよう non-null assertion で null を返している。
+	if (typeof io === "undefined") return null!;
+
 	return io(uri, {
 		// デフォルトはInfinityだが、過去に同じホスト・ポートで起動されたサーバに
 		// 接続していたクライアントが生きている(i.e. ブラウザのタブが開いたまま)時、
