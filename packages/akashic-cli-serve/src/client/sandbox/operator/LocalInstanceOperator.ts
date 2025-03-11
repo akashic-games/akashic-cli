@@ -57,15 +57,36 @@ export class LocalInstanceOperator {
 		this.store.currentLocalInstance!.setTargetTime(time);
 	};
 
-	switchToRealtime = (): Promise<void> => {
+	switchToRealtime = async (): Promise<void> => {
 		// NOTE: この箇所は active instance がサーバ上にあることを前提にしている共通コードを流用しているため、
 		// やむなく PlayEntity と LocalInstanceEntity のメソッドを個別に呼んでいる。
 		this.store.currentPlay!.startTimekeeper();
 		this.store.currentPlay!.handleRunnerResume();
 
-		// !!FIXME: この箇所は Passive + Realtime で最新フレームまで追いついた後に Active + Realtime と修正することを検討
-		this.store.currentLocalInstance!.setExecutionMode("active");
-		return this.store.currentLocalInstance!.resume();
+		const localInstance = this.store.currentLocalInstance!;
+		const dump = this.store.currentPlay!.amflow.dump();
+		const latestAge = dump.tickList![1];
+		const game = this.store.currentLocalInstance!.gameContent.agvGameContent.getGame();
+
+		// NOTE: Replay -> Active Realtime への切り替えは現状想定されていない。
+		// そのため Passive + Realtime で最新フレームまで追いついた後に Active Realtime に切り替える。
+		localInstance.setExecutionMode("passive");
+
+		await waitForCondition(async () => {
+			if (game.age > latestAge) {
+				localInstance.setExecutionMode("active");
+				return true;
+			}
+
+			if (localInstance.executionMode !== "passive") {
+				// 最新まで追っかけ再生中にシークされた場合は追っかけ処理を中断する
+				return true;
+			}
+
+			return false;
+		});
+
+		await localInstance.resume();
 	};
 
 	saveScreenshot = (): void => {
@@ -82,4 +103,29 @@ function downloadBase64(data: string): void {
 	link.setAttribute("download", "screen.png");
 	link.click();
 	link.remove();
+}
+
+// NOTE: 他の部分で使えるようならば共通化する
+async function waitForCondition(condition: () => boolean | Promise<boolean>, timeout?: number): Promise<void> {
+	const start = performance.now();
+
+	return new Promise((resolve, reject) => {
+		const check = async (): Promise<void> => {
+			let checked: boolean = false;
+			try {
+				checked = await condition();
+			} catch (error) {
+				reject(error);
+				return;
+			}
+			if (checked) {
+				resolve();
+			} else if (timeout != null && performance.now() - start >= timeout) {
+				reject(new Error("timeout"));
+			} else {
+				setTimeout(check, 100);
+			}
+		};
+		return check();
+	});
 }

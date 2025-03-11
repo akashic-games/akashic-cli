@@ -175,6 +175,7 @@ declare module agv {
 
 	interface GameLike {
 		external: GameExternalPluginsLike;
+		age: number;
 
 		// to dump
 		db: ae.WeakRefKVSOrObjectTableLike;
