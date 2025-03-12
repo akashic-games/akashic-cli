@@ -11,7 +11,7 @@ import type { PlayStatus } from "../../common/types/PlayStatus";
 import type { StartPointHeader } from "../../common/types/StartPointHeader";
 import type { RunnerDescription, ClientInstanceDescription } from "../../common/types/TestbedEvent";
 import type { GameViewManager } from "../akashic/GameViewManager";
-import { ServeMemoryAmflowClient } from "../akashic/ServeMemoryAMFlowClient";
+import type { ServeMemoryAmflowClient } from "../akashic/ServeMemoryAMFlowClient";
 import type { SocketIOAMFlowClient } from "../akashic/SocketIOAMFlowClient";
 import { apiClient } from "../api/apiClientInstance";
 import type { ScenarioEventData } from "../common/types/ScenarioEventData";
@@ -112,10 +112,6 @@ export class PlayEntity {
 			if (!param.durationState.isPaused) {
 				this._startTimeKeeper();
 			}
-		}
-
-		if (param.amflow instanceof ServeMemoryAmflowClient) {
-			param.amflow.onPutStartPoint.add(startPoint => this.handleStartPointHeader(startPoint));
 		}
 	}
 
