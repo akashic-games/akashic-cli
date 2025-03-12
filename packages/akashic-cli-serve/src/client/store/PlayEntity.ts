@@ -225,10 +225,6 @@ export class PlayEntity {
 		this._timeKeeper.start();
 	}
 
-	getTimekeeperNow(): number {
-		return this._timeKeeper.now();
-	}
-
 	muteAll(): Promise<void> {
 		return apiClient.changePlayAudioState(this.playId, { muteType: "all" });
 	}
