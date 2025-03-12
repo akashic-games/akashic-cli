@@ -4,6 +4,7 @@ lib
 config/
 src/client/static/thirdparty/
 www/internal/
-www/public/
+www/public/*
 !www/public/external/playlogClient*.js
+!www/public/img/
 *.tar
