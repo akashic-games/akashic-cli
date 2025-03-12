@@ -1,5 +1,14 @@
 # Change Log
 
+## 3.0.0-next.4
+
+### Patch Changes
+
+- [#1516](https://github.com/akashic-games/akashic-cli/pull/1516) [`a6892a4`](https://github.com/akashic-games/akashic-cli/commit/a6892a4ee7c60cfd5f0ae5e8ddf1eac7fdcf653d) Thanks [@xnv](https://github.com/xnv)! - fix launch failure of 'akashic serve'
+
+- Updated dependencies [[`0d0f538`](https://github.com/akashic-games/akashic-cli/commit/0d0f538a86c095f7463690685891abbbf870b54d)]:
+  - @akashic/akashic-cli-serve@2.0.0-next.2
+
 ## 3.0.0-next.3
 
 ### Patch Changes
