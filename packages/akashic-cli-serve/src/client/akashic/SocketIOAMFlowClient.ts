@@ -182,6 +182,7 @@ export class SocketIOAMFlowClient implements amflow.AMFlow {
 		callback(new Error("not supported"));
 	}
 
+	// MemoryAmflowClient と型を合わせるためのダミー実装
 	dump(): never {
 		throw new Error("Not implemented");
 	}
