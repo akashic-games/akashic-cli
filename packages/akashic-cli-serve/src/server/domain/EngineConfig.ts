@@ -60,6 +60,6 @@ export const getEngineConfig = (param: GetEngineConfigParameterObject): EngineCo
 		external,
 		content_url: `${param.baseUrl}/contents/${param.contentId}/${gameContentDir}/game.json`,
 		asset_base_url: `${param.baseUrl}/contents/${param.contentId}/${gameContentDir}`,
-		content_id: "" + param.contentId
+		content_id: "" + param.contentId // TODO コンテンツごとに違う ID にすべき
 	};
 };
