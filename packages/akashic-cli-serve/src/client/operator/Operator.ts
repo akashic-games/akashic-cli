@@ -282,8 +282,10 @@ export class Operator {
 			this.gameViewManager.registerExternalPlugin(new agvplugin.CoeLimitedPlugin());
 			this.gameViewManager.registerExternalPlugin(new agvplugin.AgvSupplementPlugin());
 			this.gameViewManager.registerExternalPlugin(new agvplugin.InstanceStoragePlugin({
-				storage: window.sessionStorage
+				storage: window.localStorage
 			}));
+			if (agvplugin.InstanceStorageLimitedPlugin)
+				this.gameViewManager.registerExternalPlugin(new agvplugin.InstanceStorageLimitedPlugin());
 		} else {
 			this.gameViewManager.registerExternalPlugin(new CoeLimitedPlugin({
 				startPlayerInfoResolver: this._startPlayerInfoResolver,

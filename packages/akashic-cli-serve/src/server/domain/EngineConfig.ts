@@ -12,6 +12,7 @@ export interface EngineConfig {
 	asset_base_url?: string;
 	untrusted?: boolean;
 	external?: string[];
+	content_id?: string;
 }
 
 export interface GetEngineConfigParameterObject {
@@ -58,6 +59,7 @@ export const getEngineConfig = (param: GetEngineConfigParameterObject): EngineCo
 		untrusted,
 		external,
 		content_url: `${param.baseUrl}/contents/${param.contentId}/${gameContentDir}/game.json`,
-		asset_base_url: `${param.baseUrl}/contents/${param.contentId}/${gameContentDir}`
+		asset_base_url: `${param.baseUrl}/contents/${param.contentId}/${gameContentDir}`,
+		content_id: "" + param.contentId
 	};
 };
