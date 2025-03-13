@@ -282,7 +282,7 @@ export class Operator {
 			this.gameViewManager.registerExternalPlugin(new agvplugin.CoeLimitedPlugin());
 			this.gameViewManager.registerExternalPlugin(new agvplugin.AgvSupplementPlugin());
 			this.gameViewManager.registerExternalPlugin(new agvplugin.InstanceStoragePlugin({
-				storage: window.localStorage
+				storage: window.sessionStorage
 			}));
 			if (agvplugin.InstanceStorageLimitedPlugin)
 				this.gameViewManager.registerExternalPlugin(new agvplugin.InstanceStorageLimitedPlugin());
