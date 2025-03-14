@@ -245,4 +245,9 @@ declare module agvplugin {
 		constructor(...args: any[]);
 		onload(game: agv.GameLike): void;
 	}
+
+	class InstanceStorageLimitedPlugin implements agv.ExternalPlugin {
+		name: string;
+		onload(game: agv.GameLike, dataBus: unknown, gameContent: agv.GameContent): void;
+	}
 }

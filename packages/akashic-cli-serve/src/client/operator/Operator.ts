@@ -284,6 +284,8 @@ export class Operator {
 			this.gameViewManager.registerExternalPlugin(new agvplugin.InstanceStoragePlugin({
 				storage: window.sessionStorage
 			}));
+			if (agvplugin.InstanceStorageLimitedPlugin)
+				this.gameViewManager.registerExternalPlugin(new agvplugin.InstanceStorageLimitedPlugin());
 		} else {
 			this.gameViewManager.registerExternalPlugin(new CoeLimitedPlugin({
 				startPlayerInfoResolver: this._startPlayerInfoResolver,
