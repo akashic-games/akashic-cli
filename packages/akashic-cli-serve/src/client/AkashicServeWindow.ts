@@ -10,7 +10,7 @@ declare global {
 			gameViewManager: GameViewManager;
 			store: Store;
 			operator: Operator;
-			pluginFuncs: {};
+			pluginFuncs: Record<string, () => Function>;
 		};
 	}
 }
