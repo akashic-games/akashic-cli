@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.0.0-next.3
+
+### Patch Changes
+
+- [#1518](https://github.com/akashic-games/akashic-cli/pull/1518) [`e39512c`](https://github.com/akashic-games/akashic-cli/commit/e39512ca1159f11cf8119b552599000159ddb98c) Thanks [@xnv](https://github.com/xnv)! - chore(deps): udpdate and follow internal components: agvw@1.0.5
+
 ## 2.0.0-next.2
 
 ### Patch Changes
