@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.0.0-next.2
+
+### Patch Changes
+
+- [#1515](https://github.com/akashic-games/akashic-cli/pull/1515) [`0d0f538`](https://github.com/akashic-games/akashic-cli/commit/0d0f538a86c095f7463690685891abbbf870b54d) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Fix design-guideline of serve
+
 ## 2.0.0-next.1
 
 ### Patch Changes
