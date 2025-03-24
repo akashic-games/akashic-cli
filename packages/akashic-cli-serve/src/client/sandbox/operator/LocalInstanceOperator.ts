@@ -72,7 +72,7 @@ export class LocalInstanceOperator {
 		// そのため Passive + Realtime で最新フレームまで追いついた後に Active Realtime に切り替える。
 		localInstance.setExecutionMode("passive");
 
-		await waitForCondition(async () => {
+		await waitForCondition(() => {
 			if (game.age > latestAge) {
 				localInstance.setExecutionMode("active");
 				return true;
@@ -105,23 +105,18 @@ function downloadBase64(data: string): void {
 	link.remove();
 }
 
-// NOTE: 他の部分で使えるようならば共通化する
-async function waitForCondition(condition: () => boolean | Promise<boolean>, timeout?: number): Promise<void> {
-	const start = performance.now();
-
+async function waitForCondition(condition: () => boolean): Promise<void> {
 	return new Promise((resolve, reject) => {
-		const check = async (): Promise<void> => {
+		const check = (): void => {
 			let checked: boolean = false;
 			try {
-				checked = await condition();
+				checked = condition();
 			} catch (error) {
 				reject(error);
 				return;
 			}
 			if (checked) {
 				resolve();
-			} else if (timeout != null && performance.now() - start >= timeout) {
-				reject(new Error("timeout"));
 			} else {
 				setTimeout(check, 100);
 			}
