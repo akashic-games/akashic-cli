@@ -30,8 +30,8 @@ export class LocalInstanceOperator {
 	};
 
 	togglePause = (pause: boolean): Promise<void> => {
-		// NOTE: この箇所は active instance がサーバ上にあることを前提にしている共通コードを流用しているため、
-		// やむなく PlayEntity と LocalInstanceEntity のメソッドを個別に呼んでいる。
+		// NOTE: 本来この処理は PlayStore が持つべきだが、serve と共有の PlayStore は active instance がサーバ上にあることを前提にしたクラスになっている。
+		// ここではやむなく PlayEntity と LocalInstanceEntity のメソッドを個別に呼んでいる。
 		const executionMode = this.store.currentLocalInstance!.executionMode;
 		if (pause) {
 			this.store.currentPlay!.handleRunnerPause();
@@ -49,8 +49,8 @@ export class LocalInstanceOperator {
 	};
 
 	switchToReplay = (time: number): void => {
-		// NOTE: この箇所は active instance がサーバ上にあることを前提にしている共通コードを流用しているため、
-		// やむなく PlayEntity と LocalInstanceEntity のメソッドを個別に呼んでいる。
+		// NOTE: 本来この処理は PlayStore が持つべきだが、serve と共有の PlayStore は active instance がサーバ上にあることを前提にしたクラスになっている。
+		// ここではやむなく PlayEntity と LocalInstanceEntity のメソッドを個別に呼んでいる。
 		this.store.currentPlay!.pauseTimekeeper();
 		this.store.currentPlay!.handleRunnerPause();
 		this.store.currentLocalInstance!.setExecutionMode("replay");
@@ -58,8 +58,8 @@ export class LocalInstanceOperator {
 	};
 
 	switchToRealtime = async (): Promise<void> => {
-		// NOTE: この箇所は active instance がサーバ上にあることを前提にしている共通コードを流用しているため、
-		// やむなく PlayEntity と LocalInstanceEntity のメソッドを個別に呼んでいる。
+		// NOTE: 本来この処理は PlayStore が持つべきだが、serve と共有の PlayStore は active instance がサーバ上にあることを前提にしたクラスになっている。
+		// ここではやむなく PlayEntity と LocalInstanceEntity のメソッドを個別に呼んでいる。
 		this.store.currentPlay!.startTimekeeper();
 		this.store.currentPlay!.handleRunnerResume();
 
