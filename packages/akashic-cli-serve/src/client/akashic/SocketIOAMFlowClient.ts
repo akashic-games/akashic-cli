@@ -182,6 +182,11 @@ export class SocketIOAMFlowClient implements amflow.AMFlow {
 		callback(new Error("not supported"));
 	}
 
+	// MemoryAmflowClient と型を合わせるためのダミー実装
+	dump(): never {
+		throw new Error("Not implemented");
+	}
+
 	private _onTick = (connectionId: string, tick: playlog.Tick): void => {
 		if (connectionId !== this._connectionId)
 			return;

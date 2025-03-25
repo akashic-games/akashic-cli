@@ -18,6 +18,7 @@ module.exports = {
 	},
 	ignorePatterns: [
 		"**/*.js",
+		"**/*.cjs",
 		"**/vite.config.mts"
 	],
 	plugins: [

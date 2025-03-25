@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Akashic Serve</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../static/favicon.ico" />
+    <link href="../static/thirdparty/material-icons/material-icons.css" rel="stylesheet" type="text/css">
+    <link href="/public/external/fonts/fonts.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <div id="container"></div>
+    <script src="/internal/agvplugin.js"></script>
+    <script src="/public/external/akashic-gameview-web.strip.js"></script>
+    <script>
+        // NOTE: 後方互換性を保つため require() 形式でビルドされたのモジュールをグローバル変数に展開する
+        window.agv = require("@akashic/akashic-gameview-web");
+        try {
+            window.agvplugin = require("@akashic/akashic-gameview-web/lib/plugin");
+        } catch (_error) {}
+    </script>
+    <script type="module" src="./bootstrap.tsx"></script>
+</body>
+</html>
