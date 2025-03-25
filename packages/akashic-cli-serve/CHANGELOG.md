@@ -1,5 +1,13 @@
 # Change Log
 
+## 2.0.0-next.3
+
+### Patch Changes
+
+- [#1514](https://github.com/akashic-games/akashic-cli/pull/1514) [`96630e2`](https://github.com/akashic-games/akashic-cli/commit/96630e2e61dbc629922e6901196b052d46baec6d) Thanks [@yu-ogi](https://github.com/yu-ogi)! - integrate sandbox
+
+- [#1518](https://github.com/akashic-games/akashic-cli/pull/1518) [`e39512c`](https://github.com/akashic-games/akashic-cli/commit/e39512ca1159f11cf8119b552599000159ddb98c) Thanks [@xnv](https://github.com/xnv)! - chore(deps): udpdate and follow internal components: agvw@1.0.5
+
 ## 2.0.0-next.2
 
 ### Patch Changes
