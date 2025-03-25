@@ -11,10 +11,9 @@ import type { PlayStatus } from "../../common/types/PlayStatus";
 import type { StartPointHeader } from "../../common/types/StartPointHeader";
 import type { RunnerDescription, ClientInstanceDescription } from "../../common/types/TestbedEvent";
 import type { GameViewManager } from "../akashic/GameViewManager";
-import { ServeMemoryAmflowClient } from "../akashic/ServeMemoryAMFlowClient";
-import { SocketIOAMFlowClient } from "../akashic/SocketIOAMFlowClient";
+import type { ServeMemoryAmflowClient } from "../akashic/ServeMemoryAMFlowClient";
+import type { SocketIOAMFlowClient } from "../akashic/SocketIOAMFlowClient";
 import { apiClient } from "../api/apiClientInstance";
-import { socketInstance } from "../api/socketInstance";
 import type { ScenarioEventData } from "../common/types/ScenarioEventData";
 import type { ContentEntity } from "./ContentEntity";
 import type { ExecutionMode } from "./ExecutionMode";
@@ -42,6 +41,7 @@ export interface CreateServerInstanceParameterObject {
 
 export interface PlayEntityParameterObject {
 	gameViewManager: GameViewManager;
+	amflow: SocketIOAMFlowClient | ServeMemoryAmflowClient;
 	playId: string;
 	status: PlayStatus;
 	joinedPlayers?: Player[];
@@ -52,7 +52,6 @@ export interface PlayEntityParameterObject {
 	audioState?: PlayAudioState;
 	parent?: PlayEntity;
 	startPointHeaders?: StartPointHeader[];
-	amflow?: ServeMemoryAmflowClient;
 }
 
 export class PlayEntity {
@@ -83,7 +82,7 @@ export class PlayEntity {
 
 	constructor(param: PlayEntityParameterObject) {
 		this.playId = param.playId;
-		this.amflow = param.amflow ?? new SocketIOAMFlowClient(socketInstance);
+		this.amflow = param.amflow;
 		this.activePlaybackRate = 1;
 		this.isActivePausing = !!param.durationState && param.durationState.isPaused;
 		this.duration = param.durationState ? param.durationState.duration : 0;
@@ -113,10 +112,6 @@ export class PlayEntity {
 			if (!param.durationState.isPaused) {
 				this._startTimeKeeper();
 			}
-		}
-
-		if (param.amflow instanceof ServeMemoryAmflowClient) {
-			param.amflow.onPutStartPoint.add(startPoint => this.handleStartPointHeader(startPoint));
 		}
 	}
 

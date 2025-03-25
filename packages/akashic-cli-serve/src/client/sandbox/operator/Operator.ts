@@ -61,17 +61,21 @@ export class Operator {
 	startContent = async (params?: StartContentParameterObject): Promise<void> => {
 		const store = this.store;
 		const player = store.player ?? { id: "sandbox-player", name: "sandbox-player" };
+		const amflow = new ServeMemoryAmflowClient({ playId: "0", });
+
+		// TODO: 本来は PlayStore で生成すべきだが、現状の PlayStore は SocketIO が必須になるため PlayEntity を直接生成している
 		const playEntity = new PlayEntity({
 			gameViewManager: this.gameViewManager,
 			playId: "0",
 			status: "running",
 			content: this.store.contentStore.defaultContent(),
-			amflow: new ServeMemoryAmflowClient({ playId: "0", }),
+			amflow,
 			durationState: {
 				duration: 0,
 				isPaused: false,
 			},
 		});
+		amflow.onPutStartPoint.add(startPoint => playEntity.handleStartPointHeader(startPoint));
 
 		store.setCurrentPlay(playEntity);
 
