@@ -23,4 +23,5 @@ export interface CliConfigServe {
 	sslKey?: string;
 	corsAllowOrigin?: string;
 	fonts?: CliConfigFontDeclaration[];
+	standalone?: boolean;
 }
