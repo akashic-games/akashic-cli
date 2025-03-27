@@ -285,7 +285,12 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 	});
 	app.use(bodyParser.json());
 
-	app.use("^\/$", (_req, res, _next) => res.redirect("/public/"));
+	if (cliConfigParam.standalone) {
+		app.use("^\/$", (_req, res, _next) => res.redirect("/public/sandbox"));
+		app.use("^/public/$", (_req, res, _next) => res.redirect("/public/sandbox"));
+	} else {
+		app.use("^\/$", (_req, res, _next) => res.redirect("/public/"));
+	}
 
 	if (cliConfigParam.corsAllowOrigin) {
 		app.use(cors({ origin: cliConfigParam.corsAllowOrigin }));
@@ -484,6 +489,7 @@ export async function run(argv: any): Promise<void> {
 		.option("-A, --no-auto-start", "Wait automatic startup of contents.")
 		.option("-s, --target-service <service>", `Simulate the specified service. arguments: ${SERVICE_TYPES}`)
 		.option("-w, --watch", "Watch directories of asset")
+		.option("--standalone", "Run as standalone mode")
 		.option("--server-external-script <path>",
 			"Evaluate the given JS and assign it to Game#external of the server instances")
 		.option("--debug-playlog <path>", "Specify path of playlog-json.")
@@ -533,6 +539,7 @@ export async function run(argv: any): Promise<void> {
 		sslCert: options.sslCert ?? conf.sslCert,
 		sslKey: options.sslKey ?? conf.sslKey,
 		corsAllowOrigin: options.corsAllowOrigin ?? conf.corsAllowOrigin,
+		standalone: options.standalone ?? conf.standalone,
 		fonts: conf.fonts,
 	};
 	await cli(cliConfigParam, options);
