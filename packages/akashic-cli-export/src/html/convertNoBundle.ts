@@ -104,9 +104,7 @@ async function convertAssetAndOutput(
 		path.basename(assetPath, path.extname(assetPath)) + (isScript ? ".js" : ".json.js");
 	const filePath = path.resolve(outputPath, relativePath);
 
-	if (!fs.existsSync(path.dirname(filePath))) {
-		fs.mkdirSync(path.dirname(filePath), { recursive: true });
-	}
+	fs.mkdirSync(path.dirname(filePath), { recursive: true });
 	fs.writeFileSync(filePath, code);
 	return relativePath;
 }
@@ -119,10 +117,7 @@ async function convertGlobalScriptAndOutput(
 	const code = isScript ? wrapScript(scriptString, scriptName, terser, false) : wrapText(scriptString, scriptName);
 	const relativePath = "./globalScripts/" + scriptName + (isScript ? "" : ".js");
 	const filePath = path.resolve(outputPath, relativePath);
-
-	if (!fs.existsSync(path.dirname(filePath))) {
-		fs.mkdirSync(path.dirname(filePath), { recursive: true });
-	}
+	fs.mkdirSync(path.dirname(filePath), { recursive: true });
 	fs.writeFileSync(filePath, code);
 	return relativePath;
 }

@@ -3,4 +3,4 @@
 "@akashic/akashic-cli-export": patch
 ---
 
-Remove fs-extra from commons and export
+Reduce usage of fs-extra from commons and export

@@ -19,6 +19,14 @@ function executeCommonJS(code: string): any {
 	return sandbox.module.exports;
 }
 
+function rmSyncWrap(path: string) {
+	try { 
+		fs.rmSync(path, { recursive: true });
+	} catch(err) {
+		// do nothing
+	} 
+}
+
 function compareAssetBundleFunction(scriptPath: string, func: Function): void {
 	const raw = fs.readFileSync(scriptPath, { encoding: "utf-8" });
 	const wrappedFuncString = [
@@ -72,8 +80,7 @@ describe("convert", () => {
 		const destDir = path.resolve(fixturesDir, "output");
 		const consoleSpy = vi.spyOn(global.console, "warn");
 		afterEach(() => {
-			if(fs.existsSync(destDir))
-				fs.rmSync(destDir, { recursive: true });
+			rmSyncWrap(destDir)
 			consoleSpy.mockClear();
 		});
 		afterAll(() => {
@@ -663,8 +670,7 @@ describe("convert - v3", () => {
 
 	describe("convert()", () => {
 		afterEach(() => {
-			if (fs.existsSync(destDir))
-				fs.rmSync(destDir, { recursive: true });
+			rmSyncWrap(destDir)
 			consoleSpy.mockClear();
 		});
 		afterAll(() => {
@@ -727,11 +733,10 @@ describe("convert - v3", () => {
 
 	describe("convertGame()", () => {
 		beforeEach(() => {
-			if (fs.existsSync(destDir))
-				fs.rmSync(destDir, { recursive: true });
+			rmSyncWrap(destDir)
 		});
 		afterEach(() => {
-			fs.rmSync(destDir, { recursive: true });
+			rmSyncWrap(destDir)
 			consoleSpy.mockClear();
 		});
 		afterAll(() => {
