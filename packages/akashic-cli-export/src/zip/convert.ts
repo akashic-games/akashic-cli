@@ -405,7 +405,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 					cmn.Renamer.renameAssetFilenames(gamejson, param.dest, hashLength);
 				} catch (error) {
 					// ファイル名のハッシュ化に失敗した場合、throwして作業中のコピー先ファイルを削除する
-					fs.unlinkSync(path.resolve(param.dest));
+					fs.rmSync(path.resolve(param.dest), {recursive: true});
 					if (error.message === cmn.Renamer.ERROR_FILENAME_CONFLICT) {
 						throw new Error("Hashed filename conflict. Use larger hash-filename param on command line.");
 					}

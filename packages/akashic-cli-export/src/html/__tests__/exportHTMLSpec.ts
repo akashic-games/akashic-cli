@@ -104,7 +104,7 @@ describe("exportHTML", function () {
 			})
 			.then((dest) => {
 				expect(dest).toBe(path.join(__dirname, "..", "..", "__tests__", "fixtures", "output.zip"));
-				fs.unlinkSync(dest);
+				fs.rmSync(dest);
 			});
 	});
 
