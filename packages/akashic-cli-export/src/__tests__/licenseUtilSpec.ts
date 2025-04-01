@@ -15,7 +15,7 @@ describe("licenseUtil", () => {
 	const consoleSpy = vi.spyOn(global.console, "warn");
 
 	afterEach(() => {
-		fs.rmSync(destDir, {recursive: true});
+		fs.rmSync(destDir, { recursive: true });
 		consoleSpy.mockRestore();
 	});
 

@@ -73,7 +73,7 @@ describe("convert", () => {
 		const consoleSpy = vi.spyOn(global.console, "warn");
 		afterEach(() => {
 			if(fs.existsSync(destDir))
-				fs.rmSync(destDir, {recursive: true});
+				fs.rmSync(destDir, { recursive: true });
 			consoleSpy.mockClear();
 		});
 		afterAll(() => {
@@ -205,7 +205,7 @@ describe("convert", () => {
 					expect(fs.readFileSync(path.join(outputDirectory, "game.json")).toString())
 						.not.toBe(fs.readFileSync(path.join(param.source, "game.json")).toString());
 				})
-				.finally(() => fs.rmSync(outputDirectory, {recursive: true}));
+				.finally(() => fs.rmSync(outputDirectory, { recursive: true }));
 		});
 
 		it("copy only necessary files and bundled-script in target directory when strip and bundle mode", async () => {
@@ -664,7 +664,7 @@ describe("convert - v3", () => {
 	describe("convert()", () => {
 		afterEach(() => {
 			if (fs.existsSync(destDir))
-				fs.rmSync(destDir, {recursive: true});
+				fs.rmSync(destDir, { recursive: true });
 			consoleSpy.mockClear();
 		});
 		afterAll(() => {
@@ -728,10 +728,10 @@ describe("convert - v3", () => {
 	describe("convertGame()", () => {
 		beforeEach(() => {
 			if (fs.existsSync(destDir))
-				fs.rmSync(destDir, {recursive: true});
+				fs.rmSync(destDir, { recursive: true });
 		});
 		afterEach(() => {
-			fs.rmSync(destDir, {recursive: true});
+			fs.rmSync(destDir, { recursive: true });
 			consoleSpy.mockClear();
 		});
 		afterAll(() => {

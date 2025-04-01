@@ -80,7 +80,7 @@ describe("exportHTML", function () {
 			.then((dest) => {
 				expect(dest).toMatch(/^.*akashic-export-html-tmp-.+$/);
 				expect(fs.existsSync(path.join(dest, "library_license.txt"))).toBeTruthy();
-				fs.rmSync(dest, {recursive: true});
+				fs.rmSync(dest, { recursive: true });
 			});
 	});
 
@@ -132,7 +132,7 @@ describe("exportHTML", function () {
 				const buff = fs.readFileSync(path.join(dest, "index.html"));
 				// index.html で指定したengineFiles が読み込まれている
 				expect(buff.toString().includes("<script src=\"./js/engineFilesV3_1_99.js\"")).toBeTruthy();
-				fs.rmSync(dest, {recursive: true});
+				fs.rmSync(dest, { recursive: true });
 			});
 	});
 
@@ -184,7 +184,7 @@ describe("exportHTML", function () {
 		expect(fs.statSync(path.join(dest, "audio", "dummyse.aac"))).toBeTruthy();
 		expect(fs.statSync(path.join(dest, "audio", "dummyse.m4a"))).toBeTruthy();
 		expect(() => fs.statSync(path.join(dest, "audio", "dummyse.invalidext"))).toThrow();
-		fs.rmSync(dest, {recursive: true});
+		fs.rmSync(dest, { recursive: true });
 	});
 
 	it("promiseExportHTML - copy sandbox.config.js to TempDir", () => {
@@ -213,7 +213,7 @@ describe("exportHTML", function () {
 				expect(html.indexOf("sessionParameter") !== -1).toBeTruthy();
 				expect(html.indexOf("autoGivenArgsName") !== -1).toBeTruthy();
 				expect(html.indexOf("argumentParameter") !== -1).toBeTruthy();
-				fs.rmSync(dest, {recursive: true});
+				fs.rmSync(dest, { recursive: true });
 			});
 	});
 

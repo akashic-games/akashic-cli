@@ -105,7 +105,7 @@ async function convertAssetAndOutput(
 	const filePath = path.resolve(outputPath, relativePath);
 
 	if (!fs.existsSync(path.dirname(filePath))) {
-		fs.mkdirSync(path.dirname(filePath), {recursive: true});
+		fs.mkdirSync(path.dirname(filePath), { recursive: true });
 	}
 	fs.writeFileSync(filePath, code);
 	return relativePath;
@@ -121,7 +121,7 @@ async function convertGlobalScriptAndOutput(
 	const filePath = path.resolve(outputPath, relativePath);
 
 	if (!fs.existsSync(path.dirname(filePath))) {
-		fs.mkdirSync(path.dirname(filePath), {recursive: true});
+		fs.mkdirSync(path.dirname(filePath), { recursive: true });
 	}
 	fs.writeFileSync(filePath, code);
 	return relativePath;

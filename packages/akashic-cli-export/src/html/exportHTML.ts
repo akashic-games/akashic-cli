@@ -128,7 +128,7 @@ export function promiseExportHTML(p: ExportHTMLParameterObject): Promise<string>
 					files.forEach((f) => archive.file(f.src, { name: f.entryName }));
 					return archive.finalize();
 				}).finally(() => {
-					fs.rmSync(dest, {recursive: true});
+					fs.rmSync(dest, { recursive: true });
 				});
 			}
 		})

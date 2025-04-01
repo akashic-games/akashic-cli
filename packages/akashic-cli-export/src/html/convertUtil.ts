@@ -62,7 +62,7 @@ export function copyAssetFilesStrip(
 					fs.cpSync(
 						path.resolve(inputPath, assetPath) + ext,
 						dst + ext,
-						{force: !!options.force, recursive: true}
+						{ force: !!options.force, recursive: true }
 					);
 				} catch (e) {
 					if (e.code !== "ENOENT") {
@@ -74,7 +74,7 @@ export function copyAssetFilesStrip(
 			fs.cpSync(
 				path.resolve(inputPath, assetPath),
 				dst,
-				{force: !!options.force, recursive: true}
+				{ force: !!options.force, recursive: true }
 			);
 		}
 	});
