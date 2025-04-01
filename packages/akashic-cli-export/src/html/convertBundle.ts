@@ -194,7 +194,8 @@ function writeCommonFiles(
 		// { filter: (_src: string, dest: string): boolean => (dest !== jsDir && dest !== cssDir), recursive: true }
 		{ filter: (_src: string, dest: string): boolean => {
 			console.log(`* filter dest:[${dest}], ${(dest !== jsDir && dest !== cssDir)}`);
-			return (dest !== jsDir && dest !== cssDir);
+			// return (dest !== jsDir && dest !== cssDir);
+			return ( !dest.includes(jsDir) && !dest.includes(cssDir))
 		}, recursive: true }
 	);
 }
