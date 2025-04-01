@@ -189,6 +189,6 @@ function writeCommonFiles(
 	fs.cpSync(
 		path.resolve(__dirname, "..", "..", "lib", templatePath),
 		outputPath,
-		{ filter: (_src: string, dest: string): boolean => (dest !== jsDir && dest !== cssDir), recursive: true }
+		{ filter: (_src: string, dest: string): boolean => (!dest.includes(jsDir) && !dest.includes(cssDir)), recursive: true }
 	);
 }
