@@ -186,9 +186,15 @@ function writeCommonFiles(
 
 	const jsDir = path.resolve(outputPath, "js");
 	const cssDir = path.resolve(outputPath, "css");
+	console.log("*** jsDir:", jsDir);
+	console.log("*** cssDir:", jsDir);
 	fs.cpSync(
 		path.resolve(__dirname, "..", "..", "lib", templatePath),
 		outputPath,
-		{ filter: (_src: string, dest: string): boolean => (dest !== jsDir && dest !== cssDir), recursive: true }
+		// { filter: (_src: string, dest: string): boolean => (dest !== jsDir && dest !== cssDir), recursive: true }
+		{ filter: (_src: string, dest: string): boolean => {
+			console.log(`* filter dest:[${dest}], ${(dest !== jsDir && dest !== cssDir)}`);
+			return (dest !== jsDir && dest !== cssDir);
+		}, recursive: true }
 	);
 }
