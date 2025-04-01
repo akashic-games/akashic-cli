@@ -1,5 +1,5 @@
 import * as path from "path";
-import fsx from "fs-extra";
+import * as fs from "fs";
 import { writeLicenseTextFile } from "../licenseUtil.js";
 
 
@@ -15,7 +15,7 @@ describe("licenseUtil", () => {
 	const consoleSpy = vi.spyOn(global.console, "warn");
 
 	afterEach(() => {
-		fsx.removeSync(destDir);
+		fs.rmSync(destDir, {recursive: true});
 		consoleSpy.mockRestore();
 	});
 
@@ -26,7 +26,7 @@ describe("licenseUtil", () => {
 		expect(consoleSpy).toBeCalledWith(expect.stringMatching(/^\[WARN\].+hoge.+LGPL-3.0-or-later.+.$/));
 		expect(result).toBeTruthy();
 
-		const license = fsx.readFileSync(path.join(destDir, "library_license.txt")).toString().split(/\r?\n/g);
+		const license = fs.readFileSync(path.join(destDir, "library_license.txt")).toString().split(/\r?\n/g);
 		expect(license).toEqual(
 			[
 				"# external",
@@ -41,7 +41,7 @@ describe("licenseUtil", () => {
 		const result = await writeLicenseTextFile(contentPath, destDir,  moduleFilePaths, "3");
 		expect(result).toBeTruthy();
 
-		const license = fsx.readFileSync(path.join(destDir, "library_license.txt")).toString().split(/\r?\n/g);
+		const license = fs.readFileSync(path.join(destDir, "library_license.txt")).toString().split(/\r?\n/g);
 		const licenseTxt = license.join("\n");
 		// library_license.txt の内容に akashic の各ライブラリ名が含まれていることを確認
 		expect(/\@akashic\/akashic-engine/.test(licenseTxt)).toBeTruthy();

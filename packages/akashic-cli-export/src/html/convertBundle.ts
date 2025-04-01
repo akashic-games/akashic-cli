@@ -4,7 +4,6 @@ import * as path from "path";
 import { fileURLToPath } from "url";
 import * as cmn from "@akashic/akashic-cli-commons";
 import * as ejs from "ejs";
-import fsx from "fs-extra";
 import type { MinifyOptions } from "terser";
 import * as licenseUtil from "../licenseUtil.js";
 import { validateGameJson } from "../utils.js";
@@ -187,9 +186,9 @@ function writeCommonFiles(
 
 	const jsDir = path.resolve(outputPath, "js");
 	const cssDir = path.resolve(outputPath, "css");
-	fsx.copySync(
+	fs.cpSync(
 		path.resolve(__dirname, "..", "..", "lib", templatePath),
 		outputPath,
-		{ filter: (_src: string, dest: string): boolean => (dest !== jsDir && dest !== cssDir) }
+		{ filter: (_src: string, dest: string): boolean => (dest !== jsDir && dest !== cssDir), recursive: true }
 	);
 }

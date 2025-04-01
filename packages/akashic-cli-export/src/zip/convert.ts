@@ -6,7 +6,6 @@ import type { ImageAssetConfigurationBase, NicoliveSupportedModes } from "@akash
 import * as babel from "@babel/core";
 import presetEnv from "@babel/preset-env";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
-import fsx from "fs-extra";
 import type { OutputChunk, RollupBuild } from "rollup";
 import { rollup } from "rollup";
 import type { MinifyOptions } from "terser";
@@ -406,7 +405,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 					cmn.Renamer.renameAssetFilenames(gamejson, param.dest, hashLength);
 				} catch (error) {
 					// ファイル名のハッシュ化に失敗した場合、throwして作業中のコピー先ファイルを削除する
-					fsx.removeSync(path.resolve(param.dest));
+					fs.unlinkSync(path.resolve(param.dest));
 					if (error.message === cmn.Renamer.ERROR_FILENAME_CONFLICT) {
 						throw new Error("Hashed filename conflict. Use larger hash-filename param on command line.");
 					}

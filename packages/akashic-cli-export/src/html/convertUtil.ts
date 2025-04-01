@@ -7,7 +7,6 @@ import type { AssetConfigurationMap, ImageAssetConfigurationBase } from "@akashi
 import type { SandboxConfiguration } from "@akashic/sandbox-configuration";
 import * as babel from "@babel/core";
 import presetEnv from "@babel/preset-env";
-import fsx from "fs-extra";
 import type { MinifyOptions } from "terser";
 import { minify_sync } from "terser";
 
@@ -55,15 +54,15 @@ export function copyAssetFilesStrip(
 	}).forEach((assetName) => {
 		const assetPath = assets[assetName].path;
 		const assetDir = path.dirname(assetPath);
-		fsx.mkdirsSync(path.resolve(outputPath, assetDir));
+		fs.mkdirSync(path.resolve(outputPath, assetDir), { recursive: true });
 		const dst = path.join(outputPath, assetPath);
 		if (assets[assetName].type === "audio") {
 			cmn.KNOWN_AUDIO_EXTENSIONS.forEach((ext) => {
 				try {
-					fsx.copySync(
+					fs.cpSync(
 						path.resolve(inputPath, assetPath) + ext,
 						dst + ext,
-						{overwrite: options.force}
+						{force: !!options.force, recursive: true}
 					);
 				} catch (e) {
 					if (e.code !== "ENOENT") {
@@ -72,10 +71,10 @@ export function copyAssetFilesStrip(
 				}
 			});
 		} else {
-			fsx.copySync(
+			fs.cpSync(
 				path.resolve(inputPath, assetPath),
 				dst,
-				{overwrite: options.force}
+				{force: !!options.force, recursive: true}
 			);
 		}
 	});
