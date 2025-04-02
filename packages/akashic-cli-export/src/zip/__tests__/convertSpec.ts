@@ -19,11 +19,12 @@ function executeCommonJS(code: string): any {
 	return sandbox.module.exports;
 }
 
-function rmSyncWrap(path: string) {
+function rmSync(path: string) {
 	try { 
 		fs.rmSync(path, { recursive: true });
-	} catch(err) {
-		// do nothing
+	} catch (err) {
+		if (err.code !== "ENOENT") 
+			throw new Error(err);
 	} 
 }
 
@@ -80,7 +81,7 @@ describe("convert", () => {
 		const destDir = path.resolve(fixturesDir, "output");
 		const consoleSpy = vi.spyOn(global.console, "warn");
 		afterEach(() => {
-			rmSyncWrap(destDir)
+			rmSync(destDir)
 			consoleSpy.mockClear();
 		});
 		afterAll(() => {
@@ -670,7 +671,7 @@ describe("convert - v3", () => {
 
 	describe("convert()", () => {
 		afterEach(() => {
-			rmSyncWrap(destDir)
+			rmSync(destDir)
 			consoleSpy.mockClear();
 		});
 		afterAll(() => {
@@ -733,10 +734,10 @@ describe("convert - v3", () => {
 
 	describe("convertGame()", () => {
 		beforeEach(() => {
-			rmSyncWrap(destDir)
+			rmSync(destDir)
 		});
 		afterEach(() => {
-			rmSyncWrap(destDir)
+			rmSync(destDir)
 			consoleSpy.mockClear();
 		});
 		afterAll(() => {
