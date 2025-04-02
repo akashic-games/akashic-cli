@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.0.0-next.2
+
+### Patch Changes
+
+- [#1520](https://github.com/akashic-games/akashic-cli/pull/1520) [`b347942`](https://github.com/akashic-games/akashic-cli/commit/b3479426e1a1fbf3b2badef5f04a862943c3206e) Thanks [@yu-ogi](https://github.com/yu-ogi)! - add `--standalone` option
+
 ## 1.0.0-next.1
 
 ### Patch Changes
