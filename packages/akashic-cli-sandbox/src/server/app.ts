@@ -156,7 +156,7 @@ export default function (options: AppOptions = {}): AkashicSandbox {
 
 				responseBody += [
 					"@font-face {",
-					Object.entries(font.descriptors).map(([key, value]) => `${key}: ${value};`).join("\n"),
+					Object.entries(font.descriptors).map(([key, value]) => `${key}: "${value}";`).join("\n"),
 					`src: url('${path.join("/css/fonts", fontFilename)}') format('${fontFormat}');`,
 					"}\n",
 				].join("\n");
