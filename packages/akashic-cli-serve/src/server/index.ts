@@ -360,7 +360,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 
 				responseBody += [
 					"@font-face {",
-					Object.entries(font.descriptors).map(([key, value]) => `${key}: ${value};`).join("\n"),
+					Object.entries(font.descriptors).map(([key, value]) => `${key}: "${value}";`).join("\n"),
 					`src: url('${path.join("/public/external/fonts", fontFilename)}') format('${fontFormat}');`,
 					"}\n",
 				].join("\n");
