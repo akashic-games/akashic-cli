@@ -1,5 +1,5 @@
 import * as path from "path";
-import fsx from "fs-extra";
+import * as fs from "fs";
 import * as exp from "../exportHTML.js";
 
 describe("exportHTML", function () {
@@ -79,8 +79,8 @@ describe("exportHTML", function () {
 			})
 			.then((dest) => {
 				expect(dest).toMatch(/^.*akashic-export-html-tmp-.+$/);
-				expect(fsx.existsSync(path.join(dest, "library_license.txt"))).toBeTruthy();
-				fsx.removeSync(dest);
+				expect(fs.existsSync(path.join(dest, "library_license.txt"))).toBeTruthy();
+				fs.rmSync(dest, { recursive: true });
 			});
 	});
 
@@ -104,7 +104,7 @@ describe("exportHTML", function () {
 			})
 			.then((dest) => {
 				expect(dest).toBe(path.join(__dirname, "..", "..", "__tests__", "fixtures", "output.zip"));
-				fsx.removeSync(dest);
+				fs.rmSync(dest);
 			});
 	});
 
@@ -128,11 +128,11 @@ describe("exportHTML", function () {
 			})
 			.then((dest) => {
 				expect(dest).toMatch(/^.*akashic-export-html-tmp-.+$/);
-				expect(fsx.statSync(path.join(dest, "js", "engineFilesV3_1_99.js"))).toBeTruthy();
-				const buff = fsx.readFileSync(path.join(dest, "index.html"));
+				expect(fs.statSync(path.join(dest, "js", "engineFilesV3_1_99.js"))).toBeTruthy();
+				const buff = fs.readFileSync(path.join(dest, "index.html"));
 				// index.html で指定したengineFiles が読み込まれている
 				expect(buff.toString().includes("<script src=\"./js/engineFilesV3_1_99.js\"")).toBeTruthy();
-				fsx.removeSync(dest);
+				fs.rmSync(dest, { recursive: true });
 			});
 	});
 
@@ -157,10 +157,10 @@ describe("exportHTML", function () {
 			})
 			.then((dest) => {
 				expect(dest).toMatch(/^.*akashic-export-html-tmp-.+$/);
-				expect(fsx.existsSync(path.join(dest, "js"))).toBeFalsy();
-				const buff = fsx.readFileSync(path.join(dest, "index.html"));
+				expect(fs.existsSync(path.join(dest, "js"))).toBeFalsy();
+				const buff = fs.readFileSync(path.join(dest, "index.html"));
 				expect(buff.toString().includes("dummy-engineFilesV3_1_99")).toBeTruthy(); // engineFiles の中身が index.html に存在する
-				fsx.removeSync(dest);
+				fs.rmSync(dest, { recursive: true });
 			});
 	});
 
@@ -180,11 +180,11 @@ describe("exportHTML", function () {
 		};
 		const dest = await exp.promiseExportHTML(param);
 		expect(dest).toMatch(/^.*akashic-export-html-tmp-.+$/);
-		expect(fsx.statSync(path.join(dest, "audio", "dummyse.ogg"))).toBeTruthy();
-		expect(fsx.statSync(path.join(dest, "audio", "dummyse.aac"))).toBeTruthy();
-		expect(fsx.statSync(path.join(dest, "audio", "dummyse.m4a"))).toBeTruthy();
-		expect(() => fsx.statSync(path.join(dest, "audio", "dummyse.invalidext"))).toThrow();
-		fsx.removeSync(dest);
+		expect(fs.statSync(path.join(dest, "audio", "dummyse.ogg"))).toBeTruthy();
+		expect(fs.statSync(path.join(dest, "audio", "dummyse.aac"))).toBeTruthy();
+		expect(fs.statSync(path.join(dest, "audio", "dummyse.m4a"))).toBeTruthy();
+		expect(() => fs.statSync(path.join(dest, "audio", "dummyse.invalidext"))).toThrow();
+		fs.rmSync(dest, { recursive: true });
 	});
 
 	it("promiseExportHTML - copy sandbox.config.js to TempDir", () => {
@@ -208,12 +208,12 @@ describe("exportHTML", function () {
 				return exp.promiseExportHTML(param);
 			})
 			.then((dest) => {
-				const html = fsx.readFileSync(path.join(dest, "index.html")).toString("utf-8");
+				const html = fs.readFileSync(path.join(dest, "index.html")).toString("utf-8");
 				expect(html.indexOf("autoSendEventName") !== -1).toBeTruthy();
 				expect(html.indexOf("sessionParameter") !== -1).toBeTruthy();
 				expect(html.indexOf("autoGivenArgsName") !== -1).toBeTruthy();
 				expect(html.indexOf("argumentParameter") !== -1).toBeTruthy();
-				fsx.removeSync(dest);
+				fs.rmSync(dest, { recursive: true });
 			});
 	});
 

@@ -4,7 +4,6 @@ import * as path from "path";
 import { fileURLToPath } from "url";
 import * as cmn from "@akashic/akashic-cli-commons";
 import * as ejs from "ejs";
-import fsx from "fs-extra";
 import type { MinifyOptions } from "terser";
 import * as licenseUtil from "../licenseUtil.js";
 import { validateGameJson } from "../utils.js";
@@ -42,7 +41,7 @@ export async function promiseConvertNoBundle(options: ConvertTemplateParameterOb
 	writeCommonFiles(options.source, options.output, conf, options);
 
 	const gamejsonPath = path.resolve(options.output, "./js/game.json.js");
-	fsx.outputFileSync(gamejsonPath, wrapText(JSON.stringify(conf._content, null, "\t"), "game.json"));
+	fs.writeFileSync(gamejsonPath, wrapText(JSON.stringify(conf._content, null, "\t"), "game.json"));
 	assetPaths.push("./js/game.json.js");
 
 	if (options.autoSendEventName || options.autoGivenArgsName) {
@@ -105,7 +104,8 @@ async function convertAssetAndOutput(
 		path.basename(assetPath, path.extname(assetPath)) + (isScript ? ".js" : ".json.js");
 	const filePath = path.resolve(outputPath, relativePath);
 
-	fsx.outputFileSync(filePath, code);
+	fs.mkdirSync(path.dirname(filePath), { recursive: true });
+	fs.writeFileSync(filePath, code);
 	return relativePath;
 }
 
@@ -117,8 +117,8 @@ async function convertGlobalScriptAndOutput(
 	const code = isScript ? wrapScript(scriptString, scriptName, terser, false) : wrapText(scriptString, scriptName);
 	const relativePath = "./globalScripts/" + scriptName + (isScript ? "" : ".js");
 	const filePath = path.resolve(outputPath, relativePath);
-
-	fsx.outputFileSync(filePath, code);
+	fs.mkdirSync(path.dirname(filePath), { recursive: true });
+	fs.writeFileSync(filePath, code);
 	return relativePath;
 }
 
@@ -183,15 +183,17 @@ function writeCommonFiles(
 			throw Error("Unknown engine version: `environment[\"sandbox-runtime\"]` field in game.json should be \"1\", \"2\", or \"3\".");
 	}
 
-	fsx.copySync(
+	fs.cpSync(
 		path.resolve(__dirname, "..", "..", "lib", templatePath),
-		outputPath);
+		outputPath,
+		{ recursive: true });
 
 	const jsDir = path.join(outputPath, "js");
 	const engineFilesPath = options.debugOverrideEngineFiles ?? resolveEngineFilesPath(version);
-	fsx.copySync(
+	fs.cpSync(
 		path.resolve(engineFilesPath),
-		path.join(jsDir, path.basename(engineFilesPath))
+		path.join(jsDir, path.basename(engineFilesPath)),
+		{ recursive: true }
 	);
 }
 

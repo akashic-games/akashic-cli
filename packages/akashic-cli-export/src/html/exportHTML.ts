@@ -4,7 +4,6 @@ import * as os from "os";
 import * as path from "path";
 import * as cmn from "@akashic/akashic-cli-commons";
 import archiver = require("archiver");
-import fsx from "fs-extra";
 import { promiseConvertBundle } from "./convertBundle.js";
 import { promiseConvertNoBundle } from "./convertNoBundle.js";
 import type { ConvertTemplateParameterObject } from "./convertUtil.js";
@@ -95,7 +94,7 @@ export function promiseExportHtmlRaw(param: ExportHTMLParameterObject): Promise<
 			// ハッシュ化した場合一時ファイルが生成されるため削除する
 			if (param.hashLength > 0) {
 				param.logger.info("removing temp files...");
-				fsx.removeSync(gamepath);
+				fs.rmSync(gamepath, { recursive: true });
 			}
 		})
 		.catch((error) => {
@@ -129,7 +128,7 @@ export function promiseExportHTML(p: ExportHTMLParameterObject): Promise<string>
 					files.forEach((f) => archive.file(f.src, { name: f.entryName }));
 					return archive.finalize();
 				}).finally(() => {
-					fsx.removeSync(dest);
+					fs.rmSync(dest, { recursive: true });
 				});
 			}
 		})

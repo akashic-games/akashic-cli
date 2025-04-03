@@ -2,7 +2,6 @@ import * as fs from "fs";
 import { createRequire } from "module";
 import * as path from "path";
 import vm from "vm";
-import fsx from "fs-extra";
 import mockfs from "mock-fs";
 import { vi } from "vitest";
 import { validateGameJson } from "../../utils.js";
@@ -18,6 +17,15 @@ function executeCommonJS(code: string): any {
 	vm.createContext(sandbox);
 	vm.runInContext(code, sandbox);
 	return sandbox.module.exports;
+}
+
+function rmSync(path: string) {
+	try { 
+		fs.rmSync(path, { recursive: true });
+	} catch (err) {
+		if (err.code !== "ENOENT") 
+			throw new Error(err);
+	} 
 }
 
 function compareAssetBundleFunction(scriptPath: string, func: Function): void {
@@ -73,7 +81,7 @@ describe("convert", () => {
 		const destDir = path.resolve(fixturesDir, "output");
 		const consoleSpy = vi.spyOn(global.console, "warn");
 		afterEach(() => {
-			fsx.removeSync(destDir);
+			rmSync(destDir)
 			consoleSpy.mockClear();
 		});
 		afterAll(() => {
@@ -205,7 +213,7 @@ describe("convert", () => {
 					expect(fs.readFileSync(path.join(outputDirectory, "game.json")).toString())
 						.not.toBe(fs.readFileSync(path.join(param.source, "game.json")).toString());
 				})
-				.finally(() => fsx.removeSync(outputDirectory));
+				.finally(() => fs.rmSync(outputDirectory, { recursive: true }));
 		});
 
 		it("copy only necessary files and bundled-script in target directory when strip and bundle mode", async () => {
@@ -663,7 +671,7 @@ describe("convert - v3", () => {
 
 	describe("convert()", () => {
 		afterEach(() => {
-			fsx.removeSync(destDir);
+			rmSync(destDir)
 			consoleSpy.mockClear();
 		});
 		afterAll(() => {
@@ -726,10 +734,10 @@ describe("convert - v3", () => {
 
 	describe("convertGame()", () => {
 		beforeEach(() => {
-			fsx.removeSync(destDir);
+			rmSync(destDir)
 		});
 		afterEach(() => {
-			fsx.removeSync(destDir);
+			rmSync(destDir)
 			consoleSpy.mockClear();
 		});
 		afterAll(() => {
