@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.0.0-next.6
+
+### Patch Changes
+
+- [#1525](https://github.com/akashic-games/akashic-cli/pull/1525) [`9cc4108`](https://github.com/akashic-games/akashic-cli/commit/9cc41081c191bf76f9341211cc912859b8c52818) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Fix custom font in serve and sandbox
+
 ## 2.0.0-next.5
 
 ### Patch Changes
