@@ -1,5 +1,15 @@
 # @akashic/akashic-cli-export
 
+## 2.0.0-next.4
+
+### Patch Changes
+
+- [#1522](https://github.com/akashic-games/akashic-cli/pull/1522) [`ef1b096`](https://github.com/akashic-games/akashic-cli/commit/ef1b096297a35f2f16d2fe037a5b23c59eb9943b) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Reduce usage of fs-extra from commons and export
+
+- Updated dependencies [[`ef1b096`](https://github.com/akashic-games/akashic-cli/commit/ef1b096297a35f2f16d2fe037a5b23c59eb9943b)]:
+  - @akashic/akashic-cli-commons@1.0.0-next.3
+  - @akashic/akashic-cli-extra@2.0.0-next.3
+
 ## 2.0.0-next.3
 
 ### Patch Changes
