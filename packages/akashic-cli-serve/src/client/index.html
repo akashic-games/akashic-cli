@@ -13,9 +13,15 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="/internal/agvplugin.js"></script>
     <script src="/public/external/akashic-gameview-web.strip.js"></script>
+    <script src="/public/external/plugin-instance-storage.js"></script>
+    <script src="/public/external/plugin-instance-storage-limited.js"></script>
     <script>
         // NOTE: 後方互換性を保つため require() 形式でビルドされたのモジュールをグローバル変数に展開する
         window.agv = require("@akashic/akashic-gameview-web");
+        window.agvPublicPlugins = {
+            InstanceStoragePlugin: require("@akashic/akashic-gameview-web/lib/plugin/InstanceStoragePlugin"),
+            InstanceStorageLimitedPlugin: require("@akashic/akashic-gameview-web/lib/plugin/InstanceStorageLimitedPlugin"),
+        };
         try {
             window.agvplugin = require("@akashic/akashic-gameview-web/lib/plugin");
         } catch (_error) {}

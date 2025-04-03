@@ -134,6 +134,19 @@ export class Operator {
 
 	// TODO: 複数のコンテンツ対応。引数の contentLocator は複数コンテンツに対応していないが暫定とする
 	private async _initializePlugins(contentLocator: ClientContentLocator): Promise<void> {
+		if (typeof agvplugin !== "undefined") {
+			this.gameViewManager.registerExternalPlugin(new agvplugin.InstanceStoragePlugin({
+				storage: window.sessionStorage,
+			}));
+			if (agvplugin.InstanceStorageLimitedPlugin)
+				this.gameViewManager.registerExternalPlugin(new agvplugin.InstanceStorageLimitedPlugin());
+		} else {
+			this.gameViewManager.registerExternalPlugin(new agvPublicPlugins.InstanceStoragePlugin({
+				storage: window.sessionStorage,
+			}));
+			this.gameViewManager.registerExternalPlugin(new agvPublicPlugins.InstanceStorageLimitedPlugin());
+		}
+
 		const content = this.store.contentStore.find(contentLocator);
 		const sandboxConfig = content.sandboxConfig;
 		const client = sandboxConfig?.client;
