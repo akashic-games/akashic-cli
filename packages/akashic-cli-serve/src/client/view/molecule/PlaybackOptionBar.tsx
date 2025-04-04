@@ -17,6 +17,7 @@ export interface PlaybackOptionBarProps {
 	isActiveExists: boolean;
 	isActivePaused: boolean;
 	isForceResetOnSeek: boolean;
+	disableFastForward?: boolean;
 	startPointHeaders: StartPointHeader[];
 	focusedStartPointHeaderIndex: number;
 	onClickPauseActive: (pause: boolean) => void;
@@ -26,6 +27,7 @@ export interface PlaybackOptionBarProps {
 	onProgressCommit: (val: number) => void;
 	onClickPause: (pause: boolean) => void;
 	onClickFastForward: () => void;
+	onClickUploadPlaylog?: () => void;
 }
 
 export const PlaybackOptionBar = observer(function (props: PlaybackOptionBarProps) {
@@ -39,6 +41,7 @@ export const PlaybackOptionBar = observer(function (props: PlaybackOptionBarProp
 		isActiveExists,
 		isActivePaused,
 		isForceResetOnSeek,
+		disableFastForward,
 		startPointHeaders,
 		focusedStartPointHeaderIndex,
 		onClickPauseActive,
@@ -48,10 +51,11 @@ export const PlaybackOptionBar = observer(function (props: PlaybackOptionBarProp
 		onProgressCommit,
 		onClickPause,
 		onClickFastForward,
+		onClickUploadPlaylog,
 	} = props;
 
-	const startedAt = startPointHeaders[0]?.timestamp;
-	const startPoint = startPointHeaders[focusedStartPointHeaderIndex];
+	const startedAt = startPointHeaders.length ? startPointHeaders[0].timestamp : null;
+	const startPoint = focusedStartPointHeaderIndex < startPointHeaders.length ? startPointHeaders[focusedStartPointHeaderIndex] : null;
 	const startPointTime = (startedAt != null && startPoint != null) ? startPoint.timestamp - startedAt : undefined;
 
 	return <div className={styles["replay-option-bar"]}>
@@ -78,6 +82,19 @@ export const PlaybackOptionBar = observer(function (props: PlaybackOptionBarProp
 			>
 				Save playlog
 			</ToolIconButton>
+			{
+				onClickUploadPlaylog ? (
+					<ToolIconButton
+						className="external-ref_button_load-playlog_devtool"
+						icon="file_upload"
+						size={18}
+						title={".json ファイルからリプレイ情報(playlog)をロードします。"}
+						onClick={onClickUploadPlaylog}
+					>
+						Upload playlog
+					</ToolIconButton>
+				) : null
+			}
 			<div className={styles.sep} />
 			<ToolCheckbox
 				checked={isForceResetOnSeek}
@@ -97,7 +114,7 @@ export const PlaybackOptionBar = observer(function (props: PlaybackOptionBarProp
 				icon="skip_next" onClick={onClickFastForward}
 				size={20}
 				title={"リアルタイム実行に戻る\r\rリプレイ再生をやめ、リアルタイム実行(他インスタンスと同期)します。"}
-				disabled={!isReplay} />
+				disabled={!!disableFastForward || !isReplay} />
 			<div className={styles.progress}>
 				<ToolProgressBar
 					max={duration}
