@@ -26,15 +26,15 @@
     "@akashic/game-configuration": "2.5.0",
     "@types/form-data": "2.5.0",
     "@types/mock-fs": "4.13.4",
-    "@types/node": "18.19.44",
+    "@types/node": "22.14.0",
     "@types/tar": "6.1.13",
-    "@typescript-eslint/eslint-plugin": "6.21.0",
-    "eslint": "8.57.0",
+    "@typescript-eslint/eslint-plugin": "8.29.0",
+    "eslint": "9.24.0",
     "eslint-plugin-import": "2.29.1",
     "mock-fs": "5.2.0",
-    "rimraf": "3.0.2",
+    "rimraf": "6.0.1",
     "typescript": "5.6.2",
-    "vitest": "^2.0.5"
+    "vitest": "^3.0.0"
   },
   "dependencies": {
     "@akashic/akashic-cli-commons": "1.0.0-next.3",
