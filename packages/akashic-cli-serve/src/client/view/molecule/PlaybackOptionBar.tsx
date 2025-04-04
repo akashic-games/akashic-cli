@@ -51,7 +51,7 @@ export const PlaybackOptionBar = observer(function (props: PlaybackOptionBarProp
 		onProgressCommit,
 		onClickPause,
 		onClickFastForward,
-		onClickUploadPlaylog: onClickUploadPlaylog,
+		onClickUploadPlaylog,
 	} = props;
 
 	const startedAt = startPointHeaders.length ? startPointHeaders[0].timestamp : null;
