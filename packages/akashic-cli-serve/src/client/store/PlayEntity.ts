@@ -52,7 +52,7 @@ export interface PlayEntityParameterObject {
 	audioState?: PlayAudioState;
 	parent?: PlayEntity;
 	startPointHeaders?: StartPointHeader[];
-	initialPlaylog?: unknown;
+	disableFastForward?: boolean; // View レイヤーからの参照のために定義。将来的には名前や役割を修正すべきかもしれない。
 }
 
 export class PlayEntity {
@@ -61,7 +61,7 @@ export class PlayEntity {
 	readonly playId: string;
 	readonly amflow: SocketIOAMFlowClient | ServeMemoryAmflowClient;
 	readonly content: ContentEntity;
-	readonly initialPlaylog?: unknown;
+	readonly disableFastForward?: boolean;
 
 	@observable activePlaybackRate: number;
 	@observable isActivePausing: boolean;
@@ -85,7 +85,7 @@ export class PlayEntity {
 	constructor(param: PlayEntityParameterObject) {
 		this.playId = param.playId;
 		this.amflow = param.amflow;
-		this.initialPlaylog = param.initialPlaylog;
+		this.disableFastForward = param.disableFastForward;
 		this.activePlaybackRate = 1;
 		this.isActivePausing = !!param.durationState && param.durationState.isPaused;
 		this.duration = param.durationState ? param.durationState.duration : 0;

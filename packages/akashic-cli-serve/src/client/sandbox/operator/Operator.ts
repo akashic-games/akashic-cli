@@ -90,7 +90,7 @@ export class Operator {
 			status: "running",
 			content: this.store.contentStore.defaultContent(),
 			amflow,
-			initialPlaylog: playlog,
+			disableFastForward: !!playlog,
 			durationState: {
 				duration: playDuration,
 				isPaused: executionMode === "replay",
