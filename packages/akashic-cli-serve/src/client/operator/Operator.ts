@@ -291,6 +291,10 @@ export class Operator {
 				startPlayerInfoResolver: this._startPlayerInfoResolver,
 				endPlayerInfoResolver: this._endPlayerInfoResolver
 			}));
+			this.gameViewManager.registerExternalPlugin(new agvPublicPlugins.InstanceStoragePlugin({
+				storage: window.sessionStorage,
+			}));
+			this.gameViewManager.registerExternalPlugin(new agvPublicPlugins.InstanceStorageLimitedPlugin());
 		}
 
 		const content = this.store.contentStore.find(contentLocator);

@@ -252,3 +252,16 @@ declare module agvplugin {
 		onload(game: agv.GameLike, dataBus: unknown, gameContent: agv.GameContent): void;
 	}
 }
+
+declare module agvPublicPlugins {
+	class InstanceStoragePlugin implements agv.ExternalPlugin {
+		name: string;
+		constructor(...args: any[]);
+		onload(game: agv.GameLike): void;
+	}
+
+	class InstanceStorageLimitedPlugin implements agv.ExternalPlugin {
+		name: string;
+		onload(game: agv.GameLike, dataBus: unknown, gameContent: agv.GameContent): void;
+	}
+}
