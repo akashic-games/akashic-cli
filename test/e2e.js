@@ -194,7 +194,7 @@ try {
 		// 通常の動作テスト
 		{
 			const port = await getPort();
-			const finalize = spawn(`${akashicCliPath} sandbox`, ["-p", port]);
+			const finalize = spawn(`${akashicCliPath} sandbox`, ["-p", port, "--legacy"]);
 			try {
 				const baseUrl = `http://localhost:${port}`;
 				await setTimeout(1000); // 起動するまで待機
@@ -230,7 +230,7 @@ try {
 			await writeFile(join(cascadeGameJsonDir, "game.json"), JSON.stringify(cascadeGameJson));
 
 			const port = await getPort();
-			const finalize = spawn(`${akashicCliPath} sandbox`, ["-p", port, "--cascade", cascadeGameJsonDir]);
+			const finalize = spawn(`${akashicCliPath} sandbox`, ["-p", port, "--cascade", cascadeGameJsonDir, "--legacy"]);
 			try {
 				const baseUrl = `http://localhost:${port}`;
 				await setTimeout(1000); // 起動するまで待機
