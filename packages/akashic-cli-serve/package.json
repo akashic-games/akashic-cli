@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-serve",
-  "version": "2.0.0-next.6",
+  "version": "2.0.0-next.7",
   "description": "A development server for Akashic Engine",
   "type": "module",
   "scripts": {

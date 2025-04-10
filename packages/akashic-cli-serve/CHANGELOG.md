@@ -1,5 +1,13 @@
 # Change Log
 
+## 2.0.0-next.7
+
+### Patch Changes
+
+- [#1526](https://github.com/akashic-games/akashic-cli/pull/1526) [`92bd87f`](https://github.com/akashic-games/akashic-cli/commit/92bd87f5de40fc1cdfb25806fd36d86bcf0f8edc) Thanks [@yu-ogi](https://github.com/yu-ogi)! - support instance-storage-plugin
+
+- [#1530](https://github.com/akashic-games/akashic-cli/pull/1530) [`92ac8a9`](https://github.com/akashic-games/akashic-cli/commit/92ac8a94bd2ae179a269fa0bc9bc0d55878ac2e3) Thanks [@yu-ogi](https://github.com/yu-ogi)! - support replaying playlog from JSON in standalone mode
+
 ## 2.0.0-next.6
 
 ### Patch Changes
