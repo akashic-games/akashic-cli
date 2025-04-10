@@ -1,8 +1,10 @@
+import { calculateFinishedTime } from "@akashic/amflow-util/lib/calculateFinishedTime";
 import { isServiceTypeNicoliveLike } from "../../../common/targetServiceUtil";
 import type { GameViewManager } from "../../akashic/GameViewManager";
 import { ServeMemoryAmflowClient } from "../../akashic/ServeMemoryAMFlowClient";
 import type { ClientContentLocator } from "../../common/ClientContentLocator";
 import type { ScreenSize } from "../../common/types/ScreenSize";
+import type { ExecutionMode } from "../../store/ExecutionMode";
 import { PlayEntity } from "../../store/PlayEntity";
 import type { Store } from "../Store";
 import { DevtoolOperator } from "./DevtoolOperator";
@@ -16,8 +18,9 @@ export interface OperatorParameterObject {
 }
 
 export interface StartContentParameterObject {
-	joinsSelf: boolean;
+	joinsSelf?: boolean;
 	isReplay?: boolean;
+	playlog?: any; // FIXME: 型をつける (DumpedPlaylog は ./src/server 以下にあるため不要な依存を避ける)
 }
 
 export class Operator {
@@ -61,7 +64,24 @@ export class Operator {
 	startContent = async (params?: StartContentParameterObject): Promise<void> => {
 		const store = this.store;
 		const player = store.player ?? { id: "sandbox-player", name: "sandbox-player" };
-		const amflow = new ServeMemoryAmflowClient({ playId: "0", });
+		const executionMode: ExecutionMode = params?.playlog ? "replay" : "active";
+		const playlog = params?.playlog;
+
+		if (store.currentPlay) {
+			await store.currentPlay.deleteAllLocalInstances();
+			store.setCurrentLocalInstance(null);
+		}
+
+		const amflow = new ServeMemoryAmflowClient({
+			playId: "0",
+			tickList: playlog ? playlog.tickList : null,
+			startPoints: playlog ? playlog.startPoints : null
+		});
+
+		let playDuration = 0;
+		if (playlog) {
+			playDuration = calculateFinishedTime(playlog.tickList, playlog.startPoints[0].data.fps);
+		}
 
 		// TODO: 本来は PlayStore で生成すべきだが、現状の PlayStore は SocketIO が必須になるため PlayEntity を直接生成している
 		const playEntity = new PlayEntity({
@@ -70,9 +90,10 @@ export class Operator {
 			status: "running",
 			content: this.store.contentStore.defaultContent(),
 			amflow,
+			disableFastForward: !!playlog,
 			durationState: {
-				duration: 0,
-				isPaused: false,
+				duration: playDuration,
+				isPaused: executionMode === "replay",
 			},
 		});
 		amflow.onPutStartPoint.add(startPoint => playEntity.handleStartPointHeader(startPoint));
@@ -87,7 +108,7 @@ export class Operator {
 
 		const instance = await playEntity.createLocalInstance({
 			playId: playEntity.playId,
-			executionMode: "active",
+			executionMode,
 			player,
 			argument,
 			runInIframe: store.appOptions.runInIframe,
@@ -116,6 +137,39 @@ export class Operator {
 
 	setGameViewSize = (size: ScreenSize): void => {
 		this.store.setGameViewSize(size);
+	};
+
+	uploadPlaylog = (): void => {
+		const input = document.createElement("input");
+		input.type = "file";
+		input.accept = "application/json";
+
+		input.addEventListener("change", (event: Event) => {
+			const target = event.target as HTMLInputElement;
+			if (target.files?.length) {
+				const file = target.files[0];
+				const reader = new FileReader();
+
+				reader.onload = async (e: ProgressEvent<FileReader>) => {
+					const result = e.target?.result as string;
+					let playlog: unknown;
+					try {
+						playlog = JSON.parse(result);
+					} catch (error) {
+						console.error(`could not load the file: ${file.name}`, error);
+						return;
+					}
+
+					await this.startContent({
+						playlog,
+					});
+				};
+
+				reader.readAsText(file);
+			}
+		});
+
+		input.click();
 	};
 
 	private _createInstanceArgumentForNicolive(isBroadcaster: boolean): any {

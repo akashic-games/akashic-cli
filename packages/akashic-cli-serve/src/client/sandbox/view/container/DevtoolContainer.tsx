@@ -54,8 +54,10 @@ export const DevtoolContainer = observer(class DevtoolContainer extends React.Co
 				isActiveExists: play.status === "running", // NOTE: 現実装に依存した実装。概念的には play.status とは独立な判定が必要
 				isActivePaused: play.isActivePausing,
 				isForceResetOnSeek: devtoolUiStore.isForceResetOnSeek,
+				disableFastForward: !!play.disableFastForward, // FIXME: 将来的には続きからプレイに対応
 				onClickPauseActive: operator.localInstance.togglePause,
 				onClickSavePlaylog: operator.play.downloadPlaylog,
+				onClickUploadPlaylog: operator.uploadPlaylog,
 				onClickForceResetOnSeek: operator.devtool.toggleForceResetOnSeek,
 				onProgressChange: operator.localInstance.previewSeekTo,
 				onProgressCommit: operator.localInstance.seekTo,
