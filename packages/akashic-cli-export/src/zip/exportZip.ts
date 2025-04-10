@@ -75,7 +75,7 @@ export function _completeExportZipParameterObject(param: ExportZipParameterObjec
 }
 
 // TODO akashic-cli-commons に移して export html と実装を共有する
-export function _checkDestinationValidity(dest: string, force: boolean): Promise<void> {
+export function _checkDestinationValidity(dest: string, force: boolean, logger?: cmn.Logger): Promise<void> {
 	return new Promise<void>((resolve, reject) => {
 		fs.stat(path.resolve(dest), (error: any, _stat: any) => {
 			if (error) {
@@ -86,10 +86,12 @@ export function _checkDestinationValidity(dest: string, force: boolean): Promise
 				}
 				return;
 			}
-			if (!force)
+			if (!force) {
 				reject(new Error(dest + " already exists. Use --force option to overwrite."));
-			else
+			} else {
+				logger?.warn(`${dest} already exists and will be removed due to --force option.`);
 				resolve();
+			}
 		});
 	});
 }
@@ -97,9 +99,10 @@ export function _checkDestinationValidity(dest: string, force: boolean): Promise
 export function promiseExportZip(param: ExportZipParameterObject): Promise<void> {
 	param = _completeExportZipParameterObject(param);
 	const outZip = /\.zip$/.test(param.dest);
-	const destDir = outZip ? fs.mkdtempSync(path.join(os.tmpdir(), "akashic-export-zip-")) : param.dest;
+	const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "akashic-export-zip-"));
+	const destDir = path.resolve(param.dest);
 
-	return _checkDestinationValidity(param.dest, param.force)
+	return _checkDestinationValidity(param.dest, param.force, param.logger)
 		.then(() => {
 			return convertGame({
 				bundle: param.bundle,
@@ -111,7 +114,7 @@ export function promiseExportZip(param: ExportZipParameterObject): Promise<void>
 				packImage: param.packImage,
 				strip: param.strip,
 				source: param.source,
-				dest: destDir,
+				dest: tmpDir,
 				hashLength: param.hashLength,
 				logger: param.logger,
 				exportInfo: param.exportInfo,
@@ -123,14 +126,17 @@ export function promiseExportZip(param: ExportZipParameterObject): Promise<void>
 			});
 		})
 		.then(() => {
-			if (!outZip)
+			if (!outZip) {
+				fs.rmSync(destDir, { recursive: true });
+				fs.cpSync(tmpDir, destDir, { recursive: true });
 				return;
+			}
 			return new Promise<void>((resolve, reject) => {
-				const files = cmn.Util.readdirRecursive(destDir).map(p => ({
-					src: path.resolve(destDir, p),
+				const files = cmn.Util.readdirRecursive(tmpDir).map(p => ({
+					src: path.resolve(tmpDir, p),
 					entryName: p
 				}));
-				const ostream = fs.createWriteStream(param.dest);
+				const ostream = fs.createWriteStream(destDir);
 				const archive = archiver("zip");
 				ostream.on("close", () => resolve());
 				archive.on("error", (err) => reject(err));
@@ -138,17 +144,23 @@ export function promiseExportZip(param: ExportZipParameterObject): Promise<void>
 				files.forEach((f) => archive.file(f.src, {name: f.entryName}));
 				return archive.finalize();
 			});
-			// TODO mkdtempのフォルダを削除すべき？
 		})
 		.then(() => {
-			const gameJson = JSON.parse(fs.readFileSync(path.resolve(destDir, "game.json"), "utf8"));
+			const gameJson = JSON.parse(fs.readFileSync(path.resolve(tmpDir, "game.json"), "utf8"));
 			const params = {
 				logger: param.logger,
-				basepath: destDir,
+				basepath: tmpDir,
 				game: gameJson,
 				raw: false
 			};
 			return statSize(params);
+		})
+		.then(() => {
+			try {
+				fs.rmSync(path.resolve(tmpDir), { recursive: true });
+			} catch (_error) {
+				// キャッシュ削除の失敗は動作に致命的な影響を与えないため握りつぶす
+			}
 		});
 }
 
