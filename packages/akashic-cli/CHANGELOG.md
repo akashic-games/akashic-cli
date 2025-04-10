@@ -1,5 +1,14 @@
 # Change Log
 
+## 3.0.0-next.9
+
+### Patch Changes
+
+- [#1531](https://github.com/akashic-games/akashic-cli/pull/1531) [`a584667`](https://github.com/akashic-games/akashic-cli/commit/a584667f75c1d662c669d7cbbb27e6c06952ff7d) Thanks [@yu-ogi](https://github.com/yu-ogi)! - support `--legacy` option in akashic-cli-sandbox
+
+- Updated dependencies [[`92bd87f`](https://github.com/akashic-games/akashic-cli/commit/92bd87f5de40fc1cdfb25806fd36d86bcf0f8edc), [`92ac8a9`](https://github.com/akashic-games/akashic-cli/commit/92ac8a94bd2ae179a269fa0bc9bc0d55878ac2e3)]:
+  - @akashic/akashic-cli-serve@2.0.0-next.7
+
 ## 3.0.0-next.8
 
 ### Patch Changes
