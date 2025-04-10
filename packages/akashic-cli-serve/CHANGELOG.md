@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.0.0-next.8
+
+### Patch Changes
+
+- [#1534](https://github.com/akashic-games/akashic-cli/pull/1534) [`c19f62f`](https://github.com/akashic-games/akashic-cli/commit/c19f62f42c03e54809242e920f7de5bf1d5b78d7) Thanks [@yu-ogi](https://github.com/yu-ogi)! - fix serve bug
+
 ## 2.0.0-next.7
 
 ### Patch Changes
