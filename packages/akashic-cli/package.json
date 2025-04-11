@@ -32,9 +32,9 @@
   },
   "devDependencies": {
     "@akashic/eslint-config": "2.1.0",
-    "@types/node": "^20.16.9",
-    "@typescript-eslint/eslint-plugin": "6.21.0",
-    "eslint": "^8.57.1",
+    "@types/node": "^22.0.0",
+    "@typescript-eslint/eslint-plugin": "8.29.1",
+    "eslint": "^9.0.0",
     "eslint-plugin-import": "^2.30.0",
     "rimraf": "^6.0.1",
     "typescript": "^5.6.2"
