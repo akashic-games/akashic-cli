@@ -1,5 +1,11 @@
 # @akashic/akashic-cli-export
 
+## 2.0.1
+
+### Patch Changes
+
+- [#1539](https://github.com/akashic-games/akashic-cli/pull/1539) [`d7f8ee8`](https://github.com/akashic-games/akashic-cli/commit/d7f8ee8822ae36c0aac106d4c740e93d1f87a262) Thanks [@yu-ogi](https://github.com/yu-ogi)! - prevent error when both `--nicolive` and `--force` options are passed
+
 ## 2.0.0
 
 ### Major Changes
