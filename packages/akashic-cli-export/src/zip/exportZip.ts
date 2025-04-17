@@ -127,12 +127,7 @@ export function promiseExportZip(param: ExportZipParameterObject): Promise<void>
 		})
 		.then(() => {
 			if (!outZip) {
-				try {
-					fs.rmSync(destDir, { recursive: true });
-				} catch (e) {
-					if (e.code !== "ENOENT")
-						throw new Error(e);
-				}
+				fs.rmSync(destDir, { recursive: true, force: true });
 				fs.cpSync(tmpDir, destDir, { recursive: true });
 				return;
 			}
