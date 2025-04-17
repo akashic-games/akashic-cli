@@ -28,6 +28,7 @@ describe("scanUtils", () => {
 				"text": {
 					"foo": {
 						"$.json": "{}",
+						".gitkeep": ""
 					}
 				},
 				"audio": {
@@ -36,23 +37,27 @@ describe("scanUtils", () => {
 						"_0.aac": DUMMY_AAC_DATA,
 						"_0.ogg": DUMMY_OGG_DATA,
 					},
+					".gitkeep": ""
 				},
 				"script": {
 					"foo": {
 						"_1.js": "var x = 1;",
-					}
+					},
+					".gitkeep": ""
 				},
 				"image": {
 					"foo": {
 						"_2.png": DUMMY_1x1_PNG_DATA
-					}
+					},
+					".gitkeep": ""
 				},
 				"assets": {
 					"_.txt": "dummy",
 					"_.ogg": DUMMY_OGG_DATA2,
 					"_.js": "var x = 1;",
 					"_.png": DUMMY_1x1_PNG_DATA,
-					"_.bin": DUMMY_WASM_DATA
+					"_.bin": DUMMY_WASM_DATA,
+					".gitkeep": ""
 				}
 			}
 		});
