@@ -2,4 +2,4 @@
 "@akashic/akashic-cli-export": patch
 ---
 
-Fix bug in export-zip
+Fix crash on v1 games and crash for directory output
