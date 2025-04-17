@@ -330,7 +330,8 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 					(param.minifyJson && gcu.isTextJsonFile(p)) ? JSON.stringify(JSON.parse(encodeToString(buff))) :
 					gcu.isMaybeTextFile(p) ? encodeToString(buff) : buff;
 
-				if (bundleResult === null && gamejson.main.includes(p)) {
+				const entryPoint = gamejson.main || gamejson.assets.mainScene.path;
+				if (bundleResult === null && entryPoint.includes(p)) {
 					value = prefixCode + value;
 				}
 				fs.writeFileSync(path.resolve(param.dest, p), value);
