@@ -1,5 +1,11 @@
 # @akashic/akashic-cli-export
 
+## 2.0.2
+
+### Patch Changes
+
+- [#1544](https://github.com/akashic-games/akashic-cli/pull/1544) [`bcc0ed7`](https://github.com/akashic-games/akashic-cli/commit/bcc0ed71a7bfd8fbdeebdc5c37a17e4f06ac383e) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Fix crash on v1 games and crash for directory output
+
 ## 2.0.1
 
 ### Patch Changes
