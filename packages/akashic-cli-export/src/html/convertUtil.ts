@@ -235,6 +235,14 @@ export function addUntaintedToImageAssets(gameJson: cmn.GameConfiguration): void
 	});
 }
 
+export function removeUntaintedToImageAssets(gameJson: cmn.GameConfiguration): void {
+	for (const asset of Object.values(gameJson.assets)) {
+		if (asset.type === "image" && asset.hint) {
+			delete asset.hint;
+		}
+	}
+}
+
 export function validateEngineFilesName(filename: string, expectedMajorVersion: string): void {
 	const matches = filename.match(/(\d+)_\d+_\d+/);
 	const engineFilesVersion = matches ? matches[1] : null;

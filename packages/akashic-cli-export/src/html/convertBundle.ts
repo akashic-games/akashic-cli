@@ -19,7 +19,8 @@ import {
 	extractAssetDefinitions,
 	getInjectedContents,
 	validateSandboxConfigJs,
-	readSandboxConfigJs
+	readSandboxConfigJs,
+	removeUntaintedToImageAssets
 } from "./convertUtil.js";
 
 interface InnerHTMLAssetData {
@@ -38,6 +39,7 @@ export async function promiseConvertBundle(options: ConvertTemplateParameterObje
 	content.environment["sandbox-runtime"] = content.environment["sandbox-runtime"] ? content.environment["sandbox-runtime"] : "1";
 
 	validateGameJson(content);
+	removeUntaintedToImageAssets(content);
 
 	const conf = new cmn.Configuration({
 		content: content
