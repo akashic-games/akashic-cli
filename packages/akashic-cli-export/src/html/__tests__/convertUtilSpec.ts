@@ -111,9 +111,10 @@ describe("convertUtil", function () {
 					}
 				}
 			};
-			convert.removeUntaintedToImageAssets(gamejson);
+			convert.removeUntaintedHints(gamejson);
 			const sampleImage1 = gamejson.assets.sample_image1 as ImageAssetConfigurationBase;
-			expect(sampleImage1.hint).toBeUndefined();
+			expect(sampleImage1.hint).toEqual({});
+			expect(sampleImage1.hint.untainted).toBeUndefined();
 		});
 	});
 	describe("validateGameJson", function () {

@@ -19,7 +19,7 @@ import {
 	readSandboxConfigJs,
 	validateEngineFilesName,
 	resolveEngineFilesPath,
-	removeUntaintedToImageAssets,
+	removeUntaintedHints,
 	validateSandboxConfigJs
 } from "./convertUtil.js";
 
@@ -33,7 +33,7 @@ export async function promiseConvertNoBundle(options: ConvertTemplateParameterOb
 	content.environment["sandbox-runtime"] = content.environment["sandbox-runtime"] ? content.environment["sandbox-runtime"] : "1";
 
 	validateGameJson(content);
-	removeUntaintedToImageAssets(content);
+	removeUntaintedHints(content);
 
 	const conf = new cmn.Configuration({
 		content: content
