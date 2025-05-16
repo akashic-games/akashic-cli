@@ -60,7 +60,7 @@
     "@akashic/akashic-cli-commons": "1.0.0",
     "@akashic/akashic-cli-extra": "2.0.0",
     "@akashic/game-configuration": "2.5.0",
-    "@akashic/headless-driver": "2.17.1",
+    "@akashic/headless-driver": "2.17.3",
     "@babel/core": "7.25.2",
     "@babel/preset-env": "7.25.3",
     "@rollup/plugin-commonjs": "^28.0.0",
