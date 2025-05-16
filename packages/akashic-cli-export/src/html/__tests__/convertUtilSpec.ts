@@ -92,6 +92,31 @@ describe("convertUtil", function () {
 			expect(gamejson.assets.sample_text1.hasOwnProperty("hint")).toBeFalsy();
 		});
 	});
+	describe("removeUntaintedToImageAssets", function () {
+		it("remove 'hint.untainted' to image asset on specified gamejson", function () {
+			const gamejson: GameConfiguration = {
+				"width": 320,
+				"height": 320,
+				"fps": 30,
+				"main": "./script/main.js",
+				"assets": {
+					"sample_image1": {
+						"type": "image",
+						"width": 150,
+						"height": 149,
+						"path": "image/sample_image1.png",
+						"hint": {
+							"untainted": true
+						}
+					}
+				}
+			};
+			convert.removeUntaintedHints(gamejson);
+			const sampleImage1 = gamejson.assets.sample_image1 as ImageAssetConfigurationBase;
+			expect(sampleImage1.hint).toEqual({});
+			expect(sampleImage1.hint.untainted).toBeUndefined();
+		});
+	});
 	describe("validateGameJson", function () {
 		it("throw Error when specified gamejson include @akashic/akashic-engine", function () {
 			const gamejson: any = {
