@@ -237,7 +237,7 @@ export function addUntaintedToImageAssets(gameJson: cmn.GameConfiguration): void
 
 export function removeUntaintedHints(gameJson: cmn.GameConfiguration): void {
 	for (const asset of Object.values(gameJson.assets)) {
-		if (asset.type === "image" && asset.hint?.untainted ) {
+		if (asset.type === "image" && asset.hint?.untainted) {
 			delete asset.hint.untainted;
 		}
 	}
