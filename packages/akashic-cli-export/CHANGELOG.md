@@ -1,5 +1,11 @@
 # @akashic/akashic-cli-export
 
+## 2.0.3
+
+### Patch Changes
+
+- [#1546](https://github.com/akashic-games/akashic-cli/pull/1546) [`50e76c1`](https://github.com/akashic-games/akashic-cli/commit/50e76c18698d40f65aca5c422f0e1732b42dc8b6) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Remove imageAsset hint.untainted in export-html
+
 ## 2.0.2
 
 ### Patch Changes
