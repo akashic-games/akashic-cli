@@ -1,6 +1,6 @@
 import * as path from "path";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger.js";
-import * as fs from "fs-extra";
+import fs from "fs-extra";
 import mockfs from "mock-fs";
 import { internals } from "../init/init.js";
 import { completeTemplateConfig } from "../init/TemplateConfig.js";

@@ -3,6 +3,7 @@ import type { CliConfigExportZip } from "./CliConfigExportZip.js";
 import type { CliConfigInit } from "./CliConfigInit.js";
 import type { CliConfigInstall } from "./CliConfigInstall.js";
 import type { CliConfigModify } from "./CliConfigModify.js";
+import type { CliConfigSandbox } from "./CliConfigSandbox.js";
 import type { CliConfigScanAsset, CliConfigScanGlobalScripts } from "./CliConfigScan.js";
 import type { CliConfigServe } from "./CliConfigServe.js";
 import type { CliConfigStat } from "./CliConfigStat.js";
@@ -21,9 +22,10 @@ export interface CliConfiguration {
 		init?: Partial<CliConfigInit>;
 		install?: Partial<CliConfigInstall>;
 		modify?: Partial<CliConfigModify>;
+		sandbox?: Partial<CliConfigSandbox>;
 		scan?: {
 			asset?: Partial<CliConfigScanAsset>;
-			globalSCripts?: Partial<CliConfigScanGlobalScripts>;
+			globalScripts?: Partial<CliConfigScanGlobalScripts>;
 		};
 		serve?: Partial<CliConfigServe>;
 		stat?: Partial<CliConfigStat>;

@@ -138,7 +138,7 @@ describe("uninstall()", () => {
 				debugNpm: dummyNpm,
 				logger
 			});
-			return cmn.ConfigurationFile.read("./testdir/foo/game.json", logger);
+			return cmn.FileSystem.readJSON<cmn.GameConfiguration>("./testdir/foo/game.json");
 		};
 
 		let content = await uninstallAndReadConfig(["foo"]);
@@ -268,7 +268,7 @@ describe("uninstall()", () => {
 				logger: logger,
 				debugNpm: new DummyNpm({ logger, fsContent })
 			});
-			const content = await cmn.ConfigurationFile.read(path.join("./testdir/foo", "game.json"), logger);
+			const content = await cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join("./testdir/foo", "game.json"));
 			expect(content.environment!.external!.fooEx).toBeUndefined();
 			expect(content.environment!.external!.buzzEx).toBe("10000");
 		});
@@ -286,7 +286,7 @@ describe("uninstall()", () => {
 				logger: logger,
 				debugNpm: new DummyNpm({ logger, fsContent })
 			});
-			const content = await cmn.ConfigurationFile.read(path.join("./testdir/foo", "game.json"), logger);
+			const content = await cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join("./testdir/foo", "game.json"));
 			expect(content.environment!.external!.fooEx).toBe("100");
 			expect(content.environment!.external!.buzzEx).toBe("10000");
 		});
@@ -302,7 +302,7 @@ describe("uninstall()", () => {
 				logger: logger,
 				debugNpm: new DummyNpm({ logger, fsContent })
 			});
-			const content = await cmn.ConfigurationFile.read(path.join("./testdir/foo", "game.json"), logger);
+			const content = await cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join("./testdir/foo", "game.json"));
 			expect(content.environment!.external!.fooEx).toBe("100");
 			expect(content.environment!.external!.buzzEx).toBe("10000");
 		});
@@ -416,7 +416,7 @@ describe("uninstall()", () => {
 				logger: logger,
 				debugNpm: new DummyNpm({ logger, fsContent })
 			});
-			const content = await cmn.ConfigurationFile.read(path.join("./testdir/foo", "game.json"), logger);
+			const content = await cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join("./testdir/foo", "game.json"));
 			expect(content.environment!.external!.fooEx).toBe("100");
 			expect(content.environment!.external!.buzzEx).toBe("10000");
 		});
@@ -432,7 +432,7 @@ describe("uninstall()", () => {
 				logger: logger,
 				debugNpm: new DummyNpm({ logger, fsContent })
 			});
-			const content = await cmn.ConfigurationFile.read(path.join("./testdir/foo", "game.json"), logger)
+			const content = await cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join("./testdir/foo", "game.json"));
 			expect(content.environment!.external!.fooEx).toBe("100");
 			expect(content.environment!.external!.buzzEx).toBe("10000");
 		});
@@ -448,7 +448,7 @@ describe("uninstall()", () => {
 				logger: logger,
 				debugNpm: new DummyNpm({ logger, fsContent })
 			});
-			const content = await cmn.ConfigurationFile.read(path.join("./testdir/foo", "game.json"), logger);
+			const content = await cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join("./testdir/foo", "game.json"));
 			expect(content.environment!.external!.fooEx).toBe("100");
 			expect(content.environment!.external!.buzzEx).toBe("10000");
 		});
@@ -465,7 +465,7 @@ describe("uninstall()", () => {
 				logger: logger,
 				debugNpm: new DummyNpm({ logger, fsContent })
 			});
-			const content = await cmn.ConfigurationFile.read(path.join("./testdir/foo", "game.json"), logger);
+			const content = await cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join("./testdir/foo", "game.json"));
 			expect(content.environment!.external!.fooEx).toBe("100");
 			expect(content.environment!.external!.buzzEx).toBe("10000");
 		});
@@ -628,7 +628,7 @@ describe("uninstall()", () => {
 				logger,
 				debugNpm: new DummyNpm({ logger, fsContent })
 			});
-			const content = await cmn.ConfigurationFile.read(path.join("./testdir", "game.json"), logger);
+			const content = await cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join("./testdir", "game.json"));
 			expect(Object.keys(content.assets).length).toBe(3);
 			expect(content.assets["node_modules/@akashic-extension/ui-library/assets/images/player.png"]).toBeUndefined();
 			expect(content.assets["node_modules/@akashic-extension/ui-library/assets/images/enemy.png"]).toBeUndefined();
@@ -648,7 +648,7 @@ describe("uninstall()", () => {
 				logger,
 				debugNpm: new DummyNpm({ logger, fsContent })
 			});
-			const content = await cmn.ConfigurationFile.read(path.join("./testdir", "game.json"), logger);
+			const content = await cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join("./testdir", "game.json"));
 			expect(Object.keys(content.assets).length).toBe(0);
 			expect(content.assets["node_modules/@akashic-extension/ui-library/assets/images/player.png"]).toBeUndefined();
 			expect(content.assets["node_modules/@akashic-extension/ui-library/assets/images/enemy.png"]).toBeUndefined();

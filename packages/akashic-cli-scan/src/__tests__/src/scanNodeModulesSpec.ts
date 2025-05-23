@@ -772,7 +772,7 @@ describe("scanNodeModules", () => {
 					"dummy": {}, "dummy2": {}, "@scope/scoped": {}
 				}
 			}),
-			noOmitPackagejson: true
+			omitPackagejson: false
 		});
 
 		const conf = JSON.parse(fs.readFileSync("./game.json").toString());

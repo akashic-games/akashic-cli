@@ -1,8 +1,6 @@
-import * as fs from "fs";
-import * as path from "path";
 import { createRequire } from "module";
 import type { CliConfigInstall } from "@akashic/akashic-cli-commons";
-import { ConsoleLogger, CliConfigurationFile } from "@akashic/akashic-cli-commons";
+import { ConsoleLogger, FileSystem } from "@akashic/akashic-cli-commons";
 import { Command } from "commander";
 import type { InstallParameterObject} from "./install.js";
 import { promiseInstall } from "./install.js";
@@ -45,25 +43,25 @@ commander
 	.option("--use-mmp", "Use moduleMainPaths in game.json")
 	.option("--use-mms", "Use moduleMainScripts in game.json (to support older Akashic Engine)");
 
-export function run(argv: string[]): void {
+export async function run(argv: string[]): Promise<void> {
 	commander.parse(argv);
 	const options = commander.opts();
-	CliConfigurationFile.read(path.join(options.cwd || process.cwd(), "akashic.config.js"), (error, configuration) => {
-		if (error) {
-			console.error(error);
-			process.exit(1);
-		}
-
-		const conf = configuration!.commandOptions?.install ?? {};
-		cli({
-			args: commander.args ?? conf.args,
-			cwd: options.cwd ?? conf.cwd,
-			link: options.link ?? conf.link,
-			quiet: options.quiet ?? conf.quiet,
-			plugin: options.plugin ?? conf.plugin,
-			omitPackagejson: options.omitPackagejson ?? conf.omitPackagejson,
-			useMmp: options.useMmp ?? conf.useMmp,
-			useMms: options.useMms ?? conf.useMms,
-		});
+	let configuration;
+	try {
+		configuration = await FileSystem.load(options.cwd || process.cwd());
+	} catch (error) {
+		console.error(error);
+		process.exit(1);
+	}
+	const conf = configuration!.commandOptions?.install ?? {};
+	cli({
+		args: commander.args ?? conf.args,
+		cwd: options.cwd ?? conf.cwd,
+		link: options.link ?? conf.link,
+		quiet: options.quiet ?? conf.quiet,
+		plugin: options.plugin ?? conf.plugin,
+		omitPackagejson: options.omitPackagejson ?? conf.omitPackagejson,
+		useMmp: options.useMmp ?? conf.useMmp,
+		useMms: options.useMms ?? conf.useMms,
 	});
 }

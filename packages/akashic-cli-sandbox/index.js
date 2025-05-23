@@ -4,6 +4,7 @@ import { existsSync } from "fs";
 import { createRequire } from "module";
 import path from "path";
 import debugLib from "debug";
+import { load } from "@akashic/akashic-cli-commons/lib/FileSystem.js";
 import appLib from "./lib/app.js";
 
 const debug = debugLib("script-test:server");
@@ -22,25 +23,30 @@ program
 	.option("-p, --port <port>", "number of listen port. default 3000", parseInt)
 	.option("-s, --scenario <scenario>", "scenario file");
 
-export const run = (argv) => {
-	program.parse(argv);
+/**
+ * @param {import('@akashic/akashic-cli-commons/lib/CliConfig/CliConfigSandbox.js').CliConfigSandbox} param
+ */
+async function cli(param) {
+	const app = appLib({
+		gameBase: param.args.length > 0 ? param.args[0] : param.cwd,
+		cascadeBases: param.cascade,
+		fonts: param.fonts,
+	});
+	const port = normalizePort(param.port ?? process.env.PORT ?? 3000);
 
-	const opts = program.opts();
-	const gameBase = program.args.length > 0 ? program.args[0] : process.cwd();
-	const app = appLib({ gameBase: gameBase, cascadeBases: opts.cascade });
-	const port = normalizePort(opts.port || process.env.PORT || 3000);
-
-	if (opts.scenario) {
-		if (!existsSync(opts.scenario)) {
-			console.error("can not load " + opts.scenario);
+	if (param.scenario) {
+		if (!existsSync(param.scenario)) {
+			console.error("could not load " + param.scenario);
+			process.exitCode = 1;
 			return;
 		}
-		app.set("scenarioPath", opts.scenario);
+		app.set("scenarioPath", param.scenario);
 	}
 
 	const gameJsonPath = path.join(app.gameBase, "game.json");
-	if (!opts.scenario && !existsSync(gameJsonPath)) {
-		console.error(`can not load ${gameJsonPath}`);
+	if (!param.scenario && !existsSync(gameJsonPath)) {
+		console.error(`could not load ${gameJsonPath}`);
+		process.exitCode = 1;
 		return;
 	}
 
@@ -100,4 +106,28 @@ export const run = (argv) => {
 		console.log("scenario file: " + app.settings.scenarioPath);
 	}
 	console.log("please access to http://localhost:%d/game/ by web-browser", port);
+}
+
+export const run = async (argv) => {
+	program.parse(argv);
+	const options = program.opts();
+
+	let configuration;
+	try {
+		configuration = await load(options.cwd || process.cwd());
+	} catch (error) {
+		console.error(error);
+		process.exitCode = 1;
+		return;
+	}
+
+	const conf = configuration.commandOptions?.sandbox ?? {};
+	await cli({
+		args: program.args ?? conf.args,
+		cwd: options.cwd ?? conf.cwd,
+		cascade: options.cascade ?? conf.cascade,
+		port: options.port ?? conf.port,
+		scenario: options.scenario ?? conf.scenario,
+		fonts: conf.fonts,
+	});
 };

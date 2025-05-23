@@ -1,7 +1,7 @@
-import * as path from "path";
 import { createRequire } from "module";
+import * as path from "path";
 import type { CliConfigModify } from "@akashic/akashic-cli-commons";
-import { ConsoleLogger, CliConfigurationFile } from "@akashic/akashic-cli-commons";
+import { ConsoleLogger, FileSystem } from "@akashic/akashic-cli-commons";
 import { Command } from "commander";
 import { promiseModifyBasicParameter } from "./modify.js";
 
@@ -25,18 +25,18 @@ function defineCommand(commandName: string): void {
 		.description("Update '" + commandName + "' property of game.json")
 		.option("-C, --cwd <dir>", "The directory incluedes game.json")
 		.option("-q, --quiet", "Suppress output")
-		.action((value: string, opts: CliConfigModify = {}) => {
-			CliConfigurationFile.read(path.join(opts.cwd || process.cwd(), "akashic.config.js"), (error, configuration) => {
-				if (error) {
-					console.error(error);
-					process.exit(1);
-				}
-
-				const conf = configuration!.commandOptions?.modify ?? {};
-				cliBasicParameter(commandName, value, {
-					cwd: opts.cwd ?? conf.cwd,
-					quiet: opts.quiet ?? conf.quiet
-				});
+		.action(async (value: string, opts: CliConfigModify = {}) => {
+			let configuration;
+			try {
+				configuration = await FileSystem.load(path.join(opts.cwd || process.cwd()));
+			} catch (error) {
+				console.error(error);
+				process.exit(1);
+			}
+			const conf = configuration!.commandOptions?.modify ?? {};
+			cliBasicParameter(commandName, value, {
+				cwd: opts.cwd ?? conf.cwd,
+				quiet: opts.quiet ?? conf.quiet
 			});
 		});
 }

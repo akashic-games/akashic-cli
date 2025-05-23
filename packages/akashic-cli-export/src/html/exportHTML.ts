@@ -4,7 +4,6 @@ import * as os from "os";
 import * as path from "path";
 import * as cmn from "@akashic/akashic-cli-commons";
 import archiver = require("archiver");
-import * as fsx from "fs-extra";
 import { promiseConvertBundle } from "./convertBundle.js";
 import { promiseConvertNoBundle } from "./convertNoBundle.js";
 import type { ConvertTemplateParameterObject } from "./convertUtil.js";
@@ -63,7 +62,7 @@ export function promiseExportHtmlRaw(param: ExportHTMLParameterObject): Promise<
 	})
 		.then(() => {
 			if (param.hashLength === 0) return param.source;
-			return createRenamedGame(param.source, param.hashLength, param.logger);
+			return createRenamedGame(param.source, param.hashLength);
 		})
 		.then((currentGamepath: string) => {
 			gamepath = currentGamepath;
@@ -72,6 +71,7 @@ export function promiseExportHtmlRaw(param: ExportHTMLParameterObject): Promise<
 				logger: param.logger,
 				strip: param.strip,
 				minify: param.minify,
+				esDownpile: param.esDownpile,
 				terser: param.terser,
 				magnify: param.magnify,
 				force: param.force,
@@ -94,7 +94,7 @@ export function promiseExportHtmlRaw(param: ExportHTMLParameterObject): Promise<
 			// ハッシュ化した場合一時ファイルが生成されるため削除する
 			if (param.hashLength > 0) {
 				param.logger.info("removing temp files...");
-				fsx.removeSync(gamepath);
+				fs.rmSync(gamepath, { recursive: true });
 			}
 		})
 		.catch((error) => {
@@ -128,7 +128,7 @@ export function promiseExportHTML(p: ExportHTMLParameterObject): Promise<string>
 					files.forEach((f) => archive.file(f.src, { name: f.entryName }));
 					return archive.finalize();
 				}).finally(() => {
-					fsx.removeSync(dest);
+					fs.rmSync(dest, { recursive: true });
 				});
 			}
 		})
@@ -141,16 +141,15 @@ export function exportHTML(param: ExportHTMLParameterObject, cb: (err?: any) => 
 	promiseExportHTML(param).then<void>(cb).catch(cb);
 }
 
-function createRenamedGame(sourcePath: string, hashLength: number, logger: cmn.Logger): Promise<string> {
+async function createRenamedGame(sourcePath: string, hashLength: number): Promise<string> {
 	const destDirPath = path.resolve(fs.mkdtempSync(path.join(os.tmpdir(), "akashic-export-html-")));
 	if (fs.existsSync(path.resolve(sourcePath, "sandbox.config.js"))) {
 		fs.copyFileSync(path.resolve(sourcePath, "sandbox.config.js"), path.resolve(destDirPath, "sandbox.config.js"));
 	}
 	Utils.copyContentFiles(sourcePath, destDirPath);
-	return Promise.resolve()
-		.then(() => cmn.ConfigurationFile.read(path.join(destDirPath, "game.json"), logger))
-		.then((gamejson: cmn.GameConfiguration) => {
-			cmn.Renamer.renameAssetFilenames(gamejson, destDirPath, hashLength);
-			return cmn.ConfigurationFile.write(gamejson, path.resolve(path.join(destDirPath, "game.json")), logger);
-		}).then(() => destDirPath);
+
+	const gamejson = await cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join(destDirPath, "game.json"));
+	cmn.Renamer.renameAssetFilenames(gamejson, destDirPath, hashLength);
+	await cmn.FileSystem.writeJSON<cmn.GameConfiguration>(path.resolve(path.join(destDirPath, "game.json")), gamejson);
+	return destDirPath;
 }

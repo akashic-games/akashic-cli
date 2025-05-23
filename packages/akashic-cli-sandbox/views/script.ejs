@@ -18,6 +18,8 @@ if (! gScriptContainer["<%- key %>"]) {
 			Date = window.MeddlingDate;
 			Math = window.MeddlingMath;
 		}
+		var setTimeout = window.meddlingSetTimeout;
+		var setInterval = window.meddlingSetInterval;
 
 		(function(exports, require, module, __filename, __dirname) {
 			<%- scriptContent %>

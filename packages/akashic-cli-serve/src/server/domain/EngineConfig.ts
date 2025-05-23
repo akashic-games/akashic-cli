@@ -1,6 +1,10 @@
+import { createRequire } from "module";
 import * as path from "path";
-import { serverGlobalConfig } from "../common/ServerGlobalConfig";
-import * as gameConfigs from "../domain/GameConfigs";
+import { serverGlobalConfig } from "../common/ServerGlobalConfig.js";
+import type { EngineFilesVersions } from "./EngineFilesVersions.js";
+import * as gameConfigs from "./GameConfigs.js";
+
+const require = createRequire(import.meta.url);
 
 export interface EngineConfig {
 	engine_urls: string[];
@@ -8,6 +12,7 @@ export interface EngineConfig {
 	asset_base_url?: string;
 	untrusted?: boolean;
 	external?: string[];
+	content_id?: string;
 }
 
 export interface GetEngineConfigParameterObject {
@@ -32,7 +37,7 @@ export const getEngineConfig = (param: GetEngineConfigParameterObject): EngineCo
 		}
 	}
 	// eslint-disable-next-line @typescript-eslint/no-var-requires
-	const versionsJson = require("../engineFilesVersion.json");
+	const versionsJson: EngineFilesVersions = require("../engineFilesVersion.json");
 
 	if (process.env.ENGINE_FILES_V3_PATH) {
 		versionsJson.v3.fileName = path.basename(process.env.ENGINE_FILES_V3_PATH);
@@ -54,6 +59,7 @@ export const getEngineConfig = (param: GetEngineConfigParameterObject): EngineCo
 		untrusted,
 		external,
 		content_url: `${param.baseUrl}/contents/${param.contentId}/${gameContentDir}/game.json`,
-		asset_base_url: `${param.baseUrl}/contents/${param.contentId}/${gameContentDir}`
+		asset_base_url: `${param.baseUrl}/contents/${param.contentId}/${gameContentDir}`,
+		content_id: "" + param.contentId // TODO コンテンツごとに違う ID にすべき
 	};
 };

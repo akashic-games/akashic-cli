@@ -1,4 +1,5 @@
 import type * as cmn from "@akashic/akashic-cli-commons";
+import type { AssetConfigurationBase } from "@akashic/game-configuration";
 import mockfs from "mock-fs";
 import * as gcu from "../GameConfigurationUtil.js";
 
@@ -53,12 +54,12 @@ describe("GameConfigurationUtil", () => {
 		mockfs.restore();
 	});
 
-	describe("removeScriptAssets", () => {
-		const filter = (filePath: string): boolean => {
-			return ["node_modules/foobar/package.json", "script/main.js"].indexOf(filePath) !== -1;
-		};
+	describe("removeAssets", () => {
 		it("remove script assets", () => {
-			gcu.removeScriptAssets(gamejson, filter);
+			const filter = (asset: AssetConfigurationBase): boolean => {
+				return ["node_modules/foobar/package.json", "script/main.js"].indexOf(asset.path) !== -1;
+			};
+			gcu.removeAssets(gamejson, filter);
 			expect(gamejson).toEqual({
 				width: 120,
 				height: 120,

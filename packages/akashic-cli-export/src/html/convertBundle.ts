@@ -4,8 +4,8 @@ import * as path from "path";
 import { fileURLToPath } from "url";
 import * as cmn from "@akashic/akashic-cli-commons";
 import * as ejs from "ejs";
-import fsx from "fs-extra";
 import type { MinifyOptions } from "terser";
+import * as licenseUtil from "../licenseUtil.js";
 import { validateGameJson } from "../utils.js";
 import type {
 	ConvertTemplateParameterObject} from "./convertUtil.js";
@@ -18,9 +18,9 @@ import {
 	getDefaultBundleStyle,
 	extractAssetDefinitions,
 	getInjectedContents,
-	validateEs5Code,
 	validateSandboxConfigJs,
-	readSandboxConfigJs
+	readSandboxConfigJs,
+	removeUntaintedHints
 } from "./convertUtil.js";
 
 interface InnerHTMLAssetData {
@@ -34,11 +34,12 @@ const __dirname = path.dirname(__filename);
 const require = createRequire(import.meta.url);
 
 export async function promiseConvertBundle(options: ConvertTemplateParameterObject): Promise<void> {
-	const content = await cmn.ConfigurationFile.read(path.join(options.source, "game.json"), options.logger);
+	const content = await cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join(options.source, "game.json"));
 	if (!content.environment) content.environment = {};
 	content.environment["sandbox-runtime"] = content.environment["sandbox-runtime"] ? content.environment["sandbox-runtime"] : "1";
 
 	validateGameJson(content);
+	removeUntaintedHints(content);
 
 	const conf = new cmn.Configuration({
 		content: content
@@ -70,16 +71,20 @@ export async function promiseConvertBundle(options: ConvertTemplateParameterObje
 
 	const terser = options.minify ? options.terser ?? {} : undefined;
 	const tempAssetData = await Promise.all(innerHTMLAssetNames.map((assetName: string) => {
-		return convertAssetToInnerHTMLObj(assetName, options.source, conf, terser, errorMessages);
+		return convertAssetToInnerHTMLObj(assetName, options.source, conf, terser, options.esDownpile);
 	}));
 	innerHTMLAssetArray = innerHTMLAssetArray.concat(tempAssetData);
 
+	const libPaths: string[] = [];
 	if (conf._content.globalScripts) {
 		const tempScriptData = await Promise.all(conf._content.globalScripts.map((scriptName: string) => {
-			return convertScriptNameToInnerHTMLObj(scriptName, options.source, terser, errorMessages);
+			libPaths.push(scriptName);
+			return convertScriptNameToInnerHTMLObj(scriptName, options.source, terser);
 		}));
 		innerHTMLAssetArray = innerHTMLAssetArray.concat(tempScriptData);
 	}
+
+	await licenseUtil.writeLicenseTextFile(options.source, options.output, libPaths, conf._content.environment["sandbox-runtime"]);
 
 	if (errorMessages.length > 0) {
 		options.logger.warn("The following ES5 syntax errors exist.\n" + errorMessages.join("\n"));
@@ -104,26 +109,27 @@ export async function promiseConvertBundle(options: ConvertTemplateParameterObje
 }
 
 async function convertAssetToInnerHTMLObj(
-	assetName: string, inputPath: string, conf: cmn.Configuration,
-	terser: MinifyOptions | undefined, errors?: string[]): Promise<InnerHTMLAssetData> {
+	assetName: string,
+	inputPath: string,
+	conf: cmn.Configuration,
+	terser: MinifyOptions | undefined,
+	esDownpile: boolean
+): Promise<InnerHTMLAssetData> {
 	const assets = conf._content.assets;
 	const isScript = assets[assetName].type === "script";
 	const asset = assets[assetName];
 	const exports = (asset.type === "script" && asset.exports) ?? [];
 	const assetString = fs.readFileSync(path.join(inputPath, asset.path), "utf8").replace(/\r\n|\r/g, "\n");
-	if (isScript) {
-		errors.push.apply(errors, await validateEs5Code(asset.path, assetString));
-	}
 	return {
 		name: assetName,
 		type: asset.type,
-		code: isScript ? wrap(assetString, terser, exports) : encodeText(assetString)
+		code: isScript ? wrap(assetString, terser, esDownpile, exports) : encodeText(assetString)
 	};
 }
 
 async function convertScriptNameToInnerHTMLObj(
 	scriptName: string, inputPath: string,
-	terser: MinifyOptions | undefined, errors?: string[]): Promise<InnerHTMLAssetData> {
+	terser: MinifyOptions | undefined): Promise<InnerHTMLAssetData> {
 	let scriptString = fs.readFileSync(path.join(inputPath, scriptName), "utf8").replace(/\r\n|\r/g, "\n");
 	const isScript = /\.js$/i.test(scriptName);
 
@@ -131,19 +137,20 @@ async function convertScriptNameToInnerHTMLObj(
 	if (path.extname(scriptPath) === ".json") {
 		scriptString = encodeText(scriptString);
 	}
-	if (isScript) {
-		errors.push.apply(errors, await validateEs5Code(scriptName, scriptString));
-	}
 	return {
 		name: scriptName,
 		type: isScript ? "script" : "text",
-		code: isScript ? wrap(scriptString, terser) : scriptString
+		code: isScript ? wrap(scriptString, terser, false) : scriptString
 	};
 }
 
 async function writeHtmlFile(
-	innerHTMLAssetArray: InnerHTMLAssetData[], outputPath: string,
-	conf: cmn.Configuration, options: ConvertTemplateParameterObject, templatePath: string): Promise<void> {
+	innerHTMLAssetArray: InnerHTMLAssetData[],
+	outputPath: string,
+	conf: cmn.Configuration,
+	options: ConvertTemplateParameterObject,
+	templatePath: string
+): Promise<void> {
 	const injects = options.injects ? options.injects : [];
 	const scripts = getDefaultBundleScripts(
 		templatePath,
@@ -181,9 +188,9 @@ function writeCommonFiles(
 
 	const jsDir = path.resolve(outputPath, "js");
 	const cssDir = path.resolve(outputPath, "css");
-	fsx.copySync(
+	fs.cpSync(
 		path.resolve(__dirname, "..", "..", "lib", templatePath),
 		outputPath,
-		{ filter: (_src: string, dest: string): boolean => (dest !== jsDir && dest !== cssDir) }
+		{ filter: (_src: string, dest: string): boolean => (!dest.includes(jsDir) && !dest.includes(cssDir)), recursive: true }
 	);
 }

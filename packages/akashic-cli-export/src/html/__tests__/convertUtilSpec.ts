@@ -36,33 +36,6 @@ describe("convertUtil", function () {
 			expect(existFileContents[1]).toBe(sampleScriptContent);
 		});
 	});
-	describe("validateEs5Code", function () {
-		it("return empty array if code is written with ES5 syntax", async function () {
-			const es5Code = `
-				"use strict";
-				var fn = function () {
-					return 1;
-				};
-				var array = [1, 2];
-				var a = array[0];
-				var b = array[1];
-			`;
-			expect((await convert.validateEs5Code("es5.js", es5Code)).length).toBe(0);
-		});
-		it("return error messages if code is not written with ES5 syntax", async function () {
-			const es6Code = `
-				"use strict";
-				const fn = () => {
-					return 1;
-				}
-				const array = [1, 3];
-				const [a, b] = array;
-			`;
-			const result = await convert.validateEs5Code("es6.js", es6Code);
-			expect(result.length).toBe(1);
-			expect(result[0]).toBe("es6.js(3:5): Parsing error: The keyword \'const\' is reserved");
-		});
-	});
 	describe("encodeText", function () {
 		it("can encode specified characters and the characters can be decode", function () {
 			let targetString = "";
@@ -119,6 +92,31 @@ describe("convertUtil", function () {
 			expect(gamejson.assets.sample_text1.hasOwnProperty("hint")).toBeFalsy();
 		});
 	});
+	describe("removeUntaintedToImageAssets", function () {
+		it("remove 'hint.untainted' to image asset on specified gamejson", function () {
+			const gamejson: GameConfiguration = {
+				"width": 320,
+				"height": 320,
+				"fps": 30,
+				"main": "./script/main.js",
+				"assets": {
+					"sample_image1": {
+						"type": "image",
+						"width": 150,
+						"height": 149,
+						"path": "image/sample_image1.png",
+						"hint": {
+							"untainted": true
+						}
+					}
+				}
+			};
+			convert.removeUntaintedHints(gamejson);
+			const sampleImage1 = gamejson.assets.sample_image1 as ImageAssetConfigurationBase;
+			expect(sampleImage1.hint).toEqual({});
+			expect(sampleImage1.hint.untainted).toBeUndefined();
+		});
+	});
 	describe("validateGameJson", function () {
 		it("throw Error when specified gamejson include @akashic/akashic-engine", function () {
 			const gamejson: any = {
@@ -156,4 +154,19 @@ describe("convertUtil", function () {
 		});
 	});
 
+	describe("wrap", () => {
+		it("babel arguments enabled/disabled", () => {
+			const code = `
+			test = () => {
+				return x ** 2;
+			};`
+			const downpiled = convert.wrap(code, {}, true);
+			expect(/\(\)\s?=>/.test(downpiled)).toBeTruthy(); // ES2015 のアロー関数はそのまま
+			expect(/\*\*/.test(downpiled)).toBeFalsy(); // ES2016 のべき乗演算子は Math.pow()に変換される
+
+			const noDownpiled = convert.wrap(code, null, false);
+			expect(/\(\)\s?=>/.test(noDownpiled)).toBeTruthy(); 
+			expect(/\*\*/.test(noDownpiled)).toBeTruthy(); 
+		});
+	})
 });

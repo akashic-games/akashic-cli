@@ -1,5 +1,11 @@
-const path = require("path");
-const fs = require("fs");
+import fs from "fs";
+import { createRequire } from "module";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const require = createRequire(import.meta.url);
 
 const versions = {
 	v1: {
@@ -23,7 +29,7 @@ try {
 		const rootPath = path.dirname(entryPath); // index.js と package.json が同層にあることが前提
 		const version = require(path.join(rootPath, "package.json")).version;
 		const fileName = `engineFilesV${version.replace(/[\.-]/g, "_")}.js`;
-		const engineFilesPath = path.join(rootPath, `dist/raw/release/full/${fileName}`);
+		const engineFilesPath = path.join(rootPath, `dist/raw/debug/full/${fileName}`);
 
 		versions[key].version = version;
 		versions[key].fileName = fileName;

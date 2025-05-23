@@ -1,4 +1,4 @@
-import type { ServiceType } from "@akashic/akashic-cli-commons/lib/ServiceType";
+import type { ServiceType } from "@akashic/akashic-cli-commons/lib/ServiceType.js";
 
 export interface AppOptions {
 	autoStart: boolean;
@@ -10,4 +10,5 @@ export interface AppOptions {
 	runInIframe: boolean;
 	experimentalOpen: number | null;
 	disableFeatCheck: boolean;
+	fontFamilies: string[];
 }

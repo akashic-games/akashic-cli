@@ -12,9 +12,9 @@ import type { PlayStatus } from "../../common/types/PlayStatus";
 import type { StartPointHeader } from "../../common/types/StartPointHeader";
 import type { RunnerDescription, ClientInstanceDescription } from "../../common/types/TestbedEvent";
 import type { GameViewManager } from "../akashic/GameViewManager";
-import { SocketIOAMFlowClient } from "../akashic/SocketIOAMFlowClient";
+import type { ServeMemoryAmflowClient } from "../akashic/ServeMemoryAMFlowClient";
+import type { SocketIOAMFlowClient } from "../akashic/SocketIOAMFlowClient";
 import { apiClient } from "../api/apiClientInstance";
-import { socketInstance } from "../api/socketInstance";
 import type { ScenarioEventData } from "../common/types/ScenarioEventData";
 import type { ContentEntity } from "./ContentEntity";
 import type { ExecutionMode } from "./ExecutionMode";
@@ -42,6 +42,7 @@ export interface CreateServerInstanceParameterObject {
 
 export interface PlayEntityParameterObject {
 	gameViewManager: GameViewManager;
+	amflow: SocketIOAMFlowClient | ServeMemoryAmflowClient;
 	playId: string;
 	status: PlayStatus;
 	joinedPlayers?: Player[];
@@ -52,14 +53,16 @@ export interface PlayEntityParameterObject {
 	audioState?: PlayAudioState;
 	parent?: PlayEntity;
 	startPointHeaders?: StartPointHeader[];
+	disableFastForward?: boolean; // View レイヤーからの参照のために定義。将来的には名前や役割を修正すべきかもしれない。
 }
 
 export class PlayEntity {
 	onTeardown: Trigger<PlayEntity>;
 
 	readonly playId: string;
-	readonly amflow: SocketIOAMFlowClient;
+	readonly amflow: SocketIOAMFlowClient | ServeMemoryAmflowClient;
 	readonly content: ContentEntity;
+	readonly disableFastForward?: boolean;
 
 	@observable activePlaybackRate: number;
 	@observable isActivePausing: boolean;
@@ -82,7 +85,8 @@ export class PlayEntity {
 
 	constructor(param: PlayEntityParameterObject) {
 		this.playId = param.playId;
-		this.amflow = new SocketIOAMFlowClient(socketInstance);
+		this.amflow = param.amflow;
+		this.disableFastForward = param.disableFastForward;
 		this.activePlaybackRate = 1;
 		this.isActivePausing = !!param.durationState && param.durationState.isPaused;
 		this.duration = param.durationState ? param.durationState.duration : 0;
@@ -210,6 +214,14 @@ export class PlayEntity {
 		// 手抜き実装: サーバインスタンスは全てアクティブ(つまり一つしかない)前提
 		this.serverInstances.forEach(si => si.step());
 		return apiClient.stepPlayDuration(this.playId);
+	}
+
+	pauseTimekeeper(): void {
+		this._timeKeeper.pause();
+	}
+
+	startTimekeeper(): void {
+		this._timeKeeper.start();
 	}
 
 	muteAll(): Promise<void> {

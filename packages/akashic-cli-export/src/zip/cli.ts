@@ -1,7 +1,6 @@
 import { createRequire } from "module";
-import * as path from "path";
 import type { CliConfigExportZip} from "@akashic/akashic-cli-commons";
-import { ConsoleLogger, CliConfigurationFile, SERVICE_TYPES } from "@akashic/akashic-cli-commons";
+import { ConsoleLogger, FileSystem, SERVICE_TYPES } from "@akashic/akashic-cli-commons";
 import { Command } from "commander";
 import { promiseExportZip } from "./exportZip.js";
 
@@ -78,7 +77,8 @@ commander
 	.option("-M, --minify", "(DEPRECATED: use --minify-js) Minify JavaScript files")
 	.option("-H, --hash-filename [length]", "Rename asset files with their hash values")
 	.option("-b, --bundle", "Bundle script assets into a single file")
-	.option("--no-es5-downpile", "No convert JavaScript into es5")
+	.option("--no-es5-downpile", "(DEPRECATED: use --no-es-downpile) No convert JavaScript into es5")
+	.option("--no-es-downpile", "No convert JavaScript")
 	.option("--no-omit-empty-js", "(DEPRECATED) Changes nothing. Provided for backward compatibility")
 	.option("--no-omit-unbundled-js", "Preserve unbundled .js files (not required from root). Works with --bundle only")
 	.option("--minify-js", "Minify JavaScript files")
@@ -89,45 +89,48 @@ commander
 	.option("--resolve-akashic-runtime", "Fill akashic-runtime field in game.json")
 	.option("--preserve-package-json", "Preserve package.json even if --strip");
 
-export function run(argv: string[]): void {
+export async function run(argv: string[]): Promise<void> {
 	// Commander の制約により --strip と --no-strip 引数を両立できないため、暫定対応として Commander 前に argv を処理する
 	const argvCopy = dropDeprecatedArgs(argv);
 	commander.parse(argvCopy);
 	const options = commander.opts();
 
-	CliConfigurationFile.read(path.join(options.cwd || process.cwd(), "akashic.config.js"), (error, configuration) => {
-		if (error) {
-			console.error(error);
-			process.exit(1);
-		}
+	let configuration;
+	try {
+		configuration = await FileSystem.load(options.cwd || process.cwd());
+	} catch (error) {
+		console.error(error);
+		process.exit(1);
+	}
+	if (options.targetService && !SERVICE_TYPES.includes(options.targetService)) {
+		console.error("Invalid --target-service option argument: " + options.targetService);
+		process.exit(1);
+	}
+	if (options.esDownpile && !options.es5Downpile) {
+		options.esDownpile = options.es5Downpile;
+	}
 
-		if (options.targetService && !SERVICE_TYPES.includes(options.targetService)) {
-			console.error("Invalid --target-service option argument: " + options.targetService);
-			process.exit(1);
-		}
-
-		const conf = configuration!.commandOptions?.export?.zip ?? {};
-		cli({
-			cwd: options.cwd ?? conf.cwd,
-			quiet: options.quiet ?? conf.quiet,
-			output: options.output ?? conf.output,
-			force: options.force ?? conf.force,
-			strip: options.strip ?? conf.strip,
-			minify: options.minify ?? conf.minify,
-			minifyJs: options.minifyJs ?? conf.minifyJs,
-			minifyJson: options.minifyJson ?? conf.minifyJson,
-			terser: options.terser ?? conf.terser,
-			packImage: options.packImage ?? conf.packImage,
-			hashFilename: options.hashFilename ?? conf.hashFilename,
-			bundle: options.bundle ?? conf.bundle,
-			babel: options.es5Downpile ?? conf.babel,
-			omitEmptyJs: options.omitEmptyJs ?? conf.omitEmptyJs,
-			omitUnbundledJs: options.omitUnbundledJs ?? conf.omitUnbundledJs,
-			targetService: options.targetService ?? conf.targetService,
-			nicolive: options.nicolive ?? conf.nicolive,
-			resolveAkashicRuntime: options.resolveAkashicRuntime ?? conf.resolveAkashicRuntime,
-			preservePackageJson: options.preservePackageJson ?? options.preservePackageJson
-		});
+	const conf = configuration!.commandOptions?.export?.zip ?? {};
+	cli({
+		cwd: options.cwd ?? conf.cwd,
+		quiet: options.quiet ?? conf.quiet,
+		output: options.output ?? conf.output,
+		force: options.force ?? conf.force,
+		strip: options.strip ?? conf.strip,
+		minify: options.minify ?? conf.minify,
+		minifyJs: options.minifyJs ?? conf.minifyJs,
+		minifyJson: options.minifyJson ?? conf.minifyJson,
+		terser: options.terser ?? conf.terser,
+		packImage: options.packImage ?? conf.packImage,
+		hashFilename: options.hashFilename ?? conf.hashFilename,
+		bundle: options.bundle ?? conf.bundle,
+		babel: options.esDownpile ?? conf.babel,
+		omitEmptyJs: options.omitEmptyJs ?? conf.omitEmptyJs,
+		omitUnbundledJs: options.omitUnbundledJs ?? conf.omitUnbundledJs,
+		targetService: options.targetService ?? conf.targetService,
+		nicolive: options.nicolive ?? conf.nicolive,
+		resolveAkashicRuntime: options.resolveAkashicRuntime ?? conf.resolveAkashicRuntime,
+		preservePackageJson: options.preservePackageJson ?? options.preservePackageJson
 	});
 }
 
