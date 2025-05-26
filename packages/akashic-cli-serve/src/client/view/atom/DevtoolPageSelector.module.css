@@ -18,6 +18,11 @@
   user-select: none;
 }
 
+.page-selector-list li.disabled {
+  cursor: not-allowed;
+  color: var(--color-pane-button-text-disabled);
+}
+
 .page-selector-list li:hover {
   background-color: var(--color-pane-button-bg-hover);
 }
