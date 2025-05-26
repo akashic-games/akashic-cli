@@ -3,7 +3,7 @@ import * as path from "path";
 import type { NormalizedSandboxConfiguration, SandboxConfiguration } from "@akashic/sandbox-configuration";
 import * as  sandboxConfigUtils  from "@akashic/sandbox-configuration/lib/utils/index.js";
 import * as chokidar from "chokidar";
-import type { SandboxConfigExternalDefinition } from "../../common/types/NicoliveCommentConfig.js";
+import type { SandboxConfigExternalDefinition } from "../../common/types/NamagameCommentConfig.js";
 import { BadRequestError, NotFoundError } from "../common/ApiError.js";
 import { dynamicRequire } from "./dynamicRequire.js";
 

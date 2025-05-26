@@ -4,7 +4,7 @@ import type { ObservableMap } from "mobx";
 import { observable, action } from "mobx";
 import { TimeKeeper } from "../../common/TimeKeeper";
 import type { PlayPatchApiResponse } from "../../common/types/ApiResponse";
-import type { NicoliveCommentEventComment } from "../../common/types/NicoliveCommentPlugin";
+import type { NamagameCommentEventComment } from "../../common/types/NamagameCommentPlugin";
 import type { PlayAudioState } from "../../common/types/PlayAudioState";
 import type { PlayDurationState } from "../../common/types/PlayDurationState";
 import type { Player } from "../../common/types/Player";
@@ -237,12 +237,12 @@ export class PlayEntity {
 		return apiClient.changePlayAudioState(this.playId, { muteType: "none" });
 	}
 
-	async sendNicoliveCommentByTemplate(templateName: string): Promise<void> {
-		await apiClient.requestToSendNicoliveCommentByTemplate(this.playId, templateName);
+	async sendNamagameCommentByTemplate(templateName: string): Promise<void> {
+		await apiClient.requestToSendNamagameCommentByTemplate(this.playId, templateName);
 	}
 
-	async sendNicoliveComment(comment: NicoliveCommentEventComment): Promise<void> {
-		await apiClient.requestToSendNicoliveComment(this.playId, comment);
+	async sendNamagameComment(comment: NamagameCommentEventComment): Promise<void> {
+		await apiClient.requestToSendNamagameComment(this.playId, comment);
 	}
 
 	@action

@@ -64,7 +64,7 @@ export interface RunnerPutStartPointTestbedEvent {
 	startPoint: amf.StartPoint;
 }
 
-export interface NicoliveCommentPluginStartStopTestbedEvent {
+export interface NamagameCommentPluginStartStopTestbedEvent {
 	playId: string;
 	started: boolean;
 }

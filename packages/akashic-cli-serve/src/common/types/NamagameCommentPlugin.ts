@@ -2,19 +2,18 @@
 
 /**
  * コメントデータ。
+ *
+ * すべてのフィールドは省略される可能性がある。
+ * 利用者は、必要なフィールドが存在するかどうかを確認してから利用すること。
  */
-export interface NicoliveCommentEventComment {
+export interface NamagameCommentEventComment {
 	/**
 	 * コメント本文。
-	 *
-	 * `start()` 時の `fields` で省かれた場合、省略される。
 	 */
 	comment?: string;
 
 	/**
 	 * コメントのコマンド指定。(e.g. "shita big red")
-	 *
-	 * `start()` 時の `fields` で省かれた場合、省略される。
 	 */
 	command?: string;
 
@@ -23,7 +22,6 @@ export interface NicoliveCommentEventComment {
 	 *
 	 * 次のいずれかの場合、省略される:
 	 *  - 放送者コメントである場合
-	 *  -  `start()` 時の `fields` で省かれた場合
 	 * 次の場合、匿名化された値になる:
 	 *  - 「なふだ機能」が OFF のコメントである場合
 	 */
@@ -34,7 +32,6 @@ export interface NicoliveCommentEventComment {
 	 *
 	 * 次のいずれかの場合、省略される:
 	 *  - 放送者コメントである場合
-	 *  -  `start()` 時の `fields` で省かれた場合
 	 */
 	isAnonymous?: boolean;
 
@@ -43,32 +40,25 @@ export interface NicoliveCommentEventComment {
 	 *
 	 * 次のいずれかの場合、省略される:
 	 *  - 放送者コメントでない場合
-	 *  -  `start()` 時の `fields` で省かれた場合
 	 */
 	isOperatorComment?: boolean;
 }
 
 /**
- * nicoliveCommet プラグインの `start()` のオプション。
+ * namagameComment プラグインの `start()` のオプション。
  */
-export interface NicoliveCommentStartOptions {
-	/**
-	 * コメントとして受信するフィールド。
-	 *
-	 * 指定する場合、値は `NicoliveComment` のプロパティ名の配列でなければならない。
-	 * 省略した場合、 `["comment", "userID", "isAnonymous", "isOperatorComment"]` と見なされる。
-	 */
-	fields?: (keyof NicoliveCommentEventComment)[];
+export interface NamagameCommentStartOptions {
+	// 将来拡張のために予約される。現在のところ空。
 }
 
-export interface NicoliveCommentPlugin {
+export interface NamagameCommentPlugin {
 	/**
 	 * コメント受信を開始する。
 	 *
 	 * @param opts オプション
 	 * @param callback 完了時に呼び出されるコールバック。特に完了を待たない場合、省略してよい。
 	 */
-	start(opts?: NicoliveCommentStartOptions | null, callback?: ((err?: Error) => void) | null): void;
+	start(opts?: NamagameCommentStartOptions | null, callback?: ((err?: Error) => void) | null): void;
 
 	/**
 	 * コメント受信を停止する。

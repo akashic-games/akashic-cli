@@ -429,8 +429,8 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 	runnerStore.onRunnerResume.add(arg => {
 		io.emit("runnerResume", arg);
 	});
-	runnerStore.onNicoliveCommentPluginStartStop.add(arg => {
-		io.emit("nicoliveCommentPluginStartStop", arg);
+	runnerStore.onNamagameCommentPluginStartStop.add(arg => {
+		io.emit("namagameCommentPluginStartStop", arg);
 	});
 	runnerStore.onRunnerPutStartPoint.add(arg => {
 		const { playId, startPoint } = arg;

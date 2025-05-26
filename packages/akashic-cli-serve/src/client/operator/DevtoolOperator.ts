@@ -1,4 +1,4 @@
-import { isNicoliveCommentEvent, MessageEventIndexData } from "../../common/PlaylogShim";
+import { isNamagameCommentEvent, MessageEventIndexData } from "../../common/PlaylogShim";
 import type { OnTickArguments } from "../akashic/ServeGameContent";
 import type { EDumpItem } from "../common/types/EDumpItem";
 import type { NiconicoDevtoolCommentPageSenderLimitation, NiconicoDevtoolCommentPageSenderType } from "../store/DevtoolUiCommentPageStore";
@@ -186,19 +186,19 @@ export class DevtoolOperator {
 		this.store.devtoolUiStore.commentPage.setCommentInput(input);
 	};
 
-	startWatchNicoliveComment = (): void => {
-		this.store.currentLocalInstance?.gameContent.onTick.add(this.nicoliveCommentWatcher);
+	startWatchNamagameComment = (): void => {
+		this.store.currentLocalInstance?.gameContent.onTick.add(this.namagameCommentWatcher);
 	};
 
-	stopWatchNicoliveComment = (): void => {
-		this.store.currentLocalInstance?.gameContent.onTick.remove(this.nicoliveCommentWatcher);
+	stopWatchNamagameComment = (): void => {
+		this.store.currentLocalInstance?.gameContent.onTick.remove(this.namagameCommentWatcher);
 	};
 
-	private nicoliveCommentWatcher = ({ events }: OnTickArguments): void => {
+	private namagameCommentWatcher = ({ events }: OnTickArguments): void => {
 		if (!events) return;
 		for (let i = 0; i < events.length; ++i) {
 			const ev = events[i];
-			if (isNicoliveCommentEvent(ev))
+			if (isNamagameCommentEvent(ev))
 				this.store.devtoolUiStore.commentPage.addComments(ev[MessageEventIndexData].comments);
 		}
 	};

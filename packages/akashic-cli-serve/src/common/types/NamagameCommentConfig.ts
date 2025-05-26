@@ -4,10 +4,10 @@
  * コメントツールから送信・自動送信される各コメントの内容
  *
  * コメントツールはここで指定されたとおりに扱う。
- * 実際のコメントが満たす制約については NicoliveCommentPlugin.ts の `NicoliveComment` を参照のこと。
+ * 実際のコメントが満たす制約については NamagameCommentPlugin.ts の `NamagameComment` を参照のこと。
  * (たとえば `isOperatorComment` が真の場合 `userID` は省略されるが、この設定はその制約を無視できる)
  */
-export interface NicoliveCommentConfigComment {
+export interface NamagameCommentConfigComment {
 	/**
 	 * コメント本文。
 	 */
@@ -52,19 +52,19 @@ export interface NicoliveCommentConfigComment {
 }
 
 /**
- * nicoliveComment プラグインのコメントテンプレート定義。
+ * namagameComment プラグインのコメントテンプレート定義。
  */
-export interface NicoliveCommentConfigTemplate {
+export interface NamagameCommentConfigTemplate {
 	/**
 	 * このテンプレートの送信契機。
 	 *
 	 * - `"playStart"`: ゲームプレイ開始時から送られる。
 	 *   `comemnts` 各要素の `.frame` はゲーム開始からのフレーム数と見なされる。
-	 * - `"pluginStart"`: nicoliveComment プラグインの `start()` 呼び出し直後から送られる。
+	 * - `"pluginStart"`: namagameComment プラグインの `start()` 呼び出し直後から送られる。
 	 *   `comemnts` 各要素の `.frame` は `start()` 呼び出し時点からのフレーム数と見なされる。
 	 * - `"manual"`: 自動送信されない。akashic serve のコメントツールの UI 操作で送られる。(未実装)
 	 *
-	 * ただしこの送信契機にかかわらず、nicoliveComment プラグインの `start()` メソッドを呼び出さない限り
+	 * ただしこの送信契機にかかわらず、namagameComment プラグインの `start()` メソッドを呼び出さない限り
 	 * コンテンツがコメントデータを受信することはない点に注意。
 	 */
 	startBy?: "playStart" | "pluginStart" | "manual";
@@ -72,18 +72,18 @@ export interface NicoliveCommentConfigTemplate {
 	/**
 	 * 送信するコメントの内容。
 	 */
-	comments: NicoliveCommentConfigComment[];
+	comments: NamagameCommentConfigComment[];
 }
 
 /**
- * nicoliveComment プラグインの設定。
+ * namagameComment プラグインの設定。
  */
-export interface NicoliveCommentConfig {
+export interface NamagameCommentConfig {
 	/**
 	 * コメントツールで流すコメントのテンプレート。
 	 * キー名はテンプレート名、値はテンプレートの内容。
 	 */
-	templates?: { [name: string]: NicoliveCommentConfigTemplate };
+	templates?: { [name: string]: NamagameCommentConfigTemplate };
 }
 
 /**
@@ -92,6 +92,6 @@ export interface NicoliveCommentConfig {
  */
 export interface SandboxConfigExternalDefinition {
 	external?: {
-		nicoliveComment?: NicoliveCommentConfig;
+		namagameComment?: NamagameCommentConfig;
 	};
 }

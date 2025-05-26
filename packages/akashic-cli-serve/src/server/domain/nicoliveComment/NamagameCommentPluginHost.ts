@@ -2,52 +2,33 @@ import type { AMFlow } from "@akashic/amflow";
 import { TickIndex, type Tick } from "@akashic/playlog";
 import { Trigger } from "@akashic/trigger";
 import { callOrThrow } from "../../../common/callOrThrow.js";
-import { createNicoliveCommentEvent } from "../../../common/PlaylogShim.js";
-import type { NicoliveCommentConfig, NicoliveCommentConfigComment } from "../../../common/types/NicoliveCommentConfig.js";
-import type { NicoliveCommentEventComment, NicoliveCommentPlugin } from "../../../common/types/NicoliveCommentPlugin.js";
+import { createNamagameCommentEvent } from "../../../common/PlaylogShim.js";
+import type { NamagameCommentConfig, NamagameCommentConfigComment } from "../../../common/types/NamagameCommentConfig.js";
+import type { NamagameCommentEventComment, NamagameCommentPlugin } from "../../../common/types/NamagameCommentPlugin.js";
 
-const VALID_FIELDS: string[] = [
-	"comment",
-	"userID",
-	"isAnonymous",
-	"isOperatorComment",
-	"command",
-] satisfies (keyof NicoliveCommentEventComment)[];
-const DEFAULT_FIELDS: (keyof NicoliveCommentEventComment)[] = ["comment", "userID", "isAnonymous", "isOperatorComment"];
-const NULL_COMMENT: NicoliveCommentEventComment = { comment: "", command: "" };
+const NULL_COMMENT: NamagameCommentEventComment = { comment: "", command: "" };
 
-export class NicoliveCommentPluginHost {
+export class NamagameCommentPluginHost {
 	onStartStop: Trigger<boolean> = new Trigger();
-	readonly plugin: NicoliveCommentPlugin;
+	readonly plugin: NamagameCommentPlugin;
 
-	protected config: NicoliveCommentConfig;
+	protected config: NamagameCommentConfig;
 	protected amflow: AMFlow;
-	protected filter: Set<keyof NicoliveCommentEventComment> = new Set();
 
 	protected started: boolean = false;
 	protected planned: boolean = false;
-	protected plan: Map<number, NicoliveCommentEventComment[]> = new Map();
+	protected plan: Map<number, NamagameCommentEventComment[]> = new Map();
 
-	constructor(config: NicoliveCommentConfig, amflow: AMFlow) {
+	constructor(config: NamagameCommentConfig, amflow: AMFlow) {
 		this.config = config;
 		this.amflow = amflow;
 
 		this.plugin = {
-			start: (opts, callback) => {
+			start: (_opts, callback) => {
 				if (this.started) {
-					callOrThrow(callback, new Error("NicoliveCommentPlugin already started."));
+					callOrThrow(callback, new Error("NamagameCommentPlugin already started."));
 					return;
 				}
-
-				if (opts?.fields) {
-					const invalidFileds = opts.fields.filter(f => VALID_FIELDS.indexOf(f) === -1);
-					if (invalidFileds.length) {
-						callOrThrow(callback, new Error(`nicoliveComment.start(): invalid fields ${JSON.stringify(invalidFileds)}.`));
-						return;
-					}
-				}
-
-				this.filter = new Set(opts?.fields ?? DEFAULT_FIELDS);
 
 				amflow.onTick(this._handleTick);
 				if (callback)
@@ -68,21 +49,21 @@ export class NicoliveCommentPluginHost {
 	planToSendByTemplate(name: string): boolean {
 		const comments = this.config.templates?.[name]?.comments;
 		if (!Array.isArray(comments) || comments.length === 0) {
-			console.warn(`NicoliveCommentPluginHost: no template named '${name}'`);
+			console.warn(`NamagameCommentPluginHost: no template named '${name}'`);
 			return false;
 		}
 		return this._planToSendImpl(comments);
 	}
 
-	planToSend(c: NicoliveCommentEventComment): boolean {
+	planToSend(c: NamagameCommentEventComment): boolean {
 		return this._planToSendImpl([{ comment: "", ...c }]);
 	}
 
-	protected _planToSendImpl(comments: NicoliveCommentConfigComment[]): boolean {
+	protected _planToSendImpl(comments: NamagameCommentConfigComment[]): boolean {
 		const { amflow } = this;
 
 		if (!this.started) {
-			console.warn("NicoliveCommentPluginHost: plugin not started.");
+			console.warn("NamagameCommentPluginHost: plugin not started.");
 			return false;
 		}
 
@@ -98,7 +79,7 @@ export class NicoliveCommentPluginHost {
 			comments.forEach(c => {
 				const comment = { ...NULL_COMMENT, ...c };
 				const frame = lastFrame = (comment.frame != null) ? base + comment.frame : lastFrame;
-				arrayMapAdd(this.plan, frame, filterProperty(comment, this.filter));
+				arrayMapAdd(this.plan, frame, comment);
 			});
 		};
 
@@ -127,7 +108,7 @@ export class NicoliveCommentPluginHost {
 				const comment = { ...NULL_COMMENT, ...c };
 				const frame = lastFrame = (comment.frame != null) ? base + comment.frame : lastFrame;
 				if (frame >= startAge)
-					arrayMapAdd(plan, frame, filterProperty(comment, this.filter));
+					arrayMapAdd(plan, frame, comment);
 			});
 		});
 	}
@@ -139,7 +120,7 @@ export class NicoliveCommentPluginHost {
 
 		const comments = this.plan.get(age);
 		if (comments?.length) {
-			this.amflow.sendEvent(createNicoliveCommentEvent(comments));
+			this.amflow.sendEvent(createNamagameCommentEvent(comments));
 		}
 	};
 }
@@ -154,12 +135,3 @@ function arrayMapAdd<K, V>(map: Map<K, V[]>, k: K, v: V): void {
 	else
 		map.set(k, [v]);
 }
-
-function filterProperty<T extends object>(o: T, filter: Set<keyof T>): Partial<T> {
-	const ret: Partial<T> = {};
-	objectForEach(o, (v, k) => {
-		if (filter.has(k))
-			ret[k] = v;
-	});
-	return ret;
-};

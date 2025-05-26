@@ -2,18 +2,18 @@ import { createRequire } from "module";
 import * as path from "path";
 import type { AMFlowClient, RunnerManager, RunnerV1, RunnerV2, RunnerV3 } from "@akashic/headless-driver";
 import { Trigger } from "@akashic/trigger";
-import type { NicoliveCommentEventComment } from "../../common/types/NicoliveCommentPlugin.js";
+import type { NamagameCommentEventComment } from "../../common/types/NamagameCommentPlugin.js";
 import type {
 	RunnerCreateTestbedEvent,
 	RunnerRemoveTestbedEvent,
 	RunnerPauseTestbedEvent,
 	RunnerResumeTestbedEvent,
 	RunnerPutStartPointTestbedEvent,
-	NicoliveCommentPluginStartStopTestbedEvent
+	NamagameCommentPluginStartStopTestbedEvent
 } from "../../common/types/TestbedEvent.js";
 import { serverGlobalConfig } from "../common/ServerGlobalConfig.js";
 import * as gameConfigs from "./GameConfigs.js";
-import { NicoliveCommentPluginHost } from "./nicoliveComment/NicoliveCommentPluginHost.js";
+import { NamagameCommentPluginHost } from "./nicoliveComment/NamagameCommentPluginHost.js";
 import * as sandboxConfigs from "./SandboxConfigs.js";
 
 const require = createRequire(import.meta.url);
@@ -37,7 +37,7 @@ export interface CreateAndStartRunnerParameterObject {
  */
 export interface RunnerEntity {
 	playId: string;
-	nicoliveCommentPluginHost: NicoliveCommentPluginHost | null;
+	namagameCommentPluginHost: NamagameCommentPluginHost | null;
 }
 
 export class RunnerStore {
@@ -46,7 +46,7 @@ export class RunnerStore {
 	onRunnerPause: Trigger<RunnerPauseTestbedEvent>;
 	onRunnerResume: Trigger<RunnerResumeTestbedEvent>;
 	onRunnerPutStartPoint: Trigger<RunnerPutStartPointTestbedEvent>;
-	onNicoliveCommentPluginStartStop: Trigger<NicoliveCommentPluginStartStopTestbedEvent>;
+	onNamagameCommentPluginStartStop: Trigger<NamagameCommentPluginStartStopTestbedEvent>;
 	private runnerManager: RunnerManager;
 	private gameExternalFactory: () => any;
 	private runnerEntities: { [runnerId: string]: RunnerEntity };
@@ -57,7 +57,7 @@ export class RunnerStore {
 		this.onRunnerPause = new Trigger();
 		this.onRunnerResume = new Trigger();
 		this.onRunnerPutStartPoint = new Trigger();
-		this.onNicoliveCommentPluginStartStop = new Trigger();
+		this.onNamagameCommentPluginStartStop = new Trigger();
 		this.runnerManager = params.runnerManager;
 		this.gameExternalFactory = params.gameExternalFactory;
 		this.runnerEntities = {};
@@ -70,12 +70,12 @@ export class RunnerStore {
 		const allowedUrls = this.createAllowedUrls(params.contentId, externalAssets);
 
 		let externalValue: { [name: string]: unknown } = {};
-		let nicoliveCommentPluginHost: NicoliveCommentPluginHost | null = null;
-		if (gameConfig.environment?.external?.nicoliveComment) {
+		let namagameCommentPluginHost: NamagameCommentPluginHost | null = null;
+		if (gameConfig.environment?.external?.namagameComment) {
 			const { playId } = params;
-			nicoliveCommentPluginHost = new NicoliveCommentPluginHost(sandboxConfig.external?.nicoliveComment ?? {}, params.amflow);
-			nicoliveCommentPluginHost.onStartStop.add(started => this.onNicoliveCommentPluginStartStop.fire({ playId, started }));
-			externalValue.nicoliveComment = nicoliveCommentPluginHost.plugin;
+			namagameCommentPluginHost = new NamagameCommentPluginHost(sandboxConfig.external?.namagameComment ?? {}, params.amflow);
+			namagameCommentPluginHost.onStartStop.add(started => this.onNamagameCommentPluginStartStop.fire({ playId, started }));
+			externalValue.namagameComment = namagameCommentPluginHost.plugin;
 		}
 
 		externalValue = { ...externalValue, ...this.gameExternalFactory() };
@@ -107,7 +107,7 @@ export class RunnerStore {
 		await this.runnerManager.startRunner(runner.runnerId, { paused: params.isPaused });
 		this.runnerEntities[runnerId] = {
 			playId: params.playId,
-			nicoliveCommentPluginHost,
+			namagameCommentPluginHost,
 		};
 		this.onRunnerCreate.fire({ playId: params.playId, runnerId, isActive: params.isActive });
 		if (params.isPaused)
@@ -150,12 +150,12 @@ export class RunnerStore {
 	}
 
 	sendCommentsByTemplate(runnerId: string, name: string): boolean {
-		const commentPluginHost = this.runnerEntities[runnerId]?.nicoliveCommentPluginHost;
+		const commentPluginHost = this.runnerEntities[runnerId]?.namagameCommentPluginHost;
 		return commentPluginHost?.planToSendByTemplate(name) ?? false;
 	}
 
-	sendComment(runnerId: string, comment: NicoliveCommentEventComment): boolean {
-		const commentPluginHost = this.runnerEntities[runnerId]?.nicoliveCommentPluginHost;
+	sendComment(runnerId: string, comment: NamagameCommentEventComment): boolean {
+		const commentPluginHost = this.runnerEntities[runnerId]?.namagameCommentPluginHost;
 		return commentPluginHost?.planToSend(comment) ?? false;
 	}
 
