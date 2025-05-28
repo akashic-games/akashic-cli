@@ -15,7 +15,8 @@ export function knownExtensionAssetFilter(p: string): boolean {
 	return scriptAssetFilter(p) ||
 		imageAssetFilter(p) ||
 		vectorImageAssetFilter(p) ||
-		audioAssetFilter(p);
+		audioAssetFilter(p) ||
+		ignoreFileFilter(p);
 }
 
 export function imageAssetFilter(p: string): boolean {
@@ -36,6 +37,10 @@ export function defaultTextAssetFilter(p: string): boolean {
 
 export function defaultBinaryAssetFilter (_: string): boolean {
 	return false;
+}
+
+export function ignoreFileFilter(p: string): boolean {
+	return /\.gitkeep$/.test(p);
 }
 
 export interface AudioDurationInfo {

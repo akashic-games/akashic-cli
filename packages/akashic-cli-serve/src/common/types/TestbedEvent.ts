@@ -1,10 +1,10 @@
 import type * as amf from "@akashic/amflow";
 import type { Packet } from "socket.io-parser";
-import type {ContentLocatorData} from "./ContentLocatorData";
-import type {PlayAudioState} from "./PlayAudioState";
-import type {Player} from "./Player";
-import type {PlayStatus} from "./PlayStatus";
-import type {StartPointHeader} from "./StartPointHeader";
+import type {ContentLocatorData} from "./ContentLocatorData.js";
+import type {PlayAudioState} from "./PlayAudioState.js";
+import type {Player} from "./Player.js";
+import type {PlayStatus} from "./PlayStatus.js";
+import type {StartPointHeader} from "./StartPointHeader.js";
 
 export interface PlayCreateTestbedEvent {
 	playId: string;

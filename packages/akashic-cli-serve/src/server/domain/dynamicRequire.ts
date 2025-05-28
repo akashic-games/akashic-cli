@@ -1,3 +1,7 @@
+import { createRequire } from "module";
+
+const require = createRequire(import.meta.url);
+
 export function dynamicRequire<T>(path: string, isDeleteCache?: boolean): T | null {
 	let ret: T | null = null;
 	try {

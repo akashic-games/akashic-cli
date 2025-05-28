@@ -17,7 +17,9 @@ import type {
 	PlayAudioStateChangeTestbedEvent
 } from "../../common/types/TestbedEvent";
 import type { GameViewManager } from "../akashic/GameViewManager";
+import { SocketIOAMFlowClient } from "../akashic/SocketIOAMFlowClient";
 import { apiClient } from "../api/apiClientInstance";
+import { socketInstance } from "../api/socketInstance";
 import * as Subscriber from "../api/Subscriber";
 import type { ClientContentLocator } from "../common/ClientContentLocator";
 import type { ContentStore } from "./ContentStore";
@@ -76,6 +78,7 @@ export class PlayStore {
 				for (const o of res) {
 					this.plays[o.playInfo.playId] = new PlayEntity({
 						...o.playInfo,
+						amflow: new SocketIOAMFlowClient(socketInstance),
 						gameViewManager: this._gameViewManager,
 						content: this._contentStore.find(o.playInfo.contentLocatorData),
 						startPointHeaders: o.startPointHeaders
@@ -137,6 +140,7 @@ export class PlayStore {
 
 		const play = new PlayEntity({
 			gameViewManager: this._gameViewManager,
+			amflow: new SocketIOAMFlowClient(socketInstance),
 			playId,
 			status: "running", // 暫定。standalone プレイは running しかないものとして扱う
 			content: this._contentStore.find(param.contentLocator),
@@ -155,6 +159,7 @@ export class PlayStore {
 	private handlePlayCreateImpl = async (e: PlayCreateTestbedEvent): Promise<void> => {
 		const play = new PlayEntity({
 			...e,
+			amflow: new SocketIOAMFlowClient(socketInstance),
 			gameViewManager: this._gameViewManager,
 			content: this._contentStore.find(e.contentLocatorData)
 		});

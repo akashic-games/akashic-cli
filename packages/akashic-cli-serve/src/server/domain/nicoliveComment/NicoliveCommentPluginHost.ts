@@ -1,10 +1,10 @@
 import type { AMFlow } from "@akashic/amflow";
 import { TickIndex, type Tick } from "@akashic/playlog";
 import { Trigger } from "@akashic/trigger";
-import { callOrThrow } from "../../../common/callOrThrow";
-import { createNicoliveCommentEvent } from "../../../common/PlaylogShim";
-import type { NicoliveCommentConfig, NicoliveCommentConfigComment } from "../../../common/types/NicoliveCommentConfig";
-import type { NicoliveCommentEventComment, NicoliveCommentPlugin } from "../../../common/types/NicoliveCommentPlugin";
+import { callOrThrow } from "../../../common/callOrThrow.js";
+import { createNicoliveCommentEvent } from "../../../common/PlaylogShim.js";
+import type { NicoliveCommentConfig, NicoliveCommentConfigComment } from "../../../common/types/NicoliveCommentConfig.js";
+import type { NicoliveCommentEventComment, NicoliveCommentPlugin } from "../../../common/types/NicoliveCommentPlugin.js";
 
 const VALID_FIELDS: string[] = [
 	"comment",

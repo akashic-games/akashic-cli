@@ -8,6 +8,9 @@ export default defineConfig({
 		],
 		include: [
 			"./src/__tests__/**/*[sS]pec.ts"
-		]
+		],
+		deps: {
+			interopDefault: false,
+		},
 	},
 });

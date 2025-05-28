@@ -25,6 +25,10 @@ export class SocketIOAMFlowClient implements amflow.AMFlow {
 		this._connectionId = null;
 	}
 
+	debugGetConnectionId(): string | null {
+		return this._connectionId;
+	}
+
 	/**
 	 * 現状開いているplayの開始時刻を取得する。
 	 * SocketIOAMFlowClient独自拡張。暫定。
@@ -176,6 +180,11 @@ export class SocketIOAMFlowClient implements amflow.AMFlow {
 	// 継承元のinterfaceに合わせるためのメソッド定義。noUnusedParametersを無視するために利用されていない引数のprefixに_を付けた
 	getStorageData(_keys: playlog.StorageReadKey[], callback: (error: Error, values?: playlog.StorageData[]) => void): void {
 		callback(new Error("not supported"));
+	}
+
+	// MemoryAmflowClient と型を合わせるためのダミー実装
+	dump(): never {
+		throw new Error("Not implemented");
 	}
 
 	private _onTick = (connectionId: string, tick: playlog.Tick): void => {

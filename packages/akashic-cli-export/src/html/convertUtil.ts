@@ -5,7 +5,8 @@ import { fileURLToPath } from "url";
 import * as cmn from "@akashic/akashic-cli-commons";
 import type { AssetConfigurationMap, ImageAssetConfigurationBase } from "@akashic/game-configuration";
 import type { SandboxConfiguration } from "@akashic/sandbox-configuration";
-import fsx from "fs-extra";
+import * as babel from "@babel/core";
+import presetEnv from "@babel/preset-env";
 import type { MinifyOptions } from "terser";
 import { minify_sync } from "terser";
 
@@ -33,6 +34,7 @@ export interface ConvertTemplateParameterObject {
 	autoGivenArgsName?: string;
 	sandboxConfigJsCode?: string;
 	omitUnbundledJs?: boolean;
+	esDownpile?: boolean;
 	debugOverrideEngineFiles?: string;
 }
 
@@ -52,15 +54,15 @@ export function copyAssetFilesStrip(
 	}).forEach((assetName) => {
 		const assetPath = assets[assetName].path;
 		const assetDir = path.dirname(assetPath);
-		fsx.mkdirsSync(path.resolve(outputPath, assetDir));
+		fs.mkdirSync(path.resolve(outputPath, assetDir), { recursive: true });
 		const dst = path.join(outputPath, assetPath);
 		if (assets[assetName].type === "audio") {
 			cmn.KNOWN_AUDIO_EXTENSIONS.forEach((ext) => {
 				try {
-					fsx.copySync(
+					fs.cpSync(
 						path.resolve(inputPath, assetPath) + ext,
 						dst + ext,
-						{overwrite: options.force}
+						{ force: !!options.force, recursive: true }
 					);
 				} catch (e) {
 					if (e.code !== "ENOENT") {
@@ -69,10 +71,10 @@ export function copyAssetFilesStrip(
 				}
 			});
 		} else {
-			fsx.copySync(
+			fs.cpSync(
 				path.resolve(inputPath, assetPath),
 				dst,
-				{overwrite: options.force}
+				{ force: !!options.force, recursive: true }
 			);
 		}
 	});
@@ -102,14 +104,28 @@ export function encodeText(text: string): string {
 	return text.replace(/[\u2028\u2029'"\\\b\f\n\r\t\v%]/g, encodeURIComponent);
 }
 
-export function wrap(code: string, terser?: MinifyOptions, exports: string[] = []): string {
+const babelOption = {
+	presets: [
+		babel.createConfigItem([presetEnv, {
+			modules: false,
+			targets: {
+				"chrome": 51
+			}
+		}],
+		{ type: "preset" })
+	]
+};
+
+export function wrap(code: string, terser?: MinifyOptions, esDownpile?: boolean, exports: string[] = []): string {
 	const preScript = "(function(exports, require, module, __filename, __dirname) {";
 	let postScript: string = "";
 	for (const key of exports) {
 		postScript += `exports["${key}"] = typeof ${key} !== "undefined" ? ${key} : undefined;\n`;
 	}
 	postScript += "})(g.module.exports, g.module.require, g.module, g.filename, g.dirname);";
-	const ret = preScript + "\n" + (terser ? minify_sync(code, terser).code : code) + "\n" + postScript + "\n";
+	// downpile -> minify の順序は入れ替えられない (先に minify すると babel がコードを整形してしまう)
+	const downpiled = esDownpile ? babel.transform(code, babelOption).code : code;
+	const ret = preScript + "\n" + (terser ? minify_sync(downpiled, terser).code : downpiled) + "\n" + postScript + "\n";
 	return ret;
 }
 
@@ -199,11 +215,6 @@ export function getInjectedContents(baseDir: string, injects: string[]): string[
 	return injectedContents;
 }
 
-export async function validateEs5Code(fileName: string, code: string): Promise<string[]> {
-	const errInfo = await cmn.LintUtil.validateEs5Code(code);
-	return errInfo.map(info => `${fileName}(${info.line}:${info.column}): ${info.message}`);
-}
-
 export function readSandboxConfigJs(sourceDir: string): string {
 	const sandboxConfigJsPath = path.join(sourceDir, "sandbox.config.js");
 	return fs.readFileSync(sandboxConfigJsPath, "utf8").replace(/\r\n|\r/g, "\n");
@@ -222,6 +233,14 @@ export function addUntaintedToImageAssets(gameJson: cmn.GameConfiguration): void
 			asset.hint.untainted = true;
 		}
 	});
+}
+
+export function removeUntaintedHints(gameJson: cmn.GameConfiguration): void {
+	for (const asset of Object.values(gameJson.assets)) {
+		if (asset.type === "image" && asset.hint?.untainted) {
+			delete asset.hint.untainted;
+		}
+	}
 }
 
 export function validateEngineFilesName(filename: string, expectedMajorVersion: string): void {

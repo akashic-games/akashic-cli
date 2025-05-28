@@ -1,5 +1,258 @@
 # Change Log
 
+## 3.0.5
+
+### Patch Changes
+
+- Updated dependencies [[`c0fdad7`](https://github.com/akashic-games/akashic-cli/commit/c0fdad7105d41ebf6ce8d9b1ffab13f91df54260)]:
+  - @akashic/akashic-cli-export@2.0.4
+  - @akashic/akashic-cli-sandbox@2.0.1
+  - @akashic/akashic-cli-serve@2.0.2
+
+## 3.0.4
+
+### Patch Changes
+
+- Updated dependencies [[`50e76c1`](https://github.com/akashic-games/akashic-cli/commit/50e76c18698d40f65aca5c422f0e1732b42dc8b6)]:
+  - @akashic/akashic-cli-export@2.0.3
+
+## 3.0.3
+
+### Patch Changes
+
+- Updated dependencies [[`bcc0ed7`](https://github.com/akashic-games/akashic-cli/commit/bcc0ed71a7bfd8fbdeebdc5c37a17e4f06ac383e)]:
+  - @akashic/akashic-cli-export@2.0.2
+
+## 3.0.2
+
+### Patch Changes
+
+- Updated dependencies [[`a7b3498`](https://github.com/akashic-games/akashic-cli/commit/a7b3498a1b3efeb12cab1f1e19a77a10276cef6b)]:
+  - @akashic/akashic-cli-scan@1.0.1
+  - @akashic/akashic-cli-serve@2.0.1
+
+## 3.0.1
+
+### Patch Changes
+
+- Updated dependencies [[`d7f8ee8`](https://github.com/akashic-games/akashic-cli/commit/d7f8ee8822ae36c0aac106d4c740e93d1f87a262)]:
+  - @akashic/akashic-cli-export@2.0.1
+
+## 3.0.0
+
+### Major Changes
+
+- [#1440](https://github.com/akashic-games/akashic-cli/pull/1440) [`54c2a58`](https://github.com/akashic-games/akashic-cli/commit/54c2a5836194fc7f74a2c2ef869ccfa47a044765) Thanks [@yu-ogi](https://github.com/yu-ogi)! - - [#1494](https://github.com/akashic-games/akashic-cli/pull/1494) feat(sandbox): support custom font
+  - [#1492](https://github.com/akashic-games/akashic-cli/pull/1492) feat(serve): support custom fonts
+  - [#1490](https://github.com/akashic-games/akashic-cli/pull/1490) Support akashic config js in scan
+  - [#1489](https://github.com/akashic-games/akashic-cli/pull/1489) Use debug engineFiles in serve
+  - [#1487](https://github.com/akashic-games/akashic-cli/pull/1487) Support es-downpile in export-html
+  - [#1486](https://github.com/akashic-games/akashic-cli/pull/1486) feat(export): support text asset bundle
+  - [#1480](https://github.com/akashic-games/akashic-cli/pull/1480) chore(serve): remove broken/unused test
+  - [#1479](https://github.com/akashic-games/akashic-cli/pull/1479) feat(serve): migrate to esm
+  - [#1472](https://github.com/akashic-games/akashic-cli/pull/1472) Fix export downpile
+  - [#1469](https://github.com/akashic-games/akashic-cli/pull/1469) feat: support akashic.config.cjs, akashic.config.mjs
+  - [#1467](https://github.com/akashic-games/akashic-cli/pull/1467) Add license file validation to export
+  - [#1465](https://github.com/akashic-games/akashic-cli/pull/1465) feat(export): bundle script assets as an assetBundle
+  - [#1460](https://github.com/akashic-games/akashic-cli/pull/1460) Remove cliconfig and configfile from commons
+  - [#1455](https://github.com/akashic-games/akashic-cli/pull/1455) Add licene file to export zip
+  - [#1450](https://github.com/akashic-games/akashic-cli/pull/1450) Fix storybook style
+  - [#1447](https://github.com/akashic-games/akashic-cli/pull/1447) feat(export): use terser to minify
+  - [#1445](https://github.com/akashic-games/akashic-cli/pull/1445) build(serve): introduce Vite instead of webpack
+  - [#1444](https://github.com/akashic-games/akashic-cli/pull/1444) fix(export): fix exporting issue
+  - [#1443](https://github.com/akashic-games/akashic-cli/pull/1443) refactor(serve): rename .css to .module.css
+  - [#1441](https://github.com/akashic-games/akashic-cli/pull/1441) chore: add tsconfig.test.json
+  - [#1439](https://github.com/akashic-games/akashic-cli/pull/1439) chore(extra): fix eol
+  - [#1437](https://github.com/akashic-games/akashic-cli/pull/1437) feat(cli): migrate to esm
+  - [#1430](https://github.com/akashic-games/akashic-cli/pull/1430) feat(init): migrate to esm
+  - [#1422](https://github.com/akashic-games/akashic-cli/pull/1422) feat(sandbox): migrate to esm
+  - [#1421](https://github.com/akashic-games/akashic-cli/pull/1421) feat(lib-manage): migrate to esm
+
+### Patch Changes
+
+- [#1503](https://github.com/akashic-games/akashic-cli/pull/1503) [`2428caf`](https://github.com/akashic-games/akashic-cli/commit/2428cafb6af5547b91f35832602b2b4d15e9f6ad) Thanks [@xnv](https://github.com/xnv)! - fix commands broken on early versions of Node.js v18, v20 and v21
+
+- [#1531](https://github.com/akashic-games/akashic-cli/pull/1531) [`a584667`](https://github.com/akashic-games/akashic-cli/commit/a584667f75c1d662c669d7cbbb27e6c06952ff7d) Thanks [@yu-ogi](https://github.com/yu-ogi)! - support `--legacy` option in akashic-cli-sandbox
+
+- [#1516](https://github.com/akashic-games/akashic-cli/pull/1516) [`a6892a4`](https://github.com/akashic-games/akashic-cli/commit/a6892a4ee7c60cfd5f0ae5e8ddf1eac7fdcf653d) Thanks [@xnv](https://github.com/xnv)! - fix launch failure of 'akashic serve'
+
+- Updated dependencies [[`d66e322`](https://github.com/akashic-games/akashic-cli/commit/d66e3224a90203b431f7d4dd0306dad32fa9f19a), [`92bd87f`](https://github.com/akashic-games/akashic-cli/commit/92bd87f5de40fc1cdfb25806fd36d86bcf0f8edc), [`2428caf`](https://github.com/akashic-games/akashic-cli/commit/2428cafb6af5547b91f35832602b2b4d15e9f6ad), [`b347942`](https://github.com/akashic-games/akashic-cli/commit/b3479426e1a1fbf3b2badef5f04a862943c3206e), [`ef1b096`](https://github.com/akashic-games/akashic-cli/commit/ef1b096297a35f2f16d2fe037a5b23c59eb9943b), [`96630e2`](https://github.com/akashic-games/akashic-cli/commit/96630e2e61dbc629922e6901196b052d46baec6d), [`92ac8a9`](https://github.com/akashic-games/akashic-cli/commit/92ac8a94bd2ae179a269fa0bc9bc0d55878ac2e3), [`8248ef1`](https://github.com/akashic-games/akashic-cli/commit/8248ef1082214e3bbce117638be8d4ef40b806bd), [`54c2a58`](https://github.com/akashic-games/akashic-cli/commit/54c2a5836194fc7f74a2c2ef869ccfa47a044765), [`c19f62f`](https://github.com/akashic-games/akashic-cli/commit/c19f62f42c03e54809242e920f7de5bf1d5b78d7), [`1896f73`](https://github.com/akashic-games/akashic-cli/commit/1896f731ed18dac261ad54834d5d6bd6e0321618), [`b075741`](https://github.com/akashic-games/akashic-cli/commit/b0757417b225982dbde05b44d260f66f59574873), [`9cc4108`](https://github.com/akashic-games/akashic-cli/commit/9cc41081c191bf76f9341211cc912859b8c52818), [`b057814`](https://github.com/akashic-games/akashic-cli/commit/b057814e1423c0af424f5251d2c151ac2e40f463), [`e39512c`](https://github.com/akashic-games/akashic-cli/commit/e39512ca1159f11cf8119b552599000159ddb98c), [`0d0f538`](https://github.com/akashic-games/akashic-cli/commit/0d0f538a86c095f7463690685891abbbf870b54d)]:
+  - @akashic/akashic-cli-export@2.0.0
+  - @akashic/akashic-cli-serve@2.0.0
+  - @akashic/akashic-cli-lib-manage@2.0.0
+  - @akashic/akashic-cli-sandbox@2.0.0
+  - @akashic/akashic-cli-extra@2.0.0
+  - @akashic/akashic-cli-init@2.0.0
+  - @akashic/akashic-cli-scan@1.0.0
+  - @akashic/akashic-cli-commons@1.0.0
+
+## 3.0.0-next.10
+
+### Patch Changes
+
+- Updated dependencies [[`c19f62f`](https://github.com/akashic-games/akashic-cli/commit/c19f62f42c03e54809242e920f7de5bf1d5b78d7)]:
+  - @akashic/akashic-cli-serve@2.0.0-next.8
+
+## 3.0.0-next.9
+
+### Patch Changes
+
+- [#1531](https://github.com/akashic-games/akashic-cli/pull/1531) [`a584667`](https://github.com/akashic-games/akashic-cli/commit/a584667f75c1d662c669d7cbbb27e6c06952ff7d) Thanks [@yu-ogi](https://github.com/yu-ogi)! - support `--legacy` option in akashic-cli-sandbox
+
+- Updated dependencies [[`92bd87f`](https://github.com/akashic-games/akashic-cli/commit/92bd87f5de40fc1cdfb25806fd36d86bcf0f8edc), [`92ac8a9`](https://github.com/akashic-games/akashic-cli/commit/92ac8a94bd2ae179a269fa0bc9bc0d55878ac2e3)]:
+  - @akashic/akashic-cli-serve@2.0.0-next.7
+
+## 3.0.0-next.8
+
+### Patch Changes
+
+- Updated dependencies [[`9cc4108`](https://github.com/akashic-games/akashic-cli/commit/9cc41081c191bf76f9341211cc912859b8c52818)]:
+  - @akashic/akashic-cli-sandbox@2.0.0-next.5
+  - @akashic/akashic-cli-serve@2.0.0-next.6
+
+## 3.0.0-next.7
+
+### Patch Changes
+
+- Updated dependencies [[`ef1b096`](https://github.com/akashic-games/akashic-cli/commit/ef1b096297a35f2f16d2fe037a5b23c59eb9943b)]:
+  - @akashic/akashic-cli-commons@1.0.0-next.3
+  - @akashic/akashic-cli-export@2.0.0-next.4
+  - @akashic/akashic-cli-extra@2.0.0-next.3
+  - @akashic/akashic-cli-init@2.0.0-next.3
+  - @akashic/akashic-cli-lib-manage@2.0.0-next.3
+  - @akashic/akashic-cli-sandbox@2.0.0-next.4
+  - @akashic/akashic-cli-scan@1.0.0-next.3
+  - @akashic/akashic-cli-serve@2.0.0-next.5
+
+## 3.0.0-next.6
+
+### Patch Changes
+
+- Updated dependencies [[`b347942`](https://github.com/akashic-games/akashic-cli/commit/b3479426e1a1fbf3b2badef5f04a862943c3206e)]:
+  - @akashic/akashic-cli-commons@1.0.0-next.2
+  - @akashic/akashic-cli-serve@2.0.0-next.4
+  - @akashic/akashic-cli-export@2.0.0-next.3
+  - @akashic/akashic-cli-extra@2.0.0-next.2
+  - @akashic/akashic-cli-init@2.0.0-next.2
+  - @akashic/akashic-cli-lib-manage@2.0.0-next.2
+  - @akashic/akashic-cli-sandbox@2.0.0-next.3
+  - @akashic/akashic-cli-scan@1.0.0-next.2
+
+## 3.0.0-next.5
+
+### Patch Changes
+
+- Updated dependencies [[`96630e2`](https://github.com/akashic-games/akashic-cli/commit/96630e2e61dbc629922e6901196b052d46baec6d), [`e39512c`](https://github.com/akashic-games/akashic-cli/commit/e39512ca1159f11cf8119b552599000159ddb98c)]:
+  - @akashic/akashic-cli-serve@2.0.0-next.3
+
+## 3.0.0-next.4
+
+### Patch Changes
+
+- [#1516](https://github.com/akashic-games/akashic-cli/pull/1516) [`a6892a4`](https://github.com/akashic-games/akashic-cli/commit/a6892a4ee7c60cfd5f0ae5e8ddf1eac7fdcf653d) Thanks [@xnv](https://github.com/xnv)! - fix launch failure of 'akashic serve'
+
+- Updated dependencies [[`0d0f538`](https://github.com/akashic-games/akashic-cli/commit/0d0f538a86c095f7463690685891abbbf870b54d)]:
+  - @akashic/akashic-cli-serve@2.0.0-next.2
+
+## 3.0.0-next.3
+
+### Patch Changes
+
+- [#1503](https://github.com/akashic-games/akashic-cli/pull/1503) [`2428caf`](https://github.com/akashic-games/akashic-cli/commit/2428cafb6af5547b91f35832602b2b4d15e9f6ad) Thanks [@xnv](https://github.com/xnv)! - fix commands broken on early versions of Node.js v18, v20 and v21
+
+- Updated dependencies [[`d66e322`](https://github.com/akashic-games/akashic-cli/commit/d66e3224a90203b431f7d4dd0306dad32fa9f19a), [`2428caf`](https://github.com/akashic-games/akashic-cli/commit/2428cafb6af5547b91f35832602b2b4d15e9f6ad), [`8248ef1`](https://github.com/akashic-games/akashic-cli/commit/8248ef1082214e3bbce117638be8d4ef40b806bd), [`b075741`](https://github.com/akashic-games/akashic-cli/commit/b0757417b225982dbde05b44d260f66f59574873)]:
+  - @akashic/akashic-cli-export@2.0.0-next.2
+  - @akashic/akashic-cli-lib-manage@2.0.0-next.1
+  - @akashic/akashic-cli-sandbox@2.0.0-next.2
+  - @akashic/akashic-cli-extra@2.0.0-next.1
+  - @akashic/akashic-cli-serve@2.0.0-next.1
+  - @akashic/akashic-cli-init@2.0.0-next.1
+  - @akashic/akashic-cli-scan@1.0.0-next.1
+  - @akashic/akashic-cli-commons@1.0.0-next.1
+
+## 3.0.0-next.2
+
+### Patch Changes
+
+- Updated dependencies [[`b057814`](https://github.com/akashic-games/akashic-cli/commit/b057814e1423c0af424f5251d2c151ac2e40f463)]:
+  - @akashic/akashic-cli-sandbox@2.0.0-next.1
+
+## 3.0.0-next.1
+
+### Patch Changes
+
+- Updated dependencies [[`1896f73`](https://github.com/akashic-games/akashic-cli/commit/1896f731ed18dac261ad54834d5d6bd6e0321618)]:
+  - @akashic/akashic-cli-export@2.0.0-next.1
+
+## 3.0.0-next.0
+
+### Major Changes
+
+- [#1440](https://github.com/akashic-games/akashic-cli/pull/1440) [`54c2a58`](https://github.com/akashic-games/akashic-cli/commit/54c2a5836194fc7f74a2c2ef869ccfa47a044765) Thanks [@yu-ogi](https://github.com/yu-ogi)! - - [#1494](https://github.com/akashic-games/akashic-cli/pull/1494) feat(sandbox): support custom font
+  - [#1492](https://github.com/akashic-games/akashic-cli/pull/1492) feat(serve): support custom fonts
+  - [#1490](https://github.com/akashic-games/akashic-cli/pull/1490) Support akashic config js in scan
+  - [#1489](https://github.com/akashic-games/akashic-cli/pull/1489) Use debug engineFiles in serve
+  - [#1487](https://github.com/akashic-games/akashic-cli/pull/1487) Support es-downpile in export-html
+  - [#1486](https://github.com/akashic-games/akashic-cli/pull/1486) feat(export): support text asset bundle
+  - [#1480](https://github.com/akashic-games/akashic-cli/pull/1480) chore(serve): remove broken/unused test
+  - [#1479](https://github.com/akashic-games/akashic-cli/pull/1479) feat(serve): migrate to esm
+  - [#1472](https://github.com/akashic-games/akashic-cli/pull/1472) Fix export downpile
+  - [#1469](https://github.com/akashic-games/akashic-cli/pull/1469) feat: support akashic.config.cjs, akashic.config.mjs
+  - [#1467](https://github.com/akashic-games/akashic-cli/pull/1467) Add license file validation to export
+  - [#1465](https://github.com/akashic-games/akashic-cli/pull/1465) feat(export): bundle script assets as an assetBundle
+  - [#1460](https://github.com/akashic-games/akashic-cli/pull/1460) Remove cliconfig and configfile from commons
+  - [#1455](https://github.com/akashic-games/akashic-cli/pull/1455) Add licene file to export zip
+  - [#1450](https://github.com/akashic-games/akashic-cli/pull/1450) Fix storybook style
+  - [#1447](https://github.com/akashic-games/akashic-cli/pull/1447) feat(export): use terser to minify
+  - [#1445](https://github.com/akashic-games/akashic-cli/pull/1445) build(serve): introduce Vite instead of webpack
+  - [#1444](https://github.com/akashic-games/akashic-cli/pull/1444) fix(export): fix exporting issue
+  - [#1443](https://github.com/akashic-games/akashic-cli/pull/1443) refactor(serve): rename .css to .module.css
+  - [#1441](https://github.com/akashic-games/akashic-cli/pull/1441) chore: add tsconfig.test.json
+  - [#1439](https://github.com/akashic-games/akashic-cli/pull/1439) chore(extra): fix eol
+  - [#1437](https://github.com/akashic-games/akashic-cli/pull/1437) feat(cli): migrate to esm
+  - [#1430](https://github.com/akashic-games/akashic-cli/pull/1430) feat(init): migrate to esm
+  - [#1422](https://github.com/akashic-games/akashic-cli/pull/1422) feat(sandbox): migrate to esm
+  - [#1421](https://github.com/akashic-games/akashic-cli/pull/1421) feat(lib-manage): migrate to esm
+
+### Patch Changes
+
+- Updated dependencies [[`54c2a58`](https://github.com/akashic-games/akashic-cli/commit/54c2a5836194fc7f74a2c2ef869ccfa47a044765)]:
+  - @akashic/akashic-cli-lib-manage@2.0.0-next.0
+  - @akashic/akashic-cli-commons@1.0.0-next.0
+  - @akashic/akashic-cli-sandbox@2.0.0-next.0
+  - @akashic/akashic-cli-export@2.0.0-next.0
+  - @akashic/akashic-cli-extra@2.0.0-next.0
+  - @akashic/akashic-cli-serve@2.0.0-next.0
+  - @akashic/akashic-cli-init@2.0.0-next.0
+  - @akashic/akashic-cli-scan@1.0.0-next.0
+
+## 2.17.26
+
+### Patch Changes
+
+- Updated dependencies [[`1311473`](https://github.com/akashic-games/akashic-cli/commit/1311473108bce006942724f3c9972db0fcfd029b)]:
+  - @akashic/akashic-cli-export@1.9.21
+  - @akashic/akashic-cli-sandbox@1.1.12
+  - @akashic/akashic-cli-serve@1.16.19
+
+## 2.17.25
+
+### Patch Changes
+
+- Updated dependencies [[`e9c6526`](https://github.com/akashic-games/akashic-cli/commit/e9c65268bf413525fe23093611a3b1f06ee362fe)]:
+  - @akashic/akashic-cli-export@1.9.20
+  - @akashic/akashic-cli-sandbox@1.1.11
+  - @akashic/akashic-cli-serve@1.16.18
+
+## 2.17.24
+
+### Patch Changes
+
+- Updated dependencies [[`7043a1f`](https://github.com/akashic-games/akashic-cli/commit/7043a1fa6b687d7b8364f505f44df4443c88c1e4)]:
+  - @akashic/akashic-cli-export@1.9.19
+  - @akashic/akashic-cli-sandbox@1.1.10
+  - @akashic/akashic-cli-serve@1.16.17
+
 ## 2.17.23
 
 ### Patch Changes

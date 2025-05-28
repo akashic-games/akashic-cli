@@ -1,5 +1,5 @@
-import { Command } from "commander";
 import { createRequire } from "module";
+import { Command } from "commander";
 
 const require = createRequire(import.meta.url);
 const { version } = require("../package.json");
@@ -22,6 +22,6 @@ commander
 	.command("sandbox", "Start a standalone server for a game")
 	.passThroughOptions();
 
-export function run(argv: string[]) {
+export function run(argv: string[]): void {
 	commander.parse(argv);
 }

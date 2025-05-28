@@ -1,11 +1,12 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as cmn from "@akashic/akashic-cli-commons";
+import type { AssetConfigurationBase } from "@akashic/game-configuration";
 
-export function removeScriptAssets(gamejson: cmn.GameConfiguration, filter: (filepath: string) => boolean): void {
+export function removeAssets(gamejson: cmn.GameConfiguration, filter: (asset: AssetConfigurationBase) => boolean): void {
 	Object.keys(gamejson.assets).forEach(key => {
 		const asset = gamejson.assets[key];
-		if (asset.type === "script" && !filter(asset.path)) {
+		if (!filter(asset)) {
 			delete gamejson.assets[key];
 		}
 	});

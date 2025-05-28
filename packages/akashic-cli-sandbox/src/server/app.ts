@@ -1,8 +1,11 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import type { CliConfigSandbox } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigSandbox.js";
+import { hashFilepath } from "@akashic/akashic-cli-commons/lib/Renamer.js";
+import { getFontFormat } from "@akashic/akashic-cli-commons/lib/Util.js";
 import express from "express";
-import session  from "express-session";
+import session from "express-session";
 import gameRoute from "./routes/game.js";
 import jsRoute from "./routes/js.js";
 import sandboxConfigRoute from "./routes/sandboxConfig.js";
@@ -24,6 +27,7 @@ interface AppOptions {
 	cssBase?: string;
 	thirdpartyBase?: string;
 	cascadeBases?: string[];
+	fonts?: CliConfigSandbox["fonts"];
 }
 
 interface ModuleEnvironment {
@@ -50,6 +54,8 @@ export default function (options: AppOptions = {}): AkashicSandbox {
 	const jsBase = options.jsBase ? options.jsBase : path.join(appBase, "js");
 	const cssBase = options.cssBase ? options.cssBase : path.join(appBase, "css");
 	const thridpartyBase = options.thirdpartyBase ? options.thirdpartyBase : path.join(appBase, "thirdparty");
+	const fonts = options.fonts ?? [];
+	const fontFamilies = fonts.map(font => font.descriptors["font-family"]);
 
 	const app: AkashicSandbox = express();
 	const isDev = app.get("env") === "development";
@@ -120,6 +126,62 @@ export default function (options: AppOptions = {}): AkashicSandbox {
 			next();
 		}
 	});
+
+	const serveDefaultFontCSS = (): void => {
+		app.get("/css/fonts/fonts.css", (_, res) => {
+			res.contentType("text/css");
+			res.send("");
+		});
+	};
+
+	if (fonts && fonts.length > 0) {
+		try {
+			let responseBody = "";
+
+			for (const font of fonts) {
+				const fontPath = path.resolve(gameBase, font.path);
+				if (!fs.existsSync(fontPath)) {
+					throw new Error(`${fontPath} not found.`);
+				}
+
+				const fontFormat = getFontFormat(font.path);
+				if (fontFormat == null) {
+					const extension = path.extname(font.path);
+					throw new Error(
+						`The file extension "${extension}" from "${font.path}" is not supported in 'commandOptions.sandbox.fonts'.`
+					);
+				}
+
+				const fontFilename = hashFilepath(fontPath, 16);
+
+				responseBody += [
+					"@font-face {",
+					Object.entries(font.descriptors).map(([key, value]) => `${key}: "${value}";`).join("\n"),
+					`src: url('${path.join("/css/fonts", fontFilename)}') format('${fontFormat}');`,
+					"}\n",
+				].join("\n");
+
+				app.get(path.join("/css/fonts", fontFilename), (_, res) => res.send(fs.readFileSync(fontPath)));
+			}
+
+			app.get("/css/fonts/fonts.css", (_, res) => {
+				res.contentType("text/css");
+				res.send(responseBody);
+			});
+
+			app.use((_req, res, next) => {
+				res.locals.fontFamilies = fontFamilies;
+				next();
+			});
+		} catch (error) {
+			console.error(error.message);
+			console.error("Proceeding without applying the 'commandOptions.sandbox.fonts' specification.");
+			serveDefaultFontCSS();
+		}
+	} else {
+		serveDefaultFontCSS();
+	}
+
 	app.use("/js/", express.static(jsBase));
 	app.use("/css/", express.static(cssBase));
 	app.use("/thirdparty/", express.static(thridpartyBase));

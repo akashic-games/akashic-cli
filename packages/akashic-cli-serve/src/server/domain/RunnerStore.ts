@@ -1,7 +1,8 @@
+import { createRequire } from "module";
 import * as path from "path";
 import type { AMFlowClient, RunnerManager, RunnerV1, RunnerV2, RunnerV3 } from "@akashic/headless-driver";
 import { Trigger } from "@akashic/trigger";
-import type { NicoliveCommentEventComment } from "../../common/types/NicoliveCommentPlugin";
+import type { NicoliveCommentEventComment } from "../../common/types/NicoliveCommentPlugin.js";
 import type {
 	RunnerCreateTestbedEvent,
 	RunnerRemoveTestbedEvent,
@@ -9,11 +10,13 @@ import type {
 	RunnerResumeTestbedEvent,
 	RunnerPutStartPointTestbedEvent,
 	NicoliveCommentPluginStartStopTestbedEvent
-} from "../../common/types/TestbedEvent";
-import { serverGlobalConfig } from "../common/ServerGlobalConfig";
-import * as gameConfigs from "./GameConfigs";
-import { NicoliveCommentPluginHost } from "./nicoliveComment/NicoliveCommentPluginHost";
-import * as sandboxConfigs from "./SandboxConfigs";
+} from "../../common/types/TestbedEvent.js";
+import { serverGlobalConfig } from "../common/ServerGlobalConfig.js";
+import * as gameConfigs from "./GameConfigs.js";
+import { NicoliveCommentPluginHost } from "./nicoliveComment/NicoliveCommentPluginHost.js";
+import * as sandboxConfigs from "./SandboxConfigs.js";
+
+const require = createRequire(import.meta.url);
 
 export interface RunnerStoreParameterObject {
 	runnerManager: RunnerManager;

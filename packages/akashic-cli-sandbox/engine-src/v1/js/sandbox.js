@@ -22,7 +22,7 @@ window.addEventListener("load", function() {
 		xhr.send();
 	}
 
-	getGamePath(start);
+	window.loadFonts().then(() => getGamePath(start));
 
 	function fitToWindow(center) {
 		var pf = window.sandboxDeveloperProps.driver._platform;

@@ -1,11 +1,11 @@
 import * as express from "express";
-import { createHandlerToGetContent, createHandlerToGetContents, createHandlerToGetEngineConfig } from "../controller/ContentController";
+import { createHandlerToGetContent, createHandlerToGetContents, createHandlerToGetEngineConfig } from "../controller/ContentController.js";
 import {
 	createHandlerToGetSandboxConfig,
 	createHandlerToGetSandboxConfigPluginCode,
 	createHandlerToGetSandboxConfigBgImage
-} from "../controller/SandboxConfigController";
-import { createScriptAssetController } from "../controller/ScriptAssetController";
+} from "../controller/SandboxConfigController.js";
+import { createScriptAssetController } from "../controller/ScriptAssetController.js";
 
 export interface ContentsRouterParameterObject {
 	targetDirs: string[];

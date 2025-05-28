@@ -1,32 +1,42 @@
 import * as fs from "fs";
+import { createRequire } from "module";
 import * as path from "path";
+import { fileURLToPath } from "url";
 import * as util from "util";
-import type { CliConfigServe } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigServe";
-import type { CliConfigurationFile } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigurationFile";
-import type { SERVICE_TYPES } from "@akashic/akashic-cli-commons/lib/ServiceType";
+import type { CliConfiguration } from "@akashic/akashic-cli-commons";
+import type { CliConfigServe } from "@akashic/akashic-cli-commons/lib/CliConfig/CliConfigServe.js";
+import { load } from "@akashic/akashic-cli-commons/lib/FileSystem.js";
+import { hashFilepath } from "@akashic/akashic-cli-commons/lib/Renamer.js";
+import { SERVICE_TYPES } from "@akashic/akashic-cli-commons/lib/ServiceType.js";
+import { getFontFormat } from "@akashic/akashic-cli-commons/lib/Util.js";
 import { PlayManager, RunnerManager, setSystemLogger, getSystemLogger } from "@akashic/headless-driver";
-import * as bodyParser from "body-parser";
-import type * as Chalk from "chalk";
+import bodyParser from "body-parser";
+import chalk from "chalk";
 import type { OptionValues } from "commander";
 import { Command } from "commander";
 import cors from "cors";
 import express from "express";
 import open from "open";
 import * as socketio from "socket.io";
-import parser from "../common/MsgpackParser";
-import { isServiceTypeNicoliveLike } from "../common/targetServiceUtil";
-import type { PutStartPointEvent } from "../common/types/TestbedEvent";
-import { ServerContentLocator } from "./common/ServerContentLocator";
-import { serverGlobalConfig } from "./common/ServerGlobalConfig";
-import type { DumpedPlaylog } from "./common/types/DumpedPlaylog";
-import { ModTargetFlags, watchContent } from "./domain/GameConfigs";
-import { PlayerIdStore } from "./domain/PlayerIdStore";
-import { PlayStore } from "./domain/PlayStore";
-import { RunnerStore } from "./domain/RunnerStore";
-import { SocketIOAMFlowManager } from "./domain/SocketIOAMFlowManager";
-import { createApiRouter } from "./route/ApiRoute";
-import { createContentsRouter } from "./route/ContentsRoute";
-import { createHealthCheckRouter } from "./route/HealthCheckRoute";
+import parser from "../common/MsgpackParser.js";
+import { isServiceTypeNicoliveLike } from "../common/targetServiceUtil.js";
+import type { PutStartPointEvent } from "../common/types/TestbedEvent.js";
+import { ServerContentLocator } from "./common/ServerContentLocator.js";
+import { serverGlobalConfig } from "./common/ServerGlobalConfig.js";
+import type { DumpedPlaylog } from "./common/types/DumpedPlaylog.js";
+import type { EngineFilesVersions } from "./domain/EngineFilesVersions.js";
+import { ModTargetFlags, watchContent } from "./domain/GameConfigs.js";
+import { PlayerIdStore } from "./domain/PlayerIdStore.js";
+import { PlayStore } from "./domain/PlayStore.js";
+import { RunnerStore } from "./domain/RunnerStore.js";
+import { SocketIOAMFlowManager } from "./domain/SocketIOAMFlowManager.js";
+import { createApiRouter } from "./route/ApiRoute.js";
+import { createContentsRouter } from "./route/ContentsRoute.js";
+import { createHealthCheckRouter } from "./route/HealthCheckRoute.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const require = createRequire(import.meta.url);
 
 // 渡されたパラメータを全てstringに変換する
 // chalkを使用する場合、ログ出力時objectの中身を展開してくれないためstringに変換する必要がある
@@ -38,25 +48,6 @@ function convertToStrings(params: any[]): string[] {
 			return param.toString();
 		}
 	});
-}
-
-// chalk@5 以降 pure ESM なので import() で読み込む
-async function importChalk(): Promise<(typeof Chalk)["default"]> {
-	// CommonJS 設定の TS では dynamic import が require() に変換されてしまうので、eval() で強引に imoprt() する
-	// eslint-disable-next-line no-eval
-	return (await eval("import('chalk')")).default;
-}
-
-async function importCommonsConfiguration(): Promise<(typeof CliConfigurationFile)> {
-	// CommonJS 設定の TS では dynamic import が require() に変換されてしまうので、eval() で強引に import() する
-	// eslint-disable-next-line no-eval
-	return (await eval("import('@akashic/akashic-cli-commons/lib/CliConfig/CliConfigurationFile.js')")).CliConfigurationFile;
-}
-
-async function importCommonsServiceType(): Promise<(typeof SERVICE_TYPES)> {
-	// CommonJS 設定の TS では dynamic import が require() に変換されてしまうので、eval() で強引に import() する
-	// eslint-disable-next-line no-eval
-	return (await eval("import('@akashic/akashic-cli-commons/lib/ServiceType.js')")).SERVICE_TYPES;
 }
 
 async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Promise<void> {
@@ -82,7 +73,6 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 		serverGlobalConfig.useGivenPort = true;
 	}
 
-	const chalk = await importChalk();
 	if (cliConfigParam.verbose) {
 		serverGlobalConfig.verbose = true;
 		setSystemLogger({
@@ -123,7 +113,6 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 			process.exit(1);
 		}
 
-		const SERVICE_TYPES = await importCommonsServiceType();
 		if (!SERVICE_TYPES.includes(cliConfigParam.targetService)) {
 			const serviceName: string = cliConfigParam.targetService;
 			if (serviceName === "nicolive:ranking" || serviceName === "nicolive:single") {
@@ -170,8 +159,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 	}
 
 	const targetDirs: string[] = cliConfigParam.targetDirs ?? [];
-	// eslint-disable-next-line @typescript-eslint/no-var-requires
-	const versionsJson = require("./engineFilesVersion.json");
+	const versionsJson: EngineFilesVersions = require("./engineFilesVersion.json");
 	const engineFilesVersions = Object.keys(versionsJson).map(key => `v${versionsJson[key].version}`);
 	console.log(`Included engine-files: ${engineFilesVersions.join(", ")}`);
 	targetDirs.forEach(dir => {
@@ -297,7 +285,12 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 	});
 	app.use(bodyParser.json());
 
-	app.use("^\/$", (_req, res, _next) => res.redirect("/public/"));
+	if (cliConfigParam.standalone) {
+		app.use("^\/$", (_req, res, _next) => res.redirect("/public/sandbox"));
+		app.use("^/public/$", (_req, res, _next) => res.redirect("/public/sandbox"));
+	} else {
+		app.use("^\/$", (_req, res, _next) => res.redirect("/public/"));
+	}
 
 	if (cliConfigParam.corsAllowOrigin) {
 		app.use(cors({ origin: cliConfigParam.corsAllowOrigin }));
@@ -333,6 +326,61 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 			res.contentType("text/javascript");
 			res.send("");
 		});
+	}
+
+	const serveDefaultFontCSS = (): void => {
+		serverGlobalConfig.fontFamilies = [];
+
+		app.use("/public/external/fonts/fonts.css", (_, res) => {
+			res.contentType("text/css");
+			res.send("");
+		});
+	};
+
+	if (cliConfigParam.fonts && cliConfigParam.fonts.length > 0) {
+		try {
+			const fonts = cliConfigParam.fonts;
+			let responseBody = "";
+
+			for (const font of fonts) {
+				const fontPath = path.resolve(process.cwd(), font.path);
+				if (!fs.existsSync(fontPath)) {
+					throw new Error(`${fontPath} not found.`);
+				}
+
+				const fontFormat = getFontFormat(font.path);
+				if (fontFormat == null) {
+					const extension = path.extname(font.path);
+					throw new Error(
+						`The file extension "${extension}" from "${font.path}" is not supported in 'commandOptions.serve.fonts'.`
+					);
+				}
+
+				const fontFilename = hashFilepath(fontPath, 16);
+
+				responseBody += [
+					"@font-face {",
+					Object.entries(font.descriptors).map(([key, value]) => `${key}: "${value}";`).join("\n"),
+					`src: url('${path.join("/public/external/fonts", fontFilename)}') format('${fontFormat}');`,
+					"}\n",
+				].join("\n");
+
+				app.get(path.join("/public/external/fonts", fontFilename), (_, res) => res.send(fs.readFileSync(fontPath)));
+			}
+
+			app.get("/public/external/fonts/fonts.css", (_, res) => {
+				res.contentType("text/css");
+				res.send(responseBody);
+			});
+
+			serverGlobalConfig.fontFamilies = fonts.map(font => font.descriptors["font-family"]);
+		} catch (error) {
+			getSystemLogger().error(error.message);
+			getSystemLogger().error("Proceeding without applying the 'commandOptions.serve.fonts' specification.");
+			serveDefaultFontCSS();
+		}
+	} else {
+		serveDefaultFontCSS();
 	}
 
 	app.use("/public/", express.static(path.join(__dirname, "..", "..", "www", "public")));
@@ -432,7 +480,6 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 // TODOこのファイルを改名してcli.tsにする
 export async function run(argv: any): Promise<void> {
 	const ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "..", "package.json"), "utf8")).version;
-	const SERVICE_TYPES = await importCommonsServiceType();
 	const commander = new Command();
 
 	commander
@@ -445,6 +492,7 @@ export async function run(argv: any): Promise<void> {
 		.option("-A, --no-auto-start", "Wait automatic startup of contents.")
 		.option("-s, --target-service <service>", `Simulate the specified service. arguments: ${SERVICE_TYPES}`)
 		.option("-w, --watch", "Watch directories of asset")
+		.option("--standalone", "Run as standalone mode")
 		.option("--server-external-script <path>",
 			"Evaluate the given JS and assign it to Game#external of the server instances")
 		.option("--debug-playlog <path>", "Specify path of playlog-json.")
@@ -465,38 +513,37 @@ export async function run(argv: any): Promise<void> {
 
 	const options = commander.opts();
 
-	// eslint-disable-next-line @typescript-eslint/naming-convention
-	const CliConfigurationFile = await importCommonsConfiguration();
-
-	CliConfigurationFile.read(path.join(options.cwd || process.cwd(), "akashic.config.js"), async (error, configuration) => {
-		if (error) {
-			console.error(error);
-			process.exit(1);
-		}
-
-		const conf = configuration!.commandOptions?.serve ?? {};
-		const cliConfigParam: CliConfigServe = {
-			port: options.port ?? conf.port,
-			hostname: options.hostname ?? conf.hostname,
-			verbose: options.verbose ?? conf.verbose,
-			autoStart: options.autoStart ?? conf.autoStart,
-			targetService: options.targetService ?? conf.targetService,
-			debugPlaylog: options.debugPlaylog ?? conf.debugPlaylog,
-			debugUntrusted: options.debugUntrusted ?? conf.debugUntrusted,
-			debugTrustedIframe: options.debugTrustedIframe ?? conf.debugTrustedIframe,
-			debugProxyAudio: options.debugProxyAudio ?? conf.debugProxyAudio,
-			debugPauseActive: options.debugPauseActive ?? conf.debugPauseActive,
-			debugDisableFeatCheck: options.debugDisableFeatCheck ?? conf.debugDisableFeatCheck,
-			allowExternal: options.allowExternal ?? conf.allowExternal,
-			targetDirs: commander.args.length > 0 ? commander.args : (conf.targetDirs ?? [process.cwd()]),
-			openBrowser: options.openBrowser ?? conf.openBrowser,
-			preserveDisconnected: options.preserveDisconnected ?? conf.preserveDisconnected,
-			watch: options.watch ?? conf.watch,
-			experimentalOpen: options.experimentalOpen ?? conf.experimentalOpen,
-			sslCert: options.sslCert ?? conf.sslCert,
-			sslKey: options.sslKey ?? conf.sslKey,
-			corsAllowOrigin: options.corsAllowOrigin ?? conf.corsAllowOrigin
-		};
-		await cli(cliConfigParam, options);
-	});
+	let configuration: CliConfiguration;
+	try {
+		configuration = await load(options.cwd || process.cwd());
+	} catch (error) {
+		console.error(error);
+		process.exit(1);
+	}
+	const conf = configuration!.commandOptions?.serve ?? {};
+	const cliConfigParam: CliConfigServe = {
+		port: options.port ?? conf.port,
+		hostname: options.hostname ?? conf.hostname,
+		verbose: options.verbose ?? conf.verbose,
+		autoStart: options.autoStart ?? conf.autoStart,
+		targetService: options.targetService ?? conf.targetService,
+		debugPlaylog: options.debugPlaylog ?? conf.debugPlaylog,
+		debugUntrusted: options.debugUntrusted ?? conf.debugUntrusted,
+		debugTrustedIframe: options.debugTrustedIframe ?? conf.debugTrustedIframe,
+		debugProxyAudio: options.debugProxyAudio ?? conf.debugProxyAudio,
+		debugPauseActive: options.debugPauseActive ?? conf.debugPauseActive,
+		debugDisableFeatCheck: options.debugDisableFeatCheck ?? conf.debugDisableFeatCheck,
+		allowExternal: options.allowExternal ?? conf.allowExternal,
+		targetDirs: commander.args.length > 0 ? commander.args : (conf.targetDirs ?? [process.cwd()]),
+		openBrowser: options.openBrowser ?? conf.openBrowser,
+		preserveDisconnected: options.preserveDisconnected ?? conf.preserveDisconnected,
+		watch: options.watch ?? conf.watch,
+		experimentalOpen: options.experimentalOpen ?? conf.experimentalOpen,
+		sslCert: options.sslCert ?? conf.sslCert,
+		sslKey: options.sslKey ?? conf.sslKey,
+		corsAllowOrigin: options.corsAllowOrigin ?? conf.corsAllowOrigin,
+		standalone: options.standalone ?? conf.standalone,
+		fonts: conf.fonts,
+	};
+	await cli(cliConfigParam, options);
 }

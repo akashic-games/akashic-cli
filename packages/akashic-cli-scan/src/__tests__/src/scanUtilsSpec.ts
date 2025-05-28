@@ -2,13 +2,14 @@ import * as path from "path";
 import * as fs from "fs";
 import { fileURLToPath } from "url";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger.js";
-import mockfs from "mock-fs";
+import * as mockfs from "./helpers/mockfs.js";
 import { scanAudioAssets, scanImageAssets, scanScriptAssets, scanTextAssets, scanBinaryAssets, knownExtensionAssetFilter } from "../../scanUtils.js";
 import { isBinaryFile } from "../../isBinaryFile.js";
 import { defaultTextAssetFilter } from "../../scanUtils.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const base = `scanUtilsSpec-${Date.now()}`;
 
 describe("scanUtils", () => {
 	const nullLogger = new ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
@@ -19,12 +20,15 @@ describe("scanUtils", () => {
 	const DUMMY_1x1_PNG_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy1x1.png"));
 	const DUMMY_WASM_DATA = fs.readFileSync(path.resolve(__dirname, "../fixtures/dummy.wasm"));
 
-	beforeEach(() => {
-		mockfs({
+	let baseDir: string;
+
+	beforeAll(() => {
+		baseDir = mockfs.create(base, {
 			"game": {
 				"text": {
 					"foo": {
 						"$.json": "{}",
+						".gitkeep": ""
 					}
 				},
 				"audio": {
@@ -33,36 +37,40 @@ describe("scanUtils", () => {
 						"_0.aac": DUMMY_AAC_DATA,
 						"_0.ogg": DUMMY_OGG_DATA,
 					},
+					".gitkeep": ""
 				},
 				"script": {
 					"foo": {
 						"_1.js": "var x = 1;",
-					}
+					},
+					".gitkeep": ""
 				},
 				"image": {
 					"foo": {
 						"_2.png": DUMMY_1x1_PNG_DATA
-					}
+					},
+					".gitkeep": ""
 				},
 				"assets": {
 					"_.txt": "dummy",
 					"_.ogg": DUMMY_OGG_DATA2,
 					"_.js": "var x = 1;",
 					"_.png": DUMMY_1x1_PNG_DATA,
-					"_.bin": DUMMY_WASM_DATA
+					"_.bin": DUMMY_WASM_DATA,
+					".gitkeep": ""
 				}
 			}
 		});
 	});
 
-	afterEach(() => {
-		mockfs.restore();
+	afterAll(() => {
+		mockfs.restore(base);
 	});
 
 	it("scanScriptAssets()", async () => {
 		expect(
 			await scanScriptAssets(
-				"./game",
+				path.join(baseDir, "./game"),
 				"script",
 				nullLogger
 			)
@@ -76,7 +84,7 @@ describe("scanUtils", () => {
 
 		expect(
 			await scanScriptAssets(
-				"./game",
+				path.join(baseDir, "./game"),
 				"assets",
 				nullLogger
 			)
@@ -92,7 +100,7 @@ describe("scanUtils", () => {
 	it("scanTextAssets()", async () => {
 		expect(
 			await scanTextAssets(
-				"./game",
+				path.join(baseDir, "./game"),
 				"text",
 				nullLogger,
 				p => {
@@ -110,13 +118,13 @@ describe("scanUtils", () => {
 
 		expect(
 			await scanTextAssets(
-				"./game",
+				path.join(baseDir, "./game"),
 				"assets",
 				nullLogger,
 				p => {
 					if (knownExtensionAssetFilter(p)) return false;
 					if (defaultTextAssetFilter(p)) return true;
-					return !isBinaryFile(path.join("./game", "assets", p));
+					return !isBinaryFile(path.join(baseDir, "./game", "assets", p));
 				}
 			)
 		).toEqual([
@@ -130,12 +138,12 @@ describe("scanUtils", () => {
 	it("scanBinaryAssets()", async () => {
 		expect(
 			await scanBinaryAssets(
-				"./game",
+				path.join(baseDir, "./game"),
 				"assets",
 				nullLogger,
 				p => {
 					if (knownExtensionAssetFilter(p)) return false;
-					return isBinaryFile(path.join("./game", "assets", p));
+					return isBinaryFile(path.join(baseDir, "./game", "assets", p));
 				}
 			)
 		).toEqual([
@@ -149,7 +157,7 @@ describe("scanUtils", () => {
 	it("scanImageAssets()", async () => {
 		expect(
 			await scanImageAssets(
-				"./game",
+				path.join(baseDir, "./game"),
 				"image",
 				nullLogger
 			)
@@ -164,7 +172,7 @@ describe("scanUtils", () => {
 
 		expect(
 			await scanImageAssets(
-				"./game",
+				path.join(baseDir, "./game"),
 				"assets",
 				nullLogger
 			)
@@ -188,7 +196,7 @@ describe("scanUtils", () => {
 
 		expect(
 			await scanAudioAssets(
-				"./game",
+				path.join(baseDir, "./game"),
 				"audio",
 				new Logger()
 			)
@@ -210,7 +218,7 @@ describe("scanUtils", () => {
 
 		expect(
 			await scanAudioAssets(
-				"./game",
+				path.join(baseDir, "./game"),
 				"assets",
 				nullLogger
 			)

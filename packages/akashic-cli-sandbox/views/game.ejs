@@ -35,8 +35,16 @@ window.g = engineFiles.akashicEngine;
 <script type="module">
     import "/js/akashic/meddling/MeddlingDate.js";
     import "/js/akashic/meddling/MeddlingMath.js";
+    import "/js/akashic/meddling/MeddlingTimer.js";
     import { TimeKeeper } from "/js/TimeKeeper.js";
     window.TimeKeeper = TimeKeeper;
+</script>
+<script type="module">
+    window.loadFonts = async () => {
+        for (const fontFamily of <%- JSON.stringify(fontFamilies) %>) {
+            await document.fonts.load(`16px '${fontFamily}'`);
+        }
+    };
 </script>
 <% if (version === "1") { %>
 <script type="text/javascript" src="/js/v<%= version %>/logger.js"></script>
@@ -46,6 +54,7 @@ window.g = engineFiles.akashicEngine;
 <link rel="stylesheet" href="/thirdparty/css/pure-min.css">
 <link rel="stylesheet" href="/thirdparty/css/font-awesome.min.css">
 <link rel="stylesheet" href="/css/developer.css">
+<link rel="stylesheet" href="/css/fonts/fonts.css">
 <script src="/thirdparty/js/vue.min.js" type="text/javascript"></script>
 <script src="/thirdparty/js/interact.min.js" type="text/javascript"></script>
 <script src="/js/v<%= version %>/developer.js" type="text/javascript"></script>
@@ -77,7 +86,7 @@ body{
 	</div>
 	<div id="containerRight">
 		<div id="profilerContainer">
-			<canvas id="profilerCanvas" />
+			<canvas id="profilerCanvas"></canvas>
 		</div>
 	</div>
 </body>

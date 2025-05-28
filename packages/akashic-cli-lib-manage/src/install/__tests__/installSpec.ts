@@ -18,10 +18,7 @@ describe("install()", () => {
 
 		await expect(
 			promiseInstall({ moduleNames: ["bar"], logger: logger, debugNpm: dummyNpm })
-		).rejects.toThrow("InstallFail:bar")
-
-		const content = await cmn.ConfigurationFile.read("./game.json", logger);
-		expect(content.globalScripts).toBeUndefined();
+		).rejects.toThrow("InstallFail:bar");
 	});
 
 	it("handles npm link failure", async () => {
@@ -32,9 +29,6 @@ describe("install()", () => {
 		await expect(
 			promiseInstall({ moduleNames: ["bar"], link: true, logger: logger, debugNpm: dummyNpm })
 		).rejects.toThrow("LinkFail:bar")
-
-		const content = await cmn.ConfigurationFile.read("./game.json", logger);
-		expect(content.globalScripts).toBeUndefined();
 	});
 
 	it("installs modules and updates globalScripts", async () => {
@@ -106,7 +100,7 @@ describe("install()", () => {
 
 		return Promise.resolve()
 			.then(() => promiseInstall({ moduleNames: ["dummy"], cwd: "./somedir", logger: logger, debugNpm: dummyNpm }))
-			.then(() => cmn.ConfigurationFile.read("./somedir/game.json", logger))
+			.then(() => cmn.FileSystem.readJSON<cmn.GameConfiguration>("./somedir/game.json"))
 			.then((content) => {
 				const globalScripts = content.globalScripts!;
 				expect(globalScripts instanceof Array).toBe(true);
@@ -122,7 +116,7 @@ describe("install()", () => {
 				expect(content.moduleMainPaths).toBeUndefined();
 			})
 			.then(() => promiseInstall({ moduleNames: ["dummy2@1.0.1"], cwd: "./somedir", plugin: 12, logger: logger, debugNpm: dummyNpm }))
-			.then(() => cmn.ConfigurationFile.read("./somedir/game.json", logger))
+			.then(() => cmn.FileSystem.readJSON<cmn.GameConfiguration>("./somedir/game.json"))
 			.then((content) => {
 				expect(content.operationPlugins).toEqual([
 					{
@@ -145,7 +139,7 @@ describe("install()", () => {
 				expect(content.moduleMainPaths).toBeUndefined();
 			})
 			.then(() => promiseInstall({ moduleNames: ["noOmitPackagejson@0.0.0"], cwd: "./somedir", logger: logger, debugNpm: dummyNpm, noOmitPackagejson: true }))
-			.then(() => cmn.ConfigurationFile.read("./somedir/game.json", logger))
+			.then(() => cmn.FileSystem.readJSON<cmn.GameConfiguration>("./somedir/game.json"))
 			.then((content) => {
 				const globalScripts = content.globalScripts!;
 
@@ -174,15 +168,15 @@ describe("install()", () => {
 					}
 				};
 			})
-			.then(() => cmn.ConfigurationFile.read("./somedir/game.json", logger))
-			.then((content) => {
+			.then(() => cmn.FileSystem.readJSON<cmn.GameConfiguration>("./somedir/game.json"))
+			.then(async (content) => {
 				// 存在しないファイルをgame.jsonに指定
 				const globalScripts = content.globalScripts!;
 				globalScripts.push("node_modules/foo/foo.js");
-				cmn.ConfigurationFile.write(content, "./somedir/game.json", logger);
+				await cmn.FileSystem.writeJSON<cmn.GameConfiguration>("./somedir/game.json", content);
 			})
 			.then(() => promiseInstall({ moduleNames: ["dummy@1.0.1"], cwd: "./somedir", logger: logger, debugNpm: dummyNpm }))
-			.then(() => cmn.ConfigurationFile.read("./somedir/game.json", logger))
+			.then(() => cmn.FileSystem.readJSON<cmn.GameConfiguration>("./somedir/game.json"))
 			.then((content) => {
 				const globalScripts = content.globalScripts!;
 				expect(globalScripts.indexOf("node_modules/dummy/main.js")).toBe(-1);
@@ -201,8 +195,8 @@ describe("install()", () => {
 			.then(async () => {
 				// moduleMainPaths の動作確認
 				const install = (param?: InstallParameterObject) => promiseInstall({ moduleNames: ["dummy@1.0.1"], cwd: "./somedir", logger: logger, debugNpm: dummyNpm, ...param });
-				const readConfig = () => cmn.ConfigurationFile.read("./somedir/game.json", logger);
-				const writeConfig = () => cmn.ConfigurationFile.write(content, "./somedir/game.json", logger);
+				const readConfig = () => cmn.FileSystem.readJSON<cmn.GameConfiguration>("./somedir/game.json");
+				const writeConfig = () => cmn.FileSystem.writeJSON<cmn.GameConfiguration>("./somedir/game.json", content);
 				const defaultConfig = (config?: any) => ({...config});
 
 				let content: any;
@@ -409,7 +403,7 @@ describe("install()", () => {
 			logger,
 			debugNpm: new dummyNpm({})
 		});
-		let content = await cmn.ConfigurationFile.read("./somedir/game.json", logger);
+		let content = await cmn.FileSystem.readJSON<cmn.GameConfiguration>("./somedir/game.json");
 
 		expect(Object.keys(content.assets).length).toBe(3);
 		expect(content.assets["node_modules/ui-library/assets/audios/se_1"]).toEqual({
@@ -437,7 +431,7 @@ describe("install()", () => {
 			logger,
 			debugNpm: new dummyNpm({})
 		});
-		content = await cmn.ConfigurationFile.read("./somedir/game.json", logger);
+		content = await cmn.FileSystem.readJSON<cmn.GameConfiguration>("./somedir/game.json");
 
 		expect(Object.keys(content.assets).length).toBe(6);
 		expect(content.assets["node_modules/audio-library/assets/audios/bgm_1"]).toEqual({

@@ -5,6 +5,9 @@ export default defineConfig({
 		globals: true,
 		include: [
 			"./spec/**/*[sS]pec.js"
-		]
+		],
+		deps: {
+			interopDefault: false,
+		},
 	},
 });

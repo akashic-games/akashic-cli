@@ -1,6 +1,6 @@
 import * as express from "express";
 import type * as socketio from "socket.io";
-import { createHandlerToBroadcast } from "../controller/BroadcastController";
+import { createHandlerToBroadcast } from "../controller/BroadcastController.js";
 import {
 	createHandlerToCreatePlay,
 	createHandlerToGetPlays,
@@ -12,20 +12,20 @@ import {
 	createHandlerToSendEvent,
 	createHandlerToSendNicoliveCommentByTemplate,
 	createHandlerToSendNicoliveComment
-} from "../controller/PlayController";
-import { createHandlerToRegisterPlayerId } from "../controller/PlayerIdController";
-import { createHandlerToCreatePlayToken } from "../controller/PlayTokenController";
+} from "../controller/PlayController.js";
+import { createHandlerToRegisterPlayerId } from "../controller/PlayerIdController.js";
+import { createHandlerToCreatePlayToken } from "../controller/PlayTokenController.js";
 import {
 	createHandlerToCreateRunner,
 	createHandlerToDeleteRunner,
 	createHandlerToPatchRunner
-} from "../controller/RunnerController";
-import { createHandlerToGetStartPointHeaderList } from "../controller/StartPointHeaderListController";
-import { handleToGetStartupOptions } from "../controller/StartupOptionsController";
-import type { PlayerIdStore } from "../domain/PlayerIdStore";
-import type { PlayStore } from "../domain/PlayStore";
-import type { RunnerStore } from "../domain/RunnerStore";
-import type { SocketIOAMFlowManager } from "../domain/SocketIOAMFlowManager";
+} from "../controller/RunnerController.js";
+import { createHandlerToGetStartPointHeaderList } from "../controller/StartPointHeaderListController.js";
+import { handleToGetStartupOptions } from "../controller/StartupOptionsController.js";
+import type { PlayerIdStore } from "../domain/PlayerIdStore.js";
+import type { PlayStore } from "../domain/PlayStore.js";
+import type { RunnerStore } from "../domain/RunnerStore.js";
+import type { SocketIOAMFlowManager } from "../domain/SocketIOAMFlowManager.js";
 
 export interface ApiRouterParameterObject {
 	playStore: PlayStore;

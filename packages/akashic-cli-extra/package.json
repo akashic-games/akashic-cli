@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-extra",
-  "version": "1.7.8",
+  "version": "2.0.0",
   "description": "Extra tools of akashic-cli-xxx",
   "type": "module",
   "types": "./lib/index.d.ts",
@@ -20,18 +20,17 @@
     "./package.json": "./package.json"
   },
   "bin": {
-    "akashic-cli-config": "./bin/akashic-cli-config",
-    "akashic-cli-modify": "./bin/akashic-cli-modify",
-    "akashic-cli-stat": "./bin/akashic-cli-stat"
+    "akashic-cli-config": "./bin/akashic-cli-config.js",
+    "akashic-cli-modify": "./bin/akashic-cli-modify.js",
+    "akashic-cli-stat": "./bin/akashic-cli-stat.js"
   },
   "scripts": {
     "prepublish": "npm run clean && npm run build",
     "clean": "rimraf ./lib && rimraf ./spec/build",
-    "start": "npm run build && node bin/run",
     "build": "tsc -p ./",
     "test": "npm run test:vitest && npm run test:lint",
     "test:vitest": "vitest run",
-    "test:lint": "eslint -c .eslintrc.cjs --fix"
+    "test:lint": "eslint -c .eslintrc.cjs --fix \"./src/**/*.ts\""
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
@@ -39,14 +38,13 @@
     "lib"
   ],
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.15.3",
+    "@akashic/akashic-cli-commons": "1.0.0",
     "commander": "12.1.0",
     "ini": "5.0.0",
     "lodash": "4.17.21"
   },
   "devDependencies": {
     "@akashic/eslint-config": "2.1.0",
-    "@types/commander": "2.12.2",
     "@types/ini": "1.3.34",
     "@types/lodash": "4.17.9",
     "@types/mock-fs": "4.13.4",

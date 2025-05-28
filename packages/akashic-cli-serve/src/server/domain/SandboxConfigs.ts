@@ -1,11 +1,11 @@
 import * as fs from "fs";
 import * as path from "path";
 import type { NormalizedSandboxConfiguration, SandboxConfiguration } from "@akashic/sandbox-configuration";
-import * as  sandboxConfigUtils  from "@akashic/sandbox-configuration/lib/utils";
+import * as  sandboxConfigUtils  from "@akashic/sandbox-configuration/lib/utils/index.js";
 import * as chokidar from "chokidar";
-import type { SandboxConfigExternalDefinition } from "../../common/types/NicoliveCommentConfig";
-import { BadRequestError, NotFoundError } from "../common/ApiError";
-import { dynamicRequire } from "./dynamicRequire";
+import type { SandboxConfigExternalDefinition } from "../../common/types/NicoliveCommentConfig.js";
+import { BadRequestError, NotFoundError } from "../common/ApiError.js";
+import { dynamicRequire } from "./dynamicRequire.js";
 
 interface ResolvedSandboxConfig extends NormalizedSandboxConfiguration, SandboxConfigExternalDefinition {
 	// backgroundImage がローカルファイルの場合、クライアントからは GET /contents/:contentId/sandboxConfig/backgroundImage で取得される。その場合のローカルファイルのパスをここに保持する。

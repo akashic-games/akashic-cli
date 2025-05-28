@@ -1,5 +1,5 @@
 import type { MessageEventIndex, EventCode, EventIndex, MessageEvent, Event } from "@akashic/playlog";
-import type { NicoliveCommentEventComment } from "./types/NicoliveCommentPlugin";
+import type { NicoliveCommentEventComment } from "./types/NicoliveCommentPlugin.js";
 
 // serve (のクライアント側) は isolatedModules: true のため、
 // const enum で定義されている EventCode は「値として」は参照できない (コンパイルエラーになる)。
