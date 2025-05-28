@@ -83,22 +83,29 @@ export const DevtoolContainer = observer(class DevtoolContainer extends React.Co
 				onMouseLeaveEntityItem: operator.devtool.clearHighlightedEntity
 			}}
 			niconicoDevtoolProps={{
-				isAutoSendEvent: devtoolUiStore.isAutoSendEvent,
-				emulatingShinichibaMode: devtoolUiStore.emulatingShinichibaMode,
-				totalTimeLimitInputValue: devtoolUiStore.totalTimeLimitInputValue,
-				totalTimeLimit: devtoolUiStore.totalTimeLimit!,
-				playDuration: play.duration,
-				usePreferredTimeLimit: devtoolUiStore.usePreferredTotalTimeLimit,
-				stopsGameOnTimeout: devtoolUiStore.stopsGameOnTimeout,
-				score: devtoolUiStore.score,
-				playThreshold: devtoolUiStore.playThreshold,
-				clearThreshold: devtoolUiStore.clearThreshold,
-				preferredTotalTimeLimit: devtoolUiStore.preferredTotalTimeLimit,
-				onAutoSendEventsChanged: operator.devtool.toggleAutoSendEvents,
-				onModeSelectChanged: operator.devtool.setSupportedMode,
-				onUsePreferredTotalTimeLimitChanged: operator.devtool.toggleUsePreferredTotalTimeLimit,
-				onUseStopGameChanged: operator.devtool.toggleUseStopGame,
-				onTotalTimeLimitInputValueChanged: operator.devtool.setTotalTimeLimitInputValue
+				activePage: devtoolUiStore.niconicoToolActivePage,
+				selectorWidth: devtoolUiStore.niconicoToolSelectorWidth,
+				rankingPageProps: {
+					isAutoSendEvent: devtoolUiStore.isAutoSendEvent,
+					emulatingShinichibaMode: devtoolUiStore.emulatingShinichibaMode,
+					totalTimeLimitInputValue: devtoolUiStore.totalTimeLimitInputValue,
+					totalTimeLimit: devtoolUiStore.totalTimeLimit!,
+					playDuration: play.duration,
+					usePreferredTimeLimit: devtoolUiStore.usePreferredTotalTimeLimit,
+					stopsGameOnTimeout: devtoolUiStore.stopsGameOnTimeout,
+					score: devtoolUiStore.score,
+					playThreshold: devtoolUiStore.playThreshold,
+					clearThreshold: devtoolUiStore.clearThreshold,
+					preferredTotalTimeLimit: devtoolUiStore.preferredTotalTimeLimit,
+					onAutoSendEventsChanged: operator.devtool.toggleAutoSendEvents,
+					onModeSelectChanged: operator.devtool.setSupportedMode,
+					onUsePreferredTotalTimeLimitChanged: operator.devtool.toggleUsePreferredTotalTimeLimit,
+					onUseStopGameChanged: operator.devtool.toggleUseStopGame,
+					onTotalTimeLimitInputValueChanged: operator.devtool.setTotalTimeLimitInputValue
+				},
+				commentPageProps: null,
+				onChangePage: operator.devtool.setNiconicoDevtoolActivePage,
+				onResizeSelector: operator.devtool.setNiconicoDevtoolSelectorWidth,
 			}}
 		/>;
 	}

@@ -2,7 +2,7 @@ import { createRequire } from "module";
 import * as path from "path";
 import type { AMFlowClient, RunnerManager, RunnerV1, RunnerV2, RunnerV3 } from "@akashic/headless-driver";
 import { Trigger } from "@akashic/trigger";
-import type { NicoliveCommentEventComment } from "../../common/types/NicoliveCommentPlugin";
+import type { NicoliveCommentEventComment } from "../../common/types/NicoliveCommentPlugin.js";
 import type {
 	RunnerCreateTestbedEvent,
 	RunnerRemoveTestbedEvent,
