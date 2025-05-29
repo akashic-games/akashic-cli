@@ -51,10 +51,11 @@ export class PlayOperator {
 		const dumped = play.amflow.dump();
 		const blob = new Blob([JSON.stringify(dumped)], { type: "application/json" });
 		const url = URL.createObjectURL(blob);
+		const fileName = `playlog_${play.playId}_${Date.now()}.json`;
 
 		const a = document.createElement("a");
 		a.href = url;
-		a.download = `playlog_${play.playId}.json`;
+		a.download = fileName;
 		document.body.appendChild(a);
 		a.click();
 
