@@ -63,7 +63,7 @@ export function mkdirpSync(p: string): void {
 			try {
 				stat = fs.statSync(p);
 			} catch (e1) {
-				throw e;
+				throw e1;
 			}
 			if (!stat.isDirectory())
 				throw e;
