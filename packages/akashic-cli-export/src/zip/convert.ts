@@ -163,10 +163,10 @@ export async function bundleScripts(
 		const { code, moduleIds } = chunk as OutputChunk;
 		const filePaths = moduleIds.map(p => cmn.Util.makeUnixPath(path.relative(basedir, p)));
 		return { type: "script", bundle: code, filePaths };
-	 } finally {
+	} finally {
 		if (bundle)
 			await bundle.close();
-	 }
+	}
 }
 
 function generateAssetBundleString(assets: (ScriptAssetContent | TextAssetContent)[]): string {
@@ -352,7 +352,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			gcu.removeGlobalScripts(gamejson, (filePath: string) => preservingFilePathSet.has(filePath));
 
 			if (param.bundle && param.omitUnbundledJs) {
-				 // omitUnbundledJs によって js ファイルが全て省かれる場合は警告する
+				// omitUnbundledJs によって js ファイルが全て省かれる場合は警告する
 				const noBundledJs: string[] = files.filter(p => p.endsWith(".js") && !bundledFilePaths.includes(p));
 				noBundledJs.forEach(p => {
 					if (!preservingFilePathSet.has(p)) {

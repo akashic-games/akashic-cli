@@ -18,7 +18,7 @@
     "build:template:v2": "cd src/template/template-export-html-v2 && npm install --no-package-lock && npm run build && cd ../../",
     "build:template:v3": "cd src/template/template-export-html-v3 && npm install --no-package-lock && npm run build && cd ../../",
     "build:template:ejs": "shx cp src/template/bundle-index.ejs lib/template/ && shx cp src/template/no-bundle-index.ejs lib/template/",
-    "lint": "eslint -c .eslintrc.cjs --fix \"src/**/*.ts\"",
+    "lint": "eslint \"src/**/*.ts\" --fix",
     "test": "npm run test:vitest && npm run lint",
     "test:vitest": "vitest run"
   },
@@ -35,7 +35,7 @@
   ],
   "devDependencies": {
     "@akashic/akashic-engine": "~2.6.7",
-    "@akashic/eslint-config": "2.1.0",
+    "@akashic/eslint-config": "3.0.1",
     "@akashic/sandbox-configuration": "^2.3.0",
     "@types/archiver": "5.3.4",
     "@types/ejs": "3.1.5",
@@ -44,9 +44,6 @@
     "@types/mock-fs": "4.13.4",
     "@types/node": "22.2.0",
     "@types/pngjs": "6.0.5",
-    "@typescript-eslint/eslint-plugin": "6.21.0",
-    "eslint": "8.57.0",
-    "eslint-plugin-import": "2.29.1",
     "minimatch": "5.1.6",
     "mock-fs": "5.2.0",
     "shx": "0.3.4",
