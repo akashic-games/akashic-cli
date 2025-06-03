@@ -5,6 +5,7 @@ import type {
 	PlayDeleteApiResponseData,
 	PlayPatchApiResponseData
 } from "../../common/types/ApiResponse.js";
+import type { DumpedPlaylog } from "../../common/types/DumpedPlaylog.js";
 import { BadRequestError, NotFoundError } from "../common/ApiError.js";
 import { responseSuccess } from "../common/ApiResponse.js";
 import { ServerContentLocator } from "../common/ServerContentLocator.js";
@@ -174,7 +175,13 @@ export const createHandlerToGetPlaylog = (playStore: PlayStore): express.Request
 			if (!amflow) {
 				throw new NotFoundError({ errorMessage: `PlayLog is not found. playId:${playId}` });
 			}
-			const dumpData = amflow.dump();
+			const dumpData = amflow.dump() as DumpedPlaylog;
+			const playInfo = playStore.getPlayInfo(playId);
+			if (playInfo) {
+				dumpData.__serve = {
+					duration: playInfo.durationState.duration,
+				};
+			}
 			const dumpJsonStr = JSON.stringify(dumpData);
 			const fileName = `playlog_${playId}_${Date.now()}.json`;
 

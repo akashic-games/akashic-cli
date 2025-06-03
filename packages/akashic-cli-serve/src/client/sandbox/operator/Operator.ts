@@ -1,5 +1,6 @@
-import { calculateFinishedTime } from "@akashic/amflow-util/lib/calculateFinishedTime";
+import { calculatePlayDuration } from "../../../common/playlogUtil";
 import { isServiceTypeNicoliveLike } from "../../../common/targetServiceUtil";
+import type { DumpedPlaylog } from "../../../common/types/DumpedPlaylog";
 import type { GameViewManager } from "../../akashic/GameViewManager";
 import { ServeMemoryAmflowClient } from "../../akashic/ServeMemoryAMFlowClient";
 import type { ClientContentLocator } from "../../common/ClientContentLocator";
@@ -20,7 +21,7 @@ export interface OperatorParameterObject {
 export interface StartContentParameterObject {
 	joinsSelf?: boolean;
 	isReplay?: boolean;
-	playlog?: any; // FIXME: 型をつける (DumpedPlaylog は ./src/server 以下にあるため不要な依存を避ける)
+	playlog?: DumpedPlaylog;
 }
 
 export class Operator {
@@ -74,14 +75,11 @@ export class Operator {
 
 		const amflow = new ServeMemoryAmflowClient({
 			playId: "0",
-			tickList: playlog ? playlog.tickList : null,
-			startPoints: playlog ? playlog.startPoints : null
+			tickList: playlog?.tickList ?? undefined,
+			startPoints: playlog?.startPoints ?? undefined
 		});
 
-		let playDuration = 0;
-		if (playlog) {
-			playDuration = calculateFinishedTime(playlog.tickList, playlog.startPoints[0].data.fps);
-		}
+		const playDuration = playlog ? calculatePlayDuration(playlog) : 0;
 
 		// TODO: 本来は PlayStore で生成すべきだが、現状の PlayStore は SocketIO が必須になるため PlayEntity を直接生成している
 		const playEntity = new PlayEntity({
@@ -152,7 +150,7 @@ export class Operator {
 
 				reader.onload = async (e: ProgressEvent<FileReader>) => {
 					const result = e.target?.result as string;
-					let playlog: unknown;
+					let playlog: DumpedPlaylog | undefined;
 					try {
 						playlog = JSON.parse(result);
 					} catch (error) {

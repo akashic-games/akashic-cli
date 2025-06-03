@@ -1,5 +1,19 @@
 # Change Log
 
+## 2.0.3
+
+### Patch Changes
+
+- [#1554](https://github.com/akashic-games/akashic-cli/pull/1554) [`68a2f92`](https://github.com/akashic-games/akashic-cli/commit/68a2f929a9fc04967833b610ca82d201df60b122) Thanks [@yu-ogi](https://github.com/yu-ogi)! - feat(serve): add support for playlog duration
+
+- [#1553](https://github.com/akashic-games/akashic-cli/pull/1553) [`1165411`](https://github.com/akashic-games/akashic-cli/commit/1165411463a9567bc853a2e0c93b4a69f6f1ae62) Thanks [@renovate](https://github.com/apps/renovate)! - Updated dependency `@akashic/headless-driver` to `2.17.4`.
+
+## 2.0.2
+
+### Patch Changes
+
+- [#1483](https://github.com/akashic-games/akashic-cli/pull/1483) [`c0fdad7`](https://github.com/akashic-games/akashic-cli/commit/c0fdad7105d41ebf6ce8d9b1ffab13f91df54260) Thanks [@renovate](https://github.com/apps/renovate)! - Updated dependency `@akashic/headless-driver` to `2.17.3`.
+
 ## 2.0.1
 
 ### Patch Changes
