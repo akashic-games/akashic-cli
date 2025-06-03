@@ -2,22 +2,22 @@ const eslintConfig = require("@akashic/eslint-config");
 const globals = require("globals");
 
 module.exports = [
-    ...eslintConfig,
-    {
+	...eslintConfig,
+	{
 		// ts 用
-        files: ["src/**/*.ts"],
-        languageOptions: {
-            sourceType: "module",
-            parserOptions: {
-                project: "tsconfig.test.json",
-            },
-        },
-        ignores: [
-          "**/*.js",
-          "*.ts",
-          "**/__tests__/**/*"
-        ]
-    },
+		files: ["src/**/*.ts"],
+		languageOptions: {
+			sourceType: "module",
+			parserOptions: {
+				project: "tsconfig.test.json",
+			},
+		},
+		ignores: [
+			"**/*.js",
+			"*.ts",
+			"**/__tests__/**/*"
+		]
+	},
 	{
 		// js-template 用
 		files: ["**/*.js"],

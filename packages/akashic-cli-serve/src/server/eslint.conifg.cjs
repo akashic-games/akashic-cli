@@ -8,12 +8,12 @@ module.exports = [
             sourceType: "module",
             parserOptions: {
                 project: "./tsconfig.test.json",
-				tsconfigRootDir: __dirname,
+                tsconfigRootDir: __dirname,
             }
         },
         ignores: [
-          "**/*.js",
-          "*.cjs",
+            "**/*.js",
+            "*.cjs",
         ]
     }
 ];

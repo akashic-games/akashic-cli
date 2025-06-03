@@ -9,7 +9,6 @@ module.exports = [
         plugins: {
             react,
         },
-
         languageOptions: {
             globals: {
                 ...globals.node
