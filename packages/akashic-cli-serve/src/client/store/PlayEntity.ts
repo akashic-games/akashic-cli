@@ -339,12 +339,9 @@ export class PlayEntity {
 		return this.teardown();
 	};
 
-	/* eslint-disable @typescript-eslint/indent */
-	// annotation の次行の関数式でインデントエラーとなるため disable とする。
 	@action
 	private _handleFrame = (): void => {
 		this.duration = this._timeKeeper.now();
 		// this._timerId = setTimeout(this._handleFrame, 200);
 	};
-	/* eslint-enable @typescript-eslint/indent */
 }

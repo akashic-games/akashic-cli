@@ -120,7 +120,7 @@ export const StartupScreen = observer(class StartupScreen extends React.Componen
 		try {
 			JSON.parse(argStr);
 			return true;
-		} catch (e) {
+		} catch (_e) {
 			return false;
 		}
 	}

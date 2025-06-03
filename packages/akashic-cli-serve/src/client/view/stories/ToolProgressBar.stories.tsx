@@ -25,7 +25,7 @@ const TestWithBehaviour = observer(() => (
 			</div>
 		</div>
 		<div style={{ width: 300, display: "flex", flexFlow: "row nowrap" }}>
-      		max
+			max
 			<div style={{ flex: "1 1 auto" }}>
 				<ToolProgressBar
 					max={200}
@@ -36,7 +36,7 @@ const TestWithBehaviour = observer(() => (
 			</div>
 		</div>
 		<div style={{ width: 300, display: "flex", flexFlow: "row nowrap" }}>
-      		markerValue
+			markerValue
 			<div style={{ flex: "1 1 auto" }}>
 				<ToolProgressBar
 					max={store.max}
