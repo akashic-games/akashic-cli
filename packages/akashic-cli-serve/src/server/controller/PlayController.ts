@@ -201,7 +201,8 @@ export const createHandlerToSendNamagameComment  = (playStore: PlayStore, runner
 	return async (req, res, next) => {
 		try {
 			const playId = req.params.playId;
-			const { comment, command, userID }  = req.body;
+			const { comment, userID }  = req.body;
+			const command = req.body.command || undefined;
 			const isAnonymous = maybeBoolOf(req.body.isAnonymous) ?? false;
 			const vpos = req.body.vpos ?? parseInt(req.body.vpos, 10);
 
