@@ -1,7 +1,6 @@
 import type { AMFlow } from "@akashic/amflow";
 import { TickIndex, type Tick } from "@akashic/playlog";
 import { Trigger } from "@akashic/trigger";
-import { callOrThrow } from "../../../common/callOrThrow.js";
 import { createNamagameCommentEvent } from "../../../common/PlaylogShim.js";
 import type { NamagameCommentConfig, NamagameCommentConfigComment } from "../../../common/types/NamagameCommentConfig.js";
 import type { NamagameCommentEventComment, NamagameCommentPlugin } from "../../../common/types/NamagameCommentPlugin.js";
@@ -139,4 +138,20 @@ function arrayMapAdd<K, V>(map: Map<K, V[]>, k: K, v: V): void {
 		map.get(k)?.push(v);
 	else
 		map.set(k, [v]);
+}
+
+/**
+ * callback が関数であるなら err を与えて呼び出す。でなければ err を throw する。
+ *
+ * 以下すべてを満たす時に利用すること。
+ * (a) エラー通知用のコールバックが省略可能で、必ずしもそれでエラー通知ができない
+ * (b) err がロジックエラー (コンテンツ開発者の対応が必要) であり、serve としてはゲーム開発者が確実に気づける形が望ましい
+ * (c) 通知したいエラーが同期的に発生している
+ */
+export function callOrThrow(callback: ((err?: Error) => void) | null | undefined, err: Error): void {
+	if (callback) {
+		callback(err);
+	} else {
+		throw err;
+	}
 }

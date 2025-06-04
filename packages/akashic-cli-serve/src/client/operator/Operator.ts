@@ -62,7 +62,6 @@ export class Operator {
 
 	async bootstrap(contentLocator?: ClientContentLocator): Promise<void> {
 		await this._initializePlugins(contentLocator || this.store.contentStore.defaultContent().locator);
-
 		const store = this.store;
 		const initialJoinPlayer = (isServiceTypeNicoliveLike(store.targetService) && store.player) || undefined;
 		let play: PlayEntity | null = null;
