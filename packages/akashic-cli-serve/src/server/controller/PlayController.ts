@@ -202,8 +202,8 @@ export const createHandlerToSendNamagameComment  = (playStore: PlayStore, runner
 		try {
 			const playId = req.params.playId;
 			const { comment, command, userID }  = req.body;
-			const isAnonymous = maybeBoolOf(req.body.isAnonymous);
-			const isOperatorComment = maybeBoolOf(req.body.isOperatorComment);
+			const isAnonymous = maybeBoolOf(req.body.isAnonymous) ?? false;
+			const vpos = req.body.vpos ?? parseInt(req.body.vpos, 10);
 
 			if (!playId) {
 				throw new BadRequestError({ errorMessage: "Invalid runnerId" });
@@ -217,7 +217,7 @@ export const createHandlerToSendNamagameComment  = (playStore: PlayStore, runner
 				throw new BadRequestError({ errorMessage: `No runner for ${playId}` });
 			}
 
-			const success = runnerStore.sendComment(runnerId, { comment, command, userID, isAnonymous, isOperatorComment });
+			const success = runnerStore.sendComment(runnerId, { comment, command, userID, isAnonymous, vpos });
 			responseSuccess<boolean>(res, 200, success);
 		} catch (e) {
 			next(e);

@@ -1,11 +1,11 @@
 // TODO sandbox-configuration に移動
 
 /**
- * コメントツールから送信・自動送信される各コメントの内容
+ * akashic serve のコメントツールから送信・自動送信される各コメントの内容
  *
  * コメントツールはここで指定されたとおりに扱う。
  * 実際のコメントが満たす制約については NamagameCommentPlugin.ts の `NamagameComment` を参照のこと。
- * (たとえば `isOperatorComment` が真の場合 `userID` は省略されるが、この設定はその制約を無視できる)
+ * (たとえば `isAnonymous` が真の場合 `userID` の値はハッシュ化されるが、その制約はここでは強制されない)
  */
 export interface NamagameCommentConfigComment {
 	/**
@@ -21,19 +21,19 @@ export interface NamagameCommentConfigComment {
 	/**
 	 * コメントを送信したユーザの ID 。
 	 */
-	userID?: string;
+	userID: string;
 
 	/**
-	 * なふだ機能が OFF であるか否か。
-	 * 省略された場合、コンテンツは偽として扱う必要がある。
+	 * 匿名コメントか否か。
+	 * 省略された場合、偽として扱われる。
 	 */
 	isAnonymous?: boolean;
 
 	/**
-	 * 放送者コメントであるか。
-	 * 省略された場合、コンテンツは偽として扱う必要がある。
+	 * コメントの投稿タイミング。単位はセンチ秒。
+	 * 省略された場合、 `frame` から計算した値として扱われる。
 	 */
-	isOperatorComment?: boolean;
+	vpos?: number;
 
 	/**
 	 * このコメントの送信フレーム。

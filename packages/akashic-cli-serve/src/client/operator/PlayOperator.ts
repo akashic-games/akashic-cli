@@ -120,17 +120,16 @@ export class PlayOperator {
 	};
 
 	sendEditorNamagameCommentEvent = async (): Promise<void> => {
-		const { commandInput: command, commentInput: comment, senderType } = this.store.devtoolUiStore.commentPage;
-		if (!comment) return;
+		const { currentPlay } = this.store;
+		const { commandInput: command, commentInput: comment, asAnonymous } = this.store.devtoolUiStore.commentPage;
+		if (!currentPlay || !comment) return;
 
-		const cmt: NamagameCommentEventComment =
-			senderType === "anonymous" ?
-				{ command, comment, isAnonymous: true, userID: this.store.hashedPlayerId! } :
-			senderType === "operator" ?
-				{ command, comment, isOperatorComment: true } :
-				{ command, comment, isAnonymous: false, userID: this.store.player?.id };
+		const vpos = Math.floor(currentPlay.duration / 10);
+		const cmt: NamagameCommentEventComment = asAnonymous  ?
+				{ command, comment, isAnonymous: true, userID: this.store.hashedPlayerId!, vpos } :
+				{ command, comment, isAnonymous: false, userID: this.store.player!.id, vpos };
 		this.store.devtoolUiStore.commentPage.setCommentInput("");
-		return this.store.currentPlay?.sendNamagameComment(cmt);
+		return currentPlay.sendNamagameComment(cmt);
 	};
 
 	sendRegisteredNamagameCommentEvent = async (name: string): Promise<void> => {
