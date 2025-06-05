@@ -65,9 +65,8 @@ export const NiconicoDevtoolCommentPage = observer(function NiconicoDevtoolComme
 					</div> :
 					<div className={styles["disabled-message"]}>
 						<div>
-							NamagameComment plugin is either not enabled or not started.<br/>
-							(<code>g.game.external.namagameComment.start()</code>
-							to send/list comments here.)
+							NamagameComment plugin is not enabled.<br/>
+							(<code>environment.external.namagameComment</code> must be set in game.json to send/list comments here.)
 						</div>
 					</div>
 			}
