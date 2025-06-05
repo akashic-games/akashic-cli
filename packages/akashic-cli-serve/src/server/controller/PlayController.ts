@@ -164,7 +164,7 @@ export const createHandlerToSendEvent = (playStore: PlayStore, toLatestPlay: boo
 	};
 };
 
-export const createHandlerToSendNicoliveCommentByTemplate = (playStore: PlayStore, runnerStore: RunnerStore): express.RequestHandler => {
+export const createHandlerToSendNamagameCommentByTemplate = (playStore: PlayStore, runnerStore: RunnerStore): express.RequestHandler => {
 	return async (req, res, next) => {
 		try {
 			const playId = req.params.playId;
@@ -197,7 +197,7 @@ function maybeBoolOf(s: string): boolean | undefined {
 	return (s === "true") || (s === "false" ? false : undefined);
 }
 
-export const createHandlerToSendNicoliveComment  = (playStore: PlayStore, runnerStore: RunnerStore): express.RequestHandler => {
+export const createHandlerToSendNamagameComment  = (playStore: PlayStore, runnerStore: RunnerStore): express.RequestHandler => {
 	return async (req, res, next) => {
 		try {
 			const playId = req.params.playId;

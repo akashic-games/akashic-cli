@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import type { NicoliveCommentEventComment } from "../../../common/types/NicoliveCommentPlugin";
+import type { NamagameCommentEventComment } from "../../../common/types/NamagameCommentPlugin";
 import type {
 	NiconicoDevtoolCommentPageSenderLimitation,
 	NiconicoDevtoolCommentPageSenderType
@@ -9,7 +9,7 @@ import { ToolChoiceButton, type ToolChoiceButtonItem } from "../atom/ToolChoiceB
 import styles from "./NiconicoDevtoolCommentPage.module.css";
 
 export interface NiconicoDevtoolCommentPagePropsModel {
-	comments: NicoliveCommentEventComment[];
+	comments: NamagameCommentEventComment[];
 	templates: string[];
 	isEnabled: boolean;
 	senderType: NiconicoDevtoolCommentPageSenderType;
@@ -77,8 +77,8 @@ export const NiconicoDevtoolCommentPage = observer(function NiconicoDevtoolComme
 					</div> :
 					<div className={styles["disabled-message"]}>
 						<div>
-							NicoliveComment plugin is either not enabled or not started.<br/>
-							(<code>g.game.external.nicoliveComment.start()</code>
+							NamagameComment plugin is either not enabled or not started.<br/>
+							(<code>g.game.external.namagameComment.start()</code>
 							to send/list comments here.)
 						</div>
 					</div>
@@ -144,7 +144,7 @@ export const NiconicoDevtoolCommentPage = observer(function NiconicoDevtoolComme
 });
 
 interface CommentRowProps {
-	comment: NicoliveCommentEventComment;
+	comment: NamagameCommentEventComment;
 	index: number;
 }
 

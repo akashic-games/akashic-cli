@@ -1,6 +1,6 @@
 import type { NormalizedSandboxConfiguration } from "@akashic/sandbox-configuration";
 import { isServiceTypeNicoliveLike } from "../../common/targetServiceUtil";
-import type { SandboxConfigExternalDefinition } from "../../common/types/NicoliveCommentConfig";
+import type { SandboxConfigExternalDefinition } from "../../common/types/NamagameCommentConfig";
 import type { Player } from "../../common/types/Player";
 import type { PlayBroadcastTestbedEvent } from "../../common/types/TestbedEvent";
 import type { GameViewManager } from "../akashic/GameViewManager";
@@ -8,7 +8,7 @@ import type { PlayerInfoResolverResultMessage } from "../akashic/plugin/CoeLimit
 import { CoeLimitedPlugin } from "../akashic/plugin/CoeLimitedPlugin";
 import type { CreateCoeLocalInstanceParameterObject } from "../akashic/plugin/CoePlugin";
 import { CoePlugin } from "../akashic/plugin/CoePlugin";
-import { NicoliveCommentClientPlugin } from "../akashic/plugin/NicoliveCommentClientPlugin";
+import { NamagameCommentClientPlugin } from "../akashic/plugin/NamagameCommentClientPlugin";
 import { NicoPlugin } from "../akashic/plugin/NicoPlugin";
 import { SendPlugin } from "../akashic/plugin/SendPlugin";
 import { apiClient } from "../api/apiClientInstance";
@@ -137,7 +137,7 @@ export class Operator {
 		}
 
 		const sandboxConfig = play.content.sandboxConfig as NormalizedSandboxConfiguration & SandboxConfigExternalDefinition;
-		const commentTemplateNames = Object.keys(sandboxConfig.external?.nicoliveComment?.templates || []);
+		const commentTemplateNames = Object.keys(sandboxConfig.external?.namagameComment?.templates || []);
 		this.devtool.resetCommentPage(
 			commentTemplateNames,
 			isNicoliveBroadcaster ? "operator" : "anonymous",
@@ -279,13 +279,13 @@ export class Operator {
 
 	//  TODO: 複数のコンテンツ対応。引数の contentLocator は複数コンテンツに対応していないが暫定とする
 	private async _initializePlugins(contentLocator: ClientContentLocator): Promise<void> {
-		const commentPlugin = new NicoliveCommentClientPlugin();
+		const commentPlugin = new NamagameCommentClientPlugin();
 		commentPlugin.onStartStop.add(started => {
 			this.devtool.setCommentPageIsEnabled(started);
 			if (started) {
-				this.devtool.startWatchNicoliveComment();
+				this.devtool.startWatchNamagameComment();
 			} else {
-				this.devtool.stopWatchNicoliveComment();
+				this.devtool.stopWatchNamagameComment();
 			}
 		});
 

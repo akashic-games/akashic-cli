@@ -10,8 +10,8 @@ import {
 	createHandlerToGetPlaylog,
 	createHandlerToPatchAudioState,
 	createHandlerToSendEvent,
-	createHandlerToSendNicoliveCommentByTemplate,
-	createHandlerToSendNicoliveComment
+	createHandlerToSendNamagameCommentByTemplate,
+	createHandlerToSendNamagameComment
 } from "../controller/PlayController.js";
 import { createHandlerToRegisterPlayerId } from "../controller/PlayerIdController.js";
 import { createHandlerToCreatePlayToken } from "../controller/PlayTokenController.js";
@@ -43,8 +43,8 @@ export const createApiRouter = (params: ApiRouterParameterObject): express.Route
 	apiRouter.get("/plays", createHandlerToGetPlays(params.playStore));
 	apiRouter.delete("/plays/:playId(\\d+)", createHandlerToDeletePlay(params.playStore));
 	apiRouter.patch("/plays/:playId(\\d+)", createHandlerToPatchPlay(params.playStore));
-	apiRouter.post("/plays/:playId/comment-template", createHandlerToSendNicoliveCommentByTemplate(params.playStore, params.runnerStore));
-	apiRouter.post("/plays/:playId/comment", createHandlerToSendNicoliveComment(params.playStore, params.runnerStore));
+	apiRouter.post("/plays/:playId/comment-template", createHandlerToSendNamagameCommentByTemplate(params.playStore, params.runnerStore));
+	apiRouter.post("/plays/:playId/comment", createHandlerToSendNamagameComment(params.playStore, params.runnerStore));
 
 	apiRouter.post("/plays/:playId(\\d+)/token", createHandlerToCreatePlayToken(params.amflowManager));
 	apiRouter.post("/plays/:playId(\\d+)/broadcast", createHandlerToBroadcast(params.io));
