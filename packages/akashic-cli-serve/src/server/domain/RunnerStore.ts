@@ -73,7 +73,7 @@ export class RunnerStore {
 		let externalValue: { [name: string]: unknown } = {};
 		let namagameCommentPluginHost: NamagameCommentPluginHost | null = null;
 		if (gameConfig.environment?.external?.namagameComment) {
-			const fps = gameConfig.fps ?? 30;;
+			const fps = gameConfig.fps ?? 30;
 			namagameCommentPluginHost = new NamagameCommentPluginHost(sandboxConfig.external?.namagameComment ?? {}, amflow, fps);
 			namagameCommentPluginHost.onStartStop.add(started => this.onNamagameCommentPluginStartStop.fire({ playId, started }));
 			externalValue.namagameComment = namagameCommentPluginHost.plugin;

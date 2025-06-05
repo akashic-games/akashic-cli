@@ -202,12 +202,15 @@ export const createHandlerToSendNamagameComment  = (playStore: PlayStore, runner
 		try {
 			const playId = req.params.playId;
 			const { comment, userID }  = req.body;
-			const command = req.body.command || undefined;
+			const command = req.body.command || undefined; // 空文字列は undefined にする
 			const isAnonymous = maybeBoolOf(req.body.isAnonymous) ?? false;
-			const vpos = req.body.vpos ?? parseInt(req.body.vpos, 10);
+			const vpos = req.body.vpos;
 
 			if (!playId) {
 				throw new BadRequestError({ errorMessage: "Invalid runnerId" });
+			}
+			if (typeof vpos !== "number" || isNaN(vpos)) {
+				throw new BadRequestError({ errorMessage: `Invalid vpos: ${vpos}` });
 			}
 			const playInfo = playStore.getPlayInfo(playId);
 			if (!playInfo) {
