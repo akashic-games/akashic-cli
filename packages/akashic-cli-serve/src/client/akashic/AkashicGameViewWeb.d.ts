@@ -74,7 +74,7 @@ declare module ae {
 	interface WeakRefKVSOrObjectTableLike {
 		get?(id: number): ae.ELike;  // WeakRefKVS 以降後用
 		[id: number]: ae.ELike; // 旧バージョン用
-	  }
+	}
 }
 
 declare module agv {

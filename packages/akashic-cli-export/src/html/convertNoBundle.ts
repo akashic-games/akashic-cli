@@ -51,7 +51,7 @@ export async function promiseConvertNoBundle(options: ConvertTemplateParameterOb
 		try {
 			options.sandboxConfigJsCode = readSandboxConfigJs(options.source);
 			sandboxConfig = require(path.join(options.source, "sandbox.config.js"));
-		} catch (error) {
+		} catch (_error) {
 			throw Error("failed read sandbox.config.js.");
 		}
 		validateSandboxConfigJs(sandboxConfig, options.autoSendEventName, options.autoGivenArgsName);

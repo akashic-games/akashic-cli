@@ -191,7 +191,6 @@ export class GameViewManager {
 function createPlatformCustomizer(content: ServeGameContent): (platform: Platform, options: any) => void {
 	return (platform: Platform, options: any): void => {
 		const scriptAssetClass = options.g.ScriptAsset || NullScriptAssetV3;
-		// eslint-disable-next-line @typescript-eslint/naming-convention
 		const TestbedScriptAsset = generateTestbedScriptAsset(scriptAssetClass);
 		platform._resourceFactory.createScriptAsset = (id: string, assetPath: string, exports?: string[]) => {
 			return new TestbedScriptAsset(

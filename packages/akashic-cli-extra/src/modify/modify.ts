@@ -51,7 +51,7 @@ export async function promiseModifyBasicParameter(param: ModifyBasicParameterPar
 	let content = {} as cmn.GameConfiguration;
 	try {
 		content = await cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join(process.cwd(), "game.json"));
-	} catch (e) {
+	} catch (_e) {
 		logger.info("No game.json found. Create a new one.");
 	}
 

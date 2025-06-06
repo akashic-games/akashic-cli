@@ -17,7 +17,6 @@ export function copyContentFiles(src: string, dest: string): void {
 
 	fs.copyFileSync(gameJsonPath, path.resolve(dest, "game.json"));
 
-	/* eslint-disable @typescript-eslint/no-var-requires */
 	const gameConfiguration = require(gameJsonPath);
 	const assetPaths = extractAssetPaths({
 		gameConfiguration,

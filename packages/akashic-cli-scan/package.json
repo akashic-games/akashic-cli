@@ -8,7 +8,7 @@
     "prepublish": "npm run clean && npm run build",
     "clean": "shx rm -rf lib && shx rm -rf spec/build",
     "build": "tsc -p ./",
-    "lint": "eslint -c .eslintrc.cjs --fix \"./src/**/*.ts\"",
+    "lint": "eslint \"./src/**/*.ts\" --fix",
     "test": "npm run test:vitest && npm run lint",
     "test:vitest": "vitest run"
   },
@@ -22,14 +22,11 @@
     "lib"
   ],
   "devDependencies": {
-    "@akashic/eslint-config": "2.1.0",
+    "@akashic/eslint-config": "3.0.1",
     "@akashic/game-configuration": "2.5.0",
     "@types/image-size": "0.8.0",
     "@types/mock-fs": "4.13.4",
     "@types/node": "18.19.44",
-    "@typescript-eslint/eslint-plugin": "6.21.0",
-    "eslint": "8.57.0",
-    "eslint-plugin-import": "2.29.1",
     "mock-fs": "5.2.0",
     "shx": "0.3.4",
     "typescript": "5.5.4",

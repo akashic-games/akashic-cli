@@ -4,7 +4,7 @@ import * as hld from "@akashic/headless-driver";
 import type { Event, Tick, TickList } from "@akashic/playlog";
 import getPort from "get-port";
 import * as socketio from "socket.io";
-import io from "socket.io-client";
+import io from "socket.io-client"; // eslint-disable-line import/no-named-as-default
 import { SocketIOAMFlowClient } from "../../client/akashic/SocketIOAMFlowClient.js";
 import { ServerContentLocator } from "../common/ServerContentLocator.js";
 import { PlayStore } from "../domain/PlayStore.js";

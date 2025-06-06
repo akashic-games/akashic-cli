@@ -50,7 +50,7 @@ export class Storage {
 			try {
 				const sessionData = window.sessionStorage.getItem(Storage.SESSION_STORAGE_KEY) || "{}";
 				s = JSON.parse(sessionData);
-			} catch (e) {
+			} catch (_e) {
 				s = {};
 			}
 		}

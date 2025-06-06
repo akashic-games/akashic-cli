@@ -36,7 +36,7 @@ export module NodeModules {
 			try {
 				if (!fs.lstatSync(packageJsonPath).isFile()) return;
 				packageJsonPaths.push(Util.makeUnixPath(path.relative(basepath, packageJsonPath)));
-			} catch (e) { /* nothing */ }
+			} catch (_e) { /* nothing */ }
 		});
 		return packageJsonPaths;
 	}
@@ -50,7 +50,7 @@ export module NodeModules {
 			try {
 				const { mainScriptPath, moduleName } = NodeModules.extractModuleMainInfo(packageJsonFile);
 				moduleMainScripts[moduleName] = Util.makeUnixPath(mainScriptPath);
-			} catch (e) {
+			} catch (_e) {
 				// do nothing
 			}
 		}
@@ -66,7 +66,7 @@ export module NodeModules {
 			try {
 				const { mainScriptPath } = NodeModules.extractModuleMainInfo(packageJsonFile);
 				moduleMainPaths[packageJsonFile] = Util.makeUnixPath(mainScriptPath);
-			} catch (e) {
+			} catch (_e) {
 				// do nothing
 			}
 		}

@@ -6,7 +6,6 @@ export function dynamicRequire<T>(path: string, isDeleteCache?: boolean): T | nu
 	let ret: T | null = null;
 	try {
 		if (isDeleteCache) delete require.cache[path];
-		// eslint-disable-next-line @typescript-eslint/no-var-requires
 		ret = require(path) as T;
 	} catch (e) {
 		if (e.code !== "MODULE_NOT_FOUND")

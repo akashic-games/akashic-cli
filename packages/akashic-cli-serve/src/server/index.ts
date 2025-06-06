@@ -445,7 +445,6 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 		// 現状 playlog は一つしか受け取らない。それは contentId: 0 のコンテンツの playlog として扱う。
 		const contentLocator = new ServerContentLocator({contentId: "0"});
 		try {
-			// eslint-disable-next-line @typescript-eslint/no-var-requires
 			const playlog = require(absolutePath) as DumpedPlaylog;
 			loadedPlaylogPlayId = await playStore.createPlay({ contentLocator, playlog });
 		} catch (e) {

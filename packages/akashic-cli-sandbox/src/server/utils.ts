@@ -11,7 +11,6 @@ export function resolveEngineFilesVariable(version: SandboxRuntimeVersion): stri
 		const filename = path.basename(process.env.ENGINE_FILES_V3_PATH, ".js");
 		engineFilesVariable = filename.replace(/[\.-]/g, "_");
 	} else {
-		// eslint-disable-next-line @typescript-eslint/no-var-requires
 		const engineFilesPkgJson = require(`engine-files-v${version}/package.json`);
 		engineFilesVariable = `engineFilesV${engineFilesPkgJson.version.replace(/[\.-]/g, "_")}`;
 	}
