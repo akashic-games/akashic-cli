@@ -24,9 +24,6 @@ module.exports = [
 		languageOptions: {
 			globals: {
 				...globals.browser,
-				...globals.commonjs,
-				...globals.node,
-
 				"Atomics": "readonly",
 				"SharedArrayBuffer": "readonly",
 				"Promise": "readonly",
