@@ -64,16 +64,17 @@ export class RunnerStore {
 	}
 
 	async createAndStartRunner(params: CreateAndStartRunnerParameterObject): Promise<RunnerV1 | RunnerV2 | RunnerV3> {
-		const sandboxConfig = sandboxConfigs.get(params.contentId);
-		const gameConfig = gameConfigs.get(params.contentId);
+		const { playId, amflow, contentId } = params;
+		const sandboxConfig = sandboxConfigs.get(contentId);
+		const gameConfig = gameConfigs.get(contentId);
 		const externalAssets = (sandboxConfig ? sandboxConfig.externalAssets : undefined) === undefined ? [] : sandboxConfig.externalAssets;
-		const allowedUrls = this.createAllowedUrls(params.contentId, externalAssets);
+		const allowedUrls = this.createAllowedUrls(contentId, externalAssets);
 
 		let externalValue: { [name: string]: unknown } = {};
 		let namagameCommentPluginHost: NamagameCommentPluginHost | null = null;
 		if (gameConfig.environment?.external?.namagameComment) {
-			const { playId } = params;
-			namagameCommentPluginHost = new NamagameCommentPluginHost(sandboxConfig.external?.namagameComment ?? {}, params.amflow);
+			const fps = gameConfig.fps ?? 30;
+			namagameCommentPluginHost = new NamagameCommentPluginHost(sandboxConfig.external?.namagameComment ?? {}, amflow, fps);
 			namagameCommentPluginHost.onStartStop.add(started => this.onNamagameCommentPluginStartStop.fire({ playId, started }));
 			externalValue.namagameComment = namagameCommentPluginHost.plugin;
 		}
@@ -89,8 +90,8 @@ export class RunnerStore {
 		}
 
 		const runnerId = await this.runnerManager.createRunner({
-			playId: params.playId,
-			amflow: params.amflow,
+			playId,
+			amflow,
 			executionMode: params.isActive ? "active" : "passive",
 			playToken: params.token,
 			allowedUrls,
@@ -98,20 +99,17 @@ export class RunnerStore {
 			trusted: !serverGlobalConfig.untrusted
 		});
 		if (params.isActive) {
-			params.amflow.onPutStartPoint.add((startPoint) => {
-				this.onRunnerPutStartPoint.fire({ startPoint, playId: params.playId });
+			amflow.onPutStartPoint.add((startPoint) => {
+				this.onRunnerPutStartPoint.fire({ startPoint, playId });
 			});
 		}
 
 		const runner = this.runnerManager.getRunner(runnerId)!;
 		await this.runnerManager.startRunner(runner.runnerId, { paused: params.isPaused });
-		this.runnerEntities[runnerId] = {
-			playId: params.playId,
-			namagameCommentPluginHost,
-		};
-		this.onRunnerCreate.fire({ playId: params.playId, runnerId, isActive: params.isActive });
+		this.runnerEntities[runnerId] = { playId, namagameCommentPluginHost };
+		this.onRunnerCreate.fire({ playId, runnerId, isActive: params.isActive });
 		if (params.isPaused)
-			this.onRunnerPause.fire({ playId: params.playId, runnerId });
+			this.onRunnerPause.fire({ playId, runnerId });
 		return runner;
 	}
 

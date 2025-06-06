@@ -137,7 +137,7 @@ export class ApiClient {
 	async requestToSendNamagameComment(playId: string, comment: NamagameCommentEventComment): Promise<PlaySendNamagameCommentResponse> {
 		return ApiRequest.post<PlaySendNamagameCommentResponse>(
 			`${this._baseUrl}/api/plays/${playId}/comment`,
-			{ ...comment, isAnonymous: comment.isAnonymous?.toString(), isOperatorComment: comment.isOperatorComment?.toString() }
+			{ ...comment, isAnonymous: comment.isAnonymous?.toString() }
 		);
 	};
 

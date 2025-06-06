@@ -1,7 +1,6 @@
 import { isNamagameCommentEvent, MessageEventIndexData } from "../../common/PlaylogShim";
 import type { OnTickArguments } from "../akashic/ServeGameContent";
 import type { EDumpItem } from "../common/types/EDumpItem";
-import type { NiconicoDevtoolCommentPageSenderLimitation, NiconicoDevtoolCommentPageSenderType } from "../store/DevtoolUiCommentPageStore";
 import type { Store } from "../store/Store";
 import type { NiconicoDevtoolPageType } from "../view/molecule/NiconicoDevtool";
 
@@ -159,23 +158,21 @@ export class DevtoolOperator {
 
 	resetCommentPage = (
 		templates: string[],
-		senderType: NiconicoDevtoolCommentPageSenderType,
-		senderLimitation: NiconicoDevtoolCommentPageSenderLimitation
+		asAnonymous: boolean
 	): void => {
 		const commentPageStore = this.store.devtoolUiStore.commentPage;
 		commentPageStore.resetComments();
 		commentPageStore.setTemplates(templates);
 		commentPageStore.setIsEnabled(false);
-		commentPageStore.setSenderType(senderType);
-		commentPageStore.setSenderLimitation(senderLimitation);
+		commentPageStore.setAsAnonymous(asAnonymous);
 	};
 
 	setCommentPageIsEnabled = (isEnabled: boolean): void => {
 		this.store.devtoolUiStore.commentPage.setIsEnabled(isEnabled);
 	};
 
-	setCommentPageSenderType = (senderType: NiconicoDevtoolCommentPageSenderType): void => {
-		this.store.devtoolUiStore.commentPage.setSenderType(senderType);
+	setCommentPageAsAnonymous = (asAnonymous: boolean): void => {
+		this.store.devtoolUiStore.commentPage.setAsAnonymous(asAnonymous);
 	};
 
 	setCommentPageCommandInput = (input: string): void => {

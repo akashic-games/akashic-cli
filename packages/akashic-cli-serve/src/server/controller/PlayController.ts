@@ -201,12 +201,16 @@ export const createHandlerToSendNamagameComment  = (playStore: PlayStore, runner
 	return async (req, res, next) => {
 		try {
 			const playId = req.params.playId;
-			const { comment, command, userID }  = req.body;
-			const isAnonymous = maybeBoolOf(req.body.isAnonymous);
-			const isOperatorComment = maybeBoolOf(req.body.isOperatorComment);
+			const { comment, userID }  = req.body;
+			const command = req.body.command || undefined; // 空文字列は undefined にする
+			const isAnonymous = maybeBoolOf(req.body.isAnonymous) ?? false;
+			const vpos = req.body.vpos;
 
 			if (!playId) {
 				throw new BadRequestError({ errorMessage: "Invalid runnerId" });
+			}
+			if (typeof vpos !== "number" || isNaN(vpos)) {
+				throw new BadRequestError({ errorMessage: `Invalid vpos: ${vpos}` });
 			}
 			const playInfo = playStore.getPlayInfo(playId);
 			if (!playInfo) {
@@ -217,7 +221,7 @@ export const createHandlerToSendNamagameComment  = (playStore: PlayStore, runner
 				throw new BadRequestError({ errorMessage: `No runner for ${playId}` });
 			}
 
-			const success = runnerStore.sendComment(runnerId, { comment, command, userID, isAnonymous, isOperatorComment });
+			const success = runnerStore.sendComment(runnerId, { comment, command, userID, isAnonymous, vpos });
 			responseSuccess<boolean>(res, 200, success);
 		} catch (e) {
 			next(e);

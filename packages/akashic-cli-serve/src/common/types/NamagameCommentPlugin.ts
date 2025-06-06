@@ -2,46 +2,35 @@
 
 /**
  * コメントデータ。
- *
- * すべてのフィールドは省略される可能性がある。
- * 利用者は、必要なフィールドが存在するかどうかを確認してから利用すること。
  */
 export interface NamagameCommentEventComment {
 	/**
 	 * コメント本文。
 	 */
-	comment?: string;
+	comment: string;
 
 	/**
 	 * コメントのコマンド指定。(e.g. "shita big red")
+	 * 指定がない場合は省略される。
 	 */
 	command?: string;
 
 	/**
 	 * コメントを送信したユーザ ID 。
-	 *
-	 * 次のいずれかの場合、省略される:
-	 *  - 放送者コメントである場合
-	 * 次の場合、匿名化された値になる:
-	 *  - 「なふだ機能」が OFF のコメントである場合
+	 * isAnonymous が true の場合はハッシュ化された値が入る。
 	 */
-	userID?: string;
+	userID: string;
 
 	/**
-	 * 「なふだ機能」が OFF であるか否か。
-	 *
-	 * 次のいずれかの場合、省略される:
-	 *  - 放送者コメントである場合
+	 * 匿名コメントであるか否か。
 	 */
-	isAnonymous?: boolean;
+	isAnonymous: boolean;
 
 	/**
-	 * 放送者コメントであるか否か。
-	 *
-	 * 次のいずれかの場合、省略される:
-	 *  - 放送者コメントでない場合
+	 * コメントの投稿タイミング。
+	 * 単位はセンチ秒。
 	 */
-	isOperatorComment?: boolean;
+	vpos: number;
 }
 
 /**
