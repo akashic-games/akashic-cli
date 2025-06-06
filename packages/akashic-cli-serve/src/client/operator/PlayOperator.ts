@@ -1,6 +1,6 @@
 import { toJS as mobxToJS } from "mobx";
 import type { PlayPatchApiResponse } from "../../common/types/ApiResponse";
-import type { NicoliveCommentEventComment } from "../../common/types/NicoliveCommentPlugin";
+import type { NamagameCommentEventComment } from "../../common/types/NamagameCommentPlugin";
 import * as Subscriber from "../api/Subscriber";
 import type { Store } from "../store/Store";
 
@@ -119,22 +119,21 @@ export class PlayOperator {
 		return this.store.currentPlay!.unmuteAll();
 	};
 
-	sendEditorNicoliveCommentEvent = async (): Promise<void> => {
-		const { commandInput: command, commentInput: comment, senderType } = this.store.devtoolUiStore.commentPage;
-		if (!comment) return;
+	sendEditorNamagameCommentEvent = async (): Promise<void> => {
+		const { currentPlay } = this.store;
+		const { commandInput: command, commentInput: comment, asAnonymous } = this.store.devtoolUiStore.commentPage;
+		if (!currentPlay || !comment) return;
 
-		const cmt: NicoliveCommentEventComment =
-			senderType === "anonymous" ?
-				{ command, comment, isAnonymous: true, userID: this.store.hashedPlayerId! } :
-			senderType === "operator" ?
-				{ command, comment, isOperatorComment: true } :
-				{ command, comment, isAnonymous: false, userID: this.store.player?.id };
+		const vpos = Math.floor(currentPlay.duration / 10);
+		const cmt: NamagameCommentEventComment = asAnonymous  ?
+				{ command, comment, isAnonymous: true, userID: this.store.hashedPlayerId!, vpos } :
+				{ command, comment, isAnonymous: false, userID: this.store.player!.id, vpos };
 		this.store.devtoolUiStore.commentPage.setCommentInput("");
-		return this.store.currentPlay?.sendNicoliveComment(cmt);
+		return currentPlay.sendNamagameComment(cmt);
 	};
 
-	sendRegisteredNicoliveCommentEvent = async (name: string): Promise<void> => {
-		return this.store.currentPlay?.sendNicoliveCommentByTemplate(name);
+	sendRegisteredNamagameCommentEvent = async (name: string): Promise<void> => {
+		return this.store.currentPlay?.sendNamagameCommentByTemplate(name);
 	};
 
 	// 指定したURLからファイルをダウンロードする

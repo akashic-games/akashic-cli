@@ -67,7 +67,15 @@ export function promiseUninstall(param: UninstallParameterObject): Promise<void>
 	const restoreDirectory = cmn.Util.chdir(normalizedParam.cwd);
 	const gameJsonPath = path.join(process.cwd(), "game.json");
 	return Promise.resolve()
-		.then(() => cmn.ConfigurationFile.read(gameJsonPath, normalizedParam.logger))
+		.then(async () => {
+			let content = {} as cmn.GameConfiguration;
+			try {
+				content = await cmn.FileSystem.readJSON<cmn.GameConfiguration>(gameJsonPath);
+			} catch (e) {
+				normalizedParam.logger.info("No game.json found. Create a new one.");
+			}
+			return content;
+		})
 		.then((content: cmn.GameConfiguration) => {
 			const conf = new Configuration({ content: content, logger: normalizedParam.logger });
 			const uninstallExternals: {[key: string]: string} = {}; // uninstall前にexternalを保持する

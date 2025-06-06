@@ -1,3 +1,4 @@
+import { asHumanReadable } from "@akashic/akashic-cli-commons/lib/asHumanReadable.js";
 import type {ServiceType} from "@akashic/akashic-cli-commons/lib/ServiceType";
 import {observable, action, autorun} from "mobx";
 import { isServiceTypeNicoliveLike } from "../../common/targetServiceUtil";
@@ -22,22 +23,6 @@ import {ProfilerStore} from "./ProfilerStore";
 import {StartupScreenUiStore} from "./StartupScreenUiStore";
 import {storage} from "./storage";
 import {ToolBarUiStore} from "./ToolBarUiStore";
-
-// FIXME: serve の ESM 移行後に commons のものを利用するように修正
-export function asHumanReadable(byteLength: number, fractionDigits?: number): string {
-	if (byteLength < 1024) {
-		return `${byteLength} Bytes`;
-	}
-	// 1024 * 1024
-	if (byteLength < 1048576) {
-		return `${(byteLength / 1024).toFixed(fractionDigits)} KiB`;
-	}
-	// 1024 * 1024 * 1024
-	if (byteLength < 1073741824) {
-		return `${(byteLength / 1048576).toFixed(fractionDigits)} MiB`;
-	}
-	return `${(byteLength / 1073741824).toFixed(fractionDigits)} GiB`;
-}
 
 export interface StoreParameterObject {
 	gameViewManager: GameViewManager;

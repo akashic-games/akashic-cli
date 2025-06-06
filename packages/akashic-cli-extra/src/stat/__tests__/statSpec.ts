@@ -2,10 +2,10 @@ import * as path from "path";
 import * as commons from "@akashic/akashic-cli-commons";
 import * as stat from "../stat.js";
 
-function testWithSize(basepath: string, raw: boolean, limit?: string): Promise<void> {
+async function testWithSize(basepath: string, raw: boolean, limit?: string): Promise<void> {
 	const logger = new commons.ConsoleLogger({ debugLogMethod: _msg => { /* do nothing */ } });
-	return commons.ConfigurationFile.read(path.join(basepath, "game.json"), logger)
-		.then(game => stat.size({ logger, basepath, game, raw, limit }));
+	const game = await commons.FileSystem.readJSON<commons.GameConfiguration>(path.join(basepath, "game.json"));
+	return stat.size({ logger, basepath, game, raw, limit });
 }
 
 describe("stat.size dummy game", () => {
@@ -111,20 +111,15 @@ describe("format stat result", () => {
 		"[ ] TOTAL SIZE (using mp4): 6.29KB (6443B)\n" +
 		"WARN: MP4 (.mp4) is deprecated. Use AAC(.aac) or M4A(.m4a) instead.\n";
 
-	it("will output following text", () => {
+	it("will output following text", async () => {
 		let buffer = "";
 		const logger = new commons.ConsoleLogger({ debugLogMethod: msg => {
 			buffer += msg + "\n";
 		} });
 		const basepath = path.join(__dirname, "fixtures", "dummyGame2");
-		return commons.ConfigurationFile.read(
-			path.join(basepath, "game.json"),
-			logger
-		)
-			.then(game => stat.size({ logger, basepath, game, raw: false }))
-			.then(() => {
-				expect(buffer).toBe(expectedText);
-			});
+		const game = await commons.FileSystem.readJSON<commons.GameConfiguration>(path.join(basepath, "game.json"));
+		await stat.size({ logger, basepath, game, raw: false });
+		expect(buffer).toBe(expectedText);
 	});
 });
 
@@ -142,20 +137,15 @@ describe("format stat result - drop aac", () => {
 		"[*] TOTAL SIZE (using ogg): 7.61KB (7796B)\n" +
 		"[ ] TOTAL SIZE (using m4a): 4.92KB (5036B)\n";
 
-	it("will output following text", () => {
+	it("will output following text", async () => {
 		let buffer = "";
 		const logger = new commons.ConsoleLogger({ quiet: true, debugLogMethod: msg => {
 			buffer += msg + "\n";
 		} });
 		const basepath = path.join(__dirname, "fixtures", "dummyGame3");
-		return commons.ConfigurationFile.read(
-			path.join(basepath, "game.json"),
-			logger
-		)
-			.then(game => stat.size({ logger, basepath, game, raw: false }))
-			.then(() => {
-				expect(buffer).toBe(expectedText);
-			});
+		const game = await commons.FileSystem.readJSON<commons.GameConfiguration>(path.join(basepath, "game.json"));
+		await stat.size({ logger, basepath, game, raw: false });
+		expect(buffer).toBe(expectedText);
 	});
 });
 
@@ -176,20 +166,15 @@ describe("format stat result - maximum mp4, drop m4a", () => {
 		"[*] TOTAL SIZE (using mp4): 9.48KB (9704B)\n" +
 		"WARN: MP4 (.mp4) is deprecated. Use AAC(.aac) or M4A(.m4a) instead.\n";
 
-	it("will output following text", () => {
+	it("will output following text", async () => {
 		let buffer = "";
 		const logger = new commons.ConsoleLogger({ quiet: true, debugLogMethod: msg => {
 			buffer += msg + "\n";
 		} });
 		const basepath = path.join(__dirname, "fixtures", "dummyGame4");
-		return commons.ConfigurationFile.read(
-			path.join(basepath, "game.json"),
-			logger
-		)
-			.then(game => stat.size({ logger, basepath, game, raw: false }))
-			.then(() => {
-				expect(buffer).toBe(expectedText);
-			});
+		const game = await commons.FileSystem.readJSON<commons.GameConfiguration>(path.join(basepath, "game.json"));
+		await stat.size({ logger, basepath, game, raw: false });
+		expect(buffer).toBe(expectedText);
 	});
 });
 
@@ -210,20 +195,15 @@ describe("format stat result - drop m4a and aac", () => {
 		"[ ] TOTAL SIZE (using mp4): 6.29KB (6443B)\n" +
 		"WARN: MP4 (.mp4) is deprecated. Use AAC(.aac) or M4A(.m4a) instead.\n";
 
-	it("will output following text", () => {
+	it("will output following text", async () => {
 		let buffer = "";
 		const logger = new commons.ConsoleLogger({ debugLogMethod: msg => {
 			buffer += msg + "\n";
 		} });
 		const basepath = path.join(__dirname, "fixtures", "dummyGame5");
-		return commons.ConfigurationFile.read(
-			path.join(basepath, "game.json"),
-			logger
-		)
-			.then(game => stat.size({ logger, basepath, game, raw: false }))
-			.then(() => {
-				expect(buffer).toBe(expectedText);
-			});
+		const game = await commons.FileSystem.readJSON<commons.GameConfiguration>(path.join(basepath, "game.json"));
+		await stat.size({ logger, basepath, game, raw: false });
+		expect(buffer).toBe(expectedText);
 	});
 });
 
@@ -241,19 +221,14 @@ describe("format stat result - vector-image and binary", () => {
 		"[ ] TOTAL SIZE (using ogg): 1017B (1017B)\n" +
 		"[*] TOTAL SIZE (using aac): 1017B (1017B)\n";
 
-	it("will output following text", () => {
+	it("will output following text", async () => {
 		let buffer = "";
 		const logger = new commons.ConsoleLogger({ debugLogMethod: msg => {
 			buffer += msg + "\n";
 		} });
 		const basepath = path.join(__dirname, "fixtures", "dummyGame6_bin_vector");
-		return commons.ConfigurationFile.read(
-			path.join(basepath, "game.json"),
-			logger
-		)
-			.then(game => stat.size({ logger, basepath, game, raw: false }))
-			.then(() => {
-				expect(buffer).toBe(expectedText);
-			});
+		const game = await commons.FileSystem.readJSON<commons.GameConfiguration>(path.join(basepath, "game.json"));
+		await stat.size({ logger, basepath, game, raw: false });
+		expect(buffer).toBe(expectedText);
 	});
 });

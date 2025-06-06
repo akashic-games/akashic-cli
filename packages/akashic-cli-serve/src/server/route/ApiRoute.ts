@@ -1,6 +1,6 @@
 import * as express from "express";
 import type * as socketio from "socket.io";
-import { createHandlerToBroadcast } from "../controller/BroadcastController";
+import { createHandlerToBroadcast } from "../controller/BroadcastController.js";
 import {
 	createHandlerToCreatePlay,
 	createHandlerToGetPlays,
@@ -10,22 +10,22 @@ import {
 	createHandlerToGetPlaylog,
 	createHandlerToPatchAudioState,
 	createHandlerToSendEvent,
-	createHandlerToSendNicoliveCommentByTemplate,
-	createHandlerToSendNicoliveComment
-} from "../controller/PlayController";
-import { createHandlerToRegisterPlayerId } from "../controller/PlayerIdController";
-import { createHandlerToCreatePlayToken } from "../controller/PlayTokenController";
+	createHandlerToSendNamagameCommentByTemplate,
+	createHandlerToSendNamagameComment
+} from "../controller/PlayController.js";
+import { createHandlerToRegisterPlayerId } from "../controller/PlayerIdController.js";
+import { createHandlerToCreatePlayToken } from "../controller/PlayTokenController.js";
 import {
 	createHandlerToCreateRunner,
 	createHandlerToDeleteRunner,
 	createHandlerToPatchRunner
-} from "../controller/RunnerController";
-import { createHandlerToGetStartPointHeaderList } from "../controller/StartPointHeaderListController";
-import { handleToGetStartupOptions } from "../controller/StartupOptionsController";
-import type { PlayerIdStore } from "../domain/PlayerIdStore";
-import type { PlayStore } from "../domain/PlayStore";
-import type { RunnerStore } from "../domain/RunnerStore";
-import type { SocketIOAMFlowManager } from "../domain/SocketIOAMFlowManager";
+} from "../controller/RunnerController.js";
+import { createHandlerToGetStartPointHeaderList } from "../controller/StartPointHeaderListController.js";
+import { handleToGetStartupOptions } from "../controller/StartupOptionsController.js";
+import type { PlayerIdStore } from "../domain/PlayerIdStore.js";
+import type { PlayStore } from "../domain/PlayStore.js";
+import type { RunnerStore } from "../domain/RunnerStore.js";
+import type { SocketIOAMFlowManager } from "../domain/SocketIOAMFlowManager.js";
 
 export interface ApiRouterParameterObject {
 	playStore: PlayStore;
@@ -43,8 +43,8 @@ export const createApiRouter = (params: ApiRouterParameterObject): express.Route
 	apiRouter.get("/plays", createHandlerToGetPlays(params.playStore));
 	apiRouter.delete("/plays/:playId(\\d+)", createHandlerToDeletePlay(params.playStore));
 	apiRouter.patch("/plays/:playId(\\d+)", createHandlerToPatchPlay(params.playStore));
-	apiRouter.post("/plays/:playId/comment-template", createHandlerToSendNicoliveCommentByTemplate(params.playStore, params.runnerStore));
-	apiRouter.post("/plays/:playId/comment", createHandlerToSendNicoliveComment(params.playStore, params.runnerStore));
+	apiRouter.post("/plays/:playId/comment-template", createHandlerToSendNamagameCommentByTemplate(params.playStore, params.runnerStore));
+	apiRouter.post("/plays/:playId/comment", createHandlerToSendNamagameComment(params.playStore, params.runnerStore));
 
 	apiRouter.post("/plays/:playId(\\d+)/token", createHandlerToCreatePlayToken(params.amflowManager));
 	apiRouter.post("/plays/:playId(\\d+)/broadcast", createHandlerToBroadcast(params.io));

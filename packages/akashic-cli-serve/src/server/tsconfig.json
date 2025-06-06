@@ -1,7 +1,10 @@
 {
   "compilerOptions": {
     "target": "ES6",
-    "module": "commonjs",
+    "module": "Node16",
+    "moduleResolution": "Node16",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "declaration": false,
     "types": [
       "express",
@@ -12,7 +15,6 @@
     ],
     "sourceMap": true,
     "outDir": "../../lib",
-    "esModuleInterop": true,
     "removeComments": true,
     "downlevelIteration": true,
     "noImplicitAny": true,
@@ -24,5 +26,8 @@
   "include": [
     "./**/*.ts",
     "../client/akashic/SocketIOAMFlowClient.ts"
+  ],
+  "exclude": [
+    "./__tests__/**/*.ts"
   ]
 }

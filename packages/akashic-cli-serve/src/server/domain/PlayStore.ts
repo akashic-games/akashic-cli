@@ -1,13 +1,13 @@
-import { calculateFinishedTime } from "@akashic/amflow-util/lib/calculateFinishedTime";
-import { PromisifiedAMFlowProxy } from "@akashic/amflow-util/lib/PromisifiedAMFlowProxy";
+import { calculateFinishedTime } from "@akashic/amflow-util/lib/calculateFinishedTime.js";
+import { PromisifiedAMFlowProxy } from "@akashic/amflow-util/lib/PromisifiedAMFlowProxy.js";
 import type { AMFlowClient, Play, PlayManager } from "@akashic/headless-driver";
 import * as pl from "@akashic/playlog";
 import { Trigger } from "@akashic/trigger";
-import { TimeKeeper } from "../../common/TimeKeeper";
-import type { PlayAudioState } from "../../common/types/PlayAudioState";
-import type { Player } from "../../common/types/Player";
-import type { PlayInfo } from "../../common/types/PlayInfo";
-import type { PlayStatus } from "../../common/types/PlayStatus";
+import { TimeKeeper } from "../../common/TimeKeeper.js";
+import type { PlayAudioState } from "../../common/types/PlayAudioState.js";
+import type { Player } from "../../common/types/Player.js";
+import type { PlayInfo } from "../../common/types/PlayInfo.js";
+import type { PlayStatus } from "../../common/types/PlayStatus.js";
 import type {
 	PlayCreateTestbedEvent,
 	PlayStatusChangedTestbedEvent,
@@ -21,10 +21,10 @@ import type {
 	RunnerDescription,
 	ClientInstanceDescription,
 	PlayAudioStateChangeTestbedEvent
-} from "../../common/types/TestbedEvent";
-import type { ServerContentLocator } from "../common/ServerContentLocator";
-import type { DumpedPlaylog } from "../common/types/DumpedPlaylog";
-import { activePermission, passivePermission, debugPermission } from "./AMFlowPermisson";
+} from "../../common/types/TestbedEvent.js";
+import type { ServerContentLocator } from "../common/ServerContentLocator.js";
+import type { DumpedPlaylog } from "../common/types/DumpedPlaylog.js";
+import { activePermission, passivePermission, debugPermission } from "./AMFlowPermisson.js";
 
 export interface PlayStoreParameterObject {
 	playManager: PlayManager;

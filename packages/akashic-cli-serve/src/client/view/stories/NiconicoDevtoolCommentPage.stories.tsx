@@ -16,14 +16,13 @@ export const Basic = {
 					comments: [],
 					templates: [],
 					isEnabled: true,
-					senderType: "anonymous",
-					senderLimitation: "none",
+					asAnonymous: true,
 					commandInput: "",
 					commentInput: "",
 				}}
 				onCommentInputChanged={action("comment-input-changed")}
 				onCommandInputChanged={action("command-input-changed")}
-				onSenderTypeChanged={action("sender-changed")}
+				onChangeAsAnonymous={action("as-anonymous-changed")}
 				onClickSend={action("click-send")}
 				onClickTemplate={action("click-template")}
 			/>
@@ -43,14 +42,13 @@ export const HasTemplates = {
 						"草",
 					],
 					isEnabled: true,
-					senderType: "operator",
-					senderLimitation: "operator",
+					asAnonymous: false,
 					commandInput: "",
 					commentInput: "",
 				}}
 				onCommentInputChanged={action("comment-input-changed")}
 				onCommandInputChanged={action("command-input-changed")}
-				onSenderTypeChanged={action("sender-changed")}
+				onChangeAsAnonymous={action("as-anonymous-changed")}
 				onClickSend={action("click-send")}
 				onClickTemplate={action("click-template")}
 			/>
@@ -65,31 +63,30 @@ export const ManyComments = {
 			<NiconicoDevtoolCommentPage
 				model={{
 					comments: [
-						{ command: "ue big", comment: "わこつ", userID: "pid1", },
-						{ command: "", comment: "放送者コメントテスト", userID: "pid1", isOperatorComment: true, },
-						{ command: "ue big", comment: "わこつ", userID: "pid1", isAnonymous: true, },
-						{ command: "", comment: "テスト1", userID: "pid1", isAnonymous: true },
-						{ command: "", comment: "テスト2", userID: "pid2", isAnonymous: true },
-						{ command: "", comment: "テスト3", userID: "pid3", isAnonymous: true },
-						{ command: "red", comment: "テスト4", userID: "pid4", isAnonymous: true },
-						{ command: "shita", comment: "テスト5", userID: "pid5", isAnonymous: true },
-						{ command: "", comment: "テスト6", userID: "pid6", isAnonymous: true },
-						{ command: "", comment: "テスト7", userID: "pid7", isAnonymous: true },
-						{ command: "", comment: "テスト8", userID: "pid8", isAnonymous: true },
+						{ command: "ue big", comment: "わこつ", userID: "pid1", isAnonymous: false, vpos: 0, },
+						{ command: "", comment: "放送者コメントテスト", userID: "pid1", isAnonymous: false, vpos: 100, },
+						{ command: "ue big", comment: "わこつ", userID: "pid1", isAnonymous: true, vpos: 100, },
+						{ command: "", comment: "テスト1", userID: "pid1", isAnonymous: true, vpos: 200, },
+						{ command: "", comment: "テスト2", userID: "pid2", isAnonymous: true, vpos: 300, },
+						{ command: "", comment: "テスト3", userID: "pid3", isAnonymous: true, vpos: 400, },
+						{ command: "red", comment: "テスト4", userID: "pid4", isAnonymous: true, vpos: 500, },
+						{ command: "shita", comment: "テスト5", userID: "pid5", isAnonymous: true, vpos: 600, },
+						{ command: "", comment: "テスト6", userID: "pid6", isAnonymous: true, vpos: 700, },
+						{ command: "", comment: "テスト7", userID: "pid7", isAnonymous: true, vpos: 800, },
+						{ command: "", comment: "テスト8", userID: "pid8", isAnonymous: true, vpos: 900, },
 					],
 					templates: [
 						"わこつx3",
 						"草",
 					],
 					isEnabled: true,
-					senderType: "anonymous",
-					senderLimitation: "audience",
+					asAnonymous: true,
 					commandInput: "ue big red",
 					commentInput: "コメント送信内容",
 				}}
 				onCommentInputChanged={action("comment-input-changed")}
 				onCommandInputChanged={action("command-input-changed")}
-				onSenderTypeChanged={action("sender-changed")}
+				onChangeAsAnonymous={action("as-anonymous-changed")}
 				onClickSend={action("click-send")}
 				onClickTemplate={action("click-template")}
 			/>
@@ -109,14 +106,13 @@ export const Disabled = {
 						"草",
 					],
 					isEnabled: false,
-					senderType: "anonymous",
-					senderLimitation: "none",
+					asAnonymous: true,
 					commandInput: "ue big red",
 					commentInput: "コメント送信内容",
 				}}
 				onCommentInputChanged={action("comment-input-changed")}
 				onCommandInputChanged={action("command-input-changed")}
-				onSenderTypeChanged={action("sender-changed")}
+				onChangeAsAnonymous={action("as-anoymous-changed")}
 				onClickSend={action("click-send")}
 				onClickTemplate={action("click-template")}
 			/>

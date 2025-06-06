@@ -20,5 +20,6 @@ export interface CliConfigExportHtml {
 	autoSendEventName?: string | boolean;
 	autoGivenArgsName?: string;
 	omitUnbundledJs?: boolean;
+	esDownpile?: boolean;
 	debugOverrideEngineFiles?: string;
 }

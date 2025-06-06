@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-lib-manage",
-  "version": "1.9.6",
+  "version": "2.0.0",
   "description": "npm command wrapper module for Akashic games",
   "type": "module",
   "scripts": {
@@ -9,24 +9,22 @@
     "build": "tsc -p ./",
     "test": "npm run test:vitest && npm run test:lint",
     "test:vitest": "vitest run",
-    "test:lint": "eslint -c .eslintrc.cjs --fix"
+    "test:lint": "eslint -c .eslintrc.cjs --fix \"./src/**/*.ts\""
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
   "bin": {
-    "akashic-cli-install": "./bin/akashic-cli-install",
-    "akashic-cli-uninstall": "./bin/akashic-cli-uninstall",
-    "akashic-cli-update": "./bin/akashic-cli-update"
+    "akashic-cli-install": "./bin/akashic-cli-install.js",
+    "akashic-cli-uninstall": "./bin/akashic-cli-uninstall.js",
+    "akashic-cli-update": "./bin/akashic-cli-update.js"
   },
   "files": [
     "lib"
   ],
   "devDependencies": {
     "@akashic/eslint-config": "2.1.0",
-    "@akashic/game-configuration": "2.3.0",
-    "@types/commander": "2.12.2",
+    "@akashic/game-configuration": "2.5.0",
     "@types/form-data": "2.5.0",
-    "@types/fs-extra": "9.0.13",
     "@types/mock-fs": "4.13.4",
     "@types/node": "18.19.44",
     "@types/tar": "6.1.13",
@@ -39,7 +37,7 @@
     "vitest": "^2.0.5"
   },
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.15.3",
+    "@akashic/akashic-cli-commons": "1.0.0",
     "commander": "12.1.0",
     "minipass": "7.1.2",
     "tar": "7.4.3"

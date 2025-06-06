@@ -11,7 +11,6 @@ module.exports = {
 	ignorePatterns: [
 		"*.js",
 		"*.cjs",
-		"*.ts",
 		"typings/**/*",
 		"src/__tests__/**/*"
 	]

@@ -1,9 +1,9 @@
 import type * as express from "express";
-import type { StartPointHeaderListResponseData } from "../../common/types/ApiResponse";
-import type { StartPointHeader } from "../../common/types/StartPointHeader";
-import { BadRequestError, NotFoundError } from "../common/ApiError";
-import { responseSuccess } from "../common/ApiResponse";
-import type { PlayStore } from "../domain/PlayStore";
+import type { StartPointHeaderListResponseData } from "../../common/types/ApiResponse.js";
+import type { StartPointHeader } from "../../common/types/StartPointHeader.js";
+import { BadRequestError, NotFoundError } from "../common/ApiError.js";
+import { responseSuccess } from "../common/ApiResponse.js";
+import type { PlayStore } from "../domain/PlayStore.js";
 
 export const createHandlerToGetStartPointHeaderList = (playStore: PlayStore): express.RequestHandler => {
 	return (req, res, next) => {

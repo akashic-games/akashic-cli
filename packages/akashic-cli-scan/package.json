@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-scan",
-  "version": "0.17.7",
+  "version": "1.0.1",
   "description": "Command line tool for updating assets and globalScripts.",
   "type": "module",
   "main": "lib/index.js",
@@ -8,14 +8,14 @@
     "prepublish": "npm run clean && npm run build",
     "clean": "shx rm -rf lib && shx rm -rf spec/build",
     "build": "tsc -p ./",
-    "lint": "eslint -c .eslintrc.cjs --fix",
+    "lint": "eslint -c .eslintrc.cjs --fix \"./src/**/*.ts\"",
     "test": "npm run test:vitest && npm run lint",
     "test:vitest": "vitest run"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
   "bin": {
-    "akashic-cli-scan": "./bin/run"
+    "akashic-cli-scan": "./bin/run.js"
   },
   "files": [
     "bin",
@@ -23,7 +23,7 @@
   ],
   "devDependencies": {
     "@akashic/eslint-config": "2.1.0",
-    "@akashic/game-configuration": "2.3.0",
+    "@akashic/game-configuration": "2.5.0",
     "@types/image-size": "0.8.0",
     "@types/mock-fs": "4.13.4",
     "@types/node": "18.19.44",
@@ -36,12 +36,12 @@
     "vitest": "^2.0.5"
   },
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.15.3",
+    "@akashic/akashic-cli-commons": "1.0.0",
     "aac-duration": "0.0.1",
     "chokidar": "^4.0.0",
     "commander": "^12.0.0",
-    "image-size": "~1.1.0",
-    "music-metadata": "10.2.0",
+    "image-size": "~1.2.0",
+    "music-metadata": "10.7.0",
     "svgson": "^5.2.1",
     "thumbcoil": "~1.2.0"
   },

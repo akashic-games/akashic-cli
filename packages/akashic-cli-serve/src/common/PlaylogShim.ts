@@ -1,5 +1,5 @@
 import type { MessageEventIndex, EventCode, EventIndex, MessageEvent, Event } from "@akashic/playlog";
-import type { NicoliveCommentEventComment } from "./types/NicoliveCommentPlugin";
+import type { NamagameCommentEventComment } from "./types/NamagameCommentPlugin.js";
 
 // serve (のクライアント側) は isolatedModules: true のため、
 // const enum で定義されている EventCode は「値として」は参照できない (コンパイルエラーになる)。
@@ -11,24 +11,24 @@ export const EventCodeMessage: EventCode.Message = 32;
 export const EventIndexCode: EventIndex.Code = 0;
 export const MessageEventIndexData: MessageEventIndex.Data = 3;
 
-export interface NicoliveCommentEvent extends MessageEvent {
+export interface NamagameCommentEvent extends MessageEvent {
 	[MessageEventIndexData]: {
-		type: "nicoservice:stream:comment";
-		comments: NicoliveCommentEventComment[];
+		type: "namagame:comment";
+		comments: NamagameCommentEventComment[];
 	};
 }
 
-export function isNicoliveCommentEvent(ev: Event): ev is NicoliveCommentEvent {
-	return ev[EventIndexCode] === EventCodeMessage && ev[MessageEventIndexData]?.type === "nicoservice:stream:comment";
+export function isNamagameCommentEvent(ev: Event): ev is NamagameCommentEvent {
+	return ev[EventIndexCode] === EventCodeMessage && ev[MessageEventIndexData]?.type === "namagame:comment";
 }
 
-export function createNicoliveCommentEvent(comments: NicoliveCommentEventComment[]): NicoliveCommentEvent {
+export function createNamagameCommentEvent(comments: NamagameCommentEventComment[]): NamagameCommentEvent {
 	return [
 		EventCodeMessage,
 		0,
 		":akashic",
 		{
-			type: "nicoservice:stream:comment",
+			type: "namagame:comment",
 			comments
 		}
 	];

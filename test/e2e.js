@@ -2,11 +2,11 @@
 //
 // Usage:
 //  node test/e2e.js          (latestタグでpublishされたものをインストールしてテスト)
-//  node test/e2e.js --local  (このリポジトリの packages/akashic-cli/bin/akashic をテスト)
+//  node test/e2e.js --local  (このリポジトリの packages/akashic-cli/bin/akashic.js をテスト)
 
 import { tmpdir } from "os";
 import { dirname, join, resolve } from "path";
-import { mkdtemp, readdir, readFile, writeFile } from "fs/promises";
+import { mkdtemp, readdir, readFile, unlink, writeFile } from "fs/promises";
 import { exec as _exec, spawn as _spawn } from "child_process";
 import assert from "assert";
 import { fileURLToPath } from "url";
@@ -69,6 +69,27 @@ async function checkHttp(url) {
 	}
 }
 
+async function createAkashicConfigJs() { 
+	const options = {
+		commandOptions: {
+			export: {
+				zip: {
+					strip: true,
+					bundle: true,
+					force: true
+				},
+				html: {
+					output: "output",
+					bundle: true,
+					force: true
+				}
+			}
+		}
+	};
+	const content = `module.exports = ${JSON.stringify(options)};`;
+	await writeFile("akashic.config.js", content);
+}
+
 try {
 	console.log("Start test");
 
@@ -86,7 +107,7 @@ try {
 		await exec("npm install @akashic/akashic-cli@latest");
 		akashicCliPath = `${targetDir}/node_modules/.bin/akashic`;
 	} else {
-		akashicCliPath = resolve(__dirname, "..", "packages", "akashic-cli", "bin", "akashic");
+		akashicCliPath = resolve(__dirname, "..", "packages", "akashic-cli", "bin", "akashic.js");
 
 		// workaround: Windows 環境は shebang を解釈しないのでそのままでは実行できない。
 		// (npm i @akashic/akashic-cli した時は実行可能な .cmd ファイルが作られるが、ここでは存在しない)
@@ -123,7 +144,7 @@ try {
 		assertContains(files, "package.json");
 		assertContains(files, "README.md");
 		assertContains(files, "sandbox.config.js");
-		assertContains(files, "eslint.config.js");
+		assertContains(files, "eslint.config.mjs");
 		assertContains(files, ".gitignore");
 		assertContains(files, "jest.config.js");
 		assertContains(files, "tsconfig.jest.json");
@@ -154,14 +175,18 @@ try {
 
 	// TODO 出力結果検証
 	{
-		console.log("test @akashic/akashic-cli-export-html");
+		console.log("test @akashic/akashic-cli-export-html/zip");
 		await exec(`${akashicCliPath} export html --output output --bundle`);
+		await exec(`${akashicCliPath} export zip --strip --bundle --force`);
 	}
 
 	// TODO 出力結果検証
 	{
-		console.log("test @akashic/akashic-cli-export-zip");
-		await exec(`${akashicCliPath} export zip --strip --bundle`);
+		console.log("test @akashic/akashic-cli-export-html/zip with akashic.config.js");
+		await createAkashicConfigJs();
+		await exec(`${akashicCliPath} export html`);
+		await exec(`${akashicCliPath} export zip`);
+		await unlink("akashic.config.js");
 	}
 
 	try {
@@ -169,7 +194,7 @@ try {
 		// 通常の動作テスト
 		{
 			const port = await getPort();
-			const finalize = spawn(`${akashicCliPath} sandbox`, ["-p", port]);
+			const finalize = spawn(`${akashicCliPath} sandbox`, ["-p", port, "--legacy"]);
 			try {
 				const baseUrl = `http://localhost:${port}`;
 				await setTimeout(1000); // 起動するまで待機
@@ -205,7 +230,7 @@ try {
 			await writeFile(join(cascadeGameJsonDir, "game.json"), JSON.stringify(cascadeGameJson));
 
 			const port = await getPort();
-			const finalize = spawn(`${akashicCliPath} sandbox`, ["-p", port, "--cascade", cascadeGameJsonDir]);
+			const finalize = spawn(`${akashicCliPath} sandbox`, ["-p", port, "--cascade", cascadeGameJsonDir, "--legacy"]);
 			try {
 				const baseUrl = `http://localhost:${port}`;
 				await setTimeout(1000); // 起動するまで待機

@@ -5,6 +5,7 @@ import { PlayerInfoResolverDialog } from "../molecule/PlayerInfoResolverDialog";
 import type { ProfilerCanvasProps } from "../molecule/ProfilerCanvas";
 import { ProfilerCanvas } from "../molecule/ProfilerCanvas";
 import styles from "./GameScreen.module.css";
+import designGuideLineImageUrl from "./img/design-guideline.png";
 
 export interface GameScreenProps {
 	showsBackgroundImage: boolean;
@@ -75,7 +76,7 @@ export const GameScreen = observer(class GameScreen extends React.Component<Game
 			}
 			{
 				showsDesignGuideline ?
-					<img src={"/public/img/design-guideline.png"}
+					<img src={designGuideLineImageUrl}
 						className={styles["design-guideline"] + " external-ref_div_design-guideline"}
 						style={this._getDesignGuideLineStyle()}/> :
 					null

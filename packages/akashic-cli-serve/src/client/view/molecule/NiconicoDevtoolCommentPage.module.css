@@ -35,23 +35,30 @@
 
 .comment-row {
   margin: 0.5rem;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  gap: 0.9rem;
 }
 
 .comment-row .index {
   font-size: 0.8rem;
   color: #aaa;
-  margin-right: 0.7rem;
 }
 
 .comment-row .aux {
   border: 1px solid silver;
   border-radius: 4px;
-  margin: 1px 4px;
-  padding: 1px 5px;
+  padding: 0 5px;
   color: #999;
 }
 
-.comment-row .operator {
+.comment-row .vpos {
+  font-size: 0.8rem;
+  color: #bbb;
+}
+
+.comment-row .broadcaster {
   color: #f44;
 }
 

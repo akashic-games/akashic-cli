@@ -177,6 +177,6 @@ describe("FileSystemSpec", () => {
 		expect(content).toEqual({ val: 42 });
 
 		await unlink("./foo/test.json");
-		expect(readJSON("./foo/test.json")).rejects.toMatchObject({ code: "ENOENT" });
+		await expect(readJSON("./foo/test.json")).rejects.toMatchObject({ code: "ENOENT" });
 	});
 });
