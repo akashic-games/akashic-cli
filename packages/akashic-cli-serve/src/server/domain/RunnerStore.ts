@@ -58,7 +58,6 @@ export class RunnerStore {
 		const serverExternal = sandboxConfig?.server?.external;
 		if (serverExternal) {
 			for (const pluginName of Object.keys(serverExternal)) {
-				// eslint-disable-next-line @typescript-eslint/no-var-requires
 				const externalSource = require(path.resolve(serverExternal[pluginName]));
 				externalValue[pluginName] = externalSource();
 			}

@@ -1,5 +1,3 @@
-// window 配下のObjectとなるため、命名規則のlintエラーを抑止
-// eslint-disable-next-line @typescript-eslint/naming-convention
 let setTimeout;
 let setInterval;
 

@@ -24,7 +24,7 @@ const TestWithBehaviour = observer(() => (
 			onResize={(h) => (console.log(h), (store.height = h))}
 		>
 			<p style={{ height: "100%", padding: 10, border: "1px solid gray" }}>
-        Foo
+				Foo
 			</p>
 		</TopResizable>
 	</div>
@@ -39,7 +39,7 @@ export const Basic = {
 		<div style={{ padding: 20 }}>
 			<TopResizable height={200} minHeight={50} onResize={action("resize")}>
 				<p style={{ flex: "1 1 auto", padding: 10, border: "1px solid gray" }}>
-          			Foo
+					Foo
 				</p>
 			</TopResizable>
 		</div>

@@ -16,8 +16,8 @@
     "build:client": "tsc -p src/client",
     "build:server": "tsc -p src/server",
     "lint": "npm run lint:client && npm run lint:server",
-    "lint:client": "eslint \"src/client/*.ts\" \"src/client/**/*.ts\" --fix",
-    "lint:server": "eslint \"src/server/*.ts\" \"src/server/**/*.ts\" --fix",
+    "lint:client": "eslint -c \"src/client/eslint.config.cjs\" \"src/client/**/*.ts\" --fix",
+    "lint:server": "eslint -c \"src/server/eslint.config.cjs\" \"src/server/**/*.ts\" --fix",
     "test": "npm run test:vitest && npm run lint",
     "test:vitest": "vitest run"
   },
@@ -49,7 +49,7 @@
   },
   "devDependencies": {
     "@akashic/akashic-engine": "~2.6.6",
-    "@akashic/eslint-config": "^2.0.0",
+    "@akashic/eslint-config": "^3.0.1",
     "@akashic/sandbox-configuration": "^2.3.0",
     "@deboxsoft/cpx": "^1.5.0",
     "@types/ejs": "^3.1.1",
@@ -59,9 +59,6 @@
     "@types/serve-static": "^1.15.0",
     "@types/superagent": "^8.0.0",
     "@types/supertest": "^6.0.0",
-    "@typescript-eslint/eslint-plugin": "^6.12.0",
-    "eslint": "^8.54.0",
-    "eslint-plugin-import": "^2.29.0",
     "supertest": "^6.3.1",
     "typescript": "^5.0.0",
     "vitest": "^2.1.0"

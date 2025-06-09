@@ -64,7 +64,7 @@ async function makeAkashicLibsLicenseInfo(engineFilesVersion: string): Promise<L
 		try {
 			const libPath = require.resolve(path.join(name, "package.json"));
 			libPkgJsonPaths.push(libPath);
-		} catch (e) {
+		} catch (_e) {
 			// do noting
 		}
 	};

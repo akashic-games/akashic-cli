@@ -71,7 +71,7 @@ export function promiseUninstall(param: UninstallParameterObject): Promise<void>
 			let content = {} as cmn.GameConfiguration;
 			try {
 				content = await cmn.FileSystem.readJSON<cmn.GameConfiguration>(gameJsonPath);
-			} catch (e) {
+			} catch (_e) {
 				normalizedParam.logger.info("No game.json found. Create a new one.");
 			}
 			return content;
