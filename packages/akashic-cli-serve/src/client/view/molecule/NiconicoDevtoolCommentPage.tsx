@@ -168,6 +168,6 @@ function formatCentiseconds(centiseconds: number): string {
 	const hs = hours > 0 ? ("" + hours).padStart(2, "0") + ":" : "";
 	const ms = ("" + mins).padStart(2, "0");
 	const ss = ("" + secs).padStart(2, "0");
-	const cs = csecs.toString().padStart(3, "0");
+	const cs = csecs.toString().padStart(2, "0");
 	return `${hs}${ms}:${ss}.${cs}`;
 }

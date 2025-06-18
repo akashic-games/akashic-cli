@@ -9,14 +9,26 @@ import { NiconicoDevtoolRankingPage, type NiconicoDevtoolRankingPageProps } from
 
 export type NiconicoDevtoolPageType = "ranking" | "comment";
 
+const rankingPageSelectorItem: DevtoolPageSelectorItem = {
+	label: "Ranking",
+	key: "ranking",
+	title: "Ranking",
+};
+
+const commentPageSelectorItem: DevtoolPageSelectorItem = {
+	label: <><small>&#x1f6a7;</small> Comment</>,
+	key: "comment",
+	title: "Comment (Experimental)",
+};
+
 const pageItems: { key: NiconicoDevtoolPageType; selector: DevtoolPageSelectorItem }[] = [
-	{ key: "ranking", selector: { label: "Ranking" } },
-	{ key: "comment", selector: { label: "Comment" } },
+	{ key: "ranking", selector: rankingPageSelectorItem },
+	{ key: "comment", selector: commentPageSelectorItem },
 ];
 
 const pageItemsNoComment: { key: NiconicoDevtoolPageType; selector: DevtoolPageSelectorItem }[] = [
-	{ key: "ranking", selector: { label: "Ranking" } },
-	{ key: "comment", selector: { label: "Comment", disabled: true } },
+	{ key: "ranking", selector: rankingPageSelectorItem },
+	{ key: "comment", selector: { ...commentPageSelectorItem, disabled: true } },
 ];
 
 export interface NiconicoDevtoolProps {

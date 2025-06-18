@@ -3,7 +3,9 @@ import * as React from "react";
 import styles from "./DevtoolPageSelector.module.css";
 
 export interface DevtoolPageSelectorItem {
-	label: string;
+	label: React.ReactElement | string;
+	key: string;
+	title: string;
 	disabled?: boolean;
 }
 
@@ -19,11 +21,11 @@ export const DevtoolPageSelector = observer(function DevtoolPageSelector(props: 
 			{
 				props.items.map((item, i) => (
 					<li
-						key={item.label}
+						key={item.key}
 						className={
 							item.disabled ? styles.disabled : (i === props.activeIndex ? styles.active : "")
 						}
-						title={item.label}
+						title={item.title}
 						onClick={() => {
 							if (item.disabled) return;
 							props.onChangeActive(i);
