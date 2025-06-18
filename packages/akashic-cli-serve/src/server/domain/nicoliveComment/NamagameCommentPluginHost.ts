@@ -126,7 +126,7 @@ export class NamagameCommentPluginHost {
 }
 
 function frameToVpos(frame: number, fps: number): number {
-	return (frame * (1000 / fps) * 10); // 10 倍してミリ秒をセンチ秒に
+	return Math.floor(frame * (1000 / fps) * 0.1); // 0.1 倍してミリ秒をセンチ秒に
 }
 
 function objectForEach<T extends object>(obj: T, fun: (val: T[keyof T], key: keyof T) => void): void {
