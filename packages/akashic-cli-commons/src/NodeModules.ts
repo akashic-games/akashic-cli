@@ -117,7 +117,7 @@ export module NodeModules {
 		const filePaths: string[] = [];
 		try {
 			const bundle = await rollup(inputOptions);
-			console.log("****", bundle.watchFiles);
+
 			bundle.watchFiles.forEach(file => {
 				const filePath = Util.makeUnixPath(path.relative(basepath, file));
 				if (!checkAllModules && !(/^(?:\.\/)?node_modules/.test(filePath))) {
