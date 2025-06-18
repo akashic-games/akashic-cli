@@ -1,11 +1,15 @@
 import * as fs from "fs";
+import { createRequire } from "module";
 import * as path from "path";
 import type { ModuleMainPathsMap, ModuleMainScriptsMap } from "@akashic/game-configuration";
-import browserify from "browserify";
+import { nodeResolve } from "@rollup/plugin-node-resolve";
+import { rollup } from "rollup";
 import { ConsoleLogger } from "./ConsoleLogger.js";
 import type { Logger } from "./Logger.js";
-import { StringStream } from "./StringStream.js";
 import * as Util from "./Util.js";
+
+const require = createRequire(import.meta.url);
+const commonjs = require("@rollup/plugin-commonjs");
 
 interface ModuleMainInfo {
 	moduleName: string;
@@ -88,7 +92,7 @@ export module NodeModules {
 
 	// TODO: node_modules/ 以下以外でも利用するメソッドのため、NodeModules ではなく別の適切な場所に移動する
 	// checkAllModules は実験的なものです。 akashic-cli の外部から利用しないでください
-	export function listScriptFiles(
+	export async function listScriptFiles(
 		basepath: string,
 		modules: string|string[],
 		logger: Logger,
@@ -97,41 +101,30 @@ export module NodeModules {
 		if (modules.length === 0) return Promise.resolve([]);
 		const moduleNames = (typeof modules === "string") ? [modules] : modules;
 
-		// moduleNamesをrequireするだけのソースコード文字列を作って依存性解析の基点にする
-		// (moduleNamesを直接b.require()してもよいはずだが、そうするとモジュールのエントリポイントの代わりに
-		// モジュールの名前(ディレクトリ名であることが多い)が出力されてしまうので避ける)
-		const dummyRootName = "__akashic-cli_dummy_require_root.js";
-		const dummyRootPath = path.join(basepath, dummyRootName);
-		const rootRequirer = moduleNames.map((name: string) => {
-			return "require(\"" + Util.makeModuleNameNoVer(name) + "\");";
-		}).join("\n");
-
 		// akashicコンテンツが Node.js のコアモジュールを参照するモジュールに依存している場合、
 		// akashic-cli-commons/node_modules 以下への依存として表現される。
 		// これを検知した場合、そのモジュールへの依存はgame.jsonに追記せず、akashicコマンドユーザには警告を表示する。
 		const ignoreModulePaths = ["/akashic-cli-commons/node_modules/"];
 
-		// builtins (コアモジュール) を有効にすると browserify が polyfill したモジュールが b.on("dep", ...) で検出される。
-		// したがってここでは false を指定してコアモジュールの読み込みを禁止する。
-		const builtins = false;
-
-		const b = browserify({
-			entries: new StringStream(rootRequirer, dummyRootPath),
-			basedir: basepath,
-			preserveSymlinks: true, // npm link で node_modules 以下に置かれたモジュールを symlink パスのまま扱う
-			builtins,
-		});
-		b.external("g");
-
-		return new Promise<string[]>((resolve, reject) => {
-			const filePaths: string[] = [];
-			b.on("dep", (row: any) => {
-				const filePath = Util.makeUnixPath(path.relative(basepath, row.file));
-				if (filePath === dummyRootName || (!checkAllModules && !(/^(?:\.\/)?node_modules/.test(filePath)))) {
+		const inputOptions = {
+			input: moduleNames,
+			external: ["g"],
+			plugins: [
+				commonjs(),
+				nodeResolve()
+			]
+		};
+		const filePaths: string[] = [];
+		try {
+			const bundle = await rollup(inputOptions);
+			console.log("****", bundle.watchFiles);
+			bundle.watchFiles.forEach(file => {
+				const filePath = Util.makeUnixPath(path.relative(basepath, file));
+				if (!checkAllModules && !(/^(?:\.\/)?node_modules/.test(filePath))) {
 					return;
 				}
 				if (/^\.\.\//.test(filePath)) {
-					const rawFilePath = Util.makeUnixPath(row.file);
+					const rawFilePath = Util.makeUnixPath(file);
 					if (ignoreModulePaths.find((modulePath) => rawFilePath.includes(modulePath))) {
 						const detectedModuleName = path.basename(path.dirname(filePath));
 						const msg = "Reference to '" + detectedModuleName
@@ -144,14 +137,14 @@ export module NodeModules {
 					const msg = "Unsupported module found in " + JSON.stringify(modules)
 												+ ". Skipped listing '" + filePath
 												+ "' that cannot be dealt with. (This may be a core module of Node.js)";
-					reject(new Error(msg));
-					return;
+					throw new Error(msg);
 				}
 				filePaths.push(filePath);
 			});
-			b.bundle((err: any) => {
-				void (err ? reject(err) : resolve(filePaths));
-			});
-		});
+
+		} catch (e) {
+			throw new Error(e);
+		}
+		return filePaths;
 	}
 }
