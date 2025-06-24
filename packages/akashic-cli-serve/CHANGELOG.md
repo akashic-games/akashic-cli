@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.0.4
+
+### Patch Changes
+
+- [#1564](https://github.com/akashic-games/akashic-cli/pull/1564) [`495f94f`](https://github.com/akashic-games/akashic-cli/commit/495f94fd53cf9c7f60028591c78e0b33b4f41893) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Fix bug in replay mode with -A option in serve
+
 ## 2.0.3
 
 ### Patch Changes
