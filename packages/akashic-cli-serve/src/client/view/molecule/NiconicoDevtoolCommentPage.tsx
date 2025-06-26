@@ -1,6 +1,10 @@
 import { observer } from "mobx-react";
 import * as React from "react";
 import type { NamagameCommentEventComment } from "../../../common/types/NamagameCommentPlugin";
+import type {
+	NiconicoDevtoolCommentPageSenderLimitation,
+	NiconicoDevtoolCommentPageSenderType
+} from "../../store/DevtoolUiCommentPageStore";
 import { ToolChoiceButton, type ToolChoiceButtonItem } from "../atom/ToolChoiceButton";
 import styles from "./NiconicoDevtoolCommentPage.module.css";
 
@@ -8,7 +12,8 @@ export interface NiconicoDevtoolCommentPagePropsModel {
 	comments: NamagameCommentEventComment[];
 	templates: string[];
 	isEnabled: boolean;
-	asAnonymous: boolean;
+	senderType: NiconicoDevtoolCommentPageSenderType;
+	senderLimitation: NiconicoDevtoolCommentPageSenderLimitation;
 	commandInput: string;
 	commentInput: string;
 }
@@ -17,23 +22,30 @@ export interface NiconicoDevtoolCommentPageProps {
 	model: NiconicoDevtoolCommentPagePropsModel;
 	onCommentInputChanged: (content: string) => void;
 	onCommandInputChanged: (content: string) => void;
-	onChangeAsAnonymous: (asAnonymous: boolean) => void;
+	onSenderTypeChanged: (type: NiconicoDevtoolCommentPageSenderType) => void;
 	onClickSend: () => void;
 	onClickTemplate: (name: string) => void;
 }
 
-const commentModeChoiceItems: (ToolChoiceButtonItem & { asAnonymous: boolean })[] = [
-	{ label: "Anonyomous", title: "匿名 (なふだ OFF) でコメント", asAnonymous: true },
-	{ label: "Named", title: "非匿名 (なふだ ON) でコメント", asAnonymous: false },
+const commentModeChoiceItemsBase: (ToolChoiceButtonItem & { type: NiconicoDevtoolCommentPageSenderType })[] = [
+	{ label: "Anonyomous", title: "匿名 (なふだ OFF) でコメント", type: "anonymous" },
+	{ label: "Named", title: "非匿名 (なふだ ON) でコメント", type: "named" },
+	{ label: "Operator", title: "配信者としてコメント", type: "operator" },
 ];
 
-export const NiconicoDevtoolCommentPage = observer(function NiconicoDevtoolCommentPage(props: NiconicoDevtoolCommentPageProps) {
-	const { model, onCommandInputChanged, onCommentInputChanged, onChangeAsAnonymous, onClickSend, onClickTemplate } = props;
-	const { comments, templates, isEnabled, asAnonymous, commandInput, commentInput } = model;
+const commentModeChoiceItemsTable: { [limitation in NiconicoDevtoolCommentPageSenderLimitation]: typeof commentModeChoiceItemsBase } = {
+	operator: commentModeChoiceItemsBase.map(item => ({ ...item, disabled: item.type !== "operator" })),
+	audience: commentModeChoiceItemsBase.map(item => ({ ...item, disabled: item.type === "operator" })),
+	none: commentModeChoiceItemsBase,
+};
 
-	const handleChoiceAsAnonymous = React.useCallback((index: number) => {
-		onChangeAsAnonymous(commentModeChoiceItems[index].asAnonymous);
-	}, [onChangeAsAnonymous]);
+export const NiconicoDevtoolCommentPage = observer(function NiconicoDevtoolCommentPage(props: NiconicoDevtoolCommentPageProps) {
+	const { model, onCommandInputChanged, onCommentInputChanged, onSenderTypeChanged, onClickSend, onClickTemplate } = props;
+	const { comments, templates, isEnabled, senderType, senderLimitation, commandInput, commentInput } = model;
+
+	const handleChoiceSenderType = React.useCallback((index: number) => {
+		onSenderTypeChanged(commentModeChoiceItemsBase[index].type);
+	}, [onSenderTypeChanged]);
 
 	const handleCommandInputChanged = React.useCallback((ev: React.ChangeEvent<HTMLInputElement>) => {
 		onCommandInputChanged(ev.target!.value);
@@ -119,10 +131,10 @@ export const NiconicoDevtoolCommentPage = observer(function NiconicoDevtoolComme
 				<div className={styles.mode}>
 					As:
 					<ToolChoiceButton
-						items={commentModeChoiceItems}
-						pushedIndex={commentModeChoiceItems.findIndex(item => item.asAnonymous === asAnonymous)}
+						items={commentModeChoiceItemsTable[senderLimitation]}
+						pushedIndex={commentModeChoiceItemsTable[senderLimitation].findIndex(item => item.type === senderType)}
 						disabled={!isEnabled}
-						onClick={handleChoiceAsAnonymous}
+						onClick={handleChoiceSenderType}
 					/>
 				</div>
 			</div>
@@ -138,13 +150,16 @@ interface CommentRowProps {
 const CommentRow = observer(function CommentRow(props: CommentRowProps) {
 	const { comment: commentEntry, index } = props;
 	const { command, comment, userID, isAnonymous, vpos } = commentEntry;
-	const isBroadcasterComment = false; // 未対応。インスタンスの playerId が join しているかをここまで渡さないといけない。
 
 	return (
 		<div className={styles["comment-row"]}>
 			<span className={styles.index}>{index + 1}</span>
-			<span className={styles.vpos}>{formatCentiseconds(vpos)}</span>
-			<span className={isBroadcasterComment ? styles.broadcaster : ""}>{comment}</span>
+			{
+				(vpos != null) ?
+					<span className={styles.vpos}>{formatCentiseconds(vpos)}</span> :
+					null
+			}
+			<span className={userID == null ? styles.broadcaster : ""}>{comment}</span>
 			{
 				command ?
 					<span className={styles.aux}>{command}</span> :

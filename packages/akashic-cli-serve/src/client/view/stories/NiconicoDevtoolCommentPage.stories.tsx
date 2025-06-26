@@ -16,13 +16,14 @@ export const Basic = {
 					comments: [],
 					templates: [],
 					isEnabled: true,
-					asAnonymous: true,
+					senderType: "anonymous",
+					senderLimitation: "none",
 					commandInput: "",
 					commentInput: "",
 				}}
 				onCommentInputChanged={action("comment-input-changed")}
 				onCommandInputChanged={action("command-input-changed")}
-				onChangeAsAnonymous={action("as-anonymous-changed")}
+				onSenderTypeChanged={action("sender-changed")}
 				onClickSend={action("click-send")}
 				onClickTemplate={action("click-template")}
 			/>
@@ -42,13 +43,14 @@ export const HasTemplates = {
 						"草",
 					],
 					isEnabled: true,
-					asAnonymous: false,
+					senderType: "operator",
+					senderLimitation: "operator",
 					commandInput: "",
 					commentInput: "",
 				}}
 				onCommentInputChanged={action("comment-input-changed")}
 				onCommandInputChanged={action("command-input-changed")}
-				onChangeAsAnonymous={action("as-anonymous-changed")}
+				onSenderTypeChanged={action("sender-changed")}
 				onClickSend={action("click-send")}
 				onClickTemplate={action("click-template")}
 			/>
@@ -64,7 +66,7 @@ export const ManyComments = {
 				model={{
 					comments: [
 						{ command: "ue big", comment: "わこつ", userID: "pid1", isAnonymous: false, vpos: 0, },
-						{ command: "", comment: "放送者コメントテスト", userID: "pid1", isAnonymous: false, vpos: 100, },
+						{ command: "", comment: "放送者コメントテスト", isAnonymous: false, },
 						{ command: "ue big", comment: "わこつ", userID: "pid1", isAnonymous: true, vpos: 100, },
 						{ command: "", comment: "テスト1", userID: "pid1", isAnonymous: true, vpos: 200, },
 						{ command: "", comment: "テスト2", userID: "pid2", isAnonymous: true, vpos: 300, },
@@ -80,13 +82,14 @@ export const ManyComments = {
 						"草",
 					],
 					isEnabled: true,
-					asAnonymous: true,
+					senderType: "anonymous",
+					senderLimitation: "audience",
 					commandInput: "ue big red",
 					commentInput: "コメント送信内容",
 				}}
 				onCommentInputChanged={action("comment-input-changed")}
 				onCommandInputChanged={action("command-input-changed")}
-				onChangeAsAnonymous={action("as-anonymous-changed")}
+				onSenderTypeChanged={action("sender-changed")}
 				onClickSend={action("click-send")}
 				onClickTemplate={action("click-template")}
 			/>
@@ -106,13 +109,14 @@ export const Disabled = {
 						"草",
 					],
 					isEnabled: false,
-					asAnonymous: true,
+					senderType: "anonymous",
+					senderLimitation: "none",
 					commandInput: "ue big red",
 					commentInput: "コメント送信内容",
 				}}
 				onCommentInputChanged={action("comment-input-changed")}
 				onCommandInputChanged={action("command-input-changed")}
-				onChangeAsAnonymous={action("as-anoymous-changed")}
+				onSenderTypeChanged={action("sender-changed")}
 				onClickSend={action("click-send")}
 				onClickTemplate={action("click-template")}
 			/>
