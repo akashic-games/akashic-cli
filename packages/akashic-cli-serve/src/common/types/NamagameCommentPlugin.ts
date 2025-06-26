@@ -11,26 +11,30 @@ export interface NamagameCommentEventComment {
 
 	/**
 	 * コメントのコマンド指定。(e.g. "shita big red")
-	 * 指定がない場合は省略される。
+	 * 放送者コメントであるか、または指定がない場合は省略される。
 	 */
 	command?: string;
 
 	/**
 	 * コメントを送信したユーザ ID 。
 	 * isAnonymous が true の場合はハッシュ化された値が入る。
+	 * 放送者コメントの場合は省略される。
 	 */
-	userID: string;
+	userID?: string;
 
 	/**
 	 * 匿名コメントであるか否か。
+	 * 「なふだ機能」が OFF のユーザのコメントは匿名コメントである。
+	 * 放送者コメントの場合は `false` 。
 	 */
 	isAnonymous: boolean;
 
 	/**
 	 * コメントの投稿タイミング。
 	 * 単位はセンチ秒。
+	 * 放送者コメントの場合は省略される。
 	 */
-	vpos: number;
+	vpos?: number;
 }
 
 /**

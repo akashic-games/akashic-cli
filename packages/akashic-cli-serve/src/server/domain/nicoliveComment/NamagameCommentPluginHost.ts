@@ -77,7 +77,13 @@ export class NamagameCommentPluginHost {
 			let lastFrame = base;
 			comments.forEach(c => {
 				const frame = lastFrame = (c.frame != null) ? base + c.frame : lastFrame;
-				const comment = { ...c, isAnonymous: !!c.isAnonymous, vpos: c.vpos ?? frameToVpos(frame, this.fps) };
+				// 実環境においては、放送者コメント (userID がないコメント) の場合 vpos は存在しないが、指定されていればそれを尊重する。
+				// sandbox.config.js のコメントテンプレート機能で、vpos だけ「無視される場合がある」のも直感に反するためだが、
+				// これが却ってトラブルの元になるなら再考する。
+				const vpos = c.vpos ?? ((c.userID != null) ? frameToVpos(frame, this.fps) : null);
+				const comment = (vpos != null) ?
+					{ ...c, isAnonymous: !!c.isAnonymous, vpos } :
+					{ ...c, isAnonymous: !!c.isAnonymous };
 				arrayMapAdd(this.plan, frame, comment);
 			});
 		};

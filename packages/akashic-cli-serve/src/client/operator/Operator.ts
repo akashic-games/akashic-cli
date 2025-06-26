@@ -137,7 +137,11 @@ export class Operator {
 
 		const sandboxConfig = play.content.sandboxConfig as NormalizedSandboxConfiguration & SandboxConfigExternalDefinition;
 		const commentTemplateNames = Object.keys(sandboxConfig.external?.namagameComment?.templates || []);
-		this.devtool.resetCommentPage(commentTemplateNames, !isNicoliveBroadcaster);
+		this.devtool.resetCommentPage(
+			commentTemplateNames,
+			isNicoliveBroadcaster ? "operator" : "anonymous",
+			isServiceNicolive ? (isNicoliveBroadcaster ? "operator" : "audience") : "none",
+		);
 
 		if (store.appOptions.autoStart) {
 			await this.startContent({
