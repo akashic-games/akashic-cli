@@ -30,12 +30,12 @@ export interface NiconicoDevtoolCommentPageProps {
 const commentModeChoiceItemsBase: (ToolChoiceButtonItem & { type: NiconicoDevtoolCommentPageSenderType })[] = [
 	{ label: "Anonyomous", title: "匿名 (なふだ OFF) でコメント", type: "anonymous" },
 	{ label: "Named", title: "非匿名 (なふだ ON) でコメント", type: "named" },
-	{ label: "Operator", title: "配信者としてコメント", type: "operator" },
+	{ label: "Broadcaster", title: "配信者としてコメント", type: "broadcaster" },
 ];
 
 const commentModeChoiceItemsTable: { [limitation in NiconicoDevtoolCommentPageSenderLimitation]: typeof commentModeChoiceItemsBase } = {
-	operator: commentModeChoiceItemsBase.map(item => ({ ...item, disabled: item.type !== "operator" })),
-	audience: commentModeChoiceItemsBase.map(item => ({ ...item, disabled: item.type === "operator" })),
+	broadcaster: commentModeChoiceItemsBase.map(item => ({ ...item, disabled: item.type !== "broadcaster" })),
+	audience: commentModeChoiceItemsBase.map(item => ({ ...item, disabled: item.type === "broadcaster" })),
 	none: commentModeChoiceItemsBase,
 };
 
