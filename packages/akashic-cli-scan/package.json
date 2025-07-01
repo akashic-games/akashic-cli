@@ -22,7 +22,7 @@
     "lib"
   ],
   "devDependencies": {
-    "@akashic/eslint-config": "3.0.1",
+    "@akashic/eslint-config": "3.0.2",
     "@akashic/game-configuration": "2.5.0",
     "@types/image-size": "0.8.0",
     "@types/mock-fs": "4.13.4",

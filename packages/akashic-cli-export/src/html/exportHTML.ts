@@ -3,7 +3,7 @@ import * as fs from "fs";
 import * as os from "os";
 import * as path from "path";
 import * as cmn from "@akashic/akashic-cli-commons";
-import archiver = require("archiver");
+import archiver = require("archiver"); // eslint-disable-line @typescript-eslint/no-require-imports
 import { promiseConvertBundle } from "./convertBundle.js";
 import { promiseConvertNoBundle } from "./convertNoBundle.js";
 import type { ConvertTemplateParameterObject } from "./convertUtil.js";

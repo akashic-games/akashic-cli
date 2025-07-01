@@ -44,7 +44,7 @@
     "lodash": "4.17.21"
   },
   "devDependencies": {
-    "@akashic/eslint-config": "3.0.1",
+    "@akashic/eslint-config": "3.0.2",
     "@types/ini": "1.3.34",
     "@types/lodash": "4.17.9",
     "@types/mock-fs": "4.13.4",
