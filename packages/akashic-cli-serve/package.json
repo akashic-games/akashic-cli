@@ -51,7 +51,7 @@
   "devDependencies": {
     "@akashic/agvw": "^1.0.6",
     "@akashic/amflow": "~3.3.0",
-    "@akashic/eslint-config": "3.0.1",
+    "@akashic/eslint-config": "3.0.2",
     "@akashic/pdi-types": "~1.14.0",
     "@akashic/playlog": "~3.4.0",
     "@storybook/addon-actions": "^8.1.11",
