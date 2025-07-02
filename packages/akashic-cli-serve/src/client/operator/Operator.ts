@@ -33,7 +33,6 @@ export interface OperatorParameterObject {
 export interface StartContentParameterObject {
 	joinsSelf: boolean;
 	instanceArgument: any;
-	isReplay?: boolean;
 }
 
 export class Operator {
@@ -79,10 +78,9 @@ export class Operator {
 				play = await this._createServerLoop(loc, initialJoinPlayer, false, false); // TODO: (起動時の最初のプレイで) audioState を指定する方法
 			}
 		}
-		const isReplay = query.mode === "replay";
-		await this.setCurrentPlay(play, isReplay);
+		await this.setCurrentPlay(play);
 
-		if (isReplay) {
+		if (query.mode === "replay") {
 			if (query.replayResetAge != null) {
 				await this.localInstance.resetByAge(query.replayResetAge);
 			}
@@ -107,7 +105,7 @@ export class Operator {
 		}
 	}
 
-	setCurrentPlay = async (play: PlayEntity, isReplay: boolean = false): Promise<void> => {
+	setCurrentPlay = async (play: PlayEntity): Promise<void> => {
 		const store = this.store;
 		if (store.currentPlay === play)
 			return;
@@ -146,8 +144,7 @@ export class Operator {
 		if (store.appOptions.autoStart) {
 			await this.startContent({
 				joinsSelf: false,
-				instanceArgument: argument,
-				isReplay
+				instanceArgument: argument
 			});
 		}
 	};
@@ -160,7 +157,7 @@ export class Operator {
 			playId: play!.playId,
 			playToken: tokenResult.data.playToken,
 			playlogServerUrl: "dummy-playlog-server-url",
-			executionMode: params != null && params.isReplay ? "replay" : "passive",
+			executionMode: query.mode === "replay" ? "replay" : "passive",
 			player: store.player!,
 			argument: params != null ? params.instanceArgument : undefined,
 			proxyAudio: store.appOptions.proxyAudio,

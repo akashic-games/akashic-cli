@@ -127,8 +127,6 @@ export class DevtoolUiStore {
 		storage.put({ showsHiddenEntity: show });
 	}
 
-	/* eslint-disable @typescript-eslint/indent */
-	// annotation の次行の関数式でインデントエラーとなるため disable とする。
 	@action
 	toggleIsSelectingEntity = (select: boolean): void => {
 		this.isSelectingEntity = select;
@@ -138,7 +136,6 @@ export class DevtoolUiStore {
 	setSelectedEntityId = (eid: number | null): void => {
 		this.selectedEntityId = eid;
 	};
-	/* eslint-enable @typescript-eslint/indent */
 
 	@action
 	// 現在は利用していないが、将来音量調節機能をつける時に使う

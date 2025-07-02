@@ -4,7 +4,7 @@ import * as path from "path";
 import { fileURLToPath } from "url";
 import * as cmn from "@akashic/akashic-cli-commons";
 import { size as statSize } from "@akashic/akashic-cli-extra/lib/stat/stat.js";
-import archiver = require("archiver");
+import archiver = require("archiver"); // eslint-disable-line @typescript-eslint/no-require-imports
 import type { MinifyOptions } from "terser";
 import { convertGame } from "./convert.js";
 

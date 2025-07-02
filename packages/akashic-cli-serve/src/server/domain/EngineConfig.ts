@@ -36,7 +36,6 @@ export const getEngineConfig = (param: GetEngineConfigParameterObject): EngineCo
 			external = Object.keys(gameJson.environment.external);
 		}
 	}
-	// eslint-disable-next-line @typescript-eslint/no-var-requires
 	const versionsJson: EngineFilesVersions = require("../engineFilesVersion.json");
 
 	if (process.env.ENGINE_FILES_V3_PATH) {

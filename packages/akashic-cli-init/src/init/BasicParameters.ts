@@ -102,7 +102,7 @@ export async function updateConfigurationFile(confPath: string, logger: Logger, 
 	let conf = {} as GameConfiguration;
 	try {
 		conf = await readJSON<GameConfiguration>(confPath);
-	} catch (e) {
+	} catch (_e) {
 		logger.info("No game.json found. Create a new one.");
 	}
 	const basicParams = await promptGetBasicParameters({

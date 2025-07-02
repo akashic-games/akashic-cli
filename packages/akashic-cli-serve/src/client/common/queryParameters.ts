@@ -191,7 +191,7 @@ export interface ServeQueryParameters {
 	/**
 	 * 背景色を表示するか。
 	 */
-	 showsBackgroundColor: boolean | null;
+	showsBackgroundColor: boolean | null;
 
 	/**
 	 * グリッドを表示するか。

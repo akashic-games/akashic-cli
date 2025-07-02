@@ -74,7 +74,7 @@ export function extractFilePaths(gamejson: cmn.GameConfiguration, basedir: strin
 			try {
 				if (fs.statSync(path.resolve(basedir, a.path + ext)).isFile())
 					result.push(a.path + ext);
-			} catch (e) {
+			} catch (_e) {
 				// do nothing.
 			}
 		});

@@ -9,7 +9,7 @@
     "build": "tsc -p ./",
     "test": "npm run test:vitest && npm run test:lint",
     "test:vitest": "vitest run",
-    "test:lint": "eslint -c .eslintrc.cjs --fix \"./src/**/*.ts\""
+    "test:lint": "eslint \"./src/**/*.ts\" --fix"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
@@ -22,15 +22,12 @@
     "lib"
   ],
   "devDependencies": {
-    "@akashic/eslint-config": "2.1.0",
+    "@akashic/eslint-config": "3.0.2",
     "@akashic/game-configuration": "2.5.0",
     "@types/form-data": "2.5.0",
     "@types/mock-fs": "4.13.4",
     "@types/node": "18.19.44",
     "@types/tar": "6.1.13",
-    "@typescript-eslint/eslint-plugin": "6.21.0",
-    "eslint": "8.57.0",
-    "eslint-plugin-import": "2.29.1",
     "mock-fs": "5.2.0",
     "rimraf": "3.0.2",
     "typescript": "5.6.2",
