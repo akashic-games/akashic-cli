@@ -20,6 +20,8 @@ export interface DevtoolContainerProps {
 export const DevtoolContainer = observer(class DevtoolContainer extends React.Component<DevtoolContainerProps, {}> {
 	render(): React.ReactNode {
 		const { play, operator, localInstance, toolBarUiStore, devtoolUiStore, sandboxConfig } = this.props;
+		const { commentPage: commentPageStore } = devtoolUiStore;
+
 		return <Devtool
 			height={devtoolUiStore.height}
 			minHeight={200}
@@ -97,22 +99,36 @@ export const DevtoolContainer = observer(class DevtoolContainer extends React.Co
 				onMouseLeaveEntityItem: operator.devtool.clearHighlightedEntity
 			}}
 			niconicoDevtoolProps={{
-				isAutoSendEvent: devtoolUiStore.isAutoSendEvent,
-				emulatingShinichibaMode: devtoolUiStore.emulatingShinichibaMode,
-				totalTimeLimitInputValue: devtoolUiStore.totalTimeLimitInputValue,
-				totalTimeLimit: devtoolUiStore.totalTimeLimit!,
-				playDuration: play.duration,
-				usePreferredTimeLimit: devtoolUiStore.usePreferredTotalTimeLimit,
-				stopsGameOnTimeout: devtoolUiStore.stopsGameOnTimeout,
-				score: devtoolUiStore.score,
-				playThreshold: devtoolUiStore.playThreshold,
-				clearThreshold: devtoolUiStore.clearThreshold,
-				preferredTotalTimeLimit: devtoolUiStore.preferredTotalTimeLimit,
-				onAutoSendEventsChanged: operator.devtool.toggleAutoSendEvents,
-				onModeSelectChanged: operator.devtool.setSupportedMode,
-				onUsePreferredTotalTimeLimitChanged: operator.devtool.toggleUsePreferredTotalTimeLimit,
-				onUseStopGameChanged: operator.devtool.toggleUseStopGame,
-				onTotalTimeLimitInputValueChanged: operator.devtool.setTotalTimeLimitInputValue
+				activePage: devtoolUiStore.niconicoToolActivePage,
+				selectorWidth: devtoolUiStore.niconicoToolSelectorWidth,
+				rankingPageProps: {
+					isAutoSendEvent: devtoolUiStore.isAutoSendEvent,
+					emulatingShinichibaMode: devtoolUiStore.emulatingShinichibaMode,
+					totalTimeLimitInputValue: devtoolUiStore.totalTimeLimitInputValue,
+					totalTimeLimit: devtoolUiStore.totalTimeLimit!,
+					playDuration: play.duration,
+					usePreferredTimeLimit: devtoolUiStore.usePreferredTotalTimeLimit,
+					stopsGameOnTimeout: devtoolUiStore.stopsGameOnTimeout,
+					score: devtoolUiStore.score,
+					playThreshold: devtoolUiStore.playThreshold,
+					clearThreshold: devtoolUiStore.clearThreshold,
+					preferredTotalTimeLimit: devtoolUiStore.preferredTotalTimeLimit,
+					onAutoSendEventsChanged: operator.devtool.toggleAutoSendEvents,
+					onModeSelectChanged: operator.devtool.setSupportedMode,
+					onUsePreferredTotalTimeLimitChanged: operator.devtool.toggleUsePreferredTotalTimeLimit,
+					onUseStopGameChanged: operator.devtool.toggleUseStopGame,
+					onTotalTimeLimitInputValueChanged: operator.devtool.setTotalTimeLimitInputValue
+				},
+				commentPageProps: {
+					model: commentPageStore,
+					onCommandInputChanged: operator.devtool.setCommentPageCommandInput,
+					onCommentInputChanged: operator.devtool.setCommentPageCommentInput,
+					onSenderTypeChanged: operator.devtool.setCommentPageSenderType,
+					onClickSend: operator.play.sendEditorNamagameCommentEvent,
+					onClickTemplate: operator.play.sendRegisteredNamagameCommentEvent,
+				},
+				onChangePage: operator.devtool.setNiconicoDevtoolActivePage,
+				onResizeSelector: operator.devtool.setNiconicoDevtoolSelectorWidth,
 			}}
 			internalDevtoolProps={{
 				sendScreenshotEvent: operator.play.sendScreenshotEvent,

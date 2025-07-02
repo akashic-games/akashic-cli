@@ -1,4 +1,6 @@
+import type { OnTickArguments } from "../../akashic/ServeGameContent";
 import type { EDumpItem } from "../../common/types/EDumpItem";
+import type { NiconicoDevtoolPageType } from "../../view/molecule/NiconicoDevtool";
 import type { Store } from "../Store";
 
 function consoleLog(value: any): void {
@@ -126,7 +128,15 @@ export class DevtoolOperator {
 			gameContent.onTick.add(this.tickHandler, this);
 	};
 
-	private async tickHandler(game: agv.GameLike): Promise<void> {
+	setNiconicoDevtoolActivePage = (pageType: NiconicoDevtoolPageType): void => {
+		this.store.devtoolUiStore.setNiconicoToolActivePage(pageType);
+	};
+
+	setNiconicoDevtoolSelectorWidth = (w: number): void => {
+		this.store.devtoolUiStore.setNiconicoToolSelectorWidth(w);
+	};
+
+	private async tickHandler({ game }: OnTickArguments): Promise<void> {
 		if (this.store.devtoolUiStore.stopsGameOnTimeout)
 			await this.updateRemainingTime();
 
