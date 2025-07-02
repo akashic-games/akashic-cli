@@ -123,7 +123,7 @@ export const DevtoolContainer = observer(class DevtoolContainer extends React.Co
 					model: commentPageStore,
 					onCommandInputChanged: operator.devtool.setCommentPageCommandInput,
 					onCommentInputChanged: operator.devtool.setCommentPageCommentInput,
-					onChangeAsAnonymous: operator.devtool.setCommentPageAsAnonymous,
+					onSenderTypeChanged: operator.devtool.setCommentPageSenderType,
 					onClickSend: operator.play.sendEditorNamagameCommentEvent,
 					onClickTemplate: operator.play.sendRegisteredNamagameCommentEvent,
 				},

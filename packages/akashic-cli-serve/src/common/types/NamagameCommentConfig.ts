@@ -21,7 +21,7 @@ export interface NamagameCommentConfigComment {
 	/**
 	 * コメントを送信したユーザの ID 。
 	 */
-	userID: string;
+	userID?: string;
 
 	/**
 	 * 匿名コメントか否か。
