@@ -43,8 +43,8 @@ export const HasTemplates = {
 						"草",
 					],
 					isEnabled: true,
-					senderType: "operator",
-					senderLimitation: "operator",
+					senderType: "broadcaster",
+					senderLimitation: "broadcaster",
 					commandInput: "",
 					commentInput: "",
 				}}

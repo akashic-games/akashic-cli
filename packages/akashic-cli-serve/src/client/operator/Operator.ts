@@ -139,8 +139,8 @@ export class Operator {
 		const commentTemplateNames = Object.keys(sandboxConfig.external?.namagameComment?.templates || []);
 		this.devtool.resetCommentPage(
 			commentTemplateNames,
-			isNicoliveBroadcaster ? "operator" : "anonymous",
-			isServiceNicolive ? (isNicoliveBroadcaster ? "operator" : "audience") : "none",
+			isNicoliveBroadcaster ? "broadcaster" : "anonymous",
+			isServiceNicolive ? (isNicoliveBroadcaster ? "broadcaster" : "audience") : "none",
 		);
 
 		if (store.appOptions.autoStart) {

@@ -126,7 +126,7 @@ export class PlayOperator {
 
 		const vpos = Math.floor(currentPlay.duration / 10);
 		const cmt: NamagameCommentEventComment =
-			senderType === "operator" ?
+			senderType === "broadcaster" ?
 				{ command, comment, isAnonymous: false } :
 			senderType === "anonymous" ?
 				{ command, comment, isAnonymous: true, userID: this.store.hashedPlayerId!, vpos } :

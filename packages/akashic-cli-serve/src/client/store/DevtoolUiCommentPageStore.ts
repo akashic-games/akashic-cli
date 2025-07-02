@@ -6,18 +6,18 @@ import type { NamagameCommentEventComment } from "../../common/types/NamagameCom
  *
  * - "anonymous": 匿名の視聴者。コメントを isAnonymous: true で送る
  * - "named": 顕名の視聴者。isAnonymous: false で送る
- * - "operator": 放送者。コメントを userID, vpos なしで送る
+ * - "broadcaster": 放送者。コメントを userID, vpos なしで送る
  */
-export type NiconicoDevtoolCommentPageSenderType = "anonymous" | "named" | "operator";
+export type NiconicoDevtoolCommentPageSenderType = "anonymous" | "named" | "broadcaster";
 
 /**
  * コメント送信者タイプの制限。
  *
- * - "operator": 放送者。 "operator" しか選べない
+ * - "broadcaster": 放送者。 "broadcaster" しか選べない
  * - "audience": 非放送者。 "named" か "anonymous" しか選べない
  * - "none": 制限なし
  */
-export type NiconicoDevtoolCommentPageSenderLimitation = "operator" | "audience" | "none";
+export type NiconicoDevtoolCommentPageSenderLimitation = "broadcaster" | "audience" | "none";
 
 export class DevtoolUiCommentPageStore {
 	@observable comments: NamagameCommentEventComment[] = [];
