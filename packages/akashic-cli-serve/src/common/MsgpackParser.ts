@@ -2,7 +2,7 @@ import { encode, decode } from "@msgpack/msgpack";
 import { Emitter } from "@socket.io/component-emitter";
 import type { Packet } from "socket.io-parser";
 import { PacketType } from "socket.io-parser";
-import type { MessageEncodeTestbedEvent } from "./types/TestbedEvent";
+import type { MessageEncodeTestbedEvent } from "./types/TestbedEvent.js";
 
 type EncoderEvents = { encoded: (d: MessageEncodeTestbedEvent) => void };
 type DecoderEvents = { decoded: (p: Packet) => void };

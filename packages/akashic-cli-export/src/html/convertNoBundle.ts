@@ -4,8 +4,8 @@ import * as path from "path";
 import { fileURLToPath } from "url";
 import * as cmn from "@akashic/akashic-cli-commons";
 import * as ejs from "ejs";
-import fsx from "fs-extra";
 import type { MinifyOptions } from "terser";
+import * as licenseUtil from "../licenseUtil.js";
 import { validateGameJson } from "../utils.js";
 import type {
 	ConvertTemplateParameterObject} from "./convertUtil.js";
@@ -16,10 +16,10 @@ import {
 	wrap,
 	extractAssetDefinitions,
 	getInjectedContents,
-	validateEs5Code,
 	readSandboxConfigJs,
 	validateEngineFilesName,
 	resolveEngineFilesPath,
+	removeUntaintedHints,
 	validateSandboxConfigJs
 } from "./convertUtil.js";
 
@@ -28,11 +28,12 @@ const __dirname = path.dirname(__filename);
 const require = createRequire(import.meta.url);
 
 export async function promiseConvertNoBundle(options: ConvertTemplateParameterObject): Promise<void> {
-	const content = await cmn.ConfigurationFile.read(path.join(options.source, "game.json"), options.logger);
+	const content = await cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join(options.source, "game.json"));
 	if (!content.environment) content.environment = {};
 	content.environment["sandbox-runtime"] = content.environment["sandbox-runtime"] ? content.environment["sandbox-runtime"] : "1";
 
 	validateGameJson(content);
+	removeUntaintedHints(content);
 
 	const conf = new cmn.Configuration({
 		content: content
@@ -42,7 +43,7 @@ export async function promiseConvertNoBundle(options: ConvertTemplateParameterOb
 	writeCommonFiles(options.source, options.output, conf, options);
 
 	const gamejsonPath = path.resolve(options.output, "./js/game.json.js");
-	fsx.outputFileSync(gamejsonPath, wrapText(JSON.stringify(conf._content, null, "\t"), "game.json"));
+	fs.writeFileSync(gamejsonPath, wrapText(JSON.stringify(conf._content, null, "\t"), "game.json"));
 	assetPaths.push("./js/game.json.js");
 
 	if (options.autoSendEventName || options.autoGivenArgsName) {
@@ -60,20 +61,24 @@ export async function promiseConvertNoBundle(options: ConvertTemplateParameterOb
 	const nonBinaryAssetNames = extractAssetDefinitions(conf, "script").concat(extractAssetDefinitions(conf, "text"));
 	const errorMessages: string[] = [];
 	const nonBinaryAssetPaths = await Promise.all(nonBinaryAssetNames.map((assetName: string) => {
-		return convertAssetAndOutput(assetName, conf, options.source, options.output, terser, errorMessages);
+		return convertAssetAndOutput(assetName, conf, options.source, options.output, terser, options.esDownpile);
 	}));
 	assetPaths = assetPaths.concat(nonBinaryAssetPaths);
+	const libPaths: string[] = [];
 	if (conf._content.globalScripts) {
 		const globalScriptPaths = await Promise.all(conf._content.globalScripts.map((scriptName: string) => {
+			libPaths.push(scriptName);
 			return convertGlobalScriptAndOutput(
 				scriptName,
 				options.source,
 				options.output,
-				terser,
-				errorMessages);
+				terser);
 		}));
 		assetPaths = assetPaths.concat(globalScriptPaths);
 	}
+
+	await licenseUtil.writeLicenseTextFile(options.source, options.output, libPaths, content.environment["sandbox-runtime"]);
+
 	if (errorMessages.length > 0) {
 		options.logger.warn("The following ES5 syntax errors exist.\n" + errorMessages.join("\n"));
 	}
@@ -82,43 +87,40 @@ export async function promiseConvertNoBundle(options: ConvertTemplateParameterOb
 }
 
 async function convertAssetAndOutput(
-	assetName: string, conf: cmn.Configuration,
-	inputPath: string, outputPath: string,
+	assetName: string,
+	conf: cmn.Configuration,
+	inputPath: string,
+	outputPath: string,
 	terser: MinifyOptions | undefined,
-	errors?: string[]): Promise<string> {
+	esDownpile: boolean
+): Promise<string> {
 	const assets = conf._content.assets;
 	const asset = assets[assetName];
 	const isScript = asset.type === "script";
 	const exports = (asset.type === "script" && asset.exports) ?? [];
 	const assetString = fs.readFileSync(path.join(inputPath, asset.path), "utf8").replace(/\r\n|\r/g, "\n");
 	const assetPath = asset.path;
-	if (isScript) {
-		errors.push.apply(errors, await validateEs5Code(assetPath, assetString)); // ES5構文に反する箇所があるかのチェック
-	}
 
-	const code = (isScript ? wrapScript(assetString, assetName, terser, exports) : wrapText(assetString, assetName));
+	const code = (isScript ? wrapScript(assetString, assetName, terser, esDownpile, exports) : wrapText(assetString, assetName));
 	const relativePath = "./js/assets/" + path.dirname(assetPath) + "/" +
 		path.basename(assetPath, path.extname(assetPath)) + (isScript ? ".js" : ".json.js");
 	const filePath = path.resolve(outputPath, relativePath);
 
-	fsx.outputFileSync(filePath, code);
+	fs.mkdirSync(path.dirname(filePath), { recursive: true });
+	fs.writeFileSync(filePath, code);
 	return relativePath;
 }
 
 async function convertGlobalScriptAndOutput(
 	scriptName: string, inputPath: string, outputPath: string,
-	terser: MinifyOptions | undefined, errors?: string[]): Promise<string> {
+	terser: MinifyOptions | undefined): Promise<string> {
 	const scriptString = fs.readFileSync(path.join(inputPath, scriptName), "utf8").replace(/\r\n|\r/g, "\n");
 	const isScript = /\.js$/i.test(scriptName);
-	if (isScript) {
-		errors.push.apply(errors, await validateEs5Code(scriptName, scriptString)); // ES5構文に反する箇所があるかのチェック
-	}
-
-	const code = isScript ? wrapScript(scriptString, scriptName, terser) : wrapText(scriptString, scriptName);
+	const code = isScript ? wrapScript(scriptString, scriptName, terser, false) : wrapText(scriptString, scriptName);
 	const relativePath = "./globalScripts/" + scriptName + (isScript ? "" : ".js");
 	const filePath = path.resolve(outputPath, relativePath);
-
-	fsx.outputFileSync(filePath, code);
+	fs.mkdirSync(path.dirname(filePath), { recursive: true });
+	fs.writeFileSync(filePath, code);
 	return relativePath;
 }
 
@@ -126,7 +128,8 @@ async function writeHtmlFile(
 	assetPaths: string[],
 	outputPath: string,
 	conf: cmn.Configuration,
-	options: ConvertTemplateParameterObject): Promise<void> {
+	options: ConvertTemplateParameterObject
+): Promise<void> {
 	const injects = options.injects ? options.injects : [];
 	const version = conf._content.environment["sandbox-runtime"];
 	const filePath = path.resolve(__dirname + "/../template/no-bundle-index.ejs");
@@ -182,15 +185,17 @@ function writeCommonFiles(
 			throw Error("Unknown engine version: `environment[\"sandbox-runtime\"]` field in game.json should be \"1\", \"2\", or \"3\".");
 	}
 
-	fsx.copySync(
+	fs.cpSync(
 		path.resolve(__dirname, "..", "..", "lib", templatePath),
-		outputPath);
+		outputPath,
+		{ recursive: true });
 
 	const jsDir = path.join(outputPath, "js");
 	const engineFilesPath = options.debugOverrideEngineFiles ?? resolveEngineFilesPath(version);
-	fsx.copySync(
+	fs.cpSync(
 		path.resolve(engineFilesPath),
-		path.join(jsDir, path.basename(engineFilesPath))
+		path.join(jsDir, path.basename(engineFilesPath)),
+		{ recursive: true }
 	);
 }
 
@@ -204,8 +209,8 @@ window.optionProps.magnify = ${!!options.magnify};
 	fs.writeFileSync(path.resolve(outputPath, "./js/option.js"), script);
 }
 
-function wrapScript(code: string, name: string, terser?: MinifyOptions, exports: string[] = []): string {
-	return "window.gLocalAssetContainer[\"" + name + "\"] = function(g) { " + wrap(code, terser, exports) + "}";
+function wrapScript(code: string, name: string, terser?: MinifyOptions, esDownpile?: boolean, exports: string[] = []): string {
+	return "window.gLocalAssetContainer[\"" + name + "\"] = function(g) { " + wrap(code, terser, esDownpile, exports) + "}";
 }
 
 function wrapText(code: string, name: string): string {

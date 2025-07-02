@@ -1,6 +1,6 @@
 import type { NormalizedSandboxConfiguration } from "@akashic/sandbox-configuration";
 import { isServiceTypeNicoliveLike } from "../../common/targetServiceUtil";
-import type { SandboxConfigExternalDefinition } from "../../common/types/NicoliveCommentConfig";
+import type { SandboxConfigExternalDefinition } from "../../common/types/NamagameCommentConfig";
 import type { Player } from "../../common/types/Player";
 import type { PlayBroadcastTestbedEvent } from "../../common/types/TestbedEvent";
 import type { GameViewManager } from "../akashic/GameViewManager";
@@ -8,7 +8,6 @@ import type { PlayerInfoResolverResultMessage } from "../akashic/plugin/CoeLimit
 import { CoeLimitedPlugin } from "../akashic/plugin/CoeLimitedPlugin";
 import type { CreateCoeLocalInstanceParameterObject } from "../akashic/plugin/CoePlugin";
 import { CoePlugin } from "../akashic/plugin/CoePlugin";
-import { NicoliveCommentClientPlugin } from "../akashic/plugin/NicoliveCommentClientPlugin";
 import { NicoPlugin } from "../akashic/plugin/NicoPlugin";
 import { SendPlugin } from "../akashic/plugin/SendPlugin";
 import { apiClient } from "../api/apiClientInstance";
@@ -137,11 +136,11 @@ export class Operator {
 		}
 
 		const sandboxConfig = play.content.sandboxConfig as NormalizedSandboxConfiguration & SandboxConfigExternalDefinition;
-		const commentTemplateNames = Object.keys(sandboxConfig.external?.nicoliveComment?.templates || []);
+		const commentTemplateNames = Object.keys(sandboxConfig.external?.namagameComment?.templates || []);
 		this.devtool.resetCommentPage(
 			commentTemplateNames,
-			isNicoliveBroadcaster ? "operator" : "anonymous",
-			isServiceNicolive ? (isNicoliveBroadcaster ? "operator" : "audience") : "none",
+			isNicoliveBroadcaster ? "broadcaster" : "anonymous",
+			isServiceNicolive ? (isNicoliveBroadcaster ? "broadcaster" : "audience") : "none",
 		);
 
 		if (store.appOptions.autoStart) {
@@ -181,6 +180,13 @@ export class Operator {
 
 		this.store.devtoolUiStore.initTotalTimeLimit(play!.content.preferredSessionParameters.totalTimeLimit!);
 		this.devtool.setupNiconicoDevtoolValueWatcher();
+
+		if (instance.content.gameJson?.environment?.external?.namagameComment) {
+			this.devtool.setCommentPageIsEnabled(true);
+			this.devtool.startWatchNamagameComment();
+		} else {
+			this.devtool.setCommentPageIsEnabled(false);
+		}
 
 		if (params != null && params.joinsSelf) {
 			store.currentPlay!.join(store.player!.id, store.player!.name);
@@ -279,18 +285,7 @@ export class Operator {
 
 	//  TODO: 複数のコンテンツ対応。引数の contentLocator は複数コンテンツに対応していないが暫定とする
 	private async _initializePlugins(contentLocator: ClientContentLocator): Promise<void> {
-		const commentPlugin = new NicoliveCommentClientPlugin();
-		commentPlugin.onStartStop.add(started => {
-			this.devtool.setCommentPageIsEnabled(started);
-			if (started) {
-				this.devtool.startWatchNicoliveComment();
-			} else {
-				this.devtool.stopWatchNicoliveComment();
-			}
-		});
-
 		this.gameViewManager.registerExternalPlugin(new NicoPlugin());
-		this.gameViewManager.registerExternalPlugin(commentPlugin);
 		this.gameViewManager.registerExternalPlugin(new SendPlugin());
 		this.gameViewManager.registerExternalPlugin(new CoePlugin({
 			onLocalInstanceCreate: this._createLocalSessionInstance,
@@ -303,11 +298,17 @@ export class Operator {
 			this.gameViewManager.registerExternalPlugin(new agvplugin.InstanceStoragePlugin({
 				storage: window.sessionStorage
 			}));
+			if (agvplugin.InstanceStorageLimitedPlugin)
+				this.gameViewManager.registerExternalPlugin(new agvplugin.InstanceStorageLimitedPlugin());
 		} else {
 			this.gameViewManager.registerExternalPlugin(new CoeLimitedPlugin({
 				startPlayerInfoResolver: this._startPlayerInfoResolver,
 				endPlayerInfoResolver: this._endPlayerInfoResolver
 			}));
+			this.gameViewManager.registerExternalPlugin(new agvPublicPlugins.InstanceStoragePlugin({
+				storage: window.sessionStorage,
+			}));
+			this.gameViewManager.registerExternalPlugin(new agvPublicPlugins.InstanceStorageLimitedPlugin());
 		}
 
 		const content = this.store.contentStore.find(contentLocator);

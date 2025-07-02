@@ -14,10 +14,10 @@ import type {
 	OptionsApiResponse,
 	PlayerPostApiResponse,
 	StartPointHeaderListResponse,
-	PlaySendNicoliveCommentResponse
+	PlaySendNamagameCommentResponse
 } from "../../common/types/ApiResponse";
 import type { ContentLocatorData } from "../../common/types/ContentLocatorData";
-import type { NicoliveCommentEventComment } from "../../common/types/NicoliveCommentPlugin";
+import type { NamagameCommentEventComment } from "../../common/types/NamagameCommentPlugin";
 import type { PlayAudioState } from "../../common/types/PlayAudioState";
 import type { Player } from "../../common/types/Player";
 import * as ApiRequest from "./ApiRequest";
@@ -127,17 +127,17 @@ export class ApiClient {
 		);
 	};
 
-	async requestToSendNicoliveCommentByTemplate(playId: string, templateName: string): Promise<PlaySendNicoliveCommentResponse> {
-		return ApiRequest.post<PlaySendNicoliveCommentResponse>(
+	async requestToSendNamagameCommentByTemplate(playId: string, templateName: string): Promise<PlaySendNamagameCommentResponse> {
+		return ApiRequest.post<PlaySendNamagameCommentResponse>(
 			`${this._baseUrl}/api/plays/${playId}/comment-template`,
 			{name: templateName}
 		);
 	};
 
-	async requestToSendNicoliveComment(playId: string, comment: NicoliveCommentEventComment): Promise<PlaySendNicoliveCommentResponse> {
-		return ApiRequest.post<PlaySendNicoliveCommentResponse>(
+	async requestToSendNamagameComment(playId: string, comment: NamagameCommentEventComment): Promise<PlaySendNamagameCommentResponse> {
+		return ApiRequest.post<PlaySendNamagameCommentResponse>(
 			`${this._baseUrl}/api/plays/${playId}/comment`,
-			{ ...comment, isAnonymous: comment.isAnonymous?.toString(), isOperatorComment: comment.isOperatorComment?.toString() }
+			{ ...comment, isAnonymous: comment.isAnonymous?.toString() }
 		);
 	};
 

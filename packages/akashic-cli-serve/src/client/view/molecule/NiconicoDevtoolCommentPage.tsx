@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import type { NicoliveCommentEventComment } from "../../../common/types/NicoliveCommentPlugin";
+import type { NamagameCommentEventComment } from "../../../common/types/NamagameCommentPlugin";
 import type {
 	NiconicoDevtoolCommentPageSenderLimitation,
 	NiconicoDevtoolCommentPageSenderType
@@ -9,7 +9,7 @@ import { ToolChoiceButton, type ToolChoiceButtonItem } from "../atom/ToolChoiceB
 import styles from "./NiconicoDevtoolCommentPage.module.css";
 
 export interface NiconicoDevtoolCommentPagePropsModel {
-	comments: NicoliveCommentEventComment[];
+	comments: NamagameCommentEventComment[];
 	templates: string[];
 	isEnabled: boolean;
 	senderType: NiconicoDevtoolCommentPageSenderType;
@@ -30,12 +30,12 @@ export interface NiconicoDevtoolCommentPageProps {
 const commentModeChoiceItemsBase: (ToolChoiceButtonItem & { type: NiconicoDevtoolCommentPageSenderType })[] = [
 	{ label: "Anonyomous", title: "匿名 (なふだ OFF) でコメント", type: "anonymous" },
 	{ label: "Named", title: "非匿名 (なふだ ON) でコメント", type: "named" },
-	{ label: "Operator", title: "配信者としてコメント", type: "operator" },
+	{ label: "Broadcaster", title: "配信者としてコメント", type: "broadcaster" },
 ];
 
 const commentModeChoiceItemsTable: { [limitation in NiconicoDevtoolCommentPageSenderLimitation]: typeof commentModeChoiceItemsBase } = {
-	operator: commentModeChoiceItemsBase.map(item => ({ ...item, disabled: item.type !== "operator" })),
-	audience: commentModeChoiceItemsBase.map(item => ({ ...item, disabled: item.type === "operator" })),
+	broadcaster: commentModeChoiceItemsBase.map(item => ({ ...item, disabled: item.type !== "broadcaster" })),
+	audience: commentModeChoiceItemsBase.map(item => ({ ...item, disabled: item.type === "broadcaster" })),
 	none: commentModeChoiceItemsBase,
 };
 
@@ -77,9 +77,8 @@ export const NiconicoDevtoolCommentPage = observer(function NiconicoDevtoolComme
 					</div> :
 					<div className={styles["disabled-message"]}>
 						<div>
-							NicoliveComment plugin is either not enabled or not started.<br/>
-							(<code>g.game.external.nicoliveComment.start()</code>
-							to send/list comments here.)
+							NamagameComment plugin is not enabled.<br/>
+							(<code>environment.external.namagameComment</code> must be set in game.json to send/list comments here.)
 						</div>
 					</div>
 			}
@@ -144,27 +143,46 @@ export const NiconicoDevtoolCommentPage = observer(function NiconicoDevtoolComme
 });
 
 interface CommentRowProps {
-	comment: NicoliveCommentEventComment;
+	comment: NamagameCommentEventComment;
 	index: number;
 }
 
 const CommentRow = observer(function CommentRow(props: CommentRowProps) {
 	const { comment: commentEntry, index } = props;
-	const { command, comment, userID, isAnonymous, isOperatorComment } = commentEntry;
+	const { command, comment, userID, isAnonymous, vpos } = commentEntry;
+
 	return (
 		<div className={styles["comment-row"]}>
 			<span className={styles.index}>{index + 1}</span>
-			<span className={isOperatorComment ? styles.operator : ""}>{comment}</span>
+			{
+				(vpos != null) ?
+					<span className={styles.vpos}>{formatCentiseconds(vpos)}</span> :
+					null
+			}
+			<span className={userID == null ? styles.broadcaster : ""}>{comment}</span>
 			{
 				command ?
 					<span className={styles.aux}>{command}</span> :
 					null
 			}
 			{
-				!isOperatorComment && !isAnonymous ?
+				!isAnonymous && userID ?
 					<span className={styles.aux}>userID: {userID}</span> :
 					null
 			}
 		</div>
 	);
 });
+
+function formatCentiseconds(centiseconds: number): string {
+	const csecs = centiseconds % 100;
+	const secs = Math.floor(centiseconds / 100) % 60;
+	const mins = Math.floor(centiseconds / 6000) % 60;
+	const hours = Math.floor(centiseconds / 360000);
+
+	const hs = hours > 0 ? ("" + hours).padStart(2, "0") + ":" : "";
+	const ms = ("" + mins).padStart(2, "0");
+	const ss = ("" + secs).padStart(2, "0");
+	const cs = csecs.toString().padStart(2, "0");
+	return `${hs}${ms}:${ss}.${cs}`;
+}

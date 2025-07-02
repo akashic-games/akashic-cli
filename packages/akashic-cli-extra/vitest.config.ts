@@ -5,6 +5,9 @@ export default defineConfig({
 		globals: true,
 		include: [
 			"./src/**/__tests__/**/*[sS]pec.ts"
-		]
+		],
+		deps: {
+			interopDefault: false,
+		},
 	},
 });

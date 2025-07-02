@@ -1,7 +1,7 @@
 import { createRequire } from "module";
 import * as path from "path";
-import type { CliConfigExportHtml} from "@akashic/akashic-cli-commons";
-import { ConsoleLogger, CliConfigurationFile } from "@akashic/akashic-cli-commons";
+import type { CliConfigExportHtml } from "@akashic/akashic-cli-commons";
+import { ConsoleLogger, FileSystem} from "@akashic/akashic-cli-commons";
 import { Command } from "commander";
 import type { ExportHTMLParameterObject } from "./exportHTML.js";
 import { promiseExportHTML } from "./exportHTML.js";
@@ -30,6 +30,7 @@ function cli(param: CliConfigExportHtml): void {
 		autoSendEventName: param.autoSendEventName || param.autoSendEvents,
 		autoGivenArgsName: param.autoGivenArgsName,
 		omitUnbundledJs: param.omitUnbundledJs,
+		esDownpile: (param.esDownpile != null) ? param.esDownpile : true,
 		compress: param.output ? path.extname(param.output) === ".zip" : false,
 		debugOverrideEngineFiles: param.debugOverrideEngineFiles,
 		// index.htmlに書き込むためのexport実行時の情報
@@ -84,50 +85,56 @@ commander
 	.option("--auto-given-args-name [argsName]", "argument name that given automatically when game start")
 	.option("-a, --atsumaru", "obsolete  option. Use 'akashic export zip --nicolive' instead")
 	.option("--no-omit-unbundled-js", "Unnecessary script files are included even when the `--atsumaru` option is specified.")
+	.option("--no-es-downpile", "No convert JavaScript")
 	.option("--debug-override-engine-files <filePath>", "Use the specified engineFiles");
 
-export function run(argv: string[]): void {
+export async function run(argv: string[]): Promise<void> {
 	// Commander の制約により --strip と --no-strip 引数を両立できないため、暫定対応として Commander 前に argv を処理する
 	const argvCopy = dropDeprecatedArgs(argv);
 	commander.parse(argvCopy);
 	const options = commander.opts();
 
-	CliConfigurationFile.read(path.join(options.cwd || process.cwd(), "akashic.config.js"), (error, configuration) => {
-		if (error) {
-			console.error(error);
+	let configuration;
+	try {
+		configuration = await FileSystem.load(options.cwd || process.cwd());
+	} catch (error) {
+		console.error(error);
+		process.exit(1);
+	}
+	if (options.debugOverrideEngineFiles) {
+		if (!/^engineFilesV\d+_\d+_\d+.*\.js$/.test(path.basename(options.debugOverrideEngineFiles))) {
+			console.error(
+				`Invalid ---debug-override-engine-files option argument:${options.debugOverrideEngineFiles}, ` +
+				"File name should be in engineFilesVx_x_x format"
+			);
 			process.exit(1);
 		}
-		if (options.debugOverrideEngineFiles) {
-			if (!/^engineFilesV\d+_\d+_\d+.*\.js$/.test(path.basename(options.debugOverrideEngineFiles))) {
-				console.error(`Invalid ---debug-override-engine-files option argument:${options.debugOverrideEngineFiles},`
-					+ "File name should be in engineFilesVx_x_x format");
-				process.exit(1);
-			}
-		}
-		if (options.atsumaru) {
-			console.error("--atsumaru is an obsolete option. Use \"akashic export zip --nicolive\" instead.");
-			process.exit(1);
-		}
+	}
+	if (options.atsumaru) {
+		console.error("--atsumaru is an obsolete option. Use \"akashic export zip --nicolive\" instead.");
+		process.exit(1);
+	}
 
-		const conf = configuration!.commandOptions?.export?.html ?? {};
-		cli({
-			cwd: options.cwd ?? conf.cwd,
-			force: options.force ?? conf.force,
-			quiet: options.quiet ?? conf.quiet,
-			output: options.output ?? conf.output,
-			source: options.source ?? conf.source,
-			strip: options.strip ?? conf.strip,
-			minify: options.minify ?? conf.minify,
-			terser: options.terser ?? conf.terser,
-			bundle: options.bundle ?? conf.bundle,
-			magnify: options.magnify ?? conf.magnify,
-			hashFilename: options.hashFilename ?? conf.hashFilename,
-			injects: options.inject ?? conf.injects,
-			autoSendEventName: options.autoSendEventName ?? options.autoSendEvents ?? conf.autoSendEventName ?? conf.autoSendEvents,
-			autoGivenArgsName: options.autoGivenArgsName ?? conf.autoGivenArgsName,
-			omitUnbundledJs: options.omitUnbundledJs ?? conf.omitUnbundledJs,
-			debugOverrideEngineFiles: options.debugOverrideEngineFiles ?? conf.debugOverrideEngineFiles
-		});
+	const conf = configuration!.commandOptions?.export?.html ?? {};
+	cli({
+		cwd: options.cwd ?? conf.cwd,
+		force: options.force ?? conf.force,
+		quiet: options.quiet ?? conf.quiet,
+		output: options.output ?? conf.output,
+		source: options.source ?? conf.source,
+		strip: options.strip ?? conf.strip,
+		minify: options.minify ?? conf.minify,
+		terser: options.terser ?? conf.terser,
+		bundle: options.bundle ?? conf.bundle,
+		magnify: options.magnify ?? conf.magnify,
+		hashFilename: options.hashFilename ?? conf.hashFilename,
+		injects: options.inject ?? conf.injects,
+		autoSendEventName: options.autoSendEventName ?? options.autoSendEvents ?? conf.autoSendEventName ?? conf.autoSendEvents,
+		autoGivenArgsName: options.autoGivenArgsName ?? conf.autoGivenArgsName,
+		omitUnbundledJs: options.omitUnbundledJs ?? conf.omitUnbundledJs,
+		esDownpile: options.esDownpile ?? conf.esDownpile,
+		debugOverrideEngineFiles: options.debugOverrideEngineFiles ?? conf.debugOverrideEngineFiles
+
 	});
 }
 

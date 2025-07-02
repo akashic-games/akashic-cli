@@ -1,4 +1,4 @@
-import type { ServiceType } from "@akashic/akashic-cli-commons/lib/ServiceType";
+import type { ServiceType } from "@akashic/akashic-cli-commons/lib/ServiceType.js";
 
 export interface ServerGlobalConfig {
 	hostname: string;
@@ -17,6 +17,7 @@ export interface ServerGlobalConfig {
 	experimentalOpen: number | null;
 	protocol: string;
 	disableFeatCheck: boolean;
+	fontFamilies: string[];
 }
 
 export const DEFAULT_HOSTNAME = "localhost";
@@ -38,5 +39,6 @@ export const serverGlobalConfig: ServerGlobalConfig = {
 	preserveDisconnected: false,
 	experimentalOpen: null,
 	protocol: "http",
-	disableFeatCheck: false
+	disableFeatCheck: false,
+	fontFamilies: [],
 };

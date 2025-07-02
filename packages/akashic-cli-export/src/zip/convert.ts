@@ -6,13 +6,12 @@ import type { ImageAssetConfigurationBase, NicoliveSupportedModes } from "@akash
 import * as babel from "@babel/core";
 import presetEnv from "@babel/preset-env";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
-import * as fsx from "fs-extra";
 import type { OutputChunk, RollupBuild } from "rollup";
 import { rollup } from "rollup";
 import type { MinifyOptions } from "terser";
 import { minify_sync } from "terser";
-import * as utils from "../utils.js";
-import { validateGameJson } from "../utils.js";
+import * as liceneUtil from "../licenseUtil.js";
+import { validateGameJson, warnLackOfAudioFile } from "../utils.js";
 import { getFromHttps } from "./apiUtil.js";
 import { NICOLIVE_SIZE_LIMIT_GAME_JSON, NICOLIVE_SIZE_LIMIT_TOTAL_FILE } from "./constants.js";
 import * as gcu from "./GameConfigurationUtil.js";
@@ -69,11 +68,84 @@ export function _completeConvertGameParameterObject(param: ConvertGameParameterO
 }
 
 export interface BundleResult {
+	/**
+	 * "assetBundle": アセットバンドル (game.json の "assetBundle" の追加が必要)
+	 * "script": バンドルされたスクリプト (game.json の "main" の上書きが必要)
+	 */
+	type: "assetBundle" | "script";
 	bundle: string;
 	filePaths: string[];
 }
 
-export async function bundleScripts(entryPoint: string, basedir: string): Promise<BundleResult> {
+interface AssetContent {
+	id: string;
+	path: string;
+	global?: boolean;
+}
+
+interface ScriptAssetContent extends AssetContent {
+	type: "script";
+	code: string;
+	preload?: boolean;
+	exports?: string[];
+}
+
+interface TextAssetContent extends AssetContent {
+	type: "text";
+	data: string;
+}
+
+export async function bundleScripts(
+	gamejson: cmn.GameConfiguration,
+	basedir: string,
+	optimizeScript?: (code: string) => string,
+): Promise<BundleResult> {
+	if (gamejson.environment?.["sandbox-runtime"] === "3") {
+		const assetContents: (ScriptAssetContent | TextAssetContent)[] = [];
+
+		for (const [assetId, asset] of Object.entries(gamejson.assets)) {
+			if (asset.type === "script") {
+				let code = fs.readFileSync(path.resolve(basedir, asset.path)).toString();
+				code = optimizeScript ? optimizeScript(code) : code;
+
+				assetContents.push({
+					...asset,
+					id: assetId,
+					code,
+				});
+			} else if (asset.type === "text") {
+				const data = fs.readFileSync(path.resolve(basedir, asset.path)).toString();
+
+				assetContents.push({
+					...asset,
+					id: assetId,
+					data,
+				});
+			}
+		}
+
+		for (const globalScript of gamejson.globalScripts ?? []) {
+			let code = fs.readFileSync(path.resolve(basedir, globalScript)).toString();
+			code = optimizeScript ? optimizeScript(code) : code;
+
+			assetContents.push({
+				type: "script",
+				id: globalScript,
+				path: globalScript,
+				global: true,
+				code,
+			});
+		}
+
+		return {
+			type: "assetBundle",
+			bundle: generateAssetBundleString(assetContents),
+			filePaths: assetContents.map(content => content.path),
+		};
+	}
+
+	const entryPoint = gamejson.main || gamejson.assets.mainScene.path;
+
 	const inputOptions = {
 		input: path.join(basedir, entryPoint),
 		external: ["g"],
@@ -90,11 +162,55 @@ export async function bundleScripts(entryPoint: string, basedir: string): Promis
 		const chunk = rollupOutput.output.find(chunkOrAsset => chunkOrAsset.type === "chunk");
 		const { code, moduleIds } = chunk as OutputChunk;
 		const filePaths = moduleIds.map(p => cmn.Util.makeUnixPath(path.relative(basedir, p)));
-		return { bundle: code, filePaths };
+		return { type: "script", bundle: code, filePaths };
 	 } finally {
 		if (bundle)
 			await bundle.close();
 	 }
+}
+
+function generateAssetBundleString(assets: (ScriptAssetContent | TextAssetContent)[]): string {
+	return `module.exports={assets:{${
+		assets.map(
+			asset => [
+				`"${asset.id}": {`,
+				[
+					`type:"${asset.type}",`,
+					`path:"${asset.path}",`,
+					(asset.global ? `global:${!!asset.global},` : ""),
+					asset.type === "script" ?
+						[
+							(asset.preload ? `preload:${!!asset.preload},` : ""),
+							"execute: rv => {",
+							[
+								"\n'use strict';\n",
+								"const module = rv.module;",
+								"const exports = module.exports;",
+								"const require = module.require;",
+								"const __dirname = rv.dirname;",
+								"const __filename = rv.filename;",
+								`\n${asset.code}\n`,
+								(asset.exports ?? [])
+									.map(key => `exports["${key}"] = typeof ${key} !== "undefined" ? ${key} : undefined;`)
+									.join(""),
+								"return module.exports;\n",
+								"},\n",
+							].join(""),
+						].join("")
+					:
+						`data: \`${escapeForTemplateLiteral(asset.data)}\`,\n`,
+				].join(""),
+				"},",
+			].join("")
+		).join("")
+	}}}`;
+}
+
+function escapeForTemplateLiteral(str: string): string {
+	return str
+		.replace(/\\/g, "\\\\")
+		.replace(/`/g, "\\`")
+		.replace(/\${/g, "\\${");
 }
 
 const babelOption = {
@@ -102,7 +218,7 @@ const babelOption = {
 		babel.createConfigItem([presetEnv, {
 			modules: false,
 			targets: {
-				"ie": 10
+				"chrome": 51
 			}
 		}],
 		{ type: "preset" })
@@ -120,12 +236,11 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 	_completeConvertGameParameterObject(param);
 	let gamejson: cmn.GameConfiguration;
 
-	cmn.Util.mkdirpSync(path.dirname(path.resolve(param.dest)));
 	return Promise.resolve()
-		.then(() => cmn.ConfigurationFile.read(path.join(param.source, "game.json"), param.logger))
+		.then(() => cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join(param.source, "game.json")))
 		.then(async (result: cmn.GameConfiguration) => {
 			gamejson = result;
-			Object.values(gamejson.assets).forEach(asset => utils.warnLackOfAudioFile(asset));
+			Object.values(gamejson.assets).forEach(asset => warnLackOfAudioFile(asset));
 
 			validateGameJson(gamejson);
 
@@ -140,24 +255,11 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 					option: param.exportInfo.option
 				};
 			}
-			// 全スクリプトがES5構文になっていることを確認する
-			let errorMessages: string[] = [];
-			const filePaths = gcu.extractScriptAssetFilePaths(gamejson);
-			for (const filePath of filePaths) {
-				const code = fs.readFileSync(path.resolve(param.source, filePath)).toString();
-				if (!param.babel) {
-					const errInfo = await cmn.LintUtil.validateEs5Code(code);
-					errorMessages = errorMessages.concat(
-						errInfo.map(info => `${filePath}(${info.line}:${info.column}): ${info.message}`)
-					);
-				}
-			}
-			if (errorMessages.length > 0) {
-				param.logger.warn("Non-ES5 syntax found.\n" + errorMessages.join("\n"));
-			}
+
 			if (!param.bundle)
 				return null;
-			return bundleScripts(gamejson.main || gamejson.assets.mainScene.path, param.source);
+
+			return bundleScripts(gamejson, param.source, optimizeScript);
 		})
 		.then(async (bundleResult) => {
 			const files: string[] = param.strip ?
@@ -216,17 +318,37 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 				});
 			}
 
+			const filePaths = bundleResult ? bundledFilePaths : Array.from(preservingFilePathSet);
+			const existLicense = await liceneUtil.writeLicenseTextFile(param.source, param.dest, filePaths);
+			const prefixCode = existLicense ? liceneUtil.LICENSE_TEXT_PREFIX : "";
+
 			preservingFilePathSet.forEach(p => {
 				const buff = fs.readFileSync(path.resolve(param.source, p));
 				cmn.Util.mkdirpSync(path.dirname(path.resolve(param.dest, p)));
-				const value: string | Buffer =
+				let value: string | Buffer =
 					(gcu.isScriptJsFile(p)) ? optimizeScript(encodeToString(buff).trim()) :
 					(param.minifyJson && gcu.isTextJsonFile(p)) ? JSON.stringify(JSON.parse(encodeToString(buff))) :
 					gcu.isMaybeTextFile(p) ? encodeToString(buff) : buff;
+
+				const entryPoint = gamejson.main || gamejson.assets.mainScene.path;
+				if (bundleResult === null && entryPoint.includes(p)) {
+					value = prefixCode + value;
+				}
 				fs.writeFileSync(path.resolve(param.dest, p), value);
 			});
-			// コピーしなかったアセットやファイルをgame.jsonから削除する
-			gcu.removeScriptAssets(gamejson, (filePath: string) => preservingFilePathSet.has(filePath));
+
+			if (bundleResult?.type === "assetBundle") {
+				const assetBundlePath = gcu.addScriptAsset(gamejson, "aez_asset_bundle");
+				const assetBundleAbsPath = path.resolve(param.dest, assetBundlePath);
+				cmn.Util.mkdirpSync(path.dirname(assetBundleAbsPath));
+				fs.writeFileSync(assetBundleAbsPath, bundleResult.bundle);
+				gamejson.assetBundle = "./" + assetBundlePath;
+				preservingFilePathSet.add(assetBundlePath);
+			}
+
+			// preservingFilePathSet (維持するファイル一覧) にないものは game.json から削除する。
+			// 暫定措置: audio は常に残す。(path に拡張子がないので preservingFilePathSet と比較できない。今後 audio を bundle しない限り動作上の悪影響はない)
+			gcu.removeAssets(gamejson, (asset) => (asset.type === "audio") || preservingFilePathSet.has(asset.path));
 			gcu.removeGlobalScripts(gamejson, (filePath: string) => preservingFilePathSet.has(filePath));
 
 			if (param.bundle && param.omitUnbundledJs) {
@@ -252,9 +374,10 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 				delete gamejson.environment.niconico;
 			}
 
-			if (bundleResult === null) {
+			if (bundleResult?.type !== "script") {
 				return;
 			}
+
 			let entryPointPath: string;
 			if (!!gamejson.main) {
 				entryPointPath = gcu.addScriptAsset(gamejson, "aez_bundle_main");
@@ -270,7 +393,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			const entryPointAbsPath = path.resolve(param.dest, entryPointPath);
 			cmn.Util.mkdirpSync(path.dirname(entryPointAbsPath));
 			const code = optimizeScript(bundleResult.bundle);
-			fs.writeFileSync(entryPointAbsPath, code);
+			fs.writeFileSync(entryPointAbsPath, prefixCode + code);
 		})
 		.then(() => {
 			if (!param.packImage) return;
@@ -282,17 +405,14 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 				try {
 					cmn.Renamer.renameAssetFilenames(gamejson, param.dest, hashLength);
 				} catch (error) {
-					// ファイル名のハッシュ化に失敗した場合、throwして作業中のコピー先ファイルを削除する
-					fsx.removeSync(path.resolve(param.dest));
 					if (error.message === cmn.Renamer.ERROR_FILENAME_CONFLICT) {
 						throw new Error("Hashed filename conflict. Use larger hash-filename param on command line.");
 					}
 					throw error;
 				}
 			}
-			return cmn.ConfigurationFile.write(
-				gamejson, path.resolve(param.dest, "game.json"), param.logger, { minify: param.minifyJson }
-			);
+			const formatter = param.minifyJson ? (s: cmn.GameConfiguration) => JSON.stringify(s) : undefined;
+			return cmn.FileSystem.writeJSON<cmn.GameConfiguration>(path.resolve(param.dest, "game.json"), gamejson, formatter);
 		})
 		.then(async () => {
 			// ニコ生環境向けの簡易ファイルサイズチェック

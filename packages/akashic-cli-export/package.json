@@ -1,12 +1,12 @@
 {
   "name": "@akashic/akashic-cli-export",
-  "version": "1.9.18",
+  "version": "2.0.4",
   "description": "A module to convert your Akashic game to a runnable standalone.",
   "type": "module",
   "scripts": {
     "prepublish": "npm run clean && npm run build",
     "clean": "shx rm -rf lib && shx rm -rf spec/build",
-    "start": "npm run build && node bin/run",
+    "start": "npm run build && node bin/run.js",
     "build": "npm run build:app && npm run copy:pdi && npm run build:template",
     "build:app": "tsc -p ./ && tsc -p ./tsconfig.cjs.json",
     "copy:pdi": "npm run copy:pdi:v1 && npm run copy:pdi:v2 && npm run copy:pdi:v3",
@@ -18,17 +18,17 @@
     "build:template:v2": "cd src/template/template-export-html-v2 && npm install --no-package-lock && npm run build && cd ../../",
     "build:template:v3": "cd src/template/template-export-html-v3 && npm install --no-package-lock && npm run build && cd ../../",
     "build:template:ejs": "shx cp src/template/bundle-index.ejs lib/template/ && shx cp src/template/no-bundle-index.ejs lib/template/",
-    "lint": "eslint -c .eslintrc.cjs --fix",
+    "lint": "eslint -c .eslintrc.cjs --fix \"src/**/*.ts\"",
     "test": "npm run test:vitest && npm run lint",
     "test:vitest": "vitest run"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
   "bin": {
-    "akashic-cli-export": "./bin/run",
-    "akashic-cli-export-html": "./bin/akashic-cli-export-html",
-    "akashic-cli-export-zip": "./bin/akashic-cli-export-zip",
-    "akashic-cli-zip": "./bin/akashic-cli-export-zip"
+    "akashic-cli-export": "./bin/run.js",
+    "akashic-cli-export-html": "./bin/akashic-cli-export-html.js",
+    "akashic-cli-export-zip": "./bin/akashic-cli-export-zip.js",
+    "akashic-cli-zip": "./bin/akashic-cli-export-zip.js"
   },
   "files": [
     "lib"
@@ -38,10 +38,8 @@
     "@akashic/eslint-config": "2.1.0",
     "@akashic/sandbox-configuration": "^2.3.0",
     "@types/archiver": "5.3.4",
-    "@types/commander": "2.12.2",
     "@types/ejs": "3.1.5",
     "@types/encoding-japanese": "^2.0.1",
-    "@types/fs-extra": "9.0.13",
     "@types/glob": "8.1.0",
     "@types/mock-fs": "4.13.4",
     "@types/node": "22.2.0",
@@ -59,25 +57,24 @@
     "zip": "1.2.0"
   },
   "dependencies": {
-    "@akashic/akashic-cli-commons": "0.15.3",
-    "@akashic/akashic-cli-extra": "1.7.8",
-    "@akashic/game-configuration": "2.3.0",
-    "@akashic/headless-driver": "2.15.8",
+    "@akashic/akashic-cli-commons": "1.0.0",
+    "@akashic/akashic-cli-extra": "2.0.0",
+    "@akashic/game-configuration": "2.5.0",
+    "@akashic/headless-driver": "2.17.3",
     "@babel/core": "7.25.2",
     "@babel/preset-env": "7.25.3",
     "@rollup/plugin-commonjs": "^28.0.0",
     "@rollup/plugin-json": "^6.1.0",
-    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-node-resolve": "^16.0.0",
     "archiver": "7.0.1",
     "commander": "12.1.0",
     "ejs": "3.1.10",
     "encoding-japanese": "^2.0.0",
-    "fs-extra": "11.2.0",
     "glob": "11.0.0",
     "https": "1.0.0",
     "maxrects-packer": "2.7.3",
     "pngjs": "7.0.0",
-    "rollup": "4.20.0",
+    "rollup": "4.22.4",
     "terser": "^5.34.1"
   },
   "publishConfig": {

@@ -1,6 +1,5 @@
 import * as fs from "fs";
 import * as path from "path";
-import * as fsx from "fs-extra";
 import { sha256 } from "js-sha256";
 import type { GameConfiguration } from "./GameConfiguration.js";
 import { KNOWN_AUDIO_EXTENSIONS } from "./knownAudioExtensions.js";
@@ -42,7 +41,7 @@ function _renameFilename(basedir: string, filePath: string, newFilePath: string)
 		fs.accessSync(path.resolve(basedir, newFilePath));
 	} catch (error) {
 		if (error.code === "ENOENT") {
-			fsx.mkdirsSync(path.dirname(path.resolve(basedir, newFilePath)));
+			fs.mkdirSync(path.dirname(path.resolve(basedir, newFilePath)), { recursive: true });
 			fs.renameSync(path.resolve(basedir, filePath), path.resolve(basedir, newFilePath));
 			return;
 		}

@@ -4,12 +4,12 @@ import type {
 	PlayApiResponseData,
 	PlayDeleteApiResponseData,
 	PlayPatchApiResponseData
-} from "../../common/types/ApiResponse";
-import { BadRequestError, NotFoundError } from "../common/ApiError";
-import { responseSuccess } from "../common/ApiResponse";
-import { ServerContentLocator } from "../common/ServerContentLocator";
-import type { PlayStore } from "../domain/PlayStore";
-import type { RunnerStore } from "../domain/RunnerStore";
+} from "../../common/types/ApiResponse.js";
+import { BadRequestError, NotFoundError } from "../common/ApiError.js";
+import { responseSuccess } from "../common/ApiResponse.js";
+import { ServerContentLocator } from "../common/ServerContentLocator.js";
+import type { PlayStore } from "../domain/PlayStore.js";
+import type { RunnerStore } from "../domain/RunnerStore.js";
 
 export const createHandlerToCreatePlay = (playStore: PlayStore): express.RequestHandler => {
 	return async (req, res, next) => {
@@ -164,7 +164,7 @@ export const createHandlerToSendEvent = (playStore: PlayStore, toLatestPlay: boo
 	};
 };
 
-export const createHandlerToSendNicoliveCommentByTemplate = (playStore: PlayStore, runnerStore: RunnerStore): express.RequestHandler => {
+export const createHandlerToSendNamagameCommentByTemplate = (playStore: PlayStore, runnerStore: RunnerStore): express.RequestHandler => {
 	return async (req, res, next) => {
 		try {
 			const playId = req.params.playId;
@@ -197,16 +197,20 @@ function maybeBoolOf(s: string): boolean | undefined {
 	return (s === "true") || (s === "false" ? false : undefined);
 }
 
-export const createHandlerToSendNicoliveComment  = (playStore: PlayStore, runnerStore: RunnerStore): express.RequestHandler => {
+export const createHandlerToSendNamagameComment  = (playStore: PlayStore, runnerStore: RunnerStore): express.RequestHandler => {
 	return async (req, res, next) => {
 		try {
 			const playId = req.params.playId;
-			const { comment, command, userID }  = req.body;
-			const isAnonymous = maybeBoolOf(req.body.isAnonymous);
-			const isOperatorComment = maybeBoolOf(req.body.isOperatorComment);
+			const { comment, userID }  = req.body;
+			const command = req.body.command || undefined; // 空文字列は undefined にする
+			const isAnonymous = maybeBoolOf(req.body.isAnonymous) ?? false;
+			const vpos = req.body.vpos ?? undefined;
 
 			if (!playId) {
 				throw new BadRequestError({ errorMessage: "Invalid runnerId" });
+			}
+			if (vpos != null && !(typeof vpos === "number" && !isNaN(vpos))) {
+				throw new BadRequestError({ errorMessage: `Invalid vpos: ${vpos}` });
 			}
 			const playInfo = playStore.getPlayInfo(playId);
 			if (!playInfo) {
@@ -217,7 +221,16 @@ export const createHandlerToSendNicoliveComment  = (playStore: PlayStore, runner
 				throw new BadRequestError({ errorMessage: `No runner for ${playId}` });
 			}
 
-			const success = runnerStore.sendComment(runnerId, { comment, command, userID, isAnonymous, isOperatorComment });
+			// null/undefined は「省略された」として扱う。
+			const commentData = { comment, command, userID, isAnonymous, vpos };
+			if (command == null)
+				delete commentData.command;
+			if (userID == null)
+				delete commentData.userID;
+			if (vpos == null)
+				delete commentData.vpos;
+
+			const success = runnerStore.sendComment(runnerId, commentData);
 			responseSuccess<boolean>(res, 200, success);
 		} catch (e) {
 			next(e);

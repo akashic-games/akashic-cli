@@ -58,7 +58,7 @@ const nicoProps: NiconicoDevtoolProps = {
 			templates: [],
 			isEnabled: false,
 			senderType: "anonymous",
-			senderLimitation: "operator",
+			senderLimitation: "broadcaster",
 			commandInput: "",
 			commentInput: ""
 		},

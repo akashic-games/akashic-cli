@@ -86,9 +86,10 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 			replayTargetTimeFunc: this._getReplayTargetTime
 		};
 		const gameLoaderCustomizer: agv.GameLoaderCustomizer = {};
+
+		gameLoaderCustomizer.createCustomAmflowClient = () => this.play.amflow;
 		if (params.playlogServerUrl != null) {
 			playConfig.playlogServerUrl = params.playlogServerUrl;
-			gameLoaderCustomizer.createCustomAmflowClient = () => this.play.amflow;
 		}
 		if (params.playToken != null) {
 			playConfig.playToken = params.playToken;
@@ -228,6 +229,11 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 	setTargetTime(targetTime: number): void {
 		this._timeKeeper.setTime(targetTime);
 		this.targetTime = Math.min(this._timeKeeper.now(), this.play.duration);
+	}
+
+	@action
+	setMasterVolume(vol: number): void {
+		this._serveGameContent.agvGameContent.setMasterVolume(vol);
 	}
 
 	@action.bound

@@ -3,15 +3,14 @@ export { CliConfigExportZip } from "./CliConfig/CliConfigExportZip.js";
 export { CliConfigInit } from "./CliConfig/CliConfigInit.js";
 export { CliConfigInstall } from "./CliConfig/CliConfigInstall.js";
 export { CliConfigModify } from "./CliConfig/CliConfigModify.js";
+export { CliConfigSandbox } from "./CliConfig/CliConfigSandbox.js";
 export { CliConfigScanAsset, CliConfigScanGlobalScripts } from "./CliConfig/CliConfigScan.js";
 export { CliConfigServe } from "./CliConfig/CliConfigServe.js";
 export { CliConfigStat } from "./CliConfig/CliConfigStat.js";
 export { CliConfigUninstall } from "./CliConfig/CliConfigUninstall.js";
 export { CliConfigUpdate } from "./CliConfig/CliConfigUpdate.js";
 export { CliConfiguration } from "./CliConfig/CliConfiguration.js";
-export { CliConfigurationFile } from "./CliConfig/CliConfigurationFile.js";
 export { Configuration, ConfigurationParameterObject } from "./Configuration.js";
-export { ConfigurationFile } from "./ConfigurationFile.js";
 export { ConsoleLogger } from "./ConsoleLogger.js";
 export * as FileSystem from "./FileSystem.js";
 export {
@@ -19,7 +18,6 @@ export {
 	ExportZipInfo
 } from "./GameConfiguration.js";
 export { LibConfiguration } from "./LibConfiguration.js";
-export * as LintUtil from "./LintUtil.js";
 export { Logger } from "./Logger.js";
 export { NodeModules } from "./NodeModules.js";
 export { PromisedNpm, PromisedNpmParameterObject, NpmLsResultObject } from "./PromisedNpm.js";

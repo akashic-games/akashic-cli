@@ -1,5 +1,9 @@
-const { execSync } = require("child_process");
-const { join } = require("path");
+import { execSync } from "child_process";
+import { join, dirname } from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 try {
 	const npmRootPath = execSync("npm root", { encoding: "utf-8" }).trim();

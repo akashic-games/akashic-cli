@@ -105,7 +105,15 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 	let installedModuleNames: string[] = [];
 	const gameJsonPath = path.join(process.cwd(), "game.json");
 	return Promise.resolve()
-		.then(() => cmn.ConfigurationFile.read(gameJsonPath, normalizedParam.logger))
+		.then(async () => {
+			let content = {} as cmn.GameConfiguration;
+			try {
+				content = await cmn.FileSystem.readJSON<cmn.GameConfiguration>(gameJsonPath);
+			} catch (e) {
+				normalizedParam.logger.info("No game.json found. Create a new one.");
+			}
+			return content;
+		})
 		.then((content: cmn.GameConfiguration) => {
 			const conf = new Configuration({ content: content, logger: normalizedParam.logger });
 			if ((normalizedParam.plugin != null) && conf.findExistingOperationPluginIndex(normalizedParam.plugin) !== -1)

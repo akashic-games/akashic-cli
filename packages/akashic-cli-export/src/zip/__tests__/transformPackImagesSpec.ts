@@ -1,6 +1,6 @@
 import * as path from "path";
+import * as fs from "fs";
 import { makeUnixPath } from "@akashic/akashic-cli-commons/lib/Util.js";
-import * as fs from "fs-extra";
 import { extractPackTargets, transformPackSmallImagesImpl } from "../transformPackImages.js";
 
 describe("transformPackImages", () => {
