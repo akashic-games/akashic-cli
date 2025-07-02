@@ -17,8 +17,8 @@ export const Basic = {
 		}}>
 			<DevtoolPageSelector
 				items={[
-					{ label: "foo", disabled: true },
-					{ label: "bar" },
+					{ label: "foo", key: "foo", title: "foo", disabled: true },
+					{ label: "bar", key: "bar", title: "bar" },
 				]}
 				activeIndex={1}
 				onChangeActive={action("event:change-active")}
@@ -36,9 +36,9 @@ export const Bleedout = {
 		}}>
 			<DevtoolPageSelector
 				items={[
-					{ label: "an opiton" },
-					{ label: "another option" },
-					{ label: "a ridculously long option that bleeds out the containing box" },
+					{ label: "an opiton", key: "a", title: "an option" },
+					{ label: "another option", key: "b", title: "another option" },
+					{ label: "a ridculously long option that bleeds out the containing box", key: "c", title: "yet another option" },
 				]}
 				activeIndex={1}
 				onChangeActive={action("event:change-active")}
@@ -58,9 +58,9 @@ const TestWithBehavior = observer(() => (
 	}}>
 		<DevtoolPageSelector
 			items={[
-				{ label: "Ranking" },
-				{ label: "Comment" },
-				{ label: "Another Option" },
+				{ label: "Ranking", key: "ranking", title: "Ranking" },
+				{ label: "Comment", key: "comment", title: "Comment (Experimental)" },
+				{ label: "Another Option", key: "another", title: "An option implemented in future" },
 			]}
 			activeIndex={store.activeIndex}
 			onChangeActive={idx => {
