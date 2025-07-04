@@ -1,5 +1,14 @@
 # Change Log
 
+## 3.0.8
+
+### Patch Changes
+
+- Updated dependencies [[`baada51`](https://github.com/akashic-games/akashic-cli/commit/baada5144717ac40c74d01eceb7cf62837204079)]:
+  - @akashic/akashic-cli-export@2.0.6
+  - @akashic/akashic-cli-sandbox@2.0.3
+  - @akashic/akashic-cli-serve@2.0.5
+
 ## 3.0.7
 
 ### Patch Changes
