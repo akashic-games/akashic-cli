@@ -150,6 +150,12 @@ export class Store {
 					this.notificationUiStore.setActive({type: "error", title: warningTitle, message: "", name: warning.message});
 				}
 				break;
+			case "surfaceSizeIsDecimal":
+				if (!sandboxConfigWarn || sandboxConfigWarn.surfaceSizeIsDecimal !== false) {
+					console.warn(`${warning.message}`);
+					this.notificationUiStore.setActive({type: "error", title: warningTitle, message: "", name: warning.message});
+				}
+				break;
 		}
 	}
 

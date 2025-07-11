@@ -1,4 +1,4 @@
-export type RuntimeWarningType =  "useMathRandom" | "drawOutOfCanvas" | "drawDestinationEmpty";
+export type RuntimeWarningType =  "useMathRandom" | "drawOutOfCanvas" | "drawDestinationEmpty" | "surfaceSizeIsDecimal";
 
 export interface RuntimeWarning {
 	type: RuntimeWarningType;

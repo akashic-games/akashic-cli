@@ -243,6 +243,15 @@ function createPlatformCustomizer(content: ServeGameContent): (platform: Platfor
 								+ "to prevent platform-specific rendering trouble.";
 							content.onWarn.fire({ type, message });
 						}
+						if (!Number.isInteger(surface.width) || !Number.isInteger(surface.height)) {
+							const type = "surfaceSizeIsDecimal";
+							const message = "drawImage(): The size of the surface is a decimal point."
+								+ `Either the surface's width or height value is a decimal point.(${surface.width}x${surface.height}). `
+								+ "This is not a bug but warned by akashic serve"
+								+ "to prevent platform-specific rendering trouble.";
+							content.onWarn.fire({ type, message });
+						}
+
 						originalDrawImage.apply(this, [
 							surface, offsetX, offsetY, width, height, _destOffsetX, _destOffsetY
 						]);
