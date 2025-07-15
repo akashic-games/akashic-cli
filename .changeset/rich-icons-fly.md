@@ -2,4 +2,4 @@
 "@akashic/akashic-cli-serve": patch
 ---
 
-Add warning to serve when the surface size is decimal point
+Warn of creating a surface with non-integer size

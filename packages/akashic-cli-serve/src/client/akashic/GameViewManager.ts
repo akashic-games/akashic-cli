@@ -203,6 +203,15 @@ function createPlatformCustomizer(content: ServeGameContent): (platform: Platfor
 		// 一部のエッジケースでSafariのみ描画されないという問題が発生するので、ゲーム開発者が開発中に気づけるようにg.Renderer#drawImage()でエラーを投げる処理を差し込む
 		function createMeddlingWrappedSurfaceFactory <T extends ((...args: any[]) => Surface)> (func: T) {
 			return function (this: Surface) {
+				if (arguments.length > 0) {
+					if (!Number.isInteger(arguments[0]) || !Number.isInteger(arguments[1])) {
+						const type = "createNonIntegerSurface";
+						const message = `Surface(): width and height should be integer. (specified ${arguments[0]}x${arguments[1]}) `
+							+ "This is not a bug but warned by akashic serve "
+							+ "to prevent platform-specific rendering trouble.";
+							content.onWarn.fire({ type, message });
+					}
+				} 
 				const surface: Surface = func.apply(this, [...arguments]);
 				// Safariで範囲外描画時に問題が発生するのはCanvas要素なので、surfaceがCanvasでなければ範囲外描画の警告は行わない
 				if (!(surface._drawable instanceof HTMLCanvasElement)) {
@@ -229,29 +238,20 @@ function createPlatformCustomizer(content: ServeGameContent): (platform: Platfor
 						if (offsetX < 0 || offsetX + width > surface.width || offsetY < 0 || offsetY + height > surface.height) {
 							// ref. https://github.com/akashic-games/akashic-engine/issues/349
 							const type = "drawOutOfCanvas";
-							const message = "drawImage(): out of bounds."
+							const message = "drawImage(): out of bounds. "
 								+ `The source rectangle bleeds out the source surface (${surface.width}x${surface.height}). `
-								+ "This is not a bug but warned by akashic serve"
+								+ "This is not a bug but warned by akashic serve "
 								+ "to prevent platform-specific rendering trouble.";
 							content.onWarn.fire({ type, message });
 						}
 						if (width <= 0 || height <= 0) {
 							const type = "drawDestinationEmpty";
-							const message = "drawImage(): nothing to draw."
-								+ "Either width or height is less than or equal to zero."
-								+ "This is not a bug but warned by akashic serve"
+							const message = "drawImage(): nothing to draw. "
+								+ "Either width or height is less than or equal to zero. "
+								+ "This is not a bug but warned by akashic serve "
 								+ "to prevent platform-specific rendering trouble.";
 							content.onWarn.fire({ type, message });
 						}
-						if (!Number.isInteger(surface.width) || !Number.isInteger(surface.height)) {
-							const type = "createNonIntegerSurface";
-							const message = "drawImage(): The size of the surface is a decimal point."
-								+ `Either the surface's width or height value is a decimal point.(${surface.width}x${surface.height}). `
-								+ "This is not a bug but warned by akashic serve"
-								+ "to prevent platform-specific rendering trouble.";
-							content.onWarn.fire({ type, message });
-						}
-
 						originalDrawImage.apply(this, [
 							surface, offsetX, offsetY, width, height, _destOffsetX, _destOffsetY
 						]);
