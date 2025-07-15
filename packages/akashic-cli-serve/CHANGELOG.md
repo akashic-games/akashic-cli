@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.0.7
+
+### Patch Changes
+
+- [#1571](https://github.com/akashic-games/akashic-cli/pull/1571) [`9b3ccf7`](https://github.com/akashic-games/akashic-cli/commit/9b3ccf72a87c39649c487e5fd4d2a8b65fed8f68) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Warn of creating a surface with non-integer size
+
 ## 2.0.6
 
 ### Patch Changes
