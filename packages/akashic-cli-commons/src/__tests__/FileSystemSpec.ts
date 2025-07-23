@@ -1,14 +1,53 @@
-import mockfs from "mock-fs";
 import { readFile, writeFile, readJSON, writeJSON, readdir, unlink } from "../FileSystem.js";
 import { buildEditorconfig } from "./helpers/buildEditorconfig.js";
+import { fs, vol } from "memfs";
+import * as editorconfig from "editorconfig";
+import path from "path";
+
+vi.mock("node:fs", async () => {
+  const memfs: { fs: typeof fs } = await vi.importActual("memfs");
+  return memfs.fs;
+});
+
+vi.mock("node:fs/promises", async () => {
+  const memfs: { fs: typeof fs } = await vi.importActual("memfs");
+  return memfs.fs.promises;
+});
+
+// editorconfig の parse() で memfs でモックした .editorconfig が読み込めないため parse() をモックし
+vi.mock("editorconfig", async (importOriginal) => {
+	const mod = await importOriginal();
+	return {
+		...await importOriginal<typeof editorconfig>(),	
+		parse: vi.fn((filepath: string, options?: editorconfig.ParseOptions): Promise<editorconfig.Props> => {
+
+			const targetPath = path.join(path.dirname(filepath), ".editorconfig");
+			console.log("**** targetPath:", targetPath);
+			if (!fs.existsSync(targetPath)) return Promise.resolve({}); 
+			const ret = fs.readFileSync(targetPath);
+			// console.log("**** ret:", ret);
+			const parsed = editorconfig.parseBuffer(ret as Buffer);
+			// console.log("@@@ parsed:", parsed[1][1]);
+			// console.log("++++++++++++++++++++++++parsed :",  parsed[1][1].indent_size);
+			const parsedObj = parsed[1][1];
+			const obj: editorconfig.Props = {
+				indent_size: parseInt(parsedObj.indent_size, 10),
+				indent_style: parsedObj.indent_style === "tab" ? "tab" : "space",
+				insert_final_newline: parsedObj.insert_final_newline === "true"
+			}
+			return Promise.resolve(obj);
+		})
+	}
+});
+
 
 describe("FileSystemSpec", () => {
 	afterEach(() => {
-		mockfs.restore();
+		vol.reset();
 	});
 
 	it("read text", async () => {
-		mockfs({
+		vol.fromJSON({
 			"someText.txt": "text content!"
 		});
 		expect(
@@ -17,7 +56,7 @@ describe("FileSystemSpec", () => {
 	});
 
 	it("read binary", async () => {
-		mockfs({
+		vol.fromJSON({
 			"someBinary": Buffer.from([12, 34, 56])
 		});
 		expect(
@@ -26,7 +65,7 @@ describe("FileSystemSpec", () => {
 	});
 
 	it("read json", async () => {
-		mockfs({
+		vol.fromNestedJSON({
 			"game": {
 				"game.json": JSON.stringify({
 					width: 120,
@@ -43,7 +82,7 @@ describe("FileSystemSpec", () => {
 	});
 
 	it("write text", async () => {
-		mockfs({
+		vol.fromNestedJSON({
 			"some": {}
 		});
 		await writeFile("./some/foo.txt", "string content!!");
@@ -53,7 +92,7 @@ describe("FileSystemSpec", () => {
 	});
 
 	it("write binary", async () => {
-		mockfs({});
+		vol.fromNestedJSON({ "": {} });
 		await writeFile("./someBinary", Buffer.from([12, 34]));
 		expect(
 			await readFile("./someBinary")
@@ -62,7 +101,7 @@ describe("FileSystemSpec", () => {
 
 	describe("#writeJson", () => {
 		it("write game.json", async () => {
-			mockfs({
+			vol.fromNestedJSON({
 				"game": {
 					"game.json": JSON.stringify({})
 				}
@@ -77,7 +116,7 @@ describe("FileSystemSpec", () => {
 		});
 
 		it("write json without .editorconfig", async () => {
-			mockfs({
+			vol.fromNestedJSON({
 				"test.json": JSON.stringify({})
 			});
 			await writeJSON("test.json", { width: 120, height: 240 });
@@ -92,7 +131,7 @@ describe("FileSystemSpec", () => {
 		});
 
 		it("write json with .editorconfig", async () => {
-			mockfs({
+			vol.fromNestedJSON({
 				"test1/.editorconfig": buildEditorconfig({ indentSize: 4, indentStyle: "tab", insertFinalNewline: true }),
 				"test1/test.json": JSON.stringify({}),
 				"test2/.editorconfig": buildEditorconfig({ indentSize: 2, indentStyle: "space", insertFinalNewline: true }),
@@ -132,7 +171,7 @@ describe("FileSystemSpec", () => {
 		});
 
 		it("write json with formatter", async () => {
-			mockfs({
+			vol.fromNestedJSON({
 				"test.json": JSON.stringify({})
 			});
 			await writeJSON("test.json", { width: 120, height: 240 }, (content) => JSON.stringify(content, undefined, " "));
@@ -148,7 +187,7 @@ describe("FileSystemSpec", () => {
 	});
 
 	it("read directories", async () => {
-		mockfs({
+		vol.fromNestedJSON({
 			"foo": {
 				"test.json": ""
 			},
@@ -167,7 +206,7 @@ describe("FileSystemSpec", () => {
 	});
 
 	it("unlink file", async () => {
-		mockfs({
+		vol.fromNestedJSON({
 			"foo": {
 				"test.json": JSON.stringify({ val: 42 })
 			},
