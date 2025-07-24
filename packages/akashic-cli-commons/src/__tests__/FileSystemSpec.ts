@@ -20,14 +20,10 @@ vi.mock("editorconfig", async (importOriginal) => {
 	return {
 		...await importOriginal<typeof editorconfig>(),	
 		parse: vi.fn((filepath: string, options?: editorconfig.ParseOptions): Promise<editorconfig.Props> => {
-
 			const targetPath = path.join(path.dirname(filepath), ".editorconfig");
 			if (!fs.existsSync(targetPath)) return Promise.resolve({}); 
 			const ret = fs.readFileSync(targetPath);
-			// console.log("**** ret:", ret);
 			const parsed = editorconfig.parseBuffer(ret as Buffer);
-			// console.log("@@@ parsed:", parsed[1][1]);
-			// console.log("++++++++++++++++++++++++parsed :",  parsed[1][1].indent_size);
 			const parsedObj = parsed[1][1];
 			const obj: editorconfig.Props = {
 				indent_size: parseInt(parsedObj.indent_size, 10),
@@ -38,7 +34,6 @@ vi.mock("editorconfig", async (importOriginal) => {
 		})
 	}
 });
-
 
 describe("FileSystemSpec", () => {
 	afterEach(() => {
