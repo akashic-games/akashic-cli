@@ -19,10 +19,6 @@ describe("NodeModules", () => {
 
 	describe(".listModulesFiles()", () => {
 		it("lists the script files and all package.json", async () => {
-			const ret = await NodeModules.listModuleFiles(contentPath, ["dummy4"], logger);
-			console.log("*ret:", ret);
-
-			// TODO symLink が解決できない
 			let pkgjsonPaths = await NodeModules.listModuleFiles(contentPath, ["dummy", "dummy2", "dummy3"], logger);
 			expect(pkgjsonPaths.sort((a, b) => ((a > b) ? 1 : (a < b) ? -1 : 0))).toEqual([
 				"node_modules/dummy/foo.js",

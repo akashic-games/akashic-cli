@@ -22,7 +22,6 @@ vi.mock("editorconfig", async (importOriginal) => {
 		parse: vi.fn((filepath: string, options?: editorconfig.ParseOptions): Promise<editorconfig.Props> => {
 
 			const targetPath = path.join(path.dirname(filepath), ".editorconfig");
-			console.log("**** targetPath:", targetPath);
 			if (!fs.existsSync(targetPath)) return Promise.resolve({}); 
 			const ret = fs.readFileSync(targetPath);
 			// console.log("**** ret:", ret);

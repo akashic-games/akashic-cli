@@ -111,6 +111,7 @@ export module NodeModules {
 		const inputOptions: RollupOptions = {
 			input: moduleNames,
 			external: ["g"],
+			preserveSymlinks: true,
 			plugins: [
 				commonjs(),
 				nodeResolve()
