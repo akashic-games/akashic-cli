@@ -1,14 +1,18 @@
 import * as path from "path";
-import mockfs from "mock-fs";
-import * as fs from "fs";
 import * as Util from "../Util.js";
 import * as Renamer from "../Renamer.js";
 import { GameConfiguration } from "../GameConfiguration.js";
 import { readJSON } from "../FileSystem.js";
+import { fs, vol } from "memfs";
+
+vi.mock("node:fs", async () => {
+  const memfs: { fs: typeof fs } = await vi.importActual("memfs");
+  return memfs.fs;
+});
 
 describe("Renamer", () => {
 	afterEach(() => {
-		mockfs.restore();
+		vol.reset();
 	});
 
 	it(".hashFilepath()", () => {
@@ -27,7 +31,7 @@ describe("Renamer", () => {
 
 	describe(".hashFilePaths()", () => {
 		beforeEach(() => {
-			mockfs({
+			vol.fromNestedJSON({
 				srcDir: {
 					"game.json": JSON.stringify({
 						main: "./script/mainScene",
@@ -91,7 +95,7 @@ describe("Renamer", () => {
 			});
 		});
 		afterEach(() => {
-			mockfs.restore();
+			vol.reset();
 		});
 
 		it("hash game.json", async () => {
@@ -209,7 +213,7 @@ describe("Renamer", () => {
 			},
 		};
 		beforeEach(() => {
-			mockfs({
+			vol.fromNestedJSON({
 				srcDir: {
 					"game.json": JSON.stringify(content),
 					script: {
@@ -227,7 +231,7 @@ describe("Renamer", () => {
 			});
 		});
 		afterEach(() => {
-			mockfs.restore();
+			vol.reset();
 		});
 		it("save file included dirs", async () => {
 			await fs.promises.writeFile("./srcDir/script/a/b/c2.js", "hello");
@@ -253,7 +257,7 @@ describe("Renamer", () => {
 			},
 		};
 		beforeEach(() => {
-			mockfs({
+			vol.fromNestedJSON({
 				srcDir: {
 					"game.json": JSON.stringify(content),
 					script: {
@@ -269,7 +273,7 @@ describe("Renamer", () => {
 			});
 		});
 		afterEach(() => {
-			mockfs.restore();
+			vol.reset();
 		});
 
 		it("delete empty dirs", async () => {
