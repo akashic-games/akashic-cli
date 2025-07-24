@@ -9,11 +9,6 @@ vi.mock("node:fs", async () => {
   return memfs.fs;
 });
 
-vi.mock("node:fs/promises", async () => {
-  const memfs: { fs: typeof fs } = await vi.importActual("memfs");
-  return memfs.fs.promises;
-});
-
 // editorconfig の parse() で memfs でモックした .editorconfig が読み込めないため parse() をモックし
 vi.mock("editorconfig", async (importOriginal) => {
 	const mod = await importOriginal();
