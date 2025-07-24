@@ -3,6 +3,7 @@ import { createRequire } from "module";
 import * as path from "path";
 import type { ModuleMainPathsMap, ModuleMainScriptsMap } from "@akashic/game-configuration";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
+import type { RollupOptions } from "rollup";
 import { rollup } from "rollup";
 import { ConsoleLogger } from "./ConsoleLogger.js";
 import type { Logger } from "./Logger.js";
@@ -105,10 +106,12 @@ export module NodeModules {
 		// akashic-cli-commons/node_modules 以下への依存として表現される。
 		// これを検知した場合、そのモジュールへの依存はgame.jsonに追記せず、akashicコマンドユーザには警告を表示する。
 		const ignoreModulePaths = ["/akashic-cli-commons/node_modules/"];
-
-		const inputOptions = {
+		
+		const restoreDirectory = Util.chdir(basepath);
+		const inputOptions: RollupOptions = {
 			input: moduleNames,
 			external: ["g"],
+			preserveSymlinks: true,
 			plugins: [
 				commonjs(),
 				nodeResolve()
@@ -144,6 +147,8 @@ export module NodeModules {
 
 		} catch (e) {
 			throw new Error(e);
+		} finally {
+			await restoreDirectory();
 		}
 		return filePaths;
 	}
