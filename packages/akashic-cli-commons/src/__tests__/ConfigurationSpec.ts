@@ -1,10 +1,15 @@
-import mockfs from "mock-fs";
 import { Configuration } from "../Configuration.js";
 import { ConsoleLogger } from "../ConsoleLogger.js";
+import { fs, vol } from "memfs";
+
+vi.mock("node:fs", async () => {
+  const memfs: { fs: typeof fs } = await vi.importActual('memfs')
+  return memfs.fs;
+});
 
 describe("Configuration", () => {
 	afterEach(() => {
-		mockfs.restore();
+		vol.reset();
 	});
 	it("can be instantiated", () => {
 		const loggedResult: string[] = [];
@@ -58,7 +63,7 @@ describe("Configuration", () => {
 				"zoo": {}
 			}
 		};
-		mockfs(mockFsContent);
+		vol.fromNestedJSON(mockFsContent);
 
 		const self = new Configuration({ content: content, logger: logger });
 		self.vacuumGlobalScripts();
