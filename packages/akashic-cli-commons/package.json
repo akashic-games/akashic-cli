@@ -34,7 +34,6 @@
   ],
   "devDependencies": {
     "@akashic/eslint-config": "^3.0.1",
-    "@types/mem-fs": " 2.2.0",
     "@types/node": "20.14.15",
     "@types/resolve": "^1.20.6",
     "memfs": "4.23.0",

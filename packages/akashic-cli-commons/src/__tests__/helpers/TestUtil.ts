@@ -8,7 +8,7 @@ interface FSContentDescDir {
 
 export interface FsContentResult {
 	path: string;
-	func: () => void;
+	dispose: () => void;
 }
 
 function setupFsContentImpl(baseDir: string, key: string, def: FSContentDescDir | string): void {
@@ -40,8 +40,8 @@ export function preperFsContent(def: FSContentDescDir, baseDir?: string): FsCont
 	const dir = fs.mkdtempSync(target);
 	setupFsContent(dir, def);
 	return {
-		"path": dir,
-		func: () => {
+		path: dir,
+		dispose: () => {
 			fs.rmSync(dir, { recursive: true, force: true });
 		}
 	};

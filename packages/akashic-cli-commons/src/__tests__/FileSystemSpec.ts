@@ -9,9 +9,8 @@ vi.mock("node:fs", async () => {
   return memfs.fs;
 });
 
-// editorconfig の parse() で memfs でモックした .editorconfig が読み込めないため parse() をモックし
+// editorconfig の parse() で memfs でモックした .editorconfig が読み込めないため parse() をモックしている。
 vi.mock("editorconfig", async (importOriginal) => {
-	const mod = await importOriginal();
 	return {
 		...await importOriginal<typeof editorconfig>(),	
 		parse: vi.fn((filepath: string, options?: editorconfig.ParseOptions): Promise<editorconfig.Props> => {

@@ -26,4 +26,3 @@ export { ServiceType, SERVICE_TYPES } from "./ServiceType.js";
 export * as Util from "./Util.js";
 export { asHumanReadable } from "./asHumanReadable.js";
 export { KNOWN_AUDIO_EXTENSIONS } from "./knownAudioExtensions.js";
-export * as TestUtil from "./TestUtil.js";

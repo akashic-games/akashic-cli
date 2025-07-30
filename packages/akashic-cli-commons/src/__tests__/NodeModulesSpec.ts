@@ -5,7 +5,7 @@ import { ConsoleLogger } from "../ConsoleLogger.js";
 import { Logger } from "../Logger.js";
 import { NodeModules } from "../NodeModules.js";
 import { Util } from "..";
-import * as testUtil from "../TestUtil.js";
+import * as testUtil from "./helpers/TestUtil.js";
 
 describe("NodeModules", () => {
 	const mockFsContent = {
@@ -62,7 +62,7 @@ describe("NodeModules", () => {
 		targetPath = fsContentResult.path;
 	});
 	afterAll(() => {
-		fsContentResult.func();
+		fsContentResult.dispose();
 	});
 
 	describe(".listModulesFiles()", () => {
@@ -239,7 +239,7 @@ describe("NodeModules", () => {
 					}
 				}
 			};
-			fsContentResult.func(); // mockFsCOntent のディレクトリを削除
+			fsContentResult.dispose(); // mockFsCOntent のディレクトリを削除
 			fsContentResult = testUtil.preperFsContent(mockFsContent2, baseDir);
 			targetPath = fsContentResult.path;
 
