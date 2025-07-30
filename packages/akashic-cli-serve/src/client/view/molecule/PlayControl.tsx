@@ -10,6 +10,7 @@ export interface PlayControlPropsData {
 	onClickReset?: () => void;
 	onClickActivePause?: (toPause: boolean) => void;
 	onClickAddInstance?: () => void;
+	onClickAddWindow?: () => void;
 	onClickStep?: () => void;
 }
 
@@ -46,6 +47,11 @@ export const PlayControl = observer(class PlayControl extends React.Component<Pl
 				icon="group_add"
 				title={"インスタンスを追加\r\r新しいタブ・ウィンドウでこのプレイに接続するインスタンスを追加します。"}
 				onClick={props.onClickAddInstance} />
+			<ToolIconButton
+				className="external-ref_button_add-window"
+				icon="open_in_new"
+				title={"ウィンドウの追加\r\r現在のプレイヤーIDを使用して別ウィンドウを開きます。"}
+				onClick={props.onClickAddWindow} />
 			{/* // 未実装
 			<ToolLabelButton title="Playback Rate (Active)" onClick={props.onClickActivePlaybackRate}>
 				x{"" + props.playbackRate}
