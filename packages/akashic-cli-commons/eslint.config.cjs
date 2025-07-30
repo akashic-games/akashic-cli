@@ -7,7 +7,7 @@ module.exports = [
         languageOptions: {
             sourceType: "module",
             parserOptions: {
-                project: "tsconfig.json",
+                project: "tsconfig.test.json",
             },
         },
         ignores: [

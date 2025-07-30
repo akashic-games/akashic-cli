@@ -1,11 +1,11 @@
 import * as fs from "fs";
 import * as path from "path";
-import mockfs from "mock-fs";
 import { vi } from "vitest";
 import { ConsoleLogger } from "../ConsoleLogger.js";
 import { Logger } from "../Logger.js";
 import { NodeModules } from "../NodeModules.js";
 import { Util } from "..";
+import * as testUtil from "../TestUtil.js";
 
 describe("NodeModules", () => {
 	const mockFsContent = {
@@ -37,7 +37,7 @@ describe("NodeModules", () => {
 				"index.js": "require('./sub')",
 				"sub.js": "",
 			},
-			"dummy3": mockfs.symlink({ path: "../dummy3-original" })
+			"dummy3": "symlink:../dummy3-original"
 		},
 		"dummy3-original": {
 			"index.js": "require('./sub')",
@@ -50,20 +50,24 @@ describe("NodeModules", () => {
 		}
 	};
 
+	const baseDir = path.resolve(__dirname, "..", "__tests__", "output");
 	let logger: Logger;
+	let fsContentResult: testUtil.FsContentResult;
+	let targetPath = "";
 	beforeEach(() => {
 		logger = new ConsoleLogger({ debugLogMethod: () => { /* do nothing */ } });
-		mockfs(mockFsContent);
 	});
-	afterEach(() => {
-		mockfs.restore();
+	beforeAll(() => {
+		fsContentResult = testUtil.preperFsContent(mockFsContent, baseDir);
+		targetPath = fsContentResult.path;
+	});
+	afterAll(() => {
+		fsContentResult.func();
 	});
 
 	describe(".listModulesFiles()", () => {
 		it("lists the script files and all package.json", async () => {
-			mockfs(mockFsContent);
-
-			let pkgjsonPaths = await NodeModules.listModuleFiles(".", ["dummy@1", "dummy2", "dummy3"], logger);
+			let pkgjsonPaths = await NodeModules.listModuleFiles(targetPath, ["dummy", "dummy2", "dummy3"], logger);
 			expect(pkgjsonPaths.sort((a, b) => ((a > b) ? 1 : (a < b) ? -1 : 0))).toEqual([
 				"node_modules/dummy/foo.js",
 				"node_modules/dummy/main.js",
@@ -77,7 +81,7 @@ describe("NodeModules", () => {
 				"node_modules/dummy3/sub.js"
 			].sort((a, b) => ((a > b) ? 1 : (a < b) ? -1 : 0)));
 
-			pkgjsonPaths = await NodeModules.listModuleFiles(".", "dummy2", logger);
+			pkgjsonPaths = await NodeModules.listModuleFiles(targetPath, "dummy2", logger);
 			expect(pkgjsonPaths.sort((a, b) => ((a > b) ? 1 : (a < b) ? -1 : 0))).toEqual([
 				"node_modules/dummy2/index.js",
 				"node_modules/dummy2/sub.js"
@@ -87,9 +91,8 @@ describe("NodeModules", () => {
 
 	describe(".listPackageJsonsFromScriptsPath()", () => {
 		it("lists the files named package.json", async () => {
-			mockfs(mockFsContent);
-			const filePaths = await NodeModules.listScriptFiles(".", ["dummy", "dummy2", "dummy3"], logger);
-			const pkgJsonPaths = NodeModules.listPackageJsonsFromScriptsPath(".", filePaths);
+			const filePaths = await NodeModules.listScriptFiles(targetPath, ["dummy", "dummy2", "dummy3"], logger);
+			const pkgJsonPaths = NodeModules.listPackageJsonsFromScriptsPath(targetPath, filePaths);
 			
 			expect(pkgJsonPaths.sort()).toEqual([
 				"node_modules/dummy/package.json",
@@ -97,8 +100,8 @@ describe("NodeModules", () => {
 				"node_modules/dummy3/package.json"
 			].sort());
 			
-			const filePathsDummy2 = await NodeModules.listScriptFiles(".", "dummy2", logger);
-			const pkgJsonPathsDummy2 = NodeModules.listPackageJsonsFromScriptsPath(".", filePathsDummy2);
+			const filePathsDummy2 = await NodeModules.listScriptFiles(targetPath, "dummy2", logger);
+			const pkgJsonPathsDummy2 = NodeModules.listPackageJsonsFromScriptsPath(targetPath, filePathsDummy2);
 			
 			expect(pkgJsonPathsDummy2).toEqual([]);
 		});
@@ -106,8 +109,7 @@ describe("NodeModules", () => {
 
 	describe(".listScriptFiles()", () => {
 		it("lists the scripts in node_modules/ up", async () => {
-			mockfs(mockFsContent);
-			const filePaths = await NodeModules.listScriptFiles(".", ["dummy", "dummy2", "dummy3"], logger);
+			const filePaths = await NodeModules.listScriptFiles(targetPath, ["dummy", "dummy2", "dummy3"], logger);
 			expect(filePaths.sort()).toEqual([
 				"node_modules/dummy/foo.js",
 				"node_modules/dummy/main.js",
@@ -118,7 +120,7 @@ describe("NodeModules", () => {
 				"node_modules/dummy3/sub.js",
 			]);
 			
-			const filePathsDummy = await NodeModules.listScriptFiles(".", "dummy", logger);
+			const filePathsDummy = await NodeModules.listScriptFiles(targetPath, "dummy", logger);
 			expect(filePathsDummy.sort()).toEqual([
 				"node_modules/dummy/foo.js",
 				"node_modules/dummy/main.js",
@@ -136,16 +138,21 @@ describe("NodeModules", () => {
 				return path.join(path.resolve("."), path.dirname(pkgJsonPath), mainScriptName);
 			});
 
-			mockfs(mockFsContent);
-			const filePaths = await NodeModules.listScriptFiles(".", ["dummy", "dummy2", "dummy3"], logger);
-			const packageJsonFiles = NodeModules.listPackageJsonsFromScriptsPath(".", filePaths);
-			const moduleMainScripts = NodeModules.listModuleMainScripts(packageJsonFiles);
+			const filePaths = await NodeModules.listScriptFiles(targetPath, ["dummy", "dummy2", "dummy3"], logger);
+			let packageJsonFiles = NodeModules.listPackageJsonsFromScriptsPath(targetPath, filePaths);
+			// 本来はルート直下の ./node_modules のパスだが、テストで node_modules のパスがルート直下ではないためパスを生成
+			packageJsonFiles = packageJsonFiles.map(p => path.resolve(targetPath, p));
+			const moduleMainPaths = NodeModules.listModuleMainPaths(packageJsonFiles);
 
-			expect(moduleMainScripts).toEqual({
-				"dummy": "node_modules/dummy/main.js",
-				"dummyChild": "node_modules/dummy/node_modules/dummyChild/main.js",
-				"dummy3": "node_modules/dummy3/index.js"
-			});
+			const pkgJsonKey1 = path.resolve(targetPath,"node_modules/dummy/package.json");
+			const gameJsonKey = path.resolve(targetPath, "node_modules/dummy/node_modules/dummyChild/package.json");
+			const pkgJsonKey3 = path.resolve(targetPath, "node_modules/dummy3/package.json");
+
+			const expectObj: { [key: string]: string } = {};
+			expectObj[pkgJsonKey1] =  path.resolve(targetPath,"node_modules/dummy/main.js").replace(/^\//, "");
+			expectObj[gameJsonKey] =  path.resolve(targetPath, "node_modules/dummy/node_modules/dummyChild/main.js").replace(/^\//, "");
+			expectObj[pkgJsonKey3] =  path.resolve(targetPath, "node_modules/dummy3/index.js").replace(/^\//, "");
+			expect(moduleMainPaths).toEqual(expectObj);
 		});
 	});
 
@@ -158,16 +165,21 @@ describe("NodeModules", () => {
 				return path.join(path.resolve("."), path.dirname(pkgJsonPath), mainScriptName);
 			});
 
-			mockfs(mockFsContent);
-			const filePaths = await NodeModules.listScriptFiles(".", ["dummy", "dummy2", "dummy3"], logger);
-			const packageJsonFiles = NodeModules.listPackageJsonsFromScriptsPath(".", filePaths);
+			const filePaths = await NodeModules.listScriptFiles(targetPath, ["dummy", "dummy2", "dummy3"], logger);
+			let packageJsonFiles = NodeModules.listPackageJsonsFromScriptsPath(targetPath, filePaths);
+			// 本来はルート直下の ./node_modules のパスだが、テストで node_modules のパスがルート直下ではないためパスを生成
+			packageJsonFiles = packageJsonFiles.map(p => path.resolve(targetPath, p));
 			const moduleMainPaths = NodeModules.listModuleMainPaths(packageJsonFiles);
 
-			expect(moduleMainPaths).toEqual({
-				"node_modules/dummy/package.json": "node_modules/dummy/main.js",
-				"node_modules/dummy/node_modules/dummyChild/package.json": "node_modules/dummy/node_modules/dummyChild/main.js",
-				"node_modules/dummy3/package.json": "node_modules/dummy3/index.js"
-			});
+			const pkgJsonKey1 = path.resolve(targetPath,"node_modules/dummy/package.json");
+			const gameJsonKey = path.resolve(targetPath, "node_modules/dummy/node_modules/dummyChild/package.json");
+			const pkgJsonKey3 = path.resolve(targetPath, "node_modules/dummy3/package.json");
+
+			const expectObj: { [key: string]: string } = {};
+			expectObj[pkgJsonKey1] =  path.resolve(targetPath,"node_modules/dummy/main.js").replace(/^\//, "");
+			expectObj[gameJsonKey] =  path.resolve(targetPath, "node_modules/dummy/node_modules/dummyChild/main.js").replace(/^\//, "");
+			expectObj[pkgJsonKey3] =  path.resolve(targetPath, "node_modules/dummy3/index.js").replace(/^\//, "");
+			expect(moduleMainPaths).toEqual(expectObj);
 		});
 	});
 
@@ -227,10 +239,12 @@ describe("NodeModules", () => {
 					}
 				}
 			};
-			mockfs(mockFsContent2);
+			fsContentResult.func(); // mockFsCOntent のディレクトリを削除
+			fsContentResult = testUtil.preperFsContent(mockFsContent2, baseDir);
+			targetPath = fsContentResult.path;
 
-			const filePaths = await NodeModules.listScriptFiles(".", ["@dummy/dummy_node_modules", "dummy_node_modules"], logger);
-			const pkgJsonPaths = NodeModules.listPackageJsonsFromScriptsPath(".", filePaths);
+			const filePaths = await NodeModules.listScriptFiles(targetPath, ["@dummy/dummy_node_modules", "dummy_node_modules"], logger);
+			const pkgJsonPaths = NodeModules.listPackageJsonsFromScriptsPath(targetPath, filePaths);
 
 			expect(pkgJsonPaths.sort()).toEqual([
 				"node_modules/@dummy/dummy_node_modules/package.json",
@@ -240,5 +254,4 @@ describe("NodeModules", () => {
 			].sort());
 		});
 	});
-
 });
