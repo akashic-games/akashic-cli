@@ -2,16 +2,16 @@ import * as fs from "fs";
 import * as os from "os";
 import path from "path";
 
-interface FSContentDescDir {
-	[filename: string]: FSContentDescDir | string;
+interface FsContentDefinition {
+	[filename: string]: FsContentDefinition | string;
 }
 
-export interface FsContentResult {
+export interface PrepareFsContentResult {
 	path: string;
 	dispose: () => void;
 }
 
-function setupFsContentImpl(baseDir: string, key: string, def: FSContentDescDir | string): void {
+function setupFsContentImpl(baseDir: string, key: string, def: FsContentDefinition | string): void {
 	if (typeof def === "string") {
 		if (def.startsWith("symlink:")) {
 			// シンボリックリンク指定は "symlink:<link to path>" の形とする
@@ -29,15 +29,14 @@ function setupFsContentImpl(baseDir: string, key: string, def: FSContentDescDir 
 	}
 }
 
-function setupFsContent(baseDir: string, def: FSContentDescDir): void {
+function setupFsContent(baseDir: string, def: FsContentDefinition): void {
 	for (const [key, value] of Object.entries(def)) {
 		setupFsContentImpl(baseDir, key, value);
 	}
 }
 
-export function preperFsContent(def: FSContentDescDir, baseDir?: string): FsContentResult  {
-	const target = baseDir ? baseDir : path.join(os.tmpdir(), "akashic-cli-test-");
-	const dir = fs.mkdtempSync(target);
+export function prepareFsContent(def: FsContentDefinition, baseDir: string): PrepareFsContentResult  {
+	const dir = fs.mkdtempSync(baseDir);
 	setupFsContent(dir, def);
 	return {
 		path: dir,
