@@ -2,6 +2,7 @@ import { observer } from "mobx-react";
 import * as React from "react";
 import { ToolControlGroup } from "../atom/ToolControlGroup";
 import { ToolIconButton } from "../atom/ToolIconButton";
+import styles from "./PlayControl.module.css";
 
 export interface PlayControlPropsData {
 	playbackRate: number;
@@ -18,9 +19,39 @@ export interface PlayControlProps {
 	makeProps: () => PlayControlPropsData;
 }
 
-export const PlayControl = observer(class PlayControl extends React.Component<PlayControlProps, {}> {
+export const PlayControl = observer(class PlayControl extends React.Component<PlayControlProps, { isInstanceDropdownOpen: boolean }> {
+	constructor(props: PlayControlProps) {
+		super(props);
+		this.state = {
+			isInstanceDropdownOpen: false
+		};
+	}
+
+	toggleInstanceDropdown = (): void => {
+		this.setState((prevState) => ({
+			isInstanceDropdownOpen: !prevState.isInstanceDropdownOpen,
+		}));
+	};
+
+	handleAddInstance = (): void => {
+		this.setState({ isInstanceDropdownOpen: false });
+		const props = this.props.makeProps();
+		if (props.onClickAddInstance) {
+			props.onClickAddInstance();
+		}
+	};
+
+	handleAddWindow = (): void => {
+		this.setState({ isInstanceDropdownOpen: false });
+		const props = this.props.makeProps();
+		if (props.onClickAddWindow) {
+			props.onClickAddWindow();
+		}
+	};
+
 	render(): React.ReactNode {
 		const props = this.props.makeProps();
+
 		return <ToolControlGroup label="Play">
 			<ToolIconButton
 				className="external-ref_button_new-play"
@@ -47,11 +78,24 @@ export const PlayControl = observer(class PlayControl extends React.Component<Pl
 				icon="group_add"
 				title={"インスタンスを追加\r\r新しいタブ・ウィンドウでこのプレイに接続するインスタンスを追加します。"}
 				onClick={props.onClickAddInstance} />
-			<ToolIconButton
-				className="external-ref_button_add-window"
-				icon="open_in_new"
-				title={"ウィンドウの追加\r\r現在のプレイヤーIDを使用して別ウィンドウを開きます。"}
-				onClick={props.onClickAddWindow} />
+			<div className={styles["dropdown-container"]}>
+				<ToolIconButton
+					className="external-ref_button_dropdown"
+					icon="arrow_drop_down"
+					title={"インスタンス追加オプション"}
+					onClick={this.toggleInstanceDropdown}
+				/>
+				{this.state.isInstanceDropdownOpen && (
+					<div className={styles["dropdown-menu"]}>
+						<div className={styles["dropdown-item"]} onClick={this.handleAddInstance}>
+							インスタンスを追加
+						</div>
+						<div className={styles["dropdown-item"]} onClick={this.handleAddWindow}>
+							同一プレイヤーIDでウィンドウを追加
+						</div>
+					</div>
+				)}
+			</div>
 			{/* // 未実装
 			<ToolLabelButton title="Playback Rate (Active)" onClick={props.onClickActivePlaybackRate}>
 				x{"" + props.playbackRate}
