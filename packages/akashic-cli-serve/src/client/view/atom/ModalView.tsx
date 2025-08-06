@@ -21,7 +21,7 @@ export const ModalContainer = observer(class NotificationContainer extends React
 				overlayClassName={styles.overlay}
 			>
 				<div className={styles["modal-content"]}>
-					<p>接続が切れました。serve を再起動してブラウザをリロードしてください。</p>
+					<p>Connection has been lost. Restart serve and reload browser.</p>
 				</div>
 			</Modal>
 		);
