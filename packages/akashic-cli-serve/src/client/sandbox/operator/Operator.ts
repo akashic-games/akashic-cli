@@ -132,7 +132,7 @@ export class Operator {
 				playEntity.join(store.player.id, store.player.name);
 			}
 			const { events, autoSendEventName } = playEntity.content.sandboxConfig;
-			if (!events || (autoSendEventName && Array.isArray(events[autoSendEventName]))) {
+			if (!events || (autoSendEventName && !Array.isArray(events[autoSendEventName]))) {
 				// autoSendEvent が存在しない場合のみデフォルトのセッションパラメータを送る
 				playEntity.amflow.enqueueEvent(createSessionParameter(this.store.targetService));
 			}
