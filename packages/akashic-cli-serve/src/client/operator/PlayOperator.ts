@@ -14,7 +14,7 @@ export class PlayOperator {
 
 	constructor(store: Store) {
 		this.store = store;
-		Subscriber.onDisconnect.add(this.closeThisWindowIfNeeded);
+		Subscriber.onDisconnect.add(this.socketDisconect);
 	}
 
 	togglePauseActive = (pauses: boolean): Promise<PlayPatchApiResponse> => {
@@ -82,6 +82,12 @@ export class PlayOperator {
 			window.close();
 		}
 	};
+
+	socketDisconect = (): void => {
+		this.store.setSocketDisconnect(true);
+		this.closeThisWindowIfNeeded();
+	};
+
 
 	sendRegisteredEvent = (eventName: string): void => {
 		const sandboxConfig = this.store.currentLocalInstance!.content.sandboxConfig;
