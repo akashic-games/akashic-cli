@@ -4,6 +4,7 @@ import type { DumpedPlaylog } from "../../../common/types/DumpedPlaylog";
 import type { GameViewManager } from "../../akashic/GameViewManager";
 import { ServeMemoryAmflowClient } from "../../akashic/ServeMemoryAMFlowClient";
 import type { ClientContentLocator } from "../../common/ClientContentLocator";
+import { createSessionParameter } from "../../common/createSessionParameter";
 import type { ScreenSize } from "../../common/types/ScreenSize";
 import type { ExecutionMode } from "../../store/ExecutionMode";
 import { PlayEntity } from "../../store/PlayEntity";
@@ -126,8 +127,15 @@ export class Operator {
 			this.store.profilerStore.pushProfilerValueResult("rendering", value.renderingTime);
 		});
 
-		if (params?.joinsSelf) {
-			playEntity.join(player.id, player.name);
+		if (params?.joinsSelf || this.store.targetService === "nicolive:multi") {
+			if (store.player) {
+				playEntity.join(store.player.id, store.player.name);
+			}
+			const { events, autoSendEventName } = playEntity.content.sandboxConfig;
+			if (!events || (autoSendEventName && Array.isArray(events[autoSendEventName]))) {
+				// autoSendEvent が存在しない場合のみデフォルトのセッションパラメータを送る
+				playEntity.amflow.enqueueEvent(createSessionParameter(this.store.targetService));
+			}
 		}
 
 		this.play.sendAutoStartEvent();
