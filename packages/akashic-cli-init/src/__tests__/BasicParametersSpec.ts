@@ -2,24 +2,22 @@ import * as os from "os";
 import * as path from "path";
 import {ConsoleLogger} from "@akashic/akashic-cli-commons/lib/ConsoleLogger.js";
 import fs from "fs-extra";
-import mockfs from "mock-fs";
 import * as bp from "../init/BasicParameters.js";
 import * as mockPrompt from "./support/mockPrompt.js";
 
 describe("BasicParameters", function () {
 
 	describe("updateConfigurationFile()", function () {
-		const confPath = fs.mkdtempSync(path.join(os.tmpdir(), ".akashicrc"));
+		const dir = fs.mkdtempSync(path.join(os.tmpdir())).toString();
+		const confPath = path.join(dir, ".akashicrc");
 		const quietLogger = new ConsoleLogger({quiet: true});
 
 		beforeEach(() => {
-			mockfs({});
 			mockPrompt.mock({ width: 42, height: 27, fps: 30 });
 		});
 
 		afterEach(() => {
 			mockPrompt.restore();
-			mockfs.restore();
 		});
 
 		it("update game.json", async () => {

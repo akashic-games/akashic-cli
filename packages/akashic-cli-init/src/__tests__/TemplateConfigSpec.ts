@@ -1,15 +1,17 @@
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger.js";
-import mockfs from "mock-fs";
 import { completeTemplateConfig } from "../init/TemplateConfig.js";
 import { vi } from "vitest";
+import path from "path";
+import * as testUtil from "../../../akashic-cli-commons/src/__tests__/helpers/TestUtil.js";
 
 describe("completeTemplateConfig", () => {
-	beforeEach(() => {
-		mockfs({});
-	});
+	const baseDir = path.resolve(__dirname, "..", "__tests__", "fixture-");
+	let fixtureContents: testUtil.PrepareFsContentResult;
 
 	afterEach(() => {
-		mockfs.restore();
+		if (fixtureContents) {
+			fixtureContents.dispose();
+		}
 	});
 
 	it("can complete TemplateConfig", async () => {
@@ -50,8 +52,9 @@ describe("completeTemplateConfig", () => {
 	});
 
 	it("can complete TemplateConfig respecting 'exclude' filed", async () => {
-		mockfs({
-			"source": {
+
+		const mockFsContent = 	{
+				"source": {
 				".akashicinitignore": ".akashicinitignore\n.ignore",
 				".hidden": "",
 				".ignore": {
@@ -65,7 +68,9 @@ describe("completeTemplateConfig", () => {
 				}
 			},
 			"destination": {}
-		});
+		};
+		fixtureContents = testUtil.prepareFsContent(mockFsContent, baseDir);
+		
 		const config = await completeTemplateConfig(
 			{
 				formatVersion: "0",
@@ -74,16 +79,16 @@ describe("completeTemplateConfig", () => {
 					".ignore"
 				]
 			},
-			"source",
+			fixtureContents.path,
 			new ConsoleLogger({ quiet: true })
 		);
 
 		expect(config).toEqual({
 			formatVersion: "0",
 			files: [
-				{ src: "package.json", dst: "" },
-				{ src: ".hidden", dst: "" },
-				{ src: "path/to/file.txt", dst: "" }
+				{ src: "source/package.json", dst: "" },
+				{ src: "source/.hidden", dst: "" },
+				{ src: "source/path/to/file.txt", dst: "" }
 			],
 			gameJson: "game.json",
 			guideMessage: null

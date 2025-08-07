@@ -1,21 +1,19 @@
 import * as path from "path";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger.js";
 import fs from "fs-extra";
-import mockfs from "mock-fs";
 import { internals } from "../init/init.js";
 import { completeTemplateConfig } from "../init/TemplateConfig.js";
-import { vi } from "vitest";
+import * as testUtil from "../../../akashic-cli-commons/src/__tests__/helpers/TestUtil.js";
 
 const _extractFromTemplate = internals._extractFromTemplate;
 
 describe("init.ts", () => {
 
-	describe("_extractFromTemplate()", () => {
-		beforeEach(() => {
-			mockfs({
-				".akashic-templates": {
+	describe("_extractFromTemplate()", async () => {
+		const mockFsContent = {
+			".akashic-templates": {
 					simple: {
-						a: "aaa",
+						"a": "aaa",
 						b: "bbb",
 						c: {
 							d: "ddd"
@@ -27,25 +25,27 @@ describe("init.ts", () => {
 							a: "yyyyyyyy"
 						}
 					}
-				}
-			});
-		});
+			},
+			"home": {}
+		};
+		const baseDir = path.resolve(__dirname, "..", "__tests__", "fixture-init-");
+		const fixtureContents = testUtil.prepareFsContent(mockFsContent, baseDir);
 
-		afterEach(() => {
-			mockfs.restore();
+		afterAll(() => {
+			fixtureContents.dispose();
 		});
 
 		it("copy simple template", async () => {
 			const logger = new ConsoleLogger({ quiet: true });
-			const src = ".akashic-templates/simple";
-			const dest = "home";
+			const src = path.join(fixtureContents.path, ".akashic-templates/simple");
+			const dest = path.join(fixtureContents.path, "home");
 			const conf = await completeTemplateConfig({}, src);
 			await _extractFromTemplate(conf, src, dest, { logger });
 
-			expect(fs.statSync(path.join("home", "a")).isFile()).toBe(true);
-			expect(fs.statSync(path.join("home", "b")).isFile()).toBe(true);
-			expect(fs.statSync(path.join("home", "c")).isDirectory()).toBe(true);
-			expect(fs.statSync(path.join("home", "c", "d")).isFile()).toBe(true);
+			expect(fs.statSync(path.join(dest, "a")).isFile()).toBe(true);
+			expect(fs.statSync(path.join(dest, "b")).isFile()).toBe(true);
+			expect(fs.statSync(path.join(dest, "c")).isDirectory()).toBe(true);
+			expect(fs.statSync(path.join(dest, "c", "d")).isFile()).toBe(true);
 		});
 
 		it("reject unsupported formatVersion", async () => {
@@ -61,8 +61,8 @@ describe("init.ts", () => {
 
 		it("can not copy when file exists", async () => {
 			const logger = new ConsoleLogger({ quiet: true });
-			const src = ".akashic-templates/simple";
-			const dest = ".akashic-templates/copyTo";
+			const src = path.join(fixtureContents.path, ".akashic-templates/simple");
+			const dest = path.join(fixtureContents.path, ".akashic-templates/copyTo");
 			const conf = await completeTemplateConfig({}, src);
 
 			await expect( _extractFromTemplate(conf, src, dest, { logger }))
@@ -73,8 +73,8 @@ describe("init.ts", () => {
 
 		it("can not copy when file exists (specify files)", async () => {
 			const logger = new ConsoleLogger({ quiet: true });
-			const src = ".akashic-templates/simple";
-			const dest = ".akashic-templates/copyTo";
+			const src = path.join(fixtureContents.path, ".akashic-templates/simple");
+			const dest = path.join(fixtureContents.path, ".akashic-templates/copyTo");
 			const conf = await completeTemplateConfig({ files: [{ src: "a" }, { src: "a", dst: "c/a" }] }, src);
 
 			await expect(_extractFromTemplate(conf, src, dest, { logger }))
@@ -85,26 +85,26 @@ describe("init.ts", () => {
 
 		it("can copy files with force-option even if file exists", async () => {
 			const logger = new ConsoleLogger({ quiet: true });
-			const src = ".akashic-templates/simple";
-			const dest = ".akashic-templates/copyTo";
+			const src = path.join(fixtureContents.path, ".akashic-templates/simple");
+			const dest = path.join(fixtureContents.path, ".akashic-templates/copyTo");
 			const conf = await completeTemplateConfig({}, src);
 			await _extractFromTemplate(conf, src, dest, { logger, forceCopy: true });
 
-			expect(fs.readFileSync(path.join(".akashic-templates", "copyTo", "a")).toString("utf8")).toBe("aaa");
-			expect(fs.readFileSync(path.join(".akashic-templates", "copyTo", "b")).toString("utf8")).toBe("bbb");
-			expect(fs.readFileSync(path.join(".akashic-templates", "copyTo", "c", "a")).toString("utf8")).toBe("yyyyyyyy");
-			expect(fs.readFileSync(path.join(".akashic-templates", "copyTo", "c", "d")).toString("utf8")).toBe("ddd");
+			expect(fs.readFileSync(path.join(dest, "a")).toString("utf8")).toBe("aaa");
+			expect(fs.readFileSync(path.join(dest, "b")).toString("utf8")).toBe("bbb");
+			expect(fs.readFileSync(path.join(dest, "c", "a")).toString("utf8")).toBe("yyyyyyyy");
+			expect(fs.readFileSync(path.join(dest, "c", "d")).toString("utf8")).toBe("ddd");
 		});
 
 		it("can copy files with force-option even if file exists (specify files)", async () => {
 			const logger = new ConsoleLogger({ quiet: true });
-			const src = ".akashic-templates/simple";
-			const dest = ".akashic-templates/copyTo";
+			const src = path.join(fixtureContents.path, ".akashic-templates/simple");
+			const dest = path.join(fixtureContents.path, ".akashic-templates/copyTo");
 			const conf = await completeTemplateConfig({ files: [{ src: "a" }, { src: "a", dst: "c/a" }] }, src);
 			await _extractFromTemplate(conf, src, dest, { logger, forceCopy: true });
 
-			expect(fs.readFileSync(path.join(".akashic-templates", "copyTo", "a")).toString("utf8")).toBe("aaa");
-			expect(fs.readFileSync(path.join(".akashic-templates", "copyTo", "c", "a")).toString("utf8")).toBe("aaa");
+			expect(fs.readFileSync(path.join(dest, "a")).toString("utf8")).toBe("aaa");
+			expect(fs.readFileSync(path.join(dest, "c", "a")).toString("utf8")).toBe("aaa");
 		});
 	});
 });
