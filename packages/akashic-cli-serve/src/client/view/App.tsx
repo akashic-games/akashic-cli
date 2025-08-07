@@ -85,6 +85,7 @@ export const App = observer(function App(props: AppProps): React.ReactElement<Ap
 		/>
 		<ModalContainer
 			isOpen={store.isSocketDisconnect}
+			message="Connection has been lost. Restart serve and reload browser."
 		/>
 	</div>;
 });
