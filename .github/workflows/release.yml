@@ -16,7 +16,7 @@ jobs:
     name: Publish and Release
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           # CHANGELOG の差分を適切に生成するため明示的にすべての履歴を取得
           fetch-depth: 0
