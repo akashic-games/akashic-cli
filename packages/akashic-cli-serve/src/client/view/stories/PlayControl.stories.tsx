@@ -16,7 +16,7 @@ export const Basic = {
 				onClickReset: action("reset"),
 				onClickActivePause: action("active-pause"),
 				onClickAddInstance: action("add-instance"),
-				onClickAddWindow: action("add-window"),
+				onClickAddSamePlayerInstance: action("add-same-player-instance"),
 				onClickStep: action("step")
 			})}
 		/>
@@ -34,7 +34,7 @@ export const Pausing = {
 				onClickReset: action("reset"),
 				onClickActivePause: action("active-pause"),
 				onClickAddInstance: action("add-instance"),
-				onClickAddWindow: action("add-window"),
+				onClickAddSamePlayerInstance: action("add-same-player-instance"),
 				onClickStep: action("step")
 			})}
 		/>

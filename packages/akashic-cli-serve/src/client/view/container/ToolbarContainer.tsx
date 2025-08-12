@@ -47,7 +47,7 @@ export const ToolBarContainer = observer(class ToolBarContainer extends React.Co
 			onClickReset: operator.restartWithNewPlay,
 			onClickActivePause: operator.play.togglePauseActive,
 			onClickAddInstance: operator.play.openNewClientInstance,
-			onClickAddWindow: operator.play.openSameClientInstance,
+			onClickAddSamePlayerInstance: operator.play.openSameClientInstance,
 			onClickStep: operator.play.step
 		};
 	};

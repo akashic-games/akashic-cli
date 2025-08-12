@@ -40,7 +40,7 @@ const TestWithBehaviour = observer(() => (
 			onClickReset: action("reset"),
 			onClickActivePause: (v) => (store.isActivePausing = v),
 			onClickAddInstance: action("add-instance"),
-			onClickAddWindow: action("add-window"),
+			onClickAddSamePlayerInstance: action("add-same-player-instance"),
 			onClickStep: action("step")
 		})}
 		makeInstanceControlProps={() => ({
@@ -124,7 +124,7 @@ export const Basic = {
 				onClickReset: action("reset"),
 				onClickActivePause: action("active-pause"),
 				onClickAddInstance: action("add-instance"),
-				onClickAddWindow: action("add-window"),
+				onClickAddSamePlayerInstance: action("add-same-player-instance"),
 				onClickStep: action("step")
 			})}
 			makeInstanceControlProps={() => ({
