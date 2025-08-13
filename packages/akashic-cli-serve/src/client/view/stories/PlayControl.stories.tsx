@@ -13,6 +13,8 @@ export const Basic = {
 				playbackRate: 1.5,
 				isActivePausing: false,
 				isActiveExists: true,
+				showsAddInstanceOptions: false,
+				onClickAddInstanceOptions: action("show-add-instance-options"),
 				onClickReset: action("reset"),
 				onClickActivePause: action("active-pause"),
 				onClickAddInstance: action("add-instance"),
@@ -31,6 +33,8 @@ export const Pausing = {
 				playbackRate: 1.5,
 				isActivePausing: true,
 				isActiveExists: true,
+				showsAddInstanceOptions: false,
+				onClickAddInstanceOptions: action("show-add-instance-options"),
 				onClickReset: action("reset"),
 				onClickActivePause: action("active-pause"),
 				onClickAddInstance: action("add-instance"),
@@ -40,4 +44,24 @@ export const Pausing = {
 		/>
 	),
 	name: "pausing"
+};
+
+export const ShowsAddInstanceOptions = {
+	render: () => (
+		<PlayControl
+			makeProps={() => ({
+				playbackRate: 1.5,
+				isActivePausing: false,
+				isActiveExists: true,
+				showsAddInstanceOptions: true,
+				onClickAddInstanceOptions: action("show-add-instance-options"),
+				onClickReset: action("reset"),
+				onClickActivePause: action("active-pause"),
+				onClickAddInstance: action("add-instance"),
+				onClickAddSamePlayerInstance: action("add-same-player-instance"),
+				onClickStep: action("step")
+			})}
+		/>
+	),
+	name: "shows-add-instance-options"
 };

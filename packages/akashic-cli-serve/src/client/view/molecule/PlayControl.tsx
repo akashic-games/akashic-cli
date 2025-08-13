@@ -1,13 +1,14 @@
 import { observer } from "mobx-react";
 import * as React from "react";
 import { ToolControlGroup } from "../atom/ToolControlGroup";
-import { ToolDropdownButton } from "../atom/ToolDropdownButton";
 import { ToolIconButton } from "../atom/ToolIconButton";
 
 export interface PlayControlPropsData {
 	playbackRate: number;
 	isActivePausing: boolean;
 	isActiveExists: boolean;
+	showsAddInstanceOptions: boolean;
+	onClickAddInstanceOptions: (show: boolean) => void;
 	onClickReset?: () => void;
 	onClickActivePause?: (toPause: boolean) => void;
 	onClickAddInstance?: () => void;
@@ -48,30 +49,33 @@ export const PlayControl = observer(class PlayControl extends React.Component<Pl
 				className="external-ref_button_add-instance"
 				icon="group_add"
 				title={"インスタンスを追加\r\r新しいタブ・ウィンドウでこのプレイに接続するインスタンスを追加します。"}
-				onClick={props.onClickAddInstance} />
-			<ToolDropdownButton
-				title={"インスタンス追加オプション\r\r新しいタブ・ウィンドウでこのプレイに接続するインスタンスを追加します。"}
-				className="external-ref_button_add-instance-options"
-				items={[
-					{
-						label: "Add Instance (New Player ID)",
-						tooltip: "新しいプレイヤーIDでインスタンスを追加",
-						onClick: () => {
-							if (props.onClickAddInstance) {
-								props.onClickAddInstance();
+				onClick={props.onClickAddInstance}
+				dropdownProps={{
+					items: [
+						{
+							label: "Add Instance (New Player ID)",
+							tooltip: "新しいプレイヤーIDでインスタンスを追加",
+							onClick: () => {
+								if (props.onClickAddInstance) {
+									props.onClickAddInstance();
+								}
+								props.onClickAddInstanceOptions(false);
+							}
+						},
+						{
+							label: "Add Instance (Same Player ID)",
+							tooltip: "このインスタンスと同一のプレイヤーIDでインスタンスを追加",
+							onClick: () => {
+								if (props.onClickAddSamePlayerInstance) {
+									props.onClickAddSamePlayerInstance();
+								}
+								props.onClickAddInstanceOptions(false);
 							}
 						}
-					},
-					{
-						label: "Add Instance (Same Player ID)",
-						tooltip: "このインスタンスと同一のプレイヤーIDでインスタンスを追加",
-						onClick: () => {
-							if (props.onClickAddSamePlayerInstance) {
-								props.onClickAddSamePlayerInstance();
-							}
-						}
-					}
-				]}
+					],
+					showMenu: props.showsAddInstanceOptions,
+					onClick: () => props.onClickAddInstanceOptions(!props.showsAddInstanceOptions)
+				}}
 			/>
 			{/* // 未実装
 			<ToolLabelButton title="Playback Rate (Active)" onClick={props.onClickActivePlaybackRate}>
