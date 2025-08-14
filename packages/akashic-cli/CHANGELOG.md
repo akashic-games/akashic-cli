@@ -1,5 +1,12 @@
 # Change Log
 
+## 3.0.11
+
+### Patch Changes
+
+- Updated dependencies [[`a121442`](https://github.com/akashic-games/akashic-cli/commit/a121442527d83a2d25a3f985c9aa738801f890c3)]:
+  - @akashic/akashic-cli-serve@2.0.8
+
 ## 3.0.10
 
 ### Patch Changes

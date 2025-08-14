@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.0.8
+
+### Patch Changes
+
+- [#1579](https://github.com/akashic-games/akashic-cli/pull/1579) [`a121442`](https://github.com/akashic-games/akashic-cli/commit/a121442527d83a2d25a3f985c9aa738801f890c3) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Fix to display modal when Websocket is disconnected in serve
+
 ## 2.0.7
 
 ### Patch Changes
