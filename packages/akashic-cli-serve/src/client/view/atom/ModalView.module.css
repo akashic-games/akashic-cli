@@ -21,7 +21,17 @@
   position: relative;
 }
 
-.modal p {
+.modal-content {
+      background: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    max-width: 95%;
+    max-height: 95%;
+    overflow: auto;
+    position: relative;
+}
+
+.modal-content p {
   font-size: 24px;
   font-weight: bold;
 }

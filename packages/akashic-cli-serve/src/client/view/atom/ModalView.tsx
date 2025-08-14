@@ -1,9 +1,8 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import Modal from "react-modal";
 import styles from "./ModalView.module.css";
 
-interface ModalProps {
+interface DisconnectModalProps {
 	isOpen: boolean;
 	message: string;
 }
@@ -11,20 +10,14 @@ interface ModalProps {
 /**
  * モーダルを表示するたコンポーネント
  */
-export const ModalContainer = observer(class NotificationContainer extends React.Component<ModalProps, {}> {
+export const DisconnectModal = observer(class NotificationContainer extends React.Component<DisconnectModalProps, {}> {
 	render(): React.ReactNode {
-		return (
-			// 現状、リロードを強いるため閉じるボタンが必要ない
-			<Modal
-				isOpen={this.props.isOpen}
-				className={styles.modal}
-				overlayClassName={styles.overlay}
-			>
-				<div className={styles["modal-content"]}>
-					<p>{this.props.message}</p>
-				</div>
-			</Modal>
-		);
+		return this.props.isOpen ? 
+		<div id="modal" className={styles.overlay}>
+			<div className={styles["modal-content"]}>
+				<p>{this.props.message}</p>
+			</div>
+		</div>
+		: null;
 	}
 });
-
