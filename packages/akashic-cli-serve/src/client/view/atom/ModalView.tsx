@@ -12,12 +12,12 @@ interface DisconnectModalProps {
  */
 export const DisconnectModal = observer(class NotificationContainer extends React.Component<DisconnectModalProps, {}> {
 	render(): React.ReactNode {
-		return this.props.isOpen ? 
-		<div id="modal" className={styles.overlay}>
-			<div className={styles["modal-content"]}>
-				<p>{this.props.message}</p>
+		return this.props.isOpen ?
+			<div id="modal" className={styles.overlay}>
+				<div className={styles["modal-content"]}>
+					<p>{this.props.message}</p>
+				</div>
 			</div>
-		</div>
-		: null;
+			: null;
 	}
 });

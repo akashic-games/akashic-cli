@@ -191,7 +191,7 @@ export class PlayOperator {
 
 		return { top, left, width, height };
 	}
-	
+
 	private handleSocketDisconnect = (): void => {
 		this.store.setSocketDisconnect(true);
 		this.closeThisWindowIfNeeded();

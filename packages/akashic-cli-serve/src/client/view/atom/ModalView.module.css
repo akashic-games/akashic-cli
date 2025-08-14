@@ -22,13 +22,13 @@
 }
 
 .modal-content {
-      background: #fff;
-    padding: 25px;
-    border-radius: 10px;
-    max-width: 95%;
-    max-height: 95%;
-    overflow: auto;
-    position: relative;
+  background: #fff;
+  padding: 25px;
+  border-radius: 10px;
+  max-width: 95%;
+  max-height: 95%;
+  overflow: auto;
+  position: relative;
 }
 
 .modal-content p {
