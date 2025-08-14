@@ -20,7 +20,7 @@ export interface PlayControlProps {
 	makeProps: () => PlayControlPropsData;
 }
 
-export const PlayControl = observer(class PlayControl extends React.Component<PlayControlProps> {
+export const PlayControl = observer(class PlayControl extends React.Component<PlayControlProps, {}> {
 	render(): React.ReactNode {
 		const props = this.props.makeProps();
 
