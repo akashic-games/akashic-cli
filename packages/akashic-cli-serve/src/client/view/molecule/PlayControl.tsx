@@ -20,7 +20,7 @@ export interface PlayControlProps {
 	makeProps: () => PlayControlPropsData;
 }
 
-export const PlayControl = observer(class PlayControl extends React.Component<PlayControlProps, { isInstanceDropdownOpen: boolean }> {
+export const PlayControl = observer(class PlayControl extends React.Component<PlayControlProps> {
 	render(): React.ReactNode {
 		const props = this.props.makeProps();
 
