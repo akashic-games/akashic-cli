@@ -14,7 +14,7 @@ export class PlayOperator {
 
 	constructor(store: Store) {
 		this.store = store;
-		Subscriber.onDisconnect.add(this.closeThisWindowIfNeeded);
+		Subscriber.onDisconnect.add(this.handleSocketDisconnect);
 	}
 
 	togglePauseActive = (pauses: boolean): Promise<PlayPatchApiResponse> => {
@@ -191,4 +191,9 @@ export class PlayOperator {
 
 		return { top, left, width, height };
 	}
+
+	private handleSocketDisconnect = (): void => {
+		this.store.setSocketDisconnect(true);
+		this.closeThisWindowIfNeeded();
+	};
 }
