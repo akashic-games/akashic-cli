@@ -83,11 +83,6 @@ export class PlayOperator {
 		}
 	};
 
-	handleSocketDisconnect = (): void => {
-		this.store.setSocketDisconnect(true);
-		this.closeThisWindowIfNeeded();
-	};
-
 	sendRegisteredEvent = (eventName: string): void => {
 		const sandboxConfig = this.store.currentLocalInstance!.content.sandboxConfig;
 		const pevs = sandboxConfig.events ? sandboxConfig.events[eventName] : [];
@@ -196,4 +191,9 @@ export class PlayOperator {
 
 		return { top, left, width, height };
 	}
+	
+	private handleSocketDisconnect = (): void => {
+		this.store.setSocketDisconnect(true);
+		this.closeThisWindowIfNeeded();
+	};
 }
