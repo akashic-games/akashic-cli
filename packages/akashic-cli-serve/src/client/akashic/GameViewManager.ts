@@ -209,9 +209,9 @@ function createPlatformCustomizer(content: ServeGameContent): (platform: Platfor
 						const message = `Surface(): width and height should be integer. (specified ${arguments[0]}x${arguments[1]}) `
 							+ "This is not a bug but warned by akashic serve "
 							+ "to prevent platform-specific rendering trouble.";
-							content.onWarn.fire({ type, message });
+						content.onWarn.fire({ type, message });
 					}
-				} 
+				}
 				const surface: Surface = func.apply(this, [...arguments]);
 				// Safariで範囲外描画時に問題が発生するのはCanvas要素なので、surfaceがCanvasでなければ範囲外描画の警告は行わない
 				if (!(surface._drawable instanceof HTMLCanvasElement)) {

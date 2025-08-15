@@ -125,7 +125,14 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 		}
 
 		if (cliConfigParam.targetService === "nicolive") {
-			cliConfigParam.targetService = "nicolive:multi"; // "nicolive"  は "nicolive:multi" のエイリアスとする
+			if (cliConfigParam.standalone) {
+				getSystemLogger().error(
+					"Invalid --target-service option argument: 'nicolive' service does not currently support standalone mode"
+				);
+				process.exit(1);
+			} else {
+				cliConfigParam.targetService = "nicolive:multi"; // "nicolive" は "nicolive:multi" のエイリアスとする
+			}
 		}
 		serverGlobalConfig.targetService = cliConfigParam.targetService;
 	}
