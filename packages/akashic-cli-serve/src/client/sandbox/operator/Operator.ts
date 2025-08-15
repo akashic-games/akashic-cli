@@ -127,7 +127,7 @@ export class Operator {
 		});
 
 		if (params?.joinsSelf || this.store.targetService === "nicolive:multi") {
-			playEntity.join(store.player!.id, store.player!.name);
+			playEntity.join(player.id, player.name);
 		}
 
 		this.play.sendAutoStartEvent();
