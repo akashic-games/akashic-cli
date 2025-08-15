@@ -24,13 +24,13 @@
   "devDependencies": {
     "@akashic/eslint-config": "3.0.2",
     "@akashic/game-configuration": "2.5.0",
-    "@types/form-data": "2.5.0",
+    "@types/form-data": "2.5.2",
     "@types/mock-fs": "4.13.4",
-    "@types/node": "18.19.44",
+    "@types/node": "18.19.123",
     "@types/tar": "6.1.13",
     "mock-fs": "5.2.0",
     "rimraf": "3.0.2",
-    "typescript": "5.6.2",
+    "typescript": "5.6.3",
     "vitest": "^2.0.5"
   },
   "dependencies": {
