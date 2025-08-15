@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.0.9
+
+### Patch Changes
+
+- [#1580](https://github.com/akashic-games/akashic-cli/pull/1580) [`ee7f9af`](https://github.com/akashic-games/akashic-cli/commit/ee7f9afd0592a14872e6a6272ecefe347cfee8e3) Thanks [@yu-ogi](https://github.com/yu-ogi)! - support 'nicolive:multi' in standalone mode
+
 ## 2.0.8
 
 ### Patch Changes
