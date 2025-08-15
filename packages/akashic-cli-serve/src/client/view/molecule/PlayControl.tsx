@@ -7,9 +7,12 @@ export interface PlayControlPropsData {
 	playbackRate: number;
 	isActivePausing: boolean;
 	isActiveExists: boolean;
+	showsAddInstanceOptions: boolean;
+	onClickAddInstanceOptions: (show: boolean) => void;
 	onClickReset?: () => void;
 	onClickActivePause?: (toPause: boolean) => void;
 	onClickAddInstance?: () => void;
+	onClickAddSamePlayerInstance?: () => void;
 	onClickStep?: () => void;
 }
 
@@ -20,6 +23,7 @@ export interface PlayControlProps {
 export const PlayControl = observer(class PlayControl extends React.Component<PlayControlProps, {}> {
 	render(): React.ReactNode {
 		const props = this.props.makeProps();
+
 		return <ToolControlGroup label="Play">
 			<ToolIconButton
 				className="external-ref_button_new-play"
@@ -45,7 +49,34 @@ export const PlayControl = observer(class PlayControl extends React.Component<Pl
 				className="external-ref_button_add-instance"
 				icon="group_add"
 				title={"インスタンスを追加\r\r新しいタブ・ウィンドウでこのプレイに接続するインスタンスを追加します。"}
-				onClick={props.onClickAddInstance} />
+				onClick={props.onClickAddInstance}
+				dropdownProps={{
+					items: [
+						{
+							label: "Add Instance (New Player ID)",
+							tooltip: "新しいプレイヤーIDでインスタンスを追加",
+							onClick: () => {
+								if (props.onClickAddInstance) {
+									props.onClickAddInstance();
+								}
+								props.onClickAddInstanceOptions(false);
+							}
+						},
+						{
+							label: "Add Instance (Same Player ID)",
+							tooltip: "このインスタンスと同一のプレイヤーIDでインスタンスを追加",
+							onClick: () => {
+								if (props.onClickAddSamePlayerInstance) {
+									props.onClickAddSamePlayerInstance();
+								}
+								props.onClickAddInstanceOptions(false);
+							}
+						}
+					],
+					showMenu: props.showsAddInstanceOptions,
+					onClick: () => props.onClickAddInstanceOptions(!props.showsAddInstanceOptions)
+				}}
+			/>
 			{/* // 未実装
 			<ToolLabelButton title="Playback Rate (Active)" onClick={props.onClickActivePlaybackRate}>
 				x{"" + props.playbackRate}
