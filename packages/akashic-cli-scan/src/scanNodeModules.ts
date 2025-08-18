@@ -1,12 +1,14 @@
 import * as fs from "fs";
+import { readFile } from "fs/promises";
 import * as path from "path";
+import { Util, type LibConfiguration } from "@akashic/akashic-cli-commons";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger.js";
 import { readJSON, writeJSON } from "@akashic/akashic-cli-commons/lib/FileSystem.js";
 import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger.js";
 import { NodeModules } from "@akashic/akashic-cli-commons/lib/NodeModules.js";
 import { PromisedNpm } from "@akashic/akashic-cli-commons/lib/PromisedNpm.js";
 import { chdir } from "@akashic/akashic-cli-commons/lib/Util.js";
-import type { GameConfiguration } from "@akashic/game-configuration";
+import type { AssetConfigurationMap, GameConfiguration } from "@akashic/game-configuration";
 
 export interface ScanNodeModulesParameterObject {
 	/**
@@ -48,6 +50,12 @@ export interface ScanNodeModulesParameterObject {
 	resolveAssetIdsFromPath?: boolean;
 
 	/**
+	 * すべての外部モジュールの定義をスキャンし直すかどうか。
+	 * 省略された場合、 `false` 。
+	 */
+	forceUpdate?: boolean;
+
+	/**
 	 * アセットIDを再度スキャンし直すかどうか。
 	 * 省略された場合、 `false` 。
 	 */
@@ -86,6 +94,7 @@ export function _completeScanNodeModulesParameterObject(param: ScanNodeModulesPa
 		logger: param.logger ?? new ConsoleLogger(),
 		fromEntryPoint: !!param.fromEntryPoint,
 		resolveAssetIdsFromPath: !!param.resolveAssetIdsFromPath,
+		forceUpdate: !!param.forceUpdate,
 		forceUpdateAssetIds: !!param.forceUpdateAssetIds,
 		omitPackagejson: param.omitPackagejson ?? true,
 		debugNpm: param.debugNpm ?? undefined,
@@ -191,10 +200,59 @@ export async function scanNodeModules(p: ScanNodeModulesParameterObject): Promis
 
 		content.globalScripts = globalScripts;
 
+		// globalScripts のファイルパスはすでに解決済みのため、ここでは akashic-lib.json に関する更新のみを扱う。
+		if (param.forceUpdate) {
+			content.environment ??= {};
+
+			if (content.environment.external && Object.keys(content.environment.external).length > 0) {
+				logger.warn("'environment.external' in game.json has existing settings, but will be overwritten due to '--force' option");
+			}
+			delete content.environment.external;
+
+			for (const moduleName of entryPaths) {
+				content.environment.external ??= {};
+				const libPath = path.resolve(".", "node_modules", moduleName, "akashic-lib.json");
+				const libJsonData = await loadLibJson(libPath);
+
+				if (libJsonData?.gameConfigurationData) {
+					const environment = libJsonData.gameConfigurationData.environment;
+					if (environment?.external) {
+						for (const [name, value] of Object.entries(environment.external)) {
+							content.environment.external[name] = value;
+						}
+					}
+				}
+
+				if (libJsonData?.assetList) {
+					content.assets ??= {};
+					for (const asset of libJsonData.assetList) {
+						const assetPath = Util.makeUnixPath(path.join("node_modules", moduleName, asset.path));
+						(content.assets as AssetConfigurationMap)[assetPath] = {
+							...asset,
+							path: assetPath
+						};
+					}
+				}
+			}
+		}
+
 		await writeJSON<GameConfiguration>(gamePath, content);
 
 		logger.info("Done!");
 	} finally {
 		await restoreDirectory();
+	}
+}
+
+async function loadLibJson(libPath: string): Promise<LibConfiguration | null> {
+	try {
+		const data = await readFile(libPath, "utf8");
+		return JSON.parse(data);
+	} catch (err: any) {
+		// akashic-lib.json が存在しない場合エラーとせずに null を返す
+		if (err.code === "ENOENT") {
+			return null;
+		}
+		throw err;
 	}
 }

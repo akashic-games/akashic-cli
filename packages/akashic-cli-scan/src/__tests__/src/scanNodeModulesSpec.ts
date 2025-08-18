@@ -1080,4 +1080,98 @@ describe("scanNodeModules", () => {
 
 		expect(warnLogs.length).toBe(0);
 	});
+
+	it("apply gameConfigurationData from akashic-lib.json to game.json", async () => {
+		mockfs({
+			"game.json": JSON.stringify({
+				assets: {},
+				globalScripts: [],
+				environment: {
+					"sandbox-runtime": 3,
+				}
+			}),
+			"node_modules": {
+				"foo": {
+					"package.json": JSON.stringify({
+						name: "foo",
+						version: "1.0.0",
+						main: "index.js"
+					}),
+					"index.js": "module.exports = 1;",
+					"akashic-lib.json": JSON.stringify({
+						gameConfigurationData: {
+							"environment": {
+								"external": {
+									"fooPlugin": "0"
+								}
+							}
+						}
+					})
+				}
+			}
+		});
+
+		await scanNodeModules({
+			logger: nullLogger,
+			forceUpdate: true, // forceUpdate が false の場合は gameConfigurationData を反映しない (後方互換の挙動)
+			debugNpm: new MockPromisedNpm({
+				expectDependencies: {
+					"foo": {}
+				}
+			}),
+		});
+
+		const conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		expect(conf.environment).toEqual({
+			"sandbox-runtime": 3,
+			external: {
+				fooPlugin: '0',
+			},
+		});
+	});
+
+	it("clear environment.external when module not in package.json with --force", async () => {
+		mockfs({
+			"game.json": JSON.stringify({
+				assets: {},
+				globalScripts: [],
+				environment: {
+					"sandbox-runtime": 3,
+					external: {
+						fooPlugin: "0"
+					}
+				}
+			}),
+		});
+
+		const warnLogs: string[] = [];
+		class Logger extends ConsoleLogger {
+			info(_message: any) {
+				// do nothing
+			}
+			warn(message: any) {
+				warnLogs.push(message);
+			}
+		}
+		const logger = new Logger();
+
+		await scanNodeModules({
+			logger,
+			forceUpdate: true,
+			debugNpm: new MockPromisedNpm({
+				expectDependencies: {}
+			}),
+		});
+
+		const conf = JSON.parse(fs.readFileSync("./game.json").toString());
+
+		// external が削除されていることを確認
+		expect(conf.environment).toEqual({
+			"sandbox-runtime": 3,
+		});
+
+		// 既存設定があれば警告を出すことを確認
+		expect(warnLogs.length).toBe(1);
+		expect(warnLogs[0]).toMatch(/environment\.external/);
+	});
 });
