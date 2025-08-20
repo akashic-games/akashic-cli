@@ -1,17 +1,18 @@
 import * as fs from "fs";
 import * as path from "path";
 import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger.js";
-import mockfs from "mock-fs";
 import { MockInstance, vi } from "vitest";
 import { scanNodeModules } from "../../scanNodeModules.js";
 import { Util } from "@akashic/akashic-cli-commons";
 import { MockPromisedNpm } from "./helpers/MockPromisedNpm.js";
 import { ScanNodeModulesParameterObject } from "../../scanNodeModules.js";
+import * as testUtil from "../../../../akashic-cli-commons/src/__tests__/helpers/TestUtil.js";
 
 describe("scanNodeModules", () => {
 	const nullLogger = new ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
 	let requireResolve: MockInstance;
-
+	const baseDir = path.resolve(__dirname, "..",  "fixture-scan-");
+	let fixtureContents: testUtil.PrepareFsContentResult; 
 	beforeAll(() => {
 		requireResolve = vi.spyOn(Util, "requireResolve");
 		requireResolve.mockImplementation((id: string, opts?: { paths?: string[] | undefined }) => {
@@ -22,16 +23,17 @@ describe("scanNodeModules", () => {
 			return path.join(path.resolve("."), path.dirname(pkgJsonPath), mainScriptName);
 		});
 	});
-	afterEach(() => {
-		mockfs.restore();
-	});
 	afterAll(() => {
 		requireResolve.mockClear();
 	});
 
 	describe("scan globalScripts field based on node_modules/", () => {
+		afterAll( ()=> {
+			fixtureContents.dispose();
+		});
+
 		const prepareMock = (gamejson: object) => {
-			mockfs({
+			const mockContent = {
 				"game.json": JSON.stringify(gamejson),
 				"node_modules": {
 					"dummy": {
@@ -57,7 +59,9 @@ describe("scanNodeModules", () => {
 						"sub.js": "",
 					}
 				}
-			});
+			};
+			const usePath = fixtureContents ? fixtureContents.path :  "";
+			fixtureContents = testUtil.prepareFsContent(mockContent, baseDir, usePath);
 		};
 
 		const scan = async (param?: ScanNodeModulesParameterObject) => {
@@ -71,11 +75,12 @@ describe("scanNodeModules", () => {
 						"dummy2": {}
 					}
 				}),
+				cwd: fixtureContents.path,
 				...param,
 			});
 		};
 
-		const readConfig = () => JSON.parse(fs.readFileSync("./game.json").toString());
+		const readConfig = () => JSON.parse(fs.readFileSync(path.join(fixtureContents.path, "./game.json")).toString());
 
 		const expectedPaths = [
 			"node_modules/dummy/main.js",
@@ -180,7 +185,7 @@ describe("scanNodeModules", () => {
 	});
 
 	it("scan globalScripts field based on node_modules/ with npm3(flatten)", async () => {
-		mockfs({
+		const mockContent = {
 			"game.json": `{ "environment": { "sandbox-runtime": "3" } }`,
 			"node_modules": {
 				"dummy": {
@@ -204,10 +209,11 @@ describe("scanNodeModules", () => {
 					"index.js": "module.exports = 'dummyChild';"
 				}
 			}
-		});
-
+		};
+		fixtureContents = testUtil.prepareFsContent(mockContent, baseDir);
 		await scanNodeModules({
 			logger: nullLogger,
+			cwd: fixtureContents.path,
 			useMmp: true,
 			debugNpm: new MockPromisedNpm({
 				expectDependencies: {
@@ -218,8 +224,7 @@ describe("scanNodeModules", () => {
 				}
 			})
 		});
-
-		let conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		let conf = JSON.parse(fs.readFileSync(path.join(fixtureContents.path, "./game.json")).toString());
 		const globalScripts = conf.globalScripts;
 		const moduleMainScripts = conf.moduleMainScripts;
 		const moduleMainPaths = conf.moduleMainPaths;
@@ -241,10 +246,11 @@ describe("scanNodeModules", () => {
 		expect(moduleMainPaths).toEqual({
 			"node_modules/dummy/package.json": "node_modules/dummy/main.js"
 		});
+		fixtureContents.dispose();
 	});
 
 	it("scan globalScripts field based on node_modules/ with @scope", async () => {
-		mockfs({
+		const mockContent = {
 			"game.json": `{ "environment": { "sandbox-runtime": "3" } }`,
 			"node_modules": {
 				"dummy": {
@@ -286,17 +292,19 @@ describe("scanNodeModules", () => {
 					}
 				}
 			}
-		});
+		};
+		fixtureContents = testUtil.prepareFsContent(mockContent, baseDir);
 
 		await scanNodeModules({
 			logger: nullLogger,
+			cwd: fixtureContents.path,
 			useMmp: true,
 			debugNpm: new MockPromisedNpm({
 				expectDependencies: { "dummy": {}, "dummy2": {}, "@scope/scoped": {} }
 			})
 		});
 
-		let conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		let conf = JSON.parse(fs.readFileSync(path.join(fixtureContents.path, "./game.json")).toString());
 		const globalScripts = conf.globalScripts;
 		const moduleMainScripts = conf.moduleMainScripts;
 		const moduleMainPaths = conf.moduleMainPaths;
@@ -321,10 +329,11 @@ describe("scanNodeModules", () => {
 			"node_modules/dummy/package.json": "node_modules/dummy/main.js",
 			"node_modules/@scope/scoped/package.json": "node_modules/@scope/scoped/root.js"
 		});
+		fixtureContents.dispose();
 	});
 
 	it("scan globalScripts If main in package.json has no extension", async () => {
-		mockfs({
+		const mockContent = {
 			"game.json": `{ "environment": { "sandbox-runtime": "3" } }`,
 			"node_modules": {
 				"dummy": {
@@ -346,10 +355,12 @@ describe("scanNodeModules", () => {
 					}
 				}
 			}
-		});
+		};
+		fixtureContents = testUtil.prepareFsContent(mockContent, baseDir);
 
 		await scanNodeModules({
 			logger: nullLogger,
+			cwd: fixtureContents.path,
 			useMmp: true,
 			debugNpm: new MockPromisedNpm({
 				expectDependencies: {
@@ -360,7 +371,7 @@ describe("scanNodeModules", () => {
 			})
 		});
 
-		let conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		let conf = JSON.parse(fs.readFileSync(path.join(fixtureContents.path, "./game.json")).toString());
 		const globalScripts = conf.globalScripts;
 		const moduleMainScripts = conf.moduleMainScripts;
 		const moduleMainPaths = conf.moduleMainPaths;
@@ -376,23 +387,26 @@ describe("scanNodeModules", () => {
 		expect(moduleMainPaths).toEqual({
 			"node_modules/dummy/package.json": "node_modules/dummy/noExtension.js"
 		});
+		fixtureContents.dispose();
 	});
 
 	it("scan globalScripts empty node_modules/", async () => {
-		mockfs({
+		const mockContent = {
 			"game.json": `{ "environment": { "sandbox-runtime": "3" } }`,
 			"node_modules": {}
-		});
+		};
+		fixtureContents = testUtil.prepareFsContent(mockContent, baseDir);
 
 		await scanNodeModules({
 			logger: nullLogger,
+			cwd: fixtureContents.path,
 			useMmp: true,
 			debugNpm: new MockPromisedNpm({
 				expectDependencies: {}
 			})
 		});
 
-		let conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		let conf = JSON.parse(fs.readFileSync(path.join(fixtureContents.path, "./game.json")).toString());
 		const globalScripts = conf.globalScripts;
 		const moduleMainScripts = conf.moduleMainScripts;
 		const moduleMainPaths = conf.moduleMainPaths;
@@ -405,6 +419,7 @@ describe("scanNodeModules", () => {
 
 		expect(moduleMainScripts).toBeUndefined();
 		expect(moduleMainPaths).toBeUndefined();
+		fixtureContents.dispose();
 	});
 
 	it("scan globalScripts field based on node_modules/, multiple versions in dependencies and devDependencies", async () => {
@@ -463,10 +478,11 @@ describe("scanNodeModules", () => {
 				}
 			}
 		};
-		mockfs(mockFsContent);
+		fixtureContents = testUtil.prepareFsContent(mockFsContent, baseDir);
 
 		await scanNodeModules({
 			logger: nullLogger,
+			cwd: fixtureContents.path,
 			useMmp: true,
 			debugNpm: new MockPromisedNpm({
 				expectDependencies: {
@@ -478,7 +494,7 @@ describe("scanNodeModules", () => {
 			})
 		});
 
-		let conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		let conf = JSON.parse(fs.readFileSync(path.join(fixtureContents.path, "./game.json")).toString());
 		let globalScripts = conf.globalScripts;
 		let moduleMainScripts = conf.moduleMainScripts;
 		let moduleMainPaths = conf.moduleMainPaths;
@@ -524,10 +540,12 @@ describe("scanNodeModules", () => {
 			}
 		};
 
-		mockfs(mockFsContent);
+		fixtureContents.dispose();
+		fixtureContents = testUtil.prepareFsContent(mockFsContent, baseDir);
 
 		await scanNodeModules({
 			logger: nullLogger,
+			cwd: fixtureContents.path,
 			useMmp: true,
 			debugNpm: new MockPromisedNpm({
 				expectDependencies: {
@@ -539,7 +557,7 @@ describe("scanNodeModules", () => {
 			})
 		});
 
-		conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		conf = JSON.parse(fs.readFileSync(path.join(fixtureContents.path, "./game.json")).toString());
 		globalScripts = conf.globalScripts;
 		moduleMainScripts = conf.moduleMainScripts;
 		moduleMainPaths = conf.moduleMainPaths;
@@ -562,10 +580,11 @@ describe("scanNodeModules", () => {
 			"node_modules/dummy/package.json": "node_modules/dummy/main.js",
 			"node_modules/dummyChild/package.json": "node_modules/dummyChild/index.js"
 		});
+		fixtureContents.dispose();
 	});
 
 	it("scan invalid package.json - no name", async () => {
-		mockfs({
+		const mockContent = {
 			"game.json": `{ "environment": { "sandbox-runtime": "3" } }`,
 			"node_modules": {
 				"invalidDummy": {
@@ -580,10 +599,12 @@ describe("scanNodeModules", () => {
 					"foo.js": "module.exports = 1;"
 				}
 			}
-		});
+		};
+		fixtureContents = testUtil.prepareFsContent(mockContent, baseDir);
 
 		await scanNodeModules({
 			logger: nullLogger,
+			cwd: fixtureContents.path,
 			useMmp: true,
 			debugNpm: new MockPromisedNpm({
 				expectDependencies: {
@@ -592,7 +613,7 @@ describe("scanNodeModules", () => {
 			})
 		});
 
-		const conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		const conf = JSON.parse(fs.readFileSync(path.join(fixtureContents.path, "./game.json")).toString());
 		const globalScripts = conf.globalScripts;
 		const moduleMainScripts = conf.moduleMainScripts;
 		const moduleMainPaths = conf.moduleMainPaths;
@@ -609,10 +630,11 @@ describe("scanNodeModules", () => {
 
 		expect(moduleMainScripts).toBeUndefined();
 		expect(moduleMainPaths).toEqual({});
+		fixtureContents.dispose();
 	});
 
 	it("scan all moduleMainScripts", async () => {
-		mockfs({
+		const mockContent = {
 			"game.json": `{ "environment": { "sandbox-runtime": "3" } }`,
 			"node_modules": {
 				"dummy": {
@@ -666,10 +688,12 @@ describe("scanNodeModules", () => {
 					}
 				}
 			}
-		});
+		};
+		fixtureContents = testUtil.prepareFsContent(mockContent, baseDir);
 
 		await scanNodeModules({
 			logger: nullLogger,
+			cwd: fixtureContents.path,
 			useMmp: true,
 			debugNpm: new MockPromisedNpm({
 				expectDependencies: {
@@ -678,7 +702,7 @@ describe("scanNodeModules", () => {
 			})
 		});
 
-		let conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		let conf = JSON.parse(fs.readFileSync(path.join(fixtureContents.path, "./game.json")).toString());
 		let globalScripts = conf.globalScripts;
 		let moduleMainScripts = conf.moduleMainScripts;
 		let moduleMainPaths = conf.moduleMainPaths;
@@ -705,10 +729,11 @@ describe("scanNodeModules", () => {
 			"node_modules/dummy2/package.json": "node_modules/dummy2/index.js",
 			"node_modules/@scope/scoped/package.json": "node_modules/@scope/scoped/root.js"
 		});
+		fixtureContents.dispose();
 	});
 
 	it("scan globalScripts: given --no-omit-packagejson property", async () => {
-		mockfs({
+		const mockContent = {
 			"game.json": `{ "environment": { "sandbox-runtime": "3" } }`,
 			"node_modules": {
 				"dummy": {
@@ -762,10 +787,12 @@ describe("scanNodeModules", () => {
 					}
 				}
 			}
-		});
+		};
+		fixtureContents = testUtil.prepareFsContent(mockContent, baseDir);
 
 		await scanNodeModules({
 			logger: nullLogger,
+			cwd: fixtureContents.path,
 			useMmp: true,
 			debugNpm: new MockPromisedNpm({
 				expectDependencies: {
@@ -775,7 +802,7 @@ describe("scanNodeModules", () => {
 			omitPackagejson: false
 		});
 
-		const conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		const conf = JSON.parse(fs.readFileSync(path.join(fixtureContents.path, "./game.json")).toString());
 		const globalScripts = conf.globalScripts;
 		const moduleMainScripts = conf.moduleMainScripts;
 		const moduleMainPaths = conf.moduleMainPaths;
@@ -806,11 +833,12 @@ describe("scanNodeModules", () => {
 			"node_modules/dummy2/package.json": "node_modules/dummy2/index.js",
 			"node_modules/@scope/scoped/package.json": "node_modules/@scope/scoped/root.js"
 		});
+		fixtureContents.dispose();
 	});
 
 
 	it("scans globalScripts from the entry point script", async () => {
-		mockfs({
+		const mockContent = {
 			"game.json": JSON.stringify({
 				main: "./script/main.js",
 				assets: {
@@ -892,10 +920,12 @@ describe("scanNodeModules", () => {
 					"main.js": "module.exports = 'dummyChild';"
 				}
 			}
-		});
+		};
+		fixtureContents = testUtil.prepareFsContent(mockContent, baseDir);
 
 		await scanNodeModules({
 			logger: nullLogger,
+			cwd: fixtureContents.path,
 			useMmp: true,
 			debugNpm: new MockPromisedNpm({
 				expectDependencies: {
@@ -908,7 +938,7 @@ describe("scanNodeModules", () => {
 			fromEntryPoint: true
 		});
 
-		const conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		const conf = JSON.parse(fs.readFileSync(path.join(fixtureContents.path, "./game.json")).toString());
 		const globalScripts = conf.globalScripts;
 		const moduleMainScripts = conf.moduleMainScripts;
 		const moduleMainPaths = conf.moduleMainPaths;
@@ -927,10 +957,11 @@ describe("scanNodeModules", () => {
 		expect(moduleMainPaths).toEqual({
 			"node_modules/dummyChild/package.json": "node_modules/dummyChild/main.js"
 		});
+		fixtureContents.dispose();
 	});
 
 	it("doesn't delete registered and existing globalScripts when scan globalScripts again", async () => {
-		mockfs({
+		const mockContent = {
 			"game.json": JSON.stringify({
 				main: "./script/main.js",
 				assets: {
@@ -992,10 +1023,12 @@ describe("scanNodeModules", () => {
 					"sub.js": "",
 				}
 			}
-		});
+		};
+		fixtureContents = testUtil.prepareFsContent(mockContent, baseDir);
 
 		await scanNodeModules({
 			logger: nullLogger,
+			cwd: fixtureContents.path,
 			useMmp: true,
 			debugNpm: new MockPromisedNpm({
 				expectDependencies: {
@@ -1007,7 +1040,7 @@ describe("scanNodeModules", () => {
 			})
 		});
 
-		const conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		const conf = JSON.parse(fs.readFileSync(path.join(fixtureContents.path, "./game.json")).toString());
 		const globalScripts = conf.globalScripts;
 		const moduleMainScripts = conf.moduleMainScripts;
 		const moduleMainPaths = conf.moduleMainPaths;
@@ -1027,10 +1060,11 @@ describe("scanNodeModules", () => {
 			"node_modules/dummy/package.json": "node_modules/dummy/main.js",
 			"node_modules/dummy/node_modules/dummyChild/package.json": "node_modules/dummy/node_modules/dummyChild/index.js",
 		});
+		fixtureContents.dispose();
 	});
 
 	it("doesn't output warning message when moduleMainScript exist in game.json", async () => {
-		mockfs({
+		const mockContent = {
 			"game.json": JSON.stringify({
 				assets: {
 				},
@@ -1056,7 +1090,8 @@ describe("scanNodeModules", () => {
 					].join("\n")
 				}
 			}
-		});
+		};
+		fixtureContents = testUtil.prepareFsContent(mockContent, baseDir);
 
 		const warnLogs: string[] = [];
 		class Logger extends ConsoleLogger {
@@ -1071,6 +1106,7 @@ describe("scanNodeModules", () => {
 
 		await scanNodeModules({
 			logger,
+			cwd: fixtureContents.path,
 			debugNpm: new MockPromisedNpm({
 				expectDependencies: {
 					"dummy": {}
@@ -1079,5 +1115,6 @@ describe("scanNodeModules", () => {
 		});
 
 		expect(warnLogs.length).toBe(0);
+		fixtureContents.dispose();
 	});
 });
