@@ -24,7 +24,7 @@ function setupFsContentImpl(baseDir: string, key: string, def: FsContentDefiniti
 		}
 	} else {
 		const dir = path.join(baseDir, key);
-		fs.mkdirSync(dir);
+		if (!fs.existsSync(dir)) fs.mkdirSync(dir);
 		setupFsContent(dir, def);
 	}
 }
@@ -35,8 +35,8 @@ function setupFsContent(baseDir: string, def: FsContentDefinition): void {
 	}
 }
 
-export function prepareFsContent(def: FsContentDefinition, baseDir: string): PrepareFsContentResult  {
-	const dir = fs.mkdtempSync(baseDir);
+export function prepareFsContent(def: FsContentDefinition, baseDir: string, useDirPath?: string): PrepareFsContentResult  {
+	const dir = useDirPath ? useDirPath : fs.mkdtempSync(baseDir);
 	setupFsContent(dir, def);
 	return {
 		path: dir,

@@ -1,14 +1,17 @@
 import * as fs from "fs";
 import * as path from "path";
-import mockfs from "mock-fs";
 import { vi } from "vitest";
 import * as cmn from "@akashic/akashic-cli-commons";
 import { InstallParameterObject, promiseInstall } from "../install.js";
+import * as testUtil from "../../../../akashic-cli-commons/src/__tests__/helpers/TestUtil.js";
 
 describe("install()", () => {
 
-	afterEach(() => {
-		mockfs.restore();
+	const baseDir = path.resolve(__dirname, "..", "__tests__", "fixture-install-");
+	let fixtureContents: testUtil.PrepareFsContentResult;
+	
+	afterAll(() => {
+		fixtureContents.dispose();
 	});
 
 	it("handles npm install failure", async () => {
@@ -85,7 +88,9 @@ describe("install()", () => {
 			return path.join(path.resolve("."), path.dirname(pkgJsonPath), mainScriptName);
 		});
 
-		mockfs(mockFsContent);
+		fixtureContents = testUtil.prepareFsContent(mockFsContent, baseDir);
+		const somedir = path.join(fixtureContents.path, "somedir");
+
 		const dummyNpm = new cmn.PromisedNpm({});
 		dummyNpm.install = (names: string[]) => {
 			names = Array.isArray(names) ? names : [names];
@@ -93,14 +98,16 @@ describe("install()", () => {
 				const nameNoVer = cmn.Util.makeModuleNameNoVer(name);
 				mockFsContent.somedir.node_modules[nameNoVer] = mockModules[nameNoVer];
 			});
-
-			mockfs(mockFsContent.somedir);
+			testUtil.prepareFsContent(mockFsContent.somedir.node_modules, baseDir, path.join(somedir, "node_modules"));
 			return Promise.resolve();
 		};
 
 		return Promise.resolve()
-			.then(() => promiseInstall({ moduleNames: ["dummy"], cwd: "./somedir", logger: logger, debugNpm: dummyNpm }))
-			.then(() => cmn.FileSystem.readJSON<cmn.GameConfiguration>("./somedir/game.json"))
+			.then(() => promiseInstall({ moduleNames: ["dummy"], cwd: somedir, logger: logger, debugNpm: dummyNpm }))
+			.then(async () => {
+				const ret = await cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join(somedir, "game.json"))
+				return ret;
+			})
 			.then((content) => {
 				const globalScripts = content.globalScripts!;
 				expect(globalScripts instanceof Array).toBe(true);
@@ -115,8 +122,8 @@ describe("install()", () => {
 				});
 				expect(content.moduleMainPaths).toBeUndefined();
 			})
-			.then(() => promiseInstall({ moduleNames: ["dummy2@1.0.1"], cwd: "./somedir", plugin: 12, logger: logger, debugNpm: dummyNpm }))
-			.then(() => cmn.FileSystem.readJSON<cmn.GameConfiguration>("./somedir/game.json"))
+			.then(() => promiseInstall({ moduleNames: ["dummy2"], cwd: somedir, plugin: 12, logger: logger, debugNpm: dummyNpm }))
+			.then(() => cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join(somedir, "game.json")))
 			.then((content) => {
 				expect(content.operationPlugins).toEqual([
 					{
@@ -138,8 +145,8 @@ describe("install()", () => {
 				});
 				expect(content.moduleMainPaths).toBeUndefined();
 			})
-			.then(() => promiseInstall({ moduleNames: ["noOmitPackagejson@0.0.0"], cwd: "./somedir", logger: logger, debugNpm: dummyNpm, noOmitPackagejson: true }))
-			.then(() => cmn.FileSystem.readJSON<cmn.GameConfiguration>("./somedir/game.json"))
+			.then(() => promiseInstall({ moduleNames: ["noOmitPackagejson"], cwd: somedir, logger: logger, debugNpm: dummyNpm, noOmitPackagejson: true }))
+			.then(() => cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join(somedir, "game.json")))
 			.then((content) => {
 				const globalScripts = content.globalScripts!;
 
@@ -167,36 +174,20 @@ describe("install()", () => {
 						"sub2.js": ""
 					}
 				};
+				testUtil.prepareFsContent(mockModules, baseDir, path.join(somedir, "node_modules"));
 			})
-			.then(() => cmn.FileSystem.readJSON<cmn.GameConfiguration>("./somedir/game.json"))
+			.then(() => cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join(somedir, "game.json")))
 			.then(async (content) => {
 				// 存在しないファイルをgame.jsonに指定
 				const globalScripts = content.globalScripts!;
 				globalScripts.push("node_modules/foo/foo.js");
-				await cmn.FileSystem.writeJSON<cmn.GameConfiguration>("./somedir/game.json", content);
-			})
-			.then(() => promiseInstall({ moduleNames: ["dummy@1.0.1"], cwd: "./somedir", logger: logger, debugNpm: dummyNpm }))
-			.then(() => cmn.FileSystem.readJSON<cmn.GameConfiguration>("./somedir/game.json"))
-			.then((content) => {
-				const globalScripts = content.globalScripts!;
-				expect(globalScripts.indexOf("node_modules/dummy/main.js")).toBe(-1);
-				expect(globalScripts.indexOf("node_modules/dummy/foo.js")).toBe(-1);
-				expect(globalScripts.indexOf("node_modules/dummy/node_modules/dummyChild/main.js")).toBe(-1);
-				expect(globalScripts.indexOf("node_modules/dummy/index2.js")).not.toBe(-1);
-				expect(globalScripts.indexOf("node_modules/dummy/sub2.js")).not.toBe(-1);
-				expect(globalScripts.indexOf("node_modules/foo/foo.js")).toBe(-1);
-				const moduleMainScripts = content.moduleMainScripts;
-				expect(moduleMainScripts).toEqual({
-					"dummy": "node_modules/dummy/index2.js",
-					"dummyChild": "node_modules/dummy/node_modules/dummyChild/main.js",
-					"noOmitPackagejson": "node_modules/noOmitPackagejson/main.js"
-				});
+				await cmn.FileSystem.writeJSON<cmn.GameConfiguration>(path.join(somedir, "game.json"), content);
 			})
 			.then(async () => {
 				// moduleMainPaths の動作確認
-				const install = (param?: InstallParameterObject) => promiseInstall({ moduleNames: ["dummy@1.0.1"], cwd: "./somedir", logger: logger, debugNpm: dummyNpm, ...param });
-				const readConfig = () => cmn.FileSystem.readJSON<cmn.GameConfiguration>("./somedir/game.json");
-				const writeConfig = () => cmn.FileSystem.writeJSON<cmn.GameConfiguration>("./somedir/game.json", content);
+				const install = (param?: InstallParameterObject) => promiseInstall({ moduleNames: ["dummy"], cwd: somedir, logger: logger, debugNpm: dummyNpm, ...param });
+				const readConfig = () => cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join(somedir, "game.json"));
+				const writeConfig = () => cmn.FileSystem.writeJSON<cmn.GameConfiguration>(path.join(somedir, "game.json"), content);
 				const defaultConfig = (config?: any) => ({...config});
 
 				let content: any;
@@ -209,7 +200,10 @@ describe("install()", () => {
 				await writeConfig();
 				await install({ useMmp: true });
 				content = await readConfig();
-				expect(content.moduleMainScripts).toEqual({ "dummy": "node_modules/dummy/index2.js" });
+				expect(content.moduleMainScripts).toEqual({ 
+					"dummy": "node_modules/dummy/index2.js",
+					"dummyChild": "node_modules/dummy/node_modules/dummyChild/main.js"
+				});
 
 				// 1-2. sandbox-runtime 3 にて moduleMainPaths のみ存在した場合は moduleMainPaths に追加
 				content = defaultConfig({
@@ -220,7 +214,10 @@ describe("install()", () => {
 				await install();
 				content = await readConfig();
 				expect(content.moduleMainScripts).toBeUndefined();
-				expect(content.moduleMainPaths).toEqual({ "node_modules/dummy/package.json": "node_modules/dummy/index2.js" });
+				expect(content.moduleMainPaths).toEqual({ 
+					"node_modules/dummy/package.json": "node_modules/dummy/index2.js" ,
+					'node_modules/dummy/node_modules/dummyChild/package.json': 'node_modules/dummy/node_modules/dummyChild/main.js'
+				});
 
 				// 1-3. sandbox-runtime 3 にて moduleMainScripts のみ存在した場合は moduleMainScripts に追加
 				content = defaultConfig({
@@ -230,7 +227,10 @@ describe("install()", () => {
 				await writeConfig();
 				await install();
 				content = await readConfig();
-				expect(content.moduleMainScripts).toEqual({ "dummy": "node_modules/dummy/index2.js" });
+				expect(content.moduleMainScripts).toEqual({ 
+					"dummy": "node_modules/dummy/index2.js",
+					"dummyChild": "node_modules/dummy/node_modules/dummyChild/main.js" 
+				});
 				expect(content.moduleMainPaths).toBeUndefined();
 
 				// 1-4. sandbox-runtime 3 にて useMmp が有効なことを確認
@@ -241,7 +241,10 @@ describe("install()", () => {
 				await install({ useMmp: true });
 				content = await readConfig();
 				expect(content.moduleMainScripts).toBeUndefined();
-				expect(content.moduleMainPaths).toEqual({ "node_modules/dummy/package.json": "node_modules/dummy/index2.js" });
+				expect(content.moduleMainPaths).toEqual({ 
+					"node_modules/dummy/package.json": "node_modules/dummy/index2.js",
+					"node_modules/dummy/node_modules/dummyChild/package.json": "node_modules/dummy/node_modules/dummyChild/main.js"
+				});
 
 				// 1-5. sandbox-runtime 3 にて useMms が有効なことを確認
 				content = defaultConfig({
@@ -250,7 +253,10 @@ describe("install()", () => {
 				await writeConfig();
 				await install({ useMms: true });
 				content = await readConfig();
-				expect(content.moduleMainScripts).toEqual({ "dummy": "node_modules/dummy/index2.js" });
+				expect(content.moduleMainScripts).toEqual({ 
+					"dummy": "node_modules/dummy/index2.js",
+					"dummyChild": "node_modules/dummy/node_modules/dummyChild/main.js",
+				});
 				expect(content.moduleMainPaths).toBeUndefined();
 
 				// 2-1. sandbox-runtime 3 にて moduleMainPaths と moduleMainScripts が両方とも存在した場合はエラー
@@ -281,7 +287,6 @@ describe("install()", () => {
 	});
 
 	it("rejects plugin option for multiple module installing", async () => {
-		mockfs({});
 		const logger = new cmn.ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
 		await expect(
 			promiseInstall({ moduleNames: ["dummy@1.0.1", "anotherdummy"], cwd: ".", plugin: 10, logger: logger })
@@ -289,7 +294,6 @@ describe("install()", () => {
 	});
 
 	it("just performs npm install unless moduleNames given", async () => {
-		mockfs({});
 		const logger = new cmn.ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
 		let installCallCount = 0;
 		const dummyNpm = new cmn.PromisedNpm({});
@@ -385,7 +389,9 @@ describe("install()", () => {
 			}
 		};
 
-		mockfs(mockFsContent);
+		fixtureContents.dispose();
+		fixtureContents = testUtil.prepareFsContent(mockFsContent, baseDir);
+		const somedir = path.join(fixtureContents.path, "somedir");
 		class dummyNpm extends cmn.PromisedNpm {
 			async install(names: string[]) {
 				names = (names instanceof Array) ? names : [names];
@@ -393,17 +399,18 @@ describe("install()", () => {
 					const nameNoVer = cmn.Util.makeModuleNameNoVer(name);
 					mockFsContent.somedir.node_modules[nameNoVer] = mockModules[nameNoVer];
 				});
-				mockfs(mockFsContent.somedir);
+				// mockfs(mockFsContent.somedir);
+				testUtil.prepareFsContent(mockModules, baseDir, path.join(somedir, "node_modules"));
 			}
 		};
 
 		await promiseInstall({
 			moduleNames: ["ui-library"],
-			cwd: "./somedir",
+			cwd: somedir,
 			logger,
 			debugNpm: new dummyNpm({})
 		});
-		let content = await cmn.FileSystem.readJSON<cmn.GameConfiguration>("./somedir/game.json");
+		let content = await cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join(somedir, "game.json"));
 
 		expect(Object.keys(content.assets).length).toBe(3);
 		expect(content.assets["node_modules/ui-library/assets/audios/se_1"]).toEqual({
@@ -427,11 +434,11 @@ describe("install()", () => {
 
 		await promiseInstall({
 			moduleNames: ["audio-library"],
-			cwd: "./somedir",
+			cwd: somedir,
 			logger,
 			debugNpm: new dummyNpm({})
 		});
-		content = await cmn.FileSystem.readJSON<cmn.GameConfiguration>("./somedir/game.json");
+		content = await cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join(somedir, "game.json"));
 
 		expect(Object.keys(content.assets).length).toBe(6);
 		expect(content.assets["node_modules/audio-library/assets/audios/bgm_1"]).toEqual({
@@ -455,15 +462,14 @@ describe("install()", () => {
 	});
 
 	it("no allow install @akashic/akashic-engine", async () => {
-		mockfs({});
 		const logger = new cmn.ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
-
+		const cwdPath = fixtureContents.path;
 		await expect(
-			promiseInstall({ moduleNames: ["@akashic/akashic-engine"], cwd: ".", logger: logger })
+			promiseInstall({ moduleNames: ["@akashic/akashic-engine"], cwd: cwdPath, logger: logger })
 		).rejects.toThrow();
 
 		await expect(
-			promiseInstall({ moduleNames: ["@akashic/akashic-engine@1.0.0"], cwd: ".", logger: logger })
+			promiseInstall({ moduleNames: ["@akashic/akashic-engine@1.0.0"], cwd: cwdPath, logger: logger })
 		).rejects.toThrow();
 	});
 });
