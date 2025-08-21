@@ -43,6 +43,12 @@ export interface ScanAssetParameterObject {
 	resolveAssetIdsFromPath?: boolean;
 
 	/**
+	 * すべてのアセット定義をスキャンし直すかどうか。
+	 * 省略された場合、 `false` 。
+	 */
+	forceUpdate?: boolean;
+
+	/**
 	 * アセットIDを強制的にスキャンし直すかどうか。
 	 * 省略された場合、 `false` 。
 	 */
@@ -86,6 +92,7 @@ export function _completeScanAssetParameterObject(param: ScanAssetParameterObjec
 		cwd: param.cwd ?? process.cwd(),
 		logger: param.logger ?? new ConsoleLogger(),
 		resolveAssetIdsFromPath: !!param.resolveAssetIdsFromPath,
+		forceUpdate: !!param.forceUpdate,
 		forceUpdateAssetIds: !!param.forceUpdateAssetIds,
 		includeExtensionToAssetId: !!param.includeExtensionToAssetId,
 		noOmitPackagejson: !!param.noOmitPackagejson,
@@ -221,14 +228,20 @@ export async function scanAsset(p: ScanAssetParameterObject): Promise<void> {
 
 			const definedAssets = (Array.isArray(configuration.assets) ? configuration.assets : AssetModule.toArray(configuration.assets));
 
-			// 既存のアセット情報と新規追加のアセット情報をマージ
-			const newAssets = AssetModule.merge(
-				definedAssets,
-				scannedAssets,
-				scanTargetDirsTable,
-				AssetModule.createDefaultMergeCustomizer(logger),
-				logger
-			);
+			let newAssets: AssetConfiguration[];
+			if (param.forceUpdate) {
+				logger.warn("Overwriting all existing asset settings due to '--force' option");
+				newAssets = scannedAssets;
+			} else {
+				// 既存のアセット情報と新規追加のアセット情報をマージ
+				newAssets = AssetModule.merge(
+					definedAssets,
+					scannedAssets,
+					scanTargetDirsTable,
+					AssetModule.createDefaultMergeCustomizer(logger),
+					logger
+				);
+			}
 
 			// 上書きしてファイル書き込み
 			if (Array.isArray(configuration.assets)) {

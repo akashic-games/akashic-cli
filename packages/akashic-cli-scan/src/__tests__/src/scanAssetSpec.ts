@@ -1878,4 +1878,60 @@ describe("scanAsset()", () => {
 		expect((assets[0] as AudioAssetConfigurationBase).duration).toBe(1250); // duration が更新されている
 		expect((assets[0] as AudioAssetConfigurationBase).offset).toBe(300); // offset が維持されている
 	});
+
+	it("reset all assets when `forceUpdate` is specified", async () => {
+		const gamejson: GameConfiguration = {
+			width: 320,
+			height: 34,
+			fps: 30,
+			main: "",
+			assets: {
+				dummy_audio: {
+					type: "audio",
+					path: "assets/audio/dummy",
+					systemId: "sound",
+					offset: 300,
+					duration: 1,
+				},
+				dummy_image: {
+					type: "image",
+					path: "assets/images/dummy.png",
+					global: true,
+					width: 1,
+					height: 1,
+				},
+			},
+		};
+		const baseDir = mockfs.create(base, {
+			"game.json": JSON.stringify(gamejson),
+			"assets": {
+				"audio": {
+					"dummy.ogg": DUMMY_OGG_DATA,
+					"dummy.aac": DUMMY_AAC_DATA,
+				},
+				"images": {
+					"dummy.png": DUMMY_1x1_PNG_DATA,
+				},
+			},
+		});
+
+		let loggedCount = 0;
+		const logger = new ConsoleLogger({ quiet: false, debugLogMethod: () => ++loggedCount });
+
+		await scanAsset({
+			logger,
+			cwd: path.join(baseDir, "./"),
+			forceUpdate: true,
+		});
+
+		const conf: GameConfiguration = JSON.parse(fs.readFileSync(path.join(baseDir, "./game.json")).toString());
+		const assets = conf.assets as Record<string, AssetConfiguration>;
+
+		// アセット ID が振り直されていることを確認
+		expect((assets["assets/audio/dummy"] as AudioAssetConfigurationBase).duration).toBe(1250); // duration が初期値にリセットされていることを確認
+		expect(assets["assets/images/dummy.png"].global).toBeUndefined(); // global が初期値にリセットされていることを確認
+
+		// offsetが変更されたwarnが1つ + 設定が上書きされたwarnが1つ + Done!のログが1つ
+		expect(loggedCount).toBe(3);
+	});
 });

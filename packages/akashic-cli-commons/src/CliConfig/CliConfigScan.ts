@@ -2,6 +2,7 @@ export interface CliConfigScanAsset {
 	cwd?: string;
 	quiet?: boolean;
 	watch?: boolean;
+	force?: boolean;
 	usePathAssetId?: boolean;
 	updateAssetId?: boolean;
 	includeExtensionToAssetId?: boolean;
@@ -15,6 +16,7 @@ export interface CliConfigScanAsset {
 export interface CliConfigScanGlobalScripts {
 	cwd?: string;
 	quiet?: boolean;
+	force?: boolean;
 	fromEntryPoint?: boolean;
 	omitPackagejson?: boolean;
 	useMmp?: boolean;
