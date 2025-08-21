@@ -204,9 +204,7 @@ export async function scanNodeModules(p: ScanNodeModulesParameterObject): Promis
 		if (param.forceUpdate) {
 			content.environment ??= {};
 
-			if (content.environment.external && Object.keys(content.environment.external).length > 0) {
-				logger.warn("'environment.external' in game.json has existing settings, but will be overwritten due to '--force' option");
-			}
+			const beforeExternal = content.environment.external;
 			delete content.environment.external;
 
 			for (const moduleName of entryPaths) {
@@ -232,6 +230,16 @@ export async function scanNodeModules(p: ScanNodeModulesParameterObject): Promis
 							path: assetPath
 						};
 					}
+				}
+			}
+
+			if (beforeExternal && Object.keys(beforeExternal).length > 0) {
+				const deletedKeys = Object.keys(beforeExternal).filter(key => !(key in (content.environment?.external ?? {})));
+				if (deletedKeys.length > 0) {
+					logger.warn(
+						"'environment.external' was overwritten due to '--force' option. " +
+						`The following keys were deleted: ${deletedKeys.map(key => `environment.external["${key}"]`).join(", ")}`
+					);
 				}
 			}
 		}
