@@ -242,7 +242,7 @@ describe("uninstall()", () => {
 				}
 			}
 		};
-		
+
 		interface DummyPromisedNpmParameterObject extends cmn.PromisedNpmParameterObject {
 			fsContent: any;
 		}

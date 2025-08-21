@@ -13,7 +13,7 @@ describe("init.ts", () => {
 		const mockFsContent = {
 			".akashic-templates": {
 					simple: {
-						"a": "aaa",
+						a: "aaa",
 						b: "bbb",
 						c: {
 							d: "ddd"
@@ -26,7 +26,7 @@ describe("init.ts", () => {
 						}
 					}
 			},
-			"home": {}
+			home: {}
 		};
 		const baseDir = path.resolve(__dirname, "..", "__tests__", "fixture-init-");
 		const fixtureContents = testUtil.prepareFsContent(mockFsContent, baseDir);

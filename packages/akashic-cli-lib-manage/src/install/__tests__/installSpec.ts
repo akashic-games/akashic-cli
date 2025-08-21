@@ -399,7 +399,6 @@ describe("install()", () => {
 					const nameNoVer = cmn.Util.makeModuleNameNoVer(name);
 					mockFsContent.somedir.node_modules[nameNoVer] = mockModules[nameNoVer];
 				});
-				// mockfs(mockFsContent.somedir);
 				testUtil.prepareFsContent(mockModules, baseDir, path.join(somedir, "node_modules"));
 			}
 		};

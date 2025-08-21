@@ -63,5 +63,6 @@ describe("BasicParameters", function () {
 					.rejects.toBe("fps must be a number");
 			});
 		});
+
 	});
 });
