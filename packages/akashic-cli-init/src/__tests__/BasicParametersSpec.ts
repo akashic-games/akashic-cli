@@ -1,31 +1,41 @@
-import * as os from "os";
-import * as path from "path";
 import {ConsoleLogger} from "@akashic/akashic-cli-commons/lib/ConsoleLogger.js";
-import fs from "fs-extra";
 import * as bp from "../init/BasicParameters.js";
 import * as mockPrompt from "./support/mockPrompt.js";
+import { fs, vol } from "memfs";
+import { readJSON, writeJSON } from "@akashic/akashic-cli-commons/lib/FileSystem.js";
+
+vi.mock("node:fs", async () => {
+  const memfs: { fs: typeof fs } = await vi.importActual("memfs")
+  return memfs.fs;
+});
 
 describe("BasicParameters", function () {
 
 	describe("updateConfigurationFile()", function () {
-		const dir = fs.mkdtempSync(path.join(os.tmpdir())).toString();
-		const confPath = path.join(dir, ".akashicrc");
+		const confPath = ".akashicrc";
 		const quietLogger = new ConsoleLogger({quiet: true});
 
 		beforeEach(() => {
+			vol.fromNestedJSON({ 
+				"": {
+					".akashicrc": ""
+				}
+			});
 			mockPrompt.mock({ width: 42, height: 27, fps: 30 });
 		});
 
 		afterEach(() => {
+			vol.reset();
 			mockPrompt.restore();
 		});
 
 		it("update game.json", async () => {
 			const conf = { width: 12, height: 23, fps: 34, assets: {} };
-			fs.writeJsonSync(confPath, conf);
+			await writeJSON(confPath, conf);
 			await bp.updateConfigurationFile(confPath, quietLogger, true);
-			expect(fs.readJsonSync(confPath))
-				.toEqual({width: 42, height: 27, fps: 30, assets: {}});
+
+			const config = await readJSON(confPath);
+			expect(config).toEqual({width: 42, height: 27, fps: 30, assets: {}});
 		});
 
 		describe("parameter value is not number", () => {
@@ -53,6 +63,5 @@ describe("BasicParameters", function () {
 					.rejects.toBe("fps must be a number");
 			});
 		});
-
 	});
 });
