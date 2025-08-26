@@ -1,5 +1,11 @@
 # @akashic/akashic-cli-export
 
+## 2.0.7
+
+### Patch Changes
+
+- [#1588](https://github.com/akashic-games/akashic-cli/pull/1588) [`955e105`](https://github.com/akashic-games/akashic-cli/commit/955e10510fe6f961c7a47a3425c45574b2e4ca94) Thanks [@dera-](https://github.com/dera-)! - change runtime-version-table url
+
 ## 2.0.6
 
 ### Patch Changes
