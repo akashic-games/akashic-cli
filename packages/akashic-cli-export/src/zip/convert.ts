@@ -470,7 +470,7 @@ async function addGameJsonValuesForNicoLive(gameJson: cmn.GameConfiguration): Pr
 	}
 
 	const versionInfo = JSON.parse(await getFromHttps(
-		"https://raw.githubusercontent.com/akashic-games/akashic-runtime-version-table/master/versions.json"
+		"https://resource.akashic.coe.nicovideo.jp/coe/contents/runtime_version_table/versions.json"
 	));
 
 	gameJson.environment["akashic-runtime"] = { version: "" };
