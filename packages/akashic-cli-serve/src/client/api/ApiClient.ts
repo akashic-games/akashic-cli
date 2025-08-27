@@ -13,9 +13,11 @@ import type {
 	SandboxConfigApiResponse,
 	OptionsApiResponse,
 	PlayerPostApiResponse,
-	StartPointHeaderListResponse
+	StartPointHeaderListResponse,
+	PlaySendNamagameCommentResponse
 } from "../../common/types/ApiResponse";
 import type { ContentLocatorData } from "../../common/types/ContentLocatorData";
+import type { NamagameCommentEventComment } from "../../common/types/NamagameCommentPlugin";
 import type { PlayAudioState } from "../../common/types/PlayAudioState";
 import type { Player } from "../../common/types/Player";
 import * as ApiRequest from "./ApiRequest";
@@ -122,6 +124,20 @@ export class ApiClient {
 		return ApiRequest.patch<RunnerPatchApiResponse>(
 			`${this._baseUrl}/api/runners/${runnerId}`,
 			{status: "paused", step: true}
+		);
+	};
+
+	async requestToSendNamagameCommentByTemplate(playId: string, templateName: string): Promise<PlaySendNamagameCommentResponse> {
+		return ApiRequest.post<PlaySendNamagameCommentResponse>(
+			`${this._baseUrl}/api/plays/${playId}/comment-template`,
+			{name: templateName}
+		);
+	};
+
+	async requestToSendNamagameComment(playId: string, comment: NamagameCommentEventComment): Promise<PlaySendNamagameCommentResponse> {
+		return ApiRequest.post<PlaySendNamagameCommentResponse>(
+			`${this._baseUrl}/api/plays/${playId}/comment`,
+			{ ...comment, isAnonymous: comment.isAnonymous?.toString() }
 		);
 	};
 

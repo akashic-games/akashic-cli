@@ -32,24 +32,46 @@ const store = observable({
 });
 
 const nicoProps: NiconicoDevtoolProps = {
-	isAutoSendEvent: true,
-	usePreferredTimeLimit: true,
-	stopsGameOnTimeout: true,
-	totalTimeLimitInputValue: 75,
-	emulatingShinichibaMode: "ranking",
-	totalTimeLimit: 65,
-	playDuration: 0,
-	preferredTotalTimeLimit: 55,
-	score: 700,
-	playThreshold: 100,
-	clearThreshold: 500,
-	onAutoSendEventsChanged: action("events:auto-send-events-changed"),
-	onModeSelectChanged: action("events:mode-select-changed"),
-	onTotalTimeLimitInputValueChanged: action("events:total-time-limit-changed"),
-	onUsePreferredTotalTimeLimitChanged: action(
-		"events:use-preferred-total-time-limit-changed",
-	),
-	onUseStopGameChanged: action("events:use-stop-game-changed")
+	rankingPageProps: {
+		isAutoSendEvent: true,
+		usePreferredTimeLimit: true,
+		stopsGameOnTimeout: true,
+		totalTimeLimitInputValue: 75,
+		emulatingShinichibaMode: "ranking",
+		totalTimeLimit: 65,
+		playDuration: 0,
+		preferredTotalTimeLimit: 55,
+		score: 700,
+		playThreshold: 100,
+		clearThreshold: 500,
+		onAutoSendEventsChanged: action("events:auto-send-events-changed"),
+		onModeSelectChanged: action("events:mode-select-changed"),
+		onTotalTimeLimitInputValueChanged: action("events:total-time-limit-changed"),
+		onUsePreferredTotalTimeLimitChanged: action(
+			"events:use-preferred-total-time-limit-changed"
+		),
+		onUseStopGameChanged: action("events:use-stop-game-changed")
+	},
+	commentPageProps: {
+		model: {
+			comments: [],
+			templates: [],
+			isEnabled: false,
+			senderType: "anonymous",
+			senderLimitation: "broadcaster",
+			commandInput: "",
+			commentInput: ""
+		},
+		onCommentInputChanged: action("events:comment-input-changed"),
+		onCommandInputChanged: action("events:command-input-changed"),
+		onSenderTypeChanged: action("events:sender-type-changed"),
+		onClickSend: action("events:send-comment"),
+		onClickTemplate: action("events:send-template"),
+	},
+	activePage: "ranking",
+	selectorWidth: 120,
+	onResizeSelector: action("events:resize-selector"),
+	onChangePage: action("events:cahnge-page"),
 };
 
 const dummyPlaybackDevtoolProps: PlaybackDevtoolProps = {

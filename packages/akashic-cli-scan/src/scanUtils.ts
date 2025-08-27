@@ -40,7 +40,8 @@ export function defaultBinaryAssetFilter (_: string): boolean {
 }
 
 export function ignoreFileFilter(p: string): boolean {
-	return /\.gitkeep$/.test(p);
+	const filename = path.basename(p);
+	return /^(\.gitkeep|\.DS_Store|Thumbs\.db)$/.test(filename);
 }
 
 export interface AudioDurationInfo {

@@ -39,11 +39,13 @@ export class Store {
 	@observable profilerStore: ProfilerStore;
 	@observable appOptions: AppOptions;
 	@observable player: Player | null;
+	@observable hashedPlayerId: string | null;
 	@observable contentLocator: ClientContentLocator;
 
 	@observable currentPlay: PlayEntity | null;
 	@observable currentLocalInstance: LocalInstanceEntity | null;
 	@observable gameViewSize: ScreenSize;
+	@observable isSocketDisconnect: boolean;
 
 	private _gameViewManager: GameViewManager;
 	private _initializationWaiter: Promise<void>;
@@ -61,6 +63,7 @@ export class Store {
 		this.profilerStore = new ProfilerStore();
 		this.appOptions = null!;
 		this.player = null;
+		this.hashedPlayerId = null;
 		this.currentPlay = null;
 		this.currentLocalInstance = null;
 		this.gameViewSize = { width: 10, height: 10 }; // ゲーム表示時に更新されるが不具合の際に現象が分かりやすいようサイズをつけておく
@@ -70,6 +73,7 @@ export class Store {
 			this.appOptions = result.data;
 			Subscriber.onMessageEncode.add(this.handleMessageEncode);
 		});
+		this.isSocketDisconnect = false;
 
 		autorun(() => {
 			if (!this.toolBarUiStore.fitsToScreen && this.currentLocalInstance?.intrinsicSize) {
@@ -88,6 +92,7 @@ export class Store {
 			this._initializationWaiter
 		]).then(() => {
 			this.player = { id: storage.data.playerId, name: storage.data.playerName };
+			this.hashedPlayerId = storage.hashedPlayerId;
 		});
 	}
 
@@ -112,6 +117,11 @@ export class Store {
 	setGameViewSize(size: ScreenSize): void {
 		this.gameViewSize = size;
 		this._gameViewManager.setViewSize(size.width, size.height);
+	}
+
+	@action
+	setSocketDisconnect(isDisconnect: boolean): void {
+		this.isSocketDisconnect = isDisconnect;
 	}
 
 	get targetService(): ServiceType {
@@ -143,6 +153,12 @@ export class Store {
 				break;
 			case "drawDestinationEmpty":
 				if (!sandboxConfigWarn || sandboxConfigWarn.drawDestinationEmpty !== false) {
+					console.warn(`${warning.message}`);
+					this.notificationUiStore.setActive({type: "error", title: warningTitle, message: "", name: warning.message});
+				}
+				break;
+			case "createNonIntegerSurface":
+				if (!sandboxConfigWarn || sandboxConfigWarn.createNonIntegerSurface !== false) {
 					console.warn(`${warning.message}`);
 					this.notificationUiStore.setActive({type: "error", title: warningTitle, message: "", name: warning.message});
 				}

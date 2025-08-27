@@ -1,5 +1,9 @@
+import { isNamagameCommentEvent, MessageEventIndexData } from "../../common/PlaylogShim";
+import type { OnTickArguments } from "../akashic/ServeGameContent";
 import type { EDumpItem } from "../common/types/EDumpItem";
+import type { NiconicoDevtoolCommentPageSenderLimitation, NiconicoDevtoolCommentPageSenderType } from "../store/DevtoolUiCommentPageStore";
 import type { Store } from "../store/Store";
+import type { NiconicoDevtoolPageType } from "../view/molecule/NiconicoDevtool";
 
 function consoleLog(value: any): void {
 	console.log(value);
@@ -145,7 +149,61 @@ export class DevtoolOperator {
 			gameContent.onTick.add(this.tickHandler, this);
 	};
 
-	private async tickHandler(game: agv.GameLike): Promise<void> {
+	setNiconicoDevtoolActivePage = (pageType: NiconicoDevtoolPageType): void => {
+		this.store.devtoolUiStore.setNiconicoToolActivePage(pageType);
+	};
+
+	setNiconicoDevtoolSelectorWidth = (w: number): void => {
+		this.store.devtoolUiStore.setNiconicoToolSelectorWidth(w);
+	};
+
+	resetCommentPage = (
+		templates: string[],
+		senderType: NiconicoDevtoolCommentPageSenderType,
+		senderLimitation: NiconicoDevtoolCommentPageSenderLimitation
+	): void => {
+		const commentPageStore = this.store.devtoolUiStore.commentPage;
+		commentPageStore.resetComments();
+		commentPageStore.setTemplates(templates);
+		commentPageStore.setIsEnabled(false);
+		commentPageStore.setSenderType(senderType);
+		commentPageStore.setSenderLimitation(senderLimitation);
+	};
+
+	setCommentPageIsEnabled = (isEnabled: boolean): void => {
+		this.store.devtoolUiStore.commentPage.setIsEnabled(isEnabled);
+	};
+
+	setCommentPageSenderType = (senderType: NiconicoDevtoolCommentPageSenderType): void => {
+		this.store.devtoolUiStore.commentPage.setSenderType(senderType);
+	};
+
+	setCommentPageCommandInput = (input: string): void => {
+		this.store.devtoolUiStore.commentPage.setCommandInput(input);
+	};
+
+	setCommentPageCommentInput = (input: string): void => {
+		this.store.devtoolUiStore.commentPage.setCommentInput(input);
+	};
+
+	startWatchNamagameComment = (): void => {
+		this.store.currentLocalInstance?.gameContent.onTick.add(this.namagameCommentWatcher);
+	};
+
+	stopWatchNamagameComment = (): void => {
+		this.store.currentLocalInstance?.gameContent.onTick.remove(this.namagameCommentWatcher);
+	};
+
+	private namagameCommentWatcher = ({ events }: OnTickArguments): void => {
+		if (!events) return;
+		for (let i = 0; i < events.length; ++i) {
+			const ev = events[i];
+			if (isNamagameCommentEvent(ev))
+				this.store.devtoolUiStore.commentPage.addComments(ev[MessageEventIndexData].comments);
+		}
+	};
+
+	private async tickHandler({ game }: OnTickArguments): Promise<void> {
 		if (this.store.devtoolUiStore.stopsGameOnTimeout)
 			await this.updateRemainingTime();
 

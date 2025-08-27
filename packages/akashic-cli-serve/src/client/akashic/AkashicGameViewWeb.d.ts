@@ -165,6 +165,7 @@ declare module agv {
 		coe?: any;
 		send?: any;
 		nico?: any;
+		namagameComment?: any;
 		coeLimited?: any;
 		instanceStorage?: any;
 	}

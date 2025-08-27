@@ -22,7 +22,7 @@
     "lib"
   ],
   "devDependencies": {
-    "@akashic/eslint-config": "3.0.1",
+    "@akashic/eslint-config": "3.0.2",
     "@akashic/game-configuration": "2.5.0",
     "@types/form-data": "2.5.0",
     "@types/node": "18.19.44",

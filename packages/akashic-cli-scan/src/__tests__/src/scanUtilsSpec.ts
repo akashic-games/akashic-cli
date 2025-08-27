@@ -57,7 +57,9 @@ describe("scanUtils", () => {
 					"_.js": "var x = 1;",
 					"_.png": DUMMY_1x1_PNG_DATA,
 					"_.bin": DUMMY_WASM_DATA,
-					".gitkeep": ""
+					".gitkeep": "",
+					".DS_Store": "",
+					"Thumbs.db": ""
 				}
 			}
 		});

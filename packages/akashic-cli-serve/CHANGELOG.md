@@ -1,5 +1,42 @@
 # Change Log
 
+## 2.0.9
+
+### Patch Changes
+
+- [#1580](https://github.com/akashic-games/akashic-cli/pull/1580) [`ee7f9af`](https://github.com/akashic-games/akashic-cli/commit/ee7f9afd0592a14872e6a6272ecefe347cfee8e3) Thanks [@yu-ogi](https://github.com/yu-ogi)! - support 'nicolive:multi' in standalone mode
+
+## 2.0.8
+
+### Patch Changes
+
+- [#1579](https://github.com/akashic-games/akashic-cli/pull/1579) [`a121442`](https://github.com/akashic-games/akashic-cli/commit/a121442527d83a2d25a3f985c9aa738801f890c3) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Fix to display modal when Websocket is disconnected in serve
+
+## 2.0.7
+
+### Patch Changes
+
+- [#1571](https://github.com/akashic-games/akashic-cli/pull/1571) [`9b3ccf7`](https://github.com/akashic-games/akashic-cli/commit/9b3ccf72a87c39649c487e5fd4d2a8b65fed8f68) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Warn of creating a surface with non-integer size
+
+## 2.0.6
+
+### Patch Changes
+
+- Updated dependencies [[`4d34204`](https://github.com/akashic-games/akashic-cli/commit/4d34204b31fe6b9835552744506aa0864d456338)]:
+  - @akashic/akashic-cli-scan@1.0.2
+
+## 2.0.5
+
+### Patch Changes
+
+- [#1563](https://github.com/akashic-games/akashic-cli/pull/1563) [`baada51`](https://github.com/akashic-games/akashic-cli/commit/baada5144717ac40c74d01eceb7cf62837204079) Thanks [@renovate](https://github.com/apps/renovate)! - Updated dependency `@akashic/headless-driver` to `2.17.5`.
+
+## 2.0.4
+
+### Patch Changes
+
+- [#1564](https://github.com/akashic-games/akashic-cli/pull/1564) [`495f94f`](https://github.com/akashic-games/akashic-cli/commit/495f94fd53cf9c7f60028591c78e0b33b4f41893) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Fix bug in replay mode with -A option in serve
+
 ## 2.0.3
 
 ### Patch Changes
