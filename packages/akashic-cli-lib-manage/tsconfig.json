@@ -7,7 +7,7 @@
     "moduleResolution": "Node16",
     "outDir": "./lib",
     "declaration": true,
-    "types" : ["commander", "form-data", "jest", "mock-fs", "node"],
+    "types" : ["commander", "form-data", "jest", "node"],
     "useUnknownInCatchVariables": false,
     "strict": true,
     "allowSyntheticDefaultImports": true
