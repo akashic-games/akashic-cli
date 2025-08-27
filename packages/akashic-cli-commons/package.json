@@ -33,7 +33,7 @@
     "lib"
   ],
   "devDependencies": {
-    "@akashic/eslint-config": "^3.0.1",
+    "@akashic/eslint-config": "^3.0.2",
     "@types/mock-fs": "4.13.4",
     "@types/node": "20.14.15",
     "@types/resolve": "^1.20.6",

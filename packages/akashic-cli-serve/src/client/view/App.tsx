@@ -6,6 +6,7 @@ import type { Store } from "../store/Store";
 import styles from "./App.module.css";
 import { FlexScrollY } from "./atom/FlexScrollY";
 import { GameViewFitter } from "./atom/GameViewFitter";
+import { DisconnectModal } from "./atom/ModalView";
 import { DevtoolContainer } from "./container/DevtoolContainer";
 import { GameScreenContainer } from "./container/GameScreenContainer";
 import { NotificationContainer } from "./container/NotificationContainer";
@@ -81,6 +82,10 @@ export const App = observer(function App(props: AppProps): React.ReactElement<Ap
 		<NotificationContainer
 			operator={operator}
 			notificationUiStore={store.notificationUiStore}
+		/>
+		<DisconnectModal
+			isOpen={store.isSocketDisconnect}
+			message="Connection has been lost. Restart serve and reload browser."
 		/>
 	</div>;
 });

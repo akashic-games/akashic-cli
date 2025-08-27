@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-scan",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Command line tool for updating assets and globalScripts.",
   "type": "module",
   "main": "lib/index.js",
@@ -22,7 +22,7 @@
     "lib"
   ],
   "devDependencies": {
-    "@akashic/eslint-config": "3.0.1",
+    "@akashic/eslint-config": "3.0.2",
     "@akashic/game-configuration": "2.5.0",
     "@types/image-size": "0.8.0",
     "@types/mock-fs": "4.13.4",

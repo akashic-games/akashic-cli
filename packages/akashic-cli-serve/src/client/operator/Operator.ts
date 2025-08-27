@@ -1,4 +1,6 @@
+import type { NormalizedSandboxConfiguration } from "@akashic/sandbox-configuration";
 import { isServiceTypeNicoliveLike } from "../../common/targetServiceUtil";
+import type { SandboxConfigExternalDefinition } from "../../common/types/NamagameCommentConfig";
 import type { Player } from "../../common/types/Player";
 import type { PlayBroadcastTestbedEvent } from "../../common/types/TestbedEvent";
 import type { GameViewManager } from "../akashic/GameViewManager";
@@ -31,7 +33,6 @@ export interface OperatorParameterObject {
 export interface StartContentParameterObject {
 	joinsSelf: boolean;
 	instanceArgument: any;
-	isReplay?: boolean;
 }
 
 export class Operator {
@@ -77,7 +78,7 @@ export class Operator {
 				play = await this._createServerLoop(loc, initialJoinPlayer, false, false); // TODO: (起動時の最初のプレイで) audioState を指定する方法
 			}
 		}
-		await this.setCurrentPlay(play, query.mode === "replay");
+		await this.setCurrentPlay(play);
 
 		if (query.mode === "replay") {
 			if (query.replayResetAge != null) {
@@ -104,14 +105,12 @@ export class Operator {
 		}
 	}
 
-	setCurrentPlay = async (play: PlayEntity, isReplay: boolean = false): Promise<void> => {
+	setCurrentPlay = async (play: PlayEntity): Promise<void> => {
 		const store = this.store;
 		if (store.currentPlay === play)
 			return;
 
-		let previousPlay;
 		if (store.currentPlay) {
-			previousPlay = store.currentPlay;
 			await store.currentPlay.deleteAllLocalInstances();
 			store.setCurrentLocalInstance(null);
 		}
@@ -120,30 +119,32 @@ export class Operator {
 
 		store.setCurrentPlay(play);
 
-		let argument = undefined;
-		if (isServiceTypeNicoliveLike(store.targetService)) {
-			let isBroadcaster = false;
-			if (previousPlay) {
-				isBroadcaster = previousPlay.joinedPlayerTable.has(store.player!.id);
-			} else {
-				isBroadcaster = play.joinedPlayerTable.size === 0;
-			}
-			argument = this._createInstanceArgumentForNicolive(isBroadcaster);
-		}
+		const isServiceNicolive = isServiceTypeNicoliveLike(store.targetService);
+		const isNicoliveBroadcaster = isServiceNicolive && play.joinedPlayerTable.has(store.player!.id);
 
+		let argument = undefined;
 		if (query.argumentsValue) {
 			argument = JSON.parse(query.argumentsValue);
 			store.startupScreenUiStore.setInstanceArgumentEditContent(query.argumentsValue, true);
 		} else if (query.argumentsName && !!store.currentPlay!.content.argumentsTable[query.argumentsName]) {
 			argument = JSON.parse(store.currentPlay!.content.argumentsTable[query.argumentsName]);
 			this.ui.selectInstanceArguments(query.argumentsName, true);
+		} else if (isServiceNicolive) {
+			argument = this._createInstanceArgumentForNicolive(isNicoliveBroadcaster);
 		}
+
+		const sandboxConfig = play.content.sandboxConfig as NormalizedSandboxConfiguration & SandboxConfigExternalDefinition;
+		const commentTemplateNames = Object.keys(sandboxConfig.external?.namagameComment?.templates || []);
+		this.devtool.resetCommentPage(
+			commentTemplateNames,
+			isNicoliveBroadcaster ? "broadcaster" : "anonymous",
+			isServiceNicolive ? (isNicoliveBroadcaster ? "broadcaster" : "audience") : "none",
+		);
 
 		if (store.appOptions.autoStart) {
 			await this.startContent({
 				joinsSelf: false,
-				instanceArgument: argument,
-				isReplay
+				instanceArgument: argument
 			});
 		}
 	};
@@ -156,7 +157,7 @@ export class Operator {
 			playId: play!.playId,
 			playToken: tokenResult.data.playToken,
 			playlogServerUrl: "dummy-playlog-server-url",
-			executionMode: params != null && params.isReplay ? "replay" : "passive",
+			executionMode: query.mode === "replay" ? "replay" : "passive",
 			player: store.player!,
 			argument: params != null ? params.instanceArgument : undefined,
 			proxyAudio: store.appOptions.proxyAudio,
@@ -173,6 +174,16 @@ export class Operator {
 			this.store.profilerStore.pushProfilerValueResult("frame", value.frameTime);
 			this.store.profilerStore.pushProfilerValueResult("rendering", value.renderingTime);
 		});
+
+		this.store.devtoolUiStore.initTotalTimeLimit(play!.content.preferredSessionParameters.totalTimeLimit!);
+		this.devtool.setupNiconicoDevtoolValueWatcher();
+
+		if (instance.content.gameJson?.environment?.external?.namagameComment) {
+			this.devtool.setCommentPageIsEnabled(true);
+			this.devtool.startWatchNamagameComment();
+		} else {
+			this.devtool.setCommentPageIsEnabled(false);
+		}
 
 		if (params != null && params.joinsSelf) {
 			store.currentPlay!.join(store.player!.id, store.player!.name);

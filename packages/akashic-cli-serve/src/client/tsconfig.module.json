@@ -15,5 +15,8 @@
   "include": [
     "./akashic/**/*.ts",
     "./api/**/*.ts"
+  ],
+  "exclude": [
+    "./akashic/plugin/*.ts",
   ]
 }

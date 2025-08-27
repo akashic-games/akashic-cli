@@ -36,6 +36,7 @@ export interface PlayTokenPostApiResponseData {
 export interface PlayerIdPostApiResponseData {
 	playerId: string;
 	isDuplicated: boolean;
+	hashedPlayerId: string;
 }
 
 export interface RunnerPostApiResponseData {
@@ -74,6 +75,7 @@ export type PlayDeleteApiResponse = ApiResponse<PlayDeleteApiResponseData>;
 export type PlayPatchApiResponse = ApiResponse<PlayPatchApiResponseData>;
 export type PlayTokenPostApiResponse = ApiResponse<PlayTokenPostApiResponseData>;
 export type PlayerPostApiResponse = ApiResponse<PlayerIdPostApiResponseData>;
+export type PlaySendNamagameCommentResponse = ApiResponse<void>;
 export type RunnerPostApiResponse = ApiResponse<RunnerPostApiResponseData>;
 export type RunnerDeleteApiResponse = ApiResponse<RunnerDeleteApiResponseData>;
 export type RunnerPatchApiResponse = ApiResponse<RunnerPatchApiResponseData>;

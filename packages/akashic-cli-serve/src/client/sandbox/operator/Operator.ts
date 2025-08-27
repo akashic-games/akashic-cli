@@ -126,7 +126,7 @@ export class Operator {
 			this.store.profilerStore.pushProfilerValueResult("rendering", value.renderingTime);
 		});
 
-		if (params?.joinsSelf) {
+		if (params?.joinsSelf || this.store.targetService === "nicolive:multi") {
 			playEntity.join(player.id, player.name);
 		}
 
