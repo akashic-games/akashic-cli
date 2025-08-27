@@ -202,6 +202,10 @@ export async function scanNodeModules(p: ScanNodeModulesParameterObject): Promis
 
 		// globalScripts のファイルパスはすでに解決済みのため、ここでは akashic-lib.json に関する更新のみを扱う。
 		if (param.forceUpdate) {
+			if (param.fromEntryPoint) {
+				throw new Error("The options '--force' and '--from-entry-point' cannot be used together");
+			}
+
 			content.environment ??= {};
 
 			const beforeExternal = content.environment.external;
