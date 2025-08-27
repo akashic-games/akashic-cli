@@ -1,4 +1,5 @@
 import { toJS as mobxToJS } from "mobx";
+import { createSessionParameter } from "../../common/createSessionParameter";
 import type { Store } from "../Store";
 
 export class PlayOperator {
@@ -22,6 +23,9 @@ export class PlayOperator {
 		const { events, autoSendEventName } = sandboxConfig;
 		if (events && autoSendEventName && events[autoSendEventName] != null) {
 			this.sendRegisteredEvent(autoSendEventName);
+		} else if (this.store.targetService === "nicolive:multi") {
+			// autoSendEvent が存在しない場合のみデフォルトのセッションパラメータを送る
+			this.store.currentPlay!.amflow.enqueueEvent(createSessionParameter(this.store.targetService));
 		}
 	}
 

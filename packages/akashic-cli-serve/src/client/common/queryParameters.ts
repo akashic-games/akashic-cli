@@ -149,27 +149,32 @@ export interface ServeQueryParameters {
 	showsHiddenEntity: boolean | null;
 
 	/**
-	 * Niconico ツールが有効な時に、セッションパラメータのイベントを送るか。
+	 * Niconico ツールのアクティブなページ。
+	 */
+	niconicoToolActigePage: "ranking" | "comment" | null;
+
+	/**
+	 * Niconico ツールの Ranking ページが有効な時に、セッションパラメータのイベントを送るか。
 	 */
 	isAutoSendEvents: boolean | null;
 
 	/**
-	 * Niconico ツールで、ranking モードのカウントダウンを行うか。
+	 * Niconico ツール Ranking ページで、ranking モードのカウントダウンを行うか。
 	 */
 	emulatingShinichibaMode: string | null;
 
 	/**
-	 * Niconico ツールで、ranking モードの totalTimeLimit を game.json の preferredSessionParameters から決定するか。
+	 * Niconico ツール Ranking ページで、ranking モードの totalTimeLimit を game.json の preferredSessionParameters から決定するか。
 	 */
 	usePreferredTotalTimeLimit: boolean | null;
 
 	/**
-	 * Niconico ツールで、ranking モードの制限時間経過時にゲームを停止するか。
+	 * Niconico ツール Ranking ページで、ranking モードの制限時間経過時にゲームを停止するか。
 	 */
 	stopsGameOnTimeout: boolean | null;
 
 	/**
-	 * Niconico ツールの totalTimeLimit 入力欄の内容。
+	 * Niconico ツール Ranking ページの totalTimeLimit 入力欄の内容。
 	 */
 	totalTimeLimitInputValue: number | null;
 
@@ -291,6 +296,7 @@ export function makeServeQueryParameters(query: RawParsedQuery): ServeQueryParam
 		showsBackgroundImage: asBool(query.showsBackgroundImage),
 		showsBackgroundColor: asBool(query.showsBackgroundColor),
 		showsGrid: asBool(query.showsGrid),
+		niconicoToolActigePage: asEnum(query.niconicoToolActigePage, ["ranking", "comment"]),
 		isAutoSendEvents: asBool(query.isAutoSendEvents),
 		emulatingShinichibaMode: asString(query.emulatingShinichibaMode),
 		usePreferredTotalTimeLimit: asBool(query.usePreferredTotalTimeLimit),

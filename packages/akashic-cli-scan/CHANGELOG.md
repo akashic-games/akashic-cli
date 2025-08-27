@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.0.2
+
+### Patch Changes
+
+- [#1570](https://github.com/akashic-games/akashic-cli/pull/1570) [`4d34204`](https://github.com/akashic-games/akashic-cli/commit/4d34204b31fe6b9835552744506aa0864d456338) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Ignore .DS_Store and Thumbs.db in asset directories
+
 ## 1.0.1
 
 ### Patch Changes

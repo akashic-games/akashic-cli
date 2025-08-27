@@ -1,6 +1,8 @@
 import type { ObservableMap } from "mobx";
 import { action, observable } from "mobx";
 import type { EDumpItem } from "../common/types/EDumpItem";
+import type { NiconicoDevtoolPageType } from "../view/molecule/NiconicoDevtool";
+import { DevtoolUiCommentPageStore } from "./DevtoolUiCommentPageStore";
 import { storage } from "./storage";
 
 export class DevtoolUiStore {
@@ -19,6 +21,7 @@ export class DevtoolUiStore {
 	@observable usePreferredTotalTimeLimit: boolean;
 	@observable stopsGameOnTimeout: boolean;
 	@observable totalTimeLimitInputValue: number;
+	@observable niconicoToolActivePage: NiconicoDevtoolPageType;
 
 	// storage に保存しないもの
 	@observable focusedStartPointHeaderIndex: number | null;
@@ -33,6 +36,9 @@ export class DevtoolUiStore {
 	@observable clearThreshold: number | undefined;
 	@observable totalTimeLimit: number | null;
 	@observable preferredTotalTimeLimit: number | null;
+	@observable niconicoToolSelectorWidth: number;
+
+	commentPage: DevtoolUiCommentPageStore;
 
 	constructor() {
 		this.height = storage.data.devtoolsHeight;
@@ -49,6 +55,7 @@ export class DevtoolUiStore {
 		this.entityTreeStateTable = observable.map<number, boolean>();
 		this.isSeekingVolume = false;
 		this.volume = 100;
+		this.niconicoToolActivePage = storage.data.niconicoToolActivePage;
 		this.isAutoSendEvent = storage.data.isAutoSendEvents;
 		this.emulatingShinichibaMode = storage.data.emulatingShinichibaMode;
 		this.usePreferredTotalTimeLimit = storage.data.usePreferredTotalTimeLimit;
@@ -59,6 +66,8 @@ export class DevtoolUiStore {
 		this.clearThreshold = undefined;
 		this.totalTimeLimit = null;
 		this.preferredTotalTimeLimit = null;
+		this.niconicoToolSelectorWidth = 120;
+		this.commentPage = new DevtoolUiCommentPageStore();
 	}
 
 	@action
@@ -193,5 +202,16 @@ export class DevtoolUiStore {
 	initTotalTimeLimit(_preferredTotalTimeLimit: number): void {
 		this.preferredTotalTimeLimit = _preferredTotalTimeLimit;
 		this.totalTimeLimit = this.usePreferredTotalTimeLimit ? _preferredTotalTimeLimit : this.totalTimeLimitInputValue;
+	}
+
+	@action
+	setNiconicoToolActivePage(pageType: NiconicoDevtoolPageType): void {
+		this.niconicoToolActivePage = pageType;
+		storage.put({ niconicoToolActivePage: pageType });
+	}
+
+	@action
+	setNiconicoToolSelectorWidth(w: number): void {
+		this.niconicoToolSelectorWidth = w;
 	}
 }

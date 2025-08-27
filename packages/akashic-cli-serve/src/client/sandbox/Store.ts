@@ -137,6 +137,12 @@ export class Store {
 					this.notificationUiStore.setActive({type: "error", title: warningTitle, message: "", name: warning.message});
 				}
 				break;
+			case "createNonIntegerSurface":
+				if (!sandboxConfigWarn || sandboxConfigWarn.createNonIntegerSurface !== false) {
+					console.warn(`${warning.message}`);
+					this.notificationUiStore.setActive({type: "error", title: warningTitle, message: "", name: warning.message});
+				}
+				break;
 		}
 	}
 }

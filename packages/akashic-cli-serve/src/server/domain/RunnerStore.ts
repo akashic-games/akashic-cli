@@ -2,14 +2,18 @@ import { createRequire } from "module";
 import * as path from "path";
 import type { AMFlowClient, RunnerManager, RunnerV1, RunnerV2, RunnerV3 } from "@akashic/headless-driver";
 import { Trigger } from "@akashic/trigger";
+import type { NamagameCommentEventComment } from "../../common/types/NamagameCommentPlugin.js";
 import type {
 	RunnerCreateTestbedEvent,
 	RunnerRemoveTestbedEvent,
 	RunnerPauseTestbedEvent,
 	RunnerResumeTestbedEvent,
-	RunnerPutStartPointTestbedEvent
+	RunnerPutStartPointTestbedEvent,
+	NamagameCommentPluginStartStopTestbedEvent
 } from "../../common/types/TestbedEvent.js";
 import { serverGlobalConfig } from "../common/ServerGlobalConfig.js";
+import * as gameConfigs from "./GameConfigs.js";
+import { NamagameCommentPluginHost } from "./nicoliveComment/NamagameCommentPluginHost.js";
 import * as sandboxConfigs from "./SandboxConfigs.js";
 
 const require = createRequire(import.meta.url);
@@ -28,33 +32,54 @@ export interface CreateAndStartRunnerParameterObject {
 	isPaused: boolean;
 }
 
+/**
+ * ランナー関連情報。headless-driver の Runner で管理できないデータを保持する。
+ */
+export interface RunnerEntity {
+	playId: string;
+	namagameCommentPluginHost: NamagameCommentPluginHost | null;
+}
+
 export class RunnerStore {
 	onRunnerCreate: Trigger<RunnerCreateTestbedEvent>;
 	onRunnerRemove: Trigger<RunnerRemoveTestbedEvent>;
 	onRunnerPause: Trigger<RunnerPauseTestbedEvent>;
 	onRunnerResume: Trigger<RunnerResumeTestbedEvent>;
 	onRunnerPutStartPoint: Trigger<RunnerPutStartPointTestbedEvent>;
+	onNamagameCommentPluginStartStop: Trigger<NamagameCommentPluginStartStopTestbedEvent>;
 	private runnerManager: RunnerManager;
 	private gameExternalFactory: () => any;
-	private playIdTable: { [runnerId: string]: string };
+	private runnerEntities: { [runnerId: string]: RunnerEntity };
 
 	constructor(params: RunnerStoreParameterObject) {
-		this.onRunnerCreate = new Trigger<RunnerCreateTestbedEvent>();
-		this.onRunnerRemove = new Trigger<RunnerRemoveTestbedEvent>();
-		this.onRunnerPause = new Trigger<RunnerPauseTestbedEvent>();
-		this.onRunnerResume = new Trigger<RunnerResumeTestbedEvent>();
-		this.onRunnerPutStartPoint = new Trigger<RunnerPutStartPointTestbedEvent>();
+		this.onRunnerCreate = new Trigger();
+		this.onRunnerRemove = new Trigger();
+		this.onRunnerPause = new Trigger();
+		this.onRunnerResume = new Trigger();
+		this.onRunnerPutStartPoint = new Trigger();
+		this.onNamagameCommentPluginStartStop = new Trigger();
 		this.runnerManager = params.runnerManager;
 		this.gameExternalFactory = params.gameExternalFactory;
-		this.playIdTable = {};
+		this.runnerEntities = {};
 	}
 
 	async createAndStartRunner(params: CreateAndStartRunnerParameterObject): Promise<RunnerV1 | RunnerV2 | RunnerV3> {
-		const sandboxConfig = sandboxConfigs.get(params.contentId);
+		const { playId, amflow, contentId } = params;
+		const sandboxConfig = sandboxConfigs.get(contentId);
+		const gameConfig = gameConfigs.get(contentId);
 		const externalAssets = (sandboxConfig ? sandboxConfig.externalAssets : undefined) === undefined ? [] : sandboxConfig.externalAssets;
-		const allowedUrls = this.createAllowedUrls(params.contentId, externalAssets);
+		const allowedUrls = this.createAllowedUrls(contentId, externalAssets);
 
-		const externalValue = { ...this.gameExternalFactory() ?? {} };
+		let externalValue: { [name: string]: unknown } = {};
+		let namagameCommentPluginHost: NamagameCommentPluginHost | null = null;
+		if (gameConfig.environment?.external?.namagameComment) {
+			const fps = gameConfig.fps ?? 30;
+			namagameCommentPluginHost = new NamagameCommentPluginHost(sandboxConfig.external?.namagameComment ?? {}, amflow, fps);
+			namagameCommentPluginHost.onStartStop.add(started => this.onNamagameCommentPluginStartStop.fire({ playId, started }));
+			externalValue.namagameComment = namagameCommentPluginHost.plugin;
+		}
+
+		externalValue = { ...externalValue, ...this.gameExternalFactory() };
 		const serverExternal = sandboxConfig?.server?.external;
 		if (serverExternal) {
 			for (const pluginName of Object.keys(serverExternal)) {
@@ -64,8 +89,8 @@ export class RunnerStore {
 		}
 
 		const runnerId = await this.runnerManager.createRunner({
-			playId: params.playId,
-			amflow: params.amflow,
+			playId,
+			amflow,
 			executionMode: params.isActive ? "active" : "passive",
 			playToken: params.token,
 			allowedUrls,
@@ -73,17 +98,17 @@ export class RunnerStore {
 			trusted: !serverGlobalConfig.untrusted
 		});
 		if (params.isActive) {
-			params.amflow.onPutStartPoint.add((startPoint) => {
-				this.onRunnerPutStartPoint.fire({ startPoint, playId: params.playId });
+			amflow.onPutStartPoint.add((startPoint) => {
+				this.onRunnerPutStartPoint.fire({ startPoint, playId });
 			});
 		}
 
 		const runner = this.runnerManager.getRunner(runnerId)!;
 		await this.runnerManager.startRunner(runner.runnerId, { paused: params.isPaused });
-		this.playIdTable[runnerId] = params.playId;
-		this.onRunnerCreate.fire({ playId: params.playId, runnerId, isActive: params.isActive });
+		this.runnerEntities[runnerId] = { playId, namagameCommentPluginHost };
+		this.onRunnerCreate.fire({ playId, runnerId, isActive: params.isActive });
 		if (params.isPaused)
-			this.onRunnerPause.fire({ playId: params.playId, runnerId });
+			this.onRunnerPause.fire({ playId, runnerId });
 		return runner;
 	}
 
@@ -93,9 +118,9 @@ export class RunnerStore {
 			// コンテンツがエラーの場合、runnerを取得できないので取得できる場合のみ実行
 			await this.runnerManager.stopRunner(runnerId);
 		}
-		const playId = this.playIdTable[runnerId];
+		const playId = this.runnerEntities[runnerId]!.playId;
 		this.onRunnerRemove.fire({ playId, runnerId });
-		delete this.playIdTable[runnerId];
+		delete this.runnerEntities[runnerId];
 	}
 
 	async pauseRunner(runnerId: string): Promise<void> {
@@ -119,6 +144,16 @@ export class RunnerStore {
 		if (runner) {
 			await this.runnerManager.stepRunner(runner.runnerId);
 		}
+	}
+
+	sendCommentsByTemplate(runnerId: string, name: string): boolean {
+		const commentPluginHost = this.runnerEntities[runnerId]?.namagameCommentPluginHost;
+		return commentPluginHost?.planToSendByTemplate(name) ?? false;
+	}
+
+	sendComment(runnerId: string, comment: NamagameCommentEventComment): boolean {
+		const commentPluginHost = this.runnerEntities[runnerId]?.namagameCommentPluginHost;
+		return commentPluginHost?.planToSend(comment) ?? false;
 	}
 
 	private createAllowedUrls(contentId: string, externalAssets: (string | RegExp)[] | null): (string | RegExp)[] | null {

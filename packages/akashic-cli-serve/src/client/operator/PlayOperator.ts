@@ -1,5 +1,6 @@
 import { toJS as mobxToJS } from "mobx";
 import type { PlayPatchApiResponse } from "../../common/types/ApiResponse";
+import type { NamagameCommentEventComment } from "../../common/types/NamagameCommentPlugin";
 import * as Subscriber from "../api/Subscriber";
 import type { Store } from "../store/Store";
 
@@ -13,7 +14,7 @@ export class PlayOperator {
 
 	constructor(store: Store) {
 		this.store = store;
-		Subscriber.onDisconnect.add(this.closeThisWindowIfNeeded);
+		Subscriber.onDisconnect.add(this.handleSocketDisconnect);
 	}
 
 	togglePauseActive = (pauses: boolean): Promise<PlayPatchApiResponse> => {
@@ -118,6 +119,26 @@ export class PlayOperator {
 		return this.store.currentPlay!.unmuteAll();
 	};
 
+	sendEditorNamagameCommentEvent = async (): Promise<void> => {
+		const { currentPlay } = this.store;
+		const { commandInput: command, commentInput: comment, senderType } = this.store.devtoolUiStore.commentPage;
+		if (!currentPlay || !comment) return;
+
+		const vpos = Math.floor(currentPlay.duration / 10);
+		const cmt: NamagameCommentEventComment =
+			senderType === "broadcaster" ?
+				{ command, comment, isAnonymous: false } :
+			senderType === "anonymous" ?
+				{ command, comment, isAnonymous: true, userID: this.store.hashedPlayerId!, vpos } :
+				{ command, comment, isAnonymous: false, userID: this.store.player?.id, vpos };
+		this.store.devtoolUiStore.commentPage.setCommentInput("");
+		return currentPlay.sendNamagameComment(cmt);
+	};
+
+	sendRegisteredNamagameCommentEvent = async (name: string): Promise<void> => {
+		return this.store.currentPlay?.sendNamagameCommentByTemplate(name);
+	};
+
 	// 指定したURLからファイルをダウンロードする
 	private downloadFile = (url: string, fileName: string): void => {
 		const a = document.createElement("a");
@@ -170,4 +191,9 @@ export class PlayOperator {
 
 		return { top, left, width, height };
 	}
+
+	private handleSocketDisconnect = (): void => {
+		this.store.setSocketDisconnect(true);
+		this.closeThisWindowIfNeeded();
+	};
 }
