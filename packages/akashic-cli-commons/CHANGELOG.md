@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.0.1
+
+### Patch Changes
+
+- [#1585](https://github.com/akashic-games/akashic-cli/pull/1585) [`ce1f14a`](https://github.com/akashic-games/akashic-cli/commit/ce1f14a914464bff1bc3f67913a2096bb0125843) Thanks [@yu-ogi](https://github.com/yu-ogi)! - support --force option
+
 ## 1.0.0
 
 ### Major Changes

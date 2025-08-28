@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2.0.4
+
+### Patch Changes
+
+- Updated dependencies [[`ce1f14a`](https://github.com/akashic-games/akashic-cli/commit/ce1f14a914464bff1bc3f67913a2096bb0125843)]:
+  - @akashic/akashic-cli-commons@1.0.1
+
 ## 2.0.3
 
 ### Patch Changes
