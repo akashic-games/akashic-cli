@@ -1,5 +1,13 @@
 # @akashic/akashic-cli-export
 
+## 2.0.8
+
+### Patch Changes
+
+- Updated dependencies [[`ce1f14a`](https://github.com/akashic-games/akashic-cli/commit/ce1f14a914464bff1bc3f67913a2096bb0125843)]:
+  - @akashic/akashic-cli-commons@1.0.1
+  - @akashic/akashic-cli-extra@2.0.1
+
 ## 2.0.7
 
 ### Patch Changes

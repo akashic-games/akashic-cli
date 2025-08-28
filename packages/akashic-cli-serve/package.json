@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-serve",
-  "version": "2.0.9",
+  "version": "2.0.10",
   "description": "A development server for Akashic Engine",
   "type": "module",
   "scripts": {
@@ -27,8 +27,8 @@
     "akashic-cli-serve": "./bin/run.js"
   },
   "dependencies": {
-    "@akashic/akashic-cli-commons": "1.0.0",
-    "@akashic/akashic-cli-scan": "1.0.2",
+    "@akashic/akashic-cli-commons": "1.0.1",
+    "@akashic/akashic-cli-scan": "1.0.3",
     "@akashic/amflow-util": "^1.3.0",
     "@akashic/game-configuration": "^2.1.0",
     "@akashic/headless-driver": "2.17.5",
