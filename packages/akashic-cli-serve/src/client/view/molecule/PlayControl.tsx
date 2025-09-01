@@ -50,16 +50,16 @@ export const PlayControl = observer(class PlayControl extends React.Component<Pl
 				icon="group_add"
 				title={"インスタンスを追加\r\r新しいタブ・ウィンドウでこのプレイに接続するインスタンスを追加します。"}
 				onClick={props.onClickAddInstance}
-				dropdownProps={{
-					items: [
+				splitButtonProps={{
+					menuItems: [
 						{
 							label: "Add Instance (New Player ID)",
 							tooltip: "新しいプレイヤーIDでインスタンスを追加",
+							icon: "group_add",
 							onClick: () => {
 								if (props.onClickAddInstance) {
 									props.onClickAddInstance();
 								}
-								props.onClickAddInstanceOptions(false);
 							}
 						},
 						{
@@ -69,12 +69,11 @@ export const PlayControl = observer(class PlayControl extends React.Component<Pl
 								if (props.onClickAddSamePlayerInstance) {
 									props.onClickAddSamePlayerInstance();
 								}
-								props.onClickAddInstanceOptions(false);
 							}
 						}
 					],
 					showMenu: props.showsAddInstanceOptions,
-					onClick: () => props.onClickAddInstanceOptions(!props.showsAddInstanceOptions)
+					setShowMenu: props.onClickAddInstanceOptions
 				}}
 			/>
 			{/* // 未実装

@@ -1,5 +1,10 @@
 @import "../global.css";
 
+.tool-icon-button-container {
+	display: flex;
+	align-items: center;
+}
+
 .tool-icon-button {
 	flex: 0 0 auto;
 	border: 1px solid transparent;
@@ -72,9 +77,21 @@
 }
 
 .dropdown-item {
-	padding: 8px 16px;
+	padding: 8px 12px;
 	cursor: pointer;
 	white-space: nowrap;
+	display: flex;
+	align-items: center;
+}
+
+.dropdown-item i {
+	margin-right: 8px;
+	width: 24px;
+	text-align: center;
+}
+
+.dropdown-item i:empty {
+	display: none;
 }
 
 .dropdown-item:hover {

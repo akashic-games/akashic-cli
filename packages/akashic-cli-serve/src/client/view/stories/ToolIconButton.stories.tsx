@@ -116,6 +116,26 @@ export const WithText = {
 	name: "with text"
 };
 
+export const WithSplitButton = {
+	render: () => (
+		<ToolIconButton
+			className="with-split-button"
+			icon="face"
+			title="face!"
+			onClick={action("clicked")}
+			splitButtonProps={{
+				menuItems: [
+					{ label: "First", icon: "face", tooltip: "face!", onClick: action("first clicked") },
+					{ label: "Second", onClick: action("second clicked") }
+				],
+				showMenu: true,
+				setShowMenu: action("setShowMenu")
+			}}
+		/>
+	),
+	name: "with split button"
+};
+
 export const WithBehaviorToggle = {
 	render: () => <TestWithBehaviour />,
 	name: "with behavior (toggle)"
