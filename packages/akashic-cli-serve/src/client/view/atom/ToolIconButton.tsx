@@ -106,7 +106,7 @@ const SplitButton = observer(function SplitButton(props: SplitButtonProps): JSX.
 	return (
 		<div className={styles["dropdown-component"]} ref={menuRef}>
 			<button className={styles["tool-icon-button"]} onClick={() => setShowMenu(!showMenu)}>
-				▼
+				<i className="material-icons">arrow_drop_down</i>
 			</button>
 			{showMenu && (
 				<div className={styles["dropdown-menu"]}>
