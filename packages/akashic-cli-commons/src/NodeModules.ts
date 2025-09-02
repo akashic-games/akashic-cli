@@ -72,11 +72,12 @@ export module NodeModules {
 				const { mainScriptPath } = NodeModules.extractModuleMainInfo(packageJsonFile);
 				console.log("@@ before:", mainScriptPath);
 				moduleMainPaths[packageJsonFile] = Util.makeUnixPath(mainScriptPath);
-				console.log("@@ ager:", moduleMainPaths[packageJsonFile]);
+				console.log("@@ after:", moduleMainPaths[packageJsonFile]);
 			} catch (_e) {
 				// do nothing
 			}
 		}
+		console.log("@@ rtn:", moduleMainPaths);
 		return moduleMainPaths;
 	}
 

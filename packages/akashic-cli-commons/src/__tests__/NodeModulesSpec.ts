@@ -173,8 +173,9 @@ describe("NodeModules", () => {
 			const filePaths = await NodeModules.listScriptFiles(fixtureContents.path, ["dummy", "dummy2", "dummy3"], logger);
 			let packageJsonFiles = NodeModules.listPackageJsonsFromScriptsPath(fixtureContents.path, filePaths);
 			// 本来はルート直下の ./node_modules のパスだが、テストで node_modules のパスがルート直下ではないためパスを生成
-			packageJsonFiles = packageJsonFiles.map(p => path.resolve(fixtureContents.path, p).replace(/^\//, ""));
-			console.log("*************************************************************");
+			console.log("** packageJsonFiles:", packageJsonFiles);
+			packageJsonFiles = packageJsonFiles.map(p => path.resolve(fixtureContents.path, p));
+			console.log("*************************************************************-");
 			const moduleMainPaths = NodeModules.listModuleMainPaths(packageJsonFiles);
 			console.log("** moduleMainPaths:", moduleMainPaths);
 
