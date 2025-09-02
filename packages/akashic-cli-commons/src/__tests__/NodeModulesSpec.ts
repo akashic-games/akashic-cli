@@ -148,9 +148,9 @@ describe("NodeModules", () => {
 			// CI の windows 用にファイルパスを unix 形式に変換して比較
 			// for(const [key, value] of Object.entries(moduleMainScripts)) moduleMainScripts[key] = toUnixPath(value);
 			expect(moduleMainScripts).toEqual({
-				"dummy": path.join(fixtureContents.path, "node_modules/dummy/main.js"),
-				"dummyChild": path.join(fixtureContents.path, "node_modules/dummy/node_modules/dummyChild/main.js"),
-				"dummy3": path.join(fixtureContents.path, "node_modules/dummy3/index.js")
+				"dummy": path.resolve(fixtureContents.path, "node_modules/dummy/main.js").replace(/^\//, ""),
+				"dummyChild": path.resolve(fixtureContents.path, "node_modules/dummy/node_modules/dummyChild/main.js").replace(/^\//, ""),
+				"dummy3": path.resolve(fixtureContents.path, "node_modules/dummy3/index.js").replace(/^\//, "")
 			});
 			// expect(moduleMainScripts).toEqual({
 			// 	"dummy": toUnixPath(path.join(fixtureContents.path, "node_modules/dummy/main.js")),
@@ -181,11 +181,11 @@ describe("NodeModules", () => {
 			// for(const [key, value] of Object.entries(moduleMainPaths)) moduleMainPaths[key] = toUnixPath(value);
 			expect(moduleMainPaths).toEqual({
 				[path.resolve(fixtureContents.path,"node_modules/dummy/package.json")]:
-					path.resolve(fixtureContents.path,"node_modules/dummy/main.js"),
+					path.resolve(fixtureContents.path,"node_modules/dummy/main.js").replace(/^\//, ""),
 				[path.resolve(fixtureContents.path, "node_modules/dummy/node_modules/dummyChild/package.json")]:
-					path.resolve(fixtureContents.path, "node_modules/dummy/node_modules/dummyChild/main.js"),
+					path.resolve(fixtureContents.path, "node_modules/dummy/node_modules/dummyChild/main.js").replace(/^\//, ""),
 				[path.resolve(fixtureContents.path, "node_modules/dummy3/package.json")]:
-					path.resolve(fixtureContents.path, "node_modules/dummy3/index.js"),	
+					path.resolve(fixtureContents.path, "node_modules/dummy3/index.js").replace(/^\//, "")	
 			});
 			// expect(moduleMainPaths).toEqual({
 			// 	[path.resolve(fixtureContents.path,"node_modules/dummy/package.json")]:
