@@ -70,7 +70,9 @@ export module NodeModules {
 			const packageJsonFile = packageJsonFiles[i];
 			try {
 				const { mainScriptPath } = NodeModules.extractModuleMainInfo(packageJsonFile);
+				console.log("@@ before:", mainScriptPath);
 				moduleMainPaths[packageJsonFile] = Util.makeUnixPath(mainScriptPath);
+				console.log("@@ ager:", moduleMainPaths[packageJsonFile]);
 			} catch (_e) {
 				// do nothing
 			}

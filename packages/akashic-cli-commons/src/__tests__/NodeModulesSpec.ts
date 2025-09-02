@@ -174,12 +174,13 @@ describe("NodeModules", () => {
 			let packageJsonFiles = NodeModules.listPackageJsonsFromScriptsPath(fixtureContents.path, filePaths);
 			// 本来はルート直下の ./node_modules のパスだが、テストで node_modules のパスがルート直下ではないためパスを生成
 			packageJsonFiles = packageJsonFiles.map(p => path.resolve(fixtureContents.path, p));
+			console.log("*************************************************************");
 			const moduleMainPaths = NodeModules.listModuleMainPaths(packageJsonFiles);
 			console.log("** moduleMainPaths:", moduleMainPaths);
 
 			// CI の windows 用にファイルパスを unix 形式に変換して比較
 			// for(const [key, value] of Object.entries(moduleMainPaths)) moduleMainPaths[key] = toUnixPath(value);
-			
+
 			expect(moduleMainPaths).toEqual({
 				[path.resolve(fixtureContents.path,"node_modules/dummy/package.json")]:
 					path.resolve(fixtureContents.path,"node_modules/dummy/main.js").replace(/^\//, ""),
@@ -188,6 +189,16 @@ describe("NodeModules", () => {
 				[path.resolve(fixtureContents.path, "node_modules/dummy3/package.json")]:
 					path.resolve(fixtureContents.path, "node_modules/dummy3/index.js").replace(/^\//, "")	
 			});
+/*
+-   "D:\\a\\akashic-cli\\akashic-cli\\packages\\akashic-cli-commons\\src\\__tests__\\fixture-WLhU5t\\node_modules\\dummy3\\package.json": "D:\\a\\akashic-cli\\akashic-cli\\packages\\akashic-cli-commons\\src\\__tests__\\fixture-WLhU5t\\node_modules\\dummy3\\index.js",
+-   "D:\\a\\akashic-cli\\akashic-cli\\packages\\akashic-cli-commons\\src\\__tests__\\fixture-WLhU5t\\node_modules\\dummy\\node_modules\\dummyChild\\package.json": "D:\\a\\akashic-cli\\akashic-cli\\packages\\akashic-cli-commons\\src\\__tests__\\fixture-WLhU5t\\node_modules\\dummy\\node_modules\\dummyChild\\main.js",
+-   "D:\\a\\akashic-cli\\akashic-cli\\packages\\akashic-cli-commons\\src\\__tests__\\fixture-WLhU5t\\node_modules\\dummy\\package.json": "D:\\a\\akashic-cli\\akashic-cli\\packages\\akashic-cli-commons\\src\\__tests__\\fixture-WLhU5t\\node_modules\\dummy\\main.js",
++   "D:\\a\\akashic-cli\\akashic-cli\\packages\\akashic-cli-commons\\src\\__tests__\\fixture-WLhU5t\\node_modules\\dummy3\\package.json": "D:/a/akashic-cli/akashic-cli/packages/akashic-cli-commons/src/__tests__/fixture-WLhU5t/node_modules/dummy3/index.js",
++   "D:\\a\\akashic-cli\\akashic-cli\\packages\\akashic-cli-commons\\src\\__tests__\\fixture-WLhU5t\\node_modules\\dummy\\node_modules\\dummyChild\\package.json": "D:/a/akashic-cli/akashic-cli/packages/akashic-cli-commons/src/__tests__/fixture-WLhU5t/node_modules/dummy/node_modules/dummyChild/main.js",
++   "D:\\a\\akashic-cli\\akashic-cli\\packages\\akashic-cli-commons\\src\\__tests__\\fixture-WLhU5t\\node_modules\\dummy\\package.json": "D:/a/akashic-cli/akashic-cli/packages/akashic-cli-commons/src/__tests__/fixture-WLhU5t/node_modules/dummy/main.js",
+*/
+
+
 			// expect(moduleMainPaths).toEqual({
 			// 	[path.resolve(fixtureContents.path,"node_modules/dummy/package.json")]:
 			// 		toUnixPath(path.resolve(fixtureContents.path,"node_modules/dummy/main.js")),
