@@ -178,7 +178,8 @@ describe("NodeModules", () => {
 			console.log("** moduleMainPaths:", moduleMainPaths);
 
 			// CI の windows 用にファイルパスを unix 形式に変換して比較
-			for(const [key, value] of Object.entries(moduleMainPaths)) moduleMainPaths[key] = toUnixPath(value);
+			// for(const [key, value] of Object.entries(moduleMainPaths)) moduleMainPaths[key] = toUnixPath(value);
+			
 			expect(moduleMainPaths).toEqual({
 				[path.resolve(fixtureContents.path,"node_modules/dummy/package.json")]:
 					path.resolve(fixtureContents.path,"node_modules/dummy/main.js").replace(/^\//, ""),
