@@ -182,6 +182,8 @@ describe("NodeModules", () => {
 			// CI の windows 用にファイルパスを unix 形式に変換して比較
 			// for(const [key, value] of Object.entries(moduleMainPaths)) moduleMainPaths[key] = toUnixPath(value);
 
+			console.log("===", path.resolve(fixtureContents.path,"node_modules/dummy/main.js").replace(/^\//, ""))
+
 			expect(moduleMainPaths).toEqual({
 				[path.resolve(fixtureContents.path,"node_modules/dummy/package.json")]:
 					path.resolve(fixtureContents.path,"node_modules/dummy/main.js").replace(/^\//, ""),
@@ -191,12 +193,19 @@ describe("NodeModules", () => {
 					path.resolve(fixtureContents.path, "node_modules/dummy3/index.js").replace(/^\//, "")	
 			});
 /*
--   "D:\\a\\akashic-cli\\akashic-cli\\packages\\akashic-cli-commons\\src\\__tests__\\fixture-WLhU5t\\node_modules\\dummy3\\package.json": "D:\\a\\akashic-cli\\akashic-cli\\packages\\akashic-cli-commons\\src\\__tests__\\fixture-WLhU5t\\node_modules\\dummy3\\index.js",
--   "D:\\a\\akashic-cli\\akashic-cli\\packages\\akashic-cli-commons\\src\\__tests__\\fixture-WLhU5t\\node_modules\\dummy\\node_modules\\dummyChild\\package.json": "D:\\a\\akashic-cli\\akashic-cli\\packages\\akashic-cli-commons\\src\\__tests__\\fixture-WLhU5t\\node_modules\\dummy\\node_modules\\dummyChild\\main.js",
--   "D:\\a\\akashic-cli\\akashic-cli\\packages\\akashic-cli-commons\\src\\__tests__\\fixture-WLhU5t\\node_modules\\dummy\\package.json": "D:\\a\\akashic-cli\\akashic-cli\\packages\\akashic-cli-commons\\src\\__tests__\\fixture-WLhU5t\\node_modules\\dummy\\main.js",
-+   "D:\\a\\akashic-cli\\akashic-cli\\packages\\akashic-cli-commons\\src\\__tests__\\fixture-WLhU5t\\node_modules\\dummy3\\package.json": "D:/a/akashic-cli/akashic-cli/packages/akashic-cli-commons/src/__tests__/fixture-WLhU5t/node_modules/dummy3/index.js",
-+   "D:\\a\\akashic-cli\\akashic-cli\\packages\\akashic-cli-commons\\src\\__tests__\\fixture-WLhU5t\\node_modules\\dummy\\node_modules\\dummyChild\\package.json": "D:/a/akashic-cli/akashic-cli/packages/akashic-cli-commons/src/__tests__/fixture-WLhU5t/node_modules/dummy/node_modules/dummyChild/main.js",
-+   "D:\\a\\akashic-cli\\akashic-cli\\packages\\akashic-cli-commons\\src\\__tests__\\fixture-WLhU5t\\node_modules\\dummy\\package.json": "D:/a/akashic-cli/akashic-cli/packages/akashic-cli-commons/src/__tests__/fixture-WLhU5t/node_modules/dummy/main.js",
+
+- "D:\\a\\akashic-cli\\akashic-cli\\packages\\akashic-cli-commons\\src\\__tests__\\fixture-M1wFzn\\node_modules\\dummy3\\package.json": "D:\\a\\akashic-cli\\akashic-cli\\packages\\akashic-cli-commons\\src\\__tests__\\fixture-M1wFzn\\node_modules\\dummy3\\index.js",
+- "D:\\a\\akashic-cli\\akashic-cli\\packages\\akashic-cli-commons\\src\\__tests__\\fixture-M1wFzn\\node_modules\\dummy\\node_modules\\dummyChild\\package.json": "D:\\a\\akashic-cli\\akashic-cli\\packages\\akashic-cli-commons\\src\\__tests__\\fixture-M1wFzn\\node_modules\\dummy\\node_modules\\dummyChild\\main.js",
+- "D:\\a\\akashic-cli\\akashic-cli\\packages\\akashic-cli-commons\\src\\__tests__\\fixture-M1wFzn\\node_modules\\dummy\\package.json": "D:\\a\\akashic-cli\\akashic-cli\\packages\\akashic-cli-commons\\src\\__tests__\\fixture-M1wFzn\\node_modules\\dummy\\main.js",
++ "D:\\a\\akashic-cli\\akashic-cli\\packages\\akashic-cli-commons\\src\\__tests__\\fixture-M1wFzn\\node_modules\\dummy3\\package.json": "D:/a/akashic-cli/akashic-cli/packages/akashic-cli-commons/src/__tests__/fixture-M1wFzn/node_modules/dummy3/index.js",
++ "D:\\a\\akashic-cli\\akashic-cli\\packages\\akashic-cli-commons\\src\\__tests__\\fixture-M1wFzn\\node_modules\\dummy\\node_modules\\dummyChild\\package.json": "D:/a/akashic-cli/akashic-cli/packages/akashic-cli-commons/src/__tests__/fixture-M1wFzn/node_modules/dummy/node_modules/dummyChild/main.js",
++ "D:\\a\\akashic-cli\\akashic-cli\\packages\\akashic-cli-commons\\src\\__tests__\\fixture-M1wFzn\\node_modules\\dummy\\package.json": "D:/a/akashic-cli/akashic-cli/packages/akashic-cli-commons/src/__tests__/fixture-M1wFzn/node_modules/dummy/main.js",
+
+
+- "D:\\a\\akashic-cli\\akashic-cli\\packages\\akashic-cli-commons\\src\\__tests__\\fixture-M1wFzn\\node_modules\\dummy3\\package.json": "D:\\a\\akashic-cli\\akashic-cli\\packages\\akashic-cli-commons\\src\\__tests__\\fixture-M1wFzn\\node_modules\\dummy3\\index.js",
++ "D:\\a\\akashic-cli\\akashic-cli\\packages\\akashic-cli-commons\\src\\__tests__\\fixture-M1wFzn\\node_modules\\dummy3\\package.json": "D:/a/akashic-cli/akashic-cli/packages/akashic-cli-commons/src/__tests__/fixture-M1wFzn/node_modules/dummy3/index.js",
+
+
 */
 
 
