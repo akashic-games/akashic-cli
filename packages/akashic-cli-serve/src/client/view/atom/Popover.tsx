@@ -2,7 +2,7 @@ import { observer } from "mobx-react";
 import * as React from "react";
 import styles from "./Popover.module.css";
 
-function useOnClickOutside(ref: React.RefObject<HTMLElement> | undefined, handler: () => void): void {
+export function useOnClickOutside(ref: React.RefObject<HTMLElement> | undefined, handler: () => void): void {
 	React.useEffect(
 		() => {
 			if (!ref || !ref.current)

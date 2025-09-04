@@ -1,5 +1,10 @@
 @import "../global.css";
 
+.tool-icon-button-container {
+	display: flex;
+	align-items: center;
+}
+
 .tool-icon-button {
 	flex: 0 0 auto;
 	border: 1px solid transparent;
@@ -54,4 +59,41 @@
 	background: var(--color-tool-bg-pushed);
 	color: var(--color-tool-text-pushed);
 	border-color: var(--color-tool-border-pushed);
+}
+
+.dropdown-component {
+	position: relative;
+	display: inline-block;
+}
+
+.dropdown-menu {
+	position: absolute;
+	top: 100%;
+	left: 0;
+	background-color: white;
+	border: 1px solid #ccc;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	z-index: 1000;
+}
+
+.dropdown-item {
+	padding: 8px 12px;
+	cursor: pointer;
+	white-space: nowrap;
+	display: flex;
+	align-items: center;
+}
+
+.dropdown-item i {
+	margin-right: 8px;
+	width: 24px;
+	text-align: center;
+}
+
+.dropdown-item i:empty {
+	display: inline-block;
+}
+
+.dropdown-item:hover {
+	background-color: #f0f0f0;
 }
