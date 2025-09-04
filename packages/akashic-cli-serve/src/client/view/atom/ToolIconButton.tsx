@@ -1,5 +1,6 @@
 import { observer } from "mobx-react";
 import * as React from "react";
+import { useOnClickOutside } from "./Popover";
 import styles from "./ToolIconButton.module.css";
 
 interface ToolIconButtonProps {
@@ -52,11 +53,12 @@ interface ToolIconButtonProps {
 interface SplitButtonProps {
 	menuItems: DropDownMenuItem[];
 	showMenu: boolean;
-	setShowMenu: (show: boolean) => void;
+	onToggleMenu: (show: boolean) => void;
 }
 
 interface DropDownMenuItem {
 	label: string;
+	key?: string;
 	tooltip?: string;
 	icon?: string;
 	onClick: () => void;
@@ -67,8 +69,7 @@ export const ToolIconButton = observer(function ToolIconButton(props: ToolIconBu
 	const pushedClass = (pushed && !pushedIcon) ? " " + styles.pushed : "";
 	return <div className={styles["tool-icon-button-container"]}>
 		<button className={styles["tool-icon-button"] + pushedClass + " " + className}
-			disabled={disabled} title={title} onClick={(event: React.MouseEvent): void => {
-				event.stopPropagation(); // 親のクリックイベントを防ぐ
+			disabled={disabled} title={title} onClick={(): void => {
 				onClick?.(!pushed);
 			}}>
 			<i className="material-icons" style={(size != null) ? { fontSize: size } : undefined}>
@@ -80,52 +81,45 @@ export const ToolIconButton = observer(function ToolIconButton(props: ToolIconBu
 		<SplitButton
 			menuItems={splitButtonProps.menuItems}
 			showMenu={splitButtonProps.showMenu}
-			setShowMenu={splitButtonProps.setShowMenu}
+			onToggleMenu={splitButtonProps.onToggleMenu}
 		/>}
 	</div>;
 });
 
 
 const SplitButton = observer(function SplitButton(props: SplitButtonProps): JSX.Element {
-	const { menuItems, showMenu, setShowMenu } = props;
+	const { menuItems, showMenu, onToggleMenu } = props;
 	const menuRef = React.useRef<HTMLDivElement>(null);
-
-	React.useEffect(() => {
-		const handleClickOutside = (event: MouseEvent): void => {
-			if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-				setShowMenu(false);
-			}
-		};
-		if (showMenu) {
-			document.addEventListener("mousedown", handleClickOutside);
-		} else {
-			document.removeEventListener("mousedown", handleClickOutside);
-		}
-	}, [showMenu]);
+	const handleClickOutside = React.useCallback(() => {
+		onToggleMenu(false);
+	}, [showMenu, onToggleMenu]);
+	useOnClickOutside(menuRef, handleClickOutside);
 
 	return (
 		<div className={styles["dropdown-component"]} ref={menuRef}>
-			<button className={styles["tool-icon-button"]} onClick={() => setShowMenu(!showMenu)}>
+			<button className={styles["tool-icon-button"]} onClick={() => onToggleMenu(!showMenu)}>
 				<i className="material-icons">arrow_drop_down</i>
 			</button>
-			{showMenu && (
-				<div className={styles["dropdown-menu"]}>
-					{menuItems.map((item, index) => (
-						<div
-							key={index}
-							className={styles["dropdown-item"]}
-							title={item.tooltip}
-							onClick={() => {
-								item.onClick();
-								setShowMenu(false);
-							}}
-						>
-							<i className="material-icons">{item.icon ?? undefined}</i>
-							{item.label}
-						</div>
-					))}
-				</div>
-			)}
+			{
+				showMenu && (
+					<div className={styles["dropdown-menu"]}>
+						{menuItems.map((item) => (
+							<div
+								key={item.key ?? item.label}
+								className={styles["dropdown-item"]}
+								title={item.tooltip}
+								onClick={() => {
+									item.onClick();
+									onToggleMenu(false);
+								}}
+							>
+								<i className="material-icons">{item.icon ?? undefined}</i>
+								{item.label}
+							</div>
+						))}
+					</div>
+				)
+			}
 		</div>
 	);
 });

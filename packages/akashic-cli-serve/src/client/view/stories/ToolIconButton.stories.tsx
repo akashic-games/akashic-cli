@@ -129,7 +129,7 @@ export const WithSplitButton = {
 					{ label: "Second", onClick: action("second clicked") }
 				],
 				showMenu: true,
-				setShowMenu: action("setShowMenu")
+				onToggleMenu: action("onToggleMenu")
 			}}
 		/>
 	),

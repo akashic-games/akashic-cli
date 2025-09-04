@@ -91,7 +91,7 @@
 }
 
 .dropdown-item i:empty {
-	display: none;
+	display: inline-block;
 }
 
 .dropdown-item:hover {

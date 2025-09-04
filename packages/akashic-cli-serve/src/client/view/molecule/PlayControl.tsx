@@ -53,6 +53,7 @@ export const PlayControl = observer(class PlayControl extends React.Component<Pl
 				splitButtonProps={{
 					menuItems: [
 						{
+							key: "add-instance-new-player",
 							label: "Add Instance (New Player ID)",
 							tooltip: "新しいプレイヤーIDでインスタンスを追加",
 							icon: "group_add",
@@ -63,6 +64,7 @@ export const PlayControl = observer(class PlayControl extends React.Component<Pl
 							}
 						},
 						{
+							key: "add-instance-same-player",
 							label: "Add Instance (Same Player ID)",
 							tooltip: "このインスタンスと同一のプレイヤーIDでインスタンスを追加",
 							onClick: () => {
@@ -73,7 +75,7 @@ export const PlayControl = observer(class PlayControl extends React.Component<Pl
 						}
 					],
 					showMenu: props.showsAddInstanceOptions,
-					setShowMenu: props.onClickAddInstanceOptions
+					onToggleMenu: props.onClickAddInstanceOptions
 				}}
 			/>
 			{/* // 未実装
