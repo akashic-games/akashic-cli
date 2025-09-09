@@ -2,7 +2,7 @@
 
 ## カスタムテンプレートの作成
 
-`akashic-init` はローカルリポジトリ(`$HOME/.akashic-templates`)内の、
+`akashic-cli-init` はローカルリポジトリ(`$HOME/.akashic-templates`)内の、
 テンプレート名と一致する名前のディレクトリの中身をカレントディレクトリにコピーします。
 
 例えば `mytemplate` という名前のテンプレートを作成する場合、
@@ -13,14 +13,18 @@
 
 以下はテンプレート設定ファイルの例です。
 
-```
+```json
 {
   "formatVersion": "0",
   "files": [
     {"src": "mainScene.js", "dst": "script/mainScene.js"},
-    {"src": "game.json": "dst": "game.json"}
+    {"src": "game.json", "dst": "game.json"}
   ],
-  "gameJson": "game.json"
+  "gameJson": "game.json",
+  "extensions": [
+    { "module": "@akashic-extension/akashic-timeline", "version": "^3" },
+    { "module": "@akashic-extension/akashic-label", "version": "^3" }
+  ]
 }
 ```
 
@@ -52,6 +56,17 @@
 `gameJson` が存在しない場合はカレントディレクトリに `game.json` が存在する必要が
 あります。
 
+`extensions` キーにはプロジェクトに追加可能な拡張機能の一覧を指定できます。
+これらの拡張機能は `akashic-cli-init` の実行時に、CLI 上でチェックボックス形式で選択可能となります。
+チェックを入れると、選択した拡張に対応する npm モジュールが自動的に `akashic install` されます。
+
+`module` には追加したい npm モジュールの名前を文字列で指定します。
+この名前は、実際に `npm install <module>` でインストールされるものです。
+
+`version` にはインストールするバージョンやタグを指定できます (例: `"^3"`)。
+この値を指定した場合は `npm install <module>@<version>` のように利用されます。
+省略した場合は `latest` が使用されます。
+
 ## テンプレート配信サーバの作成
 
 テンプレート配信サーバはHTTPまたはHTTPSでテンプレートの中身をzipで固めたファイルを配信します。
@@ -60,7 +75,7 @@
 
 テンプレートリストは以下のようなJSONファイルです。
 
-```
+```json
 {
   "formatVersion": "0",
   "templates": {
