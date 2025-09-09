@@ -144,8 +144,6 @@ describe("NodeModules", () => {
 			packageJsonFiles = packageJsonFiles.map(p => path.resolve(fixtureContents.path, p));
 			const moduleMainScripts = NodeModules.listModuleMainScripts(packageJsonFiles);
 
-			// CI の windows 用にファイルパスを unix 形式に変換して比較
-			for(const [key, value] of Object.entries(moduleMainScripts)) moduleMainScripts[key] = toUnixPath(value);
 			expect(moduleMainScripts).toEqual({
 				"dummy": toUnixPath(path.join(fixtureContents.path, "node_modules/dummy/main.js")),
 				"dummyChild": toUnixPath(path.join(fixtureContents.path, "node_modules/dummy/node_modules/dummyChild/main.js")),
@@ -169,17 +167,14 @@ describe("NodeModules", () => {
 			packageJsonFiles = packageJsonFiles.map(p => path.resolve(fixtureContents.path, p));
 			const moduleMainPaths = NodeModules.listModuleMainPaths(packageJsonFiles);
 
-			// CI の windows 用にファイルパスを unix 形式に変換して比較
-			for(const [key, value] of Object.entries(moduleMainPaths)) moduleMainPaths[key] = toUnixPath(value);
 			expect(moduleMainPaths).toEqual({
 				[path.resolve(fixtureContents.path,"node_modules/dummy/package.json")]:
 					toUnixPath(path.resolve(fixtureContents.path,"node_modules/dummy/main.js")),
 				[path.resolve(fixtureContents.path, "node_modules/dummy/node_modules/dummyChild/package.json")]:
 					toUnixPath(path.resolve(fixtureContents.path, "node_modules/dummy/node_modules/dummyChild/main.js")),
 				[path.resolve(fixtureContents.path, "node_modules/dummy3/package.json")]:
-					toUnixPath(path.resolve(fixtureContents.path, "node_modules/dummy3/index.js")),	
+					toUnixPath(path.resolve(fixtureContents.path, "node_modules/dummy3/index.js"))
 			});
-
 		});
 	});
 
