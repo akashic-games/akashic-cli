@@ -34,6 +34,7 @@ export function makeModuleNameNoVer(name: string): string {
 // akashic-cli が扱う game.json 内ではパスはすべて / 区切りなので、
 // 環境依存を暗黙に吸収して \ と / を使い分ける path.resolve() が使えない。
 export function makeUnixPath(path: string): string {
+	console.log("**** makeUnixPath:");
 	return path.replace(/\\/g, "/");
 }
 

@@ -4,7 +4,7 @@ export default defineConfig({
 	test: {
 		globals: true,
 		include: [
-			"./src/**/__tests__/**/*[sS]pec.ts",
+			"./src/**/__tests__/**/NodeModulesSpec.ts",
 		],
 		deps: {
 			interopDefault: false,

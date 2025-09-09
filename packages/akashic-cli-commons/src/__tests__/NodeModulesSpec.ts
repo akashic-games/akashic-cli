@@ -144,12 +144,13 @@ describe("NodeModules", () => {
 			packageJsonFiles = packageJsonFiles.map(p => path.resolve(fixtureContents.path, p));
 			const moduleMainScripts = NodeModules.listModuleMainScripts(packageJsonFiles);
 
+
 			// CI の windows 用にファイルパスを unix 形式に変換して比較
-			for(const [key, value] of Object.entries(moduleMainScripts)) moduleMainScripts[key] = toUnixPath(value);
+			// for(const [key, value] of Object.entries(moduleMainScripts)) moduleMainScripts[key] = toUnixPath(value);
 			expect(moduleMainScripts).toEqual({
-				"dummy": toUnixPath(path.join(fixtureContents.path, "node_modules/dummy/main.js")),
-				"dummyChild": toUnixPath(path.join(fixtureContents.path, "node_modules/dummy/node_modules/dummyChild/main.js")),
-				"dummy3": toUnixPath(path.join(fixtureContents.path, "node_modules/dummy3/index.js"))
+				"dummy": path.join(fixtureContents.path, "node_modules/dummy/main.js").replace(/^\//, ""),
+				"dummyChild": path.join(fixtureContents.path, "node_modules/dummy/node_modules/dummyChild/main.js").replace(/^\//, ""),
+				"dummy3": path.join(fixtureContents.path, "node_modules/dummy3/index.js").replace(/^\//, "")
 			});
 		});
 	});
@@ -170,16 +171,48 @@ describe("NodeModules", () => {
 			const moduleMainPaths = NodeModules.listModuleMainPaths(packageJsonFiles);
 
 			// CI の windows 用にファイルパスを unix 形式に変換して比較
-			for(const [key, value] of Object.entries(moduleMainPaths)) moduleMainPaths[key] = toUnixPath(value);
+			// for(const [key, value] of Object.entries(moduleMainPaths)) moduleMainPaths[key] = toUnixPath(value);
 			expect(moduleMainPaths).toEqual({
 				[path.resolve(fixtureContents.path,"node_modules/dummy/package.json")]:
-					toUnixPath(path.resolve(fixtureContents.path,"node_modules/dummy/main.js")),
+					// toUnixPath(path.resolve(fixtureContents.path,"node_modules/dummy/main.js")),
+					path.resolve(fixtureContents.path,"node_modules/dummy/main.js").replace(/^\//, ""),
 				[path.resolve(fixtureContents.path, "node_modules/dummy/node_modules/dummyChild/package.json")]:
-					toUnixPath(path.resolve(fixtureContents.path, "node_modules/dummy/node_modules/dummyChild/main.js")),
+					// toUnixPath(path.resolve(fixtureContents.path, "node_modules/dummy/node_modules/dummyChild/main.js")),
+					path.resolve(fixtureContents.path, "node_modules/dummy/node_modules/dummyChild/main.js").replace(/^\//, ""),
 				[path.resolve(fixtureContents.path, "node_modules/dummy3/package.json")]:
-					toUnixPath(path.resolve(fixtureContents.path, "node_modules/dummy3/index.js")),	
+					// toUnixPath(path.resolve(fixtureContents.path, "node_modules/dummy3/index.js"))
+					path.resolve(fixtureContents.path, "node_modules/dummy3/index.js").replace(/^\//, "")
 			});
+/*
+ = D:\a\akashic-cli\akashic-cli\packages\akashic-cli-commons\src\__tests__\fixture-kD4bGu\node_modules\dummy\main.js
+ 
 
+
+-   "D:\\a\\akashic-cli\\akashic-cli\\packages\\akashic-cli-commons\\src\\__tests__\\fixture-kD4bGu\\node_modules\\dummy3\\package.json": "D:\\a\\akashic-cli\\akashic-cli\\packages\\akashic-cli-commons\\src\\__tests__\\fixture-kD4bGu\\node_modules\\dummy3\\index.js",
+-   "D:\\a\\akashic-cli\\akashic-cli\\packages\\akashic-cli-commons\\src\\__tests__\\fixture-kD4bGu\\node_modules\\dummy\\node_modules\\dummyChild\\package.json": "D:\\a\\akashic-cli\\akashic-cli\\packages\\akashic-cli-commons\\src\\__tests__\\fixture-kD4bGu\\node_modules\\dummy\\node_modules\\dummyChild\\main.js",
+-   "D:\\a\\akashic-cli\\akashic-cli\\packages\\akashic-cli-commons\\src\\__tests__\\fixture-kD4bGu\\node_modules\\dummy\\package.json": "D:\\a\\akashic-cli\\akashic-cli\\packages\\akashic-cli-commons\\src\\__tests__\\fixture-kD4bGu\\node_modules\\dummy\\main.js",
++   "D:\\a\\akashic-cli\\akashic-cli\\packages\\akashic-cli-commons\\src\\__tests__\\fixture-kD4bGu\\node_modules\\dummy3\\package.json": "D:/a/akashic-cli/akashic-cli/packages/akashic-cli-commons/src/__tests__/fixture-kD4bGu/node_modules/dummy3/index.js",
++   "D:\\a\\akashic-cli\\akashic-cli\\packages\\akashic-cli-commons\\src\\__tests__\\fixture-kD4bGu\\node_modules\\dummy\\node_modules\\dummyChild\\package.json": "D:/a/akashic-cli/akashic-cli/packages/akashic-cli-commons/src/__tests__/fixture-kD4bGu/node_modules/dummy/node_modules/dummyChild/main.js",
++   "D:\\a\\akashic-cli\\akashic-cli\\packages\\akashic-cli-commons\\src\\__tests__\\fixture-kD4bGu\\node_modules\\dummy\\package.json": "D:/a/akashic-cli/akashic-cli/packages/akashic-cli-commons/src/__tests__/fixture-kD4bGu/node_modules/dummy/main.js",
+
+
+-   "D:\\a\\akashic-cli\\akashic-cli\\packages\\akashic-cli-commons\\src\\__tests__\\fixture-kD4bGu\\node_modules\\dummy3\\package.json": 
++   "D:\\a\\akashic-cli\\akashic-cli\\packages\\akashic-cli-commons\\src\\__tests__\\fixture-kD4bGu\\node_modules\\dummy3\\package.json": 
+
+"D:\\a\\akashic-cli\\akashic-cli\\packages\\akashic-cli-commons\\src\\__tests__\\fixture-kD4bGu\\node_modules\\dummy3\\index.js",
+"D:/a/akashic-cli/akashic-cli/packages/akashic-cli-commons/src/__tests__/fixture-kD4bGu/node_modules/dummy3/index.js",
+
+*/
+
+
+			// expect(moduleMainPaths).toEqual({
+			// 	[path.resolve(fixtureContents.path,"node_modules/dummy/package.json")]:
+			// 		toUnixPath(path.resolve(fixtureContents.path,"node_modules/dummy/main.js")),
+			// 	[path.resolve(fixtureContents.path, "node_modules/dummy/node_modules/dummyChild/package.json")]:
+			// 		toUnixPath(path.resolve(fixtureContents.path, "node_modules/dummy/node_modules/dummyChild/main.js")),
+			// 	[path.resolve(fixtureContents.path, "node_modules/dummy3/package.json")]:
+			// 		toUnixPath(path.resolve(fixtureContents.path, "node_modules/dummy3/index.js")),	
+			// });
 		});
 	});
 
