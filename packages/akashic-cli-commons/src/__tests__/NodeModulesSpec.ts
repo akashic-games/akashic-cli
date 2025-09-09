@@ -144,13 +144,10 @@ describe("NodeModules", () => {
 			packageJsonFiles = packageJsonFiles.map(p => path.resolve(fixtureContents.path, p));
 			const moduleMainScripts = NodeModules.listModuleMainScripts(packageJsonFiles);
 
-
-			// CI の windows 用にファイルパスを unix 形式に変換して比較
-			// for(const [key, value] of Object.entries(moduleMainScripts)) moduleMainScripts[key] = toUnixPath(value);
 			expect(moduleMainScripts).toEqual({
-				"dummy": path.join(fixtureContents.path, "node_modules/dummy/main.js").replace(/^\//, ""),
-				"dummyChild": path.join(fixtureContents.path, "node_modules/dummy/node_modules/dummyChild/main.js").replace(/^\//, ""),
-				"dummy3": path.join(fixtureContents.path, "node_modules/dummy3/index.js").replace(/^\//, "")
+				"dummya": toUnixPath(path.join(fixtureContents.path, "node_modules/dummy/main.js")),
+				"dummyChild": toUnixPath(path.join(fixtureContents.path, "node_modules/dummy/node_modules/dummyChild/main.js")),
+				"dummy3": toUnixPath(path.join(fixtureContents.path, "node_modules/dummy3/index.js"))
 			});
 		});
 	});
