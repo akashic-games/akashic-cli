@@ -24,4 +24,5 @@ export interface CliConfigServe {
 	corsAllowOrigin?: string;
 	fonts?: CliConfigFontDeclaration[];
 	standalone?: boolean;
+	sandboxConfig?: string;
 }
