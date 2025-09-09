@@ -93,7 +93,7 @@ describe("uninstall()", () => {
 				}
 			}
 		};
-		fixtureContents = testUtil.prepareFsContent(mockfsContent, baseDir);
+		fixtureContents = testUtil.prepareFsContent(mockfsContent, fs.mkdtempSync(baseDir));
 
 		const logger = new cmn.ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
 		class DummyNpm extends cmn.PromisedNpm {
@@ -265,7 +265,7 @@ describe("uninstall()", () => {
 
 		it("with uninstall akashic-lib.json, gameConfigurationData, environment", async () => {
 			const fsContent = JSON.parse(JSON.stringify(mockfsContent));
-			fixtureContents = testUtil.prepareFsContent(mockfsContent, baseDir);
+			fixtureContents = testUtil.prepareFsContent(mockfsContent, fs.mkdtempSync(baseDir));
 
 			await promiseUninstall({
 				moduleNames: ["foo"],
@@ -283,7 +283,7 @@ describe("uninstall()", () => {
 			const fooAkashicLib = JSON.parse(fsContent.testdir.foo.node_modules.foo["akashic-lib.json"]);
 			delete fooAkashicLib.gameConfigurationData.environment;
 			fsContent.testdir.foo.node_modules.foo["akashic-lib.json"] = JSON.stringify(fooAkashicLib);
-			fixtureContents = testUtil.prepareFsContent(fsContent, baseDir);
+			fixtureContents = testUtil.prepareFsContent(fsContent, fs.mkdtempSync(baseDir));
 
 			await promiseUninstall({
 				moduleNames: ["foo"],
@@ -299,7 +299,7 @@ describe("uninstall()", () => {
 		it("without uninstall akashic-lib.json", async () => {
 			const fsContent = JSON.parse(JSON.stringify(mockfsContent));
 			delete fsContent.testdir.foo.node_modules.foo["akashic-lib.json"];
-			fixtureContents = testUtil.prepareFsContent(fsContent, baseDir);
+			fixtureContents = testUtil.prepareFsContent(fsContent, fs.mkdtempSync(baseDir));
 
 			await promiseUninstall({
 				moduleNames: ["foo"],
@@ -405,7 +405,6 @@ describe("uninstall()", () => {
 				for(const name of names) {
 					delete this.fsContent.testdir.foo.node_modules[name];
 					const rmPath = path.join(fixtureContents.path, "testdir", "foo", "node_modules", name);
-					fs.rmSync(rmPath, {recursive: true});
 				};
 				return Promise.resolve();
 			}
@@ -414,7 +413,7 @@ describe("uninstall()", () => {
 
 		it("with uninstall akashic-lib.json, gameConfigurationData, environment", async () => {
 			const fsContent = JSON.parse(JSON.stringify(mockfsContent));
-			fixtureContents = testUtil.prepareFsContent(fsContent, baseDir);
+			fixtureContents = testUtil.prepareFsContent(fsContent, fs.mkdtempSync(baseDir));
 
 			await promiseUninstall({
 				moduleNames: ["foo"],
@@ -430,7 +429,7 @@ describe("uninstall()", () => {
 		
 		it("with uninstall akashic-lib.json, gameConfigurationData", async () => {
 			const fsContent = JSON.parse(JSON.stringify(mockfsContent));
-			fixtureContents = testUtil.prepareFsContent(fsContent, baseDir);
+			fixtureContents = testUtil.prepareFsContent(fsContent, fs.mkdtempSync(baseDir));
 
 			await promiseUninstall({
 				moduleNames: ["foo"],
@@ -446,7 +445,7 @@ describe("uninstall()", () => {
 		
 		it("with uninstall akashic-lib.json", async () => {
 			const fsContent = JSON.parse(JSON.stringify(mockfsContent));
-			fixtureContents = testUtil.prepareFsContent(fsContent, baseDir);
+			fixtureContents = testUtil.prepareFsContent(fsContent, fs.mkdtempSync(baseDir));
 
 			await promiseUninstall({
 				moduleNames: ["foo"],
@@ -463,7 +462,7 @@ describe("uninstall()", () => {
 			const fsContent = JSON.parse(JSON.stringify(mockfsContent));
 			delete fsContent.testdir.foo["akashic-lib.json"];
 
-			fixtureContents = testUtil.prepareFsContent(fsContent, baseDir);
+			fixtureContents = testUtil.prepareFsContent(fsContent, fs.mkdtempSync(baseDir));
 
 			await promiseUninstall({
 				moduleNames: ["foo"],
@@ -627,7 +626,7 @@ describe("uninstall()", () => {
 
 		it("should remove the assets when uninstalled module with akashic-lib.json", async () => {
 			const fsContent = JSON.parse(JSON.stringify(mockfsContent));
-			fixtureContents = testUtil.prepareFsContent(fsContent, baseDir);
+			fixtureContents = testUtil.prepareFsContent(fsContent, fs.mkdtempSync(baseDir));
 
 			await promiseUninstall({
 				moduleNames: ["@akashic-extension/ui-library"],
@@ -647,7 +646,7 @@ describe("uninstall()", () => {
 
 		it("should remove the assets when uninstalled multiple modules with akashic-lib.json", async () => {
 			const fsContent = JSON.parse(JSON.stringify(mockfsContent));
-			fixtureContents = testUtil.prepareFsContent(fsContent, baseDir);
+			fixtureContents = testUtil.prepareFsContent(fsContent, fs.mkdtempSync(baseDir));
 
 			await promiseUninstall({
 				moduleNames: ["@akashic-extension/ui-library", "@akashic-extension/audio-library"],

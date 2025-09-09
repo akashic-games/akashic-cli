@@ -29,7 +29,7 @@ describe("init.ts", () => {
 			home: {}
 		};
 		const baseDir = path.resolve(__dirname, "..", "__tests__", "fixture-init-");
-		const fixtureContents = testUtil.prepareFsContent(mockFsContent, baseDir);
+		const fixtureContents = testUtil.prepareFsContent(mockFsContent, fs.mkdtempSync(baseDir));
 
 		afterAll(() => {
 			fixtureContents.dispose();

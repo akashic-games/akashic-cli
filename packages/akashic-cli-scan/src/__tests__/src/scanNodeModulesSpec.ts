@@ -60,8 +60,8 @@ describe("scanNodeModules", () => {
 					}
 				}
 			};
-			const usePath = fixtureContents ? fixtureContents.path :  "";
-			fixtureContents = testUtil.prepareFsContent(mockContent, baseDir, usePath);
+			const usePath = fixtureContents ? fixtureContents.path : fs.mkdtempSync(baseDir);
+			fixtureContents = testUtil.prepareFsContent(mockContent, usePath);
 		};
 
 		const scan = async (param?: ScanNodeModulesParameterObject) => {
@@ -210,7 +210,7 @@ describe("scanNodeModules", () => {
 				}
 			}
 		};
-		fixtureContents = testUtil.prepareFsContent(mockContent, baseDir);
+		fixtureContents = testUtil.prepareFsContent(mockContent, fs.mkdtempSync(baseDir));
 		await scanNodeModules({
 			logger: nullLogger,
 			cwd: fixtureContents.path,
@@ -293,7 +293,7 @@ describe("scanNodeModules", () => {
 				}
 			}
 		};
-		fixtureContents = testUtil.prepareFsContent(mockContent, baseDir);
+		fixtureContents = testUtil.prepareFsContent(mockContent, fs.mkdtempSync(baseDir));
 
 		await scanNodeModules({
 			logger: nullLogger,
@@ -356,7 +356,7 @@ describe("scanNodeModules", () => {
 				}
 			}
 		};
-		fixtureContents = testUtil.prepareFsContent(mockContent, baseDir);
+		fixtureContents = testUtil.prepareFsContent(mockContent, fs.mkdtempSync(baseDir));
 
 		await scanNodeModules({
 			logger: nullLogger,
@@ -395,7 +395,7 @@ describe("scanNodeModules", () => {
 			"game.json": `{ "environment": { "sandbox-runtime": "3" } }`,
 			"node_modules": {}
 		};
-		fixtureContents = testUtil.prepareFsContent(mockContent, baseDir);
+		fixtureContents = testUtil.prepareFsContent(mockContent, fs.mkdtempSync(baseDir));
 
 		await scanNodeModules({
 			logger: nullLogger,
@@ -478,7 +478,7 @@ describe("scanNodeModules", () => {
 				}
 			}
 		};
-		fixtureContents = testUtil.prepareFsContent(mockFsContent, baseDir);
+		fixtureContents = testUtil.prepareFsContent(mockFsContent, fs.mkdtempSync(baseDir));
 
 		await scanNodeModules({
 			logger: nullLogger,
@@ -541,7 +541,7 @@ describe("scanNodeModules", () => {
 		};
 
 		fixtureContents.dispose();
-		fixtureContents = testUtil.prepareFsContent(mockFsContent, baseDir);
+		fixtureContents = testUtil.prepareFsContent(mockFsContent, fs.mkdtempSync(baseDir));
 
 		await scanNodeModules({
 			logger: nullLogger,
@@ -600,7 +600,7 @@ describe("scanNodeModules", () => {
 				}
 			}
 		};
-		fixtureContents = testUtil.prepareFsContent(mockContent, baseDir);
+		fixtureContents = testUtil.prepareFsContent(mockContent, fs.mkdtempSync(baseDir));
 
 		await scanNodeModules({
 			logger: nullLogger,
@@ -689,7 +689,7 @@ describe("scanNodeModules", () => {
 				}
 			}
 		};
-		fixtureContents = testUtil.prepareFsContent(mockContent, baseDir);
+		fixtureContents = testUtil.prepareFsContent(mockContent, fs.mkdtempSync(baseDir));
 
 		await scanNodeModules({
 			logger: nullLogger,
@@ -788,7 +788,7 @@ describe("scanNodeModules", () => {
 				}
 			}
 		};
-		fixtureContents = testUtil.prepareFsContent(mockContent, baseDir);
+		fixtureContents = testUtil.prepareFsContent(mockContent, fs.mkdtempSync(baseDir));
 
 		await scanNodeModules({
 			logger: nullLogger,
@@ -921,7 +921,7 @@ describe("scanNodeModules", () => {
 				}
 			}
 		};
-		fixtureContents = testUtil.prepareFsContent(mockContent, baseDir);
+		fixtureContents = testUtil.prepareFsContent(mockContent, fs.mkdtempSync(baseDir));
 
 		await scanNodeModules({
 			logger: nullLogger,
@@ -1024,7 +1024,7 @@ describe("scanNodeModules", () => {
 				}
 			}
 		};
-		fixtureContents = testUtil.prepareFsContent(mockContent, baseDir);
+		fixtureContents = testUtil.prepareFsContent(mockContent, fs.mkdtempSync(baseDir));
 
 		await scanNodeModules({
 			logger: nullLogger,
@@ -1091,7 +1091,7 @@ describe("scanNodeModules", () => {
 				}
 			}
 		};
-		fixtureContents = testUtil.prepareFsContent(mockContent, baseDir);
+		fixtureContents = testUtil.prepareFsContent(mockContent, fs.mkdtempSync(baseDir));
 
 		const warnLogs: string[] = [];
 		class Logger extends ConsoleLogger {

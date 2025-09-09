@@ -88,7 +88,7 @@ describe("install()", () => {
 			return path.join(path.resolve("."), path.dirname(pkgJsonPath), mainScriptName);
 		});
 
-		fixtureContents = testUtil.prepareFsContent(mockFsContent, baseDir);
+		fixtureContents = testUtil.prepareFsContent(mockFsContent, fs.mkdtempSync(baseDir));
 		const somedir = path.join(fixtureContents.path, "somedir");
 
 		const dummyNpm = new cmn.PromisedNpm({});
@@ -98,16 +98,13 @@ describe("install()", () => {
 				const nameNoVer = cmn.Util.makeModuleNameNoVer(name);
 				mockFsContent.somedir.node_modules[nameNoVer] = mockModules[nameNoVer];
 			});
-			testUtil.prepareFsContent(mockFsContent.somedir.node_modules, baseDir, path.join(somedir, "node_modules"));
+			testUtil.prepareFsContent(mockFsContent.somedir.node_modules, path.join(somedir, "node_modules"));
 			return Promise.resolve();
 		};
 
 		return Promise.resolve()
 			.then(() => promiseInstall({ moduleNames: ["dummy"], cwd: somedir, logger: logger, debugNpm: dummyNpm }))
-			.then(async () => {
-				const ret = await cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join(somedir, "game.json"))
-				return ret;
-			})
+			.then(() => cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join(somedir, "game.json")))
 			.then((content) => {
 				const globalScripts = content.globalScripts!;
 				expect(globalScripts instanceof Array).toBe(true);
@@ -122,7 +119,7 @@ describe("install()", () => {
 				});
 				expect(content.moduleMainPaths).toBeUndefined();
 			})
-			.then(() => promiseInstall({ moduleNames: ["dummy2"], cwd: somedir, plugin: 12, logger: logger, debugNpm: dummyNpm }))
+			.then(() => promiseInstall({ moduleNames: ["dummy2@1.0.1"], cwd: somedir, plugin: 12, logger: logger, debugNpm: dummyNpm }))
 			.then(() => cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join(somedir, "game.json")))
 			.then((content) => {
 				expect(content.operationPlugins).toEqual([
@@ -145,7 +142,7 @@ describe("install()", () => {
 				});
 				expect(content.moduleMainPaths).toBeUndefined();
 			})
-			.then(() => promiseInstall({ moduleNames: ["noOmitPackagejson"], cwd: somedir, logger: logger, debugNpm: dummyNpm, noOmitPackagejson: true }))
+			.then(() => promiseInstall({ moduleNames: ["noOmitPackagejson@0.0.0"], cwd: somedir, logger: logger, debugNpm: dummyNpm, noOmitPackagejson: true }))
 			.then(() => cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join(somedir, "game.json")))
 			.then((content) => {
 				const globalScripts = content.globalScripts!;
@@ -174,7 +171,7 @@ describe("install()", () => {
 						"sub2.js": ""
 					}
 				};
-				testUtil.prepareFsContent(mockModules, baseDir, path.join(somedir, "node_modules"));
+				testUtil.prepareFsContent(mockModules, path.join(somedir, "node_modules"));
 			})
 			.then(() => cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join(somedir, "game.json")))
 			.then(async (content) => {
@@ -185,7 +182,7 @@ describe("install()", () => {
 			})
 			.then(async () => {
 				// moduleMainPaths の動作確認
-				const install = (param?: InstallParameterObject) => promiseInstall({ moduleNames: ["dummy"], cwd: somedir, logger: logger, debugNpm: dummyNpm, ...param });
+				const install = (param?: InstallParameterObject) => promiseInstall({ moduleNames: ["dummy@1.0.1"], cwd: somedir, logger: logger, debugNpm: dummyNpm, ...param });
 				const readConfig = () => cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join(somedir, "game.json"));
 				const writeConfig = () => cmn.FileSystem.writeJSON<cmn.GameConfiguration>(path.join(somedir, "game.json"), content);
 				const defaultConfig = (config?: any) => ({...config});
@@ -390,7 +387,7 @@ describe("install()", () => {
 		};
 
 		fixtureContents.dispose();
-		fixtureContents = testUtil.prepareFsContent(mockFsContent, baseDir);
+		fixtureContents = testUtil.prepareFsContent(mockFsContent, fs.mkdtempSync(baseDir));
 		const somedir = path.join(fixtureContents.path, "somedir");
 		class dummyNpm extends cmn.PromisedNpm {
 			async install(names: string[]) {
@@ -399,7 +396,7 @@ describe("install()", () => {
 					const nameNoVer = cmn.Util.makeModuleNameNoVer(name);
 					mockFsContent.somedir.node_modules[nameNoVer] = mockModules[nameNoVer];
 				});
-				testUtil.prepareFsContent(mockModules, baseDir, path.join(somedir, "node_modules"));
+				testUtil.prepareFsContent(mockModules, path.join(somedir, "node_modules"));
 			}
 		};
 

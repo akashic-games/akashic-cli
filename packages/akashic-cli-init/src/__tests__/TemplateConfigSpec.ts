@@ -2,6 +2,7 @@ import { ConsoleLogger } from "@akashic/akashic-cli-commons/lib/ConsoleLogger.js
 import { completeTemplateConfig } from "../init/TemplateConfig.js";
 import { vi } from "vitest";
 import path from "path";
+import * as fs from "fs";
 import * as testUtil from "../../../akashic-cli-commons/src/__tests__/helpers/TestUtil.js";
 
 describe("completeTemplateConfig", () => {
@@ -23,7 +24,7 @@ describe("completeTemplateConfig", () => {
 				files: [
 					{ src: ".hidden" },
 					{ src: ".ignore", dst: ".ignore" },
-					{ src: "package.json"},
+					{ src: "package.json" },
 					{ src: "path/to/file.txt", dst: "file.txt" }
 				],
 				exclude: [
@@ -53,8 +54,8 @@ describe("completeTemplateConfig", () => {
 
 	it("can complete TemplateConfig respecting 'exclude' filed", async () => {
 
-		const mockFsContent = 	{
-				"source": {
+		const mockFsContent = {
+			"source": {
 				".akashicinitignore": ".akashicinitignore\n.ignore",
 				".hidden": "",
 				".ignore": {
@@ -69,8 +70,8 @@ describe("completeTemplateConfig", () => {
 			},
 			"destination": {}
 		};
-		fixtureContents = testUtil.prepareFsContent(mockFsContent, baseDir);
-		
+		fixtureContents = testUtil.prepareFsContent(mockFsContent, fs.mkdtempSync(baseDir));
+
 		const config = await completeTemplateConfig(
 			{
 				formatVersion: "0",
