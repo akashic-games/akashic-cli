@@ -2,7 +2,7 @@
 
 .tool-icon-button-container {
 	display: flex;
-	align-items: center;
+	align-items: stretch;
 }
 
 .tool-icon-button {
@@ -51,6 +51,28 @@
 	background: var(--color-tool-bg-active);
 }
 
+.tool-icon-button.with-split-button {
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+	margin-right: 0;
+}
+
+.tool-icon-button.as-split-button {
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+	margin-left: 0;
+}
+
+.down-arrow {
+	width: 0; 
+	height: 0; 
+	border-left: 5px solid transparent;
+	border-right: 5px solid transparent;
+	border-top: 5px solid currentColor;
+	display: inline-block;
+	margin: 0 1px;
+}
+
 .pushed {
 	/* css-loader にクラスを認識させるための空定義 */
 }
@@ -63,31 +85,39 @@
 
 .dropdown-component {
 	position: relative;
-	display: inline-block;
+	display: flex;
+	flex-flow: row nowrap;
+	align-items: stretch;
 }
 
 .dropdown-menu {
 	position: absolute;
 	top: 100%;
 	left: 0;
+	
+	display: flex;
+	flex-flow: column nowrap;
+	gap: 2px;
 	background-color: white;
 	border: 1px solid #ccc;
 	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 	z-index: 1000;
+	padding: 6px 0;
 }
 
 .dropdown-item {
-	padding: 8px 12px;
+	padding: 4px 10px;
 	cursor: pointer;
 	white-space: nowrap;
 	display: flex;
 	align-items: center;
+	font-size: 0.95rem;
+	gap: 4px;
 }
 
 .dropdown-item i {
-	margin-right: 8px;
 	width: 24px;
-	text-align: center;
+	font-size: 20px;
 }
 
 .dropdown-item i:empty {

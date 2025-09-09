@@ -67,8 +67,9 @@ interface DropDownMenuItem {
 export const ToolIconButton = observer(function ToolIconButton(props: ToolIconButtonProps): JSX.Element {
 	const { className, icon, title, pushed, pushedIcon, disabled, children, size, onClick, splitButtonProps } = props;
 	const pushedClass = (pushed && !pushedIcon) ? " " + styles.pushed : "";
+	const hasSplitButton = splitButtonProps != null && splitButtonProps.menuItems.length > 0;
 	return <div className={styles["tool-icon-button-container"]}>
-		<button className={styles["tool-icon-button"] + pushedClass + " " + className}
+		<button className={`${styles["tool-icon-button"]} ${hasSplitButton ? styles["with-split-button"] : ""} ${pushedClass} ${className}`}
 			disabled={disabled} title={title} onClick={(): void => {
 				onClick?.(!pushed);
 			}}>
@@ -77,12 +78,15 @@ export const ToolIconButton = observer(function ToolIconButton(props: ToolIconBu
 			</i>
 			{ children ? <p>{children}</p> : null }
 		</button>
-		{splitButtonProps && splitButtonProps.menuItems.length > 0 &&
-		<SplitButton
-			menuItems={splitButtonProps.menuItems}
-			showMenu={splitButtonProps.showMenu}
-			onToggleMenu={splitButtonProps.onToggleMenu}
-		/>}
+		{
+			hasSplitButton && (
+				<SplitButton
+					menuItems={splitButtonProps.menuItems}
+					showMenu={splitButtonProps.showMenu}
+					onToggleMenu={splitButtonProps.onToggleMenu}
+				/>
+			)
+		}
 	</div>;
 });
 
@@ -97,8 +101,8 @@ const SplitButton = observer(function SplitButton(props: SplitButtonProps): JSX.
 
 	return (
 		<div className={styles["dropdown-component"]} ref={menuRef}>
-			<button className={styles["tool-icon-button"]} onClick={() => onToggleMenu(!showMenu)}>
-				<i className="material-icons">arrow_drop_down</i>
+			<button className={styles["tool-icon-button"] + " " + styles["as-split-button"]} onClick={() => onToggleMenu(!showMenu)}>
+				<div className={styles["down-arrow"]}></div>
 			</button>
 			{
 				showMenu && (
