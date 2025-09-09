@@ -3,7 +3,7 @@ import { ConsoleLogger } from "../ConsoleLogger.js";
 import { fs, vol } from "memfs";
 
 vi.mock("node:fs", async () => {
-  const memfs: { fs: typeof fs } = await vi.importActual('memfs')
+  const memfs: { fs: typeof fs } = await vi.importActual("memfs")
   return memfs.fs;
 });
 
