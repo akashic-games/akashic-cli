@@ -18,6 +18,7 @@ export interface ServerGlobalConfig {
 	protocol: string;
 	disableFeatCheck: boolean;
 	fontFamilies: string[];
+	sandboxConfig: string | null;
 }
 
 export const DEFAULT_HOSTNAME = "localhost";
@@ -41,4 +42,5 @@ export const serverGlobalConfig: ServerGlobalConfig = {
 	protocol: "http",
 	disableFeatCheck: false,
 	fontFamilies: [],
+	sandboxConfig: null
 };

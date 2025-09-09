@@ -141,6 +141,16 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 		serverGlobalConfig.allowExternal = cliConfigParam.allowExternal;
 	}
 
+	if (cliConfigParam.sandboxConfig) {
+		const configPath = path.resolve(cliConfigParam.sandboxConfig);
+		if (!fs.existsSync(configPath)) {
+			getSystemLogger().error(`Can not find ${configPath}`);
+			process.exit(1);
+		}
+		// sandbox.config.js が存在するディレクトリパスを設定。パスの組み立ては利用箇所で行う。
+		serverGlobalConfig.sandboxConfig = path.dirname(cliConfigParam.sandboxConfig);
+	}
+
 	let gameExternalFactory: () => any = () => undefined;
 	if (cmdOptions.serverExternalScript) {
 		try {
@@ -515,6 +525,7 @@ export async function run(argv: any): Promise<void> {
 		.option("--ssl-cert <certificatePath>", "Specify path to an SSL/TLS certificate to use HTTPS")
 		.option("--ssl-key <privatekeyPath>", "Specify path to an SSL/TLS privatekey to use HTTPS")
 		.option("--cors-allow-origin <origin>", "Specify origin for Access-Control-Allow-Origin")
+		.option("--sandbox-config <path>", "Specify path of sandbox.config.js")
 		.parse(argv);
 
 	const options = commander.opts();
@@ -550,6 +561,7 @@ export async function run(argv: any): Promise<void> {
 		corsAllowOrigin: options.corsAllowOrigin ?? conf.corsAllowOrigin,
 		standalone: options.standalone ?? conf.standalone,
 		fonts: conf.fonts,
+		sandboxConfig: options.sandboxConfig ?? conf.sandboxConfig
 	};
 	await cli(cliConfigParam, options);
 }
