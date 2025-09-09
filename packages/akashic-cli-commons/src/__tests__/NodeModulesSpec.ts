@@ -59,7 +59,7 @@ describe("NodeModules", () => {
 		logger = new ConsoleLogger({ debugLogMethod: () => { /* do nothing */ } });
 	});
 	beforeAll(() => {
-		fixtureContents = testUtil.prepareFsContent(mockFsContent, baseDir);
+		fixtureContents = testUtil.prepareFsContent(mockFsContent, fs.mkdtempSync(baseDir));
 	});
 	afterAll(() => {
 		fixtureContents.dispose();
@@ -240,7 +240,7 @@ describe("NodeModules", () => {
 				}
 			};
 			fixtureContents.dispose(); // mockFsCOntent のディレクトリを削除
-			fixtureContents = testUtil.prepareFsContent(mockFsContent2, baseDir);
+			fixtureContents = testUtil.prepareFsContent(mockFsContent2, fs.mkdtempSync(baseDir));
 
 			const filePaths = await NodeModules.listScriptFiles(fixtureContents.path, ["@dummy/dummy_node_modules", "dummy_node_modules"], logger);
 			const pkgJsonPaths = NodeModules.listPackageJsonsFromScriptsPath(fixtureContents.path, filePaths);
