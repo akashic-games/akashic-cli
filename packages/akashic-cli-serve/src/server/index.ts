@@ -148,7 +148,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 			process.exit(1);
 		}
 		// sandbox.config.js が存在するディレクトリパスを設定。パスの組み立ては利用箇所で行う。
-		serverGlobalConfig.sandboxConfig = path.dirname(cliConfigParam.sandboxConfig);
+		serverGlobalConfig.sandboxConfigDir = path.dirname(cliConfigParam.sandboxConfig);
 	}
 
 	let gameExternalFactory: () => any = () => undefined;
