@@ -142,13 +142,17 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 	}
 
 	if (cliConfigParam.sandboxConfig) {
-		const configPath = path.resolve(cliConfigParam.sandboxConfig);
+		let configPath = path.resolve(cliConfigParam.sandboxConfig);
+		if(!configPath.toLowerCase().endsWith(".js")) {
+			// 値がディレクトリの場合は sandbox.config.js をファイル名のデフォルト値とする
+			configPath = path.join(configPath, "sandbox.config.js");
+		}
+
 		if (!fs.existsSync(configPath)) {
 			getSystemLogger().error(`Can not find ${configPath}`);
 			process.exit(1);
 		}
-		// sandbox.config.js が存在するディレクトリパスを設定。パスの組み立ては利用箇所で行う。
-		serverGlobalConfig.sandboxConfigDir = path.dirname(cliConfigParam.sandboxConfig);
+		serverGlobalConfig.sandboxConfig = configPath;
 	}
 
 	let gameExternalFactory: () => any = () => undefined;

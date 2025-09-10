@@ -15,8 +15,8 @@ export const createHandlerToGetSandboxConfig = (dirPaths: string[]): express.Req
 			if (!dirPaths[contentId]) {
 				throw new NotFoundError({ errorMessage: `contentId:${contentId} is not found.` });
 			}
-			const confDirPath = serverGlobalConfig.sandboxConfigDir ??  dirPaths[contentId];
-			const configPath = path.resolve(confDirPath, "sandbox.config.js");
+			const confDirPath = dirPaths[contentId];
+			const configPath = serverGlobalConfig.sandboxConfig ?? path.resolve(confDirPath, "sandbox.config.js");
 			// TODO ファイル監視。内容に変化がなければ直前の値を返せばよい
 			const config = dynamicRequire(configPath) ?? {};
 			const normalizedConfig = sandboxConfigs.normalizeConfig(config, req.params.contentId);
