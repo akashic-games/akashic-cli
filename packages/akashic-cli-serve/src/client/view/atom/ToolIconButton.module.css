@@ -1,5 +1,10 @@
 @import "../global.css";
 
+.tool-icon-button-container {
+	display: flex;
+	align-items: stretch;
+}
+
 .tool-icon-button {
 	flex: 0 0 auto;
 	border: 1px solid transparent;
@@ -46,6 +51,28 @@
 	background: var(--color-tool-bg-active);
 }
 
+.tool-icon-button.with-split-button {
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+	margin-right: 0;
+}
+
+.tool-icon-button.as-split-button {
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+	margin-left: 0;
+}
+
+.down-arrow {
+	width: 0; 
+	height: 0; 
+	border-left: 5px solid transparent;
+	border-right: 5px solid transparent;
+	border-top: 5px solid currentColor;
+	display: inline-block;
+	margin: 0 1px;
+}
+
 .pushed {
 	/* css-loader にクラスを認識させるための空定義 */
 }
@@ -54,4 +81,49 @@
 	background: var(--color-tool-bg-pushed);
 	color: var(--color-tool-text-pushed);
 	border-color: var(--color-tool-border-pushed);
+}
+
+.dropdown-component {
+	position: relative;
+	display: flex;
+	flex-flow: row nowrap;
+	align-items: stretch;
+}
+
+.dropdown-menu {
+	position: absolute;
+	top: 100%;
+	left: 0;
+	
+	display: flex;
+	flex-flow: column nowrap;
+	gap: 2px;
+	background-color: white;
+	border: 1px solid #ccc;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	z-index: 1000;
+	padding: 6px 0;
+}
+
+.dropdown-item {
+	padding: 4px 10px;
+	cursor: pointer;
+	white-space: nowrap;
+	display: flex;
+	align-items: center;
+	font-size: 0.95rem;
+	gap: 4px;
+}
+
+.dropdown-item i {
+	width: 24px;
+	font-size: 20px;
+}
+
+.dropdown-item i:empty {
+	display: inline-block;
+}
+
+.dropdown-item:hover {
+	background-color: #f0f0f0;
 }
