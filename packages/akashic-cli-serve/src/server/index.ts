@@ -142,6 +142,12 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 	}
 
 	if (cliConfigParam.sandboxConfig) {
+		// コンテンツが複数指定された場合はエラーとする
+		if (cliConfigParam.targetDirs && cliConfigParam.targetDirs.length > 1) {
+			getSystemLogger().error("--sandbox-config option does not support multiple contents.");
+			process.exit(1);
+		}
+
 		let configPath = path.resolve(cliConfigParam.sandboxConfig);
 		if(!configPath.toLowerCase().endsWith(".js")) {
 			// 値がディレクトリの場合は sandbox.config.js をファイル名のデフォルト値とする
