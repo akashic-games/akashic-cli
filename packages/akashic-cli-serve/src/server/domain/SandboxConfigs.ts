@@ -6,7 +6,6 @@ import * as chokidar from "chokidar";
 import type { SandboxConfigExternalDefinition } from "../../common/types/NamagameCommentConfig.js";
 import { BadRequestError, NotFoundError } from "../common/ApiError.js";
 import { dynamicRequire } from "./dynamicRequire.js";
-import { serverGlobalConfig } from "../common/ServerGlobalConfig.js";
 
 interface ResolvedSandboxConfig extends NormalizedSandboxConfiguration, SandboxConfigExternalDefinition {
 	// backgroundImage がローカルファイルの場合、クライアントからは GET /contents/:contentId/sandboxConfig/backgroundImage で取得される。その場合のローカルファイルのパスをここに保持する。
@@ -19,10 +18,9 @@ const configs: { [key: string]: ResolvedSandboxConfig } = {};
  * コンテンツの sandbox.config.js  ファイルの読み込み/監視を登録。
  *
  * @param contentId コンテンツID
- * @param targetDir sandbox.config.jsが存在するディレクトリパス
+ * @param configPath sandbox.config.js のファイルパス
  */
-export function register(contentId: string, targetDir: string): void {
-	const configPath = serverGlobalConfig.sandboxConfig ?? path.resolve(targetDir, "sandbox.config.js");
+export function register(contentId: string, configPath: string): void {
 	if (configs[contentId]) return;
 	configs[contentId] = watchRequire(configPath, contentId, config => configs[contentId] = config);
 }

@@ -149,7 +149,7 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 		}
 
 		let configPath = path.resolve(cliConfigParam.sandboxConfig);
-		if(!configPath.toLowerCase().endsWith(".js")) {
+		if (!configPath.toLowerCase().endsWith(".js")) {
 			// 値がディレクトリの場合は sandbox.config.js をファイル名のデフォルト値とする
 			configPath = path.join(configPath, "sandbox.config.js");
 		}
