@@ -7,6 +7,9 @@ import { completeTemplateConfig } from "../init/TemplateConfig.js";
 import { vi } from "vitest";
 
 const _extractFromTemplate = internals._extractFromTemplate;
+const _addExtensionToPackageJSON = internals._addExtensionToPackageJSON;
+const _setSpawnFn = internals._setSpawnFn;
+const _extractVersionPrefix = internals._extractVersionPrefix;
 
 describe("init.ts", () => {
 
@@ -105,6 +108,79 @@ describe("init.ts", () => {
 
 			expect(fs.readFileSync(path.join(".akashic-templates", "copyTo", "a")).toString("utf8")).toBe("aaa");
 			expect(fs.readFileSync(path.join(".akashic-templates", "copyTo", "c", "a")).toString("utf8")).toBe("aaa");
+		});
+	});
+
+	describe("_addExtensionToPackageJSON", () => {
+		function createSpawnMock(exitCode: number): any {
+			return vi.fn(() => ({
+				on: (_event: "close", listener: (code: number | null, signal: unknown) => void) => {
+					listener(exitCode, null);
+					return {};
+				},
+			}));
+		}
+
+		const onSpawnMock = createSpawnMock(0);
+		_setSpawnFn(onSpawnMock);
+
+		beforeEach(() => {
+			onSpawnMock.mockClear();
+		});
+
+		afterAll(() => {
+			_setSpawnFn(undefined);
+		});
+
+		it.each([
+			["foo", "^3", "^"],
+			["@scope/foo", "~2.1.5", "~"],
+			["foo", "1.2.3", ""],
+			["@scope/foo", "latest", "^"],
+		])(
+			"resolves and calls spawn correctly for '%s@%s'",
+			async (module, version, expectedPrefix) => {
+				await expect(_addExtensionToPackageJSON(module, version)).resolves.toBeUndefined();
+				expect(onSpawnMock).toHaveBeenCalledWith(
+					"npm",
+					[
+						"install",
+						"--save",
+						"--package-lock-only",
+						"--no-package-lock",
+						"--save-prefix",
+						expectedPrefix,
+						`${module}@${version}`,
+					],
+					{ stdio: "inherit" },
+				);
+			},
+		);
+	});
+
+	describe("_extractVersionPrefix", () => {
+		it("returns ^ for versions starting with ^", () => {
+			expect(_extractVersionPrefix("^10")).toBe("^");
+			expect(_extractVersionPrefix("^5.1.0")).toBe("^");
+			expect(_extractVersionPrefix("^0.1.2")).toBe("^");
+		});
+
+		it("returns ~ for versions starting with ~", () => {
+			expect(_extractVersionPrefix("~5")).toBe("~");
+			expect(_extractVersionPrefix("~3.5")).toBe("~");
+			expect(_extractVersionPrefix("~2.1.0")).toBe("~");
+		});
+
+		it("returns empty string for versions without prefix or empty string", () => {
+			expect(_extractVersionPrefix("3")).toBe("");
+			expect(_extractVersionPrefix("2.10")).toBe("");
+			expect(_extractVersionPrefix("1.2.3")).toBe("");
+			expect(_extractVersionPrefix("0.0.1")).toBe("");
+			expect(_extractVersionPrefix("")).toBe("");
+		});
+
+		it("returns ^ as default for 'latest'", () => {
+			expect(_extractVersionPrefix("latest")).toBe("^");
 		});
 	});
 });
