@@ -5,7 +5,7 @@ import { fs, vol } from "memfs";
 import { readJSON, writeJSON } from "@akashic/akashic-cli-commons/lib/FileSystem.js";
 
 vi.mock("node:fs", async () => {
-  const memfs: { fs: typeof fs } = await vi.importActual("memfs")
+  const memfs: { fs: typeof fs } = await vi.importActual("memfs");
   return memfs.fs;
 });
 
