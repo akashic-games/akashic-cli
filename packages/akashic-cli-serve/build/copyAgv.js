@@ -9,15 +9,15 @@ const __dirname = dirname(__filename);
 
 try {
 	const agvw = require.resolve("@akashic/agvw/dist/index.js");
-	execSync(`npx shx cp ${agvw} ${join(__dirname, "../www/public/external/akashic-gameview-web.strip.js")}`, { encoding: "utf-8" });
+	execSync(`npx --no shx cp ${agvw} ${join(__dirname, "../www/public/external/akashic-gameview-web.strip.js")}`, { encoding: "utf-8" });
 
 	const plg1 = require.resolve("@akashic/agvw/dist/plugin-instance-storage.js");
-	execSync(`npx shx cp ${plg1} ${join(__dirname, "../www/public/external/plugin-instance-storage.js")}`, { encoding: "utf-8" });
+	execSync(`npx --no shx cp ${plg1} ${join(__dirname, "../www/public/external/plugin-instance-storage.js")}`, { encoding: "utf-8" });
 
 	const plg2 = require.resolve("@akashic/agvw/dist/plugin-instance-storage-limited.js");
-	execSync(`npx shx cp ${plg2} ${join(__dirname, "../www/public/external/plugin-instance-storage-limited.js")}`, { encoding: "utf-8" });
+	execSync(`npx --no shx cp ${plg2} ${join(__dirname, "../www/public/external/plugin-instance-storage-limited.js")}`, { encoding: "utf-8" });
 
-	execSync(`npx shx mkdir -p ${join(__dirname, "../www/internal/untrusted_loader")}`, { encoding: "utf-8" });
+	execSync(`npx --no shx mkdir -p ${join(__dirname, "../www/internal/untrusted_loader")}`, { encoding: "utf-8" });
 } catch (e) {
 	console.error(e);
 	process.exitCode = 1;
