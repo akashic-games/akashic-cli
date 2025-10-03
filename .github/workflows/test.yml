@@ -16,7 +16,7 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: [ubuntu-latest, windows-2022]
         node: [18.x, 20.x]
     steps:
       - name: Checkout code
