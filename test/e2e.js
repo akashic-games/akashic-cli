@@ -4,7 +4,7 @@
 //  node test/e2e.js          (latestタグでpublishされたものをインストールしてテスト)
 //  node test/e2e.js --local  (このリポジトリの packages/akashic-cli/bin/akashic.js をテスト)
 
-import { tmpdir, platform } from "os";
+import { tmpdir } from "os";
 import { dirname, join, resolve } from "path";
 import { mkdtemp, readdir, readFile, unlink, writeFile } from "fs/promises";
 import { exec as _exec, spawn as _spawn } from "child_process";
@@ -53,11 +53,6 @@ function spawn(command, argv) {
 	// proc.stderr.on("data", data => void console.error(`${data}`));
 	const pid = proc.pid;
 	return async () => {
-		if (platform() === "win32") {
-			// Windows の場合、環境によっては ps-tree モジュール実行時にエラーになるので taskkill に任せる
-			await exec(`taskkill /F /T /PID ${pid}`);
-			return;
-		}
 		const children = await psTree(pid);
 		for (const child of children) {
 			process.kill(child.PID);
