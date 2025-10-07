@@ -297,7 +297,7 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 				// TODO: Promise#then() と async/await が混在する状態を改め、 async/await に統一する
 				const pluginScripts = await cmn.NodeModules.listScriptFiles(
 					pluginRootDir,
-					"./" + path.basename(pluginRootAbsPath),
+					pluginRootAbsPath,
 					param.logger,
 					true
 				);
