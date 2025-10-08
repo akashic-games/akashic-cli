@@ -24,6 +24,7 @@ jobs:
         with:
           # CHANGELOG の差分を適切に生成するため明示的にすべての履歴を取得
           fetch-depth: 0
+          persist-credentials: false
       - name: Setup Node
         uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
