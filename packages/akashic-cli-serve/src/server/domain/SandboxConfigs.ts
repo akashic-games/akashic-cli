@@ -79,8 +79,8 @@ export function normalizeConfig(sandboxConfig: SandboxConfiguration, contentId: 
 	const bgImage = config.displayOptions.backgroundImage;
 	let resolvedBackgroundImagePath = null;
 	if (bgImage) {
-		if (!/\.(jpg|jpeg|png)$/.test(bgImage)) {
-			throw new BadRequestError({ errorMessage: "Invalid backgroundImage, Please specify a png/jpg file." });
+		if (!/\.(jpg|jpeg|png|webp)$/.test(bgImage)) {
+			throw new BadRequestError({ errorMessage: "Invalid backgroundImage, Please specify a png/jpg/webp file." });
 		}
 
 		if (/^\/contents\//.test(bgImage)) {
