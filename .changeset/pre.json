@@ -1,6 +1,6 @@
 {
   "mode": "pre",
-  "tag": "next",
+  "tag": "test-dontuse",
   "initialVersions": {
     "@akashic/akashic-cli": "3.0.14",
     "@akashic/akashic-cli-commons": "1.0.1",
