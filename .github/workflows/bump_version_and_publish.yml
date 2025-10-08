@@ -10,6 +10,9 @@ on:
 env:
   PUBLISH_VERSION: patch
 
+permissions:
+  contents: write
+
 jobs:
   publish:
     # PullRequest に release ラベルが付与されている場合のみ実行
@@ -20,6 +23,7 @@ jobs:
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           fetch-depth: 0 # lerna-changelog の実行に tags の情報が必要なため明示的にすべての履歴を取得
+          persist-credentials: false
       - name: Setup Node
         uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:

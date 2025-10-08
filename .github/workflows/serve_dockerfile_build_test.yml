@@ -9,12 +9,17 @@ env:
   WORKING_DIR: packages/akashic-cli-serve
   TEST_TAG: akashic/akashic-cli-serve:test
 
+permissions:
+  contents: read
+
 jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
       - name: Set up QEMU
         uses: docker/setup-qemu-action@29109295f81e9208d7d86ff1c6c12d2833863392 # v3.6.0
       - name: Set up Docker Buildx

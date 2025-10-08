@@ -1,7 +1,7 @@
 name: Generate changeset for Renovate
 
 on:
-  pull_request_target:
+  pull_request:
     paths:
       - '.github/workflows/changesets-renovate.yml'
       - '**/package-lock.json'
@@ -10,10 +10,13 @@ on:
 env:
   NODE_VERSION: 20
 
+permissions:
+  contents: write
+
 jobs:
   generate-changeset:
     runs-on: ubuntu-latest
-    if: github.actor == 'renovate[bot]' && github.repository == 'akashic-games/akashic-cli' && contains(github.event.pull_request.labels.*.name, 'release')
+    if: github.event.pull_request.user.login == 'renovate[bot]' && github.repository == 'akashic-games/akashic-cli' && contains(github.event.pull_request.labels.*.name, 'release')
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
