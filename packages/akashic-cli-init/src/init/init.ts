@@ -1,8 +1,10 @@
 import { existsSync } from "fs";
 import * as fs from "fs/promises";
+import { spawn } from "node:child_process";
 import * as path from "path";
 import { readJSON } from "@akashic/akashic-cli-commons/lib/FileSystem.js";
 import type { Logger } from "@akashic/akashic-cli-commons/lib/Logger.js";
+import checkbox from "@inquirer/checkbox";
 import fsx from "fs-extra";
 import {
 	collectLocalTemplatesMetadata,
@@ -69,6 +71,22 @@ export async function promiseInit(p: InitParameterObject): Promise<void> {
 			await updateConfigurationFile(gameJsonPath, logger, skipAsk);
 		}
 
+		if (conf.extensions.length > 0) {
+			logger.warn("⚠️ Installing extensions from untrusted templates or modules may be risky.");
+
+			const extensions = await checkbox({
+				message: "Select the extensions you want to install for this template:",
+				choices: conf.extensions.map(({ module, version }) => ({ name: module, value: { module, version } })),
+			});
+
+			if (extensions.length > 0) {
+				for (const { module, version } of extensions) {
+					await _addExtensionToPackageJSON(module, version);
+				}
+				logger.info("The selected extensions have been added to your package.json. To actually install them, run `npm install`.");
+			}
+		}
+
 		if (conf.guideMessage)
 			logger.print(conf.guideMessage);
 	} finally {
@@ -123,6 +141,44 @@ async function _readJSONWithDefault<T>(filepath: string, defaultValue: T): Promi
 	}
 }
 
+let spawnFn: typeof spawn = spawn;
+
+function _setSpawnFn(mockSpawnFn: typeof spawn | undefined): void {
+	spawnFn = mockSpawnFn ?? spawn;
+}
+
+/**
+ * 与えられた拡張機能をパッケージとして package.json に追加する。
+ * インストールはしない。
+ */
+function _addExtensionToPackageJSON(module: string, version: string): Promise<void> {
+	return new Promise((resolve, reject) => {
+		// 与えられた値をコマンドの引数として直接渡すことでコマンドインジェクションのリスクを低減
+		const options = ["--save", "--package-lock-only", "--no-package-lock", "--save-prefix", _extractVersionPrefix(version)];
+		const p = spawnFn("npm", ["install", ...options, `${module}@${version}`], { stdio: "inherit" });
+		p.on("close", (code) => {
+			if (code === 0) {
+				resolve();
+			} else {
+				reject(new Error(`npm install failed with code ${code}`));
+			}
+		});
+	});
+}
+
+/**
+ * バージョン文字列から接頭辞 (^, ~, なし) を抽出する。
+ * 例外として "latest" の場合は "^" を付与。
+ */
+function _extractVersionPrefix(version: string): string {
+	if (version === "latest") return "^";
+	const match = version.match(/^(\^|~)/);
+	return match?.[1] ?? "";
+}
+
 export const internals = {
-	_extractFromTemplate
+	_extractFromTemplate,
+	_addExtensionToPackageJSON,
+	_extractVersionPrefix,
+	_setSpawnFn,
 };
