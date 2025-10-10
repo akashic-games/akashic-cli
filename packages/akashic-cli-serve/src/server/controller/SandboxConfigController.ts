@@ -74,8 +74,9 @@ export const createHandlerToGetSandboxConfigBgImage = (): express.RequestHandler
 					throw new NotFoundError({ errorMessage: `backgroundImage is not found. path:${config.resolvedBackgroundImagePath}` });
 				}
 
-				// SandboxConfigs#normalizeConfig() で PNG/JPEG 以外のファイルはエラーとしている
-				const type = path.extname(imgPath) === ".png" ? "image/png" : "image/jpeg";
+				// SandboxConfigs#normalizeConfig() で PNG/WEBP/JPEG 以外のファイルはエラーとしている
+				const extname = path.extname(imgPath);
+				const type = extname === ".png" ? "image/png" : extname === "webp" ? "image/webp" : "image/jpeg";
 				res.contentType(type);
 				res.sendFile(imgPath);
 			} else {

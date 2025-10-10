@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.0.11
+
+### Patch Changes
+
+- [#1578](https://github.com/akashic-games/akashic-cli/pull/1578) [`5959e99`](https://github.com/akashic-games/akashic-cli/commit/5959e99eea2d9137a29d43883ed7b6c86d756db7) Thanks [@dera-](https://github.com/dera-)! - add split button about instance
+
 ## 2.0.10
 
 ### Patch Changes

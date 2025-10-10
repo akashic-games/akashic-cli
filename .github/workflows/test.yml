@@ -16,7 +16,7 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: [ubuntu-latest, windows-2022] # windows-latest 環境では e2e テストが失敗するため、暫定的対応として windows-2022 を指定
         node: [18.x, 20.x]
     steps:
       - name: Checkout code

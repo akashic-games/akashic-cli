@@ -29,6 +29,10 @@ export class UiOperator {
 		this.store.toolBarUiStore.setShowDisplayOptionPopover(show);
 	};
 
+	setShowsAddInstanceOptions = (show: boolean): void => {
+		this.store.toolBarUiStore.setShowsAddInstanceOptions(show);
+	};
+
 	setFitsToScreen = (fits: boolean): void => {
 		this.store.toolBarUiStore.setFitsToScreen(fits);
 	};
