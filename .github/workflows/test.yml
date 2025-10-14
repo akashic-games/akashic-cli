@@ -9,6 +9,9 @@ concurrency:
   group: ${{ startsWith(github.head_ref, 'renovate/') && 'renovate' || format('{0}-{1}', github.workflow, github.ref) }}
   cancel-in-progress: ${{ !startsWith(github.head_ref, 'renovate/') }}
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}
@@ -20,9 +23,11 @@ jobs:
         node: [18.x, 20.x]
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
       - name: Setup Node
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
           node-version: ${{ matrix.node }}
           cache: npm

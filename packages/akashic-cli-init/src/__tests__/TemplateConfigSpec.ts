@@ -41,7 +41,8 @@ describe("completeTemplateConfig", () => {
 				{ src: "path/to/file.txt", dst: "file.txt" }
 			],
 			gameJson: "game.json",
-			guideMessage: null
+			extensions: [],
+			guideMessage: null,
 		});
 		expect(warn.mock.calls.length).toBe(1);
 		expect(
@@ -86,6 +87,7 @@ describe("completeTemplateConfig", () => {
 				{ src: "path/to/file.txt", dst: "" }
 			],
 			gameJson: "game.json",
+			extensions: [],
 			guideMessage: null
 		});
 	});
