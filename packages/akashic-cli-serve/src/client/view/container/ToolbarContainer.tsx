@@ -39,14 +39,17 @@ export const ToolBarContainer = observer(class ToolBarContainer extends React.Co
 	}
 
 	private _makePlayControlProps = (): PlayControlPropsData => {
-		const { play, operator } = this.props;
+		const { play, operator, toolBarUiStore } = this.props;
 		return {
 			playbackRate: play.activePlaybackRate,
 			isActivePausing: play.isActivePausing,
 			isActiveExists: play.status === "running", // NOTE: アクティブインスタンスの存在を PlayStatus から判定するのは現実装で一致しているだけであり、厳密には異なるケースがある
+			showsAddInstanceOptions: toolBarUiStore.showsAddInstanceOptions,
 			onClickReset: operator.restartWithNewPlay,
 			onClickActivePause: operator.play.togglePauseActive,
 			onClickAddInstance: operator.play.openNewClientInstance,
+			onClickAddSamePlayerInstance: operator.play.openSameClientInstance,
+			onClickAddInstanceOptions: operator.ui.setShowsAddInstanceOptions,
 			onClickStep: operator.play.step
 		};
 	};
