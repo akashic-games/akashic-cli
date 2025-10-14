@@ -1,5 +1,12 @@
 # @akashic/akashic-cli-lib-manage
 
+## 2.0.2
+
+### Patch Changes
+
+- Updated dependencies [[`6e78afc`](https://github.com/akashic-games/akashic-cli/commit/6e78afc781de9fe5bf46622c3d232d8202e92b82)]:
+  - @akashic/akashic-cli-commons@1.0.2
+
 ## 2.0.1
 
 ### Patch Changes

@@ -1,5 +1,15 @@
 # Change Log
 
+## 2.0.12
+
+### Patch Changes
+
+- [#1593](https://github.com/akashic-games/akashic-cli/pull/1593) [`6e78afc`](https://github.com/akashic-games/akashic-cli/commit/6e78afc781de9fe5bf46622c3d232d8202e92b82) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Add --sandbox-config option to serve
+
+- Updated dependencies [[`6e78afc`](https://github.com/akashic-games/akashic-cli/commit/6e78afc781de9fe5bf46622c3d232d8202e92b82)]:
+  - @akashic/akashic-cli-commons@1.0.2
+  - @akashic/akashic-cli-scan@1.0.4
+
 ## 2.0.11
 
 ### Patch Changes
