@@ -13,6 +13,18 @@ export interface TemplateFileEntry {
 	dst?: string;
 }
 
+export interface TemplateExtensionEntry {
+	/**
+	 * モジュールの名前。
+	 */
+	module: string;
+	/**
+	 * モジュールのバージョン。
+	 * 省略された場合、 `latest` 。
+	 */
+	version?: string;
+}
+
 export interface TemplateConfig {
 	/**
 	 * このテンプレートのフォーマット。現在 "0" のみがサポートされている。
@@ -45,6 +57,12 @@ export interface TemplateConfig {
 	 * 省略された場合、 `null` 。
 	 */
 	guideMessage?: string | null;
+
+	/**
+	 * このテンプレートで利用する拡張機能。
+	 * 省略された場合、空配列。
+	 */
+	extensions?: TemplateExtensionEntry[];
 }
 
 // ref. https://off.tokyo/blog/typescript-saiki-utility-types/#DeepRequired
@@ -60,7 +78,7 @@ export async function completeTemplateConfig(
 	baseDir: string,
 	logger?: Logger
 ): Promise<NormalizedTemplateConfig> {
-	const { formatVersion, files, exclude, gameJson, guideMessage } = templateConfig;
+	const { formatVersion, files, exclude, gameJson, guideMessage, extensions } = templateConfig;
 
 	if (formatVersion != null && formatVersion !== "0") {
 		throw new Error(
@@ -95,10 +113,13 @@ export async function completeTemplateConfig(
 			.map(fileName => ({ src: fileName, dst: "" } as Required<TemplateFileEntry>));
 	}
 
+	const normalizedExtensions = (extensions ?? []).map(({ module, version }) => ({ module, version: version ?? "latest" }));
+
 	return {
 		formatVersion: formatVersion ?? "0",
 		files: normalizedFiles,
 		gameJson: gameJson ?? "game.json",
-		guideMessage: guideMessage ?? null
+		guideMessage: guideMessage ?? null,
+		extensions: normalizedExtensions,
 	};
 }
