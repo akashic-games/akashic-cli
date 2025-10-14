@@ -31,6 +31,9 @@
       "rollup": "npm:@rollup/wasm-node"
     }
   },
+  "files": [
+    "npm-shrinkwrap.json"
+  ],
   "devDependencies": {
     "@akashic/remark-preset-lint": "^0.1.2",
     "@changesets/changelog-github": "^0.5.0",
