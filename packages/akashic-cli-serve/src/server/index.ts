@@ -141,6 +141,26 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 		serverGlobalConfig.allowExternal = cliConfigParam.allowExternal;
 	}
 
+	if (cliConfigParam.sandboxConfig) {
+		// コンテンツが複数指定された場合はエラーとする
+		if (cliConfigParam.targetDirs && cliConfigParam.targetDirs.length > 1) {
+			getSystemLogger().error("--sandbox-config option does not support multiple contents.");
+			process.exit(1);
+		}
+
+		let configPath = path.resolve(cliConfigParam.sandboxConfig);
+		if (!configPath.toLowerCase().endsWith(".js")) {
+			// 値がディレクトリの場合は sandbox.config.js をファイル名のデフォルト値とする
+			configPath = path.join(configPath, "sandbox.config.js");
+		}
+
+		if (!fs.existsSync(configPath)) {
+			getSystemLogger().error(`Can not find ${configPath}`);
+			process.exit(1);
+		}
+		serverGlobalConfig.sandboxConfig = configPath;
+	}
+
 	let gameExternalFactory: () => any = () => undefined;
 	if (cmdOptions.serverExternalScript) {
 		try {
@@ -515,6 +535,7 @@ export async function run(argv: any): Promise<void> {
 		.option("--ssl-cert <certificatePath>", "Specify path to an SSL/TLS certificate to use HTTPS")
 		.option("--ssl-key <privatekeyPath>", "Specify path to an SSL/TLS privatekey to use HTTPS")
 		.option("--cors-allow-origin <origin>", "Specify origin for Access-Control-Allow-Origin")
+		.option("--sandbox-config <path>", "Specify path of sandbox.config.js")
 		.parse(argv);
 
 	const options = commander.opts();
@@ -550,6 +571,7 @@ export async function run(argv: any): Promise<void> {
 		corsAllowOrigin: options.corsAllowOrigin ?? conf.corsAllowOrigin,
 		standalone: options.standalone ?? conf.standalone,
 		fonts: conf.fonts,
+		sandboxConfig: options.sandboxConfig ?? conf.sandboxConfig
 	};
 	await cli(cliConfigParam, options);
 }

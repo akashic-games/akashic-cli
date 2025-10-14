@@ -52,6 +52,7 @@ akashic-cli-serve [<options>] [<path>]
 |`--ssl-cert <certificatePath>`|N/A|HTTPS で起動するための SSL 証明書のパスを指定します。|N/A|
 |`--ssl-key <privatekeyPath>`|N/A|HTTPS で起動するための 秘密鍵のパスを指定します。|N/A|
 |`--cors-allow-origin <origin>`|N/A|Access-Control-Allow-Origin レスポンスヘッダーの値を指定します。|N/A|
+|`--sandbox-config <path>`|N/A|指定した sandbox.config.js を読み込みます。|`./sandbox.config.js`|
 |`--help`|`-h`|ヘルプを表示して終了します。|N/A|
 |`--version`|`-V`|バージョンを表示して終了します。|N/A|
 

@@ -4,6 +4,7 @@ import type * as express from "express";
 import type { SandboxConfigApiResponseData } from "../../common/types/ApiResponse.js";
 import { BadRequestError, NotFoundError } from "../common/ApiError.js";
 import { responseSuccess } from "../common/ApiResponse.js";
+import { serverGlobalConfig } from "../common/ServerGlobalConfig.js";
 import { dynamicRequire } from "../domain/dynamicRequire.js";
 import * as sandboxConfigs from "../domain/SandboxConfigs.js";
 
@@ -14,7 +15,8 @@ export const createHandlerToGetSandboxConfig = (dirPaths: string[]): express.Req
 			if (!dirPaths[contentId]) {
 				throw new NotFoundError({ errorMessage: `contentId:${contentId} is not found.` });
 			}
-			const configPath = path.resolve(dirPaths[contentId], "sandbox.config.js");
+			const confDirPath = dirPaths[contentId];
+			const configPath = serverGlobalConfig.sandboxConfig ?? path.resolve(confDirPath, "sandbox.config.js");
 			// TODO ファイル監視。内容に変化がなければ直前の値を返せばよい
 			const config = dynamicRequire(configPath) ?? {};
 			const normalizedConfig = sandboxConfigs.normalizeConfig(config, req.params.contentId);
