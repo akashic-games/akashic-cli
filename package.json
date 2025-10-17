@@ -13,7 +13,7 @@
     "lint:md": "remark . --frail --no-stdout --quiet --rc-path ./.remarkrc",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release-packages": "changeset publish"
+    "release-packages": "npm shrinkwrap && changeset publish"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
