@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.0.3-test-dontuse.2
+
+### Patch Changes
+
+- [#1608](https://github.com/akashic-games/akashic-cli/pull/1608) [`4ab9df0`](https://github.com/akashic-games/akashic-cli/commit/4ab9df0bd779ccac9c283e42070e92af5e0c32cf) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Fix release.yml, package-json
+
 ## 1.0.3-test-dontuse.1
 
 ### Patch Changes
