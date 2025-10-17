@@ -13,6 +13,7 @@
     "@akashic/akashic-cli-serve": "2.0.12"
   },
   "changesets": [
+    "nasty-files-burn",
     "strong-houses-share"
   ]
 }
