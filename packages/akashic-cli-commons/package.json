@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-commons",
-  "version": "1.0.2",
+  "version": "1.0.3-test-dontuse.0",
   "description": "The shared definitions and routines for akashic-cli-xxx",
   "type": "module",
   "types": "./lib/index.d.ts",
