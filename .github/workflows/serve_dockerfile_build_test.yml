@@ -34,4 +34,4 @@ jobs:
           tags: ${{ env.TEST_TAG }}
       - name: Test
         run: |
-          docker run --rm ${{ env.TEST_TAG }} --version
+          docker run --rm "${TEST_TAG}" --version
