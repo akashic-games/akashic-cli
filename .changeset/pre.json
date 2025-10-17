@@ -13,6 +13,7 @@
     "@akashic/akashic-cli-serve": "2.0.12"
   },
   "changesets": [
+    "famous-items-chew",
     "nasty-files-burn",
     "strong-houses-share"
   ]
