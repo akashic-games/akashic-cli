@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.0.3-test-dontuse.1
+
+### Patch Changes
+
+- [#1606](https://github.com/akashic-games/akashic-cli/pull/1606) [`5d594a5`](https://github.com/akashic-games/akashic-cli/commit/5d594a538a5d8cc581de9ae93406a70fd927eb4a) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Update package-lock.json, remove npm-shrinkwrap.json
+
 ## 1.0.3-test-dontuse.0
 
 ### Patch Changes
