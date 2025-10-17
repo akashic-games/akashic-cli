@@ -12,5 +12,7 @@
     "@akashic/akashic-cli-scan": "1.0.4",
     "@akashic/akashic-cli-serve": "2.0.12"
   },
-  "changesets": []
+  "changesets": [
+    "strong-houses-share"
+  ]
 }
