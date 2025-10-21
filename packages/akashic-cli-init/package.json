@@ -39,7 +39,7 @@
     "@akashic/akashic-cli-commons": "1.0.3-test-dontuse.2",
     "@akashic/akashic-cli-extra": "2.0.3-test-dontuse.2",
     "@inquirer/checkbox": "^4.2.2",
-    "commander": "12.1.0",
+    "commander": "14.0.1",
     "fs-extra": "11.2.0",
     "glob": "11.0.0",
     "ignore": "7.0.0",
