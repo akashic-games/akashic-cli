@@ -17,8 +17,7 @@
   "license": "MIT",
   "files": [
     "bin",
-    "lib",
-    "npm-shrinkwrap.json"
+    "lib"
   ],
   "dependencies": {
     "@akashic/akashic-cli-commons": "1.0.3-test-dontuse.2",

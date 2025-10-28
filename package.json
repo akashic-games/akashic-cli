@@ -13,8 +13,8 @@
     "lint:md": "remark . --frail --no-stdout --quiet --rc-path ./.remarkrc",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release-packages": "npm run generateShrinkwrap && changeset publish",
-    "generateShrinkwrap": "node scripts/generateShrinkwrapJson.js"
+    "release-packages": "changeset publish",
+    "prepack": "nx run-many -t generateShrinkwrap"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",

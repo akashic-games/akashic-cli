@@ -19,7 +19,8 @@
     "lint:client": "eslint -c \"src/client/eslint.config.cjs\" \"src/client/**/*.ts\" --fix",
     "lint:server": "eslint -c \"src/server/eslint.config.cjs\" \"src/server/**/*.ts\" --fix",
     "test": "npm run test:vitest && npm run lint",
-    "test:vitest": "vitest run"
+    "test:vitest": "vitest run",
+    "generateShrinkwrap": "node ../../scripts/generateShrinkwrapJson.js"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
@@ -31,7 +32,8 @@
     "js",
     "css",
     "views",
-    "thirdparty"
+    "thirdparty",
+    "npm-shrinkwrap.json"
   ],
   "publishConfig": {
     "access": "public",
