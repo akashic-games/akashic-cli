@@ -39,6 +39,7 @@
     "@akashic/akashic-cli-commons": "1.0.3-test-dontuse.2",
     "commander": "12.1.0",
     "minipass": "7.1.2",
+    "minizlib": "3.0.1",
     "tar": "7.4.3"
   },
   "publishConfig": {
