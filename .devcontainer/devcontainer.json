@@ -1,0 +1,29 @@
+{
+    "name": "akashic-cli sandbox",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "args": {
+            "TZ": "${localEnv:TZ:Asia/Tokyo}"
+        }
+    },
+    "runArgs": [
+        "--memory=8g"
+    ],
+    "customizations": {
+        "vscode": {
+            "extensions": [
+            ]
+        }
+    },
+    "remoteUser": "node",
+    "forwardPorts": [],
+    "mounts": [
+        "source=${localEnv:HOME}${localEnv:USERPROFILE}/.npmrc,target=/home/node/.npmrc,type=bind,readonly"
+    ],
+    "remoteEnv": {
+        "NODE_OPTIONS": "--max-old-space-size=4096"
+    },
+    "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=delegated",
+    "workspaceFolder": "/workspace",
+    "postCreateCommand": "sudo chown -R node:node /workspace || true"
+}
