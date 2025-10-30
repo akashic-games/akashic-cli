@@ -63,7 +63,6 @@ function formatDate(date) {
  */
 async function generateShrinkwrapJson() {
   let orgRootPackageJson = null;
-  const cwd = process.cwd();
   let pkgName = "";
   let isError = false;
 
@@ -103,7 +102,7 @@ async function generateShrinkwrapJson() {
     execSync(npmShrinkwrapCmd);
 
   } catch (err) {
-    console.error("Failed:", err);
+    console.error("Error:", err);
     isError = true;
   } finally {
     if (orgRootPackageJson) {
