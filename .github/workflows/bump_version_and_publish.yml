@@ -8,10 +8,12 @@ on:
       - closed
 
 env:
+  NODE_VERSION: 24
   PUBLISH_VERSION: patch
 
 permissions:
   contents: write
+  id-token: write
 
 jobs:
   publish:
@@ -27,12 +29,11 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
         with:
-          node-version: 24
+          node-version: ${{ env.NODE_VERSION }}
           cache: npm
       - name: Prepare
         run: |
           npm ci
-          npm run build
           npm test
       - name: Publish and Release
         run: |
@@ -41,5 +42,4 @@ jobs:
           echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> .npmrc
           npm run publish:${PUBLISH_VERSION}
         env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_AUTH: ${{ secrets.GITHUB_TOKEN }}
