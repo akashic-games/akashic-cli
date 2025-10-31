@@ -6,7 +6,7 @@ import type { LocalInstanceEntity } from "../../../store/LocalInstanceEntity";
 import type { ProfilerCanvasProps } from "../../../view/molecule/ProfilerCanvas";
 import { GameScreen } from "../../../view/organism/GameScreen";
 import type { Operator } from "../../operator/Operator";
-import type { Store } from "../../Store";
+import type { Store } from "../../store/Store";
 
 export interface GameScreenContainerProps {
 	sandboxConfig: NormalizedSandboxConfiguration;

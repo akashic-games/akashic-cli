@@ -1,21 +1,22 @@
 import type { ServiceType } from "@akashic/akashic-cli-commons/lib/ServiceType";
 import { observable, action, autorun } from "mobx";
-import type { AppOptions } from "../../common/types/AppOptions";
-import type { Player } from "../../common/types/Player";
-import type { GameViewManager } from "../akashic/GameViewManager";
-import type { RuntimeWarning } from "../akashic/RuntimeWarning";
-import { apiClient } from "../api/apiClientInstance";
-import { ClientContentLocator } from "../common/ClientContentLocator";
-import type { ScreenSize } from "../common/types/ScreenSize";
-import { ContentStore } from "../store/ContentStore";
-import { DevtoolUiStore } from "../store/DevtoolUiStore";
-import type { LocalInstanceEntity } from "../store/LocalInstanceEntity";
-import { NotificationUiStore } from "../store/NotificationUiStore";
-import type { PlayEntity } from "../store/PlayEntity";
-import { ProfilerStore } from "../store/ProfilerStore";
-import { StartupScreenUiStore } from "../store/StartupScreenUiStore";
-import { storage } from "../store/storage";
-import { ToolBarUiStore } from "../store/ToolBarUiStore";
+import type { AppOptions } from "../../../common/types/AppOptions";
+import type { Player } from "../../../common/types/Player";
+import type { GameViewManager } from "../../akashic/GameViewManager";
+import type { RuntimeWarning } from "../../akashic/RuntimeWarning";
+import { apiClient } from "../../api/apiClientInstance";
+import { ClientContentLocator } from "../../common/ClientContentLocator";
+import type { ScreenSize } from "../../common/types/ScreenSize";
+import { ContentStore } from "../../store/ContentStore";
+import { DevtoolUiStore } from "../../store/DevtoolUiStore";
+import type { LocalInstanceEntity } from "../../store/LocalInstanceEntity";
+import { NotificationUiStore } from "../../store/NotificationUiStore";
+import type { PlayEntity } from "../../store/PlayEntity";
+import { ProfilerStore } from "../../store/ProfilerStore";
+import { StartupScreenUiStore } from "../../store/StartupScreenUiStore";
+import { storage } from "../../store/storage";
+import { ToolBarUiStore } from "../../store/ToolBarUiStore";
+import { PlayStore } from "./PlayStore";
 
 export interface StoreParameterObject {
 	contentId: string;
@@ -23,6 +24,7 @@ export interface StoreParameterObject {
 }
 
 export class Store {
+	@observable playStore: PlayStore;
 	@observable contentStore: ContentStore;
 	@observable toolBarUiStore: ToolBarUiStore;
 	@observable devtoolUiStore: DevtoolUiStore;
@@ -43,6 +45,7 @@ export class Store {
 	constructor(param: StoreParameterObject) {
 		this.contentLocator = new ClientContentLocator({ contentId: param.contentId });
 		this.contentStore = new ContentStore();
+		this.playStore = new PlayStore({ gameViewManager: param.gameViewManager });
 		this.toolBarUiStore = new ToolBarUiStore();
 		this.devtoolUiStore = new DevtoolUiStore();
 		this.notificationUiStore = new NotificationUiStore();
