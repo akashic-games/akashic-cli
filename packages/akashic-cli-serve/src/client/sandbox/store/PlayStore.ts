@@ -31,7 +31,7 @@ export class PlayStore {
 		const { playId, content, amflow, playlog, durationState } = param;
 
 		if (this.plays[playId])
-			return this.plays[playId];
+			throw new Error(`Play already exists: ${playId}`);
 
 		const playEntity = new PlayEntity({
 			gameViewManager: this._gameViewManager,
