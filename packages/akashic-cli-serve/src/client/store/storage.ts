@@ -31,6 +31,7 @@ export interface StorageData {
 	showsDesignGuideline: boolean;
 	niconicoToolActivePage: NiconicoDevtoolPageType;
 	niconicoToolSelectorWidth: number;
+	audioVolume: number;
 }
 
 function choose<T>(a: T | null | undefined, b: T | null | undefined, c: T): T {
@@ -82,7 +83,8 @@ export class Storage {
 			usePreferredTotalTimeLimit: choose(query.usePreferredTotalTimeLimit, s.usePreferredTotalTimeLimit, false),
 			stopsGameOnTimeout: choose(query.stopsGameOnTimeout, s.stopsGameOnTimeout, false),
 			totalTimeLimitInputValue: choose(query.totalTimeLimitInputValue, s.totalTimeLimitInputValue, 85),
-			premium: choose(query.premium, s.premium, false)
+			premium: choose(query.premium, s.premium, false),
+			audioVolume: choose(query.audioVolume, s.audioVolume, 100)
 		});
 
 		const playerId: string = choose(query.playerId, s.playerId, undefined);

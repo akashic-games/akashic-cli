@@ -89,10 +89,12 @@ export const ToolBarContainer = observer(class ToolBarContainer extends React.Co
 		return {
 			showsAudioOptionPopover: toolBarUiStore.showsAudioOptionPopover,
 			audioStateSummary: localInstance.playAudioStateSummary,
+			audioVolume: toolBarUiStore.audioVolume,
 			onClickAudioOptionPopover: operator.ui.setShowAudioOptionPopover,
 			onClickMuteAll: operator.play.muteAll,
 			onClickSolo: operator.play.muteOthers,
 			onClickMuteNone: operator.play.unmuteAll,
+			onChangeAudioVolume: operator.ui.setAudioVolume
 		};
 	};
 

@@ -117,6 +117,7 @@ export class Operator {
 		store.setCurrentLocalInstance(instance);
 
 		await instance.start();
+		instance.setMasterVolume(store.toolBarUiStore.audioVolume);
 		this.devtool.setupNiconicoDevtoolValueWatcher();
 
 		instance.setProfilerValueTrigger(value => {
@@ -237,6 +238,7 @@ export class Operator {
 			resizeGameView: false
 		});
 		await localSessionInstance.start();
+		localSessionInstance.setMasterVolume(this.store.toolBarUiStore.audioVolume);
 
 		return localSessionInstance;
 	};
