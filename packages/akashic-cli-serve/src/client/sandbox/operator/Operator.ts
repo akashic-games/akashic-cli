@@ -1,13 +1,18 @@
+import { ContentLocator } from "../../../common/ContentLocator";
 import { calculatePlayDuration } from "../../../common/playlogUtil";
 import { isServiceTypeNicoliveLike } from "../../../common/targetServiceUtil";
 import type { DumpedPlaylog } from "../../../common/types/DumpedPlaylog";
+import type { Player } from "../../../common/types/Player";
 import type { GameViewManager } from "../../akashic/GameViewManager";
+import type { CreateCoeLocalInstanceParameterObject } from "../../akashic/plugin/CoePlugin";
+import { CoePlugin } from "../../akashic/plugin/CoePlugin";
 import { ServeMemoryAmflowClient } from "../../akashic/ServeMemoryAMFlowClient";
 import type { ClientContentLocator } from "../../common/ClientContentLocator";
 import type { ScreenSize } from "../../common/types/ScreenSize";
+import { ContentEntity } from "../../store/ContentEntity";
 import type { ExecutionMode } from "../../store/ExecutionMode";
-import { PlayEntity } from "../../store/PlayEntity";
-import type { Store } from "../Store";
+import type { LocalInstanceEntity } from "../../store/LocalInstanceEntity";
+import type { Store } from "../store/Store";
 import { DevtoolOperator } from "./DevtoolOperator";
 import { LocalInstanceOperator } from "./LocalInstanceOperator";
 import { PlayOperator } from "./PlayOperator";
@@ -64,9 +69,10 @@ export class Operator {
 
 	startContent = async (params?: StartContentParameterObject): Promise<void> => {
 		const store = this.store;
-		const player = store.player ?? { id: "sandbox-player", name: "sandbox-player" };
+		const player = this._getPlayer();
 		const executionMode: ExecutionMode = params?.playlog ? "replay" : "active";
 		const playlog = params?.playlog;
+		const playId = "0";
 
 		if (store.currentPlay) {
 			await store.currentPlay.deleteAllLocalInstances();
@@ -74,34 +80,29 @@ export class Operator {
 		}
 
 		const amflow = new ServeMemoryAmflowClient({
-			playId: "0",
+			playId,
 			tickList: playlog?.tickList ?? undefined,
 			startPoints: playlog?.startPoints ?? undefined
 		});
-
 		const playDuration = playlog ? calculatePlayDuration(playlog) : 0;
 
-		// TODO: 本来は PlayStore で生成すべきだが、現状の PlayStore は SocketIO が必須になるため PlayEntity を直接生成している
-		const playEntity = new PlayEntity({
-			gameViewManager: this.gameViewManager,
-			playId: "0",
-			status: "running",
-			content: this.store.contentStore.defaultContent(),
+		const playEntity = await this.store.playStore.createStandalonePlay({
+			playId,
+			playlog: params?.playlog,
 			amflow,
-			disableFastForward: !!playlog,
+			content: this.store.contentStore.defaultContent(),
 			durationState: {
 				duration: playDuration,
 				isPaused: executionMode === "replay",
 			},
 		});
-		amflow.onPutStartPoint.add(startPoint => playEntity.handleStartPointHeader(startPoint));
 
 		store.setCurrentPlay(playEntity);
 
 		let argument = undefined;
 		if (isServiceTypeNicoliveLike(store.targetService)) {
 			const isBroadcaster = playEntity.joinedPlayerTable.size === 0;
-			argument = this._createInstanceArgumentForNicolive(isBroadcaster);
+			argument = _createInstanceArgumentForNicolive(isBroadcaster);
 		}
 
 		const instance = await playEntity.createLocalInstance({
@@ -170,22 +171,13 @@ export class Operator {
 		input.click();
 	};
 
-	private _createInstanceArgumentForNicolive(isBroadcaster: boolean): any {
-		return {
-			coe: {
-				permission: {
-					advance: false,
-					advanceRequest: isBroadcaster,
-					aggregation: false
-				},
-				roles: isBroadcaster ? ["broadcaster"] : [],
-				debugMode: true
-			}
-		};
-	};
-
 	// TODO: 複数のコンテンツ対応。引数の contentLocator は複数コンテンツに対応していないが暫定とする
 	private async _initializePlugins(contentLocator: ClientContentLocator): Promise<void> {
+		this.gameViewManager.registerExternalPlugin(new CoePlugin({
+			onLocalInstanceCreate: this._createLocalSessionInstance,
+			onLocalInstanceDelete: this._deleteLocalSessionInstance,
+		}));
+
 		if (typeof agvplugin !== "undefined") {
 			this.gameViewManager.registerExternalPlugin(new agvplugin.InstanceStoragePlugin({
 				storage: window.sessionStorage,
@@ -217,6 +209,46 @@ export class Operator {
 		}
 	}
 
+	private _createLocalSessionInstance = async (params: CreateCoeLocalInstanceParameterObject): Promise<LocalInstanceEntity> => {
+		if (!params.local) {
+			throw new Error("non-local mode not supported");
+		}
+
+		const playId = params.playId;
+		const player = this._getPlayer();
+		const contentLocator = new ContentLocator({ path: params.contentUrl });
+		const content = new ContentEntity({ contentLocatorData: contentLocator });
+		const amflow = new ServeMemoryAmflowClient({ playId });
+
+		const localSessionPlay = await this.store.playStore.createStandalonePlay({
+			playId,
+			amflow,
+			content,
+		});
+		const localSessionInstance = await localSessionPlay.createLocalInstance({
+			player,
+			playId,
+			executionMode: "active",
+			argument: params.argument,
+			initialEvents: params.initialEvents,
+			proxyAudio: this.store.appOptions.proxyAudio,
+			runInIframe: this.store.appOptions.runInIframe,
+			useNonDebuggableScript: true,
+			resizeGameView: false
+		});
+		await localSessionInstance.start();
+
+		return localSessionInstance;
+	};
+
+	private _deleteLocalSessionInstance = async (playId: string): Promise<void> => {
+		await this.store.playStore.deletePlay(playId);
+	};
+
+	private _getPlayer = (): Player => {
+		return this.store.player ?? { id: "sandbox-player", name: "sandbox-player" };
+	};
+
 	private _loadScript(scriptPath: string): Promise<void> {
 		return new Promise((resolve, reject) => {
 			const script = document.createElement("script");
@@ -231,3 +263,17 @@ export class Operator {
 		});
 	}
 }
+
+function _createInstanceArgumentForNicolive(isBroadcaster: boolean): any {
+	return {
+		coe: {
+			permission: {
+				advance: false,
+				advanceRequest: isBroadcaster,
+				aggregation: false
+			},
+			roles: isBroadcaster ? ["broadcaster"] : [],
+			debugMode: true
+		}
+	};
+};

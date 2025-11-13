@@ -1,7 +1,7 @@
 import type { OnTickArguments } from "../../akashic/ServeGameContent";
 import type { EDumpItem } from "../../common/types/EDumpItem";
 import type { NiconicoDevtoolPageType } from "../../view/molecule/NiconicoDevtool";
-import type { Store } from "../Store";
+import type { Store } from "../store/Store";
 
 function consoleLog(value: any): void {
 	console.log(value);

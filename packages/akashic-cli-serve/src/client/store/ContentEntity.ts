@@ -19,7 +19,7 @@ export class ContentEntity {
 		this.locator = ClientContentLocator.instantiate(desc.contentLocatorData);
 		this.sandboxConfig = desc.sandboxConfig ?? null!;
 		this.argumentsTable = {};
-		const args = this.sandboxConfig.arguments || {};
+		const args = this.sandboxConfig?.arguments ?? {};
 		this.gameJson = desc.gameJson;
 		this.gameLocationKey = desc.gameLocationKey;
 		this.preferredSessionParameters = {};

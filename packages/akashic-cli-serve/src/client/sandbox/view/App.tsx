@@ -4,7 +4,7 @@ import type { GameViewManager } from "../../akashic/GameViewManager";
 import { FlexScrollY } from "../../view/atom/FlexScrollY";
 import { GameViewFitter } from "../../view/atom/GameViewFitter";
 import type { Operator } from "../operator/Operator";
-import type { Store } from "../Store";
+import type { Store } from "../store/Store";
 import styles from "./App.module.css";
 import { DevtoolContainer } from "./container/DevtoolContainer";
 import { GameScreenContainer } from "./container/GameScreenContainer";
