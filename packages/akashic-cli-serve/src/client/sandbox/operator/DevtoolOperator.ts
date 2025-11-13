@@ -96,10 +96,9 @@ export class DevtoolOperator {
 		consoleLog(e);
 	};
 
-	// 現在は利用していないが、将来音量調節機能をつける時に使う
 	volumeChangeTo = (vol: number): void => {
-		this.store.devtoolUiStore.volumeSeekTo(vol);
-		this.store.currentLocalInstance!.setMasterVolume(vol / 100); // convert percentage to decimal
+		this.store.toolBarUiStore.setAudioVolume(vol);
+		this.store.currentLocalInstance!.setMasterVolume(vol);
 	};
 
 	toggleAutoSendEvents = (isSend: boolean): void => {

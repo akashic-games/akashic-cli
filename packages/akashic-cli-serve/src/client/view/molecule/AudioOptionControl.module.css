@@ -4,6 +4,12 @@
 	right: 0;
 }
 
+.popover-inner {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
 .mutebar {
 	display: flex;
 	flex-flow: row nowrap;
@@ -34,4 +40,15 @@
 .mutebutton-right {
 	border-radius: 0 4px 4px 0;
 	margin-left: 0;
+}
+
+.volume-bar {
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+.volume-bar-label {
+	margin-right: 2px;
 }

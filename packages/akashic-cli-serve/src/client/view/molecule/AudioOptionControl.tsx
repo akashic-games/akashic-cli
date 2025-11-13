@@ -5,15 +5,19 @@ import { Popover } from "../atom/Popover";
 import type { ToolChoiceButtonItem } from "../atom/ToolChoiceButton";
 import { ToolChoiceButton } from "../atom/ToolChoiceButton";
 import { ToolIconButton } from "../atom/ToolIconButton";
+import { ToolProgressBar } from "../atom/ToolProgressBar";
 import styles from "./AudioOptionControl.module.css";
 
 export interface AudioOptionControlPropsData {
 	showsAudioOptionPopover: boolean;
 	audioStateSummary?: PlayAudioStateSummary;
+	audioVolume: number;
 	onClickAudioOptionPopover: (show: boolean) => void;
-	onClickMuteAll: () => void;
-	onClickSolo: () => void;
-	onClickMuteNone: () => void;
+	onChangeAudioVolume: (volume: number) => void;
+	// 以下は全て non-null の場合のみ UI を有効にする
+	onClickMuteAll?: () => void;
+	onClickSolo?: () => void;
+	onClickMuteNone?: () => void;
 }
 
 export interface AudioOptionControlProps {
@@ -39,10 +43,12 @@ export const AudioOptionControl = observer(function AudioOptionControl(props: Au
 	const {
 		showsAudioOptionPopover,
 		audioStateSummary,
+		audioVolume,
 		onClickAudioOptionPopover,
 		onClickMuteAll,
 		onClickSolo,
-		onClickMuteNone
+		onClickMuteNone,
+		onChangeAudioVolume
 	} = props.makeProps();
 	const ref = React.useRef() as React.MutableRefObject<HTMLInputElement>;
 
@@ -56,9 +62,11 @@ export const AudioOptionControl = observer(function AudioOptionControl(props: Au
 		(audioStateSummary === "all-player-muted") ? 0 :
 		(audioStateSummary === "only-this-player-unmuted") ? 1 :
 		(audioStateSummary === "all-player-unmuted") ? 2 : null;
+
 	const isMuted = (
 		audioStateSummary === "all-player-muted" ||
-		audioStateSummary === "only-other-player-unmuted"
+		audioStateSummary === "only-other-player-unmuted" ||
+		audioVolume === 0
 	);
 
 	return <div ref={ref} style={{ position: "relative" }}>
@@ -75,12 +83,21 @@ export const AudioOptionControl = observer(function AudioOptionControl(props: Au
 			onChangeShows={onClickAudioOptionPopover}
 			outsideRef={ref}
 		>
-			<div className={styles.mutebar}>
-				<span className={styles["mutebar-label"]}>Mute:</span>
-				<ToolChoiceButton
-					items={muteButtonItems}
-					pushedIndex={muteChoicePushedIndex}
-					onClick={handleClickMuteChoice} />
+			<div className={styles["popover-inner"]}>
+				{
+					(onClickMuteAll && onClickMuteNone && onClickSolo) ?
+						<div className={styles.mutebar}>
+							<span className={styles["mutebar-label"]}>Mute:</span>
+							<ToolChoiceButton
+								items={muteButtonItems}
+								pushedIndex={muteChoicePushedIndex}
+								onClick={handleClickMuteChoice} />
+						</div> : null
+				}
+				<div className={styles["volume-bar"]}>
+					<span className={styles["volume-bar-label"]}>Vol:</span>
+					<ToolProgressBar value={audioVolume} max={100} width={100} onChange={onChangeAudioVolume} />
+				</div>
 			</div>
 		</Popover>
 	</div>;

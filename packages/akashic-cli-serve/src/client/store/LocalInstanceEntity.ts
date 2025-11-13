@@ -63,6 +63,8 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 	private _gameViewManager: GameViewManager;
 	private _serveGameContent: ServeGameContent;
 	private _resizeGameView: boolean;
+	private _audioVolume: number;
+	private _audioMuted: boolean;
 	private _initializationWaiter: Promise<void>;
 
 	constructor(params: LocalInstanceEntityParameterObject) {
@@ -72,6 +74,8 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 		this.executionMode = params.executionMode;
 		this.targetTime = 0; // 値は _timeKeeper を元に更新される
 		this.resetTime = 0;
+		this._audioVolume = 100;
+		this._audioMuted = false;
 		this.play = params.play;
 		this.isPaused = false;
 		this.intrinsicSize = { width: 0, height: 0 };
@@ -233,7 +237,8 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 
 	@action
 	setMasterVolume(vol: number): void {
-		this._serveGameContent.agvGameContent.setMasterVolume(vol);
+		this._audioVolume = vol;
+		this._applyAudioVolume();
 	}
 
 	@action.bound
@@ -253,7 +258,8 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 			(audioState.muteType === "all") ||
 			(audioState.muteType === "solo" && this.player?.id !== audioState.soloPlayerId)
 		);
-		this._serveGameContent.agvGameContent.setMasterVolume(muted ? 0 : 1);
+		this._audioMuted = muted;
+		this._applyAudioVolume();
 	}
 
 	makeScreenshotData(): string {
@@ -267,6 +273,11 @@ export class LocalInstanceEntity implements GameInstanceEntity {
 		const contentJson = await ApiRequest.get<{ content_url: string }>(url);
 		const gameJson = await ApiRequest.get<{ width: number; height: number }>(contentJson.content_url);
 		this.intrinsicSize = { width: gameJson.width, height: gameJson.height };
+	}
+
+	private _applyAudioVolume(): void {
+		const vol = this._audioMuted ? 0 : Math.min(Math.max(this._audioVolume, 0), 100); // set a limit for safety
+		this._serveGameContent.agvGameContent.setMasterVolume(vol / 100); // convert percentage to decimal
 	}
 
 	@action

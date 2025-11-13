@@ -112,4 +112,9 @@ export class UiOperator {
 	setShowsProfiler = (show: boolean): void => {
 		this.store.toolBarUiStore.setShowsProfiler(show);
 	};
+
+	setAudioVolume = (vol: number): void => {
+		this.store.toolBarUiStore.setAudioVolume(vol);
+		this.store.currentLocalInstance?.setMasterVolume(vol);
+	};
 }

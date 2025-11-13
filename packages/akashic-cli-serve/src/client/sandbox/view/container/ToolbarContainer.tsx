@@ -4,6 +4,7 @@ import * as React from "react";
 import type { LocalInstanceEntity } from "../../../store/LocalInstanceEntity";
 import type { PlayEntity } from "../../../store/PlayEntity";
 import type { ToolBarUiStore } from "../../../store/ToolBarUiStore";
+import type { AudioOptionControlPropsData } from "../../../view/molecule/AudioOptionControl";
 import type { DisplayOptionControlPropsData } from "../../../view/molecule/DisplayOptionControl";
 import type { PlayerControlPropsData } from "../../../view/molecule/PlayerControl";
 import type { Operator } from "../../operator/Operator";
@@ -23,6 +24,7 @@ export const ToolBarContainer = observer(class ToolBarContainer extends React.Co
 		return <ToolBar
 			makePlayerControlProps={this._makePlayerControlProps}
 			makeDisplayOptionControlProps={this._makeDisplayOptionControlProps}
+			makeAudioOptionControlProps={this._makeAudioOptionControlProps}
 			showsDevtools={toolBarUiStore.showsDevtools}
 			targetService={targetService}
 			onClickDevTools={operator.ui.setShowDevtools}
@@ -58,6 +60,16 @@ export const ToolBarContainer = observer(class ToolBarContainer extends React.Co
 			onChangeShowProfiler: operator.ui.setShowsProfiler,
 			onChangeShowDesignGuideline: operator.ui.setShowDesignGuideline,
 			onClickScreenshot: operator.localInstance.saveScreenshot
+		};
+	};
+
+	private _makeAudioOptionControlProps = (): AudioOptionControlPropsData => {
+		const { operator, toolBarUiStore } = this.props;
+		return {
+			showsAudioOptionPopover: toolBarUiStore.showsAudioOptionPopover,
+			audioVolume: toolBarUiStore.audioVolume,
+			onClickAudioOptionPopover: operator.ui.setShowAudioOptionPopover,
+			onChangeAudioVolume: operator.devtool.volumeChangeTo,
 		};
 	};
 });
