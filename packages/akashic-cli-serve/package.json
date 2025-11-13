@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-serve",
-  "version": "2.0.13-test-dontuse.2",
+  "version": "2.0.13-test-dontuse.3",
   "description": "A development server for Akashic Engine",
   "type": "module",
   "scripts": {
