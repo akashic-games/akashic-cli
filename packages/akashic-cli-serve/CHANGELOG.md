@@ -1,5 +1,13 @@
 # Change Log
 
+## 2.0.13-test-dontuse.3
+
+### Patch Changes
+
+- [#1615](https://github.com/akashic-games/akashic-cli/pull/1615) [`f73d6d9`](https://github.com/akashic-games/akashic-cli/commit/f73d6d953868f9f22cf65266a910a5ae6dfc6739) Thanks [@yu-ogi](https://github.com/yu-ogi)! - add support for coe-plugin in sandbox mode
+
+- [#1618](https://github.com/akashic-games/akashic-cli/pull/1618) [`19fa310`](https://github.com/akashic-games/akashic-cli/commit/19fa3109befad9645c6d968006b448c992169d24) Thanks [@yu-ogi](https://github.com/yu-ogi)! - add audio volume slider
+
 ## 2.0.13-test-dontuse.2
 
 ### Patch Changes

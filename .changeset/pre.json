@@ -13,7 +13,9 @@
     "@akashic/akashic-cli-serve": "2.0.12"
   },
   "changesets": [
+    "dry-adults-pump",
     "famous-items-chew",
+    "light-bears-suffer",
     "nasty-files-burn",
     "strong-houses-share"
   ]
