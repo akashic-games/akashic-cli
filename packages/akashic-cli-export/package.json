@@ -20,7 +20,8 @@
     "build:template:ejs": "shx cp src/template/bundle-index.ejs lib/template/ && shx cp src/template/no-bundle-index.ejs lib/template/",
     "lint": "eslint \"src/**/*.ts\" --fix",
     "test": "npm run test:vitest && npm run lint",
-    "test:vitest": "vitest run"
+    "test:vitest": "vitest run",
+    "generateShrinkwrap": "node ../../scripts/generateShrinkwrapJson.js"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
@@ -36,7 +37,8 @@
     "akashic-cli-zip": "./bin/akashic-cli-export-zip.js"
   },
   "files": [
-    "lib"
+    "lib",
+    "npm-shrinkwrap.json"
   ],
   "devDependencies": {
     "@akashic/akashic-engine": "~2.6.7",

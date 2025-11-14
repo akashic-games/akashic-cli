@@ -10,7 +10,8 @@
     "build": "tsc -p ./",
     "lint": "eslint \"./src/**/*.ts\" --fix",
     "test": "npm run test:vitest && npm run lint",
-    "test:vitest": "vitest run"
+    "test:vitest": "vitest run",
+    "generateShrinkwrap": "node ../../scripts/generateShrinkwrapJson.js"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
@@ -23,7 +24,8 @@
     "akashic-cli-init": "./bin/run.js"
   },
   "files": [
-    "lib"
+    "lib",
+    "npm-shrinkwrap.json"
   ],
   "devDependencies": {
     "@akashic/eslint-config": "3.0.2",

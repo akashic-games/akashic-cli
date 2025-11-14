@@ -30,7 +30,8 @@
     "build": "tsc -p ./",
     "test": "npm run test:vitest && npm run test:lint",
     "test:vitest": "vitest run",
-    "test:lint": "eslint \"./src/**/*.ts\" --fix"
+    "test:lint": "eslint \"./src/**/*.ts\" --fix",
+    "generateShrinkwrap": "node ../../scripts/generateShrinkwrapJson.js"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
@@ -40,7 +41,8 @@
     "directory": "packages/akashic-cli-extra"
   },
   "files": [
-    "lib"
+    "lib",
+    "npm-shrinkwrap.json"
   ],
   "dependencies": {
     "@akashic/akashic-cli-commons": "1.0.3-test-dontuse.2",
