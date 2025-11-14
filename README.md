@@ -81,7 +81,7 @@ publish 時、各パッケージの依存関係のバージョンを固定する
 akashic-cli がモノレポであることや、akashic-cli の publish が行われた場合に、akashic-cli-xxxxx が `npm i --before <date>` でエラーとなる事を考慮し、スクリプトは下記の手順で `npm-shrinkwrap.json` を作成します。
 
 1. ルートの `package.json` から workspaces プロパティを削除
-2. 各パッケージの `package.json` の dependencies から `@akashic/xxxxx` を削除し `npm i --before <date>` を実行
+2. 各パッケージの `package.json` の dependencies から `@akashic/xxxxx` を削除し `npm i --before <実行日の七日前>` を実行
 3. 2 で削除した `@akashic/xxxxx` を npm インストール
 4. `npm shrinkwarp` を実行
 
