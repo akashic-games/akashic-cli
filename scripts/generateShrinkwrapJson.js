@@ -1,3 +1,10 @@
+// 各パッケージの依存関係のバージョンを固定するために `npm-shrinkwrap.json` を追加するスクリプト。(packages/*/ でのみ実行する想定)
+// モノレポであることや、直前に akashic-cli の publish が行われた場合、akashic-cli-xxxxx が `npm i --before <date>` でエラーとなるため、下記の手順で `npm-shrinkwrap.json` を作成する。
+// 1. ルートの `package.json` から workspaces プロパティを削除
+// 2. 各パッケージの `package.json` の dependencies から `@akashic/xxxxx` を削除し `npm i --before <実行日の七日前>` を実行
+// 3. 2 で削除した `@akashic/xxxxx` を npm インストール
+// 4. `npm shrinkwarp` を実行
+
 import * as fs from "fs";
 import * as path from "path";
 import { execSync } from "child_process";
@@ -10,8 +17,8 @@ const packageJsonPath = path.resolve(process.cwd(), "package.json");
  * ルートの package.json の workspaces プロパティを削除し保存し、元の package.json の内容を返す。
  */
 function removeWorkspacesField() {
-  const orgContent = JSON.parse(fs.readFileSync(rootPackageJsonPath, "utf8"));
-  const newContent = { ...orgContent };
+  const orgContent = fs.readFileSync(rootPackageJsonPath, "utf-8");
+  const newContent = { ...JSON.parse(orgContent) };
   
   if (newContent.workspaces) {
     delete newContent.workspaces;
@@ -27,21 +34,20 @@ function removeWorkspacesField() {
  * 各パッケージの package.json の dependencies から akashic 系を削除する
  */
 function removeAkashicDependencies(pkgJsonPath) {
-  const orgContent = JSON.parse(fs.readFileSync(pkgJsonPath, "utf8"));
-  const newContent = { ...orgContent };
+  const pkgJson = JSON.parse(fs.readFileSync(pkgJsonPath, "utf8"));
   const akshicDependencies = [];
 
-  if (newContent.dependencies) {
-    for (const module of Object.keys(newContent.dependencies)) {
+  if (pkgJson.dependencies) {
+    for (const module of Object.keys(pkgJson.dependencies)) {
       if (/^@akashic\//.test(module)) {
-        akshicDependencies.push({name: module, ver: newContent.dependencies[module]});
-        delete newContent.dependencies[module];
+        akshicDependencies.push({name: module, ver: pkgJson.dependencies[module]});
+        delete pkgJson.dependencies[module];
       }
     }
   } else {
     return null;
   }
-  fs.writeFileSync(pkgJsonPath, JSON.stringify(newContent, null, 2) + "\n");
+  fs.writeFileSync(pkgJsonPath, JSON.stringify(pkgJson, null, 2) + "\n");
   return akshicDependencies;
 }
 
@@ -106,7 +112,7 @@ async function generateShrinkwrapJson() {
     isError = true;
   } finally {
     if (orgRootPackageJson) {
-      fs.writeFileSync(rootPackageJsonPath, JSON.stringify(orgRootPackageJson, null, 2) + "\n");
+      fs.writeFileSync(rootPackageJsonPath, orgRootPackageJson);
     }
     console.log(`--- ${pkgName} generateShrinkwrapJson end ---`);
     if (isError) process.exit(1);
