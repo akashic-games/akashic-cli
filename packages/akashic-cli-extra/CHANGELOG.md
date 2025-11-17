@@ -1,5 +1,12 @@
 # @akashic/akashic-cli-extra
 
+## 2.0.3-test-dontuse.5
+
+### Patch Changes
+
+- Updated dependencies [[`cc2dd03`](https://github.com/akashic-games/akashic-cli/commit/cc2dd03a1863099e4dfea80312e9ef7a3d7a0ba9)]:
+  - @akashic/akashic-cli-commons@1.0.3-test-dontuse.5
+
 ## 2.0.3-test-dontuse.4
 
 ### Patch Changes
