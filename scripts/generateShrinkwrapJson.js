@@ -68,6 +68,7 @@ function formatDate(date) {
  * akashic-cli 以外の各 package 配下に shrinkwrap.json を生成する。
  */
 async function generateShrinkwrapJson() {
+  console.log(`--------------------- generateShrinkwrapJson ------------------`);
   let orgRootPackageJson = null;
   let pkgName = "";
   let isError = false;
@@ -81,7 +82,7 @@ async function generateShrinkwrapJson() {
     const pkgJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
     pkgName = pkgJson.name;
     console.log(`--- ${pkgName} generateShrinkwrapJson start ---`);
-  
+/*  
     const dt = new Date();
     dt.setDate(dt.getDate() - BEFORE_DAYS);
     const formattedDate = formatDate(dt);
@@ -106,7 +107,7 @@ async function generateShrinkwrapJson() {
     const npmShrinkwrapCmd = "npm shrinkwrap";
     console.log(`- exec: "${npmShrinkwrapCmd}"`);
     execSync(npmShrinkwrapCmd);
-
+*/
   } catch (err) {
     console.error("Error:", err);
     isError = true;
