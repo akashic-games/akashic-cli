@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli",
-  "version": "3.0.17-test-dontuse.3",
+  "version": "3.0.17-test-dontuse.4",
   "description": "Command-line utility for akashic game development",
   "type": "module",
   "bin": {
