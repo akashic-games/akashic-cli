@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-sandbox",
-  "version": "2.0.6-test-dontuse.5",
+  "version": "2.0.6-test-dontuse.6",
   "description": "Standalone runner for Akashic contents",
   "type": "module",
   "main": "index.js",
@@ -45,7 +45,7 @@
     "@akashic:registry": "https://registry.npmjs.org/"
   },
   "dependencies": {
-    "@akashic/akashic-cli-commons": "1.0.3-test-dontuse.5",
+    "@akashic/akashic-cli-commons": "1.0.3-test-dontuse.6",
     "@akashic/game-configuration": "^2.0.0",
     "@akashic/headless-driver": "2.17.5",
     "commander": "^11.0.0",
