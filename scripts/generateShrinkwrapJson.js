@@ -82,7 +82,7 @@ async function generateShrinkwrapJson() {
     const pkgJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
     pkgName = pkgJson.name;
     console.log(`--- ${pkgName} generateShrinkwrapJson start ---`);
-/*  
+
     const dt = new Date();
     dt.setDate(dt.getDate() - BEFORE_DAYS);
     const formattedDate = formatDate(dt);
@@ -92,7 +92,7 @@ async function generateShrinkwrapJson() {
     const npmInstallCmd = `npm i --before ${formattedDate}`;
     console.log(`- exec: "${npmInstallCmd}"`);
     execSync(npmInstallCmd);
-
+/*
     if (akashicModules) { 
       const installList = [];
       for (const module of akashicModules) {
