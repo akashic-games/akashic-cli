@@ -135,8 +135,8 @@ export class Store {
 					});
 				}
 				break;
-			case "useMathBasicTrig":
-				if (!sandboxConfigWarn || sandboxConfigWarn.useMathBasicTrig !== false) {
+			case "useMathSinCosTan":
+				if (!sandboxConfigWarn || sandboxConfigWarn.useMathSinCosTan !== false) {
 					console.warn(`${warning.message}`);
 					this.notificationUiStore.setActive({
 						type: "error",

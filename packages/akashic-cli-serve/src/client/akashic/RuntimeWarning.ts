@@ -1,6 +1,6 @@
 export type RuntimeWarningType =
 	"useMathRandom" |
-	"useMathBasicTrig" |
+	"useMathSinCosTan" |
 	"drawOutOfCanvas" |
 	"drawDestinationEmpty" |
 	"createNonIntegerSurface";
