@@ -1,5 +1,95 @@
 # Change Log
 
+## 2.0.13-test-dontuse.12
+
+### Patch Changes
+
+- Updated dependencies [[`5dde385`](https://github.com/akashic-games/akashic-cli/commit/5dde38584d1d4e13b9b46100379d928903853d02)]:
+  - @akashic/akashic-cli-commons@1.0.3-test-dontuse.11
+  - @akashic/akashic-cli-scan@1.0.5-test-dontuse.11
+
+## 2.0.13-test-dontuse.11
+
+### Patch Changes
+
+- [#1639](https://github.com/akashic-games/akashic-cli/pull/1639) [`d762466`](https://github.com/akashic-games/akashic-cli/commit/d7624660e8f82edb053942546b91f94d989eb2e5) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - bump version
+
+- Updated dependencies [[`d762466`](https://github.com/akashic-games/akashic-cli/commit/d7624660e8f82edb053942546b91f94d989eb2e5)]:
+  - @akashic/akashic-cli-commons@1.0.3-test-dontuse.10
+  - @akashic/akashic-cli-scan@1.0.5-test-dontuse.10
+
+## 2.0.13-test-dontuse.10
+
+### Patch Changes
+
+- [#1637](https://github.com/akashic-games/akashic-cli/pull/1637) [`5c3d2d4`](https://github.com/akashic-games/akashic-cli/commit/5c3d2d47142659864256027a5a2901d92e1ad00a) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - shrinkwrap.json investigation 4
+
+- Updated dependencies [[`5c3d2d4`](https://github.com/akashic-games/akashic-cli/commit/5c3d2d47142659864256027a5a2901d92e1ad00a)]:
+  - @akashic/akashic-cli-commons@1.0.3-test-dontuse.9
+  - @akashic/akashic-cli-scan@1.0.5-test-dontuse.9
+
+## 2.0.13-test-dontuse.9
+
+### Patch Changes
+
+- [#1635](https://github.com/akashic-games/akashic-cli/pull/1635) [`9724cbd`](https://github.com/akashic-games/akashic-cli/commit/9724cbd2ea87adb8045eacf74dd622563e5b01fb) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Bump version
+
+- Updated dependencies [[`9724cbd`](https://github.com/akashic-games/akashic-cli/commit/9724cbd2ea87adb8045eacf74dd622563e5b01fb)]:
+  - @akashic/akashic-cli-commons@1.0.3-test-dontuse.8
+  - @akashic/akashic-cli-scan@1.0.5-test-dontuse.8
+
+## 2.0.13-test-dontuse.8
+
+### Patch Changes
+
+- [#1631](https://github.com/akashic-games/akashic-cli/pull/1631) [`b1293ca`](https://github.com/akashic-games/akashic-cli/commit/b1293caebe9ce36883785c2a14c3c189fa1d815a) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Update extra package.json, shrinkwrap.json investigation-3
+
+- Updated dependencies [[`b1293ca`](https://github.com/akashic-games/akashic-cli/commit/b1293caebe9ce36883785c2a14c3c189fa1d815a)]:
+  - @akashic/akashic-cli-commons@1.0.3-test-dontuse.7
+  - @akashic/akashic-cli-scan@1.0.5-test-dontuse.7
+
+## 2.0.13-test-dontuse.7
+
+### Patch Changes
+
+- Updated dependencies [[`238f022`](https://github.com/akashic-games/akashic-cli/commit/238f0229a453d8023e1f62e73df31040a6beb16d)]:
+  - @akashic/akashic-cli-commons@1.0.3-test-dontuse.6
+  - @akashic/akashic-cli-scan@1.0.5-test-dontuse.6
+
+## 2.0.13-test-dontuse.6
+
+### Patch Changes
+
+- Updated dependencies [[`cc2dd03`](https://github.com/akashic-games/akashic-cli/commit/cc2dd03a1863099e4dfea80312e9ef7a3d7a0ba9)]:
+  - @akashic/akashic-cli-commons@1.0.3-test-dontuse.5
+  - @akashic/akashic-cli-scan@1.0.5-test-dontuse.5
+
+## 2.0.13-test-dontuse.5
+
+### Patch Changes
+
+- [#1625](https://github.com/akashic-games/akashic-cli/pull/1625) [`e4ad711`](https://github.com/akashic-games/akashic-cli/commit/e4ad711b8a2d6d6f36ea9351c952f4377d11bf14) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Mod package.json scripts generateShrinkwrap to prepublishOnly
+
+- Updated dependencies [[`e4ad711`](https://github.com/akashic-games/akashic-cli/commit/e4ad711b8a2d6d6f36ea9351c952f4377d11bf14)]:
+  - @akashic/akashic-cli-commons@1.0.3-test-dontuse.4
+  - @akashic/akashic-cli-scan@1.0.5-test-dontuse.4
+
+## 2.0.13-test-dontuse.4
+
+### Patch Changes
+
+- Updated dependencies [[`51bd35a`](https://github.com/akashic-games/akashic-cli/commit/51bd35a422d23d9dced601c819de962197fe2602)]:
+  - @akashic/akashic-cli-commons@1.0.3-test-dontuse.3
+  - @akashic/akashic-cli-scan@1.0.5-test-dontuse.3
+
+## 2.0.13-test-dontuse.3
+
+### Patch Changes
+
+- [#1615](https://github.com/akashic-games/akashic-cli/pull/1615) [`f73d6d9`](https://github.com/akashic-games/akashic-cli/commit/f73d6d953868f9f22cf65266a910a5ae6dfc6739) Thanks [@yu-ogi](https://github.com/yu-ogi)! - add support for coe-plugin in sandbox mode
+
+- [#1618](https://github.com/akashic-games/akashic-cli/pull/1618) [`19fa310`](https://github.com/akashic-games/akashic-cli/commit/19fa3109befad9645c6d968006b448c992169d24) Thanks [@yu-ogi](https://github.com/yu-ogi)! - add audio volume slider
+
 ## 2.0.13-test-dontuse.2
 
 ### Patch Changes

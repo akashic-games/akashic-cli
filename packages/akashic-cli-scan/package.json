@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-scan",
-  "version": "1.0.5-test-dontuse.2",
+  "version": "1.0.5-test-dontuse.11",
   "description": "Command line tool for updating assets and globalScripts.",
   "type": "module",
   "main": "lib/index.js",
@@ -10,16 +10,23 @@
     "build": "tsc -p ./",
     "lint": "eslint \"./src/**/*.ts\" --fix",
     "test": "npm run test:vitest && npm run lint",
-    "test:vitest": "vitest run"
+    "test:vitest": "vitest run",
+    "generateShrinkwrap": "node ../../scripts/generateShrinkwrapJson.js"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/akashic-games/akashic-cli.git",
+    "directory": "packages/akashic-cli-scan"
+  },
   "bin": {
     "akashic-cli-scan": "./bin/run.js"
   },
   "files": [
     "bin",
-    "lib"
+    "lib",
+    "npm-shrinkwrap.json"
   ],
   "devDependencies": {
     "@akashic/eslint-config": "3.0.2",
@@ -33,7 +40,7 @@
     "vitest": "^2.0.5"
   },
   "dependencies": {
-    "@akashic/akashic-cli-commons": "1.0.3-test-dontuse.2",
+    "@akashic/akashic-cli-commons": "1.0.3-test-dontuse.11",
     "aac-duration": "0.0.1",
     "chokidar": "^4.0.0",
     "commander": "^12.0.0",

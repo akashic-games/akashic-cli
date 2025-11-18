@@ -8,11 +8,12 @@ on:
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 env:
-  NODE_VERSION: 20
+  NODE_VERSION: 24
 
 permissions:
   contents: write
   pull-requests: write
+  id-token: write
 
 jobs:
   release:
@@ -40,5 +41,4 @@ jobs:
           publish: npm run release-packages
           version: npm run version-packages
         env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-export",
-  "version": "2.0.10-test-dontuse.2",
+  "version": "2.0.10-test-dontuse.11",
   "description": "A module to convert your Akashic game to a runnable standalone.",
   "type": "module",
   "scripts": {
@@ -20,10 +20,17 @@
     "build:template:ejs": "shx cp src/template/bundle-index.ejs lib/template/ && shx cp src/template/no-bundle-index.ejs lib/template/",
     "lint": "eslint \"src/**/*.ts\" --fix",
     "test": "npm run test:vitest && npm run lint",
-    "test:vitest": "vitest run"
+    "test:vitest": "vitest run",
+    "prepublishOnly": "node ../../scripts/generateShrinkwrapJson.js",
+    "generateShrinkwrap": "node ../../scripts/generateShrinkwrapJson.js"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/akashic-games/akashic-cli.git",
+    "directory": "packages/akashic-cli-export"
+  },
   "bin": {
     "akashic-cli-export": "./bin/run.js",
     "akashic-cli-export-html": "./bin/akashic-cli-export-html.js",
@@ -31,7 +38,8 @@
     "akashic-cli-zip": "./bin/akashic-cli-export-zip.js"
   },
   "files": [
-    "lib"
+    "lib",
+    "npm-shrinkwrap.json"
   ],
   "devDependencies": {
     "@akashic/akashic-engine": "~2.6.7",
@@ -54,8 +62,8 @@
     "zip": "1.2.0"
   },
   "dependencies": {
-    "@akashic/akashic-cli-commons": "1.0.3-test-dontuse.2",
-    "@akashic/akashic-cli-extra": "2.0.3-test-dontuse.2",
+    "@akashic/akashic-cli-commons": "1.0.3-test-dontuse.11",
+    "@akashic/akashic-cli-extra": "2.0.3-test-dontuse.11",
     "@akashic/game-configuration": "2.5.0",
     "@akashic/headless-driver": "2.17.5",
     "@babel/core": "7.25.2",

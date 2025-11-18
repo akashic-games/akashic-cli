@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-init",
-  "version": "2.0.3-test-dontuse.2",
+  "version": "2.0.3-test-dontuse.11",
   "description": "A module to get your Akashic game started.",
   "type": "module",
   "scripts": {
@@ -10,15 +10,22 @@
     "build": "tsc -p ./",
     "lint": "eslint \"./src/**/*.ts\" --fix",
     "test": "npm run test:vitest && npm run lint",
-    "test:vitest": "vitest run"
+    "test:vitest": "vitest run",
+    "generateShrinkwrap": "node ../../scripts/generateShrinkwrapJson.js"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/akashic-games/akashic-cli.git",
+    "directory": "packages/akashic-cli-init"
+  },
   "bin": {
     "akashic-cli-init": "./bin/run.js"
   },
   "files": [
-    "lib"
+    "lib",
+    "npm-shrinkwrap.json"
   ],
   "devDependencies": {
     "@akashic/eslint-config": "3.0.2",
@@ -36,8 +43,8 @@
     "vitest": "^2.1.1"
   },
   "dependencies": {
-    "@akashic/akashic-cli-commons": "1.0.3-test-dontuse.2",
-    "@akashic/akashic-cli-extra": "2.0.3-test-dontuse.2",
+    "@akashic/akashic-cli-commons": "1.0.3-test-dontuse.11",
+    "@akashic/akashic-cli-extra": "2.0.3-test-dontuse.11",
     "@inquirer/checkbox": "^4.2.2",
     "commander": "12.1.0",
     "fs-extra": "11.2.0",

@@ -13,7 +13,8 @@
     "lint:md": "remark . --frail --no-stdout --quiet --rc-path ./.remarkrc",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release-packages": "npm shrinkwrap && changeset publish"
+    "release-packages": "changeset publish",
+    "generateShrinkwrap": "nx run-many -t generateShrinkwrap --parallel=1"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
@@ -31,9 +32,6 @@
       "rollup": "npm:@rollup/wasm-node"
     }
   },
-  "files": [
-    "npm-shrinkwrap.json"
-  ],
   "devDependencies": {
     "@akashic/remark-preset-lint": "^0.1.2",
     "@changesets/changelog-github": "^0.5.0",

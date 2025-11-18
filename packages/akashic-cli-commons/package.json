@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-commons",
-  "version": "1.0.3-test-dontuse.2",
+  "version": "1.0.3-test-dontuse.11",
   "description": "The shared definitions and routines for akashic-cli-xxx",
   "type": "module",
   "types": "./lib/index.d.ts",
@@ -25,12 +25,20 @@
     "build": "tsc -p ./",
     "test": "npm run test:vitest && npm run test:lint",
     "test:vitest": "vitest run",
-    "test:lint": "eslint \"./src/**/*.ts\" --fix"
+    "test:lint": "eslint \"./src/**/*.ts\" --fix",
+    "prepublishOnly": "node ../../scripts/generateShrinkwrapJson.js",
+    "generateShrinkwrap": "node ../../scripts/generateShrinkwrapJson.js"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/akashic-games/akashic-cli.git",
+    "directory": "packages/akashic-cli-commons"
+  },
   "files": [
-    "lib"
+    "lib",
+    "npm-shrinkwrap.json"
   ],
   "devDependencies": {
     "@akashic/eslint-config": "^3.0.2",

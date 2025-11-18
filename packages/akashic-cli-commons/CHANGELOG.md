@@ -1,5 +1,59 @@
 # Change Log
 
+## 1.0.3-test-dontuse.11
+
+### Patch Changes
+
+- [#1641](https://github.com/akashic-games/akashic-cli/pull/1641) [`5dde385`](https://github.com/akashic-games/akashic-cli/commit/5dde38584d1d4e13b9b46100379d928903853d02) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - shrinkwrap.json investigation
+
+## 1.0.3-test-dontuse.10
+
+### Patch Changes
+
+- [#1639](https://github.com/akashic-games/akashic-cli/pull/1639) [`d762466`](https://github.com/akashic-games/akashic-cli/commit/d7624660e8f82edb053942546b91f94d989eb2e5) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - bump version
+
+## 1.0.3-test-dontuse.9
+
+### Patch Changes
+
+- [#1637](https://github.com/akashic-games/akashic-cli/pull/1637) [`5c3d2d4`](https://github.com/akashic-games/akashic-cli/commit/5c3d2d47142659864256027a5a2901d92e1ad00a) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - shrinkwrap.json investigation 4
+
+## 1.0.3-test-dontuse.8
+
+### Patch Changes
+
+- [#1635](https://github.com/akashic-games/akashic-cli/pull/1635) [`9724cbd`](https://github.com/akashic-games/akashic-cli/commit/9724cbd2ea87adb8045eacf74dd622563e5b01fb) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Bump version
+
+## 1.0.3-test-dontuse.7
+
+### Patch Changes
+
+- [#1631](https://github.com/akashic-games/akashic-cli/pull/1631) [`b1293ca`](https://github.com/akashic-games/akashic-cli/commit/b1293caebe9ce36883785c2a14c3c189fa1d815a) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Update extra package.json, shrinkwrap.json investigation-3
+
+## 1.0.3-test-dontuse.6
+
+### Patch Changes
+
+- [#1629](https://github.com/akashic-games/akashic-cli/pull/1629) [`238f022`](https://github.com/akashic-games/akashic-cli/commit/238f0229a453d8023e1f62e73df31040a6beb16d) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - shrinkwrap.json investigation2
+
+## 1.0.3-test-dontuse.5
+
+### Patch Changes
+
+- [#1627](https://github.com/akashic-games/akashic-cli/pull/1627) [`cc2dd03`](https://github.com/akashic-games/akashic-cli/commit/cc2dd03a1863099e4dfea80312e9ef7a3d7a0ba9) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - shrinkwrap.json investigation
+
+## 1.0.3-test-dontuse.4
+
+### Patch Changes
+
+- [#1625](https://github.com/akashic-games/akashic-cli/pull/1625) [`e4ad711`](https://github.com/akashic-games/akashic-cli/commit/e4ad711b8a2d6d6f36ea9351c952f4377d11bf14) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Mod package.json scripts generateShrinkwrap to prepublishOnly
+
+## 1.0.3-test-dontuse.3
+
+### Patch Changes
+
+- [#1623](https://github.com/akashic-games/akashic-cli/pull/1623) [`51bd35a`](https://github.com/akashic-games/akashic-cli/commit/51bd35a422d23d9dced601c819de962197fe2602) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - bump version
+
 ## 1.0.3-test-dontuse.2
 
 ### Patch Changes

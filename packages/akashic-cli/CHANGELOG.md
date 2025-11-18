@@ -1,5 +1,150 @@
 # Change Log
 
+## 3.0.17-test-dontuse.13
+
+### Patch Changes
+
+- Updated dependencies [[`5dde385`](https://github.com/akashic-games/akashic-cli/commit/5dde38584d1d4e13b9b46100379d928903853d02)]:
+  - @akashic/akashic-cli-commons@1.0.3-test-dontuse.11
+  - @akashic/akashic-cli-export@2.0.10-test-dontuse.11
+  - @akashic/akashic-cli-extra@2.0.3-test-dontuse.11
+  - @akashic/akashic-cli-init@2.0.3-test-dontuse.11
+  - @akashic/akashic-cli-lib-manage@2.0.3-test-dontuse.11
+  - @akashic/akashic-cli-sandbox@2.0.6-test-dontuse.11
+  - @akashic/akashic-cli-scan@1.0.5-test-dontuse.11
+  - @akashic/akashic-cli-serve@2.0.13-test-dontuse.12
+
+## 3.0.17-test-dontuse.12
+
+### Patch Changes
+
+- [#1639](https://github.com/akashic-games/akashic-cli/pull/1639) [`d762466`](https://github.com/akashic-games/akashic-cli/commit/d7624660e8f82edb053942546b91f94d989eb2e5) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - bump version
+
+- Updated dependencies [[`d762466`](https://github.com/akashic-games/akashic-cli/commit/d7624660e8f82edb053942546b91f94d989eb2e5)]:
+  - @akashic/akashic-cli-commons@1.0.3-test-dontuse.10
+  - @akashic/akashic-cli-export@2.0.10-test-dontuse.10
+  - @akashic/akashic-cli-extra@2.0.3-test-dontuse.10
+  - @akashic/akashic-cli-init@2.0.3-test-dontuse.10
+  - @akashic/akashic-cli-lib-manage@2.0.3-test-dontuse.10
+  - @akashic/akashic-cli-sandbox@2.0.6-test-dontuse.10
+  - @akashic/akashic-cli-scan@1.0.5-test-dontuse.10
+  - @akashic/akashic-cli-serve@2.0.13-test-dontuse.11
+
+## 3.0.17-test-dontuse.11
+
+### Patch Changes
+
+- [#1637](https://github.com/akashic-games/akashic-cli/pull/1637) [`5c3d2d4`](https://github.com/akashic-games/akashic-cli/commit/5c3d2d47142659864256027a5a2901d92e1ad00a) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - shrinkwrap.json investigation 4
+
+- Updated dependencies [[`5c3d2d4`](https://github.com/akashic-games/akashic-cli/commit/5c3d2d47142659864256027a5a2901d92e1ad00a)]:
+  - @akashic/akashic-cli-commons@1.0.3-test-dontuse.9
+  - @akashic/akashic-cli-export@2.0.10-test-dontuse.9
+  - @akashic/akashic-cli-extra@2.0.3-test-dontuse.9
+  - @akashic/akashic-cli-init@2.0.3-test-dontuse.9
+  - @akashic/akashic-cli-lib-manage@2.0.3-test-dontuse.9
+  - @akashic/akashic-cli-sandbox@2.0.6-test-dontuse.9
+  - @akashic/akashic-cli-scan@1.0.5-test-dontuse.9
+  - @akashic/akashic-cli-serve@2.0.13-test-dontuse.10
+
+## 3.0.17-test-dontuse.10
+
+### Patch Changes
+
+- [#1635](https://github.com/akashic-games/akashic-cli/pull/1635) [`9724cbd`](https://github.com/akashic-games/akashic-cli/commit/9724cbd2ea87adb8045eacf74dd622563e5b01fb) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Bump version
+
+- Updated dependencies [[`9724cbd`](https://github.com/akashic-games/akashic-cli/commit/9724cbd2ea87adb8045eacf74dd622563e5b01fb)]:
+  - @akashic/akashic-cli-commons@1.0.3-test-dontuse.8
+  - @akashic/akashic-cli-export@2.0.10-test-dontuse.8
+  - @akashic/akashic-cli-extra@2.0.3-test-dontuse.8
+  - @akashic/akashic-cli-init@2.0.3-test-dontuse.8
+  - @akashic/akashic-cli-lib-manage@2.0.3-test-dontuse.8
+  - @akashic/akashic-cli-sandbox@2.0.6-test-dontuse.8
+  - @akashic/akashic-cli-scan@1.0.5-test-dontuse.8
+  - @akashic/akashic-cli-serve@2.0.13-test-dontuse.9
+
+## 3.0.17-test-dontuse.9
+
+### Patch Changes
+
+- Updated dependencies [[`b1293ca`](https://github.com/akashic-games/akashic-cli/commit/b1293caebe9ce36883785c2a14c3c189fa1d815a)]:
+  - @akashic/akashic-cli-commons@1.0.3-test-dontuse.7
+  - @akashic/akashic-cli-export@2.0.10-test-dontuse.7
+  - @akashic/akashic-cli-extra@2.0.3-test-dontuse.7
+  - @akashic/akashic-cli-init@2.0.3-test-dontuse.7
+  - @akashic/akashic-cli-lib-manage@2.0.3-test-dontuse.7
+  - @akashic/akashic-cli-sandbox@2.0.6-test-dontuse.7
+  - @akashic/akashic-cli-scan@1.0.5-test-dontuse.7
+  - @akashic/akashic-cli-serve@2.0.13-test-dontuse.8
+
+## 3.0.17-test-dontuse.8
+
+### Patch Changes
+
+- Updated dependencies [[`238f022`](https://github.com/akashic-games/akashic-cli/commit/238f0229a453d8023e1f62e73df31040a6beb16d)]:
+  - @akashic/akashic-cli-commons@1.0.3-test-dontuse.6
+  - @akashic/akashic-cli-export@2.0.10-test-dontuse.6
+  - @akashic/akashic-cli-extra@2.0.3-test-dontuse.6
+  - @akashic/akashic-cli-init@2.0.3-test-dontuse.6
+  - @akashic/akashic-cli-lib-manage@2.0.3-test-dontuse.6
+  - @akashic/akashic-cli-sandbox@2.0.6-test-dontuse.6
+  - @akashic/akashic-cli-scan@1.0.5-test-dontuse.6
+  - @akashic/akashic-cli-serve@2.0.13-test-dontuse.7
+
+## 3.0.17-test-dontuse.7
+
+### Patch Changes
+
+- Updated dependencies [[`cc2dd03`](https://github.com/akashic-games/akashic-cli/commit/cc2dd03a1863099e4dfea80312e9ef7a3d7a0ba9)]:
+  - @akashic/akashic-cli-commons@1.0.3-test-dontuse.5
+  - @akashic/akashic-cli-export@2.0.10-test-dontuse.5
+  - @akashic/akashic-cli-extra@2.0.3-test-dontuse.5
+  - @akashic/akashic-cli-init@2.0.3-test-dontuse.5
+  - @akashic/akashic-cli-lib-manage@2.0.3-test-dontuse.5
+  - @akashic/akashic-cli-sandbox@2.0.6-test-dontuse.5
+  - @akashic/akashic-cli-scan@1.0.5-test-dontuse.5
+  - @akashic/akashic-cli-serve@2.0.13-test-dontuse.6
+
+## 3.0.17-test-dontuse.6
+
+### Patch Changes
+
+- Updated dependencies [[`e4ad711`](https://github.com/akashic-games/akashic-cli/commit/e4ad711b8a2d6d6f36ea9351c952f4377d11bf14)]:
+  - @akashic/akashic-cli-commons@1.0.3-test-dontuse.4
+  - @akashic/akashic-cli-export@2.0.10-test-dontuse.4
+  - @akashic/akashic-cli-extra@2.0.3-test-dontuse.4
+  - @akashic/akashic-cli-init@2.0.3-test-dontuse.4
+  - @akashic/akashic-cli-lib-manage@2.0.3-test-dontuse.4
+  - @akashic/akashic-cli-sandbox@2.0.6-test-dontuse.4
+  - @akashic/akashic-cli-scan@1.0.5-test-dontuse.4
+  - @akashic/akashic-cli-serve@2.0.13-test-dontuse.5
+
+## 3.0.17-test-dontuse.5
+
+### Patch Changes
+
+- Updated dependencies [[`51bd35a`](https://github.com/akashic-games/akashic-cli/commit/51bd35a422d23d9dced601c819de962197fe2602)]:
+  - @akashic/akashic-cli-commons@1.0.3-test-dontuse.3
+  - @akashic/akashic-cli-export@2.0.10-test-dontuse.3
+  - @akashic/akashic-cli-extra@2.0.3-test-dontuse.3
+  - @akashic/akashic-cli-init@2.0.3-test-dontuse.3
+  - @akashic/akashic-cli-lib-manage@2.0.3-test-dontuse.3
+  - @akashic/akashic-cli-sandbox@2.0.6-test-dontuse.3
+  - @akashic/akashic-cli-scan@1.0.5-test-dontuse.3
+  - @akashic/akashic-cli-serve@2.0.13-test-dontuse.4
+
+## 3.0.17-test-dontuse.4
+
+### Patch Changes
+
+- [#1612](https://github.com/akashic-games/akashic-cli/pull/1612) [`5d4cf1c`](https://github.com/akashic-games/akashic-cli/commit/5d4cf1c96589801a16a9141d5643ffcea8a30fd2) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Add scripts/generateShrinkwrapJson.js
+
+## 3.0.17-test-dontuse.3
+
+### Patch Changes
+
+- Updated dependencies [[`f73d6d9`](https://github.com/akashic-games/akashic-cli/commit/f73d6d953868f9f22cf65266a910a5ae6dfc6739), [`19fa310`](https://github.com/akashic-games/akashic-cli/commit/19fa3109befad9645c6d968006b448c992169d24)]:
+  - @akashic/akashic-cli-serve@2.0.13-test-dontuse.3
+
 ## 3.0.17-test-dontuse.2
 
 ### Patch Changes

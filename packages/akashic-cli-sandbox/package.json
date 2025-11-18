@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-sandbox",
-  "version": "2.0.6-test-dontuse.2",
+  "version": "2.0.6-test-dontuse.11",
   "description": "Standalone runner for Akashic contents",
   "type": "module",
   "main": "index.js",
@@ -19,10 +19,16 @@
     "lint:client": "eslint -c \"src/client/eslint.config.cjs\" \"src/client/**/*.ts\" --fix",
     "lint:server": "eslint -c \"src/server/eslint.config.cjs\" \"src/server/**/*.ts\" --fix",
     "test": "npm run test:vitest && npm run lint",
-    "test:vitest": "vitest run"
+    "test:vitest": "vitest run",
+    "generateShrinkwrap": "node ../../scripts/generateShrinkwrapJson.js"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/akashic-games/akashic-cli.git",
+    "directory": "packages/akashic-cli-sandbox"
+  },
   "bin": {
     "akashic-cli-sandbox": "./bin/akashic-cli-sandbox.js"
   },
@@ -31,14 +37,15 @@
     "js",
     "css",
     "views",
-    "thirdparty"
+    "thirdparty",
+    "npm-shrinkwrap.json"
   ],
   "publishConfig": {
     "access": "public",
     "@akashic:registry": "https://registry.npmjs.org/"
   },
   "dependencies": {
-    "@akashic/akashic-cli-commons": "1.0.3-test-dontuse.2",
+    "@akashic/akashic-cli-commons": "1.0.3-test-dontuse.11",
     "@akashic/game-configuration": "^2.0.0",
     "@akashic/headless-driver": "2.17.5",
     "commander": "^11.0.0",

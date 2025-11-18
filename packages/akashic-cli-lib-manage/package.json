@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-lib-manage",
-  "version": "2.0.3-test-dontuse.2",
+  "version": "2.0.3-test-dontuse.11",
   "description": "npm command wrapper module for Akashic games",
   "type": "module",
   "scripts": {
@@ -9,17 +9,24 @@
     "build": "tsc -p ./",
     "test": "npm run test:vitest && npm run test:lint",
     "test:vitest": "vitest run",
-    "test:lint": "eslint \"./src/**/*.ts\" --fix"
+    "test:lint": "eslint \"./src/**/*.ts\" --fix",
+    "generateShrinkwrap": "node ../../scripts/generateShrinkwrapJson.js"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/akashic-games/akashic-cli.git",
+    "directory": "packages/akashic-cli-lib-manage"
+  },
   "bin": {
     "akashic-cli-install": "./bin/akashic-cli-install.js",
     "akashic-cli-uninstall": "./bin/akashic-cli-uninstall.js",
     "akashic-cli-update": "./bin/akashic-cli-update.js"
   },
   "files": [
-    "lib"
+    "lib",
+    "npm-shrinkwrap.json"
   ],
   "devDependencies": {
     "@akashic/eslint-config": "3.0.2",
@@ -34,9 +41,10 @@
     "vitest": "^2.0.5"
   },
   "dependencies": {
-    "@akashic/akashic-cli-commons": "1.0.3-test-dontuse.2",
+    "@akashic/akashic-cli-commons": "1.0.3-test-dontuse.11",
     "commander": "12.1.0",
     "minipass": "7.1.2",
+    "minizlib": "3.0.1",
     "tar": "7.4.3"
   },
   "publishConfig": {
