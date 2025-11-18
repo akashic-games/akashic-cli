@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.0.3-test-dontuse.7
+
+### Patch Changes
+
+- [#1631](https://github.com/akashic-games/akashic-cli/pull/1631) [`b1293ca`](https://github.com/akashic-games/akashic-cli/commit/b1293caebe9ce36883785c2a14c3c189fa1d815a) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Update extra package.json, shrinkwrap.json investigation-3
+
 ## 1.0.3-test-dontuse.6
 
 ### Patch Changes
