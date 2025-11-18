@@ -69,6 +69,7 @@ function formatDate(date) {
  */
 async function generateShrinkwrapJson() {
   console.log(`--------------------- generateShrinkwrapJson ------------------`);
+  execSync("echo +++++++++++ generateShrinkwrapJson +++++++++++");
   let orgRootPackageJson = null;
   let pkgName = "";
   let isError = false;
