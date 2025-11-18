@@ -82,7 +82,7 @@ async function generateShrinkwrapJson() {
     const pkgJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
     pkgName = pkgJson.name;
     console.log(`--- ${pkgName} generateShrinkwrapJson start ---`);
-
+/*
     const dt = new Date();
     dt.setDate(dt.getDate() - BEFORE_DAYS);
     const formattedDate = formatDate(dt);
