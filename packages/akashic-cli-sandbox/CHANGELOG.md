@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.0.6-test-dontuse.8
+
+### Patch Changes
+
+- [#1635](https://github.com/akashic-games/akashic-cli/pull/1635) [`9724cbd`](https://github.com/akashic-games/akashic-cli/commit/9724cbd2ea87adb8045eacf74dd622563e5b01fb) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Bump version
+
+- Updated dependencies [[`9724cbd`](https://github.com/akashic-games/akashic-cli/commit/9724cbd2ea87adb8045eacf74dd622563e5b01fb)]:
+  - @akashic/akashic-cli-commons@1.0.3-test-dontuse.8
+
 ## 2.0.6-test-dontuse.7
 
 ### Patch Changes
