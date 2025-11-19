@@ -42,6 +42,9 @@
     "npm-shrinkwrap.json"
   ],
   "devDependencies": {
+    "@akashic/akashic-engine": "~2.6.7",
+    "@akashic/eslint-config": "3.0.2",
+    "@akashic/sandbox-configuration": "^2.5.0",
     "@types/archiver": "5.3.4",
     "@types/ejs": "3.1.5",
     "@types/encoding-japanese": "^2.0.1",
@@ -59,6 +62,10 @@
     "zip": "1.2.0"
   },
   "dependencies": {
+    "@akashic/akashic-cli-commons": "1.0.3-test-dontuse.14",
+    "@akashic/akashic-cli-extra": "2.0.3-test-dontuse.14",
+    "@akashic/game-configuration": "2.5.0",
+    "@akashic/headless-driver": "2.17.5",
     "@babel/core": "7.25.2",
     "@babel/preset-env": "7.25.3",
     "@rollup/plugin-commonjs": "^28.0.0",
