@@ -9,6 +9,9 @@ import * as fs from "fs";
 import * as path from "path";
 import { execSync } from "child_process";
 
+import { info, error } from "@changesets/logger";
+
+
 const BEFORE_DAYS = 7;
 const rootPackageJsonPath = path.resolve(process.cwd(), "..", "..", "package.json");
 const packageJsonPath = path.resolve(process.cwd(), "package.json");
@@ -35,20 +38,29 @@ function removeWorkspacesField() {
  */
 function removeAkashicDependencies(pkgJsonPath) {
   const pkgJson = JSON.parse(fs.readFileSync(pkgJsonPath, "utf8"));
-  const akshicDependencies = [];
+  const akashicDependencies = [];
+  const devAkashicDependencies = [];
 
   if (pkgJson.dependencies) {
     for (const module of Object.keys(pkgJson.dependencies)) {
       if (/^@akashic\//.test(module)) {
-        akshicDependencies.push({name: module, ver: pkgJson.dependencies[module]});
+        akashicDependencies.push({name: module, ver: pkgJson.dependencies[module]});
         delete pkgJson.dependencies[module];
       }
     }
-  } else {
-    return null;
   }
+  if (pkgJson.devDependencies) {
+    for (const module of Object.keys(pkgJson.devDependencies)) {
+      if (/^@akashic\//.test(module)) {
+        devAkashicDependencies.push({name: module, ver: pkgJson.devDependencies[module]});
+        delete pkgJson.devDependencies[module];
+      }
+    }
+  }
+
   fs.writeFileSync(pkgJsonPath, JSON.stringify(pkgJson, null, 2) + "\n");
-  return akshicDependencies;
+  // return akashicDependencies;
+  return { dependencies: akashicDependencies, devDependencies: devAkashicDependencies };
 }
 
 /**
@@ -69,6 +81,7 @@ function formatDate(date) {
  */
 async function generateShrinkwrapJson() {
   console.log(`--------------------- generateShrinkwrapJson ------------------`);
+  info("++++++++++++++++ generateShrinkwrapJson ++++++++++++++++");
   let orgRootPackageJson = null;
   let pkgName = "";
   let isError = false;
@@ -82,6 +95,7 @@ async function generateShrinkwrapJson() {
     const pkgJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
     pkgName = pkgJson.name;
     console.log(`--- ${pkgName} generateShrinkwrapJson start ---`);
+    info(`+++ ${pkgName} generateShrinkwrapJson start +++`);
 
     const dt = new Date();
     dt.setDate(dt.getDate() - BEFORE_DAYS);
@@ -91,32 +105,50 @@ async function generateShrinkwrapJson() {
 
     const npmInstallCmd = `npm i --before ${formattedDate}`;
     console.log(`- exec: "${npmInstallCmd}"`);
+    info(`- exec: "${npmInstallCmd}"`);
+
     execSync(npmInstallCmd);
 
-    if (akashicModules) { 
+    if (akashicModules.dependencies) { 
       const installList = [];
-      for (const module of akashicModules) {
+      for (const module of akashicModules.dependencies) {
         const target = `${module.name}@${module.ver}`;
         installList.push(target);
       }
       const akashicInstallCmd = `npm i --save-exact ${installList.join(" ")}`;
       console.log(`- exec: "${akashicInstallCmd}"`);
+      info(`+ exec: "${akashicInstallCmd}"`);
+      execSync(akashicInstallCmd);
+    }
+
+    if (akashicModules.devDependencies) { 
+      const installList = [];
+      for (const module of akashicModules.devDependencies) {
+        const target = `${module.name}@${module.ver}`;
+        installList.push(target);
+      }
+      const akashicInstallCmd = `npm i --save-dev --save-exact ${installList.join(" ")}`;
+      console.log(`- exec: "${akashicInstallCmd}"`);
+      info(`+ exec: "${akashicInstallCmd}"`);
       execSync(akashicInstallCmd);
     }
 
     const npmShrinkwrapCmd = "npm shrinkwrap";
     console.log(`- exec: "${npmShrinkwrapCmd}"`);
+    info(`+ exec: "${npmShrinkwrapCmd}"`);
     execSync(npmShrinkwrapCmd);
 /*
 */
   } catch (err) {
     console.error("Error:", err);
+    error("Error:", err);
     isError = true;
   } finally {
     if (orgRootPackageJson) {
       fs.writeFileSync(rootPackageJsonPath, orgRootPackageJson);
     }
     console.log(`--- ${pkgName} generateShrinkwrapJson end ---`);
+    info(`+++ ${pkgName} generateShrinkwrapJson end +++`);
     if (isError) process.exit(1);
   }
 }
