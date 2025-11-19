@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli",
-  "version": "3.0.17-test-dontuse.16",
+  "version": "3.0.17-test-dontuse.17",
   "description": "Command-line utility for akashic game development",
   "type": "module",
   "bin": {
@@ -25,14 +25,14 @@
     "lib"
   ],
   "dependencies": {
-    "@akashic/akashic-cli-commons": "1.0.3-test-dontuse.14",
-    "@akashic/akashic-cli-export": "2.0.10-test-dontuse.14",
-    "@akashic/akashic-cli-extra": "2.0.3-test-dontuse.14",
-    "@akashic/akashic-cli-init": "2.0.3-test-dontuse.14",
-    "@akashic/akashic-cli-lib-manage": "2.0.3-test-dontuse.14",
-    "@akashic/akashic-cli-sandbox": "2.0.6-test-dontuse.14",
-    "@akashic/akashic-cli-scan": "1.0.5-test-dontuse.14",
-    "@akashic/akashic-cli-serve": "2.0.13-test-dontuse.15",
+    "@akashic/akashic-cli-commons": "1.0.3-test-dontuse.15",
+    "@akashic/akashic-cli-export": "2.0.10-test-dontuse.15",
+    "@akashic/akashic-cli-extra": "2.0.3-test-dontuse.15",
+    "@akashic/akashic-cli-init": "2.0.3-test-dontuse.15",
+    "@akashic/akashic-cli-lib-manage": "2.0.3-test-dontuse.15",
+    "@akashic/akashic-cli-sandbox": "2.0.6-test-dontuse.15",
+    "@akashic/akashic-cli-scan": "1.0.5-test-dontuse.15",
+    "@akashic/akashic-cli-serve": "2.0.13-test-dontuse.16",
     "commander": "^12.0.0"
   },
   "devDependencies": {
