@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.0.3-test-dontuse.14
+
+### Patch Changes
+
+- [#1646](https://github.com/akashic-games/akashic-cli/pull/1646) [`ed41be5`](https://github.com/akashic-games/akashic-cli/commit/ed41be53ba0381da5bdb0b4cabcc20dee1c9407e) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - shrinkwarp.json investigation
+
 ## 1.0.3-test-dontuse.13
 
 ### Patch Changes
