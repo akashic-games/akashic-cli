@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-export",
-  "version": "2.0.10-test-dontuse.11",
+  "version": "2.0.10-test-dontuse.12",
   "description": "A module to convert your Akashic game to a runnable standalone.",
   "type": "module",
   "scripts": {
@@ -62,8 +62,8 @@
     "zip": "1.2.0"
   },
   "dependencies": {
-    "@akashic/akashic-cli-commons": "1.0.3-test-dontuse.11",
-    "@akashic/akashic-cli-extra": "2.0.3-test-dontuse.11",
+    "@akashic/akashic-cli-commons": "1.0.3-test-dontuse.12",
+    "@akashic/akashic-cli-extra": "2.0.3-test-dontuse.12",
     "@akashic/game-configuration": "2.5.0",
     "@akashic/headless-driver": "2.17.5",
     "@babel/core": "7.25.2",

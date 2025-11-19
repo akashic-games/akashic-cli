@@ -1,5 +1,15 @@
 # @akashic/akashic-cli-export
 
+## 2.0.10-test-dontuse.12
+
+### Patch Changes
+
+- [#1619](https://github.com/akashic-games/akashic-cli/pull/1619) [`b272b77`](https://github.com/akashic-games/akashic-cli/commit/b272b779b9befdf8d8bf9506dcfae9d647fdcd2d) Thanks [@yu-ogi](https://github.com/yu-ogi)! - feat(serve): add warning when using `Math.sin()` or `Math.cos()`
+
+- Updated dependencies [[`b272b77`](https://github.com/akashic-games/akashic-cli/commit/b272b779b9befdf8d8bf9506dcfae9d647fdcd2d)]:
+  - @akashic/akashic-cli-commons@1.0.3-test-dontuse.12
+  - @akashic/akashic-cli-extra@2.0.3-test-dontuse.12
+
 ## 2.0.10-test-dontuse.11
 
 ### Patch Changes
