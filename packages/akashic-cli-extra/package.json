@@ -31,6 +31,7 @@
     "test": "npm run test:vitest && npm run test:lint",
     "test:vitest": "vitest run",
     "test:lint": "eslint \"./src/**/*.ts\" --fix",
+    "prepublishOnly": "node ../../scripts/generateShrinkwrapJson.js",
     "generateShrinkwrap": "node ../../scripts/generateShrinkwrapJson.js"
   },
   "author": "DWANGO Co., Ltd.",
