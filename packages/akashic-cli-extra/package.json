@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-extra",
-  "version": "2.0.3-test-dontuse.15",
+  "version": "2.0.3-test-dontuse.16",
   "description": "Extra tools of akashic-cli-xxx",
   "type": "module",
   "types": "./lib/index.d.ts",
@@ -45,7 +45,7 @@
     "npm-shrinkwrap.json"
   ],
   "dependencies": {
-    "@akashic/akashic-cli-commons": "1.0.3-test-dontuse.15",
+    "@akashic/akashic-cli-commons": "1.0.3-test-dontuse.16",
     "commander": "12.1.0",
     "ini": "5.0.0",
     "lodash": "4.17.21"
