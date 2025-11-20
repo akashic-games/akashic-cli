@@ -1,5 +1,15 @@
 # Change Log
 
+## 2.0.3-test-dontuse.16
+
+### Patch Changes
+
+- [#1651](https://github.com/akashic-games/akashic-cli/pull/1651) [`e125d5c`](https://github.com/akashic-games/akashic-cli/commit/e125d5c09a923f455428dd718d7ae4be47526305) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Mod generateShrinkwrapJson.js
+
+- Updated dependencies [[`e125d5c`](https://github.com/akashic-games/akashic-cli/commit/e125d5c09a923f455428dd718d7ae4be47526305)]:
+  - @akashic/akashic-cli-commons@1.0.3-test-dontuse.16
+  - @akashic/akashic-cli-extra@2.0.3-test-dontuse.16
+
 ## 2.0.3-test-dontuse.15
 
 ### Patch Changes
