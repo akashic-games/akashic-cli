@@ -9,31 +9,23 @@ import * as fs from "fs";
 import * as path from "path";
 import { execSync } from "child_process";
 
-const POLLING_MAX_RETRY_COUNT = 10;
-const POLLING_WAIT_TIME = 3000; // ms
+const POLLING_MAX_RETRY_COUNT = 180;  // polling 最大試行回数 
+const POLLING_WAIT_TIME = 10 * 1000; // ms 要時間調整 retry * time で 30 min
 const BEFORE_DAYS = 7;
+
 const rootPackageJsonPath = path.resolve(process.cwd(), "..", "..", "package.json");
+const rootRenamePackageJsonPath = path.resolve(process.cwd(), "..", "..", "_package.json");
+const rootPackageLockPath = path.resolve(process.cwd(), "..", "..", "package-lock.json");
+const rootRenamePackageLockPath = path.resolve(process.cwd(), "..", "..", "_package-lock.json");
 const packageJsonPath = path.resolve(process.cwd(), "package.json");
-
-// const commonsPackageJsonPath = path.resolve(process.cwd(), "..", "akashic-cli-commons", "package.json");
+const lockFilePath = path.resolve(process.cwd(), "..", "..", "publish.lock");
 const cliPackageJsonPath = path.resolve(process.cwd(), "..", "akashic-cli", "package.json");
+const lockFileDirPath = path.resolve(process.cwd(), "..", "..", "lockDir");
 
-/**
- * ルートの package.json の workspaces プロパティを削除し保存し、元の package.json の内容を返す。
- */
-function removeWorkspacesField() {
-  const orgContent = fs.readFileSync(rootPackageJsonPath, "utf-8");
-  const newContent = { ...JSON.parse(orgContent) };
-  
-  if (newContent.workspaces) {
-    delete newContent.workspaces;
-  } else {
-    return null;
-  }
+let fd; // filedescriptor
 
-  fs.writeFileSync(rootPackageJsonPath, JSON.stringify(newContent, null, 2) + "\n");
-  return orgContent;
-}
+// debug
+// if (fs.existsSync(lockFilePath)) fs.rmSync(lockFilePath);
 
 /**
  * 各パッケージの package.json の dependencies/devDependencies から akashic 系を削除する
@@ -46,20 +38,20 @@ function removeAkashicDependencies(pkgJsonPath) {
   if (pkgJson.dependencies) {
     for (const module of Object.keys(pkgJson.dependencies)) {
       if (/^@akashic\//.test(module)) {
-        akashicDependencies.push({name: module, ver: pkgJson.dependencies[module]});
+        akashicDependencies.push({ name: module, ver: pkgJson.dependencies[module] });
         delete pkgJson.dependencies[module];
       }
     }
   }
   if (pkgJson.name !== "@akashic/akashic-cli-serve") { // debug, TODO: serve でdevDpendencies を除去すると copy:agv でこける
-  if (pkgJson.devDependencies) {
-    for (const module of Object.keys(pkgJson.devDependencies)) {
-      if (/^@akashic\//.test(module)) {
-        devAkashicDependencies.push({name: module, ver: pkgJson.devDependencies[module]});
-        delete pkgJson.devDependencies[module];
+    if (pkgJson.devDependencies) {
+      for (const module of Object.keys(pkgJson.devDependencies)) {
+        if (/^@akashic\//.test(module)) {
+          devAkashicDependencies.push({ name: module, ver: pkgJson.devDependencies[module] });
+          delete pkgJson.devDependencies[module];
+        }
       }
     }
-  }
   }
 
   fs.writeFileSync(pkgJsonPath, JSON.stringify(pkgJson, null, 2) + "\n");
@@ -80,28 +72,48 @@ function formatDate(date) {
   return formatted.replace(/\//g, "-");
 }
 
+async function pollingLockFile(pkgName) {
+  let count = 0;
+  while (count < POLLING_MAX_RETRY_COUNT) {
+    try {
+      if (!fs.existsSync(lockFilePath)) {
 
-async function polling(pkgName, version) {
+        console.log(`--- lockFile: ${pkgName}:  count=${count}`);
+        return fs.openSync(lockFilePath, "wx");
+        // const fd2 = fs.openSync(lockFilePath, "wx");
+        // fs.appendFileSync(fd2, pkgName, "utf-8");
+        // return fd2;
+      }
+    } catch (error) {
+      console.warn(`- warn:  count=${count}: LockFile exists`);
+    }
+
+    if (count < POLLING_MAX_RETRY_COUNT) {
+      count++;
+      await new Promise(resolve => setTimeout(resolve, POLLING_WAIT_TIME));
+    }
+  }
+  // console.error(`--- error: pollingLockFile(), The maximum number of times has been reached.`);
+  throw new Error("pollingLockFile(): The maximum number of times has been reached.");
+  // return null;
+}
+
+async function pollingPublish(pkgName, version) {
   // 試行回数に達するまでループ
   let count = 0;
-  let npmViewCmd = `npm view ${pkgName}@${version}`;
+  const npmViewCmd = `npm view ${pkgName}@${version}`;
   console.log(`- exec: "${npmViewCmd}"`);
 
   while (count < POLLING_MAX_RETRY_COUNT) {
-    
     try {
       // --- debug
-      // if (count !== 3) { 
-      //   npmViewCmd = "npm view @akashic/akashic-cli-commons@1.0.3-test-dontuse.16";
-      // } else { 
-      //  npmViewCmd = `npm view ${pkgName}@${version}`;
-      // }
-      // --- debug end
+      // npmViewCmd = count !== 3 ? "npm view @akashic/akashic-cli-commons@1.0.3-test-dontuse.16" : `npm view ${pkgName}@${version}`;
+      // npmViewCmd = "npm view @akashic/akashic-cli-commons@1.0.3-test-dontuse.99";
 
       execSync(npmViewCmd);
-      console.log(`- success: npm view. count=${count}`);
+      // console.log(`- success: npm view. count=${count}`);
       return true;
-      
+
     } catch (error) {
       console.error(`- warn:  count=${count}: Not found`);
     }
@@ -111,55 +123,68 @@ async function polling(pkgName, version) {
       await new Promise(resolve => setTimeout(resolve, POLLING_WAIT_TIME));
     }
   }
-  console.log(`--- error: The maximum number of times has been reached.`);
-  return false;
+  // console.log(`--- error: pollingPublish() The maximum number of times has been reached.`);
+  // return false;
+  throw new Error("pollingLockFile(): The maximum number of times has been reached.");
+
 }
+
+
+const sleep = time => new Promise(resolve => setTimeout(resolve, time));
+let isError = false;
+
 
 /**
  * akashic-cli 以外の各 package 配下に shrinkwrap.json を生成する。
  */
 async function generateShrinkwrapJson() {
-  console.log(`--------------------- generateShrinkwrapJson ------------------`);
-  let orgRootPackageJson = null;
+  // console.log(`--------------------- generateShrinkwrapJson ------------------`);
+
   let pkgName = "";
-  let isError = false;
+  // let isError = false;
 
   try {
-    orgRootPackageJson = removeWorkspacesField();
-    // if (!orgRootPackageJson) {
-    //     console.log("root package.json is missing workspaces field.");
-    //     process.exit(1);
-    // }
-    
-    const pkgJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
+    const pkgJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
     pkgName = pkgJson.name;
-    console.log(`--- ${pkgName} generateShrinkwrapJson start ---`);
+    console.log(`--------------- ${pkgName} generateShrinkwrapJson start ---`);
 
     // バージョン取得用
-    const cliPkgJson = JSON.parse(fs.readFileSync(cliPackageJsonPath, "utf8"));
+    const cliPkgJson = JSON.parse(fs.readFileSync(cliPackageJsonPath, "utf-8"));
 
-    // changeset の publish は並列処理のため、npm view <pkgName> で publish されるまで待つ
+    // let isSuccess = false;
+    // 依存モジュールが publish 済みか確認
     if (pkgName !== "@akashic/akashic-cli-commons" && pkgName !== "@akashic/akashic-cli-export") {
-        // commons 依存:[extra, init, lib-manage, sandbox, scan, serve]
-        const version = cliPkgJson.dependencies["@akashic/akashic-cli-commons"];
-        const isSuccess = await polling("@akashic/akashic-cli-commons", version);
-        console.log(`- commons, isSuccess: "${isSuccess}"`);
+      // commons 依存:[extra, init, lib-manage, sandbox, scan, serve]
+      const version = cliPkgJson.dependencies["@akashic/akashic-cli-commons"];
+      const isSuccess = await pollingPublish("@akashic/akashic-cli-commons", version);
+      console.log(`- npm info view commons, isSuccess: "${isSuccess}"`);
     }
-
     if (pkgName === "@akashic/akashic-cli-serve") {
       // scan 依存: [serve]
       const version = cliPkgJson.dependencies["@akashic/akashic-cli-scan"];
-      const isSuccess = await polling("@akashic/akashic-cli-scan", version);
-      console.log(`- scan, isSuccess: "${isSuccess}"`);
+      const isSuccess = await pollingPublish("@akashic/akashic-cli-scan", version);
+      console.log(`- npm info view scan, isSuccess: "${isSuccess}"`);
     }
-    
     if (pkgName === "@akashic/akashic-cli-init") {
       // extra 依存: [init]
       const version = cliPkgJson.dependencies["@akashic/akashic-cli-extra"];
-      const isSuccess = await polling("@akashic/akashic-cli-extra", version);
-      console.log(`- extra, isSuccess: "${isSuccess}"`);
+      const isSuccess = await pollingPublish("@akashic/akashic-cli-extra", version);
+      console.log(`- npm info view extra, isSuccess: "${isSuccess}"`);
     }
-    
+
+    // ロックファイルを flag: "wx" で open() して成功なら処理続行
+    fd = await pollingLockFile(pkgName);
+
+    // root package.json の rename
+    console.log(`--- pkgjson rename start ${pkgName}`, fs.existsSync(rootPackageJsonPath), new Date().toLocaleTimeString());
+    fs.renameSync(rootPackageJsonPath, rootRenamePackageJsonPath);
+    fs.renameSync(rootPackageLockPath, rootRenamePackageLockPath);
+    // ++++++ debug ++++++++++++    
+    // if (pkgName == "@akashic/akashic-cli-commons") await sleep(15000);
+    // if (pkgName == "@akashic/akashic-cli-scan") await sleep(7000);
+    // if (pkgName == "@akashic/akashic-cli-extra") await sleep(4000);
+    // ++++++ debug ++++++++++++    
+
     const dt = new Date();
     dt.setDate(dt.getDate() - BEFORE_DAYS);
     const formattedDate = formatDate(dt);
@@ -170,7 +195,7 @@ async function generateShrinkwrapJson() {
     console.log(`- exec: "${npmInstallCmd}"`);
     execSync(npmInstallCmd);
 
-    if (akashicModules.dependencies.length) { 
+    if (akashicModules.dependencies.length) {
       const installList = [];
       for (const module of akashicModules.dependencies) {
         const target = `${module.name}@${module.ver}`;
@@ -181,7 +206,7 @@ async function generateShrinkwrapJson() {
       execSync(akashicInstallCmd);
     }
 
-    if (akashicModules.devDependencies.length) { 
+    if (akashicModules.devDependencies.length) {
       const installList = [];
       for (const module of akashicModules.devDependencies) {
         const target = `${module.name}@${module.ver}`;
@@ -195,18 +220,30 @@ async function generateShrinkwrapJson() {
     const npmShrinkwrapCmd = "npm shrinkwrap";
     console.log(`- exec: "${npmShrinkwrapCmd}"`);
     execSync(npmShrinkwrapCmd);
-/*
-*/
+    /*
+    */
   } catch (err) {
-    console.error("Error:", err);
+    console.error("*** err:", err);
     isError = true;
   } finally {
-    if (orgRootPackageJson) {
-      fs.writeFileSync(rootPackageJsonPath, orgRootPackageJson);
-    }
-    console.log(`--- ${pkgName} generateShrinkwrapJson end ---`);
-    if (isError) process.exit(1);
+    // package.json を戻す
+    console.log(`--- pkgjson rename end ${pkgName}`, fs.existsSync(rootRenamePackageJsonPath), new Date().toLocaleTimeString());
+    if (fs.existsSync(rootRenamePackageJsonPath)) fs.renameSync(rootRenamePackageJsonPath, rootPackageJsonPath);
+    if (fs.existsSync(rootRenamePackageLockPath)) fs.renameSync(rootRenamePackageLockPath, rootPackageLockPath);
+
+    console.log(`------------ ${pkgName}  end ------------`, new Date().toLocaleTimeString());
+    // if (isError) process.exit(1);
   }
 }
+
+process.on("beforeExit", () => {
+  // console.log("+++++++++++++ process beforeExit");
+  // lockfile 削除
+  if (fd != null) {
+    fs.closeSync(fd);
+    fs.rmSync(lockFilePath);
+  }
+  if (isError) process.exit(1);
+});
 
 generateShrinkwrapJson();
