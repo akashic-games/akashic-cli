@@ -36,7 +36,7 @@
     "@types/mock-fs": "4.13.4",
     "@types/node": "20.14.14",
     "@types/unzipper": "0.10.10",
-    "express": "^4.20.0",
+    "express": "^4.22.0",
     "get-port": "5.1.1",
     "mock-fs": "5.2.0",
     "rimraf": "3.0.2",
