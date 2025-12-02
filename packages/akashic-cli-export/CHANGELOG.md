@@ -1,5 +1,15 @@
 # @akashic/akashic-cli-export
 
+## 2.0.10-test-dontuse.17
+
+### Patch Changes
+
+- [#1658](https://github.com/akashic-games/akashic-cli/pull/1658) [`4e7bac6`](https://github.com/akashic-games/akashic-cli/commit/4e7bac6e7414a7d59dab406e9b2f4bf60b4ab06e) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Fix generateShrinkwrapJson.js
+
+- Updated dependencies [[`4e7bac6`](https://github.com/akashic-games/akashic-cli/commit/4e7bac6e7414a7d59dab406e9b2f4bf60b4ab06e)]:
+  - @akashic/akashic-cli-commons@1.0.3-test-dontuse.17
+  - @akashic/akashic-cli-extra@2.0.3-test-dontuse.17
+
 ## 2.0.10-test-dontuse.16
 
 ### Patch Changes
