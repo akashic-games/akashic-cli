@@ -20,8 +20,6 @@
     "lint:client": "eslint -c ./src/client/eslint.config.cjs \"src/client/**/*.ts\" \"src/common/**/*.ts\" \"src/client/**/*.tsx\" --fix",
     "lint:server": "eslint -c ./src/server/eslint.conifg.cjs \"src/server/**/*.ts\" --fix",
     "storybook": "sb dev -p 9001",
-    "hoge": "if $HOGE than echo hoge else echo aaaa fi",
-    "hoge2": "node ./bin/prepare.js",
     "generateShrinkwrap": "node ../../scripts/generateShrinkwrapJson.js"
   },
   "author": "DWANGO Co., Ltd.",
