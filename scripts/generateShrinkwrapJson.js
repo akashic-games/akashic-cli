@@ -153,8 +153,8 @@ async function generateShrinkwrapJson() {
 
     // let isSuccess = false;
     // 依存モジュールが publish 済みか確認
-    if (pkgName !== "@akashic/akashic-cli-commons" && pkgName !== "@akashic/akashic-cli-export") {
-      // commons 依存:[extra, init, lib-manage, sandbox, scan, serve]
+    if (pkgName !== "@akashic/akashic-cli-commons") {
+      // commons 依存
       const version = cliPkgJson.dependencies["@akashic/akashic-cli-commons"];
       const isSuccess = await pollingPublish("@akashic/akashic-cli-commons", version);
       console.log(`- npm info view commons, isSuccess: "${isSuccess}"`);
@@ -194,6 +194,12 @@ async function generateShrinkwrapJson() {
     const npmInstallCmd = `npm i --before ${formattedDate}`;
     console.log(`- exec: "${npmInstallCmd}"`);
     execSync(npmInstallCmd);
+    
+    // if (pkgName == "@akashic/akashic-cli-serve") {
+      // dependencies/debDependencies で @akashic 系を削除しインストールするため、prepare の処理で落ちる。環境変数の値を設定し prepare をスキップさせる。 
+    //   process.env.SKIP_SERVE_PREPARE = true;
+    //   console.log("****** env:", process.env.SKIP_SERVE_PREPARE);
+    // }
 
     if (akashicModules.dependencies.length) {
       const installList = [];
