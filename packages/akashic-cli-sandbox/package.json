@@ -20,6 +20,7 @@
     "lint:server": "eslint -c \"src/server/eslint.config.cjs\" \"src/server/**/*.ts\" --fix",
     "test": "npm run test:vitest && npm run lint",
     "test:vitest": "vitest run",
+    "prepublishOnly": "node ../../scripts/generateShrinkwrapJson.js",
     "generateShrinkwrap": "node ../../scripts/generateShrinkwrapJson.js"
   },
   "author": "DWANGO Co., Ltd.",

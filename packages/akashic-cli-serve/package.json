@@ -20,6 +20,7 @@
     "lint:client": "eslint -c ./src/client/eslint.config.cjs \"src/client/**/*.ts\" \"src/common/**/*.ts\" \"src/client/**/*.tsx\" --fix",
     "lint:server": "eslint -c ./src/server/eslint.conifg.cjs \"src/server/**/*.ts\" --fix",
     "storybook": "sb dev -p 9001",
+    "prepublishOnly": "node ../../scripts/generateShrinkwrapJson.js",
     "generateShrinkwrap": "node ../../scripts/generateShrinkwrapJson.js"
   },
   "author": "DWANGO Co., Ltd.",

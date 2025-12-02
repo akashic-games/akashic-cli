@@ -11,3 +11,4 @@ spec/typings/index.d.ts
 .vscode
 *.log
 .nx
+publish.lock
