@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-init",
-  "version": "2.0.3-test-dontuse.16",
+  "version": "2.0.3-test-dontuse.17",
   "description": "A module to get your Akashic game started.",
   "type": "module",
   "scripts": {
@@ -44,8 +44,8 @@
     "vitest": "^2.1.1"
   },
   "dependencies": {
-    "@akashic/akashic-cli-commons": "1.0.3-test-dontuse.16",
-    "@akashic/akashic-cli-extra": "2.0.3-test-dontuse.16",
+    "@akashic/akashic-cli-commons": "1.0.3-test-dontuse.17",
+    "@akashic/akashic-cli-extra": "2.0.3-test-dontuse.17",
     "@inquirer/checkbox": "^4.2.2",
     "commander": "12.1.0",
     "fs-extra": "11.2.0",
