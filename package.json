@@ -14,8 +14,7 @@
     "changeset": "changeset",
     "version-packages": "changeset version",
     "release-packages": "changeset publish",
-    "generateShrinkwrap": "nx run-many -t generateShrinkwrap --parallel=1",
-    "generateShrinkwrap2": "nx run-many -t generateShrinkwrap --verbose"
+    "generateShrinkwrap": "nx run-many -t generateShrinkwrap --parallel=1"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
