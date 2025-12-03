@@ -1,5 +1,12 @@
 # @akashic/akashic-cli-lib-manage
 
+## 2.0.3-test-dontuse.19
+
+### Patch Changes
+
+- Updated dependencies [[`47aa239`](https://github.com/akashic-games/akashic-cli/commit/47aa23911074443e4756d9b80ba1a93a13b9a0d3)]:
+  - @akashic/akashic-cli-commons@1.0.3-test-dontuse.19
+
 ## 2.0.3-test-dontuse.18
 
 ### Patch Changes

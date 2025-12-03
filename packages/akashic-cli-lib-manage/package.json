@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-lib-manage",
-  "version": "2.0.3-test-dontuse.18",
+  "version": "2.0.3-test-dontuse.19",
   "description": "npm command wrapper module for Akashic games",
   "type": "module",
   "scripts": {
@@ -42,7 +42,7 @@
     "vitest": "^2.0.5"
   },
   "dependencies": {
-    "@akashic/akashic-cli-commons": "1.0.3-test-dontuse.18",
+    "@akashic/akashic-cli-commons": "1.0.3-test-dontuse.19",
     "commander": "12.1.0",
     "minipass": "7.1.2",
     "minizlib": "3.0.1",
