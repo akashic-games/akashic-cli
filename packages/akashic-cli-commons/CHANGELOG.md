@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.0.3-test-dontuse.19
+
+### Patch Changes
+
+- [#1663](https://github.com/akashic-games/akashic-cli/pull/1663) [`47aa239`](https://github.com/akashic-games/akashic-cli/commit/47aa23911074443e4756d9b80ba1a93a13b9a0d3) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Fix skip build script in serve
+
 ## 1.0.3-test-dontuse.18
 
 ### Patch Changes
