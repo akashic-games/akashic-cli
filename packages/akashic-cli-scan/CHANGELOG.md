@@ -1,5 +1,16 @@
 # Change Log
 
+## 1.0.5-test-dontuse.20
+
+### Patch Changes
+
+- [#1662](https://github.com/akashic-games/akashic-cli/pull/1662) [`22f478f`](https://github.com/akashic-games/akashic-cli/commit/22f478fc37ac4d817882ab0f029c1baa6bfadd60) Thanks [@renovate](https://github.com/apps/renovate)! -
+
+- [#1662](https://github.com/akashic-games/akashic-cli/pull/1662) [`248e94f`](https://github.com/akashic-games/akashic-cli/commit/248e94f9b08d299aa6fe62a6958f95fda58fed1e) Thanks [@renovate](https://github.com/apps/renovate)! - Updated dependency `@types/node` to `24.10.1`.
+
+- Updated dependencies [[`22f478f`](https://github.com/akashic-games/akashic-cli/commit/22f478fc37ac4d817882ab0f029c1baa6bfadd60)]:
+  - @akashic/akashic-cli-commons@1.0.3-test-dontuse.20
+
 ## 1.0.5-test-dontuse.19
 
 ### Patch Changes
