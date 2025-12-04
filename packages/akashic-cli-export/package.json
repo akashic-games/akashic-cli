@@ -21,7 +21,6 @@
     "lint": "eslint \"src/**/*.ts\" --fix",
     "test": "npm run test:vitest && npm run lint",
     "test:vitest": "vitest run",
-    "prepublishOnly": "node ../../scripts/generateShrinkwrapJson.js",
     "generateShrinkwrap": "node ../../scripts/generateShrinkwrapJson.js"
   },
   "author": "DWANGO Co., Ltd.",
@@ -75,7 +74,7 @@
     "commander": "12.1.0",
     "ejs": "3.1.10",
     "encoding-japanese": "^2.0.0",
-    "glob": "11.0.3",
+    "glob": "11.1.0",
     "https": "1.0.0",
     "maxrects-packer": "2.7.3",
     "pngjs": "7.0.0",

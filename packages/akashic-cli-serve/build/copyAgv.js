@@ -3,10 +3,6 @@ import { createRequire } from "module";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 
-if (process.env.SKIP_SERVE_PREPARE) {
-	process.exit(0);
-}
-
 const require = createRequire(import.meta.url);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
