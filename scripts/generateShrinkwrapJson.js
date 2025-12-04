@@ -193,7 +193,7 @@ async function generateShrinkwrapJson() {
     execSync(npmShrinkwrapCmd, { stdio: "inherit" });
 
   } catch (err) {
-    console.error("*** err:", err);
+    console.error("--- Error:", err);
     isError = true;
   } finally {
     if (fs.existsSync(rootRenamePackageJsonPath)) fs.renameSync(rootRenamePackageJsonPath, rootPackageJsonPath);
