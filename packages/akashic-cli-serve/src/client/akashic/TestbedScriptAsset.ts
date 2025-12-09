@@ -83,7 +83,8 @@ export const generateTestbedScriptAsset = <T extends Constructor<pdi.ScriptAsset
 		}
 
 		execute(execEnv: ScriptAssetExecuteEnvironment): any {
-			window.gScriptContainer[this.path](execEnv);
+			const key = (new URL(this.path)).pathname;
+			window.gScriptContainer[key](execEnv);
 			return execEnv.module.exports;
 		}
 	};

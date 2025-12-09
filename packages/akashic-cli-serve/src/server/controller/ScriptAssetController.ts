@@ -21,7 +21,7 @@ export const createScriptAssetController = (baseDir: string, index: number): exp
 		}
 
 		const content = fs.readFileSync(scriptPath);
-		const key = `${req.protocol}://${req.get("host") + req.originalUrl}`;
+		const key = req.originalUrl;
 
 		// TODO: game.json の内容に変化が無い限りキャッシュから読み込むように修正
 		const gameJson: GameConfiguration = JSON.parse(fs.readFileSync(path.join(baseDir, "game.json"), { encoding: "utf-8" }));
