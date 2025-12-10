@@ -21,7 +21,8 @@ export const createScriptAssetController = (baseDir: string, index: number): exp
 		}
 
 		const content = fs.readFileSync(scriptPath);
-		const key = req.originalUrl;
+		// クエリ部分を無視したいので、URL#pathname を key とする
+		const key = new URL(`${req.protocol}://${req.get("host") + req.originalUrl}`).pathname;
 
 		// TODO: game.json の内容に変化が無い限りキャッシュから読み込むように修正
 		const gameJson: GameConfiguration = JSON.parse(fs.readFileSync(path.join(baseDir, "game.json"), { encoding: "utf-8" }));
