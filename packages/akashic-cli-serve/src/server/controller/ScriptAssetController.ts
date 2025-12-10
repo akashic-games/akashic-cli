@@ -4,6 +4,7 @@ import type { GameConfiguration } from "@akashic/akashic-cli-commons";
 import type { ScriptAssetConfigurationBase } from "@akashic/game-configuration";
 import { makePathKeyObject } from "@akashic/game-configuration/lib/utils/makePathKeyObject.js";
 import type * as express from "express";
+import { getUrlPathname } from "../../common/urlUtil.js";
 import * as gameConfigs from "../domain/GameConfigs.js";
 
 export const createScriptAssetController = (baseDir: string, index: number): express.RequestHandler => {
@@ -22,7 +23,7 @@ export const createScriptAssetController = (baseDir: string, index: number): exp
 
 		const content = fs.readFileSync(scriptPath);
 		// クエリ部分を無視したいので、URL#pathname を key とする
-		const key = new URL(`${req.protocol}://${req.get("host") + req.originalUrl}`).pathname;
+		const key = getUrlPathname(`${req.protocol}://${req.get("host") + req.originalUrl}`);
 
 		// TODO: game.json の内容に変化が無い限りキャッシュから読み込むように修正
 		const gameJson: GameConfiguration = JSON.parse(fs.readFileSync(path.join(baseDir, "game.json"), { encoding: "utf-8" }));
