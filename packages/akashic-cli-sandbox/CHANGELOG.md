@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2.0.6-test-dontuse.21
+
+### Patch Changes
+
+- [#1672](https://github.com/akashic-games/akashic-cli/pull/1672) [`534f444`](https://github.com/akashic-games/akashic-cli/commit/534f4441a629894dcee9136bf4825ab57e0d6c3e) Thanks [@renovate](https://github.com/apps/renovate)! - Updated dependency `@akashic/headless-driver` to `2.17.9`.
+
 ## 2.0.6-test-dontuse.20
 
 ### Patch Changes
