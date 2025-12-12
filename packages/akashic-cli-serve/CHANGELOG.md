@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.0.13-test-dontuse.22
+
+### Patch Changes
+
+- [#1671](https://github.com/akashic-games/akashic-cli/pull/1671) [`02c6a0f`](https://github.com/akashic-games/akashic-cli/commit/02c6a0f3146ff9a6a9b5671cbbff1a8e58114904) Thanks [@yu-ogi](https://github.com/yu-ogi)! - add `Math.tan()` to the meddling warnings
+
 ## 2.0.13-test-dontuse.21
 
 ### Patch Changes
