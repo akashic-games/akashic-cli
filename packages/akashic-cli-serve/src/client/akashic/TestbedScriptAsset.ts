@@ -1,4 +1,6 @@
 import type * as pdi from "@akashic/pdi-types";
+import { getUrlPathname } from "../../common/urlUtil";
+
 
 interface WindowForTestbedScriptAsset extends Window {
 	gScriptContainer: {[key: string]: Function};
@@ -83,7 +85,8 @@ export const generateTestbedScriptAsset = <T extends Constructor<pdi.ScriptAsset
 		}
 
 		execute(execEnv: ScriptAssetExecuteEnvironment): any {
-			window.gScriptContainer[this.path](execEnv);
+			const key = getUrlPathname(this.path);
+			window.gScriptContainer[key](execEnv);
 			return execEnv.module.exports;
 		}
 	};
