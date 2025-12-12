@@ -13,8 +13,7 @@
     "lint:md": "remark . --frail --no-stdout --quiet --rc-path ./.remarkrc",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release-packages": "changeset publish",
-    "generateShrinkwrap": "nx run-many -t generateShrinkwrap --parallel=1"
+    "release-packages": "changeset publish"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
