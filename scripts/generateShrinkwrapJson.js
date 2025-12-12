@@ -72,7 +72,7 @@ function formatDate(date) {
  * ロックファイルが作成可能となるまでポーリングする
  * ロックファイルを flag: "wx" で open() して成功ならポーリング終了、もしくは最大回数試行でエラー
  */
-async function pollingLockFile() {
+async function waitLockFile() {
   let count = 0;
   while (count < POLLING_MAX_RETRY_COUNT) {
     try {
@@ -84,13 +84,13 @@ async function pollingLockFile() {
       }
     }
   }
-  throw new Error("pollingLockFile(): The maximum number of times has been reached.");
+  throw new Error("waitLockFile(): The maximum number of times has been reached.");
 }
 
 /**
  * npm view で指定したパッケージのバージョンが取得できるまでポーリングする
  */
-async function pollingPublish(pkgName, version) {
+async function waitPublish(pkgName, version) {
   let count = 0;
   const npmViewCmd = `npm view ${pkgName}@${version}`;
   console.log(`- exec: "${npmViewCmd}"`);
@@ -107,7 +107,7 @@ async function pollingPublish(pkgName, version) {
       }
     }
   }
-  throw new Error("pollingPublish(): The maximum number of times has been reached.");
+  throw new Error("waitPublish(): The maximum number of times has been reached.");
 }
 
 /**
@@ -124,28 +124,29 @@ async function generateShrinkwrapJson() {
     // バージョン取得用
     const cliPkgJson = JSON.parse(fs.readFileSync(cliPackageJsonPath, "utf-8"));
     // 依存モジュールが publish 済みかポーリングして確認
+    // TODO: 以下の各 packages の waitPublish() を removeAkashicDependencies().dependencies から /^@akashic\/akashic-cli-/ にマッチするものを待つようにする
     if (pkgName !== "@akashic/akashic-cli-commons") {
       // commons 依存
       const version = cliPkgJson.dependencies["@akashic/akashic-cli-commons"];
-      await pollingPublish("@akashic/akashic-cli-commons", version);
+      await waitPublish("@akashic/akashic-cli-commons", version);
     }
     if (pkgName === "@akashic/akashic-cli-export") {
       // extra 依存
       const version = cliPkgJson.dependencies["@akashic/akashic-cli-extra"];
-      await pollingPublish("@akashic/akashic-cli-extra", version);
+      await waitPublish("@akashic/akashic-cli-extra", version);
     }
     if (pkgName === "@akashic/akashic-cli-serve") {
       // scan 依存: [serve]
       const version = cliPkgJson.dependencies["@akashic/akashic-cli-scan"];
-      await pollingPublish("@akashic/akashic-cli-scan", version);
+      await waitPublish("@akashic/akashic-cli-scan", version);
     }
     if (pkgName === "@akashic/akashic-cli-init") {
       // extra 依存: [init]
       const version = cliPkgJson.dependencies["@akashic/akashic-cli-extra"];
-      await pollingPublish("@akashic/akashic-cli-extra", version);
+      await waitPublish("@akashic/akashic-cli-extra", version);
     }
 
-    fd = await pollingLockFile();
+    fd = await waitLockFile();
 
     // モノレポの制御を外すため package.json, package-lock.json をリネーム
     fs.renameSync(rootPackageJsonPath, rootRenamePackageJsonPath);
@@ -159,7 +160,7 @@ async function generateShrinkwrapJson() {
 
     if (pkgName == "@akashic/akashic-cli-serve") {
       // serve で @akashic 系を削除してインストールした場合、`npm run setup` の処理で落ちる。環境変数の値を設定し処理をスキップさせる。 
-      process.env.SKIP_SERVE_SETUP = true;
+      process.env.SKIP_SETUP = true;
     }
 
     const npmInstallCmd = `npm i --before ${formattedDate}`;

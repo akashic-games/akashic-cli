@@ -3,7 +3,8 @@ import { createRequire } from "module";
 import path from "path";
 import { fileURLToPath } from "url";
 
-if (process.env.SETUP) {
+// npm-shrinkwrap.json の生成中の実行を抑止する。generateShrinkwrapJson.js を参照
+if (process.env.SKIP_SETUP) {
     process.exit(0);
 }
 
