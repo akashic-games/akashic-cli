@@ -3,6 +3,11 @@ import { createRequire } from "module";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 
+// npm-shrinkwrap.json の生成中の実行を抑止する。generateShrinkwrapJson.js を参照
+if (process.env.SKIP_SETUP) {
+    process.exit(0);
+}
+
 const require = createRequire(import.meta.url);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
