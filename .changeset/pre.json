@@ -1,5 +1,5 @@
 {
-  "mode": "pre",
+  "mode": "exit",
   "tag": "test-dontuse",
   "initialVersions": {
     "@akashic/akashic-cli": "3.0.16",
