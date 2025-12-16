@@ -1,5 +1,19 @@
 # Change Log
 
+## 3.0.17-test-dontuse.25
+
+### Patch Changes
+
+- Updated dependencies [[`27a4355`](https://github.com/akashic-games/akashic-cli/commit/27a43557f82ca4199aa55e83323d53a1f1ea2d47)]:
+  - @akashic/akashic-cli-commons@1.0.3-test-dontuse.21
+  - @akashic/akashic-cli-export@2.0.10-test-dontuse.22
+  - @akashic/akashic-cli-extra@2.0.3-test-dontuse.21
+  - @akashic/akashic-cli-init@2.0.3-test-dontuse.21
+  - @akashic/akashic-cli-lib-manage@2.0.3-test-dontuse.21
+  - @akashic/akashic-cli-sandbox@2.0.6-test-dontuse.22
+  - @akashic/akashic-cli-scan@1.0.5-test-dontuse.21
+  - @akashic/akashic-cli-serve@2.0.13-test-dontuse.24
+
 ## 3.0.17-test-dontuse.24
 
 ### Patch Changes
