@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-serve",
-  "version": "2.0.13-test-dontuse.21",
+  "version": "2.0.13",
   "description": "A development server for Akashic Engine",
   "type": "module",
   "scripts": {
@@ -20,7 +20,7 @@
     "lint:client": "eslint -c ./src/client/eslint.config.cjs \"src/client/**/*.ts\" \"src/common/**/*.ts\" \"src/client/**/*.tsx\" --fix",
     "lint:server": "eslint -c ./src/server/eslint.conifg.cjs \"src/server/**/*.ts\" --fix",
     "storybook": "sb dev -p 9001",
-    "generateShrinkwrap": "node ../../scripts/generateShrinkwrapJson.js"
+    "prepublishOnly": "node ../../scripts/generateShrinkwrapJson.js"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
@@ -33,11 +33,11 @@
     "akashic-cli-serve": "./bin/run.js"
   },
   "dependencies": {
-    "@akashic/akashic-cli-commons": "1.0.3-test-dontuse.20",
-    "@akashic/akashic-cli-scan": "1.0.5-test-dontuse.20",
+    "@akashic/akashic-cli-commons": "1.0.3",
+    "@akashic/akashic-cli-scan": "1.0.5",
     "@akashic/amflow-util": "^1.3.0",
     "@akashic/game-configuration": "^2.1.0",
-    "@akashic/headless-driver": "2.17.8",
+    "@akashic/headless-driver": "2.17.9",
     "@akashic/sandbox-configuration": "^2.5.0",
     "@akashic/trigger": "2.1.3",
     "@msgpack/msgpack": "2.8.0",

@@ -1,6 +1,6 @@
 {
   "name": "@akashic/akashic-cli-commons",
-  "version": "1.0.3-test-dontuse.20",
+  "version": "1.0.3",
   "description": "The shared definitions and routines for akashic-cli-xxx",
   "type": "module",
   "types": "./lib/index.d.ts",
@@ -26,7 +26,7 @@
     "test": "npm run test:vitest && npm run test:lint",
     "test:vitest": "vitest run",
     "test:lint": "eslint \"./src/**/*.ts\" --fix",
-    "generateShrinkwrap": "node ../../scripts/generateShrinkwrapJson.js"
+    "prepublishOnly": "node ../../scripts/generateShrinkwrapJson.js"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
