@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.0.14
+
+### Patch Changes
+
+- [#1670](https://github.com/akashic-games/akashic-cli/pull/1670) [`2903fe9`](https://github.com/akashic-games/akashic-cli/commit/2903fe96165658ec82a547c613475a3cde74a6f7) Thanks [@dera-](https://github.com/dera-)! - able to run by port 80, 443
+
 ## 2.0.13
 
 ### Patch Changes
