@@ -1,5 +1,53 @@
 # Change Log
 
+## 1.0.3
+
+### Patch Changes
+
+- [#1619](https://github.com/akashic-games/akashic-cli/pull/1619) [`b272b77`](https://github.com/akashic-games/akashic-cli/commit/b272b779b9befdf8d8bf9506dcfae9d647fdcd2d) Thanks [@yu-ogi](https://github.com/yu-ogi)! - feat(serve): add warning when using `Math.sin()` or `Math.cos()`
+
+- [#1641](https://github.com/akashic-games/akashic-cli/pull/1641) [`5dde385`](https://github.com/akashic-games/akashic-cli/commit/5dde38584d1d4e13b9b46100379d928903853d02) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - shrinkwrap.json investigation
+
+- [#1625](https://github.com/akashic-games/akashic-cli/pull/1625) [`e4ad711`](https://github.com/akashic-games/akashic-cli/commit/e4ad711b8a2d6d6f36ea9351c952f4377d11bf14) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Mod package.json scripts generateShrinkwrap to prepublishOnly
+
+- [#1608](https://github.com/akashic-games/akashic-cli/pull/1608) [`4ab9df0`](https://github.com/akashic-games/akashic-cli/commit/4ab9df0bd779ccac9c283e42070e92af5e0c32cf) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Fix release.yml, package-json
+
+- [#1660](https://github.com/akashic-games/akashic-cli/pull/1660) [`225b7fb`](https://github.com/akashic-games/akashic-cli/commit/225b7fb997e66d3146f15d50241d17a2e9b73716) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Fix generateShrinkwrapJson.js
+
+- [#1668](https://github.com/akashic-games/akashic-cli/pull/1668) [`27a4355`](https://github.com/akashic-games/akashic-cli/commit/27a43557f82ca4199aa55e83323d53a1f1ea2d47) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Fix generateShrinkwrap.json
+
+- [#1627](https://github.com/akashic-games/akashic-cli/pull/1627) [`cc2dd03`](https://github.com/akashic-games/akashic-cli/commit/cc2dd03a1863099e4dfea80312e9ef7a3d7a0ba9) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - shrinkwrap.json investigation
+
+- [#1639](https://github.com/akashic-games/akashic-cli/pull/1639) [`d762466`](https://github.com/akashic-games/akashic-cli/commit/d7624660e8f82edb053942546b91f94d989eb2e5) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - bump version
+
+- [#1606](https://github.com/akashic-games/akashic-cli/pull/1606) [`5d594a5`](https://github.com/akashic-games/akashic-cli/commit/5d594a538a5d8cc581de9ae93406a70fd927eb4a) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Update package-lock.json, remove npm-shrinkwrap.json
+
+- [#1637](https://github.com/akashic-games/akashic-cli/pull/1637) [`5c3d2d4`](https://github.com/akashic-games/akashic-cli/commit/5c3d2d47142659864256027a5a2901d92e1ad00a) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - shrinkwrap.json investigation 4
+
+- [#1629](https://github.com/akashic-games/akashic-cli/pull/1629) [`238f022`](https://github.com/akashic-games/akashic-cli/commit/238f0229a453d8023e1f62e73df31040a6beb16d) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - shrinkwrap.json investigation2
+
+- [#1662](https://github.com/akashic-games/akashic-cli/pull/1662) [`22f478f`](https://github.com/akashic-games/akashic-cli/commit/22f478fc37ac4d817882ab0f029c1baa6bfadd60) Thanks [@renovate](https://github.com/apps/renovate)! -
+
+- [#1644](https://github.com/akashic-games/akashic-cli/pull/1644) [`ebfb28e`](https://github.com/akashic-games/akashic-cli/commit/ebfb28efde4544a5b559241e27b6c70194af02cd) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - update package-lock.json
+
+- [#1651](https://github.com/akashic-games/akashic-cli/pull/1651) [`e125d5c`](https://github.com/akashic-games/akashic-cli/commit/e125d5c09a923f455428dd718d7ae4be47526305) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Mod generateShrinkwrapJson.js
+
+- [#1646](https://github.com/akashic-games/akashic-cli/pull/1646) [`ed41be5`](https://github.com/akashic-games/akashic-cli/commit/ed41be53ba0381da5bdb0b4cabcc20dee1c9407e) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - shrinkwarp.json investigation
+
+- [#1604](https://github.com/akashic-games/akashic-cli/pull/1604) [`1420827`](https://github.com/akashic-games/akashic-cli/commit/1420827189dc832fa583c25d4fec8e21a7df45ae) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - bump pre-version
+
+- [#1623](https://github.com/akashic-games/akashic-cli/pull/1623) [`51bd35a`](https://github.com/akashic-games/akashic-cli/commit/51bd35a422d23d9dced601c819de962197fe2602) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - bump version
+
+- [#1631](https://github.com/akashic-games/akashic-cli/pull/1631) [`b1293ca`](https://github.com/akashic-games/akashic-cli/commit/b1293caebe9ce36883785c2a14c3c189fa1d815a) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Update extra package.json, shrinkwrap.json investigation-3
+
+- [#1658](https://github.com/akashic-games/akashic-cli/pull/1658) [`4e7bac6`](https://github.com/akashic-games/akashic-cli/commit/4e7bac6e7414a7d59dab406e9b2f4bf60b4ab06e) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Fix generateShrinkwrapJson.js
+
+- [#1635](https://github.com/akashic-games/akashic-cli/pull/1635) [`9724cbd`](https://github.com/akashic-games/akashic-cli/commit/9724cbd2ea87adb8045eacf74dd622563e5b01fb) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Bump version
+
+- [#1663](https://github.com/akashic-games/akashic-cli/pull/1663) [`47aa239`](https://github.com/akashic-games/akashic-cli/commit/47aa23911074443e4756d9b80ba1a93a13b9a0d3) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Fix skip build script in serve
+
+- [#1648](https://github.com/akashic-games/akashic-cli/pull/1648) [`d871f1a`](https://github.com/akashic-games/akashic-cli/commit/d871f1aab5aa7c877cc2607c2f4aaf50af718097) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Add log to generateShrinkwrapJson.js
+
 ## 1.0.3-test-dontuse.21
 
 ### Patch Changes
