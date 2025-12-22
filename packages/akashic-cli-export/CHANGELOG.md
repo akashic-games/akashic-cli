@@ -1,5 +1,11 @@
 # @akashic/akashic-cli-export
 
+## 2.0.11
+
+### Patch Changes
+
+- [#1680](https://github.com/akashic-games/akashic-cli/pull/1680) [`0a88a78`](https://github.com/akashic-games/akashic-cli/commit/0a88a78d203fabcb6b5fd5732ca9aa6f7521e6ea) Thanks [@yu-ogi](https://github.com/yu-ogi)! - add support for instance-storage-plugin
+
 ## 2.0.10
 
 ### Patch Changes
