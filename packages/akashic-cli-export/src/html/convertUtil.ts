@@ -170,6 +170,7 @@ export function getDefaultBundleScripts(
 		if (bundleText) {
 			postloadScriptNames.push("pdi/LocalTextAssetV3.cjs");
 		}
+		postloadScriptNames.push("plugin-instance-storage.js", "plugin-instance-storage-limited.js");
 	} else {
 		postloadScriptNames.push("pdi/LocalScriptAsset.cjs");
 		if (bundleText) {

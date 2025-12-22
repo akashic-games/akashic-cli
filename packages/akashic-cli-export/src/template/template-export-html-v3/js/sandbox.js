@@ -134,32 +134,25 @@ window.addEventListener("load", function() {
 			if (e) {
 				throw e;
 			}
-			setAtsumaruHook();
 			driver.startGame();
 		});
 
-		function setAtsumaruHook() {
-			try {
-				if (typeof window !== "undefined" && window.RPGAtsumaru) {
-					var volume = window.RPGAtsumaru.volume.getCurrentValue();
-					pf.setMasterVolume(volume);
-					window.RPGAtsumaru.volume.changed.subscribe(function(newVolume) {
-						pf.setMasterVolume(newVolume);
-					});
-	
-					window.RPGAtsumaru.screenshot.setScreenshotHandler(function() {
-						var canvas = pf.getPrimarySurface().canvas;
-						var pngData = canvas.toDataURL("image/png");
-						return Promise.resolve(pngData);
-					});
-				}
-			} catch (error) {
-				console.error(error);
-			}
-		}
-
 		function injectGameExternalStorage(game) {
-			// TODO: game.external.contentStorage に GameExternalStorage を inject する。
+			const InstanceStoragePlugin = require("@akashic/akashic-gameview-web/lib/plugin/InstanceStoragePlugin").InstanceStoragePlugin;
+			const InstanceStorageLimitedPlugin = require("@akashic/akashic-gameview-web/lib/plugin/InstanceStorageLimitedPlugin").InstanceStorageLimitedPlugin;
+
+			const instanceStoragePlugin = new InstanceStoragePlugin({ storage: window.localStorage, prefix: "akst:" });
+			const instanceStorageLimitedPlugin = new InstanceStorageLimitedPlugin();
+
+			const config = {
+				_engineConfig: {
+					content_id: "export-html_",
+				},
+				untrusted: true,
+			};
+
+			instanceStoragePlugin.onload(game);
+			instanceStorageLimitedPlugin.onload(game, null, config);
 		}
 	}
 });

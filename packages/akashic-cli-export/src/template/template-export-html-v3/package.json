@@ -5,9 +5,14 @@
   "scripts": {
     "build": "npm run build:mkdir && npm run copy",
     "build:mkdir": "shx mkdir -p ../../../lib/template/v3/js",
-    "copy": "shx cp -r js ../../../lib/template/v3 && shx cp -r css ../../../lib/template/v3"
+    "copy": "npm run copy:template && npm run copy:plugin",
+    "copy:template": "shx cp -r js ../../../lib/template/v3 && shx cp -r css ../../../lib/template/v3",
+    "copy:plugin": "npm run copy:plugin:storage && npm run copy:plugin:storage-limited",
+    "copy:plugin:storage": "cp ./node_modules/@akashic/agvw/dist/plugin-instance-storage.js ../../../lib/template/v3/js",
+    "copy:plugin:storage-limited": "cp ./node_modules/@akashic/agvw/dist/plugin-instance-storage-limited.js ../../../lib/template/v3/js"
   },
   "devDependencies": {
+    "@akashic/agvw": "^1.0.7",
     "shx": "0.3.4"
   },
   "private": true
