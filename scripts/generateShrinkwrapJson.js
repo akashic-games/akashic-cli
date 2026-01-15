@@ -23,6 +23,8 @@ const rootRenamePackageLockPath = path.resolve(process.cwd(), "..", "..", "_pack
 const packageJsonPath = path.resolve(process.cwd(), "package.json");
 const lockFilePath = path.resolve(process.cwd(), "..", "..", "publish.lock");
 const cliPackageJsonPath = path.resolve(process.cwd(), "..", "akashic-cli", "package.json");
+const logsDirPath = path.resolve(process.cwd(), "..", "..", "logs");
+const logs = [];
 
 let fd; // filedescriptor
 let isError = false;
@@ -93,7 +95,7 @@ async function waitLockFile() {
 async function waitPublish(pkgName, version) {
   let count = 0;
   const npmViewCmd = `npm view ${pkgName}@${version}`;
-  console.log(`- exec: "${npmViewCmd}"`);
+  logs.push(`- exec: "${npmViewCmd}"`);
 
   while (count < POLLING_MAX_RETRY_COUNT) {
     try {
@@ -119,7 +121,7 @@ async function generateShrinkwrapJson() {
   try {
     const pkgJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
     pkgName = pkgJson.name;
-    console.log(`--------------- ${pkgName} generateShrinkwrapJson start ---`);
+    logs.push(`--------------- ${pkgName} generateShrinkwrapJson start ---`);
 
     // バージョン取得用
     const cliPkgJson = JSON.parse(fs.readFileSync(cliPackageJsonPath, "utf-8"));
@@ -164,8 +166,10 @@ async function generateShrinkwrapJson() {
     }
 
     const npmInstallCmd = `npm i --before ${formattedDate}`;
-    console.log(`- exec: "${npmInstallCmd}"`);
-    execSync(npmInstallCmd, { stdio: "inherit" });
+    logs.push(`- exec: "${npmInstallCmd}"`);
+    let cmdResult = execSync(npmInstallCmd, { encoding: "utf8" });
+    logs.push(cmdResult);
+
 
     if (akashicModules.dependencies.length) {
       const installList = [];
@@ -174,8 +178,9 @@ async function generateShrinkwrapJson() {
         installList.push(target);
       }
       const akashicInstallCmd = `npm i --save-exact ${installList.join(" ")}`;
-      console.log(`- exec: "${akashicInstallCmd}"`);
-      execSync(akashicInstallCmd, { stdio: "inherit" });
+      logs.push(`- exec: "${akashicInstallCmd}"`);
+      cmdResult = execSync(akashicInstallCmd, { encoding: "utf8" });
+      logs.push(cmdResult);
     }
 
     if (akashicModules.devDependencies.length) {
@@ -185,22 +190,29 @@ async function generateShrinkwrapJson() {
         installList.push(target);
       }
       const akashicInstallCmd = `npm i --save-dev --save-exact ${installList.join(" ")}`;
-      console.log(`- exec: "${akashicInstallCmd}"`);
-      execSync(akashicInstallCmd);
+      logs.push(`- exec: "${akashicInstallCmd}"`);
+      cmdResult = execSync(akashicInstallCmd, { encoding: "utf8" });
+      logs.push(cmdResult);
     }
 
     const npmShrinkwrapCmd = "npm shrinkwrap";
-    console.log(`- exec: "${npmShrinkwrapCmd}"`);
-    execSync(npmShrinkwrapCmd, { stdio: "inherit" });
+    logs.push(`- exec: "${npmShrinkwrapCmd}"`);
+    cmdResult = execSync(npmShrinkwrapCmd, { encoding: "utf8" });
+    logs.push(cmdResult);
 
   } catch (err) {
-    console.error("--- Error:", err);
+    logs.push("--- Error:", err);
     isError = true;
   } finally {
     if (fs.existsSync(rootRenamePackageJsonPath)) fs.renameSync(rootRenamePackageJsonPath, rootPackageJsonPath);
     if (fs.existsSync(rootRenamePackageLockPath)) fs.renameSync(rootRenamePackageLockPath, rootPackageLockPath);
 
-    console.log(`------------ ${pkgName}  end ------------`);
+    logs.push(`------------ ${pkgName}  end ------------`);
+    if (isError) {
+      if (!fs.existsSync(logsDirPath)) fs.mkdirSync(logsDirPath);
+      const fileName = pkgName.replaceAll("/", "_");
+      fs.writeFileSync(`${logsDirPath}/${fileName}.log`, logs.join("\n"), "utf-8");
+    }
   }
 }
 
