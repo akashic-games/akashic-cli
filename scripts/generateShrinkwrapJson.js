@@ -23,7 +23,7 @@ const rootRenamePackageLockPath = path.resolve(process.cwd(), "..", "..", "_pack
 const packageJsonPath = path.resolve(process.cwd(), "package.json");
 const lockFilePath = path.resolve(process.cwd(), "..", "..", "publish.lock");
 const cliPackageJsonPath = path.resolve(process.cwd(), "..", "akashic-cli", "package.json");
-const logsDirPath = path.resolve(process.cwd(), "..", "..", "logs");
+const logsDirPath = path.resolve(process.cwd(), "..", "..", "logs_shrinkwrap");
 const logs = [];
 
 let fd; // filedescriptor
