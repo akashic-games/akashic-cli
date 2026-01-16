@@ -20,7 +20,8 @@ import {
 	getInjectedContents,
 	validateSandboxConfigJs,
 	readSandboxConfigJs,
-	removeUntaintedHints
+	removeUntaintedHints,
+	hasInstanceStorageFeature
 } from "./convertUtil.js";
 
 interface InnerHTMLAssetData {
@@ -154,7 +155,7 @@ async function writeHtmlFile(
 	const injects = options.injects ? options.injects : [];
 	const scripts = getDefaultBundleScripts(
 		templatePath,
-		conf._content.environment["sandbox-runtime"],
+		conf,
 		options,
 		!options.unbundleText,
 		options.debugOverrideEngineFiles
@@ -166,6 +167,7 @@ async function writeHtmlFile(
 		postloadScripts: scripts.postloadScripts,
 		css: getDefaultBundleStyle(templatePath),
 		magnify: !!options.magnify,
+		hasInstanceStorage: hasInstanceStorageFeature(conf),
 		injectedContents: getInjectedContents(options.cwd, injects),
 		exportVersion: options.exportInfo !== undefined ? options.exportInfo.version : "",
 		exportOption: options.exportInfo !== undefined ? options.exportInfo.option : "",
