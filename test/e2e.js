@@ -4,7 +4,7 @@
 //  node test/e2e.js          (latestタグでpublishされたものをインストールしてテスト)
 //  node test/e2e.js --local  (このリポジトリの packages/akashic-cli/bin/akashic.js をテスト)
 
-import { tmpdir } from "os";
+// import { tmpdir } from "os";
 import { dirname, join, resolve } from "path";
 import { mkdtemp, readdir, readFile, unlink, writeFile } from "fs/promises";
 import { exec as _exec, spawn as _spawn } from "child_process";
@@ -14,7 +14,6 @@ import { promisify } from "util";
 import { createRequire } from "module";
 import { setTimeout } from "timers/promises";
 import getPort from "get-port";
-import { mkdirSync } from "fs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -23,18 +22,13 @@ const exec = promisify(_exec);
 const shell = require("shelljs");
 const _psTree = require("ps-tree");
 const psTree = promisify(_psTree);
-const tmpDir = tmpdir();
+// const tmpDir = tmpdir();
 // const targetDir = resolve(__dirname, "..","test-akashic-cli"); // await mkdtemp(`${join(tmpDir, "test-akashic-cli_")}`);
 const targetDir = await mkdtemp(`${join(__dirname, "..", "test-akashic-cli_")}`);
 console.log("---dir:", targetDir);
-// mkdirSync(targetDir);
 
 
 const testsPublished = (process.argv.slice(2)[0] !== "--local");
-
-// await exec("npm config set loglevel warn");
-// const ret = await exec("npm config get loglevel");
-// console.log(`**** loglevel:[${ret.stdout.trim()}]`);
 
 process.on("exit", () => {
 	console.log("delete test-directory");
