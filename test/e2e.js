@@ -27,7 +27,6 @@ const testsPublished = (process.argv.slice(2)[0] !== "--local");
 
 process.on("exit", () => {
 	console.log("delete test-directory");
-	shell.cd(`${__dirname}`);
 	shell.rm("-rf", `${targetDir}`);
 });
 
