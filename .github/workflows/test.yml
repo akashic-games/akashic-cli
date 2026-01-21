@@ -1,9 +1,10 @@
 name: test
-# 動作確認ようにコメントアウト
-# on:
-#   pull_request:
-#     types: [opened, synchronize]
-#   push:
+# e2e の動作確認ようにこのワークフローは走らせない
+on:
+  # pull_request:
+  #   types: [opened, synchronize]
+  pull_request_review:
+    types: [submitted]
 
 concurrency:
   group: ${{ startsWith(github.head_ref, 'renovate/') && 'renovate' || format('{0}-{1}', github.workflow, github.ref) }}
