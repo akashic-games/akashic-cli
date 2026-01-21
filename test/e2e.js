@@ -24,9 +24,9 @@ const shell = require("shelljs");
 const _psTree = require("ps-tree");
 const psTree = promisify(_psTree);
 const tmpDir = tmpdir();
-// const targetDir = resolve(__dirname, "..","test-akashic-cli2"); // await mkdtemp(`${join(tmpDir, "test-akashic-cli_")}`);
-// mkdirSync(targetDir);
-const targetDir = await mkdtemp(`${join(tmpDir, "test-akashic-cli_")}`);
+const targetDir = resolve(__dirname, "..","test-akashic-cli"); // await mkdtemp(`${join(tmpDir, "test-akashic-cli_")}`);
+// const targetDir = await mkdtemp(`${join(tmpDir, "test-akashic-cli_")}`);
+mkdirSync(targetDir);
 
 const testsPublished = (process.argv.slice(2)[0] !== "--local");
 
@@ -37,7 +37,7 @@ const testsPublished = (process.argv.slice(2)[0] !== "--local");
 process.on("exit", () => {
 	console.log("delete test-directory");
 	shell.cd(`${tmpDir}`);
-	// shell.rm("-rf", `${targetDir}`);
+	shell.rm("-rf", `${targetDir}`);
 });
 
 function assertContains(actuals, expected) {
@@ -158,8 +158,8 @@ try {
 		assertContains(files, "tsconfig.json");
 		await exec("npm install");
 		await exec("npm run build");
-		// await exec("npm test");
-		// await exec("npm run lint");
+		await exec("npm test");
+		await exec("npm run lint");
 	}
 
 	// 各akashic-cli-xxxモジュールのテスト
@@ -186,7 +186,7 @@ try {
 		await exec(`${akashicCliPath} export html --output output --bundle -f`);
 		await exec(`${akashicCliPath} export zip --strip --bundle --force -f`);
 	}
-/*
+
 	// TODO 出力結果検証
 	{
 		console.log("test @akashic/akashic-cli-export-html/zip with akashic.config.js", new Date().toLocaleString());
@@ -297,7 +297,7 @@ try {
 		assert.deepEqual(gameJson.moduleMainScripts, {});
 		assertNotContains(gameJson["globalScripts"], "node_modules/@akashic-extension/akashic-label/lib/index.js");
 	}
-*/
+
 	console.log("Completed!", new Date().toLocaleString());
 	process.exitCode = 0;
 } catch (e) {
