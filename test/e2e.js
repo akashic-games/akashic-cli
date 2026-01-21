@@ -130,7 +130,7 @@ try {
 
 	// ゲームディレクトリを作成しつつakashic-cli-initのテスト
 	{
-		console.log("test @akashic/akashic-cli-init");
+		console.log("test @akashic/akashic-cli-init", new Date().toLocaleString());
 		shell.cd(`${targetDir}/game`);
 		await exec(`${akashicCliPath} init --type typescript -y`);
 		const files = await readdir(`${targetDir}/game`);
@@ -156,31 +156,31 @@ try {
 	// 各akashic-cli-xxxモジュールのテスト
 	// TODO 出力確認
 	{
-		console.log("test @akashic/akashic-cli-stat");
+		console.log("test @akashic/akashic-cli-stat", new Date().toLocaleString());
 		await exec(`${akashicCliPath} stat size`);
 	}
 
 	// TODO game.json の編集結果確認
 	{
-		console.log("test @akashic/akashic-cli-scan");
+		console.log("test @akashic/akashic-cli-scan", new Date().toLocaleString());
 		await exec(`${akashicCliPath} scan asset`);
 	}
 
 	{
-		console.log("test @akashic/akashic-cli-update");
+		console.log("test @akashic/akashic-cli-update", new Date().toLocaleString());
 		await exec(`${akashicCliPath} update`);
 	}
 
 	// TODO 出力結果検証
 	{
-		console.log("test @akashic/akashic-cli-export-html/zip");
+		console.log("test @akashic/akashic-cli-export-html/zip", new Date().toLocaleString());
 		await exec(`${akashicCliPath} export html --output output --bundle`);
 		await exec(`${akashicCliPath} export zip --strip --bundle --force`);
 	}
 
 	// TODO 出力結果検証
 	{
-		console.log("test @akashic/akashic-cli-export-html/zip with akashic.config.js");
+		console.log("test @akashic/akashic-cli-export-html/zip with akashic.config.js", new Date().toLocaleString());
 		await createAkashicConfigJs();
 		await exec(`${akashicCliPath} export html`);
 		await exec(`${akashicCliPath} export zip`);
@@ -188,7 +188,7 @@ try {
 	}
 
 	try {
-		console.log("test @akashic/akashic-cli-sandbox");
+		console.log("test @akashic/akashic-cli-sandbox", new Date().toLocaleString());
 		// 通常の動作テスト
 		{
 			const port = await getPort();
@@ -255,7 +255,7 @@ try {
 	}
 
 	{
-		console.log("test @akashic/akashic-cli-modify");
+		console.log("test @akashic/akashic-cli-modify", new Date().toLocaleString());
 		await exec(`${akashicCliPath} modify width 816`);
 		await exec(`${akashicCliPath} modify height 624`);
 		await exec(`${akashicCliPath} modify fps 60`);
@@ -266,7 +266,7 @@ try {
 	}
 
 	{
-		console.log("test @akashic/akashic-cli-install");
+		console.log("test @akashic/akashic-cli-install", new Date().toLocaleString());
 		await exec(`${akashicCliPath} install @akashic-extension/akashic-label`);
 		const packageJson = await loadJSON(`${targetDir}/game/package.json`);
 		const gameJson = await loadJSON(`${targetDir}/game/game.json`);
@@ -276,7 +276,7 @@ try {
 	}
 
 	{
-		console.log("test @akashic/akashic-cli-uninstall");
+		console.log("test @akashic/akashic-cli-uninstall", new Date().toLocaleString());
 		await exec(`${akashicCliPath} uninstall @akashic-extension/akashic-label`);
 		const packageJson = await loadJSON(`${targetDir}/game/package.json`);
 		const gameJson = await loadJSON(`${targetDir}/game/game.json`);
@@ -288,7 +288,7 @@ try {
 		assertNotContains(gameJson["globalScripts"], "node_modules/@akashic-extension/akashic-label/lib/index.js");
 	}
 
-	console.log("Completed!");
+	console.log("Completed!", new Date().toLocaleString());
 	process.exitCode = 0;
 } catch (e) {
 	console.error(e);
