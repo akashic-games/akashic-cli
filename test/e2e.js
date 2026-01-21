@@ -24,10 +24,11 @@ const shell = require("shelljs");
 const _psTree = require("ps-tree");
 const psTree = promisify(_psTree);
 const tmpDir = tmpdir();
-const targetDir = resolve(__dirname, "..","test-akashic-cli"); // await mkdtemp(`${join(tmpDir, "test-akashic-cli_")}`);
-// const targetDir = await mkdtemp(`${join(tmpDir, "test-akashic-cli_")}`);
-mkdirSync(targetDir);
+// const targetDir = resolve(__dirname, "..","test-akashic-cli"); // await mkdtemp(`${join(tmpDir, "test-akashic-cli_")}`);
+const targetDir = await mkdtemp(`${join(__dirname, "..", "test-akashic-cli_")}`);
 console.log("---dir:", targetDir);
+// mkdirSync(targetDir);
+
 
 const testsPublished = (process.argv.slice(2)[0] !== "--local");
 
@@ -37,7 +38,7 @@ const testsPublished = (process.argv.slice(2)[0] !== "--local");
 
 process.on("exit", () => {
 	console.log("delete test-directory");
-	shell.cd(`${tmpDir}`);
+	shell.cd(`${__dirname}`);
 	shell.rm("-rf", `${targetDir}`);
 });
 
