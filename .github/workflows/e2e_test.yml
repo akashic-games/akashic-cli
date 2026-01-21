@@ -1,9 +1,9 @@
-name: test
-# 動作確認ようにコメントアウト
-# on:
-#   pull_request:
-#     types: [opened, synchronize]
-#   push:
+name: e22_test
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+  push:
 
 concurrency:
   group: ${{ startsWith(github.head_ref, 'renovate/') && 'renovate' || format('{0}-{1}', github.workflow, github.ref) }}
@@ -34,6 +34,6 @@ jobs:
       - name: Run test
         run: |
           npm ci
-          npm test
+          npm test:published
         env:
           NX_DISABLE_DB: true
