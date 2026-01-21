@@ -34,6 +34,6 @@ jobs:
       - name: Run test
         run: |
           npm ci
-          npm run test:published
+          npm run test
         env:
           NX_DISABLE_DB: true
