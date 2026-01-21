@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "lib": ["es5"],
+    "noImplicitAny": true,
+    "module": "commonjs" ,
+    "outDir": "script",
+    "types" : [],
+    "allowUmdGlobalAccess": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitOverride": true
+  },
+  "files": [
+    "node_modules/@akashic/akashic-engine/index.runtime.d.ts"
+  ],
+  "include": [
+    "src/**/*.ts",
+    "typings/console.d.ts"
+  ]
+}

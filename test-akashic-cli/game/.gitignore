@@ -1,0 +1,5 @@
+node_modules
+/script
+/game
+coverage
+game.zip
