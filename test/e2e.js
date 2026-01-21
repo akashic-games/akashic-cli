@@ -27,6 +27,7 @@ const tmpDir = tmpdir();
 const targetDir = resolve(__dirname, "..","test-akashic-cli"); // await mkdtemp(`${join(tmpDir, "test-akashic-cli_")}`);
 // const targetDir = await mkdtemp(`${join(tmpDir, "test-akashic-cli_")}`);
 mkdirSync(targetDir);
+console.log("---dir:", targetDir);
 
 const testsPublished = (process.argv.slice(2)[0] !== "--local");
 
