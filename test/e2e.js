@@ -24,8 +24,10 @@ const shell = require("shelljs");
 const _psTree = require("ps-tree");
 const psTree = promisify(_psTree);
 const tmpDir = tmpdir();
-const targetDir = resolve(__dirname, "..","test-akashic-cli2"); // await mkdtemp(`${join(tmpDir, "test-akashic-cli_")}`);
-mkdirSync(targetDir);
+// const targetDir = resolve(__dirname, "..","test-akashic-cli2"); // await mkdtemp(`${join(tmpDir, "test-akashic-cli_")}`);
+// mkdirSync(targetDir);
+const targetDir = await mkdtemp(`${join(tmpDir, "test-akashic-cli_")}`);
+
 const testsPublished = (process.argv.slice(2)[0] !== "--local");
 
 // await exec("npm config set loglevel warn");
