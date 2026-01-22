@@ -4,7 +4,6 @@
 //  node test/e2e.js          (latestタグでpublishされたものをインストールしてテスト)
 //  node test/e2e.js --local  (このリポジトリの packages/akashic-cli/bin/akashic.js をテスト)
 
-import { tmpdir } from "os";
 import { dirname, join, resolve } from "path";
 import { mkdtemp, readdir, readFile, unlink, writeFile } from "fs/promises";
 import { exec as _exec, spawn as _spawn } from "child_process";
@@ -22,14 +21,12 @@ const exec = promisify(_exec);
 const shell = require("shelljs");
 const _psTree = require("ps-tree");
 const psTree = promisify(_psTree);
-const tmpDir = tmpdir();
-const targetDir = await mkdtemp(`${join(tmpDir, "test-akashic-cli_")}`);
+const targetDir = await mkdtemp(`${join(__dirname, "..", "test-akashic-cli_")}`);
 
 const testsPublished = (process.argv.slice(2)[0] !== "--local");
 
 process.on("exit", () => {
 	console.log("delete test-directory");
-	shell.cd(`${tmpDir}`);
 	shell.rm("-rf", `${targetDir}`);
 });
 
