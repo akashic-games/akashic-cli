@@ -48,3 +48,8 @@ jobs:
         with:
           name: shrinkwrap_log
           path: ./logs_shrinkwrap
+      - name: Test after publish
+        run: | 
+          if [[ `find ./packages/**/npm-shrinkwrap.json` ]]; then
+            npm test
+          fi
