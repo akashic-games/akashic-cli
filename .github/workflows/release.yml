@@ -49,6 +49,9 @@ jobs:
           name: shrinkwrap_log
           path: ./logs_shrinkwrap
       - name: Test after publish
+        # package-lock.json を更新するのが publish 直前のため、publish した物と完全に同じ状態でテストできない
+        # ここでエラーになっても既に publish してしまった後だが、問題の検出を早めるため実行している
+        # publish 時に npm-shrinkwrap.json が作成されていなければエラーとなり、このテストは実行されない
         run: | 
           if [[ `find ./packages/**/npm-shrinkwrap.json` ]]; then
             npm test
