@@ -47,7 +47,7 @@
   "dependencies": {
     "@akashic/akashic-cli-commons": "1.0.3",
     "@akashic/game-configuration": "^2.0.0",
-    "@akashic/headless-driver": "2.17.10",
+    "@akashic/headless-driver": "2.17.11",
     "commander": "^11.0.0",
     "debug": "^4.3.4",
     "ejs": "^3.1.8",
