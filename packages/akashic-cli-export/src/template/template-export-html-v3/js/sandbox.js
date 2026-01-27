@@ -93,7 +93,9 @@ window.addEventListener("load", function() {
 					resize(game);
 				});
 			}
-			injectGameExternalStorage(game);
+			if (window.optionProps.hasInstanceStorage) {
+				injectGameExternalStorage(game);
+			}
 		});
 
 		function resize(game) {

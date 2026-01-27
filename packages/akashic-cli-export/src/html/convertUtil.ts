@@ -44,6 +44,11 @@ export function extractAssetDefinitions (conf: cmn.Configuration, type: string):
 	return assetNames.filter((assetName) => assets[assetName].type === type);
 }
 
+export function hasInstanceStorageFeature(conf: cmn.Configuration): boolean {
+	const external = conf._content.environment?.external;
+	return !!external?.instanceStorage || !!external?.instanceStorageLimited;
+}
+
 export function copyAssetFilesStrip(
 	inputPath: string, outputPath: string,
 	assets: AssetConfigurationMap, options: ConvertTemplateParameterObject): void {
@@ -131,11 +136,12 @@ export function wrap(code: string, terser?: MinifyOptions, esDownpile?: boolean,
 
 export function getDefaultBundleScripts(
 	templatePath: string,
-	version: string,
+	conf: cmn.Configuration,
 	options: ConvertTemplateParameterObject,
 	bundleText: boolean = true,
 	overrideEngineFilesPath?: string
 ): any {
+	const version = conf._content.environment?.["sandbox-runtime"] ?? "1";
 	let engineFilePath: string;
 	let engineFilesVariable: string;
 
@@ -170,7 +176,9 @@ export function getDefaultBundleScripts(
 		if (bundleText) {
 			postloadScriptNames.push("pdi/LocalTextAssetV3.cjs");
 		}
-		postloadScriptNames.push("plugin-instance-storage.js", "plugin-instance-storage-limited.js");
+		if (hasInstanceStorageFeature(conf)) {
+			postloadScriptNames.push("plugin-instance-storage.js", "plugin-instance-storage-limited.js");
+		}
 	} else {
 		postloadScriptNames.push("pdi/LocalScriptAsset.cjs");
 		if (bundleText) {
