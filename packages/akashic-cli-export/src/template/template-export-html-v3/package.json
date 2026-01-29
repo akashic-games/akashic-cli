@@ -13,7 +13,7 @@
   },
   "devDependencies": {
     "@akashic/agvw": "^1.0.7",
-    "shx": "0.3.4"
+    "shx": "0.4.0"
   },
   "private": true
 }
