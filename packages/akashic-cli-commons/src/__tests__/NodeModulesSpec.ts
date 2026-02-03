@@ -7,7 +7,7 @@ import { NodeModules } from "../NodeModules.js";
 import { Util } from "..";
 import * as testUtil from "./helpers/TestUtil.js";
 
-const toUnixPath = (p: string) => p.replace(/^\//, "").replace(/\\/g, "/");
+const toGameJsonPath = (p: string) => p.replace(/^\//, "").replace(/\\/g, "/");
 
 describe("NodeModules", () => {
 	const mockFsContent = {
@@ -145,9 +145,9 @@ describe("NodeModules", () => {
 			const moduleMainScripts = NodeModules.listModuleMainScripts(packageJsonFiles);
 
 			expect(moduleMainScripts).toEqual({
-				"dummy": toUnixPath(path.join(fixtureContents.path, "node_modules/dummy/main.js")),
-				"dummyChild": toUnixPath(path.join(fixtureContents.path, "node_modules/dummy/node_modules/dummyChild/main.js")),
-				"dummy3": toUnixPath(path.join(fixtureContents.path, "node_modules/dummy3/index.js"))
+				"dummy": toGameJsonPath(path.join(fixtureContents.path, "node_modules/dummy/main.js")),
+				"dummyChild": toGameJsonPath(path.join(fixtureContents.path, "node_modules/dummy/node_modules/dummyChild/main.js")),
+				"dummy3": toGameJsonPath(path.join(fixtureContents.path, "node_modules/dummy3/index.js"))
 			});
 		});
 	});
@@ -169,11 +169,11 @@ describe("NodeModules", () => {
 
 			expect(moduleMainPaths).toEqual({
 				[path.resolve(fixtureContents.path,"node_modules/dummy/package.json")]:
-					toUnixPath(path.resolve(fixtureContents.path,"node_modules/dummy/main.js")),
+					toGameJsonPath(path.resolve(fixtureContents.path,"node_modules/dummy/main.js")),
 				[path.resolve(fixtureContents.path, "node_modules/dummy/node_modules/dummyChild/package.json")]:
-					toUnixPath(path.resolve(fixtureContents.path, "node_modules/dummy/node_modules/dummyChild/main.js")),
+					toGameJsonPath(path.resolve(fixtureContents.path, "node_modules/dummy/node_modules/dummyChild/main.js")),
 				[path.resolve(fixtureContents.path, "node_modules/dummy3/package.json")]:
-					toUnixPath(path.resolve(fixtureContents.path, "node_modules/dummy3/index.js"))
+					toGameJsonPath(path.resolve(fixtureContents.path, "node_modules/dummy3/index.js"))
 			});
 		});
 	});
