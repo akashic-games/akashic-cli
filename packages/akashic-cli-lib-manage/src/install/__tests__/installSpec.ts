@@ -187,18 +187,18 @@ describe("install()", () => {
 			.then(() => promiseInstall({ moduleNames: ["dummy"], cwd: somedir, logger: logger, debugNpm: dummyNpm }))
 			.then(() => cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join(somedir, "game.json")))
 			.then((content) => {
+				const globalScripts = content.globalScripts!;
 				expect(globalScripts.indexOf("node_modules/dummy/main.js")).toBe(-1);
 				expect(globalScripts.indexOf("node_modules/dummy/foo.js")).toBe(-1);
 				expect(globalScripts.indexOf("node_modules/dummy/node_modules/dummyChild/main.js")).toBe(-1);
 				expect(globalScripts.indexOf("node_modules/dummy/index2.js")).not.toBe(-1);
 				expect(globalScripts.indexOf("node_modules/dummy/sub2.js")).not.toBe(-1);
 				expect(globalScripts.indexOf("node_modules/foo/foo.js")).toBe(-1);
-
 				const moduleMainScripts = content.moduleMainScripts;
 				expect(moduleMainScripts).toEqual({
 					"dummy": "node_modules/dummy/index2.js",
 					"dummyChild": "node_modules/dummy/node_modules/dummyChild/main.js",
-					"noOmitPackagejson": "node_modules/noOmitPackagejson/hogemain.js"
+					"noOmitPackagejson": "node_modules/noOmitPackagejson/main.js"
 				});
 			})
 */
