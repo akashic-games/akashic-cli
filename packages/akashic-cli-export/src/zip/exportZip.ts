@@ -51,6 +51,7 @@ function _createExportInfo(param: ExportZipParameterObject): cmn.ExportZipInfo {
 }
 
 export function _completeExportZipParameterObject(param: ExportZipParameterObject): ExportZipParameterObject {
+	const dest = path.resolve((param.source || process.cwd()), (param.dest || "./game.zip"));
 	return {
 		bundle: !!param.bundle,
 		babel: !!param.babel,
@@ -61,7 +62,7 @@ export function _completeExportZipParameterObject(param: ExportZipParameterObjec
 		packImage: !!param.packImage,
 		strip: !!param.strip,
 		source: param.source || process.cwd(),
-		dest: param.dest || "./game.zip",
+		dest,
 		force: !!param.force,
 		logger: param.logger || new cmn.ConsoleLogger(),
 		hashLength: param.hashLength,
@@ -100,7 +101,7 @@ export function promiseExportZip(param: ExportZipParameterObject): Promise<void>
 	param = _completeExportZipParameterObject(param);
 	const outZip = /\.zip$/.test(param.dest);
 	const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "akashic-export-zip-"));
-	const destDir = path.resolve(param.dest);
+	const destDir = param.dest;
 
 	return _checkDestinationValidity(param.dest, param.force, param.logger)
 		.then(() => {
