@@ -1,5 +1,11 @@
 # @akashic/akashic-cli-export
 
+## 2.0.14
+
+### Patch Changes
+
+- [#1693](https://github.com/akashic-games/akashic-cli/pull/1693) [`07cc6e4`](https://github.com/akashic-games/akashic-cli/commit/07cc6e4130db973117773c3a2ec7c48767f30815) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Fix --output (-o) option: relative path is now interpreted from `--cwd` option's path, if given.
+
 ## 2.0.13
 
 ### Patch Changes
