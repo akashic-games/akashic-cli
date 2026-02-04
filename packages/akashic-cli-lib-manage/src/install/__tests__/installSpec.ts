@@ -157,9 +157,11 @@ describe("install()", () => {
 				});
 				expect(content.moduleMainPaths).toBeUndefined();
 			})
-/*			
+			/*			
 			// Rollup は一度読み込んだ package.json が変更された場合、packag.json の main フィールドが変わっても検知できない。 
 			// そのため、下記の dummy モジュールの中身が変更されて反映できているかのブロックをコメントアウトとする。
+			// 厳密には `--watch` 中に node_modules 以下の package.json 書き換えを検知できなくなっているので、デグレである。
+			// ただ回避手段が見当たらないこと、現実的にほぼないユースケースであるため妥協する
 			.then(() => {
 				// dummyモジュールの定義を書き換えて反映されるか確認する
 				mockModules = {
@@ -201,7 +203,7 @@ describe("install()", () => {
 					"noOmitPackagejson": "node_modules/noOmitPackagejson/main.js"
 				});
 			})
-*/
+			*/
 			.then(async () => {
 				// moduleMainPaths の動作確認
 				const install = (param?: InstallParameterObject) => promiseInstall({ moduleNames: ["dummy@1.0.1"], cwd: somedir, logger: logger, debugNpm: dummyNpm, ...param });
