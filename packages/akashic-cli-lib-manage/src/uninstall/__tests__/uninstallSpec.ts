@@ -1,24 +1,26 @@
 import * as fs from "fs";
 import * as path from "path";
-import mockfs from "mock-fs";
-import { vi } from "vitest";
 import * as cmn from "@akashic/akashic-cli-commons";
 import { promiseUninstall } from "../../uninstall/uninstall.js";
+import * as testUtil from "../../../../akashic-cli-commons/src/__tests__/helpers/TestUtil.js";
 
 describe("uninstall()", () => {
+	const baseDir = path.resolve(__dirname, "..", "__tests__", "fixture-unistall-");
+	let fixtureContents: testUtil.PrepareFsContentResult; 
+
 	afterEach(() => {
-		mockfs.restore();
+		if (fixtureContents) {
+			fixtureContents.dispose();
+		}			
 	});
 
 	it("rejects multiple module names if plugin operation is given", async () => {
-		mockfs({});
 		await expect(
 			promiseUninstall({ moduleNames: ["foo", "bar"], plugin: true })
 		).rejects.toThrow();
 	});
 
 	it("handles npm failure", async () => {
-		mockfs({});
 		class DummyNpm extends cmn.PromisedNpm {
 			uninstall(names?: string[]) { return Promise.reject("UninstallFail:" + names); }
 		}
@@ -91,7 +93,7 @@ describe("uninstall()", () => {
 				}
 			}
 		};
-		mockfs(mockfsContent);
+		fixtureContents = testUtil.prepareFsContent(mockfsContent, fs.mkdtempSync(baseDir));
 
 		const logger = new cmn.ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
 		class DummyNpm extends cmn.PromisedNpm {
@@ -104,18 +106,20 @@ describe("uninstall()", () => {
 			}
 			uninstall(names: string[]) {
 				this.uninstallLog.push(names);
-				names.forEach((name) => {
-					mockfsContent.testdir.foo.node_modules[name] = null;
-				});
-				mockfs(mockfsContent.testdir.foo);
+				for(const name of names) {
+					delete mockfsContent.testdir.foo.node_modules[name];
+					const rmPath = path.join(fixtureContents.path, "testdir", "foo", "node_modules", name);
+					fs.rmSync(rmPath, {recursive: true});
+				};
 				return Promise.resolve();
 			}
 			unlink(names: string[]) {
 				this.unlinkLog.push(names);
-				names.forEach((name) => {
-					mockfsContent.testdir.foo.node_modules[name] = null;
-				});
-				mockfs(mockfsContent.testdir.foo);
+				for(const name of names) {
+					delete mockfsContent.testdir.foo.node_modules[name];
+					const rmPath = path.join(fixtureContents.path, "testdir", "foo", "node_modules", name);
+					fs.rmSync(rmPath, {recursive: true});
+				};
 				return Promise.resolve();
 			}
 		}
@@ -132,13 +136,13 @@ describe("uninstall()", () => {
 		const uninstallAndReadConfig = async (moduleNames: string[], unlink: boolean = false) => {
 			await promiseUninstall({
 				moduleNames,
-				cwd: "./testdir/foo/",
+				cwd: path.join(fixtureContents.path, "/testdir/foo/"),
 				plugin: true,
 				unlink,
 				debugNpm: dummyNpm,
 				logger
 			});
-			return cmn.FileSystem.readJSON<cmn.GameConfiguration>("./testdir/foo/game.json");
+			return cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join(fixtureContents.path, "/testdir/foo/game.json"));
 		};
 
 		let content = await uninstallAndReadConfig(["foo"]);
@@ -249,10 +253,11 @@ describe("uninstall()", () => {
 				this.fsContent = param.fsContent;
 			}
 			uninstall(names: string[]) {
-				names.forEach((name) => {
-					this.fsContent.testdir.foo.node_modules[name] = null;
-				});
-				mockfs(this.fsContent.testdir.foo);
+				for(const name of names) {
+					delete this.fsContent.testdir.foo.node_modules[name];
+					const rmPath = path.join(fixtureContents.path, "testdir", "foo", "node_modules", name);
+					fs.rmSync(rmPath, {recursive: true});
+				};
 				return Promise.resolve();
 			}
 		}
@@ -260,15 +265,15 @@ describe("uninstall()", () => {
 
 		it("with uninstall akashic-lib.json, gameConfigurationData, environment", async () => {
 			const fsContent = JSON.parse(JSON.stringify(mockfsContent));
-			mockfs(fsContent);
+			fixtureContents = testUtil.prepareFsContent(mockfsContent, fs.mkdtempSync(baseDir));
 
 			await promiseUninstall({
 				moduleNames: ["foo"],
-				cwd: "./testdir/foo",
+				cwd: path.join(fixtureContents.path, "/testdir/foo"),
 				logger: logger,
 				debugNpm: new DummyNpm({ logger, fsContent })
 			});
-			const content = await cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join("./testdir/foo", "game.json"));
+			const content = await cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join(fixtureContents.path, "/testdir/foo", "game.json"));
 			expect(content.environment!.external!.fooEx).toBeUndefined();
 			expect(content.environment!.external!.buzzEx).toBe("10000");
 		});
@@ -278,15 +283,15 @@ describe("uninstall()", () => {
 			const fooAkashicLib = JSON.parse(fsContent.testdir.foo.node_modules.foo["akashic-lib.json"]);
 			delete fooAkashicLib.gameConfigurationData.environment;
 			fsContent.testdir.foo.node_modules.foo["akashic-lib.json"] = JSON.stringify(fooAkashicLib);
-			mockfs(fsContent);
+			fixtureContents = testUtil.prepareFsContent(fsContent, fs.mkdtempSync(baseDir));
 
 			await promiseUninstall({
 				moduleNames: ["foo"],
-				cwd: "./testdir/foo",
+				cwd: path.join(fixtureContents.path, "/testdir/foo"),
 				logger: logger,
 				debugNpm: new DummyNpm({ logger, fsContent })
 			});
-			const content = await cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join("./testdir/foo", "game.json"));
+			const content = await cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join(fixtureContents.path, "/testdir/foo", "game.json"));
 			expect(content.environment!.external!.fooEx).toBe("100");
 			expect(content.environment!.external!.buzzEx).toBe("10000");
 		});
@@ -294,15 +299,15 @@ describe("uninstall()", () => {
 		it("without uninstall akashic-lib.json", async () => {
 			const fsContent = JSON.parse(JSON.stringify(mockfsContent));
 			delete fsContent.testdir.foo.node_modules.foo["akashic-lib.json"];
-			mockfs(fsContent);
+			fixtureContents = testUtil.prepareFsContent(fsContent, fs.mkdtempSync(baseDir));
 
 			await promiseUninstall({
 				moduleNames: ["foo"],
-				cwd: "./testdir/foo",
+				cwd: path.join(fixtureContents.path, "/testdir/foo"),
 				logger: logger,
 				debugNpm: new DummyNpm({ logger, fsContent })
 			});
-			const content = await cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join("./testdir/foo", "game.json"));
+			const content = await cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join(fixtureContents.path, "/testdir/foo", "game.json"));
 			expect(content.environment!.external!.fooEx).toBe("100");
 			expect(content.environment!.external!.buzzEx).toBe("10000");
 		});
@@ -397,10 +402,10 @@ describe("uninstall()", () => {
 				this.fsContent = param.fsContent;
 			}
 			uninstall(names: string[]) {
-				names.forEach((name) => {
-					this.fsContent.testdir.foo.node_modules[name] = null;
-				});
-				mockfs(this.fsContent.testdir.foo);
+				for(const name of names) {
+					delete this.fsContent.testdir.foo.node_modules[name];
+					const rmPath = path.join(fixtureContents.path, "testdir", "foo", "node_modules", name);
+				};
 				return Promise.resolve();
 			}
 		}
@@ -408,15 +413,15 @@ describe("uninstall()", () => {
 
 		it("with uninstall akashic-lib.json, gameConfigurationData, environment", async () => {
 			const fsContent = JSON.parse(JSON.stringify(mockfsContent));
-			mockfs(fsContent);
+			fixtureContents = testUtil.prepareFsContent(fsContent, fs.mkdtempSync(baseDir));
 
 			await promiseUninstall({
 				moduleNames: ["foo"],
-				cwd: "./testdir/foo",
+				cwd: path.join(fixtureContents.path, "/testdir/foo"),
 				logger: logger,
 				debugNpm: new DummyNpm({ logger, fsContent })
 			});
-			const content = await cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join("./testdir/foo", "game.json"));
+			const content = await cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join(fixtureContents.path, "/testdir/foo", "game.json"));
 			expect(content.environment!.external!.fooEx).toBe("100");
 			expect(content.environment!.external!.buzzEx).toBe("10000");
 		});
@@ -424,15 +429,15 @@ describe("uninstall()", () => {
 		
 		it("with uninstall akashic-lib.json, gameConfigurationData", async () => {
 			const fsContent = JSON.parse(JSON.stringify(mockfsContent));
-			mockfs(fsContent);
+			fixtureContents = testUtil.prepareFsContent(fsContent, fs.mkdtempSync(baseDir));
 
 			await promiseUninstall({
 				moduleNames: ["foo"],
-				cwd: "./testdir/foo",
+				cwd: path.join(fixtureContents.path, "/testdir/foo"),
 				logger: logger,
 				debugNpm: new DummyNpm({ logger, fsContent })
 			});
-			const content = await cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join("./testdir/foo", "game.json"));
+			const content = await cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join(fixtureContents.path, "/testdir/foo", "game.json"));
 			expect(content.environment!.external!.fooEx).toBe("100");
 			expect(content.environment!.external!.buzzEx).toBe("10000");
 		});
@@ -440,15 +445,15 @@ describe("uninstall()", () => {
 		
 		it("with uninstall akashic-lib.json", async () => {
 			const fsContent = JSON.parse(JSON.stringify(mockfsContent));
-			mockfs(fsContent);
+			fixtureContents = testUtil.prepareFsContent(fsContent, fs.mkdtempSync(baseDir));
 
 			await promiseUninstall({
 				moduleNames: ["foo"],
-				cwd: "./testdir/foo",
+				cwd: path.join(fixtureContents.path, "/testdir/foo"),
 				logger: logger,
 				debugNpm: new DummyNpm({ logger, fsContent })
 			});
-			const content = await cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join("./testdir/foo", "game.json"));
+			const content = await cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join(fixtureContents.path, "/testdir/foo", "game.json"));
 			expect(content.environment!.external!.fooEx).toBe("100");
 			expect(content.environment!.external!.buzzEx).toBe("10000");
 		});
@@ -457,15 +462,15 @@ describe("uninstall()", () => {
 			const fsContent = JSON.parse(JSON.stringify(mockfsContent));
 			delete fsContent.testdir.foo["akashic-lib.json"];
 
-			mockfs(fsContent);
+			fixtureContents = testUtil.prepareFsContent(fsContent, fs.mkdtempSync(baseDir));
 
 			await promiseUninstall({
 				moduleNames: ["foo"],
-				cwd: "./testdir/foo",
+				cwd: path.join(fixtureContents.path, "/testdir/foo"),
 				logger: logger,
 				debugNpm: new DummyNpm({ logger, fsContent })
 			});
-			const content = await cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join("./testdir/foo", "game.json"));
+			const content = await cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join(fixtureContents.path, "./testdir/foo", "game.json"));
 			expect(content.environment!.external!.fooEx).toBe("100");
 			expect(content.environment!.external!.buzzEx).toBe("10000");
 		});
@@ -610,25 +615,26 @@ describe("uninstall()", () => {
 				this.fsContent = param.fsContent;
 			}
 			uninstall = async (names: string[]) => {
-				names.forEach((name) => {
-					this.fsContent.testdir.node_modules[name] = null;
-				});
-				mockfs(this.fsContent.testdir);
+				for(const name of names) {
+					delete this.fsContent.testdir.node_modules[name];
+					const rmPath = path.join(fixtureContents.path, "testdir", "node_modules", name);
+					fs.rmSync(rmPath, {recursive: true});
+				};
 			}
 		}
 		const logger = new cmn.ConsoleLogger({ quiet: true, debugLogMethod: () => {/* do nothing */} });
 
 		it("should remove the assets when uninstalled module with akashic-lib.json", async () => {
 			const fsContent = JSON.parse(JSON.stringify(mockfsContent));
-			mockfs(fsContent);
+			fixtureContents = testUtil.prepareFsContent(fsContent, fs.mkdtempSync(baseDir));
 
 			await promiseUninstall({
 				moduleNames: ["@akashic-extension/ui-library"],
-				cwd: "./testdir",
+				cwd: path.join(fixtureContents.path, "testdir"),
 				logger,
 				debugNpm: new DummyNpm({ logger, fsContent })
 			});
-			const content = await cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join("./testdir", "game.json"));
+			const content = await cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join(fixtureContents.path, "/testdir", "game.json"));
 			expect(Object.keys(content.assets).length).toBe(3);
 			expect(content.assets["node_modules/@akashic-extension/ui-library/assets/images/player.png"]).toBeUndefined();
 			expect(content.assets["node_modules/@akashic-extension/ui-library/assets/images/enemy.png"]).toBeUndefined();
@@ -640,15 +646,15 @@ describe("uninstall()", () => {
 
 		it("should remove the assets when uninstalled multiple modules with akashic-lib.json", async () => {
 			const fsContent = JSON.parse(JSON.stringify(mockfsContent));
-			mockfs(fsContent);
+			fixtureContents = testUtil.prepareFsContent(fsContent, fs.mkdtempSync(baseDir));
 
 			await promiseUninstall({
 				moduleNames: ["@akashic-extension/ui-library", "@akashic-extension/audio-library"],
-				cwd: "./testdir",
+				cwd: path.join(fixtureContents.path, "testdir"),
 				logger,
 				debugNpm: new DummyNpm({ logger, fsContent })
 			});
-			const content = await cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join("./testdir", "game.json"));
+			const content = await cmn.FileSystem.readJSON<cmn.GameConfiguration>(path.join(fixtureContents.path,  "/testdir", "game.json"));
 			expect(Object.keys(content.assets).length).toBe(0);
 			expect(content.assets["node_modules/@akashic-extension/ui-library/assets/images/player.png"]).toBeUndefined();
 			expect(content.assets["node_modules/@akashic-extension/ui-library/assets/images/enemy.png"]).toBeUndefined();

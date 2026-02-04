@@ -2,7 +2,6 @@ import * as fs from "fs";
 import { createRequire } from "module";
 import * as path from "path";
 import vm from "vm";
-import mockfs from "mock-fs";
 import { vi } from "vitest";
 import { validateGameJson } from "../../utils.js";
 import type { ConvertGameParameterObject } from "../convert.js";
@@ -49,10 +48,6 @@ function compareAssetBundleFunction(scriptPath: string, func: Function): void {
 }
 
 describe("convert", () => {
-
-	afterEach(() => {
-		mockfs.restore();
-	});
 
 	describe("bundleScripts", () => {
 		it("bundles scripts", async () => {
@@ -664,10 +659,6 @@ describe("convert", () => {
 describe("convert - v3", () => {
 	const destDir = path.resolve(fixturesDir, "output");
 	const consoleSpy = vi.spyOn(global.console, "warn");
-
-	afterEach(() => {
-		mockfs.restore();
-	});
 
 	describe("convert()", () => {
 		afterEach(() => {

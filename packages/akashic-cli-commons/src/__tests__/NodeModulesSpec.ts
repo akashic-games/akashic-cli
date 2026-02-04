@@ -7,6 +7,8 @@ import { NodeModules } from "../NodeModules.js";
 import { Util } from "..";
 import * as testUtil from "./helpers/TestUtil.js";
 
+const toGameJsonPath = (p: string) => p.replace(/^\//, "").replace(/\\/g, "/");
+
 describe("NodeModules", () => {
 	const mockFsContent = {
 		"node_modules": {
@@ -57,7 +59,7 @@ describe("NodeModules", () => {
 		logger = new ConsoleLogger({ debugLogMethod: () => { /* do nothing */ } });
 	});
 	beforeAll(() => {
-		fixtureContents = testUtil.prepareFsContent(mockFsContent, baseDir);
+		fixtureContents = testUtil.prepareFsContent(mockFsContent, fs.mkdtempSync(baseDir));
 	});
 	afterAll(() => {
 		fixtureContents.dispose();
@@ -141,10 +143,11 @@ describe("NodeModules", () => {
 			// 本来はルート直下の ./node_modules のパスだが、テストで node_modules のパスがルート直下ではないためパスを生成
 			packageJsonFiles = packageJsonFiles.map(p => path.resolve(fixtureContents.path, p));
 			const moduleMainScripts = NodeModules.listModuleMainScripts(packageJsonFiles);
+
 			expect(moduleMainScripts).toEqual({
-				"dummy": path.resolve(fixtureContents.path, "node_modules/dummy/main.js").replace(/^\//, ""),
-				"dummyChild": path.resolve(fixtureContents.path, "node_modules/dummy/node_modules/dummyChild/main.js").replace(/^\//, ""),
-				"dummy3": path.resolve(fixtureContents.path, "node_modules/dummy3/index.js").replace(/^\//, "")
+				"dummy": toGameJsonPath(path.join(fixtureContents.path, "node_modules/dummy/main.js")),
+				"dummyChild": toGameJsonPath(path.join(fixtureContents.path, "node_modules/dummy/node_modules/dummyChild/main.js")),
+				"dummy3": toGameJsonPath(path.join(fixtureContents.path, "node_modules/dummy3/index.js"))
 			});
 		});
 	});
@@ -166,13 +169,12 @@ describe("NodeModules", () => {
 
 			expect(moduleMainPaths).toEqual({
 				[path.resolve(fixtureContents.path,"node_modules/dummy/package.json")]:
-					path.resolve(fixtureContents.path,"node_modules/dummy/main.js").replace(/^\//, ""),
+					toGameJsonPath(path.resolve(fixtureContents.path,"node_modules/dummy/main.js")),
 				[path.resolve(fixtureContents.path, "node_modules/dummy/node_modules/dummyChild/package.json")]:
-					path.resolve(fixtureContents.path, "node_modules/dummy/node_modules/dummyChild/main.js").replace(/^\//, ""),
+					toGameJsonPath(path.resolve(fixtureContents.path, "node_modules/dummy/node_modules/dummyChild/main.js")),
 				[path.resolve(fixtureContents.path, "node_modules/dummy3/package.json")]:
-					path.resolve(fixtureContents.path, "node_modules/dummy3/index.js").replace(/^\//, ""),	
+					toGameJsonPath(path.resolve(fixtureContents.path, "node_modules/dummy3/index.js"))
 			});
-
 		});
 	});
 
@@ -233,7 +235,7 @@ describe("NodeModules", () => {
 				}
 			};
 			fixtureContents.dispose(); // mockFsCOntent のディレクトリを削除
-			fixtureContents = testUtil.prepareFsContent(mockFsContent2, baseDir);
+			fixtureContents = testUtil.prepareFsContent(mockFsContent2, fs.mkdtempSync(baseDir));
 
 			const filePaths = await NodeModules.listScriptFiles(fixtureContents.path, ["@dummy/dummy_node_modules", "dummy_node_modules"], logger);
 			const pkgJsonPaths = NodeModules.listPackageJsonsFromScriptsPath(fixtureContents.path, filePaths);

@@ -1,5 +1,4 @@
 import * as fs from "fs";
-import * as os from "os";
 import path from "path";
 
 interface FsContentDefinition {
@@ -24,7 +23,7 @@ function setupFsContentImpl(baseDir: string, key: string, def: FsContentDefiniti
 		}
 	} else {
 		const dir = path.join(baseDir, key);
-		fs.mkdirSync(dir);
+		if (!fs.existsSync(dir)) fs.mkdirSync(dir);
 		setupFsContent(dir, def);
 	}
 }
@@ -36,12 +35,11 @@ function setupFsContent(baseDir: string, def: FsContentDefinition): void {
 }
 
 export function prepareFsContent(def: FsContentDefinition, baseDir: string): PrepareFsContentResult  {
-	const dir = fs.mkdtempSync(baseDir);
-	setupFsContent(dir, def);
+	setupFsContent(baseDir, def);
 	return {
-		path: dir,
+		path: baseDir,
 		dispose: () => {
-			fs.rmSync(dir, { recursive: true, force: true });
+			fs.rmSync(baseDir, { recursive: true, force: true });
 		}
 	};
 }

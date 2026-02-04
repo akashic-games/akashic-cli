@@ -7,7 +7,7 @@
     "moduleResolution": "Node16",
     "outDir": "./lib",
     "declaration": true,
-    "types" : ["image-size", "mock-fs", "node"],
+    "types" : ["image-size", "node"],
     "useUnknownInCatchVariables": false,
     "strict": true,
     "allowJs": true,
