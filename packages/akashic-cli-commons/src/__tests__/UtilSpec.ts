@@ -1,10 +1,14 @@
-import mockfs from "mock-fs";
-import * as fs from "fs";
 import * as Util from "../Util.js";
+import { fs, vol } from "memfs";
+
+vi.mock("node:fs", async () => {
+  const memfs: { fs: typeof fs } = await vi.importActual("memfs");
+  return memfs.fs;
+});
 
 describe("Util", () => {
 	afterEach(() => {
-		mockfs.restore();
+		vol.reset();
 	});
 
 	it(".filterMap()", () => {
@@ -71,14 +75,14 @@ describe("Util", () => {
 
 	describe("mkdirpSync", () => {
 		it("creates directory", () => {
-			mockfs({});
+			vol.fromNestedJSON({});
 			expect(() => fs.statSync("./test/some/dir")).toThrow();
 			Util.mkdirpSync("./test/some/dir");
 			expect(fs.statSync("./test/some/dir").isDirectory()).toBe(true);
 		});
 
 		it("does nothing if exists", () => {
-			mockfs({
+			vol.fromNestedJSON({
 				"test": {
 					"some": {
 						"dir": {},
@@ -92,7 +96,7 @@ describe("Util", () => {
 		});
 
 		it("throws if it is a file", () => {
-			mockfs({
+			vol.fromNestedJSON({
 				"test": {
 					"some": {
 						"dir": "a file"
@@ -103,7 +107,7 @@ describe("Util", () => {
 		});
 
 		it("throws when it finds a file in a path", () => {
-			mockfs({
+			vol.fromNestedJSON({
 				"test": "a file"
 			});
 			expect(() => Util.mkdirpSync("./test/some/dir")).toThrow();
@@ -112,7 +116,7 @@ describe("Util", () => {
 
 	describe("getTotalFileSize", () => {
 		it("can obtain the total file size in the specified path", async () => {
-			mockfs({
+			vol.fromNestedJSON({
 				test1: Buffer.from(new Uint8Array(1024)),
 				dir: {
 					test2: Buffer.from(new Uint8Array(2000)),
