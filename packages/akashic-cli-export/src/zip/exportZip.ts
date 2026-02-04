@@ -51,7 +51,8 @@ function _createExportInfo(param: ExportZipParameterObject): cmn.ExportZipInfo {
 }
 
 export function _completeExportZipParameterObject(param: ExportZipParameterObject): ExportZipParameterObject {
-	const dest = path.resolve((param.source || process.cwd()), (param.dest || "./game.zip"));
+	const source = param.source || process.cwd();
+	const dest = path.resolve(source, (param.dest || "./game.zip"));
 	return {
 		bundle: !!param.bundle,
 		babel: !!param.babel,
@@ -61,7 +62,7 @@ export function _completeExportZipParameterObject(param: ExportZipParameterObjec
 		terser: param.terser,
 		packImage: !!param.packImage,
 		strip: !!param.strip,
-		source: param.source || process.cwd(),
+		source,
 		dest,
 		force: !!param.force,
 		logger: param.logger || new cmn.ConsoleLogger(),
