@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2.0.8
+
+### Patch Changes
+
+- [#1696](https://github.com/akashic-games/akashic-cli/pull/1696) [`ac60ae7`](https://github.com/akashic-games/akashic-cli/commit/ac60ae7387f840a4661b94c3f9bf188ba9033b16) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Bump version by headless-driver update
+
 ## 2.0.7
 
 ### Patch Changes
