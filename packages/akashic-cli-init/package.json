@@ -46,7 +46,7 @@
     "@akashic/akashic-cli-commons": "1.0.3",
     "@akashic/akashic-cli-extra": "2.0.3",
     "@inquirer/checkbox": "^4.2.2",
-    "commander": "12.1.0",
+    "commander": "14.0.3",
     "fs-extra": "11.2.0",
     "glob": "11.1.0",
     "ignore": "7.0.0",
