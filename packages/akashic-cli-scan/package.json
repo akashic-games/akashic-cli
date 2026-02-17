@@ -33,7 +33,7 @@
     "@akashic/game-configuration": "2.5.0",
     "@types/image-size": "0.8.0",
     "@types/mock-fs": "4.13.4",
-    "@types/node": "24.10.1",
+    "@types/node": "24.10.13",
     "mock-fs": "5.2.0",
     "shx": "0.3.4",
     "typescript": "5.5.4",
@@ -45,7 +45,7 @@
     "chokidar": "^4.0.0",
     "commander": "^12.0.0",
     "image-size": "~1.2.0",
-    "music-metadata": "10.7.0",
+    "music-metadata": "10.7.1",
     "svgson": "^5.2.1",
     "thumbcoil": "~1.2.0"
   },
