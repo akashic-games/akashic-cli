@@ -25,9 +25,8 @@
     "@akashic/eslint-config": "3.0.2",
     "@akashic/game-configuration": "2.5.0",
     "@types/image-size": "0.8.0",
-    "@types/mock-fs": "4.13.4",
     "@types/node": "18.19.44",
-    "mock-fs": "5.2.0",
+    "memfs": "4.17.2",
     "shx": "0.3.4",
     "typescript": "5.5.4",
     "vitest": "^2.0.5"

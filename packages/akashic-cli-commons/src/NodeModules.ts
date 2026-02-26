@@ -106,7 +106,7 @@ export module NodeModules {
 		// akashic-cli-commons/node_modules 以下への依存として表現される。
 		// これを検知した場合、そのモジュールへの依存はgame.jsonに追記せず、akashicコマンドユーザには警告を表示する。
 		const ignoreModulePaths = ["/akashic-cli-commons/node_modules/"];
-		
+
 		const restoreDirectory = Util.chdir(basepath);
 		const inputOptions: RollupOptions = {
 			input: moduleNames,

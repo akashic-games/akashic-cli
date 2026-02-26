@@ -1,7 +1,12 @@
 import type * as cmn from "@akashic/akashic-cli-commons";
 import type { AssetConfigurationBase } from "@akashic/game-configuration";
-import mockfs from "mock-fs";
+import { fs, vol } from "memfs";
 import * as gcu from "../GameConfigurationUtil.js";
+
+vi.mock("node:fs", async () => {
+  const memfs: { fs: typeof fs } = await vi.importActual("memfs");
+  return memfs.fs;
+});
 
 describe("GameConfigurationUtil", () => {
 	let gamejson: cmn.GameConfiguration;
@@ -51,7 +56,7 @@ describe("GameConfigurationUtil", () => {
 	});
 
 	afterEach(() => {
-		mockfs.restore();
+		vol.reset();
 	});
 
 	describe("removeAssets", () => {
@@ -218,7 +223,7 @@ describe("GameConfigurationUtil", () => {
 				path: "audio/foo",
 				duration: 100
 			};
-			mockfs({
+			vol.fromNestedJSON({
 				gamejson: "",
 				audio: {
 					"foo.ogg": "",
@@ -256,7 +261,7 @@ describe("GameConfigurationUtil", () => {
 
 		it("completes preserve packagejson", () => {
 			gamejson.globalScripts = ["node_modules/foobar/lib/x.js"];
-			mockfs({
+			vol.fromNestedJSON({
 				gamejson: "",
 				script: {
 					"main.js": "",
