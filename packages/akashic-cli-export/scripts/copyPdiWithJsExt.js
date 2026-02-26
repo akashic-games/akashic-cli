@@ -1,9 +1,6 @@
 /**
- * lib/pdi から lib/template/v1~v3/js/pdi へのコピーに用いるスクリプト
- * export した html を安定して実行できるよう、 .cjs の場合は .js への拡張子変更を行う
- *
- * Usage: node scripts/copyPdiWithJsExt.js <destDir>
- *   e.g. node scripts/copyPdiWithJsExt.js lib/template/v1/js/pdi
+ * lib/pdi から lib/template/v1~v3/js/pdi へコピーする
+ * .cjs の場合は .js への拡張子変更を行う
  */
 import fs from "fs";
 import path from "path";
