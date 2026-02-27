@@ -36,9 +36,9 @@
     "@changesets/changelog-github": "^0.5.0",
     "@changesets/cli": "^2.27.5",
     "get-port": "^7.1.0",
-    "nx": "^20.3.1",
+    "nx": "^22.0.0",
     "ps-tree": "^1.2.0",
-    "remark-cli": "^10.0.1",
+    "remark-cli": "^12.0.0",
     "shelljs": "^0.8.5"
   }
 }
