@@ -56,9 +56,9 @@
     "@types/lodash": "4.17.9",
     "@types/mock-fs": "4.13.4",
     "@types/node": "18.19.130",
-    "mock-fs": "5.2.0",
+    "mock-fs": "5.5.0",
     "rimraf": "3.0.2",
-    "typescript": "5.5.4",
+    "typescript": "5.9.3",
     "vitest": "^2.0.5"
   },
   "publishConfig": {
