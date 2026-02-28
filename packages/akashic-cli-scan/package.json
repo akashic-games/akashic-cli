@@ -44,7 +44,7 @@
     "aac-duration": "0.0.1",
     "chokidar": "^4.0.0",
     "commander": "^12.0.0",
-    "image-size": "~1.2.0",
+    "image-size": "~2.0.0",
     "music-metadata": "10.7.0",
     "svgson": "^5.2.1",
     "thumbcoil": "~1.2.0"
