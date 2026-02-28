@@ -42,7 +42,7 @@
   "dependencies": {
     "@akashic/akashic-cli-commons": "1.0.3",
     "aac-duration": "0.0.1",
-    "chokidar": "^4.0.0",
+    "chokidar": "^5.0.0",
     "commander": "^12.0.0",
     "image-size": "~1.2.0",
     "music-metadata": "10.7.0",
