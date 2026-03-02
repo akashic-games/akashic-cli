@@ -172,17 +172,17 @@ export function getDefaultBundleScripts(
 	const postloadScriptNames =
 		["sandbox.js", "initGlobals.js"];
 	if (version === "3") {
-		postloadScriptNames.push("pdi/LocalScriptAssetV3.cjs");
+		postloadScriptNames.push("pdi/LocalScriptAssetV3.js");
 		if (bundleText) {
-			postloadScriptNames.push("pdi/LocalTextAssetV3.cjs");
+			postloadScriptNames.push("pdi/LocalTextAssetV3.js");
 		}
 		if (hasInstanceStorageFeature(conf)) {
 			postloadScriptNames.push("plugin-instance-storage.js", "plugin-instance-storage-limited.js");
 		}
 	} else {
-		postloadScriptNames.push("pdi/LocalScriptAsset.cjs");
+		postloadScriptNames.push("pdi/LocalScriptAsset.js");
 		if (bundleText) {
-			postloadScriptNames.push("pdi/LocalTextAsset.cjs");
+			postloadScriptNames.push("pdi/LocalTextAsset.js");
 		}
 	}
 	if (version === "1") postloadScriptNames.push("logger.js");
