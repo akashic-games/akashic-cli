@@ -55,5 +55,6 @@ export class PlayStore {
 			throw new Error("Play not found: " + playId);
 
 		await play.teardown();
+		delete this.plays[playId];
 	};
 }
