@@ -76,6 +76,7 @@ export class Operator {
 
 		if (store.currentPlay) {
 			await store.currentPlay.deleteAllLocalInstances();
+			await store.playStore.deletePlay(playId);
 			store.setCurrentLocalInstance(null);
 		}
 
