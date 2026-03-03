@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.0.17
+
+### Patch Changes
+
+- [#1704](https://github.com/akashic-games/akashic-cli/pull/1704) [`651e4c5`](https://github.com/akashic-games/akashic-cli/commit/651e4c549759b64c6b57cc16b3a3b6ea1f407b12) Thanks [@yu-ogi](https://github.com/yu-ogi)! - handle playlog upload correctly
+
 ## 2.0.16
 
 ### Patch Changes
