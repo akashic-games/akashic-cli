@@ -167,6 +167,7 @@ export class Operator {
 		instance.onStop.addOnce(this._endPlayerInfoResolver);
 		store.setCurrentLocalInstance(instance);
 		await instance.start();
+		instance.setMasterVolume(store.toolBarUiStore.audioVolume);
 		instance.setProfilerValueTrigger((value: ProfilerValue) => {
 			this.store.profilerStore.pushProfilerValueResult("fps", value.framePerSecond);
 			this.store.profilerStore.pushProfilerValueResult("skipped", value.skippedFrameCount);

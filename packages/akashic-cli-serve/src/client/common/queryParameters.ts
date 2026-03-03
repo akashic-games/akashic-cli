@@ -208,6 +208,12 @@ export interface ServeQueryParameters {
 	 */
 	showsDesignGuideline: boolean | null;
 
+	/**
+	 * 音量。
+	 * 0から100の数値。
+	 */
+	audioVolume: number | null;
+
 	// -------------------------------
 	// 以下、内部利用のための定義。
 	// 外部から利用すべきではない。
@@ -308,7 +314,8 @@ export function makeServeQueryParameters(query: RawParsedQuery): ServeQueryParam
 		ignoreSession: asBool(query.ignoreSession),
 		experimentalIsChildWindow: asBool(query.experimentalIsChildWindow),
 		argumentsName: asString(query.argumentsName),
-		argumentsValue: asString(query.argumentsValue)
+		argumentsValue: asString(query.argumentsValue),
+		audioVolume: asNumber(query.audioVolume)
 	};
 }
 

@@ -6,8 +6,8 @@ import type { LocalInstanceEntity } from "../../store/LocalInstanceEntity";
 
 export interface GameState {
 	score?: number;
-	playThrethold?: number;
-	clearThrethold?: number;
+	playThreshold?: number;
+	clearThreshold?: number;
 }
 
 export interface CreateCoeLocalInstanceParameterObject {

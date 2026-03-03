@@ -23,7 +23,8 @@ const store = observable({
 	showsProfiler: false,
 	isActivePausing: false,
 	audioStateSummary: "all-player-unmuted" as PlayAudioStateSummary,
-	showsDesignGuideline: false
+	showsDesignGuideline: false,
+	audioVolume: 50
 });
 
 window.setInterval(() => {
@@ -37,9 +38,12 @@ const TestWithBehaviour = observer(() => (
 			playbackRate: 150,
 			isActivePausing: store.isActivePausing,
 			isActiveExists: true,
+			showsAddInstanceOptions: false,
+			onClickAddInstanceOptions: action("show-add-instance-options"),
 			onClickReset: action("reset"),
 			onClickActivePause: (v) => (store.isActivePausing = v),
 			onClickAddInstance: action("add-instance"),
+			onClickAddSamePlayerInstance: action("add-same-player-instance"),
 			onClickStep: action("step")
 		})}
 		makeInstanceControlProps={() => ({
@@ -71,6 +75,8 @@ const TestWithBehaviour = observer(() => (
 		makeAudioOptionControlProps={() => ({
 			showsAudioOptionPopover: store.showsAudioOptionPopover,
 			audioStateSummary: store.audioStateSummary,
+			audioVolume: store.audioVolume,
+			onChangeAudioVolume: (volume) => void (store.audioVolume = volume),
 			onClickAudioOptionPopover: (show) =>
 				(store.showsAudioOptionPopover = show),
 			onClickSolo: () => (store.audioStateSummary = "only-this-player-unmuted"),
@@ -120,9 +126,12 @@ export const Basic = {
 				playbackRate: 150,
 				isActivePausing: false,
 				isActiveExists: true,
+				showsAddInstanceOptions: false,
+				onClickAddInstanceOptions: action("show-add-instance-options"),
 				onClickReset: action("reset"),
 				onClickActivePause: action("active-pause"),
 				onClickAddInstance: action("add-instance"),
+				onClickAddSamePlayerInstance: action("add-same-player-instance"),
 				onClickStep: action("step")
 			})}
 			makeInstanceControlProps={() => ({
@@ -145,6 +154,8 @@ export const Basic = {
 			makeAudioOptionControlProps={() => ({
 				showsAudioOptionPopover: false,
 				audioStateSummary: "only-this-player-unmuted",
+				audioVolume: 50,
+				onChangeAudioVolume: action("change-audio-volume"),
 				onClickAudioOptionPopover: action("audio-option"),
 				onClickSolo: () => {
 					// do nothing

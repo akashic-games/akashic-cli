@@ -8,7 +8,12 @@ on:
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 env:
-  NODE_VERSION: 20
+  NODE_VERSION: 24
+
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write
 
 jobs:
   release:
@@ -16,12 +21,13 @@ jobs:
     name: Publish and Release
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
         with:
           # CHANGELOG の差分を適切に生成するため明示的にすべての履歴を取得
           fetch-depth: 0
+          persist-credentials: false
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
@@ -30,10 +36,23 @@ jobs:
           npm ci
           npm test
       - name: Create Release PullRequest or Publish
-        uses: changesets/action@v1
+        uses: changesets/action@e0145edc7d9d8679003495b11f87bd8ef63c0cba # v1.5.3
         with:
           publish: npm run release-packages
           version: npm run version-packages
         env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Archive artifact
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: shrinkwrap_log
+          path: ./logs_shrinkwrap
+      - name: Test after publish
+        # package-lock.json を更新するのが publish 直前のため、publish した物と完全に同じ状態でテストできない
+        # ここでエラーになっても既に publish してしまった後だが、問題の検出を早めるため実行している
+        # publish 時に npm-shrinkwrap.json が作成されていなければエラーとなり、このテストは実行されない
+        run: | 
+          if [[ `find ./packages/**/npm-shrinkwrap.json` ]]; then
+            npm test
+          fi

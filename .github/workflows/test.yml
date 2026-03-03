@@ -9,6 +9,9 @@ concurrency:
   group: ${{ startsWith(github.head_ref, 'renovate/') && 'renovate' || format('{0}-{1}', github.workflow, github.ref) }}
   cancel-in-progress: ${{ !startsWith(github.head_ref, 'renovate/') }}
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}
@@ -16,13 +19,15 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        os: [ubuntu-latest, windows-latest]
-        node: [18.x, 20.x]
+        os: [ubuntu-latest, windows-2022] # windows-latest 環境では e2e テストが失敗するため、暫定的対応として windows-2022 を指定
+        node: [20.x, 22.x]
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+        with:
+          persist-credentials: false
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
         with:
           node-version: ${{ matrix.node }}
           cache: npm

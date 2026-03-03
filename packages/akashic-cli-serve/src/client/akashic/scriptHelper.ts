@@ -15,6 +15,13 @@ function createMeddlingMath(): Math {
 				const referenceUrl = "https://akashic-games.github.io/guide/sandbox-config.html#warn";
 				const referenceMessage = "この警告が表示される場合の対処方法についてはこちらを参照してください";
 				(window as any).akashicServe.scriptHelper.onScriptWarn.fire({ type, message, referenceUrl, referenceMessage });
+			} else if (prop === "sin" || prop === "cos" || prop === "tan") {
+				// FIXME: tan に対応
+				const type = "useMathSinCosTan";
+				const message = `Math.${prop}() が利用されました。代わりに g.game.Math.${prop}() の利用を推奨します。`;
+				const referenceUrl = "https://akashic-games.github.io/guide/sandbox-config.html#warn";
+				const referenceMessage = "この警告が表示される場合の対処方法についてはこちらを参照してください";
+				(window as any).akashicServe.scriptHelper.onScriptWarn.fire({ type, message, referenceUrl, referenceMessage });
 			}
 			return (target as any)[prop];
 		}

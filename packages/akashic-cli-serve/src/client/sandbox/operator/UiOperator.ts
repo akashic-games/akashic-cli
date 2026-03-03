@@ -1,5 +1,5 @@
 import type { NotificationType } from "../../store/NotificationType";
-import type { Store } from "../Store";
+import type { Store } from "../store/Store";
 
 export class UiOperator {
 	private store: Store;
@@ -10,6 +10,14 @@ export class UiOperator {
 
 	setShowDevtools = (show: boolean): void => {
 		this.store.toolBarUiStore.setShowDevtools(show);
+	};
+
+	setShowAudioOptionPopover = (show: boolean): void => {
+		this.store.toolBarUiStore.setShowAudioOptionPopover(show);
+	};
+
+	setAudioVolume = (volume: number): void => {
+		this.store.toolBarUiStore.setAudioVolume(volume);
 	};
 
 	setShowDisplayOptionPopover = (show: boolean): void => {

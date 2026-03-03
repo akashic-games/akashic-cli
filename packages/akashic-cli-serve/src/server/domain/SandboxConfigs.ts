@@ -18,10 +18,9 @@ const configs: { [key: string]: ResolvedSandboxConfig } = {};
  * コンテンツの sandbox.config.js  ファイルの読み込み/監視を登録。
  *
  * @param contentId コンテンツID
- * @param targetDir sandbox.config.jsが存在するディレクトリパス
+ * @param configPath sandbox.config.js のファイルパス
  */
-export function register(contentId: string, targetDir: string): void {
-	const configPath = path.resolve(targetDir, "sandbox.config.js");
+export function register(contentId: string, configPath: string): void {
 	if (configs[contentId]) return;
 	configs[contentId] = watchRequire(configPath, contentId, config => configs[contentId] = config);
 }
@@ -79,8 +78,8 @@ export function normalizeConfig(sandboxConfig: SandboxConfiguration, contentId: 
 	const bgImage = config.displayOptions.backgroundImage;
 	let resolvedBackgroundImagePath = null;
 	if (bgImage) {
-		if (!/\.(jpg|jpeg|png)$/.test(bgImage)) {
-			throw new BadRequestError({ errorMessage: "Invalid backgroundImage, Please specify a png/jpg file." });
+		if (!/\.(jpg|jpeg|png|webp)$/.test(bgImage)) {
+			throw new BadRequestError({ errorMessage: "Invalid backgroundImage, Please specify a png/jpg/webp file." });
 		}
 
 		if (/^\/contents\//.test(bgImage)) {

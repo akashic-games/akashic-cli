@@ -72,6 +72,22 @@ npm run changeset
 対象の PullRequest をマージするとバージョン更新の PullRequest が自動的に作成されます。
 内容を確認後、その PullRequest をマージすることで publish が完了します。
 
+
+### publish 時の npm-shrinkwrap.json の追加
+
+`npm publish` の実行タイミングで `./scripts/generateShrinkwrapJson.js` が実行されます。
+publish 時、各パッケージの依存関係のバージョンを固定するために `npm-shrinkwrap.json` を追加するスクリプトです。
+
+akashic-cli がモノレポであることや、akashic-cli の publish が行われた場合に、akashic-cli-xxxxx が `npm i --before <date>` でエラーとなる事を考慮し、スクリプトは下記の手順で `npm-shrinkwrap.json` を作成します。
+
+1. ルートの `package.json`, `package-lock.json` をリネーム
+2. 依存モジュールが publish 済みかポーリングして確認
+3. ロックファイルを作成。ロックファイルが作成済みの場合はポーリングで待つ
+4. 各パッケージの `package.json` の dependencies/devDependencies から `@akashic/xxxxx` を削除し `npm i --before <実行日の七日前>` を実行
+5. 4 で削除した `@akashic/xxxxx` を npm インストール
+6. `npm shrinkwarp` を実行
+7. 1 でリネームした `package.json`, `package-lock.json` を戻し、ロックファイルを削除
+
 ## ライセンス
 
 本リポジトリは MIT License の元で公開されています。

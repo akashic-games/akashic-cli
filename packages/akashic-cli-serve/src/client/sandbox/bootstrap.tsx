@@ -5,7 +5,7 @@ import { GameViewManager } from "../akashic/GameViewManager";
 import { scriptHelper } from "../akashic/scriptHelper";
 import { queryParameters as query } from "../common/queryParameters";
 import { Operator } from "./operator/Operator";
-import { Store } from "./Store";
+import { Store } from "./store/Store";
 import { App } from "./view/App";
 
 mobxConfigure({ enforceActions: "observed" });

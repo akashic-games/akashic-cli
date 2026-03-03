@@ -20,7 +20,7 @@ export function knownExtensionAssetFilter(p: string): boolean {
 }
 
 export function imageAssetFilter(p: string): boolean {
-	return /.*\.(png|gif|jp(?:e)?g)$/i.test(p);
+	return /.*\.(png|gif|jp(?:e)?g|webp)$/i.test(p);
 }
 
 export function vectorImageAssetFilter(p: string): boolean {

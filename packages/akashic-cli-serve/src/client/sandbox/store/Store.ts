@@ -1,21 +1,22 @@
 import type { ServiceType } from "@akashic/akashic-cli-commons/lib/ServiceType";
 import { observable, action, autorun } from "mobx";
-import type { AppOptions } from "../../common/types/AppOptions";
-import type { Player } from "../../common/types/Player";
-import type { GameViewManager } from "../akashic/GameViewManager";
-import type { RuntimeWarning } from "../akashic/RuntimeWarning";
-import { apiClient } from "../api/apiClientInstance";
-import { ClientContentLocator } from "../common/ClientContentLocator";
-import type { ScreenSize } from "../common/types/ScreenSize";
-import { ContentStore } from "../store/ContentStore";
-import { DevtoolUiStore } from "../store/DevtoolUiStore";
-import type { LocalInstanceEntity } from "../store/LocalInstanceEntity";
-import { NotificationUiStore } from "../store/NotificationUiStore";
-import type { PlayEntity } from "../store/PlayEntity";
-import { ProfilerStore } from "../store/ProfilerStore";
-import { StartupScreenUiStore } from "../store/StartupScreenUiStore";
-import { storage } from "../store/storage";
-import { ToolBarUiStore } from "../store/ToolBarUiStore";
+import type { AppOptions } from "../../../common/types/AppOptions";
+import type { Player } from "../../../common/types/Player";
+import type { GameViewManager } from "../../akashic/GameViewManager";
+import type { RuntimeWarning } from "../../akashic/RuntimeWarning";
+import { apiClient } from "../../api/apiClientInstance";
+import { ClientContentLocator } from "../../common/ClientContentLocator";
+import type { ScreenSize } from "../../common/types/ScreenSize";
+import { ContentStore } from "../../store/ContentStore";
+import { DevtoolUiStore } from "../../store/DevtoolUiStore";
+import type { LocalInstanceEntity } from "../../store/LocalInstanceEntity";
+import { NotificationUiStore } from "../../store/NotificationUiStore";
+import type { PlayEntity } from "../../store/PlayEntity";
+import { ProfilerStore } from "../../store/ProfilerStore";
+import { StartupScreenUiStore } from "../../store/StartupScreenUiStore";
+import { storage } from "../../store/storage";
+import { ToolBarUiStore } from "../../store/ToolBarUiStore";
+import { PlayStore } from "./PlayStore";
 
 export interface StoreParameterObject {
 	contentId: string;
@@ -23,6 +24,7 @@ export interface StoreParameterObject {
 }
 
 export class Store {
+	@observable playStore: PlayStore;
 	@observable contentStore: ContentStore;
 	@observable toolBarUiStore: ToolBarUiStore;
 	@observable devtoolUiStore: DevtoolUiStore;
@@ -39,10 +41,12 @@ export class Store {
 
 	private _gameViewManager: GameViewManager;
 	private _initializationWaiter: Promise<void>;
+	private _warnedTypes: Set<string>;
 
 	constructor(param: StoreParameterObject) {
 		this.contentLocator = new ClientContentLocator({ contentId: param.contentId });
 		this.contentStore = new ContentStore();
+		this.playStore = new PlayStore({ gameViewManager: param.gameViewManager });
 		this.toolBarUiStore = new ToolBarUiStore();
 		this.devtoolUiStore = new DevtoolUiStore();
 		this.notificationUiStore = new NotificationUiStore();
@@ -58,6 +62,7 @@ export class Store {
 		this._initializationWaiter = apiClient.getOptions().then(result => {
 			this.appOptions = result.data;
 		});
+		this._warnedTypes = new Set();
 
 		autorun(() => {
 			if (!this.toolBarUiStore.fitsToScreen && this.currentLocalInstance?.intrinsicSize) {
@@ -109,8 +114,13 @@ export class Store {
 
 	// FIXME: Store と共通化する
 	private _warn(warning: RuntimeWarning): void {
+		// すでに通知済みの type なら何もしない
+		if (this._warnedTypes.has(warning.type)) return;
+
 		const sandboxConfigWarn = this.currentLocalInstance!.content.sandboxConfig.warn;
 		const warningTitle = "Runtime Warning";
+		this._warnedTypes.add(warning.type);
+
 		switch (warning.type) {
 			case "useMathRandom":
 				if (!sandboxConfigWarn || sandboxConfigWarn.useMathRandom !== false) {
@@ -120,6 +130,19 @@ export class Store {
 						title: warningTitle,
 						name: warning.message, // 赤字表示のため name に message を設定
 						message: "",
+						referenceUrl: warning.referenceUrl,
+						referenceMessage: warning.referenceMessage
+					});
+				}
+				break;
+			case "useMathSinCosTan":
+				if (!sandboxConfigWarn || sandboxConfigWarn.useMathSinCosTan !== false) {
+					console.warn(`${warning.message}`);
+					this.notificationUiStore.setActive({
+						type: "error",
+						title: warningTitle,
+						name: "",
+						message: warning.message,
 						referenceUrl: warning.referenceUrl,
 						referenceMessage: warning.referenceMessage
 					});

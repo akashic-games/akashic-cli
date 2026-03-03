@@ -11,6 +11,7 @@ export class ToolBarUiStore {
 	@observable showsAudioOptionPopover: boolean;
 
 	@observable showsDisplayOptionPopover: boolean;
+	@observable showsAddInstanceOptions: boolean;
 	@observable fitsToScreen!: boolean;
 	// 以下のプロパティは assertInitialize() が resolve されるまでの値は保証されない
 	@observable showsBackgroundImage: boolean;
@@ -18,6 +19,7 @@ export class ToolBarUiStore {
 	@observable showsGrid: boolean;
 	@observable showsProfiler: boolean;
 	@observable showsDesignGuideline: boolean;
+	@observable audioVolume: number;
 
 	constructor() {
 		this.currentTimePreview = 0;
@@ -26,11 +28,13 @@ export class ToolBarUiStore {
 		this.showsDevtools = storage.data.showsDevtools;
 		this.showsAudioOptionPopover = false;
 		this.showsDisplayOptionPopover = false;
+		this.showsAddInstanceOptions = false;
 		this.showsBackgroundImage = null!;
 		this.showsBackgroundColor = null!;
 		this.showsGrid = null!;
 		this.showsProfiler = null!;
 		this.showsDesignGuideline = null!;
+		this.audioVolume = null!;
 	}
 
 	async assertInitialized(): Promise<void> {
@@ -43,6 +47,7 @@ export class ToolBarUiStore {
 			this.showsProfiler = storage.data.showsProfiler;
 			this.showsDesignGuideline = storage.data.showsDesignGuideline;
 			this.showsDevtools = storage.data.showsDevtools;
+			this.audioVolume = storage.data.audioVolume;
 		});
 	}
 
@@ -84,6 +89,11 @@ export class ToolBarUiStore {
 	}
 
 	@action
+	setShowsAddInstanceOptions(show: boolean): void {
+		this.showsAddInstanceOptions = show;
+	}
+
+	@action
 	setFitsToScreen(fits: boolean): void {
 		this.fitsToScreen = fits;
 		storage.put({ fitsToScreen: fits });
@@ -117,5 +127,11 @@ export class ToolBarUiStore {
 	setShowDesignGuideline(show: boolean): void {
 		this.showsDesignGuideline = show;
 		storage.put({ showsDesignGuideline: show });
+	}
+
+	@action
+	setAudioVolume(volume: number): void {
+		this.audioVolume = volume;
+		storage.put({ audioVolume: volume });
 	}
 }

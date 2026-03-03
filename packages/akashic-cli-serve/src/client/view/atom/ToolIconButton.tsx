@@ -1,8 +1,9 @@
 import { observer } from "mobx-react";
 import * as React from "react";
+import { useOnClickOutside } from "./Popover";
 import styles from "./ToolIconButton.module.css";
 
-export interface ToolIconButtonProps {
+interface ToolIconButtonProps {
 	/**
 	 * アイコン名。
 	 * Material Icons の名前である必要がある。
@@ -43,23 +44,86 @@ export interface ToolIconButtonProps {
 	 * ReactNode
 	 */
 	children?: React.ReactNode;
+	/**
+	 * スプリットボタン用Props
+	 */
+	splitButtonProps?: SplitButtonProps;
 }
 
-export const ToolIconButton = observer(class ToolIconButton extends React.Component<ToolIconButtonProps, {}> {
-	render(): JSX.Element {
-		const { className, icon, title, pushed, pushedIcon, disabled, children, size } = this.props;
-		const pushedClass = (pushed && !pushedIcon) ? " " + styles.pushed : "";
-		return <button className={styles["tool-icon-button"] + pushedClass + " " + className}
-			disabled={disabled} title={title} onClick={this._onClick}>
+interface SplitButtonProps {
+	menuItems: DropDownMenuItem[];
+	showMenu: boolean;
+	onToggleMenu: (show: boolean) => void;
+}
+
+interface DropDownMenuItem {
+	label: string;
+	key?: string;
+	tooltip?: string;
+	icon?: string;
+	onClick: () => void;
+}
+
+export const ToolIconButton = observer(function ToolIconButton(props: ToolIconButtonProps): JSX.Element {
+	const { className, icon, title, pushed, pushedIcon, disabled, children, size, onClick, splitButtonProps } = props;
+	const pushedClass = (pushed && !pushedIcon) ? " " + styles.pushed : "";
+	const hasSplitButton = splitButtonProps != null && splitButtonProps.menuItems.length > 0;
+	return <div className={styles["tool-icon-button-container"]}>
+		<button className={`${styles["tool-icon-button"]} ${hasSplitButton ? styles["with-split-button"] : ""} ${pushedClass} ${className}`}
+			disabled={disabled} title={title} onClick={(): void => {
+				onClick?.(!pushed);
+			}}>
 			<i className="material-icons" style={(size != null) ? { fontSize: size } : undefined}>
 				{(pushed && pushedIcon) ? pushedIcon : icon}
 			</i>
 			{ children ? <p>{children}</p> : null }
-		</button>;
-	}
-
-	private _onClick = (): void => {
-		this.props.onClick?.(!this.props.pushed);
-	};
+		</button>
+		{
+			hasSplitButton && (
+				<SplitButton
+					menuItems={splitButtonProps.menuItems}
+					showMenu={splitButtonProps.showMenu}
+					onToggleMenu={splitButtonProps.onToggleMenu}
+				/>
+			)
+		}
+	</div>;
 });
 
+
+const SplitButton = observer(function SplitButton(props: SplitButtonProps): JSX.Element {
+	const { menuItems, showMenu, onToggleMenu } = props;
+	const menuRef = React.useRef<HTMLDivElement>(null);
+	const handleClickOutside = React.useCallback(() => {
+		onToggleMenu(false);
+	}, [showMenu, onToggleMenu]);
+	useOnClickOutside(menuRef, handleClickOutside);
+
+	return (
+		<div className={styles["dropdown-component"]} ref={menuRef}>
+			<button className={styles["tool-icon-button"] + " " + styles["as-split-button"]} onClick={() => onToggleMenu(!showMenu)}>
+				<div className={styles["down-arrow"]}></div>
+			</button>
+			{
+				showMenu && (
+					<div className={styles["dropdown-menu"]}>
+						{menuItems.map((item) => (
+							<div
+								key={item.key ?? item.label}
+								className={styles["dropdown-item"]}
+								title={item.tooltip}
+								onClick={() => {
+									item.onClick();
+									onToggleMenu(false);
+								}}
+							>
+								<i className="material-icons">{item.icon ?? undefined}</i>
+								{item.label}
+							</div>
+						))}
+					</div>
+				)
+			}
+		</div>
+	);
+});

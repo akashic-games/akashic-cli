@@ -20,7 +20,8 @@ import {
 	validateEngineFilesName,
 	resolveEngineFilesPath,
 	removeUntaintedHints,
-	validateSandboxConfigJs
+	validateSandboxConfigJs,
+	hasInstanceStorageFeature
 } from "./convertUtil.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -83,7 +84,7 @@ export async function promiseConvertNoBundle(options: ConvertTemplateParameterOb
 		options.logger.warn("The following ES5 syntax errors exist.\n" + errorMessages.join("\n"));
 	}
 	await writeHtmlFile(assetPaths, options.output, conf, options);
-	writeOptionScript(options.output, options);
+	writeOptionScript(options.output, options, conf);
 }
 
 async function convertAssetAndOutput(
@@ -155,7 +156,8 @@ async function writeHtmlFile(
 		exportOption: options.exportInfo !== undefined ? options.exportInfo.option : "",
 		autoSendEventName: options.autoSendEventName,
 		autoGivenArgsName: options.autoGivenArgsName,
-		sandboxConfigJsCode: options.sandboxConfigJsCode !== undefined ? options.sandboxConfigJsCode : ""
+		sandboxConfigJsCode: options.sandboxConfigJsCode !== undefined ? options.sandboxConfigJsCode : "",
+		hasInstanceStorage: hasInstanceStorageFeature(conf)
 	});
 	fs.writeFileSync(path.resolve(outputPath, "./index.html"), html);
 }
@@ -199,12 +201,13 @@ function writeCommonFiles(
 	);
 }
 
-function writeOptionScript(outputPath: string, options: ConvertTemplateParameterObject): void {
+function writeOptionScript(outputPath: string, options: ConvertTemplateParameterObject, conf: cmn.Configuration): void {
 	const script = `
 if (! ("optionProps" in window)) {
 	window.optionProps = {};
 }
 window.optionProps.magnify = ${!!options.magnify};
+window.optionProps.hasInstanceStorage = ${!!hasInstanceStorageFeature(conf)};
 	`;
 	fs.writeFileSync(path.resolve(outputPath, "./js/option.js"), script);
 }

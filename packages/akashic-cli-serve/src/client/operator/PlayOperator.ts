@@ -65,14 +65,11 @@ export class PlayOperator {
 	};
 
 	openNewClientInstance = (): void => {
-		const { top, left, width, height } = this.calcWindowLayout();
-		// Mac Chrome で正しく動作しないのと、親ウィンドウかどうかの判別をしたいことがあるので noopener は付けない。
-		// 代わりに ignoreSession を指定して自前でセッションストレージをウィンドウごとに使い分ける (ref. ../store/storage.ts)
-		window.open(
-			`${window.location.pathname}?ignoreSession=1&experimentalIsChildWindow=1`,
-			"_blank",
-			`width=${width},height=${height},top=${top},left=${left}`
-		);
+		this.openClientInstance();
+	};
+
+	openSameClientInstance = (): void => {
+		this.openClientInstance(this.store.player!.id);
 	};
 
 	closeThisWindowIfNeeded = (): void => {
@@ -147,6 +144,17 @@ export class PlayOperator {
 		a.download = fileName;
 		a.click();
 		document.body.removeChild(a);
+	};
+
+	private openClientInstance = (playerId?: string): void => {
+		const { top, left, width, height } = this.calcWindowLayout();
+		// Mac Chrome で正しく動作しないのと、親ウィンドウかどうかの判別をしたいことがあるので noopener は付けない。
+		// 代わりに ignoreSession を指定して自前でセッションストレージをウィンドウごとに使い分ける (ref. ../store/storage.ts)
+		let url = `${window.location.pathname}?ignoreSession=1&experimentalIsChildWindow=1`;
+		if (playerId) {
+			url += `&playerId=${playerId}`;
+		}
+		window.open(url, "_blank", `width=${width},height=${height},top=${top},left=${left}`);
 	};
 
 	private calcWindowLayout(): { top: number; left: number; width: number; height: number } {
