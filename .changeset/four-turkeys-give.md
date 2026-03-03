@@ -4,4 +4,4 @@
 "@akashic/akashic-cli-export": patch
 ---
 
-Remove browserify, Use rollup
+Remove browserify & mock-fs, Use rollup & memfs
