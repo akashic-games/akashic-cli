@@ -1119,7 +1119,7 @@ describe("scanNodeModules", () => {
 	});
 
 	it("apply gameConfigurationData from akashic-lib.json to game.json", async () => {
-		mockfs({
+		const mockContent = {
 			"game.json": JSON.stringify({
 				assets: {},
 				globalScripts: [],
@@ -1146,10 +1146,12 @@ describe("scanNodeModules", () => {
 					})
 				}
 			}
-		});
+		};
+		fixtureContents = testUtil.prepareFsContent(mockContent, fs.mkdtempSync(baseDir));
 
 		await scanNodeModules({
 			logger: nullLogger,
+			cwd: fixtureContents.path,
 			forceUpdate: true, // forceUpdate が false の場合は gameConfigurationData を反映しない (後方互換の挙動)
 			debugNpm: new MockPromisedNpm({
 				expectDependencies: {
@@ -1158,17 +1160,18 @@ describe("scanNodeModules", () => {
 			}),
 		});
 
-		const conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		const conf = JSON.parse(fs.readFileSync(path.join(fixtureContents.path, "./game.json")).toString());
 		expect(conf.environment).toEqual({
 			"sandbox-runtime": 3,
 			external: {
 				fooPlugin: '0',
 			},
 		});
+		fixtureContents.dispose();
 	});
 
 	it("clear environment.external when module not in package.json with --force", async () => {
-		mockfs({
+		const mockContent = {
 			"game.json": JSON.stringify({
 				assets: {},
 				globalScripts: [],
@@ -1179,7 +1182,7 @@ describe("scanNodeModules", () => {
 					}
 				}
 			}),
-		});
+		};
 
 		const warnLogs: string[] = [];
 		class Logger extends ConsoleLogger {
@@ -1191,16 +1194,18 @@ describe("scanNodeModules", () => {
 			}
 		}
 		const logger = new Logger();
+		fixtureContents = testUtil.prepareFsContent(mockContent, fs.mkdtempSync(baseDir));
 
 		await scanNodeModules({
 			logger,
+			cwd: fixtureContents.path,
 			forceUpdate: true,
 			debugNpm: new MockPromisedNpm({
 				expectDependencies: {}
 			}),
 		});
 
-		const conf = JSON.parse(fs.readFileSync("./game.json").toString());
+		const conf = JSON.parse(fs.readFileSync(path.join(fixtureContents.path, "./game.json")).toString());
 
 		// external が削除されていることを確認
 		expect(conf.environment).toEqual({
@@ -1210,5 +1215,6 @@ describe("scanNodeModules", () => {
 		// 既存設定があれば警告を出すことを確認
 		expect(warnLogs.length).toBe(1);
 		expect(warnLogs[0]).toMatch(/environment\.external/);
+		fixtureContents.dispose();
 	});
 });
