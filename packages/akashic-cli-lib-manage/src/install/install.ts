@@ -155,8 +155,9 @@ export function promiseInstall(param: InstallParameterObject): Promise<void> {
 				.then(() => {
 					// param.moduleNames は npm pack された tgz ファイルのパスを含む場合がある。しかし NodeModules#listScriptFiles() はこれを扱えない。
 					// そのため tgz ファイルを解凍し package.json からモジュール名を取得し後続処理に渡す。
+					// バージョン付き(moduleName@x.x.x) では rollup で解決できないため、バージョン情報を取り除く
 					installedModuleNames = normalizedParam.moduleNames.map(name => {
-						return /\.t(ar\.)?gz$/.test(name) ? _getPackageNameFromTgzFile(name) : name;
+						return /\.t(ar\.)?gz$/.test(name) ? _getPackageNameFromTgzFile(name) : name.replace(/@\d+\.\d+\.\d+/, "");
 					});
 				})
 				.then(() => {
