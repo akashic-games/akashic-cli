@@ -37,7 +37,7 @@
     "mock-fs": "5.2.0",
     "shx": "0.3.4",
     "typescript": "5.5.4",
-    "vitest": "^2.0.5"
+    "vitest": "^4.0.0"
   },
   "dependencies": {
     "@akashic/akashic-cli-commons": "1.0.3",
