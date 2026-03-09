@@ -144,9 +144,6 @@ export module NodeModules {
 				}
 				filePaths.push(filePath);
 			});
-
-		} catch (e) {
-			throw new Error(e);
 		} finally {
 			await restoreDirectory();
 		}
