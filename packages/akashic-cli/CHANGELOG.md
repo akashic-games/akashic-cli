@@ -1,5 +1,19 @@
 # Change Log
 
+## 3.0.25
+
+### Patch Changes
+
+- Updated dependencies [[`5b21096`](https://github.com/akashic-games/akashic-cli/commit/5b2109645d7741faac0197ffa687d3a5cc4a12c7)]:
+  - @akashic/akashic-cli-lib-manage@2.0.4
+  - @akashic/akashic-cli-commons@1.0.4
+  - @akashic/akashic-cli-export@2.0.16
+  - @akashic/akashic-cli-extra@2.0.4
+  - @akashic/akashic-cli-init@2.0.4
+  - @akashic/akashic-cli-sandbox@2.0.9
+  - @akashic/akashic-cli-scan@1.0.6
+  - @akashic/akashic-cli-serve@2.0.18
+
 ## 3.0.24
 
 ### Patch Changes
