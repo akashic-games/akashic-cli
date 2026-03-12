@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.0.4
+
+### Patch Changes
+
+- [#1561](https://github.com/akashic-games/akashic-cli/pull/1561) [`5b21096`](https://github.com/akashic-games/akashic-cli/commit/5b2109645d7741faac0197ffa687d3a5cc4a12c7) Thanks [@ShinobuTakahashi](https://github.com/ShinobuTakahashi)! - Remove browserify & mock-fs, Use rollup & memfs
+
 ## 1.0.3
 
 ### Patch Changes
