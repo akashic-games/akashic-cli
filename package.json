@@ -7,9 +7,9 @@
   "scripts": {
     "postinstall": "npm run build",
     "build": "nx run-many -t build",
-    "test": "npm run lint:md && npm run test:nx",
-    "test:e2e": "node test/e2e.js --local",
+    "test": "npm run lint:md && npm run test:nx && npm run test:e2e",
     "test:nx": "nx run-many -t test",
+    "test:e2e": "node test/e2e.js --local",
     "test:published": "node test/e2e.js",
     "lint:md": "remark . --frail --no-stdout --quiet --rc-path ./.remarkrc",
     "changeset": "changeset",
