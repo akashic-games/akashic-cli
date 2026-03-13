@@ -56,7 +56,7 @@
     "fs-readdir-recursive": "1.1.0",
     "js-sha256": "^0.11.0",
     "resolve": "^1.22.8",
-    "rollup": "4.41.1"
+    "rollup": "4.59.0"
   },
   "publishConfig": {
     "access": "public",
