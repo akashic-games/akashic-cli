@@ -35,9 +35,9 @@
     "@akashic/remark-preset-lint": "^0.1.2",
     "@changesets/changelog-github": "^0.5.0",
     "@changesets/cli": "^2.27.5",
-    "@types/node": "^22.19.13",
+    "@types/node": "^24.0.0",
     "get-port": "^7.1.0",
-    "nx": "^20.3.1",
+    "nx": "^22.0.0",
     "ps-tree": "^1.2.0",
     "remark-cli": "^12.0.0",
     "shelljs": "^0.10.0"
