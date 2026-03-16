@@ -3,7 +3,7 @@
 // 1. ルートの `package.json`, `package-lock.json` をリネーム
 // 2. 依存モジュールが publish 済みかポーリングして確認
 // 3. ロックファイルを作成。ロックファイルが作成済みの場合はポーリングで待つ
-// 4. 各パッケージの `package.json` の dependencies/devDependencies から `@akashic/xxxxx` を削除し `npm i --before <実行日の七日前>` を実行
+// 4. 各パッケージの `package.json` の devDependencies を削除し、dependencies から `@akashic/xxxxx` を削除後に `npm i --before <実行日の七日前> --ignore-scripts` を実行
 // 5. 4 で削除した `@akashic/xxxxx` を npm インストール
 // 6. `npm shrinkwarp` を実行
 // 7. 1 でリネームした `package.json`, `package-lock.json` を戻し、ロックファイルを削除
@@ -30,12 +30,11 @@ let fd; // filedescriptor
 let isError = false;
 
 /**
- * 各パッケージの package.json の dependencies/devDependencies から akashic 系を削除する
+ * 各パッケージの package.json の dependencies から akashic 系を削除する
  */
 function removeAkashicDependencies(pkgJsonPath) {
   const pkgJson = JSON.parse(fs.readFileSync(pkgJsonPath, "utf8"));
   const akashicDependencies = [];
-  const devAkashicDependencies = [];
 
   if (pkgJson.dependencies) {
     for (const module of Object.keys(pkgJson.dependencies)) {
@@ -45,16 +44,8 @@ function removeAkashicDependencies(pkgJsonPath) {
       }
     }
   }
-  if (pkgJson.devDependencies) {
-    for (const module of Object.keys(pkgJson.devDependencies)) {
-      if (/^@akashic\//.test(module)) {
-        devAkashicDependencies.push({ name: module, ver: pkgJson.devDependencies[module] });
-        delete pkgJson.devDependencies[module];
-      }
-    }
-  }
   fs.writeFileSync(pkgJsonPath, JSON.stringify(pkgJson, null, 2) + "\n");
-  return { dependencies: akashicDependencies, devDependencies: devAkashicDependencies };
+  return { dependencies: akashicDependencies };
 }
 
 /**
@@ -117,9 +108,11 @@ async function waitPublish(pkgName, version) {
  */
 async function generateShrinkwrapJson() {
   let pkgName = "";
+  let orgPkgJson;
 
   try {
     const pkgJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
+    orgPkgJson = { ...pkgJson };
     pkgName = pkgJson.name;
     logs.push(`--------------- ${pkgName} generateShrinkwrapJson start ---`);
 
@@ -154,6 +147,9 @@ async function generateShrinkwrapJson() {
     fs.renameSync(rootPackageJsonPath, rootRenamePackageJsonPath);
     fs.renameSync(rootPackageLockPath, rootRenamePackageLockPath);
 
+    delete pkgJson.devDependencies;
+    fs.writeFileSync(packageJsonPath, JSON.stringify(pkgJson, null, 2) + "\n");
+
     const dt = new Date();
     dt.setDate(dt.getDate() - BEFORE_DAYS);
     const formattedDate = formatDate(dt);
@@ -165,7 +161,7 @@ async function generateShrinkwrapJson() {
       process.env.SKIP_SETUP = true;
     }
 
-    const npmInstallCmd = `npm i --before ${formattedDate} --production`;
+    const npmInstallCmd = `npm i --before ${formattedDate} --ignore-scripts`;
     logs.push(`- exec: "${npmInstallCmd}"`);
     let cmdResult = execSync(npmInstallCmd, { encoding: "utf8" });
     logs.push(cmdResult);
@@ -192,6 +188,7 @@ async function generateShrinkwrapJson() {
     logs.push("--- Error:", err);
     isError = true;
   } finally {
+    fs.writeFileSync(packageJsonPath, JSON.stringify(orgPkgJson, null, 2) + "\n");
     if (fs.existsSync(rootRenamePackageJsonPath)) fs.renameSync(rootRenamePackageJsonPath, rootPackageJsonPath);
     if (fs.existsSync(rootRenamePackageLockPath)) fs.renameSync(rootRenamePackageLockPath, rootPackageLockPath);
 
