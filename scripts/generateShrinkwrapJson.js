@@ -32,8 +32,7 @@ let isError = false;
 /**
  * 各パッケージの package.json の dependencies から akashic 系を削除する
  */
-function removeAkashicDependencies(pkgJsonPath) {
-  const pkgJson = JSON.parse(fs.readFileSync(pkgJsonPath, "utf8"));
+function removeAkashicDependencies(pkgJson) {
   const akashicDependencies = [];
 
   if (pkgJson.dependencies) {
@@ -44,7 +43,6 @@ function removeAkashicDependencies(pkgJsonPath) {
       }
     }
   }
-  fs.writeFileSync(pkgJsonPath, JSON.stringify(pkgJson, null, 2) + "\n");
   return { dependencies: akashicDependencies };
 }
 
@@ -108,11 +106,11 @@ async function waitPublish(pkgName, version) {
  */
 async function generateShrinkwrapJson() {
   let pkgName = "";
-  let orgPkgJson;
+  let orgPkgJsonStr = null;
 
   try {
     const pkgJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
-    orgPkgJson = { ...pkgJson };
+    orgPkgJsonStr = JSON.stringify(pkgJson, null, 2);
     pkgName = pkgJson.name;
     logs.push(`--------------- ${pkgName} generateShrinkwrapJson start ---`);
 
@@ -147,14 +145,13 @@ async function generateShrinkwrapJson() {
     fs.renameSync(rootPackageJsonPath, rootRenamePackageJsonPath);
     fs.renameSync(rootPackageLockPath, rootRenamePackageLockPath);
 
-    delete pkgJson.devDependencies;
-    fs.writeFileSync(packageJsonPath, JSON.stringify(pkgJson, null, 2) + "\n");
-
     const dt = new Date();
     dt.setDate(dt.getDate() - BEFORE_DAYS);
     const formattedDate = formatDate(dt);
     // akashic-cli-xxxxx は publish 日付が直前の可能性があり、--before <date> で引っかかるため package.json から削除し後でインストールする
-    const akashicModules = removeAkashicDependencies(packageJsonPath);
+    const akashicModules = removeAkashicDependencies(pkgJson);
+    delete pkgJson.devDependencies;
+    fs.writeFileSync(packageJsonPath, JSON.stringify(pkgJson, null, 2));
 
     if (pkgName == "@akashic/akashic-cli-serve") {
       // serve で @akashic 系を削除してインストールした場合、`npm run setup` の処理で落ちる。環境変数の値を設定し処理をスキップさせる。 
@@ -188,7 +185,7 @@ async function generateShrinkwrapJson() {
     logs.push("--- Error:", err);
     isError = true;
   } finally {
-    fs.writeFileSync(packageJsonPath, JSON.stringify(orgPkgJson, null, 2) + "\n");
+    if (orgPkgJsonStr) fs.writeFileSync(packageJsonPath, orgPkgJsonStr);
     if (fs.existsSync(rootRenamePackageJsonPath)) fs.renameSync(rootRenamePackageJsonPath, rootPackageJsonPath);
     if (fs.existsSync(rootRenamePackageLockPath)) fs.renameSync(rootRenamePackageLockPath, rootPackageLockPath);
 
