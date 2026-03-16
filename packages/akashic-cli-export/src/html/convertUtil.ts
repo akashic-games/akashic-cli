@@ -36,6 +36,7 @@ export interface ConvertTemplateParameterObject {
 	omitUnbundledJs?: boolean;
 	esDownpile?: boolean;
 	debugOverrideEngineFiles?: string;
+	useUntaintedImage?: boolean;
 }
 
 export function extractAssetDefinitions (conf: cmn.Configuration, type: string): string[] {

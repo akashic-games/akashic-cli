@@ -36,7 +36,7 @@ export function cli(param: CliConfigExportZip): void {
 			omitUnbundledJs: (param.bundle || param.nicolive) && param.omitUnbundledJs,
 			targetService: param.nicolive ? "nicolive" : param.targetService,
 			nicolive: param.nicolive,
-			resolveAkashicRuntime: param.resolveAkashicRuntime || param.nicolive,
+			resolveAkashicRuntime: param.resolveAkashicRuntime ?? (param.nicolive ? true : undefined),
 			preservePackageJson: param.preservePackageJson,
 			exportInfo: {
 				version,
@@ -86,7 +86,9 @@ commander
 	.option("--pack-image", "Pack small images")
 	.option("--target-service <service>", `(Deprecated) Specify the target service of the exported content:${SERVICE_TYPES}`)
 	.option("--nicolive", "Export zip file for nicolive")
-	.option("--resolve-akashic-runtime", "Fill akashic-runtime field in game.json")
+	.option("--resolve-akashic-runtime [versionOrUrl]",
+		"Fill akashic-runtime field in game.json. " +
+		"Optionally specify a version (e.g. \"3.1.2\") or a URL to use instead of the default remote API")
 	.option("--preserve-package-json", "Preserve package.json even if --strip");
 
 export async function run(argv: string[]): Promise<void> {
