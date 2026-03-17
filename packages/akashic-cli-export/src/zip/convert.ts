@@ -366,10 +366,10 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			}
 
 			if (param.resolveAkashicRuntime) {
-				const versionsJsonUrl = typeof param.resolveAkashicRuntime === "string"
+				const versionOrTableUrl = typeof param.resolveAkashicRuntime === "string"
 					? param.resolveAkashicRuntime
 					: "https://resource.akashic.coe.nicovideo.jp/coe/contents/runtime_version_table/versions.json";
-				await addGameJsonValuesForNicoLive(gamejson, versionsJsonUrl);
+				await addGameJsonValuesForNicoLive(gamejson, versionOrTableUrl);
 			}
 
 			if (gamejson.environment?.niconico) {
@@ -458,12 +458,12 @@ function addUntaintedToImageAssets(gameJson: cmn.GameConfiguration): void {
 
 /**
  * nicolive 用に game.json に値を追加する。
- * @param versionsJsonUrl - バージョン文字列 (例: `"3.1.2"`) または バージョン情報 JSON の URL。
+ * @param versionOrTableUrl - バージョン文字列 (例: `"3.1.2"`) または バージョン情報 JSON の URL。
  *   バージョン文字列 (`https?://` で始まらない文字列) の場合は、リモートへのアクセスなしに
  *   そのバージョンを `environment["akashic-runtime"].version` に直接追記する。
  *   URL の場合はその URL からバージョン情報を取得して設定する。
  */
-async function addGameJsonValuesForNicoLive(gameJson: cmn.GameConfiguration, versionsJsonUrl: string): Promise<void> {
+async function addGameJsonValuesForNicoLive(gameJson: cmn.GameConfiguration, versionOrTableUrl: string): Promise<void> {
 	// game.jsonへの追記
 	if (!gameJson.environment) {
 		gameJson.environment = {};
@@ -477,8 +477,8 @@ async function addGameJsonValuesForNicoLive(gameJson: cmn.GameConfiguration, ver
 	}
 
 	// バージョン文字列が直接指定された場合はリモートアクセスなしに追記する
-	if (!/^https?:\/\//.test(versionsJsonUrl)) {
-		gameJson.environment["akashic-runtime"] = { version: "~" + versionsJsonUrl };
+	if (!/^https?:\/\//.test(versionOrTableUrl)) {
+		gameJson.environment["akashic-runtime"] = { version: "~" + versionOrTableUrl };
 		if (!gameJson.renderers || gameJson.renderers.indexOf("webgl") === -1) {
 			const sandboxRuntime = gameJson.environment["sandbox-runtime"];
 			if (sandboxRuntime && sandboxRuntime !== "1") {
@@ -488,7 +488,7 @@ async function addGameJsonValuesForNicoLive(gameJson: cmn.GameConfiguration, ver
 		return;
 	}
 
-	const versionInfo = JSON.parse(await getFromHttps(versionsJsonUrl));
+	const versionInfo = JSON.parse(await getFromHttps(versionOrTableUrl));
 
 	gameJson.environment["akashic-runtime"] = { version: "" };
 	if (!gameJson.environment["sandbox-runtime"] || gameJson.environment["sandbox-runtime"] === "1") {
