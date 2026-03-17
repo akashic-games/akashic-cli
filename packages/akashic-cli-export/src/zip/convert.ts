@@ -44,7 +44,7 @@ export interface ConvertGameParameterObject {
 	omitUnbundledJs?: boolean;
 	targetService?: cmn.ServiceType;
 	nicolive?: boolean;
-	resolveAkashicRuntime?: boolean;
+	resolveAkashicRuntime?: boolean | string;
 	preservePackageJson?: boolean;
 }
 
@@ -63,7 +63,7 @@ export function _completeConvertGameParameterObject(param: ConvertGameParameterO
 	param.omitUnbundledJs = !!param.omitUnbundledJs;
 	param.targetService = param.targetService || "none";
 	param.nicolive = !!param.nicolive;
-	param.resolveAkashicRuntime = !!param.resolveAkashicRuntime;
+	param.resolveAkashicRuntime = param.resolveAkashicRuntime;
 	param.preservePackageJson = !!param.preservePackageJson;
 }
 
@@ -366,7 +366,10 @@ export function convertGame(param: ConvertGameParameterObject): Promise<void> {
 			}
 
 			if (param.resolveAkashicRuntime) {
-				await addGameJsonValuesForNicoLive(gamejson);
+				const versionOrTableUrl = typeof param.resolveAkashicRuntime === "string"
+					? param.resolveAkashicRuntime
+					: "https://resource.akashic.coe.nicovideo.jp/coe/contents/runtime_version_table/versions.json";
+				await addGameJsonValuesForNicoLive(gamejson, versionOrTableUrl);
 			}
 
 			if (gamejson.environment?.niconico) {
@@ -455,8 +458,12 @@ function addUntaintedToImageAssets(gameJson: cmn.GameConfiguration): void {
 
 /**
  * nicolive 用に game.json に値を追加する。
+ * @param versionOrTableUrl - バージョン文字列 (例: `"3.1.2"`) または バージョン情報 JSON の URL。
+ *   バージョン文字列 (`https?://` で始まらない文字列) の場合は、リモートへのアクセスなしに
+ *   そのバージョンを `environment["akashic-runtime"].version` に直接追記する。
+ *   URL の場合はその URL からバージョン情報を取得して設定する。
  */
-async function addGameJsonValuesForNicoLive(gameJson: cmn.GameConfiguration): Promise<void> {
+async function addGameJsonValuesForNicoLive(gameJson: cmn.GameConfiguration, versionOrTableUrl: string): Promise<void> {
 	// game.jsonへの追記
 	if (!gameJson.environment) {
 		gameJson.environment = {};
@@ -469,9 +476,19 @@ async function addGameJsonValuesForNicoLive(gameJson: cmn.GameConfiguration): Pr
 		return;
 	}
 
-	const versionInfo = JSON.parse(await getFromHttps(
-		"https://resource.akashic.coe.nicovideo.jp/coe/contents/runtime_version_table/versions.json"
-	));
+	// バージョン文字列が直接指定された場合はリモートアクセスなしに追記する
+	if (!/^https?:\/\//.test(versionOrTableUrl)) {
+		gameJson.environment["akashic-runtime"] = { version: "~" + versionOrTableUrl };
+		if (!gameJson.renderers || gameJson.renderers.indexOf("webgl") === -1) {
+			const sandboxRuntime = gameJson.environment["sandbox-runtime"];
+			if (sandboxRuntime && sandboxRuntime !== "1") {
+				gameJson.environment["akashic-runtime"].flavor = "-canvas";
+			}
+		}
+		return;
+	}
+
+	const versionInfo = JSON.parse(await getFromHttps(versionOrTableUrl));
 
 	gameJson.environment["akashic-runtime"] = { version: "" };
 	if (!gameJson.environment["sandbox-runtime"] || gameJson.environment["sandbox-runtime"] === "1") {

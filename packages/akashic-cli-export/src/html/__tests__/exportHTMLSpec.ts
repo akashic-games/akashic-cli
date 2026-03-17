@@ -80,6 +80,7 @@ describe("exportHTML", function () {
 			.then((dest) => {
 				expect(dest).toMatch(/^.*akashic-export-html-tmp-.+$/);
 				expect(fs.existsSync(path.join(dest, "library_license.txt"))).toBeTruthy();
+				expect(fs.readFileSync(path.join(dest, "js", "game.json.js"), "utf-8")).not.toContain("untainted");
 				fs.rmSync(dest, { recursive: true });
 			});
 	});
@@ -184,6 +185,47 @@ describe("exportHTML", function () {
 		expect(fs.statSync(path.join(dest, "audio", "dummyse.aac"))).toBeTruthy();
 		expect(fs.statSync(path.join(dest, "audio", "dummyse.m4a"))).toBeTruthy();
 		expect(() => fs.statSync(path.join(dest, "audio", "dummyse.invalidext"))).toThrow();
+		fs.rmSync(dest, { recursive: true });
+	});
+
+	it("promiseExportHTML with useUntaintedImage option (no-bundle)", async () => {
+		const param: exp.ExportHTMLParameterObject = {
+			logger: undefined,
+			cwd: path.join(__dirname, "..", "..", "__tests__", "fixtures", "sample_game"),
+			source: ".",
+			output: undefined,
+			force: true,
+			strip: true,
+			minify: false,
+			terser: {},
+			magnify: false,
+			unbundleText: false,
+			useUntaintedImage: true
+		};
+		const dest = await exp.promiseExportHTML(param);
+		const gameJsonJs = fs.readFileSync(path.join(dest, "js", "game.json.js"), "utf-8");
+		expect(gameJsonJs).toContain("%22untainted%22: true");
+		fs.rmSync(dest, { recursive: true });
+	});
+
+	it("promiseExportHTML with useUntaintedImage option (bundle)", async () => {
+		const param: exp.ExportHTMLParameterObject = {
+			logger: undefined,
+			cwd: path.join(__dirname, "..", "..", "__tests__", "fixtures", "sample_game"),
+			source: ".",
+			output: undefined,
+			force: true,
+			strip: true,
+			minify: false,
+			terser: {},
+			magnify: false,
+			unbundleText: false,
+			bundle: true,
+			useUntaintedImage: true
+		};
+		const dest = await exp.promiseExportHTML(param);
+		const html = fs.readFileSync(path.join(dest, "index.html"), "utf-8");
+		expect(html).toContain("%22untainted%22: true");
 		fs.rmSync(dest, { recursive: true });
 	});
 

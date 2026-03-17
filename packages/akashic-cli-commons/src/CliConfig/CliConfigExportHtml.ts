@@ -22,4 +22,5 @@ export interface CliConfigExportHtml {
 	omitUnbundledJs?: boolean;
 	esDownpile?: boolean;
 	debugOverrideEngineFiles?: string;
+	useUntaintedImage?: boolean;
 }

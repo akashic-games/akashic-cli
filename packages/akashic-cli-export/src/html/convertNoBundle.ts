@@ -19,6 +19,7 @@ import {
 	readSandboxConfigJs,
 	validateEngineFilesName,
 	resolveEngineFilesPath,
+	addUntaintedToImageAssets,
 	removeUntaintedHints,
 	validateSandboxConfigJs,
 	hasInstanceStorageFeature
@@ -34,7 +35,11 @@ export async function promiseConvertNoBundle(options: ConvertTemplateParameterOb
 	content.environment["sandbox-runtime"] = content.environment["sandbox-runtime"] ? content.environment["sandbox-runtime"] : "1";
 
 	validateGameJson(content);
-	removeUntaintedHints(content);
+	if (options.useUntaintedImage) {
+		addUntaintedToImageAssets(content);
+	} else {
+		removeUntaintedHints(content);
+	}
 
 	const conf = new cmn.Configuration({
 		content: content

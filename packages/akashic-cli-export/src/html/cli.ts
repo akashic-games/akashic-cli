@@ -33,6 +33,7 @@ function cli(param: CliConfigExportHtml): void {
 		esDownpile: (param.esDownpile != null) ? param.esDownpile : true,
 		compress: param.output ? path.extname(param.output) === ".zip" : false,
 		debugOverrideEngineFiles: param.debugOverrideEngineFiles,
+		useUntaintedImage: param.useUntaintedImage,
 		// index.htmlに書き込むためのexport実行時の情報
 		exportInfo: {
 			version, // export実行時のバージョン
@@ -45,7 +46,8 @@ function cli(param: CliConfigExportHtml): void {
 				minify: param.minify,
 				terser: param.terser,
 				bundle: param.bundle,
-				magnify: param.magnify
+				magnify: param.magnify,
+				useUntaintedImage: param.useUntaintedImage
 			})
 		}
 	};
@@ -86,7 +88,8 @@ commander
 	.option("-a, --atsumaru", "obsolete  option. Use 'akashic export zip --nicolive' instead")
 	.option("--no-omit-unbundled-js", "Unnecessary script files are included even when the `--atsumaru` option is specified.")
 	.option("--no-es-downpile", "No convert JavaScript")
-	.option("--debug-override-engine-files <filePath>", "Use the specified engineFiles");
+	.option("--debug-override-engine-files <filePath>", "Use the specified engineFiles")
+	.option("--use-untainted-image", "Add untainted:true hint to all image assets in game.json");
 
 export async function run(argv: string[]): Promise<void> {
 	// Commander の制約により --strip と --no-strip 引数を両立できないため、暫定対応として Commander 前に argv を処理する
@@ -114,6 +117,12 @@ export async function run(argv: string[]): Promise<void> {
 		console.error("--atsumaru is an obsolete option. Use \"akashic export zip --nicolive\" instead.");
 		process.exit(1);
 	}
+	if (options.useUntaintedImage) {
+		console.warn(
+			"--use-untainted-image: `untainted: true` is set on all image assets. " +
+			"Note that the exported HTML cannot be opened via file:// protocol."
+		);
+	}
 
 	const conf = configuration!.commandOptions?.export?.html ?? {};
 	cli({
@@ -133,8 +142,8 @@ export async function run(argv: string[]): Promise<void> {
 		autoGivenArgsName: options.autoGivenArgsName ?? conf.autoGivenArgsName,
 		omitUnbundledJs: options.omitUnbundledJs ?? conf.omitUnbundledJs,
 		esDownpile: options.esDownpile ?? conf.esDownpile,
-		debugOverrideEngineFiles: options.debugOverrideEngineFiles ?? conf.debugOverrideEngineFiles
-
+		debugOverrideEngineFiles: options.debugOverrideEngineFiles ?? conf.debugOverrideEngineFiles,
+		useUntaintedImage: options.useUntaintedImage ?? conf.useUntaintedImage
 	});
 }
 

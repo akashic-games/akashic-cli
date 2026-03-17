@@ -22,6 +22,12 @@ export interface CliConfigExportZip {
 	omitUnbundledJs?: boolean;
 	targetService?: ServiceType;
 	nicolive?: boolean;
-	resolveAkashicRuntime?: boolean;
+	/**
+	 * akashic-runtime フィールドを解決する。
+	 * - `true` の場合: 既定の URL から最新バージョンを取得して設定する。
+	 * - バージョン文字列 (例: `"3.1.2"`) の場合: そのバージョンを `environment["akashic-runtime"].version` に追記する。
+	 * - URL (例: `"https://..."`) の場合: その URL から最新バージョンを取得して設定する。
+	 */
+	resolveAkashicRuntime?: boolean | string;
 	preservePackageJson?: boolean;
 }

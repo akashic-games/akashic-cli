@@ -7,9 +7,20 @@ import { validateGameJson } from "../../utils.js";
 import type { ConvertGameParameterObject } from "../convert.js";
 import { bundleScripts, convertGame, validateGameJsonForNicolive } from "../convert.js";
 import { LICENSE_TEXT_PREFIX } from "../../licenseUtil.js";
+import * as apiUtil from "../apiUtil.js";
+
+vi.mock("../apiUtil.js", () => ({
+	getFromHttps: vi.fn()
+}));
 
 const require = createRequire(import.meta.url);
 const fixturesDir = path.resolve(__dirname, "..", "..", "__tests__", "fixtures");
+const DEFAULT_VERSIONS_URL = "https://resource.akashic.coe.nicovideo.jp/coe/contents/runtime_version_table/versions.json";
+const MOCK_VERSIONS_JSON = JSON.stringify({ latest: { "1": "1.9.0", "2": "2.8.0", "3": "3.7.0" } });
+
+beforeEach(() => {
+	vi.mocked(apiUtil.getFromHttps).mockResolvedValue(MOCK_VERSIONS_JSON);
+});
 
 function executeCommonJS(code: string): any {
 	const sandbox: any = { module: { exports: {} } };
@@ -76,8 +87,9 @@ describe("convert", () => {
 		const destDir = path.resolve(fixturesDir, "output");
 		const consoleSpy = vi.spyOn(global.console, "warn");
 		afterEach(() => {
-			rmSync(destDir)
+			rmSync(destDir);
 			consoleSpy.mockClear();
+			vi.clearAllMocks();
 		});
 		afterAll(() => {
 			consoleSpy.mockRestore();
@@ -553,6 +565,7 @@ describe("convert", () => {
 			};
 			return convertGame(param)
 				.then(() => {
+					expect(vi.mocked(apiUtil.getFromHttps)).toHaveBeenCalledWith(DEFAULT_VERSIONS_URL);
 					expect(fs.existsSync(path.join(destDir, "script/aez_asset_bundle.js"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "game.json"))).toBe(true);
 					expect(fs.existsSync(path.join(destDir, "package.json"))).toBe(true);
@@ -563,7 +576,7 @@ describe("convert", () => {
 					expect(gameJson.assets.aez_asset_bundle.global).toBe(true);
 					expect(gameJson.environment["sandbox-runtime"]).toBe("3");
 					expect(gameJson.environment.external).toEqual({ send: "0" });
-					expect(gameJson.environment["akashic-runtime"].version).toMatch(/^~3\.\d+\.\d+(-.*)?$/);
+					expect(gameJson.environment["akashic-runtime"].version).toBe("~3.7.0");
 					expect(gameJson.environment["akashic-runtime"].flavor).toBe("-canvas");
 				});
 		});
@@ -578,6 +591,7 @@ describe("convert", () => {
 			};
 			return convertGame(param)
 				.then(() => {
+					expect(vi.mocked(apiUtil.getFromHttps)).not.toHaveBeenCalled();
 					const gameJson = JSON.parse(fs.readFileSync(path.join(destDir, "game.json")).toString());
 					expect(gameJson.environment.external.send).toBe("0");
 					expect(gameJson.environment["akashic-runtime"].version).toBe("~1.0.9-beta");
@@ -597,9 +611,10 @@ describe("convert", () => {
 			};
 			return convertGame(param)
 				.then(() => {
+					expect(vi.mocked(apiUtil.getFromHttps)).toHaveBeenCalledWith(DEFAULT_VERSIONS_URL);
 					const gameJson = JSON.parse(fs.readFileSync(path.join(destDir, "game.json")).toString());
 					expect(gameJson.environment["sandbox-runtime"]).toBe("3");
-					expect(gameJson.environment["akashic-runtime"].version).toMatch(/^~3\.\d+\.\d+(-.*)?$/);
+					expect(gameJson.environment["akashic-runtime"].version).toBe("~3.7.0");
 					expect(gameJson.environment["akashic-runtime"].flavor).toBe("-canvas");
 					expect(gameJson.environment.external).toEqual({ send: "0" });
 				});
@@ -897,5 +912,96 @@ describe("validateGameJson", function () {
 	};
 	it("throw Error when specified gamejson include @akashic/akashic-engine", function () {
 		expect(() => validateGameJson(gamejson)).toThrow();
+	});
+});
+
+describe("resolveAkashicRuntime", () => {
+	const destDir = path.resolve(fixturesDir, "output");
+	const getFromHttpsMock = () => vi.mocked(apiUtil.getFromHttps);
+
+	afterEach(() => {
+		vi.clearAllMocks();
+		try { fs.rmSync(destDir, { recursive: true }); } catch { /* ignore */ }
+	});
+
+	it("true: passes the default URL to getFromHttps", async () => {
+		const param: ConvertGameParameterObject = {
+			source: path.resolve(fixturesDir, "sample_game_v3"),
+			dest: destDir,
+			resolveAkashicRuntime: true
+		};
+		await convertGame(param);
+
+		expect(getFromHttpsMock()).toHaveBeenCalledWith(DEFAULT_VERSIONS_URL);
+		const gameJson = JSON.parse(fs.readFileSync(path.join(destDir, "game.json"), "utf-8"));
+		expect(gameJson.environment["akashic-runtime"].version).toBe("~3.7.0");
+	});
+
+	it("URL string: passes the given URL to getFromHttps", async () => {
+		const customUrl = "https://example.com/custom/versions.json";
+		const param: ConvertGameParameterObject = {
+			source: path.resolve(fixturesDir, "sample_game_v3"),
+			dest: destDir,
+			resolveAkashicRuntime: customUrl
+		};
+		await convertGame(param);
+
+		expect(getFromHttpsMock()).toHaveBeenCalledWith(customUrl);
+		const gameJson = JSON.parse(fs.readFileSync(path.join(destDir, "game.json"), "utf-8"));
+		expect(gameJson.environment["akashic-runtime"].version).toBe("~3.7.0");
+	});
+
+	it("version string: writes akashic-runtime.version directly without HTTP access", async () => {
+		const param: ConvertGameParameterObject = {
+			source: path.resolve(fixturesDir, "sample_game_v3"),
+			dest: destDir,
+			resolveAkashicRuntime: "3.1.2"
+		};
+		await convertGame(param);
+
+		expect(getFromHttpsMock()).not.toHaveBeenCalled();
+		const gameJson = JSON.parse(fs.readFileSync(path.join(destDir, "game.json"), "utf-8"));
+		expect(gameJson.environment["akashic-runtime"].version).toBe("~3.1.2");
+		expect(gameJson.environment["akashic-runtime"].flavor).toBe("-canvas");
+		expect(gameJson.environment.external.send).toBe("0");
+	});
+
+	it("version string: no flavor when renderers includes webgl", async () => {
+		const param: ConvertGameParameterObject = {
+			source: path.resolve(fixturesDir, "sample_game_v3"),
+			dest: destDir,
+			resolveAkashicRuntime: "3.1.2"
+		};
+		// game.json の renderers に webgl を追加した一時フィクスチャを用意する
+		const srcGameJson = JSON.parse(fs.readFileSync(path.resolve(fixturesDir, "sample_game_v3", "game.json"), "utf-8"));
+		srcGameJson.renderers = ["canvas", "webgl"];
+		const tmpDir = fs.mkdtempSync(path.join(require("os").tmpdir(), "akashic-test-"));
+		try {
+			fs.cpSync(path.resolve(fixturesDir, "sample_game_v3"), tmpDir, { recursive: true });
+			fs.writeFileSync(path.join(tmpDir, "game.json"), JSON.stringify(srcGameJson));
+			const tmpDest = path.join(tmpDir, "output");
+			await convertGame({ ...param, source: tmpDir, dest: tmpDest });
+
+			expect(getFromHttpsMock()).not.toHaveBeenCalled();
+			const gameJson = JSON.parse(fs.readFileSync(path.join(tmpDest, "game.json"), "utf-8"));
+			expect(gameJson.environment["akashic-runtime"].version).toBe("~3.1.2");
+			expect(gameJson.environment["akashic-runtime"].flavor).toBeUndefined();
+		} finally {
+			fs.rmSync(tmpDir, { recursive: true });
+		}
+	});
+
+	it("version string: skips update when akashic-runtime already exists in game.json", async () => {
+		const param: ConvertGameParameterObject = {
+			source: path.resolve(fixturesDir, "sample_game_with_akashic_runtime"),
+			dest: destDir,
+			resolveAkashicRuntime: "3.1.2"
+		};
+		await convertGame(param);
+
+		expect(getFromHttpsMock()).not.toHaveBeenCalled();
+		const gameJson = JSON.parse(fs.readFileSync(path.join(destDir, "game.json"), "utf-8"));
+		// 既存の値が保持される
+		expect(gameJson.environment["akashic-runtime"].version).toBe("~1.0.9-beta");
 	});
 });
