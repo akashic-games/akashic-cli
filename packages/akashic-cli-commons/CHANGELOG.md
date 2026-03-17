@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.0.5
+
+### Patch Changes
+
+- [#1713](https://github.com/akashic-games/akashic-cli/pull/1713) [`4ccff3a`](https://github.com/akashic-games/akashic-cli/commit/4ccff3ac8e733a320d8af8919c554713df65028a) Thanks [@yu-ogi](https://github.com/yu-ogi)! - add open source options
+
 ## 1.0.4
 
 ### Patch Changes
