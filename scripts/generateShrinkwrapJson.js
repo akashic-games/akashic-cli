@@ -106,11 +106,11 @@ async function waitPublish(pkgName, version) {
  */
 async function generateShrinkwrapJson() {
   let pkgName = "";
-  let orgPkgJsonStr = null;
+  let pkgJsonStr = null;
 
   try {
-    const pkgJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
-    orgPkgJsonStr = JSON.stringify(pkgJson, null, 2);
+    pkgJsonStr = fs.readFileSync(packageJsonPath, "utf-8");
+    const pkgJson = JSON.parse(pkgJsonStr);
     pkgName = pkgJson.name;
     logs.push(`--------------- ${pkgName} generateShrinkwrapJson start ---`);
 
@@ -185,7 +185,7 @@ async function generateShrinkwrapJson() {
     logs.push("--- Error:", err);
     isError = true;
   } finally {
-    if (orgPkgJsonStr) fs.writeFileSync(packageJsonPath, orgPkgJsonStr);
+    if (pkgJsonStr) fs.writeFileSync(packageJsonPath, pkgJsonStr);
     if (fs.existsSync(rootRenamePackageJsonPath)) fs.renameSync(rootRenamePackageJsonPath, rootPackageJsonPath);
     if (fs.existsSync(rootRenamePackageLockPath)) fs.renameSync(rootRenamePackageLockPath, rootPackageLockPath);
 
