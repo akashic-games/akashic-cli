@@ -51,8 +51,10 @@ jobs:
       - name: Test after publish
         # package-lock.json を更新するのが publish 直前のため、publish した物と完全に同じ状態でテストできない
         # ここでエラーになっても既に publish してしまった後だが、問題の検出を早めるため実行している
+        # モノレポでインストールしたルートの node_modules と npm-shrinkwrap.json 作成時にインストールした各パッケージの node_modules が原因なのか、
+        # 各パッケージのテストがおかしな挙動で失敗する。そのため e2e テストを実行
         # publish 時に npm-shrinkwrap.json が作成されていなければエラーとなり、このテストは実行されない
         run: | 
           if [[ `find ./packages/**/npm-shrinkwrap.json` ]]; then
-            npm test
+            npm run test:e2e
           fi

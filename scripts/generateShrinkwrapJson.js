@@ -3,7 +3,7 @@
 // 1. ルートの `package.json`, `package-lock.json` をリネーム
 // 2. 依存モジュールが publish 済みかポーリングして確認
 // 3. ロックファイルを作成。ロックファイルが作成済みの場合はポーリングで待つ
-// 4. 各パッケージの `package.json` の dependencies/devDependencies から `@akashic/xxxxx` を削除し `npm i --before <実行日の七日前>` を実行
+// 4. 各パッケージの `package.json` の devDependencies を削除し、dependencies から `@akashic/xxxxx` を削除後に `npm i --before <実行日の七日前> --ignore-scripts` を実行
 // 5. 4 で削除した `@akashic/xxxxx` を npm インストール
 // 6. `npm shrinkwarp` を実行
 // 7. 1 でリネームした `package.json`, `package-lock.json` を戻し、ロックファイルを削除
@@ -30,12 +30,10 @@ let fd; // filedescriptor
 let isError = false;
 
 /**
- * 各パッケージの package.json の dependencies/devDependencies から akashic 系を削除する
+ * 各パッケージの package.json の dependencies から akashic 系を削除する
  */
-function removeAkashicDependencies(pkgJsonPath) {
-  const pkgJson = JSON.parse(fs.readFileSync(pkgJsonPath, "utf8"));
+function removeAkashicDependencies(pkgJson) {
   const akashicDependencies = [];
-  const devAkashicDependencies = [];
 
   if (pkgJson.dependencies) {
     for (const module of Object.keys(pkgJson.dependencies)) {
@@ -45,16 +43,7 @@ function removeAkashicDependencies(pkgJsonPath) {
       }
     }
   }
-  if (pkgJson.devDependencies) {
-    for (const module of Object.keys(pkgJson.devDependencies)) {
-      if (/^@akashic\//.test(module)) {
-        devAkashicDependencies.push({ name: module, ver: pkgJson.devDependencies[module] });
-        delete pkgJson.devDependencies[module];
-      }
-    }
-  }
-  fs.writeFileSync(pkgJsonPath, JSON.stringify(pkgJson, null, 2) + "\n");
-  return { dependencies: akashicDependencies, devDependencies: devAkashicDependencies };
+  return { dependencies: akashicDependencies };
 }
 
 /**
@@ -117,9 +106,11 @@ async function waitPublish(pkgName, version) {
  */
 async function generateShrinkwrapJson() {
   let pkgName = "";
+  let pkgJsonStr = null;
 
   try {
-    const pkgJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
+    pkgJsonStr = fs.readFileSync(packageJsonPath, "utf-8");
+    const pkgJson = JSON.parse(pkgJsonStr);
     pkgName = pkgJson.name;
     logs.push(`--------------- ${pkgName} generateShrinkwrapJson start ---`);
 
@@ -158,14 +149,16 @@ async function generateShrinkwrapJson() {
     dt.setDate(dt.getDate() - BEFORE_DAYS);
     const formattedDate = formatDate(dt);
     // akashic-cli-xxxxx は publish 日付が直前の可能性があり、--before <date> で引っかかるため package.json から削除し後でインストールする
-    const akashicModules = removeAkashicDependencies(packageJsonPath);
+    const akashicModules = removeAkashicDependencies(pkgJson);
+    delete pkgJson.devDependencies;
+    fs.writeFileSync(packageJsonPath, JSON.stringify(pkgJson, null, 2));
 
     if (pkgName == "@akashic/akashic-cli-serve") {
       // serve で @akashic 系を削除してインストールした場合、`npm run setup` の処理で落ちる。環境変数の値を設定し処理をスキップさせる。 
       process.env.SKIP_SETUP = true;
     }
 
-    const npmInstallCmd = `npm i --before ${formattedDate}`;
+    const npmInstallCmd = `npm i --before ${formattedDate} --ignore-scripts`;
     logs.push(`- exec: "${npmInstallCmd}"`);
     let cmdResult = execSync(npmInstallCmd, { encoding: "utf8" });
     logs.push(cmdResult);
@@ -183,18 +176,6 @@ async function generateShrinkwrapJson() {
       logs.push(cmdResult);
     }
 
-    if (akashicModules.devDependencies.length) {
-      const installList = [];
-      for (const module of akashicModules.devDependencies) {
-        const target = `${module.name}@${module.ver}`;
-        installList.push(target);
-      }
-      const akashicInstallCmd = `npm i --save-dev --save-exact ${installList.join(" ")}`;
-      logs.push(`- exec: "${akashicInstallCmd}"`);
-      cmdResult = execSync(akashicInstallCmd, { encoding: "utf8" });
-      logs.push(cmdResult);
-    }
-
     const npmShrinkwrapCmd = "npm shrinkwrap";
     logs.push(`- exec: "${npmShrinkwrapCmd}"`);
     cmdResult = execSync(npmShrinkwrapCmd, { encoding: "utf8" });
@@ -204,6 +185,7 @@ async function generateShrinkwrapJson() {
     logs.push("--- Error:", err);
     isError = true;
   } finally {
+    if (pkgJsonStr) fs.writeFileSync(packageJsonPath, pkgJsonStr);
     if (fs.existsSync(rootRenamePackageJsonPath)) fs.renameSync(rootRenamePackageJsonPath, rootPackageJsonPath);
     if (fs.existsSync(rootRenamePackageLockPath)) fs.renameSync(rootRenamePackageLockPath, rootPackageLockPath);
 
