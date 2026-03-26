@@ -48,7 +48,7 @@ jobs:
         with:
           name: shrinkwrap_log
           path: ./logs_shrinkwrap
-      - name: Push tag after shrinkwrap
+      - name: Push tag after publish
         # checkout の persist-credentials: false で認証情報が消されるので設定し処理後に削除
         run: |
           if [[ `find ./packages/**/npm-shrinkwrap.json` ]]; then
