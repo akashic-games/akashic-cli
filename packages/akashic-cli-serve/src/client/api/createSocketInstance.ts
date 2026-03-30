@@ -12,7 +12,6 @@ export function createSocketInstance(uri: string): ioc.Socket {
 	return io(uri, {
 		// サーバが切断された場合に自動再接続を行う。
 		// 再接続成功時 (serverReady イベント) にページリロードを行うため、新しいサーバへ繋いだ場合も正しく初期化される。
-		// TODO: 本当はここを 1 にするよりも、playId を起動ごとにユニークなものにすべきかもしれない。
 		reconnectionAttempts: Infinity,
 		parser
 	});
