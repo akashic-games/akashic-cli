@@ -46,6 +46,7 @@ export class Store {
 	@observable currentLocalInstance: LocalInstanceEntity | null;
 	@observable gameViewSize: ScreenSize;
 	@observable isSocketDisconnect: boolean;
+	@observable isSocketReconnecting: boolean;
 
 	private _gameViewManager: GameViewManager;
 	private _initializationWaiter: Promise<void>;
@@ -74,6 +75,7 @@ export class Store {
 			Subscriber.onMessageEncode.add(this.handleMessageEncode);
 		});
 		this.isSocketDisconnect = false;
+		this.isSocketReconnecting = false;
 
 		autorun(() => {
 			if (!this.toolBarUiStore.fitsToScreen && this.currentLocalInstance?.intrinsicSize) {
@@ -122,6 +124,11 @@ export class Store {
 	@action
 	setSocketDisconnect(isDisconnect: boolean): void {
 		this.isSocketDisconnect = isDisconnect;
+	}
+
+	@action
+	setSocketReconnecting(isReconnecting: boolean): void {
+		this.isSocketReconnecting = isReconnecting;
 	}
 
 	get targetService(): ServiceType {

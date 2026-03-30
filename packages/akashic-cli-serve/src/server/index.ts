@@ -417,6 +417,8 @@ async function cli(cliConfigParam: CliConfigServe, cmdOptions: OptionValues): Pr
 	app.use("/health-check/", createHealthCheckRouter({ playStore }));
 
 	io.on("connection", (socket: socketio.Socket) => {
+		// 接続直後にクライアントへ通知し、再接続後のリロードを素早く行えるようにする。
+		socket.emit("serverReady");
 		amflowManager.setupSocketIOAMFlow(socket);
 	});
 	// TODO 全体ブロードキャストせず該当するプレイにだけ通知するべき？

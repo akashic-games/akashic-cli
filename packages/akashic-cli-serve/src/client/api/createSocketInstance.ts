@@ -10,11 +10,10 @@ export function createSocketInstance(uri: string): ioc.Socket {
 	if (typeof io === "undefined") return null!;
 
 	return io(uri, {
-		// デフォルトはInfinityだが、過去に同じホスト・ポートで起動されたサーバに
-		// 接続していたクライアントが生きている(i.e. ブラウザのタブが開いたまま)時、
-		// つなぎなおして来てしまうのでやむなく1にしている。(0だとInfinity扱いされる)
-		// 本当はここを 1 にするよりも、playId を起動ごとにユニークなものにすべきかもしれない。
-		reconnectionAttempts: 1,
+		// サーバが切断された場合に自動再接続を行う。
+		// 再接続成功時 (serverReady イベント) にページリロードを行うため、新しいサーバへ繋いだ場合も正しく初期化される。
+		// TODO: 本当はここを 1 にするよりも、playId を起動ごとにユニークなものにすべきかもしれない。
+		reconnectionAttempts: Infinity,
 		parser
 	});
 }
