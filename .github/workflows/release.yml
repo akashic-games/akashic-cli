@@ -58,11 +58,11 @@ jobs:
             git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
 
             git checkout -b tag_$VERSION
-            git add .
+            git add './packages/**/npm-shrinkwrap.json'
             git commit -m "Add tag after published $VERSION"
             git tag -a v$VERSION -m "tag $VERSION"
             git push origin v$VERSION
-            
+
             git remote rm origin
             git config unset user.name
             git config unset user.email
