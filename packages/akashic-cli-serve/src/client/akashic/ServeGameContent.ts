@@ -87,35 +87,67 @@ export class ServeGameContent {
 		const self = this;
 		const game = this._game;
 		const renderOriginal = game.render;
+
+		// renderer によっては実装依存で begin() でキャンバス内容がクリアされる場合がある。
+		// そこで renderOriginal() の内部から元の begin()/end() が呼ばれないようそれぞれを no-op に差し替えた上で、
+		// beginOriginal() -> renderOriginal() -> (ハイライト描画: 必要であれば) -> endOriginal() の順に実行することを保証する。
+		// 各フック関数はフレームをまたいで再利用し、renderer が変わったときだけ original を更新する。
+		let rendererOriginal: ae.RendererLike = null!;
+		let rendererBeginOriginal: (() => void) = null!;
+		let rendererEndOriginal: (() => void) = null!;
+		const noop = (): void => { /* do nothing */ };
+
 		game.render = function (camera?: ae.CameraLike) {
-			const gameModified = game._modified;
+			const renderer = game.renderers[0]; // TODO 0番だけで描画するのは暫定。現実的には0しかない。
+
+			// renderer が変わったときだけ更新 (通常は初回のみ)
+			if (renderer !== rendererOriginal) {
+				rendererOriginal = renderer;
+				rendererBeginOriginal = renderer.begin.bind(renderer);
+				rendererEndOriginal = renderer.end.bind(renderer);
+			}
+
+			// AEv3 において画面更新が不要ならなにもしない。
+			if ("_modified" in game && !game._modified) {
+				return renderOriginal.apply(this, [camera]);
+			}
+
+			renderer.begin = noop;
+			renderer.end = noop;
+
+			rendererBeginOriginal();
 			const ret = renderOriginal.apply(this, [camera]);
-			if ("_modified" in game && !gameModified) return ret; // AEv3 は画面更新が不要ならなにもしない。
 
 			// エンティティハイライト描画
 			// TODO 子孫要素の包含矩形描画 (or サイズ 0 のエンティティの表示方法検討
 			const eid = self._highlightedEntityId;
-			if (eid == null)
-				return ret;
-			const e = (eid >= 0) ? (game.db.get?.(eid) ?? game.db[eid]) : (game._localDb.get?.(eid) ?? game._localDb[eid]);
-			if (!e)
-				return ret;
-			const renderer = game.renderers[0];  // TODO 0番だけで描画するのは暫定。現実的には0しかない。
-			renderer.begin();
-			renderer.save();
-			const mat = getMatrixFromRoot(e, camera || game.focusingCamera);
-			if (mat != null) {
-				renderer.transform(mat._matrix);
-				renderer.fillRect(0, 0, e.width, e.height, "rgba(255, 0, 0, 0.3)");
-				const anchorSize = 4;
-				const anchorX = e.anchorX == null ? 0 : e.anchorX;
-				const anchorY = e.anchorY == null ? 0 : e.anchorY;
-				renderer.restore();
-				const anchor = mat.multiplyPoint({ x: e.width * anchorX, y: e.height * anchorY });
-				const color = (e.anchorX == null || e.anchorY == null) ? "rgba(0, 0, 255, 1)" : "rgba(0, 255, 255, 1)";
-				renderer.fillRect(anchor.x - anchorSize / 2, anchor.y - anchorSize / 2, anchorSize, anchorSize, color);
+			const highlightedEntity = (eid != null)
+				? ((eid >= 0) ? (game.db.get?.(eid) ?? game.db[eid]) : (game._localDb.get?.(eid) ?? game._localDb[eid]))
+				: null;
+
+			if (highlightedEntity != null) {
+				renderer.save();
+				const mat = getMatrixFromRoot(highlightedEntity, camera || game.focusingCamera);
+				if (mat != null) {
+					renderer.transform(mat._matrix);
+					renderer.fillRect(0, 0, highlightedEntity.width, highlightedEntity.height, "rgba(255, 0, 0, 0.3)");
+					const anchorSize = 4;
+					const anchorX = highlightedEntity.anchorX == null ? 0 : highlightedEntity.anchorX;
+					const anchorY = highlightedEntity.anchorY == null ? 0 : highlightedEntity.anchorY;
+					renderer.restore();
+					const anchor = mat.multiplyPoint({ x: highlightedEntity.width * anchorX, y: highlightedEntity.height * anchorY });
+					const color = (highlightedEntity.anchorX == null || highlightedEntity.anchorY == null)
+						? "rgba(0, 0, 255, 1)"
+						: "rgba(0, 255, 255, 1)";
+					renderer.fillRect(anchor.x - anchorSize / 2, anchor.y - anchorSize / 2, anchorSize, anchorSize, color);
+				}
 			}
-			renderer.end();
+
+			rendererEndOriginal();
+
+			renderer.begin = rendererBeginOriginal;
+			renderer.end = rendererEndOriginal;
+
 			return ret;
 		};
 
