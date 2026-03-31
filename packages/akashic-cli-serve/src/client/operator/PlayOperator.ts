@@ -212,6 +212,8 @@ export class PlayOperator {
 		// サーバが復帰したらページをリロードして再初期化する。
 		// これにより同じサーバへの再接続でも新しいサーバへの接続でも正しく動作する。
 		if (!this.store.isSocketDisconnect) return;
+		if (!this.store.isSocketReconnecting) return;
+
 		window.location.reload();
 	};
 
