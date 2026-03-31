@@ -1,5 +1,13 @@
 # Change Log
 
+## 2.0.20
+
+### Patch Changes
+
+- [#1720](https://github.com/akashic-games/akashic-cli/pull/1720) [`f06b989`](https://github.com/akashic-games/akashic-cli/commit/f06b989a990c88ab9eb796aeac1592fca33c6139) Thanks [@yu-ogi](https://github.com/yu-ogi)! - automatically reconnect client on server restart
+
+- [#1718](https://github.com/akashic-games/akashic-cli/pull/1718) [`e4660b9`](https://github.com/akashic-games/akashic-cli/commit/e4660b988f0eaea90f82e3e3e6d21161bf2ac333) Thanks [@yu-ogi](https://github.com/yu-ogi)! - fix entity highlight display in WebGL
+
 ## 2.0.19
 
 ### Patch Changes
