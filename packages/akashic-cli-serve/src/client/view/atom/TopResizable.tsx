@@ -22,7 +22,7 @@ export const TopResizable = observer(class TopResizable extends React.Component<
 			<div className={styles.content}>
 				{ this.props.children }
 			</div>
-			<div className={styles["h-resizer"]} onMouseDown={this._onMouseDownResizer} />
+			<div className={styles["h-resizer"]} onMouseDown={this._onMouseDownResizer} onTouchStart={this._onTouchStartResizer} />
 		</div>;
 	}
 
@@ -44,6 +44,28 @@ export const TopResizable = observer(class TopResizable extends React.Component<
 	private _onMouseUpWindow = (): void => {
 		window.removeEventListener("mousemove", this._onMouseMoveWindow);
 		window.removeEventListener("mouseup", this._onMouseUpWindow);
+	};
+
+	private _onTouchStartResizer = (ev: React.TouchEvent<HTMLDivElement>): void => {
+		ev.preventDefault();
+		window.addEventListener("touchmove", this._onTouchMoveWindow);
+		window.addEventListener("touchend", this._onTouchEndWindow);
+		this.lastPageY = ev.touches[0].pageY;
+	};
+
+	private _onTouchMoveWindow = (ev: TouchEvent): void => {
+		const { onResize, height, minHeight } = this.props;
+		const pageY = ev.touches[0].pageY;
+		const h = Math.max(height - (pageY - this.lastPageY!), minHeight);
+		if (h !== height) {
+			onResize(h);
+			this.lastPageY = pageY;
+		}
+	};
+
+	private _onTouchEndWindow = (): void => {
+		window.removeEventListener("touchmove", this._onTouchMoveWindow);
+		window.removeEventListener("touchend", this._onTouchEndWindow);
 	};
 });
 

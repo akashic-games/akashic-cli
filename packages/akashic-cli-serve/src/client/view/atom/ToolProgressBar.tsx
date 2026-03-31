@@ -67,7 +67,12 @@ export const ToolProgressBar = observer(class ToolProgressBar extends React.Comp
 		const className = styles["tool-progress-bar"] + (active ? ` ${styles.active}` : "");
 		const subBar = <div className={styles.subbar} style={{ width: `${subRatio * 100}%` }} />;
 		return (
-			<div className={styles.container} style={{ width }} onMouseDown={this._onMouseDownGauge} >
+			<div
+				className={styles.container}
+				style={{ width }}
+				onMouseDown={this._onMouseDownGauge}
+				onTouchStart={this._onTouchStartGauge}
+			>
 				<div className={className} ref={this._onRef}>
 					{ (subRatio > ratio) && subBar }
 					<div className={styles.bar} style={{ width: `${ratio * 100}%` }} />
@@ -127,6 +132,44 @@ export const ToolProgressBar = observer(class ToolProgressBar extends React.Comp
 		if (isNaN(v))
 			return;
 		// onChangeと異なり、値が変化していなくても通知する。さもなくばonChangeの後にonCommitが来る保証がなくなってしまう
+		this.props.onCommit(v);
+	};
+
+	private _onTouchStartGauge = (ev: React.TouchEvent<HTMLDivElement>): void => {
+		if (!this._ref || !this.props.onChange)
+			return;
+		ev.preventDefault();
+		ev.stopPropagation();
+		window.addEventListener("touchmove", this._onTouchMoveWindow, { passive: false });
+		window.addEventListener("touchend", this._onTouchEndWindow);
+		const v = this._valueFromPageX(ev.touches[0].pageX);
+		if (isNaN(v))
+			return;
+		if (this.props.value !== v)
+			this.props.onChange(v);
+	};
+
+	private _onTouchMoveWindow = (ev: TouchEvent): void => {
+		ev.preventDefault();
+		ev.stopPropagation();
+		if (!this.props.onChange)
+			return;
+		const v = this._valueFromPageX(ev.touches[0].pageX);
+		if (isNaN(v))
+			return;
+		if (this.props.value !== v)
+			this.props.onChange(v);
+	};
+
+	private _onTouchEndWindow = (ev: TouchEvent): void => {
+		ev.stopPropagation();
+		window.removeEventListener("touchmove", this._onTouchMoveWindow);
+		window.removeEventListener("touchend", this._onTouchEndWindow);
+		if (!this.props.onCommit)
+			return;
+		const v = this._valueFromPageX(ev.changedTouches[0].pageX);
+		if (isNaN(v))
+			return;
 		this.props.onCommit(v);
 	};
 
