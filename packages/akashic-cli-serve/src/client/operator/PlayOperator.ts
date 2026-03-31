@@ -15,6 +15,7 @@ export class PlayOperator {
 	constructor(store: Store) {
 		this.store = store;
 		Subscriber.onDisconnect.add(this.handleSocketDisconnect);
+		Subscriber.onReconnect.add(this.handleSocketReconnect);
 	}
 
 	togglePauseActive = (pauses: boolean): Promise<PlayPatchApiResponse> => {
@@ -202,6 +203,18 @@ export class PlayOperator {
 
 	private handleSocketDisconnect = (): void => {
 		this.store.setSocketDisconnect(true);
+		this.store.setSocketReconnecting(true);
 		this.closeThisWindowIfNeeded();
 	};
+
+	private handleSocketReconnect = (): void => {
+		// 切断済みの場合のみリロードする (初回接続時の serverReady は無視する)。
+		// サーバが復帰したらページをリロードして再初期化する。
+		// これにより同じサーバへの再接続でも新しいサーバへの接続でも正しく動作する。
+		if (!this.store.isSocketDisconnect) return;
+		if (!this.store.isSocketReconnecting) return;
+
+		window.location.reload();
+	};
+
 }

@@ -34,6 +34,7 @@ export const onClientInstanceAppear = new Trigger<ClientInstanceAppearTestbedEve
 export const onClientInstanceDisappear = new Trigger<ClientInstanceDisappearTestbedEvent>();
 export const onBroadcast = new Trigger<any>();
 export const onDisconnect = new Trigger<void>();
+export const onReconnect = new Trigger<void>();
 export const onPutStartPoint = new Trigger<PutStartPointEvent>();
 export const onNamagameCommentPluginStartStop = new Trigger<NamagameCommentPluginStartStopTestbedEvent>();
 
@@ -52,6 +53,7 @@ socket.on("clientInstanceAppear", (arg: ClientInstanceAppearTestbedEvent) => onC
 socket.on("clientInstanceDisappear", (arg: ClientInstanceDisappearTestbedEvent) => onClientInstanceDisappear.fire(arg));
 socket.on("playBroadcast", (arg: PlayBroadcastTestbedEvent) => onBroadcast.fire(arg));
 socket.on("disconnect", () => onDisconnect.fire());
+socket.on("serverReady", () => onReconnect.fire());
 socket.on("putStartPoint", (arg: PutStartPointEvent) => onPutStartPoint.fire(arg));
 socket.on("namagameCommentPluginStartStop", (arg: NamagameCommentPluginStartStopTestbedEvent) => {
 	onNamagameCommentPluginStartStop.fire(arg);
