@@ -3,6 +3,7 @@
 .container {
 	padding: 3px 0;
 	margin: 0 4px;
+	touch-action: none;
 }
 
 .tool-progress-bar {

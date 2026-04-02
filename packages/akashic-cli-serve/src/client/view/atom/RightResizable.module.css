@@ -13,6 +13,7 @@
 
 	background: rgba(255, 255, 255, 0.01);
 	cursor: ew-resize;
+	touch-action: none;
 }
 
 .v-resizer:active {

@@ -2,6 +2,7 @@
 	position: fixed;
 	z-index: var(--zindex-notification);
 	width: 450px;
+	max-width: 100%;
 	padding: 12px;
 	bottom: 0;
 	right: 0;
@@ -9,6 +10,7 @@
 	font-size: 16px;
 	box-sizing: border-box;
 	box-shadow: 0px 0px 10px;
+	transform: translateX(0);
 	transition: .3s ease-out;
 }
 
@@ -22,7 +24,7 @@
 }
 
 .notification-hidden {
-	right: -450px;
+	transform: translateX(100%);
 	opacity: 0;
 	transition: .3s ease-out;
 }

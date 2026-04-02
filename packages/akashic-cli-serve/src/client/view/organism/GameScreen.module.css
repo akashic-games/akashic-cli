@@ -15,6 +15,9 @@
 
 	/* 内側の AGV が z-index を使うため、ここで z-index をつけて影響範囲を閉じる */
 	z-index: var(--zindex-game-screen);
+
+	/* ゲームのタッチ入力がブラウザのスクロール・ズームと干渉しないよう無効化 */
+	touch-action: none;
 }
 
 .pseudo-transparent-bg {
