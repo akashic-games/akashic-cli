@@ -1,5 +1,11 @@
 # @akashic/akashic-cli-export
 
+## 2.0.18
+
+### Patch Changes
+
+- [#1724](https://github.com/akashic-games/akashic-cli/pull/1724) [`977cc00`](https://github.com/akashic-games/akashic-cli/commit/977cc00c085b05e87fc7dc6fe52dedb8b7605268) Thanks [@renovate](https://github.com/apps/renovate)! - Updated dependency `@akashic/headless-driver` to `2.18.1`.
+
 ## 2.0.17
 
 ### Patch Changes
