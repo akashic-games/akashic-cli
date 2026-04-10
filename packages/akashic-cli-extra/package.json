@@ -48,7 +48,7 @@
     "@akashic/akashic-cli-commons": "1.0.5",
     "commander": "12.1.0",
     "ini": "5.0.0",
-    "lodash": "4.17.23"
+    "lodash": "4.18.1"
   },
   "devDependencies": {
     "@akashic/eslint-config": "3.0.2",
