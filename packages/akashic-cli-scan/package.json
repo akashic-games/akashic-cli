@@ -34,8 +34,8 @@
     "@types/node": "24.10.1",
     "memfs": "4.17.2",
     "shx": "0.4.0",
-    "typescript": "5.5.4",
-    "vitest": "^2.0.5"
+    "typescript": "6.0.3",
+    "vitest": "^4.0.0"
   },
   "dependencies": {
     "@akashic/akashic-cli-commons": "1.0.5",
