@@ -31,10 +31,10 @@
   "devDependencies": {
     "@akashic/eslint-config": "3.0.2",
     "@akashic/game-configuration": "2.5.0",
-    "@types/node": "24.10.1",
-    "memfs": "4.17.2",
+    "@types/node": "24.12.2",
+    "memfs": "4.57.2",
     "shx": "0.4.0",
-    "typescript": "5.5.4",
+    "typescript": "5.9.3",
     "vitest": "^2.0.5"
   },
   "dependencies": {
