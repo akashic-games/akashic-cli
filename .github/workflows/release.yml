@@ -34,6 +34,8 @@ jobs:
       - name: Prepare
         run: |
           npm ci
+          npm run setup
+          npm run build
           npm test
       - name: Create Release PullRequest or Publish
         uses: changesets/action@e0145edc7d9d8679003495b11f87bd8ef63c0cba # v1.5.3

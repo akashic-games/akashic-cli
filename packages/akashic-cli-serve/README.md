@@ -112,6 +112,7 @@ akashic-cli-serveの自動実行テストでDOMを参照できるようにする
 
 ```
 npm i
+npm run setup
 ```
 
 ビルド:
