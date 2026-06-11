@@ -38,7 +38,7 @@
     "memfs": "4.23.0",
     "rimraf": "6.1.3",
     "typescript": "5.5.4",
-    "vitest": "^2.1.1"
+    "vitest": "^4.1.6"
   },
   "dependencies": {
     "@akashic/akashic-cli-commons": "1.0.5",

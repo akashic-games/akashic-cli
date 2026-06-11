@@ -42,5 +42,12 @@
     "ps-tree": "^1.2.0",
     "remark-cli": "^12.0.0",
     "shelljs": "^0.10.0"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "npm",
+      "version": "11.11.0",
+      "onFail": "error"
+    }
   }
 }
