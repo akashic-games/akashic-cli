@@ -1,8 +1,8 @@
-import { action } from "@storybook/addon-actions";
 // import { observable } from "mobx";
 // import { observer } from "mobx-react";
 import * as React from "react";
-import { NiconicoDevtoolCommentPage } from "../molecule/NiconicoDevtoolCommentPage";
+import { fn } from "storybook/test";
+import { NiconicoDevtoolCommentPage } from "../molecule/NiconicoDevtoolCommentPage.js";
 
 export default {
 	title: "m-NiconicoDevtoolCommentPage"
@@ -21,11 +21,11 @@ export const Basic = {
 					commandInput: "",
 					commentInput: "",
 				}}
-				onCommentInputChanged={action("comment-input-changed")}
-				onCommandInputChanged={action("command-input-changed")}
-				onSenderTypeChanged={action("sender-changed")}
-				onClickSend={action("click-send")}
-				onClickTemplate={action("click-template")}
+				onCommentInputChanged={fn()}
+				onCommandInputChanged={fn()}
+				onSenderTypeChanged={fn()}
+				onClickSend={fn()}
+				onClickTemplate={fn()}
 			/>
 		</div>
 	),
@@ -48,11 +48,11 @@ export const HasTemplates = {
 					commandInput: "",
 					commentInput: "",
 				}}
-				onCommentInputChanged={action("comment-input-changed")}
-				onCommandInputChanged={action("command-input-changed")}
-				onSenderTypeChanged={action("sender-changed")}
-				onClickSend={action("click-send")}
-				onClickTemplate={action("click-template")}
+				onCommentInputChanged={fn()}
+				onCommandInputChanged={fn()}
+				onSenderTypeChanged={fn()}
+				onClickSend={fn()}
+				onClickTemplate={fn()}
 			/>
 		</div>
 	),
@@ -87,11 +87,11 @@ export const ManyComments = {
 					commandInput: "ue big red",
 					commentInput: "コメント送信内容",
 				}}
-				onCommentInputChanged={action("comment-input-changed")}
-				onCommandInputChanged={action("command-input-changed")}
-				onSenderTypeChanged={action("sender-changed")}
-				onClickSend={action("click-send")}
-				onClickTemplate={action("click-template")}
+				onCommentInputChanged={fn()}
+				onCommandInputChanged={fn()}
+				onSenderTypeChanged={fn()}
+				onClickSend={fn()}
+				onClickTemplate={fn()}
 			/>
 		</div>
 	),
@@ -114,11 +114,11 @@ export const Disabled = {
 					commandInput: "ue big red",
 					commentInput: "コメント送信内容",
 				}}
-				onCommentInputChanged={action("comment-input-changed")}
-				onCommandInputChanged={action("command-input-changed")}
-				onSenderTypeChanged={action("sender-changed")}
-				onClickSend={action("click-send")}
-				onClickTemplate={action("click-template")}
+				onCommentInputChanged={fn()}
+				onCommandInputChanged={fn()}
+				onSenderTypeChanged={fn()}
+				onClickSend={fn()}
+				onClickTemplate={fn()}
 			/>
 		</div>
 	),

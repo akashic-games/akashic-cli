@@ -1,8 +1,8 @@
 import type { Event } from "@akashic/playlog";
 import type {
 	CoeStartSessionParameterObject, CoeExitSessionParameterObject, CoeApplicationIdentifier, CoeExternalMessage
-} from "../../common/types/plugin";
-import type { LocalInstanceEntity } from "../../store/LocalInstanceEntity";
+} from "../../common/types/plugin.js";
+import type { LocalInstanceEntity } from "../../store/LocalInstanceEntity.js";
 
 export interface GameState {
 	score?: number;

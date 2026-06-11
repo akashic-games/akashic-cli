@@ -1,5 +1,5 @@
 import { observable, action } from "mobx";
-import type { NamagameCommentEventComment } from "../../common/types/NamagameCommentPlugin";
+import type { NamagameCommentEventComment } from "../../common/types/NamagameCommentPlugin.js";
 
 /**
  * コメント送信者タイプ。

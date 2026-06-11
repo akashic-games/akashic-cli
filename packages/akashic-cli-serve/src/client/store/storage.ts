@@ -1,6 +1,6 @@
-import { apiClient } from "../api/apiClientInstance";
-import { queryParameters as query } from "../common/queryParameters";
-import type { NiconicoDevtoolPageType } from "../view/molecule/NiconicoDevtool";
+import { apiClient } from "../api/apiClientInstance.js";
+import { queryParameters as query } from "../common/queryParameters.js";
+import type { NiconicoDevtoolPageType } from "../view/molecule/NiconicoDevtool.js";
 
 export interface StorageData {
 	playerId: string;

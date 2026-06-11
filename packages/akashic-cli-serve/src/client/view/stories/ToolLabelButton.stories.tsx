@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ToolLabelButton } from "../atom/ToolLabelButton";
+import { ToolLabelButton } from "../atom/ToolLabelButton.js";
 
 export default {
 	title: "a-ToolLabelButton"

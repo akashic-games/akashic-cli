@@ -1,5 +1,5 @@
 import { Trigger } from "@akashic/trigger";
-import type parser from "../../common/MsgpackParser";
+import type parser from "../../common/MsgpackParser.js";
 import type {
 	PlayCreateTestbedEvent,
 	PlayStatusChangedTestbedEvent,
@@ -17,8 +17,8 @@ import type {
 	PutStartPointEvent,
 	MessageEncodeTestbedEvent,
 	NamagameCommentPluginStartStopTestbedEvent
-} from "../../common/types/TestbedEvent";
-import { socketInstance } from "./socketInstance";
+} from "../../common/types/TestbedEvent.js";
+import { socketInstance } from "./socketInstance.js";
 
 export const onPlayCreate = new Trigger<PlayCreateTestbedEvent>();
 export const onPlayStatusChange = new Trigger<PlayStatusChangedTestbedEvent>();

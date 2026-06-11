@@ -1,7 +1,7 @@
 import {observable} from "mobx";
-import { apiClient } from "../api/apiClientInstance";
-import type {GameInstanceEntity} from "./GameInstanceEntity";
-import type {PlayEntity} from "./PlayEntity";
+import { apiClient } from "../api/apiClientInstance.js";
+import type {GameInstanceEntity} from "./GameInstanceEntity.js";
+import type {PlayEntity} from "./PlayEntity.js";
 
 export interface ServerInstanceEntityParameterObject {
 	runnerId: string;

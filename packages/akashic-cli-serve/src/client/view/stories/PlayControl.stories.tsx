@@ -1,6 +1,6 @@
-import { action } from "@storybook/addon-actions";
 import * as React from "react";
-import { PlayControl } from "../molecule/PlayControl";
+import { fn } from "storybook/test";
+import { PlayControl } from "../molecule/PlayControl.js";
 
 export default {
 	title: "m-PlayControl"
@@ -14,12 +14,12 @@ export const Basic = {
 				isActivePausing: false,
 				isActiveExists: true,
 				showsAddInstanceOptions: false,
-				onClickAddInstanceOptions: action("show-add-instance-options"),
-				onClickReset: action("reset"),
-				onClickActivePause: action("active-pause"),
-				onClickAddInstance: action("add-instance"),
-				onClickAddSamePlayerInstance: action("add-same-player-instance"),
-				onClickStep: action("step")
+				onClickAddInstanceOptions: fn(),
+				onClickReset: fn(),
+				onClickActivePause: fn(),
+				onClickAddInstance: fn(),
+				onClickAddSamePlayerInstance: fn(),
+				onClickStep: fn()
 			})}
 		/>
 	),
@@ -34,12 +34,12 @@ export const Pausing = {
 				isActivePausing: true,
 				isActiveExists: true,
 				showsAddInstanceOptions: false,
-				onClickAddInstanceOptions: action("show-add-instance-options"),
-				onClickReset: action("reset"),
-				onClickActivePause: action("active-pause"),
-				onClickAddInstance: action("add-instance"),
-				onClickAddSamePlayerInstance: action("add-same-player-instance"),
-				onClickStep: action("step")
+				onClickAddInstanceOptions: fn(),
+				onClickReset: fn(),
+				onClickActivePause: fn(),
+				onClickAddInstance: fn(),
+				onClickAddSamePlayerInstance: fn(),
+				onClickStep: fn()
 			})}
 		/>
 	),
@@ -54,12 +54,12 @@ export const ShowsAddInstanceOptions = {
 				isActivePausing: false,
 				isActiveExists: true,
 				showsAddInstanceOptions: true,
-				onClickAddInstanceOptions: action("show-add-instance-options"),
-				onClickReset: action("reset"),
-				onClickActivePause: action("active-pause"),
-				onClickAddInstance: action("add-instance"),
-				onClickAddSamePlayerInstance: action("add-same-player-instance"),
-				onClickStep: action("step")
+				onClickAddInstanceOptions: fn(),
+				onClickReset: fn(),
+				onClickActivePause: fn(),
+				onClickAddInstance: fn(),
+				onClickAddSamePlayerInstance: fn(),
+				onClickStep: fn()
 			})}
 		/>
 	),

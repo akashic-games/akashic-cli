@@ -1,8 +1,8 @@
-import { action } from "@storybook/addon-actions";
 import { observable } from "mobx";
 import { observer } from "mobx-react";
 import * as React from "react";
-import { ToolProgressBar } from "../atom/ToolProgressBar";
+import { fn } from "storybook/test";
+import { ToolProgressBar } from "../atom/ToolProgressBar.js";
 
 const store = observable({
 	max: 100,
@@ -78,8 +78,8 @@ export const Basic = {
 			width={200}
 			max={100}
 			value={64}
-			onChange={action("change")}
-			onCommit={action("commit")}
+			onChange={fn()}
+			onCommit={fn()}
 		/>
 	),
 	name: "basic"

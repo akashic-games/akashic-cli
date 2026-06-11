@@ -1,11 +1,11 @@
-import { action } from "@storybook/addon-actions";
 import { observable } from "mobx";
 import { observer } from "mobx-react";
 import * as React from "react";
-import type { EDumpItem } from "../../common/types/EDumpItem";
-import type { NiconicoDevtoolProps } from "../molecule/NiconicoDevtool";
-import type { PlaybackDevtoolProps } from "../molecule/PlaybackDevtool";
-import { Devtool } from "../organism/Devtool";
+import { fn } from "storybook/test";
+import type { EDumpItem } from "../../common/types/EDumpItem.js";
+import type { NiconicoDevtoolProps } from "../molecule/NiconicoDevtool.js";
+import type { PlaybackDevtoolProps } from "../molecule/PlaybackDevtool.js";
+import { Devtool } from "../organism/Devtool.js";
 
 const store = observable({
 	devtoolsHeight: 300,
@@ -44,13 +44,11 @@ const nicoProps: NiconicoDevtoolProps = {
 		score: 700,
 		playThreshold: 100,
 		clearThreshold: 500,
-		onAutoSendEventsChanged: action("events:auto-send-events-changed"),
-		onModeSelectChanged: action("events:mode-select-changed"),
-		onTotalTimeLimitInputValueChanged: action("events:total-time-limit-changed"),
-		onUsePreferredTotalTimeLimitChanged: action(
-			"events:use-preferred-total-time-limit-changed"
-		),
-		onUseStopGameChanged: action("events:use-stop-game-changed")
+		onAutoSendEventsChanged: fn(),
+		onModeSelectChanged: fn(),
+		onTotalTimeLimitInputValueChanged: fn(),
+		onUsePreferredTotalTimeLimitChanged: fn(),
+		onUseStopGameChanged: fn()
 	},
 	commentPageProps: {
 		model: {
@@ -62,16 +60,16 @@ const nicoProps: NiconicoDevtoolProps = {
 			commandInput: "",
 			commentInput: ""
 		},
-		onCommentInputChanged: action("events:comment-input-changed"),
-		onCommandInputChanged: action("events:command-input-changed"),
-		onSenderTypeChanged: action("events:sender-type-changed"),
-		onClickSend: action("events:send-comment"),
-		onClickTemplate: action("events:send-template"),
+		onCommentInputChanged: fn(),
+		onCommandInputChanged: fn(),
+		onSenderTypeChanged: fn(),
+		onClickSend: fn(),
+		onClickTemplate: fn(),
 	},
 	activePage: "ranking",
 	selectorWidth: 120,
-	onResizeSelector: action("events:resize-selector"),
-	onChangePage: action("events:cahnge-page"),
+	onResizeSelector: fn(),
+	onChangePage: fn(),
 };
 
 const dummyPlaybackDevtoolProps: PlaybackDevtoolProps = {
@@ -86,16 +84,16 @@ const dummyPlaybackDevtoolProps: PlaybackDevtoolProps = {
 	isActiveExists: true,
 	isActivePaused: false,
 	isForceResetOnSeek: true,
-	onClickPauseActive: action("click-pause-active"),
-	onClickSavePlaylog: action("click-save-playlog"),
-	onClickForceResetOnSeek: action("click-force-jump-on-seek"),
-	onProgressChange: action("progress-change"),
-	onProgressCommit: action("progress-commit"),
-	onClickPause: action("click-pause"),
-	onClickFastForward: action("click-fastforward"),
-	onHoverStartPoint: action("hover-startpoint"),
-	onJumpWithStartPoint: action("jump-startpoint"),
-	onDumpStartPoint: action("doubleclick-startpoint")
+	onClickPauseActive: fn(),
+	onClickSavePlaylog: fn(),
+	onClickForceResetOnSeek: fn(),
+	onProgressChange: fn(),
+	onProgressCommit: fn(),
+	onClickPause: fn(),
+	onClickFastForward: fn(),
+	onHoverStartPoint: fn(),
+	onJumpWithStartPoint: fn(),
+	onDumpStartPoint: fn()
 };
 
 function createFilledRectDumpItem(
@@ -146,7 +144,7 @@ const TestWithBehaviour = observer(() => (
 			isActivePaused: store.isActivePaused,
 			isForceResetOnSeek: store.isForceResetOnSeek,
 			onClickPauseActive: (v) => (store.isActivePaused = v),
-			onClickSavePlaylog: action("click-save-playlog"),
+			onClickSavePlaylog: fn(),
 			onClickForceResetOnSeek: (v) => (store.isForceResetOnSeek = v),
 			onProgressChange: (v) => (store.currentTime = v),
 			onProgressCommit: (v) => {
@@ -157,8 +155,8 @@ const TestWithBehaviour = observer(() => (
 			onClickFastForward: () => (store.isReplay = false),
 			onHoverStartPoint: (v, hovers) =>
 				(store.selectedStartPointIndex = hovers ? v : null),
-			onJumpWithStartPoint: action("jump-startpoint"),
-			onDumpStartPoint: action("dump-startpoint")
+			onJumpWithStartPoint: fn(),
+			onDumpStartPoint: fn()
 		}}
 		eventsDevtoolProps={{
 			showsEventList: store.showsEventList,
@@ -173,9 +171,9 @@ const TestWithBehaviour = observer(() => (
 				"A very long event name to see how it will be shown on your display ya?"
 			],
 			eventEditContent: store.eventEditContent,
-			onClickSendEvent: action("events:send"),
-			onClickCopyEvent: action("events:copy"),
-			onClickSendEditingEvent: action("events:send-edit"),
+			onClickSendEvent: fn(),
+			onClickCopyEvent: fn(),
+			onClickSendEditingEvent: fn(),
 			onEventEditContentChanged: (v) => (store.eventEditContent = v)
 		}}
 		instancesDevtoolProps={{
@@ -209,7 +207,7 @@ const TestWithBehaviour = observer(() => (
 					isJoined: true
 				},
 			],
-			onClickAddInstance: action("add-instance")
+			onClickAddInstance: fn()
 		}}
 		entityTreeDevtoolProps={{
 			entityTrees: [
@@ -292,26 +290,26 @@ const TestWithBehaviour = observer(() => (
 			selectedEntityId: 2,
 			isSelectingEntity: false,
 			showsHidden: store.showsHidden,
-			onClickDump: action("dump"),
+			onClickDump: fn(),
 			onChangeShowsHidden: (shows) => (store.showsHidden = shows),
 			onClickSelectEntity: () => {
 				// do nothing
 			},
-			onClickUpdateEntityTrees: action("update-entity-tree"),
+			onClickUpdateEntityTrees: fn(),
 			onClickToggleOpenEntityChildren: (e) => {
 				store.entityTreeStateTable.set(
 					e.id,
 					!store.entityTreeStateTable.get(e.id)
 				);
 			},
-			onClickEntityItem: action("click-entity"),
-			onMouseOverEntityItem: action("mouseover"),
-			onMouseLeaveEntityItem: action("mouseleave")
+			onClickEntityItem: fn(),
+			onMouseOverEntityItem: fn(),
+			onMouseLeaveEntityItem: fn()
 		}}
 		niconicoDevtoolProps={nicoProps}
 		internalDevtoolProps={{
-			sendScreenshotEvent: action("send-screenshot-event"),
-			sendFinishEvent: action("send-finish-event")
+			sendScreenshotEvent: fn(),
+			sendFinishEvent: fn()
 		}}
 	/>
 ));
@@ -325,16 +323,16 @@ export const Instances = {
 		<Devtool
 			height={300}
 			minHeight={200}
-			onResizeHeight={action("resize-height")}
+			onResizeHeight={fn()}
 			activeDevtool={"Instances"}
-			onSelectDevtool={action("select-tool")}
+			onSelectDevtool={fn()}
 			playbackDevtoolProps={dummyPlaybackDevtoolProps}
 			eventsDevtoolProps={{
 				showsEventList: true,
 				eventListWidth: 250,
 				eventListMinWidth: 200,
-				onEventListResize: action("events:list-resize"),
-				onClickShowEventList: action("events:list"),
+				onEventListResize: fn(),
+				onClickShowEventList: fn(),
 				eventNames: [
 					"Foo",
 					"Start",
@@ -342,10 +340,10 @@ export const Instances = {
 					"A very long event name to see how it will be shown on your display ya?"
 				],
 				eventEditContent: "[\"test\", 1]",
-				onClickSendEvent: action("events:send"),
-				onClickCopyEvent: action("events:copy"),
-				onClickSendEditingEvent: action("events:send-edit"),
-				onEventEditContentChanged: action("events:edit")
+				onClickSendEvent: fn(),
+				onClickCopyEvent: fn(),
+				onClickSendEditingEvent: fn(),
+				onEventEditContentChanged: fn()
 			}}
 			instancesDevtoolProps={{
 				instances: [
@@ -546,7 +544,7 @@ export const Instances = {
 						isJoined: false
 					},
 				],
-				onClickAddInstance: action("add-instance")
+				onClickAddInstance: fn()
 			}}
 			entityTreeDevtoolProps={{
 				entityTrees: [
@@ -570,19 +568,19 @@ export const Instances = {
 				selectedEntityId: null,
 				isSelectingEntity: false,
 				showsHidden: false,
-				onClickDump: action("dump"),
-				onChangeShowsHidden: action("change-shows-hidden"),
-				onClickSelectEntity: action("click-select-entity"),
-				onClickUpdateEntityTrees: action("update-entity-tree"),
-				onClickToggleOpenEntityChildren: action("toggle"),
-				onClickEntityItem: action("click-entity"),
-				onMouseOverEntityItem: action("mouseover"),
-				onMouseLeaveEntityItem: action("mouseleave")
+				onClickDump: fn(),
+				onChangeShowsHidden: fn(),
+				onClickSelectEntity: fn(),
+				onClickUpdateEntityTrees: fn(),
+				onClickToggleOpenEntityChildren: fn(),
+				onClickEntityItem: fn(),
+				onMouseOverEntityItem: fn(),
+				onMouseLeaveEntityItem: fn()
 			}}
 			niconicoDevtoolProps={nicoProps}
 			internalDevtoolProps={{
-				sendScreenshotEvent: action("send-screenshot-event"),
-				sendFinishEvent: action("send-finish-event")
+				sendScreenshotEvent: fn(),
+				sendFinishEvent: fn()
 			}}
 		/>
 	),
@@ -595,16 +593,16 @@ export const Events = {
 		<Devtool
 			height={300}
 			minHeight={200}
-			onResizeHeight={action("resize-height")}
+			onResizeHeight={fn()}
 			activeDevtool={"Events"}
-			onSelectDevtool={action("select-tool")}
+			onSelectDevtool={fn()}
 			playbackDevtoolProps={dummyPlaybackDevtoolProps}
 			eventsDevtoolProps={{
 				showsEventList: true,
 				eventListWidth: 250,
 				eventListMinWidth: 200,
-				onEventListResize: action("events:list-resize"),
-				onClickShowEventList: action("events:list"),
+				onEventListResize: fn(),
+				onClickShowEventList: fn(),
 				eventNames: [
 					"Foo",
 					"Start",
@@ -644,10 +642,10 @@ export const Events = {
 					"Test 32"
 				],
 				eventEditContent: "[\"test\", 1]",
-				onClickSendEvent: action("events:send"),
-				onClickCopyEvent: action("events:copy"),
-				onClickSendEditingEvent: action("events:send-edit"),
-				onEventEditContentChanged: action("events:edit")
+				onClickSendEvent: fn(),
+				onClickCopyEvent: fn(),
+				onClickSendEditingEvent: fn(),
+				onEventEditContentChanged: fn()
 			}}
 			instancesDevtoolProps={{
 				instances: [
@@ -680,7 +678,7 @@ export const Events = {
 						isJoined: false
 					},
 				],
-				onClickAddInstance: action("add-instance")
+				onClickAddInstance: fn()
 			}}
 			entityTreeDevtoolProps={{
 				entityTrees: [],
@@ -688,19 +686,19 @@ export const Events = {
 				selectedEntityId: null,
 				isSelectingEntity: false,
 				showsHidden: false,
-				onClickDump: action("dump"),
-				onChangeShowsHidden: action("change-shows-hidden"),
-				onClickSelectEntity: action("click-select-entity"),
-				onClickUpdateEntityTrees: action("update-entity-tree"),
-				onClickToggleOpenEntityChildren: action("toggle"),
-				onClickEntityItem: action("click-entity"),
-				onMouseOverEntityItem: action("mouseover"),
-				onMouseLeaveEntityItem: action("mouseleave")
+				onClickDump: fn(),
+				onChangeShowsHidden: fn(),
+				onClickSelectEntity: fn(),
+				onClickUpdateEntityTrees: fn(),
+				onClickToggleOpenEntityChildren: fn(),
+				onClickEntityItem: fn(),
+				onMouseOverEntityItem: fn(),
+				onMouseLeaveEntityItem: fn()
 			}}
 			niconicoDevtoolProps={nicoProps}
 			internalDevtoolProps={{
-				sendScreenshotEvent: action("send-screenshot-event"),
-				sendFinishEvent: action("send-finish-event")
+				sendScreenshotEvent: fn(),
+				sendFinishEvent: fn()
 			}}
 		/>
 	),
@@ -713,22 +711,22 @@ export const EntityTree = {
 		<Devtool
 			height={300}
 			minHeight={200}
-			onResizeHeight={action("resize-height")}
+			onResizeHeight={fn()}
 			activeDevtool={"EntityTree"}
-			onSelectDevtool={action("select-tool")}
+			onSelectDevtool={fn()}
 			playbackDevtoolProps={dummyPlaybackDevtoolProps}
 			eventsDevtoolProps={{
 				showsEventList: true,
 				eventListWidth: 250,
 				eventListMinWidth: 200,
-				onEventListResize: action("events:list-resize"),
-				onClickShowEventList: action("events:toggle-list"),
+				onEventListResize: fn(),
+				onClickShowEventList: fn(),
 				eventNames: ["Foo", "Test 0"],
 				eventEditContent: "[\"test\", 1]",
-				onClickSendEvent: action("events:send"),
-				onClickCopyEvent: action("events:copy"),
-				onClickSendEditingEvent: action("events:send-edit"),
-				onEventEditContentChanged: action("events:edit")
+				onClickSendEvent: fn(),
+				onClickCopyEvent: fn(),
+				onClickSendEditingEvent: fn(),
+				onEventEditContentChanged: fn()
 			}}
 			instancesDevtoolProps={{
 				instances: [
@@ -761,7 +759,7 @@ export const EntityTree = {
 						isJoined: false
 					},
 				],
-				onClickAddInstance: action("add-instance")
+				onClickAddInstance: fn()
 			}}
 			entityTreeDevtoolProps={{
 				entityTrees: [
@@ -810,19 +808,19 @@ export const EntityTree = {
 				selectedEntityId: null,
 				isSelectingEntity: false,
 				showsHidden: false,
-				onClickDump: action("dump"),
-				onChangeShowsHidden: action("change-shows-hidden"),
-				onClickSelectEntity: action("click-select-entity"),
-				onClickUpdateEntityTrees: action("update-entity-tree"),
-				onClickToggleOpenEntityChildren: action("toggle"),
-				onClickEntityItem: action("click-entity"),
-				onMouseOverEntityItem: action("mouseover"),
-				onMouseLeaveEntityItem: action("mouseleave")
+				onClickDump: fn(),
+				onChangeShowsHidden: fn(),
+				onClickSelectEntity: fn(),
+				onClickUpdateEntityTrees: fn(),
+				onClickToggleOpenEntityChildren: fn(),
+				onClickEntityItem: fn(),
+				onMouseOverEntityItem: fn(),
+				onMouseLeaveEntityItem: fn()
 			}}
 			niconicoDevtoolProps={nicoProps}
 			internalDevtoolProps={{
-				sendScreenshotEvent: action("send-screenshot-event"),
-				sendFinishEvent: action("send-finish-event")
+				sendScreenshotEvent: fn(),
+				sendFinishEvent: fn()
 			}}
 		/>
 	),
@@ -835,26 +833,26 @@ export const Niconico = {
 		<Devtool
 			height={300}
 			minHeight={200}
-			onResizeHeight={action("resize-height")}
+			onResizeHeight={fn()}
 			activeDevtool={"Niconico"}
-			onSelectDevtool={action("select-tool")}
+			onSelectDevtool={fn()}
 			playbackDevtoolProps={dummyPlaybackDevtoolProps}
 			eventsDevtoolProps={{
 				showsEventList: true,
 				eventListWidth: 250,
 				eventListMinWidth: 200,
-				onEventListResize: action("events:list-resize"),
-				onClickShowEventList: action("events:toggle-list"),
+				onEventListResize: fn(),
+				onClickShowEventList: fn(),
 				eventNames: ["Foo", "Test 0"],
 				eventEditContent: "[\"test\", 1]",
-				onClickSendEvent: action("events:send"),
-				onClickCopyEvent: action("events:copy"),
-				onClickSendEditingEvent: action("events:send-edit"),
-				onEventEditContentChanged: action("events:edit")
+				onClickSendEvent: fn(),
+				onClickCopyEvent: fn(),
+				onClickSendEditingEvent: fn(),
+				onEventEditContentChanged: fn()
 			}}
 			instancesDevtoolProps={{
 				instances: [],
-				onClickAddInstance: action("add-instance")
+				onClickAddInstance: fn()
 			}}
 			entityTreeDevtoolProps={{
 				entityTrees: [],
@@ -862,19 +860,19 @@ export const Niconico = {
 				selectedEntityId: null,
 				isSelectingEntity: false,
 				showsHidden: false,
-				onClickDump: action("dump"),
-				onChangeShowsHidden: action("change-shows-hidden"),
-				onClickSelectEntity: action("click-select-entity"),
-				onClickUpdateEntityTrees: action("update-entity-tree"),
-				onClickToggleOpenEntityChildren: action("toggle"),
-				onClickEntityItem: action("click-entity"),
-				onMouseOverEntityItem: action("mouseover"),
-				onMouseLeaveEntityItem: action("mouseleave")
+				onClickDump: fn(),
+				onChangeShowsHidden: fn(),
+				onClickSelectEntity: fn(),
+				onClickUpdateEntityTrees: fn(),
+				onClickToggleOpenEntityChildren: fn(),
+				onClickEntityItem: fn(),
+				onMouseOverEntityItem: fn(),
+				onMouseLeaveEntityItem: fn()
 			}}
 			niconicoDevtoolProps={nicoProps}
 			internalDevtoolProps={{
-				sendScreenshotEvent: action("send-screenshot-event"),
-				sendFinishEvent: action("send-finish-event")
+				sendScreenshotEvent: fn(),
+				sendFinishEvent: fn()
 			}}
 		/>
 	),
@@ -887,26 +885,26 @@ export const Playback = {
 		<Devtool
 			height={300}
 			minHeight={200}
-			onResizeHeight={action("resize-height")}
+			onResizeHeight={fn()}
 			activeDevtool={"Playback"}
-			onSelectDevtool={action("select-tool")}
+			onSelectDevtool={fn()}
 			playbackDevtoolProps={dummyPlaybackDevtoolProps}
 			eventsDevtoolProps={{
 				showsEventList: true,
 				eventListWidth: 250,
 				eventListMinWidth: 200,
-				onEventListResize: action("events:list-resize"),
-				onClickShowEventList: action("events:toggle-list"),
+				onEventListResize: fn(),
+				onClickShowEventList: fn(),
 				eventNames: ["Foo", "Test 0"],
 				eventEditContent: "[\"test\", 1]",
-				onClickSendEvent: action("events:send"),
-				onClickCopyEvent: action("events:copy"),
-				onClickSendEditingEvent: action("events:send-edit"),
-				onEventEditContentChanged: action("events:edit")
+				onClickSendEvent: fn(),
+				onClickCopyEvent: fn(),
+				onClickSendEditingEvent: fn(),
+				onEventEditContentChanged: fn()
 			}}
 			instancesDevtoolProps={{
 				instances: [],
-				onClickAddInstance: action("add-instance")
+				onClickAddInstance: fn()
 			}}
 			entityTreeDevtoolProps={{
 				entityTrees: [],
@@ -914,19 +912,19 @@ export const Playback = {
 				selectedEntityId: null,
 				isSelectingEntity: false,
 				showsHidden: false,
-				onClickDump: action("dump"),
-				onChangeShowsHidden: action("change-shows-hidden"),
-				onClickSelectEntity: action("click-select-entity"),
-				onClickUpdateEntityTrees: action("update-entity-tree"),
-				onClickToggleOpenEntityChildren: action("toggle"),
-				onClickEntityItem: action("click-entity"),
-				onMouseOverEntityItem: action("mouseover"),
-				onMouseLeaveEntityItem: action("mouseleave")
+				onClickDump: fn(),
+				onChangeShowsHidden: fn(),
+				onClickSelectEntity: fn(),
+				onClickUpdateEntityTrees: fn(),
+				onClickToggleOpenEntityChildren: fn(),
+				onClickEntityItem: fn(),
+				onMouseOverEntityItem: fn(),
+				onMouseLeaveEntityItem: fn()
 			}}
 			niconicoDevtoolProps={nicoProps}
 			internalDevtoolProps={{
-				sendScreenshotEvent: action("send-screenshot-event"),
-				sendFinishEvent: action("send-finish-event")
+				sendScreenshotEvent: fn(),
+				sendFinishEvent: fn()
 			}}
 		/>
 	),

@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import type { NotificationUiStore } from "../../../store/NotificationUiStore";
-import { Notification } from "../../../view/atom/Notification";
-import type { UiOperator } from "../../operator/UiOperator";
+import type { NotificationUiStore } from "../../../store/NotificationUiStore.js";
+import { Notification } from "../../../view/atom/Notification.js";
+import type { UiOperator } from "../../operator/UiOperator.js";
 
 export interface NotificationContainerProps {
 	operator: UiOperator;

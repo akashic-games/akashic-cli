@@ -1,8 +1,8 @@
-import { action } from "@storybook/addon-actions";
 import { observable } from "mobx";
 import { observer } from "mobx-react";
 import * as React from "react";
-import { ToolIconButton } from "../atom/ToolIconButton";
+import { fn } from "storybook/test";
+import { ToolIconButton } from "../atom/ToolIconButton.js";
 
 const store = observable({
 	pushed: false
@@ -28,7 +28,7 @@ export const Basic = {
 			className="basic"
 			icon="face"
 			title="face!"
-			onClick={action("clicked")}
+			onClick={fn()}
 		/>
 	),
 
@@ -41,7 +41,7 @@ export const Disabled = {
 			className="disabled"
 			icon="face"
 			disabled={true}
-			onClick={action("should not fire")}
+			onClick={fn()}
 		/>
 	),
 
@@ -54,7 +54,7 @@ export const Pushed = {
 			className="pushed"
 			icon="face"
 			pushed={true}
-			onClick={action("clicked")}
+			onClick={fn()}
 		/>
 	),
 
@@ -68,7 +68,7 @@ export const PushedPushedIcon = {
 			icon="face"
 			pushed={true}
 			pushedIcon="pause"
-			onClick={action("clicked")}
+			onClick={fn()}
 		/>
 	),
 
@@ -82,7 +82,7 @@ export const NonPushedPushedIcon = {
 			icon="face"
 			pushed={false}
 			pushedIcon="pause"
-			onClick={action("clicked")}
+			onClick={fn()}
 		/>
 	),
 
@@ -96,7 +96,7 @@ export const PushedDisabled = {
 			icon="face"
 			pushed={true}
 			disabled={true}
-			onClick={action("should not fire")}
+			onClick={fn()}
 		/>
 	),
 
@@ -108,7 +108,7 @@ export const WithText = {
 		<ToolIconButton
 			className="with-text"
 			icon="pause"
-			onClick={action("clicked")}
+			onClick={fn()}
 		>
 			Send to the play
 		</ToolIconButton>
@@ -122,14 +122,14 @@ export const WithSplitButton = {
 			className="with-split-button"
 			icon="face"
 			title="face!"
-			onClick={action("clicked")}
+			onClick={fn()}
 			splitButtonProps={{
 				menuItems: [
-					{ label: "First", icon: "face", tooltip: "face!", onClick: action("first clicked") },
-					{ label: "Second", onClick: action("second clicked") }
+					{ label: "First", icon: "face", tooltip: "face!", onClick: fn() },
+					{ label: "Second", onClick: fn() }
 				],
 				showMenu: true,
-				onToggleMenu: action("onToggleMenu")
+				onToggleMenu: fn()
 			}}
 		/>
 	),

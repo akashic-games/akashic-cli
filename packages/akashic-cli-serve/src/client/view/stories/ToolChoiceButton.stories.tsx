@@ -1,8 +1,8 @@
-import { action } from "@storybook/addon-actions";
 import { observable } from "mobx";
 import { observer } from "mobx-react";
 import * as React from "react";
-import { ToolChoiceButton } from "../atom/ToolChoiceButton";
+import { fn } from "storybook/test";
+import { ToolChoiceButton } from "../atom/ToolChoiceButton.js";
 
 const store = observable({
 	pushedIndex: 0
@@ -35,7 +35,7 @@ export const Basic = {
 				{ label: "Third Element" }
 			]}
 			className="test"
-			onClick={action("onClick")}
+			onClick={fn()}
 		/>
 	),
 	name: "basic"
@@ -51,7 +51,7 @@ export const AllDisabled = {
 			]}
 			disabled={true}
 			pushedIndex={null}
-			onClick={action("onClick")}
+			onClick={fn()}
 		/>
 	),
 	name: "all-disabled"
@@ -66,7 +66,7 @@ export const PartialDisabled = {
 				{ label: "Third Element" }
 			]}
 			pushedIndex={0}
-			onClick={action("onClick")}
+			onClick={fn()}
 		/>
 	),
 	name: "partial-disabled"

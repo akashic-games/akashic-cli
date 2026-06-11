@@ -1,6 +1,6 @@
-import { action } from "@storybook/addon-actions";
 import * as React from "react";
-import { GameScreen } from "../organism/GameScreen";
+import { fn } from "storybook/test";
+import { GameScreen } from "../organism/GameScreen.js";
 
 function createDummyDiv(width: number, height: number): HTMLElement {
 	const e = document.createElement("div");
@@ -27,11 +27,10 @@ export const Basic = {
 			playerInfoResolverDialogProps={undefined}
 			profilerCanvasProps={undefined}
 			shouldStopPropagationFunc={() => {
-				action("shouldStopPropagation");
 				return false;
 			}}
-			onMouseMoveCapture={action("onMouseMoveCapture")}
-			onClickCapture={action("onClickCapture")}
+			onMouseMoveCapture={fn()}
+			onClickCapture={fn()}
 		/>
 	),
 	name: "basic"
@@ -52,11 +51,10 @@ export const Background = {
 			playerInfoResolverDialogProps={undefined}
 			profilerCanvasProps={undefined}
 			shouldStopPropagationFunc={() => {
-				action("shouldStopPropagation");
 				return false;
 			}}
-			onMouseMoveCapture={action("onMouseMoveCapture")}
-			onClickCapture={action("onClickCapture")}
+			onMouseMoveCapture={fn()}
+			onClickCapture={fn()}
 		/>
 	),
 	name: "background"
@@ -77,11 +75,10 @@ export const BackgroundGrid = {
 			playerInfoResolverDialogProps={undefined}
 			profilerCanvasProps={undefined}
 			shouldStopPropagationFunc={() => {
-				action("shouldStopPropagation");
 				return false;
 			}}
-			onMouseMoveCapture={action("onMouseMoveCapture")}
-			onClickCapture={action("onClickCapture")}
+			onMouseMoveCapture={fn()}
+			onClickCapture={fn()}
 		/>
 	),
 	name: "background&grid"
@@ -102,11 +99,10 @@ export const DesignGuideline = {
 			playerInfoResolverDialogProps={undefined}
 			profilerCanvasProps={undefined}
 			shouldStopPropagationFunc={() => {
-				action("shouldStopPropagation");
 				return false;
 			}}
-			onMouseMoveCapture={action("onMouseMoveCapture")}
-			onClickCapture={action("onClickCapture")}
+			onMouseMoveCapture={fn()}
+			onClickCapture={fn()}
 		/>
 	),
 	name: "designGuideline"
@@ -128,15 +124,14 @@ export const ConfirmDialog = {
 				remainingSeconds: 15,
 				name: "プレイヤー名X",
 				guestName: "ゲスト名Y",
-				onClick: action("onClick")
+				onClick: fn()
 			}}
 			profilerCanvasProps={undefined}
 			shouldStopPropagationFunc={() => {
-				action("shouldStopPropagation");
 				return false;
 			}}
-			onMouseMoveCapture={action("onMouseMoveCapture")}
-			onClickCapture={action("onClickCapture")}
+			onMouseMoveCapture={fn()}
+			onClickCapture={fn()}
 		/>
 	),
 	name: "confirmDialog"
@@ -212,11 +207,10 @@ export const Profiler = {
 				profilerHeight: 61
 			}}
 			shouldStopPropagationFunc={() => {
-				action("shouldStopPropagation");
 				return false;
 			}}
-			onMouseMoveCapture={action("onMouseMoveCapture")}
-			onClickCapture={action("onClickCapture")}
+			onMouseMoveCapture={fn()}
+			onClickCapture={fn()}
 		/>
 	),
 	name: "profiler"

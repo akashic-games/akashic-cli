@@ -1,18 +1,18 @@
-import type { ServiceType } from "@akashic/akashic-cli-commons/lib/ServiceType";
+import type { ServiceType } from "@akashic/akashic-cli-commons/lib/ServiceType.js";
 import { observer } from "mobx-react";
 import * as React from "react";
-import { ToolIconButton } from "../atom/ToolIconButton";
-import { ToolLabel } from "../atom/ToolLabel";
-import type { AudioOptionControlPropsData } from "../molecule/AudioOptionControl";
-import { AudioOptionControl } from "../molecule/AudioOptionControl";
-import type { DisplayOptionControlPropsData } from "../molecule/DisplayOptionControl";
-import { DisplayOptionControl } from "../molecule/DisplayOptionControl";
-import type { InstanceControlPropsData } from "../molecule/InstanceControl";
-import { InstanceControl } from "../molecule/InstanceControl";
-import type { PlayControlPropsData } from "../molecule/PlayControl";
-import { PlayControl } from "../molecule/PlayControl";
-import type { PlayerControlPropsData } from "../molecule/PlayerControl";
-import { PlayerControl } from "../molecule/PlayerControl";
+import { ToolIconButton } from "../atom/ToolIconButton.js";
+import { ToolLabel } from "../atom/ToolLabel.js";
+import type { AudioOptionControlPropsData } from "../molecule/AudioOptionControl.js";
+import { AudioOptionControl } from "../molecule/AudioOptionControl.js";
+import type { DisplayOptionControlPropsData } from "../molecule/DisplayOptionControl.js";
+import { DisplayOptionControl } from "../molecule/DisplayOptionControl.js";
+import type { InstanceControlPropsData } from "../molecule/InstanceControl.js";
+import { InstanceControl } from "../molecule/InstanceControl.js";
+import type { PlayControlPropsData } from "../molecule/PlayControl.js";
+import { PlayControl } from "../molecule/PlayControl.js";
+import type { PlayerControlPropsData } from "../molecule/PlayerControl.js";
+import { PlayerControl } from "../molecule/PlayerControl.js";
 import styles from "./ToolBar.module.css";
 
 export interface ToolBarProps {

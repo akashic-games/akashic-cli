@@ -1,5 +1,5 @@
 import type * as pdi from "@akashic/pdi-types";
-import { getUrlPathname } from "../../common/urlUtil";
+import { getUrlPathname } from "../../common/urlUtil.js";
 
 
 interface WindowForTestbedScriptAsset extends Window {

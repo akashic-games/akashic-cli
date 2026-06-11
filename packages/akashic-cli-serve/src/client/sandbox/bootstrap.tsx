@@ -1,12 +1,12 @@
 import { configure as mobxConfigure } from "mobx";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { GameViewManager } from "../akashic/GameViewManager";
-import { scriptHelper } from "../akashic/scriptHelper";
-import { queryParameters as query } from "../common/queryParameters";
-import { Operator } from "./operator/Operator";
-import { Store } from "./store/Store";
-import { App } from "./view/App";
+import { GameViewManager } from "../akashic/GameViewManager.js";
+import { scriptHelper } from "../akashic/scriptHelper.js";
+import { queryParameters as query } from "../common/queryParameters.js";
+import { Operator } from "./operator/Operator.js";
+import { Store } from "./store/Store.js";
+import { App } from "./view/App.js";
 
 mobxConfigure({ enforceActions: "observed" });
 const pluginFuncs = {};

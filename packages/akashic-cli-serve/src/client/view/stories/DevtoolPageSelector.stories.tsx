@@ -1,8 +1,8 @@
-import { action } from "@storybook/addon-actions";
 import { observable } from "mobx";
 import { observer } from "mobx-react";
 import * as React from "react";
-import { DevtoolPageSelector } from "../atom/DevtoolPageSelector";
+import { fn } from "storybook/test";
+import { DevtoolPageSelector } from "../atom/DevtoolPageSelector.js";
 
 export default {
 	title: "a-DevtoolPageSelector"
@@ -21,7 +21,7 @@ export const Basic = {
 					{ label: "bar", key: "bar", title: "bar" },
 				]}
 				activeIndex={1}
-				onChangeActive={action("event:change-active")}
+				onChangeActive={fn()}
 			/>
 		</div>
 	)
@@ -41,7 +41,7 @@ export const Bleedout = {
 					{ label: "a ridculously long option that bleeds out the containing box", key: "c", title: "yet another option" },
 				]}
 				activeIndex={1}
-				onChangeActive={action("event:change-active")}
+				onChangeActive={fn()}
 			/>
 		</div>
 	)

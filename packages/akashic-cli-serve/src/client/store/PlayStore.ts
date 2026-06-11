@@ -1,6 +1,6 @@
 import { observable } from "mobx";
-import type { ContentLocatorData } from "../../common/types/ContentLocatorData";
-import type { Player } from "../../common/types/Player";
+import type { ContentLocatorData } from "../../common/types/ContentLocatorData.js";
+import type { Player } from "../../common/types/Player.js";
 import type {
 	PlayCreateTestbedEvent,
 	PlayStatusChangedTestbedEvent,
@@ -15,15 +15,15 @@ import type {
 	ClientInstanceDisappearTestbedEvent,
 	PutStartPointEvent,
 	PlayAudioStateChangeTestbedEvent
-} from "../../common/types/TestbedEvent";
-import type { GameViewManager } from "../akashic/GameViewManager";
-import { SocketIOAMFlowClient } from "../akashic/SocketIOAMFlowClient";
-import { apiClient } from "../api/apiClientInstance";
-import { socketInstance } from "../api/socketInstance";
-import * as Subscriber from "../api/Subscriber";
-import type { ClientContentLocator } from "../common/ClientContentLocator";
-import type { ContentStore } from "./ContentStore";
-import { PlayEntity } from "./PlayEntity";
+} from "../../common/types/TestbedEvent.js";
+import type { GameViewManager } from "../akashic/GameViewManager.js";
+import { SocketIOAMFlowClient } from "../akashic/SocketIOAMFlowClient.js";
+import { apiClient } from "../api/apiClientInstance.js";
+import { socketInstance } from "../api/socketInstance.js";
+import * as Subscriber from "../api/Subscriber.js";
+import type { ClientContentLocator } from "../common/ClientContentLocator.js";
+import type { ContentStore } from "./ContentStore.js";
+import { PlayEntity } from "./PlayEntity.js";
 
 export interface PlayStoreParameterObject {
 	contentStore: ContentStore;

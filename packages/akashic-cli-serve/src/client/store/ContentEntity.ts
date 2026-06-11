@@ -1,10 +1,10 @@
 import type { GameConfiguration, NicoliveEnvironment, PreferredSessionParameters } from "@akashic/game-configuration";
 import type { NormalizedSandboxConfiguration } from "@akashic/sandbox-configuration";
 import { action, observable } from "mobx";
-import type { ContentDesc } from "../../common/types/ContentDesc";
-import { apiClient } from "../api/apiClientInstance";
-import { ClientContentLocator } from "../common/ClientContentLocator";
-import { DevtoolUiStore } from "./DevtoolUiStore";
+import type { ContentDesc } from "../../common/types/ContentDesc.js";
+import { apiClient } from "../api/apiClientInstance.js";
+import { ClientContentLocator } from "../common/ClientContentLocator.js";
+import { DevtoolUiStore } from "./DevtoolUiStore.js";
 
 export class ContentEntity {
 	readonly locator: ClientContentLocator;

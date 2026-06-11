@@ -1,8 +1,8 @@
 import type * as pl from "@akashic/playlog";
-import type { ClientContentLocator } from "../common/ClientContentLocator";
-import { NullScriptAssetV3 } from "./AssetV3";
-import { ServeGameContent } from "./ServeGameContent";
-import { generateTestbedScriptAsset } from "./TestbedScriptAsset";
+import type { ClientContentLocator } from "../common/ClientContentLocator.js";
+import { NullScriptAssetV3 } from "./AssetV3.js";
+import { ServeGameContent } from "./ServeGameContent.js";
+import { generateTestbedScriptAsset } from "./TestbedScriptAsset.js";
 
 interface Renderer {
 	drawImage(

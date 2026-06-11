@@ -1,8 +1,8 @@
 import { toJS as mobxToJS } from "mobx";
-import type { PlayPatchApiResponse } from "../../common/types/ApiResponse";
-import type { NamagameCommentEventComment } from "../../common/types/NamagameCommentPlugin";
-import * as Subscriber from "../api/Subscriber";
-import type { Store } from "../store/Store";
+import type { PlayPatchApiResponse } from "../../common/types/ApiResponse.js";
+import type { NamagameCommentEventComment } from "../../common/types/NamagameCommentPlugin.js";
+import * as Subscriber from "../api/Subscriber.js";
+import type { Store } from "../store/Store.js";
 
 const WINDOW_HEIGHT_MARGIN = 100;
 const WINDOW_WIDTH_MARGIN = 40;

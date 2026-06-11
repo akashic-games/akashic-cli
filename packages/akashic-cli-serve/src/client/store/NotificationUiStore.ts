@@ -1,5 +1,5 @@
 import { action, observable } from "mobx";
-import type { NotificationType } from "./NotificationType";
+import type { NotificationType } from "./NotificationType.js";
 
 export interface NotificationActiveParameterObject {
 	type: NotificationType;

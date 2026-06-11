@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import { FlexScrollY } from "../atom/FlexScrollY";
+import { FlexScrollY } from "../atom/FlexScrollY.js";
 import styles from "./NiconicoDevtoolRankingPage.module.css";
 
 export interface NiconicoDevtoolRankingPageProps {

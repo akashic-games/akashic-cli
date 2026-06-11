@@ -1,5 +1,5 @@
 import {action, observable} from "mobx";
-import {storage} from "./storage";
+import {storage} from "./storage.js";
 
 export class StartupScreenUiStore {
 	@observable selectedArgumentName: string | null;

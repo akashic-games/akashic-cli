@@ -15,12 +15,12 @@ import type {
 	PlayerPostApiResponse,
 	StartPointHeaderListResponse,
 	PlaySendNamagameCommentResponse
-} from "../../common/types/ApiResponse";
-import type { ContentLocatorData } from "../../common/types/ContentLocatorData";
-import type { NamagameCommentEventComment } from "../../common/types/NamagameCommentPlugin";
-import type { PlayAudioState } from "../../common/types/PlayAudioState";
-import type { Player } from "../../common/types/Player";
-import * as ApiRequest from "./ApiRequest";
+} from "../../common/types/ApiResponse.js";
+import type { ContentLocatorData } from "../../common/types/ContentLocatorData.js";
+import type { NamagameCommentEventComment } from "../../common/types/NamagameCommentPlugin.js";
+import type { PlayAudioState } from "../../common/types/PlayAudioState.js";
+import type { Player } from "../../common/types/Player.js";
+import * as ApiRequest from "./ApiRequest.js";
 
 export class ApiClient {
 	private _baseUrl: string;

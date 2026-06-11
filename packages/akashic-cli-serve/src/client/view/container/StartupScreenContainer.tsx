@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import type { Operator } from "../../operator/Operator";
-import type { StartupScreenUiStore } from "../../store/StartupScreenUiStore";
-import { StartupScreen } from "../organism/StartupScreen";
+import type { Operator } from "../../operator/Operator.js";
+import type { StartupScreenUiStore } from "../../store/StartupScreenUiStore.js";
+import { StartupScreen } from "../organism/StartupScreen.js";
 
 export interface StartupScreenContainerProps {
 	operator: Operator;

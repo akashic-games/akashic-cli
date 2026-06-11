@@ -1,17 +1,17 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import type { GameViewManager } from "../akashic/GameViewManager";
-import type { Operator } from "../operator/Operator";
-import type { Store } from "../store/Store";
+import type { GameViewManager } from "../akashic/GameViewManager.js";
+import type { Operator } from "../operator/Operator.js";
+import type { Store } from "../store/Store.js";
 import styles from "./App.module.css";
-import { FlexScrollY } from "./atom/FlexScrollY";
-import { GameViewFitter } from "./atom/GameViewFitter";
-import { DisconnectModal } from "./atom/ModalView";
-import { DevtoolContainer } from "./container/DevtoolContainer";
-import { GameScreenContainer } from "./container/GameScreenContainer";
-import { NotificationContainer } from "./container/NotificationContainer";
-import { StartupScreenContainer } from "./container/StartupScreenContainer";
-import { ToolBarContainer } from "./container/ToolbarContainer";
+import { FlexScrollY } from "./atom/FlexScrollY.js";
+import { GameViewFitter } from "./atom/GameViewFitter.js";
+import { DisconnectModal } from "./atom/ModalView.js";
+import { DevtoolContainer } from "./container/DevtoolContainer.js";
+import { GameScreenContainer } from "./container/GameScreenContainer.js";
+import { NotificationContainer } from "./container/NotificationContainer.js";
+import { StartupScreenContainer } from "./container/StartupScreenContainer.js";
+import { ToolBarContainer } from "./container/ToolbarContainer.js";
 import "./global.css";
 
 export interface AppProps {

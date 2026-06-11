@@ -1,13 +1,13 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import { DevtoolSelectorBar } from "../atom/DevtoolSelectorBar";
-import { TopResizable } from "../atom/TopResizable";
-import { EntityTreeDevtool, type EntityTreeDevtoolProps } from "../molecule/EntityTreeDevtool";
-import { EventsDevtool, type EventsDevtoolProps } from "../molecule/EventsDevtool";
-import { InstancesDevtool, type InstancesDevtoolProps } from "../molecule/InstancesDevtool";
-import { InternalDevtool, type InternalDevtoolProps } from "../molecule/InternalDevtool";
-import { NiconicoDevtool, type NiconicoDevtoolProps } from "../molecule/NiconicoDevtool";
-import { PlaybackDevtool, type PlaybackDevtoolProps } from "../molecule/PlaybackDevtool";
+import { DevtoolSelectorBar } from "../atom/DevtoolSelectorBar.js";
+import { TopResizable } from "../atom/TopResizable.js";
+import { EntityTreeDevtool, type EntityTreeDevtoolProps } from "../molecule/EntityTreeDevtool.js";
+import { EventsDevtool, type EventsDevtoolProps } from "../molecule/EventsDevtool.js";
+import { InstancesDevtool, type InstancesDevtoolProps } from "../molecule/InstancesDevtool.js";
+import { InternalDevtool, type InternalDevtoolProps } from "../molecule/InternalDevtool.js";
+import { NiconicoDevtool, type NiconicoDevtoolProps } from "../molecule/NiconicoDevtool.js";
+import { PlaybackDevtool, type PlaybackDevtoolProps } from "../molecule/PlaybackDevtool.js";
 import styles from "./Devtool.module.css";
 
 // TODO 適切な箇所に定義を移す

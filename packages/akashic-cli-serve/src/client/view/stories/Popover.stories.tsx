@@ -1,7 +1,7 @@
 import { observable } from "mobx";
 import { observer } from "mobx-react";
 import * as React from "react";
-import { Popover } from "../atom/Popover";
+import { Popover } from "../atom/Popover.js";
 
 const store = observable({
 	shows: false

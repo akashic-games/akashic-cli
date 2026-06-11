@@ -1,5 +1,5 @@
 import type * as ioc from "socket.io-client";
-import parser from "../../common/MsgpackParser";
+import parser from "../../common/MsgpackParser.js";
 
 declare const io: typeof ioc.io;
 

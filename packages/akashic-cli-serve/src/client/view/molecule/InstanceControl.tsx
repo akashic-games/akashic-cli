@@ -1,9 +1,9 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import { millisecondsToHms } from "../../common/DateUtil";
-import { ToolControlGroup } from "../atom/ToolControlGroup";
-import { ToolIconButton } from "../atom/ToolIconButton";
-import { ToolProgressBar } from "../atom/ToolProgressBar";
+import { millisecondsToHms } from "../../common/DateUtil.js";
+import { ToolControlGroup } from "../atom/ToolControlGroup.js";
+import { ToolIconButton } from "../atom/ToolIconButton.js";
+import { ToolProgressBar } from "../atom/ToolProgressBar.js";
 import styles from "./InstanceControl.module.css";
 
 export interface InstanceControlPropsData {

@@ -1,14 +1,14 @@
-import type { ServiceType } from "@akashic/akashic-cli-commons/lib/ServiceType";
+import type { ServiceType } from "@akashic/akashic-cli-commons/lib/ServiceType.js";
 import { observer } from "mobx-react";
 import * as React from "react";
 
-import { ToolIconButton } from "../../../view/atom/ToolIconButton";
-import type { AudioOptionControlPropsData } from "../../../view/molecule/AudioOptionControl";
-import { AudioOptionControl } from "../../../view/molecule/AudioOptionControl";
-import type { DisplayOptionControlPropsData } from "../../../view/molecule/DisplayOptionControl";
-import { DisplayOptionControl } from "../../../view/molecule/DisplayOptionControl";
-import type { PlayerControlPropsData } from "../../../view/molecule/PlayerControl";
-import { PlayerControl } from "../../../view/molecule/PlayerControl";
+import { ToolIconButton } from "../../../view/atom/ToolIconButton.js";
+import type { AudioOptionControlPropsData } from "../../../view/molecule/AudioOptionControl.js";
+import { AudioOptionControl } from "../../../view/molecule/AudioOptionControl.js";
+import type { DisplayOptionControlPropsData } from "../../../view/molecule/DisplayOptionControl.js";
+import { DisplayOptionControl } from "../../../view/molecule/DisplayOptionControl.js";
+import type { PlayerControlPropsData } from "../../../view/molecule/PlayerControl.js";
+import { PlayerControl } from "../../../view/molecule/PlayerControl.js";
 import styles from "./ToolBar.module.css";
 
 export interface ToolBarProps {

@@ -1,8 +1,8 @@
-import { action } from "@storybook/addon-actions";
 import { observable } from "mobx";
 import { observer } from "mobx-react";
 import * as React from "react";
-import { EventsDevtool } from "../molecule/EventsDevtool";
+import { fn } from "storybook/test";
+import { EventsDevtool } from "../molecule/EventsDevtool.js";
 
 const store = observable({
 	shows: true,
@@ -27,11 +27,11 @@ const TestWithBehaviour = observer(() => (
 		eventNames={Object.keys(store.events)}
 		eventEditContent={store.editContent}
 		onClickShowEventList={(v) => (store.shows = v)}
-		onClickSendEvent={action("send")}
+		onClickSendEvent={fn()}
 		onClickCopyEvent={(name) =>
 			(store.editContent = JSON.stringify(store.events[name]))
 		}
-		onClickSendEditingEvent={action("send-edit")}
+		onClickSendEditingEvent={fn()}
 		onEventEditContentChanged={(v) => (store.editContent = v)}
 	/>
 ));
@@ -53,12 +53,12 @@ export const Basic = {
 				"foo (a very long long event name example to test, woo hoo!)",
 			]}
 			eventEditContent={"[\"test\"]"}
-			onClickShowEventList={action("list")}
-			onEventListResize={action("event-list-resize")}
-			onClickSendEvent={action("send")}
-			onClickCopyEvent={action("copy")}
-			onClickSendEditingEvent={action("send-edit")}
-			onEventEditContentChanged={action("edit-content")}
+			onClickShowEventList={fn()}
+			onEventListResize={fn()}
+			onClickSendEvent={fn()}
+			onClickCopyEvent={fn()}
+			onClickSendEditingEvent={fn()}
+			onEventEditContentChanged={fn()}
 		/>
 	),
 
@@ -110,12 +110,12 @@ export const ManyEvents = {
 				"Test 32"
 			]}
 			eventEditContent={"[\"test\"]"}
-			onClickShowEventList={action("list")}
-			onEventListResize={action("event-list-resize")}
-			onClickSendEvent={action("send")}
-			onClickCopyEvent={action("copy")}
-			onClickSendEditingEvent={action("send-edit")}
-			onEventEditContentChanged={action("edit-content")}
+			onClickShowEventList={fn()}
+			onEventListResize={fn()}
+			onClickSendEvent={fn()}
+			onClickCopyEvent={fn()}
+			onClickSendEditingEvent={fn()}
+			onEventEditContentChanged={fn()}
 		/>
 	),
 	name: "many events"

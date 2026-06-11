@@ -1,5 +1,5 @@
 import type * as amflow from "@akashic/amflow";
-import { MemoryAmflowClient } from "@akashic/amflow-util/lib/MemoryAmflowClient";
+import { MemoryAmflowClient } from "@akashic/amflow-util/lib/MemoryAmflowClient.js";
 import type * as playlog from "@akashic/playlog";
 import { Trigger } from "@akashic/trigger";
 

@@ -1,5 +1,5 @@
-import { ContentLocator } from "../../common/ContentLocator";
-import type { ContentLocatorData } from "../../common/types/ContentLocatorData";
+import { ContentLocator } from "../../common/ContentLocator.js";
+import type { ContentLocatorData } from "../../common/types/ContentLocatorData.js";
 
 export class ClientContentLocator extends ContentLocator {
 	static instantiate(locData: ContentLocatorData): ClientContentLocator {

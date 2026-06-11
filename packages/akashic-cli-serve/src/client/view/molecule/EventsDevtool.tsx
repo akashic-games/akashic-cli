@@ -1,9 +1,9 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import { FlexScrollY } from "../atom/FlexScrollY";
-import { RightResizable } from "../atom/RightResizable";
-import { ToolIconButton } from "../atom/ToolIconButton";
-import { ToolLabelButton } from "../atom/ToolLabelButton";
+import { FlexScrollY } from "../atom/FlexScrollY.js";
+import { RightResizable } from "../atom/RightResizable.js";
+import { ToolIconButton } from "../atom/ToolIconButton.js";
+import { ToolLabelButton } from "../atom/ToolLabelButton.js";
 import styles from "./EventsDevtool.module.css";
 
 export interface EventsDevtoolProps {

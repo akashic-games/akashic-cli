@@ -1,15 +1,15 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import type { GameViewManager } from "../../akashic/GameViewManager";
-import { FlexScrollY } from "../../view/atom/FlexScrollY";
-import { GameViewFitter } from "../../view/atom/GameViewFitter";
-import type { Operator } from "../operator/Operator";
-import type { Store } from "../store/Store";
+import type { GameViewManager } from "../../akashic/GameViewManager.js";
+import { FlexScrollY } from "../../view/atom/FlexScrollY.js";
+import { GameViewFitter } from "../../view/atom/GameViewFitter.js";
+import type { Operator } from "../operator/Operator.js";
+import type { Store } from "../store/Store.js";
 import styles from "./App.module.css";
-import { DevtoolContainer } from "./container/DevtoolContainer";
-import { GameScreenContainer } from "./container/GameScreenContainer";
-import { NotificationContainer } from "./container/NotificationContainer";
-import { ToolBarContainer } from "./container/ToolbarContainer";
+import { DevtoolContainer } from "./container/DevtoolContainer.js";
+import { GameScreenContainer } from "./container/GameScreenContainer.js";
+import { NotificationContainer } from "./container/NotificationContainer.js";
+import { ToolBarContainer } from "./container/ToolbarContainer.js";
 
 export interface AppSandboxProps {
 	store: Store;

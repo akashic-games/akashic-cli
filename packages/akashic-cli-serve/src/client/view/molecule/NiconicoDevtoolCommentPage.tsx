@@ -1,11 +1,11 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import type { NamagameCommentEventComment } from "../../../common/types/NamagameCommentPlugin";
+import type { NamagameCommentEventComment } from "../../../common/types/NamagameCommentPlugin.js";
 import type {
 	NiconicoDevtoolCommentPageSenderLimitation,
 	NiconicoDevtoolCommentPageSenderType
-} from "../../store/DevtoolUiCommentPageStore";
-import { ToolChoiceButton, type ToolChoiceButtonItem } from "../atom/ToolChoiceButton";
+} from "../../store/DevtoolUiCommentPageStore.js";
+import { ToolChoiceButton, type ToolChoiceButtonItem } from "../atom/ToolChoiceButton.js";
 import styles from "./NiconicoDevtoolCommentPage.module.css";
 
 export interface NiconicoDevtoolCommentPagePropsModel {

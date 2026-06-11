@@ -1,5 +1,5 @@
 import {action, observable, runInAction} from "mobx";
-import {storage} from "./storage";
+import {storage} from "./storage.js";
 
 export class ToolBarUiStore {
 	// TODO: 切り出す。devtool にもプログレスバーを置いたので ToolBarUiStore といいつつ共有してしまっている
