@@ -10,12 +10,6 @@ import { vi } from "vitest";
 
 const tempPath = path.join(__dirname, "support", "fixture", ".akashicrc");
 
-class MockAkashicConfigFile extends config.AkashicConfigFile {
-	constructor(validator: Record<string, string>) {
-		super(validator, tempPath);
-	}
-}
-
 vi.mock("prompt", async () => {
 	const actualPrompt = await vi.importActual<any>("prompt");
 	return {
@@ -28,8 +22,14 @@ vi.mock("prompt", async () => {
 	};
 });
 
-vi.spyOn(config, "AkashicConfigFile").mockImplementation(validator => {
-	return new MockAkashicConfigFile(validator!);
+vi.mock(import("@akashic/akashic-cli-extra/lib/config/config.js"), async () => {
+	const actual = await vi.importActual<typeof config>("@akashic/akashic-cli-extra/lib/config/config.js");
+	class MockAkashicConfigFile extends actual.AkashicConfigFile {
+		constructor(validator: Record<string, string>) {
+			super(validator, tempPath);
+		}
+	}
+	return { AkashicConfigFile: MockAkashicConfigFile };
 });
 
 describe("InitParameterObject.ts", () => {
