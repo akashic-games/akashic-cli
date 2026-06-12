@@ -1,6 +1,6 @@
-import { action } from "@storybook/addon-actions";
 import * as React from "react";
-import { DevtoolSelectorBar } from "../atom/DevtoolSelectorBar";
+import { fn } from "storybook/test";
+import { DevtoolSelectorBar } from "../atom/DevtoolSelectorBar.js";
 
 export default {
 	title: "a-DevtoolSelectorBar"
@@ -10,10 +10,10 @@ export const Basic = {
 	render: () => (
 		<DevtoolSelectorBar
 			items={[
-				{ name: "Instances", onClick: action("instance"), active: true },
-				{ name: "Entities", onClick: action("entities") },
-				{ name: "Events", onClick: action("events") },
-				{ name: "Niconico", onClick: action("niconico"), warning: true }
+				{ name: "Instances", onClick: fn(), active: true },
+				{ name: "Entities", onClick: fn() },
+				{ name: "Events", onClick: fn() },
+				{ name: "Niconico", onClick: fn(), warning: true }
 			]}
 		/>
 	),
@@ -24,10 +24,10 @@ export const ActiveWarn = {
 	render: () => (
 		<DevtoolSelectorBar
 			items={[
-				{ name: "Niconico", onClick: action("niconico"), warning: true },
+				{ name: "Niconico", onClick: fn(), warning: true },
 				{
 					name: "Instances",
-					onClick: action("instance"),
+					onClick: fn(),
 					active: true,
 					warning: true
 				}

@@ -1,8 +1,8 @@
-import { action } from "@storybook/addon-actions";
 import { observable } from "mobx";
 import { observer } from "mobx-react";
 import * as React from "react";
-import { TopResizable } from "../atom/TopResizable";
+import { fn } from "storybook/test";
+import { TopResizable } from "../atom/TopResizable.js";
 
 const store = observable({
 	height: 200
@@ -37,7 +37,7 @@ export default {
 export const Basic = {
 	render: () => (
 		<div style={{ padding: 20 }}>
-			<TopResizable height={200} minHeight={50} onResize={action("resize")}>
+			<TopResizable height={200} minHeight={50} onResize={fn()}>
 				<p style={{ flex: "1 1 auto", padding: 10, border: "1px solid gray" }}>
 					Foo
 				</p>

@@ -1,7 +1,7 @@
-import { action } from "@storybook/addon-actions";
 import { observable } from "mobx";
 import * as React from "react";
-import { NiconicoDevtoolRankingPage } from "../molecule/NiconicoDevtoolRankingPage";
+import { fn } from "storybook/test";
+import { NiconicoDevtoolRankingPage } from "../molecule/NiconicoDevtoolRankingPage.js";
 
 export default {
 	title: "m-NiconicoDevtoolRankingPage"
@@ -19,13 +19,11 @@ const store = observable({
 	score: 700,
 	playThreshold: 100,
 	clearThreshold: 500,
-	onAutoSendEventsChanged: action("events:auto-send-events-changed"),
-	onModeSelectChanged: action("events:mode-select-changed"),
-	onTotalTimeLimitInputValueChanged: action("events:total-time-limit-changed"),
-	onUsePreferredTotalTimeLimitChanged: action(
-		"events:use-preferred-total-time-limit-changed",
-	),
-	onUseStopGameChanged: action("events:use-stop-game-changed")
+	onAutoSendEventsChanged: fn(),
+	onModeSelectChanged: fn(),
+	onTotalTimeLimitInputValueChanged: fn(),
+	onUsePreferredTotalTimeLimitChanged: fn(),
+	onUseStopGameChanged: fn()
 });
 
 export const WithBehavior = {

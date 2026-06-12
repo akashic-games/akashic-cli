@@ -1,4 +1,4 @@
-import { createSocketInstance } from "./createSocketInstance";
+import { createSocketInstance } from "./createSocketInstance.js";
 
 const wsProtocol = window.location.protocol.includes("https") ? "wss" : "ws";
 

@@ -1,8 +1,8 @@
-import { action } from "@storybook/addon-actions";
 import { observable } from "mobx";
 import { observer } from "mobx-react";
 import * as React from "react";
-import { RightResizable } from "../atom/RightResizable";
+import { fn } from "storybook/test";
+import { RightResizable } from "../atom/RightResizable.js";
 
 const store = observable({
 	width: 200
@@ -39,7 +39,7 @@ export default {
 export const Basic = {
 	render: () => (
 		<div style={{ padding: 20 }}>
-			<RightResizable width={200} minWidth={50} onResize={action("resize")}>
+			<RightResizable width={200} minWidth={50} onResize={fn()}>
 				<p style={{ flex: "1 1 auto", padding: 10, border: "1px solid gray" }}>
 					Foo
 				</p>

@@ -1,9 +1,9 @@
-import { action } from "@storybook/addon-actions";
 import { observable } from "mobx";
 import { observer } from "mobx-react";
 import * as React from "react";
-import type { PlayAudioStateSummary } from "../../../common/types/PlayAudioState";
-import { ToolBar } from "../organism/ToolBar";
+import { fn } from "storybook/test";
+import type { PlayAudioStateSummary } from "../../../common/types/PlayAudioState.js";
+import { ToolBar } from "../organism/ToolBar.js";
 
 const store = observable({
 	realtime: true,
@@ -39,12 +39,12 @@ const TestWithBehaviour = observer(() => (
 			isActivePausing: store.isActivePausing,
 			isActiveExists: true,
 			showsAddInstanceOptions: false,
-			onClickAddInstanceOptions: action("show-add-instance-options"),
-			onClickReset: action("reset"),
+			onClickAddInstanceOptions: fn(),
+			onClickReset: fn(),
 			onClickActivePause: (v) => (store.isActivePausing = v),
-			onClickAddInstance: action("add-instance"),
-			onClickAddSamePlayerInstance: action("add-same-player-instance"),
-			onClickStep: action("step")
+			onClickAddInstance: fn(),
+			onClickAddSamePlayerInstance: fn(),
+			onClickStep: fn()
 		})}
 		makeInstanceControlProps={() => ({
 			currentTime:
@@ -70,7 +70,7 @@ const TestWithBehaviour = observer(() => (
 			selfId: "1234567asdfg",
 			isJoined: true,
 			isJoinEnabled: store.realtime,
-			onClickJoinLeave: action("joinleave"),
+			onClickJoinLeave: fn(),
 		})}
 		makeAudioOptionControlProps={() => ({
 			showsAudioOptionPopover: store.showsAudioOptionPopover,
@@ -127,12 +127,12 @@ export const Basic = {
 				isActivePausing: false,
 				isActiveExists: true,
 				showsAddInstanceOptions: false,
-				onClickAddInstanceOptions: action("show-add-instance-options"),
-				onClickReset: action("reset"),
-				onClickActivePause: action("active-pause"),
-				onClickAddInstance: action("add-instance"),
-				onClickAddSamePlayerInstance: action("add-same-player-instance"),
-				onClickStep: action("step")
+				onClickAddInstanceOptions: fn(),
+				onClickReset: fn(),
+				onClickActivePause: fn(),
+				onClickAddInstance: fn(),
+				onClickAddSamePlayerInstance: fn(),
+				onClickStep: fn()
 			})}
 			makeInstanceControlProps={() => ({
 				currentTime: 2234 * 1000,
@@ -140,23 +140,23 @@ export const Basic = {
 				resetTime: 1111 * 1000,
 				isPaused: false,
 				isProgressActive: false,
-				onProgressChange: action("progress-change"),
-				onProgressCommit: action("progress-commit"),
-				onClickPause: action("click-pause"),
-				onClickFastForward: action("click-fast-forward")
+				onProgressChange: fn(),
+				onProgressCommit: fn(),
+				onClickPause: fn(),
+				onClickFastForward: fn()
 			})}
 			makePlayerControlProps={() => ({
 				selfId: "1234567asdfg",
 				isJoined: true,
 				isJoinEnabled: false,
-				onClickJoinLeave: action("joinleave")
+				onClickJoinLeave: fn()
 			})}
 			makeAudioOptionControlProps={() => ({
 				showsAudioOptionPopover: false,
 				audioStateSummary: "only-this-player-unmuted",
 				audioVolume: 50,
-				onChangeAudioVolume: action("change-audio-volume"),
-				onClickAudioOptionPopover: action("audio-option"),
+				onChangeAudioVolume: fn(),
+				onClickAudioOptionPopover: fn(),
 				onClickSolo: () => {
 					// do nothing
 				},
@@ -175,13 +175,13 @@ export const Basic = {
 				showsGrid: true,
 				showsProfiler: true,
 				showsDesignGuideline: false,
-				onClickDisplayOptionPopover: action("display-option"),
-				onChangeFitsToScreen: action("fits"),
-				onChangeShowBackgroundImage: action("bgimage"),
-				onChangeShowBackgroundColor: action("bgcolor"),
-				onChangeShowGrid: action("grid"),
-				onChangeShowProfiler: action("profiler"),
-				onChangeShowDesignGuideline: action("design-guideline"),
+				onClickDisplayOptionPopover: fn(),
+				onChangeFitsToScreen: fn(),
+				onChangeShowBackgroundImage: fn(),
+				onChangeShowBackgroundColor: fn(),
+				onChangeShowGrid: fn(),
+				onChangeShowProfiler: fn(),
+				onChangeShowDesignGuideline: fn(),
 				onClickScreenshot: () => {
 					// do nothing
 				}
@@ -190,8 +190,8 @@ export const Basic = {
 			showsDevtools={true}
 			showsInstanceControl={true}
 			targetService={"none"}
-			onToggleAppearance={action("toggle-appearance")}
-			onClickDevTools={action("dev-tools")}
+			onToggleAppearance={fn()}
+			onClickDevTools={fn()}
 		/>
 	),
 

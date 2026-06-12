@@ -1,5 +1,5 @@
 import { Trigger } from "@akashic/trigger";
-import type { RuntimeWarning } from "./RuntimeWarning";
+import type { RuntimeWarning } from "./RuntimeWarning.js";
 
 export interface ScriptHelper {
 	onScriptWarn: Trigger<RuntimeWarning>;

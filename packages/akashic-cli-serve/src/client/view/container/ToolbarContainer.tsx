@@ -1,16 +1,16 @@
-import type { ServiceType } from "@akashic/akashic-cli-commons/lib/ServiceType";
+import type { ServiceType } from "@akashic/akashic-cli-commons/lib/ServiceType.js";
 import { observer } from "mobx-react";
 import * as React from "react";
-import type { Operator } from "../../operator/Operator";
-import type { LocalInstanceEntity } from "../../store/LocalInstanceEntity";
-import type { PlayEntity } from "../../store/PlayEntity";
-import type { ToolBarUiStore } from "../../store/ToolBarUiStore";
-import type { AudioOptionControlPropsData } from "../molecule/AudioOptionControl";
-import type { DisplayOptionControlPropsData } from "../molecule/DisplayOptionControl";
-import type { InstanceControlPropsData } from "../molecule/InstanceControl";
-import type { PlayControlPropsData } from "../molecule/PlayControl";
-import type { PlayerControlPropsData } from "../molecule/PlayerControl";
-import { ToolBar } from "../organism/ToolBar";
+import type { Operator } from "../../operator/Operator.js";
+import type { LocalInstanceEntity } from "../../store/LocalInstanceEntity.js";
+import type { PlayEntity } from "../../store/PlayEntity.js";
+import type { ToolBarUiStore } from "../../store/ToolBarUiStore.js";
+import type { AudioOptionControlPropsData } from "../molecule/AudioOptionControl.js";
+import type { DisplayOptionControlPropsData } from "../molecule/DisplayOptionControl.js";
+import type { InstanceControlPropsData } from "../molecule/InstanceControl.js";
+import type { PlayControlPropsData } from "../molecule/PlayControl.js";
+import type { PlayerControlPropsData } from "../molecule/PlayerControl.js";
+import { ToolBar } from "../organism/ToolBar.js";
 
 export interface ToolBarContainerProps {
 	play: PlayEntity;

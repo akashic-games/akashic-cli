@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import { ToolControlGroup } from "../atom/ToolControlGroup";
-import { ToolIconButton } from "../atom/ToolIconButton";
+import { ToolControlGroup } from "../atom/ToolControlGroup.js";
+import { ToolIconButton } from "../atom/ToolIconButton.js";
 
 export interface PlayControlPropsData {
 	playbackRate: number;

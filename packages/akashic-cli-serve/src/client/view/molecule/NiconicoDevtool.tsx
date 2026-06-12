@@ -1,11 +1,11 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import type { DevtoolPageSelectorItem } from "../atom/DevtoolPageSelector";
-import { DevtoolPageSelector } from "../atom/DevtoolPageSelector";
-import { RightResizable } from "../atom/RightResizable";
+import type { DevtoolPageSelectorItem } from "../atom/DevtoolPageSelector.js";
+import { DevtoolPageSelector } from "../atom/DevtoolPageSelector.js";
+import { RightResizable } from "../atom/RightResizable.js";
 import styles from "./NiconicoDevtool.module.css";
-import { NiconicoDevtoolCommentPage, type NiconicoDevtoolCommentPageProps } from "./NiconicoDevtoolCommentPage";
-import { NiconicoDevtoolRankingPage, type NiconicoDevtoolRankingPageProps } from "./NiconicoDevtoolRankingPage";
+import { NiconicoDevtoolCommentPage, type NiconicoDevtoolCommentPageProps } from "./NiconicoDevtoolCommentPage.js";
+import { NiconicoDevtoolRankingPage, type NiconicoDevtoolRankingPageProps } from "./NiconicoDevtoolRankingPage.js";
 
 export type NiconicoDevtoolPageType = "ranking" | "comment";
 

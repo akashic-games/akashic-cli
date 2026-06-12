@@ -1,10 +1,10 @@
 import { observable } from "mobx";
-import type { DumpedPlaylog } from "../../../common/types/DumpedPlaylog";
-import type { PlayDurationState } from "../../../common/types/PlayDurationState";
-import type { GameViewManager } from "../../akashic/GameViewManager";
-import type { ServeMemoryAmflowClient } from "../../akashic/ServeMemoryAMFlowClient";
-import type { ContentEntity } from "../../store/ContentEntity";
-import { PlayEntity } from "../../store/PlayEntity";
+import type { DumpedPlaylog } from "../../../common/types/DumpedPlaylog.js";
+import type { PlayDurationState } from "../../../common/types/PlayDurationState.js";
+import type { GameViewManager } from "../../akashic/GameViewManager.js";
+import type { ServeMemoryAmflowClient } from "../../akashic/ServeMemoryAMFlowClient.js";
+import type { ContentEntity } from "../../store/ContentEntity.js";
+import { PlayEntity } from "../../store/PlayEntity.js";
 
 export interface PlayStoreParameterObject {
 	gameViewManager: GameViewManager;

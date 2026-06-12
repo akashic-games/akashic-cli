@@ -1,13 +1,13 @@
 import { configure as mobxConfigure } from "mobx";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { GameViewManager } from "./akashic/GameViewManager";
-import { scriptHelper } from "./akashic/scriptHelper";
-import { Operator } from "./operator/Operator";
-import { storage } from "./store/storage";
-import { Store } from "./store/Store";
-import { App } from "./view/App";
-import "./AkashicServeWindow";
+import { GameViewManager } from "./akashic/GameViewManager.js";
+import { scriptHelper } from "./akashic/scriptHelper.js";
+import { Operator } from "./operator/Operator.js";
+import { storage } from "./store/storage.js";
+import { Store } from "./store/Store.js";
+import { App } from "./view/App.js";
+import "./AkashicServeWindow.js";
 
 mobxConfigure({ enforceActions: "observed" });
 

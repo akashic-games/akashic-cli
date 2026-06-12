@@ -1,6 +1,6 @@
-import { action } from "@storybook/addon-actions";
 import * as React from "react";
-import { PlayerControl } from "../molecule/PlayerControl";
+import { fn } from "storybook/test";
+import { PlayerControl } from "../molecule/PlayerControl.js";
 
 export default {
 	title: "m-PlayerControl"
@@ -13,7 +13,7 @@ export const JoinedEnabled = {
 				selfId: "1234567asdfg",
 				isJoined: true,
 				isJoinEnabled: true,
-				onClickJoinLeave: action("joinleave")
+				onClickJoinLeave: fn()
 			})}
 		/>
 	),
@@ -27,7 +27,7 @@ export const NonJoinedDisabled = {
 				selfId: "1234567asdfg",
 				isJoined: false,
 				isJoinEnabled: false,
-				onClickJoinLeave: action("joinleave")
+				onClickJoinLeave: fn()
 			})}
 		/>
 	),

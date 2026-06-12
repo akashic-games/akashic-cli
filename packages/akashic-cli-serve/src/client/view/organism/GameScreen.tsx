@@ -1,9 +1,9 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import type { PlayerInfoResolverDialogProps } from "../molecule/PlayerInfoResolverDialog";
-import { PlayerInfoResolverDialog } from "../molecule/PlayerInfoResolverDialog";
-import type { ProfilerCanvasProps } from "../molecule/ProfilerCanvas";
-import { ProfilerCanvas } from "../molecule/ProfilerCanvas";
+import type { PlayerInfoResolverDialogProps } from "../molecule/PlayerInfoResolverDialog.js";
+import { PlayerInfoResolverDialog } from "../molecule/PlayerInfoResolverDialog.js";
+import type { ProfilerCanvasProps } from "../molecule/ProfilerCanvas.js";
+import { ProfilerCanvas } from "../molecule/ProfilerCanvas.js";
 import styles from "./GameScreen.module.css";
 import designGuideLineImageUrl from "./img/design-guideline.png";
 

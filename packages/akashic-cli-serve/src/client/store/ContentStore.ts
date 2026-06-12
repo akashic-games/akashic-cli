@@ -1,8 +1,8 @@
 import { observable, ObservableMap } from "mobx";
-import type { ContentLocatorData } from "../../common/types/ContentLocatorData";
-import { apiClient } from "../api/apiClientInstance";
-import { ClientContentLocator } from "../common/ClientContentLocator";
-import { ContentEntity } from "./ContentEntity";
+import type { ContentLocatorData } from "../../common/types/ContentLocatorData.js";
+import { apiClient } from "../api/apiClientInstance.js";
+import { ClientContentLocator } from "../common/ClientContentLocator.js";
+import { ContentEntity } from "./ContentEntity.js";
 
 export class ContentStore {
 	@observable contents: ObservableMap<string, ContentEntity>;

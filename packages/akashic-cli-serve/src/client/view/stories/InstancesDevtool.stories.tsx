@@ -1,6 +1,6 @@
-import { action } from "@storybook/addon-actions";
 import * as React from "react";
-import { InstancesDevtool } from "../molecule/InstancesDevtool";
+import { fn } from "storybook/test";
+import { InstancesDevtool } from "../molecule/InstancesDevtool.js";
 
 export default {
 	title: "m-InstancesDevtool"
@@ -39,7 +39,7 @@ export const Basic = {
 					isJoined: false
 				},
 			]}
-			onClickAddInstance={action("add-instance")}
+			onClickAddInstance={fn()}
 		/>
 	),
 	name: "basic"

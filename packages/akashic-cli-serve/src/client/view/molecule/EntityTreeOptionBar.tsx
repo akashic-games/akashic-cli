@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import { ToolCheckbox } from "../atom/ToolCheckbox";
-import { ToolIconButton } from "../atom/ToolIconButton";
+import { ToolCheckbox } from "../atom/ToolCheckbox.js";
+import { ToolIconButton } from "../atom/ToolIconButton.js";
 import styles from "./EntityTreeOptionBar.module.css";
 
 export interface EntityTreeOptionBarProps {

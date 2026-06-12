@@ -1,7 +1,7 @@
 import { Trigger } from "@akashic/trigger";
 import { observable, action, computed } from "mobx";
-import type { PlayerInfoResolverResultMessage } from "../akashic/plugin/CoeLimitedPlugin";
-import { storage } from "./storage";
+import type { PlayerInfoResolverResultMessage } from "../akashic/plugin/CoeLimitedPlugin.js";
+import { storage } from "./storage.js";
 
 const DEFAULT_LIMIT_MILLISECONDS = 15 * 1000;
 

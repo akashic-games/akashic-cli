@@ -1,7 +1,7 @@
-import type { GameViewManager } from "./akashic/GameViewManager";
-import type { ScriptHelper } from "./akashic/scriptHelper";
-import type { Operator } from "./operator/Operator";
-import type { Store } from "./store/Store";
+import type { GameViewManager } from "./akashic/GameViewManager.js";
+import type { ScriptHelper } from "./akashic/scriptHelper.js";
+import type { Operator } from "./operator/Operator.js";
+import type { Store } from "./store/Store.js";
 
 declare global {
 	interface Window {

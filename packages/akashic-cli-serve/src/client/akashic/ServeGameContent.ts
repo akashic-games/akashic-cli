@@ -1,9 +1,9 @@
 import type * as amf from "@akashic/amflow";
 import type * as realPlaylog from "@akashic/playlog";
 import { Trigger } from "@akashic/trigger";
-import type { EDumpItem } from "../common/types/EDumpItem";
-import type { ProfilerValue } from "../common/types/Profiler";
-import type { RuntimeWarning } from "./RuntimeWarning";
+import type { EDumpItem } from "../common/types/EDumpItem.js";
+import type { ProfilerValue } from "../common/types/Profiler.js";
+import type { RuntimeWarning } from "./RuntimeWarning.js";
 
 // akashic-engine の g.EntityStateFlags のうち、必要な部分のコピー。
 //

@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import { useOnClickOutside } from "./Popover";
+import { useOnClickOutside } from "./Popover.js";
 import styles from "./ToolIconButton.module.css";
 
 interface ToolIconButtonProps {

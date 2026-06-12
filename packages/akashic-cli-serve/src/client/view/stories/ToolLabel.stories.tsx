@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ToolLabel } from "../atom/ToolLabel";
+import { ToolLabel } from "../atom/ToolLabel.js";
 
 export default {
 	title: "a-ToolLabel",

@@ -51,7 +51,8 @@ Akashic Engineの詳細な利用方法については、 [公式ページ](https
 akashic-cli はTypeScriptで書かれたJSモジュールです。ビルドにはNode.jsが必要です。 リポジトリ直下で次を実行してください。
 
 ```
-npm install
+npm install # 初回のみ
+npm run setup # 初回のみ
 npm run build
 ```
 

@@ -1,9 +1,9 @@
 import type { ObservableMap } from "mobx";
 import { action, observable } from "mobx";
-import type { EDumpItem } from "../common/types/EDumpItem";
-import type { NiconicoDevtoolPageType } from "../view/molecule/NiconicoDevtool";
-import { DevtoolUiCommentPageStore } from "./DevtoolUiCommentPageStore";
-import { storage } from "./storage";
+import type { EDumpItem } from "../common/types/EDumpItem.js";
+import type { NiconicoDevtoolPageType } from "../view/molecule/NiconicoDevtool.js";
+import { DevtoolUiCommentPageStore } from "./DevtoolUiCommentPageStore.js";
+import { storage } from "./storage.js";
 
 export class DevtoolUiStore {
 	static DEFAULT_TOTAL_TIME_LIMIT = 85;

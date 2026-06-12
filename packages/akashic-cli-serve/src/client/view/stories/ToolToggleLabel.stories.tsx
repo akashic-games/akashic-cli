@@ -1,6 +1,6 @@
-import { action } from "@storybook/addon-actions";
 import * as React from "react";
-import { ToolToggleLabel } from "../atom/ToolToggleLabel";
+import { fn } from "storybook/test";
+import { ToolToggleLabel } from "../atom/ToolToggleLabel.js";
 
 export default {
 	title: "a-ToolToggleLabel"
@@ -8,7 +8,7 @@ export default {
 
 export const Pushed = {
 	render: () => (
-		<ToolToggleLabel isPushed={true} onToggle={action("toggle")}>
+		<ToolToggleLabel isPushed={true} onToggle={fn()}>
 			<i className="material-icons">zoom_in</i>
 		</ToolToggleLabel>
 	),
@@ -17,7 +17,7 @@ export const Pushed = {
 
 export const NonPushed = {
 	render: () => (
-		<ToolToggleLabel isPushed={false} onToggle={action("toggle")}>
+		<ToolToggleLabel isPushed={false} onToggle={fn()}>
 			<p>Foo</p>
 		</ToolToggleLabel>
 	),

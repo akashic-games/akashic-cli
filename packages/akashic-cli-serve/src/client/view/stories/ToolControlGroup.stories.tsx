@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ToolControlGroup } from "../atom/ToolControlGroup";
+import { ToolControlGroup } from "../atom/ToolControlGroup.js";
 
 export default {
 	title: "a-ToolControlGroup"

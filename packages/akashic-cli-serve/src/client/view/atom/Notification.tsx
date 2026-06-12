@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import type { NotificationType } from "../../store/NotificationType";
+import type { NotificationType } from "../../store/NotificationType.js";
 import styles from "./Notification.module.css";
-import { ToolIconButton } from "./ToolIconButton";
+import { ToolIconButton } from "./ToolIconButton.js";
 
 export interface NotificationProps {
 	isShown: boolean;

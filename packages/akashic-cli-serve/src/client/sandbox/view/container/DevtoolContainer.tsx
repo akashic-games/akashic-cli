@@ -1,12 +1,12 @@
 import type { NormalizedSandboxConfiguration } from "@akashic/sandbox-configuration";
 import { observer } from "mobx-react";
 import * as React from "react";
-import type { DevtoolUiStore } from "../../../store/DevtoolUiStore";
-import type { LocalInstanceEntity } from "../../../store/LocalInstanceEntity";
-import type { PlayEntity } from "../../../store/PlayEntity";
-import type { ToolBarUiStore } from "../../../store/ToolBarUiStore";
-import type { Operator } from "../../operator/Operator";
-import { Devtool } from "../organism/Devtool";
+import type { DevtoolUiStore } from "../../../store/DevtoolUiStore.js";
+import type { LocalInstanceEntity } from "../../../store/LocalInstanceEntity.js";
+import type { PlayEntity } from "../../../store/PlayEntity.js";
+import type { ToolBarUiStore } from "../../../store/ToolBarUiStore.js";
+import type { Operator } from "../../operator/Operator.js";
+import { Devtool } from "../organism/Devtool.js";
 
 export interface DevtoolContainerProps {
 	play: PlayEntity;

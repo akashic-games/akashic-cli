@@ -1,9 +1,9 @@
-import { action } from "@storybook/addon-actions";
 import { observable } from "mobx";
 import { observer } from "mobx-react";
 import * as React from "react";
-import type { NiconicoDevtoolPageType, NiconicoDevtoolProps } from "../molecule/NiconicoDevtool";
-import { NiconicoDevtool } from "../molecule/NiconicoDevtool";
+import { fn } from "storybook/test";
+import type { NiconicoDevtoolPageType, NiconicoDevtoolProps } from "../molecule/NiconicoDevtool.js";
+import { NiconicoDevtool } from "../molecule/NiconicoDevtool.js";
 
 const store: NiconicoDevtoolProps = observable({
 	rankingPageProps: {
@@ -18,13 +18,11 @@ const store: NiconicoDevtoolProps = observable({
 		score: 700,
 		playThreshold: 100,
 		clearThreshold: 500,
-		onAutoSendEventsChanged: action("events:auto-send-events-changed"),
-		onModeSelectChanged: action("events:mode-select-changed"),
-		onTotalTimeLimitInputValueChanged: action("events:total-time-limit-changed"),
-		onUsePreferredTotalTimeLimitChanged: action(
-			"events:use-preferred-total-time-limit-changed",
-		),
-		onUseStopGameChanged: action("events:use-stop-game-changed")
+		onAutoSendEventsChanged: fn(),
+		onModeSelectChanged: fn(),
+		onTotalTimeLimitInputValueChanged: fn(),
+		onUsePreferredTotalTimeLimitChanged: fn(),
+		onUseStopGameChanged: fn()
 	},
 
 	commentPageProps: {
@@ -52,11 +50,11 @@ const store: NiconicoDevtoolProps = observable({
 			commandInput: "ue big red",
 			commentInput: "コメント送信内容",
 		},
-		onCommentInputChanged: action("comment-input-changed"),
-		onCommandInputChanged: action("command-input-changed"),
-		onSenderTypeChanged: action("sender-changed"),
-		onClickSend: action("click-send"),
-		onClickTemplate: action("click-template"),
+		onCommentInputChanged: fn(),
+		onCommandInputChanged: fn(),
+		onSenderTypeChanged: fn(),
+		onClickSend: fn(),
+		onClickTemplate: fn(),
 	},
 
 	activePage: "ranking" as NiconicoDevtoolPageType,

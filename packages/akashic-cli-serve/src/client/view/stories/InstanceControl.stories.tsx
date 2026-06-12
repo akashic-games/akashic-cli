@@ -1,6 +1,6 @@
-import { action } from "@storybook/addon-actions";
 import * as React from "react";
-import { InstanceControl } from "../molecule/InstanceControl";
+import { fn } from "storybook/test";
+import { InstanceControl } from "../molecule/InstanceControl.js";
 
 export default {
 	title: "m-InstanceControl"
@@ -15,10 +15,10 @@ export const Basic = {
 				resetTime: 1111 * 1000,
 				isPaused: false,
 				isProgressActive: false,
-				onProgressChange: action("progress-change"),
-				onProgressCommit: action("progress-commit"),
-				onClickPause: action("click-pause"),
-				onClickFastForward: action("click-fast-forward")
+				onProgressChange: fn(),
+				onProgressCommit: fn(),
+				onClickPause: fn(),
+				onClickFastForward: fn()
 			})}
 		/>
 	),

@@ -2,11 +2,11 @@ import type { ObservableMap } from "mobx";
 import { observer } from "mobx-react";
 import * as React from "react";
 import scrollIntoView from "scroll-into-view-if-needed";
-import type { EDumpItem } from "../../common/types/EDumpItem";
-import { FlexScrollY } from "../atom/FlexScrollY";
+import type { EDumpItem } from "../../common/types/EDumpItem.js";
+import { FlexScrollY } from "../atom/FlexScrollY.js";
 import styles from "./EntityTreeDevtool.module.css";
-import type { EntityTreeOptionBarProps } from "./EntityTreeOptionBar";
-import { EntityTreeOptionBar } from "./EntityTreeOptionBar";
+import type { EntityTreeOptionBarProps } from "./EntityTreeOptionBar.js";
+import { EntityTreeOptionBar } from "./EntityTreeOptionBar.js";
 
 export interface EntityTreeDevtoolProps extends EntityTreeOptionBarProps {
 	entityTrees: EDumpItem[];

@@ -1,13 +1,13 @@
 import type { NormalizedSandboxConfiguration } from "@akashic/sandbox-configuration";
 import { observer } from "mobx-react";
 import * as React from "react";
-import type { GameViewManager } from "../../akashic/GameViewManager";
-import type { Operator } from "../../operator/Operator";
-import type { LocalInstanceEntity } from "../../store/LocalInstanceEntity";
-import type { Store } from "../../store/Store";
-import type { PlayerInfoResolverDialogProps } from "../molecule/PlayerInfoResolverDialog";
-import type { ProfilerCanvasProps } from "../molecule/ProfilerCanvas";
-import { GameScreen } from "../organism/GameScreen";
+import type { GameViewManager } from "../../akashic/GameViewManager.js";
+import type { Operator } from "../../operator/Operator.js";
+import type { LocalInstanceEntity } from "../../store/LocalInstanceEntity.js";
+import type { Store } from "../../store/Store.js";
+import type { PlayerInfoResolverDialogProps } from "../molecule/PlayerInfoResolverDialog.js";
+import type { ProfilerCanvasProps } from "../molecule/ProfilerCanvas.js";
+import { GameScreen } from "../organism/GameScreen.js";
 
 export interface GameScreenContainerProps {
 	sandboxConfig: NormalizedSandboxConfiguration;

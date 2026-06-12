@@ -1,9 +1,12 @@
-import { isNamagameCommentEvent, MessageEventIndexData } from "../../common/PlaylogShim";
-import type { OnTickArguments } from "../akashic/ServeGameContent";
-import type { EDumpItem } from "../common/types/EDumpItem";
-import type { NiconicoDevtoolCommentPageSenderLimitation, NiconicoDevtoolCommentPageSenderType } from "../store/DevtoolUiCommentPageStore";
-import type { Store } from "../store/Store";
-import type { NiconicoDevtoolPageType } from "../view/molecule/NiconicoDevtool";
+import { isNamagameCommentEvent, MessageEventIndexData } from "../../common/PlaylogShim.js";
+import type { OnTickArguments } from "../akashic/ServeGameContent.js";
+import type { EDumpItem } from "../common/types/EDumpItem.js";
+import type {
+	NiconicoDevtoolCommentPageSenderLimitation,
+	NiconicoDevtoolCommentPageSenderType
+} from "../store/DevtoolUiCommentPageStore.js";
+import type { Store } from "../store/Store.js";
+import type { NiconicoDevtoolPageType } from "../view/molecule/NiconicoDevtool.js";
 
 function consoleLog(value: any): void {
 	console.log(value);

@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import { FlexScrollY } from "../atom/FlexScrollY";
-import { ToolIconButton } from "../atom/ToolIconButton";
+import { FlexScrollY } from "../atom/FlexScrollY.js";
+import { ToolIconButton } from "../atom/ToolIconButton.js";
 import styles from "./InstancesDevtool.module.css";
 
 export interface InstanceViewData {

@@ -1,11 +1,11 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import type { PlayAudioStateSummary } from "../../../common/types/PlayAudioState";
-import { Popover } from "../atom/Popover";
-import type { ToolChoiceButtonItem } from "../atom/ToolChoiceButton";
-import { ToolChoiceButton } from "../atom/ToolChoiceButton";
-import { ToolIconButton } from "../atom/ToolIconButton";
-import { ToolProgressBar } from "../atom/ToolProgressBar";
+import type { PlayAudioStateSummary } from "../../../common/types/PlayAudioState.js";
+import { Popover } from "../atom/Popover.js";
+import type { ToolChoiceButtonItem } from "../atom/ToolChoiceButton.js";
+import { ToolChoiceButton } from "../atom/ToolChoiceButton.js";
+import { ToolIconButton } from "../atom/ToolIconButton.js";
+import { ToolProgressBar } from "../atom/ToolProgressBar.js";
 import styles from "./AudioOptionControl.module.css";
 
 export interface AudioOptionControlPropsData {

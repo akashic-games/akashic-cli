@@ -1,8 +1,8 @@
-import { action } from "@storybook/addon-actions";
 import { observable } from "mobx";
 import { observer } from "mobx-react";
 import * as React from "react";
-import { StartupScreen } from "../organism/StartupScreen";
+import { fn } from "storybook/test";
+import { StartupScreen } from "../organism/StartupScreen.js";
 
 const store = observable({
 	joinsAutomatically: false,
@@ -45,7 +45,7 @@ const TestWithBehaviour = observer(() => (
 			)}
 			onArgumentsEditContentChanged={(v) => (store.editContent = v)}
 			onChangeJoinsAutomatically={(v) => (store.joinsAutomatically = v)}
-			onClickStart={action("start-content")}
+			onClickStart={fn()}
 		/>
 	</Box>
 ));
@@ -69,11 +69,11 @@ export const Basic = {
 				selectedArgumentName={"Stop"}
 				argumentEditContent={"[\"test\"]"}
 				joinsAutomatically={false}
-				onListResize={action("argument-list-resize")}
-				onSelectArgument={action("select")}
-				onArgumentsEditContentChanged={action("edit-content")}
-				onChangeJoinsAutomatically={action("change-joins-auto")}
-				onClickStart={action("start-content")}
+				onListResize={fn()}
+				onSelectArgument={fn()}
+				onArgumentsEditContentChanged={fn()}
+				onChangeJoinsAutomatically={fn()}
+				onClickStart={fn()}
 			/>
 		</Box>
 	),
@@ -127,11 +127,11 @@ export const ManyArgumentsTable = {
 				selectedArgumentName={"Test 9"}
 				argumentEditContent={"[\"test\"]"}
 				joinsAutomatically={false}
-				onListResize={action("argument-list-resize")}
-				onSelectArgument={action("select")}
-				onArgumentsEditContentChanged={action("edit-content")}
-				onChangeJoinsAutomatically={action("change-joins-auto")}
-				onClickStart={action("start-content")}
+				onListResize={fn()}
+				onSelectArgument={fn()}
+				onArgumentsEditContentChanged={fn()}
+				onChangeJoinsAutomatically={fn()}
+				onClickStart={fn()}
 			/>
 		</Box>
 	),

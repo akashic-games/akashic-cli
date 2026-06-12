@@ -1,6 +1,6 @@
 import { toJS as mobxToJS } from "mobx";
-import { createSessionParameter } from "../../common/createSessionParameter";
-import type { Store } from "../store/Store";
+import { createSessionParameter } from "../../common/createSessionParameter.js";
+import type { Store } from "../store/Store.js";
 
 export class PlayOperator {
 	private store: Store;

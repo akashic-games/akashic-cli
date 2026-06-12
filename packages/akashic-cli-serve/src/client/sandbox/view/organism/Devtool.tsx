@@ -1,15 +1,15 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import { DevtoolSelectorBar } from "../../../view/atom/DevtoolSelectorBar";
-import { TopResizable } from "../../../view/atom/TopResizable";
-import type { EntityTreeDevtoolProps } from "../../../view/molecule/EntityTreeDevtool";
-import { EntityTreeDevtool } from "../../../view/molecule/EntityTreeDevtool";
-import type { EventsDevtoolProps } from "../../../view/molecule/EventsDevtool";
-import { EventsDevtool } from "../../../view/molecule/EventsDevtool";
-import type { NiconicoDevtoolProps } from "../../../view/molecule/NiconicoDevtool";
-import { NiconicoDevtool } from "../../../view/molecule/NiconicoDevtool";
-import type { PlaybackDevtoolProps } from "../../../view/molecule/PlaybackDevtool";
-import { PlaybackDevtool } from "../../../view/molecule/PlaybackDevtool";
+import { DevtoolSelectorBar } from "../../../view/atom/DevtoolSelectorBar.js";
+import { TopResizable } from "../../../view/atom/TopResizable.js";
+import type { EntityTreeDevtoolProps } from "../../../view/molecule/EntityTreeDevtool.js";
+import { EntityTreeDevtool } from "../../../view/molecule/EntityTreeDevtool.js";
+import type { EventsDevtoolProps } from "../../../view/molecule/EventsDevtool.js";
+import { EventsDevtool } from "../../../view/molecule/EventsDevtool.js";
+import type { NiconicoDevtoolProps } from "../../../view/molecule/NiconicoDevtool.js";
+import { NiconicoDevtool } from "../../../view/molecule/NiconicoDevtool.js";
+import type { PlaybackDevtoolProps } from "../../../view/molecule/PlaybackDevtool.js";
+import { PlaybackDevtool } from "../../../view/molecule/PlaybackDevtool.js";
 import styles from "./Devtool.module.css";
 
 // TODO 適切な箇所に定義を移す
