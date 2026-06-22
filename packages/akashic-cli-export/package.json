@@ -41,7 +41,7 @@
     "npm-shrinkwrap.json"
   ],
   "devDependencies": {
-    "@akashic/akashic-engine": "~2.6.7",
+    "@akashic/akashic-engine": "~3.21.0",
     "@akashic/eslint-config": "3.0.2",
     "@akashic/sandbox-configuration": "^2.5.0",
     "@types/archiver": "5.3.4",
