@@ -34,7 +34,7 @@
     "@types/node": "24.10.1",
     "memfs": "4.17.2",
     "shx": "0.4.0",
-    "typescript": "5.5.4",
+    "typescript": "6.0.3",
     "vitest": "^4.1.6"
   },
   "dependencies": {
