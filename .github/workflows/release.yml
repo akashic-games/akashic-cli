@@ -38,7 +38,7 @@ jobs:
           npm run build
           npm test
       - name: Create Release PullRequest or Publish
-        uses: changesets/action@e0145edc7d9d8679003495b11f87bd8ef63c0cba # v1.5.3
+        uses: changesets/action@198f833dd7d863100ea6e28967bc9a9fdefadb0a # v2.1.0
         with:
           publish: npm run release-packages
           version: npm run version-packages
