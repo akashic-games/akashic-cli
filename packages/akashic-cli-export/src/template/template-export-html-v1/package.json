@@ -8,7 +8,7 @@
     "copy": "shx cp -r js ../../../lib/template/v1 && shx cp -r css ../../../lib/template/v1"
   },
   "devDependencies": {
-    "shx": "0.3.4"
+    "shx": "0.4.0"
   },
   "private": true
 }
