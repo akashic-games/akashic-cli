@@ -1,4 +1,4 @@
-FROM node:26.12-slim as build
+FROM node:26.12.1-slim@sha256:94816674c62774da0d099a947bf4613b9e1972a2733abd0d0cd80e795f8411d0 as build
 
 WORKDIR /app
 
@@ -11,19 +11,30 @@ COPY package*.json ./
 COPY www/ ./www/
 COPY build/ ./build/
 COPY src/ ./src/
+COPY .npmrc ./
 
 # lerna 環境だと各リポジトリ内の package-lock.json が不整合を起こすため npm ci は使えない
-RUN npm install
+RUN npm i && npm run setup && npm run build
 
 COPY . .
 RUN npm prune --omit=dev
 
-FROM node:26.12-slim
+FROM node:26.12.1-slim@sha256:94816674c62774da0d099a947bf4613b9e1972a2733abd0d0cd80e795f8411d0
 
 ENV TZ Asia/Tokyo
 ENV LANG ja_JP.UTF-8
 
 WORKDIR /app
+
+# ワークアラウンド: 依存系の akashic-cli-commons などに shrinkwrap をつけている影響で、
+# 明示的に amd64 向けの libc を入れないと Apple Sillicon 上で動作しない
+ARG TARGETARCH
+RUN if [ "$TARGETARCH" = "arm64" ]; then \
+      dpkg --add-architecture amd64 && \
+      apt-get update && \
+      apt-get install -y --no-install-recommends libc6:amd64 && \
+      rm -rf /var/lib/apt/lists/* ; \
+    fi
 
 COPY --from=build --chown=node:node /tini /tini
 
