@@ -1,4 +1,4 @@
-FROM node:24
+FROM node:26
 
 # Install basic development tools
 RUN apt update && apt install -y less \
