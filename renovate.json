@@ -6,48 +6,86 @@
   "automerge": true,
   "packageRules": [
     {
-      "matchUpdateTypes": ["minor", "major"],
-      "matchPackagePatterns": ["^@akashic/"],
+      "matchUpdateTypes": [
+        "minor",
+        "major"
+      ],
+      "matchPackagePatterns": [
+        "^@akashic/"
+      ],
       "schedule": "at any time",
       "groupName": "akashic major/minor dependencies",
       "automerge": false
     },
     {
-      "matchUpdateTypes": ["patch"],
-      "matchPackagePatterns": ["^@akashic/"],
+      "matchUpdateTypes": [
+        "patch"
+      ],
+      "matchPackagePatterns": [
+        "^@akashic/"
+      ],
       "schedule": "at any time",
       "groupName": "akashic patch dependencies",
-      "labels": ["release"]
+      "labels": [
+        "release"
+      ]
     },
     {
-      "matchUpdateTypes": ["major"],
-      "matchDepTypes": ["devDependencies"],
-      "excludePackagePatterns": ["^@akashic/"],
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "matchDepTypes": [
+        "devDependencies"
+      ],
+      "excludePackagePatterns": [
+        "^@akashic/"
+      ],
       "groupName": "dev dependencies",
       "automerge": false
     },
     {
-      "matchUpdateTypes": ["major"],
-      "matchDepTypes": ["dependencies"],
-      "excludePackagePatterns": ["^@akashic/"],
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "matchDepTypes": [
+        "dependencies"
+      ],
+      "excludePackagePatterns": [
+        "^@akashic/"
+      ],
       "draftPR": true
     },
     {
-      "matchPackagePatterns": ["^@storybook/"],
+      "matchPackagePatterns": [
+        "^@storybook/"
+      ],
       "enabled": false
     },
     {
-      "matchFileNames": ["packages/akashic-cli-sandbox/package.json"],
-      "matchPackageNames": ["@akashic/akashic-engine"],
+      "matchFileNames": [
+        "packages/akashic-cli-sandbox/package.json"
+      ],
+      "matchPackageNames": [
+        "@akashic/akashic-engine"
+      ],
       "allowedVersions": "<3.0"
     },
     {
-      "matchFileNames": ["packages/akashic-cli-sandbox/package.json"],
-      "matchPackageNames": ["commander"],
+      "matchFileNames": [
+        "packages/akashic-cli-sandbox/package.json"
+      ],
+      "matchPackageNames": [
+        "commander"
+      ],
       "enabled": false
     }
   ],
   "ignorePaths": [
     "**/spec/**"
-  ]
+  ],
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "minimumReleaseAge": null,
+    "prPriority": 10
+  }
 }
