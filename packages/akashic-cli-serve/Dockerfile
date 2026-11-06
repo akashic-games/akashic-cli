@@ -1,4 +1,4 @@
-FROM node:26.12.1-slim@sha256:94816674c62774da0d099a947bf4613b9e1972a2733abd0d0cd80e795f8411d0 as build
+FROM node:26.13.0-slim@sha256:5adad64f9a1fca2d51972caa65983634c8a774eb300d72b20f7f2a0f60368072 as build
 
 WORKDIR /app
 
@@ -19,7 +19,7 @@ RUN npm i && npm run setup && npm run build
 COPY . .
 RUN npm prune --omit=dev
 
-FROM node:26.12.1-slim@sha256:94816674c62774da0d099a947bf4613b9e1972a2733abd0d0cd80e795f8411d0
+FROM node:26.13.0-slim@sha256:5adad64f9a1fca2d51972caa65983634c8a774eb300d72b20f7f2a0f60368072
 
 ENV TZ Asia/Tokyo
 ENV LANG ja_JP.UTF-8
